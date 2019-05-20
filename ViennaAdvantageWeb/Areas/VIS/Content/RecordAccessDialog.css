@@ -1,0 +1,116 @@
+
+.vis-rad-mainWrap{ width: 540px; margin: 20% auto;}
+.vis-header-wrap h3 {
+    margin: 0;
+    font-size: 17px;
+    font-family: helvetica;
+    font-weight: 400;
+    color: white;
+}
+
+.vis-btn-close {
+    width: 8%;
+    background: url('../Images/close.png');
+    background-color: #616364;
+    float: right;
+    background-repeat: no-repeat;
+    padding-top: 25px;
+    padding-bottom: 13px;
+    cursor: pointer;
+    background-position: center;
+    border: 0px;
+    margin: 0;
+}
+.vis-clear-both{
+	clear: both;
+}
+.vis-rad-contantWrap{
+	width: 100%;
+	float: left;
+	/*border-left: 2px solid #1aa0ed;
+	border-right: 2px solid #1aa0ed;
+	border-bottom: 2px solid #1aa0ed;
+	padding-right: 15px;
+	padding-left: 15px;*/	
+}
+.vis-rad-contantTop, .vis-rad-roleCombo, .vis-rad-recordOp{
+	width: 100%;
+	float: left;	
+}
+ .vis-rad-recordOp{ margin-top: 10px;}
+.vis-rad-recordData{
+	width: 89%;
+	float: left;
+	/*margin-right: 15px;*/
+}
+.vis-rad-roleCombo > label{
+	width: 100%;
+	float: left;
+	font-weight: normal;
+	color: #666;
+	font-size: 14px;	
+}
+.vis-rad-roleCombo > select {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+.vis-rad-check {
+	width: 50%;
+	float: left;
+}
+.vis-rad-check > input[type="checkbox"]{
+	float: left;
+	margin-right: 5px;	
+}
+.vis-rad-check > label{
+	font-weight: normal;
+	color: #666;
+	font-size: 13px;
+	float: left;
+	margin-top: 2px;	
+}
+.vis-rad-navIcons{
+	width: 11%;
+	float: left;
+}
+button.vis-rad-navBtn {
+    width: 37px;
+    background: none;
+    border: none;
+    float:right;
+    outline:none;
+}
+.vis-rad-contantBottom {
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+    /*margin-bottom: 10px;*/
+}
+.vis-rad-actionIcons {
+    float: left;
+}
+button.vis-rad-actionBtn {
+    background: none repeat scroll 0% 0% transparent;
+    border: medium none;
+    padding: 0px;
+    margin-right: 5px;
+}
+.vis-rad-btnWrap {
+    float: right;
+	margin-top: 5px;
+}
+a.vis-rad-buttons {
+    background: none repeat scroll 0% 0% rgb(97, 99, 100);
+    color: rgb(255, 255, 255);
+    padding: 7px 12px;
+    font-size: 13px;
+    margin-left: 5px;
+}
+a.vis-rad-buttons:hover{ text-decoration: none;}
+span.vis-rad-paging {
+    width: 60%;
+    float: left;
+    text-align: center;
+    padding: 5px 0;
+}

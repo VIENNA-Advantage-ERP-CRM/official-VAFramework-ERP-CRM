@@ -1,0 +1,433 @@
+﻿/********************************************************
+ * Project Name   : VAdvantage
+ * Class Name     : MMatchInv
+ * Purpose        : 
+ * Class Used     : 
+ * Chronological    Development
+ * Raghunandan     08-Jun-2009
+  ******************************************************/
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using VAdvantage.Classes;
+using VAdvantage.Common;
+using VAdvantage.Process;
+using System.Windows.Forms;
+using VAdvantage.Model;
+using VAdvantage.DataBase;
+using VAdvantage.SqlExec;
+using VAdvantage.Utility;
+using System.Data;
+using VAdvantage.Logging;
+
+namespace VAdvantage.Model
+{
+    public class MMatchInv : X_M_MatchInv
+    {
+        /**	Static Logger	*/
+        private static VLogger _log = VLogger.GetVLogger(typeof(MMatchInv).FullName);
+        /**
+       * 	Get InOut-Invoice Matches
+       *	@param ctx context
+       *	@param M_InOutLine_ID shipment
+       *	@param C_InvoiceLine_ID invoice
+       *	@param trxName transaction
+       *	@return array of matches
+       */
+        public static MMatchInv[] Get(Ctx ctx, int M_InOutLine_ID, int C_InvoiceLine_ID, Trx trxName)
+        {
+            if (M_InOutLine_ID == 0 || C_InvoiceLine_ID == 0)
+                return new MMatchInv[] { };
+            //
+            String sql = "SELECT * FROM M_MatchInv WHERE M_InOutLine_ID=" + M_InOutLine_ID + " AND C_InvoiceLine_ID=" + C_InvoiceLine_ID;
+            List<MMatchInv> list = new List<MMatchInv>();
+            DataSet ds = new DataSet();
+            try
+            {
+                ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DataRow dr = ds.Tables[0].Rows[i];
+                    list.Add(new MMatchInv(ctx, dr, trxName));
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            MMatchInv[] retValue = new MMatchInv[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
+
+        /*	Get InOut Invoice Matches
+        *	@param ctx context
+        *	@param M_InOutLine_ID shipment
+        *	@param trxName transaction
+        *	@return array of matches
+        */
+        public static MMatchInv[] Get(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        {
+            if (M_InOutLine_ID == 0)
+                return new MMatchInv[] { };
+            //
+            String sql = "SELECT * FROM M_MatchInv WHERE M_InOutLine_ID=" + M_InOutLine_ID;
+            List<MMatchInv> list = new List<MMatchInv>();
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql, null, trxName);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(new MMatchInv(ctx, dr, trxName));
+                }
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            finally { dt = null; }
+            MMatchInv[] retValue = new MMatchInv[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
+
+        /**
+       * 	Get Inv Matches for InOut
+       *	@param ctx context
+       *	@param M_InOut_ID shipment
+       *	@param trxName transaction
+       *	@return array of matches
+       */
+        public static MMatchInv[] GetInOut(Ctx ctx, int M_InOut_ID, Trx trxName)
+        {
+            if (M_InOut_ID == 0)
+                return new MMatchInv[] { };
+            //
+            String sql = "SELECT * FROM M_MatchInv m"
+                + " INNER JOIN M_InOutLine l ON (m.M_InOutLine_ID=l.M_InOutLine_ID) "
+                + "WHERE l.M_InOut_ID=" + M_InOut_ID;
+            List<MMatchInv> list = new List<MMatchInv>();
+            IDataReader idr = null;
+            DataTable dt = null;
+            try
+            {
+
+                idr = DataBase.DB.ExecuteReader(sql, null, trxName);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(new MMatchInv(ctx, dr, trxName));
+                }
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            finally
+            { dt = null; }
+
+            MMatchInv[] retValue = new MMatchInv[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
+
+        /* 	Get Inv Matches for Invoice
+         *	@param ctx context
+         *	@param C_Invoice_ID invoice
+         *	@param trxName transaction
+         *	@return array of matches
+         */
+        public static MMatchInv[] GetInvoice(Ctx ctx, int C_Invoice_ID, Trx trxName)
+        {
+            if (C_Invoice_ID == 0)
+                return new MMatchInv[] { };
+            //
+            String sql = "SELECT * FROM M_MatchInv mi"
+                + " INNER JOIN C_InvoiceLine il ON (mi.C_InvoiceLine_ID=il.C_InvoiceLine_ID) "
+                + "WHERE il.C_Invoice_ID=" + C_Invoice_ID;
+            List<MMatchInv> list = new List<MMatchInv>();
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql, null, trxName);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(new MMatchInv(ctx, dr, trxName));
+                }
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            finally
+            { dt = null; }
+
+            MMatchInv[] retValue = new MMatchInv[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
+
+
+        /**
+         * 	Standard Constructor
+         *	@param ctx context
+         *	@param M_MatchInv_ID id
+         *	@param trxName transaction
+         */
+        public MMatchInv(Ctx ctx, int M_MatchInv_ID, Trx trxName)
+            : base(ctx, M_MatchInv_ID, trxName)
+        {
+            if (M_MatchInv_ID == 0)
+            {
+                //	setDateTrx (new DateTime(System.currentTimeMillis()));
+                //	setC_InvoiceLine_ID (0);
+                //	setM_InOutLine_ID (0);
+                //	setM_Product_ID (0);
+                SetM_AttributeSetInstance_ID(0);
+                //	setQty (Env.ZERO);
+                SetPosted(false);
+                SetProcessed(false);
+                SetProcessing(false);
+            }
+        }
+
+        /**
+         * 	Load Constructor
+         *	@param ctx context
+         *	@param dr result set
+         *	@param trxName transaction
+         */
+        public MMatchInv(Ctx ctx, DataRow dr, Trx trxName)
+            : base(ctx, dr, trxName)
+        {
+
+        }
+
+        /**
+        * 	Invoice Line Constructor
+        *	@param iLine invoice line
+        *	@param dateTrx optional date
+        *	@param qty matched quantity
+        */
+        public MMatchInv(MInvoiceLine iLine, DateTime? dateTrx, Decimal qty)
+            : this(iLine.GetCtx(), 0, iLine.Get_TrxName())
+        {
+            SetClientOrg(iLine);
+            SetC_InvoiceLine_ID(iLine.GetC_InvoiceLine_ID());
+            SetM_InOutLine_ID(iLine.GetM_InOutLine_ID());
+            if (dateTrx != null)
+                SetDateTrx(dateTrx);
+            SetM_Product_ID(iLine.GetM_Product_ID());
+            SetM_AttributeSetInstance_ID(iLine.GetM_AttributeSetInstance_ID());
+            SetQty(qty);
+            SetProcessed(true);		//	auto
+        }
+
+        /**
+         * 	Before Save
+         *	@param newRecord new
+         *	@return true
+         */
+        protected override bool BeforeSave(bool newRecord)
+        {
+            //	Set Trx Date
+            if (GetDateTrx() == null)
+                SetDateTrx(new DateTime(CommonFunctions.CurrentTimeMillis()));
+            //	Set Acct Date
+            if (GetDateAcct() == null)
+            {
+                DateTime? ts = GetNewerDateAcct();
+                if (ts == null)
+                    ts = GetDateTrx();
+                SetDateAcct(ts);
+            }
+            if (GetM_AttributeSetInstance_ID() == 0 && GetM_InOutLine_ID() != 0)
+            {
+                MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
+            }
+            return true;
+        }
+
+        protected override bool AfterSave(bool newRecord, bool success)
+        {
+            if (IsCostCalculated() || IsCostImmediate())
+            {
+                X_M_MatchInvCostTrack costTrack = null;
+                int M_MatchInvCostTrack_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_MatchInvCostTrack_ID FROM M_MatchInvCostTrack WHERE M_MatchInv_ID = " + GetM_MatchInv_ID()));
+                if (M_MatchInvCostTrack_ID > 0)
+                {
+                    costTrack = new X_M_MatchInvCostTrack(GetCtx(), M_MatchInvCostTrack_ID, null);
+                    costTrack.SetIsCostCalculated(IsCostCalculated());
+                    costTrack.SetIsCostImmediate(IsCostImmediate());
+                }
+                else
+                {
+                     costTrack = new X_M_MatchInvCostTrack(GetCtx(), 0, null);
+                     costTrack.SetM_MatchInv_ID(GetM_MatchInv_ID());
+                     costTrack.SetM_InOutLine_ID(GetM_InOutLine_ID());
+                     costTrack.SetC_InvoiceLine_ID(GetC_InvoiceLine_ID());
+                     costTrack.SetQty(GetQty());
+                     costTrack.SetM_Product_ID(GetM_Product_ID());
+                     costTrack.SetIsCostCalculated(IsCostCalculated());
+                     costTrack.SetIsCostImmediate(IsCostImmediate());
+                }
+                costTrack.Save();
+            }
+            return true;
+        }
+
+        /**
+         * 	Get the later Date Acct from invoice or shipment
+         *	@return date or null
+         */
+        private DateTime? GetNewerDateAcct()
+        {
+            DateTime? invoiceDate = null;
+            DateTime? shipDate = null;
+
+            String sql = "SELECT i.DateAcct "
+                + "FROM C_InvoiceLine il"
+                + " INNER JOIN C_Invoice i ON (i.C_Invoice_ID=il.C_Invoice_ID) "
+                + "WHERE C_InvoiceLine_ID=" + GetC_InvoiceLine_ID();
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    invoiceDate =Utility.Util.GetValueOfDateTime(dr[0]);//.getTimestamp(1);
+                }
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, sql, e);
+            }
+            finally
+            {
+                dt = null;
+            }
+            sql = "SELECT io.DateAcct "
+                + "FROM M_InOutLine iol"
+                + " INNER JOIN M_InOut io ON (io.M_InOut_ID=iol.M_InOut_ID) "
+                + "WHERE iol.M_InOutLine_ID=" + GetM_InOutLine_ID();
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    shipDate = Utility.Util.GetValueOfDateTime(dr[0]);//.getTimestamp(1);
+                }
+
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, sql, e);
+            }
+            finally
+            {
+                dt = null;
+            }
+
+            if (invoiceDate == null)
+                return (DateTime?)shipDate;
+            if (shipDate == null)
+                return (DateTime?)invoiceDate;
+            //if (invoiceDate.after(shipDate))
+            if (invoiceDate > shipDate)
+            {
+                return (DateTime?)invoiceDate;
+            }
+            return (DateTime?)shipDate;
+        }
+
+        /**
+         * 	Before Delete
+         *	@return true if acct was deleted
+         */
+        protected override bool BeforeDelete()
+        {
+            if (IsPosted())
+            {
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_MATCHINVOICE))
+                    return false;
+                SetPosted(false);
+                return MFactAcct.Delete(Table_ID, Get_ID(), Get_TrxName()) >= 0;
+            }
+            return true;
+        }
+
+        /**
+         * 	After Delete
+         *	@param success success
+         *	@return success
+         */
+        protected override bool AfterDelete(bool success)
+        {
+            if (success)
+            {
+                //	Get Order and decrease invoices
+                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
+                int C_OrderLine_ID = iLine.GetC_OrderLine_ID();
+                if (C_OrderLine_ID == 0)
+                {
+                    MInOutLine ioLine = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                    C_OrderLine_ID = ioLine.GetC_OrderLine_ID();
+                }
+                //	No Order Found
+                if (C_OrderLine_ID == 0)
+                    return success;
+                //	Find MatchPO
+                MMatchPO[] mPO = MMatchPO.Get(GetCtx(), C_OrderLine_ID, GetC_InvoiceLine_ID(), Get_TrxName());
+                for (int i = 0; i < mPO.Length; i++)
+                {
+                    if (mPO[i].GetM_InOutLine_ID() == 0)
+                        mPO[i].Delete(true);
+                    else
+                    {
+                        mPO[i].SetC_InvoiceLine_ID(null);
+                        mPO[i].Save();
+                    }
+                }
+            }
+            return success;
+        }
+    }
+}

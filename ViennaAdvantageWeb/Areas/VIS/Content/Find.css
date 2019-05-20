@@ -1,0 +1,425 @@
+﻿/* CSS Document */
+
+/*advancedSearch-wrap{
+	width:60%;
+	margin:10% auto;	
+}
+.header-wrap{ width:100%; float:left;}
+.advancedSearch-tittle {
+    width: 96%;
+    background: #1aa0ed;
+    padding: 14px 0px 14px 15px;
+    float: left;
+	font-size:13.5px;
+	 margin: 0;
+    font-family: helvetica;
+    font-weight: bold;
+    color: white;
+}*/
+
+/*.vis-advancedSearch-GrayWrap{
+
+	width:100%;
+    height:100%;
+	/*float:left;
+	border-left:2px solid #1aa0ed;
+	border-right:2px solid #1aa0ed;
+	border-bottom:2px solid #1aa0ed;
+}*/
+
+.vis-advancedSearch-contentWrap
+{
+    width: 100%;
+    height: 95%;
+}
+
+.vis-advancedSearchContentArea
+{
+   
+    width: 80%;
+    height: 100%;
+}
+
+.vis-advancedSearchContentArea-up
+{
+    height: 40%;
+}
+
+.vis-advancedSearchContentArea-down
+{
+    height: 50%;
+}
+
+.vis-advancedSearchContentArea-button
+{
+    height: 10%;
+}
+
+
+
+.vis-advancedSearch-RecentRecords
+{
+    width: 20%;
+    float: left;
+}
+
+.vis-advanedSearch-InputsWrap
+{
+    width: 100%;
+    
+}
+
+.vis-advancedSearchInput, .vis-advancedSearchHorigontal
+{
+    width: 21%;
+    float: left;
+    margin-right: 10px;
+}
+
+.vis-advancedSearchInput
+{
+    width: 21%;
+    float: left;
+    margin-right: 10px;
+}
+
+html[dir="rtl"] .vis-advancedSearchInput
+{
+    float:right;
+    margin-right:0px;
+    margin-left: 10px;
+}
+
+.vis-advancedSearchInput-op
+{
+    width: 11%;
+}
+
+.vis-advancedSearchInput-v
+{
+    width: 25%;
+}
+
+.vis-advancedSearchHorigontal-colspan2
+{
+    width: 38%;
+    float: left;
+}
+
+.vis-advancedSearchHorigontal-dynamic
+{
+    float: left;
+    /*width: 13%;*/
+    margin-right: 5px;
+}
+
+.vis-advancedSearchInput1
+{
+    width: 20.55%;
+    float: left;
+    margin-top: 5px;
+}
+
+.vis-advancedSearchHorigontal > label
+{
+    width: 16%;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.vis-advancedSearchInput > label, .vis-advancedSearchInput1 > label, .vis-advancedSearchHorigontal > label
+{
+    font-size: 12px;
+    color: #535353;
+    font-weight: 400;
+    float: left;
+}
+
+html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedSearchInput1 > label, html[dir="rtl"] .vis-advancedSearchHorigontal > label
+{
+    float: right;
+}
+/*.vis-advancedSearchInput1 > input[type=checkbox]
+{
+    float: left;
+}*/
+
+.vis-advancedSearchInput1 > label
+{
+    margin-left: 10px;
+    margin-top: 2px;
+}
+/*.advancedSearchMrgin{ margin-left:20%;}*/
+.vis-advancedSearchInput > input, .vis-advancedSearchInput > select
+{
+    border: 1px solid #ccc;
+    padding: 6px 0;
+    width: 100%;
+    color: #848484;
+    font-size: 12px;
+}
+
+    .vis-advancedSearchInput > input:focus, .vis-advancedSearchInput > select:focus, .vis-advancedSearchHorigontal > select:focus
+    {
+        border: 1px solid #1aa0ed;
+        box-shadow: none;
+    }
+
+.vis-advancedSearchHorigontal > select
+{
+    width: 55%;
+    float: left;
+    border: 1px solid #ccc;
+    padding: 5px;
+    color: #848484;
+    font-size: 12px;
+}
+
+.vis-advancedSearchInput > select
+{
+    padding: 6px;
+    min-height: 30px;
+    line-height: inherit !important;
+    /*margin-bottom: 20px;*/
+    padding: 1px !important;
+}
+
+.vis-advancedSearchInput > button
+{
+    width:100%;
+    min-height:30px;
+}
+
+.vis-advancedSearch-Icons
+{
+    width: 17%;
+    float: left;
+}
+
+.vis-advancedSearch-calender-Icon
+{
+    width: 31px;
+    float: left;
+    margin-left: -7px;
+    margin-right: 10px;
+}
+
+    .vis-advancedSearch-Icons > ul, .vis-advancedSearch-calender-Icon > ul
+    {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        margin-top: 22px;
+    }
+
+        .vis-advancedSearch-Icons > ul > li
+        {
+            margin-right: 2px;
+            float: left;
+        }
+
+
+        .vis-advancedSearch-calender-Icon > ul > li
+        {
+            float: left;
+        }
+
+.vis-advancedSearchActionIcon
+{
+    width: 30px;
+    height: 30px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position:center center;
+}
+
+/*.vis-advancedSearch-EditIcon
+{
+    background: url('../img/edit-icon.jpg');
+}*/
+
+.vis-advancedSearch-delIcon
+{
+    background-image: url('../Images/adv-delete-icon.png');
+}
+
+/*.vis-advancedSearch-calenderIcon
+{
+    background: url('../Images/calender-icon.jpg');
+}*/
+
+.vis-advancedSearch-SaveIcon
+{
+    background-image: url('../Images/adv-save-icon.png');
+    margin-left: 7px;
+}
+
+.vis-advancedSearchTableWrap
+{
+    width: 98%;
+    float: left;
+    height: 100%;
+    overflow: auto;
+}
+
+.vis-advancedSearchTable
+{
+    border-collapse: collapse;
+    border-spacing: 0px;
+    width: 100%;
+    float: left;
+}
+/*.advancedSearchTableHead{
+	background:#e9eef0;
+	width:100%;
+	float:left;	
+}
+.advancedSearchTableHead > p{
+	width:16.55%;
+	text-align:center;
+	font-size:13px;
+	font-weight:normal;
+	color:#494949;
+	padding:5px 0;
+	float:left;
+}*/
+
+/*.advancedSearchTableBody{ 
+	background:#f8fafa;
+	height:173px;
+	overflow-y:scroll;
+}*/
+.vis-advancedSearchTableHead
+{
+    background: #e9eef0;
+}
+
+    .vis-advancedSearchTableHead > th, .vis-advancedSearchTableRow > td
+    {
+        text-align: center;
+        font-size: 13px;
+        font-weight: normal;
+        color: #494949;
+        padding: 10px 0;
+    }
+
+.vis-advancedSearchTableBody
+{
+    background: #f8fafa;
+}
+
+.vis-advancedTableIcon
+{
+    width: 22px;
+    height: 19px;
+    float: left;
+    background-repeat: no-repeat !important;
+    margin-top: 10px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+/*.vis-advncedRefreshIcon
+{
+    background: url('../img/refersh.png');
+}*/
+
+/*.vis-advncedTickIcon
+{
+    background: url('../img/tickIcon.png');
+    margin-top: 13px;
+}*/
+
+/*.vis-advncedCloseIcon
+{
+    background: url('../img/closeIcon.png');
+}*/
+
+.vis-RecentRecords-Heading
+{
+    float: left;
+    width: 100%;
+}
+
+    .vis-RecentRecords-Heading > h4
+    {
+        color: #535353;
+        font-size: 13px;
+        margin-top: 0;
+        padding: 0;
+        font-weight: 500;
+    }
+
+.vis-RecentRecords-listWrap
+{
+    border: 1px solid #eee;
+    float: left;
+    width: 90%;
+    padding: 10px;
+    height: 374px;
+    overflow-y: auto;
+}
+
+    .vis-RecentRecords-listWrap > ul
+    {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        margin-top: 0;
+    }
+
+        .vis-RecentRecords-listWrap > ul > li
+        {
+            color: #848484;
+            line-height: 23px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+            .vis-RecentRecords-listWrap > ul > li:hover
+            {
+                background-color: lightblue;
+            }
+
+
+.vis-advancedSearchFooter
+{
+    float: right;
+    height: 5%;
+    /*position:absolute;*/
+}
+
+    .vis-advancedSearchFooter > p
+    {
+        float: right;
+        margin-right: 15px;
+        color: #535353;
+        font-size: 12px;
+    }
+
+.vis-advcedfooterBtn
+{
+    margin-top: 20px;
+    float: left;
+    width: 100%;
+}
+
+.vis-advncedBtn
+{
+    background: #626365;
+    border-radius: 0;
+    color: #fff;
+    font-size: 12px;
+}
+
+.vis-form-group
+{
+    margin-bottom: 10px;
+}
+
+.vis-advancedSearchbusy
+{
+    height: 98%;
+    width: 95%;
+}
+ 

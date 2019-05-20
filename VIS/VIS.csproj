@@ -1,0 +1,1064 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C9421E8F-F38E-417A-96C5-90E1BA817465}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VIS</RootNamespace>
+    <AssemblyName>VIS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth, Version=4.0.0.11165, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\DotNetOpenAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.2.4640.29187, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Authentication.OAuth2, Version=1.2.4640.29180, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.Apis.Authentication.OAuth2.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Calendar.v3, Version=1.2.4640.29145, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.Apis.Calendar.v3.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Tasks.v1, Version=1.2.4573.23226, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.Apis.Tasks.v1.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Contacts, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7e065189dd4b982f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.GData.Contacts.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.YouTube, Version=2.1.0.0, Culture=neutral, PublicKeyToken=af04a32718ae8833, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\Google.GData.YouTube.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.ClassLibrary, Version=0.38.0.2, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\IKVM.OpenJDK.ClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime, Version=0.38.0.2, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\IKVM.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=4.1.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LibDll\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.2.1269.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\tfsHtml5\ViennaAdvantageWeb\ViennaAdvantageWeb\bin\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SecureEngineUtility">
+      <HintPath>..\..\..\..\Dlls\Partnerkitdlls\SecureEngineUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.1.2\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.1.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\VIS\Content\ClientSetup.css" />
+    <Content Include="Areas\VIS\Content\Email.css" />
+    <Content Include="Areas\VIS\Content\Find.css" />
+    <Content Include="Areas\VIS\Content\GroupStyle.css" />
+    <Content Include="Areas\VIS\Content\Home.css" />
+    <Content Include="Areas\VIS\Content\Login.css" />
+    <Content Include="Areas\VIS\Content\PaymentRule.css" />
+    <Content Include="Areas\VIS\Content\PrefStyle.css" />
+    <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />
+    <Content Include="Areas\VIS\Content\ReportStyle.css" />
+    <Content Include="Areas\VIS\Content\Site.css" />
+    <Content Include="Areas\VIS\Content\Style.css" />
+    <Content Include="Areas\VIS\Content\VIS.rtl.css" />
+    <Content Include="Areas\VIS\Content\VIS.all.min.css" />
+    <Content Include="Areas\VIS\Content\VISAD.css" />
+    <Content Include="Areas\VIS\Content\VPaySelect.css" />
+    <Content Include="Areas\VIS\Images\11.png" />
+    <Content Include="Areas\VIS\Images\12.png" />
+    <Content Include="Areas\VIS\Images\21.png" />
+    <Content Include="Areas\VIS\Images\22.png" />
+    <Content Include="Areas\VIS\Images\accent.png" />
+    <Content Include="Areas\VIS\Images\Action.png" />
+    <Content Include="Areas\VIS\Images\add-edit.png" />
+    <Content Include="Areas\VIS\Images\add-new.png" />
+    <Content Include="Areas\VIS\Images\add.png" />
+    <Content Include="Areas\VIS\Images\AddBP16.png" />
+    <Content Include="Areas\VIS\Images\AddKpitoHome.png" />
+    <Content Include="Areas\VIS\Images\adv-delete-icon.png" />
+    <Content Include="Areas\VIS\Images\adv-save-icon.png" />
+    <Content Include="Areas\VIS\Images\archive.png" />
+    <Content Include="Areas\VIS\Images\arr.png" />
+    <Content Include="Areas\VIS\Images\arrot-up-1.png" />
+    <Content Include="Areas\VIS\Images\arrow-down-1-hover.png.png" />
+    <Content Include="Areas\VIS\Images\arrow-down-1.png" />
+    <Content Include="Areas\VIS\Images\arrow-left-1-hover.png" />
+    <Content Include="Areas\VIS\Images\arrow-left-1.png" />
+    <Content Include="Areas\VIS\Images\arrow-right-1-hover.png" />
+    <Content Include="Areas\VIS\Images\arrow-right-1.png" />
+    <Content Include="Areas\VIS\Images\arrow-slider.png" />
+    <Content Include="Areas\VIS\Images\arrow-up-1-hover.png" />
+    <Content Include="Areas\VIS\Images\arrow.png" />
+    <Content Include="Areas\VIS\Images\arrow1.png" />
+    <Content Include="Areas\VIS\Images\arrow2.png" />
+    <Content Include="Areas\VIS\Images\arrow3.png" />
+    <Content Include="Areas\VIS\Images\arrow4.png" />
+    <Content Include="Areas\VIS\Images\athumb-forward.png" />
+    <Content Include="Areas\VIS\Images\attach-close-ico.png" />
+    <Content Include="Areas\VIS\Images\attachment.png" />
+    <Content Include="Areas\VIS\Images\audio.png" />
+    <Content Include="Areas\VIS\Images\barcode.png" />
+    <Content Include="Areas\VIS\Images\base\Account20.png" />
+    <Content Include="Areas\VIS\Images\base\addToCart.png" />
+    <Content Include="Areas\VIS\Images\base\Add_sub16.png" />
+    <Content Include="Areas\VIS\Images\base\Amtdimension20.png" />
+    <Content Include="Areas\VIS\Images\base\Appointment24.png" />
+    <Content Include="Areas\VIS\Images\base\Archive24.png" />
+    <Content Include="Areas\VIS\Images\base\arrow-bottom.png" />
+    <Content Include="Areas\VIS\Images\base\arrow-left-handler.png" />
+    <Content Include="Areas\VIS\Images\base\arrow-left.png" />
+    <Content Include="Areas\VIS\Images\base\arrow-right-handler.png" />
+    <Content Include="Areas\VIS\Images\base\arrow-top.png" />
+    <Content Include="Areas\VIS\Images\base\AttachDocumentFrom24.png" />
+    <Content Include="Areas\VIS\Images\base\AttachDocumentFromX24.png" />
+    <Content Include="Areas\VIS\Images\base\Attachment24.png" />
+    <Content Include="Areas\VIS\Images\base\AttachmentX24.png" />
+    <Content Include="Areas\VIS\Images\base\back16.PNG" />
+    <Content Include="Areas\VIS\Images\base\backX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\BPartner20.png" />
+    <Content Include="Areas\VIS\Images\base\BtnAction.png" />
+    <Content Include="Areas\VIS\Images\base\Card16.png" />
+    <Content Include="Areas\VIS\Images\base\CardDialog16.png" />
+    <Content Include="Areas\VIS\Images\base\Chat24.png" />
+    <Content Include="Areas\VIS\Images\base\ChatX24.png" />
+    <Content Include="Areas\VIS\Images\base\check-icon.png" />
+    <Content Include="Areas\VIS\Images\base\CheckRequest16.png" />
+    <Content Include="Areas\VIS\Images\base\close-button.png" />
+    <Content Include="Areas\VIS\Images\base\closeIcon.png" />
+    <Content Include="Areas\VIS\Images\base\confirm-icon.png" />
+    <Content Include="Areas\VIS\Images\base\Copy16.png" />
+    <Content Include="Areas\VIS\Images\base\Copy24.png" />
+    <Content Include="Areas\VIS\Images\base\CreateDocument24.png" />
+    <Content Include="Areas\VIS\Images\base\CreateDocumentX24.png" />
+    <Content Include="Areas\VIS\Images\base\Delete-W24.png" />
+    <Content Include="Areas\VIS\Images\base\delete10.png" />
+    <Content Include="Areas\VIS\Images\base\Delete24.PNG" />
+    <Content Include="Areas\VIS\Images\base\DeleteX24.PNG" />
+    <Content Include="Areas\VIS\Images\base\Down32.png" />
+    <Content Include="Areas\VIS\Images\base\Edit_sub16.png" />
+    <Content Include="Areas\VIS\Images\base\EMail16.png" />
+    <Content Include="Areas\VIS\Images\base\Email24.png" />
+    <Content Include="Areas\VIS\Images\base\EmailAttach24.png" />
+    <Content Include="Areas\VIS\Images\base\error-cros.png" />
+    <Content Include="Areas\VIS\Images\base\error-icon.png" />
+    <Content Include="Areas\VIS\Images\base\FaxEMail24.png" />
+    <Content Include="Areas\VIS\Images\base\fieldgrpdown.png" />
+    <Content Include="Areas\VIS\Images\base\File20.png" />
+    <Content Include="Areas\VIS\Images\base\Find24.gif" />
+    <Content Include="Areas\VIS\Images\base\Find24.png" />
+    <Content Include="Areas\VIS\Images\base\First16.PNG" />
+    <Content Include="Areas\VIS\Images\base\FirstX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\Folder20.png" />
+    <Content Include="Areas\VIS\Images\base\Help16.png" />
+    <Content Include="Areas\VIS\Images\base\Help24.png" />
+    <Content Include="Areas\VIS\Images\base\History24.png" />
+    <Content Include="Areas\VIS\Images\base\icon-home.png" />
+    <Content Include="Areas\VIS\Images\base\Ignore24.png" />
+    <Content Include="Areas\VIS\Images\base\IgnoreX24.png" />
+    <Content Include="Areas\VIS\Images\base\Import24.png" />
+    <Content Include="Areas\VIS\Images\base\info-cros.png" />
+    <Content Include="Areas\VIS\Images\base\info-icon.png" />
+    <Content Include="Areas\VIS\Images\base\Info20.png" />
+    <Content Include="Areas\VIS\Images\base\Info24.png" />
+    <Content Include="Areas\VIS\Images\base\InfoAccount20.png" />
+    <Content Include="Areas\VIS\Images\base\Last16.PNG" />
+    <Content Include="Areas\VIS\Images\base\LastX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\Left32.png" />
+    <Content Include="Areas\VIS\Images\base\Letter24.png" />
+    <Content Include="Areas\VIS\Images\base\list.png" />
+    <Content Include="Areas\VIS\Images\base\Location10.png" />
+    <Content Include="Areas\VIS\Images\base\Location20.png" />
+    <Content Include="Areas\VIS\Images\base\Locator10.png" />
+    <Content Include="Areas\VIS\Images\base\Locator20.png" />
+    <Content Include="Areas\VIS\Images\base\Lock24.png" />
+    <Content Include="Areas\VIS\Images\base\LockX24.png" />
+    <Content Include="Areas\VIS\Images\base\logo.png" />
+    <Content Include="Areas\VIS\Images\base\Map16.png" />
+    <Content Include="Areas\VIS\Images\base\Mark24.png" />
+    <Content Include="Areas\VIS\Images\base\MarkX24.png" />
+    <Content Include="Areas\VIS\Images\base\mt24.png" />
+    <Content Include="Areas\VIS\Images\base\Multi16.PNG" />
+    <Content Include="Areas\VIS\Images\base\MultiX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\New24.PNG" />
+    <Content Include="Areas\VIS\Images\base\NewX24.PNG" />
+    <Content Include="Areas\VIS\Images\base\Next16.PNG" />
+    <Content Include="Areas\VIS\Images\base\NextX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\opencart.png" />
+    <Content Include="Areas\VIS\Images\base\PageDown16.PNG" />
+    <Content Include="Areas\VIS\Images\base\PageDownWhite.png" />
+    <Content Include="Areas\VIS\Images\base\PageDownX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\PageFirst16.png" />
+    <Content Include="Areas\VIS\Images\base\PageFirstWhite.png" />
+    <Content Include="Areas\VIS\Images\base\PageFirstX16.png" />
+    <Content Include="Areas\VIS\Images\base\PageLast16.png" />
+    <Content Include="Areas\VIS\Images\base\PageLastWhite.png" />
+    <Content Include="Areas\VIS\Images\base\PageLastX16.png" />
+    <Content Include="Areas\VIS\Images\base\PageUp16.PNG" />
+    <Content Include="Areas\VIS\Images\base\PageUpWhite.png" />
+    <Content Include="Areas\VIS\Images\base\PageUpX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\PAttribute20.png" />
+    <Content Include="Areas\VIS\Images\base\Payment20.png" />
+    <Content Include="Areas\VIS\Images\base\pencil.png" />
+    <Content Include="Areas\VIS\Images\base\PickOpen20.png" />
+    <Content Include="Areas\VIS\Images\base\Preference16.PNG" />
+    <Content Include="Areas\VIS\Images\base\Previous16.PNG" />
+    <Content Include="Areas\VIS\Images\base\PreviousX16.PNG" />
+    <Content Include="Areas\VIS\Images\base\Print24.PNG" />
+    <Content Include="Areas\VIS\Images\base\Process20.png" />
+    <Content Include="Areas\VIS\Images\base\Product20.png" />
+    <Content Include="Areas\VIS\Images\base\RecordAccess24.png" />
+    <Content Include="Areas\VIS\Images\base\RecordAccessX24.png" />
+    <Content Include="Areas\VIS\Images\base\Refresh24.PNG" />
+    <Content Include="Areas\VIS\Images\base\RefreshX24.PNG" />
+    <Content Include="Areas\VIS\Images\base\Report24.png" />
+    <Content Include="Areas\VIS\Images\base\requery.png" />
+    <Content Include="Areas\VIS\Images\base\Request24.png" />
+    <Content Include="Areas\VIS\Images\base\Right32.png" />
+    <Content Include="Areas\VIS\Images\base\RoleCenterView24.png" />
+    <Content Include="Areas\VIS\Images\base\Save24.PNG" />
+    <Content Include="Areas\VIS\Images\base\SaveX24.PNG" />
+    <Content Include="Areas\VIS\Images\base\scan.png" />
+    <Content Include="Areas\VIS\Images\base\sear.png" />
+    <Content Include="Areas\VIS\Images\base\Search24.PNG" />
+    <Content Include="Areas\VIS\Images\base\select-att.png" />
+    <Content Include="Areas\VIS\Images\base\seprator16.PNG" />
+    <Content Include="Areas\VIS\Images\base\seprator24.PNG" />
+    <Content Include="Areas\VIS\Images\base\Sms24.png" />
+    <Content Include="Areas\VIS\Images\base\Subscribe24.png" />
+    <Content Include="Areas\VIS\Images\base\SubscribeX24.png" />
+    <Content Include="Areas\VIS\Images\base\Task24.png" />
+    <Content Include="Areas\VIS\Images\base\thumb-back.png" />
+    <Content Include="Areas\VIS\Images\base\thumb-first.png" />
+    <Content Include="Areas\VIS\Images\base\thumb-forward.png" />
+    <Content Include="Areas\VIS\Images\base\thumb-last.png" />
+    <Content Include="Areas\VIS\Images\base\ToLink20.png" />
+    <Content Include="Areas\VIS\Images\base\tri-tackice.png" />
+    <Content Include="Areas\VIS\Images\base\uncheck-icon.png" />
+    <Content Include="Areas\VIS\Images\base\Undo24.png" />
+    <Content Include="Areas\VIS\Images\base\Up32.png" />
+    <Content Include="Areas\VIS\Images\base\UploadDocument24.png" />
+    <Content Include="Areas\VIS\Images\base\Url20.png" />
+    <Content Include="Areas\VIS\Images\base\ViewDocument24.png" />
+    <Content Include="Areas\VIS\Images\base\ViewDocumentX24.png" />
+    <Content Include="Areas\VIS\Images\base\warning-cros.png" />
+    <Content Include="Areas\VIS\Images\base\warning-icon.png" />
+    <Content Include="Areas\VIS\Images\base\window-default.png" />
+    <Content Include="Areas\VIS\Images\base\Workflow24.png" />
+    <Content Include="Areas\VIS\Images\base\zoom.png" />
+    <Content Include="Areas\VIS\Images\base\Zoom16.jpg" />
+    <Content Include="Areas\VIS\Images\base\Zoom20.png" />
+    <Content Include="Areas\VIS\Images\base\ZoomAcross24.png" />
+    <Content Include="Areas\VIS\Images\bg-tile.png" />
+    <Content Include="Areas\VIS\Images\book.png" />
+    <Content Include="Areas\VIS\Images\browse.png" />
+    <Content Include="Areas\VIS\Images\bullet.png" />
+    <Content Include="Areas\VIS\Images\busy.gif" />
+    <Content Include="Areas\VIS\Images\cal-1.png" />
+    <Content Include="Areas\VIS\Images\cal-hover.png" />
+    <Content Include="Areas\VIS\Images\cal.png" />
+    <Content Include="Areas\VIS\Images\calendar.png" />
+    <Content Include="Areas\VIS\Images\callout.gif" />
+    <Content Include="Areas\VIS\Images\cancel-18.png" />
+    <Content Include="Areas\VIS\Images\cancel.png" />
+    <Content Include="Areas\VIS\Images\cancel22x22.png" />
+    <Content Include="Areas\VIS\Images\cancelfiles.png" />
+    <Content Include="Areas\VIS\Images\ccc.png" />
+    <Content Include="Areas\VIS\Images\Clear16.png" />
+    <Content Include="Areas\VIS\Images\clock-hover.png" />
+    <Content Include="Areas\VIS\Images\clock-time.png" />
+    <Content Include="Areas\VIS\Images\clock.png" />
+    <Content Include="Areas\VIS\Images\close-file.png" />
+    <Content Include="Areas\VIS\Images\close-ico.png" />
+    <Content Include="Areas\VIS\Images\close.png" />
+    <Content Include="Areas\VIS\Images\comment-icon.jpg" />
+    <Content Include="Areas\VIS\Images\compresed.png" />
+    <Content Include="Areas\VIS\Images\Contact16.png" />
+    <Content Include="Areas\VIS\Images\cre-cardview.png" />
+    <Content Include="Areas\VIS\Images\croswithText.png" />
+    <Content Include="Areas\VIS\Images\csv.png" />
+    <Content Include="Areas\VIS\Images\customize.png" />
+    <Content Include="Areas\VIS\Images\DefaultProfilePic.png" />
+    <Content Include="Areas\VIS\Images\defult.png" />
+    <Content Include="Areas\VIS\Images\del.png" />
+    <Content Include="Areas\VIS\Images\delete-ico-hover.png" />
+    <Content Include="Areas\VIS\Images\delete-ico.png" />
+    <Content Include="Areas\VIS\Images\delete-icon.jpg" />
+    <Content Include="Areas\VIS\Images\dots.png" />
+    <Content Include="Areas\VIS\Images\down arrow.png" />
+    <Content Include="Areas\VIS\Images\down-arrow.png" />
+    <Content Include="Areas\VIS\Images\download-ico-hover.png" />
+    <Content Include="Areas\VIS\Images\download-ico.png" />
+    <Content Include="Areas\VIS\Images\edit.png" />
+    <Content Include="Areas\VIS\Images\email-attachment.png" />
+    <Content Include="Areas\VIS\Images\email-audio.png" />
+    <Content Include="Areas\VIS\Images\email-cancel.png" />
+    <Content Include="Areas\VIS\Images\email-close.png" />
+    <Content Include="Areas\VIS\Images\email-compresed.png" />
+    <Content Include="Areas\VIS\Images\email-divider.png" />
+    <Content Include="Areas\VIS\Images\email-image.png" />
+    <Content Include="Areas\VIS\Images\email-open.png" />
+    <Content Include="Areas\VIS\Images\email-preview.png" />
+    <Content Include="Areas\VIS\Images\email-Refresh24.png" />
+    <Content Include="Areas\VIS\Images\email-save.png" />
+    <Content Include="Areas\VIS\Images\email-saveas.png" />
+    <Content Include="Areas\VIS\Images\email-saveAttachment.png" />
+    <Content Include="Areas\VIS\Images\email-savepdf.png" />
+    <Content Include="Areas\VIS\Images\email-send.png" />
+    <Content Include="Areas\VIS\Images\excel.png" />
+    <Content Include="Areas\VIS\Images\favicon.ico" />
+    <Content Include="Areas\VIS\Images\favItem.png" />
+    <Content Include="Areas\VIS\Images\folder-open.png" />
+    <Content Include="Areas\VIS\Images\folder.png" />
+    <Content Include="Areas\VIS\Images\forword.png" />
+    <Content Include="Areas\VIS\Images\group-active-user.png" />
+    <Content Include="Areas\VIS\Images\group-add.png" />
+    <Content Include="Areas\VIS\Images\group-close.png" />
+    <Content Include="Areas\VIS\Images\group-edit-hover.png" />
+    <Content Include="Areas\VIS\Images\group-edit.png" />
+    <Content Include="Areas\VIS\Images\group-inactive-user.png" />
+    <Content Include="Areas\VIS\Images\group-info-hover.png" />
+    <Content Include="Areas\VIS\Images\group-info.png" />
+    <Content Include="Areas\VIS\Images\group-save.png" />
+    <Content Include="Areas\VIS\Images\group-search.png" />
+    <Content Include="Areas\VIS\Images\group-sort-arrow.png" />
+    <Content Include="Areas\VIS\Images\group-tab-mob.png" />
+    <Content Include="Areas\VIS\Images\group-tick.png" />
+    <Content Include="Areas\VIS\Images\group-tittle-ico.png" />
+    <Content Include="Areas\VIS\Images\heroAccent.png" />
+    <Content Include="Areas\VIS\Images\history-appointment.png" />
+    <Content Include="Areas\VIS\Images\history-call.png" />
+    <Content Include="Areas\VIS\Images\history-close.png" />
+    <Content Include="Areas\VIS\Images\history-download.png" />
+    <Content Include="Areas\VIS\Images\history-email.png" />
+    <Content Include="Areas\VIS\Images\history-letter.png" />
+    <Content Include="Areas\VIS\Images\history-print.png" />
+    <Content Include="Areas\VIS\Images\history-search.png" />
+    <Content Include="Areas\VIS\Images\history-sms.png" />
+    <Content Include="Areas\VIS\Images\history-zoom.png" />
+    <Content Include="Areas\VIS\Images\History24.png" />
+    <Content Include="Areas\VIS\Images\home.png" />
+    <Content Include="Areas\VIS\Images\homePage.PNG" />
+    <Content Include="Areas\VIS\Images\home\1.jpg" />
+    <Content Include="Areas\VIS\Images\home\2.jpg" />
+    <Content Include="Areas\VIS\Images\home\3.jpg" />
+    <Content Include="Areas\VIS\Images\home\4.jpg" />
+    <Content Include="Areas\VIS\Images\home\Ballon.jpg" />
+    <Content Include="Areas\VIS\Images\home\comments.jpg" />
+    <Content Include="Areas\VIS\Images\home\comments.png" />
+    <Content Include="Areas\VIS\Images\home\defaultUser.png" />
+    <Content Include="Areas\VIS\Images\home\defaultUser46X46.png" />
+    <Content Include="Areas\VIS\Images\home\done-ico.png" />
+    <Content Include="Areas\VIS\Images\home\icons-favourites.png" />
+    <Content Include="Areas\VIS\Images\home\icons-feeds.png" />
+    <Content Include="Areas\VIS\Images\home\icons-links.png" />
+    <Content Include="Areas\VIS\Images\home\icons-MenuBar.png" />
+    <Content Include="Areas\VIS\Images\home\icons-welcomeScreenTabs.png" />
+    <Content Include="Areas\VIS\Images\home\icons-workflowActivity.png" />
+    <Content Include="Areas\VIS\Images\home\mainMenu-BG.png" />
+    <Content Include="Areas\VIS\Images\home\mainMenu.png" />
+    <Content Include="Areas\VIS\Images\home\top-iconswelcomeScreenTab.png" />
+    <Content Include="Areas\VIS\Images\home\upload-ico.png" />
+    <Content Include="Areas\VIS\Images\home\User.png" />
+    <Content Include="Areas\VIS\Images\home\userAvatar-Feeds-Caroline.png" />
+    <Content Include="Areas\VIS\Images\home\userAvatar-Feeds-Scott.png" />
+    <Content Include="Areas\VIS\Images\home\userAvatar-Feeds-Sophia.png" />
+    <Content Include="Areas\VIS\Images\home\userAvatar-Large.png" />
+    <Content Include="Areas\VIS\Images\home\userAvatar.png" />
+    <Content Include="Areas\VIS\Images\home\verticalScroll-End.png" />
+    <Content Include="Areas\VIS\Images\home\welcomeScreen-AlertBubbles.png" />
+    <Content Include="Areas\VIS\Images\home\workflowActivity-history.png" />
+    <Content Include="Areas\VIS\Images\home\zoom-ico2.png" />
+    <Content Include="Areas\VIS\Images\html.png" />
+    <Content Include="Areas\VIS\Images\i.png" />
+    <Content Include="Areas\VIS\Images\icons.png" />
+    <Content Include="Areas\VIS\Images\Ignore22.png" />
+    <Content Include="Areas\VIS\Images\image.png" />
+    <Content Include="Areas\VIS\Images\imaport-contacts.png" />
+    <Content Include="Areas\VIS\Images\info-icon.png" />
+    <Content Include="Areas\VIS\Images\infoOnHome.png" />
+    <Content Include="Areas\VIS\Images\invalid.png" />
+    <Content Include="Areas\VIS\Images\kpi-greenarrow.png" />
+    <Content Include="Areas\VIS\Images\kpi-redarrow.png" />
+    <Content Include="Areas\VIS\Images\left-shift.png" />
+    <Content Include="Areas\VIS\Images\link-del.png" />
+    <Content Include="Areas\VIS\Images\LoadingCircle.gif" />
+    <Content Include="Areas\VIS\Images\Location.png" />
+    <Content Include="Areas\VIS\Images\login\bg2.jpg" />
+    <Content Include="Areas\VIS\Images\login\calender.png" />
+    <Content Include="Areas\VIS\Images\login\client.png" />
+    <Content Include="Areas\VIS\Images\login\combo-arrow.png" />
+    <Content Include="Areas\VIS\Images\login\folder-open.png" />
+    <Content Include="Areas\VIS\Images\login\folder.png" />
+    <Content Include="Areas\VIS\Images\login\form-bg.png" />
+    <Content Include="Areas\VIS\Images\login\html5_login.JPG" />
+    <Content Include="Areas\VIS\Images\login\html5_login.PNG" />
+    <Content Include="Areas\VIS\Images\login\lang-ico.png" />
+    <Content Include="Areas\VIS\Images\login\lock.png" />
+    <Content Include="Areas\VIS\Images\login\LoginLogo.png" />
+    <Content Include="Areas\VIS\Images\login\logo.png" />
+    <Content Include="Areas\VIS\Images\login\mDocAction.png" />
+    <Content Include="Areas\VIS\Images\login\mProcess.png" />
+    <Content Include="Areas\VIS\Images\login\mReport.png" />
+    <Content Include="Areas\VIS\Images\login\mWindow.png" />
+    <Content Include="Areas\VIS\Images\login\mWorkbench.png" />
+    <Content Include="Areas\VIS\Images\login\mWorkFlow.png" />
+    <Content Include="Areas\VIS\Images\login\off-btn.png" />
+    <Content Include="Areas\VIS\Images\login\org.png" />
+    <Content Include="Areas\VIS\Images\login\pass-ico.png" />
+    <Content Include="Areas\VIS\Images\login\role.png" />
+    <Content Include="Areas\VIS\Images\login\user-ico.png" />
+    <Content Include="Areas\VIS\Images\login\warehouse.png" />
+    <Content Include="Areas\VIS\Images\logo.jpg" />
+    <Content Include="Areas\VIS\Images\main_screen.png" />
+    <Content Include="Areas\VIS\Images\mDocAction.png" />
+    <Content Include="Areas\VIS\Images\menuTree.PNG" />
+    <Content Include="Areas\VIS\Images\mProcess.png" />
+    <Content Include="Areas\VIS\Images\mReport.png" />
+    <Content Include="Areas\VIS\Images\multiplepdf.png" />
+    <Content Include="Areas\VIS\Images\mWindow.png" />
+    <Content Include="Areas\VIS\Images\mWorkbench.png" />
+    <Content Include="Areas\VIS\Images\mWorkFlow.png" />
+    <Content Include="Areas\VIS\Images\nonfavItem.png" />
+    <Content Include="Areas\VIS\Images\nonSummary.png" />
+    <Content Include="Areas\VIS\Images\orderedList0.png" />
+    <Content Include="Areas\VIS\Images\orderedList1.png" />
+    <Content Include="Areas\VIS\Images\orderedList2.png" />
+    <Content Include="Areas\VIS\Images\pdf.png" />
+    <Content Include="Areas\VIS\Images\ppt-ico.png" />
+    <Content Include="Areas\VIS\Images\ppt.png" />
+    <Content Include="Areas\VIS\Images\Preference16.png" />
+    <Content Include="Areas\VIS\Images\preview.png" />
+    <Content Include="Areas\VIS\Images\print.png" />
+    <Content Include="Areas\VIS\Images\Refresh16.png" />
+    <Content Include="Areas\VIS\Images\Refresh22.png" />
+    <Content Include="Areas\VIS\Images\Refresh24.png" />
+    <Content Include="Areas\VIS\Images\removefav.png" />
+    <Content Include="Areas\VIS\Images\repformat.png" />
+    <Content Include="Areas\VIS\Images\reply.png" />
+    <Content Include="Areas\VIS\Images\requery.png" />
+    <Content Include="Areas\VIS\Images\right-shift.png" />
+    <Content Include="Areas\VIS\Images\save-icon.jpg" />
+    <Content Include="Areas\VIS\Images\Save22.png" />
+    <Content Include="Areas\VIS\Images\savecsv.png" />
+    <Content Include="Areas\VIS\Images\savepdf.png" />
+    <Content Include="Areas\VIS\Images\search.png" />
+    <Content Include="Areas\VIS\Images\search32.png" />
+    <Content Include="Areas\VIS\Images\select.png" />
+    <Content Include="Areas\VIS\Images\send.png" />
+    <Content Include="Areas\VIS\Images\sendSms.png" />
+    <Content Include="Areas\VIS\Images\smiley-awake.gif" />
+    <Content Include="Areas\VIS\Images\smiley-sleep.gif" />
+    <Content Include="Areas\VIS\Images\summary.png" />
+    <Content Include="Areas\VIS\Images\text.png" />
+    <Content Include="Areas\VIS\Images\tm-expand.png" />
+    <Content Include="Areas\VIS\Images\tm-minus.png" />
+    <Content Include="Areas\VIS\Images\ToLink.png" />
+    <Content Include="Areas\VIS\Images\up-arrow.png" />
+    <Content Include="Areas\VIS\Images\up-cardview.png" />
+    <Content Include="Areas\VIS\Images\UpdateBP16.png" />
+    <Content Include="Areas\VIS\Images\upload.png" />
+    <Content Include="Areas\VIS\Images\upload22x22.png" />
+    <Content Include="Areas\VIS\Images\user.png" />
+    <Content Include="Areas\VIS\Images\valid.png" />
+    <Content Include="Areas\VIS\Images\vis_home_fav1.png" />
+    <Content Include="Areas\VIS\Images\vis_home_myLink1.png" />
+    <Content Include="Areas\VIS\Images\word.png" />
+    <Content Include="Areas\VIS\Images\xml.png" />
+    <Content Include="Areas\VIS\Images\zoom.png" />
+    <Content Include="Areas\VIS\Images\Zoom16.png" />
+    <Content Include="Areas\VIS\Images\zoomfav.png" />
+    <Content Include="Areas\VIS\ReportViewer\js\kendo.subset.2015.3.930.min.js" />
+    <Content Include="Areas\VIS\ReportViewer\js\telerikReportViewer-10.0.16.204.js" />
+    <Content Include="Areas\VIS\ReportViewer\js\telerikReportViewer-10.0.16.204.min.js" />
+    <Content Include="Areas\VIS\ReportViewer\styles\kendo.blueopal.min.css" />
+    <Content Include="Areas\VIS\ReportViewer\styles\kendo.common.min.css" />
+    <Content Include="Areas\VIS\ReportViewer\styles\telerikReportViewer.css" />
+    <Content Include="Areas\VIS\ReportViewer\templates\telerikReportViewerTemplate-FA.html" />
+    <Content Include="Areas\VIS\ReportViewer\templates\telerikReportViewerTemplate.html" />
+    <Content Include="Areas\VIS\Scripts\app\adialog.js" />
+    <Content Include="Areas\VIS\Scripts\app\ajaxlogin.js" />
+    <Content Include="Areas\VIS\Scripts\app\areport.js" />
+    <Content Include="Areas\VIS\Scripts\app\arequest.js" />
+    <Content Include="Areas\VIS\Scripts\app\azoomacross.js" />
+    <Content Include="Areas\VIS\Scripts\app\calloutengine.js" />
+    <Content Include="Areas\VIS\Scripts\app\child-dialog.js" />
+    <Content Include="Areas\VIS\Scripts\app\classes.js" />
+    <Content Include="Areas\VIS\Scripts\app\context.js" />
+    <Content Include="Areas\VIS\Scripts\app\controller.js" />
+    <Content Include="Areas\VIS\Scripts\app\controls.js" />
+    <Content Include="Areas\VIS\Scripts\app\datacontext.js" />
+    <Content Include="Areas\VIS\Scripts\app\desktopmgr.js" />
+    <Content Include="Areas\VIS\Scripts\app\favouritehelper.js" />
+    <Content Include="Areas\VIS\Scripts\app\formframe.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\acctviewer.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\productContainerTree.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vallocation.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vattributegrid.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vBOMdrop.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vcharge.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefrom.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefrominvoice.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefromshipment.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefromstatement.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vinoutgen.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vinvoicegen.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vmatch.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vpayprint.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vpayselect.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vtrxmaterial.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\accountform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\appointments.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\archiveviewer.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\attachmentform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\attachmentHistory.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\bpartner.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\cardviewdialog.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\contactInfo.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\chat.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\bulkdownload.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\email.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\find.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\genralattributeform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\help.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\importexcelwizard.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\infogeneral.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\infomenu.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\infoproduct.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\infoscanform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\infowindow.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\ini.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\locationform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\locatorform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\markmodule.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\newmailformat.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\openmailformats.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\parameterdialog.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\pattributeinstance.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\pattributesform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\recordaccessdialog.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\sms.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\treemaintenance.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\userpreference.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\valuepreference.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\vbinaryform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\vdocaction.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\vimageform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\visimportfiles.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\vpayment.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\vsetup.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\wfactivity.js" />
+    <Content Include="Areas\VIS\Scripts\app\gridvo.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\createrole.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\createuser.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\gmailcontacts.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\gmailcontactsetting.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\group.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\groupinfo.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\importcontacts.js" />
+    <Content Include="Areas\VIS\Scripts\app\grouprights\orgaccess.js" />
+    <Content Include="Areas\VIS\Scripts\app\historymgr.js" />
+    <Content Include="Areas\VIS\Scripts\app\i18N.js" />
+    <Content Include="Areas\VIS\Scripts\app\initialize.js" />
+    <Content Include="Areas\VIS\Scripts\app\logger.js" />
+    <Content Include="Areas\VIS\Scripts\app\lookup.js" />
+    <Content Include="Areas\VIS\Scripts\app\native-extension.js" />
+    <Content Include="Areas\VIS\Scripts\app\processframe.js" />
+    <Content Include="Areas\VIS\Scripts\app\processwrapper.js" />
+    <Content Include="Areas\VIS\Scripts\app\role.js" />
+    <Content Include="Areas\VIS\Scripts\app\secure-engine.js" />
+    <Content Include="Areas\VIS\Scripts\app\todo.bindings.js" />
+    <Content Include="Areas\VIS\Scripts\app\todo.datacontext.js" />
+    <Content Include="Areas\VIS\Scripts\app\todo.model.js" />
+    <Content Include="Areas\VIS\Scripts\app\todo.viewmodel.js" />
+    <Content Include="Areas\VIS\Scripts\app\treepanel.js" />
+    <Content Include="Areas\VIS\Scripts\app\utility.js" />
+    <Content Include="Areas\VIS\Scripts\app\viewmanager.js" />
+    <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
+    <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
+    <Content Include="Areas\VIS\Scripts\forms\form.js" />
+    <Content Include="Areas\VIS\Scripts\home\changeuserimage.js" />
+    <Content Include="Areas\VIS\Scripts\home\favourite.js" />
+    <Content Include="Areas\VIS\Scripts\home\home.js" />
+    <Content Include="Areas\VIS\Scripts\home\shortcut.js" />
+    <Content Include="Areas\VIS\Scripts\model\callouts.js" />
+    <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
+    <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
+    <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
+    <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
+    <Content Include="Areas\VIS\Scripts\TestPanel.js" />
+    <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
+    <Content Include="Areas\VIS\Templates\VIS_Templates.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\VIS\Classes\AcctViewerDataClass.cs" />
+    <Compile Include="Areas\VIS\Classes\ClientCredentials.cs" />
+    <Compile Include="Areas\VIS\Classes\GmailConfig.cs" />
+    <Compile Include="Areas\VIS\Classes\LookupHelper.cs" />
+    <Compile Include="Areas\VIS\Classes\QueryCollection.cs" />
+    <Compile Include="Areas\VIS\Classes\SecureEngineBridge.cs" />
+    <Compile Include="Areas\VIS\Classes\VChargeModelClass.cs" />
+    <Compile Include="Areas\VIS\Controllers\AccountController.cs" />
+    <Compile Include="Areas\VIS\Controllers\AccountFormController.cs" />
+    <Compile Include="Areas\VIS\Controllers\AcctViewerDataController.cs" />
+    <Compile Include="Areas\VIS\Controllers\ASearchController.cs" />
+    <Compile Include="Areas\VIS\Controllers\AttachmentController.cs" />
+    <Compile Include="Areas\VIS\Controllers\AttachmentHistoryController.cs" />
+    <Compile Include="Areas\VIS\Controllers\Bitmap.cs" />
+    <Compile Include="Areas\VIS\Controllers\BPartnerController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CalloutOrderController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MAcctSchemaController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MBankStatementController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MBPartnerController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MCashBookController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MCashJournalController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MChargeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MConversionRateController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MCurrencyController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MDocTypeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MInOutController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MInOutLineController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MInventoryController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MInventoryLineController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MInvoiceBatchLineController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MInvoiceController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MLocatorContoller.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\ModulePrefixController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MOrderController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MOrderLineController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentTermController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListVersionController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MProductCategoryController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MProductController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MProductionLineController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MProductLocatorController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MProductPricingController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MProjectController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MRequestController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MRequestTypeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MStorageController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MTaxController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MUOMController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MUOMConversionController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MWarehouseController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CardViewController.cs" />
+    <Compile Include="Areas\VIS\Controllers\Chat\ChatController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CommonController.cs" />
+    <Compile Include="Areas\VIS\Controllers\DocActionController.cs" />
+    <Compile Include="Areas\VIS\Controllers\EmailController.cs" />
+    <Compile Include="Areas\VIS\Controllers\FormController.cs" />
+    <Compile Include="Areas\VIS\Controllers\GenerateXModelController.cs" />
+    <Compile Include="Areas\VIS\Controllers\GenralAttributeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\Group\GmailContactsController.cs" />
+    <Compile Include="Areas\VIS\Controllers\Group\GroupController.cs" />
+    <Compile Include="Areas\VIS\Controllers\HomeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\InfoGeneralController.cs" />
+    <Compile Include="Areas\VIS\Controllers\InfoMenuController.cs" />
+    <Compile Include="Areas\VIS\Controllers\InfoProductController.cs" />
+    <Compile Include="Areas\VIS\Controllers\InfoWindowController.cs" />
+    <Compile Include="Areas\VIS\Controllers\InOutController.cs" />
+    <Compile Include="Areas\VIS\Controllers\JsonDataController.cs" />
+    <Compile Include="Areas\VIS\Controllers\LocationController.cs" />
+    <Compile Include="Areas\VIS\Controllers\LocatorController.cs" />
+    <Compile Include="Areas\VIS\Controllers\LoginController.cs" />
+    <Compile Include="Areas\VIS\Controllers\MarkModuleController.cs" />
+    <Compile Include="Areas\VIS\Controllers\OrderController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PAttributesController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PaymentAllocationController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PaymentRuleController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PostingController.cs" />
+    <Compile Include="Areas\VIS\Controllers\ProductContainerController.cs" />
+    <Compile Include="Areas\VIS\Controllers\ProductController.cs" />
+    <Compile Include="Areas\VIS\Controllers\RecordAccessController.cs" />
+    <Compile Include="Areas\VIS\Controllers\ResourceController.cs" />
+    <Compile Include="Areas\VIS\Controllers\SmsController.cs" />
+    <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\TreeMaintenanceController.cs" />
+    <Compile Include="Areas\VIS\Controllers\UserPreferenceController.cs" />
+    <Compile Include="Areas\VIS\Controllers\ValuePreferenceController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VBOMDropController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VChargeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VCreateFromController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VImageFormController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VPayPrintController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VPaySelectController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VSetupController.cs" />
+    <Compile Include="Areas\VIS\Controllers\VTrxMaterialController.cs" />
+    <Compile Include="Areas\VIS\Controllers\WFActivityController.cs" />
+    <Compile Include="Areas\VIS\DataContracts\CalloutData.cs" />
+    <Compile Include="Areas\VIS\DataContracts\FormData.cs" />
+    <Compile Include="Areas\VIS\DataContracts\ProcessData.cs" />
+    <Compile Include="Areas\VIS\DataContracts\SqlParams.cs" />
+    <Compile Include="Areas\VIS\DataContracts\WindowData.cs" />
+    <Compile Include="Areas\VIS\DBase\DB.cs" />
+    <Compile Include="Areas\VIS\Filters\AjaxAuthorizeAttribute.cs" />
+    <Compile Include="Areas\VIS\Filters\AjaxSessionFilterAttribute.cs" />
+    <Compile Include="Areas\VIS\Filters\AjaxValidateAntiForgeryTokenAttribute.cs" />
+    <Compile Include="Areas\VIS\Helpers\ContextHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\FormHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\HomeHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\JsonHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\LoginHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\MarkModuleHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\MenuHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\ProcessHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\RoleHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\ShortcutHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\SqlHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\WindowHelper.cs" />
+    <Compile Include="Areas\VIS\Models\AccountFormModel.cs" />
+    <Compile Include="Areas\VIS\Models\AccountModels.cs" />
+    <Compile Include="Areas\VIS\Models\AcctViewerData.cs" />
+    <Compile Include="Areas\VIS\Models\ASearchModel.cs" />
+    <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
+    <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
+    <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MAcctSchemaModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MBankStatementModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MBPartnerModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MCashBookModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MCashJournalModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MChargeModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MConversionRateModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MCurrencyModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MDocTypeModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MInOutLineModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MInOutModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MInventoryLineModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MInventoryModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MInvoiceBatchLineModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MInvoiceModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MLocatorModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\ModulePrefixModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MOrderLineModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MOrderModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MPaymentModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MPaymentTermModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MPriceListModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MPriceListVersionModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MProductCategoryModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MProductionLineModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MProductLocatorModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MProductModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MProductPricingModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MProjectModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MRequestTypeModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MStorageModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MTaxModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MUOMConversionModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MUOMModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MWarehouseModel.cs" />
+    <Compile Include="Areas\VIS\Models\CardViewModel.cs" />
+    <Compile Include="Areas\VIS\Models\Chat\ChatModel.cs" />
+    <Compile Include="Areas\VIS\Models\DocActionModel.cs" />
+    <Compile Include="Areas\VIS\Models\EmailModel.cs" />
+    <Compile Include="Areas\VIS\Models\FormModel.cs" />
+    <Compile Include="Areas\VIS\Models\GenerateModel.cs" />
+    <Compile Include="Areas\VIS\Models\GenerateXModelModel.cs" />
+    <Compile Include="Areas\VIS\Models\GenralAttributeModel.cs" />
+    <Compile Include="Areas\VIS\Models\Group\CreateUser.cs" />
+    <Compile Include="Areas\VIS\Models\Group\CTX.cs" />
+    <Compile Include="Areas\VIS\Models\Group\GmailContactsSettings.cs" />
+    <Compile Include="Areas\VIS\Models\Group\Group.cs" />
+    <Compile Include="Areas\VIS\Models\HomeModels.cs" />
+    <Compile Include="Areas\VIS\Models\InfoGeneralModel.cs" />
+    <Compile Include="Areas\VIS\Models\InfoMenuModel.cs" />
+    <Compile Include="Areas\VIS\Models\InfoProductModel.cs" />
+    <Compile Include="Areas\VIS\Models\InfoWindowModel.cs" />
+    <Compile Include="Areas\VIS\Models\LocationModel.cs" />
+    <Compile Include="Areas\VIS\Models\LocatorModel.cs" />
+    <Compile Include="Areas\VIS\Models\MChart.cs" />
+    <Compile Include="Areas\VIS\Models\PAttributesModel.cs" />
+    <Compile Include="Areas\VIS\Models\PaymentAllocation.cs" />
+    <Compile Include="Areas\VIS\Models\PaymentAllocationModel.cs" />
+    <Compile Include="Areas\VIS\Models\PaymentModel.cs" />
+    <Compile Include="Areas\VIS\Models\ProductContainerModel.cs" />
+    <Compile Include="Areas\VIS\Models\RecordAccessModel.cs" />
+    <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
+    <Compile Include="Areas\VIS\Models\SmsModel.cs" />
+    <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
+    <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
+    <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
+    <Compile Include="Areas\VIS\Models\ValuePreferenceModel.cs" />
+    <Compile Include="Areas\VIS\Models\VBOMDropModel.cs" />
+    <Compile Include="Areas\VIS\Models\VChargeModel.cs" />
+    <Compile Include="Areas\VIS\Models\VCreateFromModel.cs" />
+    <Compile Include="Areas\VIS\Models\VImageModel.cs" />
+    <Compile Include="Areas\VIS\Models\VPayPrintModel.cs" />
+    <Compile Include="Areas\VIS\Models\VPaySelectModel.cs" />
+    <Compile Include="Areas\VIS\Models\VSetupModel.cs" />
+    <Compile Include="Areas\VIS\Models\VTree.cs" />
+    <Compile Include="Areas\VIS\Models\VTreeMaintenance.cs" />
+    <Compile Include="Areas\VIS\Models\VTrxMaterialModel.cs" />
+    <Compile Include="Areas\VIS\Models\WFActivityModel.cs" />
+    <Compile Include="Areas\VIS\VISAreaRegistration.cs" />
+    <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.cs">
+      <DependentUpon>CreateUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.designer.cs">
+      <DependentUpon>CreateUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
+    <Content Include="LibDll\DotNetOpenAuth.dll" />
+    <Content Include="LibDll\Google.Apis.Authentication.OAuth2.dll" />
+    <Content Include="LibDll\Google.Apis.Calendar.v3.dll" />
+    <Content Include="LibDll\Google.Apis.dll" />
+    <Content Include="LibDll\Google.Apis.Tasks.v1.dll" />
+    <Content Include="LibDll\Google.GData.Client.dll" />
+    <Content Include="LibDll\Google.GData.Contacts.dll" />
+    <Content Include="LibDll\Google.GData.Extensions.dll" />
+    <Content Include="LibDll\Google.GData.YouTube.dll" />
+    <Content Include="LibDll\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="LibDll\IKVM.OpenJDK.ClassLibrary.dll" />
+    <Content Include="LibDll\IKVM.Runtime.dll" />
+    <Content Include="LibDll\itextsharp.dll" />
+    <Content Include="LibDll\Mail.dll" />
+    <Content Include="packages.config" />
+    <Content Include="Areas\VIS\Views\AccountForm\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\ASearch\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Chat\LoadChat.cshtml" />
+    <Content Include="Areas\VIS\Views\Email\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Email\Init.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\Home.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\TimeoutRedirect.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\_Login.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\_Login2.cshtml" />
+    <Content Include="Areas\VIS\Views\Location\Locations.cshtml" />
+    <Content Include="Areas\VIS\Views\Locator\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_Menu.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_UserSettings.cshtml" />
+    <Content Include="Areas\VIS\Views\UserPreference\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\ValuePreference\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\VImageForm\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\VSetup\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Web.config" />
+    <Content Include="Areas\VIS\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\VIS\Scripts\app\processengine\" />
+    <Folder Include="Areas\VIS\Views\AmountDivision\" />
+    <Folder Include="Areas\VIS\Views\GenerateXModel\" />
+    <Folder Include="Areas\VIS\Views\GmailContacts\" />
+    <Folder Include="Areas\VIS\Views\Group\" />
+    <Folder Include="Areas\VIS\Views\MarkModule\" />
+    <Folder Include="Areas\VIS\Views\ModulePrefix\" />
+    <Folder Include="Areas\VIS\Views\OrgStructure\" />
+    <Folder Include="Areas\VIS\Views\Payment\" />
+    <Folder Include="Areas\VIS\Views\RecordAccess\" />
+    <Folder Include="Areas\VIS\Views\TreeOnDemand\" />
+    <Folder Include="Areas\VIS\Views\VBOMDrop\" />
+    <Folder Include="Areas\VIS\Views\VCharge\" />
+    <Folder Include="Areas\VIS\Views\VCreateFrom\" />
+    <Folder Include="Areas\VIS\Views\VPayPrint\" />
+    <Folder Include="Areas\VIS\Views\VTrxMaterial\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\VIS\Views\PaymentAllocation\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\TelerikReport\Index.cshtml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
+      <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
+      <Name>ModelLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3285</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:9464/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /E /Y /I  "$(ProjectDir)Areas\*" "$(ProjectDir)..\ViennaAdvantageWeb\Areas"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,408 @@
+[Account_Value],[Account_Name],[Account_Description],[Account_Type],[Account_Sign],[Account_Document],[Account_Summary],[Default_Account],[Account_Parent],[Balance Sheet],[Balance Sheet_Name],[US 1120 Balance Sheet],US 1120 Balance Sheet_Name,[Profit & Loss],[Profit & Loss_Name],[US 1120 Income Statement],[US 1120 Income Statement_Name],[Cash Flow],[Cash Flow_Name],[Master_Type],[Primary_Group],[Primary_Sub_Group],[Memo_Ledger]
+1,Assets,,Asset,,,Yes,,,1,Assets,15,Total Assets,,,,,,,,,,
+11,Cash,,Asset,,,Yes,,1,,,,,,,,,,,,1000004,1000034,
+11800,Cash in Registers,,Asset,,,No,,11,,,,,,,,,,,,,,
+11900,Petty Cash,Cash Book Asset,Asset,,Yes,No,CB_ASSET_ACCT,11,,,,,,,,,,,CB,,,
+11910,Petty Cash In-Transfer,Cash Book Transfer,Asset,,Yes,No,CB_CASHTRANSFER_ACCT,11,,,,,,,,,,,,,,
+111,Bank Account,,Asset,,,Yes,,1,11,Cash,1,Cash,,,,,,,,1000003,1000018,
+11100,Checking Account,Bank Asset,Asset,,Yes,No,B_ASSET_ACCT,111,,,,,,,,,,,BA,,,
+11110,Checking In-Transfer,Bank transactions in transit,Asset,,Yes,No,B_INTRANSIT_ACCT,111,,,,,,,,,,,,,,
+11120,Checking Unidentified Receipts,Receipts from unidentified customer,Asset,,Yes,No,B_UNIDENTIFIED_ACCT,111,,,,,,,,,,,,,,
+11131,Checking Unallocated Receipts,"Received, unallocated payments",Asset,,Yes,No,B_UNALLOCATEDCASH_ACCT,111,,,,,,,,,,,,,,
+11121,Checking Account 2,,Asset,,,No,,111,,,,,,,,,,,,,,
+11130,Savings Account,,Asset,,,No,,111,,,,,,,,,,,,,,
+12,Accounts Receivable,,Asset,,,Yes,,1,12,Accounts Receivable,,,,,,,,,,,,
+121,Accounts Receivable - Trade,,Asset,,,Yes,,12,,,,,,,,,,,,1000005,,
+12110,Accounts Receivable - Trade,Accounts Receivables,Asset,,Yes,No,C_RECEIVABLE_ACCT,121,,,2a,Trade nodes and accounts receivables,,,,,,,,,,
+12115,Accounts Receivable Services - Trade,Accounts Receivables for Services,Asset,,Yes,No,C_RECEIVABLE_SERVICES_ACCT,121,,,2a,Trade nodes and accounts receivables,,,,,,,,,,
+12120,A/R Non Sufficient Funds Returned Checks,,Asset,,,No,,121,,,2a,,,,,,,,,,,
+12180,A/R Trade Allowance for Bad Debit,,Asset,,,No,,121,,,2b,Less allowances for bad debts,,,,,,,,,,
+12190,Not invoiced receivables,We delivered but have not invoiced yet,Asset,,Yes,No,NOTINVOICEDRECEIVABLES_ACCT,121,,,2a,,,,,,,,,,,
+122,Credit Card in Transit,,Asset,,,Yes,,12,,,,,,,,,,,,1000003,1000018,
+12210,In Transit A/R Amex,,Asset,,,No,,122,,,2a,,,,,,,,,,,
+12220,In Transit A/R Master Card,,Asset,,,No,,122,,,2a,,,,,,,,,,,
+12230,In Transit A/R Visa,,Asset,,,No,,122,,,2a,,,,,,,,,,,
+12240,In Transit A/R ATM Cards,,Asset,,,No,,122,,,2a,,,,,,,,,,,
+12290,A/R Credit Cards Allowance for Bad Debit,,Asset,,,No,,122,,,2b,,,,,,,,,,,
+12300,Vendor Allowances Receivable,,Asset,,,No,,122,,,2a,,,,,,,,,,,
+124,Loans Receivable,,Asset,,,Yes,,12,,,,,,,,,,,,1000004,1000032,
+12410,Loans Receivable Employees,,Asset,,,No,,124,,,2a,,,,,,,,,,,
+12420,Loans Receivable Owners/Shareholders,,Asset,,,No,,124,,,7,Loans to Shareholders,,,,,,,,,,
+12440,Loans Receivable Others,,Asset,,,No,,124,,,2a,,,,,,,,,,,
+125,Prepayments,,Asset,,,Yes,,12,,,,,,,,,,,,1000004,1000028,
+12510,Vendor prepayment,Prepayments for future expense,Asset,,Yes,No,V_PREPAYMENT_ACCT,125,,,2a,,,,,,,,,,,
+12520,Employee Expense Prepayment,Expense advances,Asset,,Yes,No,E_PREPAYMENT_ACCT,125,,,2a,,,,,,,,,,,
+126,Tax receivables,,Asset,,,Yes,,12,,,,,,,,,,,,1000004,1000030,
+12610,Tax credit A/R,Tax to be reimbursed - before tax declaration,Asset,,Yes,No,T_CREDIT_ACCT,126,,,6,,,,,,,,,,,
+12620,Tax receivables,Tax to receive based on tax declaration,Asset,,Yes,No,T_RECEIVABLES_ACCT,126,,,6,,,,,,,,,,,
+13,Investments,,Asset,,,Yes,,1,13,Investments,,,,,,,,,,1000004,1000027,
+13100,US Government Obligations,,Asset,,,No,,13,,,4,US Government Obligations,,,,,,,,,,
+13200,Tax-Exempt Securities,,Asset,,,No,,13,,,5,Tax-Exempt Securities,,,,,,,,,,
+13300,Other Investments,,Asset,,,No,,13,,,9,Other Investments,,,,,,,,,,
+14,Inventory,,Asset,,,Yes,,1,14,Inventory,3,Inventories,,,,,,,,1000004,1000031,
+14100,General Trade Inventory,Inventory Account,Asset,,Yes,No,W_INVENTORY_ACCT,14,,,,,,,,,,,,,,
+14120,Product asset,Product Inventory Account,Asset,,Yes,No,P_ASSET_ACCT,14,,,,,,,,,,,,,,
+14130,Material Overhead,Material Overhead Account,Asset,,Yes,No,P_MATERIALOVERHD_ACCT,14,,,,,,,,,,,,,,
+15,"Prepaid Expenses, Deposits & Other Current Assets",,Asset,,,Yes,,1,15,"Prepaid Expenses, Deposits & Other Current Assets",6,Other Current Assets,,,,,,,,,,
+151,Prepaid Expenses,,Asset,,,Yes,,15,,,,,,,,,,,,1000004,1000028,
+15110,Prepaid Insurance,,Asset,,,No,,151,,,,,,,,,,,,,,
+15120,Prepaid Rent,,Asset,,,No,,151,,,,,,,,,,,,,,
+15130,Prepaid Interest,,Asset,,,No,,151,,,,,,,,,,,,,,
+15190,Prepaid Others,,Asset,,,No,,151,,,,,,,,,,,,,,
+152,Deposits,,Asset,,,Yes,,15,,,,,,,,,,,,1000004,1000033,
+15210,Deposit Rent,,Asset,,,No,,152,,,,,,,,,,,,,,
+15220,Deposit Utilities,,Asset,,,No,,152,,,,,,,,,,,,,,
+15290,Deposit Others,,Asset,,,No,,152,,,,,,,,,,,,,,
+153,Other Current Assets,,Asset,,,Yes,,15,,,,,,,,,,,,1000004,1000035,
+15300,Other Current Assets,,Asset,,,No,,153,,,,,,,,,,,,,,
+15310,Intercompany Due From,Default Receivables account for intercompany trx,Asset,,Yes,No,INTERCOMPANYDUEFROM_ACCT,153,,,6,,,,,,,,,,,
+15320,A/R Miscellaneous,,Asset,,,No,,153,,,2a,,,,,,,,,,,
+,,,,,,,,,15_,Total Current Assets,,,,,,,,,,,,
+161,Land and Building,,Asset,,,Yes,,1,16,Land and Building,,,,,,,,,,1000001,1000001,
+16100,Land,,Asset,,,No,,161,,,12,Land,,,,,,,,,,
+16200,Building,,Asset,,,No,,161,,,10a,Buildings and other depreciable assets,,,,,,,,,,
+16300,Land Improvements,,Asset,,,No,,161,,,10a,,,,,,,,,,,
+16400,Building Improvements,,Asset,,,No,,161,,,10a,,,,,,,,,,,
+16500,Leasehold Improvements,,Asset,,,No,,161,,,10a,,,,,,,,,,,
+17,Furniture & Fixtures,,Asset,,,Yes,,1,17,"Furniture, Fixtures & Equipment",10a,,,,,,,,,1000001,1000003,
+17100,Furniture,,Asset,,,No,,17,,,,,,,,,,,,,,
+17200,Fixtures,,Asset,,,No,,17,,,,,,,,,,,,,,
+173,Machinery & Equipment,,Asset,,,Yes,,1,,,,,,,,,,,,1000001,1000007,
+17300,Equipment,,Asset,,,No,,173,,,,,,,,,,,,,,
+17310,Data Processing Equipment,,Asset,,,No,,173,,,,,,,,,,,,,,
+17320,Software,,Asset,,,No,,173,,,,,,,,,,,,,,
+174,Vehicles,,Asset,,,Yes,,1,,,,,,,,,,,,1000001,1000005,
+17400,Vehicles,,Asset,,,No,,174,,,,,,,,,,,,,,
+177,Project & Work Order Assets,,Asset,,,Yes,,1,,,10a,,,,,,,,,1000001,1000017,
+17710,Project asset,Created Asset,Asset,,Yes,No,PJ_ASSET_ACCT,177,,,,,,,,,,,,,,
+17720,Project WIP,Asset Work in Progress,Asset,,Yes,No,PJ_WIP_ACCT,177,,,,,,,,,,,,,,
+17730,Work Order Material,Material assets assigned to work order,Asset,,Yes,No,WO_MATERIAL_ACCT,177,,,,,,,,,,,,,,
+17740,Work Order Material Overhead,"Material assets assigned to work order,Asset",Asset,,Yes,No,WO_MATERIALOVERHD_ACCT,177,,,,,,,,,,,,,,
+17750,Work Order Resource,"Resource assigned to work order,Asset",Asset,,Yes,No,WO_RESOURCE_ACCT,177,,,,,,,,,,,,,,
+17760,Work Center Overhead,Work Center Overhead assigned to work order,Asset,,Yes,No,WC_OVERHEAD_ACCT,177,,,,,,,,,,,,,,
+18,Accumulated Depreciation,,Asset,,,Yes,,1,18,Accumulated Depreciation,10b,Less accumulated depreciation,,,,,,,,1000002,1000000,
+18120,Building Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18130,Land Improvement Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18140,Building Improvement Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18150,Leasehold Improvement Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18210,Furniture Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18220,Fixtures Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18230,Equipment Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18240,Vehicles Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18250,Data Processing Equipment Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+18260,Software Accumulated Depreciation,,Asset,,,No,,18,,,,,,,,,,,,,,
+19,Other Assets,,Asset,,,Yes,,1,19,Other Assets,,,,,,,,,,,,
+191,Intangible Assets,,Asset,,,Yes,,19,,,,,,,,,,,,1000001,1000004,
+19110,Amortizable Assets,,Asset,,,No,,191,,,13a,Intangible Assets,,,,,,,,,,
+19120,Goodwill,,Asset,,,No,,191,,,13a,,,,,,,,,,,
+19130,Customer Lists,,Asset,,,No,,191,,,13a,,,,,,,,,,,
+19140,Other Intangible Assets,,Asset,,,No,,191,,,13a,,,,,,,,,,,
+19150,Accumulated Amortization,,Asset,,,No,,191,,,13b,Less accumulated amortization,,,,,,,,,,
+19200,Cash Surrender Value of Life Insurance,,Asset,,,No,,191,,,14,Other Assets,,,,,,,,,,
+19900,Other Assets,,Asset,,,No,,191,,,14,,,,,,,,,,,
+192,Fixed Assets,,Asset,,,Yes,,19,,,,,,,,,,,,1000001,1000004,
+19210,Fix Assets Account,,Asset,,,No,,192,,,,,,,,,,,,,,
+19220,Asset Depreciation,,Asset,,,No,ASSET_DEPRECIATION_ACCT,192,,,,,,,,,,,,,,
+19230,Asset Disposal Revenue,,Asset,,,No,ASSET_DISP_REVENUE_ACCT,192,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,19_,Fixed and other Assets,,,,,,,,,,,,
+2,Liabilities,,Liability,,,Yes,,,2,Liabilities,,,,,,,,,,,,
+21,Accounts Payables,,Liability,,,Yes,,2,21,Accounts Payable,,,,,,,,,,,,
+211,Accounts Payables Trade,,Liability,,,Yes,,21,,,16,Accounts Payable,,,,,,,,1000010,,
+21100,Accounts Payable Trade,Accounts Payables,Liability,,Yes,No,V_LIABILITY_ACCT,211,,,,,,,,,,,,,,
+21190,Not invoiced receipts,"Received products/services from vendors, but not invoiced",Liability,,Yes,No,NOTINVOICEDRECEIPTS_ACCT,211,,,,,,,,,,,,,,
+21200,Accounts Payable Services,Accounts Payables for non-product revenue,Liability,,Yes,No,V_LIABILITY_SERVICES_ACCT,211,,,,,,,,,,,,,,
+21300,Payment selection,Selected A/P invoices for payment ,Liability,,Yes,No,B_PAYMENTSELECT_ACCT,211,,,,,,,,,,,,,,
+21800,Intercompany Due To,Default Payables account for intercompany trx,Liability,,Yes,No,INTERCOMPANYDUETO_ACCT,211,,,,,,,,,,,,,,
+215,Customer Payables,,Liability,,,Yes,,21,,,16,,,,,,,,,1000007,1000093,
+21510,Customer Prepayments,Prepayments for future revenue,Liability,,Yes,No,C_PREPAYMENT_ACCT,215,,,,,,,,,,,,,,
+21520,Merchandise Credits Unredeemed,,Liability,,,No,,215,,,,,,,,,,,,,,
+21530,Gift Certificated Unredeemed,,Liability,,,No,,215,,,,,,,,,,,,,,
+21540,Special Order Deposits,,Liability,,,No,,215,,,,,,,,,,,,,,
+21550,Mail Order Deposits,,Liability,,,No,,215,,,,,,,,,,,,,,
+216,Tax Payables,,Liability,,,Yes,,21,,,18,Other current liabilities,,,,,,,,1000007,1000056,
+21610,Tax due,Tax to be paid - before tax declaration,Liability,,Yes,No,T_DUE_ACCT,216,,,,,,,,,,,TR,,,
+21620,Tax liability,Tax to be paid based on tax declaration,Liability,,Yes,No,T_LIABILITY_ACCT,216,,,,,,,,,,,,,,
+21700,Withholding (Tax),Withholding for 1099 or Quality Guarantee,Liability,,Yes,No,WITHHOLDING_ACCT,216,,,,,,,,,,,,,,
+21710,Withholding (Other),,Liability,,,No,,216,,,,,,,,,,,,,,
+22,Accrued Expenses,,Liability,,,Yes,,2,22,Accrued Expenses,18,,,,,,,,,1000007,1000093,
+22100,Accrued Payroll,,Liability,,,No,,22,,,,,,,,,,,,,,
+22200,Payroll Withholdings,,Liability,,,No,,22,,,,,,,,,,,,,,
+22210,Federal Tax Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22220,FICA Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22230,Medicare Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22240,State Tax Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22250,Local Tax Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22260,401k & Pension Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22270,Garnishment Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22290,Miscellaneous Withholding,,Liability,,,No,,22,,,,,,,,,,,,,,
+22300,Accrued Payroll Taxes,,Liability,,,No,,22,,,,,,,,,,,,,,
+22310,FICA Employers Contribution,,Liability,,,No,,22,,,,,,,,,,,,,,
+22320,Medicare Employers Contribution,,Liability,,,No,,22,,,,,,,,,,,,,,
+22330,Federal Unemployment Employers Contribution,,Liability,,,No,,22,,,,,,,,,,,,,,
+22340,State Unemployment Employers Contribution,,Liability,,,No,,22,,,,,,,,,,,,,,
+22400,Sales Tax Collected,,Liability,,,No,,22,,,,,,,,,,,,,,
+22500,Accrued Use Tax,,Liability,,,No,,22,,,,,,,,,,,,,,
+22600,Accrued Retirement Plan Expense,,Liability,,,No,,22,,,,,,,,,,,,,,
+22900,Accrued Expenses Others,,Liability,,,No,,22,,,,,,,,,,,,,,
+23,Current Note Payables,,Liability,,,Yes,,2,23,Current Note Payables,17,"Mortgages, notes, bonds payable in less than 1 year",,,,,,,,1000008,1000059,
+23100,Short Term Obligation,,Liability,,,No,,23,,,,,,,,,,,,,,
+23900,Current Portion of Long Term Debt,,Liability,,,No,,23,,,,,,,,,,,,,,
+24,Long Term Liabilities,,Liability,,,Yes,,2,24,Long Term Liabilities,,,,,,,,,,1000008,1000060,
+24100,Long Term Obligation,,Liability,,,No,,24,,,20,"Mortgages, notes, bonds payable in 1 year or more",,,,,,,,,,
+24200,Mortgage,,Liability,,,No,,24,,,8,Mortgage and real estate loan,,,,,,,,,,
+24300,Loan from Owner/Stockholder,,Liability,,,No,,24,,,19,Loans from Shareholder,,,,,,,,,,
+24800,Other Long Term Obligation,,Liability,,,No,,24,,,21,Other Liabilities,,,,,,,,,,
+24900,Current Portion of Long Term Debt,,Liability,,,No,,24,,,20,,,,,,,,,,,
+3,Owner's Equity/Net Worth,,Owner's Equity,,,Yes,,,3,Owner's Equity/Net Worth,,,,,,,,,,,,
+31,Capital,,Owner's Equity,,,Yes,,3,31,Capital,,,,,,,,,,1000006,1000042,
+31000,Capital/Common Stock,,Owner's Equity,,,No,,31,,,22b,Capital Stock Preferred,,,,,,,,,,
+31010,Capital in excess of Par on Common Stock,,Owner's Equity,,,No,,31,,,23,Additional Paid-in Capital,,,,,,,,,,
+31100,Preferred Stock,,Owner's Equity,,,No,,31,,,22a,Capital Stock Common,,,,,,,,,,
+31110,Capital in excess of Par on Preferred Stock,,Owner's Equity,,,No,,31,,,23,,,,,,,,,,,
+32,Earnings,,Owner's Equity,,,Yes,,3,32,Current Profit & Loss,25,Retained Earnings,,,,,,,,1000006,1000043,
+32100,Dividends,,Owner's Equity,,,No,,32,,,,,,,,,,,,,,
+32200,Drawings,,Owner's Equity,,,No,,32,,,,,,,,,,,,,,
+32900,Retained Earnings,Year end processing to balance account (Income Summary),Owner's Equity,,Yes,No,RETAINEDEARNING_ACCT,32,,,,,,,,,,,,,,
+,,,,,,,,,33,Total Liabilities and Equity,,,,,,,,,,,,
+4,Revenue,,Revenue,,,Yes,,,,,,,4,Sales,,,,,,1000012,1000068,
+41,Sales,,Revenue,,,Yes,,4,,,,,4,Sales,,,,,,1000012,1000068,
+41000,Trade Revenue,Default Product or Service revenue,Revenue,,Yes,No,P_REVENUE_ACCT,41,,,,,,,1a,Gross receipts or sales,,,,,,92000
+42000,Services Revenue,,Revenue,,,No,,41,,,,,,,1a,,,,,,,92000
+43000,Sideline Revenue,,Revenue,,,No,,41,,,,,,,1a,,,,,,,92000
+46000,Royalties Revenue,,Revenue,,,No,,41,,,,,,,7,Gross Royalties,,,,,,92000
+47000,Unearned revenue,"We have invoiced, but not delivered yet",Revenue,,Yes,No,UNEARNEDREVENUE_ACCT,41,,,,,,,1a,,,,,,,92000
+48000,Not invoiced revenue,We delivered but have not invoiced yet,Revenue,,Yes,No,NOTINVOICEDREVENUE_ACCT,41,,,,,,,1a,,,,,,,92000
+49,Sales Discounts,,Revenue,,,Yes,,41,,,,,49,Sales Discounts,1b,Less returns and allowances,,,,1000012,1000065,
+49100,Trade Discounts,Granted Trade discounts (corrects Product Revenue),Revenue,,Yes,No,P_TRADEDISCOUNTGRANT_ACCT,49,,,,,,,,,,,,,,92000
+49200,Payment discount expense,Granted early payment discount to customers,Revenue,,Yes,No,PAYDISCOUNT_EXP_ACCT,49,,,,,,,,,,,,,,92000
+49300,Promotion Discounts,,Revenue,,,No,,49,,,,,,,,,,,,,,92000
+5,Expense,,Expense,,,Yes,,,,,,,5,Cost of Goods Sold,2,Cost of goods sold,,,,1000014,1000079,
+51,Cost of Goods Sold,,Expense,,,Yes,,5,,,,,5,Cost of Goods Sold,2,Cost of goods sold,,,,1000014,1000079,
+51100,Product COGS,Cost of Goods Sold,Expense,,Yes,No,P_COGS_ACCT,51,,,,,,,,,,,,,,93300
+51200,Product Expense,Default Service costs (I.e. not on inventory),Expense,,Yes,No,P_EXPENSE_ACCT,51,,,,,,,,,,,,,,93300
+51210,Product Cost Adjustment,Product Cost Adjustments,Expense,,Yes,No,P_COSTADJUSTMENT_ACCT,51,,,,,,,,,,,,,,93300
+51220,Product Inventory Clearing,Default Product costs (I.e. on inventory),Expense,,Yes,No,P_INVENTORYCLEARING_ACCT,51,,,,,,,,,,,,,,93300
+51230,Sideline Purchases,,Expense,,,No,,51,,,,,,,,,,,,,,93300
+57000,Direct Labor,,Expense,,,No,,51,,,,,,,,,,,,,,93400
+52,Cost of Service,,Expense,,,Yes,,5,,,,,,,,,,,,1000014,1000078,
+52000,Services Purchases,,Expense,,,No,,52,,,,,,,,,,,,,,93400
+52010,Freight in,,Expense,,,No,,52,,,,,,,,,,,,,,93400
+53,Work Order Variance,,Expense,,,Yes,,5,,,,,,,,,,,,1000016,1000091,
+53010,Work Order Material Variance,Material Variance in Work Order,Expense,,Yes,No,WO_MATERIALVARIANCE_ACCT,53,,,,,,,,,,,,,,
+53020,Work Order Material Overhead Variance,Material Overhead Variance in Work Order,Expense,,Yes,No,WO_MATERIALOVERHDVARIANCE_ACCT,53,,,,,,,,,,,,,,
+53030,Work Order Resource Variance,Resource Variance in Work Order,Expense,,Yes,No,WO_RESOURCEVARIANCE_ACCT,53,,,,,,,,,,,,,,
+53040,Work Order Overhead Variance,Overhead Variance in Work Order,Expense,,Yes,No,WO_OVERHDVARIANCE_ACCT,53,,,,,,,,,,,,,,
+53050,Work Order Scrap,Scrap value in Work Order,Expense,,Yes,No,WO_SCRAP_ACCT,53,,,,,,,,,,,,,,
+55,Returns,,Expense,,,Yes,,5,,,,,55,Returns,1b,,,,,1000016,1000091,
+55100,Returns Expense,,Expense,,,No,,55,,,,,,,,,,,,,,93400
+55200,Returns to Vendors,,Expense,,,No,,55,,,,,,,,,,,,,,93400
+56,Inventory COGS,,Expense,,,Yes,,5,,,,,56,Inventory CoGs,2,,,,,1000016,1000091,
+56100,Inventory Shrinkage,Physical Inventory Gain/Loss,Expense,,Yes,No,W_DIFFERENCES_ACCT,56,,,,,,,,,,,,,,93400
+56200,Inventory Write Down Below Cost,,Expense,,,No,,56,,,,,,,,,,,,,,93400
+56300,Inventory Adjustment,Inventory Actual Accounting Value Adjustment,Expense,,Yes,No,W_INVACTUALADJUST_ACCT,56,,,,,,,,,,,,,,93400
+56400,Inventory Revaluation,Difference to (lower cost) or market,Expense,,Yes,No,W_REVALUATION_ACCT,56,,,,,,,,,,,,,,93400
+58,COGS Variances,,Expense,,,Yes,,5,,,,,58,CoGs Variances,2,,,,,1000016,1000091,
+58100,Invoice price variance,Difference between product cost and invoice price (IPV),Expense,,Yes,No,P_INVOICEPRICEVARIANCE_ACCT,58,,,,,,,,,,,,,,93400
+58200,Purchase price variance,Difference between purchase price and standard costs (PPV),Expense,,Yes,No,P_PURCHASEPRICEVARIANCE_ACCT,58,,,,,,,,,,,,,,93400
+58300,Purchase price variance Offset,Offset Account for Purchase price variance (PPV) ,Expense,,Yes,No,PPVOFFSET_ACCT,58,,,,,,,,,,,,,,93400
+59,COGS Discounts,,Expense,,,Yes,,5,,,,,59,CoGS Discounts,2,,,,,1000016,1000091,
+59100,Trade discounts received,Received Trade Discounts (corrects Product expense),Expense,,Yes,No,P_TRADEDISCOUNTREC_ACCT,59,,,,,,,,,,,,,,93300
+59200,Payment discount revenue,Granted early payment discount from vendors,Expense,,Yes,No,PAYDISCOUNT_REV_ACCT,59,,,,,,,,,,,,,,93300
+,,,,,,,,,,,,,5_,Gross Margin,3,Gross Profit,,,,,,
+60,Payroll Expenses,,Expense,,,Yes,,5,,,,,60,Payroll Expense,,,,,,1000016,1000091,
+60110,Wages,,Expense,,,No,,60,,,,,,,13,Salaries and wages,,,,,,93000
+60120,Wages Owners,,Expense,,,No,,60,,,,,,,12,Compensation of officers,,,,,,93000
+60130,Salaries,,Expense,,,No,,60,,,,,,,13,,,,,,,93000
+60210,Vacation Pay,,Expense,,,No,,60,,,,,,,13,,,,,,,93000
+60220,Vacation Pay Owners,,Expense,,,No,,60,,,,,,,12,,,,,,,93000
+60230,Sick Pay,,Expense,,,No,,60,,,,,,,13,,,,,,,93000
+60240,Sick Pay Owners,,Expense,,,No,,60,,,,,,,12,,,,,,,93000
+60300,"Retirement (Pension, Profit Sharing, 401k)",,Expense,,,No,,60,,,,,,,24,Pension Proft Sharing,,,,,,93500
+60410,FICA Tax,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60420,FICA Tax Owners,,Expense,,,No,,60,,,,,,,12,,,,,,,93400
+60430,Federal/State Unemployment,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60440,Federal/State Unemployment Owners,,Expense,,,No,,60,,,,,,,12,,,,,,,93400
+60510,Health Insurance Premium,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60520,Health Insurance Premium Owners,,Expense,,,No,,60,,,,,,,12,,,,,,,93400
+60580,Health Insurance Employee Contribution,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60590,Health Insurance Cobra Payments,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60600,Workers Compensation Insurance,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60710,Disability Insurance Premium,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60720,Disability Insurance Premium Owners,,Expense,,,No,,60,,,,,,,12,,,,,,,93400
+60790,Disability Insurance Employee Contribution,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60810,Life Insurance Premium,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60820,Life Insurance Premium Owners,,Expense,,,No,,60,,,,,,,12,,,,,,,93400
+60890,Life Insurance Employee Contribution,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+60900,Other Benefit Expense,,Expense,,,No,,60,,,,,,,25,Employee benefit programs,,,,,,93400
+60910,Staff Gifts & Perks,,Expense,,,No,,60,,,,,,,25,,,,,,,93400
+60920,Staff Picnic (100% Deductible),,Expense,,,No,,60,,,,,,,25,,,,,,,93400
+60990,Payroll Processing Expense,,Expense,,,No,,60,,,,,,,13,,,,,,,93400
+61,Occupancy Cost,,Expense,,,Yes,,5,,,,,61,Occupancy Cost,16,Rents,,,,1000015,1000085,
+61100,Rent Expense,,Expense,,,No,,61,,,,,,,,,,,,,,93100
+61200,Utilities,,Expense,,,No,,61,,,,,,,,,,,,,,93100
+61300,Other Occupancy Costs,,Expense,,,No,,61,,,,,,,,,,,,,,93100
+62,Advertising,,Expense,,,Yes,,5,,,,,62,Advertising & Promotion,23,Advertising,,,,1000015,1000080,
+62100,Media Advertising,,Expense,,,No,,62,,,,,,,,,,,,,,93400
+62200,"Catalog, Newsletter",,Expense,,,No,,62,,,,,,,,,,,,,,93400
+62300,Events,,Expense,,,No,,62,,,,,,,,,,,,,,93400
+62400,Joint Advertising,,Expense,,,No,,62,,,,,,,,,,,,,,93400
+62500,Web Hosting,,Expense,,,No,,62,,,,,,,,,,,,,,93400
+62800,Other Advertising & Promotion,,Expense,,,No,,62,,,,,,,,,,,,,,93400
+62900,Vendor Advertising Allowances,,Expense,,,No,,62,,,,,,,,,,,,,,93400
+63,Telephone and Communications,,Expense,,,Yes,,5,,,,,63,Telephone and Communication,xx1,Telephone and Communication,,,,1000015,1000084,
+63100,Telephone,,Expense,,,No,,63,,,,,,,,,,,,,,93400
+63200,Mobile Telephone,,Expense,,,No,,63,,,,,,,,,,,,,,93400
+63300,Network Charges,,Expense,,,No,,63,,,,,,,,,,,,,,93400
+64,Professional Services,,Expense,,,Yes,,5,,,,,64,Professional Services,xx2,Professional Services,,,,1000015,1000083,
+64100,Legal Fees,,Expense,,,No,,64,,,,,,,,,,,,,,93400
+64200,Accounting Fees,,Expense,,,No,,64,,,,,,,,,,,,,,93400
+64300,Inventory Verification Fees,,Expense,,,No,,64,,,,,,,,,,,,,,93400
+64500,Other Consulting Fees,,Expense,,,No,,64,,,,,,,,,,,,,,93400
+65,Stationary & Supplies,,Expense,,,Yes,,5,,,,,65,Stationary & Supplies,xx3,Stationary & Supplies,,,,1000015,1000084,
+65100,Stationary & Supplies - Office Use,,Expense,,,No,,65,,,,,,,,,,,,,,93400
+65500,Janitorial Supplies,,Expense,,,No,,65,,,,,,,,,,,,,,93400
+66,Data Processing,,Expense,,,Yes,,5,,,,,66,Data Processing Expense,xx4,Data Processing Expense,,,,1000015,1000088,
+66100,Data Processing Supplies,,Expense,,,No,,66,,,,,,,,,,,,,,93400
+66200,Data Processing Rental,,Expense,,,No,,66,,,,,,,,,,,,,,93400
+66300,Outside Computer Services,,Expense,,,No,,66,,,,,,,,,,,,,,93400
+66900,Data Processing Other Expense,,Expense,,,No,,66,,,,,,,,,,,,,,93400
+67,Depreciation Expense,,Expense,,,Yes,,5,,,,,67,Depreciation Expense,20,Depreciation,,,,1000016,1000090,
+67120,Building Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67130,Land Improvement Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67140,Building Improvement Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67150,Leasehold Improvement Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67210,Furniture Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67220,Fixtures Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67230,Equipment Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67240,Vehicles Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67250,Data Processing Equipment Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+67260,Software Depreciation,,Expense,,,No,,67,,,,,,,,,,,,,,93400
+68,Business Travel,,Expense,,,Yes,,5,,,,,68,Travel & Entertainment,,,,,,1000015,1000084,
+68100,Business Travel - Plane/Train/Taxi,,Expense,,,No,,68,,,,,,,,,,,,,,93200
+68200,Business Travel - Auto Reimbursement,,Expense,,,No,,68,,,,,,,,,,,,,,93200
+68300,Business Travel - Hotel,,Expense,,,No,,68,,,,,,,,,,,,,,93200
+68400,Business Meals & Entertainment (50%),,Expense,,,No,,68,,,,,,,,,,,,,,93200
+68500,Staff Meeting Food (100%),,Expense,,,No,,68,,,,,,,,,,,,,,93200
+68600,Employee expense,Default employee expenses,Expense,,Yes,No,E_EXPENSE_ACCT,68,,,,,,,,,,,,,,93200
+68900,Business Travel Other Expense,,Expense,,,No,,68,,,,,,,,,,,,,,93200
+69,Insurance,,Expense,,,Yes,,5,,,,,69,Insurance,,,,,,1000015,1000082,
+69100,Business Insurance,,Expense,,,No,,69,,,,,,,,,,,,,,93400
+69200,Real Estate Insurance,,Expense,,,No,,69,,,,,,,,,,,,,,93400
+69300,Vehicle Insurance,,Expense,,,No,,69,,,,,,,,,,,,,,93400
+69400,Other Insurance,,Expense,,,No,,69,,,,,,,,,,,,,,93400
+70,Payment Processor Costs,,Expense,,,Yes,,5,,,,,70,Payment Processor Costs,,,,,,1000016,1000091,
+70100,Credit Card Service Charges,,Expense,,,No,,70,,,,,,,,,,,,,,93400
+70200,Bank Service Charges,Bank expenses,Expense,,Yes,No,B_EXPENSE_ACCT,70,,,,,,,,,,,,,,93400
+70900,Other Payment Service Charges,,Expense,,,No,,70,,,,,,,,,,,,,,93400
+71,Dues & Subscription,,Expense,,,Yes,,5,,,,,71,Dues & Subscriptions,,,,,,1000015,1000081,
+71100,Association Membership Fees,,Expense,,,No,,71,,,,,,,,,,,,,,93500
+71200,Subscription Fees,,Expense,,,No,,71,,,,,,,,,,,,,,93500
+72,Office Expense,,Expense,,,Yes,,5,,,,,72,Office Expense,,,,,,1000015,1000084,
+72100,Office Expense,,Expense,,,No,,72,,,,,,,,,,,,,,93400
+73,Posting & Shipping,,Expense,,,Yes,,5,,,,,73,Postage & Shipping,,,,,,1000015,1000086,
+73100,Postage Expense,,Expense,,,No,,73,,,,,,,,,,,,,,93400
+73200,Customer Package Expense,,Expense,,,No,,73,,,,,,,,,,,,,,93400
+73290,Customer Postage Fees Received,,Expense,,,No,,73,,,,,,,,,,,,,,93400
+73300,Shipping Expenses,,Expense,,,No,,73,,,,,,,,,,,,,,93400
+74,Taxes and Licenses,,Expense,,,Yes,,5,,,,,74,Taxes and Licenses,17,Taxes and Licenses,,,,1000015,1000087,
+74100,Tax expense,Sales Tax paid to Vendors,Expense,,Yes,No,T_EXPENSE_ACCT,74,,,,,,,,,,,,,,93400
+74200,Inventory & Use Taxes,,Expense,,,No,,74,,,,,,,,,,,,,,93400
+74300,Real Estate Taxes,,Expense,,,No,,74,,,,,,,,,,,,,,93100
+74400,Business Licenses & Fees,,Expense,,,No,,74,,,,,,,,,,,,,,93400
+74900,Licenses & Fees - Other,,Expense,,,No,,74,,,,,,,,,,,,,,93400
+75,Education,,Expense,,,Yes,,5,,,,,75,Education,,,,,,1000015,1000084,
+75100,Education Course Fees,,Expense,,,No,,75,,,,,,,,,,,,,,93500
+75200,Education Travel,,Expense,,,No,,75,,,,,,,,,,,,,,93500
+75300,Education Meals & Entertainment (50%),,Expense,,,No,,75,,,,,,,,,,,,,,93500
+75900,Education Other,,Expense,,,No,,75,,,,,,,,,,,,,,93500
+76,Equipment Rent,,Expense,,,Yes,,5,,,,,76,Equipment Rent,,,,,,1000015,1000088,
+76100,Office Equipment Rent,,Expense,,,No,,76,,,,,,,,,,,,,,93100
+76200,Store Equipment Rent,,Expense,,,No,,76,,,,,,,,,,,,,,93100
+76900,Equipment Rent Other,,Expense,,,No,,76,,,,,,,,,,,,,,93100
+77,Repairs & Maintenance,,Expense,,,Yes,,5,,,,,77,Repairs & Maintenance,14,Repairs and maintenance,,,,1000016,1000091,
+77100,Building Repairs & Maintenance,,Expense,,,No,,77,,,,,,,,,,,,,,93100
+77200,"Furniture, Equipment Repairs & Maintenance",,Expense,,,No,,77,,,,,,,,,,,,,,93100
+77300,Data Processing Repairs & Maintenance,,Expense,,,No,,77,,,,,,,,,,,,,,93100
+77400,Software Maintenance,,Expense,,,No,,77,,,,,,,,,,,,,,93100
+77500,Vehicle Repairs & Maintenance,,Expense,,,No,,77,,,,,,,,,,,,,,93100
+77900,Repairs & Maintenance Other,,Expense,,,No,,77,,,,,,,,,,,,,,93100
+78,Other Operating Expenses,,Expense,,,Yes,,5,,,,,78,Other Operating Expenses,,,,,,1000016,1000091,
+78100,Bad Debts Write-off,Receivables write-off - bad debt,Expense,,Yes,No,WRITEOFF_ACCT,78,,,,,,,15,Bad Debt,,,,,,93400
+78200,Collection Expense,,Expense,,,No,,78,,,,,,,,,,,,,,93400
+78300,Petty Cash Over/Short,Petty Cash Differences,Expense,,Yes,No,CB_DIFFERENCES_ACCT,78,,,,,,,,,,,,,,93400
+78400,Recruitment Costs,,Expense,,,No,,78,,,,,,,,,,,,,,93400
+78500,Vehicle Expense,,Expense,,,No,,78,,,,,,,,,,,,,,93400
+78600,Amortization Expense,,Expense,,,No,,78,,,,,,,,,,,,,,93400
+78700,Penalties,,Expense,,,No,,78,,,,,,,,,,,,,,93400
+78800,Franchise Fee / Royalty Fees,,Expense,,,No,,78,,,,,,,,,,,,,,93400
+78900,Miscellaneous Expense,,Expense,,,No,,78,,,,,,,,,,,,,,93400
+79,Default/Suspense Accounts,Temporary accounts - balance should be zero,Expense,,,Yes,,5,,,,,79,Default/Suspense Accounts,,,,,,1000016,1000091,
+79100,Default account,Default Account (if no other account is defined) V1.1,Expense,,Yes,No,DEFAULT_ACCT,79,,,,,,,,,,,,,,93400
+79200,Suspense balancing ,Difference to make journal balance in source currency - needs to be solved,Expense,,Yes,No,SUSPENSEBALANCING_ACCT,79,,,,,,,,,,,,,,93400
+79300,Suspense error,Import did not find account - needs to be solved,Expense,,Yes,No,SUSPENSEERROR_ACCT,79,,,,,,,,,,,,,,93400
+79400,Cash book expense,Default other expense for petty cash transactions,Expense,,Yes,No,CB_EXPENSE_ACCT,79,,,,,,,,,,,,,,93400
+79500,Cash book receipts,Default other revenue for petty cash transactions,Revenue,,Yes,No,CB_RECEIPT_ACCT,79,,,,,,,,,,,,,,93400
+79600,Charge expense,Default other expense,Expense,,Yes,No,CH_EXPENSE_ACCT,79,,,,,,,,,,,,,,93400
+79700,Charge revenue,Default other revenue,Revenue,,Yes,No,CH_REVENUE_ACCT,79,,,,,,,,,,,,,,93400
+79800,Resource Absorption,Resource Absorption account,Expense,,Yes,No,P_RESOURCE_ABSORPTION_ACCT,79,,,,,,,,,,,,,,93400
+79900,Overhead Absorption,Overhead Absorption Account,Expense,,Yes,No,OVERHEAD_ABSORPTION_ACCT,79,,,,,,,,,,,,,,93400
+,,,,,,,,,,,,,79_,Total Operating Expenses,,,,,,,,
+,,,,,,,,,,,,,79__,Operating Income,,,,,,,,
+80,Other Income,,Revenue,,,Yes,,4,,,,,80,Other Income,,,,,,1000013,1000073,
+80100,Interest Income,Bank interest revenue,Revenue,,Yes,No,B_INTERESTREV_ACCT,80,,,,,,,5,Interest,,,,,,92100
+80200,Dividend Income,,Revenue,,,No,,80,,,,,,,4,Dividents,,,,,,92100
+80300,Rental Income,,Revenue,,,No,,80,,,,,,,6,Gross Rents,,,,,,92100
+80400,Sales Tax Commission,,Revenue,,,No,,80,,,,,,,,,,,,,,92100
+80700,Capital Gains Income,,Revenue,,,No,,80,,,,,,,,,,,,,,92100
+80800,Fixed Asset Sale Gain,,Revenue,,,No,,80,,,,,,,,,,,,,,92100
+80900,Other Income,,Revenue,,,No,,80,,,,,,,,,,,,,,92100
+805,Currency Gain,,Revenue,,,Yes,,4,,,,,805,Currency Gain,,,,,,1000013,1000073,
+80510,Bank revaluation gain,Foreign currency bank account gain,Revenue,,Yes,No,B_REVALUATIONGAIN_ACCT,805,,,,,,,,,,,,,,92100
+80520,Bank settlement gain,Difference between payment and bank account currency,Revenue,,Yes,No,B_SETTLEMENTGAIN_ACCT,805,,,,,,,,,,,,,,92100
+80530,Unrealized gain,Difference between foreign currency receivables/payables and current rate,Revenue,,Yes,No,UNREALIZEDGAIN_ACCT,805,,,,,,,,,,,,,,92100
+80540,Realized gain,Difference between invoice and payment currency,Revenue,,Yes,No,REALIZEDGAIN_ACCT,805,,,,,,,,,,,,,,92100
+82,Other Expense,,Expense,,,Yes,,5,,,,,82,Other Expense,,,,,,1000016,1000091,
+82100,Interest Expense,Bank interest expense,Expense,,Yes,No,B_INTERESTEXP_ACCT,82,,,,,,,18,Interest,,,,,,93500
+82200,Mortgage Interest Expense,,Expense,,,No,,82,,,,,,,,,,,,,,93500
+82300,Uninsured Casualty Loss,,Expense,,,No,,82,,,,,,,,,,,,,,93500
+82400,Charitable Contributions,,Expense,,,No,,82,,,,,,,19,Charitable Contributions,,,,,,93500
+82700,Capital Gains Loss,,Expense,,,No,,82,,,,,,,,,,,,,,93500
+82800,Fixed Asset Sale Loss,,Expense,,,No,,82,,,,,,,,,,,,,,93500
+82900,Other Expense,,Expense,,,No,,82,,,,,,,,,,,,,,93500
+825,Currency Loss,,Expense,,,Yes,,5,,,,,825,Currency Loss,,,,,,1000016,1000091,
+82510,Bank revaluation loss,Foreign currency bank account loss,Expense,,Yes,No,B_REVALUATIONLOSS_ACCT,825,,,,,,,,,,,,,,93500
+82520,Bank settlement loss,Difference between payment and bank account currency,Expense,,Yes,No,B_SETTLEMENTLOSS_ACCT,825,,,,,,,,,,,,,,93500
+82530,Unrealized loss,Difference between foreign currency receivables/payables and current rate,Expense,,Yes,No,UNREALIZEDLOSS_ACCT,825,,,,,,,,,,,,,,93500
+82540,Realized loss,Difference between invoice and payment currency,Expense,,Yes,No,REALIZEDLOSS_ACCT,825,,,,,,,,,,,,,,93500
+82550,Currency balancing,Rounding difference to make journal balance in accounting currency,Expense,,Yes,No,CURRENCYBALANCING_ACCT,825,,,,,,,,,,,,,,93500
+,,,,,,,,,,,,,82_,Net Income before Tax,,,,,,,,
+89,Income Tax & Summary,,Expense,,,Yes,,5,,,,,89,Income Tax & Summary,,,,,,1000016,1000087,
+89100,Federal Income Tax,,Expense,,,No,,89,,,,,,,,,,,,,,93500
+89200,State Income Tax,,Expense,,,No,,89,,,,,,,,,,,,,,93500
+89300,Local Income Tax,,Expense,,,No,,89,,,,,,,,,,,,,,93500
+89900,Income Summary,Year end processing to balance account (Retained Earnings),Expense,,Yes,No,INCOMESUMMARY_ACCT,89,,,,,89_,Net Income,,,,,,,,93500
+9,Memo,,Memo,,,Yes,,,,,,,,,,,,,,,,
+91,Costing,,Memo,,,Yes,,9,,,,,,,,,,,,,,
+911,Profit Center Costing Distribution,,Memo,,,No,,91,,,,,,,,,,,,,,
+912,Project Costing Distribution,,Memo,,,No,,91,,,,,,,,,,,,,,
+92,Revenue Memo,,Memo,,,Yes,,9,,,,,,,,,,,,,,
+92000,Operational Revenues,,Memo,,,No,,92,,,,,,,,,,,,,,
+92100,Non-Operational Revenues,,Memo,,,No,,92,,,,,,,,,,,,,,
+93,Expenses Memo,,Memo,,,Yes,,9,,,,,,,,,,,,,,
+93000,Salary Cost,,Memo,,,No,,93,,,,,,,,,,,,,,
+93100,Infrastructure,,Memo,,,No,,93,,,,,,,,,,,,,,
+93200,Travel Cost,,Memo,,,No,,93,,,,,,,,,,,,,,
+93300,Product Expenses,,Memo,,,No,,93,,,,,,,,,,,,,,
+93400,Operational Expenses,,Memo,,,No,,93,,,,,,,,,,,,,,
+93500,Non-Operational Expenses,,Memo,,,No,,93,,,,,,,,,,,,,,
+95,Commitment Accounting,,Memo,,,Yes,,9,,,,,,,,,,,,,,
+951,PO Encumbrance,,Memo,,,No,,95,,,,,,,,,,,,,,
+952,PO Commitment,,Memo,,,No,COMMITMENTOFFSET_ACCT,95,,,,,,,,,,,,,,
+955,SO Future Revenue,,Memo,,,No,,95,,,,,,,,,,,,,,
+99,Clearing Codes,,Asset,,,Yes,,,,,,,,,,,,,,,,
+99000,Account Recievable Clearing,,Asset,,,No,,99,,,,,,,,,,,,,,
+99100,Bank In Transit Clearing,,Liability,,,No,,99,,,,,,,,,,,,,,
+99200,Account Payable Clearing,,Liability,,,No,,99,,,,,,,,,,,,,,
+99300,Product Asset Clearing,,Asset,,,No,,99,,,,,,,,,,,,,,
+99400,Profit/Loss Adjustment,,Expense,,,No,,99,,,,,,,,,,,,,,

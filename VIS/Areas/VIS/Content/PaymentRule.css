@@ -1,0 +1,76 @@
+﻿.vis-payment-table
+{
+    width: 100%;
+    margin-bottom:0px;
+    margin-top:2px;
+}
+
+
+.vis-payment-td1
+{
+    width: 40%;
+}
+
+.vis-payment-td2
+{
+    width: 60%;
+}
+
+.vis-payment-spanPayment
+{
+    width: 39%;
+    margin: 5px 0px 0px 1%;
+    float: left;
+}
+
+
+.vis-payment-spanPayment-RTL
+{
+    width: 39%;
+    margin: 5px 0px 0px 1%;
+    float: Right;
+}
+
+.vis-payment-cmbPayment
+{
+    width: 58%;
+    margin-left:1%;
+    margin-right:1%;
+    /*margin-bottom:15px;*/
+}
+
+
+.vis-payment-span
+{
+    margin: 5px 0px 5px 1%;
+}
+
+
+.vis-payment-inputs
+{
+    margin: 10px 1% 5px 2%;
+    width:97%;
+}
+
+.vis-payment-inputs-buttons
+{
+    margin: 15px 0px 0px 0px;
+    width:100%;
+}
+
+.vis-payment-cmb
+{
+      margin: 10px 1% 5px 2%;
+    width: 97%;
+}
+
+.vis-payment-date
+{
+    height:30px;
+}
+
+.vis-payment-AmountField
+{
+    float:right;
+    margin-right:2px;
+}

@@ -1,0 +1,173 @@
+﻿
+.vis-vsetup-wrap{
+	width:40%;
+	margin:5% auto;
+	min-width: 595px;	
+}
+.vis-header-wrap{ width:100%; float:left;}
+.vis-vsetup-tittle {
+    width: 96%;
+    background: #1aa0ed;
+    padding: 14px 0px 14px 15px;
+    float: left;
+	font-size:13.5px;
+	 margin: 0;
+    font-family: helvetica;
+    font-weight: bold;
+    color: white;
+}
+.vis-btn-close {
+    width: 4%;
+	height:29px;
+    background: url('../Images/close.png');
+    background-color: #616364;
+    float: right;
+    background-repeat: no-repeat;
+   padding-top: 25px;
+    padding-bottom: 18px;
+    cursor: pointer;
+    background-position: center;
+    border: 0px;
+    margin: 0;
+}
+.vis-clear-both{
+	clear: both;
+}
+.vis-graywrap{
+	/*background:#f4f4f4;*/
+	width:100%;
+	float:left;
+	/*border-left:2px solid #1aa0ed;
+	border-right:2px solid #1aa0ed;
+	border-bottom:2px solid #1aa0ed;*/
+	/*padding: 15px;*/
+}
+.vis-graywrap > p{
+	color:#666;
+	font-size:14px;	
+}
+.vis-intial-form-data, .vis-initial-form-buttons{ 
+	float:left; 
+	width:50%;
+	margin-bottom:10px;
+    /*margin-left:15px;*/
+    padding-left:15px;
+    margin-top: 10px;
+    padding-right:15px;
+}
+.vis-intial-form-data > label, .vis-intial-form-dataCombo > label{
+	font-size:14px;
+	color:#666;
+	font-weight:normal;
+	width:100%;
+	float:left;	
+   
+}
+.vis-intial-form-data > input{
+	float:left;
+	width:100%;	
+	border:1px solid #ccc;
+	border-radius:3px;
+	padding:5px 10px;
+     height:30px;
+   
+}
+.vis-intial-form-data > a{
+	float:right;
+	width:16px;
+	height:16px;
+	background:url('../Images/info-icon.png');
+	margin-top: 8px;
+	cursor:pointer;	
+}
+
+html[dir="rtl"] .vis-intial-form-data
+{
+    float:right;
+}
+
+
+ul.vis-initial-client-form-list{
+	margin:0;
+	padding:0;
+	list-style:none;	
+    margin-top: 10px;
+}
+ul.vis-initial-client-form-list > li{
+	float:left;
+	width:48%;	
+    margin-left:15px;
+}
+.vis-intial-form-dataCombo{
+	width:50%;
+	float:left;
+	/*margin-right:20px;*/	
+	margin-bottom:10px;
+     /*margin-left:15px;*/
+     margin-top:10px;
+     padding-left:15px;
+     padding-right:15px;
+}
+.vis-intial-form-dataCombo > select{
+	float:left;
+	width:100%;
+	border:1px solid #ccc;
+	margin-right:10px;
+	padding:5px 10px;	
+     height:30px;
+}
+.vis-initial-form-checkbox{ 
+	width: 50%;
+	float: left;
+	/*margin-left: 10px;*/	
+}
+.vis-initial-form-checkbox > input{
+	float:left;	
+	margin-right:10px;
+    margin-left:10px;
+}
+
+html[dir="rtl"] .vis-initial-form-checkbox
+{
+    	float:right;	
+}
+
+html[dir="rtl"] .vis-initial-form-checkbox > input {
+	float:right;	
+}
+
+.vis-initial-form-checkbox > label{
+	float:left;
+	font-size:14px;
+	color:#666;
+	font-weight:normal;	
+}
+
+html[dir="rtl"] .vis-initial-form-checkbox > label {
+	float:right;	
+}
+
+
+.vis-initial-form-buttons{
+	margin-top:20px;	
+    width: 100%;
+}
+.vis-initial-btn-right{
+	float:left;	
+}
+.vis-initial-btn-left{
+	float:right;	
+    margin-top: 10px;
+    padding-left:15px;
+    
+}
+.vis-initial-btn, .vis-initial-btn:hover{
+	color:#fff;
+	background:#626365;	
+	padding:10px 20px;
+	cursor:pointer;
+	text-decoration:none;
+}
+.vis-initial-btn-blue, .vis-initial-btn-blue:hover{	
+	background:#1aa0ed;	
+}

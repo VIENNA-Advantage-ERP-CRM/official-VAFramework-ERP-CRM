@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Handlebars.js</id>
+    <version>2.0.0.0</version>
+    <title>Handlebars.js :: Semantic Templates</title>
+    <authors>Yehuda Katz</authors>
+    <owners>Yehuda Katz</owners>
+    <licenseUrl>https://raw.github.com/wycats/handlebars.js/master/LICENSE</licenseUrl>
+    <projectUrl>http://handlebarsjs.com/</projectUrl>
+    <iconUrl>https://raw.github.com/evereq/handlebars.js.nuget/master/images/handlebars.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Handlebars.js is an extension to the Mustache templating language created by Chris Wanstrath. Handlebars.js and Mustache are both logicless templating languages that keep the view and the code separated like we all know they should be.
+
+Checkout the official Handlebars docs site at http://www.handlebarsjs.com.</description>
+    <summary>Handlebars provides the power necessary to let you build semantic templates effectively with no frustration.</summary>
+    <releaseNotes>NuGet Handlebars.js version 2.0.0.0 contains latest release version 2.0.0 of Handlebars.JS from http://handlebarsjs.com
+Note 1: be prepeared to recompile  templates if you use precompiler (runtime) and upgrade from version 1.x
+Note 2: starting from version 1.0.9 minifiled handlebars.min.js file was added. Please update your code for production environment to use this file to save more trees in the world!
+Note 3: starting from v1.1.2, separated files included for AMD support</releaseNotes>
+    <copyright>(C) 2011-2014 by Yehuda Katz</copyright>
+    <tags>JavaScript Templates Templating Mustache Handlebars HTML</tags>
+  </metadata>
+</package>

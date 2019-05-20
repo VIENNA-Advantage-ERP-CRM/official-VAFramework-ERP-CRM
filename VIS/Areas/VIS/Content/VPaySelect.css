@@ -1,0 +1,175 @@
+﻿.vis-pSelectInfo
+{
+    width: 24%;
+    float: left;
+    padding: 15px;
+    background: #f8f8f8;
+    position:relative;
+    height:79%;
+    margin: 10px;
+    margin-right: 0px;
+    margin-left:5px;
+  
+}
+.vis-pPrintInfo
+{
+    width: 24%;   
+    padding: 15px;
+    /*background: #f8f8f8;*/
+    position:relative;   
+    margin:5px;
+    margin-right:0px;
+    /*height: 60% !important;*/
+    width: 100%;
+    /*margin-left: 25%;*/
+  
+}
+.vis-paymentselect-field
+{
+    float:left;
+    width:100%;
+    margin-bottom:10px;
+}
+.vis-paymentPrint-field
+{
+    float:left;
+    width:49%;
+    margin-bottom:10px;
+}
+.vis-paymentPrintChk-field
+{
+    float:right;
+}
+    .vis-paymentPrintChk-field checkbox,.vis-paymentPrintChk-field label
+    {
+        float:left;
+    }
+.vis-mainContainer
+{
+    position:absolute;
+    width:100%;
+    height:98%;
+}
+.vis-pSelectIionGrid
+{
+    height:75%;
+    width: 74%;
+    float: right;
+    margin: 10px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+
+}
+.vis-fieldreadonly
+{
+  background: #f8f8f8 !important;
+}
+    .vis-paymentselect-field select, .vis-paymentselect-field input,.vis-paymentPrint-field select,.vis-paymentPrint-field input
+    {
+        width: 100%;
+        float: left;
+        color: #666;
+        height: 30px;
+       
+    }
+        .vis-paymentselect-field input[type="date"]
+        {
+            -webkit-appearance: none;
+        }
+        .vis-paymentPrint-field input[name='vis-name'],.vis-paymentPrint-field select[name='vis-name']
+        {
+            margin-right:15px;
+        }
+    .vis-paymentselect-field label,.vis-paymentPrint-field label,.vis-paymentPrintChk-field label
+    {
+        font-weight:normal;
+        color:#535353;
+        /*width:100%;*/
+    }
+
+.vis-pPrintProcess
+{
+    float:right;
+    width:100%;
+    padding-right: 10px;
+}
+.vis-pSelectProcess
+{
+    float: right;
+    margin-right: 9px;
+}
+.vis-pBOMInfo
+{
+    width: 24%;
+    float: left;
+    padding: 15px;
+    background: #f8f8f8;
+    position:relative;
+    height:85%;
+    margin: 10px;
+    margin-right: 0px;
+    margin-left:5px;
+  
+}
+.vis-BOMLines
+{
+    height:80%;
+    width: 65%;
+    float: right;
+    margin: 10px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+.vis-bomlinesdata
+{
+    margin:5px;
+    float:left;
+    width:80%;
+}
+
+.vis-lookupTextboxes
+{
+  width:77% !important;
+  border-radius:none;
+}
+.vis-BOMLines label
+{
+    font-weight:normal;
+}
+
+@media (max-width: 1024px)
+{
+    .vis-paymentPrint-field
+    {
+        width:48.5%;
+    }
+     .vis-lookupTextboxes
+    {
+        width:71% !important;
+        
+    }
+     .vis-lookupButtons
+    {
+    width:20px;
+    height:20px;
+    }
+}
+@media (max-width:999px)
+{
+    .vis-pSelectInfo
+    {
+        width: 32%;
+    }
+    .vis-pSelectIionGrid
+    {
+       
+        width: 66%;
+    }
+}
+@media (max-width: 767px)
+{
+    .vis-paymentPrint-field
+    {
+        width:100%;
+    }
+}

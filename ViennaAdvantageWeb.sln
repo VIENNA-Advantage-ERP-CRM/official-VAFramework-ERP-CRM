@@ -1,0 +1,92 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViennaAdvantageWeb", "ViennaAdvantageWeb\ViennaAdvantageWeb.csproj", "{BE66152A-A548-4EFF-88A3-C6305B6FDC38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VIS", "VIS\VIS.csproj", "{C9421E8F-F38E-417A-96C5-90E1BA817465}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLibrary", "ModelLibrary\ModelLibrary.csproj", "{F8F980FC-83EF-4495-812E-5DEF569B9242}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViennaBase", "ViennaBase\ViennaBase.csproj", "{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market", "Market\Market.csproj", "{ACA48D7D-358E-4BA8-BFE9-557956FEB061}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketSvc", "MarketSvc\MarketSvc.csproj", "{127827D0-F08C-4EAC-84A3-87B4D2B61879}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlWebHelper", "HtmlWebHelper\HtmlWebHelper.csproj", "{6BFA6520-94B0-4B30-9D25-6477C6998CCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureEngineUtility", "SecureEngineUtility\SecureEngineUtility.csproj", "{0947F64E-7AC4-42DB-93D2-3BC6C7290DAE}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 9
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.0.178:8080/tfs/html5%20product%20collection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ModelLibrary\\ModelLibrary.csproj
+		SccProjectName1 = ModelLibrary
+		SccLocalPath1 = ModelLibrary
+		SccProjectUniqueName2 = ViennaAdvantageWeb\\ViennaAdvantageWeb.csproj
+		SccProjectName2 = ViennaAdvantageWeb
+		SccLocalPath2 = ViennaAdvantageWeb
+		SccProjectUniqueName3 = VIS\\VIS.csproj
+		SccProjectName3 = VIS
+		SccLocalPath3 = VIS
+		SccProjectUniqueName4 = ViennaBase\\ViennaBase.csproj
+		SccProjectName4 = ViennaBase
+		SccLocalPath4 = ViennaBase
+		SccProjectUniqueName5 = Market\\Market.csproj
+		SccProjectName5 = Market
+		SccLocalPath5 = Market
+		SccProjectUniqueName6 = MarketSvc\\MarketSvc.csproj
+		SccProjectName6 = MarketSvc
+		SccLocalPath6 = MarketSvc
+		SccProjectUniqueName7 = HtmlWebHelper\\HtmlWebHelper.csproj
+		SccProjectName7 = HtmlWebHelper
+		SccLocalPath7 = HtmlWebHelper
+		SccProjectUniqueName8 = SecureEngineUtility\\SecureEngineUtility.csproj
+		SccProjectName8 = SecureEngineUtility
+		SccLocalPath8 = SecureEngineUtility
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE66152A-A548-4EFF-88A3-C6305B6FDC38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE66152A-A548-4EFF-88A3-C6305B6FDC38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE66152A-A548-4EFF-88A3-C6305B6FDC38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE66152A-A548-4EFF-88A3-C6305B6FDC38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9421E8F-F38E-417A-96C5-90E1BA817465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9421E8F-F38E-417A-96C5-90E1BA817465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9421E8F-F38E-417A-96C5-90E1BA817465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9421E8F-F38E-417A-96C5-90E1BA817465}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8F980FC-83EF-4495-812E-5DEF569B9242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8F980FC-83EF-4495-812E-5DEF569B9242}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8F980FC-83EF-4495-812E-5DEF569B9242}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8F980FC-83EF-4495-812E-5DEF569B9242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA48D7D-358E-4BA8-BFE9-557956FEB061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA48D7D-358E-4BA8-BFE9-557956FEB061}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA48D7D-358E-4BA8-BFE9-557956FEB061}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA48D7D-358E-4BA8-BFE9-557956FEB061}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127827D0-F08C-4EAC-84A3-87B4D2B61879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127827D0-F08C-4EAC-84A3-87B4D2B61879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127827D0-F08C-4EAC-84A3-87B4D2B61879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127827D0-F08C-4EAC-84A3-87B4D2B61879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BFA6520-94B0-4B30-9D25-6477C6998CCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BFA6520-94B0-4B30-9D25-6477C6998CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BFA6520-94B0-4B30-9D25-6477C6998CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BFA6520-94B0-4B30-9D25-6477C6998CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0947F64E-7AC4-42DB-93D2-3BC6C7290DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0947F64E-7AC4-42DB-93D2-3BC6C7290DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0947F64E-7AC4-42DB-93D2-3BC6C7290DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0947F64E-7AC4-42DB-93D2-3BC6C7290DAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
