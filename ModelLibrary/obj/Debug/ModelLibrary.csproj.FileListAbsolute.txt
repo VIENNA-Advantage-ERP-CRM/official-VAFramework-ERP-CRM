@@ -14,3 +14,26 @@ D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\ModelLibrary\bin\Debug\Secure
 D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\ModelLibrary\bin\Debug\SecureEngineUtility.xml
 D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\ModelLibrary\bin\Debug\System.Web.Optimization.xml
 D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\ModelLibrary\obj\Debug\ModelLibrary.csprojResolveAssemblyReference.cache
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\ModelLibrary.dll.config
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\ModelLibrary.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\ModelLibrary.pdb
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\Microsoft.QualityTools.Testing.Fakes.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Net.Http.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Net.Http.Formatting.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Spatial.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Web.Optimization.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\Microsoft.Web.Infrastructure.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\stdole.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\SecureEngineUtility.pdb
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\SecureEngineUtility.xml
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Net.Http.xml
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Net.Http.Formatting.xml
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Spatial.xml
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\bin\Debug\System.Web.Optimization.xml
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csprojAssemblyReference.cache
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.Properties.Resources.resources
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csproj.GenerateResource.cache
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csproj.CoreCompileInputs.cache
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csproj.CopyComplete
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.dll
+G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.pdb

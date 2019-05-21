@@ -33,3 +33,45 @@ D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\VIS\bin\System.Web.WebPages.D
 D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\VIS\bin\System.Web.WebPages.Razor.xml
 D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\VIS\obj\Debug\VIS.dll
 D:\TFS HTML\TFS HTML\VAdvantage\ViennaAdvantageWeb\VIS\obj\Debug\VIS.pdb
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\VIS.dll.config
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\VIS.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\VIS.pdb
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Antlr3.Runtime.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Microsoft.Web.Infrastructure.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\ModelLibrary.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Newtonsoft.Json.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Net.Http.Formatting.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Helpers.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Http.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Http.WebHost.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Mvc.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Optimization.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Razor.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.WebPages.Deployment.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.WebPages.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.WebPages.Razor.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\WebGrease.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Npgsql.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\MySql.Data.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Oracle.ManagedDataAccess.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Mail.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\stdole.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\ModelLibrary.pdb
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\ModelLibrary.dll.config
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Antlr3.Runtime.pdb
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\Newtonsoft.Json.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Net.Http.Formatting.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Helpers.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Http.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Http.WebHost.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Mvc.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Optimization.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.Razor.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.WebPages.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.WebPages.Deployment.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\bin\System.Web.WebPages.Razor.xml
+G:\Karan\GIT\ViennaAdvantage\VIS\obj\Debug\VIS.csprojAssemblyReference.cache
+G:\Karan\GIT\ViennaAdvantage\VIS\obj\Debug\VIS.csproj.CoreCompileInputs.cache
+G:\Karan\GIT\ViennaAdvantage\VIS\obj\Debug\VIS.csproj.CopyComplete
+G:\Karan\GIT\ViennaAdvantage\VIS\obj\Debug\VIS.dll
+G:\Karan\GIT\ViennaAdvantage\VIS\obj\Debug\VIS.pdb
