@@ -960,6 +960,52 @@ SetVersion (0.0);
             return false;
         }
 
+        ///<summary>
+        /// SetIsRightPaneLink
+        ///</summary>
+        ///<param name="IsRightPaneLink">IsRightPaneLink</param>
+        public void SetIsRightPaneLink(Boolean IsRightPaneLink)
+        {
+            Set_Value("IsRightPaneLink", IsRightPaneLink);
+        }
+
+        ///<summary>
+        /// GetIsRightPaneLink
+        ///</summary>
+        ///<returns> IsRightPaneLink</returns>
+        public Boolean IsRightPaneLink()
+        {
+            Object oo = Get_Value("IsRightPaneLink"); if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
+
+        ///<summary>
+        /// SetExport
+        ///</summary>
+        ///<param name="Export_ID">Export</param>
+        public void SetExport_ID(String Export_ID)
+        {
+            if (Export_ID != null && Export_ID.Length > 50)
+            {
+                log.Warning("Length > 50 - truncated");
+                Export_ID = Export_ID.Substring(0, 50);
+            }
+            Set_ValueNoCheck("Export_ID", Export_ID);
+        }
+
+        ///<summary>
+        /// GetExport
+        ///</summary>
+        ///<returns> Export</returns>
+        public String GetExport_ID()
+        {
+            return (String)Get_Value("Export_ID");
+        }
+
 
     }
 
