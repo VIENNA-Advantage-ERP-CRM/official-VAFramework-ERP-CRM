@@ -199,8 +199,9 @@ namespace VIS.Models
         {
             int C_BPartner_Location_ID = Util.GetValueOfInt(fields);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT p.CreditStatusSettingOn, p.SO_CreditLimit, NVL(p.SO_CreditLimit,0)-NVL(p.SO_CreditUsed,0) AS CreditAvailable" +
-                            " FROM C_BPartner_Location p WHERE p.C_BPartner_Location_ID = " + C_BPartner_Location_ID;
+            // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019 
+            string sql = "SELECT bp.CreditStatusSettingOn, p.SO_CreditLimit, NVL(p.SO_CreditLimit,0)-NVL(p.SO_CreditUsed,0) AS CreditAvailable" +
+                            " FROM C_BPartner_Location p INNER JOIN C_BPartner bp ON (bp.C_BPartner_ID = p.C_BPartner_ID) WHERE p.C_BPartner_Location_ID = " + C_BPartner_Location_ID;
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

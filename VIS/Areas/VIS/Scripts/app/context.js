@@ -40,7 +40,7 @@ VIS.context.getWindowContext = function (windowNo, context, onlyWindow) {
 
     var value = "";
     if (this.m_map[windowNo]) {
-        value = this.m_map[windowNo][key]; 
+        value = this.m_map[windowNo][key];
     }
 
     if (!value || value == "") {
@@ -318,6 +318,12 @@ VIS.context.setIsSOTrx = function (windowNo, isSOTrx) {
         this.setContext(arguments[0], "IsSOTrx", arguments[1] ? "Y" : "N");
     else
         this.setContext("IsSOTrx", arguments[0] ? "Y" : "N");
+};
+
+
+VIS.context.getIsUseCrystalReportViewer = function ()
+{
+    return VIS.context.getContext("#USE_CRYSTAL_REPORT_VIEWER")=="Y";
 };
 
 

@@ -1968,7 +1968,7 @@ namespace VIS.Helpers
             outt.Headers.Add(Msg.Translate(ctx, "NewValue"));
             outt.Headers.Add(Msg.Translate(ctx, "OldValue"));
             outt.Headers.Add(Msg.Translate(ctx, "UpdatedBy"));
-            outt.Headers.Add(Msg.Translate(ctx, "Updated"));
+            outt.Headers.Add(Msg.Translate(ctx, "Updated") + " (" + Msg.GetMsg(ctx, "UTC") + ")");
 
             return outt;
         }

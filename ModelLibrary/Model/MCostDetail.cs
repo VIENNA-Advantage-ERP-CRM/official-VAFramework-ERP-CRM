@@ -91,10 +91,29 @@ namespace VAdvantage.Model
             SetDescription(Description);
         }
 
-        //Created by Amit 18-12-2015
+        /// <summary>
+        /// Is used to create Cost detail with respective reference
+        /// </summary>
+        /// <param name="mas">Accounting SChema</param>
+        /// <param name="AD_Org_ID">Organization</param>
+        /// <param name="M_Product_ID">Product</param>
+        /// <param name="M_AttributeSetInstance_ID">AttributeSetInstance</param>
+        /// <param name="WindowName">calling window</param>
+        /// <param name="inventoryLine">inventory line reference</param>
+        /// <param name="inoutline">inout line reference</param>
+        /// <param name="movementline">movement line reference</param>
+        /// <param name="invoiceline">invoice line reference </param>
+        /// <param name="po">Production execution reference</param>
+        /// <param name="M_CostElement_ID">cost element</param>
+        /// <param name="Amt">amount</param>
+        /// <param name="Qty">quantity</param>
+        /// <param name="Description">description</param>
+        /// <param name="trxName">trasnaction</param>
+        /// <param name="M_Warehouse_ID">Optional parameter -- Warehouse ID</param>
+        /// <returns>MCostDetail Object</returns>
         public static MCostDetail CreateCostDetail(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, string WindowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
-            MInvoiceLine invoiceline, PO po, int M_CostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName)
+            MInvoiceLine invoiceline, PO po, int M_CostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName, int M_Warehouse_ID = 0)
         {
             try
             {
@@ -102,6 +121,7 @@ namespace VAdvantage.Model
                 MCostDetail cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID, Amt, Qty, Description, trxName);
                 cd.SetProcessed(true);
+                cd.SetM_Warehouse_ID(M_Warehouse_ID);
                 if (WindowName == "Physical Inventory" || WindowName == "Internal Use Inventory")
                 {
                     cd.SetM_InventoryLine_ID(inventoryLine.GetM_InventoryLine_ID());
@@ -130,7 +150,7 @@ namespace VAdvantage.Model
                         cd.SetIsSOTrx(true);
                     }
                 }
-                else if (WindowName == "Invoice(Vendor)" || WindowName == "Invoice(Vendor)-Return")
+                else if (WindowName == "Invoice(Vendor)" || WindowName == "Invoice(Vendor)-Return" || WindowName == "LandedCost")
                 {
                     cd.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
                     cd.SetIsSOTrx(false);
@@ -192,6 +212,7 @@ namespace VAdvantage.Model
             string costingMethod = null;
             int costElementId = 0;
             MClient client = MClient.Get(GetCtx(), cd.GetAD_Client_ID());
+            int M_Warehouse_ID = 0; // is used to calculate cost with warehouse level or not
 
             if (product != null)
             {
@@ -223,7 +244,7 @@ namespace VAdvantage.Model
             }
 
             // set Organization for product costs
-            if (cl == "C" || cl == "B")
+            if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_BatchLot)
             {
                 AD_Org_ID = 0;
             }
@@ -231,10 +252,14 @@ namespace VAdvantage.Model
             {
                 AD_Org_ID = cd.GetAD_Org_ID();
             }
-            // set ASI as ZERO in case of costing levele either "Client" or "Organization"
-            if (cl != MProductCategory.COSTINGLEVEL_BatchLot && cl != MProductCategory.COSTINGLEVEL_OrgPlusBatch)
+            // set ASI as ZERO in case of costing levele either "Client" or "Organization" or "Warehouse"
+            if (cl != MProductCategory.COSTINGLEVEL_BatchLot && cl != MProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
             {
                 M_ASI_ID = 0;
+            }
+            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+            {
+                M_Warehouse_ID = cd.GetM_Warehouse_ID();
             }
 
             // get Cost element id of selected costing method
@@ -267,14 +292,14 @@ namespace VAdvantage.Model
                         MCostElement ce = ces[i];
                         if (ce.GetM_CostElement_ID() != costElementId)
                         {
-                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId))
+                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                             {
                                 return false;
                             }
                         }
                         else if (!client.IsCostImmediate())
                         {
-                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId))
+                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                             {
                                 return false;
                             }
@@ -318,7 +343,7 @@ namespace VAdvantage.Model
                             }
                             if (isCostImmediate == "N")
                             {
-                                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId))
+                                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                                 {
                                     return false;
                                 }
@@ -343,7 +368,7 @@ namespace VAdvantage.Model
                 {
                     ce = MCostElement.Get(GetCtx(), GetM_CostElement_ID());
                 }
-                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId))
+                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                 {
                     return false;
                 }
@@ -352,7 +377,7 @@ namespace VAdvantage.Model
         }
 
         private bool UpdateCost(MAcctSchema mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int A_Asset_ID, int cq_AD_Org_ID,
-                                string windowName, MCostDetail cd, string costingMethod = "", int costCominationelement = 0)
+                                string windowName, MCostDetail cd, string costingMethod = "", int costCominationelement = 0, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
             MInOutLine inoutline = null;
@@ -368,23 +393,29 @@ namespace VAdvantage.Model
             {
                 if (windowName == "Inventory Move")
                 {
-                    cost = MCost.Get(product, M_ASI_ID, mas, cq_AD_Org_ID, ce.GetM_CostElement_ID());
+                    cost = MCost.Get(product, M_ASI_ID, mas, cq_AD_Org_ID, ce.GetM_CostElement_ID(), M_Warehouse_ID);
                     //change 10-5-2016
                     if (cd.GetM_MovementLine_ID() > 0)
                     {
+                        int M_SourceWarehouse_ID = 0;
                         MMovementLine movementlineFrom = new MMovementLine(GetCtx(), cd.GetM_MovementLine_ID(), Get_TrxName());
-                        costFrom = MCost.Get(product, M_ASI_ID, mas, movementlineFrom.GetAD_Org_ID(), ce.GetM_CostElement_ID());
+                        // when costing level is warehouse then need to get source warehouse
+                        if (M_Warehouse_ID > 0)
+                        {
+                            M_SourceWarehouse_ID = MLocator.Get(GetCtx(), movementlineFrom.GetM_Locator_ID()).GetM_Warehouse_ID();
+                        }
+                        costFrom = MCost.Get(product, M_ASI_ID, mas, movementlineFrom.GetAD_Org_ID(), ce.GetM_CostElement_ID(), M_SourceWarehouse_ID);
                     }
                     //end
                 }
                 else
                 {
-                    cost = MCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetM_CostElement_ID());
+                    cost = MCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetM_CostElement_ID(), M_Warehouse_ID);
                 }
             }
             else
             {
-                cost = MCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetM_CostElement_ID(), A_Asset_ID);
+                cost = MCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetM_CostElement_ID(), A_Asset_ID, M_Warehouse_ID);
             }
 
             //Decimal qty = 0;
@@ -682,7 +713,7 @@ namespace VAdvantage.Model
                     decimal totalPrice = 0;
                     decimal totalQty = 0;
                     MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                        mas, Org_ID, ce, Get_TrxName());
+                        mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
                         for (int j = 0; j < cQueue.Length; j++)
@@ -831,7 +862,7 @@ namespace VAdvantage.Model
                     decimal totalPrice = 0;
                     decimal totalQty = 0;
                     MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                        mas, Org_ID, ce, Get_TrxName());
+                        mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
                         for (int j = 0; j < cQueue.Length; j++)
@@ -1074,7 +1105,7 @@ namespace VAdvantage.Model
                         //MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
                         //    mas, cq_AD_Org_ID, ce, Get_TrxName());
                         MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                        mas, Org_ID, ce, Get_TrxName());
+                        mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                         if (cQueue != null && cQueue.Length > 0)
                         {
                             for (int j = 0; j < cQueue.Length; j++)
@@ -1304,7 +1335,7 @@ namespace VAdvantage.Model
                     decimal totalPrice = 0;
                     decimal totalQty = 0;
                     MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                        mas, Org_ID, ce, Get_TrxName());
+                        mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
                         for (int j = 0; j < cQueue.Length; j++)
@@ -1723,7 +1754,7 @@ namespace VAdvantage.Model
                                     {
                                         // get cost based on Accounting Schema
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         //if (primaryActSchemaCurrencyID != mas.GetC_Currency_ID())
                                         //{
                                         //    costCombination = MConversionRate.Convert(movement.GetCtx(), costCombination, primaryActSchemaCurrencyID, mas.GetC_Currency_ID(),
@@ -1795,16 +1826,30 @@ namespace VAdvantage.Model
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
+                        // now we will get cost(CurrentCostPrice) from the document line itself - product come with that price on To Warehouse
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                        //}
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
                         {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
-                               cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(movementline.GetCurrentCostPrice(), qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            Decimal convertAmount = MConversionRate.Convert(GetCtx(), movementline.GetCurrentCostPrice(),
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(convertAmount, qty)));
                         }
+
                         if (Env.Signum(cost.GetCumulatedQty()) != 0)
                         {
                             price = Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero);
@@ -1968,7 +2013,7 @@ namespace VAdvantage.Model
                                     if (ce.GetM_CostElement_ID() == costCominationelement)
                                     {
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
                                         // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
@@ -2089,48 +2134,79 @@ namespace VAdvantage.Model
                         //this is to warehouse
 
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
-                        {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
-                               cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
-                            // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
-                            if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
-                            {
-                                price = Decimal.Round(Decimal.Divide(
-                                                  Decimal.Add(
-                                                  Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
-                                                  Decimal.Multiply(costCombination, qty)),
-                                                  Decimal.Add(cost.GetCurrentQty(), qty))
-                                                  , precision, MidpointRounding.AwayFromZero);
-                                cost.SetCurrentCostPrice(price);
-                            }
-                            else
-                            {
-                                cost.SetCurrentCostPrice(0);
-                            }
+                        Decimal affectedAmount = movementline.GetCurrentCostPrice();
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
+                        {
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
-
-                            // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
-                            if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
-                            {
-                                price = Decimal.Round(Decimal.Divide(
-                                                  Decimal.Add(
-                                                  Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
-                                                  Decimal.Multiply(cost.GetCurrentCostPrice(), qty)),
-                                                  Decimal.Add(cost.GetCurrentQty(), qty))
-                                                  , precision, MidpointRounding.AwayFromZero);
-                                cost.SetCurrentCostPrice(price);
-                            }
-                            else
-                            {
-                                cost.SetCurrentCostPrice(0);
-                            }
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
+
+                        // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
+                        {
+                            price = Decimal.Round(Decimal.Divide(
+                                              Decimal.Add(
+                                              Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                                              Decimal.Multiply(affectedAmount, qty)),
+                                              Decimal.Add(cost.GetCurrentQty(), qty))
+                                              , precision, MidpointRounding.AwayFromZero);
+                            cost.SetCurrentCostPrice(price);
+                        }
+                        else
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
+
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+
+                        //    // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
+                        //    if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
+                        //    {
+                        //        price = Decimal.Round(Decimal.Divide(
+                        //                          Decimal.Add(
+                        //                          Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                        //                          Decimal.Multiply(costCombination, qty)),
+                        //                          Decimal.Add(cost.GetCurrentQty(), qty))
+                        //                          , precision, MidpointRounding.AwayFromZero);
+                        //        cost.SetCurrentCostPrice(price);
+                        //    }
+                        //    else
+                        //    {
+                        //        cost.SetCurrentCostPrice(0);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+
+                        //    // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
+                        //    if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
+                        //    {
+                        //        price = Decimal.Round(Decimal.Divide(
+                        //                          Decimal.Add(
+                        //                          Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                        //                          Decimal.Multiply(cost.GetCurrentCostPrice(), qty)),
+                        //                          Decimal.Add(cost.GetCurrentQty(), qty))
+                        //                          , precision, MidpointRounding.AwayFromZero);
+                        //        cost.SetCurrentCostPrice(price);
+                        //    }
+                        //    else
+                        //    {
+                        //        cost.SetCurrentCostPrice(0);
+                        //    }
+                        //}
 
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -2262,7 +2338,7 @@ namespace VAdvantage.Model
                                     if (ce.GetM_CostElement_ID() == costCominationelement)
                                     {
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                                     }
                                     else
@@ -2330,16 +2406,32 @@ namespace VAdvantage.Model
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
+
+                        Decimal affectedAmount = movementline.GetCurrentCostPrice();
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
                         {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
-                               cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
+
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                        //}
+
                         if (Env.Signum(cost.GetCumulatedQty()) != 0)
                         {
                             price = Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero);
@@ -2502,7 +2594,7 @@ namespace VAdvantage.Model
                                     if (ce.GetM_CostElement_ID() == costCominationelement)
                                     {
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
                                         // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
@@ -2627,48 +2719,79 @@ namespace VAdvantage.Model
                         //this is to warehouse
 
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
-                        {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
-                               cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
-                            // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
-                            if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
-                            {
-                                price = Decimal.Round(Decimal.Divide(
-                                                  Decimal.Add(
-                                                  Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
-                                                  Decimal.Multiply(costCombination, qty)),
-                                                  Decimal.Add(cost.GetCurrentQty(), qty))
-                                                  , precision, MidpointRounding.AwayFromZero);
-                                cost.SetCurrentCostPrice(price);
-                            }
-                            else
-                            {
-                                cost.SetCurrentCostPrice(0);
-                            }
+                        Decimal affectedAmount = movementline.GetCurrentCostPrice();
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
+                        {
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
-
-                            // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
-                            if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
-                            {
-                                price = Decimal.Round(Decimal.Divide(
-                                                  Decimal.Add(
-                                                  Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
-                                                  Decimal.Multiply(cost.GetCurrentCostPrice(), qty)),
-                                                  Decimal.Add(cost.GetCurrentQty(), qty))
-                                                  , precision, MidpointRounding.AwayFromZero);
-                                cost.SetCurrentCostPrice(price);
-                            }
-                            else
-                            {
-                                cost.SetCurrentCostPrice(0);
-                            }
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
+
+                        // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
+                        {
+                            price = Decimal.Round(Decimal.Divide(
+                                              Decimal.Add(
+                                              Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                                              Decimal.Multiply(affectedAmount, qty)),
+                                              Decimal.Add(cost.GetCurrentQty(), qty))
+                                              , precision, MidpointRounding.AwayFromZero);
+                            cost.SetCurrentCostPrice(price);
+                        }
+                        else
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
+
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+
+                        //    // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
+                        //    if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
+                        //    {
+                        //        price = Decimal.Round(Decimal.Divide(
+                        //                          Decimal.Add(
+                        //                          Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                        //                          Decimal.Multiply(costCombination, qty)),
+                        //                          Decimal.Add(cost.GetCurrentQty(), qty))
+                        //                          , precision, MidpointRounding.AwayFromZero);
+                        //        cost.SetCurrentCostPrice(price);
+                        //    }
+                        //    else
+                        //    {
+                        //        cost.SetCurrentCostPrice(0);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+
+                        //    // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
+                        //    if (Decimal.Add(cost.GetCurrentQty(), qty) > 0)
+                        //    {
+                        //        price = Decimal.Round(Decimal.Divide(
+                        //                          Decimal.Add(
+                        //                          Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                        //                          Decimal.Multiply(cost.GetCurrentCostPrice(), qty)),
+                        //                          Decimal.Add(cost.GetCurrentQty(), qty))
+                        //                          , precision, MidpointRounding.AwayFromZero);
+                        //        cost.SetCurrentCostPrice(price);
+                        //    }
+                        //    else
+                        //    {
+                        //        cost.SetCurrentCostPrice(0);
+                        //    }
+                        //}
 
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -2796,7 +2919,7 @@ namespace VAdvantage.Model
                                     if (ce.GetM_CostElement_ID() == costCominationelement)
                                     {
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                                     }
                                     else
@@ -2859,16 +2982,31 @@ namespace VAdvantage.Model
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
+
+                        Decimal affectedAmount = movementline.GetCurrentCostPrice();
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
                         {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
-                               cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
+
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                        //}
                     }
                     else if (windowName == "Invoice(Vendor)-Return")
                     {
@@ -2906,12 +3044,12 @@ namespace VAdvantage.Model
                     if (windowName == "Inventory Move")
                     {
                         cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                            mas, cq_AD_Org_ID, ce, Get_TrxName());
+                            mas, cq_AD_Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     }
                     else
                     {
                         cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                            mas, Org_ID, ce, Get_TrxName());
+                            mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     }
                     if (cQueue != null && cQueue.Length > 0)
                     {
@@ -3029,7 +3167,7 @@ namespace VAdvantage.Model
                                     if (ce.GetM_CostElement_ID() == costCominationelement)
                                     {
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                                     }
                                     else
@@ -3077,16 +3215,31 @@ namespace VAdvantage.Model
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
+
+                        Decimal affectedAmount = movementline.GetCurrentCostPrice();
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
                         {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                               costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costFrom.GetCurrentCostPrice(), qty)));
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
+
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                        //       costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costFrom.GetCurrentCostPrice(), qty)));
+                        //}
                     }
                     else if (windowName == "Invoice(Vendor)-Return")
                     {
@@ -3209,7 +3362,7 @@ namespace VAdvantage.Model
                                     if (ce.GetM_CostElement_ID() == costCominationelement)
                                     {
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                                     }
                                     else
@@ -3258,16 +3411,31 @@ namespace VAdvantage.Model
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
+
+                        Decimal affectedAmount = movementline.GetCurrentCostPrice();
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
                         {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                               costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costFrom.GetCurrentCostPrice(), qty)));
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
+
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                        //       costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costFrom.GetCurrentCostPrice(), qty)));
+                        //}
                     }
                     else if (windowName == "Return To Vendor")
                     {
@@ -3405,7 +3573,7 @@ namespace VAdvantage.Model
                                     if (ce.GetM_CostElement_ID() == costCominationelement)
                                     {
                                         decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
+                                           costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                         cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                                     }
                                     else
@@ -3471,16 +3639,32 @@ namespace VAdvantage.Model
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
                         cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                        if (ce.GetM_CostElement_ID() == costCominationelement)
+
+                        Decimal affectedAmount = movementline.GetCurrentCostPrice();
+                        if (mas.GetC_Currency_ID() == GetCtx().GetContextAsInt("$C_Currency_ID"))
                         {
-                            decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
-                               costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx());
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
                         else
                         {
-                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                            // convert currenctCostPrice on movementline in accounting schema currency
+                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
+                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                            cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
+
+                        //if (ce.GetM_CostElement_ID() == costCominationelement)
+                        //{
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                        //       costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
+                        //}
+                        //else
+                        //{
+                        //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(cost.GetCurrentCostPrice(), qty)));
+                        //}
+
                         if (Env.Signum(cost.GetCumulatedQty()) != 0 && Env.Signum(cost.GetCurrentCostPrice()) == 0)
                         {
                             price = Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero);
@@ -3594,7 +3778,7 @@ namespace VAdvantage.Model
             string costingMethod = null;
             int costElementId1 = 0;
             Decimal AccQty = 0;
-
+            int M_Warehouse_ID = 0;
             if (product != null)
             {
                 pc = MProductCategory.Get(product.GetCtx(), product.GetM_Product_Category_ID());
@@ -3617,7 +3801,7 @@ namespace VAdvantage.Model
                     costElementId1 = acctSchema.GetM_CostElement_ID();
                 }
             }
-            if (cl == "C" || cl == "B")
+            if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_BatchLot)
             {
                 AD_Org_ID = 0;
                 // during Inventory Move, not to calculate cost combination
@@ -3628,11 +3812,14 @@ namespace VAdvantage.Model
             {
                 AD_Org_ID = cd.GetAD_Org_ID();
             }
-            if (cl != "B" && cl != "A")
+            if (cl != MProductCategory.COSTINGLEVEL_BatchLot && cl != MProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
             {
                 M_ASI_ID = 0;
             }
-
+            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+            {
+                M_Warehouse_ID = cd.GetM_Warehouse_ID();
+            }
             // when we complete a record, and costing method is not any combination, then no need to calculate
             if (optionalStrcc == "window" && costingMethod != "C")
             {
@@ -3688,27 +3875,27 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            UpdateFreightWithActualQty(ds, AD_Org_ID, cd, acctSchema, product, M_ASI_ID, windowName);
+                            UpdateFreightWithActualQty(ds, AD_Org_ID, cd, acctSchema, product, M_ASI_ID, windowName, M_Warehouse_ID);
                         }
                     }
 
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]));
+                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
 
                         //If cost combination is already calculated on completion, then not to re-calculate through process
                         if (windowName == "LandedCostAllocation" && cd.GetC_InvoiceLine_ID() > 0)
                         {
                             invoiceLine = new MInvoiceLine(GetCtx(), cd.GetC_InvoiceLine_ID(), Get_Trx());
                             costElementId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]);
-                            if (invoiceLine.IsCostImmediate() && costElementId == costElementId1)
-                            {
-                                isCurrentCostprice = false;
-                            }
-                            else
-                            {
-                                isCurrentCostprice = true;
-                            }
+                            //if (invoiceLine.IsCostImmediate() && costElementId == costElementId1)
+                            //{
+                            //    isCurrentCostprice = false;
+                            //}
+                            //else
+                            //{
+                            isCurrentCostprice = true;
+                            //}
                         }
                         //end
 
@@ -3752,22 +3939,22 @@ namespace VAdvantage.Model
                         if (windowName == "LandedCostAllocation" && cd.GetC_InvoiceLine_ID() > 0)
                         {
                             invoiceLine = new MInvoiceLine(GetCtx(), cd.GetC_InvoiceLine_ID(), Get_Trx());
-                            if (invoiceLine.IsCostImmediate() && costElementId == costElementId1)
-                            {
-                                isCurrentCostprice = false;
-                            }
-                            else
-                            {
-                                isCurrentCostprice = true;
-                            }
+                            //if (invoiceLine.IsCostImmediate() && costElementId == costElementId1)
+                            //{
+                            //    isCurrentCostprice = false;
+                            //}
+                            //else
+                            //{
+                            isCurrentCostprice = true;
+                            //}
                         }
                         //end
 
                         // created object of Cost elemnt for checking iscalculated = true/ false
                         ce = MCostElement.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]));
 
-                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]));
-                        cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]));
+                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
+                        cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), M_Warehouse_ID);
                         if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["iscostMethod"]) == 1)
                         {
                             AccQty = cost.GetCurrentQty();
@@ -3834,7 +4021,7 @@ namespace VAdvantage.Model
         /// <param name="M_ASI_ID">Attribute Set Instance, whose cost is to be calculated</param>
         /// <param name="windowName">consume/Increase by which window</param>
         /// <returns>true or false</returns>
-        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int AD_Org_ID, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, string windowName)
+        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int AD_Org_ID, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, string windowName, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
             for (int i = 0; i < dsCostElementLine.Tables[0].Rows.Count; i++)
@@ -3853,7 +4040,7 @@ namespace VAdvantage.Model
                 }
 
                 // object of Landed cost allocation - cost element
-                cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, landedM_CostElement_ID);
+                cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, landedM_CostElement_ID, M_Warehouse_ID);
                 if (cost.GetCumulatedQty() <= 0)
                 {
                     cost.Save();
@@ -3937,6 +4124,7 @@ namespace VAdvantage.Model
             freightImpact.SetRecord_ID(recordId);
             freightImpact.SetC_AcctSchema_ID(cd.GetC_AcctSchema_ID());
             freightImpact.SetM_CostElement_ID(landedM_CostElement_ID);
+            freightImpact.SetM_Product_ID(cd.GetM_Product_ID()); // when we re-calculate, at that tym we have to delete record from from m_freightimpact based on product
             freightImpact.SetQty(qty);
             if (!freightImpact.Save())
             {

@@ -28,7 +28,7 @@
         var $divBusy = null;
 
         var baseUrl = VIS.Application.contextUrl;
-        var dataSetUrl = baseUrl + "JsonData/JDataSet";
+        var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
 
         this.initialize = function () {
             customDesign();
@@ -205,8 +205,11 @@
                 }
                 if (pSelectID > 0) {
                     $cmbPaymentSelect.val(pSelectID);
-                    var sql = "SELECT PaymentRule FROM C_PaySelectionCheck WHERE C_PaySelection_ID = " + pSelectID;
-                    payMethodID = VIS.Utility.Util.getValueOfInt(executeScalar(sql));
+                    var sql = "VIS_135";
+                    var param = [];
+                    param[0] = new VIS.DB.SqlParam("@pSelectID", pSelectID);
+
+                    payMethodID = VIS.Utility.Util.getValueOfInt(executeScalar(sql, param));
                 }
                 //* Load PaymentMethod
                 if (data.PaymentMethod != null || data.PaymentMethod.length > 0) {
@@ -369,9 +372,16 @@
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(param),
                 success: function (jsonResult) {
-                    var ad_process_id = executeScalar("select ad_process_id from ad_process where ad_printformat_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + check_ID + ")) and c_bankaccountdoc.isactive = 'Y' and rownum =1)");
-                    var ad_table_id = executeScalar("select ad_table_id from ad_table where tablename = 'C_PaySelectionCheck'");
-                    var prin = new VIS.APrint(ad_process_id, ad_table_id, parseInt(check_ID), $self.windowNo);
+                    // Change by mohit to get check prints.
+                    var sql = "VIS_152";
+                    var params = [];
+                    params[0] = new VIS.DB.SqlParam("@BankAcct_ID", C_BankAccount_ID);
+                    var ad_process_id = executeScalar(sql, params);
+                    
+                    sql = "VIS_150";
+                    var ad_table_id = executeScalar(sql);
+
+                    var prin = new VIS.APrint(ad_process_id, ad_table_id, parseInt($cmbPaymentSelect.val()), $self.windowNo);
                     prin.startPdf(null);
                     isBusy(false);
                     var data = JSON.parse(jsonResult);
@@ -412,8 +422,14 @@
                     var data = JSON.parse(jsonResult);
                     if (paymentID != null || paymentID != undefined) {
                         //var ad_process_id = VIS.DB.executeScalar("select ad_process_id from ad_process where value = 'remittanceprintformat'");
-                        var ad_process_id = executeScalar("SELECT AD_Process_ID  FROM AD_Tab WHERE AD_Tab_ID = 330");
-                        var ad_table_id = executeScalar("select ad_table_id from ad_table where tablename = 'C_Payment'");
+                        // Change by mohit to print remittance slip.
+                        var sql = "VIS_151";
+
+                        var ad_process_id = executeScalar(sql);
+
+
+                        sql = "VIS_150";
+                        var ad_table_id = executeScalar(sql);
                         // for (var j = 0; j < data.check_id; j++) {
                         //var pi = new VIS.ProcessInfo(null, ad_process_id, ad_table_id, paymentID[0]);
                         //pi.setAD_User_ID(VIS.context.getAD_User_ID());
@@ -421,7 +437,7 @@
                         //ctl.setIsPdf(true);
                         //ctl.process($self.windowNo); //call dispose intenally
                         //ctl = null;
-                        var prin = new VIS.APrint(ad_process_id, ad_table_id, paymentID[0], $self.windowNo);
+                        var prin = new VIS.APrint(ad_process_id, ad_table_id, parseInt($cmbPaymentSelect.val()), $self.windowNo);
                         prin.startPdf(null);
                         $self.dispose();
                         // }
@@ -513,12 +529,13 @@
 
 
 
-        var executeScalar = function (sql, params, callback)
-        {
+        var executeScalar = function (sql, params, callback) {
             var async = callback ? true : false;
             var dataIn = { sql: sql, page: 1, pageSize: 0 }
             var value = null;
-
+            if (params) {
+                dataIn.param = params;
+            }
             getDataSetJString(dataIn, async, function (jString) {
                 dataSet = new VIS.DB.DataSet().toJson(jString);
                 var dataSet = new VIS.DB.DataSet().toJson(jString);
@@ -551,7 +568,7 @@
                 result = json;
                 if (callback) {
                     callback(json);
-                }                
+                }
             });
             return result;
         };

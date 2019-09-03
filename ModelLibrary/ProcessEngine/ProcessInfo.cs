@@ -114,8 +114,9 @@ namespace VAdvantage.ProcessEngine
         private List<ProcessInfoLog> _logs = null;
         private int _AD_ReportFormat_ID;
         private int _AD_ReportMaster_ID;
-
-
+        private bool useCrysalReportViewer = false;
+        private bool isReport = false;
+        private bool isBackGround = false;
         private Dictionary<string, string> ctxLocal = new Dictionary<string, string>();
 
         public Dictionary<String, Object> ToList()
@@ -153,6 +154,9 @@ namespace VAdvantage.ProcessEngine
             lst.Add("WindowNo", _windowNo);
             lst.Add("PrintFormatTableName", _AD_PrintFormat_TableName);
             lst.Add("AD_ReportView_ID", _AD_ReportView_ID);
+            lst.Add("UseCrystalReportViewer", useCrysalReportViewer);
+            lst.Add("IsReport", isReport);
+            lst.Add("IsBackground", isBackGround);
             return lst;
         }
 
@@ -160,6 +164,8 @@ namespace VAdvantage.ProcessEngine
         {
             ProcessInfo info = new ProcessInfo(Util.GetValueOfString(lst["Title"]), Util.GetValueOfInt(lst["Process_ID"])); //2
             info._AD_PInstance_ID = Util.GetValueOfInt(lst["AD_PInstance_ID"]);
+            info.useCrysalReportViewer = Util.GetValueOfBool(lst["UseCrystalReportViewer"]);
+            info.isReport = Util.GetValueOfBool(lst["IsReport"]);
             info._record_ID = Util.GetValueOfInt(lst["Record_ID"]);
             info._error = Convert.ToBoolean(lst["Error"]);
             info._summary = Util.GetValueOfString(lst["Summary"]);
@@ -191,7 +197,7 @@ namespace VAdvantage.ProcessEngine
 
             info._ad_window_ID = Util.GetValueOfInt(lst["AD_Window_ID"]);
             info._windowNo = Util.GetValueOfInt(lst["WindowNo"]);
-
+            info.isBackGround = Util.GetValueOfBool(lst["IsBackground"]); ;
             return info;
         }
 
@@ -383,6 +389,65 @@ namespace VAdvantage.ProcessEngine
         {
             _AD_PInstance_ID = AD_PInstance_ID;
         }
+
+        /// <summary>
+        /// get system will use crystal report viewer
+        /// </summary>
+        /// <returns></returns>
+        public bool GetUseCrystalReportViewer()
+        {
+            return useCrysalReportViewer;
+        }
+
+        /// <summary>
+        /// Set system will use Report
+        /// </summary>
+        /// <param name="useCRV"></param>
+        public void SetUseCrystalReportViewer(bool useCRV)
+        {
+            useCrysalReportViewer = useCRV;
+        }
+
+
+        /// <summary>
+        /// get system will use crystal report viewer
+        /// </summary>
+        /// <returns></returns>
+        public bool GetIsReport()
+        {
+            return isReport;
+        }
+
+        /// <summary>
+        /// Set system will use Report
+        /// </summary>
+        /// <param name="useCRV"></param>
+        public void SetIsReport(bool isRep)
+        {
+            isReport = isRep;
+        }
+
+
+        /// <summary>
+        /// Get If process will execute in background thread
+        /// </summary>
+        /// <returns></returns>
+        public bool GetIsBackground()
+        {
+            return isBackGround;
+        }
+
+        /// <summary>
+        /// Set If process will execute in background thread
+        /// </summary>
+        /// <param name="useCRV"></param>
+        public void SetIsBackground(bool IsBackground)
+        {
+            isBackGround = IsBackground;
+        }
+
+
+
 
         /// <summary>
         /// get process id

@@ -493,6 +493,22 @@ namespace VAdvantage.Model
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
+        /** Set Reversal Document.
+        @param ReversalDoc_ID Reference of its original document */
+        public void SetReversalDoc_ID(int ReversalDoc_ID)
+        {
+            if (ReversalDoc_ID <= 0) Set_Value("ReversalDoc_ID", null);
+            else
+                Set_Value("ReversalDoc_ID", ReversalDoc_ID);
+        }
+        /** Get Reversal Document.
+        @return Reference of its original document */
+        public int GetReversalDoc_ID()
+        {
+            Object ii = Get_Value("ReversalDoc_ID");
+            if (ii == null) return 0;
+            return Convert.ToInt32(ii);
+        }
     }
 
 }

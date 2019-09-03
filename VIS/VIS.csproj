@@ -24,6 +24,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,6 +47,14 @@
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\CrystalDecisions.Web.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth, Version=4.0.0.11165, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -936,10 +946,18 @@
     <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.designer.cs">
       <DependentUpon>CreateUser.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.cs">
+      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.designer.cs">
+      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
+    <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
     <Content Include="LibDll\DotNetOpenAuth.dll" />
     <Content Include="LibDll\Google.Apis.Authentication.OAuth2.dll" />
     <Content Include="LibDll\Google.Apis.Calendar.v3.dll" />

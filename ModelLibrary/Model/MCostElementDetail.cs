@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                MCostElementDetail ced = new MCostElementDetail(ctx, 0, null);
+                MCostElementDetail ced = new MCostElementDetail(ctx, 0, cd.Get_Trx());
                 ced.SetAD_Client_ID(AD_Client_ID);
                 ced.SetAD_Org_ID(AD_Org_ID);
                 ced.SetC_AcctSchema_ID(mas.GetC_AcctSchema_ID());
@@ -79,6 +79,7 @@ namespace VAdvantage.Model
                 ced.SetM_ProductionLine_ID(cd.GetM_ProductionLine_ID());
                 ced.SetM_WorkOrderResourceTxnLine_ID(cd.GetM_WorkOrderResourceTxnLine_ID());
                 ced.SetM_WorkOrderTransactionLine_ID(cd.GetM_WorkOrderTransactionLine_ID());
+                ced.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
                 if (!ced.Save())
                 {
                     ValueNamePair pp = VLogger.RetrieveError();

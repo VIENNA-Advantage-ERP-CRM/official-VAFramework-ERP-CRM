@@ -88,7 +88,7 @@
         var formWidth = 0;
         var winNo = self.windowNo;
         var arrWindowNo = [];
-        $root = $('<div class="vis-email-rootDiv"></div>');
+        $root = $('<div class="vis-email-rootDiv vis-forms-container"></div>');
         var isBusy = $('<div class="vis-email-rootDivBusy"></div>');
         var $AttacmentOption = $("<ul id='ulAttachmentOption' class='vis-apanel-rb-ul'>");
         // Added By Param On date 18-sep-2015
@@ -2304,9 +2304,10 @@
                 $SubjectTextChange = 0;
                 var selectedRow = mailformat.getSelectedRow();
                 if (selectedRow != null && selectedRow != undefined) {
-                    selectedTemplateID = selectedRow.ad_texttemplate_id;
-                    openFormatClientID = selectedRow.ad_client_id;
-                    $subject.val(selectedRow.subject);
+                    // changes done by Bharat on 27 Sep 2018 to habdle issue of open text format
+                    selectedTemplateID = selectedRow.AD_TEXTTEMPLATE_ID;
+                    openFormatClientID = selectedRow.AD_CLIENT_ID;
+                    $subject.val(selectedRow.SUBJECT);
 
                     if (openFormatClientID != ctx.getAD_Client_ID()) {
 
@@ -2318,7 +2319,7 @@
                     }
 
 
-                    if (selectedRow.isdynamiccontent == "Y") {
+                    if (selectedRow.ISDYNAMICCONTENT == "Y") {
                         $dynamicDisplay.prop("checked", false).trigger("click");
 
                     }
@@ -2327,15 +2328,15 @@
 
                     }
 
-                    if (selectedRow.ad_window_id != null && selectedRow.ad_window_id != undefined && selectedRow.ad_window_id > 0) {
+                    if (selectedRow.AD_Window_ID != null && selectedRow.AD_Window_ID != undefined && selectedRow.AD_Window_ID > 0) {
                         saveForAllWindows = false;
                     }
                     else {
                         saveForAllWindows = true;
                     }
 
-                    formatName = selectedRow.name;
-                    $textAreakeno.value(selectedRow.mailtext);
+                    formatName = selectedRow.NAME;
+                    $textAreakeno.value(selectedRow.MAILTEXT);
                 }
                 onOkOpentn = false;
             };

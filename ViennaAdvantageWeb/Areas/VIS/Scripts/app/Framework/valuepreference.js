@@ -6,7 +6,7 @@
         }
 
         var $self = this;
-        var $root = $("<div style='position:relative;'>");
+        var $root = $("<div class='vis-forms-container' style='position:relative;'>");
         var $busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
 
         this.Okbtn = null;
@@ -65,7 +65,9 @@
         function setBusy(isBusy) {
             $busyDiv.css("display", isBusy ? 'block' : 'none');
         };
-
+        /*  
+        Design Removed from server side and created on client Side.
+        */
         function createDesign($self) {
             var html = '<div style="width: 100%;  float: left" id="fisrt_' + $self.windowNum + '">' +
     '<label class=" VIS_Pref_Label_Font" style="width:15% ;text-align: left;"  id="vlblAttributeText_' + $self.windowNum + '">test</label>' +

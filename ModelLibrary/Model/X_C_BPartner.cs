@@ -2815,6 +2815,27 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
+
+        /** VA009_PO_PaymentMethod_ID AD_Reference_ID=1000613 */
+        public static int VA009_PO_PAYMENTMETHOD_ID_AD_Reference_ID = 1000613;
+        /** Set PO Payment Method.
+            @param VA009_PO_PaymentMethod_ID The way that a buyer choose to pay the seller of a good or service. */
+        public void SetVA009_PO_PaymentMethod_ID(int VA009_PO_PaymentMethod_ID)
+        {
+            if (VA009_PO_PaymentMethod_ID <= 0)
+                Set_Value("VA009_PO_PaymentMethod_ID", null);
+            else
+                Set_Value("VA009_PO_PaymentMethod_ID", VA009_PO_PaymentMethod_ID);
+        }
+        /** Get PO Payment Method.
+            @return The way that a buyer choose to pay the seller of a good or service. */
+        public int GetVA009_PO_PaymentMethod_ID()
+        {
+            Object ii = Get_Value("VA009_PO_PaymentMethod_ID");
+            if (ii == null)
+                return 0;
+            return Convert.ToInt32(ii);
+        }
         //----------------------------------------------------------
 
         /** Set Generate Opportunity.

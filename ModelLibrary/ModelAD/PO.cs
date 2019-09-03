@@ -772,6 +772,11 @@ namespace VAdvantage.Model
         //    }
         //}
 
+        /// <summary>
+        /// (re)Load record with _mIDs[*]
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="trx"></param>
         protected void Load(int ID, Trx trx)
         {
             log.Finest("ID=" + ID);
@@ -947,7 +952,7 @@ namespace VAdvantage.Model
 
             try
             {
-                //Set Parameter (primary key ids)
+                //Set Parameter (primary key ids and multi key values (DateTime and Boolean))
                 param = new SqlParameter[_mIDs.Length];
 
                 for (int j = 0; j < _mIDs.Length; j++)
@@ -955,7 +960,14 @@ namespace VAdvantage.Model
                     if (_mIDs[j] is int)
                     {
                         param[j] = new SqlParameter("@param" + j.ToString(), (int)_mIDs[j]);
-
+                    }
+                    else if (_mIDs[j] is DateTime)
+                    {
+                        param[j] = new SqlParameter("@param" + j.ToString(), (DateTime)_mIDs[j]);
+                    }
+                    else if (_mIDs[j] is Boolean)
+                    {
+                        param[j] = new SqlParameter("@param" + j.ToString(), ((Boolean)_mIDs[j] ? "Y" : "N"));
                     }
                     else
                     {
@@ -1229,7 +1241,7 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Create Single/Multi Key Where Clause
+        /// Create Single/Multi Key (Included (DateTime and Boolean)) Where Clause
         /// </summary>
         /// <param name="blnWithValues">blnWithValues if true uses actual values otherwise ?</param>
         /// <returns>where clause</returns>
@@ -1245,8 +1257,28 @@ namespace VAdvantage.Model
                 {
                     if (_mKeyColumns[i].EndsWith("_ID"))
                         sb.Append(_mIDs[i]);
+                    else if (_mIDs[i] is DateTime)
+                        sb.Append(DB.TO_DATE(((DateTime)_mIDs[i]).ToLocalTime(), false));
                     else
-                        sb.Append("'").Append(_mIDs[i]).Append("'");
+                    {
+                        sb.Append("'");
+                        if (_mIDs[i] is Boolean)
+                        {
+                            if ((Boolean)_mIDs[i])
+                            {
+                                sb.Append("Y");
+                            }
+                            else
+                            {
+                                sb.Append("N");
+                            }
+                        }
+                        else
+                        {
+                            sb.Append(_mIDs[i]);
+                        }
+                        sb.Append("'");
+                    }
                 }
                 else
                     sb.Append("@param" + i.ToString());
@@ -1302,7 +1334,7 @@ namespace VAdvantage.Model
             if (AD_Org_ID != GetAD_Org_ID())
                 SetAD_Org_ID(AD_Org_ID);
 
-            
+
         }
 
         // vinay bhatt window id
@@ -1907,6 +1939,13 @@ namespace VAdvantage.Model
 
         protected static int I_ZERO = 0;
 
+        
+
+        /// <summary>
+        /// Is new record
+        /// check all value fo multikey table
+        /// </summary>
+        /// <returns>true if new</returns>
         public bool Is_New()
         {
             if (_mCreateNew)
@@ -1914,13 +1953,17 @@ namespace VAdvantage.Model
 
             for (int i = 0; i < _mIDs.Length; i++)
             {
-                if (_mIDs[i].Equals(I_ZERO))
+                if (_mIDs[i].Equals(I_ZERO) || _mIDs[i] == null || _mIDs[i] == Null.NULL) //match non zero and non- null value
                     continue;
                 return false;
             }
             return true;
         }
 
+        /// <summary>
+        /// Is value changed of column
+        /// </summary>
+        /// <returns></returns>
         public bool Is_Changed()
         {
             int size = Get_ColumnCount();
@@ -1932,6 +1975,10 @@ namespace VAdvantage.Model
             return false;
         }
 
+        /// <summary>
+        /// Record is active or not
+        /// </summary>
+        /// <returns>tru if active</returns>
         public bool IsActive()
         {
             bool? bb = (bool?)Get_Value("IsActive");
@@ -2344,7 +2391,10 @@ namespace VAdvantage.Model
 
         }
 
-
+        /// <summary>
+        /// Update Record directly
+        /// </summary>
+        /// <returns>true if updated</returns>
         protected bool SaveUpdate()
         {
             String strWhere = Get_WhereClause(true);
@@ -2455,28 +2505,22 @@ namespace VAdvantage.Model
 
                     sql.Append(Encrypt(i, blnValue ? "'Y'" : "'N'"));
                 }
-                else if (value is DateTime)
+                else if (value.GetType().ToString() == TYPE_DATE_TIME)
                     sql.Append(GlobalVariable.TO_DATE((DateTime?)Encrypt(i, value), p_info.GetColumnDisplayType(i) == DisplayType.Date));
-                else
+                else if (type == typeof(string) || dt == DisplayType.Label)
                     sql.Append(Encrypt(i, GlobalVariable.TO_STRING(value.ToString())));
-
-
-
-
-
-
-
-
+                else
+                    sql.Append(SaveNewSpecial(value, i));
 
 
 
                 //Change Log
-                 if (_mIDs.Length == 1 && (session != null) && logThis
-                    && !p_info.IsEncrypted(i)		//	not encrypted
-                    && !p_info.IsVirtualColumn(i)	//	no virtual column
-                    && !"Password".Equals(columnName)
-                    && !"CreditCardNumber".Equals(columnName)
-                    )
+                if (_mIDs.Length == 1 && (session != null) && logThis
+                   && !p_info.IsEncrypted(i)		//	not encrypted
+                   && !p_info.IsVirtualColumn(i)	//	no virtual column
+                   && !"Password".Equals(columnName)
+                   && !"CreditCardNumber".Equals(columnName)
+                   )
                 {
                     Object oldV = _mOldValues[i];
                     Object newV = value;
@@ -2489,17 +2533,17 @@ namespace VAdvantage.Model
                     if (_mIDs.Length != 1)
                         keyInfo = Get_WhereClause(true);
 
-                      if ((this.Get_TableName() != "AD_PInstance_Para") && (this.Get_TableName() != "AD_PInstance"))
+                    if ((this.Get_TableName() != "AD_PInstance_Para") && (this.Get_TableName() != "AD_PInstance"))
                     {
-                     
-                    MChangeLog cLog = session.ChangeLog(
-                            _trx, AD_ChangeLog_ID,
-                            p_info.getAD_Table_ID(), p_info.GetColumn(i).AD_Column_ID,
-                            keyInfo, GetAD_Client_ID(), GetAD_Org_ID(), oldV, newV,
-                            Get_TableName(), X_AD_ChangeLog.CHANGELOGTYPE_Update);
-                    if (cLog != null)
-                        AD_ChangeLog_ID = cLog.GetAD_ChangeLog_ID();
-                      }
+
+                        MChangeLog cLog = session.ChangeLog(
+                                _trx, AD_ChangeLog_ID,
+                                p_info.getAD_Table_ID(), p_info.GetColumn(i).AD_Column_ID,
+                                keyInfo, GetAD_Client_ID(), GetAD_Org_ID(), oldV, newV,
+                                Get_TableName(), X_AD_ChangeLog.CHANGELOGTYPE_Update);
+                        if (cLog != null)
+                            AD_ChangeLog_ID = cLog.GetAD_ChangeLog_ID();
+                    }
                     // System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
                     //  System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
                 }
@@ -2545,7 +2589,7 @@ namespace VAdvantage.Model
                 bool ok;
                 try
                 {
-                      string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                    string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                     if (adLog.Length > 6)
                     {
                         string adLogDB = adLog + " END; ";
@@ -2835,6 +2879,11 @@ namespace VAdvantage.Model
         {
             Set_Value("IsActive", active);
         }
+
+        /// <summary>
+        /// Insert (missing) Translation Records
+        /// </summary>
+        /// <returns>false if error (true if no translation or success)</returns>
         private bool InsertTranslations()
         {
             //	Not a translation table
@@ -2887,7 +2936,10 @@ namespace VAdvantage.Model
             return no > 0;
         }
 
-
+        /// <summary>
+        /// Update Translations.
+        /// </summary>
+        /// <returns>false if error (true if no translation or success)</returns>
         private bool UpdateTranslations()
         {
             //	Not a translation table
@@ -3162,10 +3214,12 @@ namespace VAdvantage.Model
             }
 
             Trx localTrx = null;
+            bool isLocalTrx = false;
             localTrx = _trx;
-            if (localTrx == null)
+            if (_trx == null)
             {
                 localTrx = Trx.Get("POdel");
+                isLocalTrx = true;
             }
             bool success = false;
             //// Delete translationa of the record
@@ -3186,12 +3240,12 @@ namespace VAdvantage.Model
             if (!success)
             {
                 log.Warning("Not deleted");
-                if (localTrx != null)
+                if (isLocalTrx)
                     localTrx.Rollback();
             }
             else
             {
-                if (localTrx != null)
+                if (isLocalTrx)
                     localTrx.Commit();
                 //	Change Log
                 MSession session = MSession.Get(GetCtx(), false);
@@ -3207,11 +3261,11 @@ namespace VAdvantage.Model
                     for (int i = 0; i < size; i++)
                     {
                         Object value = _mOldValues[i];
-                         if (_mIDs.Length == 1 && value != null
-                            && !p_info.IsEncrypted(i)		//	not encrypted
-                            && !p_info.IsVirtualColumn(i)	//	no virtual column
-                            && !"Password".Equals(p_info.GetColumnName(i))
-                            )
+                        if (_mIDs.Length == 1 && value != null
+                           && !p_info.IsEncrypted(i)		//	not encrypted
+                           && !p_info.IsVirtualColumn(i)	//	no virtual column
+                           && !"Password".Equals(p_info.GetColumnName(i))
+                           )
                         {
                             Object keyInfo = Get_ID();
                             if (_mIDs.Length != 1)
@@ -3227,7 +3281,7 @@ namespace VAdvantage.Model
                     }	//   for all fields
                 }
 
-                   string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                 if (adLog.Length > 6)
                 {
                     string adLogDB = adLog + " END; ";
@@ -3247,7 +3301,7 @@ namespace VAdvantage.Model
                 }
                 _attachment = null;
             }
-            if (localTrx != null)
+            if (isLocalTrx)
                 localTrx.Close();
             localTrx = null;
             UpdatePreferences();
@@ -4191,7 +4245,7 @@ namespace VAdvantage.Model
                 {
                     param = po.Is_New() ? po.GetSaveNewQueryInfo() :
                        po.GetSaveUpdateQueryInfo();
-                    
+
                     Ctx p_ctx = new Ctx();
                     string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                     if (adLog.Length > 6)

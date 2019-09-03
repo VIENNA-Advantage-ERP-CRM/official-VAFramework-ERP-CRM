@@ -4,7 +4,7 @@
  * Purpose        : Deletion of records from inout table
  * Class Used     : X_M_InOutLineMA
  * Chronological    Development
- * Raghunandan     08-Jun-2009
+ * Raghunandan     08-Jun-2009  
   ******************************************************/
 using System;
 using System.Collections;
@@ -129,6 +129,113 @@ namespace VAdvantage.Model
             SetMovementQty(MovementQty);
         }
 
+        /// <summary>
+        /// Parent Constructor
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="movementQty"></param>
+        /// <param name="MMPloicyDate"></param>
+        public MInOutLineMA(MInOutLine parent, int M_AttributeSetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+            : this(parent.GetCtx(), 0, parent.Get_TrxName())
+        {
+            SetClientOrg(parent);
+            SetM_InOutLine_ID(parent.GetM_InOutLine_ID());
+            //
+            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetMovementQty(movementQty);
+            if (MMPloicyDate == null)
+            {
+                MMPloicyDate = parent.GetParent().GetMovementDate();
+            }
+            SetMMPolicyDate(MMPloicyDate);
+        }
+
+        /// <summary>
+        /// Is Used to Get or Create  Instance of MInoutLineMA (Attribute)
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="MovementQty"></param>
+        /// <param name="DateMaterialPolicy"></param>
+        /// <returns></returns>
+        public static MInOutLineMA GetOrCreate(MInOutLine line, int M_AttributeSetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        {
+            MInOutLineMA retValue = null;
+            String sql = "SELECT * FROM M_InoutLineMA " +
+                         @" WHERE  M_InOutLine_ID = " + line.GetM_InOutLine_ID() +
+                         @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
+            if (M_AttributeSetInstance_ID == 0)
+                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+            else
+                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DB.ExecuteReader(sql, null, line.Get_Trx());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    retValue = new MInOutLineMA(line.GetCtx(), dr, line.Get_Trx());
+                }
+            }
+            catch (Exception ex)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, ex);
+            }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                dt = null;
+            }
+            if (retValue == null)
+                retValue = new MInOutLineMA(line, M_AttributeSetInstance_ID, MovementQty, DateMaterialPolicy);
+            else
+                retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
+            return retValue;
+        }
+
+        /**
+	 * 	Get Material Allocations from shipment which is not returned
+	 *	@param ctx context
+	 *	@param M_InOutLine_ID line
+	 *	@param trxName trx
+	 *	@return allocations
+	 */
+        public static MInOutLineMA[] getNonReturned(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        {
+            List<MInOutLineMA> list = new List<MInOutLineMA>();
+            String sql = "SELECT * FROM M_InOutLineMA WHERE M_InOutLine_ID=" + M_InOutLine_ID + " ORDER BY MMPolicyDate ASC";
+            DataSet ds = null;
+            try
+            {
+                ds = DB.ExecuteDataset(sql, null, trxName);
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DataRow dr = ds.Tables[0].Rows[i];
+                    list.Add(new MInOutLineMA(ctx, dr, trxName));
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            MInOutLineMA[] retValue = new MInOutLineMA[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }	
+	
          // Mohit 20-8-2015 VAWMS
            /***  Parent Constructor
            * @param parent parent

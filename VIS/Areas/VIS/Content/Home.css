@@ -798,6 +798,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
         color: #1b95d7;
         margin-top: 15px;
         float: left;
+         flex:1;
     }
 
         #fllupsScreen h2 strong {
@@ -873,17 +874,21 @@ html[dir="rtl"] .vis-feedContainer {
     padding: 0px 10px 0px 10px;
     display: inline-block;
     width: 100%;
+     display: flex;
+    align-items: center;
 }
 
     .vis-feedTitleBar h3 {
         font-size: 14px;
         color: #999999;
-        margin: 15px 0px 10px 0px;
-        float: left;
-        width: calc(100% - 77px);
+        /*margin: 15px 0px 10px 0px;*/
+        /*float: left;
+        width: calc(100% - 77px);*/
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        flex: 1;
+        margin: 0;
     }
 
 
@@ -910,9 +915,12 @@ html[dir="rtl"] .vis-feedContainer {
 
 /* Feeds details */
 .vis-feedDetails {
-    margin: 10px 10px 0px 10px;
+   /*margin: 10px 10px 0px 10px;
     display: inline-block;
-    width: 95%;
+    width: 95%;*/
+    padding: 10px 10px 0px 10px;
+    display: inline-block;
+    width: 100%;
 }
 
     .vis-feedDetails .userAvatar-Feeds {
@@ -1024,6 +1032,12 @@ html[dir="rtl"] .vis-viewMoreComments {
     display: block;
 }
 
+/*Feed icons */
+.vis-processZoomIcon {
+    background: url('../Images/home/process-icon.png') 0px 0px no-repeat;
+    display: block;
+}
+
     .vis-feedIcons.vis-icon-feed {
         background-position: 0px 0px;
         width: 18px;
@@ -1106,6 +1120,20 @@ html[dir="rtl"] .vis-viewMoreComments {
         margin-top: 12px;
         cursor: pointer;
     }
+
+
+      .vis-processZoomIcon.vis-icon-check {
+        /*background-position: 0px -339px;*/
+        width: 16px;
+        height: 16px;
+        float: left;
+        text-indent: -999999px;
+        margin-top: 12px;
+        cursor: pointer;
+    }
+
+
+    
 
 .activeFeed .vis-feedIcons.icon-check {
     background-position: 0px -384px;
@@ -1450,10 +1478,13 @@ ul.vis-userFavourites-ListMenu li a {
     }
 
 .vis-schedule-feed-detail {
-    width: 96.7%;
+    /*width: 96.7%;
     margin: 10px 10px 10px 10px;
-    display: inline-block;
+    display: inline-block;*/
+    width: 100%;
+    display: flex;
 }
+
 
     .vis-schedule-feed-detail .vis-userAvatar-Feeds {
         float: left;
@@ -1499,12 +1530,14 @@ ul.vis-userFavourites-ListMenu li a {
 }
 
 
+
+
 .vis-scheduleDateTime {
     background: #e8e8e8;
-    margin: -15px 10px -10px -10px;
-    padding: 0 6px 5px;
+    /*margin: -15px 10px -10px -10px;*/
+    padding: 5px;
     min-width: 82px;
-    max-width: 82px;
+    /*max-width: 82px;*/
 }
 
     .vis-scheduleDateTime > h4 {
@@ -2890,3 +2923,29 @@ p.vis-maintain-customer-p span {
     padding-top: 5px;
     padding-left: 8px;
 }
+
+/** New changes Migration*/
+#favLinks > [class^="col"] {
+    float: left;
+}
+
+.vis-change-pic-input {
+    margin-top: -30px;
+    width: 130px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.vis-schedule-feed-text {
+    flex: 1;
+    padding: 5px 10px;
+    margin-top: 0px !important; /*added this property temprary to overwrite the inline property because that is in ws module*/
+}
+
+.vis-change-picture-wrap {
+    float: left;
+    width: 100%;
+}
+/* new Changes */

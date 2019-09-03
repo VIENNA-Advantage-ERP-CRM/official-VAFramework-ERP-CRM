@@ -20,6 +20,8 @@ using System.Web.Mvc;
 using VIS.Filters;
 using System.Web.SessionState;
 using ViennaAdvantage.Model;
+using System.Web.Script.Serialization;
+using System.Text;
 
 namespace VIS.Controllers
 {
@@ -27,7 +29,7 @@ namespace VIS.Controllers
     /// common class to handle json data request 
     /// </summary>
     /// 
-    [AjaxAuthorizeAttribute] // redirect to login page if request is not Authorized
+    [AjaxAuthorizeAttribute] // redirect to login page if reques`t is not Authorized
     [AjaxSessionFilterAttribute] // redirect to Login/Home page if session expire
     [AjaxValidateAntiForgeryToken] // validate antiforgery token 
     //[SessionState(SessionStateBehavior.ReadOnly)]
@@ -36,6 +38,8 @@ namespace VIS.Controllers
     public class JsonDataController : Controller
     {
 
+        private static Dictionary<string, string> toastrMessage = new Dictionary<string, string>();
+        static readonly object _object = new object();
         public JsonResult UpdateCtx(Dictionary<string, object> dCtx)
         {
 
@@ -931,6 +935,37 @@ namespace VIS.Controllers
         {
             Ctx ctx = Session["ctx"] as Ctx;
             return Json(JsonConvert.SerializeObject(ProcessHelper.GetReportFileTypes(ctx, AD_Process_ID)), JsonRequestBehavior.AllowGet);
+        }
+
+        [NonAction]
+        public static void AddMessageForToastr(string key, string value)
+        {
+            lock (_object)
+            {
+                toastrMessage[key] = value;
+            }
+        }
+
+        public ContentResult MsgForToastr()
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            string sessionID = ctx.GetAD_Session_ID().ToString();
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            string serializedObject = null;
+            IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+            if (newDic != null && newDic.Count() > 0)
+            {
+                for (int i = 0; i < newDic.Count(); )
+                {
+                    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
+                    toastrMessage.Remove(keyVal.Key);
+                    serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
+                    return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
+                }
+            }
+            JavaScriptSerializer se1r = new JavaScriptSerializer();
+            serializedObject = se1r.Serialize(new { item = 1, message = "" });
+            return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
         }
 
     }

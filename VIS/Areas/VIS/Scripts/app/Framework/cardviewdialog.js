@@ -99,7 +99,7 @@
         // var 
         var root, ch;
         function init() {
-            root = $('<div style="width:100%;height:100%"></div>');
+            root = $('<div class="vis-forms-container" style="width:100%;height:100%"></div>');
             ArrayTotalTabFields();
             CardViewUI();
             FillCardViewCombo();
@@ -212,8 +212,8 @@
             centerBtn.append("<button   class='vis-btnleft' style='margin-top:10px'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/" + (VIS.Application.isRTL ? "right" : "left") + "-shift.png' ></button><button  class='vis-btndown' style='margin-top:10px'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/down arrow.png' ></button>");
             divChildLeftLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("SelectField") + "</label></div>");
             divChildRightLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("IncludedField") + "</label></div>");
-            divChildLeftColumns = $("<div style='width:99%;border: 1px solid #ccc;height:89%;overflow:auto'></div>");
-            divChildRightColumns = $("<div style='width:100%;border: 1px solid #ccc;height:89%;overflow:auto'></div>");
+            divChildLeftColumns = $("<div style='width:99%;border: 1px solid #ccc;height:77%;overflow:auto'></div>");
+            divChildRightColumns = $("<div style='width:100%;border: 1px solid #ccc;height:77%;overflow:auto'></div>");
             ulLeftColumns = $("<ul  class='vis-windowfield'></ul>");
             ulRightColumns = $("<ul  class='vis-cardviewcolumnfield'></ul>");
             divChildLeftColumns.append(ulLeftColumns);

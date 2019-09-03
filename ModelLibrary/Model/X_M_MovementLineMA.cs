@@ -162,6 +162,17 @@ Object bd =Get_Value("MovementQty");
 if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
+/// <summary>
+///  Set Material Policy Date.
+/// </summary>
+/// <param name="MMPolicyDate">Time used for LIFO and FIFO Material Policy</param>
+public void SetMMPolicyDate(DateTime? MMPolicyDate) { if (MMPolicyDate == null) throw new ArgumentException("MMPolicyDate is mandatory."); Set_ValueNoCheck("MMPolicyDate", (DateTime?)MMPolicyDate); }
+/// <summary>
+/// Get Material Policy Date.
+/// </summary>
+/// <returns>Time used for LIFO and FIFO Material Policy</returns>
+public DateTime? GetMMPolicyDate() { return (DateTime?)Get_Value("MMPolicyDate"); }
+
 }
 
 }

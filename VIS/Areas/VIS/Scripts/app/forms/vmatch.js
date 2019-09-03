@@ -1091,7 +1091,7 @@
                     //    ctxmsg = VIS.Msg.getMsg("VIS_Reversed");
                     var res = JSON.parse(data);
                     if (res.Msg != "") {
-                        VIS.ADialog.info(data.result, null, null, null);
+                        VIS.ADialog.info("", null, res.Msg, null);
                     }
                     else if (res.MatchedPO_ID > 0) {
                         //VIS.ADialog.info(ctxmsg + "Processed Line No: " + lineMatched.toString(), null, null, null);

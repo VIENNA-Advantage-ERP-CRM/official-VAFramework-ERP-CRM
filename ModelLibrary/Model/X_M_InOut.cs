@@ -953,7 +953,7 @@ namespace VAdvantage.Model
         public void SetMovementDate(DateTime? MovementDate)
         {
             if (MovementDate == null) throw new ArgumentException("MovementDate is mandatory.");
-            Set_Value("MovementDate", (DateTime?)MovementDate);
+            Set_Value("MovementDate", (DateTime?)MovementDate.Value.Date);
         }
         /** Get Movement Date.
         @return Date a product was moved in or out of inventory */
@@ -1519,6 +1519,24 @@ namespace VAdvantage.Model
         public void SetIsReversal(Boolean IsReversal) { Set_Value("IsReversal", IsReversal); }
         /** Get Reversal.@return This is a reversing transaction */
         public Boolean IsReversal() { Object oo = Get_Value("IsReversal"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /** Set Temp Document No.
+        @param TempDocumentNo Temp Document No for this Document */
+        public void SetTempDocumentNo(String TempDocumentNo)
+        {
+            if (TempDocumentNo != null && TempDocumentNo.Length > 30)
+            {
+                log.Warning("Length > 30 - truncated");
+                TempDocumentNo = TempDocumentNo.Substring(0, 30);
+            }
+            Set_Value("TempDocumentNo", TempDocumentNo);
+        }
+        /** Get Temp Document No.
+        @return Temp Document No for this Document */
+        public String GetTempDocumentNo()
+        {
+            return (String)Get_Value("TempDocumentNo");
+        }
     }
 
 }

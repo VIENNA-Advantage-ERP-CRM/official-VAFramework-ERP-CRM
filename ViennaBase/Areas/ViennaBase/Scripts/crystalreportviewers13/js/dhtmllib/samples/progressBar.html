@@ -1,0 +1,80 @@
+<!--
+=============================================================
+WebIntelligence(r) Report Panel
+Copyright(c) 2001-2003 Business Objects S.A.
+All rights reserved
+
+Use and support of this software is governed by the terms
+and conditions of the software license agreement and support
+policy of Business Objects S.A. and/or its subsidiaries. 
+The Business Objects products and technology are protected
+by the US patent number 5,555,403 and 6,247,008
+
+File: progressBar.html
+=============================================================
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Progress Bar</title>
+			
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../dialog.js"></script>
+		<script language="javascript" src="../waitdialog.js"></script>
+		
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+		
+		<script language="javascript">
+						
+			// 
+			// GLOBALS
+			//		
+			
+			// Widgets
+			var waitDlg = null;
+						
+			// Used in resizeCB			
+			var initialized		= false;
+		</script>					
+		
+
+		<script language="javascript">
+															        
+			// --------------------------------------------------------
+			// Create widgets
+			// --------------------------------------------------------
+					
+			progressBar=newProgressBarWidget("progressBar",200,10000)
+					
+			function loadCB()
+			{
+				// --------------------------------------------------------
+				// Init widgets
+				// --------------------------------------------------------
+				progressBar.init();
+				progressBar.begin();
+			}
+								
+		</script>
+
+	</head>
+
+	<body class="dialogzone" onload="setTimeout('loadCB()',1000)">
+	
+		<div class="dialogzone" style="padding:15px" align="center">					
+			<script language="javascript">
+					document.write(progressBar.getHTML())
+			</script>
+		</div>
+		
+	</body>
+	
+</html>

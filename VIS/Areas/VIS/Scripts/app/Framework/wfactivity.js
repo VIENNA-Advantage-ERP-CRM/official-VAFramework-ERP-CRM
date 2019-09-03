@@ -364,7 +364,7 @@
                                 $busyIndicator.hide();
                                 $divActivity.empty();
                                 $divActivity.append(0);
-
+                                $divActivity.show();
 
                                 //$("#sAlrtTxtType").empty();
                                 //$("#sAlrtTxtType").append(VIS.Msg.getMsg('WorkflowActivities'));
@@ -389,7 +389,7 @@
                             }
                             $divActivity.empty();
                             $divActivity.append(dyndata.result.count);
-
+                            $divActivity.show();
                             $alertTxtTypeCount.empty();
                             $alertTxtTypeCount.append(dyndata.result.count);
 
@@ -928,6 +928,16 @@
                     ansBtnClick($(this).data("id"), $(this).data("window"), $(this).data("col"));
                 });
                 detailCtrl.Action = 'W';
+            }
+            else if (info.NodeAction == 'X')
+            {
+                var ansBtn = $('<button style="margin-bottom:10px;margin-top: 0px;width: 100%;" class="VIS_Pref_pass-btn" data-id="' + index + '" data-form="' + info.AD_Form_ID + '" data-col="' + info.KeyCol + '">').append(info.NodeName);
+                detailCtrl.AnswerCtrl = ansBtn;
+                liAInput.append(ansBtn);
+                ansBtn.on('click', function () {
+                    VIS.viewManager.startForm($(this).data("form"));
+                });
+                detailCtrl.Action = 'X';
             }
 
 

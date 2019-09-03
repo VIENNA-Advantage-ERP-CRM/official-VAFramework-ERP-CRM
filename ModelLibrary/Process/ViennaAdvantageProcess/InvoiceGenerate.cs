@@ -38,7 +38,8 @@ namespace ViennaAdvantage.Process
         /** BPartner				*/
         private int _C_BPartner_ID = 0;
         /** Order					*/
-        private int _C_Order_ID = 0;
+        //private int _C_Order_ID = 0;
+        private string _C_Order_ID = "";
         /** Consolidate				*/
         private bool _ConsolidateDocument = true;
         /** Invoice Document Action	*/
@@ -89,7 +90,7 @@ namespace ViennaAdvantage.Process
                 }
                 else if (name.Equals("C_Order_ID"))
                 {
-                    _C_Order_ID = para[i].GetParameterAsInt();
+                    _C_Order_ID = para[i].GetParameter().ToString();
                 }
                 else if (name.Equals("ConsolidateDocument"))
                 {
@@ -130,45 +131,54 @@ namespace ViennaAdvantage.Process
                 + ", Consolidate=" + _ConsolidateDocument);
             //
             String sql = null;
-            if (_Selection)	//	VInvoiceGen
-            {
-                sql = "SELECT * FROM C_Order "
-                    + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND AD_Client_ID = " + GetAD_Client_ID()
-                    + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
-            }
-            else
-            {
-                sql = "SELECT * FROM C_Order o "
-                    + "WHERE o.DocStatus IN('CO','CL') AND o.IsSOTrx='Y' AND o.AD_Client_ID = " + GetAD_Client_ID();
-                if (_AD_Org_ID != 0)
-                {
-                    sql += " AND AD_Org_ID=" + _AD_Org_ID;
-                }
-                if (_C_BPartner_ID != 0)
-                {
-                    sql += " AND C_BPartner_ID=" + _C_BPartner_ID;
-                }
-                if (_C_Order_ID != 0)
-                {
-                    sql += " AND C_Order_ID=" + _C_Order_ID;
-                }
-                //
-                sql += " AND EXISTS (SELECT * FROM C_OrderLine ol "
-                        + "WHERE o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
-                    + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
 
-                //sql += " AND EXISTS (SELECT * FROM C_OrderLine ol INNER JOIN c_order ord "
-                //      + "  ON (ord.c_order_id = ol.c_order_id) WHERE ord.C_Order_ID  =ol.C_Order_ID "
-                //     + "  AND ol.QtyOrdered <> ol.QtyInvoiced AND ol.Iscontract ='N') "
-                //  + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
+            //Changes done for invoice generation when multiple users generate the invoices at the same time. 02-May-18
+
+            //if (_Selection)	//	VInvoiceGen
+            //{
+            //    sql = "SELECT * FROM C_Order "
+            //        + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND AD_Client_ID = " + GetAD_Client_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()
+            //        + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
+            //}
+            //else
+            //{
+            // not pick record of "Sales Quotation" And "Blanket Order"
+            sql = "SELECT * FROM C_Order o "
+                + "WHERE o.DocStatus IN('CO','CL') AND o.IsSOTrx='Y' AND o.IsSalesQuotation = 'N' AND o.isblankettrx = 'N' AND o.AD_Client_ID = " + GetAD_Client_ID();
+            if (_AD_Org_ID != 0)
+            {
+                sql += " AND AD_Org_ID=" + _AD_Org_ID;
             }
+            if (_C_BPartner_ID != 0)
+            {
+                sql += " AND C_BPartner_ID=" + _C_BPartner_ID;
+            }
+            if (_C_Order_ID != null && _C_Order_ID != string.Empty)
+            {
+                sql += " AND C_Order_ID IN (" + _C_Order_ID + ")";
+            }
+            // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
+            sql += " AND EXISTS (SELECT * FROM C_OrderLine ol "
+                    + "WHERE o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
+                + "ORDER BY AD_Org_ID, C_BPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
+
+            //sql += " AND EXISTS (SELECT * FROM C_OrderLine ol INNER JOIN c_order ord "
+            //      + "  ON (ord.c_order_id = ol.c_order_id) WHERE ord.C_Order_ID  =ol.C_Order_ID "
+            //     + "  AND ol.QtyOrdered <> ol.QtyInvoiced AND ol.Iscontract ='N') "
+            //  + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
+            //}
             //	sql += " FOR UPDATE";
 
-            IDataReader idr = null;
+            //End of Changes done for invoice generation when multiple users generate the invoices at the same time. 02-May-18
 
+            IDataReader idr = null;
             try
             {
                 idr = DB.ExecuteReader(sql, null, Get_TrxName());
+                DataTable dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                return Generate(dt);
             }
             catch (Exception e)
             {
@@ -177,42 +187,66 @@ namespace ViennaAdvantage.Process
                     idr.Close();
                 }
                 log.Log(Level.SEVERE, sql, e);
+                throw new ArgumentException(e.Message);
             }
-            return Generate(idr);
         }
 
-
-        /**
-         * 	Generate Shipments
-         * 	@param pstmt order query 
-         *	@return info
-         */
-        private String Generate(IDataReader idr)
+        /// <summary>
+        /// Generate Invoices
+        /// </summary>
+        /// <param name="idr">pstmt order query</param>
+        /// <returns>info</returns>
+        //private String Generate(IDataReader idr)
+        private String Generate(DataTable dt)
         {
-            DataTable dt = new DataTable();
-            try
+            foreach (DataRow dr in dt.Rows)
             {
+                MOrder order = new MOrder(GetCtx(), dr, Get_TrxName());
 
-                dt.Load(idr);
-                idr.Close();
-                foreach (DataRow dr in dt.Rows)//  while (dr.next ())
+                // Credit Limit check 
+                MBPartner bp = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
+                if (bp.GetCreditStatusSettingOn() == "CH")
                 {
-                    MOrder order = new MOrder(GetCtx(), dr, Get_TrxName());
-
-                    // Credit Limit check added by Vivek on 24/08/2016
-                    MBPartner bp = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
-                    if (bp.GetCreditStatusSettingOn() == "CH")
+                    decimal creditLimit = bp.GetSO_CreditLimit();
+                    string creditVal = bp.GetCreditValidation();
+                    if (creditLimit != 0)
                     {
-                        decimal creditLimit = bp.GetSO_CreditLimit();
-                        string creditVal = bp.GetCreditValidation();
+                        decimal creditAvlb = creditLimit - bp.GetSO_CreditUsed();
+                        if (creditAvlb <= 0)
+                        {
+                            if (creditVal == "C" || creditVal == "D" || creditVal == "F")
+                            {
+                                AddLog(Msg.GetMsg(GetCtx(), "StopInvoice") + bp.GetName());
+                                continue;
+                            }
+                            else if (creditVal == "I" || creditVal == "J" || creditVal == "L")
+                            {
+                                if (_msg != null)
+                                {
+                                    _msg.Clear();
+                                }
+                                _msg.Append(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName());
+                                //AddLog(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName());
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetC_BPartner_Location_ID(), null);
+                    //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
+                    if (bpl.GetCreditStatusSettingOn() == "CL")
+                    {
+                        decimal creditLimit = bpl.GetSO_CreditLimit();
+                        string creditVal = bpl.GetCreditValidation();
                         if (creditLimit != 0)
                         {
-                            decimal creditAvlb = creditLimit - bp.GetSO_CreditUsed();
+                            decimal creditAvlb = creditLimit - bpl.GetSO_CreditUsed();
                             if (creditAvlb <= 0)
                             {
                                 if (creditVal == "C" || creditVal == "D" || creditVal == "F")
                                 {
-                                    AddLog(Msg.GetMsg(GetCtx(), "StopInvoice") + bp.GetName());
+                                    AddLog(Msg.GetMsg(GetCtx(), "StopInvoice") + bp.GetName() + " " + bpl.GetName());
                                     continue;
                                 }
                                 else if (creditVal == "I" || creditVal == "J" || creditVal == "L")
@@ -221,113 +255,124 @@ namespace ViennaAdvantage.Process
                                     {
                                         _msg.Clear();
                                     }
-                                    _msg.Append(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName());
-                                    //AddLog(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName());
+                                    _msg.Append(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
+                                    //AddLog(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
                                 }
                             }
                         }
+                    }
+                }
+                // Credit Limit End
+
+                //	New Invoice Location
+                // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
+                if (!_ConsolidateDocument
+                    || (_invoice != null
+                    && (_invoice.GetC_BPartner_Location_ID() != order.GetBill_Location_ID()
+                        || _invoice.GetC_PaymentTerm_ID() != order.GetC_PaymentTerm_ID()
+                        || _invoice.GetM_PriceList_ID() != order.GetM_PriceList_ID()
+                        || _invoice.GetAD_Org_ID() != order.GetAD_Org_ID())))
+                {
+                    CompleteInvoice();
+                }
+                bool completeOrder = MOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule());
+
+                //	Schedule After Delivery
+                bool doInvoice = false;
+                if (MOrder.INVOICERULE_CustomerScheduleAfterDelivery.Equals(order.GetInvoiceRule()))
+                {
+                    _bp = new MBPartner(GetCtx(), order.GetBill_BPartner_ID(), null);
+                    if (_bp.GetC_InvoiceSchedule_ID() == 0)
+                    {
+                        log.Warning("BPartner has no Schedule - set to After Delivery");
+                        order.SetInvoiceRule(MOrder.INVOICERULE_AfterDelivery);
+                        order.Save();
                     }
                     else
                     {
-                        MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetC_BPartner_Location_ID(), null);
-                        MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
-                        if (bpl.GetCreditStatusSettingOn() == "CL")
+                        MInvoiceSchedule ins = MInvoiceSchedule.Get(GetCtx(), _bp.GetC_InvoiceSchedule_ID(), Get_TrxName());
+                        if (ins.CanInvoice(order.GetDateOrdered(), order.GetGrandTotal()))
                         {
-                            decimal creditLimit = bpl.GetSO_CreditLimit();
-                            string creditVal = bpl.GetCreditValidation();
-                            if (creditLimit != 0)
-                            {
-                                decimal creditAvlb = creditLimit - bpl.GetSO_CreditUsed();
-                                if (creditAvlb <= 0)
-                                {
-                                    if (creditVal == "C" || creditVal == "D" || creditVal == "F")
-                                    {
-                                        AddLog(Msg.GetMsg(GetCtx(), "StopInvoice") + bp.GetName() + " " + bpl.GetName());
-                                        continue;
-                                    }
-                                    else if (creditVal == "I" || creditVal == "J" || creditVal == "L")
-                                    {
-                                        if (_msg != null)
-                                        {
-                                            _msg.Clear();
-                                        }
-                                        _msg.Append(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
-                                        //AddLog(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // Credit Limit End
-
-                    //	New Invoice Location
-                    if (!_ConsolidateDocument
-                        || (_invoice != null
-                        && (_invoice.GetC_BPartner_Location_ID() != order.GetBill_Location_ID()
-                            || _invoice.GetC_PaymentTerm_ID() != order.GetC_PaymentTerm_ID())))
-                    {
-                        CompleteInvoice();
-                    }
-                    bool completeOrder = MOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule());
-
-                    //	Schedule After Delivery
-                    bool doInvoice = false;
-                    if (MOrder.INVOICERULE_CustomerScheduleAfterDelivery.Equals(order.GetInvoiceRule()))
-                    {
-                        _bp = new MBPartner(GetCtx(), order.GetBill_BPartner_ID(), null);
-                        if (_bp.GetC_InvoiceSchedule_ID() == 0)
-                        {
-                            log.Warning("BPartner has no Schedule - set to After Delivery");
-                            order.SetInvoiceRule(MOrder.INVOICERULE_AfterDelivery);
-                            order.Save();
+                            doInvoice = true;
                         }
                         else
                         {
-                            MInvoiceSchedule ins = MInvoiceSchedule.Get(GetCtx(), _bp.GetC_InvoiceSchedule_ID(), Get_TrxName());
-                            if (ins.CanInvoice(order.GetDateOrdered(), order.GetGrandTotal()))
-                            {
-                                doInvoice = true;
-                            }
-                            else
-                            {
-                                continue;
-                            }
+                            continue;
                         }
-                    }	//	Schedule
+                    }
+                }	//	Schedule
 
-                    //	After Delivery
-                    if (doInvoice || MOrder.INVOICERULE_AfterDelivery.Equals(order.GetInvoiceRule()))
+                //	After Delivery
+                if (doInvoice || MOrder.INVOICERULE_AfterDelivery.Equals(order.GetInvoiceRule()))
+                {
+                    MInOut shipment = null;
+                    MInOutLine[] shipmentLines = order.GetShipmentLines();
+                    MOrderLine[] oLines = order.GetLines(true, null);
+                    for (int i = 0; i < shipmentLines.Length; i++)
                     {
-                        MInOut shipment = null;
-                        MInOutLine[] shipmentLines = order.GetShipmentLines();
-                        MOrderLine[] oLines = order.GetLines(true, null);
-                        for (int i = 0; i < shipmentLines.Length; i++)
+                        MInOutLine shipLine = shipmentLines[i];
+                        if (shipLine.IsInvoiced())
                         {
-                            MInOutLine shipLine = shipmentLines[i];
-                            if (shipLine.IsInvoiced())
+                            continue;
+                        }
+                        if (shipment == null
+                            || shipment.GetM_InOut_ID() != shipLine.GetM_InOut_ID())
+                        {
+                            shipment = new MInOut(GetCtx(), shipLine.GetM_InOut_ID(), Get_TrxName());
+                        }
+                        if (!shipment.IsComplete()		//	ignore incomplete or reversals 
+                            || shipment.GetDocStatus().Equals(MInOut.DOCSTATUS_Reversed))
+                        {
+                            continue;
+                        }
+                        //
+                        CreateLine(order, shipment, shipLine);
+                    }	//	shipment lines                        
+                    for (int i = 0; i < oLines.Length; i++)
+                    {
+                        MOrderLine oLine = oLines[i];
+                        if (oLine.GetC_Charge_ID() > 0)
+                        {
+                            Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
+                            log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
+                            Decimal qtyEntered = toInvoice;
+                            //	Correct UOM for QtyEntered
+                            if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
                             {
-                                continue;
-                            }
-                            if (shipment == null
-                                || shipment.GetM_InOut_ID() != shipLine.GetM_InOut_ID())
-                            {
-                                shipment = new MInOut(GetCtx(), shipLine.GetM_InOut_ID(), Get_TrxName());
-                            }
-                            if (!shipment.IsComplete()		//	ignore incomplete or reversals 
-                                || shipment.GetDocStatus().Equals(MInOut.DOCSTATUS_Reversed))
-                            {
-                                continue;
+                                qtyEntered = Decimal.Round(Decimal.Divide(Decimal.Multiply(
+                                    toInvoice, oLine.GetQtyEntered()),
+                                    oLine.GetQtyOrdered()), 12, MidpointRounding.AwayFromZero);
                             }
                             //
-                            CreateLine(order, shipment, shipLine);
-                        }	//	shipment lines                        
-                        for (int i = 0; i < oLines.Length; i++)
+                            if (oLine.IsContract() == false)
+                            {
+                                CreateLine(order, oLine, toInvoice, qtyEntered);
+                                log.Info("ID " + oLine.Get_ID() + "Qty Ordered " + oLine.GetQtyOrdered() + " Qty Invoiced " + oLine.GetQtyInvoiced());
+                            }
+                        }
+                    }
+                }
+                //	After Order Delivered, Immediate
+                else
+                {
+                    MOrderLine[] oLines = order.GetLines(true, null);
+                    for (int i = 0; i < oLines.Length; i++)
+                    {
+                        MOrderLine oLine = oLines[i];
+                        Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
+                        if (toInvoice.CompareTo(Env.ZERO) == 0 && oLine.GetM_Product_ID() != 0)
                         {
-                            MOrderLine oLine = oLines[i];
+                            continue;
+                        }
+                        //                            
+                        bool fullyDelivered = oLine.GetQtyOrdered().CompareTo(oLine.GetQtyDelivered()) == 0;
+                        //JID_1136: While creating the Invoices against the charge system should not check the Ordered qty= Delivered qty. need to check this only in case of products
+                        if (completeOrder && oLine.GetC_Charge_ID() > 0)
+                        {
+                            fullyDelivered = true;
                             if (oLine.GetC_Charge_ID() > 0)
                             {
-                                Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
-                                log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
+                                log.Fine("After Order Delivery - ToInvoice=" + toInvoice + " - " + oLine);
                                 Decimal qtyEntered = toInvoice;
                                 //	Correct UOM for QtyEntered
                                 if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
@@ -344,147 +389,120 @@ namespace ViennaAdvantage.Process
                                 }
                             }
                         }
-                    }
-                    //	After Order Delivered, Immediate
-                    else
-                    {
-                        MOrderLine[] oLines = order.GetLines(true, null);
-                        for (int i = 0; i < oLines.Length; i++)
+
+                        //	Complete Order
+                        if (completeOrder && !fullyDelivered)
                         {
-                            MOrderLine oLine = oLines[i];
-                            Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
-                            if (toInvoice.CompareTo(Env.ZERO) == 0 && oLine.GetM_Product_ID() != 0)
+                            log.Fine("Failed CompleteOrder - " + oLine);
+                            completeOrder = false;
+                            break;
+                        }
+                        //	Immediate
+                        else if (MOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
+                        {
+                            log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
+                            Decimal qtyEntered = toInvoice;
+                            //	Correct UOM for QtyEntered
+                            if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
                             {
-                                continue;
+                                qtyEntered = Decimal.Round(Decimal.Divide(Decimal.Multiply(
+                                    toInvoice, oLine.GetQtyEntered()),
+                                    oLine.GetQtyOrdered()), 12, MidpointRounding.AwayFromZero);
                             }
                             //
-                            bool fullyDelivered = oLine.GetQtyOrdered().CompareTo(oLine.GetQtyDelivered()) == 0;
-
-                            //	Complete Order
-                            if (completeOrder && !fullyDelivered)
+                            if (oLine.IsContract() == false)
                             {
-                                log.Fine("Failed CompleteOrder - " + oLine);
-                                completeOrder = false;
-                                break;
+                                CreateLine(order, oLine, toInvoice, qtyEntered);
+                                log.Info("ID " + oLine.Get_ID() + "Qty Ordered " + oLine.GetQtyOrdered() + " Qty Invoiced " + oLine.GetQtyInvoiced());
                             }
-                            //	Immediate
-                            else if (MOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
-                            {
-                                log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
-                                Decimal qtyEntered = toInvoice;
-                                //	Correct UOM for QtyEntered
-                                if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
-                                {
-                                    qtyEntered = Decimal.Round(Decimal.Divide(Decimal.Multiply(
-                                        toInvoice, oLine.GetQtyEntered()),
-                                        oLine.GetQtyOrdered()), 12, MidpointRounding.AwayFromZero);
-                                }
-                                //
-                                if (oLine.IsContract() == false)
-                                {
-                                    CreateLine(order, oLine, toInvoice, qtyEntered);
-                                    log.Info("ID " + oLine.Get_ID() + "Qty Ordered " + oLine.GetQtyOrdered() + " Qty Invoiced " + oLine.GetQtyInvoiced());
-                                }
 
-                            }
-                            else
-                            {
-                                log.Fine("Failed: " + order.GetInvoiceRule()
-                                    + " - ToInvoice=" + toInvoice + " - " + oLine);
-                            }
-                        }	//	for all order lines
-                        if (MOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
-                            _line += 1000;
-                    }
-
-                    //	Complete Order successful
-                    if (completeOrder && MOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule()))
-                    {
-                        MInOut[] shipments = order.GetShipments(true);
-                        for (int i = 0; i < shipments.Length; i++)
+                        }
+                        else
                         {
-                            MInOut ship = shipments[i];
-                            if (!ship.IsComplete()		//	ignore incomplete or reversals 
-                                || ship.GetDocStatus().Equals(MInOut.DOCSTATUS_Reversed))
+                            log.Fine("Failed: " + order.GetInvoiceRule()
+                                + " - ToInvoice=" + toInvoice + " - " + oLine);
+                        }
+                    }	//	for all order lines
+                    if (MOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
+                        _line += 1000;
+                }
+
+                //	Complete Order successful
+                if (completeOrder && MOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule()))
+                {
+                    MInOut[] shipments = order.GetShipments(true);
+                    for (int i = 0; i < shipments.Length; i++)
+                    {
+                        MInOut ship = shipments[i];
+                        if (!ship.IsComplete()		//	ignore incomplete or reversals 
+                            || ship.GetDocStatus().Equals(MInOut.DOCSTATUS_Reversed))
+                        {
+                            continue;
+                        }
+                        MInOutLine[] shipLines = ship.GetLines(false);
+                        for (int j = 0; j < shipLines.Length; j++)
+                        {
+                            MInOutLine shipLine = shipLines[j];
+                            if (!order.IsOrderLine(shipLine.GetC_OrderLine_ID()))
                             {
                                 continue;
                             }
-                            MInOutLine[] shipLines = ship.GetLines(false);
-                            for (int j = 0; j < shipLines.Length; j++)
+                            if (!shipLine.IsInvoiced())
                             {
-                                MInOutLine shipLine = shipLines[j];
-                                if (!order.IsOrderLine(shipLine.GetC_OrderLine_ID()))
-                                {
-                                    continue;
-                                }
-                                if (!shipLine.IsInvoiced())
-                                {
-                                    CreateLine(order, ship, shipLine);
-                                }
-                            }	//	lines
-                            _line += 1000;
-                        }	//	all shipments
-                    }	//	complete Order
+                                CreateLine(order, ship, shipLine);
+                            }
+                        }	//	lines
+                        _line += 1000;
+                    }	//	all shipments
+                }	//	complete Order
 
-                }	//	for all orders
-            }
-            catch (Exception e)
-            {
-                if (idr != null)
-                {
-                    idr.Close();
-                }
-                log.Log(Level.SEVERE, "", e);
-            }
-            finally
-            {
-                if (idr != null)
-                {
-                    idr.Close();
-                }
-
-                dt = null;
-            }
+            }	//	for all orders
 
             CompleteInvoice();
             return "@Created@ = " + _created;
         }
 
-
-
-        /**************************************************************************
-         * 	Create Invoice Line from Order Line
-         *	@param order order
-         *	@param orderLine line
-         *	@param qtyInvoiced qty
-         *	@param qtyEntered qty
-         */
+        /// <summary>
+        /// Create Invoice Line from Order Line
+        /// </summary>
+        /// <param name="order">order</param>
+        /// <param name="orderLine">line</param>
+        /// <param name="qtyInvoiced">qty</param>
+        /// <param name="qtyEntered">qty</param>
         private void CreateLine(MOrder order, MOrderLine orderLine,
             Decimal qtyInvoiced, Decimal qtyEntered)
         {
             if (_invoice == null)
             {
                 _invoice = new MInvoice(order, 0, _DateInvoiced);
-                //-----------------Column Added by Anuj------------------
-                int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+                int _CountVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
                 if (_CountVA009 > 0)
                 {
                     int _PaymentMethod_ID = order.GetVA009_PaymentMethod_ID();
+
+                    // Get Payment method from Business partner
+                    int bpPamentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT " + (order.IsSOTrx() ? " VA009_PaymentMethod_ID " : " VA009_PO_PaymentMethod_ID ") +
+                        @" FROM C_BPartner WHERE C_BPartner_ID = " + order.GetC_BPartner_ID(), null, Get_Trx()));
+
+                    // during consolidation, payment method need to set that is defined on selected business partner. 
+                    // If not defined on BP then it will set from order
+                    if (_ConsolidateDocument && bpPamentMethod_ID != 0)
+                    {
+                        _PaymentMethod_ID = bpPamentMethod_ID;
+                    }
                     if (_PaymentMethod_ID > 0)
                     {
                         _invoice.SetVA009_PaymentMethod_ID(_PaymentMethod_ID);
                     }
                 }
-                //-----------------Column Added by Anuj------------------
 
-                int _CountVA026 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA026_'  AND IsActive = 'Y'"));
+                int _CountVA026 = Env.IsModuleInstalled("VA026_") ? 1 : 0;
                 if (_CountVA026 > 0)
                 {
                     _invoice.SetVA026_LCDetail_ID(order.GetVA026_LCDetail_ID());
                 }
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
-
                 if (_invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
                 {
                     _invoice.SetC_IncoTerm_ID(order.GetC_IncoTerm_ID());
@@ -492,6 +510,9 @@ namespace ViennaAdvantage.Process
 
                 if (!_invoice.Save())
                 {
+                    ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                    if (pp != null)
+                        throw new ArgumentException("Could not create Invoice (o). " + pp.GetName());
                     throw new Exception("Could not create Invoice (o)");
                 }
             }
@@ -507,42 +528,53 @@ namespace ViennaAdvantage.Process
             line.SetLine(_line + orderLine.GetLine());
             if (!line.Save())
             {
+                ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                if (pp != null)
+                    throw new ArgumentException("Could not create Invoice Line (o). " + pp.GetName());
                 throw new Exception("Could not create Invoice Line (o)");
             }
             log.Fine(line.ToString());
         }
 
-        /**
-         * 	Create Invoice Line from Shipment
-         *	@param order order
-         *	@param ship shipment header
-         *	@param sLine shipment line
-         */
+        /// <summary>
+        /// Create Invoice Line from Shipment
+        /// </summary>
+        /// <param name="order">order</param>
+        /// <param name="ship">shipment header</param>
+        /// <param name="sLine">shipment line</param>
         private void CreateLine(MOrder order, MInOut ship, MInOutLine sLine)
         {
             if (_invoice == null)
             {
                 _invoice = new MInvoice(order, 0, _DateInvoiced);
-                //---------------------------Column Added by Anuj------------------
-                int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+                int _CountVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
                 if (_CountVA009 > 0)
                 {
                     int _PaymentMethod_ID = order.GetVA009_PaymentMethod_ID();
+                    // during consolidation, payment method need to set that is defined on selected business partner. 
+                    // If not defined on BP then it will set from order
+                    // during sale cycle -- VA009_PaymentMethod_ID
+                    // during purchase cycle -- VA009_PO_PaymentMethod_ID
+                    int bpPamentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT " + (order.IsSOTrx() ? " VA009_PaymentMethod_ID " : " VA009_PO_PaymentMethod_ID ") +
+                        @" FROM C_BPartner WHERE C_BPartner_ID = " + order.GetC_BPartner_ID(), null, Get_Trx()));
+
+                    if (_ConsolidateDocument && bpPamentMethod_ID != 0)
+                    {
+                        _PaymentMethod_ID = bpPamentMethod_ID;
+                    }
                     if (_PaymentMethod_ID > 0)
                     {
                         _invoice.SetVA009_PaymentMethod_ID(_PaymentMethod_ID);
                     }
                 }
-                //-----------------Column Added by Anuj------------------
 
-                int _CountVA026 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA026_'  AND IsActive = 'Y'"));
+                int _CountVA026 = Env.IsModuleInstalled("VA026_") ? 1 : 0;
                 if (_CountVA026 > 0)
                 {
                     _invoice.SetVA026_LCDetail_ID(order.GetVA026_LCDetail_ID());
                 }
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
-
                 if (_invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
                 {
                     _invoice.SetC_IncoTerm_ID(order.GetC_IncoTerm_ID());
@@ -550,6 +582,9 @@ namespace ViennaAdvantage.Process
 
                 if (!_invoice.Save())
                 {
+                    ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                    if (pp != null)
+                        throw new ArgumentException("Could not create Invoice (s). " + pp.GetName());
                     throw new Exception("Could not create Invoice (s)");
                 }
             }
@@ -645,12 +680,18 @@ namespace ViennaAdvantage.Process
 
             if (!line1.Save())
             {
+                ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                if (pp != null)
+                    throw new ArgumentException("Could not create Invoice Line (s). " + pp.GetName());
                 throw new Exception("Could not create Invoice Line (s)");
             }
             //	Link
             sLine.SetIsInvoiced(true);
             if (!sLine.Save())
             {
+                ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                if (pp != null)
+                    throw new ArgumentException("Could not update Shipment Line. " + pp.GetName());
                 throw new Exception("Could not update Shipment Line");
             }
 
@@ -714,9 +755,9 @@ namespace ViennaAdvantage.Process
             return AssetCost;
         }
 
-        /**
-         * 	Complete Invoice
-         */
+        /// <summary>
+        /// Complete Invoice
+        /// </summary>
         private void CompleteInvoice()
         {
             if (_invoice != null)

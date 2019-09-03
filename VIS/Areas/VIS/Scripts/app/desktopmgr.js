@@ -288,11 +288,22 @@
 
         /*set height of section (main container) to window size */
         function adjustHeight() {
-            $section.css('height', window.innerHeight - 22);
-            VIS.Env.setScreenHeight(window.innerHeight - 42 - 22);
+               
+                var height = 0;
+                if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement)
+                {
+                    height = document.documentElement.clientHeight;
+                }
+                else {
+                    height = window.innerHeight;
+                }
 
-            if (VIS.viewManager)
-                VIS.viewManager.sizeChanged();
+                $section.css('height', height - 22);
+                VIS.Env.setScreenHeight(height - 42 - 22);
+
+
+                if (VIS.viewManager)
+                    VIS.viewManager.sizeChanged();
 
             // Resize event for calling interface
             //if (window.VA048 && VA048.Apps.GetCallingInstance(false))
@@ -396,6 +407,7 @@
             setAndLoadHomePage(); //Home Page
             historyMgr.restoreHistory(); //Restore History of App if any
             navigationInit();
+            window.addEventListener("DOMContentLoaded", startToastr, false);
         }
 
         /*
@@ -695,7 +707,7 @@
                 cmbWare.val(null);
             }
             btnChange.prop("disabled", true);
-            displayErrors(form, "");
+            displayErrors(form, []);
             changed = false;
         };
 
@@ -820,7 +832,7 @@
         */
         function formSubmitHandler(e) {
             var $form = $(this);
-            displayErrors($form, "");
+            displayErrors($form, []);
             btnClose.prop('disabled', true);
             btnChange.prop('disabled', true);
             $form.find('#vis_home_langugage').val(localStorage.getItem("vis_login_langCode"));
@@ -1026,6 +1038,23 @@
         };
         return d;
     }();
+
+
+    /**
+    * Start Server sent events
+    */
+    var startToastr = function ()
+    {
+        var source = new EventSource('JsonData/MsgForToastr?varificationToken='+$("#vis_antiForgeryToken").val());
+        source.onmessage = function (e) {
+            var returnedItem = JSON.parse(e.data);
+            if (returnedItem.message && returnedItem.message.length > 0) {
+                toastr.success(returnedItem.message, '', { timeOut: 4000, "positionClass": "toast-top-center","closeButton": true, });
+            }
+        };
+    };
+
+  
 
     /*
        global ajax error handler 

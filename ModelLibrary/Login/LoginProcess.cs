@@ -235,9 +235,10 @@ namespace VAdvantage.Login
             m_ctx.SetContext("#YYYY", "Y");
 
             //	AccountSchema Info (first)
-            String sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision "
+            String sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "    // Get AutoArchive from Tenant header
                 + "FROM C_AcctSchema a"
                 + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
                 + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
                 + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
             IDataReader dr = null;
@@ -261,6 +262,7 @@ namespace VAdvantage.Login
                     m_ctx.SetContext("$HasAlias", dr[2].ToString());
                     m_ctx.SetContext("$CurrencyISO", dr[3].ToString());
                     m_ctx.SetStdPrecision(Utility.Util.GetValueOfInt(dr[4].ToString()));
+                    m_ctx.SetContext("$AutoArchive", dr[5].ToString());
                 }
                 dr.Close();
 
@@ -915,50 +917,18 @@ namespace VAdvantage.Login
             //	Other Settings
             m_ctx.SetContext("#YYYY", "Y");
 
-            //	Report Page Size Element
-            m_ctx.SetContext("#REPORT_PAGE_SIZE", "500");
-            String sql ="SELECT NAME, VALUE FROM AD_SysConfig WHERE NAME = 'REPORT_PAGE_SIZE'";
-            IDataReader dr = DataBase.DB.ExecuteReader(sql);
-            while (dr.Read())
-                if (!string.IsNullOrEmpty(dr[1].ToString()))
-                {
-                    Regex regex = new Regex(@"^[1-9]\d*$");
-                    if (regex.IsMatch(dr[1].ToString()))
-                        m_ctx.SetContext("#REPORT_PAGE_SIZE", (dr[1].ToString()));
-                }
-            dr.Close();
+            
+            //LoadSysConfig();
 
-            //	Bulk Report Download
-            m_ctx.SetContext("#BULK_REPORT_DOWNLOAD", "N");
-            sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE NAME = 'BULK_REPORT_DOWNLOAD'";
-            dr = DataBase.DB.ExecuteReader(sql);
-            while (dr.Read())
-                if (!string.IsNullOrEmpty(dr[1].ToString()))
-                {
-                    Regex regex = new Regex(@"Y|N");
-                    if (regex.IsMatch(dr[1].ToString()))
-                        m_ctx.SetContext("#BULK_REPORT_DOWNLOAD", (dr[1].ToString()));
-                }
-            dr.Close();
-
-            // Set Default Value of System Config in Context
-            sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE ISACTIVE = 'Y' AND NAME NOT IN ('REPORT_PAGE_SIZE' , 'BULK_REPORT_DOWNLOAD')";
-            dr = DataBase.DB.ExecuteReader(sql);
-            while (dr.Read())
-                if (!string.IsNullOrEmpty(dr[1].ToString()))
-                {
-                    m_ctx.SetContext("#" + dr[0].ToString(), (dr[1].ToString()));
-                }
-            dr.Close();
-
-
+            string sql = "";
             //	AccountSchema Info (first)
-            sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision "
+            sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "       // Get AutoArchive from Tenant header
                 + "FROM C_AcctSchema a"
                 + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
                 + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
                 + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
-            dr = null;
+            IDataReader dr = null;
             try
             {
                 int C_AcctSchema_ID = 0;
@@ -979,6 +949,7 @@ namespace VAdvantage.Login
                     m_ctx.SetContext("$HasAlias", dr[2].ToString());
                     m_ctx.SetContext("$CurrencyISO", dr[3].ToString());
                     m_ctx.SetStdPrecision(Utility.Util.GetValueOfInt(dr[4].ToString()));
+                    m_ctx.SetContext("$AutoArchive", dr[5].ToString());
                 }
                 dr.Close();
 
@@ -1055,6 +1026,48 @@ namespace VAdvantage.Login
             m_ctx.SetShowMiniGrid(Ini.GetProperty(Ini.P_Show_Mini_Grid));
             return retValue;
         }	//	loadPreferences
+
+        /// <summary>
+        /// Load System Config
+        /// </summary>
+        public void LoadSysConfig()
+        {
+            //	Report Page Size Element
+            m_ctx.SetContext("#REPORT_PAGE_SIZE", "500");
+            string sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE NAME = 'REPORT_PAGE_SIZE'";
+            IDataReader dr = DataBase.DB.ExecuteReader(sql);
+            while (dr.Read())
+                if (!string.IsNullOrEmpty(dr[1].ToString()))
+                {
+                    Regex regex = new Regex(@"^[1-9]\d*$");
+                    if (regex.IsMatch(dr[1].ToString()))
+                        m_ctx.SetContext("#REPORT_PAGE_SIZE", (dr[1].ToString()));
+                }
+            dr.Close();
+
+            //	Bulk Report Download
+            m_ctx.SetContext("#BULK_REPORT_DOWNLOAD", "N");
+            sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE NAME = 'BULK_REPORT_DOWNLOAD'";
+            dr = DataBase.DB.ExecuteReader(sql);
+            while (dr.Read())
+                if (!string.IsNullOrEmpty(dr[1].ToString()))
+                {
+                    Regex regex = new Regex(@"Y|N");
+                    if (regex.IsMatch(dr[1].ToString()))
+                        m_ctx.SetContext("#BULK_REPORT_DOWNLOAD", (dr[1].ToString()));
+                }
+            dr.Close();
+
+            // Set Default Value of System Config in Context
+            sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE ISACTIVE = 'Y' AND NAME NOT IN ('REPORT_PAGE_SIZE' , 'BULK_REPORT_DOWNLOAD')";
+            dr = DataBase.DB.ExecuteReader(sql);
+            while (dr.Read())
+                if (!string.IsNullOrEmpty(dr[1].ToString()))
+                {
+                    m_ctx.SetContext("#" + dr[0].ToString(), (dr[1].ToString()));
+                }
+            dr.Close();
+        }
 
     }
 }

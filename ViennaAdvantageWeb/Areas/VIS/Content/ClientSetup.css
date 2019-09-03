@@ -162,7 +162,7 @@ html[dir="rtl"] .vis-initial-form-checkbox > label {
     
 }
 .vis-initial-btn, .vis-initial-btn:hover{
-	color:#fff;
+	color:#fff !important;
 	background:#626365;	
 	padding:10px 20px;
 	cursor:pointer;

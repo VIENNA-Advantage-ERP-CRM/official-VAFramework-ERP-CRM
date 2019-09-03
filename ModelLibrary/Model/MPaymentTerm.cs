@@ -61,16 +61,25 @@ namespace VAdvantage.Model
         {
         }
 
-        /**
-	     * 	Get Payment Schedule
-	     * 	@param requery if true re-query
-	     *	@return array of schedule
-	     */
+        /// <summary>
+        /// Get Payment Schedule
+        /// </summary>
+        /// <param name="requery">requery if true re-query</param>
+        /// <returns>array of schedule</returns>
         public MPaySchedule[] GetSchedule(bool requery)
         {
             if (_schedule != null && !requery)
                 return _schedule;
-            String sql = "SELECT * FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID() + " ORDER BY NetDays";
+            String sql = null;
+            // when Payment Management module available then get advance record first than other
+            if (Env.IsModuleInstalled("VA009_"))
+            {
+                sql = "SELECT * FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID() + " ORDER BY COALESCE( VA009_Advance , 'N') DESC, NetDays";
+            }
+            else
+            {
+                sql = "SELECT * FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID() + " ORDER BY NetDays";
+            }
             List<MPaySchedule> list = new List<MPaySchedule>();
             try
             {
@@ -154,11 +163,11 @@ namespace VAdvantage.Model
             return Apply(invoice);
         }
 
-        /**
-         * 	Apply Payment Term to Invoice
-         *	@param invoice invoice
-         *	@return true if payment schedule is valid
-         */
+        /// <summary>
+        /// Apply Payment Term to Invoice
+        /// </summary>
+        /// <param name="invoice">invoice reference</param>
+        /// <returns>true if payment schedule is valid</returns>
         public bool Apply(MInvoice invoice)
         {
             if (invoice == null || invoice.Get_ID() == 0)
@@ -167,15 +176,16 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            //Added By Vivek on 17/5/2016 fro Advance Payment    
             GetSchedule(true);
+
             if (invoice.GetC_Order_ID() != 0)
             {
                 return ApplyNoSchedule(invoice);
             }
             else
+            {
                 return ApplySchedule(invoice);
-            //End Vivek
+            }
         }
 
         /// <summary>
@@ -183,10 +193,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="invoice">invoice</param>
         /// <returns>bool, true-false</returns>
-        #region Advance Payment by Vivek on 16/06/2016
-
         private bool ApplyNoSchedule(MInvoice invoice)
         {
+            UpdateOrderSchedule(invoice.GetRef_C_Invoice_ID() > 0 ? invoice.GetRef_C_Invoice_ID() : invoice.GetC_Invoice_ID(), invoice.Get_Trx());
             DeleteInvoicePaySchedule(invoice.GetC_Invoice_ID(), invoice.Get_Trx());
             StringBuilder _sql = new StringBuilder();
             MInvoicePaySchedule schedule = null;
@@ -195,33 +204,125 @@ namespace VAdvantage.Model
 
             Decimal remainder = invoice.GetGrandTotal();
 
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // check if payment term is advance then copy order schedules
                 if (payterm.IsVA009_Advance())
                 {
-                    schedule = new MInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
-                    String sql = "SELECT * FROM VA009_OrderPaySchedule WHERE C_Order_ID=" + invoice.GetC_Order_ID() + " AND VA009_IsPaid='Y' ORDER BY Created";
-                    DataSet _ds = DB.ExecuteDataset(sql, null);
-
-                    if (_ds != null && _ds.Tables.Count > 0 && _ds.Tables[0].Rows.Count > 0)
+                    // is used to get record from invoice line which is created against orderline
+                    String sql = @"SELECT o.C_Order_ID , NVL(SUM(il.LineTotalAmt) , 0) AS LineTotalAmt 
+                                    FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_ID = il.C_Invoice_ID
+                                    INNER JOIN C_Orderline ol ON ol.C_Orderline_ID = il.C_Orderline_ID
+                                    INNER JOIN C_Order o ON o.C_Order_ID = ol.C_Order_ID
+                                    WHERE i.C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " GROUP BY o.C_Order_ID ";
+                    DataSet _dsInvoice = DB.ExecuteDataset(sql, null, Get_Trx());
+                    if (_dsInvoice != null && _dsInvoice.Tables.Count > 0 && _dsInvoice.Tables[0].Rows.Count > 0)
                     {
-                        for (int j = 0; j < _ds.Tables[0].Rows.Count; j++)
-                        {
-                            copyorderschedules(schedule, invoice, _ds);
+                        int order_Id = 0; // order reference
+                        Decimal LineTotalAmt = 0; // amount against order
+                        DataSet _dsOrderSchedule = null; // order schedule dataset
+                        DataRow dr = null;
 
-                            if (!schedule.Save(invoice.Get_Trx()))
+                        for (int i = 0; i < _dsInvoice.Tables[0].Rows.Count; i++)
+                        {
+                            order_Id = Convert.ToInt32(_dsInvoice.Tables[0].Rows[i]["C_Order_ID"]);
+                            // JID_1379 : Type cast Issue
+                            LineTotalAmt = Math.Abs(Util.GetValueOfDecimal(_dsInvoice.Tables[0].Rows[i]["LineTotalAmt"]));
+
+                            // is used to get order schedule detail which is paid but not fully allocated
+                            sql = "SELECT * FROM VA009_OrderPaySchedule WHERE C_Order_ID=" + order_Id + " AND VA009_IsPaid='Y' AND NVL(VA009_AllocatedAmt,0) != DueAmt ORDER BY Created";
+                            _dsOrderSchedule = DB.ExecuteDataset(sql, null, invoice.Get_Trx());
+
+                            if (_dsOrderSchedule != null && _dsOrderSchedule.Tables.Count > 0 && _dsOrderSchedule.Tables[0].Rows.Count > 0)
                             {
-                                return false;
+                                for (int j = 0; j < _dsOrderSchedule.Tables[0].Rows.Count; j++)
+                                {
+                                    // data row - order schedule record
+                                    dr = _dsOrderSchedule.Tables[0].Rows[j];
+
+                                    schedule = new MInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
+                                    copyorderschedules(schedule, invoice, dr, LineTotalAmt, 100);
+
+                                    if (!schedule.Save(invoice.Get_Trx()))
+                                    {
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "VIS_ScheduleNotSave") +
+                                            (pp != null && !string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : ""));
+
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        // Ref_C_Invoice_ID > 0 its means reverse record, then subtract due amt else add due amt
+                                        if (invoice.GetRef_C_Invoice_ID() <= 0)
+                                        {
+                                            DB.ExecuteQuery("UPDATE VA009_OrderPaySchedule SET VA009_AllocatedAmt = NVL(VA009_AllocatedAmt, 0) + "
+                                                + Util.GetValueOfDecimal(schedule.GetDueAmt()) +
+                                                @" WHERE VA009_OrderPaySchedule_ID = " + Convert.ToInt32(dr["VA009_OrderPaySchedule_ID"]), null, invoice.Get_Trx());
+                                        }
+                                    }
+                                    remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
+                                    LineTotalAmt = Decimal.Subtract(LineTotalAmt, Math.Abs(schedule.GetDueAmt()));
+                                    if (LineTotalAmt == 0)
+                                    {
+                                        break;
+                                    }
+                                }
                             }
-                            remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
                         }
                     }
+
+                    // when remainder > 0 the need to create new invoice schedule  
                     if (remainder.CompareTo(Env.ZERO) != 0 && schedule != null)
                     {
-                        schedule.SetDueAmt(Decimal.Add(schedule.GetDueAmt(), remainder));
-                        schedule.Save(invoice.Get_Trx());
+                        //schedule.SetDueAmt(Decimal.Add(schedule.GetDueAmt(), remainder));
+                        //schedule.Save(invoice.Get_Trx());
+
+                        MInvoicePaySchedule newSchedule = new MInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
+                        PO.CopyValues(schedule, newSchedule, schedule.GetAD_Client_ID(), schedule.GetAD_Org_ID());
+
+                        // set references
+                        newSchedule.SetVA009_OrderPaySchedule_ID(0);
+                        newSchedule.SetC_Payment_ID(0);
+                        // Paid Amount (Base)
+                        newSchedule.SetVA009_PaidAmnt(0);
+                        // Paid Amount (Invoice)
+                        newSchedule.SetVA009_PaidAmntInvce(0);
+                        // Variance
+                        newSchedule.SetVA009_Variance(0);
+                        // set discount
+                        newSchedule.SetDiscountAmt(0);
+                        newSchedule.SetDiscount2(0);
+                        // set payment method from invoice header
+                        newSchedule.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
+                        // set Payment execution
+                        newSchedule.SetVA009_ExecutionStatus("A");
+                        // payment not paid yet
+                        newSchedule.SetVA009_IsPaid(false);
+
+                        Decimal baseCurencyAmt = 0;
+                        if (invoice.GetC_Currency_ID() != GetCtx().GetContextAsInt("$C_Currency_ID")) //(invoice currency != base Currency)
+                        {
+                            baseCurencyAmt = MConversionRate.Convert(GetCtx(), remainder, invoice.GetC_Currency_ID(),
+                                GetCtx().GetContextAsInt("$C_Currency_ID"), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
+                                invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                        }
+
+                        newSchedule.SetDueAmt(Util.GetValueOfDecimal(remainder));
+                        // set Open Amount (Invoice)
+                        newSchedule.SetVA009_OpnAmntInvce(Util.GetValueOfDecimal(remainder));
+                        // set Open Amount (Base)
+                        newSchedule.SetVA009_OpenAmnt(Util.GetValueOfDecimal(baseCurencyAmt));
+
+                        if (!newSchedule.Save(invoice.Get_Trx()))
+                        {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "VIS_ScheduleNotSave") +
+                                (pp != null && !string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : ""));
+
+                            return false;
+                        }
+
                         log.Fine("Remainder=" + remainder + " - " + schedule);
                     }
 
@@ -248,6 +349,10 @@ namespace VAdvantage.Model
 
                         if (!schedule.Save())
                         {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "VIS_ScheduleNotSave") +
+                                    (pp != null && !string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : ""));
+
                             return false;
                         }
                         /* we can not commit record in between - otherwise impact can't be rollback 
@@ -282,22 +387,70 @@ namespace VAdvantage.Model
                         if (_sch.IsVA009_Advance())
                         {
                             #region IsAdvance true on Payment Schedule
-                            String sql = "SELECT * FROM VA009_OrderPaySchedule WHERE C_Order_ID=" + invoice.GetC_Order_ID() + " AND VA009_IsPaid='Y' AND C_PaySchedule_ID="
-                                + _sch.GetC_PaySchedule_ID() + " ORDER BY Created";
-                            DataSet _ds = DB.ExecuteDataset(sql, null);
 
-                            if (_ds != null && _ds.Tables.Count > 0 && _ds.Tables[0].Rows.Count > 0)
+                            // is used to get record from invoice line which is created against orderline
+                            String sql = @"SELECT o.C_Order_ID , NVL(SUM(il.LineTotalAmt) , 0) AS LineTotalAmt 
+                                    FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_ID = il.C_Invoice_ID
+                                    INNER JOIN C_Orderline ol ON ol.C_Orderline_ID = il.C_Orderline_ID
+                                    INNER JOIN C_Order o ON o.C_Order_ID = ol.C_Order_ID
+                                    WHERE i.C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " GROUP BY o.C_Order_ID ";
+                            DataSet _dsInvoice = DB.ExecuteDataset(sql, null, Get_Trx());
+                            if (_dsInvoice != null && _dsInvoice.Tables.Count > 0 && _dsInvoice.Tables[0].Rows.Count > 0)
                             {
-                                for (int j = 0; j < _ds.Tables[0].Rows.Count; j++)
-                                {
-                                    schedule = new MInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
-                                    copyorderschedules(schedule, invoice, _ds);
+                                int order_Id = 0; // order reference
+                                Decimal LineTotalAmt = 0; // amount against order
+                                DataSet _dsOrderSchedule = null; // order schedule dataset
+                                DataRow dr = null;
 
-                                    if (!schedule.Save(invoice.Get_Trx()))
+                                for (int K = 0; K < _dsInvoice.Tables[0].Rows.Count; K++)
+                                {
+                                    order_Id = Convert.ToInt32(_dsInvoice.Tables[0].Rows[K]["C_Order_ID"]);
+                                    // JID_1379 : Type cast Issue
+                                    LineTotalAmt = Math.Abs(Util.GetValueOfDecimal(_dsInvoice.Tables[0].Rows[K]["LineTotalAmt"]));
+                                    // percentage of order amount which is to be distribute
+                                    LineTotalAmt = Decimal.Multiply(LineTotalAmt, Decimal.Divide(_sch.GetPercentage(),
+                                                   Decimal.Round(HUNDRED, MCurrency.GetStdPrecision(GetCtx(), invoice.GetC_Currency_ID()), MidpointRounding.AwayFromZero)));
+
+                                    sql = "SELECT * FROM VA009_OrderPaySchedule WHERE C_Order_ID=" + order_Id + " AND VA009_IsPaid='Y'  AND NVL(VA009_AllocatedAmt,0) != DueAmt AND C_PaySchedule_ID="
+                                       + _sch.GetC_PaySchedule_ID() + " ORDER BY Created";
+                                    _dsOrderSchedule = DB.ExecuteDataset(sql, null, invoice.Get_Trx());
+
+                                    if (_dsOrderSchedule != null && _dsOrderSchedule.Tables.Count > 0 && _dsOrderSchedule.Tables[0].Rows.Count > 0)
                                     {
-                                        return false;
+                                        for (int j = 0; j < _dsOrderSchedule.Tables[0].Rows.Count; j++)
+                                        {
+                                            schedule = new MInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
+                                            // data row - order schedule record
+                                            dr = _dsOrderSchedule.Tables[0].Rows[j];
+
+                                            copyorderschedules(schedule, invoice, dr, LineTotalAmt, _sch.GetPercentage());
+
+                                            if (!schedule.Save(invoice.Get_Trx()))
+                                            {
+                                                ValueNamePair pp = VLogger.RetrieveError();
+                                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "VIS_ScheduleNotSave") +
+                                                (pp != null && !string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : ""));
+
+                                                return false;
+                                            }
+                                            else
+                                            {
+                                                // Ref_C_Invoice_ID > 0 its means reverse record, then not to update VA009_AllocatedAmt from here 
+                                                if (invoice.GetRef_C_Invoice_ID() <= 0)
+                                                {
+                                                    int no = DB.ExecuteQuery("UPDATE VA009_OrderPaySchedule SET VA009_AllocatedAmt = NVL(VA009_AllocatedAmt, 0) + "
+                                                           + Util.GetValueOfDecimal(schedule.GetDueAmt()) +
+                                                           @" WHERE VA009_OrderPaySchedule_ID = " + Convert.ToInt32(dr["VA009_OrderPaySchedule_ID"]), null, invoice.Get_Trx());
+                                                }
+                                            }
+                                            remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
+                                            LineTotalAmt = Decimal.Subtract(LineTotalAmt, Math.Abs(schedule.GetDueAmt()));
+                                            if (LineTotalAmt == 0)
+                                            {
+                                                break;
+                                            }
+                                        }
                                     }
-                                    remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
                                 }
                             }
                             #endregion
@@ -340,6 +493,10 @@ namespace VAdvantage.Model
 
                             if (!schedule.Save(invoice.Get_Trx()))
                             {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "VIS_ScheduleNotSave") +
+                                    (pp != null && !string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : ""));
+
                                 return false;
                             }
                             /* we can not commit record in between - otherwise impact can't be rollback 
@@ -640,8 +797,6 @@ namespace VAdvantage.Model
             return invoice.ValidatePaySchedule();
         }
 
-
-
         private bool InsertSchedulePOS(MInvoice invoice, int VA009_PaymentMethod_ID, decimal? payAmt, int payCur, int index = 0)
         {
             // MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
@@ -726,9 +881,6 @@ namespace VAdvantage.Model
             return true;
         }
 
-
-        #endregion
-
         /// <summary>
         /// Get Due Date based on the settings on Payment Term.
         /// </summary>
@@ -749,8 +901,6 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="invoice">invoice</param>
         /// <returns>bool, true-false</returns>
-        #region Advance Payment by Vivek on 16/06/2016
-
         private bool ApplySchedule(MInvoice invoice)
         {
             //	Create Schedule
@@ -847,12 +997,11 @@ namespace VAdvantage.Model
             return true;
         }
 
-        #endregion
-        /**
-         * 	Delete existing Invoice Payment Schedule
-         *	@param C_Invoice_ID id
-         *	@param trxName transaction
-         */
+        /// <summary>
+        /// Delete existing Invoice Payment Schedule
+        /// </summary>
+        /// <param name="C_Invoice_ID">Invoice ID</param>
+        /// <param name="trxName">trxName</param>
         private void DeleteInvoicePaySchedule(int C_Invoice_ID, Trx trxName)
         {
             String sql = "DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + C_Invoice_ID;
@@ -860,11 +1009,25 @@ namespace VAdvantage.Model
             log.Fine("C_Invoice_ID=" + C_Invoice_ID + " - #" + no);
         }
 
+        /// <summary>
+        /// Is used to update VA009_AllocatedAmt as (VA009_AllocatedAmt - DueAmt) On Order schedule
+        /// </summary>
+        /// <param name="C_Invoice_ID">Invoice ID reference</param>
+        /// <param name="trxName">transaction</param>
+        private void UpdateOrderSchedule(int C_Invoice_ID, Trx trxName)
+        {
+            int no = DB.ExecuteQuery(@"UPDATE VA009_OrderPaySchedule osch SET VA009_AllocatedAmt = (NVL(VA009_AllocatedAmt , 0) -
+                             (SELECT SUM(NVL((DueAmt) , 0)) FROM C_InvoicePaySchedule isch
+                             WHERE isch.VA009_OrderPaySchedule_ID = osch.VA009_OrderPaySchedule_ID and isch.C_Invoice_ID = " + C_Invoice_ID + @" ))
+                             WHERE osch.VA009_OrderPaySchedule_ID IN (SELECT VA009_OrderPaySchedule_ID FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + C_Invoice_ID + @"
+                             AND VA009_OrderPaySchedule_ID > 0 )", null, trxName);
+            log.Fine("Updated VA009_AllocatedAmt on Order Schedule record against C_Invoice_ID=" + C_Invoice_ID + " - #" + no);
+        }
 
-        /**************************************************************************
-         * 	String Representation
-         *	@return info
-         */
+        /// <summary>
+        /// String Representation
+        /// </summary>
+        /// <returns>info</returns>
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MPaymentTerm[");
@@ -964,7 +1127,8 @@ namespace VAdvantage.Model
         /// <returns>DateTime, Next Business Day</returns>
         public DateTime? GetNextBusinessDate(DateTime? DueDate)
         {
-            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, GetAD_Org_ID()) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
         }
 
         /// <summary>
@@ -981,7 +1145,7 @@ namespace VAdvantage.Model
             schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
             schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
 
-            MOrder _Order = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
+            //MOrder _Order = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
             schedule.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
             schedule.SetC_PaymentTerm_ID(invoice.GetC_PaymentTerm_ID());
             schedule.SetVA009_GrandTotal(invoice.GetGrandTotal());
@@ -1086,35 +1250,22 @@ namespace VAdvantage.Model
             schedule.SetProcessed(true);
         }
 
-        /**
-         * 	Convert amount in base currency
-         *	@param invoice invoice
-         * 	@param Invoicepayschedule schedule         
-         */
-
+        /// <summary>
+        /// Convert amount in base currency
+        /// </summary>
+        /// <param name="invoice">MInvoice class object</param>
+        /// <param name="schedule">MInvoicePaySchedule class object</param>
         private void basecurrency(MInvoice invoice, MInvoicePaySchedule schedule)
         {
             int BaseCurrency = 0;
-            StringBuilder _sqlBsCrrncy = new StringBuilder();
-
-            _sqlBsCrrncy.Append(@"SELECT UNIQUE asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
-                                 INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
-                                 WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
-            BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
-
+            //            StringBuilder _sqlBsCrrncy = new StringBuilder();
+            //            _sqlBsCrrncy.Append(@"SELECT UNIQUE asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
+            //                                 INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
+            //                                 WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
+            //            BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
+            BaseCurrency = MClientInfo.Get(GetCtx(), invoice.GetAD_Client_ID()).GetC_Currency_ID();
             if (BaseCurrency != invoice.GetC_Currency_ID())
             {
-                //_sqlBsCrrncy.Clear();
-                //_sqlBsCrrncy.Append(@"SELECT multiplyrate FROM c_conversion_rate WHERE AD_Client_ID = " + invoice.GetAD_Client_ID() + " AND  c_currency_id  = " + invoice.GetC_Currency_ID() +
-                //              " AND c_currency_to_id = " + BaseCurrency + " AND " + GlobalVariable.TO_DATE(invoice.GetDateAcct(), true) + " BETWEEN ValidFrom AND ValidTo");
-                //decimal multiplyRate = Util.GetValueOfDecimal(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
-                //if (multiplyRate == 0)
-                //{
-                //    _sqlBsCrrncy.Clear();
-                //    _sqlBsCrrncy.Append(@"SELECT dividerate FROM c_conversion_rate WHERE AD_Client_ID = " + invoice.GetAD_Client_ID() + " AND c_currency_id  = " + BaseCurrency +
-                //                  " AND c_currency_to_id = " + invoice.GetC_Currency_ID() + " AND " + GlobalVariable.TO_DATE(invoice.GetDateAcct(), true) + " BETWEEN ValidFrom AND ValidTo");
-                //    multiplyRate = Util.GetValueOfDecimal(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
-                //}
                 decimal multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
                 schedule.SetVA009_OpenAmnt(schedule.GetDueAmt() * multiplyRate);
             }
@@ -1125,132 +1276,111 @@ namespace VAdvantage.Model
             schedule.SetVA009_BseCurrncy(BaseCurrency);
         }
 
-
-        /**
-         * 	Copy Order schedules at invoice schedule
-         * 	@param Invoicepayschedule schedule
-         *	@param invoice invoice
-         *	@param Dataset ds
-         */
-
-        private void copyorderschedules(MInvoicePaySchedule schedule, MInvoice invoice, DataSet _ds)
+        /// <summary>
+        /// Copy Order schedules at invoice schedule
+        /// </summary>
+        /// <param name="schedule">invoice pay shedule object in which order schedule to be copied</param>
+        /// <param name="invoice">invoice object</param>
+        /// <param name="_ds">datarow of orderschedule</param>
+        private void copyorderschedules(MInvoicePaySchedule schedule, MInvoice invoice, DataRow _ds, Decimal LineTotalAmt, Decimal schedulePercentage)
         {
-            if (_ds.Tables[0].Rows.Count > 0 && _ds.Tables[0].Rows != null)
+            schedule.SetAD_Client_ID(Util.GetValueOfInt(_ds["AD_Client_ID"]));
+            schedule.SetAD_Org_ID(Util.GetValueOfInt(_ds["AD_Org_ID"]));
+            schedule.SetVA009_OrderPaySchedule_ID(Util.GetValueOfInt(_ds["VA009_OrderPaySchedule_ID"]));
+            schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
+            schedule.SetC_PaymentTerm_ID(Util.GetValueOfInt(_ds["C_PaymentTerm_ID"]));
+            schedule.SetC_PaySchedule_ID(Util.GetValueOfInt(_ds["C_PaySchedule_ID"]));
+
+            schedule.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(_ds["VA009_PaymentMethod_ID"]));
+            // when order schedule dont have payment method, then need to update payment method from invoice header
+            if (schedule.GetVA009_PaymentMethod_ID() <= 0)
+                schedule.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
+
+            schedule.SetDueDate(invoice.GetDateInvoiced());
+            schedule.SetDiscountDate(Util.GetValueOfDateTime(_ds["DiscountDate"]));
+
+            // amount which is to be left whose invoice schedule not created 
+            Decimal remainingDueAmount = Decimal.Subtract(Util.GetValueOfDecimal(_ds["DueAmt"]), Util.GetValueOfDecimal(_ds["VA009_AllocatedAmt"]));
+            // percentage of due amount which is to be distribute
+            //remainingDueAmount = Decimal.Multiply(remainingDueAmount, Decimal.Divide(schedulePercentage,
+            //               Decimal.Round(HUNDRED, MCurrency.GetStdPrecision(GetCtx(), invoice.GetC_Currency_ID()), MidpointRounding.AwayFromZero)));
+            if (remainingDueAmount > 0)
             {
-                for (int j = 0; j < _ds.Tables[0].Rows.Count; j++)
+                // if invoice line having less amount then order schedule amount, than invoice schedule created with invoice line amount
+                if (LineTotalAmt < remainingDueAmount)
                 {
-                    Boolean _isPaid = false;
-                    if (Util.GetValueOfString(_ds.Tables[0].Rows[j]["VA009_IsPaid"]) == "Y")
-                    {
-                        _isPaid = true;
-                    }
-                    schedule.SetAD_Client_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["AD_Client_ID"]));
-                    schedule.SetAD_Org_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["AD_Org_ID"]));
-                    schedule.SetVA009_OrderPaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA009_OrderPaySchedule_ID"]));
-                    schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-                    schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
-                    schedule.SetC_PaymentTerm_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["C_PaymentTerm_ID"]));
-                    schedule.SetC_PaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["C_PaySchedule_ID"]));
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetVA009_GrandTotal(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_GrandTotal"])));
-                    }
-                    else
-                    {
-                        schedule.SetVA009_GrandTotal(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_GrandTotal"]));
-                    }
-                    schedule.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA009_PaymentMethod_ID"]));
-                    // when order schedule dont have payment method, then need to update payment method from invoice header
-                    if (schedule.GetVA009_PaymentMethod_ID() <= 0)
-                        schedule.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
-                    schedule.SetDueDate(invoice.GetDateInvoiced());
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetDueAmt(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["DueAmt"])));
-                    }
-                    else
-                    {
-                        schedule.SetDueAmt(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["DueAmt"]));
-                    }
-                    schedule.SetDiscountDate(Util.GetValueOfDateTime(_ds.Tables[0].Rows[j]["DiscountDate"]));
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetDiscountAmt(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["DiscountAmt"])));
-                    }
-                    else
-                    {
-                        schedule.SetDiscountAmt(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["DiscountAmt"]));
-                    }
-                    schedule.SetVA009_IsPaid(_isPaid);
-                    schedule.SetC_Payment_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["C_Payment_ID"]));
-                    schedule.SetDiscountDays2(Util.GetValueOfDateTime(_ds.Tables[0].Rows[j]["DiscountDays2"]));
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetDiscount2(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["Discount2"])));
-                    }
-                    else
-                    {
-                        schedule.SetDiscount2(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["Discount2"]));
-                    }
-                    schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(_ds.Tables[0].Rows[j]["VA009_PlannedDueDate"]));
-                    schedule.SetC_Currency_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["C_Currency_ID"]));
-                    schedule.SetVA009_BseCurrncy(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA009_bseCurrncy"]));
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetVA009_OpnAmntInvce(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_OpnAmntInvce"])));
-                    }
-                    else
-                    {
-                        schedule.SetVA009_OpnAmntInvce(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_OpnAmntInvce"]));
-                    }
-                    // set Open Amount (Base)
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetVA009_OpenAmnt(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_OpenAmnt"])));
-                    }
-                    else
-                    {
-                        schedule.SetVA009_OpenAmnt(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_OpenAmnt"]));
-                    }
-                    // Paid Amount (Base)
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetVA009_PaidAmnt(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_PaidAmnt"])));
-                    }
-                    else
-                    {
-                        schedule.SetVA009_PaidAmnt(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_PaidAmnt"]));
-                    }
-                    // Paid Amount (Invoice)
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetVA009_PaidAmntInvce(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_PaidAmntInvce"])));
-                    }
-                    else
-                    {
-                        schedule.SetVA009_PaidAmntInvce(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_PaidAmntInvce"]));
-                    }
-                    // Variance
-                    if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
-                    {
-                        schedule.SetVA009_Variance(Decimal.Negate(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_Variance"])));
-                    }
-                    else
-                    {
-                        schedule.SetVA009_Variance(Util.GetValueOfDecimal(_ds.Tables[0].Rows[j]["VA009_Variance"]));
-                    }
-                    schedule.SetC_BPartner_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[j]["C_Bpartner_ID"]));
-                    schedule.SetVA009_FollowupDate(Util.GetValueOfDateTime(_ds.Tables[0].Rows[j]["VA009_FollowUpDate"]));
-                    schedule.SetVA009_PaymentMode(Util.GetValueOfString(_ds.Tables[0].Rows[j]["va009_paymentmode"]));
-                    if (!String.IsNullOrEmpty(Convert.ToString(_ds.Tables[0].Rows[j]["va009_paymenttype"])))
-                    {
-                        schedule.SetVA009_PaymentType(Util.GetValueOfString(_ds.Tables[0].Rows[j]["va009_paymenttype"]));
-                    }
-                    schedule.SetVA009_PaymentTrigger(Util.GetValueOfString(_ds.Tables[0].Rows[j]["va009_paymenttrigger"]));
-                    schedule.SetVA009_ExecutionStatus(Util.GetValueOfString(_ds.Tables[0].Rows[j]["VA009_ExecutionStatus"]));
-                    schedule.SetProcessed(true);
+                    remainingDueAmount = LineTotalAmt;
                 }
             }
+
+            Decimal baseCurencyAmt = remainingDueAmount;
+            if (invoice.GetC_Currency_ID() != GetCtx().GetContextAsInt("$C_Currency_ID")) //(invoice currency != base Currency)
+            {
+                baseCurencyAmt = MConversionRate.Convert(GetCtx(), baseCurencyAmt, invoice.GetC_Currency_ID(),
+                    GetCtx().GetContextAsInt("$C_Currency_ID"), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
+                    invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+            }
+
+            // For reverse record
+            if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
+            {
+                schedule.SetVA009_GrandTotal(Decimal.Negate(Util.GetValueOfDecimal(_ds["VA009_GrandTotal"])));
+                schedule.SetDueAmt(Decimal.Negate(remainingDueAmount));
+                schedule.SetDiscountAmt(Decimal.Negate(Util.GetValueOfDecimal(_ds["DiscountAmt"])));
+                schedule.SetDiscount2(Decimal.Negate(Util.GetValueOfDecimal(_ds["Discount2"])));
+                // set Open Amount (Invoice)
+                //schedule.SetVA009_OpnAmntInvce(Decimal.Negate(Util.GetValueOfDecimal(_ds["VA009_OpnAmntInvce"])));
+                schedule.SetVA009_OpnAmntInvce(Decimal.Negate(remainingDueAmount));
+                // set Open Amount (Base)
+                //schedule.SetVA009_OpenAmnt(Decimal.Negate(Util.GetValueOfDecimal(_ds["VA009_OpenAmnt"])));
+                schedule.SetVA009_OpenAmnt(Decimal.Negate(baseCurencyAmt));
+                // Paid Amount (Base)
+                //schedule.SetVA009_PaidAmnt(Decimal.Negate(Util.GetValueOfDecimal(_ds["VA009_PaidAmnt"])));
+                schedule.SetVA009_PaidAmnt(Decimal.Negate(baseCurencyAmt));
+                // Paid Amount (Invoice)
+                //schedule.SetVA009_PaidAmntInvce(Decimal.Negate(Util.GetValueOfDecimal(_ds["VA009_PaidAmntInvce"])));
+                schedule.SetVA009_PaidAmntInvce(Decimal.Negate(remainingDueAmount));
+                // Variance
+                // schedule.SetVA009_Variance(Decimal.Negate(Util.GetValueOfDecimal(_ds["VA009_Variance"])));
+            }
+            else
+            {
+                schedule.SetVA009_GrandTotal(Util.GetValueOfDecimal(_ds["VA009_GrandTotal"]));
+                schedule.SetDueAmt(remainingDueAmount);
+                schedule.SetDiscountAmt(Util.GetValueOfDecimal(_ds["DiscountAmt"]));
+                schedule.SetDiscount2(Util.GetValueOfDecimal(_ds["Discount2"]));
+                // set Open Amount (Invoice)
+                schedule.SetVA009_OpnAmntInvce(remainingDueAmount);
+                // set Open Amount (Base)
+                schedule.SetVA009_OpenAmnt(baseCurencyAmt);
+                // Paid Amount (Base)
+                schedule.SetVA009_PaidAmnt(baseCurencyAmt);
+                // Paid Amount (Invoice)
+                schedule.SetVA009_PaidAmntInvce(remainingDueAmount);
+                // Variance
+                // schedule.SetVA009_Variance(Util.GetValueOfDecimal(_ds["VA009_Variance"]));
+            }
+
+            schedule.SetVA009_IsPaid(Util.GetValueOfString(_ds["VA009_IsPaid"]).Equals("Y"));
+
+            schedule.SetC_Payment_ID(Util.GetValueOfInt(_ds["C_Payment_ID"]));
+            schedule.SetDiscountDays2(Util.GetValueOfDateTime(_ds["DiscountDays2"]));
+
+            schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(_ds["VA009_PlannedDueDate"]));
+            schedule.SetC_Currency_ID(Util.GetValueOfInt(_ds["C_Currency_ID"]));
+            schedule.SetVA009_BseCurrncy(Util.GetValueOfInt(_ds["VA009_bseCurrncy"]));
+
+            schedule.SetC_BPartner_ID(Util.GetValueOfInt(_ds["C_Bpartner_ID"]));
+            schedule.SetVA009_FollowupDate(Util.GetValueOfDateTime(_ds["VA009_FollowUpDate"]));
+            schedule.SetVA009_PaymentMode(Util.GetValueOfString(_ds["va009_paymentmode"]));
+            if (!String.IsNullOrEmpty(Convert.ToString(_ds["va009_paymenttype"])))
+            {
+                schedule.SetVA009_PaymentType(Util.GetValueOfString(_ds["va009_paymenttype"]));
+            }
+            schedule.SetVA009_PaymentTrigger(Util.GetValueOfString(_ds["va009_paymenttrigger"]));
+            schedule.SetVA009_ExecutionStatus(Util.GetValueOfString(_ds["VA009_ExecutionStatus"]));
+            schedule.SetProcessed(true);
         }
 
     }

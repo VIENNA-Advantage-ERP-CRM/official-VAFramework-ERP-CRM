@@ -23,6 +23,7 @@
         this.mFields = [];
         this.mFields2 = [];
         this.isOkClicked = false;
+        var splitUI = parent.splitUI;
 
         this.onClosed;
 
@@ -31,22 +32,33 @@
 
         function initlizedComponent() {
 
-            $root = $("<div title='" + VIS.Msg.getMsg('Process') + "'>");
+            $root = $("<div class='vis-pro-para-root'>");
             $table = $("<table class='vis-processpara-table'>");
             // $root.append($table);
-            $divButtons = $('<div style="overflow:auto">');
-            $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
+            $divButtons = $('<div style="overflow:auto;padding:0 10px">');
+            // $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
+            $divTable = $('<div class="vis-para-maxheight">');
+
             $divTable.append($table);
             $root.append($divTable).append($divButtons);
-            $btnOK = $('<input type="button" style="margin-right:5px" >').val(VIS.Msg.getMsg("OK"));
+            $btnOK = $('<input type="button" class="vis-process-ok-btn" >').val(VIS.Msg.getMsg("OK"));
             $btnOK.addClass("VIS_Pref_btn-2");
             $btnClose = $("<input type='button'>").val(VIS.Msg.getMsg("Close"));
             $btnClose.addClass("VIS_Pref_btn-2");
-            $btnClose.css({ "margin-bottom": "0px", "margin-top": "7px" });
+            $btnClose.css({ "margin-bottom": "0px", "margin-top": "7px", "margin-left": "5px" });
             $btnOK.css({ "margin-bottom": "0px", "margin-top": "7px" });
-            $divTable.css('max-height', (window.innerHeight - 200) + 'px');
+            //$divTable.css('max-height', (window.innerHeight - 200) + 'px');
+
+            if (!splitUI) {
+                $divTable.css('height', 'auto');
+            }
+
 
         };
+
+        //this.getTableDiv = function () {
+        //    return $divTable;
+        //};
 
         initlizedComponent();
 
@@ -58,28 +70,69 @@
         this.addLine = function () {
 
             $tr = $td1 = $td2 = $td3 = null;
+            $tr = $('<tr>');
 
             $td1 = $("<td class=''>");
-            $td2 = $("<td class=''>");
+            //$td2 = $("<td class=''>");
             $td3 = $("<td class='vis-processpara-table-td3'>");
-            $table.append($("<tr>").append($td1).append($td2).append($td3));
+            //$table.append($tr.append($td1).append($td2).append($td3));
+            $table.append($tr.append($td1).append($td3));
+            if (splitUI) {
+                $table.width('100%');
+                $tr.addClass('vis-processpara-table-SplitUI');
+                $td1.addClass('vis-processpara-table-SplitUI');
+                //$td2.addClass('vis-processpara-table-SplitUI');
+                $td3.addClass('vis-processpara-table-SplitUI');
+            }
         };
 
         this.addFields = function (c1, c2) {
-            if (c1)
-                $td1.append(c1.getControl());
+            if (c1) {
+                var control = c1.getControl();
+                if (splitUI)
+                    control.css('color', 'white');
+                $td1.append(control);
+            }
             if (c2) {
-                c2.getControl().width("200px");
-                c2.getControl().height("30px");
                 $td3.append(c2.getControl());
                 if (c2.getBtnCount() > 0) {
+
+                    if (splitUI) {
+                        if (c2.getControl().attr('type') == "date") {
+                            c2.getControl().css({ 'width': '100%' });
+                        }
+                        else {
+                            //c2.getControl().css({ 'width': 'calc(100% - 36px)' });
+                        }
+                        //c2.getControl().height("26px");
+                    }
+                    else {
+                        c2.getControl().width("200px");
+                        //c2.getControl().height("26px");
+                    }
+
                     var btn = c2.getBtn(0);
                     $td3.append(btn);
 
-                    if (c2.getDisplayType() == VIS.DisplayType.MultiKey) {
-                        $td3.append(c2.getBtn(1));
+                    //if (c2.getDisplayType() == VIS.DisplayType.MultiKey) {
+                    var btn2 = c2.getBtn(1);
+                    if (btn2) {
+                        $td3.append(btn2);
                     }
+                    //    if (splitUI) {
+                    //        // c2.getControl().css({ 'width': 'calc(100% - 64px)' });
+                    //    }
+                    //}
 
+
+                }
+                else {
+                    if (splitUI) {
+                        if (c2.getControl().attr('type') == "date") {
+                            c2.getControl().css({ 'width': '100%' });
+                        }
+                        //c2.getControl().height("26px");
+                    }
                 }
             }
         };
@@ -89,8 +142,19 @@
             $divButtons.append($btnClose).append($btnOK);
         };
 
+        this.canOpenDialog = function (split) {
+            splitUI = split;
+
+        };
+
+        this.showCloseIcon = function (show) {
+            if (!show) {
+                $btnClose.hide();
+            }
+        };
+
         this.showDialog = function () {
-           // if (IsPosReport != "IsPosReport") {
+            // if (IsPosReport != "IsPosReport") {
             $root.dialog({
                 modal: true,
                 width: "auto",
@@ -102,52 +166,17 @@
                     self = null;
                 }
             });
-           // }
-            //else {
-            //    this.IsPosReportForDialog = "IsPosReport";
-            //    var x = $root.dialog({
-            //        modal: true,
-            //        width: "auto",
-            //        closeText: VIS.Msg.getMsg("close"),
-            //        close: function () {
-            //            if (self.parent)
-            //                self.parent.onProcessDialogClosed(self.isOkClicked, self.parameterList);
-            //            self.dispose();
-            //            self = null;
-            //        }
-            //    });
-
-            //    VAPOS.DashBoardDesign.append(x);
-            //    VAPOS.DashBoardDesign.parents().find(".ui-widget-overlay").remove();
-            //    VAPOS.DashBoardDesign.parents().find(".ui-dialog").remove();
-
-            //    var getTr = x.find("tr");
-            //    for (var i = 0; i < getTr.length ; i++) {
-            //        for (var j = 0; j < $(getTr[0]).find("td").length; j++) {
-            //            var chiild = $($(getTr[i]).find("td")[j]).children();
-            //            if (chiild.length == 0)
-            //            { continue; }
-            //            if (chiild.length > 2) {
-            //                VAPOS.DashBoardDesign.append($('<div class="VAPOS-FormDataRowRap VAPOS-FormDataIcons2">').append(chiild));
-            //            }
-            //            else if (chiild.length == 2) {
-            //                VAPOS.DashBoardDesign.append($('<div class="VAPOS-FormDataRowRap VAPOS-FormDataIcons1">').append(chiild));
-            //            }
-            //            else {
-            //                VAPOS.DashBoardDesign.append($('<div class="VAPOS-FormDataRowRap VAPOS-FormDataIcons0">').append(chiild));
-            //            }
-            //        }
-            //    }
-
-            //    VAPOS.DashBoardDesign.append($('<div>').append($($(x.find("div")[1]).find("input")[1]).css("margin-right", "0px !important")));
-            //    VAPOS.DashBoardDesign.find(".ui-dialog-content").remove();
-            //    VAPOS.DashBoardDesign.find("input[type='Checkbox']").css({ "height": "auto", "width": "auto !important" });
-            //    VAPOS.DashBoardDesign.find(".vis-gc-vpanel-table-label-checkbox").css({ "height": "auto !important", "margin-bottom": "0px" })
-            //};
             window.setTimeout(function () {
                 $btnClose.focus();
             }, 200);
         };
+
+        this.getRoot = function () {
+            var selff = this;
+
+
+            return $root;
+        }
 
         this.onClose = function (isOkClicked) {
             self.isOkClicked = isOkClicked
@@ -165,21 +194,44 @@
         });
 
         $btnOK.on(VIS.Events.onTouchStartAndClick, function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            var list = self.saveParameters();
-            if (!list) {
-                return;
+            if (splitUI) {
+                self.isOkClicked = true;
+                parent.setBusy(true);
+                var list = self.saveParameters();
+                if (!list) {
+                    parent.setBusy(false);
+                    return;
+                }
+                self.pi.setAD_PInstance_ID(0);
+                self.pi.setPageNo(1);
+                if (!self.parent.getFileType()) {
+                    self.pi.setFileType(VIS.ProcessCtl.prototype.REPORT_TYPE_PDF);
+                }
+                else {
+                    self.pi.setFileType(self.parent.getFileType());
+                }
+
+                self.pi.setIsBackground(self.parent.isBackground());
+
+                self.parameterList = list;
+                self.parent.onProcessDialogClosed(self.isOkClicked, self.parameterList);
             }
-            self.parameterList = list;
-            //self.onClose(true, list);
-            //if (self.IsPosReportForDialog != "IsPosReport") {
+            else {
+                e.stopPropagation();
+                e.preventDefault();
+                var list = self.saveParameters();
+                if (!list) {
+                    return;
+                }
+                self.parameterList = list;
                 self.onClose(true, list);
-           // }
-           // else {
-            //    self.parent.onProcessDialogClosed(true, self.parameterList, self.IsPosReportForDialog);
-            //}
+            }
         });
+
+        this.setHeights = function () {
+            //var wrapperHeight = $root.find('.vis-process-outer-main-wrap').height();// $root.closest('.vis-process-outer-main-wrap').height();
+            //$root.height((wrapperHeight - 84) + 'px');
+        };
 
         this.disposeComponent = function () {
 
@@ -238,6 +290,9 @@
 	 */
     ProcessParameter.prototype.initDialog = function (fields) {
         var mField = null;
+
+
+
         for (var i = 0, len = fields.length; i < len; i++) {
             mField = new VIS.GridField(fields[i]);
             this.addLine(); // add new line
@@ -308,6 +363,8 @@
             }
         }
         this.addButtons();
+
+
         return true;
     };
 

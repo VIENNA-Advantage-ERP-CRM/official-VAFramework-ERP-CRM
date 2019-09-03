@@ -236,10 +236,13 @@ namespace VAdvantage.Controller
                         vo.MobileListingFormat = Utility.Util.GetValueOfString(dr[i]);
                     else if (columnName.Equals("MRSEQNO"))
                     {
-                        int mrseq = Util.GetValueOfInt(dr[i]);
-                        if (mrseq > 0)
+                        if (dr[i] != null && dr[i] != DBNull.Value)
                         {
-                            vo.mrSeqNo = mrseq;
+                            int mrseq = Util.GetValueOfInt(dr[i]);
+                            if (mrseq >= 0)
+                            {
+                                vo.mrSeqNo = mrseq;
+                            }
                         }
                     }
 
@@ -266,6 +269,15 @@ namespace VAdvantage.Controller
                     {
                         vo.ColumnWidth = Util.GetValueOfInt(dr[i]);
                     }
+                    else if (columnName.Equals("ISBACKGROUNDPROCESS"))
+                    {
+                        vo.IsBackgroundProcess = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("ASKUSERBGPROCESS"))
+                    {
+                        vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
+                    }
+
                 }
                 if (vo.Header == null)
                     vo.Header = vo.ColumnName;
@@ -738,6 +750,9 @@ namespace VAdvantage.Controller
             clone.IsCopy = IsCopy;
             clone.ColumnWidth = ColumnWidth;
 
+            clone.AD_Form_ID = AD_Form_ID;
+            clone.IsBackgroundProcess = IsBackgroundProcess;
+            clone.AskUserBGProcess = AskUserBGProcess;
 
             return clone;
         }

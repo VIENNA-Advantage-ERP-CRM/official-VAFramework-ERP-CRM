@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -18,6 +19,11 @@ namespace VIS.Filters
                 {
                     this.ValidateRequestHeader(filterContext.HttpContext.Request); // run the validation.
                 }
+                else if (filterContext.HttpContext.Request.Url.Segments.ToList().IndexOf("MsgForToastr")>0)
+                {
+                    string vari = filterContext.HttpContext.Request.QueryString["varificationToken"];
+                    ValidateVerificationToken(vari);
+                }
                 else
                 {
                     AntiForgery.Validate();
@@ -34,9 +40,14 @@ namespace VIS.Filters
 
         private void ValidateRequestHeader(HttpRequestBase request)
         {
+            string tokenValue = request.Headers["VerificationToken"]; // read the header key and validate the tokens.
+            ValidateVerificationToken(tokenValue);
+        }
+
+        private void ValidateVerificationToken(string tokenValue)
+        {
             string cookieToken = string.Empty;
             string formToken = string.Empty;
-            string tokenValue = request.Headers["VerificationToken"]; // read the header key and validate the tokens.
             if (!string.IsNullOrEmpty(tokenValue))
             {
                 string[] tokens = tokenValue.Split(':');

@@ -272,6 +272,17 @@ namespace VAdvantage.Model
                 }
                 _unique = 3;
             }
+            // 5 - Country
+            if (_unique == 5 || _uniqueName.Length == 0)
+            {
+                String xx = address.GetCountryName();
+                {
+                    if (_uniqueName.Length > 0)
+                        _uniqueName += " ";
+                    _uniqueName += xx;
+                }
+                _unique = 5;
+            }
             //	4 - ID	
             if (_unique == 4 || _uniqueName.Length == 0)
             {
@@ -281,6 +292,36 @@ namespace VAdvantage.Model
                 _uniqueName += "#" + id;
                 _unique = 4;
             }
+        }
+
+        /// <summary>
+        /// Set Credit Status
+        /// </summary>
+        public void SetSOCreditStatus()
+        {
+            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+            Decimal creditLimit = GetSO_CreditLimit();
+            //	Nothing to do
+            if (SOCREDITSTATUS_NoCreditCheck.Equals(GetSOCreditStatus())
+                || SOCREDITSTATUS_CreditStop.Equals(GetSOCreditStatus())
+                || Env.ZERO.CompareTo(creditLimit) == 0)
+                return;
+
+            //	Above Credit Limit
+            // changed this function for fetching open balance because in case of void it calculates again and fetches wrong value of open balance // Lokesh Chauhan
+            //if (creditLimit.CompareTo(GetTotalOpenBalance(!_TotalOpenBalanceSet)) < 0)
+            if (creditLimit.CompareTo(GetTotalOpenBalance()) <= 0)
+                SetSOCreditStatus(SOCREDITSTATUS_CreditHold);
+            else
+            {
+                //	Above Watch Limit
+                Decimal watchAmt = Decimal.Multiply(creditLimit, bp.GetCreditWatchRatio());
+                if (watchAmt.CompareTo(GetTotalOpenBalance()) < 0)
+                    SetSOCreditStatus(SOCREDITSTATUS_CreditWatch);
+                else	//	is OK
+                    SetSOCreditStatus(SOCREDITSTATUS_CreditOK);
+            }
+            log.Fine("SOCreditStatus=" + GetSOCreditStatus());
         }
     }
 }

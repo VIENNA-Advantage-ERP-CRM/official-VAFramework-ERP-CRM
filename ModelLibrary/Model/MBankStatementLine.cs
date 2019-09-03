@@ -385,7 +385,15 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
 
-            return UpdateBSAndLine();
+            bool updateBS = UpdateBSAndLine();
+
+            //JID_1325: On save on bank statment system should give warning message "Payment and charge reference not found. Either create payment or the system will not complete bank statement."
+            if (GetC_Payment_ID() == 0 && GetC_Charge_ID() == 0)
+            {
+                log.SaveWarning("VIS_NoPaymentorChargeStatement", "");
+            }
+
+            return updateBS;
         }
 
         //private bool UpdateBSAndLine()

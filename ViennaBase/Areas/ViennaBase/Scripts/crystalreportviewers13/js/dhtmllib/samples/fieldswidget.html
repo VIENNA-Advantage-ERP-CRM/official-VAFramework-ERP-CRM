@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+			
+			
+			textFieldWithHelp = newTextFieldWidget( "textFieldWithHelp", textCB())			
+			
+			maxchar = 10
+			textField = newTextFieldWidget( "textField", textCB(), maxchar)
+			maxchar = 5
+			intField = newIntFieldWidget( "intField", intCB(), maxchar)
+			maxchar = 7
+			floatField = newFloatFieldWidget( "floatField", floatCB(), maxchar)
+			
+			testCheck = newCheckWidget("testCheck","text",null) 
+		
+			
+			txtArea = newTextAreaWidget("txtArea", 3, 36);
+			
+			//
+			function loadCB()
+			{
+				textFieldWithHelp.init()
+				textFieldWithHelp.setHelpTxt("you can type a text here")
+				
+				textField.init()
+				textField.setValue("du texte")
+				
+				intField.init()
+				intField.setMin( -10)
+				intField.setMax( 1000)
+				intField.setValue(3)
+				
+				floatField.init()
+				floatField.setMin( 0)
+				floatField.setMax( 10)
+				floatField.setPrecision(2)
+				floatField.setValue(3.50)
+				
+				testCheck.init()
+				testCheck.checkbox.indeterminate = true
+				
+				txtArea.init()
+			}
+			
+			function textCB()
+			{
+				//alert("Text Field maxchar = 10")
+			}
+			
+			function intCB()
+			{
+				//alert("Int Field min = -10, max = 1000, maxchar = 5")
+			}
+			function floatCB()
+			{
+				//alert("Float Field  Value =3.454, min = 0, max = 10, precision = 2 decimales, maxchar = 7")
+			}
+						
+		</script>
+	</head>
+	<body onload="loadCB()">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<b>Text Field with help text</b><br>
+				<script language="javascript">textFieldWithHelp.write()</script>
+				<br><br><br>
+				
+				<b>Text Field maxchar = 10</b><br>
+				<script language="javascript">textField.write()</script>
+				<br><br><br>
+				<b>Int Field min = -10, max = 1000, maxchar = 5 </b><br>
+				<script language="javascript">intField.write()</script>
+				<br><br><br>
+				<b>Float Field  Value =3.50, min = 0, max = 10, precision = 2 decimales, maxchar = 7</b><br>
+				<script language="javascript">floatField.write()</script>
+				<br><br><br>
+				<script language="javascript">testCheck.write()</script>
+				<br><br><br>
+				<CODE>txtArea = newTextAreaWidget("txtArea", 3, 36);</CODE>
+				<script language="javascript">txtArea.write()</script>
+				
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

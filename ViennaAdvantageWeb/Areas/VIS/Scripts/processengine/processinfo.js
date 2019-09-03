@@ -38,6 +38,7 @@
         this.printFormatTableName = "";
         this.useCrystalReportViewer = false;
         this.isReport = false;
+        this.isBackground = false;
     };
 
     ProcessInfo.prototype.toJson = function () {
@@ -70,7 +71,8 @@
             "WindowNo": this.windowNo,
             "AD_ReportView_ID": this.AD_ReportView_ID,
             "UseCrystalReportViewer": this.useCrystalReportViewer,
-            "IsReport": this.isReport
+            "IsReport": this.isReport,
+            "IsBackground": this.isBackground
         }
         return o;
 
@@ -84,7 +86,9 @@
         else {
             info = new ProcessInfo(o.Title, o.Process_ID);
         }
-        createPIFromJson(info, o);
+        if (o && o.length > 0) {
+            createPIFromJson(info, o);
+        }
         return info;
     };
 
@@ -119,6 +123,7 @@
         info.isJasperReport = o.IsJasperReport;
         info.useCrystalReportViewer = o.UseCrystalReportViewer;
         info.isReport = o.IsReport;
+        info.isBackground = o.IsBackground;
     };
 
     ProcessInfo.prototype.setPrintFormatTableName = function (tableName) {
@@ -383,6 +388,14 @@
         return this.AD_Window_ID;
     }
 
+    ProcessInfo.prototype.setIsBackground = function (Background) {
+        this.isBackground = Background;
+    }
+
+    ProcessInfo.prototype.getIsBackground = function () {
+        return this.isBackground;
+    }
+
     ProcessInfo.prototype.setSummary = function (summary, error) {
 
         if (arguments.length == 2) {
@@ -540,7 +553,7 @@
         this.isReportFormat = null;
         this.isCrystal = null;
         this.totalrecords = null;
-        this.isJasperReport=null;
+        this.isJasperReport = null;
     };
 
     var baseUrl = VIS.Application.contextUrl;

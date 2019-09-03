@@ -128,7 +128,7 @@ html[dir="rtl"] .vis-attach-file-wrapla
 	padding: 0px 0px 0px 10px;
 	float:left;
 	width: 100%;	
-    position:relative;
+    /*position:relative;*/
 }
 .vis-attach-ico {
     width: 27px;
@@ -155,7 +155,12 @@ html[dir="rtl"] .vis-attach-file-wrapla
 	margin-left:7px;
 }
 .vis-attach-file-icon, .vis-attach-fileBottom-Text, .vis-attach-BottomLeft{ float:left;position:relative;}
-.vis-attach-file-text{ width:75%; float:right; margin-right:10px;position:relative;}
+.vis-attach-file-text{
+     width:75%;
+      float:right; 
+      margin-right:10px;
+      /*position:relative;*/
+}
 .vis-attach-fileBottom-Text{ width:100%; margin-bottom:10px; float:left;}
 .vis-attach-file-text > p, vis-attach-file-text > a{
 	color:#666;
@@ -194,7 +199,7 @@ html[dir="rtl"] .vis-attach-file-wrapla
 .vis-attach-file-location > select{ margin-left:10px;}
 .vis-attach-btns > a{
 	background:#626365;
-	color:#fff;
+	color:#fff!important;
 	padding:5px 15px;
 	font-size:14px;
 	border-radius:0;	

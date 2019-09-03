@@ -20,7 +20,7 @@
         var toggleGen = false;
         var toggleside = false;
 
-        var $root = $("<div style='width: 100%; height: 100%; background-color: white;'>");
+        var $root = $("<div class='vis-forms-container' style='width: 100%; height: 100%; background-color: white;'>");
         var $busyDiv = $("<div class='vis-apanel-busy'>");
 
         var arrListColumns = [];
@@ -145,7 +145,7 @@
 
             //Left Div Design settings 
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
-            topLeftDiv = $("<div id='" + "topLeftDiv_" + $self.windowNo + "' style='float: left; height: 100%; margin-bottom: 2px;margin-left: 0px;position: absolute;'>" +
+            topLeftDiv = $("<div class='vis-archive-left-sidebar' id='" + "topLeftDiv_" + $self.windowNo + "' style='float: left; height: 100%; margin-bottom: 2px;margin-left: 0px;position: absolute;'>" +
                   "<div id='" + "topToggalDiv_" + $self.windowNo + "' style='width: 100%; height: 45px;float: left;padding-left: 11px; padding-top: 11px; background-color: #F1F1F1;'>" +
                        "<button id='" + "btnToggal_" + $self.windowNo + "' style='border: 0px;background-color: transparent; padding: 0px;' >" +
                        "<img src='" + src + "' /></button></div></div>");

@@ -1,6 +1,24 @@
 ﻿/*** W2ui Add method **/
 /*add recid attribute to record object if not exist */
 
+if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
+    
+
+    // grid not getting refresh if render with records 
+    // jquery 3.4.1 compatibility issue 
+    /* extend  w2Grid rendering*/
+    var old2grid = $.fn.w2grid;
+    $.fn.w2grid = function () {
+        var grd = old2grid.apply(this, arguments);
+        if (grd.records.length > 0) {
+            //console.log("refresh call");
+            grd.refresh();
+        }
+        return grd;
+    }
+};
+
+
 ; w2obj.grid.prototype.add = function (record) {
     if (!$.isArray(record)) record = [record];
     var added = 0;
@@ -534,7 +552,7 @@
             var fld = obj.sortData[s].field;
 
             var column = obj.columns.find(function (col) {
-                return col.columnName.toLowerCase() == fld
+                return col.columnName.toLowerCase() == fld.toLowerCase()
             });
 
             if (obj.sortData[s].field_)

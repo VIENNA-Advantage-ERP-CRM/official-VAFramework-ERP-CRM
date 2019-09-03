@@ -1,4 +1,12 @@
-﻿using System;
+﻿/********************************************************
+ * Module Name    : VIS
+ * Purpose        : Model class for Pallet / Product Container Functionality
+ * Class Used     : 
+ * Chronological Development
+ * Amit Bansal     26 June 2019
+ ******************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -176,6 +184,7 @@ namespace VIS.Models
         /// <param name="warehouse">Warehouse -- which warehouse container we have to show</param>
         /// <param name="locator">Locato - which locator container we have to show</param>
         /// <param name="container">not used this parameter functionality -- Tree structure mismatched</param>
+        /// <param name="validation"></param>
         /// <returns></returns>
         public List<TreeContainer> GetContainerAsTree(int warehouse, int locator, int container, string validation)
         {
@@ -228,9 +237,12 @@ namespace VIS.Models
         /// <summary>
         /// Get Product from Transaction (Container Wise)
         /// </summary>
-        /// <param name="warehouse"></param>
-        /// <param name="locator"></param>
         /// <param name="container"></param>
+        /// <param name="movementDate"></param>
+        /// <param name="AD_Org_ID"></param>
+        /// <param name="locator"></param>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
         /// <returns></returns>
         public List<MoveContainer> GetProductContainerFromTransaction(int container, DateTime? movementDate, int AD_Org_ID, int locator, int page, int size)
         {
@@ -247,8 +259,8 @@ namespace VIS.Models
                             WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) = " + container +
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
-                               AND t.AD_Client_ID  = " + _ctx.GetAD_Client_ID() + 
-                               //AND t.AD_Org_ID  = " + AD_Org_ID +
+                               AND t.AD_Client_ID  = " + _ctx.GetAD_Client_ID() +
+                //AND t.AD_Org_ID  = " + AD_Org_ID +
                             @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
                           )t WHERE ContainerCurrentQty <> 0 ";
 
@@ -267,7 +279,7 @@ namespace VIS.Models
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
                                AND t.AD_Client_ID  = " + _ctx.GetAD_Client_ID() +
-                               //AND t.AD_Org_ID  = " + AD_Org_ID +
+                    //AND t.AD_Org_ID  = " + AD_Org_ID +
                             @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
                           )t WHERE ContainerCurrentQty <> 0 ";
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql1, null, null));
@@ -753,25 +765,24 @@ namespace VIS.Models
             }
 
             // Create Product Container in Locator Organization
-            //MProductContainer container = new MProductContainer(_ctx, 0, null);
-            //container.SetAD_Org_ID(m_locator.GetAD_Org_ID());
-            //container.SetValue(value);
-            //container.SetName(name);
-            //container.SetM_Warehouse_ID(warehouseId);
-            //container.SetM_Locator_ID(locatorId);
-            //container.SetHeight(height);
-            //container.SetWidth(width);
-            //container.SetRef_M_Container_ID(parentContainerId);
-            //if (!container.Save())
-            //{
-            //    ValueNamePair pp = VLogger.RetrieveError();
-            //    return Msg.GetMsg(_ctx, "VIS_ContainernotSaved") + " " + (pp != null ? pp.GetName() : "");
-            //}
-            //else
-            //{
-            //    return "";
-            //}
-            return "";
+            MProductContainer container = new MProductContainer(_ctx, 0, null);
+            container.SetAD_Org_ID(m_locator.GetAD_Org_ID());
+            container.SetValue(value);
+            container.SetName(name);
+            container.SetM_Warehouse_ID(warehouseId);
+            container.SetM_Locator_ID(locatorId);
+            container.SetHeight(height);
+            container.SetWidth(width);
+            container.SetRef_M_Container_ID(parentContainerId);
+            if (!container.Save())
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                return Msg.GetMsg(_ctx, "VIS_ContainernotSaved") + " " + (pp != null ? pp.GetName() : "");
+            }
+            else
+            {
+                return "";
+            }
         }
 
     }

@@ -47,6 +47,9 @@
         this.lblGenrate = null;
         this.lblSelect = null;
 
+        var btnClearBP = null;
+        var btnClearOrd = null;
+
         var sideDivWidth = 260;
         var minSideWidth = 50;
         //window with-(sidediv with_margin from left+ space)
@@ -66,6 +69,13 @@
 
             var lblGenerateid = "lblGenerate_" + $self.windowNo;
             var lblSelectid = "lblSelect_" + $self.windowNo;
+
+            // JID_1110: Clear option required on Business partner and Docuemnt No. parameter.
+            var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
+            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
+                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
+            btnClearOrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
+                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
 
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
 
@@ -95,39 +105,38 @@
             var tble = $("<table style='width: 100%;'>");
 
             var tr = $("<tr>");
-            var td = $("<td style='padding: 4px 15px 2px;'>");
+            var td = $("<td style='padding: 4px 15px 0px;'>");
             $self.div.append(tble);
             tble.append(tr);
             tr.append(td);
             td.append($self.lblOrg.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 8px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.cmbOrg.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tble.append(tr);
             tr.append(td);
 
             td.append($self.lblBPartner.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 15px 8px;'>");
             tble.append(tr);
             tr.append(td);
             // var ctrl = $("<div style='float: left; width: 100%;' class='VIS_Pref_slide-show pp'>");
             //ctrl.removeClass("VIS_Pref_slide-show pp");
-            td.append($self.vSearchBPartner.getControl().css('width', '206px')).append($self.vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-            //td.append(ctrl);
-
-            
+            td.append($self.vSearchBPartner.getControl().css('width', '176px')).append($self.vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
+            .append(btnClearBP);
 
 
+            //JID_1109: Top tip required on Document No. field ie Sales Order/Customer RMA.
             var OrderShipmentNo = VIS.Msg.translate(VIS.Env.getCtx(), "DocumentNo")
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 15px 0px;' title=' " + VIS.Msg.getMsg("SalesOrderNo", false, false) + "'>");
             tble.append(tr);
             tr.append(td);
             td.append(OrderShipmentNo);
@@ -138,8 +147,14 @@
             tr.append(td);
             // var ctrl = $("<div style='float: left; width: 100%;' class='VIS_Pref_slide-show pp'>");
             //ctrl.removeClass("VIS_Pref_slide-show pp");
-            td.append($self.vSearchOrderShipment.getControl(0).css('width', '206px')).append($self.vSearchOrderShipment.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-            //td.append(ctrl);
+            td.append($self.vSearchOrderShipment.getControl(0).css('width', '176px')).append($self.vSearchOrderShipment.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
+                .append(btnClearOrd);
+
+            tr = $("<tr>");
+            td = $("<td style='padding: 0px 15px 0px;font-size:12px;'>");
+            tble.append(tr);
+            tr.append(td);
+            td.append("(" + VIS.Msg.getMsg("SalesOrderNo", false, false) + ")");
 
             //===============================
 
@@ -199,11 +214,11 @@
             $self.cmbOrg = new VIS.Controls.VComboBox("AD_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
             var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search);
-            $self.vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value);
+            $self.vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value, 0);
 
             // var orderShipmentvalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search);
             var orderShipmentvalue = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search, "C_Order_ID", 0, false, "DocStatus='CO'");
-            $self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("C_Order_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue);
+            $self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("C_Order_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue, 0);
             //var orderShipmentvalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 3521, VIS.DisplayType.Search);
             //$self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("M_InOut_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue);
 
@@ -267,7 +282,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "VCreateFrom/ExecuteQueryVInvoiceGen",
                 type: 'POST',
-                async: false,
+                //async: false,
                 data: {
                     adClientID: AD_Client_ID,
                     adOrgIDs: adOrgID,
@@ -291,12 +306,17 @@
                                 line['recid'] = count;
                                 count++;
                                 data.push(line);
-                            }
+                            }                            
                         }
                         catch (e) {
 
                         }
+                    }       // JID_1110: done by Bharat on 04 Feb 2019 to disable Ok button when there in no data in the grid
+                    else {
+                        VIS.ADialog.info("NoDataFound");
+                        $self.okBtn.attr('disabled', 'disabled');
                     }
+                    dynInit(data);
                     // set busy indegator
                     $($self.$root[0]).removeClass("vis-apanel-busyVInOutGenRoot");
                     $($self.$busyDiv[0]).removeClass("vis-apanel-busyVInOutGenBusyDiv");
@@ -309,9 +329,7 @@
                 },
             });
 
-            dynInit(data);
-
-            return data;
+            //return data;
         }
 
 
@@ -383,8 +401,9 @@
                 return;
             }
             var splitValue = selectedItems.toString().split(',');
+            //Changes done for invoice generation when multiple users generate the invoices at the same time. 02-May-18
             for (var i = 0; i < splitValue.length; i++) {
-                results[i] = ($self.dGrid.get(splitValue[0])).C_Order_ID;//($self.dGrid.get(splitValue[i]));// //  ID in column 0
+                results[i] = ($self.dGrid.get(splitValue[i])).C_Order_ID;
             }
 
             if (results.length == 0) {
@@ -392,31 +411,34 @@
             }
 
             //	Query String
-            var keyColumn = "C_Order_ID";
-            var sb = keyColumn;
-            if (results.length > 1) {
-                sb = sb.concat(" IN (");
-            }
-            else {
-                sb = sb.concat("=");
-            }
+            //var keyColumn = "C_Order_ID";
+            var sb = "";
+            //var sb = keyColumn;
+            //if (results.length > 1) {
+            //    sb = sb.concat(" IN (");
+            //}
+            //else {
+            //    sb = sb.concat("=");
+            //}
             //	Add elements
             for (var i = 0; i < results.length; i++) {
                 if (i > 0) {
                     sb = sb.concat(",");
                 }
-                if (keyColumn.endsWith("_ID")) {
-                    sb = sb.concat(results[i].toString());
-                }
-                else {
-                    sb = sb.concat("'").concat(results[i].toString());
-                }
+                //if (keyColumn.endsWith("_ID")) {
+                //    sb = sb.concat(results[i].toString());
+                //}
+                //else {
+                //sb = sb.concat("'").concat(results[i].toString());
+                sb = sb.concat(results[i].toString());
+                //}
             }
 
-            if (results.length > 1) {
-                sb = sb.concat(")");
-            }
+            //if (results.length > 1) {
+            //    sb = sb.concat(")");
+            //}
 
+            //End Changes done for invoice generation when multiple users generate the invoices at the same time. 02-May-18
             return sb.toString();
         }
 
@@ -438,7 +460,7 @@
                     }
                     if (data.ErrorMsg != null) {
                         //show Message in pop up
-                        alert(data.ErrorMsg);
+                        VIS.ADialog.info("", null, data.ErrorMsg, null);
                     }
                     obj.$busyDiv[0].style.visibility = "hidden";
 
@@ -447,6 +469,7 @@
                     $($self.$busyDiv[0]).removeClass("vis-apanel-busyVInOutGenBusyDiv");
                 },
                 error: function (e) {
+                    obj.$busyDiv[0].style.visibility = "hidden";
                     // set busy indegator
                     $($self.$root[0]).removeClass("vis-apanel-busyVInOutGenRoot");
                     $($self.$busyDiv[0]).removeClass("vis-apanel-busyVInOutGenBusyDiv");
@@ -485,6 +508,7 @@
         this.vetoablechange = function (evt) {
             C_BPartner_ID = $self.vSearchBPartner.getValue();
             ordershipment_id = $self.vSearchOrderShipment.getValue();
+            $self.okBtn.removeAttr('disabled');
             executeQuery();
         };
 
@@ -501,8 +525,7 @@
             //Events
 
             if (this.okBtn != null)
-                this.okBtn.on(VIS.Events.onTouchStartOrClick, function ()
-                {
+                this.okBtn.on(VIS.Events.onTouchStartOrClick, function () {
                     $self.$busyDiv[0].style.visibility = 'visible';
                     // set busy indegator
                     $($self.$root[0]).addClass("vis-apanel-busyVInOutGenRoot");
@@ -510,10 +533,15 @@
 
                     $self.okBtn.attr('disabled', 'disabled');
                     whereClause = saveSelection();
-                    if (whereClause != null) {
+                    if (whereClause != null && whereClause.length > 0) {
                         generateInvoices(whereClause);
                     }
-                   // $self.$busyDiv[0].style.visibility = "hidden";
+                    else { // show msg if user didn't selected any order
+                        $self.$busyDiv[0].style.visibility = 'hidden';                        
+                        VIS.ADialog.error("PlzSelectatLeast1Inv");
+                    }
+                    $self.okBtn.removeAttr('disabled');
+                    // $self.$busyDiv[0].style.visibility = "hidden";
                 });
 
             if (this.cancelBtn != null)
@@ -626,7 +654,7 @@
 
             if (this.cmbOrg != null)
                 this.cmbOrg.getControl().change(function () {
-
+                    $self.okBtn.removeAttr('disabled');
                     AD_Org_ID = $self.cmbOrg.getControl().find('option:selected').val();
                     executeQuery();
                 });
@@ -635,6 +663,22 @@
                 this.vSearchBPartner.addVetoableChangeListener(this);
             if (this.vSearchOrderShipment != null)
                 this.vSearchOrderShipment.addVetoableChangeListener(this);
+
+            if (btnClearBP != null) {
+                btnClearBP.on(VIS.Events.onTouchStartOrClick, function () {
+                    if ($self.vSearchBPartner.isReadOnly)
+                        return;
+                    $self.vSearchBPartner.setValue(null, false, true);
+                });
+            }
+
+            if (btnClearOrd != null) {
+                btnClearOrd.on(VIS.Events.onTouchStartOrClick, function () {
+                    if ($self.vSearchOrderShipment.isReadOnly)
+                        return;
+                    $self.vSearchOrderShipment.setValue(null, false, true);
+                });
+            }
 
         }
 
@@ -653,7 +697,10 @@
                 this.okBtn.off(VIS.Events.onTouchStartOrClick);
             if (this.cancelBtn)
                 this.cancelBtn.off(VIS.Events.onTouchStartOrClick);
-
+            if (btnClearBP)
+                btnClearBP.off(VIS.Events.onTouchStartOrClick);
+            if (btnClearOrd)
+                btnClearOrd.off(VIS.Events.onTouchStartOrClick);
             $self = null;
             this.frame = null;
             this.windowNo = null;

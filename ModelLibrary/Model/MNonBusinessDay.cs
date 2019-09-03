@@ -58,14 +58,27 @@ namespace VAdvantage.Model
         /// <returns>true for nonbusinessday</returns>
         public static bool IsNonBusinessDay(Ctx ctx, DateTime? dt)
         {
+            return IsNonBusinessDay(ctx, dt, 0);
+        }
+
+        /// <summary>
+        /// Check trascation record for non business day organization wise
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="dt">date</param>
+        /// <param name="AD_Org_ID">optional organization</param>
+        /// <returns>true for nonbusinessday</returns>
+        public static bool IsNonBusinessDay(Ctx ctx, DateTime? dt, int AD_Org_ID = 0)
+        {
             bool nbDay = false;
             int C_Period_ID = MPeriod.GetC_Period_ID(ctx, dt);
             string sql = "SELECT C_CALENDAR_ID FROM C_YEAR WHERE C_YEAR_ID=(SELECT C_YEAR_ID FROM C_PERIOD  WHERE C_PERIOD_ID=" + C_Period_ID + ")";
             int C_Calendar_ID = Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
 
             sql = MRole.GetDefault(ctx, false).AddAccessSQL(
-               "SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=" + C_Calendar_ID + " AND DATE1=TO_DATE('" + dt.Value.ToShortDateString() + "', 'MM-DD-YY')",
-               "C_NonBusinessDay", false, false);
+               "SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=" + C_Calendar_ID
+               + (AD_Org_ID > 0 ? " AND AD_Org_ID IN (0, " + AD_Org_ID + ")" : "") + " AND DATE1=TO_DATE('" + dt.Value.ToShortDateString() + "', 'MM-DD-YY')",
+               "C_NonBusinessDay", false, false);   // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
             try
             {
                 int count = Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));

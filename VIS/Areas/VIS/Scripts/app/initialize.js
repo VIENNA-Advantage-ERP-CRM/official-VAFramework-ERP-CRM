@@ -23,6 +23,8 @@
                 //,
                 //type: "POST"
             });
+
+            VIS.Application.isIOS = /ipad|iphone|ipod/i.test(navigator.userAgent.toLowerCase());
         };
 
         /* Intilize App Logger js */

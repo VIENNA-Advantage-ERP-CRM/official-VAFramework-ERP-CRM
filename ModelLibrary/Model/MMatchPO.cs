@@ -215,7 +215,7 @@ namespace VAdvantage.Model
                 ctx = iLine.GetCtx();
                 C_OrderLine_ID = iLine.GetC_OrderLine_ID();
             }
-            if (sLine != null)
+            else if (sLine != null)
             {
                 trxName = sLine.Get_Trx();
                 ctx = sLine.GetCtx();

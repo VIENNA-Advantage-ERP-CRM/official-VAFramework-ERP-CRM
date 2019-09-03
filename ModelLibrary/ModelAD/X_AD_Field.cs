@@ -742,6 +742,46 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
+        ///<summary>
+        /// MRIsDisplayed AD_Reference_ID=319
+        ///</summary>
+        public static int MRISDISPLAYED_AD_Reference_ID = 319;
+        ///<summary>
+        /// No = N
+        ///</summary>
+        public static String MRISDISPLAYED_No = "N";
+        ///<summary>
+        /// Yes = Y
+        ///</summary>
+        public static String MRISDISPLAYED_Yes = "Y";
+
+        ///<summary>
+        /// Is test a valid value.
+        ///</summary>
+        ///<param name="test"> TestValue </param>
+        ///<returns> True If Valid </returns>
+        public bool IsMRIsDisplayedValid(String test)
+        {
+            return test == null || test.Equals("N") || test.Equals("Y");
+        }
+
+        ///<summary>
+        /// SetMulti Row Displayed
+        ///</summary>
+        ///<param name="MRIsDisplayed">Method to show-hide fields in Grid(Multi-Row) view. </param>
+        public void SetMRIsDisplayed(String MRIsDisplayed)
+        {
+            if (!IsMRIsDisplayedValid(MRIsDisplayed))
+                throw new ArgumentException("MRIsDisplayed Invalid value - " + MRIsDisplayed + " - Reference_ID=319 - N - Y");
+            if (MRIsDisplayed != null && MRIsDisplayed.Length > 1)
+            {
+                log.Warning("Length > 1 - truncated");
+                MRIsDisplayed = MRIsDisplayed.Substring(0, 1);
+            }
+            Set_Value("MRIsDisplayed", MRIsDisplayed);
+        }
+
+
     }
 
 }

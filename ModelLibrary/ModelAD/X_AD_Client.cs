@@ -576,6 +576,17 @@ public String GetValue()
 {
 return (String)Get_Value("Value");
 }
+/// <summary>
+/// Set Cost Mandatory on Completion.
+/// </summary>
+/// <param name="IsCostMandatory">This checkbox indicate cost is mandatory on completion. System will restrict the completion of document if fail in cost calculation due to either conversion is not found between currencies or price not available. </param>
+public void SetIsCostMandatory(Boolean IsCostMandatory) { Set_Value("IsCostMandatory", IsCostMandatory); }
+/// <summary>
+/// Get Cost Mandatory on Completion.
+/// This checkbox indicate cost is mandatory on completion. System will restrict the completion of document if fail in cost calculation due to either conversion is not found between currencies or price not available.
+/// </summary>
+/// <returns></returns>
+public Boolean IsCostMandatory() { Object oo = Get_Value("IsCostMandatory"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 }
 
 }

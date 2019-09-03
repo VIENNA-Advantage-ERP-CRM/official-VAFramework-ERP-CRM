@@ -25,5 +25,20 @@ namespace VIS.Controllers
             retJSON = JsonConvert.SerializeObject(objCJModel.GetLocationData(ctx, fields));
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        ///  <summary>
+        /// Get account no and routing no against selected bank account
+        /// </summary>        
+        /// <param name="fields"> ID of bank account  </param>
+        /// <returns>Account number and Routing Number</returns> //Added by manjot on 22/02/2019 
+        public JsonResult GetBankAccountData(string fields)
+        {
+            string retJSON = "";
+            Ctx ctx = Session["ctx"] as Ctx;
+            MCashJournalModel objCJModel = new MCashJournalModel();
+            retJSON = JsonConvert.SerializeObject(objCJModel.GetAccountData(ctx, Util.GetValueOfInt(fields)));
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

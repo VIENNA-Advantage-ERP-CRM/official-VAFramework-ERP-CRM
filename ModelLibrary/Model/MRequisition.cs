@@ -308,7 +308,8 @@ namespace VAdvantage.Model
                 }
 
                 // is Non Business Day?
-                if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateDoc()))
+                // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+                if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateDoc(), GetAD_Org_ID()))
                 {
                     _processMsg = Common.Common.NONBUSINESSDAY;
                     return DocActionVariables.STATUS_INVALID;
@@ -383,6 +384,10 @@ namespace VAdvantage.Model
                     if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                         return status;
                 }
+
+                // JID_1290: Set the document number from completed document sequence after completed (if needed)
+                SetCompletedDocumentNo();
+
                 //	Implicit Approval
                 if (!IsApproved())
                 {
@@ -514,6 +519,43 @@ namespace VAdvantage.Model
                 log.Severe(ex.ToString());
             }
             return DocActionVariables.STATUS_COMPLETED;
+        }
+
+        /// <summary>
+        /// Set the document number from Completed Document Sequence after completed
+        /// </summary>
+        private void SetCompletedDocumentNo()
+        {
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateDoc(DateTime.Now.Date);
+
+                //	Std Period open?
+                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType()))
+                {
+                    throw new Exception("@PeriodClosed@");
+                }
+            }
+
+            // if Overwrite Sequence on Complete checkbox is true.
+            if (dt.IsOverwriteSeqOnComplete())
+            {
+                // Set Drafted Document No into Temp Document No.
+                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                {
+                    SetTempDocumentNo(GetDocumentNo());
+                }
+
+                // Get current next from Completed document sequence defined on Document type
+                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                if (value != null)
+                {
+                    SetDocumentNo(value);
+                }
+            }
         }
 
         /*	Set Processed.

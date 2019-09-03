@@ -141,7 +141,10 @@ namespace VIS.Models
                     || docStatus.Equals(DocumentEngine.STATUS_INVALID))
                 {
                     options[index++] = DocumentEngine.ACTION_PREPARE;
-                    options[index++] = DocumentEngine.ACTION_CLOSE;
+
+                    //JID_0213: Close option should not be visible before doc status is completed in doc process.
+                    //options[index++] = DocumentEngine.ACTION_CLOSE;
+
                     //	Draft Sales Order Quote/Proposal - Process
                     if (isSOTrx
                         && ("OB".Equals(orderType) || "ON".Equals(orderType)))

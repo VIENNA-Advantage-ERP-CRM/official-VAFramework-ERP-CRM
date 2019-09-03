@@ -5,9 +5,10 @@
         this.windowNo = 0;
         var ctx = VIS.Env.getCtx();
         var $self = this;
-        var $root = $('<div class="vis-allocate-root">');
+        var $root = $('<div class="vis-allocate-root vis-forms-container">');
         var $row1 = $('<div class="vis-leftpanel-wrapper" style="padding-right:0px">');
-        var $innerRow = $('<div style="height:100%;padding-right:15px; overflow: auto;">');
+        //set height of filters div and Process Button div
+        var $innerRow = $('<div style="height: calc(100% - 42px);padding-right:15px; overflow: auto;">');
         var rowContiner = $('<div class="vis-allocation-rightContainer">');
         var $row2 = $('<div class="vis-allocate-paymentdiv" >');
         var $row3 = $('<div class="vis-allocate-cashdiv" >');
@@ -66,6 +67,10 @@
         var _noInvoices = 0;
         var _noPayments = 0;
         var _noCashLines = 0;
+        // array for selected invoices
+        var selectedInvoices = [];
+        var totalselectedinv = 0;
+        var $clrbtn = null;
 
 
         var colInvCheck = false;
@@ -101,6 +106,9 @@
 
         //array to get all the date of selected grid records
         var _allDates = [];
+
+        // is used to compare org of payment / invoice / cash journal with org of selecetd dropdown
+        var isOrgMatched = true;
 
         var baseUrl = VIS.Application.contextUrl;
         var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
@@ -213,6 +221,13 @@
             $row3.css('display', 'none');
             //------------------------------
             $root.append($row1.append($innerRow)).append(rowContiner);
+            // to set process button static in design it will not scroll with other filters
+            var $divProcess = $('<div style="padding-right: 15px;">');
+            $divProcess.append(' <a class="vis-group-btn vis-group-create vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg('Process') + '</a>');
+            $row1.append($divProcess);
+            $root.append($row1.append($innerRow).append($divProcess)).append(rowContiner);
+            $vbtnAllocate = $root.find('.vis-group-btn');
+            $vbtnAllocate.css({ "pointer-events": "none", "opacity": "0.5" });
             createBusyIndicator();
             eventHandling();
             $root.find(".vis-allocation-resultdiv").css({ "width": "100%", "margin": "0", "bottom": "0", "position": "inherit" });
@@ -261,11 +276,28 @@
                         return false;
                     }
 
-                    //Org Manadatory because system will create view allocation in the selected org.
-                    if (parseInt($cmbOrg.val()) > 0)
-                        allocate();
-                    else
-                        VIS.ADialog.info("", true, VIS.Msg.getMsg("ValidateOrg"), "");
+                    if (isOrgMatched) {
+                        //Org Manadatory because system will create view allocation in the selected org.
+                        if (parseInt($cmbOrg.val()) > 0)
+                            allocate();
+                        else
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("ValidateOrg"), "");
+                    }
+                    else {
+                        /*Selected records are having a different organization than parameter organization. Do you want to proceed?*/
+                        VIS.ADialog.confirm("ConfirmForDiffOrg", true, "", "Confirm", function (result) {
+                            if (result) {
+                                //Org Manadatory because system will create view allocation in the selected org.
+                                if (parseInt($cmbOrg.val()) > 0)
+                                    allocate();
+                                else
+                                    VIS.ADialog.info("", true, VIS.Msg.getMsg("ValidateOrg"), "");
+                            }
+                            else {
+                                return;
+                            }
+                        });
+                    }
                 }
                 else {
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("PleaseSelectRecord"), "");
@@ -299,6 +331,9 @@
                     $gridInvoice.trigger(eData);
                 }
 
+                // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
+                if ($invSelectAll.prop("checked") == false)
+                    selectedInvoices = [];
             });
             $paymentSelctAll.on("change", function (e) {
                 var chk = $('#grid_' + $gridPayment.name + '_records td[col="0"]').find('input[type="checkbox"]');
@@ -323,7 +358,7 @@
 
             });
             $cmbOrg.on("change", function (e) {
-                if(parseInt($cmbOrg.val()) > 0)
+                if (parseInt($cmbOrg.val()) > 0)
                     $cmbOrg.css("background-color", SetMandatory(false));
                 else
                     $cmbOrg.css("background-color", SetMandatory(true));
@@ -333,12 +368,25 @@
                 conversionDate = $conversionDate.val();
                 loadBPartner();
             });
-
             //---For inter-business Partner data load in all grids
             $vchkBPAllocation.on("change", function (e) {
                 vetoableChange("Date", $vchkBPAllocation.is(':checked'));
                 _isInterBPartner = $vchkBPAllocation.is(':checked');
                 loadBPartner();
+            });
+            //clear selected invoices invoices 
+            $clrbtn.on("click", function (e) {
+
+                var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
+                for (var i = 0; i < chk.length; i++) {
+                    $(chk[i]).prop('checked', false);
+                    //$(chk[i]).change(e);
+                    $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, e);
+                    var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
+                    $gridInvoice.trigger(eData);
+                }
+                selectedInvoices = [];
+                loadInvoice();
             });
         };
 
@@ -441,13 +489,36 @@
                                 invoiceRecord = data[0].InvoiceRecord;
                                 gridPgnoInvoice = Math.ceil(invoiceRecord / PAGESIZE);
                             }
+
+                            //if any invoice is selected and we load another invoice from db than we have to check weather that invoice is already selected or not. if already selected tha skip that.
+                            if (selectedInvoices.length > 0) {
+                                totalselectedinv = selectedInvoices.length;
+                                for (var i = 0; i < data.length; i++) {
+
+                                    var filterObj = selectedInvoices.filter(function (e) {
+                                        return e.C_InvoicePaySchedule_ID == data[i]["C_InvoicePaySchedule_ID"];
+                                    });
+
+                                    if (filterObj.length == 0) {
+                                        data[i]["recid"] = selectedInvoices.length + i;
+                                        selectedInvoices.push(data[i]);
+                                    }
+                                }
+                                data = selectedInvoices;
+                                // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
+                                selectedInvoices = [];
+                            }
+                            //end
+
                             bindInvoiceGrid(data, chk);
+                            //Amount
                             _openInv = 9;
                             // _discount = chk ? 7 : 5;
                             _discount = 10;
                             _writeOff = 13;
                             _applied = 14;
-                            $divInvoice.find('#grid_openformatgridinvoice_records').on('scroll', cartInvoiceScroll);
+                            //added window no to find grid to implement scroll  issue : scroll was not working properly
+                            $divInvoice.find('#grid_openformatgridinvoice_' + $self.windowNo + '_records').on('scroll', cartInvoiceScroll);
                             isInvoiceGridLoaded = true;
                             isBusyIndicatorHidden();
                         }
@@ -460,8 +531,8 @@
         };
 
         function createRow1() {
-           var $divBp = $('<div class="vis-allocation-leftControls">');
-           $divBp.append('<span class="vis-allocation-inputLabels">' + VIS.translatedTexts.C_BPartner_ID + '</span>').append($vSearchBPartner.getControl().addClass("vis-allocation-bpartner")).append($vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+            var $divBp = $('<div class="vis-allocation-leftControls">');
+            $divBp.append('<span class="vis-allocation-inputLabels">' + VIS.translatedTexts.C_BPartner_ID + '</span>').append($vSearchBPartner.getControl().addClass("vis-allocation-bpartner")).append($vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
             var $divCu = $('<div class="vis-allocation-leftControls">');
             $divCu.append('<span class="vis-allocation-inputLabels">' + VIS.translatedTexts.C_Currency_ID + '</span>').append($cmbCurrency);
             $innerRow.append($divBp).append($divCu);
@@ -487,7 +558,7 @@
                                + '<div class="panel panel-default">'
                                       + '<div class="panel-heading" role="tab" id="headingOne">'
                                             + '<h4 class="panel-title">'
-                                                + '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="VIS-Accordion-head collapsed">'+ VIS.Msg.getMsg("InvoiceFilter")
+                                                + '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="VIS-Accordion-head collapsed">' + VIS.Msg.getMsg("InvoiceFilter")
                                                     + '<i class="glyphicon glyphicon-chevron-down pull-right"></i>'
                                                 + '</a>'
                                             + '</h4>'
@@ -500,30 +571,30 @@
                                             + '</div>'
                                             + '<div class="vis-allocation-leftControls vis-allocation-cmbdoctype">'
                                                  + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("DocType") + '</span>'
-                                            +'</div>'
-                                     +'</div>'
-                                 +'</div>'  
+                                            + '</div>'
+                                     + '</div>'
+                                 + '</div>'
                                + '</div>'
                              + '</div>'
                            + '</div>'
                           + '</div>');
-                              $innerRow.append($rowOne);
-                              $rowOne.find(".vis-allocation-cmbdoctype").append($cmbDocType);
-                              $rowOne.find(".panel-body").append('<div class="vis-allocation-leftControls">'
-                                                     + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_FromDate") + '</span>'
-                                                     + '<input  class="vis-allocation-fromDate"  type="date"></input>'
-                                           + '</div>'
-                                           + '<div class="vis-allocation-leftControls">'
-                                                 + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_ToDate") + '</span>'
-                                                 + '<input  class="vis-allocation-toDate"  type="date"></input>'
-                                           + '</div>');
-                              $divBp.find(".vis-allocation-bpartner").css('width', 'calc(100% - 30px)');
+            $innerRow.append($rowOne);
+            $rowOne.find(".vis-allocation-cmbdoctype").append($cmbDocType);
+            $rowOne.find(".panel-body").append('<div class="vis-allocation-leftControls">'
+                                   + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_FromDate") + '</span>'
+                                   + '<input  class="vis-allocation-fromDate"  type="date"></input>'
+                         + '</div>'
+                         + '<div class="vis-allocation-leftControls">'
+                               + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_ToDate") + '</span>'
+                               + '<input  class="vis-allocation-toDate"  type="date"></input>'
+                         + '</div>');
+            $divBp.find(".vis-allocation-bpartner").css('width', 'calc(100% - 30px)');
             //-----------Neha-----------------
-                              $vchkMultiCurrency = $innerRow.find('.vis-allocation-multicheckbox');
+            $vchkMultiCurrency = $innerRow.find('.vis-allocation-multicheckbox');
             $vchkAllocation = $innerRow.find('.vis-allocation-cashbox');
-          
+
             $vchkAutoWriteOff = $innerRow.find('.vis-allocation-autowriteoff');
-           
+
             //-----get controls values------------------
             $txtDocNo = $innerRow.find('.vis-allocation-docNo');
             $fromDate = $innerRow.find('.vis-allocation-fromDate');
@@ -556,7 +627,8 @@
                        + '</div>');
 
             //$resultDiv.append('<div class="vis-allocation-leftControls"><input  class="vis-allocation-autowriteoff"  type="checkbox"><label>' + VIS.Msg.getMsg("AutoWriteOff") + '</label></div>');
-            $resultDiv.append(' <a class="vis-group-btn vis-group-create vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg('Process') + '</a>');
+            //Hide the privious Process Button
+            // $resultDiv.append(' <a class="vis-group-btn vis-group-create vis-group-grayBtn" style="float: right; display: none; ">' + VIS.Msg.getMsg('Process') + '</a>');
 
             $innerRow.append($resultDiv);
             $date = $innerRow.find('#VIS_cmbDate_' + $self.windowNo);
@@ -570,8 +642,8 @@
             $cmbOrg = $innerRow.find('#VIS_cmbOrg_' + $self.windowNo);
             $vchkBPAllocation = $innerRow.find('#VIS_chkbxBPAllocation_' + $self.windowNo);
             $vtxtDifference = $resultDiv.find('.vis-allocation-lbldifferenceAmt');
-            $vbtnAllocate = $resultDiv.find('.vis-group-btn');
-            $vbtnAllocate.css({ "pointer-events": "none", "opacity": "0.5" });
+            //$vbtnAllocate = $resultDiv.find('.vis-group-btn');
+            //$vbtnAllocate.css({ "pointer-events": "none", "opacity": "0.5" });
             $vlblAllocCurrency = $resultDiv.find('.vis-allocation-lblCurrnecy');
         };
 
@@ -590,10 +662,13 @@
         };
 
         function createRow4() {
-            $row4.append('<div style=" width: 100%; float: left; "><p style="float:left;">' + VIS.translatedTexts.C_Invoice_ID + '</p> <input style="float:left;" type="checkbox" id="invoiceselectall" /><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
+            //
+            $row4.append('<div style=" width: 100%; float: left; "><p style="float:left;">' + VIS.translatedTexts.C_Invoice_ID + '</p> <input style="float:left;" type="checkbox" id="invoiceselectall" /><p style="float:left;margin-left: 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="clrbutton_' + $self.windowNo + '" style="float:left;cursor: pointer !important;margin-left: 5px;margin-top: 2px;" class="glyphicon glyphicon-refresh"></span><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
             $divInvoice = $row4.find('.vis-allocation-invoice-grid');
             $lblInvoiceSum = $row4.find('.vis-allocate-invoiceSum');
             $invSelectAll = $row4.find('#invoiceselectall');
+            //get control of clear button
+            $clrbtn = $row4.find('#clrbutton_' + $self.windowNo);
         };
         /**
         *To get all the  Organization which are accessable by login user
@@ -717,7 +792,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetPayments",
-                data: { _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner : _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE },
+                data: { _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -727,7 +802,8 @@
                             gridPgnoPayment = Math.ceil(paymentRecord / PAGESIZE);
                         }
                         bindPaymentGrid(data, chk);
-                        $divPayment.find('#grid_openformatgrid_records').on('scroll', cartPaymentScroll);
+                        //added window no to find grid to implement scroll  issue : scroll was not working properly
+                        $divPayment.find('#grid_openformatgrid_' + $self.windowNo + '_records').on('scroll', cartPaymentScroll);
                         isPaymentGridLoaded = true;
                         isBusyIndicatorHidden();
                     }
@@ -779,7 +855,8 @@
                             gridPgnoCashJounal = Math.ceil(CashRecord / PAGESIZE);
                         }
                         bindCashline(data, chk);
-                        $divCashline.find('#grid_openformatgridcash_records').on('scroll', cartCashScroll);
+                        //added window no to find grid to implement scroll  issue : scroll was not working properly
+                        $divCashline.find('#grid_openformatgridcash_' + $self.windowNo + '_records').on('scroll', cartCashScroll);
                         isCashGridLoaded = true;
                         isBusyIndicatorHidden();
                         //_payment = 7;
@@ -1010,7 +1087,28 @@
                 success: function (result) {
                     var data = JSON.parse(result);
                     if (data) {
+
+                        //if any invoice is selected and we load another invoice from db than we have to check weather that invoice is already selected or not. if already selected tha skip that.
+                        if (selectedInvoices.length > 0) {
+                            totalselectedinv = selectedInvoices.length;
+                            for (var i = 0; i < data.length; i++) {
+                                var filterObj = selectedInvoices.filter(function (e) {
+                                    return e.C_InvoicePaySchedule_ID == data[i]["C_InvoicePaySchedule_ID"];
+                                });
+
+                                if (filterObj.length == 0) {
+                                    data[i]["recid"] = selectedInvoices.length + i;
+                                    selectedInvoices.push(data[i]);
+                                }
+                            }
+                            data = selectedInvoices;
+                            // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
+                            selectedInvoices = [];
+                        }
+                        //end
+
                         bindInvoiceGridOnScroll(data);
+                        //Amount
                         _openInv = 9;
                         _discount = 10;
                         _writeOff = 13;
@@ -1049,7 +1147,8 @@
             columns.push({ field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', hidden: false });
             columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
             columns.push({ field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false });
-
+            columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
 
 
             var rows = [];
@@ -1099,7 +1198,8 @@
                 onSelect: function (event) {
                     if (event.all) {
                         event.onComplete = function () {
-                            $divPayment.find('#grid_openformatgrid_records').on('scroll', cartPaymentScroll);
+                            //added window no to find grid to implement scroll  issue : scroll was not working properly
+                            $divPayment.find('#grid_openformatgrid_' + $self.windowNo + '_records').on('scroll', cartPaymentScroll);
                         }
                     }
                 }
@@ -1110,7 +1210,7 @@
             $($($gridPayment.box)[0]).find('.w2ui-search-clear').css('margin-top', '4px');
             //$('.w2ui-search-down').css('margin-top', '4px');
             //$('.w2ui-search-clear').css('margin-top', '4px');
-            
+
         };
         function bindPaymentGridOnScroll(data) {
             var rows = [];
@@ -1148,7 +1248,8 @@
 
             rows = [];
             colkeys = [];
-            $divPayment.find('#grid_openformatgrid_records').on('scroll', cartPaymentScroll);
+            //added window no to find grid to implement scroll  issue : scroll was not working properly
+            $divPayment.find('#grid_openformatgrid_' + $self.windowNo + '_records').on('scroll', cartPaymentScroll);
         };
 
         //Cash line grid bind
@@ -1178,6 +1279,8 @@
             columns.push({ field: "Multiplierap", caption: VIS.translatedTexts.multiplierap, hidden: true });
             columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
             columns.push({ field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false });
+            columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
 
             var rows = [];
 
@@ -1227,7 +1330,8 @@
                 onSelect: function (event) {
                     if (event.all) {
                         event.onComplete = function () {
-                            $divCashline.find('#grid_openformatgridcash_records').on('scroll', cartCashScroll);
+                            //added window no to find grid to implement scroll  issue : scroll was not working properly
+                            $divCashline.find('#grid_openformatgridcash_' + $self.windowNo + '_records').on('scroll', cartCashScroll);
                         }
                     }
                 }
@@ -1275,14 +1379,15 @@
 
             rows = [];
             colkeys = [];
-            $divCashline.find('#grid_openformatgridcash_records').on('scroll', cartCashScroll);
+            //added window no to find grid to implement scroll  issue : scroll was not working properly
+            $divCashline.find('#grid_openformatgridcash_' + $self.windowNo + '_records').on('scroll', cartCashScroll);
         };
 
         //Invoice grid bind
         function bindInvoiceGrid(data, chk) {
             var columns = [];
             columns.push({ field: 'SelectRow', caption: 'check', size: '40px', editable: { type: 'checkbox' } });
-            columns.push({ field: "Date1", caption: VIS.translatedTexts.Date,  render: 'date:yyyy-mm-dd', size: '80px', hidden: false });
+            columns.push({ field: "Date1", caption: VIS.translatedTexts.Date, render: 'date:yyyy-mm-dd', size: '80px', hidden: false });
             columns.push({ field: "InvoiceScheduleDate", caption: VIS.translatedTexts.ScheduleDate, size: '80px', hidden: false });
             columns.push({ field: "Documentno", caption: VIS.translatedTexts.DocumentNo, size: '120px', hidden: false });
             columns.push({ field: "CinvoiceID", caption: VIS.translatedTexts.cinvoiceid, size: '150px', hidden: true });
@@ -1311,6 +1416,8 @@
             }
             columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
             columns.push({ field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false });
+            columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
             //}
             //end
             //}
@@ -1351,13 +1458,13 @@
                 multiSelect: true,
                 columns: columns,
                 records: rows,
-            //    searches: [
-            //{ field: 'Date1', caption: 'Date', type: 'date', render: 'date:yyyy-mm-dd' },
-            //{ field: 'Documentno', caption: 'Document no', type: 'text' },
-            //{ field: 'DocBaseType1', caption: 'DocBaseType', type: 'list', options: { items: DocBaseTypeData } },
-            //{ field: 'DocBaseType', caption: 'Document Type', type: 'text' }
-            
-            //    ],
+                //    searches: [
+                //{ field: 'Date1', caption: 'Date', type: 'date', render: 'date:yyyy-mm-dd' },
+                //{ field: 'Documentno', caption: 'Document no', type: 'text' },
+                //{ field: 'DocBaseType1', caption: 'DocBaseType', type: 'list', options: { items: DocBaseTypeData } },
+                //{ field: 'DocBaseType', caption: 'Document Type', type: 'text' }
+
+                //    ],
                 onChange: function (event) {
                     invoiceCellChanged(event);
                 },
@@ -1371,11 +1478,24 @@
                 onSelect: function (event) {
                     if (event.all) {
                         event.onComplete = function () {
-                            $divInvoice.find('#grid_openformatgridinvoice_records').on('scroll', cartInvoiceScroll);
+                            //added window no to find grid to implement scroll  issue : scroll was not working properly
+                            $divInvoice.find('#grid_openformatgridinvoice_' + $self.windowNo + '_records').on('scroll', cartInvoiceScroll);
                         }
                     }
                 }
             });
+            // when we load new invoice schedules either after filter or directly and if any invoice schedule is selected already than we need to trigger it's click event.
+            if (totalselectedinv > 0) {
+                for (var i = 0; i < totalselectedinv ; i++) {
+                    var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
+                    $(chk[i]).prop('checked', true);
+                    $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, event);
+                    var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
+                    $gridInvoice.trigger(eData);
+                }
+            }
+            totalselectedinv = 0;
+            //end
 
             $gridInvoice.autoLoad = true;
             $($($gridInvoice.box)[0]).find('.w2ui-search-down').css('margin-top', '4px');
@@ -1417,9 +1537,23 @@
             w2utils.encodeTags(rows);
             $gridInvoice.add(rows);
 
+            // when we load new invoice schedules either after filter or directly and if any invoice schedule is selected already than we need to trigger it's click event.
+            if (totalselectedinv > 0) {
+                for (var i = 0; i < totalselectedinv ; i++) {
+                    var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
+                    $(chk[i]).prop('checked', true);
+                    $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, event);
+                    var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
+                    $gridInvoice.trigger(eData);
+                }
+            }
+            totalselectedinv = 0;
+            //end
+
             rows = [];
             colkeys = [];
-            $divInvoice.find('#grid_openformatgridinvoice_records').on('scroll', cartInvoiceScroll);
+            //added window no to find grid to implement scroll  issue : scroll was not working properly
+            $divInvoice.find('#grid_openformatgridinvoice_' + $self.windowNo + '_records').on('scroll', cartInvoiceScroll);
         };
 
         function paymentDoubleClicked(event) {
@@ -1698,7 +1832,7 @@
                                 $gridCashline.get(event.recid).changes = false;
                                 $gridCashline.unselect(event.recid);
                                 $gridCashline.columns[colIndex].editable = false;
-                               // $gridCashline.get(event.recid).changes.AppliedAmt = "0";
+                                // $gridCashline.get(event.recid).changes.AppliedAmt = "0";
                                 $gridCashline.refreshCell(event.recid, "AppliedAmt");
                                 var chk = $('#grid_' + $gridCashline.name + '_records td[col="0"]').find('input[type="checkbox"]');
                                 $(chk[event.recid]).prop('checked', false);
@@ -1981,13 +2115,26 @@
                 if (col == 0) {
                     var columns = $gridPayment.columns;
                     colPayCheck = getBoolValue($gridPayment.getChanges(), row);
+
+                    //AppliedAmt---//get column index from grid
+                    _payment = getIndexFromArray(columns, "AppliedAmt");
                     var payemntCol = columns[_payment].field;
+
+
                     //  selected - set payment amount
                     var changes = $gridPayment.get(row).changes;
 
                     if (colPayCheck) {
+
+                        //OpenAmt--//get column index from grid
+                        _openPay = getIndexFromArray(columns, "OpenAmt");
+
                         var amount = parseFloat($gridPayment.get(row)[columns[_openPay].field]);
-                        AllocationDate = new Date($gridPayment.get(row)[columns[1].field]);
+
+                        //Date1--//get column index from grid
+                        var _date1 = getIndexFromArray(columns, "Date1");
+                        AllocationDate = new Date($gridPayment.get(row)[columns[_date1].field]);
+
                         if (payemntCol == "AppliedAmt") {
                             if (changes != null && changes != undefined) {
                                 changes.AppliedAmt = amount;
@@ -2038,11 +2185,17 @@
                 if (col == 0) {
                     var columns = $gridCashline.columns;
                     colCashCheck = getBoolValue($gridCashline.getChanges(), row);
+
+                    //AppliedAmt--- //get column index from grid
+                    _paymentCash = getIndexFromArray(columns, "AppliedAmt");
                     var payemntCol = columns[_paymentCash].field;
                     //  selected - set payment amount
                     var changes = $gridCashline.get(row).changes;
                     //  selected - set payment amount
                     if (colCashCheck) {
+
+                        //OpenAmt--//get column index from grid
+                        _open = getIndexFromArray(columns, "OpenAmt");
                         var amount = parseFloat($gridCashline.get(row)[columns[_open].field]);
                         if (payemntCol == "AppliedAmt") {
                             if (changes != null && changes != undefined) {
@@ -2101,16 +2254,55 @@
                 var changes = $gridInvoice.get(row).changes;
                 //  selected - set payment amount
 
+                //Writeoff--//get column index from grid
+                _writeOff = getIndexFromArray(columns, "Writeoff");
                 var writeOff = columns[_writeOff].field;
+
+                //AppliedAmt-- //get column index from grid
+                _applied = getIndexFromArray(columns, "AppliedAmt");
                 var applied = columns[_applied].field;
                 //  selected - set applied amount
                 if (colInvCheck) {
+
+                    // prepared same array for grid when we select any invoice from invoice grid and push that object into selected invoice array.
+                    var record = $gridInvoice.records[row];
+                    var rcdRow = {
+                        SelectRow: record.SelectRow,
+                        InvoiceRecord: record.InvoiceRecord,
+                        Date1: record.Date1,
+                        Documentno: record.Documentno,
+                        CinvoiceID: record.CinvoiceID,
+                        Isocode: record.Isocode,
+                        Currency: record.Currency,
+                        Converted: record.Converted,
+                        Amount: record.Amount,
+                        Discount: record.Discount,
+                        Multiplierap: record.Multiplierap,
+                        DocBaseType: record.DocBaseType,
+                        Writeoff: record.Writeoff,
+                        AppliedAmt: record.AppliedAmt,
+                        C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
+                        InvoiceScheduleDate: record.InvoiceScheduleDate,
+                        C_ConversionType_ID: record.C_ConversionType_ID,
+                        ConversionName: record.ConversionName,
+                        DATEACCT: record.DATEACCT,
+                        AD_Org_ID: record.AD_Org_ID,
+                        OrgName: record.OrgName
+                    };
+                    selectedInvoices.push(rcdRow);
+
+                    //Amount-- //get column index from grid
+                    _openInv = getIndexFromArray(columns, "Amount");
                     var amount = parseFloat($gridInvoice.get(row)[columns[_openInv].field]);
+                    //Discount  //get column index from grid
+                    _discount = getIndexFromArray(columns, "Discount");
                     amount = amount - parseFloat($gridInvoice.get(row)[columns[_discount].field]);
                     if (applied == "AppliedAmt") {
                         if (changes != null && changes != undefined) {
                             changes.Writeoff = 0;
                             changes.AppliedAmt = amount;
+                            //get column index from grid
+                            _discount = getIndexFromArray(columns, "Discount");
                             changes.Discount = parseFloat($gridInvoice.get(row)[columns[_discount].field]);
                             $gridInvoice.refreshCell(row, "Writeoff");
                             $gridInvoice.refreshCell(row, "AppliedAmt");
@@ -2126,10 +2318,19 @@
                 }
                 else    //  de-selected
                 {
+                    // remove invoice schedule from array when we de-select any schedule from invoice grid.
+                    for (var x = 0; x < selectedInvoices.length; x++) {
+                        if (selectedInvoices[x].C_InvoicePaySchedule_ID == $gridInvoice.records[row].C_InvoicePaySchedule_ID) {
+                            selectedInvoices.splice(x, 1);
+                        }
+                    }
+
                     if (applied == "AppliedAmt") {
                         if (changes != null && changes != undefined) {
                             changes.Writeoff = 0;
                             changes.AppliedAmt = amount;
+                            //Discount---//get column index from grid
+                            _discount = getIndexFromArray(columns, "Discount");
                             changes.Discount = parseFloat($gridInvoice.get(row)[columns[_discount].field]);
                             $gridInvoice.refreshCell(row, "Writeoff");
                             $gridInvoice.refreshCell(row, "AppliedAmt");
@@ -2209,6 +2410,18 @@
             calculate();
         };
 
+        //to get index of column from array
+        function getIndexFromArray(columns, name) {
+            var index = 0;
+            for (var i = 0; i < columns.length; i++) {
+                if (columns[i].field == name) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        };
+
         function getBoolValue(changes, row) {
             if (changes == null || changes.length == 0) {
                 return false;
@@ -2262,6 +2475,7 @@
 
                     if (lastRow == null) {
                         lastRow = $gridInvoice.get(invoiceChanges[i].recid);
+                        //Amount
                         if (lastRow[columns[_openInv].field] <= 0) {
                             lastRow = null;
                         }
@@ -2343,7 +2557,7 @@
                 }
                 else {
                     if ($gridInvoice.getChanges()[i].SelectRow == true) {
-                        var row = $gridInvoice.records[$gridInvoice.getChanges()[i].recid].InvoiceScheduleDate;
+                        var row = $gridInvoice.records[$gridInvoice.getChanges()[i].recid].Date1; //changed schedule date to invoice date suggested by Mukesh sir, ravi and amit.
                         _allDates.push(new Date(row));
                         if ($gridPayment.getChanges().length == 0 && $gridCashline.getChanges().length == 0) {
                             var DATEACCT = $gridInvoice.records[$gridInvoice.getChanges()[i].recid].DATEACCT;
@@ -2379,12 +2593,17 @@
 
         function getSelectedRecordsCount() {
             _allDates = [];
+            isOrgMatched = true;
             for (var i = 0; i < $gridPayment.getChanges().length; i++) {
                 if ($gridPayment.getChanges()[i].SelectRow === undefined) {
                 }
                 else {
                     if ($gridPayment.getChanges()[i].SelectRow == true) {
                         var row = $gridPayment.records[$gridPayment.getChanges()[i].recid].Date1;
+                        // check org matched or not 
+                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridPayment.records[$gridPayment.getChanges()[i].recid].AD_Org_ID)) {
+                            isOrgMatched = false;
+                        }
                         _allDates.push(new Date(row));
                         //console.log(_allDates);
                     }
@@ -2395,7 +2614,11 @@
                 }
                 else {
                     if ($gridInvoice.getChanges()[i].SelectRow == true) {
-                        var row = $gridInvoice.records[$gridInvoice.getChanges()[i].recid].InvoiceScheduleDate;
+                        var row = $gridInvoice.records[$gridInvoice.getChanges()[i].recid].Date1; //changed schedule date to invoice date suggested by Mukesh sir, ravi and amit.
+                        // check org matched or not 
+                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridInvoice.records[$gridInvoice.getChanges()[i].recid].AD_Org_ID)) {
+                            isOrgMatched = false;
+                        }
                         _allDates.push(new Date(row));
                         //console.log(_allDates);
                     }
@@ -2407,6 +2630,10 @@
                 else {
                     if ($gridCashline.getChanges()[i].SelectRow == true) {
                         var row = $gridCashline.records[$gridCashline.getChanges()[i].recid].Created;
+                        // check org matched or not 
+                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridCashline.records[$gridCashline.getChanges()[i].recid].AD_Org_ID)) {
+                            isOrgMatched = false;
+                        }
                         _allDates.push(new Date(row));
                         // console.log(_allDates);
                     }
@@ -2760,7 +2987,7 @@
                         var invoiceData = [];
                         for (var i = 0; i < rowsPayment.length; i++) {
                             var row = $gridPayment.get(rowsPayment[i].recid);
-                            C_CurrencyType_ID= parseInt(row.C_ConversionType_ID);
+                            C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                             paymentData.push({
                                 AppliedAmt: rowsPayment[i].AppliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, CpaymentID: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
                                 Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val())
@@ -2773,7 +3000,7 @@
                             payment = keys[keys.indexOf("AppliedAmt")];
                             for (var i = 0; i < rowsCash.length; i++) {
                                 var row = $gridCashline.get(rowsCash[i].recid);
-                                C_CurrencyType_ID= parseInt(row.C_ConversionType_ID);
+                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 cashData.push({
                                     AppliedAmt: rowsCash[i].AppliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
                                     Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val())
@@ -2794,7 +3021,7 @@
 
                             for (var i = 0; i < rowsInvoice.length; i++) {
                                 var row = $gridInvoice.get(rowsInvoice[i].recid);
-                                C_CurrencyType_ID= parseInt(row.C_ConversionType_ID);
+                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 var discounts = rowsInvoice[i].Discount;
                                 if (discounts == undefined) {
                                     discounts = row.Discount;
@@ -2837,9 +3064,11 @@
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
                                 isCash: $vchkAllocation.is(':checked'), _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                    , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID
+                                    , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
                             }),
                             success: function (result) {
+                                // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
+                                selectedInvoices = [];
                                 VIS.ADialog.info("", true, result, "");
                                 loadBPartner();
                                 $bsyDiv[0].style.visibility = "hidden";
@@ -2892,7 +3121,7 @@
                         for (var i = 0; i < rowsPayment.length; i++) {
                             var row = $gridPayment.get(rowsPayment[i].recid);
                             var keys = Object.keys($gridPayment.get(0));
-                            C_CurrencyType_ID= parseInt(row.C_ConversionType_ID);
+                            C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                             payment = keys[10];
                             paymentData.push({
                                 appliedamt: rowsPayment[i].AppliedAmt, date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
@@ -2927,7 +3156,7 @@
 
                             for (var i = 0; i < rowsInvoice.length; i++) {
                                 var row = $gridInvoice.get(rowsInvoice[i].recid);
-                                C_CurrencyType_ID= parseInt(row.C_ConversionType_ID);
+                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 var discounts = rowsInvoice[i].Discount;
                                 if (discounts == undefined) {
                                     discounts = row.Discount;
@@ -2971,9 +3200,11 @@
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
                                 isCash: $vchkAllocation.is(':checked'), _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                    , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID
+                                    , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
                             }),
                             success: function (result) {
+                                // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
+                                selectedInvoices = [];
                                 loadBPartner();
                                 VIS.ADialog.info("", true, result, "");
                                 $bsyDiv[0].style.visibility = "hidden";
@@ -3007,10 +3238,10 @@
                 $gridInvoice.destroy();
                 $gridInvoice = null;
             }
-             $invSelectAll = null;
-             $paymentSelctAll = null;
-             $cashSelctAll = null;
-             _allDates = null;
+            $invSelectAll = null;
+            $paymentSelctAll = null;
+            $cashSelctAll = null;
+            _allDates = null;
         };
 
         this.getRoot = function () {

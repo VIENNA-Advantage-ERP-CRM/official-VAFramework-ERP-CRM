@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,6 +32,22 @@ namespace VIS.Areas.VIS.Controllers
         {
             RecordAccessModel model = new RecordAccessModel();
             return Json(new { result = model.DeleteRecordAccess( AD_Role_ID, AD_Table_ID, Record_ID, isActive, isExclude, isReadOnly, isDependentEntities) }, JsonRequestBehavior.AllowGet);
+        }
+
+        // Added by Bharat on 06 June 2017
+        public JsonResult GetRoles()
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            RecordAccessModel model = new RecordAccessModel();            
+            return Json(JsonConvert.SerializeObject(model.GetRoles(ctx)), JsonRequestBehavior.AllowGet); ;
+        }
+
+        // Added by Bharat on 06 June 2017
+        public JsonResult GetRecordAccess(int Table_ID, int Record_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            RecordAccessModel model = new RecordAccessModel();
+            return Json(JsonConvert.SerializeObject(model.GetRecordAccess(Table_ID, Record_ID, ctx)), JsonRequestBehavior.AllowGet); ;
         }
 	}
 }

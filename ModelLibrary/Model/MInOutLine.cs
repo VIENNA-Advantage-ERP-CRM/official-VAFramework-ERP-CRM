@@ -40,6 +40,7 @@ namespace VAdvantage.Model
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MInOutLine).FullName);
         public Decimal? OnHandQty = 0;
+        private Decimal? containerQty = 0;
         #endregion
 
         /* 	Get Ship lines Of Order Line
@@ -1010,6 +1011,9 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
+            // chck pallet Functionality applicable or not
+            bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+
             Decimal? movementQty, QtyEntered, VA024_ProvisionPrice = 0;
             QtyEntered = GetQtyEntered();
             movementQty = GetMovementQty();
@@ -1059,8 +1063,8 @@ namespace VAdvantage.Model
             Decimal newMoveQty = movementQty ?? 0; //Arpit
 
             //Checking for conversion of UOM 
-            MInOut inOut = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            MDocType dt = new MDocType(GetCtx(), inOut.GetC_DocType_ID(), Get_TrxName());
+            MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+            MDocType dt = new MDocType(GetCtx(), inO.GetC_DocType_ID(), Get_TrxName());
             MProduct _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
             if (GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
@@ -1091,7 +1095,7 @@ namespace VAdvantage.Model
                 SetMovementQty(movementQty);
             }
 
-            MInOut inO = new MInOut(Env.GetCtx(), GetM_InOut_ID(), Get_Trx());
+            //MInOut inO = new MInOut(Env.GetCtx(), GetM_InOut_ID(), Get_Trx());
             String qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
             int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1));
             Tuple<String, String, String> iInfo = null;
@@ -1113,67 +1117,89 @@ namespace VAdvantage.Model
             }
 
             // check record is reversed or not
-            bool IsReveresed = false;
-            if (inO.GetDescription() != null)
-            {
-                if (inO.GetDescription().Contains("RC"))
-                {
-                    IsReveresed = true;
-                }
-                else if (inO.GetDescription().Contains("->"))
-                {
-                    IsReveresed = true;
-                }
-            }
-
-            // true in case of Shipment and False in case of MR
-            //if (inO.IsSOTrx() == true)
+            //bool IsReveresed = false;
+            //if (inO.GetDescription() != null)
             //{
-            int M_Warehouse_ID = 0; MWarehouse wh = null;
-            StringBuilder qry = new StringBuilder();
-            qry.Append("select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID());
-            M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
-
-            wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
-            qry.Clear();
-            qry.Append("SELECT QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID());
-            if (GetM_AttributeSetInstance_ID() != 0)
-            {
-                qry.Append(" AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID());
-            }
-            else
-            {
-                //SI_0642 :  when we have to check qtyonhand where ASI is null or 0
-                qry.Append(" AND NVL(M_AttributeSetInstance_ID, 0) = 0");
-            }
-            OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry.ToString()));
-            // when record is in completed & closed stage - then no need to check qty availablity in warehouse
-            if (wh.IsDisallowNegativeInv() == true &&
-                (!(inO.GetDocStatus() == "CO" || inO.GetDocStatus() == "CL" || inO.GetDocStatus() == "RE" || inO.GetDocStatus() == "VO")))
-            {
-                // Material receipt && Customer return
-                if ((!inO.IsSOTrx() && !inO.IsReturnTrx()) || (inO.IsSOTrx() && inO.IsReturnTrx()))
-                {
-                    if ((OnHandQty + GetMovementQty()) < 0)
-                    {
-                        log.SaveError("Info", _Product.GetName() + " , " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
-                        return false;
-                    }
-                }
-                // Shipment && Vendor return
-                else if ((inO.IsSOTrx() && !inO.IsReturnTrx()) || (!inO.IsSOTrx() && inO.IsReturnTrx()))
-                {
-                    if ((OnHandQty - GetMovementQty()) < 0)
-                    {
-                        log.SaveError("Info", _Product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
-                        return false;
-                    }
-                }
-            }
+            //    if (inO.GetDescription().Contains("RC"))
+            //    {
+            //        IsReveresed = true;
+            //    }
+            //    else if (inO.GetDescription().Contains("->"))
+            //    {
+            //        IsReveresed = true;
+            //    }
             //}
 
+            // dont verify qty during completion
+            if ((!inO.IsProcessing() || newRecord) && _Product.IsStocked())
+            {
+                int M_Warehouse_ID = 0; MWarehouse wh = null;
+                StringBuilder qry = new StringBuilder();
+                qry.Append("select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID());
+                M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
+
+                wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+                qry.Clear();
+                qry.Append("SELECT QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID());
+                if (GetM_AttributeSetInstance_ID() != 0)
+                {
+                    qry.Append(" AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID());
+                }
+                else
+                {
+                    //SI_0642 :  when we have to check qtyonhand where ASI is null or 0
+                    qry.Append(" AND NVL(M_AttributeSetInstance_ID, 0) = 0");
+                }
+                OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry.ToString(), null, Get_Trx()));
+                // when record is in completed & closed stage - then no need to check qty availablity in warehouse
+                if (wh.IsDisallowNegativeInv() == true &&
+                    (!(inO.GetDocStatus() == "CO" || inO.GetDocStatus() == "CL" || inO.GetDocStatus() == "RE" || inO.GetDocStatus() == "VO")))
+                {
+                    // pick container current qty from transaction based on locator / product / ASI / Container / Movement Date 
+                    if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0)
+                    {
+                        qry.Clear();
+                        qry.Append(@"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
+                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inO.GetMovementDate(), true) +
+                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + GetM_Locator_ID() +
+                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
+                                    " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID());
+                        containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, Get_Trx()));  // dont use Transaction here - otherwise impact goes wrong on completion
+                    }
+
+                    // Material receipt && Customer return
+                    if ((!inO.IsSOTrx() && !inO.IsReturnTrx()) || (inO.IsSOTrx() && inO.IsReturnTrx()))
+                    {
+                        if ((OnHandQty + GetMovementQty()) < 0)
+                        {
+                            log.SaveError("Info", _Product.GetName() + " , " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
+                            return false;
+                        }
+                        if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0 && (containerQty + GetMovementQty()) < 0)
+                        {
+                            log.SaveError("Info", _Product.GetName() + " , " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQtyContainer") + containerQty);
+                            return false;
+                        }
+                    }
+                    // Shipment && Vendor return
+                    else if ((inO.IsSOTrx() && !inO.IsReturnTrx()) || (!inO.IsSOTrx() && inO.IsReturnTrx()))
+                    {
+                        if ((OnHandQty - GetMovementQty()) < 0)
+                        {
+                            log.SaveError("Info", _Product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
+                            return false;
+                        }
+                        if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0 && (containerQty - GetMovementQty()) < 0)
+                        {
+                            log.SaveError("Info", _Product.GetName() + " , " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQtyContainer") + containerQty);
+                            return false;
+                        }
+                    }
+                }
+            }
+
             //during creating a line of M_inout, system check qty on line cannot be greater than Ordered qty (Ordered - delivered)
-            if (!IsReveresed)
+            if (!inO.IsReversal())
             {
                 if (GetC_OrderLine_ID() > 0 && (newRecord || Is_ValueChanged("IsActive") || Is_ValueChanged("MovementQty")))
                 {
@@ -1194,38 +1220,6 @@ namespace VAdvantage.Model
                 }
             }
 
-            //else
-            //{
-            //MProduct pro = new MProduct(GetCtx(), GetM_Product_ID(), null);
-            //String qryUom = "SELECT vdr.C_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + GetM_Product_ID() + " AND vdr.C_BPartner_ID = " + inO.GetC_BPartner_ID();
-            //int uom = Util.GetValueOfInt(DB.ExecuteScalar(qryUom));
-            //if (pro.GetC_UOM_ID() != 0)
-            //{
-            //    if (pro.GetC_UOM_ID() != uom && uom != 0)
-            //    {
-            //        decimal? Res = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM C_UOM_Conversion WHERE C_UOM_ID = " + pro.GetC_UOM_ID() + " AND C_UOM_To_ID = " + uom + " AND M_Product_ID= " + GetM_Product_ID() + " AND IsActive='Y'"));
-            //        if (Res > 0)
-            //        {
-            //            SetQtyEntered(GetQtyEntered() * Res);
-            //            //OrdQty = MUOMConversion.ConvertProductTo(GetCtx(), _M_Product_ID, UOM, OrdQty);
-            //        }
-            //        else
-            //        {
-            //            decimal? res = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM C_UOM_Conversion WHERE C_UOM_ID = " + pro.GetC_UOM_ID() + " AND C_UOM_To_ID = " + uom + " AND IsActive='Y'"));
-            //            if (res > 0)
-            //            {
-            //                SetQtyEntered(GetQtyEntered() * res);
-            //                //OrdQty = MUOMConversion.Convert(GetCtx(), prdUOM, UOM, OrdQty);
-            //            }
-            //        }
-            //        SetC_UOM_ID(uom);
-            //    }
-            //    else
-            //    {
-            //        SetC_UOM_ID(pro.GetC_UOM_ID());
-            //    }
-            //}
-            //}
             //	Qty Precision
             if (newRecord || Is_ValueChanged("QtyEntered"))
                 SetQtyEntered(GetQtyEntered());
@@ -1260,119 +1254,28 @@ namespace VAdvantage.Model
 
 
             // By Amit for Obsolete Inventory - 25-May-2016
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA024_'")) > 0)
+            if (Env.IsModuleInstalled("VA024_"))
             {
-                MInOut inout = new MInOut(GetCtx(), GetM_InOut_ID(), Get_Trx());
+                //MInOut inout = new MInOut(GetCtx(), GetM_InOut_ID(), Get_Trx());
                 //shipment and Return to vendor
-                if ((!inout.IsSOTrx() && inout.IsReturnTrx()) || (inout.IsSOTrx() && !inout.IsReturnTrx()))
+                if ((!inO.IsSOTrx() && inO.IsReturnTrx()) || (inO.IsSOTrx() && !inO.IsReturnTrx()))
                 {
-                    try
-                    {
-                        //                        qry1 = @"SELECT  o.VA024_UnitPrice * " + GetMovementQty() + @"  FROM VA024_t_ObsoleteInventory o 
-                        //                                  WHERE o.IsActive = 'Y' AND o.VA024_RemainingQty <>0 AND  o.M_Product_ID = " + GetM_Product_ID() + @" and 
-                        //                                  ( o.M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + @" OR o.M_AttributeSetInstance_ID IS NULL )" +
-                        //                                   " AND o.AD_Org_ID = " + GetAD_Org_ID() + " AND M_Warehouse_ID = " + inout.GetM_Warehouse_ID() +
-                        //                                   @" AND o.C_Period_ID = (SELECT pr.c_period_id   FROM AD_Client cl INNER JOIN ad_clientinfo clinf ON cl.ad_client_id = clinf.ad_client_id
-                        //                                    INNER JOIN C_Calendar cal   ON clinf.C_Calendar_ID = cal.C_Calendar_ID  
-                        //                                    INNER JOIN c_year yr  ON cal.C_Calendar_ID = yr.C_Calendar_ID
-                        //                                    INNER JOIN c_period pr   ON pr.c_year_id       = yr.c_year_id   WHERE cl.ad_client_ID = " + GetAD_Client_ID() + @"
-                        //                                    AND " + GlobalVariable.TO_DATE(inout.GetDateAcct(), true) + @" BETWEEN pr.startdate AND pr.enddate )
-                        //                                  AND o.C_Year_ID = (SELECT yr.c_Year_id   FROM AD_Client cl INNER JOIN ad_clientinfo clinf ON cl.ad_client_id = clinf.ad_client_id
-                        //                                   INNER JOIN C_Calendar cal   ON clinf.C_Calendar_ID = cal.C_Calendar_ID   
-                        //                                   INNER JOIN c_year yr   ON cal.C_Calendar_ID  = yr.C_Calendar_ID
-                        //                                   WHERE cl.ad_client_ID = " + GetAD_Client_ID() + @"   
-                        //                                   AND yr.fiscalyear = extract(YEAR FROM " + GlobalVariable.TO_DATE(inout.GetDateAcct(), true) + "))";
-
-                        //                        qry1 = @"SELECT  SUM(o.VA024_UnitPrice)  FROM VA024_t_ObsoleteInventory o 
-                        //                                  WHERE o.IsActive = 'Y' AND  o.M_Product_ID = " + GetM_Product_ID() + @" and 
-                        //                                  ( o.M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + @" OR o.M_AttributeSetInstance_ID IS NULL )" +
-                        //                                   " AND o.AD_Org_ID = " + GetAD_Org_ID() + " AND M_Warehouse_ID = " + inout.GetM_Warehouse_ID();
-
-                        qry1 = @"SELECT  SUM(o.VA024_UnitPrice)  FROM VA024_t_ObsoleteInventory o 
+                    qry1 = @"SELECT  SUM(o.VA024_UnitPrice)  FROM VA024_t_ObsoleteInventory o 
                                   WHERE o.IsActive = 'Y' AND  o.M_Product_ID = " + GetM_Product_ID() + @" and 
                                   ( o.M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + @" OR o.M_AttributeSetInstance_ID IS NULL )" +
-                                  " AND o.AD_Org_ID = " + GetAD_Org_ID();
-                        VA024_ProvisionPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(qry1, null, Get_Trx()));
-                        SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
+                              " AND o.AD_Org_ID = " + GetAD_Org_ID();
+                    VA024_ProvisionPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(qry1, null, Get_Trx()));
+                    SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
-                        qry1 = @"SELECT  (ct.currentcostprice - " + VA024_ProvisionPrice + ") * " + GetMovementQty();
-                        qry1 += @" FROM m_product p  INNER JOIN va024_t_obsoleteinventory oi ON p.m_product_id = oi.M_product_ID
-                                 INNER JOIN m_product_category pc ON pc.m_product_category_ID = p.m_product_category_ID
-                                 INNER JOIN AD_client c ON c.AD_Client_ID = p.Ad_Client_ID   INNER JOIN AD_ClientInfo ci  ON c.AD_Client_ID = ci.Ad_Client_ID
-                                 INNER JOIN m_cost ct ON ( p.M_Product_ID     = ct.M_Product_ID  AND ci.C_AcctSchema1_ID = ct.C_AcctSchema_ID )
-                                 INNER JOIN c_acctschema asch  ON (asch.C_AcctSchema_ID = ci.C_AcctSchema1_ID)";
-                        qry1 += @"    WHERE ct.AD_Org_ID =  
-                          CASE WHEN ( pc.costinglevel IS NOT NULL AND pc.costinglevel = 'O') THEN " + GetAD_Org_ID() + @" 
-                               WHEN ( pc.costinglevel IS NOT NULL AND (pc.costinglevel  = 'C' OR pc.costinglevel = 'B')) THEN 0 
-                               WHEN (pc.costinglevel IS NULL AND asch.costinglevel  = 'O') THEN " + GetAD_Org_ID() + @" 
-                               WHEN ( pc.costinglevel IS NULL AND (asch.costinglevel  = 'C' OR asch.costinglevel   = 'B')) THEN 0  END
-                          AND ct.m_costelement_id =  
-                          CASE WHEN ( pc.costingmethod IS NOT NULL AND pc.costingmethod  != 'C') THEN  (SELECT MIN(m_costelement_id)  FROM m_costelement  
-                                     WHERE m_costelement.costingmethod =pc.costingmethod  AND m_costelement.Ad_Client_ID  = oi.ad_client_id  ) 
-                                WHEN ( pc.costingmethod IS NOT NULL AND pc.costingmethod = 'C' ) THEN  pc.m_costelement_id 
-                                WHEN ( pc.costingmethod IS NULL AND asch.costingmethod  != 'C') THEN  (SELECT MIN(m_costelement_id)  FROM m_costelement 
-                                     WHERE m_costelement.costingmethod = asch.costingmethod  AND m_costelement.Ad_Client_ID  = oi.ad_client_id  )
-                                WHEN ( pc.costingmethod IS NULL AND asch.costingmethod  = 'C') THEN asch.m_costelement_id  END 
-                         AND NVL(ct.M_Attributesetinstance_ID , 0) =  
-                         CASE WHEN ( pc.costinglevel IS NOT NULL AND pc.costinglevel = 'B') THEN " + GetM_AttributeSetInstance_ID() + @" 
-                              WHEN ( pc.costinglevel IS NOT NULL AND (pc.costinglevel  = 'C' OR pc.costinglevel = 'O')) THEN 0 
-                              WHEN ( pc.costinglevel IS NULL AND asch.costinglevel  = 'B') THEN " + GetM_AttributeSetInstance_ID() + @"
-                              WHEN ( pc.costinglevel IS NULL AND (asch.costinglevel  = 'C' OR asch.costinglevel   = 'O')) THEN 0  END 
-                        AND p.M_Product_ID = " + GetM_Product_ID();
-                        //                         AND VA024_t_ObsoleteInventory_ID = (SELECT VA024_t_ObsoleteInventory_ID FROM VA024_t_ObsoleteInventory WHERE IsActive = 'Y'
-                        //                         AND VA024_RemainingQty <>0 AND  M_Product_ID = " + GetM_Product_ID() + @" and 
-                        //                         ( M_AttributeSetInstance_ID =" + GetM_AttributeSetInstance_ID() + " OR M_AttributeSetInstance_ID IS NULL ) " +
-                        //                         " AND AD_Org_ID = " + GetAD_Org_ID() + " AND M_Warehouse_ID = " + inout.GetM_Warehouse_ID() +
-                        //                         @" AND C_Period_ID = (SELECT pr.c_period_id   FROM AD_Client cl INNER JOIN ad_clientinfo clinf ON cl.ad_client_id = clinf.ad_client_id
-                        //                                    INNER JOIN C_Calendar cal   ON clinf.C_Calendar_ID = cal.C_Calendar_ID  
-                        //                                    INNER JOIN c_year yr  ON cal.C_Calendar_ID = yr.C_Calendar_ID
-                        //                                    INNER JOIN c_period pr   ON pr.c_year_id       = yr.c_year_id   WHERE cl.ad_client_ID = " + GetAD_Client_ID() + @"
-                        //                                    AND " + GlobalVariable.TO_DATE(inout.GetDateAcct(), true) + @" BETWEEN pr.startdate AND pr.enddate )
-                        //                           AND C_Year_ID = (SELECT yr.c_Year_id   FROM AD_Client cl INNER JOIN ad_clientinfo clinf ON cl.ad_client_id = clinf.ad_client_id
-                        //                                   INNER JOIN C_Calendar cal   ON clinf.C_Calendar_ID = cal.C_Calendar_ID   
-                        //                                   INNER JOIN c_year yr   ON cal.C_Calendar_ID  = yr.C_Calendar_ID
-                        //                                   WHERE cl.ad_client_ID = " + GetAD_Client_ID() + @"   
-                        //                                   AND yr.fiscalyear = extract(YEAR FROM " + GlobalVariable.TO_DATE(inout.GetDateAcct(), true) + ")))";
-                        SetVA024_CostPrice(Util.GetValueOfDecimal(DB.ExecuteScalar(qry1, null, Get_Trx())));
-                    }
-                    catch { }
+                    // is used to get cost of binded cost method / costing level of primary accounting schema
+                    Decimal cost = MCost.GetproductCosts(inO.GetAD_Client_ID(), inO.GetAD_Org_ID(), GetM_Product_ID(),
+                         GetM_AttributeSetInstance_ID(), Get_Trx(), inO.GetM_Warehouse_ID());
+                    SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }
             }
 
-            //	if (getC_Charge_ID() == 0 && getM_Product_ID() == 0)
-            //		;
-
-            /**	 Qty on instance ASI
-            if (getM_AttributeSetInstance_ID() != 0)
-            {
-                MProduct product = getProduct();
-                int M_AttributeSet_ID = product.getM_AttributeSet_ID();
-                bool isInstance = M_AttributeSet_ID != 0;
-                if (isInstance)
-                {
-                    MAttributeSet mas = MAttributeSet.get(getCtx(), M_AttributeSet_ID);
-                    isInstance = mas.isInstanceAttribute();
-                }
-                //	Max
-                if (isInstance)
-                {
-                    MStorage storage = MStorage.get(getCtx(), getM_Locator_ID(), 
-                        getM_Product_ID(), getM_AttributeSetInstance_ID(), get_TrxName());
-                    if (storage != null)
-                    {
-                        Decimal qty = storage.getQtyOnHand();
-                        if (getMovementQty().compareTo(qty) > 0)
-                        {
-                            log.warning("Qty - Stock=" + qty + ", Movement=" + getMovementQty());
-                            log.saveError("QtyInsufficient", "=" + qty); 
-                            return false;
-                        }
-                    }
-                }
-            }	/**/
             //Mandatory
-            Tuple<String, String, String> mInfo = null;
-            if (Env.HasModulePrefix("DTD001_", out mInfo))
+            if (Env.IsModuleInstalled("DTD001_"))
             {
                 if (GetM_AttributeSetInstance_ID() != 0)	//	Set to from
                     SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
@@ -1397,8 +1300,8 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            MInOut inout = new MInOut(Env.GetCtx(), GetM_InOut_ID(), Get_Trx());
-                            if (inout.GetDescription() != "RC" && Util.GetValueOfBool(IsDTD001_IsAttributeNo()) == false)
+                            //MInOut inout = new MInOut(Env.GetCtx(), GetM_InOut_ID(), Get_Trx());
+                            if (inO.GetDescription() != "RC" && Util.GetValueOfBool(IsDTD001_IsAttributeNo()) == false)
                             {
                                 if (GetDTD001_Attribute() == "" || GetDTD001_Attribute() == null)
                                 {

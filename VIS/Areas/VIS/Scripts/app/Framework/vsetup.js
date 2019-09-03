@@ -25,7 +25,7 @@
 
 
 
-        var $root = $("<div style='height:100%'>");
+        var $root = $("<div class='vis-forms-container' style='height:100%'>");
         // $root.height($(window).height() - 70);
         var container = $("<div style='width:80%;height:100%;overflow:auto;' class='vis-pull-left'>");
 

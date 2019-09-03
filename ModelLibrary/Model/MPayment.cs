@@ -491,11 +491,11 @@ namespace VAdvantage.Model
         }
 
 
-        /**
-         * 	Before Save
-         *	@param newRecord new
-         *	@return save
-         */
+        /// <summary>
+        ///  Before Save
+        /// </summary>
+        /// <param name="newRecord">new</param>
+        /// <returns>true, on Save</returns>
         protected override bool BeforeSave(bool newRecord)
         {
             MOrder order = null;
@@ -506,12 +506,27 @@ namespace VAdvantage.Model
 
             try
             {
+                // JID_1259: Check Date should not be greater than Account Date. 
+                // When Discounting PDC is true, No need to check Check Date with Account Date.
+                if (Env.IsModuleInstalled("VA027_") && IsVA027_DiscountingPDC())
+                {
+
+                }
+                else
+                {
+                    if (GetCheckDate() != null)
+                    {
+                        if (GetCheckDate().Value.Date > GetDateAcct().Value.Date)
+                        {
+                            log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckDateCantbeGreaterSys"));
+                            return false;
+                        }
+                    }
+                }
+
                 // Handle PaymentDocTypeInvoiceInconsistent
                 if (GetC_Order_ID() != 0 || GetC_Invoice_ID() != 0)
                 {
-
-
-
                     if (GetC_Invoice_ID() > 0)
                     {
                         invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
@@ -598,6 +613,16 @@ namespace VAdvantage.Model
                     else
                     {
                         log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@: @C_BPartner_ID@"));
+                        return false;
+                    }
+                }
+
+                // check schedule is hold or not, if hold then no to save record
+                if (GetC_InvoicePaySchedule_ID() > 0)
+                {
+                    if (IsHoldpaymentSchedule(GetC_InvoicePaySchedule_ID()))
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PaymentisHold"));
                         return false;
                     }
                 }
@@ -876,11 +901,6 @@ namespace VAdvantage.Model
                 // when post dated check module is not installed then system check Cheque date can not be greater than Current Date
                 if (Env.IsModuleInstalled("VA027_"))
                 {
-                    if (GetCheckDate().Value.Date > DateTime.Now.Date)
-                    {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckDateCantbeGreaterSys"));
-                        return false;
-                    }
                     // validate when we giving check (Payable)
                     if (string.IsNullOrEmpty(GetPDCType()) && dt1.GetDocBaseType() != "ARR")
                     {
@@ -955,6 +975,26 @@ namespace VAdvantage.Model
             return true;
         }	//	beforeSave
 
+        /// <summary>
+        /// Is used to get Invoice payment schedule is Hold payment or not
+        /// </summary>
+        /// <param name="C_InvoicePaySchedule_ID">Invoice payment schedule reference</param>
+        /// <returns>TRUE, if hold payment</returns>
+        public bool IsHoldpaymentSchedule(int C_InvoicePaySchedule_ID)
+        {
+            try
+            {
+                String sql = "SELECT IsHoldPayment FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID = " + C_InvoicePaySchedule_ID;
+                String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                return IsHoldPayment.Equals("Y");
+            }
+            catch
+            {
+                // when column not found, mean hold payment functionlity not in system
+                return false;
+            }
+        }
+
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
@@ -984,6 +1024,38 @@ namespace VAdvantage.Model
                 }
 
             }
+
+            if (!IsReceipt())
+            {
+                bool isRev = false;
+                if (Get_ColumnIndex("IsReversal") > 0 && Util.GetValueOfBool(Get_Value("IsReversal")))
+                    isRev = true;
+
+                if (!isRev && GetC_BPartner_ID() != 0)
+                {
+                    MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+
+                    Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
+                        GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                    if (payAmt == null || payAmt == 0)
+                    {
+                        // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                    }
+
+                    payAmt = Decimal.Subtract(0, payAmt.Value);
+
+                    string retMsg = "";
+                    bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), payAmt, out retMsg);
+                    if (!crdAll)
+                        log.SaveWarning("Warning", retMsg);
+                    else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+                }
+            }
+
             return true;
         }
 
@@ -2431,7 +2503,8 @@ namespace VAdvantage.Model
             }
 
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct()))
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -2495,23 +2568,38 @@ namespace VAdvantage.Model
             //	Do not pay when Credit Stop/Hold
             if (!IsReceipt())
             {
-                MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-                //Credit Limit by Vivek on 30/09/2016
-                if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()) && bp.GetCreditStatusSettingOn() == "CH")
-                //if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
+                bool isRev = false;
+                if (Get_ColumnIndex("IsReversal") > 0 && Util.GetValueOfBool(Get_Value("IsReversal")))
+                    isRev = true;
+
+                if (!isRev && GetC_BPartner_ID() != 0)
                 {
-                    _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
-                        + bp.GetTotalOpenBalance()
-                        + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
-                    return DocActionVariables.STATUS_INVALID;
-                }
-                if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus()) && bp.GetCreditStatusSettingOn() == "CH")
-                //if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus()))
-                {
-                    _processMsg = "@BPartnerCreditHold@ - @TotalOpenBalance@="
-                        + bp.GetTotalOpenBalance()
-                        + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
-                    return DocActionVariables.STATUS_INVALID;
+                    MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+
+                    Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
+                        GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                    if (payAmt == null || payAmt == 0)
+                    {
+                        // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                        return DocActionVariables.STATUS_INVALID;
+                    }
+
+                    payAmt = Decimal.Subtract(0, payAmt.Value);
+
+                    string retMsg = "";
+                    bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), payAmt, out retMsg);
+                    if (!crdAll)
+                    {
+                        if (bp.ValidateCreditValidation("D", GetC_BPartner_Location_ID()))
+                        {
+                            _processMsg = retMsg;
+                            return DocActionVariables.STATUS_INVALID;
+                        }
+                    }
                 }
             }
 
@@ -2556,6 +2644,9 @@ namespace VAdvantage.Model
                 if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                     return status;
             }
+
+            // JID_1290: Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
 
             // Amit for VA009 27-10-2015
             int countPaymentAllocateRecords = 0;
@@ -2759,25 +2850,37 @@ namespace VAdvantage.Model
             if (GetC_BPartner_ID() != 0)
             {
                 MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+
+                // JID_0556 :: // Change by Lokesh Chauhan to validate watch % from BP Group, 
+                // if it is 0 on BP Group then default to 90 // 12 July 2019
+                MBPGroup bpg = new MBPGroup(GetCtx(), bp.GetC_BP_Group_ID(), Get_Trx());
+                Decimal? watchPer = bpg.GetCreditWatchPercent();
+                if (watchPer == 0)
+                    watchPer = 90;
+
+                Decimal? newCreditAmt = 0;
+                Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
+                    GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                if (payAmt == null || payAmt == 0)
+                {
+                    // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                    MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                    _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                        + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                    return DocActionVariables.STATUS_INVALID;
+                }
+
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
-                    Decimal? newCreditAmt = 0;
-                    Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
-                        GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-                    if (payAmt == null || payAmt == 0)
-                    {
-                        _processMsg = "Could not convert C_Currency_ID=" + GetC_Currency_ID()
-                            + " to base C_Currency_ID=" + MClient.Get(GetCtx()).GetC_Currency_ID();
-                        return DocActionVariables.STATUS_INVALID;
-                    }
                     //	Total Balance
                     Decimal? newBalance = bp.GetTotalOpenBalance(false);
                     if (newBalance == null)
                         newBalance = Env.ZERO;
+
+                    newBalance = Decimal.Subtract((Decimal)newBalance, (Decimal)payAmt);
+
                     if (IsReceipt())
                     {
-                        newBalance = Decimal.Subtract((Decimal)newBalance, (Decimal)payAmt);
-
                         newCreditAmt = bp.GetSO_CreditUsed();
                         if (newCreditAmt == null)
                             newCreditAmt = Decimal.Negate((Decimal)payAmt);
@@ -2791,44 +2894,37 @@ namespace VAdvantage.Model
                     }	//	SO
                     else
                     {
-                        newBalance = Decimal.Subtract((Decimal)newBalance, (Decimal)payAmt);
                         log.Fine("Payment Amount =" + GetPayAmt(false) + "(" + payAmt
                             + ") Balance=" + bp.GetTotalOpenBalance(false) + " -> " + newBalance);
                     }
                     bp.SetTotalOpenBalance(Convert.ToDecimal(newBalance));
-                    if (bp.GetSO_CreditLimit() > 0)
-                    {
-                        if (((newCreditAmt / bp.GetSO_CreditLimit()) * 100) <= 90)
-                        {
-                            bp.SetSOCreditStatus("O");
-                        }
-                    }
+                    // commented this as we will use existing function on MBPartner to calculate logic for setting credit status
+                    //if (bp.GetSO_CreditLimit() > 0)
+                    //{
+                    //    if (((newCreditAmt / bp.GetSO_CreditLimit()) * 100) <= watchPer)
+                    //    {
+                    //        bp.SetSOCreditStatus("O");
+                    //    }
+                    //}
+                    bp.SetSOCreditStatus();
                     if (!bp.Save(Get_Trx()))
                     {
                         _processMsg = "Could not update Business Partner";
                         return DocActionVariables.STATUS_INVALID;
                     }
                 }
-                else
+                // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
+                else if (bp.GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
                     MBPartnerLocation loc = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), Get_Trx());
-                    Decimal? newCreditAmt = 0;
-                    Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
-                        GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-                    if (payAmt == null || payAmt == 0)
-                    {
-                        _processMsg = "Could not convert C_Currency_ID=" + GetC_Currency_ID()
-                            + " to base C_Currency_ID=" + MClient.Get(GetCtx()).GetC_Currency_ID();
-                        return DocActionVariables.STATUS_INVALID;
-                    }
+                    
                     //	Total Balance
                     Decimal? newBalance = loc.GetTotalOpenBalance();
                     if (newBalance == null)
                         newBalance = Env.ZERO;
+                    newBalance = Decimal.Subtract((Decimal)newBalance, (Decimal)payAmt);
                     if (IsReceipt())
                     {
-                        newBalance = Decimal.Subtract((Decimal)newBalance, (Decimal)payAmt);
-
                         newCreditAmt = loc.GetSO_CreditUsed();
                         if (newCreditAmt == null)
                             newCreditAmt = Decimal.Negate((Decimal)payAmt);
@@ -2839,32 +2935,34 @@ namespace VAdvantage.Model
                             + ", Credit=" + loc.GetSO_CreditUsed() + "->" + newCreditAmt
                             + ", Balance=" + loc.GetTotalOpenBalance() + " -> " + newBalance);
                         loc.SetSO_CreditUsed((Decimal)newCreditAmt);
+
+                        Decimal? bpSOcreditUsed = Decimal.Negate((Decimal)payAmt) + bp.GetSO_CreditUsed();
+                        bp.SetSO_CreditUsed(bpSOcreditUsed);
                     }	//	SO
                     else
                     {
-                        newBalance = Decimal.Subtract((Decimal)newBalance, (Decimal)payAmt);
                         log.Fine("Payment Amount =" + GetPayAmt(false) + "(" + payAmt
                             + ") Balance=" + loc.GetTotalOpenBalance() + " -> " + newBalance);
                     }
                     loc.SetTotalOpenBalance(Convert.ToDecimal(newBalance));
-                    Decimal? bptotalopenbal = Decimal.Negate((Decimal)payAmt) + bp.GetTotalOpenBalance();
-                    Decimal? bpSOcreditUsed = Decimal.Negate((Decimal)payAmt) + bp.GetSO_CreditUsed();
-                    bp.SetSO_CreditUsed(bpSOcreditUsed);
+                    Decimal? bptotalopenbal = Decimal.Negate((Decimal)payAmt) + bp.GetTotalOpenBalance();                    
                     bp.SetTotalOpenBalance(bptotalopenbal);
-                    if (bp.GetSO_CreditLimit() > 0)
-                    {
-                        if (((bpSOcreditUsed / bp.GetSO_CreditLimit()) * 100) <= 90)
-                        {
-                            bp.SetSOCreditStatus("O");
-                        }
-                    }
-                    if (loc.GetSO_CreditLimit() > 0)
-                    {
-                        if (((newCreditAmt / loc.GetSO_CreditLimit()) * 100) <= 90)
-                        {
-                            loc.SetSOCreditStatus("O");
-                        }
-                    }
+                    // commented this as we will use existing function on MBPartner to calculate logic for setting credit status
+                    //if (bp.GetSO_CreditLimit() > 0)
+                    //{
+                    //    if (((bpSOcreditUsed / bp.GetSO_CreditLimit()) * 100) <= watchPer)
+                    //    {
+                    //        bp.SetSOCreditStatus("O");
+                    //    }
+                    //}
+                    //if (loc.GetSO_CreditLimit() > 0)
+                    //{
+                    //    if (((newCreditAmt / loc.GetSO_CreditLimit()) * 100) <= watchPer)
+                    //    {
+                    //        loc.SetSOCreditStatus("O");
+                    //    }
+                    //}
+                    loc.SetSOCreditStatus();
                     if (bp.Save())
                     {
                         if (!loc.Save(Get_Trx()))
@@ -2948,8 +3046,9 @@ namespace VAdvantage.Model
             {
                 if (GetVA009_OrderPaySchedule_ID() != 0 && GetDescription() != null && GetDescription().Contains("{->"))
                 {
-                    DB.ExecuteQuery(@"Update VA009_OrderPaySchedule set VA009_ISPAID='N', C_Payment_ID=null, 
-                                       VA009_PaidAmntInvce = 0 , VA009_PaidAmnt= 0 , VA009_Variance = 0  
+                    // also need to set Execution Status As Awaited
+                    DB.ExecuteQuery(@"Update VA009_OrderPaySchedule set VA009_ISPAID='N', C_Payment_ID=0, 
+                                       VA009_PaidAmntInvce = 0 , VA009_PaidAmnt= 0 , VA009_Variance = 0  , VA009_ExecutionStatus = 'A'  
                                        where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
                 }
                 else
@@ -2969,10 +3068,25 @@ namespace VAdvantage.Model
                         {
                             basePaidAmt = MConversionRate.Convert(GetCtx(), basePaidAmt, GetC_Currency_ID(), asch.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                         }
+                        // update variance amount as ( Due amount - paid amount )
                         DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y',C_Payment_ID=" + GetC_Payment_ID() +
+                                        @" , DueAmt = " + (GetOverUnderAmt() != 0 ? orderPaidAmt.ToString() : " DueAmt ") +
+                                        @" , VA009_OpnAmntInvce = " + (GetOverUnderAmt() != 0 ? orderPaidAmt.ToString() : " VA009_OpnAmntInvce ") +
+                                        @" , VA009_OpenAmnt = " + (GetOverUnderAmt() != 0 ? basePaidAmt.ToString() : " VA009_OpenAmnt ") +
                                         @" , VA009_PaidAmntInvce = " + orderPaidAmt +
                                         @" , VA009_PaidAmnt = " + basePaidAmt +
-                                        @" , VA009_Variance = -( DueAmt - " + orderPaidAmt + " ) where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID() , null , Get_Trx());
+                                        @" , VA009_Variance = -( " + (GetOverUnderAmt() != 0 ? orderPaidAmt.ToString() : " DueAmt ") + " - " + orderPaidAmt + " ) " +
+                                        @" , VA009_ExecutionStatus = 'I' " +
+                                        @" WHERE VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
+
+                        // when underr amount contain value then we need to split order schedule
+                        if (GetOverUnderAmt() != 0)
+                        {
+                            if (!SpiltOrderSchedule(GetCtx(), this, GetVA009_OrderPaySchedule_ID(), asch.GetC_Currency_ID(), GetOverUnderAmt(), Get_Trx()))
+                            {
+                                return DocActionVariables.STATUS_INVALID;
+                            }
+                        }
                     }
                 }
             }
@@ -3057,6 +3171,100 @@ namespace VAdvantage.Model
 
             return DocActionVariables.STATUS_COMPLETED;
         }
+
+        /// <summary>
+        /// Set the document number from Completed Document Sequence after completed
+        /// </summary>
+        private void SetCompletedDocumentNo()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (Get_ColumnIndex("IsReversal") > 0 && IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateTrx(DateTime.Now.Date);
+                if (GetDateAcct().Value.Date < GetDateTrx().Value.Date)
+                {
+                    SetDateAcct(GetDateTrx());
+
+                    //	Std Period open?
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+                    {
+                        throw new Exception("@PeriodClosed@");
+                    }
+                }
+            }
+
+            // if Overwrite Sequence on Complete checkbox is true.
+            if (dt.IsOverwriteSeqOnComplete())
+            {
+                // Set Drafted Document No into Temp Document No.
+                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                {
+                    SetTempDocumentNo(GetDocumentNo());
+                }
+
+                // Get current next from Completed document sequence defined on Document type
+                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                if (value != null)
+                {
+                    SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Is used to create new order schedule with given Amount
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="payment">Payment refernce for picking records detail </param>
+        /// <param name="VA009_OrderPaySchedule_ID">Order Schedule whose copy to be created with remaing amount</param>
+        /// <param name="BaseCurrency">Represent Base currency - for updation of base amount</param>
+        /// <param name="Amt">Amount : Due Amt of new created schedule</param>
+        /// <param name="TrxName">current transaction</param>
+        /// <returns>True when record created successfully</returns>
+        private bool SpiltOrderSchedule(Ctx ctx, MPayment payment, int VA009_OrderPaySchedule_ID, int BaseCurrency, Decimal Amt, Trx TrxName)
+        {
+            PO poOrignal = MTable.GetPO(ctx, "VA009_OrderPaySchedule", VA009_OrderPaySchedule_ID, TrxName);
+            if (poOrignal != null && poOrignal.Get_ID() > 0)
+            {
+                PO poNew = MTable.GetPO(ctx, "VA009_OrderPaySchedule", 0, TrxName);
+                poNew.Set_TrxName(TrxName);
+                PO.CopyValues(poOrignal, poNew, poOrignal.GetAD_Client_ID(), poOrignal.GetAD_Org_ID());
+                poNew.Set_Value("VA009_Variance", 0);
+                poNew.Set_Value("C_Payment_ID", 0);
+                poNew.Set_Value("C_CashLine_ID", 0);
+                poNew.Set_Value("VA009_ExecutionStatus", "A");
+                poNew.Set_Value("VA009_IsPaid", false);
+                poNew.Set_Value("VA009_PaidAmnt", 0);
+                poNew.Set_Value("VA009_PaidAmntInvce", 0);
+                // convert amount into Order Currency
+                Decimal InfoAmount = MConversionRate.Convert(ctx, Amt, payment.GetC_Currency_ID(), Util.GetValueOfInt(poOrignal.Get_Value("C_Currency_ID")),
+                    payment.GetDateAcct(), payment.GetC_ConversionType_ID(), payment.GetAD_Client_ID(), payment.GetAD_Org_ID());
+                poNew.Set_Value("DueAmt", InfoAmount);
+                poNew.Set_Value("VA009_OpnAmntInvce", InfoAmount);
+                // convert amount into Base Currency
+                InfoAmount = MConversionRate.Convert(ctx, Amt, payment.GetC_Currency_ID(), BaseCurrency,
+                    payment.GetDateAcct(), payment.GetC_ConversionType_ID(), payment.GetAD_Client_ID(), payment.GetAD_Org_ID());
+                poNew.Set_Value("VA009_OpenAmnt", InfoAmount);
+                if (!poNew.Save(TrxName))
+                {
+                    TrxName.Rollback();
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    log.Info("Error Occured when try to Split Order Schedule. Error Type : " + pp.GetValue() + "  , Error Name : " + pp.GetName());
+                    SetProcessMsg(Msg.GetMsg(ctx, "VIS_OrderNotSplitted") + ", " + (pp != null ? pp.GetName() : ""));
+                    return false;
+                }
+            }
+            return true;
+        }
+
         //public int GetCostAllocationID()
         //{
         //    return Convert.ToInt32(DB.ExecuteScalar("select nvl(cl.m_CostAllocation_ID,0) as CostAllocationID from c_payment cp inner join C_AllocationLine cl on cp.c_payment_ID=cl.c_payment_ID where cp.c_payment_ID='" + GetC_Payment_ID() + "'"));
@@ -3960,13 +4168,13 @@ namespace VAdvantage.Model
             return counter;
         }
 
-        /**
-         * 	Allocate It.
-         * 	Only call when there is NO allocation as it will create duplicates.
-         * 	If an invoice exists, it allocates that 
-         * 	otherwise it allocates Payment Selection.
-         *	@return true if allocated
-         */
+        /// <summary>
+        ///   	Allocate It.
+        /// 	Only call when there is NO allocation as it will create duplicates.
+        /// 	If an invoice exists, it allocates that 
+        /// 	otherwise it allocates Payment Selection.
+        /// </summary>
+        /// <returns>true if allocated</returns>
         public bool AllocateIt()
         {
             //	Create invoice Allocation -	See also MCash.completeIt
@@ -4003,6 +4211,11 @@ namespace VAdvantage.Model
                     Msg.Translate(GetCtx(), "C_Payment_ID") + ": " + GetDocumentNo(),
                     Get_TrxName());
             alloc.SetAD_Org_ID(GetAD_Org_ID());
+            // Update conversion type from payment to view allocation (required for posting)
+            if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
+            {
+                alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
+            }
             if (!alloc.Save())
             {
                 log.Severe("P.Allocations not created");
@@ -4059,10 +4272,10 @@ namespace VAdvantage.Model
             return alloc.Save(Get_TrxName());
         }
 
-        /**
-         * 	Allocate single AP/AR Invoice
-         * 	@return true if allocated
-         */
+        /// <summary>
+        /// Allocate single AP/AR Invoice
+        /// </summary>
+        /// <returns>true if allocated</returns>
         private bool AllocateInvoice()
         {
             try
@@ -4077,6 +4290,11 @@ namespace VAdvantage.Model
                     Msg.Translate(GetCtx(), "C_Payment_ID") + ": " + GetDocumentNo() + " [1]", Get_TrxName());
 
                 alloc.SetAD_Org_ID(GetAD_Org_ID());
+                // Update conversion type from payment to view allocation (required for posting)
+                if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
+                {
+                    alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
+                }
                 if (!alloc.Save())
                 {
                     log.Log(Level.SEVERE, "Could not create Allocation Hdr");
@@ -4132,17 +4350,21 @@ namespace VAdvantage.Model
             return true;
         }
 
-        /**
-         * 	Allocate Payment Selection
-         * 	@return true if allocated
-         */
+        /// <summary>
+        /// Allocate Payment Selection
+        /// </summary>
+        /// <returns>return true if allocated</returns>
         private Boolean AllocatePaySelection()
         {
             MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,
                 GetDateTrx(), GetC_Currency_ID(),
                 Msg.Translate(GetCtx(), "C_Payment_ID") + ": " + GetDocumentNo() + " [n]", Get_Trx());
             alloc.SetAD_Org_ID(GetAD_Org_ID());
-
+            // Update conversion type from payment to view allocation (required for posting)
+            if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
+            {
+                alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
+            }
             String sql = "SELECT psc.C_BPartner_ID, psl.C_Invoice_ID, psl.IsSOTrx, "	//	1..3
                 + " psl.PayAmt, psl.DiscountAmt, psl.DifferenceAmt, psl.OpenAmt ";
             if (Env.IsModuleInstalled("VA009_"))
@@ -4407,10 +4629,11 @@ namespace VAdvantage.Model
             return true;
         }
 
-        /**
-         * 	Reverse Correction
-         * 	@return true if success 
-         */
+        /// <summary>
+        /// Reverse Correction
+        /// @return true if success
+        /// </summary>
+        /// <returns></returns>
         public Boolean ReverseCorrectIt()
         {
             //if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
@@ -4452,6 +4675,11 @@ namespace VAdvantage.Model
                 reversal.SetVA009_ExecutionStatus("I");
             //
             reversal.SetIsAllocated(true);
+            // Reconcile true on Original and Reverse Payment if Reconcile is False
+            if (!IsReconciled())
+            {
+                reconciled = true;
+            }
             reversal.SetIsReconciled(reconciled);	//	to put on bank statement
             reversal.SetIsOnline(false);
             reversal.SetIsApproved(true);
@@ -4466,6 +4694,23 @@ namespace VAdvantage.Model
             reversal.SetPosted(false);
             reversal.SetDescription(GetDescription());
             reversal.AddDescription("{->" + GetDocumentNo() + ")");
+
+            // Set Reversal value to true and add Reference of Original Document.
+            if (reversal.Get_ColumnIndex("ReversalDoc_ID") > 0)
+            {
+                reversal.SetReversalDoc_ID(GetC_Payment_ID());
+            }
+            if (reversal.Get_ColumnIndex("IsReversal") > 0)
+            {
+                reversal.SetIsReversal(true);
+            }
+
+            // for reversal document set Temp Document No to empty
+            if (reversal.Get_ColumnIndex("TempDocumentNo") > 0)
+            {
+                reversal.SetTempDocumentNo("");
+            }
+
             reversal.Save(Get_Trx());
 
             int invoice_ID = 0;
@@ -4490,6 +4735,12 @@ namespace VAdvantage.Model
                         reversalPaymentAllocate.SetDiscountAmt(Decimal.Negate(originalPaymentAllocate.GetDiscountAmt()));
                         reversalPaymentAllocate.SetWriteOffAmt(Decimal.Negate(originalPaymentAllocate.GetWriteOffAmt()));
                         reversalPaymentAllocate.SetOverUnderAmt(Decimal.Negate(originalPaymentAllocate.GetOverUnderAmt()));
+
+                        // Set Reference of Original Document.
+                        if (reversalPaymentAllocate.Get_ColumnIndex("ReversalDoc_ID") > 0)
+                        {
+                            reversalPaymentAllocate.SetReversalDoc_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_PaymentAllocate_ID"]));
+                        }
                         reversalPaymentAllocate.Save(Get_Trx());
                         invoice_ID = originalPaymentAllocate.GetC_Invoice_ID();
                     }
@@ -4505,6 +4756,8 @@ namespace VAdvantage.Model
             reversal.CloseIt();
             reversal.SetDocStatus(DOCSTATUS_Reversed);
             reversal.SetDocAction(DOCACTION_None);
+            // JID_1363: the allocation is overwritten we need to set Allocated Is TRUE while reversal and Void
+            reversal.SetIsAllocated(true);
             reversal.Save(Get_Trx());
 
             if (Env.IsModuleInstalled("VA009_"))
@@ -4564,6 +4817,11 @@ namespace VAdvantage.Model
                 GetDateTrx(), GetC_Currency_ID(),
                 Msg.Translate(GetCtx(), "C_Payment_ID") + ": " + reversal.GetDocumentNo(), Get_Trx());
                 alloc.SetAD_Org_ID(GetAD_Org_ID());
+                // Update conversion type from payment to view allocation (required for posting)
+                if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
+                {
+                    alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
+                }
                 if (!alloc.Save())
                 {
                     log.Warning("Automatic allocation - hdr not saved");
@@ -4921,11 +5179,17 @@ namespace VAdvantage.Model
                         BankAccount_.SetUnMatchedBalance(Decimal.Add(BankAccount_.GetUnMatchedBalance(), convertedAmt));
                     else
                     {
-                        convertedAmt = Util.GetValueOfDecimal(MConversionRate.Convert(GetCtx(), convertedAmt, GetC_Currency_ID(), BankAccount_.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID()));
+                        convertedAmt = Util.GetValueOfDecimal(MConversionRate.Convert(GetCtx(), convertedAmt, GetC_Currency_ID(), BankAccount_.GetC_Currency_ID(), GetDateAcct(),
+                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID()));
                         if (convertedAmt == 0)
                         {
-                            _processMsg = "Could not convert C_Currency_ID=" + GetC_Currency_ID()
-                                + " to Bank Account C_Currency_ID=" + BankAccount_.GetC_Currency_ID();
+                            // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                            MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), BankAccount_.GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                            //_processMsg = "Could not convert C_Currency_ID=" + GetC_Currency_ID()
+                            //    + " to Bank Account C_Currency_ID=" + BankAccount_.GetC_Currency_ID();
                             return false;   //return DocActionVariables.STATUS_INVALID;
                         }
                         BankAccount_.SetUnMatchedBalance(Decimal.Add(BankAccount_.GetUnMatchedBalance(), Util.GetValueOfDecimal(convertedAmt)));
@@ -4946,8 +5210,13 @@ namespace VAdvantage.Model
                         convertedAmt = Util.GetValueOfDecimal(MConversionRate.Convert(GetCtx(), convertedAmt, GetC_Currency_ID(), BankAccount_.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID()));
                         if (convertedAmt == 0)
                         {
-                            _processMsg = "Could not convert C_Currency_ID=" + GetC_Currency_ID()
-                                + " to Bank Account C_Currency_ID=" + BankAccount_.GetC_Currency_ID();
+                            // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                            MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), BankAccount_.GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                            //_processMsg = "Could not convert C_Currency_ID=" + GetC_Currency_ID()
+                            //    + " to Bank Account C_Currency_ID=" + BankAccount_.GetC_Currency_ID();
                             return false; //return DocActionVariables.STATUS_INVALID;
                         }
                         BankAccount_.SetUnMatchedBalance(Decimal.Add(BankAccount_.GetUnMatchedBalance(), Decimal.Negate(Util.GetValueOfDecimal(convertedAmt))));
@@ -4985,7 +5254,7 @@ namespace VAdvantage.Model
 
         public void SetProcessMsg(string processMsg)
         {
-
+            _processMsg = processMsg;
         }
 
 

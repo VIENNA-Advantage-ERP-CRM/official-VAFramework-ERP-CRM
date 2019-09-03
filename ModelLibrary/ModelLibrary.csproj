@@ -436,6 +436,7 @@
     <Compile Include="ModelAD\X_AD_InviteUser_Role.cs" />
     <Compile Include="ModelAD\X_AD_MailQueue.cs" />
     <Compile Include="ModelAD\X_AD_ModuleTable.cs" />
+    <Compile Include="ModelAD\X_AD_PInstance_Result.cs" />
     <Compile Include="ModelAD\X_AD_ReportFormat.cs" />
     <Compile Include="ModelAD\X_AD_ReportItem.cs" />
     <Compile Include="ModelAD\X_AD_ReportTable.cs" />
@@ -925,6 +926,7 @@
     <Compile Include="Model\MProductBOM.cs" />
     <Compile Include="Model\MProductCategory.cs" />
     <Compile Include="Model\MProductCategoryAcct.cs" />
+    <Compile Include="Model\MProductContainer.cs" />
     <Compile Include="Model\MProductCosting.cs" />
     <Compile Include="Model\MProductDownload.cs" />
     <Compile Include="Model\MProductionLine.cs" />
@@ -1340,6 +1342,7 @@
     <Compile Include="Model\X_M_BOMProduct.cs" />
     <Compile Include="Model\X_M_ChangeNotice.cs" />
     <Compile Include="Model\X_M_ChangeRequest.cs" />
+    <Compile Include="Model\X_M_ContainerStorage.cs" />
     <Compile Include="Model\X_M_Cost.cs" />
     <Compile Include="Model\X_M_CostDetail.cs" />
     <Compile Include="Model\X_M_CostElement.cs" />
@@ -1396,6 +1399,7 @@
     <Compile Include="Model\X_M_Product.cs" />
     <Compile Include="Model\X_M_ProductAttributeImage.cs" />
     <Compile Include="Model\X_M_ProductAttributes.cs" />
+    <Compile Include="Model\X_M_ProductContainer.cs" />
     <Compile Include="Model\X_M_ProductDownload.cs" />
     <Compile Include="Model\X_M_Production.cs" />
     <Compile Include="Model\X_M_ProductionLine.cs" />

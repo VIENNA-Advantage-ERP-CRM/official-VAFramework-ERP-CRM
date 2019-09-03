@@ -3,7 +3,7 @@
  * Purpose        : Movement Material Allocation
  * Class Used     : X_M_MovementLineMA
  * Chronological Development
- * Veena         27-Oct-2009
+ * Veena         27-Oct-2009  
  ******************************************************/
 
 using System;
@@ -28,7 +28,7 @@ namespace VAdvantage.Model
     public class MMovementLineMA : X_M_MovementLineMA
     {
         /**	Logger	*/
-	    private static VLogger _log	= VLogger.GetVLogger(typeof(MMovementLineMA).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MMovementLineMA).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -36,14 +36,14 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="M_MovementLineMA_ID">id (ignored)</param>
         /// <param name="trxName">transaction</param>
-	    public MMovementLineMA (Ctx ctx, int M_MovementLineMA_ID, Trx trxName)
-            : base (ctx, M_MovementLineMA_ID, trxName)
-	    {
+        public MMovementLineMA(Ctx ctx, int M_MovementLineMA_ID, Trx trxName)
+            : base(ctx, M_MovementLineMA_ID, trxName)
+        {
             if (M_MovementLineMA_ID != 0)
                 throw new ArgumentException("Multi-Key");
-	    }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Load Constructor
         /// </summary>
         /// <param name="ctx">context</param>
@@ -68,6 +68,83 @@ namespace VAdvantage.Model
             //
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
             SetMovementQty(movementQty);
+        }
+
+        /// <summary>
+        /// Parent Constructor
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="movementQty"></param>
+        /// <param name="MMPloicyDate"></param>
+        public MMovementLineMA(MMovementLine parent, int M_AttributeSetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+            : this(parent.GetCtx(), 0, parent.Get_TrxName())
+        {
+            SetClientOrg(parent);
+            SetM_MovementLine_ID(parent.GetM_MovementLine_ID());
+            //
+            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetMovementQty(movementQty);
+            if (MMPloicyDate == null)
+            {
+
+                MMPloicyDate = parent.GetParent().GetMovementDate();
+            }
+            SetMMPolicyDate(MMPloicyDate);
+        }
+
+        /// <summary>
+        /// Is Used to Get or Create  Instance of MMovementLineMA (Attribute)
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="MovementQty"></param>
+        /// <param name="DateMaterialPolicy"></param>
+        /// <returns></returns>
+        public static MMovementLineMA GetOrCreate(MMovementLine line, int M_AttributeSetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        {
+            MMovementLineMA retValue = null;
+            String sql = "SELECT * FROM M_MovementLineMA " +
+                         @" WHERE  M_MovementLine_ID = " + line.GetM_MovementLine_ID() +
+                         @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
+            if (M_AttributeSetInstance_ID == 0)
+                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+            else
+                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DB.ExecuteReader(sql, null, line.Get_Trx());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    retValue = new MMovementLineMA(line.GetCtx(), dr, line.Get_Trx());
+                }
+            }
+            catch (Exception ex)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, ex);
+            }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                dt = null;
+            }
+            if (retValue == null)
+                retValue = new MMovementLineMA(line, M_AttributeSetInstance_ID, MovementQty, DateMaterialPolicy);
+            else
+                retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
+            return retValue;
         }
 
         /// <summary>

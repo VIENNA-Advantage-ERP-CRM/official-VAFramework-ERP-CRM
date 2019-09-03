@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript" src="../psheet.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			function loadCB()
+			{					
+				tbar.init()
+				tbar.resize(600)
+			}		
+
+			var tbar = newTabBarWidget("theTbar",false,null,"",null,null,true)
+			tbar.add("test d'onglet 1","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 2","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 3","toto",-1,"imgtabs.gif",16,16,0,0)
+			
+			tbar.add("test d'onglet 4","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 5","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 6","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 7","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 8","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.select(3)
+
+		</script>
+	</head>
+	<body onload="loadCB()">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+
+				<br><br><br>
+				<u><b>Tab bar</b></u><br><br>
+				<div>
+					<script language="javascript">
+						tbar.write()
+					</script>
+				</div>
+
+				<br>
+
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

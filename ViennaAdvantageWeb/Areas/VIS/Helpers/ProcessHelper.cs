@@ -22,17 +22,18 @@ namespace VIS.Helpers
     public class ProcessHelper
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(ProcessHelper).FullName);
+        private static int msgID = 0;
         public static ProcessDataOut GetProcessInfo(int AD_Process_ID, Ctx ctx)
         {
             ProcessDataOut outt = new ProcessDataOut();
 
             bool trl = !Env.IsBaseLanguage(ctx, "AD_Process");
-            String sql = "SELECT p.Name, p.Description, p.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx "
+            String sql = "SELECT p.Name, p.Description, p.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
                     + "FROM AD_Process p "
                     + "LEFT OUTER JOIN AD_CtxArea ca ON (p.AD_CtxArea_ID=ca.AD_CtxArea_ID) "
                     + "WHERE AD_Process_ID=" + AD_Process_ID;
             if (trl)
-                sql = "SELECT t.Name, t.Description, t.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx "
+                sql = "SELECT t.Name, t.Description, t.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
                     + "FROM AD_Process p "
                     + "LEFT OUTER JOIN AD_CtxArea ca ON (p.AD_CtxArea_ID=ca.AD_CtxArea_ID) "
                     + " INNER JOIN AD_Process_Trl t ON (p.AD_Process_ID=t.AD_Process_ID) "
@@ -51,7 +52,7 @@ namespace VIS.Helpers
                     outt.IsReport = dr.GetString(3).Equals("Y");
 
                     //
-                    string msgText = "<b>";
+                    string msgText = "<b style='display: block;width: calc(100% - 20px);'>";
 
                     if (dr.IsDBNull(1))
                         msgText += Msg.GetMsg(ctx, "StartProcess?");
@@ -61,7 +62,7 @@ namespace VIS.Helpers
                     msgText += "</b>";
 
                     if (!dr.IsDBNull(2))
-                        msgText += "<p>" + dr.GetString(2) + "</p>";
+                        msgText += "<p style='display: inline-block;float: left;Max-width: calc(100% - 38px);'>" + dr.GetString(2) + "</p>";
                     //
                     outt.MessageText = msgText;
 
@@ -69,6 +70,15 @@ namespace VIS.Helpers
                     if (isSOTrx == "")
                         isSOTrx = "Y";
                     outt.IsSOTrx = isSOTrx;
+                    outt.IsBackground = dr["IsBackgroundProcess"].Equals("Y");
+                    outt.AskUser = dr["AskUserBGProcess"].Equals("Y");
+                    outt.IsCrystal = dr["iSCrystalReport"].Equals("Y");
+                    var paraCount = Util.GetValueOfInt(dr["para"]);
+                    if (paraCount > 0)
+                    {
+                        outt.HasPara = true;
+                    }
+
 
                 }
                 dr.Close();
@@ -114,11 +124,73 @@ namespace VIS.Helpers
             // Get Locks from Dictionary
             string lockedid = processInfo["Process_ID"].ToString() + "_" + processInfo["Record_ID"].ToString();
             //string lockedidlog = lockedid + " -UserID- " + ctx.GetAD_User_ID() + " -SesstionID- " + ctx.GetAD_Session_ID();
-
+            var isBackground = processInfo["IsBackground"].Equals("True", StringComparison.OrdinalIgnoreCase);
             var currentLock = GetLock(lockedid);
             lock (currentLock)
             {
-                ret = ExecuteProcess(ctx, processInfo, pList);
+                if (!isBackground)
+                {
+                    ret = ExecuteProcess(ctx, processInfo, pList);
+                }
+                else
+                {
+                    System.Threading.ThreadPool.QueueUserWorkItem(delegate
+                    {
+                        ret = ExecuteProcess(ctx, processInfo, pList);
+
+                        // Insert Result into Pinstance Result table.
+                        X_AD_PInstance_Result pResult = new X_AD_PInstance_Result(ctx, 0, null);
+                        pResult.SetAD_PInstance_ID(ret.AD_PInstance_ID);
+
+
+                        StringBuilder sBuilder = new StringBuilder();
+                        string sqlk = "SELECT Log_ID, P_ID, P_Date, P_Number, P_Msg "
+                + "FROM AD_PInstance_Log "
+                + "WHERE AD_PInstance_ID= " + ret.AD_PInstance_ID
+                + " ORDER BY Log_ID";
+
+                        DataSet ds = DB.ExecuteDataset(sqlk);
+                        if (ds != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                sBuilder.Append(Util.GetValueOfString(ds.Tables[0].Rows[i]["P_Number"]) + "  " + Util.GetValueOfString(ds.Tables[0].Rows[i]["P_Msg"]) + " \n ");
+                            }
+                        }
+
+                        pResult.SetResult(ret.Result + " \n " + sBuilder.ToString());
+                        pResult.Save();
+
+
+                        // Get Message for Notice window from Cache or DB.
+                        if (msgID == 0)
+                        {
+                            object messageID = DB.ExecuteScalar("SELECT AD_Message_ID FROM AD_Message WHERE Value='ProcessResult'");
+                            if (messageID != null && messageID != DBNull.Value)
+                            {
+                                msgID = Convert.ToInt32(messageID);
+                            }
+                            //cache.Add(10101, msgID);
+                        }
+
+                        MProcess pro = MProcess.Get(ctx, Convert.ToInt32(processInfo["Process_ID"]));
+
+                        // Insert Notice
+                        MNote note = new MNote(ctx, msgID, ctx.GetAD_User_ID(), null);
+                        note.SetTextMsg(Msg.GetMsg(ctx, "ProcessCompleted") + ": " + pro.GetName());
+
+                        note.SetDescription(pro.GetName());
+                        note.SetRecord(X_AD_PInstance_Result.Table_ID, pResult.GetAD_PInstance_Result_ID());
+                        note.Save();
+                        if (ret.Result != null && ret.Result.Length > 100)
+                        {
+                            ret.Result = ret.Result.Substring(0, 100) + "...";
+                        }
+
+                        VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
+
+                    });
+                }
             }
             return ret;
         }
@@ -130,6 +202,17 @@ namespace VIS.Helpers
             ProcessInfo pi = new ProcessInfo().FromList(processInfo);
             pi.SetAD_User_ID(ctx.GetAD_User_ID());
             pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            if (pi.GetAD_PInstance_ID() == 0)
+            {
+                MPInstance instance = null;
+                instance = new MPInstance(ctx, Util.GetValueOfInt(processInfo["Process_ID"]), Util.GetValueOfInt(processInfo["Record_ID"]));
+
+                if (!instance.Save())
+                {
+
+                }
+                pi.SetAD_PInstance_ID(instance.Get_ID());
+            }
 
             int vala = 0;
             if (pList != null && pList.Length > 0) //we have process parameter
@@ -307,6 +390,9 @@ namespace VIS.Helpers
                 // {
                 //    rep.AD_PrintFormat_ID = Convert.ToInt32(d["AD_PrintFormat_ID"]);
                 // }
+                rep.AD_PInstance_ID = pi.GetAD_PInstance_ID();
+                rep.Result = pi.GetSummary();
+
                 ctl.ReportString = null;
                 rep.HTML = ctl.GetRptHtml();
                 //rep.AD_Table_ID = ctl.GetReprortTableID();
@@ -711,6 +797,10 @@ namespace VIS.Helpers
                 ret.TotalRecords = pi.GetTotalRecords();
                 ret.IsReportFormat = pi.GetIsReportFormat();
                 ret.IsTelerikReport = pi.GetIsTelerik();
+                ret.AD_Table_ID = pi.GetTable_ID();
+                ret.RecordID = pi.GetRecord_ID();
+                ret.AD_Process_ID = pi.GetAD_Process_ID();
+                ret.RecordIDs = pi.GetRecIds();
                 ctl.ReportString = null;
 
 
@@ -873,6 +963,15 @@ namespace VIS.Helpers
         {
             List<ValueNamePair> list = new List<ValueNamePair>();
             string sql = "";
+
+            if (ctx.GetUseCrystalReportViewer().Equals("Y"))
+            {
+                object isCrystal = DB.ExecuteScalar("SELECT  IsCrystalReport FROM AD_Process WHERE IsActive='Y' AND AD_Process_ID=" + AD_Process_ID);
+                if (isCrystal.Equals("Y"))
+                {
+                    return list;
+                }
+            }
 
             int refListID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Reference_ID FROM AD_Reference WHERE Export_ID='VIS_1000195'"));
             bool showRTF = IsShowRTF(AD_Process_ID);

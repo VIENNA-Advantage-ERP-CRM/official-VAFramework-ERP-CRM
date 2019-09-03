@@ -444,6 +444,20 @@ namespace VAdvantage.Model
         }
         //END
 
+        /** Set Container Current Qty.@param ContainerCurrentQty Container Current Qty */
+        public void SetContainerCurrentQty(Decimal? ContainerCurrentQty) { Set_Value("ContainerCurrentQty", (Decimal?)ContainerCurrentQty); }
+        /** Get Container Current Qty.@return Container Current Qty */
+        public Decimal GetContainerCurrentQty() { Object bd = Get_Value("ContainerCurrentQty"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** Set Product Container.@param M_ProductContainer_ID Product Container */
+        public void SetM_ProductContainer_ID(int M_ProductContainer_ID)
+        {
+            if (M_ProductContainer_ID <= 0) Set_Value("M_ProductContainer_ID", null);
+            else
+                Set_Value("M_ProductContainer_ID", M_ProductContainer_ID);
+        }
+        /** Get Product Container.@return Product Container */
+        public int GetM_ProductContainer_ID() { Object ii = Get_Value("M_ProductContainer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

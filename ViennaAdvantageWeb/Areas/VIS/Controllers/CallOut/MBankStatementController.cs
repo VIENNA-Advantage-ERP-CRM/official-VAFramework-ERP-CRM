@@ -31,5 +31,38 @@ namespace VIS.Controllers
             return Json(retJSON , JsonRequestBehavior.AllowGet);
         }    
 
+        // Get Payment Details
+        public JsonResult GetPayment(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MBankStatementModel objBankStatement = new MBankStatementModel();
+                retJSON = JsonConvert.SerializeObject(objBankStatement.GetPayment(ctx, fields));
+            }
+
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Get Converted Amount
+        /// </summary>
+        /// <param name="fields">String Fields</param>
+        /// <returns>JSON Data</returns>
+        public JsonResult GetConvertedAmt(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MBankStatementModel objBankStatement = new MBankStatementModel();
+                retJSON = JsonConvert.SerializeObject(objBankStatement.GetConvertedAmt(ctx, fields));
+            }
+
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

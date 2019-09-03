@@ -2863,5 +2863,66 @@ namespace VAdvantage.Model
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
+
+        /// <summary>
+        /// Set Sales Quotation.
+        /// </summary>
+        /// <param name="IsSalesQuotation">Sales Quotation</param>
+        public void SetIsSalesQuotation(Boolean IsSalesQuotation) { Set_Value("IsSalesQuotation", IsSalesQuotation); }
+
+        /// <summary>
+        /// Get Sales Quotation.
+        /// </summary>
+        /// <returns>Sales Quotation</returns>
+        public Boolean IsSalesQuotation() { Object oo = Get_Value("IsSalesQuotation"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /// <summary>
+        /// Set Hold Payment.
+        /// </summary>
+        /// <param name="IsHoldPayment">This checkbox used to hold the payments. If this checkbox true on the Order, it will set hold payment checkbox true at Invoice window while creating invoice against this order and user can’t do the payment for that invoice.</param>
+        public void SetIsHoldPayment(Boolean IsHoldPayment) { Set_Value("IsHoldPayment", IsHoldPayment); }
+
+        /// <summary>
+        /// Get Hold Payment.
+        /// </summary>
+        /// <returns>This checkbox used to hold the payments. If this checkbox true on the Order, it will set hold payment checkbox true at Invoice window while creating invoice against this order and user can't do the payment for that invoice.</returns>
+        public Boolean IsHoldPayment() { Object oo = Get_Value("IsHoldPayment"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /** Set ReActivated.
+@param IsReActivated Re-Activate a record */
+        public void SetIsReActivated(Boolean IsReActivated) 
+        {
+            Set_Value("IsReActivated", IsReActivated); 
+        }
+
+        /** Get ReActivated.
+    @return Re-Activate a record */
+        public Boolean IsReActivated() { Object oo = Get_Value("IsReActivated"); 
+            if (oo != null) 
+            { 
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo); 
+                return "Y".Equals(oo); 
+            } 
+            return false; 
+        }
+
+        /** Set Temp Document No.
+        @param TempDocumentNo Temp Document No for this Document */
+        public void SetTempDocumentNo(String TempDocumentNo)
+        {
+            if (TempDocumentNo != null && TempDocumentNo.Length > 30)
+            {
+                log.Warning("Length > 30 - truncated");
+                TempDocumentNo = TempDocumentNo.Substring(0, 30);
+            }
+            Set_Value("TempDocumentNo", TempDocumentNo);
+        }
+        /** Get Temp Document No.
+        @return Temp Document No for this Document */
+        public String GetTempDocumentNo()
+        {
+            return (String)Get_Value("TempDocumentNo");
+        }
     }
 }

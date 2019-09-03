@@ -1,0 +1,155 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>		
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript" src="../treeview.js"></script>
+		<script language="javascript" src="../bolist.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript" src="../calendar.js"></script>
+		<script language="javascript" src="../lov.js"></script>
+	<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+
+			var arrChunk = new Array;
+			for (var i=0; i< 1; i++)
+				arrChunk[i] = "Chunk value number " +i;
+				
+			var arrChunk2 = new Array;
+			for (var i=0; i< 5; i++)
+				arrChunk2[i] = "Chunk value number " +i;
+				
+			var arrLOV = new Array;
+			for (var i=0; i< 100; i++)
+				arrLOV[i] = "LOV value number " +i;
+			
+			function smallCB()
+			{
+				lov.resize(100,5);
+			}
+			
+			function normalCB()
+			{
+				lov.resize(200,10);
+			}
+			
+			function bigCB()
+			{
+				lov.resize(400,20);
+			}
+			function moveCB()
+			{
+				var chunk = lov.getChunkSelection();
+				alert("["+this.id+"]\n"+"Chunk index = <" + chunk.index + ">\nChunk value = <" + chunk.value + ">");
+			}
+			
+			function refreshCB()
+			{
+				alert("["+this.id+"]\n"+"Refreshing LOV...");
+				var LOVValue = lov.getLOVSelection();
+				for (var i=0;i<LOVValue.length;i++)
+					alert("LOV index = <" + LOVValue[i].index + ">\nLOV value = <" + LOVValue[i].value + ">");
+			}
+			
+			function searchCB()
+			{
+				alert("["+this.id+"]\n"+"Searching for <" + lov.getSearchValue() + ">");
+			}
+			
+			function searchCB2()
+			{				
+				alert("["+this.id+"]\n"+"Searching for <" + searchW.getSearchValue() + ">");
+			}
+			
+			function dblClickCB()
+			{
+				alert("["+this.id+"]\n"+"Double click");
+			}
+			
+			function enterCB()
+			{
+				alert("["+this.id+"]\n"+"Enter hit");
+			}
+			
+			var showRefresh=true;
+			function updateRefreshCB()
+			{				
+				showRefresh = !showRefresh;
+				lov.change(null,null,null,null,showRefresh)
+				lov2.change(null,null,null,null,showRefresh)
+			}
+			
+			function loadCB()
+			{	
+				lov=newLovWidget("lov","Select a chunk:",200,10,true,true,
+					moveCB,refreshCB,searchCB,dblClickCB,true,enterCB,false);
+				
+				lov2=newLovWidget("lov2","Select a chunk:",200,10,false,true,
+					null,null,searchCB,dblClickCB,true,enterCB,true);
+			
+				refreshButton=newButtonWidget("refreshButton","update Refresh",updateRefreshCB);
+				smallButton=newButtonWidget("smallButton","Resize : Smaller",smallCB);
+				normalButton=newButtonWidget("normalButton","Resize : Normal",normalCB);
+				bigButton=newButtonWidget("bigButton","Resize : Bigger",bigCB);
+				
+				searchW = newSearchWidget("searchWidget",null,searchCB2);
+				
+				targetApp(
+					'<table width="100%"><tbody>'+
+					'<tr>'+
+						'<td colspan="3">'+
+						'<div class="insetBorder" style="background-color:#AAAAAA"><div style="padding:15px">'+
+							lov.getHTML()+
+						'</div></div>'+
+						'</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td>'+	refreshButton.getHTML() + '</td>'+
+						'<td>'+ smallButton.getHTML() + '</td>'+
+						'<td>'+ normalButton.getHTML()+ '</td>'+
+						'<td>'+	bigButton.getHTML() + '</td>'+						
+					'</tr>'+
+					'<tr>'+
+						'<td colspan="3">'+
+						'<div class="insetBorder" style="background-color:#AFAFAF"><div style="padding:15px">'+
+							lov2.getHTML()+
+						'</div></div>'+
+						'</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td colspan="3">'+
+						'<div class="insetBorder" style="background-color:#AFAFAF"><div style="padding:15px">'+
+							searchW.getHTML()+
+						'</div></div>'+
+						'</td>'+
+					'</tr>'+					
+					'</tbody></table>'			
+				);
+				
+				lov.init();
+				lov2.init()
+				
+				lov.setTextValue("Enter a value");
+				lov.fillChunk( arrChunk );
+				lov.fillLOV( arrLOV );
+				
+				lov2.fillChunk( arrChunk2 );
+				lov2.fillLOV( arrLOV );				
+				
+				lov.setTooltips("text","prev","next","refresh","search","chunk","lov");
+				
+				searchW.init();
+			}
+			
+		</script>
+	</head>
+	<body onload="loadCB()">
+	</body>
+	
+</html>

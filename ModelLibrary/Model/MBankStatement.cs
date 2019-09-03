@@ -288,6 +288,39 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            //JID_1325: if Bank Statement is open against same Bank Account, then not to save new record fo same Bank Account
+            int no = 0;
+            if (newRecord || Is_ValueChanged("C_BankAccount_ID"))
+            {
+                no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BankStatement_ID) FROM C_BankStatement WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO' , 'CL', 'VO')  
+                                                           AND C_BankAccount_ID = " + GetC_BankAccount_ID(), null, Get_Trx()));
+                if (no > 0)
+                {
+                    log.SaveError("VIS_CantCreateNewStatement", "");
+                    return false;
+                }
+            }
+
+            //JID_1325: System should not allow to save bank statment with previous date, statement date should be equal or greater than previous created bank statment record with same bank account. 
+            no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BankStatement_ID) FROM C_BankStatement WHERE IsActive = 'Y' AND DocStatus != 'VO' AND StatementDate > "
+                + GlobalVariable.TO_DATE(GetStatementDate(), true) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND C_BankStatement_ID != " + Get_ID(), null, Get_Trx()));
+            if (no > 0)
+            {
+                log.SaveError("VIS_BankStatementDate", "");
+                return false;
+            }
+
+            // JID_0331: Once user add the lines system should not allow to change the bank account on header
+            if (!newRecord && Is_ValueChanged("C_BankAccount_ID"))
+            {
+                MBankStatementLine[] lines = GetLines(false);
+                if (lines.Length > 0)
+                {
+                    log.SaveError("pleaseDeleteLinesFirst", "");
+                    return false;
+                }
+            }
+
             SetEndingBalance(Decimal.Add(GetBeginningBalance(), GetStatementDifference()));
             return true;
         }

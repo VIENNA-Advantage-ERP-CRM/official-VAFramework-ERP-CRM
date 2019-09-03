@@ -450,7 +450,7 @@ namespace VAdvantage.Model
         public void SetMovementDate(DateTime? MovementDate)
         {
             if (MovementDate == null) throw new ArgumentException("MovementDate is mandatory.");
-            Set_Value("MovementDate", (DateTime?)MovementDate);
+            Set_Value("MovementDate", (DateTime?)MovementDate.Value.Date);
         }
         /** Get Movement Date.
         @return Date a product was moved in or out of inventory */
@@ -643,6 +643,23 @@ namespace VAdvantage.Model
         /** Get Drop All Lines.@return Is Used to drop all movement lines. */
         public String GetDropAllLines() { return (String)Get_Value("DropAllLines"); }
 
+        /** Set Temp Document No.
+        @param TempDocumentNo Temp Document No for this Document */
+        public void SetTempDocumentNo(String TempDocumentNo) 
+        { 
+            if (TempDocumentNo != null && TempDocumentNo.Length > 30) 
+            { 
+                log.Warning("Length > 30 - truncated"); 
+                TempDocumentNo = TempDocumentNo.Substring(0, 30); 
+            }
+            Set_Value("TempDocumentNo", TempDocumentNo); 
+        }
+        /** Get Temp Document No.
+        @return Temp Document No for this Document */
+        public String GetTempDocumentNo() 
+        { 
+            return (String)Get_Value("TempDocumentNo"); 
+        }
     }
 
 }

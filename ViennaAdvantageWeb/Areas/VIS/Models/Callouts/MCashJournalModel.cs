@@ -60,6 +60,24 @@ namespace VIS.Models
             return retDic;
         }
 
+        ///  <summary>
+        /// Get account no and routing no against selected bank account
+        /// </summary>        
+        /// <param name="ctx"> Context Object </param>
+        /// <param name="C_BankAccount_ID"> ID of bank account </param>
+        /// <returns>Account number and Routing Number</returns> //Added by manjot on 22/02/2019 
+        public Dictionary<string, object> GetAccountData(Ctx ctx, int C_BankAccount_ID)
+        {
+            Dictionary<string, object> retValue = new Dictionary<string, object>();
+            DataSet _ds = DB.ExecuteDataset(@" SELECT ac.AccountNo, b.RoutingNo FROM C_BankAccount ac INNER JOIN C_Bank b ON b.C_Bank_ID= ac.C_Bank_ID WHERE ac.C_BankAccount_ID = " + C_BankAccount_ID);
+            if (_ds != null && _ds.Tables[0].Rows.Count > 0)
+            {
+                retValue["AccountNo"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["AccountNo"]);
+                retValue["RoutingNo"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["RoutingNo"]);
+            }
+            return retValue;
+        }
+
     }
 
 }

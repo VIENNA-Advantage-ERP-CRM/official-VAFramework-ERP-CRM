@@ -1,0 +1,26 @@
+.crExceptionBorder   
+{
+    background-color: #A3A3BC;    
+}
+
+.crExceptionHeader   
+{
+    background-color: #E4E4EC;
+    color: black
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+.crExceptionElement  
+{
+    background-color: #E4E4EC;
+    border-top:1px solid #FFFFFF;
+}
+
+.crExceptionText  
+{
+    color: black;
+    font-family: Arial;
+    font-size: 11pt;
+}

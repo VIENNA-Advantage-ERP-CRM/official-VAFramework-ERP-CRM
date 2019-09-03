@@ -3,10 +3,9 @@
     height: 100%;
     width: 100%;
     margin: 0;
-    /*font-family: 'Source Sans Pro',sans-serif;*/
     font-weight: 200;
     overflow: hidden;
-    /*background-color: ButtonHighlight;*/
+    
 }
 
 
@@ -651,6 +650,7 @@ html[dir="rtl"] .vis-hasSubMenu:after
                 padding: 10px;
                 display: block;
                 outline: none;
+                Color: #428bca;
                 /*margin-right: 20px;*/
             }
 

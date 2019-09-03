@@ -34,8 +34,8 @@ namespace VAdvantage.Model
         public MRfQTopicSubscriberOnly(Ctx ctx, int C_RfQ_TopicSubscriberOnly_ID, Trx trxName)
             : base(ctx, C_RfQ_TopicSubscriberOnly_ID, trxName)
         {
-            
-        }	
+
+        }
 
         /// <summary>
         /// Load Constructor
@@ -46,7 +46,24 @@ namespace VAdvantage.Model
         public MRfQTopicSubscriberOnly(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
-            
+
+        }
+
+        /// <summary>
+        /// Before Save
+        /// </summary>
+        /// <param name="newRecord">new</param>
+        /// <returns>true if success</returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            // JID_0474: "RFQ Topic window third tab (Restriction) system allow to save blank entry
+            //	No Product OR Product Category
+            if (GetM_Product_Category_ID() == 0 && GetM_Product_ID() == 0)
+            {
+                log.SaveError("NoProduct/Category", "");
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -186,6 +186,14 @@ namespace VAdvantage.Model
                 MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
                     GetM_Product_ID(), GetC_BPartner_ID(), GetQty(), isSOTrx);
                 pp.SetM_PriceList_ID(M_PriceList_ID);
+
+                // 
+                // JID_0495_1: Set unit price on Requisition Line based on selected Pricelist on header
+                if (Env.IsModuleInstalled("ED011_"))
+                {
+                    pp.SetC_UOM_ID(Util.GetValueOfInt(Get_Value("C_UOM_ID")));
+                }
+
                 //	pp.setPriceDate(getDateOrdered());
                 //
                 SetPriceActual(pp.GetPriceStd());

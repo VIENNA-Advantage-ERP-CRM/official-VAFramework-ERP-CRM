@@ -359,7 +359,9 @@
                 // remove class
                 treeStructure.find(".nav-header").removeClass("current");
                 // Add class
-                $($(this).parent().context).addClass('current')
+                //$($(this).parent().context).addClass('current')
+                // after bootstrap 4
+                $($(this)).addClass('current');
                 // toggle records
                 $(this).parent().children('ul.tree').toggle(300);
             });
@@ -493,7 +495,7 @@
 
             $ContainerPopUp.find("#containerParent").css('height', '400px');
             $ContainerPopUp.find("#containerParent1").css('height', '383px');
-            $ContainerPopUp.find("#VIS_ContainerParentChild").css('height', '398px');
+            $ContainerPopUp.find("#VIS_ContainerParentChild").css('height', '397px');
 
             $labelInfo[0].style.display = "none";
         };

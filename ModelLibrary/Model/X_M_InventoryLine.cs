@@ -593,6 +593,11 @@ namespace VAdvantage.Model
         /** Get Actual Requisition Reserved / Ordered.@return Actual Requisition Reserved / Ordered */
         public Decimal GetActualReqReserved() { Object bd = Get_Value("ActualReqReserved"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
+        /** Set Post Current Cost Price.@param PostCurrentCostPrice It indicate the cost after cost calculation of current record */
+        public void SetPostCurrentCostPrice(Decimal? PostCurrentCostPrice) { Set_Value("PostCurrentCostPrice", (Decimal?)PostCurrentCostPrice); }
+        /** Get Post Current Cost Price. @return It indicate the cost after cost calculation of current record */
+        public Decimal GetPostCurrentCostPrice() { Object bd = Get_Value("PostCurrentCostPrice"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
     }
 
 }

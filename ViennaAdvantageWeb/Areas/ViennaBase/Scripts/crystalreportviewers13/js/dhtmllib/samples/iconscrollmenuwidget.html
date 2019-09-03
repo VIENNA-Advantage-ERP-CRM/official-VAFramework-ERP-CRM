@@ -1,0 +1,102 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../bolist.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			function showMenu(e)
+			{
+				scmenu.show(true,eventGetX(e),eventGetY(e))
+			}
+			
+			function clickCB()
+			{
+				alert('clickCB')
+			}
+			
+			function changeCB()
+			{
+				alert('changeCB')
+			}
+			
+			function dblClickCB()
+			{
+				alert('dblClickCB')
+			}
+			
+			function keyUpCB()
+			{
+				alert('keyUpCB')
+			}
+			
+			function loadCB()
+			{
+				scmenu.init()
+				scmenu.add("Test item 0","id0",true)
+				scmenu.add("Test item 1","id1")
+				scmenu.add("Test item 2","id2")
+				scmenu.add("Test item 3","id3")
+				scmenu.add("court","id4")
+				scmenu.add("Test item 1","id5")
+				scmenu.add("Test item 2","id6")
+				
+				icscMenu.init()
+				icscMenu.add("Test item 0","id0",true)
+				icscMenu.add("Test item 1","id1")
+				icscMenu.add("Test item 2","id2")
+				icscMenu.add("Test item 3","id3")
+				icscMenu.add("court","id4")
+				icscMenu.add("Test item 1","id5")
+				icscMenu.add("Test item 2","id6")
+			}
+					
+			var scmenu=newScrollMenuWidget("scmenu",changeCB,false,100,5,"tooltip",dblClickCB,keyUpCB,true,"Mon label",false)
+			
+			var icscMenu=newIconScrollMenuWidget("icscMenu","format.gif",clickCB,"test","alt",16,16,6*16,0,6*16,16,changeCB,false,100,5,"tooltip",dblClickCB,keyUpCB,true,"Mon label",false)												
+			
+		</script>
+	</head>
+	
+	<body onload="loadCB()">
+		
+		<div class="insetBorder">
+			<div id="scrollMenuWidgetTestArea" class="dialogzone" onclick="showMenu(event)">
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>
+				Test scrollMenuWidget by clicking here. The scrollMenuWidget should appear...<br>				
+			</div>
+			
+			<br><br>
+			
+			<div id="iconScrollMenuWidgetArea" class="dialogzone" align="center">	
+				<u><b>Icon scroll menu widget</b></u>
+				<br><br>
+				<script language="javascript">icscMenu.write()</script>
+				<br>
+			</div>
+		</div>
+	</body>
+	
+</html>

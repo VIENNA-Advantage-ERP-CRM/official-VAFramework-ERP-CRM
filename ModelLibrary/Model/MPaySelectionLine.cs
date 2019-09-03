@@ -224,25 +224,58 @@ namespace VAdvantage.Model
         }
 
 
-        /**
-         * 	Before Save
-         *	@param newRecord new
-         *	@return true
-         */
+        /// <summary>
+        ///  Before Save
+        /// </summary>
+        /// <param name="newRecord">new</param>
+        /// <returns>true, on Save</returns>
         protected override Boolean BeforeSave(Boolean newRecord)
         {
+            // check schedule is hold or not, if hold then do not save record
+            if (GetC_InvoicePaySchedule_ID() > 0)
+            {
+                if (IsHoldpaymentSchedule(GetC_InvoicePaySchedule_ID()))
+                {
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PaymentisHold"));
+                    return false;
+                }
+            }
+
             SetDifferenceAmt(Decimal.Subtract(Decimal.Subtract(GetOpenAmt(), GetPayAmt()), GetDiscountAmt()));
             return true;
         }
 
-        /**
-         * 	After Save
-         *	@param newRecord new
-         *	@param success success
-         *	@return success
-         */
+        /// <summary>
+        /// Is used to get Invoice payment schedule is Hold Payment or not
+        /// </summary>
+        /// <param name="C_InvoicePaySchedule_ID">Invoice payment schedule reference</param>
+        /// <returns>TRUE, if hold payment</returns>
+        public bool IsHoldpaymentSchedule(int C_InvoicePaySchedule_ID)
+        {
+            try
+            {
+                String sql = "SELECT IsHoldPayment FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID = " + C_InvoicePaySchedule_ID;
+                String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                return IsHoldPayment.Equals("Y");
+            }
+            catch
+            {
+                // when column not found, mean hold payment functionlity not in system
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///  After Save
+        /// </summary>
+        /// <param name="newRecord">new</param>
+        /// <returns>true, After Save</returns>
         protected override Boolean AfterSave(Boolean newRecord, Boolean success)
         {
+            if (!success)
+            {
+                return success;
+            }
             SetHeader();
             return success;
         }

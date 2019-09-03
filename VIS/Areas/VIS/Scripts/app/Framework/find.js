@@ -162,7 +162,7 @@
         var whereExtended = curTab.getWhereClause();
         var findFields = curTab.getFields();
 
-        var $root = $("<div style='height:100%'>");
+        var $root = $("<div class='vis-forms-container' style='height:100%'>");
         var $busy = null;
 
         var $self = this;
@@ -447,12 +447,19 @@
                 var columnName = field.getColumnName();
                 if (field.getDisplayType() == VIS.DisplayType.Button) {
                     if (field.getAD_Reference_Value_ID() == 0)
-                        continue;
-                    if (columnName.endsWith("_ID"))
-                        field.setDisplayType(VIS.DisplayType.Table);
-                    else
-                        field.setDisplayType(VIS.DisplayType.List);
-                    //field.loadLookUp();
+                        // change done here to display textbox for search in case where buttons don't have Reference List bind with Column
+                        //continue;
+                        field.setDisplayType(VIS.DisplayType.String);
+                    else {
+                        if (columnName.endsWith("_ID"))
+                            field.setDisplayType(VIS.DisplayType.Table);
+                        else {
+                            field.setDisplayType(VIS.DisplayType.List);
+                            // bind lookup for buttons having Reference List bind with column
+                            field.lookup = new VIS.MLookupFactory.getMLookUp(VIS.context, windowNo, field.getAD_Column_ID(), VIS.DisplayType.List);
+                        }
+                        //field.loadLookUp();
+                    }
                 }
                 // get text to be displayed
                 var header = field.getHeader();

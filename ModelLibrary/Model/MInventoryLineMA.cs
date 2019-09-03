@@ -4,7 +4,7 @@
  * Purpose        : Inventory Material Allocation
  * Class Used     : X_M_InventoryLineMA
  * Chronological    Development
- * Raghunandan     22-Jun-2009
+ * Raghunandan     22-Jun-2009  
   ******************************************************/
 using System;
 using System.Collections;
@@ -140,6 +140,82 @@ namespace VAdvantage.Model
             //
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
             SetMovementQty(MovementQty);
+        }
+
+             /// <summary>
+        /// Parent Constructor
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="movementQty"></param>
+        /// <param name="MMPloicyDate"></param>
+        public MInventoryLineMA(MInventoryLine parent, int M_AttributeSetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+            : this(parent.GetCtx(), 0, parent.Get_TrxName())
+        {
+            SetClientOrg(parent);
+            SetM_InventoryLine_ID(parent.GetM_InventoryLine_ID());
+            //
+            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetMovementQty(movementQty);
+            if (MMPloicyDate == null)
+            {
+                MMPloicyDate = parent.GetParent().GetMovementDate();
+            }
+            SetMMPolicyDate(MMPloicyDate);
+        }
+
+        /// <summary>
+        /// Is Used to Get or Create  Instance of MInventoryLineMA (Attribute)
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="MovementQty"></param>
+        /// <param name="DateMaterialPolicy"></param>
+        /// <returns></returns>
+        public static MInventoryLineMA GetOrCreate(MInventoryLine line, int M_AttributeSetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        {
+            MInventoryLineMA retValue = null;
+            String sql = "SELECT * FROM M_InventoryLineMA " +
+                         @" WHERE  M_InventoryLine_ID = " + line.GetM_InventoryLine_ID() +
+                         @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
+            if (M_AttributeSetInstance_ID == 0)
+                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+            else
+                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DB.ExecuteReader(sql, null, line.Get_Trx());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    retValue = new MInventoryLineMA(line.GetCtx(), dr, line.Get_Trx());
+                }
+            }
+            catch (Exception ex)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, ex);
+            }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                dt = null;
+            }
+            if (retValue == null)
+                retValue = new MInventoryLineMA(line, M_AttributeSetInstance_ID, MovementQty, DateMaterialPolicy);
+            else
+                retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
+            return retValue;
         }
 
         /**

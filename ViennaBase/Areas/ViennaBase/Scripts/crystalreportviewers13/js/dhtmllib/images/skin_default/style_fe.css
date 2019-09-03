@@ -1,0 +1,891 @@
+A
+{
+	color:#0000e0
+}
+
+A:hover
+{
+	color:#e00000
+}
+
+.smallTxt
+{
+	font-size:3px;
+	text-decoration:none;
+}
+
+.dragTxt
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	color:black;
+}
+
+.dragTooltip
+{
+	background-color:#FFFFE0;
+	border-color:black;
+	border-width:1px;
+	border-style:solid;
+	padding-right:5px;
+	padding-left:5px;
+	padding-top:1px;
+	padding-bottom:1px;
+}
+
+.titlezone
+{
+	background-color:#4B7FCD;
+	color:white;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-weight:bold;
+}
+
+.dialogzone
+{
+	background-color:#D5E7FF;
+	color:#2D62B0;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+.dialogbox
+{
+	background-color:#D5E7FF;
+	color:#2D62B0;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	border-top:2px solid #C5D7EF;
+	border-left:2px solid #C5D7EF;
+	border-bottom:2px solid #6A85AE;
+	border-right:2px solid #6A85AE;
+}
+
+.infozone
+{
+	background-color:white;
+	color:#808080;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	border:1px solid #808080;
+	padding:4px;
+}
+
+.treeZone
+{
+	background-color:white;
+	border-color:#4B7FCD;
+	border-width:1px;
+	border-style:solid;
+}
+
+.treeNoBorder
+{
+	background-color:white;	
+}
+
+.insetBorder
+{
+	background-color:white;
+	border-bottom:2px solid #D5DAE0;
+	border-right:2px solid #D5DAE0;
+	border-top:2px solid #6A85AE;
+	border-left:2px solid #6A85AE;
+}
+
+.insetBorderBlue
+{
+	background-color:#CCECFF;
+	border-bottom:2px solid #D5DAE0;
+	border-right:2px solid #D5DAE0;
+	border-top:2px solid #6A85AE;
+	border-left:2px solid #6A85AE;
+}
+
+.dialogzonebold
+{
+	background-color:#D5E7FF;
+	color:#2D62B0;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-weight:bold;
+}
+
+.bgzone
+{
+	background-color:white;
+	color:#336DBF;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+.listinputs
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	margin:0px;
+	background-color:white;
+}
+
+.textinputs
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	background-color:white;
+	border: 1px solid #6392D6;
+	padding-left:2px;
+	padding-right:2px;
+}
+
+/*======*/
+/* Tabs */
+/*======*/
+
+.thumbtxt
+{
+	color:white;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+a.thumbtxt:hover
+{
+	color:#E8E8E8;
+	text-decoration:underline;
+}
+
+.thumbtxtsel
+{
+	color:#12397A;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+a.thumbtxtsel:hover
+{
+	color:#4269AA;
+	text-decoration:underline;
+}
+
+/*=========*/
+/* Buttons */
+/*=========*/
+
+.wizbutton
+{
+	color:white;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:none;
+}
+
+.wizbuttongray
+{
+	color:#CCCCCC;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-weight:normal;
+	text-decoration:none;
+}
+
+a.wizbutton:hover
+{
+	color:white;
+	text-decoration:underline;
+}
+
+a.wizbuttongray:hover
+{
+	color:#CCCCCC;
+}
+
+/*===========*/
+/* Tree view */
+/*===========*/
+
+.treeBody
+{
+	background-color:white;
+}
+
+.treeContainer
+{
+	background-color:white;
+	color:black;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+.treeNormal
+{
+	text-decoration:none;
+	color:black;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-style:normal;		
+	padding:1px;
+	margin-left:2px;
+}
+
+.treeGray
+{
+	text-decoration:none;
+	color:#909090;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-style:italic;		
+	padding:1px;
+	margin-left:2px;
+}
+
+.treeSelected
+{
+	text-decoration:none;
+	color:white;
+	background-color:#195FA0;
+	color:white;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-style:normal;		
+	padding:1px;
+	margin-left:2px;
+}
+
+.treeHL
+{
+	text-decoration:none;
+	color:black;
+	background-color:#D5E7FF;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	font-style:normal;		
+	padding:1px;
+	margin-left:2px;	
+}
+
+a.treeHL:hover
+{
+	color:black;
+}
+
+a.treeNormal:hover
+{
+	color:black;
+}
+
+a.treeGray:hover
+{
+	color:#909090;
+}
+
+a.treeSelected:hover
+{
+	color:white;
+}
+
+/*==================*/
+/* Prompt Tree view */
+/*==================*/
+
+.promptNormal
+{
+	text-decoration:none;
+	color:#2961B5;
+	background-color:white;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+.promptSelected
+{
+	text-decoration:none;
+	color:#2961B5;
+	background-color:#EAE8E7;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+a.promptNormal:hover
+{
+	color:#2961B5;
+	text-decoration:underline;
+}
+
+a.promptSelected:hover
+{
+	color:#2961B5;
+	text-decoration:underline;
+}
+
+/*=================*/
+/* BO Custom lists */
+/*=================*/
+
+.bolist
+{
+	background-color:white;
+	border-color:#D5E7FF;
+	border-width:2px;
+	border-style:inset;
+}
+
+.bolistitem
+{
+	background-color:#F3F3F3;
+	border-color:#F3F3F3;
+	border-width:2px;
+	border-style:outset;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	margin:1px;
+	padding:0px;
+	padding-right:10px;
+}
+
+.bolistitemsel
+{
+	background-color:#D6D6D6;
+	border-color:#D6D6D6;
+	border-width:2px;
+	border-style:outset;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	margin:1px;
+	padding:0px;
+	padding-right:10px;
+}
+
+.bolistlink
+{
+	color:black;
+	text-decoration:none;
+}
+
+.bolistlinksel
+{
+	color:black;
+	text-decoration:none;
+}
+
+a.bolistlink:hover
+{
+	color:black;
+	text-decoration:underline;
+}
+
+a.bolistlinksel:hover
+{
+	color:black;
+	text-decoration:underline;
+}
+
+.error
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:14px;
+	font-weight:bold;
+	font-style:italic;
+	color:#245AA7;
+}
+
+.critical
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:14px;
+	color:red;
+}
+
+/*===============*/
+/* Palette icons */
+/*===============*/
+
+.palette
+{
+	background-color:#D5E7FF;
+	border: 1px solid #4B7FCD;
+}
+
+.iconnocheck
+{
+	background-color:#D5E7FF;
+	border: 1px solid #D5E7FF;
+}
+
+.combonocheck
+{
+	background-color:white;
+	border: 1px solid #C6D7EF;
+}
+
+.combohover
+{
+	background-color:white;
+	border: 1px solid #6392D6;
+}
+
+.combocheck
+{
+	background-color:#B8C5D1;
+	border: 1px solid #6392D6;
+}
+
+.combobtnhover
+{
+	background-color:#6392D6;
+	border: 1px solid #6392D6;
+}
+
+.iconnocheck
+{
+	background-color:#D5E7FF;
+	border: 1px solid #D5E7FF;
+}
+
+.iconcheck
+{
+	background-color:#B8C5D1;
+	border-top:1px solid #6A85AE;
+	border-left:1px solid #6A85AE;
+	border-bottom:1px solid white;
+	border-right:1px solid white;
+}
+
+.iconhover
+{
+	background-color:#D5E7FF;
+	border-top:1px solid white;
+	border-left:1px solid white;
+	border-bottom:1px solid #6A85AE;
+	border-right:1px solid #6A85AE;
+}
+
+.iconcheckhover
+{
+	background-color:#B8C5D1;
+	border-top:1px solid #6A85AE;
+	border-left:1px solid #6A85AE;
+	border-bottom:1px solid white;
+	border-right:1px solid white;
+}
+
+.iconText
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	color:#2D62B0;
+}
+
+.iconTextDis
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+	color:#7B8694;
+}
+
+.iconcheckwhite
+{
+	background-color:#FFFFFF;
+	border: 1px solid #788591;
+}
+
+.iconcheckhoverwhite
+{
+	background-color:#FFFFFF;
+	border: 1px solid #788591;
+}
+
+.combo
+{
+	background-color:white;
+	border: 1px solid #C6D7EF;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+.comboDisabled
+{
+	background-color:#DDDDDD;
+	border: 1px solid #999999;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+.comboEditable
+{
+	background-color:white;
+	border: 1px solid #636384;
+	font-family:"Tahoma","sans-serif";
+	font-size:12px;
+}
+
+/*=======*/
+/* menus */
+/*=======*/
+
+.menuColor
+{
+	padding:2px;
+	border: 1px solid white;
+}
+
+.menuColorSel
+{
+	padding:2px;
+	border: 1px solid #636384;
+	background-color:#CAD1D8;
+}
+
+.menuShadow
+{
+	position:absolute;
+	background-color:#a0a0a0;
+}
+
+.menuFrame
+{
+	position:absolute;
+	background-color:white;
+	border: 1px solid #636384;
+}
+
+
+.menuLeftPart
+{
+	border:1px solid #D5E7FF;
+	border-right:0px;
+	background-color:#D5E7FF;
+}
+
+.menuLeftPartColor
+{
+	border:1px solid white;
+	border-right:0px;
+	background-color:white;
+}
+
+.menuLeftPartSel
+{
+	border:1px solid #636384;
+	border-right:0px;
+	background-color:#CAD1D8;
+}
+
+.menuTextPart
+{
+	white-space:nowrap;
+	font-family:"Tahoma","sans-serif";	
+	font-size:12px;
+	color:black;
+	padding-left:5px;
+	padding-right:5px;
+	border:1px solid white;
+	border-right:0px;
+	border-left:0px;
+	background-color:white;
+}
+
+.menuTextPartSel
+{
+	white-space:nowrap;
+	font-family:"Tahoma","sans-serif";	
+	font-size:12px;
+	color:black;
+	padding-left:5px;
+	padding-right:5px;
+	border:1px solid #636384;
+	border-right:0px;
+	border-left:0px;
+	background-color:#CAD1D8;
+}
+
+.menuTextPartDisabled
+{
+	white-space:nowrap;
+	font-family:"Tahoma","sans-serif";	
+	font-size:12px;
+	color:#7B8694;
+	padding-left:5px;
+	padding-right:5px;
+	border:1px solid white;
+	border-right:0px;
+	border-left:0px;
+	background-color:white;
+}
+
+.menuRightPart
+{
+	border:1px solid white;
+	border-left:0px;
+	background-color:white;
+}
+
+.menuRightPartSel
+{
+	border:1px solid #636384;
+	border-left:0px;
+	background-color:#CAD1D8;
+}
+
+.menuIcon
+{
+	border:1px solid none;
+}
+
+.menuIconCheck
+{
+	border-top:1px solid #636384;
+	border-left:1px solid #636384;
+	border-bottom:1px solid white;
+	border-right:1px solid white;
+	background-color:#CAD1D8;
+}
+
+.menuCalendar
+{
+	height:15px;
+	padding:2px;
+	margin-left:2px;
+	margin-right:2px;
+	border: 1px solid white;
+}
+
+.menuCalendarSel
+{
+	height:15px;
+	padding:2px;
+	margin-left:2px;
+	margin-right:2px;
+	border: 1px solid #636384;
+	background-color:#CAD1D8;
+}
+
+.menuiconborders
+{
+	padding:2px;
+	white-space:nowrap;
+	font-family:"Tahoma","sans-serif";	
+	font-size:12px;
+	color:black;
+	background-color:#F6F6FB;
+	border: 1px solid white;
+}
+
+.menuiconbordersSel
+{
+	padding:2px;
+	white-space:nowrap;
+	font-family:"Tahoma","sans-serif";	
+	font-size:12px;
+	color:black;
+	background-color:#CAD1D8;
+	border: 1px solid #636384;
+}
+
+.calendarTextPart
+{
+	font-family:"Tahoma","sans-serif";	
+	font-size:12px;
+	color:black;
+	padding:0px;
+}
+
+/*=======*/
+/* Filter */
+/*=======*/
+
+.treeFilter
+{
+	text-decoration:none;
+	color:black;
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	font-style:normal;	
+	padding:1px;
+	margin:1px 1px 1px 2px;		
+}
+
+.treeFilterSelected
+{
+	text-decoration:none;
+	color:white;
+	background-color:#195FA0;
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	font-style:normal;
+	padding:1px;	
+	margin:1px 1px 1px 2px;		
+}
+
+
+.treeFeedbackDD
+{
+	text-decoration:none;
+	color:black;
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	font-style:normal;
+	padding:1px;		
+	margin:0px 0px 0px 2px;		
+	border:2px solid #CC0000;
+}
+
+.filterOp
+{
+
+	font-size:12px;		
+}
+
+.filterText
+{	
+	font-family:"Tahoma","sans-serif";	
+	font-size:11px;	
+	color:black;
+	text-decoration:none;
+	margin: 1px;	
+}
+
+.filterTextSelected
+{
+	font-family:"Tahoma","sans-serif";	
+	font-size:11px;	
+	color:black;
+	text-decoration:none;
+	border: 1px solid #CC0000;
+	margin: 1px;
+}
+
+.filterTextFeedbackDD
+{	
+	font-family:"Tahoma","sans-serif";	
+	font-size:11px;	
+	color:black;
+	text-decoration:none;
+	border: 2px solid #CC0000;
+	margin: 0px;	
+}
+
+.filterBox
+{
+	font-family:"Tahoma","sans-serif";	
+	font-size:11px;	
+	color:black;
+	text-decoration:none;	
+	background-color:#F1F1F1;	
+	border: 1px solid #666699;
+	margin: 1px;
+}
+
+.filterBoxSelected
+{
+	font-family:"Tahoma","sans-serif";	
+	font-size:11px;	
+	color:black;
+	text-decoration:none;	
+	background-color:#A6CAF0;
+	border: 1px solid #CC0000;
+	margin: 1px;
+}
+
+.filterBoxFeedbackDD
+{
+	font-family:"Tahoma","sans-serif";	
+	font-size:11px;	
+	color:black;
+	text-decoration:none;	
+	background-color:#F1F1F1;	
+	border: 2px solid #CC0000;
+	margin: 0px;	
+}
+
+
+.LOVZone
+{
+	background-color:#93B4E1;
+	color:#FFFFFF;
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	font-weight:bold;
+}
+
+
+/*==================*/
+/* Chart Appearance */
+/*==================*/
+
+.blockZoneFrame
+{
+	background-color:#F3F3F3;
+}
+
+.blockZone
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	background-color:white;
+	color:#A5A2A5;
+	border:solid 1px #666666;
+	padding:1px;
+}
+
+.blockZoneSelected
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	background-color:white;
+	color:#A5A2A5;
+	border:solid 2px #000033;
+	padding:0px;
+}
+.blockZone_txt
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	background-color:#A5A2A5;
+	color:white;
+	padding:0px;
+}
+
+
+.blockZone_label
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	background-color:white;
+	color:#A5A2A5;
+	padding:4px;
+}
+
+.blockZone_labelSelected
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	background-color:white;
+	color:#A5A2A5;
+	border:solid 2px #000033;
+	padding:2px;
+}
+
+.blockZone_values
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	background-color:#F3F3F3;
+	color:#A5A2A5;
+	padding:4px;
+}
+
+.blockZone_valuesSelected
+{
+	font-family:"Tahoma","sans-serif";
+	font-size:11px;
+	background-color:#F3F3F3;
+	color:#A5A2A5;
+	border:solid 2px #000033;
+	padding:2px;
+}

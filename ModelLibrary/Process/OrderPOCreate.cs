@@ -254,7 +254,7 @@ namespace VAdvantage.Process
             }
 
             // changes don eby Bharat on 26 June 2018 to handle If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
-            sql.Append(@") WHERE ol.C_Order_ID=" + so.GetC_Order_ID() + @" AND po.IsCurrentVendor='Y' AND prd.IsPurchased='Y'");    
+            sql.Append(@") WHERE ol.C_Order_ID=" + so.GetC_Order_ID() + @" AND po.IsCurrentVendor='Y' AND prd.IsPurchased='Y'");
             sqlErrorMessage.Append(@") WHERE ol.C_Order_ID=" + so.GetC_Order_ID());
 
             if (_Vendor_ID > 0)
@@ -358,31 +358,9 @@ namespace VAdvantage.Process
                                 poLine.SetDatePromised(soLines[i].GetDatePromised());
                                 poLine.SetIsDropShip(soLines[i].IsDropShip());
                                 poLine.SetPrice();
-                                // set price
-                                //if (Util.GetValueOfDecimal(idr[5]) != po.GetC_Currency_ID())
-                                //{
-
-                                //}
-                                //poLine.SetPriceActual(Util.GetValueOfDecimal(idr[4])); // PO Price
-                                //poLine.SetPriceList(Util.GetValueOfDecimal(idr[3])); // list price
-                                //poLine.SetPriceLimit(Util.GetValueOfDecimal(idr[4])); // PO Price
-                                //if (poLine.GetQtyEntered().CompareTo(poLine.GetQtyOrdered()) == 0)
-                                //{
-                                //    poLine.SetPriceEntered(poLine.GetPriceActual());
-                                //}
-                                //else
-                                //{
-                                //    poLine.SetPriceEntered(Decimal.Multiply(poLine.GetPriceActual(), Decimal.Divide(poLine.GetQtyOrdered(), Decimal.Round(poLine.GetQtyEntered(), 12, MidpointRounding.AwayFromZero))));
-                                //}
-                                // set discount
-                                //Decimal Discount = Env.ZERO;
-                                //if (poLine.GetPriceList() != 0)
-                                //{
-                                //    Discount = new Decimal((Decimal.ToDouble(poLine.GetPriceList()) - Decimal.ToDouble(poLine.GetPriceActual())) / Decimal.ToDouble(poLine.GetPriceList()) * 100.0);
-                                //}
-                                //if (Env.Scale(Discount) > 2)
-                                //    Discount = Decimal.Round(Discount, 2);
-                                //poLine.SetDiscount(Discount);
+                                
+                                // Set value in Property From Process to check on Before Save.
+                                poLine.SetFromProcess(true);
                                 if (!poLine.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
@@ -453,9 +431,10 @@ namespace VAdvantage.Process
             MBPartner vendor = new MBPartner(GetCtx(), C_BPartner_ID, Get_TrxName());
             if (Env.IsModuleInstalled("VA009_"))
             {
-                if (Util.GetValueOfInt(vendor.GetVA009_PaymentMethod_ID()) > 0)
+                // Set PO Payment Method from Vendor
+                if (Util.GetValueOfInt(vendor.GetVA009_PO_PaymentMethod_ID()) > 0)
                 {
-                    po.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(vendor.GetVA009_PaymentMethod_ID()));
+                    po.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(vendor.GetVA009_PO_PaymentMethod_ID()));
                 }
                 else
                 {
@@ -471,6 +450,45 @@ namespace VAdvantage.Process
                     return po;
                 }
             }
+
+            //JID_1252: If Vendor do not have Po Pricelist bind. System should give message.
+            if (vendor.GetPO_PriceList_ID() > 0)
+            {
+                po.SetM_PriceList_ID(vendor.GetPO_PriceList_ID());
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(messageErrorOrSetting.ToString()))
+                {
+                    messageErrorOrSetting.Append(Msg.GetMsg(GetCtx(), "VIS_VendorPrcListNotDefine") + " : " + vendor.GetName());
+                }
+                else
+                {
+                    messageErrorOrSetting.Append(" , " + Msg.GetMsg(GetCtx(), "VIS_VendorPrcListNotDefine") + " : " + vendor.GetName());
+                }
+                po = null;
+                return po;
+            }
+
+            // JID_1262: If Payment Term is not bind BP, BP Group and No Default Payment Term. System do not create PO neither give message. 
+            if (vendor.GetPO_PaymentTerm_ID() > 0)
+            {
+                po.SetC_PaymentTerm_ID(vendor.GetPO_PaymentTerm_ID());
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(messageErrorOrSetting.ToString()))
+                {
+                    messageErrorOrSetting.Append(Msg.GetMsg(GetCtx(), "VIS_VendorPaytemNotDefine") + " : " + vendor.GetName());
+                }
+                else
+                {
+                    messageErrorOrSetting.Append(" , " + Msg.GetMsg(GetCtx(), "VIS_VendorPaytemNotDefine") + " : " + vendor.GetName());
+                }
+                po = null;
+                return po;
+            }
+
             po.SetBPartner(vendor);
 
             // Code Commented by Vivek Kumar on 20/09/2017 Assigned By Pradeep  for drop shipment
@@ -548,16 +566,17 @@ namespace VAdvantage.Process
                         //    }
                         //    continue;
                         //}
-                        // check price list
+
+                        // check price list                        
                         //if (Util.GetValueOfInt(dsRecod.Tables[0].Rows[i]["PO_PriceList_ID"]) == 0)
                         //{
                         //    if (string.IsNullOrEmpty(messageErrorOrSetting.ToString()))
                         //    {
-                        //        messageErrorOrSetting.Append(Msg.GetMsg(GetCtx(), "VIS_VendorPrcListNotDefine") + ":" + Util.GetValueOfString(dsRecod.Tables[0].Rows[i]["BPName"]));
+                        //        messageErrorOrSetting.Append(Msg.GetMsg(GetCtx(), "VIS_VendorPrcListNotDefine") + " : " + Util.GetValueOfString(dsRecod.Tables[0].Rows[i]["BPName"]));
                         //    }
                         //    else
                         //    {
-                        //        messageErrorOrSetting.Append(" , " + Msg.GetMsg(GetCtx(), "VIS_VendorPrcListNotDefine") + ":" + Util.GetValueOfString(dsRecod.Tables[0].Rows[i]["BPName"]));
+                        //        messageErrorOrSetting.Append(" , " + Msg.GetMsg(GetCtx(), "VIS_VendorPrcListNotDefine") + " : " + Util.GetValueOfString(dsRecod.Tables[0].Rows[i]["BPName"]));
                         //    }
                         //    continue;
                         //}

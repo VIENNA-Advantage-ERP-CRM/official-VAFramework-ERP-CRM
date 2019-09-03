@@ -1349,6 +1349,27 @@ namespace VAdvantage.Utility
         //{
         //    return GetContext("#AppFullUrl");
         //}
+
+        /// <summary>
+        ///Get Tab AD_Org_ID
+        /// </summary>
+        /// <param name="WindowNo"></param>
+        /// <param name="TabNo"></param>
+        /// <returns></returns>
+        public string SetUseCrystalReportViewer(string use)
+        {
+            return SetContext("#USE_CRYSTAL_REPORT_VIEWER",use);
+        }
+
+        /// <summary>
+        ///Get Login AD_User_ID
+        /// </summary>
+        /// <returns></returns>
+        public string GetUseCrystalReportViewer()
+        {
+            return GetContext("#USE_CRYSTAL_REPORT_VIEWER");
+        }	
+
     }
     #endregion
 }

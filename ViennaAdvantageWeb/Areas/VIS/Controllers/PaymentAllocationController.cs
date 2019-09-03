@@ -36,10 +36,11 @@ namespace VIS.Controllers
         /// <param name="open">Open Amount</param>
         /// <param name="DateAcct">Account Date</param>
         /// <param name="_CurrencyType_ID">Currency ConversionType ID</param>
+        /// <param name="isInterBPartner">Inter Business Partner</param>
         /// <returns></returns>
         [HttpPost]
         public string SaveCashData(string paymentData, string cashData, string invoiceData, string currency, bool isCash, int _C_BPartner_ID, int _windowNo, string payment, string DateTrx,
-            string appliedamt, string discount, string writeOff, string open, string DateAcct , int _CurrencyType_ID )
+            string appliedamt, string discount, string writeOff, string open, string DateAcct , int _CurrencyType_ID , bool isInterBPartner)
         {
 
             List<Dictionary<string, string>> pData = null;
@@ -63,7 +64,7 @@ namespace VIS.Controllers
 
 
             PaymentAllocation payments = new PaymentAllocation(ct);
-            msg = payments.SaveCashData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID);
+            msg = payments.SaveCashData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID, isInterBPartner);
 
             return msg;
         }
@@ -86,10 +87,11 @@ namespace VIS.Controllers
         /// <param name="open">Open Amount</param>
         /// <param name="DateAcct">Account Date</param>
         /// <param name="_CurrencyType_ID">Currency ConversionType ID</param>
+        /// <param name="isInterBPartner">Inter Business Partner</param>
         /// <returns></returns>
         [HttpPost]
         public string SavePaymentData(string paymentData, string cashData, string invoiceData, string currency, bool isCash, int _C_BPartner_ID, int _windowNo, string payment, string DateTrx,
-        string appliedamt, string discount, string writeOff, string open, string DateAcct , int _CurrencyType_ID )
+        string appliedamt, string discount, string writeOff, string open, string DateAcct, int _CurrencyType_ID, bool isInterBPartner)
         {
             List<Dictionary<string, string>> pData = null;
             List<Dictionary<string, string>> cData = null;
@@ -112,7 +114,7 @@ namespace VIS.Controllers
 
 
             PaymentAllocation payments = new PaymentAllocation(ct);
-            msg = payments.SavePaymentData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID);
+            msg = payments.SavePaymentData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID, isInterBPartner);
 
             return msg;
         }

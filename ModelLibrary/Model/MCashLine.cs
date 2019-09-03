@@ -109,16 +109,20 @@ namespace VAdvantage.Model
                 SetDescription(desc + " | " + description);
         }
 
-        /**
-         * 	Set Invoice - no discount
-         *	@param invoice invoice
-         */
+        /// <summary>
+        /// Set Invoice - no discount
+        /// </summary>
+        /// <param name="invoice">Invoice</param>
         public void SetInvoice(MInvoice invoice)
         {
             Decimal amt = 0;
             SetC_Invoice_ID(invoice.GetC_Invoice_ID());
             SetCashType(CASHTYPE_Invoice);
             SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+
+            // JID_0687: System is not updating the Location on cash journal line in cases of POS order and payment method cash
+            SetC_BPartner_Location_ID(invoice.GetC_BPartner_Location_ID());
+
             SetC_Currency_ID(invoice.GetC_Currency_ID());
             //	Amount
             MDocType dt = MDocType.Get(GetCtx(), invoice.GetC_DocType_ID());
@@ -154,12 +158,22 @@ namespace VAdvantage.Model
             _invoice = invoice;
         }
 
+        /// <summary>
+        /// Create Cash Journal Line
+        /// </summary>
+        /// <param name="invoice">Invoice</param>
+        /// <param name="C_InvoicePaySchedule_ID">Invoice Payemt Schedule</param>
+        /// <param name="amt">Amount</param>
         public void CreateCashLine(MInvoice invoice, int C_InvoicePaySchedule_ID, decimal amt)
         {
             SetC_Invoice_ID(invoice.GetC_Invoice_ID());
             SetC_InvoicePaySchedule_ID(C_InvoicePaySchedule_ID);
             SetCashType(CASHTYPE_Invoice);
             SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+
+            // JID_0687: System is not updating the Location on cash journal line in cases of POS order and payment method cash
+            SetC_BPartner_Location_ID(invoice.GetC_BPartner_Location_ID());
+
             SetC_Currency_ID(invoice.GetC_Currency_ID());
             //	Amount
             MDocType dt = MDocType.Get(GetCtx(), invoice.GetC_DocType_ID());
@@ -587,6 +601,17 @@ namespace VAdvantage.Model
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
                     return false;
                 }
+            
+            }
+
+            // check schedule is hold or not, if hold then no to save record
+            if (Get_ColumnIndex("C_InvoicePaySchedule_ID") >= 0 && GetC_InvoicePaySchedule_ID() > 0)
+            {
+                if (IsHoldpaymentSchedule(GetC_InvoicePaySchedule_ID()))
+                {
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PaymentisHold"));
+                    return false;
+                }
             }
 
             //	Verify CashType
@@ -596,6 +621,19 @@ namespace VAdvantage.Model
                 SetCashType(CASHTYPE_GeneralExpense);
             if (CASHTYPE_Charge.Equals(GetCashType()) && GetC_Charge_ID() == 0)
                 SetCashType(CASHTYPE_GeneralExpense);
+
+            // JID_1244: On Save of record need to check cash journal account date with check date. If check date is greater than account data need to give error as on payment window.
+            if (CASHTYPE_BankAccountTransfer.Equals(GetCashType()))
+            {
+                if (GetCheckDate() != null)
+                {
+                    if (GetCheckDate().Value.Date > GetParent().GetDateAcct().Value.Date)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckDateCantbeGreaterSys"));
+                        return false;
+                    }
+                }
+            }
 
             bool verify = newRecord
                 || Is_ValueChanged("CashType")
@@ -658,6 +696,12 @@ namespace VAdvantage.Model
                 SetLine(ii);
             }
 
+            // JID_1326: Voucher number would be pick from document number from header Hyphen line number
+            if (String.IsNullOrEmpty(GetVSS_RECEIPTNO()))
+            {
+                SetVSS_RECEIPTNO(Util.GetValueOfString(GetParent().Get_Value("DocumentNo")) + "-" + GetLine());
+            }
+
             // Added by Amit 1-8-2015 VAMRP
             //if (Env.HasModulePrefix("VAMRP_", out mInfo))
             //{
@@ -713,6 +757,26 @@ namespace VAdvantage.Model
             return true;
         }
 
+        /// <summary>
+        /// Is used to get Invoice payment schedule is Hold payment or not
+        /// </summary>
+        /// <param name="C_InvoicePaySchedule_ID">Invoice payment schedule reference</param>
+        /// <returns>TRUE, if hold payment</returns>
+        public bool IsHoldpaymentSchedule(int C_InvoicePaySchedule_ID)
+        {
+            try
+            {
+                String sql = "SELECT IsHoldPayment FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID = " + C_InvoicePaySchedule_ID;
+                String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                return IsHoldPayment.Equals("Y");
+            }
+            catch
+            {
+                // when column not found, mean hold payment functionlity not in system
+                return false;
+            }
+        }
+
         /**
        * 	After Save
        *	@param newRecord
@@ -724,7 +788,25 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
 
-            return UpdateCbAndLine();
+            if (!UpdateCbAndLine())
+                return false;
+
+            if (GetVSS_PAYMENTTYPE() == X_C_CashLine.VSS_PAYMENTTYPE_Payment && GetC_BPartner_ID() > 0)
+            {
+                MCash csh = new MCash(GetCtx(), GetC_Cash_ID(), Get_TrxName());
+                Decimal amt = MConversionRate.ConvertBase(GetCtx(), GetAmount(),	//	CM adjusted 
+                    GetC_Currency_ID(), csh.GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+
+                MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+                string retMsg = "";
+                bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), Decimal.Subtract(0, amt), out retMsg);
+                if (!crdAll)
+                    log.SaveWarning("Warning", retMsg);
+                else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                    log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+            }
+
+            return true;
         }
 
         private bool UpdateCbAndLine()
@@ -780,7 +862,7 @@ namespace VAdvantage.Model
             if (C_CASHBOOKLINE_ID == 0)
             {
                 cashbookLine.SetC_CashBook_ID(cashbook.GetC_CashBook_ID());
-                // Update org/client as on cash line
+                // SI_0419 : Update org/client as on cash line
                 cashbookLine.SetAD_Org_ID(GetAD_Org_ID());
                 cashbookLine.SetAD_Client_ID(GetAD_Client_ID());
                 cashbookLine.SetEndingBalance

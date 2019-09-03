@@ -36,12 +36,12 @@
 
         var drow3 = null;
         var drow4 = null;
-       
-       
-       
-       
-       
-      
+
+
+
+
+
+
         var lblRecNo = null;
         var recordAccessData = null;
         var curIndex = -1;
@@ -90,8 +90,8 @@
                 lblDepEntry = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities'));
 
             }
-            root = $("<div>");
-            subroot = $("<div class='vis-rad-contantWrap'>");
+            root = $("<div class='vis-forms-container'>");
+            subroot = $("<div class='vis-forms-container vis-rad-contantWrap'>");
             drow1 = $("<div class='vis-rad-contantTop'>");
             //divRecord = $("<div class='vis-rad-recordData' style='float:" + VIS.Application.isRTL?'right':'left' + "'>");
             divRole = $("<div class='vis-rad-roleCombo'>");
@@ -138,7 +138,7 @@
             //btnUp = $("<button  class='vis-rad-navBtn' disabled='disabled' style='float:" + VIS.Application.isRTL ? 'left' : 'right' + "'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/up-arrow.png'>"));;
             divNav.append(btnDown);
             divNav.append(btnUp);
-            
+
             drow1.append(divNav);
 
             drow2 = $("<div class='vis-rad-contantBottom'>");
@@ -163,37 +163,37 @@
             subroot.append(drow1);
             subroot.append(drow2);
             root.append(subroot);
-           
 
-          //  ///////////////////
-          //  drow3 = $("<div>");
-          //  drow4 = $("<div>");
-          //  root.append(drow1);
-          //  root.append(drow2);
-          //  root.append(drow3);
-          //  root.append(drow4);
-          //  btnOk = $("<button  class='VIS_Pref_pass-btn VIS_Pref_btn-pass-click'>OK</button>");
-          //  btnCancel = $("<button  class='VIS_Pref_pass-btn VIS_Pref_btn-pass-click'>Cancel</button>");
-          //  lblRole = $("<lable>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'AD_Role_ID'));
-          //  cmbRole = $("<select>");
-         
-          // // chkExclude = $("<input type='checkbox' checked >" + VIS.Msg.translate(VIS.Env.getCtx(), 'IsExclude') + "</input>");
-          // // chkReadOnly = $("<input type='checkbox' >" + VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly') + "</input>");
-          ////  chkDepEntry = $("<input type='checkbox' >" + VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities') + "</input>");
-           
-          //  drow1.append(btnDown);
-          //  drow1.append(btnNew);
-          //  drow2.append(lblRole);
-          //  drow2.append(cmbRole);
-          //  drow2.append(chkActive);
-          //  drow2.append(chkExclude);
-          //  drow2.append(chkReadOnly);
-          //  drow2.append(chkDepEntry);
-          //  drow2.append(btnDelete);
-          //  drow3.append(btnUp);
-          //  drow3.append(lblRecNo);
-          //  drow4.append(btnCancel);
-          //  drow4.append(btnOk);
+
+            //  ///////////////////
+            //  drow3 = $("<div>");
+            //  drow4 = $("<div>");
+            //  root.append(drow1);
+            //  root.append(drow2);
+            //  root.append(drow3);
+            //  root.append(drow4);
+            //  btnOk = $("<button  class='VIS_Pref_pass-btn VIS_Pref_btn-pass-click'>OK</button>");
+            //  btnCancel = $("<button  class='VIS_Pref_pass-btn VIS_Pref_btn-pass-click'>Cancel</button>");
+            //  lblRole = $("<lable>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'AD_Role_ID'));
+            //  cmbRole = $("<select>");
+
+            // // chkExclude = $("<input type='checkbox' checked >" + VIS.Msg.translate(VIS.Env.getCtx(), 'IsExclude') + "</input>");
+            // // chkReadOnly = $("<input type='checkbox' >" + VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly') + "</input>");
+            ////  chkDepEntry = $("<input type='checkbox' >" + VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities') + "</input>");
+
+            //  drow1.append(btnDown);
+            //  drow1.append(btnNew);
+            //  drow2.append(lblRole);
+            //  drow2.append(cmbRole);
+            //  drow2.append(chkActive);
+            //  drow2.append(chkExclude);
+            //  drow2.append(chkReadOnly);
+            //  drow2.append(chkDepEntry);
+            //  drow2.append(btnDelete);
+            //  drow3.append(btnUp);
+            //  drow3.append(lblRecNo);
+            //  drow4.append(btnCancel);
+            //  drow4.append(btnOk);
             bindEvents();
             loadRoles();
             loadRecords();
@@ -209,38 +209,57 @@
 
         var loadRoles = function () {
 
-            var sqlRole = VIS.MRole.getDefault().addAccessSQL("SELECT AD_Role_ID, Name FROM AD_Role ORDER BY 2", "AD_Role", VIS.MRole.SQL_NOTQUALIFIED,VIS.MRole.SQL_RW);
-            var dr = VIS.DB.executeReader(sqlRole, null, null);
+            //var sqlRole = VIS.MRole.getDefault().addAccessSQL("SELECT AD_Role_ID, Name FROM AD_Role ORDER BY 2", "AD_Role", VIS.MRole.SQL_NOTQUALIFIED,VIS.MRole.SQL_RW);
+            //var dr = VIS.DB.executeReader(sqlRole, null, null);
+            var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RecordAccess/GetRoles", null, null);
             var options = '<option Value="-1"></option>';
-            while (dr.read()) {
-                options += ('<option value="' + dr.getInt(0) + '">' + dr.getString(1) + '</option>');
+            //while (dr.read()) {
+            //    options += ('<option value="' + dr.getInt(0) + '">' + dr.getString(1) + '</option>');
+            //}
+            if (dr != null) {
+                for (i in dr)
+                    options += ('<option value="' + dr[i].AD_Role_ID + '">' + dr[i].Name + '</option>');
             }
             cmbRole.append(options);
             options = null;
-            sqlRole = null;
+            //sqlRole = null;
             dr = null;
 
         };
         var loadRecords = function () {
-            var sql = "SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID + " AND Record_ID=" + _Record_ID + " AND AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID();
+            //var sql = "SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID + " AND Record_ID=" + _Record_ID + " AND AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID();
             if (recordAccessData == null) {
                 recordAccessData = [];
             }
-            var dr = VIS.DB.executeReader(sql, null, null);
-            var item = null;
-            while (dr.read()) {
-                item = {};
-                item.AD_ROLE_ID = dr.getInt(0);
-                item.ISACTIVE = dr.getString(1);
-                item.ISDEPENDENTENTITIES = dr.getString(2);
-                item.ISEXCLUDE = dr.getString(3);
-                item.ISREADONLY = dr.getString(4);
-                recordAccessData.push(item);
+            //var dr = VIS.DB.executeReader(sql, null, null);
 
+            var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RecordAccess/GetRecordAccess", { "Table_ID": _AD_Table_ID, "Record_ID": _Record_ID }, null);
+            var item = null;
+            //while (dr.read()) {
+            //    item = {};
+            //    item.AD_ROLE_ID = dr.getInt(0);
+            //    item.ISACTIVE = dr.getString(1);
+            //    item.ISDEPENDENTENTITIES = dr.getString(2);
+            //    item.ISEXCLUDE = dr.getString(3);
+            //    item.ISREADONLY = dr.getString(4);
+            //    recordAccessData.push(item);
+
+            //}
+
+            if (dr != null) {
+                for (var i in dr) {
+                    item = {};
+                    item.AD_ROLE_ID = dr[i].AD_ROLE_ID;
+                    item.ISACTIVE = dr[i].ISACTIVE;
+                    item.ISDEPENDENTENTITIES = dr[i].ISDEPENDENTENTITIES;
+                    item.ISEXCLUDE = dr[i].ISEXCLUDE;
+                    item.ISREADONLY = dr[i].ISREADONLY;
+                    recordAccessData.push(item);
+                }
             }
             item = null;
             dr = null;
-            sql = null;
+            //sql = null;
             if (recordAccessData.length > 0) {
 
                 curIndex = 0;
@@ -249,12 +268,12 @@
             else {
                 cmdnew = true;
             }
-          
+
         };
         var save = function () {
 
             var roleID = cmbRole.val();
-            if (roleID == -1 ) {
+            if (roleID == -1) {
                 return;
             }
             var update = false;
@@ -307,9 +326,9 @@
             btnCancel.on('click', function () { onclose(); });
         };
         var cmdNew = function () {
-           
+
             cmdnew = true;
-            curIndex = (recordAccessData.length-1);
+            curIndex = (recordAccessData.length - 1);
             setLine();
             cmbRole.val(-1);
             chkActive.attr('checked', true);
@@ -332,21 +351,21 @@
             chkDepEntry.attr('checked', recordAccessData[curIndex].ISDEPENDENTENTITIES == 'Y' ? true : false);
             lblRecNo.empty();
             lblRecNo.append((curIndex + 1) + "/" + recordAccessData.length);
-            if (recordAccessData.length > (curIndex+1)) {
+            if (recordAccessData.length > (curIndex + 1)) {
                 btnDown.attr('disabled', false);
-                btnDown.css('opacity','1');
+                btnDown.css('opacity', '1');
             }
             else {
                 btnDown.attr('disabled', true);
-                btnDown.css('opacity','.5');
+                btnDown.css('opacity', '.5');
             }
             if (curIndex == 0) {
                 btnUp.attr('disabled', true);
-                btnUp.css('opacity','.5');
+                btnUp.css('opacity', '.5');
             }
             else {
                 btnUp.attr('disabled', false);
-                btnUp.css('opacity','1');
+                btnUp.css('opacity', '1');
             }
         };
         var cmdDelete = function () {
@@ -383,14 +402,14 @@
             btnDelete.off("click");
             btnOk.off("click");
             btnCancel.off("click");
-            loadRoles=null;
-            loadRecords=null;
-            save=null;
-            bindEvents=null;
-            cmdNew=null;
-            setLine=null;
-            cmdDelete=null;  
-            
+            loadRoles = null;
+            loadRecords = null;
+            save = null;
+            bindEvents = null;
+            cmdNew = null;
+            setLine = null;
+            cmdDelete = null;
+
             _AD_Table_ID = null;
             _Record_ID = null;
             drow1 = null;
@@ -418,8 +437,8 @@
             root.remove();
             root = null;
         };
-    
-        };
+
+    };
     VIS.RecordAccessDialog = RecordAccessDialog;
 
 })(VIS, jQuery);

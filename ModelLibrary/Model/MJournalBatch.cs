@@ -421,12 +421,19 @@ namespace VAdvantage.Model
             }
 
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct()))
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
             {
                 m_processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // JID_0521 - Restrict if debit and credit amount is not equal.-Mohit-12-jun-2019.
+            if (GetTotalCr() != GetTotalDr())
+            {
+                m_processMsg = Msg.GetMsg(GetCtx(), "DBAndCRAmtNotEqual");
+                return DocActionVariables.STATUS_INVALID;
+            }
 
             //	Add up Amounts & prepare them
             MJournal[] journals = GetJournals(false);
@@ -525,6 +532,10 @@ namespace VAdvantage.Model
                     return status;
                 }
             }
+
+            // JID_1290: Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             //	Implicit Approval
             ApproveIt();
 
@@ -583,6 +594,53 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }	//	completeIt
+
+        /// <summary>
+        /// Set the document number from Completed Document Sequence after completed
+        /// </summary>
+        private void SetCompletedDocumentNo()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (Get_ColumnIndex("IsReversal") > 0 && IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateDoc(DateTime.Now.Date);
+                if (GetDateAcct().Value.Date < GetDateDoc().Value.Date)
+                {
+                    SetDateAcct(GetDateDoc());
+
+                    //	Std Period open?
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType()))
+                    {
+                        throw new Exception("@PeriodClosed@");
+                    }
+                }
+            }
+
+            // if Overwrite Sequence on Complete checkbox is true.
+            if (dt.IsOverwriteSeqOnComplete())
+            {
+                // Set Drafted Document No into Temp Document No.
+                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                {
+                    SetTempDocumentNo(GetDocumentNo());
+                }
+
+                // Get current next from Completed document sequence defined on Document type
+                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                if (value != null)
+                {
+                    SetDocumentNo(value);
+                }
+            }
+        }
 
         /// <summary>
         /// Void Document.
@@ -676,6 +734,21 @@ namespace VAdvantage.Model
             reverse.SetDateAcct(GetDateAcct());
             reverse.SetC_Year_ID(GetC_Year_ID());
             //	Reverse indicator
+
+            if (reverse.Get_ColumnIndex("ReversalDoc_ID") > 0 && reverse.Get_ColumnIndex("IsReversal") > 0)
+            {
+                // set Reversal property for identifying, record is reversal or not during saving or for other actions
+                reverse.SetIsReversal(true);
+                // Set Orignal Document Reference
+                reverse.SetReversalDoc_ID(GetGL_JournalBatch_ID());
+            }
+
+            // for reversal document set Temp Document No to empty
+            if (reverse.Get_ColumnIndex("TempDocumentNo") > 0)
+            {
+                reverse.SetTempDocumentNo("");
+            }
+
             String description = reverse.GetDescription();
             if (description == null)
             {
@@ -684,8 +757,20 @@ namespace VAdvantage.Model
             else
             {
                 description += " ** " + GetDocumentNo() + " **";
-                reverse.SetDescription(description);
-                reverse.Save();
+                reverse.SetDescription(description);                
+            }
+            if (!reverse.Save())
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                {
+                    m_processMsg = pp.GetName() + " - " + "Could not reverse " + this;
+                }
+                else
+                {
+                    m_processMsg = "Could not reverse " + this;
+                }
+                return false;
             }
             //
 
@@ -699,7 +784,7 @@ namespace VAdvantage.Model
                 }
                 if (journal.ReverseCorrectIt(reverse.GetGL_JournalBatch_ID()) == null)
                 {
-                    m_processMsg = "Could not reverse " + journal;
+                    m_processMsg = "Could not reverse " + journal;                    
                     return false;
                 }
                 journal.Save();

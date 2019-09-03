@@ -1,0 +1,96 @@
+<!-- DEFAULT STYLE SETTINGS -->
+
+BODY { 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 8pt; 
+}
+
+.table { 
+	font-size: 8pt;
+	font-family: Verdana,Arial, Helvetica, sans-serif
+}
+
+A:link { 
+	color: blue; 
+	font-family: Verdana,Arial, Helvetica, sans-serif; 
+	
+}
+
+A:visited { 
+	color: blue; 
+
+}
+
+A:hover {color: red;}
+
+.header { 
+	background: black;
+	color: white; 
+	font-size: 8pt; 
+	font-family: Verdana,Arial, Helvetica, sans-serif;
+}
+A.header:link { color: white; text-decoration:none; }
+A.header:visited { color: white; text-decoration:none; }
+A.largeheader:link { 
+	color: white;
+	font-size: 12pt;
+	text-decoration:none;
+}
+A.largeheader:visited {
+	color: white;
+	font-size:12pt;
+	text-decoration:none;
+}
+A.header:hover { color: red; text-decoration:none; }
+
+.actions { 
+	background:#ffcc11;
+	/*background:gold;*/
+	color: black; 
+	font-size: 8pt; 
+	font-family: Verdana,Arial, Helvetica, sans-serif;
+}
+
+.radio { 
+	/*background:gold;*/
+	background:#ffcc00;
+}
+
+.results {
+	color: black; 
+	font-size: 8pt; 
+	font-family: Verdana,Arial, Helvetica, sans-serif;
+}
+
+A.results:link { color: blue }
+A.results:visited { color: blue }
+A.results:hover { color: red;}
+
+
+.button {
+	font-size: 8pt; 
+	font-family: Verdana,Arial, Helvetica, sans-serif;
+}
+
+.heading {
+	background: #ffff99;
+	font-size: 8pt; 
+	font-family: Verdana,Arial, Helvetica, sans-serif;
+	color: black;
+}
+
+.footer { 
+	background: #cc9900;
+	color: black; 
+	font-size: 8pt; 
+	font-family: Verdana,Arial, Helvetica, sans-serif;
+}
+
+.error {
+	color: red;
+	font-size: 9pt;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+
+

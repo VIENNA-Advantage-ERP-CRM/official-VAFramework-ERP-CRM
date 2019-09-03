@@ -31,6 +31,8 @@
         var $reset = null;
         // var $sentmail = null;
         var $savetofile = null;
+        var $btnlogDate = null;
+        var $btnDownLog = null;
         var $error = null;
 
         var $Okbtn = null;
@@ -109,7 +111,7 @@
         var $cmdWareHouse = null;
         var defaultLogin = null;
         //*********************************
-        var $root = $("<div>");
+        var $root = $("<div class='vis-forms-container'>");
         var $busyDiv = $("<div class='vis-apanel-busy'>")
         var windowNo = VIS.Env.getWindowNo();
         this.log = VIS.Logging.VLogger.getVLogger("UserPreference");
@@ -489,6 +491,52 @@
             $reset = root.find("#vbtnReset_" + windowNo);
             // $sentmail = root.find("#vbtnSentMail_" + windowNo);
             $savetofile = root.find("#vbtnSaveToFile_" + windowNo);
+
+            // check if did not logged in as System Administrator Role, 
+            // then hide download server log and Date section from user preference
+            // commented this line to hide button always, need to enable this in later versions
+            //if (VIS.context && !VIS.context.getAD_Role_ID() == 0)
+                root.find(".VIS_Pref_err_btnLeft").hide();
+
+            $btnlogDate = root.find("#vbtnLogDate_" + windowNo);
+            $btnDownLog = root.find("#vbtnDownLog_" + windowNo);
+
+            setTodaysDate($btnlogDate);
+
+            $btnDownLog.on('click', function (e) {
+                var dateLog = $btnlogDate.val();
+                if (dateLog)
+                    dateLog = new Date(dateLog).toISOString()
+                else
+                    dateLog = new Date().toISOString();
+                setBusy(true);
+                $.ajax({
+                    type: "POST",
+                    url: VIS.Application.contextUrl + "UserPreference/DownloadServerLog",
+                    dataType: "json",
+                    data: {
+                        logDate: dateLog,
+                    },
+                    success: function (zipName) {
+                        if (zipName) {
+                            var url = "TempDownload/" + zipName;
+                            window.open(VIS.Application.contextUrl + url);
+                            setTodaysDate($btnlogDate);
+                        }
+                        else {
+                            VIS.ADialog.info("VIS_NoLogFound", null, null);
+                        }
+                        setBusy(false);
+                    },
+                    error: function (data) {
+                        setBusy(false);
+                    }
+                });
+            });
+
+            // var hgt = $(".VIS_Pref_content-right-4").height() - 90;
+
+            // $("#divError_" + windowNo).css("height", hgt + "px");
 
             //check error check box
             $erroronly.prop("checked", true);
@@ -939,6 +987,21 @@
                 }, 500);
             });
 
+            function setBusy(isBusy) {
+                if (isBusy) 
+                    $busyDiv[0].style.visibility = 'visible';
+                else
+                    $busyDiv[0].style.visibility = 'hidden';
+            };
+
+            function setTodaysDate(ctrl) {
+                var now = new Date();
+                var day = ("0" + now.getDate()).slice(-2);
+                var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                var today = now.getFullYear() + "-" + (month) + "-" + (day);
+                ctrl.val(today);
+            };
+
             function getSavedTaskDetail() {
 
                 $.ajax({
@@ -1333,7 +1396,7 @@
                 var length = arrOfarr.length;
                 var textToInsert = "";
                 for (var a = 0; a < length; a += 1) {
-                    textToInsert += "<tr>";
+                    textToInsert += "<tr class='VIS_Pref-tbl-Row'>";
                     for (var i = 0; i < arrOfarr[a].length; i += 1) {
                         var obj = arrOfarr[a][i];
                         if (i == 0) {
@@ -1627,6 +1690,9 @@
             //    $sentmail.off("click");
             if ($savetofile)
                 $savetofile.off("click");
+
+            if ($btnDownLog)
+                $btnDownLog.off("click");
 
             $autologin = null;
             $transtab = null;

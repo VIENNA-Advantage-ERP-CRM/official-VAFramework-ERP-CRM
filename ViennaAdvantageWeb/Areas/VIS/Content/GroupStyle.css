@@ -77,6 +77,11 @@
     float: left;
 }
 
+/*******************************************/
+.vis-group-assign-content {
+    display: flex;
+}
+
 .vis-group-content-wrap {
     float: left;
     margin-top: 20px;

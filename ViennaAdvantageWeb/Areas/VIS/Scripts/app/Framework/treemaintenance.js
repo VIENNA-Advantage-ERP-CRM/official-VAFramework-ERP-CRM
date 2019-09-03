@@ -5,7 +5,7 @@
         this.frame;
         this.windowNo;
         var $self = this;
-        var $root = $('<div style="padding:15px 0 7px;background-color:white;height:100%"/>');
+        var $root = $('<div class="vis-forms-container" style="padding:15px 0 7px;background-color:white;height:100%"/>');
 
         var $leftTreeKeno;
         //var $isSummary = false;
@@ -57,11 +57,104 @@
         var $setorderflagss = true;
 
 
+        var baseUrl = VIS.Application.contextUrl;
+        var dataSetUrl = baseUrl + "JsonData/JDataSet";
+        var nonQueryUrl = baseUrl + "JsonData/ExecuteNonQuer";
+
+
         var $ldiv = $("<div  class='VIS-TM-left-tree' style='border-right:1px solid #ccc' >");
         var $mdiv = $("<div  class='VIS-TM-middle'>");
         var $rdiv = $("<div class='VIS-TM-right-slide'>");
         var mouseEnter = false;
 
+
+        //executeDataSet
+        var executeDataSet = function (sql, param, callback) {
+            var async = callback ? true : false;
+
+            var dataIn = { sql: sql, page: 1, pageSize: 0 };
+            if (param) {
+                dataIn.param = param;
+            }
+
+            var dataSet = null;
+
+            getDataSetJString(dataIn, async, function (jString) {
+                dataSet = new VIS.DB.DataSet().toJson(jString);
+                if (callback) {
+                    callback(dataSet);
+                }
+            });
+
+            return dataSet;
+        };
+
+        var executeScalar = function (sql, params, callback) {
+            var async = callback ? true : false;
+            var dataIn = { sql: sql, page: 1, pageSize: 0 }
+
+            var value = null;
+
+            getDataSetJString(dataIn, async, function (jString) {
+                dataSet = new VIS.DB.DataSet().toJson(jString);
+                var dataSet = new VIS.DB.DataSet().toJson(jString);
+                if (dataSet.getTable(0).getRows().length > 0) {
+                    value = dataSet.getTable(0).getRow(0).getCell(0);
+                }
+                else { value = null; }
+                dataSet.dispose();
+                dataSet = null;
+                if (async) {
+                    callback(value);
+                }
+            });
+
+            return value;
+        };
+
+        var executeQuery = function (sqls, params, callback) {
+            var async = callback ? true : false;
+            var ret = null;
+            var dataIn = { sql: sqls, param: params };
+
+           // dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
+            $.ajax({
+                url: nonQueryUrl + 'y',
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                async: async,
+                data: JSON.stringify(dataIn)
+            }).done(function (json) {
+                ret = json;
+                if (callback) {
+                    callback(json);
+                }
+            });
+
+            return ret;
+        };
+
+        function getDataSetJString(data, async, callback) {
+            var result = null;
+           // data.sql = VIS.secureEngine.encrypt(data.sql);
+            $.ajax({
+                url: dataSetUrl,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                async: async,
+                data: JSON.stringify(data)
+            }).done(function (json) {
+                result = json;
+                if (callback) {
+                    callback(json);
+                }
+                //return result;
+            });
+            return result;
+        };
+        
         var $lTopLeftDiv = $('<div class="VIS-TM-data-head">')
         var $lTopRightDiv = $('<div class="VIS-TM-data">');
         var $chkSummaryLevel = $('<input disabled type="checkbox" checked="true" />');
@@ -223,7 +316,7 @@
         //$rTopHeard.append($lblRh4).append($lblGetMenu).append($rightMenuDemand);
 
 
-       // var $chkTrace = $('<input type="checkbox" disabled style="margin-right:25px;float:left" />');
+        // var $chkTrace = $('<input type="checkbox" disabled style="margin-right:25px;float:left" />');
 
         var $chkTrace = $('<input type="checkbox"  style="float:left;margin-right:9px" disabled  />');
         //        var $lblTrace = $('<span style="float:left;margin-right:2px">' + VIS.Msg.getMsg("TraceItem") + '<span/>');
@@ -382,29 +475,28 @@
             $chkAllCheckOrNot.prop("checked", false);
         };
 
-        function GetCountOnTreeChanges()
-        {
+        function GetCountOnTreeChanges() {
             var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            table_id = VIS.DB.executeDataSet(table_id, null, null);
+            table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
                 table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
             }
 
             var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
-            tablename = VIS.DB.executeDataSet(tablename, null, null);
+            tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
             }
 
 
             TreeTableName();
-          //  var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
+            //  var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
 
             var sqlQry = "SELECT Count(*) as Count FROM " + tablename + " WHERE IsActive='Y' AND " + tablename + "_ID  IN (SELECT Node_ID FROM " + tableTreeName + " where AD_Tree_ID=" + $treeID + ")";
 
             sqlQry = VIS.MRole.addAccessSQL(sqlQry, tablename, true, false);
 
-            sqlQry = VIS.DB.executeDataSet(sqlQry, null, null);
+            sqlQry = executeDataSet(sqlQry, null, null);
             sqlQry = sqlQry.tables[0].rows[0].cells["count"];
             if (sqlQry > 0) {
                 chkCountForrestriction = true;
@@ -413,25 +505,20 @@
                 chkCountForrestriction = false;
             }
 
-            if (bindornot == "false")
-            {
-                if (sqlQry == convertmenuArray.length)
-                {
+            if (bindornot == "false") {
+                if (sqlQry == convertmenuArray.length) {
                     var sqlQryss = "SELECT node_id  FROM " + tableTreeName + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
-                    sqlQryss = VIS.DB.executeDataSet(sqlQryss, null, null);
-                    if (sqlQryss != null)
-                    {
+                    sqlQryss = executeDataSet(sqlQryss, null, null);
+                    if (sqlQryss != null) {
                         var node_Idss = null;
-                        for (var t = 0; t < sqlQryss.tables[0].rows.length; t++)
-                        {
+                        for (var t = 0; t < sqlQryss.tables[0].rows.length; t++) {
                             node_Idss = sqlQryss.tables[0].rows[t].cells["node_id"];
 
                             if ($.inArray(node_Idss, convertmenuArray) < 0) {
                                 chkCountForrestriction = true;
                                 break;
                             }
-                            else
-                            {
+                            else {
                                 chkCountForrestriction = false
                             }
 
@@ -443,8 +530,7 @@
 
 
         var chkCountForrestriction = false;
-        function TreeDataOnCmbChange($cmbSelectedType, $treeID, $cmbIsallnodes, $isSummary)
-        {
+        function TreeDataOnCmbChange($cmbSelectedType, $treeID, $cmbIsallnodes, $isSummary) {
             // $bsyDiv[0].style.visibility = "visible";
             $bsyDivTree[0].style.visibility = "visible";
 
@@ -452,17 +538,15 @@
             if (!$chkSummaryLevel.is(":checked")) {
                 GetCountForRestriction();
 
-                if ($chkSummaryLevel.is(":checked"))
-                {
+                if ($chkSummaryLevel.is(":checked")) {
                     $isSummary = true;
                 }
-                else
-                {
+                else {
                     $isSummary = false;
                 }
-                
+
             }
-            
+
 
 
 
@@ -476,11 +560,10 @@
                         LoadTreeData(result);
 
 
-                        
 
 
-                        window.setTimeout(function ()
-                        {
+
+                        window.setTimeout(function () {
                             window.setTimeout(function () {
                                 if ($cmbSelectTree.val() == "") {
                                     cmbTreeOnRefresh();
@@ -723,6 +806,7 @@
                         window.setTimeout(function () {
                             getParentID = $leftTreeDiv.find(".k-state-selected").find(".treechild").attr("data-nodeid");
                             if ($chkSummaryLevel.is(":checked")) {
+                                $leftTreeDiv.find(".k-state-hover").removeClass("k-state-hover");
                                 GetDataTreeNodeSelect(getParentID, $treeID, pageNoForChild, pageSizeForChild, searchChildNode, getTreeNodeChkValue, e);
                             }
                         }, 300);
@@ -792,15 +876,13 @@
             }, 200);
 
 
-            if (changeSeqFlag == true)
-            {
+            if (changeSeqFlag == true) {
                 $leftTreeKeno.data("kendoTreeView").expand(".k-item");
                 //$leftTreeDiv.find("div").find("div[data-nodeid='" + onseqSelectID + "']").parent().addClass("k-state-selected")[0].scrollIntoView();
 
                 $leftTreeDiv.find("div").find("div[data-nodeid='" + onseqSelectID + "']").parent().addClass("k-state-selected");
 
-                if ($leftTreeDiv.find("span").hasClass("k-state-selected"))
-                {
+                if ($leftTreeDiv.find("span").hasClass("k-state-selected")) {
                     $leftTreeDiv.find("div").find("div[data-nodeid='" + onseqSelectID + "']").parent().addClass("k-state-selected")[0].scrollIntoView();
                 }
 
@@ -1044,8 +1126,7 @@
 
 
         var trenodeselectedId = 0;
-        function onDrop(e)
-        {
+        function onDrop(e) {
 
 
             //if (!e.valid) {
@@ -1080,11 +1161,9 @@
                 return;
             }
 
-            if (e.dropPosition == "after")
-            {
+            if (e.dropPosition == "after") {
 
-                if ($(e.dropTarget).parent().attr("data-nodeid")==0)
-                {
+                if ($(e.dropTarget).parent().attr("data-nodeid") == 0) {
                     e.preventDefault();
                     $deleteArea.removeClass("VIS-TM-ondragdrop");
                     $deleteArea.css("display", "none");
@@ -1190,8 +1269,7 @@
                     // $treeRefresh.css("display", "inherit");
                     return;
                 }
-                if ($(e.dropTarget).find(".treechild").attr("data-nodeid") == 0)
-                {
+                if ($(e.dropTarget).find(".treechild").attr("data-nodeid") == 0) {
                     e.preventDefault();
                     $deleteArea.removeClass("VIS-TM-ondragdrop");
                     $deleteArea.css("display", "none");
@@ -1229,31 +1307,35 @@
 
 
             var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            tree = VIS.DB.executeDataSet(tree, null, null);
+            tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
 
 
             if (treeType == "PR") {
-                tbname = "ad_treenodepr"
+                tbname = "AD_TreeNodePR"
             }
             else if (treeType == "BP") {
-                tbname = "ad_treenodebp"
+                tbname = "AD_TreeNodeBP"
             }
             else if (treeType == "MM") {
-                tbname = "ad_treenodemm"
+                tbname = "AD_TreeNodeMM"
             }
             else {
-                tbname = "ad_treenode"
+                tbname = "AD_TreeNode"
             }
 
             var $dropTreeDataNodeIDasParentID = $leftTreeKeno.find(".k-state-hover").find(".treechild").attr("data-nodeid");
             var isSummary = $leftTreeKeno.find(".k-state-hover").find(".treechild").attr("data-issummary");
+
+           
+
             if (isSummary == "true") {
                 SaveTreeDragDrop($treeID, $dragTreeDataNodeID, $dropTreeDataNodeIDasParentID);
                 var cNode = $(e.destinationNode);
                 $bsyDiv[0].style.visibility = "visible";
 
                 //---------------------------------
+
                 window.setTimeout(function () {
                     $bsyDiv[0].style.visibility = "visible";
                     moveDraggedItemToFirstPalce(cNode);
@@ -1262,6 +1344,7 @@
                         SearchNodeInTree(e);
                     }
                     SelectedNodeColor();
+                    dblSelectedNod();
                     $bsyDiv[0].style.visibility = "hidden";
 
                 }, 100);
@@ -1279,10 +1362,11 @@
                     $bsyDiv[0].style.visibility = "hidden";
                     return;
                 };
+
+                dblSelectedNod();
             }
 
-            if (trenodeselectedId > 0)
-            {
+            if (trenodeselectedId > 0) {
                 window.setTimeout(function () {
 
                     $leftTreeDiv.find(".k-state-selected").removeClass("k-state-selected");
@@ -1308,29 +1392,28 @@
                         var sequence = 0;
 
                         var getseqqry = "SELECT seqno FROM " + tbname + "  WHERE AD_Tree_ID=" + $treeID + " AND node_id=" + cNode.find(".treechild").attr("data-nodeid");
-                        var dsss = VIS.DB.executeDataSet(getseqqry, null, null);
+                        var dsss = executeDataSet(getseqqry, null, null);
 
                         if (dsss.tables[0].rows.length > 0) {
                             sequence = dsss.tables[0].rows[0].cells["seqno"];
                         }
 
 
-                        if (droppossitions == "after")
-                        {
+                        if (droppossitions == "after") {
                             sequence = sequence + 1;
                         }
-                        
+
 
 
 
 
                         var increaseSqe = "update " + tbname + " set seqno=seqno+1,Updated=Sysdate,parent_ID=0 where seqno >=" + sequence +
                                          " AND (parent_id=0 or parent_id is null)  AND AD_Tree_ID=" + $treeID;
-                        VIS.DB.executeQuery(increaseSqe, null, null);
+                        executeQuery(increaseSqe, null, null);
 
 
 
-                  
+
 
 
 
@@ -1339,25 +1422,24 @@
                         if (getparentornot > 0) {
                             var movedSetSeq = "update " + tbname + " set seqno=" + sequence + ",parent_id=0  where node_id=" + setmoveSeq +
                                            "   AND AD_Tree_ID=" + $treeID;
-                            VIS.DB.executeQuery(movedSetSeq, null, null);
+                            executeQuery(movedSetSeq, null, null);
                         }
-                        else
-                        {
+                        else {
                             var movedSetSeq = "update " + tbname + " set seqno=" + sequence + " where node_id=" + setmoveSeq +
                                            " AND (parent_id=0 or parent_id is null) AND AD_Tree_ID=" + $treeID;
-                            VIS.DB.executeQuery(movedSetSeq, null, null);
+                            executeQuery(movedSetSeq, null, null);
                         }
 
 
-                        
 
-                        
+
+
                         //var nodeidfromcnode = cNode.find(".treechild").attr("data-nodeid");
                         //var movednodeid = $(soursenodes).find(".treechild").attr("data-nodeid");
                         //var updatesqn = "UPDATE " + tbname + "  SET Updated=Sysdate, seqNo=" + seqnoafterdrop + " WHERE node_id=" + movednodeid + " AND AD_Tree_ID=" + $treeID;
 
                         //VIS.DB.executeQuery(updatesqn, null, null);
-                        
+
 
                         //for (var l = 0; l < ulss.length; l++)
                         //{
@@ -1443,7 +1525,7 @@
                                                 " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + nd;
 
 
-                                VIS.DB.executeQuery(sql, null, null);
+                                executeQuery(sql, null, null);
                             }
 
                         }
@@ -1461,7 +1543,7 @@
                                                 " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + nd;
 
 
-                                VIS.DB.executeQuery(sql, null, null);
+                                executeQuery(sql, null, null);
                             }
 
                         }
@@ -1473,10 +1555,10 @@
             window.setTimeout(function () {
                 if ($cmbSearch.val() != "") {
                     SearchNodeInTree(e);
-                }
+                }              
             }, 300);
 
-           
+
             //else
             //{
             //    window.setTimeout(function ()
@@ -1541,15 +1623,22 @@
 
             // $bsyDiv[0].style.visibility = "hidden";
 
-
+           
 
         };
+
+        function dblSelectedNod() {
+            if ($leftTreeDiv.find(".k-state-selected").length > 1) {
+                $leftTreeDiv.find(".k-state-selected").removeClass("k-state-selected");
+                $ulMid.empty();
+            }
+        };
+
 
         function moveDraggedItemToFirstPalce(cNode) {
             var currentparent = cNode.parent();
 
-            if (currentparent.attr("role") == "tree") 
-            {
+            if (currentparent.attr("role") == "tree") {
                 var ulss = cNode.parent().children().children('ul').children()[cNode.parent().children().children('ul').children().length - 1]
 
                 if (ulss && currentparent) {
@@ -1621,6 +1710,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "TreeMaintenance/GetDataTreeNodeSelect",
                 type: 'Post',
+                async: false,
                 data: { nodeID: getParentID, treeID: $treeID, pageNo: pageNoForChild, pageLength: pageSizeForChild, searchChildNode: searchChildNode, getTreeNodeChkValue: getTreeNodeChkValue },
                 success: function (data) {
                     // $ulMid.sortable();
@@ -1847,7 +1937,7 @@
                         $bsyDiv[0].style.visibility = "visible";
                         TreeTableName();
                         var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
-                        var child = VIS.DB.executeDataSet(findchilds, null, null);
+                        var child = executeDataSet(findchilds, null, null);
 
                         if (child != null && child.tables[0].rows.length == 0) {
                             var selectedItemArray = [];
@@ -1965,33 +2055,33 @@
         var tbnameofTree = null;
         function getTreeTableName() {
             var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            table_id = VIS.DB.executeDataSet(table_id, null, null);
+            table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
                 table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
             }
 
             var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
-            tablename = VIS.DB.executeDataSet(tablename, null, null);
+            tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
             }
 
             var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            tree = VIS.DB.executeDataSet(tree, null, null);
+            tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
 
 
             if (treeType == "PR") {
-                tbnameofTree = "ad_treenodepr"
+                tbnameofTree = "AD_TreeNodePR";
             }
             else if (treeType == "BP") {
-                tbnameofTree = "ad_treenodebp"
+                tbnameofTree = "AD_TreeNodeBP";
             }
             else if (treeType == "MM") {
-                tbnameofTree = "ad_treenodemm"
+                tbnameofTree = "AD_TreeNodeMM";
             }
             else {
-                tbnameofTree = "ad_treenode"
+                tbnameofTree = "AD_TreeNode"
             }
         };
 
@@ -2047,8 +2137,7 @@
                     $checkMorRdragable = true;
                     dragMenuNodeIDArray = [];
                     mliDragArray = [];
-                    for (var j = 0; j < $($(getIDFromContainer.find("li li"))).length; j++)
-                    {
+                    for (var j = 0; j < $($(getIDFromContainer.find("li li"))).length; j++) {
                         var IDPush = $($(getIDFromContainer.find("li li"))[j]).attr("id");
                         //if (bindornot == "false") {
                         //    if ($.inArray(parseInt(IDPush), convertmenuArray) >= 0) {
@@ -2106,7 +2195,7 @@
                         $bsyDiv[0].style.visibility = "visible";
                         TreeTableName();
                         var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
-                        var child = VIS.DB.executeDataSet(findchilds, null, null);
+                        var child = executeDataSet(findchilds, null, null);
 
                         if (child != null && child.tables[0].rows.length == 0) {
                             var selectedItemArray = [];
@@ -2122,8 +2211,7 @@
 
                             //bottomchildselectedID = selectedItemArray;
                             //selectedItemArray = selectedItemArray.toString();
-                            if (dragMenuNodeIDArray.length > 0)
-                            {
+                            if (dragMenuNodeIDArray.length > 0) {
                                 if (bindornot == "false") {
                                     var ides = [];
                                     for (var q = 0; q < mliDragArray.length; q++) {
@@ -2136,12 +2224,11 @@
                                     if (ides.length > 0) {
                                         DeleteNodeFromBottom($treeID, ides.toString());
                                     }
-                                    else
-                                    {
+                                    else {
                                         // VIS.ADialog.info("NeverDelete");
                                         VIS.ADialog.info("NeverDelete", true, msgShowforbindingWindow);
                                         $bsyDiv[0].style.visibility = "hidden";
-                                        
+
                                     }
 
 
@@ -2150,8 +2237,7 @@
                                     DeleteNodeFromBottom($treeID, dragMenuNodeIDArray.toString());
                                 }
                             }
-                            else
-                            {
+                            else {
                                 //VIS.ADialog.info("NeverDelete");
                                 VIS.ADialog.info("NeverDelete", true, msgShowforbindingWindow);
                                 $bsyDiv[0].style.visibility = "hidden";
@@ -2218,7 +2304,7 @@
 
             leftstopdiv.css("display", "inherit");
             onDisableDiv.css("display", "inherit");
-            
+
             $.ajax({
                 url: VIS.Application.contextUrl + "TreeMaintenance/LoadMenuData",
                 type: 'Post',
@@ -2229,11 +2315,9 @@
                     var nonSummImage;
                     var checkBox;
                     var unlink = $("<span style='margin-left:8px'></span>");
-                    if (res)
-                    {
-                        for (var i = 0; i < res.length; i++)
-                        {
-                            if ($ulRight.find("li li").length > 0) {                              
+                    if (res) {
+                        for (var i = 0; i < res.length; i++) {
+                            if ($ulRight.find("li li").length > 0) {
 
                                 var lisItem = $ulRight.find('[data-id="' + res[i]["ID"] + '"]');
                                 if (lisItem && lisItem.length > 0) {
@@ -2248,7 +2332,7 @@
                             }
 
 
-                          
+
 
                             if (res[i]["issummary"] == 'Y') {
                                 if (res[i]["disabled"] == true) {
@@ -2259,8 +2343,8 @@
                                     checkBox = $('<input  class="vis-tm-chkbox"  style="cursor:pointer;float:left; margin-right: 10px;" type="checkbox" />');
                                     summImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/folder.png'></img>";
                                 }
-                                
-                                
+
+
                                 $ulRight.append($('<li class="vis-tm-upperLi">').append($("<div class='vis-tm-upperdivchkandimg'>").append(checkBox).append(summImage)).append($("<div class='vis-tm-upperdivli'>").append($("<li class='" + res[i]["classopacity"] + " vis-tm-textli ' checkSummary='checkSummary'  style='cursor:default;color:" + res[i]["color"] + "' id='" + res[i]["ID"] + "' data-id='" + res[i]["ID"] + "'  style='cursor:pointer'  >" + VIS.Utility.encodeText(res[i].Name) + " (" + VIS.Utility.encodeText(res[i].description) + ")" + "</li>").append($("<span title='" + VIS.Msg.getMsg("UnlinkNode") + "' style='cursor:pointer;margin-left:8px' class='" + res[i]["unlinkClass"] + "'></span>")))));
 
                             }
@@ -2273,7 +2357,7 @@
                                     checkBox = $('<input  class="vis-tm-chkbox"  style="cursor:pointer;float:left; margin-right: 10px;" type="checkbox" />');
                                     nonSummImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/mWindow.png'></img>";
                                 }
-                             
+
 
                                 $ulRight.append($('<li class="vis-tm-upperLi">').append($("<div class='vis-tm-upperdivchkandimg'>").append(checkBox).append(nonSummImage)).append($("<div class='vis-tm-upperdivli'>").append($("<li class='" + res[i]["classopacity"] + " vis-tm-textli ' style='cursor:default;color:" + res[i]["color"] + "' id='" + res[i]["ID"] + "' data-id='" + res[i]["ID"] + "'   style='cursor:pointer'  >" + VIS.Utility.encodeText(res[i].Name) + " (" + VIS.Utility.encodeText(res[i].description) + ")" + "</li>").append($("<span title='" + VIS.Msg.getMsg("UnlinkNode") + "'  style='cursor:pointer;margin-left:8px' class='" + res[i]["unlinkClass"] + "'></span>")))));
 
@@ -2296,7 +2380,7 @@
                     }
                     DragMenu();
                     SelectAllRightPanel();
-                    
+
                     $rightMenuDemand.prop("disabled", false);
                     leftstopdiv.css("display", "none");
                     onDisableDiv.css("display", "none");
@@ -3202,8 +3286,7 @@
 
                         var lstNewChildren = [];
 
-                        for (var t = 0; t < getIDFromContainer.find(".vis-tm-textli").length ; t++)
-                        {
+                        for (var t = 0; t < getIDFromContainer.find(".vis-tm-textli").length ; t++) {
                             var IsSummaryOrNot = null;
                             var ImageSource = null;
                             if ($(getIDFromContainer.find(".vis-tm-textli")[t]).attr("checkSummary") == "checkSummary") {
@@ -3223,21 +3306,19 @@
                             }
 
 
-                            if ($chkSummaryLevel.is(":checked"))
-                            {
+                            if ($chkSummaryLevel.is(":checked")) {
                                 if (IsSummaryOrNot == "true") {
                                     $treeExpandColapse.css("display", "inherit");
                                     $treeCollapseColapse.css("display", "none");
                                 }
                             }
 
-                            
-                            if (!$chkSummaryLevel.is(":checked"))
-                            {
+
+                            if (!$chkSummaryLevel.is(":checked")) {
                                 $treeExpandColapse.css("display", "inherit");
                                 $treeCollapseColapse.css("display", "none");
                             }
-                            
+
 
                             var textForTree = $(getIDFromContainer.find(".vis-tm-textli")[t]).text();
                             textForTree = textForTree.substring(0, textForTree.lastIndexOf("("));
@@ -3540,7 +3621,7 @@
                     }
                     else {
                         getTreeNodeChkValue = "false";
-                    }                        
+                    }
                     var selectedNodeID = $leftTreeDiv.find(".k-state-selected").find(".treechild").attr("data-nodeid");
                     GetDataTreeNodeSelect(selectedNodeID, $treeID, pageNoForChild, pageSizeForChild, searchChildNode, getTreeNodeChkValue, e);
 
@@ -3548,12 +3629,9 @@
             });
 
 
-            $cmbRightSearch.on('input', function (e)
-            {
-                if ('' == this.value)
-                {
-                    if ($cmbSelectTree.val() != "")
-                    {
+            $cmbRightSearch.on('input', function (e) {
+                if ('' == this.value) {
+                    if ($cmbSelectTree.val() != "") {
                         $ulRight.empty();
                         window.setTimeout(function () {
                             $ulRight.empty();
@@ -3681,9 +3759,9 @@
             });
 
 
-            unlinkeAllNode.on("click",OpenW2overlay)
+            unlinkeAllNode.on("click", OpenW2overlay)
 
-            $chkTrace.on("click",StopDefaultW2overlay);
+            $chkTrace.on("click", StopDefaultW2overlay);
 
         };
 
@@ -3691,40 +3769,35 @@
         var bindornot = "true";
         var convertmenuArray = null;
         var msgShowforbindingWindow = null;
-        function CreateRestrictionforDelete()
-        {           
+        function CreateRestrictionforDelete() {
             menuArray = [];
             var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            table_id = VIS.DB.executeDataSet(table_id, null, null);
+            table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
                 table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
             }
 
             var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
-            tablename = VIS.DB.executeDataSet(tablename, null, null);
+            tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
             }
 
-            bindornot = "true"; 
+            bindornot = "true";
 
-            if (tablename == "AD_Menu")
-            {
+            if (tablename == "AD_Menu") {
                 var rolCheck = "SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + $treeID;
-                var checkCount =VIS.DB.executeScalar(rolCheck);
-                if (checkCount > 0)
-                {
+                var checkCount = executeScalar(rolCheck);
+                if (checkCount > 0) {
                     bindornot = "false";
                 }
-                else
-                {
+                else {
                     var tenantCheck = "SELECT count(*) FROM AD_ClientInfo WHERE ad_tree_menu_id=" + $treeID;
-                    var checktenant = VIS.DB.executeScalar(tenantCheck);
-                    if (checktenant > 0)
-                    {
+                    var checktenant = executeScalar(tenantCheck);
+                    if (checktenant > 0) {
                         bindornot = "false";
                     }
-                }                
+                }
             }
 
             //if(bindornot == false)
@@ -3733,80 +3806,70 @@
 
             var formID = "SELECT ad_menu_id FROM AD_Menu WHERE ad_form_id IN (SELECT ad_form_id FROM ad_form WHERE name IN ('Tree Maintenance'))";
 
-           
 
 
-            var ds1 = VIS.DB.executeDataSet(formID, null, null);
 
-            if (ds1 != null && ds1.tables[0].rows.length > 0)
-            {
-                for (var i = 0; i < ds1.tables[0].rows.length; i++)
-                {
+            var ds1 = executeDataSet(formID, null, null);
+
+            if (ds1 != null && ds1.tables[0].rows.length > 0) {
+                for (var i = 0; i < ds1.tables[0].rows.length; i++) {
                     menuArray.push(ds1.tables[0].rows[i].cells["ad_menu_id"]);
                 }
-            }            
-          
+            }
 
 
-                var ds = VIS.DB.executeDataSet(getIdes, null, null);
 
-                if (ds != null && ds.tables[0].rows.length > 0)
-                {
-                    for (var i = 0; i < ds.tables[0].rows.length; i++)
-                    {                     
-                        menuArray.push(ds.tables[0].rows[i].cells["ad_menu_id"]);                        
-                    }
+            var ds = executeDataSet(getIdes, null, null);
+
+            if (ds != null && ds.tables[0].rows.length > 0) {
+                for (var i = 0; i < ds.tables[0].rows.length; i++) {
+                    menuArray.push(ds.tables[0].rows[i].cells["ad_menu_id"]);
                 }
+            }
             // }
-                convertmenuArray = menuArray;
-                menuArray = menuArray.toString();
+            convertmenuArray = menuArray;
+            menuArray = menuArray.toString();
 
-                var getnamebyID = "SELECT name FROM ad_menu WHERE ad_menu_id IN(" + menuArray + ") ORDER BY upper(name)";
-                var dss = VIS.DB.executeDataSet(getnamebyID, null, null);
-                
-                var messagess = "";
-                if (dss != null && dss.tables[0].rows.length > 0)
-                {
-                    for (var m = 0; m < dss.tables[0].rows.length; m++)
-                    {
-                        messagess += dss.tables[0].rows[m].cells["name"];
-                        messagess += ",";
-                    }
+            var getnamebyID = "SELECT name FROM ad_menu WHERE ad_menu_id IN(" + menuArray + ") ORDER BY upper(name)";
+            var dss = executeDataSet(getnamebyID, null, null);
+
+            var messagess = "";
+            if (dss != null && dss.tables[0].rows.length > 0) {
+                for (var m = 0; m < dss.tables[0].rows.length; m++) {
+                    messagess += dss.tables[0].rows[m].cells["name"];
+                    messagess += ",";
                 }
+            }
 
 
-                msgShowforbindingWindow = messagess + " " + VIS.Msg.getMsg("MenuBinded");
+            msgShowforbindingWindow = messagess + " " + VIS.Msg.getMsg("MenuBinded");
 
 
-                $bsyDivforbottom[0].style.visibility = "hidden";
+            $bsyDivforbottom[0].style.visibility = "hidden";
         };
 
 
-        function UpdateRollCheckSeq(idforupdate)
-        {
+        function UpdateRollCheckSeq(idforupdate) {
             TreeTableName();
 
             var maxSeq = "SELECT MAX(seqno) FROM " + tableTreeName + " WHERE AD_Tree_ID=" + $treeID;
-            var seq = VIS.DB.executeScalar(maxSeq);         
+            var seq = executeScalar(maxSeq);
             seq += 1;
             var increaseSqe = "update " + tableTreeName + " set seqno=" + seq + ",Updated=Sysdate,parent_ID=0 WHERE AD_Tree_ID=" + $treeID + " AND node_id=" + idforupdate;
 
-            VIS.DB.executeQuery(increaseSqe, null, null);
+            executeQuery(increaseSqe, null, null);
 
 
         };
 
 
-        function StopDefaultW2overlay(e) {            
-          //  e.stopPropagation();
+        function StopDefaultW2overlay(e) {
+            //  e.stopPropagation();
         };
 
-        function RemoeveLinkedNode(e)
-        {
-            if ($cmbSelectTree.val() != "")
-            {
-                if ($(this).find("span").hasClass("vis-tm-delete"))
-                {
+        function RemoeveLinkedNode(e) {
+            if ($cmbSelectTree.val() != "") {
+                if ($(this).find("span").hasClass("vis-tm-delete")) {
                     return;
                 }
 
@@ -3824,53 +3887,51 @@
                         chkCountForrestriction = false;
                     }
                 });
-            }            
+            }
         };
 
 
-        function RemoveLinkedItemFromTree()
-        {
-            
+        function RemoveLinkedItemFromTree() {
+            $bsyDiv[0].style.visibility = "visible";
             $.ajax({
                 url: VIS.Application.contextUrl + "TreeMaintenance/RemoveLinkedItemFromTree",
                 type: 'Post',
-                data: { treeID: $treeID,menuId: menuArray },
-                success: function (data)
-                {
+                data: { treeID: $treeID, menuId: menuArray },
+                success: function (data) {
                     var res = JSON.parse(data);
 
-                    if (res == "count")
-                    {
-                        $ulRight.empty();                        
+                    if (res == "count") {
+                        $ulRight.empty();
                         searchRightext = $cmbRightSearch.val();
                         $demandsMenu = $rightMenuDemand.val();
                         pageNo = 1;
                         LoadMenuData($treeID, $cmbSelectedType, searchRightext, $demandsMenu);
                         window.setTimeout(function () {
-                         //   changeSeqFlag = false;
+                            //   changeSeqFlag = false;
                             TreeRefresh();
                             window.setTimeout(function () {
                                 chkCountForrestriction = false;
+                                $bsyDiv[0].style.visibility = "hidden";
                             }, 200);
                         }, 200);
                     }
-                    else if (res == "menubind")
-                    {
+                    else if (res == "menubind") {
                         //VIS.ADialog.info("NeverDelete");
+                        $bsyDiv[0].style.visibility = "hidden";
                         VIS.ADialog.info("NeverDelete", true, msgShowforbindingWindow);
                     }
 
                 },
                 error: function (e) {
-                    console.log(e);                    
+                    console.log(e);
+                    $bsyDiv[0].style.visibility = "hidden";
                 },
             });
         };
 
 
         var $outerP = null;
-        function OpenW2overlay()
-        {            
+        function OpenW2overlay() {
             if ($cmbSelectTree.val() != "") {
                 var $pintohomeOverlay = $('<ul class="vis-apanel-tm-ul"></ul>');
 
@@ -3907,7 +3968,7 @@
                 else {
                     imgSpan.addClass("vis-tm-delete");
                 }
-                
+
                 $outerP.on("click", RemoeveLinkedNode);
             }
         };
@@ -4011,7 +4072,7 @@
 
         function CreateNewTree() {
             var sql = "SELECT AD_Window_ID FROM AD_Window WHERE Name='Tree'";
-            var n_win = VIS.DB.executeScalar(sql);
+            var n_win = executeScalar(sql);
 
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction("AD_Tree_ID", VIS.Query.prototype.EQUAL, $treeID);
@@ -4249,6 +4310,7 @@
                     $.ajax({
                         url: VIS.Application.contextUrl + "TreeMaintenance/UpdateItemSeqNo",
                         type: 'Post',
+                        //   async: false,
                         data: { treeID: $treeID, itemsid: ItemsIDTostring, ParentID: selectedNodeID },
                         success: function (data) {
                             var res = JSON.parse(data);
@@ -4645,12 +4707,10 @@
 
 
         var selectedItemArray = [];
-        function DeleteBottomDivData()
-        {
+        function DeleteBottomDivData() {
             selectedItemArray = [];
-            
-            if ($ulMid.find("input:checked").length > 0)
-            {
+
+            if ($ulMid.find("input:checked").length > 0) {
 
                 VIS.ADialog.confirm("DoYouWantToUnlink", true, "", "Confirm", function (result) {
                     if (!result) {
@@ -4662,8 +4722,7 @@
 
                         $bsyDiv[0].style.visibility = "visible";
                         // var selectedItem = $ulMid.find("input:selected");
-                        window.setTimeout(function ()
-                        {
+                        window.setTimeout(function () {
                             var selectedItemss = [];
 
                             for (var i = 0; i < $ulMid.find("input:checked").length; i++) {
@@ -4685,29 +4744,28 @@
 
                             //if (bindornot == "false")
                             //{   
-                                //var someFlag = true;
-                                //for (var i = 0; i < selectedItemss.length; i++)
-                                //{
-                                //    if ($.inArray(selectedItemss[i], convertmenuArray) < 0)
-                                //    {
-                                //        DeleteNodeFromBottom($treeID, selectedItemArray);
-                                //        break;
-                                //    }
-                                //    else
-                                //    {
-                                //        VIS.ADialog.info("NeverDelete");
-                                //        $bsyDiv[0].style.visibility = "hidden";
-                                //        break;
-                                //    }
+                            //var someFlag = true;
+                            //for (var i = 0; i < selectedItemss.length; i++)
+                            //{
+                            //    if ($.inArray(selectedItemss[i], convertmenuArray) < 0)
+                            //    {
+                            //        DeleteNodeFromBottom($treeID, selectedItemArray);
+                            //        break;
+                            //    }
+                            //    else
+                            //    {
+                            //        VIS.ADialog.info("NeverDelete");
+                            //        $bsyDiv[0].style.visibility = "hidden";
+                            //        break;
+                            //    }
 
-                                //}
-                           // }
+                            //}
+                            // }
                             // else {
                             if (selectedItemArray.length > 0) {
                                 DeleteNodeFromBottom($treeID, selectedItemArray);
                             }
-                            else
-                            {
+                            else {
                                 //VIS.ADialog.info("NeverDelete");
                                 VIS.ADialog.info("NeverDelete", true, msgShowforbindingWindow);
                                 $bsyDiv[0].style.visibility = "hidden";
@@ -4748,25 +4806,25 @@
             $bsyDiv[0].style.visibility = "visible";
 
             var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            table_id = VIS.DB.executeDataSet(table_id, null, null);
+            table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
                 table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
             }
             var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            tree = VIS.DB.executeDataSet(tree, null, null);
+            tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
             var tbname = "";
             if (treeType == "PR") {
-                tbname = "ad_treenodepr"
+                tbname = "AD_TreeNodePR"
             }
             else if (treeType == "BP") {
-                tbname = "ad_treenodebp"
+                tbname = "AD_TreeNodeBP"
             }
             else if (treeType == "MM") {
-                tbname = "ad_treenodemm"
+                tbname = "AD_TreeNodeMM"
             }
             else {
-                tbname = "ad_treenode"
+                tbname = "AD_TreeNode"
             }
 
             getIDFromChildLevel = [];
@@ -4796,7 +4854,7 @@
             }
 
 
-            
+
 
             $.ajax({
                 url: VIS.Application.contextUrl + "TreeMaintenance/DeleteNodeFromBottom",
@@ -4815,8 +4873,7 @@
 
 
 
-                        for (var i = 0; i < $ulMid.find("input:checked").length ; i++)
-                        {
+                        for (var i = 0; i < $ulMid.find("input:checked").length ; i++) {
                             getMidCheckBoxValue = false;
 
                             if (bindornot == "false") {
@@ -5079,35 +5136,32 @@
 
 
                         $deleteChild.addClass("vis-tm-delete");
-                        
+
                         var selectedArrayOndel = [];
-                            for (var t = 0; t < $ulMid.find("input:checked").length ; t++)
-                            {
-                                var id = $($ulMid.find("input:checked").parent().find("li")[t]).attr("data-id");
-                                if (bindornot == "false") {
-                                    if ($.inArray(parseInt(id), convertmenuArray) >= 0) {
-                                        continue;
-                                    }
+                        for (var t = 0; t < $ulMid.find("input:checked").length ; t++) {
+                            var id = $($ulMid.find("input:checked").parent().find("li")[t]).attr("data-id");
+                            if (bindornot == "false") {
+                                if ($.inArray(parseInt(id), convertmenuArray) >= 0) {
+                                    continue;
                                 }
-                                selectedArrayOndel.push(id);
-                                //$ulMid.find("li").find("li[data-id='" + id + "']").parent().remove();
                             }
+                            selectedArrayOndel.push(id);
+                            //$ulMid.find("li").find("li[data-id='" + id + "']").parent().remove();
+                        }
 
-                            for (var a = 0; a < selectedArrayOndel.length ; a++)
-                            {
-                                $ulMid.find("li").find("li[data-id='" + selectedArrayOndel[a] + "']").parent().remove();
-                            }
-
-
-                            if ($ulMid.find("input:checked").length>0)
-                            {
-                                VIS.ADialog.info("NeverDelete");
-                            }
+                        for (var a = 0; a < selectedArrayOndel.length ; a++) {
+                            $ulMid.find("li").find("li[data-id='" + selectedArrayOndel[a] + "']").parent().remove();
+                        }
 
 
-                       
-                      //    $ulMid.find("input:checked").parent().remove();
-                       
+                        if ($ulMid.find("input:checked").length > 0) {
+                            VIS.ADialog.info("NeverDelete");
+                        }
+
+
+
+                        //    $ulMid.find("input:checked").parent().remove();
+
                         HasScrollarOrNot();
                     }
 
@@ -5225,25 +5279,22 @@
 
 
             var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + $dragTreeDataNodeID + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
-            var child = VIS.DB.executeDataSet(findchilds, null, null);
+            var child = executeDataSet(findchilds, null, null);
 
-            if (child != null && child.tables[0].rows.length == 0)
-            {
+            if (child != null && child.tables[0].rows.length == 0) {
                 $chkValueFromDailog = true;
 
                 $deleteArea.removeClass("VIS-TM-ondragdrop");
                 $deleteArea.css("display", "none");
                 $deleteImage.css("display", "none");
 
-                if (bindornot == "false")
-                {
+                if (bindornot == "false") {
                     if ($.inArray(parseInt(delNodId), convertmenuArray) >= 0) {
                         //VIS.ADialog.info("NeverDelete");
                         VIS.ADialog.info("NeverDelete", true, msgShowforbindingWindow);
                         return;
                     }
-                    else
-                    {
+                    else {
                         DeleteNodeFromTree($treeID, delNodId, getMovingdiv, $chkValueFromDailog);
                     }
                 }
@@ -5251,7 +5302,7 @@
                     DeleteNodeFromTree($treeID, delNodId, getMovingdiv, $chkValueFromDailog);
                 }
 
-               
+
                 return;
             }
 
@@ -5325,32 +5376,32 @@
                 $bsyDiv[0].style.visibility = "visible";
 
                 var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
-                table_id = VIS.DB.executeDataSet(table_id, null, null);
+                table_id = executeDataSet(table_id, null, null);
                 if (table_id.tables[0].rows.length > 0) {
                     table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
                 }
 
                 var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
-                tablename = VIS.DB.executeDataSet(tablename, null, null);
+                tablename = executeDataSet(tablename, null, null);
                 if (tablename.tables[0].rows.length > 0) {
                     tablename = tablename.tables[0].rows[0].cells["tablename"];
                 }
                 var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
-                tree = VIS.DB.executeDataSet(tree, null, null);
+                tree = executeDataSet(tree, null, null);
                 treeType = tree.tables[0].rows[0].cells["treetype"];
                 var tbname = "";
                 // var tablename = "";
                 if (treeType == "PR") {
-                    tbname = "ad_treenodepr"
+                    tbname = "AD_TreeNodePR"
                 }
                 else if (treeType == "BP") {
-                    tbname = "ad_treenodebp"
+                    tbname = "AD_TreeNodeBP"
                 }
                 else if (treeType == "MM") {
-                    tbname = "ad_treenodemm"
+                    tbname = "AD_TreeNodeMM"
                 }
                 else {
-                    tbname = "ad_treenode"
+                    tbname = "AD_TreeNode"
                 }
 
                 selectedItemArray = delNodId.toString();
@@ -5391,7 +5442,7 @@
                 //    tbname = "ad_treenode"
                 //}
                 var getfirstParent = "select parent_ID  from " + tbname + " WHERE NODE_ID=" + delNodId + " AND AD_Tree_ID=" + $treeID + " AND IsActive='Y'";
-                getfirstParent = VIS.DB.executeDataSet(getfirstParent, null, null);
+                getfirstParent = executeDataSet(getfirstParent, null, null);
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "TreeMaintenance/DeleteNodeFromTree",
@@ -5470,8 +5521,7 @@
                                 // FindChildsID(tbname, delNodId, $treeID);
 
                                 //$leftTreeDiv.find("div").find("div[data-nodeid='" + delNodId + "']").parent().parent().parent().remove();
-                                if (bindornot == "false")
-                                {
+                                if (bindornot == "false") {
 
                                     GetIDsOnRolBindTree();
 
@@ -5495,9 +5545,9 @@
                                     //    }
                                     //}
                                 }
-                                
-                                   $leftTreeDiv.data("kendoTreeView").remove(draggingItemsss);
-                                
+
+                                $leftTreeDiv.data("kendoTreeView").remove(draggingItemsss);
+
 
 
 
@@ -5528,10 +5578,8 @@
                                     var sqlqryNodeID = getIDFromChildLevel[i];
                                     $ulMid.find("li").find("li[data-id='" + sqlqryNodeID + "']").parent().remove();
 
-                                    if (bindornot == "false")
-                                    {
-                                        if ($.inArray(parseInt(sqlqryNodeID), convertmenuArray) >= 0)
-                                        {
+                                    if (bindornot == "false") {
+                                        if ($.inArray(parseInt(sqlqryNodeID), convertmenuArray) >= 0) {
                                             continue;
                                         }
                                     }
@@ -5541,7 +5589,7 @@
 
 
                                     //$ulMid.find("li").find("li[id='" + sqlqryNodeID + "']").parent().remove();
-                                    
+
 
                                     // var getLi = $ulRight.find("li").find("li[id='" + sqlqryNodeID + "']").parent().parent();
                                     var getLi = $ulRight.find("li").find("li[data-id='" + sqlqryNodeID + "']").parent().parent();
@@ -5706,20 +5754,17 @@
         };
 
 
-        function GetIDsOnRolBindTree()
-        {
+        function GetIDsOnRolBindTree() {
             var draggingArrayss = [];
             for (var w = 0; w < getIDforwithlongQuery.length; w++) {
                 var idss = getIDforwithlongQuery[w];
                 draggingArrayss.push(parseInt(idss));
             }
 
-            for (var s = 0; s < draggingArrayss.length; s++)
-            {
-                if ($.inArray(draggingArrayss[s], convertmenuArray) >= 0)
-                {
+            for (var s = 0; s < draggingArrayss.length; s++) {
+                if ($.inArray(draggingArrayss[s], convertmenuArray) >= 0) {
                     UpdateRollCheckSeq(draggingArrayss[s])
-                   // var getrestrictIDss = $($($leftTreeDiv.find(".treechild")[0]).parent().parent().parent().find("ul")[0]);
+                    // var getrestrictIDss = $($($leftTreeDiv.find(".treechild")[0]).parent().parent().parent().find("ul")[0]);
                     var matchResult = $leftTreeDiv.find("div").find("div[data-nodeid='" + draggingArrayss[s] + "']").parent().parent().parent();
                     $leftTreeDiv.find("div").find("div[data-nodeid='" + draggingArrayss[s] + "']").parent().parent().parent().remove();
                     //getrestrictIDss.append(matchResult);
@@ -5735,13 +5780,13 @@
                             'ParentID': 0,//,
                             'ImageSource': "Areas/VIS/Images/mWindow.png",
                         }, $($($leftTreeDiv.find(".treechild")[0])));
-                    }                 
-                    
+                    }
+
                 }
             }
 
             if ($cmbSearch.val() != "") {
-                window.setTimeout(function () { 
+                window.setTimeout(function () {
                     SearchNodeInTree(getEvalueforsearch);
                 }, 200);
             }
@@ -5820,7 +5865,7 @@
                     "(SELECT tnp.node_id  FROM " + tbname + " tnp  WHERE tnp.parent_id IN" +
             "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.ad_tree_id= " + $treeID + " AND tnp.parent_id = " + delNodId + "    ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + "  ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + " ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + " ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + "  ";
 
-            childlevel = VIS.DB.executeDataSet(childsId, null, null);
+            childlevel = executeDataSet(childsId, null, null);
 
             for (var i = 0; i < childlevel.tables[0].rows.length; i++) {
                 var selectedItem = childlevel.tables[0].rows[i].cells["node_id"];
@@ -5876,7 +5921,7 @@
             chksearchvalues = e;
             $cmbSelectTree.empty();
             GetTreeNameForCombo();
-            changeSeqFlag = false;            
+            changeSeqFlag = false;
             TreeRefresh();
             $squenceDailog.addClass("vis-tm-delete");
 
@@ -6306,6 +6351,7 @@
         };
 
         function SelectedNodeColor() {
+            $leftTreeDiv.find(".k-state-hover").removeClass("k-state-hover");
             $leftTreeDiv.find(".vis-tm-selectedkendoNode").removeClass("vis-tm-selectedkendoNode");
             $leftTreeDiv.find(".k-state-selected").find("p").addClass("vis-tm-selectedkendoNode");
         };
@@ -6493,7 +6539,7 @@
                 window.setTimeout(function () {
                     chksearchvalues = e;
                 }, 200);
-                
+
                 if (bindornot == "false") {
                     if ($.inArray(parseInt(getID), convertmenuArray) < 0) {
                         DeleteNodeWithIcon($treeID, selectedItemArray, parent);//not found
@@ -6507,11 +6553,10 @@
                         $bsyDiv[0].style.visibility = "hidden";
                     }
                 }
-                else
-                {
+                else {
                     DeleteNodeWithIcon($treeID, selectedItemArray, parent);
                 }
-               
+
                 // }
                 //  else
                 //   {
@@ -6778,7 +6823,7 @@
                                         else {
                                             TreeTableName();
                                             var findparent = "Select parent_id from " + tableTreeName + " where node_id=" + e.target.id + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
-                                            var parent = VIS.DB.executeDataSet(findparent, null, null);
+                                            var parent = executeDataSet(findparent, null, null);
 
                                             if (parent != null && parent.tables[0].rows.length > 0) {
                                                 var parent_id = parent.tables[0].rows[0].cells["parent_id"];
@@ -6924,30 +6969,30 @@
 
 
             var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            table_id = VIS.DB.executeDataSet(table_id, null, null);
+            table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
                 table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
             }
 
             var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
-            tree = VIS.DB.executeDataSet(tree, null, null);
+            tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
             var tbname = "";
             if (treeType == "PR") {
-                tbname = "ad_treenodepr"
+                tbname = "AD_TreeNodePR"
             }
             else if (treeType == "BP") {
-                tbname = "ad_treenodebp"
+                tbname = "AD_TreeNodeBP"
             }
             else if (treeType == "MM") {
-                tbname = "ad_treenodemm"
+                tbname = "AD_TreeNodeMM"
             }
             else {
-                tbname = "ad_treenode"
+                tbname = "AD_TreeNode"
             }
 
             var findchild = "Select node_id from " + tbname + " where parent_id=" + selectedItemArray + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
-            var child = VIS.DB.executeDataSet(findchild, null, null);
+            var child = executeDataSet(findchild, null, null);
 
             if (child != null && child.tables[0].rows.length > 0) {
                 VIS.ADialog.confirm("ChildAlsoWillbeRemove", true, "", "Confirm", function (result) {
@@ -6997,23 +7042,22 @@
                                         getLi.find("input").prop("checked", true);
                                     }
 
-                                   
-                                        if (bindornot == "false")
-                                        {
-                                            GetIDsOnRolBindTree();
-                                            //for (var f = 0; f < getIDforwithlongQuery.length; f++)
-                                            //{
-                                            //    if ($.inArray(parseInt(getIDforwithlongQuery[f]), convertmenuArray) >= 0)
-                                            //    {
-                                            //        UpdateRollCheckSeq(getIDforwithlongQuery[f]);
-                                            //        var getrestrictIDss = $($($leftTreeDiv.find(".treechild")[0]).parent().parent().parent().find("ul")[0]);
-                                            //        var matchResult = $leftTreeDiv.find("div").find("div[data-nodeid='" + getIDforwithlongQuery[f] + "']").parent().parent().parent();
-                                            //        $leftTreeDiv.find("div").find("div[data-nodeid='" + getIDforwithlongQuery[f] + "']").parent().parent().parent().remove();
-                                            //        getrestrictIDss.append(matchResult);
-                                            //    }
-                                            //}
-                                        }
-                                  
+
+                                    if (bindornot == "false") {
+                                        GetIDsOnRolBindTree();
+                                        //for (var f = 0; f < getIDforwithlongQuery.length; f++)
+                                        //{
+                                        //    if ($.inArray(parseInt(getIDforwithlongQuery[f]), convertmenuArray) >= 0)
+                                        //    {
+                                        //        UpdateRollCheckSeq(getIDforwithlongQuery[f]);
+                                        //        var getrestrictIDss = $($($leftTreeDiv.find(".treechild")[0]).parent().parent().parent().find("ul")[0]);
+                                        //        var matchResult = $leftTreeDiv.find("div").find("div[data-nodeid='" + getIDforwithlongQuery[f] + "']").parent().parent().parent();
+                                        //        $leftTreeDiv.find("div").find("div[data-nodeid='" + getIDforwithlongQuery[f] + "']").parent().parent().parent().remove();
+                                        //        getrestrictIDss.append(matchResult);
+                                        //    }
+                                        //}
+                                    }
+
 
 
 
@@ -7101,14 +7145,11 @@
                                     //    var selectedItem = childlevel.tables[0].rows[i].cells["node_id"];
 
 
-                                    for (var i = 0; i < getIDFromChildLevel.length; i++)
-                                    {
+                                    for (var i = 0; i < getIDFromChildLevel.length; i++) {
                                         var selectedItem = getIDFromChildLevel[i];
                                         $ulMid.find("li").find("li[data-id='" + selectedItem + "']").parent().remove();
-                                        if (bindornot == "false")
-                                        {
-                                            if ($.inArray(parseInt(selectedItem), convertmenuArray) >= 0)
-                                            {
+                                        if (bindornot == "false") {
+                                            if ($.inArray(parseInt(selectedItem), convertmenuArray) >= 0) {
                                                 continue;
                                             }
                                         }
@@ -7139,7 +7180,7 @@
                                         // $ulRight.find(".vis-tm-menuselectedcolor").removeClass("vis-tm-menuselectedcolor");
 
                                         ////$ulMid.find("li").find("li[id='" + selectedItem + "']").parent().remove();
-                                       
+
 
                                         //var imgSource = $ulRight.find("li").find("li[id='" + selectedItem + "']").parent().parent().find("img").attr("src");
                                         //var changeImgSource = $ulRight.find("li").find("li[id='" + selectedItem + "']").parent().parent().find("img");
@@ -7502,7 +7543,7 @@
 
 
             var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
-            sqlQry = VIS.DB.executeDataSet(sqlQry, null, null);
+            sqlQry = executeDataSet(sqlQry, null, null);
             sqlQry = sqlQry.tables[0].rows[0].cells["count"];
 
             if (sqlQry > 5000) {
@@ -7524,7 +7565,7 @@
                 });
                 $treeBackDiv.find(".ui-resizable-e").css("right", "0px");
                 $treeBackDiv.find(".ui-resizable-s").css("bottom", "0px");
-                topTreeDiv.addClass("VIS-TM-resizediv");                
+                topTreeDiv.addClass("VIS-TM-resizediv");
                 $secoundDiv.height(leftMianDataDiv.height() - $treeBackDiv.height() - 20);
                 $cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
                 crossImages.css("right", "145px");
@@ -7536,10 +7577,10 @@
         };
 
 
+     
 
 
-        function OnTreeChange()
-        {
+        function OnTreeChange() {
             expandCollapse = false;
             clickontreenode = true;
             changeSeqFlag = false;

@@ -543,9 +543,17 @@ namespace VAdvantage.Model
                 return null;
             }
 
+            // if "Overwrite Sequence on complete" is not upto mark.
+            if (definite && !dt.IsOverwriteSeqOnComplete())
+            {
+                s_log.Warning("DocType_ID=" + C_DocType_ID + " Not Sequence Overwrite on Complete");
+                return null;
+            }
+
             lock (GetLock(dt.GetDocNoSequence_ID().ToString()))
             {
-                int seqID = dt.GetDocNoSequence_ID();
+                // Get Completed Document sequence if "Overwrite Sequence on complete" is marked as true on Document Type.
+                int seqID = definite ? dt.GetCompletedSequence_ID() : dt.GetDocNoSequence_ID();
                 MSequence seq = new MSequence(ctx, seqID, trxName);
 
                 if (VLogMgt.IsLevelAll())

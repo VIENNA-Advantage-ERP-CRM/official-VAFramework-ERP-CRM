@@ -183,8 +183,8 @@
         function startProcess(id, action) {
             var windw = new VIS.AWindow();
             //Uncomment this code to run report in split mode.
-            //  if (windw.initProcess(id, addShortcut, action,true)) {
-            if (windw.initProcess(id, addShortcut, action)) {
+              if (windw.initProcess(id, addShortcut, action,true)) {
+          //  if (windw.initProcess(id, addShortcut, action)) {
                 windw.onClosed = removeShortcut;
                 windw.show($mainConatiner);
                 registerView(windw);

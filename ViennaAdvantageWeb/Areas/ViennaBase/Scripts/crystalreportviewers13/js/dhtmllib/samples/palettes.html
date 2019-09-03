@@ -1,0 +1,194 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+
+		<script language="javascript">
+			// Initializations
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet();
+		</script>
+		
+		
+		<script language="javascript">
+
+			// Optional code : a right click menu
+			menu   = newMenuWidget("menu");
+			second = menu.addCheck("second","show second palette",clickCB);
+			third  = menu.addCheck("third","show third palette",clickCB);
+		
+			second.check(true);
+			third.check(true);
+		
+
+			// A palette container must be used, even when using only one palette
+			palettes = newPaletteContainerWidget("palettes",menu);
+
+
+
+		
+			// Create a first palette
+			palette1 = newPaletteWidget("palette1");
+			palettes.add(palette1);
+			
+			// 2 simples icon buttons
+			button1 = newIconWidget("button1",'format.gif',clickCB,null,"Button one",16,16,16*4,0,16*4,16);
+			palette1.add(button1)
+			button2 = newIconWidget("button2",'format.gif',clickCB,null,"Button two",16,16,16*5,0,16*5,16);
+			palette1.add(button2)
+			
+			
+			// Vertical separator
+			palette1.beginRightZone()
+			palette1.add()
+			
+			// Button with text
+			button3 = newIconWidget("button3",'format.gif',clickCB,"Bold","Button three",16,16,16*3,0,16*3,16);
+			palette1.add(button3)
+			
+
+
+			// Create a second palette
+			
+			pal2container=newWidget("pal2container")
+			sep1=newPaletteSepWidget("sep1")
+			palette2 = newPaletteWidget("palette2");
+			palettes.add(palette2);
+
+			button4 = newIconWidget("button4",'format.gif',clickCB,null,"Button one",16,16,16*4,0,16*4,16);
+			palette2.add(button4)
+
+			palette2.add()
+			combo=newComboWidget("combo1",clickCB,true)
+			palette2.add(combo)
+
+
+			// Create a second palette
+			
+			palette2.add()
+			customCombo=newCustomCombo("combo2",clickCB,true,200)
+			palette2.add(customCombo)
+			
+			ena=palette2.add(newIconCheckWidget("ena",null,clickCB,"Disable/Enable"));
+			enaI=palette2.add(newIconCheckWidget("enaI",null,clickCB,"Disable/Enable 2d item"));
+			
+			// Create a third palette
+			
+
+			pal3container=newWidget("pal3container")
+			sep2=newPaletteSepWidget("sep2")
+			palette3 = newPaletteWidget("palette3");
+			palettes.add(palette3);
+
+			button5 = newIconWidget("button5",'format.gif',clickCB,null,"Button one",16,16,16*7,0,16*7,16);
+			palette3.add(button5)
+
+		
+			// Callbacks
+			function clickCB()
+			{
+				switch(this.id)
+				{
+					// Show or hide palettes
+					
+					case "second":
+						pal2container.setDisplay(this.isChecked())
+						break
+
+					case "third":
+						pal3container.setDisplay(this.isChecked())
+						break
+						
+					
+					case "button1":
+					case "button2":
+					case "button3":
+						alert(this.id)
+						break
+						
+					case "combo1":
+						var sel=combo.getSelection()
+						alert("combo ID="+this.id+" Selection\nindex="+sel.index+"\nvalue= "+sel.value)
+						break
+
+
+					case "combo2":
+						var sel=customCombo.getSelection()
+						alert("combo ID="+this.id+" Selection\nindex="+sel.index+"\nvalue= "+sel.value)
+						break
+						
+					case "ena":
+						customCombo.setDisabled(ena.isChecked())
+						break
+						
+					case "enaI":
+						customCombo.setItemDisabled(1,enaI.isChecked())
+						break
+					case "id1":
+						alert("Action...")
+						break
+				}
+			}
+		
+
+			function loadCB()
+
+			{
+				palettes.init();
+				palette1.init();
+				
+				pal2container.init();
+				palette2.init();
+
+				pal3container.init();
+				palette3.init();
+
+				menu.init();
+				
+				combo.init()
+				combo.add("value 1","val1")
+				combo.add("value 2","val2")
+				combo.add("value 3","val3")
+
+				customCombo.init()
+				customCombo.add("value 1","val1")
+				customCombo.add("value 2","val2")
+				customCombo.add("value 3","val3")
+				
+				customCombo.addSeparator()
+				customCombo.addMenuItem("id1","I'm an action, not a combo item!",clickCB,"imgtabs.gif",0,0)
+				
+				
+				customCombo.valueSelect("val3")
+			}
+		</script>
+
+	</head>
+
+	<body onload="loadCB()">
+
+		<script language="javascript">
+			menu.write()
+			palettes.begin()
+				palette1.write()
+			
+				document.write('<div id="pal2container" style="display:block">')
+				sep1.write()
+				palette2.write()
+				document.write('</div>')
+
+			
+				document.write('<div id="pal3container" style="display:block">')
+				sep2.write()
+				palette3.write()
+				document.write('</div>')
+			palettes.end()
+		</script>
+
+	</body>
+
+</html>

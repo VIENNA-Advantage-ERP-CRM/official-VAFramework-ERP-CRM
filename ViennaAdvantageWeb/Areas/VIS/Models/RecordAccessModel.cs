@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
+using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 
@@ -51,6 +53,50 @@ namespace VIS.Areas.VIS.Models
                 return true;
             }
             return false;
+        }
+
+        // Added by Bharat on 06 June 2017
+        public List<Dictionary<string, object>> GetRoles(Ctx ctx)
+        {
+            List<Dictionary<string, object>> retDic = null;
+            string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT AD_Role_ID, Name FROM AD_Role ORDER BY 2", "AD_Role", MRole.SQL_NOTQUALIFIED, MRole.SQL_RW);
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic = new List<Dictionary<string, object>>();
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    Dictionary<string, object> obj = new Dictionary<string, object>();
+                    obj["AD_Role_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                    obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);                    
+                    retDic.Add(obj);
+                }
+            }
+            return retDic;
+        }
+
+        // Added by Bharat on 06 June 2017
+        public List<Dictionary<string, object>> GetRecordAccess(int _AD_Table_ID, int _Record_ID, Ctx ctx)
+        {
+            List<Dictionary<string, object>> retDic = null;
+            string sql = @"SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID 
+                + " AND Record_ID=" + _Record_ID + " AND AD_Client_ID=" + ctx.GetAD_Client_ID();
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic = new List<Dictionary<string, object>>();
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    Dictionary<string, object> obj = new Dictionary<string, object>();
+                    obj["AD_ROLE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_ROLE_ID"]);
+                    obj["ISACTIVE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISACTIVE"]);
+                    obj["ISDEPENDENTENTITIES"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEPENDENTENTITIES"]);
+                    obj["ISEXCLUDE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISEXCLUDE"]);
+                    obj["ISREADONLY"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISREADONLY"]);                    
+                    retDic.Add(obj);
+                }
+            }
+            return retDic;
         }
     }
 }

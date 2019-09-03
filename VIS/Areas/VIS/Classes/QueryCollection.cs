@@ -398,7 +398,7 @@ namespace VIS.Classes
 + " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=@AD_Tab_ID AND AD_DefaultUserQuery.AD_User_ID=@AD_User_ID  )  "
 + "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=@AD_Tab_ID1 AND AD_DefaultUserQuery.AD_User_ID=@AD_User_ID1 )   ELSE null End as AD_DefaultUserQuery_ID"
        + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =@AD_Client_ID AND AD_UserQuery.IsActive             ='Y' "
-       + " AND (AD_UserQuery.AD_Tab_ID           =@AD_Tab_ID2 OR AD_UserQuery.AD_Table_ID           =@AD_Table_ID)"
+       + " AND AD_UserQuery.AD_Tab_ID           =@AD_Tab_ID2 AND AD_UserQuery.AD_Table_ID           =@AD_Table_ID"
        + " AND lower(AD_UserQuery.Name) like lower('%'||@queryData||'%')"
        + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
 
@@ -406,7 +406,7 @@ namespace VIS.Classes
             queryList.VIS_115 = "SELECT count(*) "
             + " FROM AD_UserQuery AD_UserQuery LEFT OUTER JOIN AD_DefaultUserQuery AD_DefaultUserQuery ON AD_DefaultUserQuery.AD_UserQuery_ID=AD_UserQuery.AD_UserQuery_ID WHERE"
                                + " AD_UserQuery.AD_Client_ID=@AD_Client_ID AND AD_UserQuery.IsActive='Y'"
-                               + " AND (AD_UserQuery.AD_Tab_ID=@AD_Tab_ID OR AD_UserQuery.AD_Table_ID=@AD_Table_ID)"
+                               + " AND (AD_UserQuery.AD_Tab_ID=@AD_Tab_ID AND AD_UserQuery.AD_Table_ID=@AD_Table_ID)"
                                + " ORDER BY AD_UserQuery.AD_UserQuery_ID";
 
 
@@ -415,7 +415,7 @@ namespace VIS.Classes
 + " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=@AD_Tab_ID AND AD_DefaultUserQuery.AD_User_ID=@AD_User_ID  )  "
 + "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=@AD_Tab_ID1 AND AD_DefaultUserQuery.AD_User_ID=@AD_User_ID1 )   ELSE null End as AD_DefaultUserQuery_ID"
        + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =@AD_Client_ID AND AD_UserQuery.IsActive             ='Y' "
-       + " AND (AD_UserQuery.AD_Tab_ID           =@AD_Tab_ID2 OR AD_UserQuery.AD_Table_ID           =@AD_Table_ID)"
+       + " AND AD_UserQuery.AD_Tab_ID           =@AD_Tab_ID2 AND AD_UserQuery.AD_Table_ID           =@AD_Table_ID"
        + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
 
 
@@ -423,7 +423,7 @@ namespace VIS.Classes
 + " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=@AD_Tab_ID AND AD_DefaultUserQuery.AD_User_ID=@AD_User_ID  )  "
 + "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=@AD_Tab_ID1 AND AD_DefaultUserQuery.AD_User_ID=@AD_User_ID1 )   ELSE null End as AD_DefaultUserQuery_ID"
        + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =@AD_Client_ID AND AD_UserQuery.IsActive             ='Y' "
-       + " AND (AD_UserQuery.AD_Tab_ID           =@AD_Tab_ID2 OR AD_UserQuery.AD_Table_ID           =@AD_Table_ID)"
+       + " AND AD_UserQuery.AD_Tab_ID           =@AD_Tab_ID2 AND AD_UserQuery.AD_Table_ID           =@AD_Table_ID"
        + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
 
 
@@ -546,9 +546,14 @@ namespace VIS.Classes
                    + " AND t.AD_Language='" + Env.GetAD_Language(ctx) + "'"
                    + " AND l.AD_Reference_ID=@AD_Reference_ID AND l.IsActive='Y'";
 
+            queryList.VIS_149 = "SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID=@AD_Process_ID";
+
+            queryList.VIS_150 = "select ad_table_id from ad_table where tablename = 'C_PaySelection'";
 
 
+            queryList.VIS_151 = "select AD_Process_ID from AD_Process where name='VARPT_RemittancePrint'";
 
+            queryList.VIS_152 = " SELECT AD_Process_ID from C_BankAccountDoc WHERE C_BankAccount_ID=@BankAcct_ID AND rownum=1";
         }
 
         public static string GetQuery(string code, Ctx ctx)

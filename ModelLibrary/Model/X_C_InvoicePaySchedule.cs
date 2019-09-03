@@ -843,7 +843,18 @@ namespace VAdvantage.Model
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
-        //------------------------------------------------------------
+        /// <summary>
+        /// Set Hold Payment.
+        /// </summary>
+        /// <param name="IsHoldPayment">This checkbox used to hold the payments. If this checkbox true on the Order, it will set hold payment checkbox true at Invoice window while creating invoice against this order and user can’t do the payment for that invoice.</param>
+        public void SetIsHoldPayment(Boolean IsHoldPayment) { Set_Value("IsHoldPayment", IsHoldPayment); }
+
+        /// <summary>
+        /// Get Hold Payment.
+        /// </summary>
+        /// <returns>This checkbox used to hold the payments. If this checkbox true on the Order, it will set hold payment checkbox true at Invoice window while creating invoice against this order and user can't do the payment for that invoice.</returns>
+        public Boolean IsHoldPayment() { Object oo = Get_Value("IsHoldPayment"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
     }
 
 }

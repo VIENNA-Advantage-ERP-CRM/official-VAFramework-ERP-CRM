@@ -301,39 +301,31 @@ namespace VAdvantage.Model
             return (String)Get_Value("CommitmentType");
         }
 
+
         /** CostingLevel AD_Reference_ID=355 */
-        public static int COSTINGLEVEL_AD_Reference_ID = 355;
-        /** Org + Batch = A */
-        public static String COSTINGLEVEL_OrgPlusBatch = "A";
-        /** Batch/Lot = B */
-        public static String COSTINGLEVEL_BatchLot = "B";
-        /** Client = C */
-        public static String COSTINGLEVEL_Client = "C";
-        /** Organization = O */
-        public static String COSTINGLEVEL_Organization = "O";
+        public static int COSTINGLEVEL_AD_Reference_ID = 355;/** Org + Batch = A */
+        public static String COSTINGLEVEL_OrgPlusBatch = "A";/** Batch/Lot = B */
+        public static String COSTINGLEVEL_BatchLot = "B";/** Client = C */
+        public static String COSTINGLEVEL_Client = "C";/** Warehouse + Batch = D */
+        public static String COSTINGLEVEL_WarehousePlusBatch = "D";/** Organization = O */
+        public static String COSTINGLEVEL_Organization = "O";/** Warehouse = W */
+        public static String COSTINGLEVEL_Warehouse = "W";
         /** Is test a valid value.
-        @param test testvalue
-        @returns true if valid **/
+    @param test testvalue
+    @returns true if valid **/
         public bool IsCostingLevelValid(String test)
         {
-            return  test.Equals("A") || test.Equals("B") || test.Equals("C") || test.Equals("O");
+            return test == null || test.Equals("A") || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("O") || test.Equals("W");
         }
         /** Set Costing Level.
-        @param CostingLevel The lowest level to accumulate Costing Information */
+    @param CostingLevel The lowest level to accumulate Costing Information */
         public void SetCostingLevel(String CostingLevel)
         {
-            if (CostingLevel == null) throw new ArgumentException("CostingLevel is mandatory");
             if (!IsCostingLevelValid(CostingLevel))
-                throw new ArgumentException("CostingLevel Invalid value - " + CostingLevel + " - Reference_ID=355 - A - B - C - O");
-            if (CostingLevel.Length > 1)
-            {
-                log.Warning("Length > 1 - truncated");
-                CostingLevel = CostingLevel.Substring(0, 1);
-            }
-            Set_Value("CostingLevel", CostingLevel);
+                throw new ArgumentException("CostingLevel Invalid value - " + CostingLevel + " - Reference_ID=355 - A - B - C - D - O - W"); if (CostingLevel != null && CostingLevel.Length > 1) { log.Warning("Length > 1 - truncated"); CostingLevel = CostingLevel.Substring(0, 1); } Set_Value("CostingLevel", CostingLevel);
         }
         /** Get Costing Level.
-        @return The lowest level to accumulate Costing Information */
+    @return The lowest level to accumulate Costing Information */
         public String GetCostingLevel()
         {
             return (String)Get_Value("CostingLevel");

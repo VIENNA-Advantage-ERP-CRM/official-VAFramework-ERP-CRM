@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			function changeCB()
+			{
+				var sel=this.getSelection()
+				alert('changeCB\nsel.index='+sel.index+'\nsel.value='+sel.value)
+			}
+			
+			function checkCB()
+			{
+				alert('checkCB')
+				return true
+			}
+			
+			function clickCB()
+			{
+				var id=this.id
+				switch (id)
+				{
+					case "disaBtn":
+						txtCombo.setDisabled(this.isChecked())
+						break
+						
+					case "editBtn":
+						txtCombo.setContentEditable(this.isChecked())
+						break
+				}
+			}
+			
+			function loadCB()
+			{
+				txtCombo.init()
+				
+				disaBtn.init()
+				disaBtn.check(txtCombo.isDisabled())
+				editBtn.init()
+				editBtn.check(txtCombo.isContentEditable())
+			}
+
+			txtCombo=newTextComboWidget("txtCombo",50,"",100,changeCB,checkCB,null)
+			txtCombo.add("Test item 0","id0",true)
+			txtCombo.add("Test item 1","id1")
+			txtCombo.add("Test item 2","id2")
+			txtCombo.add("Test item plus int","id3")
+			txtCombo.add("court","id4")
+			txtCombo.add("Test item 1","id5")
+			txtCombo.add("Test item 2","id6")
+			
+			disaBtn=newIconCheckWidget("disaBtn",_skin+"information_icon.gif",clickCB,"Disabled","Disabled",32,32)
+			editBtn=newIconCheckWidget("editBtn",_skin+"information_icon.gif",clickCB,"Editable","Editable",32,32)
+									
+		</script>
+	</head>
+	<body onload="loadCB()">
+
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>TextCombo widget</b></u><br><br>
+				<script language="javascript">txtCombo.write()</script>
+				<br>
+				
+				<table align="center" width="25%"><tr>
+					<td><script language="javascript">disaBtn.write()</script></td>
+					<td><script language="javascript">editBtn.write()</script></td>
+				</tr></table>
+				
+			</div></div>
+		</td></tr></table>
+		
+		
+		
+	</body>
+	
+</html>

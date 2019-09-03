@@ -59,6 +59,35 @@
         return ret;
     };
 
+
+    var executeScalar = function (sql, params, callback) {
+        var async = callback ? true : false;
+        var dataIn = { sql: sql, page: 1, pageSize: 0 }
+        if (params) {
+            dataIn.param = params;
+        }
+        var value = null;
+
+
+        getDataSetJString(dataIn, async, function (jString) {
+            dataSet = new VIS.DB.DataSet().toJson(jString);
+            var dataSet = new VIS.DB.DataSet().toJson(jString);
+            if (dataSet.getTable(0).getRows().length > 0) {
+                value = dataSet.getTable(0).getRow(0).getCell(0);
+
+            }
+            else { value = null; }
+            dataSet.dispose();
+            dataSet = null;
+            if (async) {
+                callback(value);
+            }
+        });
+
+        return value;
+    };
+
+
     //DataSet String
     function getDataSetJString(data, async, callback) {
         var result = null;
@@ -90,7 +119,7 @@
         var list = null;
         var tree_ID = treeID;
         var treeNode_ID = treeNodeID;
-       
+
 
         var rv = new VIS.ReportViewer(windowNo, curTab);
 
@@ -103,8 +132,7 @@
         if (!IsSummary) {
             rv.showSummary(IsSummary);
         }
-        if (AD_Table_ID)
-        {
+        if (AD_Table_ID) {
             rv.setAD_Table_ID(AD_Table_ID);
         }
 
@@ -304,8 +332,7 @@
             tree_ID = treeID;
         }
 
-        this.setAD_Table_ID =function (AD_Table_ID)
-        {
+        this.setAD_Table_ID = function (AD_Table_ID) {
             Ad_Table_ID = Ad_Table_ID;
         };
 
@@ -538,7 +565,7 @@
 
                 btnSavePdf = $("<li><a style='cursor:pointer;' title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SavePdf")) + "' class='vis-report-icon vis-savepdf-ico'></a></li>");
                 ulAction.append(btnSavePdf);
-                
+
                 // bulk download icon pdf
                 btnSaveAllPdf = $("<li style='display:none'><a style='cursor:pointer;' title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllPagePdf")) + "' class='vis-report-icon vis-savepdfALL-ico'></a></li>");
                 ulAction.append(btnSaveAllPdf);
@@ -1188,7 +1215,7 @@
                     cmbPage.append($("<option value=" + (i + 1) + ">" + (i + 1) + "</option>"))
                 }
                 cmbPage.val(psetting.CurrentPage);
-                
+
                 self.setIteration(psetting.TotalPage);
 
                 if (psetting.TotalPage > psetting.CurrentPage) {
@@ -1259,6 +1286,11 @@
                         return;
                     }
                     var d = jQuery.parseJSON(data);
+
+                    if (d.length == 0) {
+
+                        return;
+                    }
                     for (var i = 0; i < d.length; i++) {
                         var li = '';
                         if (i == 0) {
@@ -1300,7 +1332,15 @@
             //liRTF.on('click', function () {
             //    process(false);
             //});
+            var sqlQry = "VIS_149";
+            var param = [];
+            param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
+            var isCrystalReport = executeScalar(sqlQry, param);
 
+            if (isCrystalReport == "Y" && VIS.context.getIsUseCrystalReportViewer()) {
+                process(false, null, VIS.ProcessCtl.prototype.REPORT_TYPE_PDF);
+                return;
+            }
 
             if ($menu.find("LI").length > 0) {
                 $btnInfo.w2overlay($root.clone(true), { css: { height: '300px' } });
@@ -1404,17 +1444,37 @@
                             return;
                         }
 
+                        //this.pi = {};
+                        ////this.pi.getUseCrystalReportViewer = function () {
+                        ////    if (VIS.context.ctx["#USE_CRYSTAL_REPORT_VIEWER"] == 'Y') {
+                        ////        return true;
+                        ////    }
+                        ////    else {
+                        ////        return false;
+                        ////    }
+                        ////};
+
+                        ////this.pi.getAD_PInstance_ID = function () {
+                        ////    return d.AD_PInstance_ID;
+                        ////};
+
+                        ////this.pi.getAD_Process_ID = function () {
+                        ////    return d.AD_Process_ID;
+                        ////};
+
+
+                        ////this.pi.getTable_ID = function () {
+                        ////    return d.AD_Table_ID;
+                        ////};
+
+
+                        ////this.pi.getRecord_ID = function () {
+                        ////    return d.RecordID;
+                        ////};
+
+
                         if (d.ReportFilePath) {
-
                             window.open(VIS.Application.contextUrl + d.ReportFilePath);
-                            //var showPaging = d.IsReportFormat && d.TotalRecords > 0 && VIS.MRole.getDefault().getIsCanExport(table_ID);
-                            //var rv = new VIS.ReportViewer(WindowNo, curTab, true, showPaging, d.TotalRecords,this.PAGE_SIZE);
-                            //rv.show(d.HTML, d.AD_PrintFormat_ID, null, table_ID, null, null);
-                            //var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
-                            //$object.attr("src", VIS.Application.contextUrl + d.ReportFilePath);
-
-                            //rv.getRoot().append($object);
-                            //rv.setReportBytes(d.Report);
                         }
                         else if (d.IsTelerikReport) {
                             if (window.KJS) {
@@ -1422,6 +1482,21 @@
                                 tc.show();
                                 this.unlock();
                             }
+                        }
+                        else if (VIS.context.getIsUseCrystalReportViewer()) {
+                            //var pdfViewer = new VIS.PdfViewer(null, null, true);
+                            //var apro = new VIS.AProcess(d.AD_Process_ID);
+                            var repV = new VIS.ReportViewerContainer(d);
+                            repV.show();
+
+                            //var frame = new VIS.CFrame();
+                            //frame.setName(VIS.Msg.getMsg("Report"));
+                            //frame.setTitle(VIS.Msg.getMsg("Report"));
+                            //frame.setContent(repV);
+                            //frame.show();
+                            //repV.addReport();
+                            //var rpv=new ReportViewer(
+
                         }
                     }
                 });
@@ -1482,6 +1557,46 @@
 
     };
 
+    function ReportViewerContainer(reportInfo) {
+        var $root = $('<div style="width:100%;height:100%"> ');
+        var bsyDiv = $("<div class='vis-apanel-busy bsyCrsyVwr' style='width:98%;height:98%;position:absolute'>");
+        this.getRoot = function () {
+            return $root;
+        };
+
+        this.addReport = function () {
+            $root.append(bsyDiv);
+            setBusy(true);
+            var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
+            if (reportInfo.pi && reportInfo.pi.getAD_PInstance_ID()) {
+                $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + reportInfo.pi.getAD_PInstance_ID() + '&pid=' + reportInfo.pi.getAD_Process_ID() + '&tid=' + reportInfo.pi.getTable_ID() + '&rid=' + reportInfo.pi.getRecord_ID());
+            }
+            else {
+                $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + reportInfo.AD_PInstance_ID + '&pid=' + reportInfo.AD_Process_ID + '&tid=' + reportInfo.AD_Table_ID + '&rid=' + reportInfo.RecordID);
+            }
+            $root.append($object);
+        };
+
+        this.dispose = function () {
+            $root.remove();
+            $root = null;
+        };
+
+        var setBusy = function (isBusy) {
+            bsyDiv.css("display", isBusy ? 'block' : 'none');
+        };
+
+        this.show = function () {
+            var frame = new VIS.CFrame();
+            frame.setName(VIS.Msg.getMsg("Report"));
+            frame.setTitle(VIS.Msg.getMsg("Report"));
+            frame.setContent(this);
+            this.addReport();
+            frame.show();
+
+        };
+    };
+
     //function PrintViewer()
     //{
 
@@ -1490,4 +1605,5 @@
     VIS.ReportViewer = ReportViewer;
     VIS.AReport = AReport;
     VIS.APrint = APrint;
+    VIS.ReportViewerContainer = ReportViewerContainer;
 })(VIS, jQuery);

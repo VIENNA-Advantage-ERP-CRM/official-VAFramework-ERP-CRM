@@ -25,7 +25,7 @@ namespace VIS.Models
         /// <param name="IsSOTrx">Sales Transaction</param>
         /// <param name="forInvoices">For Invoice</param>
         /// <returns>List<VCreateFromGetCOrder>, List of Orders</returns>
-        
+
         public List<VCreateFromGetCOrder> VCreateGetOrders(Ctx ctx, string display, string column, int C_BPartner_ID, bool isReturnTrx, int OrgId, bool DropShip, bool IsSOTrx, bool forInvoices)
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
@@ -46,7 +46,7 @@ namespace VIS.Models
             (SELECT SUM(m.qty) FROM m_matchPO m WHERE ol.C_OrderLine_ID=m.C_OrderLine_ID AND NVL(" + column + @", 0) != 0 AND m.ISACTIVE = 'Y' ) AS Qty,
             (SELECT SUM(IL.QtyInvoiced)  FROM C_INVOICELINE IL INNER JOIN C_Invoice I ON I.C_INVOICE_ID = IL.C_INVOICE_ID
             WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN ('VO','RE') AND OL.C_ORDERLINE_ID  =IL.C_ORDERLINE_ID) AS QtyInvoiced FROM C_OrderLine ol ");
-            
+
             if (!forInvoices)
             {
                 sql.Append("INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID AND p.ProductType = 'I'");
@@ -179,15 +179,17 @@ namespace VIS.Models
             string sql = "SELECT i.C_Invoice_ID," + displays + " AS displays FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
                 // New column added to fill invoice which drop ship is true
                         + "WHERE i.C_BPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' AND i.IsDropShip='" + (IsDrop ? "Y" : "N") + "' "
-                        + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO')"
+                        + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') "
+                //Invoice vendor record created with Document Type having checkbox 'Treat As Discount' is true will not show on 'Create line From' on window : Return to Vendor.
+                        + " AND i.TreatAsDiscount = 'N' "
                         + " AND i.C_Invoice_ID IN "
-                        + "(SELECT C_Invoice_ID FROM (SELECT il.C_Invoice_ID,il.C_InvoiceLine_ID,il.QtyInvoiced,mi.Qty FROM C_InvoiceLine il "
-                        + " LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
-                        + " INNER JOIN M_Product Mp On Mp.M_Product_Id = Il.M_Product_Id  "
-                        + " WHERE Mp.ProductType = 'I' AND (il.QtyInvoiced <> nvl(mi.Qty,0) AND mi.C_InvoiceLine_ID IS NOT NULL And Mp.Iscostadjustmentonlost = 'N') "
-                        + " OR (NVL(Mi.Qty,0) = 0 AND Mi.C_Invoiceline_Id IS NOT NULL AND Mp.Iscostadjustmentonlost = 'Y') "
-                        + " OR mi.C_InvoiceLine_ID IS NULL ) GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
-                        + " HAVING QtyInvoiced > SUM(nvl(Qty,0))) ORDER BY i.DateInvoiced, i.DocumentNo";
+                     + "(SELECT C_Invoice_ID FROM (SELECT il.C_Invoice_ID,il.C_InvoiceLine_ID,il.QtyInvoiced,mi.Qty FROM C_InvoiceLine il "
+                     + " LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
+                     + " INNER JOIN M_Product Mp On Mp.M_Product_Id = Il.M_Product_Id  "
+                     + " WHERE Mp.ProductType = 'I' AND (il.QtyInvoiced <> nvl(mi.Qty,0) AND mi.C_InvoiceLine_ID IS NOT NULL And Mp.Iscostadjustmentonlost = 'N') "
+                     + " OR (NVL(Mi.Qty,0) = 0 AND Mi.C_Invoiceline_Id IS NOT NULL AND Mp.Iscostadjustmentonlost = 'Y') "
+                     + " OR mi.C_InvoiceLine_ID IS NULL ) GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
+                     + " HAVING QtyInvoiced > SUM(nvl(Qty,0))) ORDER BY i.DateInvoiced, i.DocumentNo";
 
             DataSet ds = DB.ExecuteDataset(sql);
 
@@ -472,35 +474,35 @@ namespace VIS.Models
 
 
         /// <summary>
-        /// used to load product container
+        /// used to load product containers
         /// </summary>
         /// <param name="locator"></param>
         /// <returns></returns>
-        //public List<MoveKeyVal> GetContainer(Ctx ctx, int locator)
-        //{
-        //    List<MoveKeyVal> keyVal = new List<MoveKeyVal>();
-        //    string sql = "SELECT M_ProductContainer_ID,Value || '_' || Name AS Value FROM M_ProductContainer WHERE IsActive = 'Y' ";
-        //    if (locator > 0)
-        //    {
-        //        sql += "  AND M_Locator_ID = " + locator;
-        //    }
-        //    sql += " ORDER BY Value";
-        //    sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
-        //    DataSet ds = DB.ExecuteDataset(sql);
-        //    if (ds != null && ds.Tables[0].Rows.Count > 0)
-        //    {
-        //        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-        //        {
-        //            keyVal.Add(new MoveKeyVal()
-        //            {
-        //                ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]),
-        //                Name = Convert.ToString(ds.Tables[0].Rows[i]["Value"])
-        //            });
-        //        }
-        //        ds.Dispose();
-        //    }
-        //    return keyVal;
-        //}
+        public List<MoveKeyVal> GetContainer(Ctx ctx, int locator)
+        {
+            List<MoveKeyVal> keyVal = new List<MoveKeyVal>();     
+            string sql = "SELECT M_ProductContainer_ID,Value || '_' || Name AS Value FROM M_ProductContainer WHERE IsActive = 'Y' ";
+            if (locator > 0)
+            {
+                sql += "  AND M_Locator_ID = " + locator;
+            }
+            sql += " ORDER BY Value";
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    keyVal.Add(new MoveKeyVal()
+                    {
+                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]),
+                        Name = Convert.ToString(ds.Tables[0].Rows[i]["Value"])
+                    });
+                }
+                ds.Dispose();
+            }
+            return keyVal;
+        }
 
     }
 

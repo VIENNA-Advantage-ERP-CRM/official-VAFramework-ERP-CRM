@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../treeview.js"></script>
+		<script language="javascript" src="../prompttree.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+
+			// Real tree view
+			tree = newTreePromptWidget("tree",350,300,theCB,theCB,null,expandCB,collapseCB)
+			
+			
+			FIRST= tree.add(newTreePromptElem("Lines Between:","Accessories","userData"))
+			tree.add(newTreePromptElem("To: Lines Between:","Dresses","userData"))
+			
+			var nested=tree.add(newTreePromptElem("Choose a store name:",null,"userData"))
+			
+			nested.add(newTreePromptElem("Revenue Greater than:","$ 50000","userData"))
+			nested2=nested.add(newTreePromptElem("City is in the list:",null,"userData"))
+			nested2.add(newTreePromptElem("City size(km²) >:","200000","userData"))
+			nested2.add(newTreePromptElem("State Equal to:","New York","userData"))
+		
+			nested.add(newTreePromptElem("Manager is older than:",null,"userData"))
+			tree.add(newTreePromptElem("Year In List:",null,"userData"))
+			
+			function theCB()
+			{
+				//alert(this.id)
+			}
+		
+			function loadCB()
+			{
+				tree.init()
+			}
+			
+			function expandCB(userData)
+			{
+				status="expandCB userData="+userData+" tree ID="+this.id
+			}
+
+			function collapseCB(userData)
+			{
+				status="collapseCB userData="+userData+" tree ID="+this.id
+			}
+		
+			
+		</script>
+	</head>
+	<body onload="loadCB()" onselectstart="return false">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>Tree View</b></u><br><br>
+				<table border="0"><tr valign="top"><td class="dialogzone">
+					<script language="javascript">tree.write()</script>
+				</td></tr></table>
+
+			<a href="javascript:FIRST.change('toto','titi')">change</a><br>
+			<a href="javascript:FIRST.change('qsfdq dqsd toto')">change with empty values</a><br>
+			
+			</div></div>
+			
+		</td></tr></table>
+		
+	</body>
+	
+</html>

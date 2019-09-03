@@ -1,0 +1,256 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript" src="../bolist.js"></script>
+
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+
+
+			var _globW=500
+
+			function setListW()
+			{
+				if (_globW==500)
+					_globW=300
+				else
+					_globW=500
+					
+				filterListCont.resize(_globW,null)
+			}
+		
+			var _globH=300
+			function setListH()
+			{
+				if (_globH==300)
+					_globH=200
+				else
+					_globH=300
+					
+				filterListCont.resize(null,_globH)
+			}
+		
+			function loadCB()
+			{
+				filterListCont.init()
+				addCombo.init()
+				addLabel.init()
+				addButton.init()
+				addCustomButton.init()
+
+				addCombo.add("Dimension","0",true)
+				addCombo.add("Measure","1")
+				addCombo.add("Detail","2")
+				addCombo.add("Filter","3")
+			}
+			
+			function changeCB()
+			{
+				//alert("ChangeCB")
+			}
+
+			function dblClickCB()
+			{
+				alert("Double click on a leaf item. value=" + this.getSelection().value)
+			}
+			
+			function moveCB()
+			{
+				alert("item moved. value=" + filterList.getSelection().value)
+			}
+			
+			function newNodeCB()
+			{
+				alert("Node created. value=" + filterList.getSelection().value)
+			}
+			
+			function andOrCB()
+			{
+				alert("Node changed. value=" + this.getSelection().value + " operator=" + (this.getSelection().isAnd?"AND":"OR") )
+			}
+			
+			_counter=0
+			
+			function addElement(elemType)
+			{
+				var sel=filterList.getSelection()
+				
+				if (!sel.isNode())
+					sel=sel.getParentNode()
+			
+				switch(elemType)
+				{
+					case 0:
+						sel.addItem(addLabel.getValue(),parseInt(addCombo.getSelection().value),"id_4"+(_counter++),"tip",0)
+						break
+					
+					case 1:
+						sel.addNode(true, "id_4"+(_counter++))
+						break
+
+					case 2:
+						sel.addNode(false, "id_4"+(_counter++))
+						break
+					case 3:											
+						sel.addAdvFilterItem(addLabel.getValue(),parseInt(addCombo.getSelection().value),"id_4"+(_counter++),"tip",0)
+						break
+					
+				}
+			}
+						
+			function getIndex()
+			{
+				var sel=filterList.getSelection()
+				if (sel)
+					alert("Index in parent = "+sel.getIndexInParent())
+			}
+			
+			function removeSelection()
+			{
+				var sel=filterList.getSelection()
+					sel.remove()
+			}
+
+			// ---------------------------------------------
+			// Drag and Drop
+			// ---------------------------------------------
+
+
+			function dragCB(source)
+			{
+				//status="dragCB()"
+			}
+			
+			function acceptDropCB(source, target, ctrl, shift)
+			{
+				//status="acceptDropCB()"
+				return true
+			}
+			
+			function dropCB(source, target, ctrl, shift)
+			{
+				var sourceItem = source.selection
+				var targetItem = target.dropWidget
+				var index      = target.dropIndex
+
+				if (ctrl)
+				{
+					if (sourceItem.isNode())
+						targetItem.addCopyNode(sourceItem, index)
+					else
+						targetItem.addItem(sourceItem.text,sourceItem.imgIndex,sourceItem.value,sourceItem.tooltip,index)
+				}
+				else
+					target.move(sourceItem, targetItem, index)
+			}
+
+
+
+			//filterList = newAndOrBOListWidget("test",500,300,"qualif.gif",changeCB,dblClickCB,andOrCB)
+			filterListCont = newAndOrContainerWidget("filterListCont",500,300,"qualif.gif",changeCB,dblClickCB,andOrCB,moveCB,newNodeCB,removeSelection,true)
+			filterList = filterListCont.getList()
+			
+			
+			filterList.setDragDrop(dragCB,acceptDropCB,dropCB)
+			
+			//newAndOrBOListWidget("test",500,300,"qualif.gif",changeCB,dblClickCB)
+			
+			addCombo   = newComboWidget("addCombo")
+			addButton  = newButtonWidget("addButton","Add","addElement(0)",100)
+			addCustomButton  = newButtonWidget("addCustomButton","Add Custom","addElement(3)",100)
+			addLabel   = newTextFieldWidget("addLabel",null,null,null,addElement,false,null,100)
+			
+			
+			addANDButton = newButtonWidget("addANDButton","add AND Node","addElement(1)",100)
+			addORButton = newButtonWidget("addORButton","add OR Node","addElement(2)",100)
+			remButton = newButtonWidget("remButton","Remove Selection","removeSelection()",100)
+			idxButton = newButtonWidget("idxButton","Get Index","getIndex()",100)
+			
+			setW = newButtonWidget("setW","Width","setListW()",100)
+			setH = newButtonWidget("setH","Height","setListH()",100)
+
+			// Build filter list			
+			var root=filterList.getRoot()
+			b1=root.addNode(true,"branche1")
+			b1.addItem("Net Income > 200000",1,"f1")
+			b1.addItem("Country in list France,US",0,"f2")
+			b2=root.addNode(false,"branche2")
+			b2.addItem("Age du capitaine > 50",2,"f3")
+			root.addItem("This Year",3,"f4")
+			root.addItem("Year 1999",3,"f4")
+			root.addItem("Year 2000",3,"f4")
+			
+			// Select the  OR node
+			filterList.select(filterList.getElementByValue("branche2"))
+			
+
+		</script>
+	</head>
+	<body onload="loadCB()">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>Filter List</b></u><br><br>
+				Drag and Drop is enabled (CTRL to copy). You can use DEL to delete an item<br>Double click on a node to change is kind (AND or OR)<br>
+				<script language="javascript">filterListCont.write()</script>
+				<br>
+				<br>
+				<table class="dialogzone" border="0" cellspacing="5">
+					<tr>
+						<td align="left">Add an item</td>
+						<td align="left"><script language="javascript">addButton.write();</script></td>
+						<td></td>
+						<td><script language="javascript">addCombo.write();addLabel.write()</script></td>
+					</tr>
+
+					<tr>
+						<td align="left">Add a custom item</td>
+						<td align="left"><script language="javascript">addCustomButton.write();</script></td>
+						<td></td>						
+					</tr>
+					
+					<tr>
+						<td align="left">Add a node</td>
+						<td align="left"><script language="javascript">addANDButton.write();</script></td>
+						<td><script language="javascript">addORButton.write();</script></td>
+					</tr>
+
+					<tr>
+						<td align="left">Remove a node or an item</td>
+						<td align="left"><script language="javascript">remButton.write();</script></td>
+					</tr>
+
+					<tr>
+						<td align="left">index</td>
+						<td align="left"><script language="javascript">idxButton.write();</script></td>
+					</tr>
+					
+					<tr>
+						<td align="left"></td>
+						<td align="left"><script language="javascript">setW.write();</script></td>
+					</tr>
+
+					<tr>
+						<td align="left"></td>
+						<td align="left"><script language="javascript">setH.write();</script></td>
+					</tr>
+
+				</table>
+				
+
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

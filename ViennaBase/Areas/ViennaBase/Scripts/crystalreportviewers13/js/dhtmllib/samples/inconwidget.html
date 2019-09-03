@@ -1,0 +1,219 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript">
+			
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			var dis=true
+			function theCB()
+			{
+				if (this.id=="icon1")
+				{
+					dis=!dis
+					icon5.setDisabled(dis)
+				}
+
+				status="Clicked on : "+ (this.id)
+			}
+		
+			function cb()
+			{
+				if (this.id == "changeText")
+					icon6.changeText("New text !!!")
+				alert(this.id)
+			}
+		
+			function loadCB()
+			{
+				icon1.init()
+				icon2.init()
+				icon3.init()
+				icon4.init()
+				icon5.init()
+				//icon5.setDisabled(true)
+				icon6.init()
+				icon7.init()
+				icon7.init()
+				
+				icon7.setColor("-1,-1,-1")
+				icon7.setDisabled(true)
+				icon7.setDisabled(false)
+
+				icon8.init()
+				
+				icon8.setColor("-1,-1,-1")
+				icon8.setDisabled(true)
+				icon8.setDisabled(false)
+	
+				icon10.init()
+
+				button1.init()
+				button2.init()
+				
+				menu=button2.getMenu()
+				menu.add("Value 1")
+				menu.add("Value 2")
+				menu.add("Value 3")
+				menu.add("Value 4")
+				menu.add("Value 5")
+				menu.add("Value 6")
+
+				horizIcnTbl.init()
+				vertiIcnTbl.init()
+			}
+
+			function colorCB()
+			{
+				alert(this.id+"   "+this.getColor()+"\n\n"+
+					icon7.id+"   "+icon7.getColor()+"\n"+
+					icon8.id+"   "+icon8.getColor()
+				)
+				
+				
+			}
+
+			function icon10CB()
+			{
+				alert(this.is)
+			}
+			
+			icon1=newIconWidget("icon1","format.gif",theCB,"text","test",16,16,6*16,0,6*16,16)
+			icon2=newIconCheckWidget("icon2",_skin+"information_icon.gif",theCB,null,"test",32,32)
+
+					//newIconToggleWidget(id,src,clickCB,text,alt,w,h,dx,dy,togX,togY,disDx,disDy)
+			icon10 = newIconToggleWidget("icon10", "doubleArrows.gif",icon10CB, "", null, 16,16, 0,0, 0,16)
+					
+			icon3=newIconRadioWidget("icon3",_skin+"information_icon.gif",theCB,null,"test","theGroup",32,32)
+			icon4=newIconRadioWidget("icon4",_skin+"information_icon.gif",theCB,"with text","test","theGroup",32,32)
+
+			icon5=newIconWidget("icon5","format.gif",theCB,"test","test",16,16,6*16,0,6*16,16)
+			
+			icon5.setDisabled(true)
+			
+			
+			icon6=newIconMenuWidget("icon6","format.gif",/*theCB*/null,"test","test",16,16,6*16,0,6*16,16)
+			menu=icon6.getMenu()
+			menu.add("changeText","Change the icon menu widget text !!!",cb,"format.gif",48,0,false,48,16)
+			menu.add("id1","Test item 1",cb,"imgtabs.gif",0,0)
+			menu.add("id2","Test item 2",cb)
+			menu.add("id3","Test item plus int",cb)
+			menu.add("id4","court",cb)
+			menu.add("id5","Test item 1",cb)
+			menu.add("id6","Test item 2",cb,"format.gif",48,0,true,48,16)
+			
+			icon6.changeArrowTooltip("a special arrow tooltip")
+			
+			
+			button1 = newButtonMenuWidget("button1","Button Menu",null,"Tooltip...")
+			menu=button1.getMenu()
+			menu.add("changeText","Change the icon menu widget text !!!",cb,"format.gif",48,0,false,48,16)
+			menu.add("id1","Test item 1",cb,"imgtabs.gif",0,0)
+			menu.add("id2","Test item 2",cb)
+			menu.add("id3","Test item plus int",cb)
+			menu.add("id4","court",cb)
+			menu.add("id5","Test item 1",cb)
+			menu.add("id6","Test item 2",cb,"format.gif",48,0,true,48,16)
+			
+
+			button2 = newButtonScrollMenuWidget("button2","button scroll menu",null,"a tooltip",null,null,
+            null,false,200,5)
+			
+			
+			
+			icon7=newIconColorMenuWidget("icon7","format.gif",colorCB,null,"test",16,16,6*16,0,6*16,16)
+			colMenu7=icon7.getMenu()
+
+			icon8=newIconColorMenuWidget("icon8","format.gif",colorCB,null,"test",16,16,6*16,0,6*16,16)
+			colMenu8=icon8.getMenu()
+			
+			horizIcnTbl=newIconTableWidget("horizIcnTbl",true,350,102)
+			for (var i=0; i < 5; i++)
+				horizIcnTbl.add("../../images/main/subblockicons.gif",theCB,"icon Text Very int"+i,null,50,50,50*i,50)
+
+			vertiIcnTbl=newIconTableWidget("vertiIcnTbl",false,102,350)
+			for (var i=0; i < 5; i++)
+				vertiIcnTbl.add("../../images/main/subblockicons.gif",theCB,"icon Text Very int"+i,null,50,50,50*i,50)
+
+		</script>
+	</head>
+	<body onload="loadCB()">
+
+		<script language="javascript">menu.write()</script>
+		<script language="javascript">colMenu7.write()</script>
+		<script language="javascript">colMenu8.write()</script>
+
+	
+		<table width="100%" ID="Table1"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>Icon widget with button behaviour: (click to disable/enable next icon)</b></u><br>
+				<script language="javascript">icon1.write()</script>
+		
+				<u><b>Disabled Icon widget with button behaviour:</b></u><br>
+				<script language="javascript">icon5.write()</script>
+		
+				<br><br><u><b>Icon widget with check box behaviour:</b></u><br>
+				<script language="javascript">icon2.write()</script>
+				
+				<br><br><u><b>Icon widget with toggle behaviour:</b></u><br>
+				<script language="javascript">icon10.write()</script>
+				
+
+				<br><br><u><b>Icon widget with radio button behaviour:</b></u><br><br>
+				<table border=0 cellpadding="0" cellspacing="0" ID="Table2"><tr><td class="dialogzone">
+					<script language="javascript">icon3.write()</script>
+				</td><td class="dialogzone">
+					<script language="javascript">icon4.write()</script>
+				</td></tr></table>
+
+				<u><b>Color menu widget</b></u><br><br>
+				<script language="javascript">icon7.write()</script>
+				<br>
+				<script language="javascript">icon8.write()</script>
+				<br>
+
+				<u><b>Icon menu widget</b></u><br><br>
+				<script language="javascript">icon6.write()</script>
+				<br>
+				
+				<u><b>Button menu widget</b></u><br><br>
+				<script language="javascript">button1.write()</script>
+				<br>
+				
+				
+				<u><b>Button scroll menu widget</b></u><br><br>
+				<script language="javascript">button2.write()</script>
+				<br>
+				
+				<u><b>Horizontal Table Icon widget</b></u><br><br>
+				<script language="javascript">horizIcnTbl.write()</script>
+				<br>
+				
+				<u><b>Vertical Table Icon widget</b></u><br><br>
+				<script language="javascript">vertiIcnTbl.write()</script>
+				<br>
+
+				<!--
+				<iframe src="http://www.ulead.com/ma/samples/slider-1/slider-1.htm" width="500" height"=300"></iframe>
+				<iframe src="http://www.ulead.com/ma/samples/slider-1/slider-1.htm" width="500" height"=300"></iframe>
+				<br>
+				<iframe src="default.html" width="500" height"=300"></iframe>
+				-->
+			</div></div>
+		</td></tr></table>
+		
+		
+		
+	</body>
+	
+</html>

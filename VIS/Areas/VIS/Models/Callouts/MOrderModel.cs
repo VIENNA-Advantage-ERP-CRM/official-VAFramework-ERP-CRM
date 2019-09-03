@@ -202,6 +202,7 @@ namespace VIS.Models
         }
 
         // when doc type = Warehouse Order / Credit Order / POS Order / Prepay order --- and payment term is advance -- then system return false
+        // Payment term can't be advance for Customer RMA / Vendor RMA
         public bool checkAdvancePaymentTerm(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
@@ -211,11 +212,14 @@ namespace VIS.Models
             PaymentTerm_Id = Util.GetValueOfInt(paramValue[1]);
 
             // when document type is not --  Warehouse Order / Credit Order / POS Order / Prepay order, then true
+            // Payment term can't be advance for Customer RMA / Vendor RMA
             MDocType doctype = MDocType.Get(ctx, documnetType_Id);
             if (!(doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_PrepayOrder ||
                 doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_OnCreditOrder ||
                 doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_WarehouseOrder ||
-                doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_POSOrder))
+                doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_POSOrder ||
+                (doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_StandardOrder && doctype.IsReturnTrx()) ||
+                (doctype.GetDocBaseType() == "POO" && doctype.IsReturnTrx())))
             {
                 isAdvancePayTerm = true;
             }

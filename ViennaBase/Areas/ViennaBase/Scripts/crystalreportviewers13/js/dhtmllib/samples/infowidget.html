@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			isLoaded=false
+		
+			function resizeCB()
+			{
+				if (isLoaded)
+				{
+					var w=winWidth()
+					var h=winHeight()
+				
+					info2.resize(Math.max(0,w-60),Math.max(0,h-280))
+				
+				}
+			}
+		
+			function loadCB()
+			{
+				info.init()
+				info2.init()
+				
+				isLoaded=true
+				resizeCB()
+			}
+			
+			function changeText()
+			{
+				info.setText("Autre texte. Autre texte. Autre texte.\nAutre texte. Autre texte. Autre texte. Autre texte. Autre texte. Autre texte. Autre texte.Autre texte. Autre texte. Autre texte. Autre texte. Autre texte. Autre texte. Autre texte.\nAutre texte. Autre texte. Autre texte.")
+			}
+			
+			function changeTitle()
+			{
+				info.setTitle("Autre titre.")
+			}
+			function changeTitleBold()
+			{
+				info.setTitleBold("Autre titre Bold.")
+			}
+
+			info=newInfoWidget("info","Info zone","Bold title","this is a help text. This is a test zone."/*,80*/)
+
+			//alert(info.getHTML())
+
+
+			info2=newInfoWidget("info2","Cette info zone","Doit se retailler par script","this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n this is a help text.\n This is a test zone."/*,80*/)
+
+
+		</script>
+	</head>
+	<body onload="loadCB()" onresize="resizeCB()">
+	
+		<table width="100%"><tr><td align="left" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px;background-color:red">
+	
+				<u><b>Info zone:</b></u><br><br>
+				<script language="javascript">info.write()</script>
+				<br><br><br>
+				<a href="javascript:void(0)" onclick="changeText()">Change the text</a>
+				<br>
+				<a href="javascript:void(0)" onclick="changeTitle()">Change the title</a>
+				<br>
+				<a href="javascript:void(0)" onclick="changeTitleBold()">Change the bold title</a>
+				<br>
+				
+				<script language="javascript">info2.write()</script>
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

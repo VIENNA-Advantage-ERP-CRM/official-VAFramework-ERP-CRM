@@ -1,0 +1,71 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+
+
+			function clickCB()
+			{
+				status="Click sur bouton: "+this.id
+			}
+
+			function loadCB()
+			{
+				for (var i in buttons)
+					buttons[i].init()
+				
+				buttonsDis.init();
+				buttonsDis.setDisabled(true);
+				
+			}
+			
+			// ---------------------------------------------
+			// Create the Buttons here
+			// ---------------------------------------------
+
+			buttons=new Array,j=0
+			
+			buttons[j++]=newButtonWidget("b"+j,"Simple Button",clickCB)
+			buttons[j++]=newButtonWidget("b"+j,"Button width=200",clickCB,200)
+			buttons[j++]=newButtonWidget("b"+j,"Button with tooltip",clickCB,null,null,"Nice tooltip")
+			buttons[j++]=newButtonWidget("b"+j,"Button margin=50",clickCB,null,null,null,null,50)
+			
+			buttons[j++]=newButtonWidget("b"+j,"Button with image",clickCB,null,null,null,null,null,"format.gif",16,16,48,0)
+			buttons[j++]=newButtonWidget("b"+j,null,clickCB,null,null,"Nice tooltip",null,null,"format.gif",16,16,48,0)
+			buttons[j++]=newButtonWidget("b"+j,"mkmlklm",clickCB,null,null,"Nice tooltip",null,null,"format.gif",16,16,48,0)
+			
+			buttons[j++]=newButtonWidget("b"+j,"mkmlklm",clickCB,null,null,"Nice tooltip",null,null,"format.gif",16,16,48,0,true)
+			buttonsDis=newButtonWidget("bDisabled","Button disabled",clickCB,null,null,"button disabled",null,null,"format.gif",16,16,48,0,true,48,16)
+
+
+			// function newButtonWidget(id,label,cb,w,hlp,tooltip,tabIndex,margin,url,w,h,dx,dy)
+
+
+		</script>
+	</head>
+	<body onload="loadCB()">
+	
+		<table width="100%"><tr><td align="left" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+			
+				<script language="javascript">
+				
+					for (var i in buttons)
+						document.write(buttons[i].getHTML()+"<br><br>")
+					document.write(buttonsDis.getHTML()+"<br><br>")					
+				</script>
+				
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

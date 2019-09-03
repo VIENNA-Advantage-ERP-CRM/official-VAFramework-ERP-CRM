@@ -75,7 +75,7 @@ namespace VAdvantage.Process
 
             GenerateSchema(AD_ModuleInfo_ID);
 
-            return "Schema Generated [ Test Mode ] ";
+            return "Schema Generated";
             //throw new NotImplementedException();
         }
 
@@ -218,9 +218,9 @@ namespace VAdvantage.Process
             }
             else
             {
-                DateTime? createdDate = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT created FROM " + tableName + " WHERE " + whereClause));
+                DateTime? updatedDate = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT Updated FROM " + tableName + " WHERE " + whereClause));
 
-                if (createdDate != null && createdDate > RELEASEDDATE)
+                if (updatedDate != null && updatedDate > RELEASEDDATE)
                 {
                     return true;
                 }
@@ -1541,10 +1541,25 @@ namespace VAdvantage.Process
 
         private void GetNodePara(int sAD_WF_Node_ID)
         {
-            IDataReader dr = DB.ExecuteReader("SELECT AD_WF_Node_Para_ID,AttributeName FROM AD_WF_Node_Para WHERE AD_WF_Node_Para_ID = " + sAD_WF_Node_ID);
+            //IDataReader dr = DB.ExecuteReader("SELECT AD_WF_Node_Para_ID,AttributeName FROM AD_WF_Node_Para WHERE AD_WF_Node_Para_ID = " + sAD_WF_Node_ID);
+
+            //fixed - find parameter against workflow node
+            IDataReader dr = DB.ExecuteReader("SELECT AD_WF_Node_Para_ID, AttributeName, AD_Process_Para_ID FROM AD_WF_Node_Para WHERE AD_WF_Node_ID = " + sAD_WF_Node_ID);
             while (dr.Read())
             {
                 int AD_WF_Node_Para_ID = Util.GetValueOfInt(dr[0]);
+                int AD_Process_Para_ID = Util.GetValueOfInt(dr[2]);
+                if (AD_Process_Para_ID > 0)
+                {
+
+                    X_AD_Process_Para para = new X_AD_Process_Para(GetCtx(), AD_Process_Para_ID, null);
+                    //CheckCtxArea For Process ID
+                    if (!IsRecordExistInDBSchema(X_AD_Process.Table_ID, para.GetAD_Process_ID()))
+                    {
+                        GetProcess(para.GetAD_Process_ID());
+                    }
+                }
+
                 InsertIntoDBSchema(X_AD_WF_Node_Para.Table_ID, AD_WF_Node_Para_ID, X_AD_WF_Node_Para.Table_Name, dr[1].ToString(), "AD_WF_Node_Para_ID = " + AD_WF_Node_Para_ID);
             }
             dr.Close();

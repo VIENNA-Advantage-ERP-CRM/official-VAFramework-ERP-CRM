@@ -86,5 +86,15 @@ public void SetM_CostElement_ID(int M_CostElement_ID)
 }/** Get Cost Element.
 @return Product Cost Element */
 public int GetM_CostElement_ID() { Object ii = Get_Value("M_CostElement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+/** Set Product.
+@param M_Product_ID Product, Service, Item */
+public void SetM_Product_ID(int M_Product_ID)
+{
+    if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+    else
+        Set_Value("M_Product_ID", M_Product_ID);
+}/** Get Product.
+@return Product, Service, Item */
+public int GetM_Product_ID() { Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 }
 }

@@ -32,7 +32,12 @@ namespace VIS.Models
 
         }
 
-        // Added by Bharat on 12/May/2017
+        /// <summary>
+        /// Is Used to get detail of Document Type
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
         public Dictionary<string, object> GetDocTypeData(Ctx ctx, string fields)
         {
             int C_DocType_ID = 0;
@@ -40,7 +45,7 @@ namespace VIS.Models
             Dictionary<string, object> result = null;
             string sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',d.IsDocNoControlled,"
             + "s.CurrentNext, d.DocBaseType, s.CurrentNextSys, "
-            + "s.AD_Sequence_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx "
+            + "s.AD_Sequence_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx, d.TreatAsDiscount "
             + "FROM C_DocType d "
             + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
             + "WHERE C_DocType_ID=" + C_DocType_ID;		//	1
@@ -59,6 +64,8 @@ namespace VIS.Models
                 result["IsReturnTrx"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsReturnTrx"]);
                 result["Value"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["value"]);
                 result["IsBlanketTrx"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsReturnTrx"]);
+                // JID_0244
+                result["TreatAsDiscount"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["TreatAsDiscount"]);
             }
             return result;
 

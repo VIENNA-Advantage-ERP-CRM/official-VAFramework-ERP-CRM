@@ -4,7 +4,7 @@
 
         this.onClose = null; //outer apanel close function
 
-        var $maindiv = $('<div></div>'); //layout
+        var $maindiv = $('<div class="vis-forms-container"></div>'); //layout
         var $div = $('<div style="overflow-y:auto;height:216px;margin-right:-2px;margin-bottom:15px"></div>');
         var $inputChat = $('<textarea  id="input-chat-new" style="Height:70px;width:624px;text-wrap:normal;margin-top:0px;font-size: 10pt;resize: none;margin-bottom:-10px;margin-right:3px"  maxlength="500" />');
         //  var $buttonsdiv = $('<div style="overflow:auto"></div>');
@@ -74,7 +74,7 @@
             ch.onOkClick = function (e) {
                 var text = $inputChat.val();
                 if ($.trim(text) == "" || text == "" || text == null) {
-                    VIS.ADialog.info(VIS.Msg.getMsg("EnterData"));
+                    VIS.ADialog.info("EnterData");
                     if (e != undefined) {
                         e.preventDefault();
                     }

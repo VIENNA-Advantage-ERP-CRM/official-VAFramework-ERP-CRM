@@ -710,7 +710,15 @@ namespace VAdvantage.Classes
                 {
                     displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
                 }
-                //  TableDir
+                    //Search with ref key
+                else if (ldc.DisplayType == DisplayType.Search && ldc.AD_Ref_Val_ID > 0)
+                {
+                    string embeddedSQL = GetLookup_TableEmbed(language, ldc.ColumnName, tableName, ldc.AD_Ref_Val_ID);
+                    if (embeddedSQL != null)
+                        displayColumn.Append("(").Append(embeddedSQL).Append(")");
+                }
+
+                //  TableDir // Search 
                 else if ((ldc.DisplayType == DisplayType.TableDir || ldc.DisplayType == DisplayType.Search)
                     && ldc.ColumnName.EndsWith("_ID"))
                 {
@@ -718,6 +726,7 @@ namespace VAdvantage.Classes
                     if (embeddedSQL != null)
                         displayColumn.Append("(").Append(embeddedSQL).Append(")");
                 }
+                
                 //	Table
                 else if (ldc.DisplayType == DisplayType.Table && ldc.AD_Ref_Val_ID != 0)
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Web;
 using VAdvantage.Logging;
 using VAdvantage.Model;
@@ -520,11 +521,11 @@ namespace VIS.Models
 
             _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
             retDic["_CountVATAX"] = _CountVATAX.ToString();
-            
+
             Dictionary<string, string> order = GetInvoice(ctx, C_Invoice_ID.ToString());
             _c_BPartner_Id = Util.GetValueOfInt(order["C_BPartner_ID"]);
             _c_Bill_Location_Id = Util.GetValueOfInt(order["C_BPartner_Location_ID"]);
-            
+
             MBPartner bp = new MBPartner(ctx, _c_BPartner_Id, null);
             retDic["TaxExempt"] = bp.IsTaxExempt() ? "Y" : "N";
 
@@ -986,11 +987,11 @@ namespace VIS.Models
             DataSet _ds = null;
             string _Sql;
             //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'", null, null)) > 0)
-            if(Env.IsModuleInstalled("VA009_"))
+            if (Env.IsModuleInstalled("VA009_"))
             {
                 //Added 2 new fields to get VA009_PaymentMethod_ID and VA009_PaymentBaseType To Set the corrosponding value on Payment Window..
                 _Sql = "SELECT * FROM   (SELECT ips.C_InvoicePaySchedule_ID,"
-                             + " NVL(ips.DueAmt , 0) - NVL(ips.va009_paidamntinvce , 0) AS DueAmt, i.IsReturnTrx, IPS.VA009_PaymentMethod_ID, PM.VA009_PaymentBaseType FROM C_Invoice i" 
+                             + " NVL(ips.DueAmt , 0) - NVL(ips.va009_paidamntinvce , 0) AS DueAmt, i.IsReturnTrx, IPS.VA009_PaymentMethod_ID, PM.VA009_PaymentBaseType FROM C_Invoice i"
                              + " INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID) "
                              + " INNER JOIN VA009_PAYMENTMETHOD PM  ON (ips.VA009_PaymentMethod_ID = PM.VA009_paymentMethod_ID) WHERE i.IsPayScheduleValid='Y' "
                              + " AND ips.IsValid ='Y' AND ips.isactive ='Y' "
@@ -1025,7 +1026,7 @@ namespace VIS.Models
                     retValue["C_InvoicePaySchedule_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["c_invoicepayschedule_id"]);
                     retValue["dueAmount"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["dueamt"]);
                     retValue["IsReturnTrx"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["IsReturnTrx"]);
-                    
+
                     //Added 2 new fields to get VA009_PaymentMethod_ID and VA009_PaymentBaseType To Set the corrosponding value on Payment Window..
                     if (Env.IsModuleInstalled("VA009_"))
                     {
@@ -1046,15 +1047,16 @@ namespace VIS.Models
         /// <summary>
         /// Get Invoice Details
         /// </summary>        
-        /// <param name="fields"></param>
-        /// <returns></returns>
+        /// <param name="fields">Parameters</param>
+        /// <returns>Dictionaty, Invoice Data</returns>
         public Dictionary<string, object> GetInvoiceDetails(string fields)
         {
             DataSet _ds = null;
             string[] paramValue = fields.Split(',');
             Dictionary<string, object> retValue = null;
-            string sql = "SELECT C_BPartner_ID, C_Currency_ID, invoiceOpen(C_Invoice_ID, " + Util.GetValueOfInt(paramValue[3]) + ") as invoiceOpen, IsSOTrx, paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0),C_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + paramValue[1] + "," + paramValue[2]
-            + " ) as paymentTermDiscount, C_DocTypeTarget_ID,C_BPartner_Location_ID FROM C_Invoice WHERE C_Invoice_ID=" + Util.GetValueOfInt(paramValue[0]); //Arpi-->Added C_BPartner_Location_ID on Cash Journal Line for case of invoice //asked by Sachin Sir
+            string sql = "SELECT C_BPartner_ID, C_Currency_ID, C_ConversionType_ID, invoiceOpen(C_Invoice_ID, " + Util.GetValueOfInt(paramValue[3]) + @") as invoiceOpen, IsSOTrx, 
+            paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0),C_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + paramValue[1] + "," + paramValue[2]
+            + " ) as paymentTermDiscount, C_DocTypeTarget_ID,C_BPartner_Location_ID FROM C_Invoice WHERE C_Invoice_ID=" + Util.GetValueOfInt(paramValue[0]);
             try
             {
                 _ds = DB.ExecuteDataset(sql, null, null);
@@ -1063,10 +1065,14 @@ namespace VIS.Models
                     retValue = new Dictionary<string, object>();
                     retValue["C_BPartner_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_BPartner_ID"]);
                     retValue["C_Currency_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_Currency_ID"]);
+
+                    // JID_1208: System should set Currency Type that is defined on Invoice.
+                    retValue["C_ConversionType_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
                     retValue["invoiceOpen"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["invoiceOpen"]);
                     retValue["IsSOTrx"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["IsSOTrx"]);
                     retValue["paymentTermDiscount"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["paymentTermDiscount"]);
-                    retValue["docbaseType"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocBaseType FROM C_DocType WHERE C_DocType_ID = " + Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_DocTypeTarget_ID"]), null, null));
+                    retValue["docbaseType"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocBaseType FROM C_DocType WHERE C_DocType_ID = "
+                        + Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_DocTypeTarget_ID"]), null, null));
                     retValue["C_BPartner_Location_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]); //Arpit
                 }
             }
@@ -1106,10 +1112,10 @@ namespace VIS.Models
                 _ds = DB.ExecuteDataset(sql, null, null);
                 if (_ds != null && _ds.Tables[0].Rows.Count > 0)
                 {
-                    retValue = new Dictionary<string, object>();                    
+                    retValue = new Dictionary<string, object>();
                     retValue["OpenAmt"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["OpenAmt"]);
                     retValue["DiscountAmt"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["DiscountAmt"]);
-                    retValue["IsSOTrx"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["IsSOTrx"]);                    
+                    retValue["IsSOTrx"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["IsSOTrx"]);
                 }
             }
             catch (Exception e)
@@ -1121,7 +1127,209 @@ namespace VIS.Models
             }
             return retValue;
         }
+
+        /// <summary>
+        /// Get Price of Product
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="param">List of Parameters</param>
+        /// <returns>List of Price Data</returns>
+        public Dictionary<String, Object> GetPrices(Ctx ctx, string param)
+        {
+            string[] paramValue = param.Split(',');
+
+            Dictionary<String, Object> retDic = new Dictionary<String, Object>();
+
+            //Assign parameter value
+            int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
+            //int _priceListVersion_Id = Util.GetValueOfInt(paramValue[1].ToString());
+            int _c_invoice_Id = Util.GetValueOfInt(paramValue[1].ToString());
+            int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
+            int _c_Uom_Id = Util.GetValueOfInt(paramValue[3].ToString());
+            int _ad_Client_Id = Util.GetValueOfInt(paramValue[4].ToString());
+            int _c_BPartner_Id = Util.GetValueOfInt(paramValue[5].ToString());
+            //int _m_DiscountSchema_ID = Util.GetValueOfInt(paramValue[5].ToString());
+            //decimal _flatDiscount = Util.GetValueOfInt(paramValue[6].ToString());
+            decimal _qtyEntered = Util.GetValueOfInt(paramValue[6].ToString());
+            //End Assign parameter value
+
+            StringBuilder sql = new StringBuilder();
+            decimal PriceEntered = 0;
+            decimal PriceList = 0;
+            decimal PriceLimit = 0;
+            int _m_PriceList_ID = 0;
+            int _priceListVersion_Id = 0;
+            int _m_DiscountSchema_ID = 0;
+            decimal _flatDiscount = 0;
+            int countEd011 = 0;
+            int countVAPRC = 0;
+
+            countEd011 = Env.IsModuleInstalled("ED011_") ? 1 : 0;
+            retDic["countEd011"] = countEd011.ToString();
+
+            countVAPRC = Env.IsModuleInstalled("VAPRC_") ? 1 : 0;
+            retDic["countVAPRC"] = countVAPRC.ToString();
+
+            if (countEd011 > 0)
+            {
+                MOrderLineModel objOrd = new MOrderLineModel();
+                _m_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + _c_invoice_Id, null, null));
+
+                MPriceListVersionModel objPLV = new MPriceListVersionModel();
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+
+
+                MBPartnerModel objBPartner = new MBPartnerModel();
+                Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
+                _m_DiscountSchema_ID = Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]);
+                _flatDiscount = Util.GetValueOfInt(bpartner1["FlatDiscount"]);
+
+                if (_m_AttributeSetInstance_Id > 0)
+                {
+                    sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                     + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                     + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
+                                     + "  AND C_UOM_ID=" + _c_Uom_Id);
+                }
+                else
+                {
+                    sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                   + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                   + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                                   + "  AND C_UOM_ID=" + _c_Uom_Id);
+                }
+                int countrecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
+                if (countrecord > 0)
+                {
+                    // Selected UOM Price Exist
+                    sql.Clear();
+                    if (_m_AttributeSetInstance_Id > 0)
+                    {
+                        sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                    + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                    + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
+                                    + "  AND C_UOM_ID=" + _c_Uom_Id);
+                    }
+                    else
+                    {
+                        sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                  + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                  + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                                  + "  AND C_UOM_ID=" + _c_Uom_Id);
+                    }
+                    DataSet ds = DB.ExecuteDataset(sql.ToString());
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            //Flat Discount
+                            PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
+                            _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                            //end
+                            PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
+                            PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
+                        }
+                    }
+                }
+                else //if (_m_AttributeSetInstance_Id > 0 && countrecord == 0)
+                {
+                    sql.Clear();
+                    sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                                + "  AND C_UOM_ID=" + _c_Uom_Id);
+                    DataSet ds1 = DB.ExecuteDataset(sql.ToString());
+                    if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
+                    {
+                        //Flat Discount
+                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]),
+                       _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                        //End
+                        PriceList = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceList"]);
+                        PriceLimit = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceLimit"]);
+                    }
+                    else
+                    {
+                        // get uom from product
+                        var paramStr = _m_Product_Id.ToString();
+                        MProductModel objProduct = new MProductModel();
+                        var prodC_UOM_ID = objProduct.GetC_UOM_ID(ctx, paramStr);
+                        sql.Clear();
+                        if (_m_AttributeSetInstance_Id > 0)
+                        {
+                            sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                        + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                        + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
+                                        + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                        }
+                        else
+                        {
+                            sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                      + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                      + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                                      + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                        }
+                        DataSet ds = DB.ExecuteDataset(sql.ToString());
+                        if (ds != null && ds.Tables.Count > 0)
+                        {
+                            if (ds.Tables[0].Rows.Count > 0)
+                            {
+                                //Flat Discount
+                                PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
+                                _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                                //end
+                                PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
+                                PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
+                            }
+                            else if (_m_AttributeSetInstance_Id > 0)
+                            {
+                                sql.Clear();
+                                sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                                            + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                                            + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                                            + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                                DataSet ds2 = DB.ExecuteDataset(sql.ToString());
+                                if (ds2 != null && ds.Tables.Count > 0)
+                                {
+                                    if (ds2.Tables[0].Rows.Count > 0)
+                                    {
+                                        //Flat Discount
+                                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]),
+                                                                    _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                                        //End
+                                        PriceList = Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceList"]);
+                                        PriceLimit = Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceLimit"]);
+                                    }
+                                }
+                            }
+                        }
+                        sql.Clear();
+                        sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+                                                   " AND con.M_Product_ID = " + _m_Product_Id +
+                                                   " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                        var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
+                        if (rate == 0)
+                        {
+                            sql.Clear();
+                            sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
+                                  " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                            rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
+                        }
+                        if (rate == 0)
+                        {
+                            rate = 1;
+                        }
+                        PriceEntered = PriceEntered * rate;
+                        PriceList = PriceList * rate;
+                        PriceLimit = PriceLimit * rate;
+                    }
+                }
+            }
+
+            retDic["PriceEntered"] = PriceEntered;
+            retDic["PriceList"] = PriceList;
+            retDic["PriceLimit"] = PriceLimit;
+            return retDic;
+        }
     }
-
-
 }

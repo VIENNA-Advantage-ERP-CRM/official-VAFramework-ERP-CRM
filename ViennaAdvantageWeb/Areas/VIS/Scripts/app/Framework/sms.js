@@ -19,7 +19,7 @@
 
         // Design variables        //contains Field names of tab on left side
         var $ulFieldNames = null;
-        var $root = $('<div class="vis-sms-rootDiv"></div>');
+        var $root = $('<div class="vis-sms-rootDiv vis-forms-container"></div>');
         var $toolbarDiv = $('<div class="vis-awindow-header vis-menuTitle">');
         var $leftDiv = null;
         var $middleDiv = null;
@@ -274,23 +274,44 @@
 
             var pvID = 0;
             for (var i = 0; i < bpID.length; i++) {
-                var sql = "Select AD_User_ID,issms,mobile from ad_user where c_bpartner_ID=" + bpID[i];
-                var ds = VIS.DB.executeDataSet(sql);
+                //var sql = "Select AD_User_ID,issms,mobile from ad_user where c_bpartner_ID=" + bpID[i];
+                //var ds = VIS.DB.executeDataSet(sql);
+                //var isBroken = false;
+                //if (ds != null && ds.getTables()[0].getRows().length > 0) {
+                //    for (var j = 0; j < ds.getTables()[0].getRows().length; j++) {
+                //        if (ds.getTables()[0].getRows()[j].getCell("ISSMS") != null) {
+                //            if (ds.getTables()[0].getRows()[j].getCell("ISSMS").toString().equals("Y")) {
+                //                if (ds.getTables()[0].getRows()[j].getCell("MOBILE") == null || ds.getTables()[0].getRows()[j].getCell("MOBILE") == "") {
+                //                    continue;
+                //                }
+
+                //                if ($($bccChkList.children('li').data(ds.getTables()[0].getRows()[j].getCell("MOBILE") + prID[i])).length > 0) {
+                //                    continue;
+                //                }
+
+                //                $bccChkList.append('<li  class="vis-sms-list-li-bcc"><input id="' + self.windowNo + '_' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + '_CheckBoxList1" type="checkbox"  value="' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + prID[i]
+                //                    + '" checked/><label class="vis-sms-chcklist-label" for="' + self.windowNo + '_' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + '_CheckBoxList1">' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + '(' + prID[i] + ')</label></li>');
+                //            }
+                //        }
+                //    }
+                //}
+
+                var ds = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Sms/GetUser", { "BPartner_ID": bpID[i] }, null);
                 var isBroken = false;
-                if (ds != null && ds.getTables()[0].getRows().length > 0) {
-                    for (var j = 0; j < ds.getTables()[0].getRows().length; j++) {
-                        if (ds.getTables()[0].getRows()[j].getCell("ISSMS") != null) {
-                            if (ds.getTables()[0].getRows()[j].getCell("ISSMS").toString().equals("Y")) {
-                                if (ds.getTables()[0].getRows()[j].getCell("MOBILE") == null || ds.getTables()[0].getRows()[j].getCell("MOBILE") == "") {
+                if (ds != null) {
+                    for (var j in ds) {
+                        if (ds[j]["ISSMS"] != null) {
+                            if (ds[j]["ISSMS"].toString().equals("Y")) {
+                                if (ds[j]["MOBILE"] == null || ds[j]["MOBILE"] == "") {
                                     continue;
                                 }
 
-                                if ($($bccChkList.children('li').data(ds.getTables()[0].getRows()[j].getCell("MOBILE") + prID[i])).length > 0) {
+                                if ($($bccChkList.children('li').data(ds[j]["MOBILE"] + prID[i])).length > 0) {
                                     continue;
                                 }
 
-                                $bccChkList.append('<li  class="vis-sms-list-li-bcc"><input id="' + self.windowNo + '_' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + '_CheckBoxList1" type="checkbox"  value="' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + prID[i]
-                                    + '" checked/><label class="vis-sms-chcklist-label" for="' + self.windowNo + '_' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + '_CheckBoxList1">' + ds.getTables()[0].getRows()[j].getCell("MOBILE") + '(' + prID[i] + ')</label></li>');
+                                $bccChkList.append('<li  class="vis-sms-list-li-bcc"><input id="' + self.windowNo + '_' + ds[j]["MOBILE"] + '_CheckBoxList1" type="checkbox"  value="' + ds[j]["MOBILE"] + prID[i]
+                                    + '" checked/><label class="vis-sms-chcklist-label" for="' + self.windowNo + '_' + ds[j]["MOBILE"] + '_CheckBoxList1">' + ds[j]["MOBILE"] + '(' + prID[i] + ')</label></li>');
                             }
                         }
                     }

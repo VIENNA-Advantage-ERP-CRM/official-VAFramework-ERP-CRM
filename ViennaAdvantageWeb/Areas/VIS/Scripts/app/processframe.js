@@ -33,7 +33,7 @@
         return ret;
     };
 
-    function AProcess(AD_Process_ID, height) {
+    function AProcess(AD_Process_ID, height, splitUI, extrnalForm) {
 
         var self = null;
         this.parent;
@@ -43,6 +43,52 @@
         this.log = VIS.Logging.VLogger.getVLogger("VIS.AProcess");
         this.isComplete = false;
         this.jpObj = null; //Jsong Process Info Object
+        this.splitUI = splitUI;
+        this.extrnalForm = extrnalForm;
+        this.partitionContainer = null;
+        this.parameterContainer = null;
+        this.reportContainer = null;
+        this.reportToolbar = null;
+        this.isReport = false;
+        this.calculateWidth = true;
+
+
+        this.hideclose = false;
+        this.showParameterClose = true;
+        this.cssForAll = null;
+        this.visRepformatIcons = null;
+        this.visSaveCsvIcons = null;
+        this.visSavePdfIcons = null;
+        this.visArchiveIcons = null;
+        this.visRequeryIcons = null;
+        this.visCustomizeIcons = null;
+        this.visPrintIcons = null;
+        this.toolbarColor = null;
+        var $divOuterMain = null;
+        var $imgToggle = $('<img class="vis-apanel-lb-img" title="Actions" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/mt24.png">');
+        if (this.splitUI) {
+            this.partitionContainer = $('<div class="vis-process-outer-wrap">');
+            this.parameterContainer = $('<div class="vis-process-left-sidebar">');
+            this.reportAreaContainer = $('<div class="vis-process-main-wrap">');
+            this.reportToolbar = $('<div class="vis-process-toolbar">');
+            this.parameterFixedArea = $('<div class="vis-process-parm-top">');
+            this.parameterContainer.append($('<div class="vis-apanel-lb-toggle"></div>').append($imgToggle)).append(this.parameterFixedArea);
+            $divOuterMain = $('<div class="vis-process-outer-main-wrap">');
+
+            this.$divDesc = $('<div class="vis-process-description">');
+            // <h5></h5>
+            //<p></p>
+            //</div>
+            this.reportContainer = $('<div class="vis-process-result">');
+            this.reportAreaContainer.append(this.$divDesc).append(this.reportContainer);
+
+            $divOuterMain.append(this.parameterContainer).append(this.reportAreaContainer);
+            this.partitionContainer.append(this.reportToolbar).append($divOuterMain);
+            //this.partitionContainer.append(this.parameterContainer).append(this.reportContainer);
+            this.showParameterClose = false;
+
+            //this.reportContainer.height(this.reportAreaContainer.height() - (this.$divDesc.height()+25));
+        }
 
         //InitComponenet
 
@@ -54,44 +100,79 @@
         //}
 
         var $root, $busyDiv, $contentGrid, $table;
-        var $btnOK, $btnClose, $text, $cmbType, $lblRptTypeHeader;
+        var $btnOK, $btnClose, $text, $cmbType, $lblRptTypeHeader, $chkIsBG, $lblIsBG;
         function initilizedComponent() {
 
-            $root = $("<div style='position:relative;width:99%'>");
+            $root = $("<div style='position:relative;width:100%'>");
             $busyDiv = $("<div class='vis-apanel-busy'>");
             $table = $("<table  class='vis-process-table'>");
-
+            $btnOK = $("<button class='vis-button-ok'>").text(VIS.Msg.getMsg("OK"));
+            $btnClose = $("<button class='vis-button-close'>").text(VIS.Msg.getMsg("Close"));
+            if (splitUI) {
+                $busyDiv.css('top', '0px');
+                $btnOK.hide();
+                $btnClose.hide();
+            }
             $table.height(height);
             $busyDiv.height(height);
 
-            $contentGrid = $("<td>");
-            $table.append($("<tr>").append($contentGrid));
+            $contentGrid = $("<div>");
+            // $table.append($("<tr>").append($contentGrid));
             $root.append($table).append($busyDiv); // append to root
 
-            $cmbType = $('<select style="float: left;display:none;width:150px">');
+            $divOuterMain.append($busyDiv);
+
+            $cmbType = $('<select style="display:none;width:100%">');
             //$cmbType.append("<option value='S'>" + VIS.Msg.getMsg("Select") + "</option>");
             //$cmbType.append("<option value='P'>" + VIS.Msg.getMsg("OpenPDF") + "</option>");
             //$cmbType.append("<option value='C'>" + VIS.Msg.getMsg("OpenCSV") + "</option>");
             //loadFileTypes();
-            $btnOK = $("<button class='vis-button-ok'>").text(VIS.Msg.getMsg("OK"));
-            $btnClose = $("<button class='vis-button-close'>").text(VIS.Msg.getMsg("Close"));
-            $text = $("<span>").val("asassasasasasaasa");
+
+            $chkIsBG = $('<input type="checkbox" class="vis-process-background">');
+            $lblIsBG = $('<label  class="vis-process-background-label">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+
+            $text = $("<span class='vis-process-description-Span' style='height: 40px;'>").val("asassasasasasaasa");
             //ProcessDialog
             $contentGrid.append($text);
-            $lblRptTypeHeader = $('<label style="float: left;margin: 0px 10px 0px 0px;display:none">' + VIS.Msg.getMsg("ChooseReportType") + '</label>');
+            $lblRptTypeHeader = $('<label style="float: left;margin: 0px 10px 0px 0px;display:none;color:white">' + VIS.Msg.getMsg("ChooseReportType") + '</label>');
             var divrptType = $('<div style="display:inherit"></div>');
-            divrptType.append($lblRptTypeHeader).append($cmbType);
+            //divrptType.append($lblRptTypeHeader).append($cmbType);
+            self.parameterFixedArea.append($lblRptTypeHeader).append($cmbType).append($chkIsBG).append($lblIsBG);
+
             $contentGrid.append(divrptType);
+
+            var $divBG = $('<div>');
+            //$divBG.append($chkIsBG).append($lblIsBG);
+            //$contentGrid.append($divBG);
+
             $contentGrid.append($btnOK).append($btnClose);
+
+
+            self.$divDesc.append($contentGrid);
 
             //if (IsPosReport == "IsPosReport") {
             //    $btnOK.css("display", "none");
             //    $btnClose.css("display", "none");
             //}
 
-        }
-        this.loadFileTypes = function () {
+            //if (self.splitUI) {
+            //    self.parent.getContentGrid().append(self.partitionContainer);
+            //    //this.reportContainer.append(panel.getRoot());
+            //    // this.parameterContainer.append(pctl.parameters.getRoot());
 
+            //}
+            ////else {
+            //    self.parent.getContentGrid().append(panel.getRoot());
+            //}
+            //$chkIsBG.on('click', function () {
+            //    pi.setIsBackground($chkIsBG.is(':checked'));
+            //});
+
+
+        }
+
+        this.loadFileTypes = function () {
+            var sel = this;
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GetReportFileTypes/",
                 dataType: "json",
@@ -103,6 +184,12 @@
                         return;
                     }
                     var d = jQuery.parseJSON(data);
+
+                    if (d.length == 0) {
+                        sel.showReportTypes(false);
+                        return;
+                    }
+
                     $cmbType.append("<option value='S'>" + VIS.Msg.getMsg("Select") + "</option>");
                     for (var i = 0; i < d.length; i++) {
                         var opt = $("<option value=" + d[i].Key + ">" + d[i].Name + "</li>");
@@ -114,6 +201,7 @@
                 }
 
             });
+
         };
         initilizedComponent();
 
@@ -122,10 +210,18 @@
             if ($root) {
                 $root.height(height); //height 
                 $busyDiv.height(height);
-                $contentGrid.height(height);
+                //$contentGrid.height(height);
+                if (this.setMsg) {
+                    this.setMsg("");
+                }
             }
+
         }
         this.setSize(height);
+
+        this.isBackground = function () {
+            return $chkIsBG.is(':checked');
+        };
 
         //privilized function
         this.getRoot = function () { return $root; };
@@ -135,42 +231,208 @@
             if (busy) {
                 //		setStatusLine(processing);
                 $busyDiv[0].style.visibility = 'visible';// .show();
+                $busyDiv.css('display', '');
             }
             else {
                 //$busyDiv.hide();
                 $busyDiv[0].style.visibility = 'hidden';
+                $busyDiv.css('display', 'none');
                 if (focus) {
                     //curGC.requestFocusInWindow();
                 }
             }
         };
-        this.setMsg = function (msg) {
-            ////if ($text == null) {
-            ////    $text = $("<span>").val("asassasasasasaasa");
-            ////}
-            ////if (isnewDiv) {
-            ////    // $contentGrid.prepend($('<div style="overflow:auto">').append(msg));
+        this.setMsg = function (msg, width) {
 
-            ////    if ($contentGrid.find('.vis-process-result').length > 0) {
-            ////        $($contentGrid.find('.vis-process-result')).eq(0).append(msg);
-            ////    }
-            ////    else {
+            var $bExist = $text.find('b');
 
-            ////        var maxHeight = $contentGrid.height() - ($($contentGrid.find('.vis-button-ok').eq(0)).height() + $($contentGrid.find('span').eq(0)).height());
+            if ($text.text().length > 0 && msg && msg.length > 0) {
+                var $resultSpan = $('<span>' + msg + '</span>');
+                this.reportContainer.removeClass('vis-process-result');
+                this.reportContainer.addClass('vis-process-detail-result');
+                this.reportContainer.append($resultSpan);
+                //return;
+            }
+            else {
+                $text.append(msg);
+            }
+            var $bMore = '';
 
-            ////        $($('<div class="vis-process-result" style="overflow:auto;max-height:' + maxHeight + 'px">').append(msg)).insertBefore('.vis-button-ok');
-            ////    }
-            ////}
-            ////else {
-            $text.append(msg);
-            var resultTable = $contentGrid.find('.vis-process-result-table');
-            var trheight = resultTable.parent().closest('div').height();
-            var spanHeight = resultTable.closest('span').height();
+            if (this.isReport && (!$bExist || $bExist.length <= 0)) {
+                $bMore = $('<strong class="vis-process-papapa vis-procss-more"    style="position: fixed;right: 29px;top:96px;cursor:pointer"><i class="glyphicon glyphicon-chevron-down"></i></strong>');
+                $text.append($bMore);
+            }
 
-            resultTable.css('max-height', (trheight - (spanHeight + 26 + 20 + 33)) + 'px');;
+            var $paraG = $($text.find('p')[0]);
+            $bMore = $text.find('.vis-process-papapa');
+            //if ($paraG && $bMore) {
+            //    $paraG.css({ 'width': ($text.width() - $bMore.width() - 10 + 'px'), 'float': 'left' });
+            //}
+            $paraG.css({ 'float': 'left' });
+            if (this.isReport) {
+                var paraWidth = $paraG.width();
+                if (paraWidth + 45 > $text.width()) {
+                    $bMore.show();
+                }
+                else {
+                    $bMore.hide();
+                }
+            }
+            if (this.isReport && (!$bExist || $bExist.length <= 0)) {
+                $bMore.on('click', function () {
+                    var continerHei = self.reportAreaContainer.height();
+                    var $i = $bMore.find('i');
+                    if ($i.hasClass('glyphicon-chevron-up')) {
+                        $i.addClass('glyphicon-chevron-down');
+                        $i.removeClass('glyphicon-chevron-up');
+                        $text.css({ 'height': '40px' });
+                    }
+                    else {
+                        $i.addClass('glyphicon-chevron-up');
+                        $i.removeClass('glyphicon-chevron-down');
+                        $text.css({ 'height': '' });
+                    }
+                    self.reportContainer.height(continerHei - (self.$divDesc.height() + 20));
+                });
+            };
+
+            this.setMsgHeight(this.isReport);
+
+
+
+
+
+
+
+            //var resultTable = $contentGrid.find('.vis-process-result-table');
+            //var trheight = resultTable.parent().closest('div').height();
+            //var spanHeight = resultTable.closest('span').height();
+
+            //resultTable.css('max-height', (trheight - (spanHeight + 26 + 20 + 33)) + 'px');;
+            //  resultTable.height(trheight - (spanHeight + 26 + 20 + 33));
+
+
             ////}
         };
 
+        this.setMsgHeight = function (isReport) {
+            if (isReport) {
+                $text.css('height', '40px');
+                $text.css('max-height', '');
+            }
+            else {
+                $text.css('height', '');
+                if (self.parent) {
+                    $text.css('max-height', self.parent.getContentGrid().height() - 100 + 'px');
+                }
+            }
+            this.reportContainer.height(this.reportAreaContainer.height() - (this.$divDesc.height() + 20));
+            //if (this.calculateWidth) {
+            this.reportAreaContainer.width(this.partitionContainer.width() - (this.parameterContainer.width()));
+            //this.calculateWidth = false;
+            //}
+        };
+
+        this.setParameterHeights = function (height, width) {
+            var selff = this;
+            var $divOuterWrap = $(selff.partitionContainer.find('.vis-process-outer-main-wrap')[0]);
+            if (height) {
+                selff.partitionContainer.height(height);
+                $divOuterWrap.height(height);
+            }
+
+            var wrapperHeight = $divOuterWrap.height();
+            var paraRoot = $(selff.partitionContainer.find('.vis-pro-para-root')[0]);// $root.closest('.vis-process-outer-main-wrap').height();
+            paraRoot.height((wrapperHeight - 114) + 'px');
+            this.reportAreaContainer.width(width - this.parameterContainer.width());
+
+        };
+
+        this.getParametersContainer = function () {
+            return this.parameterContainer;
+        };
+
+        this.getReportAreaContainer = function () {
+            return this.reportContainer;
+        };
+
+
+        this.getContentTable = function () {
+            return $table;
+        };
+
+        this.getBusyIndicator = function () {
+            return $busyDiv;
+        };
+
+        this.getToolbar = function () {
+            return this.reportToolbar;
+        };
+
+        this.showCloseIcon = function (show) {
+            if (show) {
+                this.hideclose = false;
+            }
+            else {
+                this.hideclose = true;
+            }
+        };
+
+        this.showOkIcon = function (val) {
+            if (val) {
+                this.parameterContainer.append($('<div style="overflow:auto;padding:0 10px">').append($btnOK));
+                $btnOK.removeClass('');
+                $btnOK.addClass('vis-process-ok-btn VIS_Pref_btn-2');
+                $btnOK.show();
+            }
+            else
+                $btnOK.hide();
+        };
+
+
+        this.showParameterCloseIcon = function (show) {
+            if (show) {
+                this.showParameterClose = true;
+            }
+            else {
+                this.showParameterClose = false;
+            }
+        };
+
+        this.getShowParameterCloseIcon = function () {
+            return this.showParameterClose;
+        };
+        this.setCssForToolbarIcons = function (className) {
+            this.cssForAll = className;
+        };
+        this.setReportFormatIcons = function (className) {
+            this.visRepformatIcons = className;
+        };
+        this.setSaveCsvIcons = function (className) {
+            this.visSaveCsvIcons = className;
+        };
+        this.setSavePdfIcons = function (className) {
+            this.visSavePdfIcons = className;
+        };
+        this.setArchiveIcons = function (className) {
+            this.visArchiveIcons = className;
+        };
+        this.setRequeryIcons = function (className) {
+            this.visRequeryIcons = className;
+        };
+        this.setCustomizeIcons = function (className) {
+            this.visCustomizeIcons = className;
+        };
+        this.setPrintIcons = function (className) {
+            this.visPrintIcons = className;
+        };
+        this.setToolbarColor = function (color) {
+            this.toolbarColor = color;
+        }
+
+        this.getFileType = function () {
+            return $cmbType.val();
+        }
 
         this.reportBytes = null;
         this.reportPath = null;
@@ -184,8 +446,59 @@
                 $lblRptTypeHeader.css('display', 'block');
                 //}
             }
+            else {
+                $cmbType.css('display', 'none');
+                $lblRptTypeHeader.css('display', 'none');
+            }
         };
 
+        this.showBackgroundProcess = function (value) {
+            if (value) {
+                self.parameterFixedArea.addClass('vis-process-pram-checkbox-text');
+                $chkIsBG.css('display', 'block');
+                $lblIsBG.css('display', 'block');
+            }
+            else {
+                self.parameterFixedArea.removeClass('vis-process-pram-checkbox-text');
+                $chkIsBG.css('display', 'none');
+                $lblIsBG.css('display', 'none');
+            }
+
+        };
+
+        this.enableBackgroundSetting = function (value) {
+            $chkIsBG.prop('checked', value);
+            if (value == true) {
+                $chkIsBG.prop('disabled', 'disabled');
+            }
+            else {
+                $chkIsBG.prop('disabled', '');
+            }
+        }
+
+        // to Archive Document
+        this.archiveDocument = function (panel, pctl) {
+            panel.setBusy(true);
+            $.ajax({
+                url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
+                dataType: "json",
+                type: "post",
+                data: {
+                    AD_Process_ID: pctl.pi.getAD_Process_ID(),
+                    Name: pctl.pi.getTitle(),
+                    AD_Table_ID: pctl.pi.getTable_ID(),
+                    Record_ID: pctl.pi.getRecord_ID(),
+                    C_BPartner_ID: 0,
+                    isReport: true,
+                    binaryData: self.reportBytes,
+                    reportPath: self.reportPath
+                },
+                success: function (data) {
+                    VIS.ADialog.info('Archived', true, "", "");
+                    panel.setBusy(false);
+                }
+            });
+        };
 
         $btnOK.on("click", function () { //click event
             self.onclickTrigger(self);
@@ -207,6 +520,10 @@
             // var pi = new VIS.ProcessInfo(self.jpObj.Name, self.jpObj.AD_Process_ID, 0, 0);
             pi.setAD_User_ID(self.ctx.getAD_User_ID());
             pi.setAD_Client_ID(self.ctx.getAD_Client_ID());
+            pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
+            pi.setIsBackground($chkIsBG.is(':checked'));
+            pi.setIsReport(self.isReport);
+
             var ctl = new VIS.ProcessCtl(self, pi, null);
 
             //if (self.jpObj.defaultFileType) {
@@ -233,11 +550,29 @@
                 ctl.process(VIS.Env.getWindowNo()); //call dispose intenally
             }
 
+
             ctl = null;
         };
 
         $btnClose.on("click", function () {
             self.parent.dispose();
+        });
+
+        $imgToggle.on("click", function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            if (self.parameterContainer.width() > 40) {
+                self.parameterContainer.css('flex-basis', '40px');
+                self.parameterFixedArea.hide();
+                self.getParametersContainer().find('.vis-pro-para-root').hide();
+                self.getParametersContainer().find('.vis-process-ok-btn').hide();
+            }
+            else {
+                self.parameterContainer.css('flex-basis', '280px');
+                self.parameterFixedArea.show();
+                self.getParametersContainer().find('.vis-pro-para-root').show();
+                self.getParametersContainer().find('.vis-process-ok-btn').show();
+            }
         });
 
         //this.setReportBytes = function (bytes) {
@@ -256,6 +591,21 @@
             if ($contentGrid)
                 $contentGrid.remove();
             $contentGrid = null;
+            //this.partitionContainer.append(this.reportToolbar).append(this.parameterContainer).append(this.reportContainer);
+            if (this.reportContainer) {
+                this.reportContainer.remove();
+            }
+            if (this.parameterContainer) {
+                this.parameterContainer.remove();
+            }
+            if (this.reportToolbar) {
+                this.reportToolbar.remove();
+            }
+            if (this.partitionContainer) {
+                this.partitionContainer.remove();
+            }
+
+
             if ($busyDiv)
                 $busyDiv.remove();
             $busyDiv = null;
@@ -270,10 +620,7 @@
 
     };
 
-    /**
-	 *	Dynamic Init
-	 *  @return true, if there is something to process (start from menu)
-	 */
+
     AProcess.prototype.init = function (json, $parent, windowNo) {
 
         //if (json.IsReport) {
@@ -288,6 +635,7 @@
         this.ctx.setWindowContext(windowNo, "IsSOTrx", json.IsSOTrx);
 
         $parent.getContentGrid().append(this.getRoot());
+        this.isReport = json.IsReport;
         this.setMsg(json.MessageText);
         this.setBusy(false);
 
@@ -295,13 +643,34 @@
         this.jpObj = json;
         if (json.IsReport) {
             this.showReportTypes(true);
-            //if (this.IsPosReport != "IsPosReport") {
             this.loadFileTypes();
-            // }
-            // if (this.IsPosReport == "IsPosReport") {
-            //     this.onclickTrigger(this, this.IsPosReport);
-            // }
+            if (json.IsCrystal && VIS.context.getIsUseCrystalReportViewer()) {
+                this.parameterFixedArea.hide();
+            }
         }
+        else {
+            this.showBackgroundProcess(true);
+            this.enableBackgroundSetting(json.IsBackground);
+
+        }
+        this.setMsgHeight(json.IsReport);
+
+
+
+
+        if (!json.HasPara) {
+            this.showOkIcon(true);
+        }
+
+        if (this.splitUI && json.HasPara) {
+            this.onclickTrigger(this);
+        }
+
+        if (this.splitUI) {
+            this.parent.getContentGrid().empty();
+            this.parent.getContentGrid().append(this.partitionContainer);
+        }
+
         this.windowNo = windowNo;
         return true;
     };
@@ -332,19 +701,29 @@
 	 *  @param pi process info
 	 */
     AProcess.prototype.unlockUI = function (pi) {
+        if (pi.logs && pi.logs.length > 0) {
+            pi.logs = null;
+        }
         VIS.ProcessInfoUtil.setLogFromDB(pi);
 
         var msg = "";
-        msg = "<p><font color=\"" + (pi.getIsError() ? "#FF0000" : "#0000FF") + "\">** " +
-            pi.getSummary() + "</font></p>";
+        if (pi && pi.getSummary()) {
+            msg = "<p style='float: left;width: 100%;'><font color=\"" + (pi.getIsError() ? "#FF0000" : "#0000FF") + "\">** " +
+                pi.getSummary() + "</font></p>";
+        }
+        else if (!this.jpObj.IsReport) {
+            msg = "<p style='float: left;width: 100%;'><font color=\"" + (pi.getIsError() ? "#FF0000" : "#0000FF") + "\">** " +
+             "</font></p>";
+        }
+
 
         msg += pi.getLogInfo(true);
 
         this.setMsg(msg);
-        console.log(msg);
         //btnOK.IsEnabled = true;
         // this.isComplete = true;
         this.setBusy(false);
+        pi.setSummary("");
         this.isLocked = false;
     };
 
@@ -493,11 +872,18 @@
         var btnSaveCsvAll = null;
         var btnsavepdfall = null;
         var self = this;
+        var toolbar = null;
+
+
+
 
 
         function createControls(panel, repObj) {
             var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
-            var toolbar = null;
+
+            //var partitionContainer = null;
+            //var parameterContainer = null;
+            //var reportContainer = null;
 
             canExport = VIS.MRole.getDefault().getIsCanExport(AD_Table_ID);
             var checkName = [];
@@ -533,25 +919,47 @@
                 },
             });
 
+            applyIconCss();
+            //if (!self.cssForAll || self.cssForAll.length == 0)
+            //{
+            //    self.cssForAll = ' vis-report-icon ';
+            //}
+
+
+
             //Create Custom Report ToolBar
             overlay = $('<div>');
             $cmbPages = $('<select class="vis-selectcsview-page">');
             $menu = $("<ul class='vis-apanel-rb-ul'>");
-            btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
-            btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdfALL-ico'></a></li>");
+            if (self.cssForAll) {
+                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='" + self.cssForAll + "vis-report-icon vis-savecsvAll-ico'></a></li>");
+                btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='" + self.cssForAll + "vis-report-icon vis-savepdfALL-ico'></a></li>");
+            }
+            else {
+                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
+                btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdfALL-ico'></a></li>");
+            }
             toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(VIS.Msg.getMsg("Report")));
+
+            if (self.toolbarColor) {
+                toolbar.css('background-color', self.toolbarColor);
+            }
+
+
+
             btnClose = $('<a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose" style="float:right">');
             actionContainer = $('<div class="vis-report-top-icons" style="float:right;">');
             ulAction = $('<ul style="margin-top: 10px;float:left">');
-            btnRF = $("<li><a style='cursor:pointer;margin-top:2px' class='vis-report-icon vis-repformat-ico'></a></li>");
+            btnRF = $("<li><a style='cursor:pointer;margin-top:2px' class='" + self.visRepformatIcons + "'></a></li>");
 
             $menu.append($('<li data-id="-1">').append(VIS.Msg.getMsg('NewReport')));
             overlay.append($menu);
-            panel.getRoot().height(self.parent.getContentGrid().height() - 10);
+            // panel.getRoot().height(self.parent.getContentGrid().height() - 10);
+            //panel.getRoot().height();
             ulAction.append(btnRF);
 
             if (canExport) {
-                btnSaveCsv = $("<li><a title='" + VIS.Msg.getMsg("SaveCSVPage") + "' style='cursor:pointer;margin-top:1px' class='vis-report-icon vis-savecsv-ico'></a></li>");
+                btnSaveCsv = $("<li><a title='" + VIS.Msg.getMsg("SaveCSVPage") + "' style='cursor:pointer;margin-top:1px' class='" + self.visSaveCsvIcons + "'></a></li>");
                 ulAction.append(btnSaveCsv);
             }
             //if ((isReportFormat) && totalRecords > 0 && canExport) {
@@ -581,7 +989,7 @@
             }
 
             if (canExport) {
-                btnSavePdf = $("<li><a title='" + VIS.Msg.getMsg("SavePDFDocumentPage") + "' style='cursor:pointer;margin-top:1px' class='vis-report-icon vis-savepdf-ico'></a></li>");
+                btnSavePdf = $("<li><a title='" + VIS.Msg.getMsg("SavePDFDocumentPage") + "' style='cursor:pointer;margin-top:1px' class='" + self.visSavePdfIcons + "'></a></li>");
                 ulAction.append(btnSavePdf);
             }
 
@@ -613,14 +1021,14 @@
                 btnsavepdfall.css('display', 'none');
             }
 
-            btnArchive = $("<li><a title='" + VIS.Msg.getMsg("Archive") + "' style='cursor:pointer;' class='vis-report-icon vis-archive-ico'></a></li>");
+            btnArchive = $("<li><a title='" + VIS.Msg.getMsg("Archive") + "' style='cursor:pointer;' class='" + self.visArchiveIcons + "'></a></li>");
             ulAction.append(btnArchive);
-            btnRequery = $("<li><a title='" + VIS.Msg.getMsg("Requery") + "' style='cursor:pointer;' class='vis-report-icon vis-requery-ico'></a></li>");
+            btnRequery = $("<li><a title='" + VIS.Msg.getMsg("Requery") + "' style='cursor:pointer;' class='" + self.visRequeryIcons + "'></a></li>");
             ulAction.append(btnRequery);
 
-            btnCustomize = $("<li><a style='cursor:pointer;' class='vis-report-icon vis-customize-ico'></a></li>");
+            btnCustomize = $("<li><a style='cursor:pointer;' class='" + self.visCustomizeIcons + "'></a></li>");
             ulAction.append(btnCustomize);
-            btnPrint = $('<li><a style="cursor:pointer;" class="vis-report-icon vis-print-ico"></a></li>');
+            btnPrint = $("<li><a style='cursor:pointer;' class='" + self.visPrintIcons + "'></a></li>");
             ulAction.append(btnPrint);
 
             //if (  isPdf) {
@@ -630,11 +1038,30 @@
                 btnRF.css('display', 'none');
             }
             actionContainer.append(ulAction);
-            toolbar.append(btnClose);
+            if (!self.hideclose) {
+                toolbar.append(btnClose);
+            }
             toolbar.append(actionContainer);
-            panel.getRoot().css('width', $(window).width());
-            self.parent.getContentGrid().append(toolbar).append(panel.getRoot());
-            //////this.parent.getContentGrid().append(toolbar).append(panel.getRoot());
+
+            if (self.splitUI) {
+                self.reportToolbar.css('display', 'flex');
+                self.reportToolbar.empty().append(toolbar);
+                // self.parent.getContentGrid().append(toolbar).append(this.partitionContainer);
+                //self.parent.getContentGrid().prepend(self.reportToolbar)
+                self.reportContainer.empty().append(panel.getRoot());
+                if (self.extrnalForm) {
+                    self.getContentTable().empty().append(self.reportContainer);
+                }
+                //panel.getRoot().css({ 'width': "100%", 'height': self.getContentTable().height() });
+                //self.reportContainer.height(self.reportAreaContainer.height() - (self.$divDesc.height()+25));
+                //self.parameterContainer.append(pctl.parameters.getRoot());
+            }
+            else {
+                self.parent.getContentGrid().append(toolbar).append(panel.getRoot());
+                panel.getRoot().css('width', $(window).width());
+            }
+
+            ////this.parent.getContentGrid().append(toolbar).append(panel.getRoot());
             ////if (selfee.IsPosReport !== "IsPosReport") {
 
             ////}
@@ -841,12 +1268,12 @@
                         panel.setBusy(false);
                     }
                     else {
-                        bulkDownloadUI(tp, d.ReportFilePath, bulkdownload,d);
+                        bulkDownloadUI(tp, d.ReportFilePath, bulkdownload, d);
                     }
                 }
             };
 
-            function bulkDownloadUI(totalPages, reportUrl, bulkdownload,d) {
+            function bulkDownloadUI(totalPages, reportUrl, bulkdownload, d) {
                 bulkdownload.setBulkBusy(false);
                 $("#forreportdownload").addClass('hide');
                 formlinks += '<input type="checkbox" data-num="' + d + '"  data-url="' + VIS.Application.contextUrl + reportUrl + '" checked />';
@@ -876,7 +1303,7 @@
                         var data = JSON.parse(result);
 
                         if (ismobile || reportType != pctl.REPORT_TYPE_PDF) {
-                            window.open(VIS.Application.contextUrl +  data);
+                            window.open(VIS.Application.contextUrl + data);
                         }
                         else {
                             var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
@@ -891,7 +1318,7 @@
             };
 
 
-            function loadDynamicReportAll(d, bulkdownload,  totalPages) {
+            function loadDynamicReportAll(d, bulkdownload, totalPages) {
                 pctl.pi.setPageNo(d);
                 var data = { processInfo: pctl.pi.toJson() };
                 $.ajax({
@@ -1162,8 +1589,7 @@
                                     }
                                 });
                             }
-                            else 
-                            {
+                            else {
                                 executeProcess(getExeProcessParameter(pctl.REPORT_TYPE_PDF), function (json) {
                                     manageRepTable(json, panel);
                                 });
@@ -1174,7 +1600,7 @@
 
                 $cmbPages.on("change", function () {
                     pageNo = $cmbPages.val();
-                    
+
                     if (pctl.pi.GetAD_ReportView_ID() > 0) {
                         panel.setBusy(true);
                         var queryInfo = [];
@@ -1190,13 +1616,13 @@
                             queryInfo.push(rquery.getWhereClause(true));
                         }
                         //}
-                       
-                        var paramData = getGenerateReportPara(queryInfo, "", false,0,0,false);
-                       
+
+                        var paramData = getGenerateReportPara(queryInfo, "", false, 0, 0, false);
+
                         $.ajax({
                             url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                             dataType: "json",
-                            type:'POST',
+                            type: 'POST',
                             data: paramData,
                             success: function (jsonStr) {
 
@@ -1384,7 +1810,7 @@
                                 //    }, 1000);
                                 //}
                                 reportUrl = "TempDownload/" + reportUrl;
-                                bulkDownloadUI(totalPages, reportUrl, bulkdownload,d);
+                                bulkDownloadUI(totalPages, reportUrl, bulkdownload, d);
 
                                 panel.setBusy(false);
 
@@ -1405,16 +1831,16 @@
                     queryInfo.push(query.getTableName());
                     queryInfo.push(query.getWhereClause(true));
 
-                    var paramData = getGenerateReportPara( queryInfo, "", false,0,0,false);
+                    var paramData = getGenerateReportPara(queryInfo, "", false, 0, 0, false);
 
                     $.ajax({
                         url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                         dataType: "json",
                         data: paramData,
-                        type:'POST',
+                        type: 'POST',
                         success: function (data) {
                             if (data == null) {
-                                alert(VIS.Msg.getMsg('ERRORGettingRepData'));
+                                VIS.ADialog.error('ERRORGettingRepData');
                             }
                             var dres = jQuery.parseJSON(data);
                             var d = dres.repInfo;
@@ -1467,17 +1893,17 @@
                     queryInfo.push(query.getTableName());
                     queryInfo.push(query.getWhereClause(true));
 
-                    var paramData = getGenerateReportPara(queryInfo, "", false,0,0,false);
+                    var paramData = getGenerateReportPara(queryInfo, "", false, 0, 0, false);
 
 
                     $.ajax({
                         url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                         dataType: "json",
                         data: paramData,
-                        type:'POST',
+                        type: 'POST',
                         success: function (data) {
                             if (data == null) {
-                                alert(VIS.Msg.getMsg('ERRORGettingRepData'));
+                                VIS.ADialog.error('ERRORGettingRepData');
                             }
                             var dres = jQuery.parseJSON(data);
                             var d = dres.repInfo;
@@ -1535,7 +1961,7 @@
 
                         if (pctl.pi.dynamicAction && pctl.pi.dynamicAction.length > 0) {
                             for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
-                                loadDynamicReportAll(d, bulkdownload,  pctl.pi.getTotalPages());
+                                loadDynamicReportAll(d, bulkdownload, pctl.pi.getTotalPages());
                             }
                         }
                         else {
@@ -1548,7 +1974,7 @@
                             }
                             else if (pctl.pi.getIsJasperReport()) {
                                 for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
-                                    getJasperReportAll( d, pctl.pi.getTotalPages(), bulkdownload);
+                                    getJasperReportAll(d, pctl.pi.getTotalPages(), bulkdownload);
                                 }
                             }
                             else {
@@ -1593,7 +2019,7 @@
                                 //        }).appendTo(document.body).submit();
                                 //    }, 1000);
                                 //}
-                                bulkDownloadUI(totalPages, reportUrl, bulkdownload,d);
+                                bulkDownloadUI(totalPages, reportUrl, bulkdownload, d);
                                 self.reportPath = reportUrl;
                                 panel.setBusy(false);
                             }
@@ -1702,14 +2128,14 @@
                 queryInfo.push(query.getTableName());
                 queryInfo.push(query.getWhereClause(true));
 
-                var paramData = getGenerateReportPara(queryInfo, query.getCode(0), false0,0,false);
+                var paramData = getGenerateReportPara(queryInfo, query.getCode(0), false0, 0, false);
 
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                     dataType: "json",
                     data: paramData,
-                    type:'POST',
+                    type: 'POST',
                     success: function (jsonStr) {
 
                         var json = jQuery.parseJSON(jsonStr);
@@ -1746,55 +2172,162 @@
 
             });
             btnArchive.on('click', function () {
-                panel.setBusy(true);
-                $.ajax({
-                    url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
-                    dataType: "json",
-                    type: "post",
-                    data: {
-                        AD_Process_ID: pctl.pi.getAD_Process_ID(),
-                        Name: pctl.pi.getTitle(),
-                        AD_Table_ID: pctl.pi.getTable_ID(),
-                        Record_ID: pctl.pi.getRecord_ID(),
-                        C_BPartner_ID: 0,
-                        isReport: true,
-                        binaryData: self.reportBytes,
-                        reportPath: self.reportPath
-                    },
-                    success: function (data) {
-                        VIS.ADialog.info('Archived', true, "", "");
-                        panel.setBusy(false);
-                    }
-                });
+                self.archiveDocument(panel, pctl);
+                //panel.setBusy(true);
+                //$.ajax({
+                //    url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
+                //    dataType: "json",
+                //    type: "post",
+                //    data: {
+                //        AD_Process_ID: pctl.pi.getAD_Process_ID(),
+                //        Name: pctl.pi.getTitle(),
+                //        AD_Table_ID: pctl.pi.getTable_ID(),
+                //        Record_ID: pctl.pi.getRecord_ID(),
+                //        C_BPartner_ID: 0,
+                //        isReport: true,
+                //        binaryData: self.reportBytes,
+                //        reportPath: self.reportPath
+                //    },
+                //    success: function (data) {
+                //        VIS.ADialog.info('Archived', true, "", "");
+                //        panel.setBusy(false);
+                //    }
+                //});
             });
 
         };
+
+        function applyIconCss() {
+
+            //this.visRepformatIcons = null;
+            //this.visSaveCsvIcons = null;
+            //this.visSavePdfIcons = null;
+            //this.visArchiveIcons = null;
+            //this.visRequeryIcons = null;
+            //this.visCustomizeIcons = null;
+            //this.visPrintIcons = null;
+
+            if (!self.visRepformatIcons || self.visRepformatIcons.length == 0) {
+                if (self.cssForAll) {
+                    self.visRepformatIcons = self.cssForAll + ' vis-repformat-ico ';
+                }
+                else {
+                    self.visRepformatIcons = 'vis-repformat-ico vis-report-icon ';
+                }
+
+            }
+
+
+            if (!self.visSaveCsvIcons || self.visSaveCsvIcons.length == 0) {
+                //if (self.cssForAll) {
+                //    self.visSaveCsvIcons = self.cssForAll + ' vis-savecsv-ico ';
+                //}
+                //else {
+                self.visSaveCsvIcons = ' vis-savecsv-ico vis-report-icon ';
+                //}
+
+            }
+            else {
+                self.visSaveCsvIcons = self.visSaveCsvIcons + ' vis-report-icon ';
+            }
+
+            if (!self.visSavePdfIcons || self.visSavePdfIcons.length == 0) {
+                //if (self.cssForAll) {
+                //    self.visSavePdfIcons = self.cssForAll + ' vis-savepdf-ico ';
+                //}
+                //else {
+                self.visSavePdfIcons = ' vis-savepdf-ico vis-report-icon ';
+                //}
+
+            }
+            else {
+                self.visSavePdfIcons = self.visSavePdfIcons + ' vis-report-icon ';
+            }
+
+            if (!self.visArchiveIcons || self.visArchiveIcons.length == 0) {
+                //if (self.cssForAll) {
+                //    self.visArchiveIcons = self.cssForAll + ' vis-archive-ico ';
+                //}
+                //else {
+                self.visArchiveIcons = ' vis-archive-ico vis-report-icon ';
+                //}
+            }
+            else {
+                self.visArchiveIcons = self.visArchiveIcons + ' vis-report-icon ';
+            }
+
+            if (!self.visRequeryIcons || self.visRequeryIcons.length == 0) {
+                //if (self.cssForAll) {
+                //    self.visRequeryIcons = self.cssForAll + ' vis-requery-ico ';
+                //}
+                //else {
+                self.visRequeryIcons = ' vis-requery-ico vis-report-icon ';
+                //}
+            }
+            else {
+                self.visRequeryIcons = self.visRequeryIcons + ' vis-report-icon ';
+            }
+
+            if (!self.visCustomizeIcons || self.visCustomizeIcons.length == 0) {
+                //if (self.cssForAll) {
+                //    self.visCustomizeIcons = self.cssForAll + ' vis-customize-ico ';
+                //}
+                //else {
+                self.visCustomizeIcons = ' vis-customize-ico vis-report-icon ';
+                //}
+            }
+            else {
+                self.visCustomizeIcons = self.visCustomizeIcons + ' vis-report-icon ';
+            }
+
+            if (!self.visPrintIcons || self.visPrintIcons.length == 0) {
+                //if (self.cssForAll) {
+                //    self.visPrintIcons = self.cssForAll + ' vis-print-ico ';
+                //}
+                //else {
+                self.visPrintIcons = ' vis-print-ico vis-report-icon ';
+                //}
+
+            }
+            else {
+                self.visPrintIcons = self.visPrintIcons + ' vis-report-icon ';
+            }
+        }
 
         createControls(panel, repObj);
         handleEvents(panel, repObj);
     }
 
-    AProcess.prototype.showReport = function (panel, repObj, pCtl) {
+    AProcess.prototype.showReport = function (panel, repObj, pCtl, isCrystalReport) {
         /* dispose Content */
-        if (this.mPanel) {
-            this.mPanel.dispose();
-            this.mPanel = null;
+        var self = this;
+        if (!this.splitUI) {
+            if (this.mPanel) {
+                this.mPanel.dispose();
+                this.mPanel = null;
+            }
+            this.disposeComponent();
         }
-        this.disposeComponent();
-
         this.mPanel = panel;
         this.pCtl = pCtl;
-
+        //if (pCtl.pi.getUseCrystalReportViewer() && isCrystalReport) {
+        //    var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
+        //    $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + pCtl.pi.getAD_PInstance_ID() + '&pid=' + pCtl.pi.getAD_Process_ID() + '&tid=' + pCtl.pi.getTable_ID() + '&rid=' + pCtl.pi.getRecord_ID());
+        //    //self.reportContainer.empty().append(panel.getRoot());
+        //    this.parent.getContentGrid().append(panel.getRoot());
+        //    panel.getRightDiv().empty().append($object);
+        //}
+        //else {
         this.createUI(panel, pCtl, repObj);
 
-
-        //AProcess.prototype.showReport = function (panel, AD_PrintFormat_ID, _pCtl, _winNo, _paraList, _AD_Table_ID, isPdf, totalRecords, isReportFormat, PAGE_SIZE, pageNo, AD_ReportView_ID, IsJasperReport) {
-
-
-        //handleEvents(this, panel, pctl, repObj);
-        panel.setBusy(false);
         this.parent.hideHeader(true);
+        //}
+        panel.setBusy(false);
 
+        // Archive Document automatically, if selected on Tenant
+        if (VIS.context.ctx["$AutoArchive"] == '1' || VIS.context.ctx["$AutoArchive"] == '2') {
+            self.archiveDocument(panel, pCtl);
+        }
     };
 
     AProcess.prototype.showTelerikReport = function (painstanceID, tableID) {
@@ -1815,15 +2348,28 @@
 
     AProcess.prototype.sizeChanged = function (height, width) {
         this.setSize(height, width);
-        if (this.mPanel && this.mPanel.sizeChanged) {
+
+        if (this.mPanel && this.mPanel.sizeChanged && !this.splitUI) {
             this.mPanel.sizeChanged(height, width);
+        }
+
+        if (this.setParameterHeights) {
+            this.setParameterHeights(height, width);
         }
     };
 
     AProcess.prototype.refresh = function () {
+        if (this.setParameterHeights) {
+            this.setParameterHeights();
+        }
+
         if (this.mPanel && this.mPanel.refresh) {
             this.mPanel.refresh();
         }
+        if (this.setMsg) {
+            this.setMsg("");
+        }
+
     };
 
     //Assignment

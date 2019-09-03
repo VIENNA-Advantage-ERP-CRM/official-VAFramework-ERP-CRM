@@ -1,0 +1,73 @@
+.panelzone
+{
+    FONT-SIZE: 10px;
+    COLOR: black;
+    FONT-FAMILY: "tahoma","sans-serif";
+    BACKGROUND-COLOR: white
+}
+.sqlText
+{
+    FONT-SIZE: 12px;
+    COLOR: black;
+    FONT-FAMILY: "tahoma","sans-serif";
+    BACKGROUND-COLOR: white
+}
+.headerPrint
+{
+    FONT-SIZE: 14px;
+    COLOR: black;
+    FONT-FAMILY: "tahoma","sans-serif";
+    BACKGROUND-COLOR: white
+}
+
+.filterText
+{
+    FONT-SIZE: 11px;
+    COLOR: #2d62b0;
+    FONT-FAMILY: "tahoma","sans-serif"
+}
+A.filterText
+{
+    FONT-SIZE: 11px;
+    COLOR: #2d62b0;
+    FONT-FAMILY: "tahoma","sans-serif";
+    TEXT-DECORATION: none
+}
+.treeNormal
+{
+    PADDING-RIGHT: 1px;
+    PADDING-LEFT: 1px;
+    FONT-SIZE: 11px;
+    PADDING-BOTTOM: 1px;
+    COLOR: black;
+    PADDING-TOP: 1px;
+    FONT-FAMILY: "tahoma","sans-serif";
+    TEXT-DECORATION: none
+}
+.treeSelected
+{
+    PADDING-RIGHT: 1px;
+    PADDING-LEFT: 1px;
+    FONT-SIZE: 11px;
+    PADDING-BOTTOM: 1px;
+    COLOR: white;
+    PADDING-TOP: 1px;
+    FONT-FAMILY: "tahoma","sans-serif";
+    BACKGROUND-COLOR: #195fa0;
+    TEXT-DECORATION: none
+}
+A.treeNormal:hover
+{
+    COLOR: black;
+    TEXT-DECORATION: none
+}
+A.treeSelected:hover
+{
+    COLOR: white
+}
+A
+{
+}
+A:hover
+{
+}

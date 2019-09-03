@@ -183,14 +183,14 @@
                           '<input class="vis-group-ass-btns vis-group-pointer vis-group-save-btn" type="button">' +
                       '</div>' +
                       '<div class="vis-group-content-headDown"><span><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<input class="vis-group-ass-btns vis-group-pointer vis-group-search-icon" type="button"> </span></div>' +
+                      '<input class="vis-group-ass-btns vis-group-ass-btnse vis-group-pointer vis-group-search-icon" type="button"> </span></div>' +
                       '<div class="vis-group-clear-both"></div>' +
                   '</div>');
 
             $btnSaveRoles = $middlePanel.find('.vis-group-save-btn');
             $btnCreateRole = $middlePanel.find('.vis-group-add-btn');
             $searchRole = $middlePanel.find('.vis-group-SearchText');
-            $searchRoleBtn = $middlePanel.find('.vis-group-ass-btns');
+            $searchRoleBtn = $middlePanel.find('.vis-group-ass-btnse');
             /**end of content-head**/
 
             $divRoleGroup = $('<div class="vis-group-role-container">');
@@ -218,14 +218,14 @@
                        '<div class="vis-group-content-headDown"><span>' +
 
                        '<input class="vis-group-SearchText"  value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<input class="vis-group-ass-btns vis-group-pointer vis-group-search-icon" type="button"> ' +
+                      '<input class="vis-group-ass-btns vis-group-ass-btnse vis-group-pointer vis-group-search-icon" type="button"> ' +
                        '</span>' +
                        '</div>' +
 
                        '<div class="vis-group-clear-both"></div>' +
                    '</div>');
             $searchGroup = $rightPanel.find('.vis-group-SearchText');
-            $searchGroupBtn = $rightPanel.find('.vis-group-ass-btns');
+            $searchGroupBtn = $rightPanel.find('.vis-group-ass-btnse');
             $btnCreateGroup = $rightPanel.find('.vis-group-add-btn');
             $btnSaveGroup = $rightPanel.find('.vis-group-save-btn');
 
@@ -928,6 +928,7 @@
             Save User's Roles
         */
         function saveUserRoles() {
+            $bsyDiv[0].style.visibility = "visible";
             roleChanged = [];
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/UpdateUserRoles",
@@ -936,9 +937,11 @@
                 success: function () {
                     $($($middlePanel.find('h7'))[0]).show();
                     $($($middlePanel.find('h7'))[0]).fadeOut(1600, "linear");
+                    loadRoles();
                 },
                 error: function () {
                     VIS.ADialog.error(VIS.Msg.getMsg('VIS_ErrorSavingRole'));
+                    $bsyDiv[0].style.visibility = "hidden";
                 }
             });
         };
@@ -947,6 +950,7 @@
         Save User's Group
         */
         function saveUserGroups() {
+            $bsyDiv[0].style.visibility = "visible";
             groupChanged = [];
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/UpdateUserGroups",
@@ -955,9 +959,11 @@
                 success: function () {
                     $($($rightPanel.find('h7'))[0]).show();
                     $($($rightPanel.find('h7'))[0]).fadeOut(1600, "linear");
+                    loadGroup();
                 },
                 error: function () {
                     VIS.ADialog.error(VIS.Msg.getMsg('VIS_ErrorSavingGroups'));
+                    $bsyDiv[0].style.visibility = "hidden";
                 }
             });
         };

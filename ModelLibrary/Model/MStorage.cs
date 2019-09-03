@@ -3,7 +3,7 @@
  * Purpose        : 
  * Class Used     : X_M_Storage
  * Chronological    Development
- * Raghunandan     04-Jun-2009
+ * Raghunandan     04-Jun-2009 
   ******************************************************/
 using System;
 using System.Collections;
@@ -870,6 +870,8 @@ namespace VAdvantage.Model
                 diffText.Append("OnHand=").Append(diffQtyOnHand);
                 changed = true;
             }
+
+            MProduct product = new MProduct(Ctx, M_Product_ID, trxName);
             //	Reserved Qty
             if (diffQtyReserved != null && diffQtyReserved != 0)
             {
@@ -877,11 +879,18 @@ namespace VAdvantage.Model
                 {
                     MWarehouse wh = MWarehouse.Get(Ctx, Ord_Warehouse_ID);
                     int Ord_Locator_ID = GetResLocator_ID(Ord_Warehouse_ID, M_Product_ID, reservationAttributeSetInstance_ID, diffQtyReserved.Value, trxName);
+                    // JID_0982: On shipment completion if system system does not find enough reserved qty to decraese it will give message "Not enough reserved quanity in warehouse for product"
+                    if (Ord_Locator_ID == 0)
+                    {
+                        _log.SaveError("", Msg.GetMsg(Ctx, "NoReserveQty") + ": " + product.GetName());
+                        return false;
+                    }
                     MStorage ordStorage = GetCreate(Ctx, Ord_Locator_ID, M_Product_ID, reservationAttributeSetInstance_ID, trxName);
                     ordStorage.SetQtyReserved(Decimal.Add(ordStorage.GetQtyReserved(), (Decimal)diffQtyReserved));
                     if (ordStorage.GetQtyReserved() < 0)
                     {
-                        ordStorage.SetQtyReserved(0);
+                        // due to management of stock datewise (Material Policy) - we can't set default as ZERO
+                        //  ordStorage.SetQtyReserved(0);
                     }
                     ordStorage.Save(trxName);
                 }
@@ -899,12 +908,20 @@ namespace VAdvantage.Model
                 //}
                 changed = true;
             }
+
+            // Ordered Qty
             if (diffQtyOrdered != null && diffQtyOrdered != 0)
             {
                 if (Ord_Warehouse_ID != 0)
                 {
                     MWarehouse wh = MWarehouse.Get(Ctx, Ord_Warehouse_ID);
                     int Ord_Locator_ID = GetLocator_ID(Ord_Warehouse_ID, M_Product_ID, reservationAttributeSetInstance_ID, diffQtyOrdered.Value, trxName);
+                    // JID_0982: On Receipt completion if system system does not find enough ordered qty to decraese it will give message "Not enough ordered quanity in warehouse for product"
+                    if (Ord_Locator_ID == 0)
+                    {
+                        _log.SaveError("", Msg.GetMsg(Ctx, "NoOrderedQty") + ": " + product.GetName());
+                        return false;
+                    }
                     MStorage ordStorage = GetCreate(Ctx, Ord_Locator_ID, M_Product_ID, reservationAttributeSetInstance_ID, trxName);
                     ordStorage.SetQtyOrdered(Decimal.Add(ordStorage.GetQtyOrdered(), (Decimal)diffQtyOrdered));
                     if (ordStorage.GetQtyOrdered() < 0)
@@ -1290,14 +1307,23 @@ namespace VAdvantage.Model
             if (diffQtyReserved != null && diffQtyReserved != 0)
             {
                 storage.SetQtyReserved(Decimal.Subtract(storage.GetQtyReserved(), (Decimal)diffQtyReserved));
+                storage.Save(trxName);
             }
 
+            // Ordered Qty
+            MProduct product = new MProduct(Ctx, M_Product_ID, trxName);
             if (diffQtyOrdered != null && diffQtyOrdered != 0)
             {
                 if (Ord_Warehouse_ID != 0)
                 {
                     MWarehouse wh = MWarehouse.Get(Ctx, Ord_Warehouse_ID);
+                    // JID_0982: On Receipt completion if system system does not find enough ordered qty to decraese it will give message "Not enough ordered quanity in warehouse for product"
                     int Ord_Locator_ID = GetLocator_ID(Ord_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID, diffQtyOrdered.Value, trxName);
+                    if (Ord_Locator_ID == 0)
+                    {
+                        _log.SaveError("", Msg.GetMsg(Ctx, "NoOrderedQty") + ": " + product.GetName());
+                        return false;
+                    }
                     MStorage ordStorage = GetCreate(Ctx, Ord_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, trxName);
                     ordStorage.SetQtyOrdered(Decimal.Subtract(ordStorage.GetQtyOrdered(), (Decimal)diffQtyOrdered));
                     if (ordStorage.GetQtyOrdered() < 0)
@@ -1318,14 +1344,15 @@ namespace VAdvantage.Model
         }
         //END
 
-        /*	Get Location with highest Locator Priority and a sufficient OnHand Qty
-        * 	@param M_Warehouse_ID warehouse
-        * 	@param M_Product_ID product
-        * 	@param M_AttributeSetInstance_ID asi
-        * 	@param Qty qty
-        *	@param trxName transaction
-        * 	@return id
-        */
+        /// <summary>
+        /// Get Location with highest Locator Priority and a sufficient OnHand Qty
+        /// </summary>
+        /// <param name="M_Warehouse_ID">warehouse</param>
+        /// <param name="M_Product_ID">product</param>
+        /// <param name="M_AttributeSetInstance_ID">M_AttributeSetInstance_ID</param>
+        /// <param name="Qty">qty</param>
+        /// <param name="trxName">transaction</param>
+        /// <returns>locator id</returns>
         public static int GetM_Locator_ID(int M_Warehouse_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, Decimal Qty, Trx trxName)
         {
@@ -1338,7 +1365,9 @@ namespace VAdvantage.Model
                 + " LEFT OUTER JOIN M_AttributeSet mas ON (p.M_AttributeSet_ID=mas.M_AttributeSet_ID) "
                 + "WHERE l.M_Warehouse_ID=" + M_Warehouse_ID
                 + " AND s.M_Product_ID=" + M_Product_ID
-                + " AND (mas.IsInstanceAttribute IS NULL OR mas.IsInstanceAttribute='N' OR s.M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ")"
+                /* Set IsInstanceAttribute as True, when it is false then control not working
+                   system was picking those locator, where record created with ZERO ASI, while system should pick high Priority Locator*/
+                + " AND (mas.IsInstanceAttribute IS NULL OR mas.IsInstanceAttribute='Y' OR s.M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ")"
                 + " AND l.IsActive='Y' "
                 + "ORDER BY l.PriorityNo DESC, s.QtyOnHand DESC";
             IDataReader idr = null;
@@ -1351,14 +1380,14 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    Decimal QtyOnHand = Convert.ToDecimal(dr[1]);//.getBigDecimal(2);
+                    Decimal QtyOnHand = Convert.ToDecimal(dr[1]);
                     if (QtyOnHand != null && Qty.CompareTo(QtyOnHand) <= 0)
                     {
-                        M_Locator_ID = Convert.ToInt32(dr[0]);//.getInt(1);
+                        M_Locator_ID = Convert.ToInt32(dr[0]);
                         break;
                     }
                     if (firstM_Locator_ID == 0)
-                        firstM_Locator_ID = Convert.ToInt32(dr[0]); //dr.getInt(1);
+                        firstM_Locator_ID = Convert.ToInt32(dr[0]); 
                 }
             }
             catch (Exception ex)
@@ -1458,6 +1487,10 @@ namespace VAdvantage.Model
         {
             //if (Qty < 0)
             //{
+            int AbsoluteRequired = 0;
+            if (Qty > 0)
+                AbsoluteRequired = 1;
+
             Qty = Decimal.Negate(Qty);
             //}
             //else
@@ -1478,7 +1511,7 @@ namespace VAdvantage.Model
                 + "WHERE l.M_Warehouse_ID=" + M_Warehouse_ID
                 + " AND s.M_Product_ID=" + M_Product_ID
                 + " AND (mas.IsInstanceAttribute IS NULL OR mas.IsInstanceAttribute='N' OR s.M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ")"
-                + " AND l.IsActive='Y' AND l.IsDefault='Y' AND s.QtyReserved >= @param ";
+                + " AND l.IsActive='Y' AND l.IsDefault='Y' AND CASE WHEN " + AbsoluteRequired + " = 1 THEN ABS(s.QtyReserved) ELSE s.QtyReserved END >= @param ";
             M_Locator_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, param, trxName));
             if (M_Locator_ID == 0)
             {
@@ -1490,7 +1523,7 @@ namespace VAdvantage.Model
                 + "WHERE l.M_Warehouse_ID=" + M_Warehouse_ID
                 + " AND s.M_Product_ID=" + M_Product_ID
                 + " AND (mas.IsInstanceAttribute IS NULL OR mas.IsInstanceAttribute='N' OR s.M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ")"
-                + " AND l.IsActive='Y' AND l.IsDefault='N' AND s.QtyReserved >= @param ";
+                + " AND l.IsActive='Y' AND l.IsDefault='N' AND CASE WHEN " + AbsoluteRequired + " = 1 THEN  ABS(s.QtyReserved) ELSE s.QtyReserved END >= @param ";
                 try
                 {
                     idr = DB.ExecuteReader(qry, param, trxName);

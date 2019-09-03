@@ -899,8 +899,13 @@ namespace VIS.Helpers
                 strQuery += "  AND AD_Note.AD_User_ID IN (0," + ctx.GetAD_User_ID() + ")"
                 + " AND AD_Note.Processed='N' ORDER BY AD_Note.Created DESC";
 
+                int PResultTableID = MTable.Get_Table_ID("AD_PInstance_Result");
+
                 dsData = VIS.DBase.DB.ExecuteDatasetPaging(strQuery, page, PageSize);
                 dsData = VAdvantage.DataBase.DB.SetUtcDateTime(dsData);
+
+                object windowID = DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE Name='Process Result'");
+
                 if (dsData != null)
                 {
                     for (int i = 0; i < dsData.Tables[0].Rows.Count; i++)
@@ -913,6 +918,16 @@ namespace VIS.Helpers
                         Alrt.MsgType = dsData.Tables[0].Rows[i]["MsgType"].ToString();
                         Alrt.Title = dsData.Tables[0].Rows[i]["Title"].ToString();
                         Alrt.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
+                        if (PResultTableID == Alrt.AD_Table_ID)
+                        {
+                            Alrt.ProcessWindowID = Util.GetValueOfInt(windowID);
+                            Alrt.ProcessTableName = "AD_PInstance_Result";
+                            Alrt.SpecialTable = true;
+                        }
+                        else
+                        {
+                            Alrt.SpecialTable = false;
+                        }
                         Alrt.Description = dsData.Tables[0].Rows[i]["Description"].ToString();
                         DateTime _createdDate = new DateTime();
                         if (dsData.Tables[0].Rows[i]["dbDate"].ToString() != null && dsData.Tables[0].Rows[i]["dbDate"].ToString() != "")
@@ -920,7 +935,6 @@ namespace VIS.Helpers
                             _createdDate = Convert.ToDateTime(dsData.Tables[0].Rows[i]["dbDate"].ToString());
                             DateTime _format = DateTime.SpecifyKind(new DateTime(_createdDate.Year, _createdDate.Month, _createdDate.Day, _createdDate.Hour, _createdDate.Minute, _createdDate.Second), DateTimeKind.Utc);
                             _createdDate = _format;
-
                             Alrt.CDate = _format;
                         }
                         lstNts.Add(Alrt);
@@ -1339,7 +1353,7 @@ namespace VIS.Helpers
         public int FormID
         {
             get;
-            set;
+            set; 
 
         }
         public int ProcessID

@@ -18,7 +18,7 @@ namespace VIS.Controllers
     public class ProductContainerController : Controller
     {
         /// <summary>
-        /// use to Get Product Container on the basis of given paameter
+        /// use to Get Product Container on the basis of given paameter 
         /// </summary>
         /// <param name="Name"></param>
         /// <param name="WarehouseId"></param>
@@ -48,6 +48,7 @@ namespace VIS.Controllers
         /// <summary>
         /// Get Warehouses
         /// </summary>
+        /// <param name="fromWarehouse_ID"></param>
         /// <returns></returns>
         public JsonResult LoadWarehouse(int fromWarehouse_ID)
         {
@@ -59,6 +60,7 @@ namespace VIS.Controllers
         /// <summary>
         /// Get locator based on warehouses
         /// </summary>
+        /// <param name="fromWarehouse_ID"></param>
         /// <returns></returns>
         public JsonResult LoadLocator(int fromWarehouse_ID)
         {
@@ -70,6 +72,9 @@ namespace VIS.Controllers
         /// <summary>
         /// Get container
         /// </summary>
+        /// <param name="warehouse"></param>
+        /// <param name="locator"></param>
+        /// <param name="container"></param>
         /// <returns></returns>
         public JsonResult LoadContainer(int warehouse, int locator, int container)
         {
@@ -84,6 +89,9 @@ namespace VIS.Controllers
         /// <param name="container"></param>
         /// <param name="movementDate"></param>
         /// <param name="AD_Org_ID"></param>
+        /// <param name="locator"></param>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
         /// <returns></returns>
         public JsonResult MoveContainer(int container, DateTime? movementDate, int AD_Org_ID, int locator, int page, int size)
         {
@@ -115,6 +123,7 @@ namespace VIS.Controllers
         /// <param name="warehouse"></param>
         /// <param name="locator"></param>
         /// <param name="container"></param>
+        /// <param name="validation"></param>
         /// <returns></returns>
         public JsonResult LoadContainerAsTree(int warehouse, int locator, int container, string validation)
         {

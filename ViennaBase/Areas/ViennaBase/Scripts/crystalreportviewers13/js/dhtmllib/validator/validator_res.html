@@ -1,0 +1,34 @@
+<html>
+<head>
+
+<script>
+	document.write('<style>.total{font-family:"Verdana","Arial";font-size:12px;}')
+	for (var i=0;i<250;i++)
+		document.write('.a'+i+'{margin-left:'+(i*10)+'px}' )
+		
+	document.write('.smallTxt{font-family:"Verdana","Arial";font-size:10px;color:#0000a0}')
+	document.write('.smallInput{font-family:"Verdana","Arial";font-size:10px;color:black}')
+	document.write('.smallBtn{font-family:"Verdana","Arial";font-size:11px;color:black;background-color:#9090d0}')
+	document.write("</style>")
+</script>
+</head>
+<body style="background-color:#f0f0ff;">
+
+<table cellspacing=4 cellpadding=0 border=0 style="background-color:#e0e0f0;border:1px solid #808080;">
+	<tr>
+		<td class=smallTxt>Restrict to file:</td><td><input class=smallInput id="restrict" type="text" style="width:300px"></td>
+	</tr>
+	<tr>
+		<td class=smallTxt>Restrict children of tag with id:</td><td><input class=smallInput id="restrictID" type="text" style="width:300px"></td>
+	</tr>
+	<tr>
+		<td colspan=2 align=right><br><input type=button class=smallBtn value="  VALIDATOR !  " onclick="parent.sniff()" id=button1 name=button1>&nbsp;&nbsp;&nbsp;&nbsp;<br><br></td>
+	</tr>
+</table>
+<br><br>
+<span id=progress style='color=black;font-family:"Verdana","Arial";font-size:10px;'></span>
+
+<nobr>
+	<span id=results style='color=black;font-family:"Verdana","Arial";font-size:10px;'></span></nobr>
+</body>
+</html>

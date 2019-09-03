@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript">
+			_img="../../../images/main/"
+		</script>
+	
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+		
+		<script language="javascript">
+		function clickCB()
+		{
+			var o=this			
+			alert('ClickCB called\no.id='+o.id)
+		}
+		
+		function labelCB()
+		{
+			var o=this			
+			alert('LabelCB called\no.id='+o.id+'\no.idx='+o.idx)
+		}
+		
+		function beforeShowCB()
+		{
+			var o=this
+			window.status='BeforeShowCB called'
+		}
+				
+		function loadCB()
+		{
+			icnmenu.init()
+			icnmenu.show(true,0,0)
+		}
+		
+		//icnmenu=newIconMenuWidget('icnmenu',_skin+'../borders.gif',clickCB,null,'alt',16,16,0,0,0,16,false,beforeShowCB,true,labelCB)
+		icnmenu=newIconBordersMenuWidget('icnmenu',clickCB,beforeShowCB,labelCB)
+		
+		</script>
+		
+	</head>
+	<body onload="setTimeout('loadCB()',1)">
+
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>IconBordersMenuwidget</b></u><br><br>
+				<script language="javascript">icnmenu.write()</script>
+				<br>
+				
+			</div></div>
+		</td></tr></table>
+		
+		
+		
+	</body>
+	
+</html>

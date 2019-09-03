@@ -31,6 +31,7 @@ namespace VAdvantage.Model
         /** Product							*/
         private MProduct _product = null;
         public Decimal? OnHandQty = 0;
+        private Decimal? containerQty = 0;
         private decimal qtyReserved = 0;
         private MStorage storage = null;
         /// <summary>
@@ -162,10 +163,10 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
 
-            //	Create MA
-            if (newRecord && success
-                && _isManualEntry && GetM_AttributeSetInstance_ID() == 0)
-                CreateMA(true);
+            //	Create MA (not to create MA on Save -- we will create MA on Completion only)
+            //if (newRecord && success
+            //    && _isManualEntry && GetM_AttributeSetInstance_ID() == 0)
+            //    CreateMA(true);
 
             if (!IsInternalUse())
             {
@@ -278,6 +279,9 @@ namespace VAdvantage.Model
         /// <returns>true if can be saved</returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            // chck pallet Functionality applicable or not
+            bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+
             Decimal VA024_ProvisionPrice = 0;
             MInventory inventory = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_Trx());
             MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
@@ -332,8 +336,17 @@ namespace VAdvantage.Model
                         SetQtyInternalUse(qty);
                     else
                     {
-                        SetAsOnDateCount(qty);
-                        SetDifferenceQty(qty);
+                        //JID_1392
+                        if (GetAdjustmentType() == ADJUSTMENTTYPE_AsOnDateCount)
+                        {
+                            SetAsOnDateCount(qty);
+                            SetDifferenceQty(Decimal.Negate(qty.Value));
+                        }
+                        else if (GetAdjustmentType() == ADJUSTMENTTYPE_QuantityDifference)
+                        {
+                            SetAsOnDateCount(Decimal.Negate(qty.Value));
+                            SetDifferenceQty(qty);
+                        }
                     }
                 }
             }
@@ -364,41 +377,65 @@ namespace VAdvantage.Model
                 qtyReserved = Util.GetValueOfDecimal(Get_ValueOld("QtyInternalUse"));
             }
 
-            int M_Warehouse_ID = 0; MWarehouse wh = null;
-            string qry = "select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID();
-            M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_TrxName()));
+            // no need to check when record is in processing
+            if (!inventory.IsProcessing() || newRecord)
+            {
+                int M_Warehouse_ID = 0; MWarehouse wh = null;
+                string qry = "select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID();
+                M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_TrxName()));
 
-            wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
-            qry = "SELECT QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID();
-            if (GetM_AttributeSetInstance_ID() != 0)
-            {
-                qry += " AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID();
-            }
-            OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
-            // when record is in completed & closed stage - then no need to check qty availablity in warehouse
-            if (wh.IsDisallowNegativeInv() == true &&
-                (!(inventory.GetDocStatus() == "CO" || inventory.GetDocStatus() == "CL" ||
-                   inventory.GetDocStatus() == "RE" || inventory.GetDocStatus() == "VO")))
-            {
-                #region DisallowNegativeInv = True
-                if (!IsInternalUse() && GetDifferenceQty() > 0)
+                wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+                qry = "SELECT QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID() +
+                      " AND NVL(M_AttributeSetInstance_ID, 0)=" + GetM_AttributeSetInstance_ID();
+                OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                // when record is in completed & closed stage - then no need to check qty availablity in warehouse
+                if (wh.IsDisallowNegativeInv() == true &&
+                    (!(inventory.GetDocStatus() == "CO" || inventory.GetDocStatus() == "CL" ||
+                       inventory.GetDocStatus() == "RE" || inventory.GetDocStatus() == "VO")))
                 {
-                    if ((OnHandQty - GetDifferenceQty()) < 0)
+                    // pick container current qty from transaction based on locator / product / ASI / Container / Movement Date 
+                    if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0)
                     {
-                        log.SaveError("Info", product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
-                        return false;
+                        qry = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
+                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
+                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + GetM_Locator_ID() +
+                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
+                                    " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID();
+                        containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, null)); // dont use Transaction here - otherwise impact goes wrong on completion
                     }
-                }
-                else if (IsInternalUse())
-                {
-                    if ((OnHandQty - GetQtyInternalUse()) < 0)
+
+                    #region DisallowNegativeInv = True
+                    if (!IsInternalUse() && GetDifferenceQty() > 0)
                     {
-                        log.SaveError("Info", product.GetName() + " , " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
-                        return false;
+                        if ((OnHandQty - GetDifferenceQty()) < 0)
+                        {
+                            log.SaveError("", product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
+                            return false;
+                        }
+                        if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0 && (containerQty - GetDifferenceQty()) < 0)
+                        {
+                            log.SaveError("", product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQtyContainer") + containerQty);
+                            return false;
+                        }
                     }
+                    else if (IsInternalUse())
+                    {
+                        if ((OnHandQty - GetQtyInternalUse()) < 0)
+                        {
+                            log.SaveError("", product.GetName() + " , " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
+                            return false;
+                        }
+                        if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0 && (containerQty - GetQtyInternalUse()) < 0)
+                        {
+                            log.SaveError("", product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQtyContainer") + containerQty);
+                            return false;
+                        }
+                    }
+                    #endregion
                 }
-                #endregion
             }
+
             //	Enforce Qty UOM
             if (newRecord || Is_ValueChanged("QtyCount"))
                 SetQtyCount(GetQtyCount());

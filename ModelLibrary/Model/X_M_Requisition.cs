@@ -554,6 +554,24 @@ public int GetDTD001_MWarehouseSource_ID()
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }
+
+/** Set Temp Document No.
+    @param TempDocumentNo Temp Document No for this Document */
+public void SetTempDocumentNo(String TempDocumentNo)
+{
+    if (TempDocumentNo != null && TempDocumentNo.Length > 30)
+    {
+        log.Warning("Length > 30 - truncated");
+        TempDocumentNo = TempDocumentNo.Substring(0, 30);
+    }
+    Set_Value("TempDocumentNo", TempDocumentNo);
+}
+/** Get Temp Document No.
+@return Temp Document No for this Document */
+public String GetTempDocumentNo()
+{
+    return (String)Get_Value("TempDocumentNo");
+}
     
 }
 

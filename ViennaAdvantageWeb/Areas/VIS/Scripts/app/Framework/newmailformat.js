@@ -9,7 +9,7 @@
         var self = this;
         init();
         function init() {
-            $maingrid = $('<div  ></div>');
+            $maingrid = $('<div class="vis-forms-container" ></div>');
 
             var $containerdiv = $('<div></div>');
 

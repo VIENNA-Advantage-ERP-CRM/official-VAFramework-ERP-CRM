@@ -71,6 +71,8 @@ namespace VAdvantage.Model
         public static String DocSubTypeSO_RMA = "RM";
         String DocSubTypeSO = "";
         public Decimal? OnHandQty = 0;
+        /**is container applicable */
+        private bool isContainerApplicable = false;
         #endregion
 
         /* 	Create new Order by copying
@@ -1263,6 +1265,8 @@ namespace VAdvantage.Model
                     line.SetC_Order_ID(GetC_Order_ID());
                     line.SetOrder(this);
                     line.Set_ValueNoCheck("C_OrderLine_ID", I_ZERO);	//	new
+                    line.Set_ValueNoCheck("C_Contract_ID", I_ZERO);
+                    line.SetCreateServiceContract("N");
                     //	References
                     if (!copyASI)
                     {
@@ -1300,6 +1304,13 @@ namespace VAdvantage.Model
                     if (GetC_BPartner_ID() != otherOrder.GetC_BPartner_ID())
                         line.SetTax();		//	recalculate
                     //
+
+                    //	Tax Amount
+                    // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.
+                    if (GetM_PriceList_ID() != otherOrder.GetM_PriceList_ID())
+                        line.SetTaxAmt();		//	recalculate Tax Amount
+                    //
+
                     //
                     line.SetProcessed(false);
                     if (line.Save(Get_TrxName()))
@@ -1790,6 +1801,52 @@ namespace VAdvantage.Model
             return GetLines(null, orderClause);
         }
 
+        /// <summary>
+        /// Is Used to get all orderline except those where (Product is of ITEM type)
+        /// </summary>
+        /// <returns>lines</returns>
+        /// <writer>Amit</writer>
+        public MOrderLine[] GetLinesOtherthanProduct()
+        {
+            List<MOrderLine> list = new List<MOrderLine>();
+            StringBuilder sql = new StringBuilder(@"SELECT * FROM C_OrderLine ol
+                                                        LEFT JOIN m_product p ON p.m_product_id = ol.m_product_id
+                                                        WHERE ol.C_Order_ID =" + GetC_Order_ID() + @" AND ol.isactive = 'Y' 
+                                                        AND (ol.M_Product_ID IS NULL OR p.ProductType     != 'I')");
+            IDataReader idr = null;
+            try
+            {
+                idr = DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
+                DataTable dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
+                    ol.SetHeaderInfo(this);
+                    list.Add(ol);
+                }
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, sql.ToString(), e);
+            }
+            finally
+            {
+                if (idr != null)
+                {
+
+                    idr.Close();
+                    idr = null;
+                }
+            }
+            //
+            MOrderLine[] lines = new MOrderLine[list.Count]; ;
+            lines = list.ToArray();
+            return lines;
+        }
+
         /*	Renumber Lines
         *	@param step start and step
         */
@@ -2119,20 +2176,36 @@ namespace VAdvantage.Model
                     MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
                     SetM_Warehouse_ID(org.GetM_Warehouse_ID());
                 }
+
                 //	Warehouse Org
+                MWarehouse wh = null;
                 if (newRecord
                     || Is_ValueChanged("AD_Org_ID") || Is_ValueChanged("M_Warehouse_ID"))
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
+                    wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
                     if (wh.GetAD_Org_ID() != GetAD_Org_ID())
                     {
                         //Arpit 20th Nov,2017 issue No.115 -Not to save record if WareHouse is conflictiong with Organization
                         log.SaveWarning("WarehouseOrgConflict", "");
-                        //log.SaveError("WarehouseOrgConflict", Msg.GetMsg(GetCtx(),""));
                         return false;
-                        //Arpit
                     }
                 }
+
+                // JID_1366 : in case of disallow : True on warhouse, and when user try to save SO with shipping Rule as Force,
+                // then system will save record with Availability as shipping Rule and give message to user.
+                if (GetDeliveryRule() == X_C_Order.DELIVERYRULE_Force)
+                {
+                    if (wh == null)
+                    {
+                        wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
+                    }
+                    if (wh.IsDisallowNegativeInv())
+                    {
+                        SetDeliveryRule(X_C_Order.DELIVERYRULE_Availability);
+                        log.Info("JID_1366 : in case of disallow : True on warhouse, and user try to save Order with shipping Rule as Force, then system will save record with Availability.");
+                    }
+                }
+
                 //	Reservations in Warehouse
                 if (!newRecord && Is_ValueChanged("M_Warehouse_ID"))
                 {
@@ -2144,14 +2217,14 @@ namespace VAdvantage.Model
                     }
                 }
 
-                // If lines are available and user is changing the pricelist on header than we have to restrict it because
-                // those lines are saved as privious pricelist prices.. standard sheet issue no : SI_0344 by Manjot
-                if (!newRecord && Is_ValueChanged("M_PriceList_ID"))
+                // If lines are available and user is changing the pricelist, Order or Ship/Receipt on header than we have to restrict it because
+                // JID_0399_1: After change the receipt or order system will give the error message
+                if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("Orig_Order_ID") || Is_ValueChanged("Orig_InOut_ID")))
                 {
                     MOrderLine[] lines = GetLines(false, null);
                     if (lines.Length > 0)
                     {
-                        log.SaveWarning("Please Delete Lines First", "");
+                        log.SaveWarning("pleaseDeleteLinesFirst", "");
                         return false;
                     }
                 }
@@ -2255,11 +2328,11 @@ namespace VAdvantage.Model
                 }
 
                 //JID_0211: System is allowing to save promised date smaller than order date on header as wll as on order lines.. There should be a validation.
-                if (GetDateOrdered() != null && GetDatePromised() != null)
+                if (!IsReturnTrx() && GetDateOrdered() != null && GetDatePromised() != null)
                 {
                     if (GetDateOrdered().Value.Date > GetDatePromised().Value.Date)
                     {
-                        log.SaveError("VIS_OrderDateGrtrThanPromisedDate", "");
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_OrderDateGrtrThanPromisedDate"));
                         return false;
                     }
                 }
@@ -2277,57 +2350,58 @@ namespace VAdvantage.Model
                 }
 
                 //Added by Bharat for Credit Limit on 24/08/2016
-                if (IsSOTrx())
-                {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
-                    if (bp.GetCreditStatusSettingOn() == "CH")
-                    {
-                        decimal creditLimit = bp.GetSO_CreditLimit();
-                        string creditVal = bp.GetCreditValidation();
-                        if (creditLimit != 0)
-                        {
-                            decimal creditAvlb = creditLimit - bp.GetSO_CreditUsed();
-                            if (creditAvlb <= 0)
-                            {
-                                if (creditVal == "A" || creditVal == "D" || creditVal == "E")
-                                {
-                                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "CreditUsedSalesOrder"));
-                                    return false;
-                                }
-                                else if (creditVal == "G" || creditVal == "J" || creditVal == "K")
-                                {
-                                    log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "CreditOver"));
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
-                        if (bpl.GetCreditStatusSettingOn() == "CL")
-                        {
-                            decimal creditLimit = bpl.GetSO_CreditLimit();
-                            string creditVal = bpl.GetCreditValidation();
-                            if (creditLimit != 0)
-                            {
-                                decimal creditAvlb = creditLimit - bpl.GetSO_CreditUsed();
-                                if (creditAvlb <= 0)
-                                {
-                                    if (creditVal == "A" || creditVal == "D" || creditVal == "E")
-                                    {
-                                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "CreditUsedSalesOrder"));
-                                        return false;
-                                    }
-                                    else if (creditVal == "G" || creditVal == "J" || creditVal == "K")
-                                    {
-                                        //log.Warning(Msg.GetMsg(GetCtx(), "CreditOver"));
-                                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "CreditOver"));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                //if (IsSOTrx())
+                //{
+                //    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                //    if (bp.GetCreditStatusSettingOn() == "CH")
+                //    {
+                //        decimal creditLimit = bp.GetSO_CreditLimit();
+                //        string creditVal = bp.GetCreditValidation();
+                //        if (creditLimit != 0)
+                //        {
+                //            decimal creditAvlb = creditLimit - bp.GetSO_CreditUsed();
+                //            if (creditAvlb <= 0)
+                //            {
+                //                //if (creditVal == "A" || creditVal == "D" || creditVal == "E")
+                //                //{
+                //                //    log.SaveError("Error", Msg.GetMsg(GetCtx(), "CreditUsedSalesOrder"));
+                //                //    return false;
+                //                //}
+                //                //else if (creditVal == "G" || creditVal == "J" || creditVal == "K")
+                //                //{
+                //                    log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "CreditOver"));
+                //                //}
+                //            }
+                //        }
+                //    }
+                //    // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
+                //    else if (bp.GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+                //    {
+                //        MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
+                //        //if (bpl.GetCreditStatusSettingOn() == "CL")
+                //        //{
+                //            decimal creditLimit = bpl.GetSO_CreditLimit();
+                //            string creditVal = bpl.GetCreditValidation();
+                //            if (creditLimit != 0)
+                //            {
+                //                decimal creditAvlb = creditLimit - bpl.GetSO_CreditUsed();
+                //                if (creditAvlb <= 0)
+                //                {
+                //                    //if (creditVal == "A" || creditVal == "D" || creditVal == "E")
+                //                    //{
+                //                    //    log.SaveError("Error", Msg.GetMsg(GetCtx(), "CreditUsedSalesOrder"));
+                //                    //    return false;
+                //                    //}
+                //                    //else if (creditVal == "G" || creditVal == "J" || creditVal == "K")
+                //                    //{
+                //                        //log.Warning(Msg.GetMsg(GetCtx(), "CreditOver"));
+                //                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "CreditOver"));
+                //                    //}
+                //                }
+                //            }
+                //        //}
+                //    }
+                //}
 
                 if (IsReturnTrx())
                 {
@@ -2377,46 +2451,73 @@ namespace VAdvantage.Model
         {
             try
             {
-                if (!success || newRecord)
+                //if (!success || newRecord)
+                if (!success)
                     return success;
 
-                //	Propagate Description changes
-                if (Is_ValueChanged("Description") || Is_ValueChanged("POReference"))
+                if (!newRecord)
                 {
-                    String sql = "UPDATE C_Invoice i"
-                        + " SET (Description,POReference)="
-                            + "(SELECT Description, POReference "
-                            + "FROM C_Order o WHERE i.C_Order_ID=o.C_Order_ID) "
-                        + "WHERE DocStatus NOT IN ('RE','CL') AND C_Order_ID=" + GetC_Order_ID();
+                    //	Propagate Description changes
+                    if (Is_ValueChanged("Description") || Is_ValueChanged("POReference"))
+                    {
+                        String sql = "UPDATE C_Invoice i"
+                            + " SET (Description,POReference)="
+                                + "(SELECT Description, POReference "
+                                + "FROM C_Order o WHERE i.C_Order_ID=o.C_Order_ID) "
+                            + "WHERE DocStatus NOT IN ('RE','CL') AND C_Order_ID=" + GetC_Order_ID();
 
-                    int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
-                    log.Fine("Description -> #" + no);
+                        int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        log.Fine("Description -> #" + no);
+                    }
+
+                    //	Propagate Changes of Payment Info to existing (not reversed/closed) invoices
+                    if (Is_ValueChanged("PaymentRule") || Is_ValueChanged("C_PaymentTerm_ID")
+                        || Is_ValueChanged("DateAcct") || Is_ValueChanged("C_Payment_ID")
+                        || Is_ValueChanged("C_CashLine_ID"))
+                    {
+                        String sql = "UPDATE C_Invoice i "
+                            + "SET (PaymentRule,C_PaymentTerm_ID,DateAcct,C_Payment_ID,C_CashLine_ID)="
+                                + "(SELECT PaymentRule,C_PaymentTerm_ID,DateAcct,C_Payment_ID,C_CashLine_ID "
+                                + "FROM C_Order o WHERE i.C_Order_ID=o.C_Order_ID)"
+                            + "WHERE DocStatus NOT IN ('RE','CL') AND C_Order_ID=" + GetC_Order_ID();
+                        //	Don't touch Closed/Reversed entries
+                        int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        log.Fine("Payment -> #" + no);
+                    }
+
+                    //	Sync Lines
+                    AfterSaveSync("AD_Org_ID");
+                    AfterSaveSync("C_BPartner_ID");
+                    AfterSaveSync("C_BPartner_Location_ID");
+                    AfterSaveSync("DateOrdered");
+                    AfterSaveSync("DatePromised");
+                    AfterSaveSync("M_Warehouse_ID");
+                    AfterSaveSync("M_Shipper_ID");
+                    AfterSaveSync("C_Currency_ID");
                 }
 
-                //	Propagate Changes of Payment Info to existing (not reversed/closed) invoices
-                if (Is_ValueChanged("PaymentRule") || Is_ValueChanged("C_PaymentTerm_ID")
-                    || Is_ValueChanged("DateAcct") || Is_ValueChanged("C_Payment_ID")
-                    || Is_ValueChanged("C_CashLine_ID"))
+                // Applied check for warning message on credit limit for Business Partner
+                if ((IsSOTrx() && !IsReturnTrx()) || (!IsSOTrx() && IsReturnTrx()))
                 {
-                    String sql = "UPDATE C_Invoice i "
-                        + "SET (PaymentRule,C_PaymentTerm_ID,DateAcct,C_Payment_ID,C_CashLine_ID)="
-                            + "(SELECT PaymentRule,C_PaymentTerm_ID,DateAcct,C_Payment_ID,C_CashLine_ID "
-                            + "FROM C_Order o WHERE i.C_Order_ID=o.C_Order_ID)"
-                        + "WHERE DocStatus NOT IN ('RE','CL') AND C_Order_ID=" + GetC_Order_ID();
-                    //	Don't touch Closed/Reversed entries
-                    int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
-                    log.Fine("Payment -> #" + no);
-                }
+                    string docSubType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocSubtypeSO FROM C_DocType WHERE 
+                                                C_DocType_ID = " + GetC_DocTypeTarget_ID() + " AND DocBaseType = 'SOO'", null, Get_TrxName()));
+                    if (!(docSubType == "ON" || docSubType == "OB"))
+                    {
+                        Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                            GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
+                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
 
-                //	Sync Lines
-                AfterSaveSync("AD_Org_ID");
-                AfterSaveSync("C_BPartner_ID");
-                AfterSaveSync("C_BPartner_Location_ID");
-                AfterSaveSync("DateOrdered");
-                AfterSaveSync("DatePromised");
-                AfterSaveSync("M_Warehouse_ID");
-                AfterSaveSync("M_Shipper_ID");
-                AfterSaveSync("C_Currency_ID");
+                        MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+                        string retMsg = "";
+                        bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                        if (!crdAll)
+                            log.SaveWarning("Warning", retMsg);
+                        else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                        {
+                            log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -2424,7 +2525,7 @@ namespace VAdvantage.Model
                 //MessageBox.Show("Error in MOrder--AfterSave");
                 return false;
             }
-            return true;
+            return success;
         }
 
         /// <summary>
@@ -2469,13 +2570,14 @@ namespace VAdvantage.Model
             }
             // check payment term is Advance, then return False
             else if (Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_Advance FROM C_PaymentTerm
-                                            WHERE C_PaymentTerm_ID = " + PaymentTerm_Id, null, null)).Equals("Y"))
+                                            WHERE C_PaymentTerm_ID = " + PaymentTerm_Id, null, Get_TrxName())).Equals("Y"))
             {
                 isAdvancePayTerm = false;
             }
             // check any payment term schedule is Advance, then return False
-            else if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_PaySchedule 
-                                            WHERE VA009_Advance = 'Y' AND C_PaymentTerm_ID = " + PaymentTerm_Id, null, null)) > 0)
+            // JID_1193: If Payment term header is valid but having lines with advance and Inactive. System should consider that as 100% immedate. However, system is creating schedule of advance on order.
+            else if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND IsValid = 'Y' 
+                                                            AND VA009_Advance = 'Y' AND C_PaymentTerm_ID = " + PaymentTerm_Id, null, Get_TrxName())) > 0)
             {
                 isAdvancePayTerm = false;
             }
@@ -2567,7 +2669,8 @@ namespace VAdvantage.Model
             }
 
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct()))
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -2690,8 +2793,8 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-            //	Credit Check
-            if (IsSOTrx() && !IsReturnTrx())
+            // Changed check to handle Vendor RMA Cases also
+            if ((IsSOTrx() && !IsReturnTrx()) || (!IsSOTrx() && IsReturnTrx()))
             {
                 // added by Bharat to avoid completion if Payment Method is not selected
                 // Tuple<String, String, String> aInfo = null;
@@ -2733,37 +2836,50 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-
-
                 else
                 {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
-                    if (MBPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
+                    string docSubType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocSubtypeSO FROM C_DocType WHERE 
+                                                C_DocType_ID = " + GetC_DocTypeTarget_ID() + " AND DocBaseType = 'SOO'", null, Get_TrxName()));
+                    if (!(docSubType == "ON" || docSubType == "OB"))
                     {
-                        _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
-                            + bp.GetTotalOpenBalance()
-                            + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
-                        return DocActionVariables.STATUS_INVALID;
-                    }
-                    if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus()))
-                    {
-                        _processMsg = "@BPartnerCreditHold@ - @TotalOpenBalance@="
-                            + bp.GetTotalOpenBalance()
-                            + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
-                        return DocActionVariables.STATUS_INVALID;
-                    }
-                    Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
-                        GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
-                        GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-                    if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
-                    {
-                        _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
-                            + bp.GetTotalOpenBalance() + ", @GrandTotal@=" + grandTotal
-                            + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
-                        return DocActionVariables.STATUS_INVALID;
+                        MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                        //if (MBPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
+                        //{
+                        //    _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
+                        //        + bp.GetTotalOpenBalance()
+                        //        + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
+                        //    return DocActionVariables.STATUS_INVALID;
+                        //}
+                        //if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus()))
+                        //{
+                        //    _processMsg = "@BPartnerCreditHold@ - @TotalOpenBalance@="
+                        //        + bp.GetTotalOpenBalance()
+                        //        + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
+                        //    return DocActionVariables.STATUS_INVALID;
+                        //}
+                        Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                           GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
+                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                        //if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
+                        //{
+                        //    _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
+                        //        + bp.GetTotalOpenBalance() + ", @GrandTotal@=" + grandTotal
+                        //        + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
+                        //    return DocActionVariables.STATUS_INVALID;
+                        //}
+
+                        string retMsg = "";
+                        bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                        if (!crdAll)
+                        {
+                            if (bp.ValidateCreditValidation("A,D,E", GetC_BPartner_Location_ID()))
+                            {
+                                _processMsg = retMsg;
+                                return DocActionVariables.STATUS_INVALID;
+                            }
+                        }
                     }
                 }
-
             }
 
             _justPrepared = true;
@@ -2786,6 +2902,9 @@ namespace VAdvantage.Model
             String sql = "SELECT COUNT(*) FROM C_OrderLine "
                 + "WHERE C_Order_ID=" + GetC_Order_ID() + where;
             int count = DataBase.DB.GetSQLValue(Get_TrxName(), sql); //Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
+
+            StringBuilder sbSQL = new StringBuilder("");
+
             while (count != 0)
             {
                 retValue = true;
@@ -2817,21 +2936,34 @@ namespace VAdvantage.Model
                         newLine.Save(Get_TrxName());
                     }
                     //	Convert into Comment Line
-                    line.SetM_Product_ID(0);
-                    line.SetM_AttributeSetInstance_ID(0);
-                    line.SetPrice(Env.ZERO);
-                    line.SetPriceLimit(Env.ZERO);
-                    line.SetPriceList(Env.ZERO);
-                    line.SetLineNetAmt(Env.ZERO);
-                    line.SetFreightAmt(Env.ZERO);
+                    //line.SetM_Product_ID(0);
+                    //line.SetM_AttributeSetInstance_ID(0);
+                    //line.SetPrice(Env.ZERO);
+                    //line.SetPriceLimit(Env.ZERO);
+                    //line.SetPriceList(Env.ZERO);
+                    //line.SetLineNetAmt(Env.ZERO);
+                    //line.SetFreightAmt(Env.ZERO);
                     //
                     String description = product.GetName();
                     if (product.GetDescription() != null)
                         description += " " + product.GetDescription();
                     if (line.GetDescription() != null)
                         description += " " + line.GetDescription();
-                    line.SetDescription(description);
-                    line.Save(Get_TrxName());
+                    //line.SetDescription(description);
+                    //line.Save(Get_TrxName());
+
+                    // change here to set product and other related information through query as in orderline before save you can not set both product or charge to ZERO
+                    // Lokesh 10 july 2019
+                    sbSQL.Clear();
+                    sbSQL.Append(@"UPDATE C_OrderLine SET M_Product_ID = null, M_AttributeSetInstance_ID = null, PriceEntered = 0, PriceLimit = 0, PriceList = 0, LineNetAmt = 0, 
+                                    FreightAmt = 0, Description = '" + description + "' WHERE C_OrderLine_ID = " + line.GetC_OrderLine_ID());
+                    int res = Util.GetValueOfInt(DB.ExecuteQuery(sbSQL.ToString(), null, Get_TrxName()));
+                    if (res <= 0)
+                    {
+                        log.Info("line not updated for BOM type product");
+                        break;
+                    }
+
                 }	//	for all lines with BOM
 
                 _lines = null;		//	force requery
@@ -3071,9 +3203,10 @@ namespace VAdvantage.Model
             return true;
         }
 
-        /* 	Calculate Tax and Total
-         * 	@return true if tax total calculated
-         */
+        /// <summary>
+        /// Calculate Tax and Total
+        /// </summary>
+        /// <returns>true if tax total calculated</returns>
         private bool CalculateTaxTotal()
         {
             try
@@ -3119,17 +3252,39 @@ namespace VAdvantage.Model
                         {
                             MTax cTax = cTaxes[j];
                             Decimal taxAmt = cTax.CalculateTax(oTax.GetTaxBaseAmt(), false, GetPrecision());
-                            //
-                            MOrderTax newOTax = new MOrderTax(GetCtx(), 0, Get_TrxName());
-                            newOTax.SetClientOrg(this);
-                            newOTax.SetC_Order_ID(GetC_Order_ID());
-                            newOTax.SetC_Tax_ID(cTax.GetC_Tax_ID());
-                            newOTax.SetPrecision(GetPrecision());
-                            newOTax.SetIsTaxIncluded(IsTaxIncluded());
-                            newOTax.SetTaxBaseAmt(oTax.GetTaxBaseAmt());
-                            newOTax.SetTaxAmt(taxAmt);
-                            if (!newOTax.Save(Get_TrxName()))
-                                return false;
+
+                            // JID_0430: if we add 2 lines with different Taxes. one is Parent and other is child. System showing error on completion that "Error Calculating Tax"
+                            if (taxList.Contains(cTax.GetC_Tax_ID()))
+                            {
+                                String sql = "SELECT * FROM C_OrderTax WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + cTax.GetC_Tax_ID();
+                                DataSet ds = DB.ExecuteDataset(sql, null, Get_TrxName());
+                                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                                {
+                                    DataRow dr = ds.Tables[0].Rows[0];
+                                    MOrderTax newOTax = new MOrderTax(GetCtx(), dr, Get_TrxName());
+                                    newOTax.SetTaxAmt(Decimal.Add(newOTax.GetTaxAmt(), taxAmt));
+                                    newOTax.SetTaxBaseAmt(Decimal.Add(newOTax.GetTaxBaseAmt(), oTax.GetTaxBaseAmt()));
+                                    if (!newOTax.Save(Get_TrxName()))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                ds = null;
+                            }
+                            else
+                            {
+                                //
+                                MOrderTax newOTax = new MOrderTax(GetCtx(), 0, Get_TrxName());
+                                newOTax.SetClientOrg(this);
+                                newOTax.SetC_Order_ID(GetC_Order_ID());
+                                newOTax.SetC_Tax_ID(cTax.GetC_Tax_ID());
+                                newOTax.SetPrecision(GetPrecision());
+                                newOTax.SetIsTaxIncluded(IsTaxIncluded());
+                                newOTax.SetTaxBaseAmt(oTax.GetTaxBaseAmt());
+                                newOTax.SetTaxAmt(taxAmt);
+                                if (!newOTax.Save(Get_TrxName()))
+                                    return false;
+                            }
                             //
                             if (!IsTaxIncluded())
                                 grandTotal = Decimal.Add(grandTotal, taxAmt);
@@ -3184,6 +3339,9 @@ namespace VAdvantage.Model
         /****************************************************************************************************/
         public String CompleteIt()
         {
+            // chck pallet Functionality applicable or not
+            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+
             try
             {
                 MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
@@ -3195,6 +3353,9 @@ namespace VAdvantage.Model
                     SetProcessed(false);
                     return DocActionVariables.STATUS_INPROGRESS;
                 }
+
+                // JID_1290: Set the document number from completed document sequence after completed (if needed)
+                SetCompletedDocumentNo();
 
                 if (!IsReturnTrx())
                 {
@@ -3421,7 +3582,7 @@ namespace VAdvantage.Model
 
                     for (int i = 0; i < _lines.Length; i++)
                     {
-                        if(_lines[i].GetC_Charge_ID() > 0)
+                        if (_lines[i].GetC_Charge_ID() > 0)
                         {
                             continue;
                         }
@@ -3478,7 +3639,10 @@ namespace VAdvantage.Model
                         Info.Append("Successfully created:@M_InOut_ID@ & doc no.: ").Append(shipment.GetDocumentNo());
                         if (shipment.GetDocStatus() == "DR")
                         {
-                            _processMsg = " Could Not Complete because Reserved qty is greater than Onhand qty, Available Qty Is : " + OnHandQty;
+                            if (String.IsNullOrEmpty(_processMsg))
+                            {
+                                _processMsg = " Could Not Complete because Reserved qty is greater than Onhand qty, Available Qty Is : " + OnHandQty;
+                            }
                             shipment.SetProcessMsg(_processMsg);
                             // Info.Append(" " + _processMsg);
                         }
@@ -3648,6 +3812,53 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
             return DocActionVariables.STATUS_COMPLETED;
+        }
+
+        /// <summary>
+        /// Set the document number from Completed Document Sequence after completed
+        /// </summary>
+        protected void SetCompletedDocumentNo()
+        {
+            // if Re-Activated document then no need to get Document no from Completed sequence
+            if (Get_ColumnIndex("IsReActivated") > 0 && IsReActivated())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateOrdered(DateTime.Now.Date);
+                if (GetDateAcct().Value.Date < GetDateOrdered().Value.Date)
+                {
+                    SetDateAcct(GetDateOrdered());
+
+                    //	Std Period open?
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+                    {
+                        throw new Exception("@PeriodClosed@");
+                    }
+                }
+            }
+
+            // if Overwrite Sequence on Complete checkbox is true.
+            if (dt.IsOverwriteSeqOnComplete())
+            {
+                // Set Drafted Document No into Temp Document No.
+                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                {
+                    SetTempDocumentNo(GetDocumentNo());
+                }
+
+                // Get current next from Completed document sequence defined on Document type
+                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                if (value != null)
+                {
+                    SetDocumentNo(value);
+                }
+            }
         }
 
         //Changes by abhishek suggested by lokesh on 7/1/2016
@@ -4018,6 +4229,7 @@ namespace VAdvantage.Model
                     MOrderLine oLine = oLines[i];
                     if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
                     {
+                        #region POS Terminal > 0
                         MInOutLine ioLine = new MInOutLine(shipment);
                         //	Qty = Ordered - Delivered
                         Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
@@ -4045,13 +4257,22 @@ namespace VAdvantage.Model
                         }
                         if (!ioLine.Save(Get_TrxName()))
                         {
-                            _processMsg = "Could not create Shipment Line";
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                                _processMsg = "Could not create Shipment Line. " + pp.GetName();
+                            else
+                                _processMsg = "Could not create Shipment Line";
                             return null;
                         }
-
+                        #endregion
                     }
                     else
                     {
+                        // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
+                        MProduct oproduct = oLine.GetProduct();
+                        if (oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
+                            continue;
+
                         //
                         int M_Warehouse_ID = oLine.GetM_Warehouse_ID();
                         wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
@@ -4076,8 +4297,11 @@ namespace VAdvantage.Model
                             }
                         }
 
-                        Decimal? QtyAvail = MStorage.GetQtyAvailable(M_Warehouse_ID, oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(), Get_TrxName());
-                        String sql = "SELECT QtyOnHand FROM M_Storage s INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) WHERE s.M_Product_ID=" + oLine.GetM_Product_ID() + " AND l.M_Warehouse_ID=" + M_Warehouse_ID;
+                        Decimal? QtyAvail = MStorage.GetQtyAvailable(M_Warehouse_ID, oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(), Get_Trx());
+                        if (MovementQty > 0)
+                            QtyAvail += MovementQty;
+
+                        String sql = "SELECT SUM(QtyOnHand) FROM M_Storage s INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) WHERE s.M_Product_ID=" + oLine.GetM_Product_ID() + " AND l.M_Warehouse_ID=" + M_Warehouse_ID;
                         if (oLine.GetM_AttributeSetInstance_ID() != 0)
                         {
                             sql += " AND M_AttributeSetInstance_ID=" + oLine.GetM_AttributeSetInstance_ID();
@@ -4087,25 +4311,33 @@ namespace VAdvantage.Model
                         {
                             sql += " AND l.M_Locator_ID = " + M_Locator_ID;
                         }
-                        OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+                        OnHandQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
                         if (wh.IsDisallowNegativeInv() == true)
                         {
                             if (oLine.GetQtyOrdered() > QtyAvail && (DocSubTypeSO == "WR" || DocSubTypeSO == "WP"))
                             {
                                 #region In Case of -- WR (WareHouse Order) / WP (POS Order)
                                 // when qty avialble on warehouse is less than qty ordered, at that time we can create shipment in Drafetd stage, to be completed mnually
-                                ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
-                                ioLine.SetQty(MovementQty);
-                                if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv());
+
+                                // when OnHand qty is less than qtyOrdered then not to create shipment (need to be rollback)
+                                if (!String.IsNullOrEmpty(_processMsg) && OnHandQty < oLine.GetQtyOrdered())
                                 {
-                                    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
-                                    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                                    return null;
                                 }
-                                if (!ioLine.Save(Get_TrxName()))
-                                {
-                                    //_processMsg = "Could not create Shipment Line";
-                                    //return null;
-                                }
+
+                                //ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
+                                //ioLine.SetQty(MovementQty);
+                                //if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                                //{
+                                //    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
+                                //    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                                //}
+                                //if (!ioLine.Save(Get_TrxName()))
+                                //{
+                                //    //_processMsg = "Could not create Shipment Line";
+                                //    //return null;
+                                //}
                                 //	Manually Process Shipment
                                 IsDrafted = true;
                                 #endregion
@@ -4113,44 +4345,57 @@ namespace VAdvantage.Model
                             else
                             {
                                 #region In Case of -- Credit Order / PePay Order / WareHouse Order / POS Order
-                                ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
-                                ioLine.SetQty(MovementQty);
-                                if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+
+                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv());
+                                if (!String.IsNullOrEmpty(_processMsg))
                                 {
-                                    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
-                                    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
-                                }
-                                if (!ioLine.Save(Get_TrxName()))
-                                {
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
-                                        _processMsg = "Could not create Shipment Line. " + pp.GetName();
-                                    else
-                                        _processMsg = "Could not create Shipment Line";
                                     return null;
                                 }
+
+                                //ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
+                                //ioLine.SetQty(MovementQty);
+                                //if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                                //{
+                                //    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
+                                //    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                                //}
+                                //if (!ioLine.Save(Get_TrxName()))
+                                //{
+                                //    ValueNamePair pp = VLogger.RetrieveError();
+                                //    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                                //        _processMsg = "Could not create Shipment Line. " + pp.GetName();
+                                //    else
+                                //        _processMsg = "Could not create Shipment Line";
+                                //    return null;
+                                //}
                                 #endregion
                             }
                         }
                         else
                         {
                             #region when disallow is FALSE
-                            ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
-                            ioLine.SetQty(MovementQty);
-                            if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                            _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv());
+                            if (!String.IsNullOrEmpty(_processMsg))
                             {
-                                //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
-                                ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
-                            }
-                            if (!ioLine.Save(Get_TrxName()))
-                            {
-                                ValueNamePair pp = VLogger.RetrieveError();
-                                if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
-                                    _processMsg = "Could not create Shipment Line. " + pp.GetName();
-                                else
-                                    _processMsg = "Could not create Shipment Line";
                                 return null;
                             }
+
+                            //ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
+                            //ioLine.SetQty(MovementQty);
+                            //if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                            //{
+                            //    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
+                            //    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                            //}
+                            //if (!ioLine.Save(Get_TrxName()))
+                            //{
+                            //    ValueNamePair pp = VLogger.RetrieveError();
+                            //    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                            //        _processMsg = "Could not create Shipment Line. " + pp.GetName();
+                            //    else
+                            //        _processMsg = "Could not create Shipment Line";
+                            //    return null;
+                            //}
                             #endregion
                         }
                     }
@@ -4204,10 +4449,205 @@ namespace VAdvantage.Model
             }
             catch
             {
+                return null;
                 //ShowMessage.Error("MOrder",null,"CreateShipment");
             }
             return shipment;
         }
+
+        /// <summary>
+        /// Create line with the reference of Container
+        /// </summary>
+        /// <param name="inout"></param>
+        /// <param name="ioLine"></param>
+        /// <param name="oLine"></param>
+        /// <param name="M_Locator_ID"></param>
+        /// <param name="Qty"></param>
+        /// <returns></returns>
+        private String CreateShipmentLineContainer(MInOut inout, MInOutLine ioLine, MOrderLine oLine, int M_Locator_ID, Decimal Qty, bool disalowNegativeInventory)
+        {
+            String pMsg = null;
+            MProductCategory productCategory = MProductCategory.GetOfProduct(GetCtx(), oLine.GetM_Product_ID());
+            List<RecordContainer> shipLine = new List<RecordContainer>();
+            RecordContainer recordContainer = null;
+            bool existingRecord = false;
+            String sql = "";
+            if (isContainerApplicable)
+            {
+                // Pick data from Container Storage based on Material Policy
+                sql = @"SELECT s.M_AttributeSetInstance_ID ,s.M_ProductContainer_ID, s.Qty
+                           FROM M_ContainerStorage s 
+                           LEFT OUTER JOIN M_AttributeSetInstance asi ON (s.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)
+                           WHERE NOT EXISTS (SELECT * FROM M_ProductContainer p WHERE isactive = 'N' AND p.M_ProductContainer_ID = NVL(s.M_ProductContainer_ID , 0)) 
+                           AND s.AD_Client_ID= " + oLine.GetAD_Client_ID() + @"
+                           AND s.AD_Org_ID=" + oLine.GetAD_Org_ID() + @"
+                           AND s.M_Locator_ID = " + M_Locator_ID + @" 
+                           AND s.M_Product_ID=" + oLine.GetM_Product_ID() + @"
+                           AND s.Qty > 0 ";
+                if (oLine.GetM_AttributeSetInstance_ID() != 0)
+                {
+                    sql += " AND NVL(s.M_AttributeSetInstance_ID , 0)=" + oLine.GetM_AttributeSetInstance_ID();
+                }
+                if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_LiFo)
+                    sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate DESC, s.M_ContainerStorage_ID DESC";
+                else if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_FiFo)
+                    sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate ASC , s.M_ContainerStorage_ID ASC";
+            }
+            else
+            {
+                sql = @"SELECT s.M_AttributeSetInstance_ID ,0 AS M_ProductContainer_ID, s.QtyOnHand AS Qty
+                        FROM M_Storage s WHERE s.M_Locator_ID = " + M_Locator_ID + @" 
+                           AND s.M_Product_ID=" + oLine.GetM_Product_ID() + @"
+                           AND s.QtyOnHand > 0 ";
+                if (oLine.GetM_AttributeSetInstance_ID() != 0)
+                {
+                    sql += " AND NVL(s.M_AttributeSetInstance_ID , 0)=" + oLine.GetM_AttributeSetInstance_ID();
+                }
+            }
+            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                int containerASI = 0;
+                int containerId = 0;
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    existingRecord = false;
+                    if (i > 0)
+                    {
+                        #region  Find existing record based on respective parameter
+                        if (shipLine.Count > 0)
+                        {
+                            // Find existing record based on respective parameter
+                            RecordContainer iRecord = null;
+                            containerASI = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                            containerId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]);
+
+                            if (shipLine.Exists(x => (x.M_Locator_ID == M_Locator_ID) &&
+                                                     (x.M_Product_ID == oLine.GetM_Product_ID()) &&
+                                                     (x.M_ASI_ID == containerASI) &&
+                                                     (x.M_ProductContainer_ID == containerId)
+                                                ))
+                            {
+                                iRecord = shipLine.Find(x => (x.M_Locator_ID == M_Locator_ID) &&
+                                                             (x.M_Product_ID == oLine.GetM_Product_ID()) &&
+                                                             (x.M_ASI_ID == containerASI) &&
+                                                             (x.M_ProductContainer_ID == containerId)
+                                                       );
+                                if (iRecord != null)
+                                {
+                                    // create object of existing record
+                                    existingRecord = true;
+                                    ioLine = new VAdvantage.Model.MInOutLine(GetCtx(), iRecord.M_InoutLine_ID, Get_Trx());
+                                }
+                            }
+                        }
+                        #endregion
+                    }
+
+                    if (!existingRecord && i != 0)
+                    {
+                        // Create new object of shipline
+                        ioLine = new MInOutLine(inout);
+                    }
+
+                    Decimal containerQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Qty"]);
+                    Decimal lineCreatedQty = (Decimal.Subtract(Qty, containerQty) >= 0 ? ((i + 1) != ds.Tables[0].Rows.Count ? containerQty : Qty) : Qty);
+                    if (!existingRecord)
+                    {
+                        ioLine.SetOrderLine(oLine, M_Locator_ID, lineCreatedQty);
+                        ioLine.SetM_ProductContainer_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]));
+                    }
+                    ioLine.SetQty(Decimal.Add(ioLine.GetQtyEntered(), lineCreatedQty));
+                    if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                    {
+                        ioLine.SetQtyEntered(Decimal.Multiply(lineCreatedQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                    }
+                    ioLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                    if (!ioLine.Save(Get_TrxName()))
+                    {
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                            pMsg = "Could not create Shipment Line. " + pp.GetName();
+                        else
+                            pMsg = "Could not create Shipment Line";
+                        return pMsg;
+                    }
+                    else
+                    {
+                        #region  created list - for updating on same record
+                        // created list - for updating on same record
+                        if (!shipLine.Exists(x => (x.M_Locator_ID == ioLine.GetM_Locator_ID()) &&
+                                                 (x.M_Product_ID == ioLine.GetM_Product_ID()) &&
+                                                 (x.M_ASI_ID == ioLine.GetM_AttributeSetInstance_ID()) &&
+                                                 (x.M_ProductContainer_ID == ioLine.GetM_ProductContainer_ID())
+                                                 ))
+                        {
+                            recordContainer = new RecordContainer();
+                            recordContainer.M_InoutLine_ID = ioLine.GetM_InOutLine_ID();
+                            recordContainer.M_Locator_ID = ioLine.GetM_Locator_ID();
+                            recordContainer.M_Product_ID = ioLine.GetM_Product_ID();
+                            recordContainer.M_ASI_ID = ioLine.GetM_AttributeSetInstance_ID();
+                            recordContainer.M_ProductContainer_ID = ioLine.GetM_ProductContainer_ID();
+                            shipLine.Add(recordContainer);
+                        }
+                        #endregion
+
+                        // Qty Represent "Remaining Qty" whose shipline line to be created
+                        Qty -= lineCreatedQty;
+                        if (Qty <= 0)
+                            break;
+                    }
+                }
+            }
+            ds.Dispose();
+
+            // When Disallow Negative Inventory is FALSE - then create new line with remainning qty
+            if (Qty != 0)
+            {
+                ioLine = null;
+                RecordContainer iRecord = null;
+                if (shipLine.Exists(x => (x.M_Locator_ID == M_Locator_ID) &&
+                                                    (x.M_Product_ID == oLine.GetM_Product_ID()) &&
+                                                    (x.M_ASI_ID == oLine.GetM_AttributeSetInstance_ID()) &&
+                                                    (x.M_ProductContainer_ID == 0)))
+                {
+                    iRecord = shipLine.Find(x => (x.M_Locator_ID == M_Locator_ID) &&
+                                                 (x.M_Product_ID == oLine.GetM_Product_ID()) &&
+                                                 (x.M_ASI_ID == oLine.GetM_AttributeSetInstance_ID()) &&
+                                                 (x.M_ProductContainer_ID == 0));
+                    if (iRecord != null)
+                    {
+                        // create object of existing record
+                        ioLine = new VAdvantage.Model.MInOutLine(GetCtx(), iRecord.M_InoutLine_ID, Get_Trx());
+                    }
+                }
+
+                // when no recod found on above filteation - then need to create new object
+                if (ioLine == null)
+                {
+                    // Create new object of shipline
+                    ioLine = new MInOutLine(inout);
+                }
+                ioLine.SetOrderLine(oLine, M_Locator_ID, Qty);
+                ioLine.SetM_ProductContainer_ID(0);
+                ioLine.SetQty(Decimal.Add(ioLine.GetQtyEntered(), Qty));
+                if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                {
+                    ioLine.SetQtyEntered(Decimal.Multiply(Qty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                }
+                if (!ioLine.Save(Get_TrxName()))
+                {
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                        pMsg = "Could not create Shipment Line. " + pp.GetName();
+                    else
+                        pMsg = "Could not create Shipment Line";
+                    return pMsg;
+                }
+            }
+            return pMsg;
+        }
+
 
         /****************************************************************************************************/
         /* 	Create Invoice
@@ -4221,6 +4661,7 @@ namespace VAdvantage.Model
             MInvoice invoice = new MInvoice(this, dt.GetC_DocTypeInvoice_ID(), invoiceDate);
             if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
             {
+                #region VAPOS_POSTerminal_ID > 0
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
                 if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                 {
@@ -4257,6 +4698,7 @@ namespace VAdvantage.Model
                 {
                     invoice.SetVA009_PaymentMethod_ID(GetVA009_PaymentMethod_ID());
                 }
+                #endregion
             }
             log.Info(dt.ToString());
             try
@@ -4298,6 +4740,28 @@ namespace VAdvantage.Model
                         if (!sLine.Save(Get_TrxName()))
                         {
                             log.Warning("Could not update Shipment line: " + sLine);
+                        }
+                    }
+
+
+                    // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
+                    MOrderLine[] oLines = GetLinesOtherthanProduct();
+                    for (int i = 0; i < oLines.Length; i++)
+                    {
+                        MOrderLine oLine = oLines[i];
+                        //
+                        MInvoiceLine iLine = new MInvoiceLine(invoice);
+                        iLine.SetOrderLine(oLine);
+                        //	Qty = Ordered - Invoiced	
+                        iLine.SetQtyInvoiced(Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced()));
+                        if (oLine.GetQtyOrdered().CompareTo(oLine.GetQtyEntered()) == 0)
+                            iLine.SetQtyEntered(iLine.GetQtyInvoiced());
+                        else
+                            iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
+                        if (!iLine.Save(Get_TrxName()))
+                        {
+                            _processMsg = "Could not create Invoice Line from Order Line";
+                            return null;
                         }
                     }
                 }
@@ -4388,8 +4852,10 @@ namespace VAdvantage.Model
             // set counter Businees partner 
             SetCounterBPartner(counterBP, counterAD_Org_ID, counterOrgInfo.GetM_Warehouse_ID());
             //	Deep Copy
+            // JID_1300: If the PO is created with lines includes Product with attribute set instance, once the counter document is created on completion of PO i.e. SO, 
+            // Attribute Set Instance values are not getting fetched into SO lines.
             MOrder counter = CopyFrom(this, GetDateOrdered(),
-                C_DocTypeTarget_ID, true, false, Get_TrxName());
+                C_DocTypeTarget_ID, true, true, Get_TrxName());
             //
             counter.SetDatePromised(GetDatePromised());		// default is date ordered 
             //	Refernces (Should not be required
@@ -4500,6 +4966,9 @@ namespace VAdvantage.Model
                 ord.Save();
             }
 
+            // JID_0658: After Creating PO from Open Requisition, & the PO record is Void, PO line reference is not getting removed from Requisition Line.
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = 0 WHERE C_OrderLine_ID IN (SELECT C_OrderLine_ID FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID() + ")", null, Get_TrxName());
+
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
             return true;
@@ -4555,12 +5024,12 @@ namespace VAdvantage.Model
                     {
                         if (!String.IsNullOrEmpty(ship.GetProcessMsg()))
                         {
-                            Info.Append(" ").Append(ship.GetProcessMsg());                            
+                            Info.Append(" ").Append(ship.GetProcessMsg());
                             //_processMsg = ship.GetProcessMsg() + " - " + ship;
                         }
                         else
                         {
-                            Info.Append(" ").Append(Msg.GetMsg(GetCtx(), "ErrorReverse"));                            
+                            Info.Append(" ").Append(Msg.GetMsg(GetCtx(), "ErrorReverse"));
                             //_processMsg = "Could not reverse Shipment " + ship;
                         }
                         _processMsg = Info.ToString();
@@ -4599,12 +5068,12 @@ namespace VAdvantage.Model
                     {
                         if (!String.IsNullOrEmpty(invoice.GetProcessMsg()))
                         {
-                            Info.Append(" ").Append(invoice.GetProcessMsg());                           
+                            Info.Append(" ").Append(invoice.GetProcessMsg());
                             //_processMsg = invoice.GetProcessMsg() + " - " + invoice;
                         }
                         else
                         {
-                            Info.Append(" ").Append(Msg.GetMsg(GetCtx(),"ErrorReverse"));                            
+                            Info.Append(" ").Append(Msg.GetMsg(GetCtx(), "ErrorReverse"));
                             //_processMsg = "Could not reverse Invoice " + invoice;
                         }
                         _processMsg = Info.ToString();
@@ -4644,12 +5113,12 @@ namespace VAdvantage.Model
                     {
                         if (!String.IsNullOrEmpty(rma.GetProcessMsg()))
                         {
-                            Info.Append(" ").Append(rma.GetProcessMsg());                            
+                            Info.Append(" ").Append(rma.GetProcessMsg());
                             //_processMsg = rma.GetProcessMsg() + " - " + rma;
                         }
                         else
                         {
-                            Info.Append(" ").Append(Msg.GetMsg(GetCtx(),"ErrorReverse"));                            
+                            Info.Append(" ").Append(Msg.GetMsg(GetCtx(), "ErrorReverse"));
                             //_processMsg = "Could not reverse RMA " + rma;
                         }
                         _processMsg = Info.ToString();
@@ -4664,6 +5133,12 @@ namespace VAdvantage.Model
             catch
             {
                 //ShowMessage.Error("MOrder",null,"CreateReversals");
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                    _processMsg = "Could not CreateReversals. " + pp.GetName();
+                else
+                    _processMsg = "Could not CreateReversals.";
+                return false;
             }
             return true;
         }
@@ -4752,12 +5227,14 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    if (!linkedDocument(GetC_Order_ID()))
-                    {
-                        _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
-                        return false;
-                    }
+                    // JID_1362 - User can reactivate record even the depenedent transaction available into system
+                    ////if (!linkedDocument(GetC_Order_ID()))
+                    ////{
+                    ////    _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
+                    ////    return false;
+                    ////}
                 }
+
                 // Added by Vivek on 27/09/2017 assigned by Pradeep 
                 // To check if associated PO is exist but not reversed  in case of drop shipment
                 if (IsSOTrx() && !IsReturnTrx())
@@ -4882,6 +5359,12 @@ namespace VAdvantage.Model
                 else
                 {
                     log.Info("Existing documents not modified - SubType=" + DocSubTypeSO);
+                }
+
+                // Set Value in Re-Activated when record is reactivated
+                if (Get_ColumnIndex("IsReActivated") > 0)
+                {
+                    SetIsReActivated(true);
                 }
 
                 SetDocAction(DOCACTION_Complete);
@@ -5057,5 +5540,14 @@ namespace VAdvantage.Model
         }
 
         #endregion
+    }
+
+    public class RecordContainer
+    {
+        public int M_InoutLine_ID { get; set; }
+        public int M_Locator_ID { get; set; }
+        public int M_Product_ID { get; set; }
+        public int M_ASI_ID { get; set; }
+        public int M_ProductContainer_ID { get; set; }
     }
 }

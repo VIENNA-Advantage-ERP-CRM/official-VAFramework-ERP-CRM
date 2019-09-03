@@ -200,7 +200,8 @@
             $contentGrid = $("<td class='vis-height-full'>");
             $lblTitle = $("<h1>");//.addClass("vis-awindow-title-label");
 
-            $btnClose = $('<a href="javascript:void(0)" title="' + VIS.Msg.getMsg("Close") + '" class="vis-mainMenuIcons vis-icon-menuclose"></a>');
+            // Mohit - Shortcut as title.
+            $btnClose = $('<a href="javascript:void(0)" title="' + VIS.Msg.getMsg("Close") + " " + VIS.Msg.getMsg("Shct_Close") + '" class="vis-mainMenuIcons vis-icon-menuclose"></a>');
 
             $toolDiv = $("<div class='vis-awindow-toolbar' >");
             $header = $("<div class='vis-awindow-header vis-menuTitle' >").append($btnClose).append($lblTitle).append($toolDiv);
@@ -564,6 +565,7 @@
             this.cPanel.disposeComponent();
             this.cPanel = null;
         }
+        splitUI = true;
         this.initProcess(AD_Process_ID, callback, action, splitUI, externalForm);
         if (externalForm.disposeComponent) {
             externalForm.getParameterContainer().empty().append(this.cPanel.getParametersContainer());
@@ -836,7 +838,8 @@
             //$arrowSearch = $("<span style='float:right'>").text(">");
             $txtSearch = $("<input type='text' class='vis-apanel-search' placeholder='" + VIS.Msg.getMsg("Search") + "'><span style='right:58px;display:none' class='glyphicon glyphicon glyphicon-remove VIS-winSearch-autocom'></span><span style='display:none' class='glyphicon glyphicon-chevron-down VIS-winSearch-autocom'></span>");
             //$txtSearch = $("<input type='text' class='vis-apanel-search' placeholder='" + VIS.Msg.getMsg("Search") + "'>");
-            $imgSearch = $("<img  title='" + VIS.Msg.getMsg("Search") + "' src='" + AppsAction.prototype.getPath() + "Sear.png'>");
+            // Mohit - Shortcut as title.
+            $imgSearch = $("<img  title='" + VIS.Msg.getMsg("Search") + " " + VIS.Msg.getMsg("Shct_Search") + "' src='" + AppsAction.prototype.getPath() + "Sear.png'>");
 
             $divSearch.append($txtSearch).append($imgSearch);//.append($arrowSearch).
         };
@@ -1011,7 +1014,7 @@
 
 
                         var li = $("<li>")
-                          .append($("<a title='" + item.title + "'>" + item.label + "</a>").append(span))
+                          .append($("<a style='display:block' title='" + item.title + "'>" + item.label + "</a>").append(span))
                           .appendTo(ul);
 
 
@@ -1121,15 +1124,15 @@
         this.createToolBar = function () {
 
             //1. toolbar action
-            this.aRefresh = this.addActions(this.ACTION_NAME_REFRESH, null, true, true, false, onAction);
-            this.aDelete = this.addActions(this.ACTION_NAME_DELETE, null, true, true, false, onAction);
-            this.aNew = this.addActions(this.ACTION_NAME_NEW, null, true, true, false, onAction);
-            this.aIgnore = this.addActions("Ignore", null, true, true, false, onAction);
-            this.aSave = this.addActions("Save", null, true, true, false, onAction);
-            this.aFind = this.addActions("Find", null, true, true, false, onAction);
-            this.aInfo = this.addActions("Info", null, true, true, false, onAction);
-            this.aReport = this.addActions("Report", null, true, true, false, onAction);
-            this.aPrint = this.addActions("Print", null, true, true, false, onAction);
+            this.aRefresh = this.addActions(this.ACTION_NAME_REFRESH, null, true, true, false, onAction, null, "Shct_Refresh");
+            this.aDelete = this.addActions(this.ACTION_NAME_DELETE, null, true, true, false, onAction, null, "Shct_Delete");
+            this.aNew = this.addActions(this.ACTION_NAME_NEW, null, true, true, false, onAction, null, "Shct_New");
+            this.aIgnore = this.addActions("Ignore", null, true, true, false, onAction, null, "Shct_Ignore");
+            this.aSave = this.addActions("Save", null, true, true, false, onAction, null, "Shct_Save");
+            this.aFind = this.addActions("Find", null, true, true, false, onAction, null, "Shct_Find");
+            this.aInfo = this.addActions("Info", null, true, true, false, onAction, null, "Shct_Info");
+            this.aReport = this.addActions("Report", null, true, true, false, onAction, null, "Shct_Report");
+            this.aPrint = this.addActions("Print", null, true, true, false, onAction, null, "Shct_Print");
 
 
             $ulToobar.append(this.aIgnore.getListItm());
@@ -1148,13 +1151,14 @@
             $ulToobar.append(new AppsAction().getSeprator(false, true));
             $ulToobar.append(this.aFind.getListItm());
 
+            // Mohit - Shortcut as title.
             ////2.Navigation sub-tollbar
-            this.aPrevious = this.addActions(this.ACTION_NAME_PREV, null, true, true, true, onAction);
-            this.aFirst = this.addActions(this.ACTION_NAME_FIRST, null, true, true, true, onAction);
-            this.aLast = this.addActions(this.ACTION_NAME_LAST, null, true, true, true, onAction);
-            this.aNext = this.addActions(this.ACTION_NAME_NEXT, null, true, true, true, onAction);
-            this.aMulti = this.addActions("Multi", null, false, true, true, onAction, true);
-            this.aCard = this.addActions("Card", null, false, true, true, onAction);
+            this.aPrevious = this.addActions(this.ACTION_NAME_PREV, null, true, true, true, onAction, null, "Shct_PrevRec");
+            this.aFirst = this.addActions(this.ACTION_NAME_FIRST, null, true, true, true, onAction, null, "Shct_FirstRec");
+            this.aLast = this.addActions(this.ACTION_NAME_LAST, null, true, true, true, onAction, null, "Shct_LastRec");
+            this.aNext = this.addActions(this.ACTION_NAME_NEXT, null, true, true, true, onAction, null, "Shct_NextRec");
+            this.aMulti = this.addActions("Multi", null, false, true, true, onAction, true, "Shct_MultiRow");
+            this.aCard = this.addActions("Card", null, false, true, true, onAction, null, "Shct_CardView");
 
             this.aMap = this.addActions("Map", null, false, true, true, onAction);
 
@@ -1166,11 +1170,12 @@
             $ulNav.append(this.aCard.getListItm());
             $ulNav.append(this.aMap.getListItm().hide());
 
+            // Mohit - Shortcut as title.
             ///3. bottom toolbar 
-            this.aPageUp = this.addActions("PageUp", null, true, true, true, onAction);
-            this.aPageFirst = this.addActions("PageFirst", null, true, true, true, onAction);
-            this.aPageLast = this.addActions("PageLast", null, true, true, true, onAction);
-            this.aPageDown = this.addActions("PageDown", null, true, true, true, onAction);
+            this.aPageUp = this.addActions("PageUp", null, true, true, true, onAction, null, "Shct_PageUp");
+            this.aPageFirst = this.addActions("PageFirst", null, true, true, true, onAction, null, "Shct_PageFirst");
+            this.aPageLast = this.addActions("PageLast", null, true, true, true, onAction, null, "Shct_PageLast");
+            this.aPageDown = this.addActions("PageDown", null, true, true, true, onAction, null, "Shct_PageDown");
 
             //Action Bar[Left] 
 
@@ -2450,7 +2455,11 @@
     APanel.prototype.refresh = function () {
         if (this.curGC) {
             this.curGC.vTable.resize();
+            if (this.curGC.vIncludedGC) {
+                this.curGC.vIncludedGC.vTable.refresh();
+            }
         }
+
     };
 
     APanel.prototype.refreshData = function () {
@@ -2460,18 +2469,18 @@
                 ssel.curGC.dataRefreshAll();
             }
             else {
-               
+
                 ssel.selectFirstTab(false, function () {
                     ssel.curGC.dataRefreshAll();
                 });
             }
             ssel.setBusy(false);
-        },100);
+        }, 100);
         this.setBusy(true);
     };
 
-    APanel.prototype.addActions = function (action, parent, disableIcon, imageOnly, isSmall, onAction, toggle) {
-        var action = new VIS.AppsAction({ action: action, parent: parent, enableDisable: disableIcon, toggle: toggle, imageOnly: imageOnly, isSmall: isSmall, onAction: onAction }); //Create Apps Action
+    APanel.prototype.addActions = function (action, parent, disableIcon, imageOnly, isSmall, onAction, toggle, toolTipText) {
+        var action = new VIS.AppsAction({ action: action, parent: parent, enableDisable: disableIcon, toggle: toggle, imageOnly: imageOnly, isSmall: isSmall, onAction: onAction, toolTipText: toolTipText }); //Create Apps Action
         return action;
     };
 
@@ -3390,19 +3399,52 @@
         var needExecute = true;
 
         try {
-            //	Ask user to start process, if Description and Help is not empty
-            if (!startWOasking && !(vButton.getDescription().equals("") && vButton.getHelp().equals(""))) {
-                needExecute = false;
-                VIS.ADialog.confirm("StartProcess?", true, vButton.getDescription() + "\n" + vButton.getHelp(), "Confirm", function (result) {
+
+            // If admin wants user to set background option
+            // If background checkbox is checked, then user can see the setting throguh dialog but cannot change
+            // if this checkbox is unchecked, then user will not be asked about setting, but process execute according to settings in DB.
+            if (vButton.getAskUserBGProcess() == true || vButton.getIsBackgroundProcess() == true) {
+                // Create Custom UI and pass root div as parameter to confirmCustomUI.
+                var $customDIv = $('<div class="vis-confirm-popup-check"><label>' + VIS.Msg.translate(VIS.context, 'IsBackgroundProcess') + '</label></div>');
+                var $chkBG = $('<input type="checkbox">');
+                var isChecked = vButton.getIsBackgroundProcess();
+                // Set (Disable or enable) and (checked or unchecked) based on DB setting
+                $chkBG.prop('checked', isChecked);
+                $chkBG.prop('disabled', isChecked);
+                $customDIv.prepend($chkBG);
+                VIS.ADialog.confirmCustomUI("StartProcess?", true, vButton.getDescription() + "\n" + vButton.getHelp(), "Confirm", $customDIv, function (result) {
                     if (result) {
-                        return btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName);
+                        isBg = $chkBG.is(':checked');
+                        return btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName, isBg);
                     }
                 });
+
+
+            }
+            else {
+                var isbg = vButton.getIsBackgroundProcess();
+                //	Ask user to start process, if Description and Help is not empty
+                if (!startWOasking && !(vButton.getDescription().equals("") && vButton.getHelp().equals(""))) {
+                    needExecute = false;
+                    VIS.ADialog.confirm("StartProcess?", true, vButton.getDescription() + "\n" + vButton.getHelp(), "Confirm", function (result) {
+                        if (result) {
+                            return btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName, isbg);
+                        }
+                    });
+                }
+
+                if (needExecute) {
+                    return btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName, isbg);
+                }
             }
 
-            if (needExecute) {
-                return btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName);
-            }
+            // }
+
+
+
+            //if (needExecute) {
+            //    return btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName);
+            //}
 
 
         }
@@ -3414,7 +3456,9 @@
     };
 
 
-    function btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName) {
+
+
+    function btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName, isbackground) {
         var title = vButton.getDescription();
         if (title == null || title.length == 0)
             title = columnName;
@@ -3423,6 +3467,7 @@
         pi.setAD_Client_ID(ctx.getAD_Client_ID());
         pi.setAD_Window_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.AD_Window_ID));// vinay bhatt window id
         pi.setIsBatch(batch);
+        pi.setIsBackground(isbackground);
         //start process
 
         var pCtl = new VIS.ProcessCtl(aPanel, pi, null);
@@ -5302,6 +5347,7 @@
                     this.toolTipText = VIS.Msg.getMsg(this.action);
                 else {
                     this.toolTipText = VIS.Msg.getMsg(this.toolTipText);
+                    this.text = this.text + " " + this.toolTipText;
                 }
                 if (this.toolTipText.contains("&")) {
                     this.toolTipText = this.toolTipText.replace('&', '');
@@ -5867,8 +5913,10 @@
             if (action == "Edit_sub") {
                 if (self.displayAsIncludedGC) {
                     //fire Tab changed and open in edit mode
-                    if (self.aPanel.tabActionPerformed(self.id))
+                    if (self.aPanel.tabActionPerformed(self.id)) {
                         self.switchSingleRow();
+                        $tabControl.find('.vis-apanel-tab-selected')[0].scrollIntoView();
+                    }
                     return;
                 }
             }
@@ -6480,13 +6528,20 @@
         var selfThis = this;
 
         //	Query Included Tab
-        window.setTimeout(function () {
+        if (!this.getIsSingleRow()) {
+            window.setTimeout(function () {
+                if (selfThis.vIncludedGC != null) {
+                    selfThis.switchIncludedGC();
+                    //vIncludedGC.getMTab().query(0, 0, false);
+                }
+            }, 50);
+        }
+        else {
             if (selfThis.vIncludedGC != null) {
                 selfThis.switchIncludedGC();
                 //vIncludedGC.getMTab().query(0, 0, false);
             }
-        }, 50);
-
+        }
         //if (this.currentRowIndex === event.index) {
         //    return;
         //}
@@ -6776,6 +6831,20 @@
             this.displayAsIncludedGC = false;
             this.aPanel.getIncludedEmptyArea().css({ 'width': '', "padding": '' });
         }
+        else if (this.gTab.getIncluded_Tab_ID() == 0) {
+            var olcIncludedTab = oldGC.vIncludedGC;
+            if (olcIncludedTab) {
+                var tdArea = olcIncludedTab.aPanel.getLayout();
+                olcIncludedTab.setUI(false);
+                olcIncludedTab.getRoot().detach();
+            }
+            //tdArea.append(oldGC.getRoot());
+            //oldGC.displayAsIncludedGC = false;
+            //oldGC.aPanel.getIncludedEmptyArea().css({ 'width': '', "padding": '' });
+
+            //old.switchIncludedGC();
+        }
+        //vIncludedGC
         this.isIncludedGCVisible = false;
         // || this.isIncludedGCVisible || oldGC.vIncludedGC) // this is Shown as Included GC then reset parameter
         //{
@@ -6968,13 +7037,13 @@
         //date:19-01-2016
         //Change/Update for:Zoom from workflow on home page
 
-        if (!this.vIncludedGC || this.isIncludedGCVisible || this.isZoomAction) {
-            this.navigate(this.gTab.getCurrentRow(), !this.gTab.getTableModel().getIsInserting());
-        }
-        else {
-            this.gTab.currentRow = -1;
-            this.gTab.fireDataStatusEventOnly();
-        }
+        //if (!this.vIncludedGC || this.isIncludedGCVisible || this.isZoomAction || 1==1) {
+        this.navigate(this.gTab.getCurrentRow(), !this.gTab.getTableModel().getIsInserting());
+        //}
+        //else {
+        //    this.gTab.currentRow = -1;
+        //    this.gTab.fireDataStatusEventOnly();
+        //}
 
         //refresh card view
         if (this.isCardRow)
@@ -7315,7 +7384,7 @@
             //p1.width("0%");//  css('width:50%');;
             //p.width("99%");//  css('width:50%');;
             p1.hide();
-            p.show();
+            p.css("display", "block");// .show();
             this.getVCardPanel().hide();
             this.getVMapPanel().hide();
 
@@ -7336,7 +7405,7 @@
             this.getVCardPanel().hide();
             this.getVMapPanel().hide();
 
-            p1.width(this.displayAsIncludedGC ? '98%' : '97%');
+            // p1.width(this.displayAsIncludedGC ? '98%' : '97%');
             if (this.isIncludedGCVisible)
                 p1.css({ "float": 'right' });
             else p1.css({ "float": '' });
@@ -7417,25 +7486,27 @@
         //return;
         //if (this.singleRow) { ///hide if parent gridcontroller in edit mode
 
-        //    if (visible) {
-        //        //this.vIncludedGC.getRoot().hide();
-        //        //this.vIncludedGC.getRoot().width("100%");
-        //        //this.getRoot().width("100%");
-        //        //this.isIncludedGCVisible = false;
-        //        //// this.displayAsIncludedGC = false;
-        //        //this.vIncludedGC.displayAsIncludedGC = false;
-        //        ////this.vIncludedGC.isIncludedGCVisible = false;
+        //if (visible) {
+        //    this.vIncludedGC.getRoot().hide();
+        //    this.vIncludedGC.getRoot().width("100%");
+        //    this.getRoot().width("100%");
+        //    this.isIncludedGCVisible = false;
+        //    // this.displayAsIncludedGC = false;
+        //    this.vIncludedGC.displayAsIncludedGC = false;
+        //    //this.vIncludedGC.isIncludedGCVisible = false;
 
-        //        //this.toggleTabItems();
-        //        //this.vIncludedGC.toggleTabItems();
-        //    }
-        //    // return;
+        //    //this.toggleTabItems();
+        //    //this.vIncludedGC.toggleTabItems();
+        //     return;
+        //}
+
         //}
 
         if (!visible) {
+            var tdArea = this.aPanel.getIncludedEmptyArea();
+            tdArea.empty();
             var inGc = this.vIncludedGC.getRoot();
             inGc.detach();
-            var tdArea = this.aPanel.getIncludedEmptyArea();
             this.vIncludedGC.setUI(true);
 
             //this.getRoot().css({
@@ -10741,6 +10812,67 @@
         };
     };
 
+    //function ProcessRunDialog(content, isBackground) {
+    //    var $mainDiv = $('<div class="vis-PopupContent-alert vis-PopupContent-alert-info vis-PopupContent-alert-Confirm">');
+    //    var $divMain = $('<div class="vis-PopupInput-alert">');
+    //    var $lblContent = $('<label style="width: 90%;padding-left: 10px; word-break: break-word;">');
+    //    var images = $('<img class="vis-alert-img" style="float:left" src="'+VIS.Application.contextUrl + 'Areas/VIS/Images/base/confirm-icon.png'+'">');
+    //    var $chkbackground = $('<input type="checkbox"></input>');
+    //    var ch = null;
+    //    if (content && content.length > 0) {
+    //        $lblContent.text(content);
+    //    }
+    //    $chkbackground.prop('checked', isBackground);
+    //    if (isBackground == true) {
+    //        $chkbackground.prop('disabled', true);
+    //    }
+    //    else {
+    //        $chkbackground.prop('disabled', '');
+    //    }
+
+    //    var dResult = false;
+    //    this.onClose=null;
+    //    $mainDiv.append($divMain.append(images).append($lblContent).append($chkbackground));
+
+    //    this.show = function () {
+    //        ch = new VIS.ChildDialog();
+    //        ch.setWidth(300);
+    //        ch.setTitle(VIS.Msg.getMsg("Confirm"));
+    //        ch.setModal(true);
+    //        ch.setContent($mainDiv);
+    //        ch.show();
+    //        ch.onOkClick = ok;
+    //        ch.onCancelClick = cancel;
+    //        ch.onClose = close;
+    //    };
+
+    //    this.result = function () {
+    //        return dResult;
+    //    }
+
+    //    this.isBackground = function () {
+    //        return $chkbackground.is('checked');
+    //    };
+
+    //    function ok() {
+    //        dResult = true;
+    //        ch.close();
+    //    };
+
+
+    //    function close()
+    //    {
+    //        this.onClose();
+    //    };
+
+    //    function cancel() {
+    //        dResult = false;
+    //        ch.close();
+    //    };
+
+    //};
+
+
 
 
 
@@ -10751,6 +10883,6 @@
     VIS.VTable = VTable;
     VIS.VCardView = VCardView;
     VIS.VMapView = VMapView;
-
+    //VIS.ProcessRunDialog = ProcessRunDialog;
 
 }(VIS, jQuery));

@@ -519,7 +519,7 @@
                         }
                         else if (activeTabType == WorkflowType) {
 
-                         //   $workflowActivity.hide();
+                            //   $workflowActivity.hide();
                             adjustDivSize();
                             $welcomeNewRecord.hide();
                             $wfSearchShow.show();
@@ -531,14 +531,14 @@
                             $WelcomeScreenHdr.append(VIS.Msg.getMsg('Activity'));
                             //var divActivityContainer = $("#welcomeScreenFeedsList");
                             //var divActivityDetailContainer = $("#workflowActivityDetails");
-                           // emptyWelcomeTabDatacontainers();;
+                            // emptyWelcomeTabDatacontainers();;
                             tabdatapcount = 0, tabdataPageSize = p_size, tabdataPage = p_no, tabdatacntpage = 0;
 
                             if (activity == null) {
                                 activity = new VIS.wfActivity(WelcomeTabDatacontainers, $workflowActivityDetails, workflowActivityData, WelcomeTabDatacontainers, $wfSearchShow);
                             }
                             activity.Load(true);
-                           
+
                         }
                         else if (activeTabType == NoticeType) {
                             tabdatapcount = 0, tabdataPageSize = p_size, tabdataPage = p_no, tabdatacntpage = 0;
@@ -653,6 +653,32 @@
                         else if (datarcrd === "liapprove") {
                             var vid = evnt.target.firstChild.id;
                             ApproveNotice(vid, true);
+                        }
+                        else if (datarcrd === "lispecial") {
+                            var vid = evnt.target.firstChild.id;
+                            var arrn = vid.toString().split('|');
+
+
+                            var recID = arrn[0];
+                            var tableName = arrn[1];
+                            var winID = arrn[2];
+
+                            var zoomQuery = new VIS.Query();
+                            zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, recID);
+                            VIS.viewManager.startWindow(winID, zoomQuery);
+                        }//
+                        else if (datarcrd === "lispecial1") {
+                            var vid = evnt.target.id;
+                            var arrn = vid.toString().split('|');
+
+
+                            var recID = arrn[0];
+                            var tableName = arrn[1];
+                            var winID = arrn[2];
+
+                            var zoomQuery = new VIS.Query();
+                            zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, recID);
+                            VIS.viewManager.startWindow(winID, zoomQuery);
                         }
 
                     }
@@ -1207,7 +1233,7 @@
                                    + "</div>"
                                    + "</div>"
 
-                                   + "<div  class='vis-feedDetails' style='margin: -5px 0px 0px 0px; width:100%;'>"
+                                   + "<div  class='vis-feedDetails vis-pt-0 vis-pl-0'>"
                                    + "<div class='vis-table-request'>"
                                    + "<ul>"
                                    + "<li><span>" + VIS.Msg.getMsg('Priority') + ":</span><br>" + data[s].Priority + "</li>"
@@ -1301,20 +1327,32 @@
                             }
 
                             str += "<div data-vishomercrd='view-recrd-cntainer' id='divrecdcntnr_" + data[s].AD_Note_ID + "' class='vis-activityContainer'>"
-                                       + " <div class='vis-feedTitleBar'>"
-                                            + "<h3 style='color:#1b95d7;'>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>"
-                                           + " <div class='vis-feedTitleBar-buttons'>"
-                                              + "  <ul>"
-                                               + "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "' class='vis-feedIcons vis-icon-check'> title='" + VIS.Msg.getMsg("Approve") + "'</a></li>"
-                                               + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "'  class='vis-feedIcons vis-icon-viewFeed'>title='" + VIS.Msg.getMsg("View") + "'</a></li>"
-                                              + "</ul>"
-                                            + "  </div>"
-                                           + "</div>"
-                                         + "<div data-vishomercrd='more-details' id=" + data[s].AD_Note_ID + " class='vis-feedDetails'>"
-                                             + divtitle_
-                            + " <p class='vis-feedDateTime'>" + VIS.Utility.encodeText(dbdate) + "</p>"
-                          + " </div>"
-                        + " </div>"
+                                       + " <div class='vis-feedTitleBar'>";
+
+                            if (data[s].SpecialTable) {
+                                str += "<h3 style='color:#1b95d7;width:calc(100% - 105px)'>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
+                            }
+                            else {
+                                str += "<h3 style='color:#1b95d7;'>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
+                            }
+
+
+                                           str+= " <div class='vis-feedTitleBar-buttons'>"
+                                              + "  <ul>";
+                            //if (data[s].SpecialTable)
+                            //{
+                            //    str += "<li data-vishomercrd='lispecial'><a data-vishomercrd='lispecial1' href='javascript:void(0)' id='" + data[s].Record_ID + "|" + data[s].ProcessTableName + "|" + data[s].ProcessWindowID + "' data-vishomercrd='SpecialTable' title='" + VIS.Msg.getMsg("ShowNotice") + "' class='vis-processZoomIcon vis-icon-check'> title='" + VIS.Msg.getMsg("ShowNotice") + "'</a></li>"
+                            //}
+                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "' class='vis-feedIcons vis-icon-check'> title='" + VIS.Msg.getMsg("Approve") + "'</a></li>"
+                            + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "'  class='vis-feedIcons vis-icon-viewFeed'>title='" + VIS.Msg.getMsg("View") + "'</a></li>"
+                           + "</ul>"
+                         + "  </div>"
+                        + "</div>"
+                      + "<div data-vishomercrd='more-details' id=" + data[s].AD_Note_ID + " class='vis-feedDetails'>"
+                          + divtitle_
+         + " <p class='vis-feedDateTime'>" + VIS.Utility.encodeText(dbdate) + "</p>"
+       + " </div>"
+     + " </div>"
 
                         }
                     }
@@ -1487,7 +1525,7 @@
                     //var divActivityDetailContainer = $("#workflowActivityDetails");
                     emptyWelcomeTabDatacontainers();;
                     tabdatapcount = 0, tabdataPageSize = p_size, tabdataPage = p_no, tabdatacntpage = 0;
-                    activity = new VIS.wfActivity(WelcomeTabDatacontainers, $workflowActivityDetails, workflowActivityData, WelcomeTabDatacontainers,$wfSearchShow);
+                    activity = new VIS.wfActivity(WelcomeTabDatacontainers, $workflowActivityDetails, workflowActivityData, WelcomeTabDatacontainers, $wfSearchShow);
                     activity.Load(false);
 
                 }

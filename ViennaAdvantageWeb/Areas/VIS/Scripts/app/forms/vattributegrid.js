@@ -39,7 +39,7 @@
 
         this.log = VIS.Logging.VLogger.getVLogger("VAttributeGrid");
 
-        var $root = $("<div style='width: 100%; height: 100%; background-color: white; '>");
+        var $root = $("<div class='vis-forms-container' style='width: 100%; height: 100%; background-color: white; '>");
         var $busyDiv = $("<div class='vis-apanel-busy' style='width:100%;height:100%;z-index: 1'>");
 
         var leftsideDiv = null;
@@ -468,8 +468,9 @@
                         toggleside = false;
                         // btnToggel.animate({ width: sideDivWidth }, "slow");
                         rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
-                        //paradiv.css("display", "block");
+                        paradiv.css("display", "block");
                         topLeftDiv.animate({ width: sideDivWidth }, "slow");
+                        leftsideDiv.animate({ width: sideDivWidth }, "slow");
                         //leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
                         //    dGrid.resize();
                         //});
@@ -489,9 +490,10 @@
 
                         toggleside = true;
                         // btnToggel.animate({ width: minSideWidth }, "slow");
-                        topLeftDiv.animate({ width: minSideWidth }, "slow");
+                        rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow");
                         leftsideDiv.animate({ width: minSideWidth }, "slow");
-                        // paradiv.css("display", "none");
+                        topLeftDiv.animate({ width: minSideWidth }, "slow");
+                         paradiv.css("display", "none");
                         //rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
                         //    dGrid.resize();
                         //});

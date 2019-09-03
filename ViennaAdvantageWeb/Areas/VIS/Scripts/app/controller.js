@@ -5882,6 +5882,14 @@
         return this.vo.ShowChildOfSelected;
     };
 
+    GridField.prototype.getIsBackgroundProcess = function () {
+        return this.vo.IsBackgroundProcess;
+    };
+
+    GridField.prototype.getAskUserBGProcess = function () {
+        return this.vo.AskUserBGProcess;
+    };
+
 
     /**
      *  Refresh Lookup if the lookup is unstable

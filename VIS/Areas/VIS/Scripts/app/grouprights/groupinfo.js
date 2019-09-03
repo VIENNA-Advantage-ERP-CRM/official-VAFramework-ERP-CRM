@@ -9,7 +9,7 @@
         };
 
         function createLayout() {
-            $root = $('<div>');
+            $root = $('<div  class="vis-forms-container">');
             getGroupInfo();
 
         };

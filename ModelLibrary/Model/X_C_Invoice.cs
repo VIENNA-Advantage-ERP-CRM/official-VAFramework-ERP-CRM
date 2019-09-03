@@ -1499,6 +1499,50 @@ namespace VAdvantage.Model
                 return 0;
             return Convert.ToInt32(ii);
         }
+
+        /// <summary>
+        /// Set Hold Payment.
+        /// </summary>
+        /// <param name="IsHoldPayment">This checkbox used to hold the payments. If this checkbox true on the Order, it will set hold payment checkbox true at Invoice window while creating invoice against this order and user can’t do the payment for that invoice.</param>
+        public void SetIsHoldPayment(Boolean IsHoldPayment) { Set_Value("IsHoldPayment", IsHoldPayment); }
+
+        /// <summary>
+        /// Get Hold Payment.
+        /// </summary>
+        /// <returns>This checkbox used to hold the payments. If this checkbox true on the Order, it will set hold payment checkbox true at Invoice window while creating invoice against this order and user can't do the payment for that invoice.</returns>
+        public Boolean IsHoldPayment() { Object oo = Get_Value("IsHoldPayment"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /// <summary>
+        /// Set Treat As Discount.
+        /// </summary>
+        /// <param name="TreatAsDiscount">This checkbox indicates if an invoice is considered as discount invoice while calculating product costing. Also the system will not allow to create return to vendor invoice.</param>
+        public void SetTreatAsDiscount(Boolean TreatAsDiscount) { Set_Value("TreatAsDiscount", TreatAsDiscount); }
+        /// <summary>
+        ///  Get Treat As Discount.
+        /// </summary>
+        /// <returns>This checkbox indicates if an invoice is considered as discount invoice while calculating product costing. Also the system will not allow to create return to vendor invoice.</returns>
+        public Boolean IsTreatAsDiscount() { Object oo = Get_Value("TreatAsDiscount"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /** Set Temp Document No.
+        @param TempDocumentNo Temp Document No for this Document */
+        public void SetTempDocumentNo(String TempDocumentNo)
+        {
+            if (TempDocumentNo != null && TempDocumentNo.Length > 30)
+            {
+                log.Warning("Length > 30 - truncated");
+                TempDocumentNo = TempDocumentNo.Substring(0, 30);
+            }
+            Set_Value("TempDocumentNo", TempDocumentNo);
+        }
+
+        /** Get Temp Document No.
+        @return Temp Document No for this Document */
+        public String GetTempDocumentNo()
+        {
+            return (String)Get_Value("TempDocumentNo");
+        }
+
+
     }
 
 }

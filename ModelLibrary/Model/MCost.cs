@@ -43,10 +43,26 @@ namespace VAdvantage.Model
         /// <returns>current cost</returns>
         public static Decimal GetproductCosts(int client_Id, int org_Id, int product_id, int M_ASI_Id, Trx trxName)
         {
+            return GetproductCosts(client_Id, org_Id, product_id, M_ASI_Id, trxName, 0);
+        }
+
+        /// <summary>
+        /// Is used to get cost from product costs based on parameter
+        /// </summary>
+        /// <param name="client_Id">clinet</param>
+        /// <param name="org_Id">org</param>
+        /// <param name="product_id">product</param>
+        /// <param name="M_ASI_Id">attributesetinstance</param>
+        /// <param name="trxName">trx</param>
+        /// <param name="M_Warehouse_ID"> warehouse id -- when to get cost against costing level - "Warehouse + Batch"</param>
+        /// <returns>current cost</returns>
+        public static Decimal GetproductCosts(int client_Id, int org_Id, int product_id, int M_ASI_Id, Trx trxName, int M_Warehouse_ID)
+        {
             Decimal cost = 0;
+            string sql = "";
             try
             {
-                string sql = @"SELECT ROUND(AVG(CST.CURRENTCOSTPRICE), 10)   FROM M_PRODUCT P   INNER JOIN M_COST CST   ON P.M_PRODUCT_ID=CST.M_PRODUCT_ID
+                sql = @"SELECT ROUND(AVG(CST.CURRENTCOSTPRICE), 10)   FROM M_PRODUCT P   INNER JOIN M_COST CST   ON P.M_PRODUCT_ID=CST.M_PRODUCT_ID
                                LEFT JOIN M_PRODUCT_CATEGORY PC   ON P.M_PRODUCT_CATEGORY_ID=PC.M_PRODUCT_CATEGORY_ID
                                INNER JOIN C_ACCTSCHEMA ACC   ON CST.C_ACCTSCHEMA_ID=ACC.C_ACCTSCHEMA_ID
                                INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID
@@ -59,18 +75,25 @@ namespace VAdvantage.Model
                                             WHEN ACC.COSTINGMETHOD IS NOT NULL AND ACC.COSTINGMETHOD   = 'C' THEN ACC.M_costelement_id ELSE
                                              (SELECT M_CostElement_ID FROM M_costelement WHERE COSTINGMETHOD = acc.COSTINGMETHOD 
                                              AND ad_client_id    = " + client_Id + @" ) END) = ce.M_COSTELEMENT_id)
-                             AND ((    CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'O')  THEN " + org_Id + @"
-                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'O') THEN " + org_Id + @"
+                             AND ((    CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D')  THEN " + org_Id + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('B' , 'C')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D') THEN " + org_Id + @"
                                             ELSE 0  END) = CST.AD_Org_ID)
-                            AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'B')  THEN " + M_ASI_Id + @"
-                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'B') THEN " + M_ASI_Id + @"
+                            AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'B', 'D')  THEN " + M_ASI_Id + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('C' , 'O', 'W')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'B', 'D') THEN " + M_ASI_Id + @"
                                             ELSE 0   END) = NVL(CST.M_AttributeSetInstance_ID , 0))
+                             AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('W' ,'D')  THEN " + M_Warehouse_ID + @"
+                                             WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' ,'B' , 'C' ,'O')  THEN 0 
+                                             WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('W' ,'D') THEN " + M_Warehouse_ID + @"
+                                            ELSE 0   END) = NVL(CST.M_Warehouse_ID , 0))
                             AND P.M_PRODUCT_ID      =" + product_id + @"
                             AND CST.C_ACCTSCHEMA_ID = (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + client_Id + " )";
                 cost = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
             }
             catch
             {
+                _log.Info("GetproductCosts : " + sql);
                 throw new ArgumentException("Error in getting cost from GetProductCosts");
             }
             return cost;
@@ -87,6 +110,22 @@ namespace VAdvantage.Model
         /// <param name="trxName">transaction</param>
         /// <returns>current cost of costing method -- which is to be binded either on product category or on respective accounting schema</returns>
         public static Decimal GetproductCostBasedonAcctSchema(int client_Id, int org_Id, int AcctSchemaId, int product_id, int M_ASI_Id, Trx trxName)
+        {
+            return GetproductCostBasedonAcctSchema(client_Id, org_Id, AcctSchemaId, product_id, M_ASI_Id, trxName, 0);
+        }
+
+        /// <summary>
+        /// Get Product Cost based on Accouting schema
+        /// </summary>
+        /// <param name="client_Id">client</param>
+        /// <param name="org_Id">org</param>
+        /// <param name="AcctSchemaId">accounting schema</param>
+        /// <param name="product_id">product</param>
+        /// <param name="M_ASI_Id">attribute set instance</param>
+        /// <param name="trxName">transaction</param>
+        /// <param name="M_Warehouse_ID"> warehouse id -- when to get cost against costing level - "Warehouse + Batch"</param>
+        /// <returns>current cost of costing method -- which is to be binded either on product category or on respective accounting schema</returns>
+        public static Decimal GetproductCostBasedonAcctSchema(int client_Id, int org_Id, int AcctSchemaId, int product_id, int M_ASI_Id, Trx trxName, int M_Warehouse_ID)
         {
             Decimal cost = 0;
             string sql = null;
@@ -105,12 +144,18 @@ namespace VAdvantage.Model
                                             WHEN ACC.COSTINGMETHOD IS NOT NULL AND ACC.COSTINGMETHOD   = 'C' THEN ACC.M_costelement_id ELSE
                                              (SELECT M_CostElement_ID FROM M_costelement WHERE COSTINGMETHOD = acc.COSTINGMETHOD 
                                              AND ad_client_id    = " + client_Id + @" ) END) = ce.M_COSTELEMENT_id)
-                             AND ((    CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'O')  THEN " + org_Id + @"
-                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'O') THEN " + org_Id + @"
+                             AND ((    CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D')  THEN " + org_Id + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('B' , 'C')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D') THEN " + org_Id + @"
                                             ELSE 0  END) = CST.AD_Org_ID)
-                            AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'B')  THEN " + M_ASI_Id + @"
-                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'B') THEN " + M_ASI_Id + @"
+                            AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'B', 'D')  THEN " + M_ASI_Id + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('C' , 'O', 'W')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'B', 'D') THEN " + M_ASI_Id + @"
                                             ELSE 0   END) = NVL(CST.M_AttributeSetInstance_ID , 0))
+                            AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('W' ,'D')  THEN " + M_Warehouse_ID + @"
+                                             WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' ,'B' , 'C' ,'O')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('W' ,'D') THEN " + M_Warehouse_ID + @"
+                                            ELSE 0   END) = NVL(CST.M_Warehouse_ID , 0))
                             AND P.M_PRODUCT_ID      =" + product_id + @"
                             AND CST.C_ACCTSCHEMA_ID = " + AcctSchemaId;
                 cost = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
@@ -1589,7 +1634,7 @@ namespace VAdvantage.Model
 
         /* Addes By Bharat 08/July/2014 */
         public static MCost Get(MProduct product, int M_AttributeSetInstance_ID,
-            VAdvantage.Model.MAcctSchema as1, int AD_Org_ID, int M_CostElement_ID, int A_Asset_ID)
+            VAdvantage.Model.MAcctSchema as1, int AD_Org_ID, int M_CostElement_ID, int A_Asset_ID, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
             String sql = "SELECT * "
@@ -1599,6 +1644,7 @@ namespace VAdvantage.Model
                 + " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID
                 + " AND M_CostType_ID=" + as1.GetM_CostType_ID() + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()
                 + " AND M_CostElement_ID=" + M_CostElement_ID + "AND A_Asset_ID=" + A_Asset_ID + "AND ISAssetCost= 'Y'";
+            sql += " AND NVL(M_Warehouse_ID,0) = " + M_Warehouse_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -1623,14 +1669,28 @@ namespace VAdvantage.Model
             finally { dt = null; }
             //	New
             if (cost == null)
+            {
                 cost = new MCost(product, M_AttributeSetInstance_ID,
                     as1, AD_Org_ID, M_CostElement_ID, A_Asset_ID);
+                cost.SetM_Warehouse_ID(M_Warehouse_ID);
+            }
             return cost;
         }
         /*  Addes By Bharat 08/July/2014   */
 
+        /// <summary>
+        /// is used to get or create object of product costs based on respective parameter
+        /// CostingLevel is not validated manually
+        /// </summary>
+        /// <param name="product">product</param>
+        /// <param name="M_AttributeSetInstance_ID">Costing Level - AttributeSetInstance</param>
+        /// <param name="as1">Accounting schema</param>
+        /// <param name="AD_Org_ID">Costing level - Organization</param>
+        /// <param name="M_CostElement_ID">cost element</param>
+        /// <param name="M_Warehouse_ID">costing level - warehouse</param>
+        /// <returns>MCost Object</returns>
         public static MCost Get(MProduct product, int M_AttributeSetInstance_ID,
-            VAdvantage.Model.MAcctSchema as1, int AD_Org_ID, int M_CostElement_ID)
+            VAdvantage.Model.MAcctSchema as1, int AD_Org_ID, int M_CostElement_ID, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
             String sql = "SELECT * "
@@ -1640,6 +1700,7 @@ namespace VAdvantage.Model
                 + " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID
                 + " AND M_CostType_ID=" + as1.GetM_CostType_ID() + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()
                 + " AND M_CostElement_ID=" + M_CostElement_ID + " AND ISAssetCost= 'N'";
+            sql += " AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -1664,8 +1725,11 @@ namespace VAdvantage.Model
             finally { dt = null; }
             //	New
             if (cost == null)
+            {
                 cost = new MCost(product, M_AttributeSetInstance_ID,
                     as1, AD_Org_ID, M_CostElement_ID);
+                cost.SetM_Warehouse_ID(M_Warehouse_ID);
+            }
             return cost;
         }
 
@@ -2051,6 +2115,7 @@ namespace VAdvantage.Model
                 //	setM_CostType_ID (0);
                 //	setM_Product_ID (0);
                 SetM_AttributeSetInstance_ID(0);
+                SetM_Warehouse_ID(0);// set default value on Warehouse as ZERO
                 //
                 SetCurrentCostPrice(Env.ZERO);
                 SetFutureCostPrice(Env.ZERO);

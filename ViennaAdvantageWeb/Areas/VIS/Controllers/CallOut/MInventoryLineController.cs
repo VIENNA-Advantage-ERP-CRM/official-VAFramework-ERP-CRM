@@ -51,6 +51,23 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Method to get the attribute of a product from a given UPC/EAN number.
+        /// </summary>
+        /// <param name="fields">Parameters sent from client side includes product id and attribute code(UPC/EAN).</param>
+        /// <returns>Returns attributesetinstance id if found as jsonString.</returns>
+        public JsonResult GetProductAttribute(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInventoryLineModel objInventoryLine = new MInventoryLineModel();
+                retJSON = JsonConvert.SerializeObject(objInventoryLine.GetProductAttribute(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
       
     }
 }

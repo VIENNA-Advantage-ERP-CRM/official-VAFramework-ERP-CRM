@@ -4,10 +4,12 @@
 
 @functions{
 
-    /// <summary>
+    ///
+    ///<summary>
     /// Get Antiforgery Token
     /// </summary>
-    /// <returns></returns>
+    ///
+    ///<returns></returns>
     public string GetAntiForgeryToken()
     {
         string cookieToken, formToken;
@@ -65,18 +67,33 @@
 
         foreach (Bundle b in BundleTable.Bundles)
         {
-            if (b is StyleBundle)
-            {
-                if (b.Path.EndsWith("RTL"))
+                if (b.Path.EndsWith("bundles/jquery") || b.Path.EndsWith("bundles/boot"))
                 {
-                    if (ViewBag.direction == "rtl")
-                    {
-        @Styles.Render(b.Path); //render style 
-                    }
+                continue;
+                }
+
+            if (b is StyleBundle)
+           {
+
+
+                if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v")  && ViewBag.LibSuffix != "" && !b.Path.Contains(ViewBag.LibSuffix))
+                {
+                    continue;
                 }
                 else
                 {
+
+                    if (b.Path.EndsWith("RTL"))
+                    {
+                        if (ViewBag.direction == "rtl")
+                        {
         @Styles.Render(b.Path); //render style 
+                        }
+                    }
+                    else
+                    {
+        @Styles.Render(b.Path); //render style 
+                    }
                 }
             }
             if (b is ScriptBundle)
@@ -90,8 +107,17 @@
 
     else //login 
     {
-        @Styles.Render("~/bundles/boot")
-        @Scripts.Render("~/bundles/jquery")
+        if (ViewBag.LibSuffix != "")
+        {
+        @Styles.Render("~/Areas/ViennaBase/bundles/boot" + ViewBag.LibSuffix);
+        @Scripts.Render("~/Areas/ViennaBase/bundles/jquery" + ViewBag.LibSuffix);
+        }
+        else
+        {
+        @Styles.Render("~/bundles/boot");
+        @Scripts.Render("~/bundles/jquery");
+        }
+
     }
 }
 
@@ -104,8 +130,8 @@
     </header>
     
     <!-- App Main Menu START -->
-if(ViewBag.Menu!=null)
-{
+    if (ViewBag.Menu != null)
+    {
     <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
         <div class="vis-menuTitle">
             <p>@ViewBag.Menu.GetRootNode().Text</p>
@@ -132,7 +158,7 @@ if(ViewBag.Menu!=null)
             </div>
         </div>
     </div>
-}
+    }
     
     <div id="vis_menuOverlay" class="vis-menu-Overlay">
     </div> <!-- App Main Menu END -->
@@ -160,7 +186,7 @@ if(ViewBag.Menu!=null)
         <div class="vis-footer">
             <div class="vis-taskbar-left">
                 <ul id="vis_taskbar" class="vis-taskbar">
-                    <li id="vis_lhome" style="display:none">
+                    <li id="vis_lhome" style="display: none">
                         <img src="~/Areas/VIS/Images/base/icon-home.png" style="vertical-align: text-top;" />
                         <a>@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Home")</a>
                     </li>
@@ -176,11 +202,19 @@ if(ViewBag.Menu!=null)
 
         @*Dynamic content js*@
         <script src="@Url.Action("Application", "Resource")"></script>
-
-
-        @foreach (string b in ViewBag.ScriptsPath)
-        {
-            @Scripts.Render(b) // Render all Script files
+        @{
+            
+            foreach (string b in ViewBag.ScriptsPath)
+            {
+                if (b.Contains("ViennaBase") && b.Contains("_v") && ViewBag.LibSuffix != "" && !b.Contains(ViewBag.LibSuffix))
+                {
+                    continue;
+                }
+                else
+                {
+            @Scripts.Render(b); // Render all Script files
+                }
+            }
         }
         <script src="https://maps.googleapis.com/maps/api/js"></script>
         <script src="~/Areas/ViennaBase/Scripts/globalize/globalize.js"></script>

@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			function showTooltipCB(e)
+			{
+				var s='This is the tooltip of object <font color="#FF0000"><b>'+e.id+'</b></font>'
+				s+='<br>You can write HTML here...'
+				s+='<br><b>Bold</b> or <i>italic</i>'
+				
+				tooltipWid.show(true,s,null,null,null,null,null,true)
+			}
+			
+			function hideTooltipCB()
+			{
+				tooltipWid.hide()
+			}
+			
+			function loadCB()
+			{
+				tooltipWid.init()
+				span1.init()
+				span2.init()
+			}			
+			
+			tooltipWid=newTooltipWidget()
+			span1=newWidget("span1")
+			span2=newWidget("span2")
+									
+		</script>
+	</head>
+	<body onload="loadCB()">
+
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>Tooltip widget</b></u><br><br>
+				<span id="span1" onmouseover="showTooltipCB(this)" onmouseout="hideTooltipCB()">Move you mouse over here</span>
+				<br>
+				<span id="span2" onmouseover="showTooltipCB(this)" onmouseout="hideTooltipCB()">Move you mouse over here</span>
+				<br>
+				
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

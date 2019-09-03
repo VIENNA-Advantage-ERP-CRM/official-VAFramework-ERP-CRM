@@ -1,0 +1,300 @@
+
+<!-- VALIDATOR Marc Delacroix -->
+
+<html>
+	<head>
+		<title>Validator</title>
+		<script language=javascript>
+		
+		var res=""
+		var tagsStack=new Array
+		var totalErrCount=0
+
+		function getTagName(s)
+		{
+			var res=""
+			var len=s.length
+			for (var i=0;i<len;i++)
+			{
+				var c=s.charAt(i)
+				if ((c==" ")||(c==">")) return res
+				else if (c!="/") res+=c
+			}
+			return res
+		}
+		
+		function pushTag(s)
+		{
+			tagsStack[tagsStack.length]=s
+		}
+
+
+		function currentStack()
+		{
+			var len=tagsStack.length
+			if  (len>0) return tagsStack[len-1]
+			else return ""
+		}
+		
+		function popTag()
+		{
+			var len=tagsStack.length
+			if (len>0)
+			{
+				var res=tagsStack[len-1]
+				tagsStack.length=len-1
+				return res
+			}
+			return ""
+		}
+
+		function writeResult(url,inner)
+		{
+			var errorsCounter=0
+			tagsStack.length=0
+			
+			// Supprimer les scripts
+			while(inner.toLowerCase().indexOf("<script")>=0)
+			{
+				var inner2=inner.toLowerCase()
+				inner=inner.slice(0,inner2.indexOf("<script"))+inner.slice(inner2.indexOf("/script>")+8)
+			}
+
+			// Supprimer les commentaires
+			while(inner.toLowerCase().indexOf("<!--")>=0)
+			{
+				var inner2=inner.toLowerCase()
+				inner=inner.slice(0,inner2.indexOf("<!--"))+inner.slice(inner2.indexOf("-->")+3)
+			}
+
+			var len=inner.length
+			var innerLow=inner.toLowerCase()
+			
+			var res2=""
+			var resTab=new Array
+			var sht=0
+			var blue=false
+			
+			for (var i=0;i<len;i++)
+			{
+				var c=inner.charAt(i)
+				var endStr=innerLow.slice(i+1)
+				
+				// DEBUT DE TAG
+				if (c=="<")
+				{
+					blue=true
+					
+					// TAG FERMANT
+					if (inner.charAt(i+1)=="/")
+					{
+						var tagName=getTagName(endStr)
+						sht--
+						//res2+='<span class="a'+sht+'"></span>' //</div>'
+						res2+="<br>"
+						for (var j=0;j<sht;j++) res2+="|&nbsp;&nbsp;&nbsp;"
+
+						
+						if (popTag()!=tagName)
+						{
+							errorsCounter++
+							res2+="&lt;<font color=red><b>"
+						}
+						else
+							res2+="&lt;<font color=blue><b>"
+					}
+					
+					// TAG OUVRANT
+					else
+					{
+						//res2+='<span class="a'+sht+'"></span>' //</div>'
+												res2+="<br>"
+						for (var j=0;j<sht;j++) res2+="|&nbsp;&nbsp;&nbsp;"
+
+
+						var mustShift=true
+						var tagName=getTagName(endStr)
+						
+						// TAGS SIMPLES
+						
+						if (tagName=="img") mustShift=false
+						if (tagName=="?xml:namespace") mustShift=false
+						if (tagName=="param") mustShift=false
+						if (tagName=="br") mustShift=false
+						if (tagName=="hr") mustShift=false
+						if (tagName=="input") mustShift=false
+						if ((tagName=="frame")&&(endStr.indexOf("frameset")!=0)) mustShift=false
+
+						
+						// REPETITION DE TAGS
+						var stk=currentStack()
+						
+						
+						if ((tagName=="p")&&(stk=="p")) mustShift=false
+						if ((tagName=="li")&&(stk=="li")) mustShift=false
+						
+						
+						if (mustShift)
+						{
+							sht++
+							pushTag(tagName)
+						}
+						res2+="&lt;<font color=blue><b>"
+					}	
+				}
+				
+				// FIN DE TAG
+				else if (c==">")
+				{
+					if (blue)
+					{
+						res2+="</b></font>"
+						blue=false
+					}
+					res2+="&gt;"
+				}
+				
+				// FIN NOM DE TAG
+				else if (c==" ")
+				{
+					if (blue)
+					{
+						res2+="</b></font>"
+						blue=false
+					}
+					res2+="&nbsp;"
+				}
+				else res2+=c
+
+
+				if (res2.length>0)
+				{
+					resTab[resTab.length]=res2
+					res2=""
+				}
+			}
+
+			var theRes=resTab.join("")
+				
+			if (tagsStack.length!=0) errorsCounter++
+		
+			totalErrCount+=errorsCounter
+			
+			if (errorsCounter>0)
+				res+="<br><br><hr><br><font color=red>=====> URL DU FRAME \""+url+"\" <b>ERREURS = "+errorsCounter+"</b></font><br><br>"+theRes
+			else
+				res+="<br><br><hr><br><font color=green>=====> URL DU FRAME \""+url+"\" PAS D'ERREURS</font><br><br>"+theRes
+		}
+		
+		function getAllErrors()
+		{
+			var lyr=document.all?document.frames[0].document.all["results"]:frames[0].document.getElementById("results")
+			lyr.innerHTML="<span class=total><b><i>TOTAL erreurs = "+totalErrCount+"</i></b></span><br>"+res
+		}
+
+		var _theResDoc=null
+		var _theResElem=null
+		
+		function getResDoc()
+		{
+			if (_theResDoc==null)
+				_theResDoc=document.all?document.frames[0].document:frames[0].document
+			return _theResDoc
+		}
+		
+		function getResElem()
+		{
+			if (_theResElem==null)
+				_theResElem=getResDoc().getElementById("results")
+				
+			return _theResElem
+		}
+		
+		_allFrames=new Array
+		_allBods=new Array
+		
+		_restrict=""
+		_restrictID=""
+		
+		function sniffFrame(currIndex)
+		{
+			var lyr=getResDoc().getElementById("progress")
+			lyr.innerHTML="processing frame #"+(currIndex+1)+" on "+_allFrames.length
+
+			
+			
+			var frame=_allFrames[currIndex]
+			var bod=_restrictID!=""?frame.document.getElementById(_restrictID):_allBods[currIndex]
+			
+			if ((_restrict=="")||(frame.location.href.indexOf(_restrict)>=0))
+			{
+				res=""
+				if (bod) writeResult(frame.document.location,""+(document.all?bod.outerHTML:bod.innerHTML))
+				var theDoc=getResDoc()
+				var lyr=getResElem()
+			
+				theSpan=theDoc.createElement('span');
+				theSpan.innerHTML=res
+				lyr.appendChild(theSpan)
+			
+				res=""
+			}
+			
+			currIndex++
+			if (currIndex<_allFrames.length)
+				setTimeout("sniffFrame("+currIndex+")",1)
+			else
+			{
+				// THE END !!!!!!
+				_allFrames.length=0
+				_allBods.length=0
+				var lyr=getResDoc().getElementById("progress")
+				lyr.innerHTML="Validation Done !"
+			}
+		}
+		
+		function sniffer(frame)
+		{
+			res=""
+			var sub=frame.frames
+			var bod=frame.document.body
+			
+			_allBods[_allBods.length]=bod
+			_allFrames[_allFrames.length]=frame
+
+			var nbsub=sub.length
+				for (var i=0;i<nbsub;i++) sniffer(sub[i])
+		}
+		
+		function startSniff()
+		{
+			totalErrCount=0
+			res=""
+
+			getResElem().innerHTML=""
+
+
+			sniffer(document.all?document.frames.content:window.frames["content"])
+			sniffFrame(0)
+		}
+		
+		function sniff()
+		{
+			var lyr=getResDoc().getElementById("progress")
+			lyr.innerHTML="Validation in progress..."
+			
+			_restrict=getResDoc().getElementById("restrict").value
+			_restrictID=getResDoc().getElementById("restrictID").value
+			
+			setTimeout("startSniff()",100)
+		}
+		</script>
+	<head>
+	<frameset rows="40%,*">
+		<frame name="results" id="results" src="validator_res.html">
+		
+		<!-- URL DE LA PAGE A TESTER ICI -->
+		<frame name="content" id="content" src="/businessobjects/enterprise115/desktoplaunch/viewers/cdz_adv/lib/samples/default.html">
+	
+	</frameset>
+</html>

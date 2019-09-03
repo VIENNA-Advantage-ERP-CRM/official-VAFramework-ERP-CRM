@@ -240,6 +240,13 @@ namespace VAdvantage.Controller
         public bool IsCopy = true;
         public int ColumnWidth = 0;
 
+        //for checking process linked to btton is background process or not
+        public bool IsBackgroundProcess = false;
+        // If administrator wants to ask the end user about wheather to run process in background or not
+        public bool AskUserBGProcess = false;
+
+
+
 
 
         /// <summary>

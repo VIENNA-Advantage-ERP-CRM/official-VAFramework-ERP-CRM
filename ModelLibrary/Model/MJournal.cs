@@ -460,6 +460,16 @@ namespace VAdvantage.Model
                 }
                 toLine.SetIsGenerated(true);
                 toLine.SetProcessed(false);
+
+                // // Set Orignal Document Reference on Reversal Document
+                if (Get_ColumnIndex("IsReversal") > 0 && IsReversal())
+                {
+                    if (toLine.Get_ColumnIndex("ReversalDoc_ID") > 0)
+                    {
+                        toLine.SetReversalDoc_ID(fromLines[i].GetGL_JournalLine_ID());
+                    }
+                }
+
                 if (toLine.Save())
                 {
                     count++;
@@ -769,6 +779,13 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // JID_0521 - Restrict if debit and credit amount is not equal.-Mohit-12-jun-2019.
+            if (GetTotalCr() != GetTotalDr())
+            {
+                m_processMsg = Msg.GetMsg(GetCtx(), "DBAndCRAmtNotEqual");
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             //	Lines
             MJournalLine[] lines = GetLines(true);
             if (lines.Length == 0)
@@ -906,6 +923,10 @@ namespace VAdvantage.Model
                     return status;
                 }
             }
+
+            // JID_1290: Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             //	Implicit Approval
             if (!IsApproved())
             {
@@ -924,6 +945,53 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }	//	completeIt
+
+        /// <summary>
+        /// Set the document number from Completed Document Sequence after completed
+        /// </summary>
+        private void SetCompletedDocumentNo()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (Get_ColumnIndex("IsReversal") > 0 && IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateDoc(DateTime.Now.Date);
+                if (GetDateAcct().Value.Date < GetDateDoc().Value.Date)
+                {
+                    SetDateAcct(GetDateDoc());
+
+                    //	Std Period open?
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType()))
+                    {
+                        throw new Exception("@PeriodClosed@");
+                    }
+                }
+            }
+
+            // if Overwrite Sequence on Complete checkbox is true.
+            if (dt.IsOverwriteSeqOnComplete())
+            {
+                // Set Drafted Document No into Temp Document No.
+                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                {
+                    SetTempDocumentNo(GetDocumentNo());
+                }
+
+                // Get current next from Completed document sequence defined on Document type
+                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                if (value != null)
+                {
+                    SetDocumentNo(value);
+                }
+            }
+        }
 
         /// <summary>
         ///	Void Document.
@@ -992,6 +1060,21 @@ namespace VAdvantage.Model
                 description += " ** " + GetDocumentNo() + " **";
             }
             reverse.SetDescription(description);
+
+            if (reverse.Get_ColumnIndex("ReversalDoc_ID") > 0 && reverse.Get_ColumnIndex("IsReversal") > 0)
+            {
+                // set Reversal property for identifying, record is reversal or not during saving or for other actions
+                reverse.SetIsReversal(true);
+                // Set Orignal Document Reference
+                reverse.SetReversalDoc_ID(GetGL_Journal_ID());
+            }
+
+            // for reversal document set Temp Document No to empty
+            if (reverse.Get_ColumnIndex("TempDocumentNo") > 0)
+            {
+                reverse.SetTempDocumentNo("");
+            }
+
             if (!reverse.Save())
             {
                 return null;

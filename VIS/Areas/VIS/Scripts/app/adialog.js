@@ -10,7 +10,7 @@
         var _overLay = $('<div id="overlayMsgDialog" class="web_dialog_overlay"></div>');
 
         var $mainDivParent = $('<div class="" style="z-index: 999999;width: 100%;top: 0;height: 100%;display:none;" tabIndex=1>');
-
+        //<div class="vis-confirm-popup-check"><input type="checkbox"><label>Background</label></div>
         var $mainDiv = $('<div id="VAPOS_ErrorInfo" class="vis-PopupWrap-alert" style="width:300px; margin: 20% auto;">' +
               '<input class="vis-Dialog-buttons-text" type="number"  tabindex="-30" style="z-index:-44;position:absolute"  autofocus="autofocus"  > ' +
             '       <div class="vis-popup-headerContainer">                                           ' +
@@ -23,6 +23,7 @@
             '               <div class="form-group vis-PopupInput-alert" style="width: 100%">                 ' +
             '               <img class="vis-alert-img" style="float:left"  />                                                   ' +
             '                   <label style="width: 90%;padding-left: 10px;word-break: break-word" id="VAPOS_lblErrorInfo"></label>                  ' +
+            '                 <div class="vis-confirm-customUI" style="display:none"> </div>         ' +
             '               </div>                                                                           ' +
             '                     <div class="vis-Dialog-buttons" style="display:none">                                           ' +
             '<input class="vis-Dialog-buttons-OK " type="button" value="' + VIS.Msg.getMsg("OK") + '" > <input  class="vis-Dialog-buttons-Cancel"  type="button" value="' + VIS.Msg.getMsg("Cancel") + '" >' +
@@ -49,6 +50,8 @@
         var _content = $mainDiv.find(".vis-PopupContent-alert");
 
         var _contentMsg = $mainDiv.find("#VAPOS_lblErrorInfo"); //label
+
+        var _customUI = $mainDiv.find('.vis-confirm-customUI');
 
         //  var _overLay = _main.find("#overlayMsgDialog");
         var _busyInd = $mainDiv.find("#VAPOS_busyInd");
@@ -268,6 +271,80 @@
 
         };
 
+        function askCustomUI(msg, header, $rootDiv, callback) {
+            _callback = callback;
+            try {
+                // $('#prodError')[0].play();
+            }
+            catch (ex) {
+            }
+            $mainDivParent.css({ "position": "absolute", "display": "inherit" });
+            $mainDiv.show();
+            _btnCloseInfo.removeClass();
+            _btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
+            _header.removeClass();
+            _header.addClass("vis-PopupHeader-alert vis-PopupHeader-alert-info");
+            _content.removeClass();
+            _content.addClass("vis-PopupContent-alert vis-PopupContent-alert-info vis-PopupContent-alert-Confirm");
+            _headerContainer.removeClass();
+            _headerContainer.addClass("vis-popup-headerContainer vis-popup-headerContainer-info");
+
+            _headerImg.attr("src", VIS.Application.contextUrl + "Areas/VIS/Images/base/confirm-icon.png");
+
+            var $btnsDiv = $mainDiv.find('.vis-Dialog-buttons');
+
+            $btnsDiv.css("display", "inherit");
+
+            _btnOK = $btnsDiv.find(".vis-Dialog-buttons-OK");
+            _btnCancel = $btnsDiv.find(".vis-Dialog-buttons-Cancel");
+
+            _prodFound = true;
+            _contentMsg.text(msg);
+            _customUI.empty();
+            _customUI.css('display', 'block');
+            _customUI.append($rootDiv);
+            if (!header) {
+                _headerText.text(VIS.Msg.getMsg("Confirm"));
+            }
+            else {
+                _headerText.text(VIS.Msg.getMsg(header));
+            }
+            //_hideOverlay = hideOverlay;
+            _overLay.show();
+            $mainDiv.fadeIn(300);
+
+            _btnOK.one("click", function () {
+                disposeEvents();
+                $btnsDiv.css("display", "none");
+                _customUI.css('display', 'none');
+                _customUI.empty();
+                _callback(true);
+                // _btnCloseInfo.trigger("click");
+
+            });
+
+            _btnCancel.one("click", function () {
+                disposeEvents();
+                $btnsDiv.css("display", "none");
+                _customUI.css('display', 'none');
+                _customUI.empty();
+                _callback(false);
+                // _btnCloseInfo.trigger("click");
+
+            });
+            handleKeys(true);
+            //_txtBx.on("keydown", function (e) {
+            //    clss(e);
+            //});
+
+            //_txtBx.on("focusin", function (e) {
+            //    e.stopPropagation();
+            //});
+
+            //_txtBx.focus();
+
+        };
+
         function warn(msg, header, callback) {
             _callback = callback;
             try {
@@ -370,7 +447,8 @@
             info: info,
             ask: ask,
             error: error,
-            warn: warn
+            warn: warn,
+            askCustomUI: askCustomUI
         }
 
     };
@@ -524,6 +602,33 @@
             //}
 
             VIS.ADialogUI.ask(content, header, callback);
+
+            return retValue;
+        },
+
+        confirmCustomUI: function (keyName, isMsgText, extraMsg, header, $rootDiv, callback) {
+
+            var content = "";
+            // if user has given a key
+            if (keyName != null && !keyName.equals("")) {
+                // get key's value
+                content += VIS.Msg.getMsg(keyName);
+            }
+            // if user has given any extra content
+            if (extraMsg != null && extraMsg.length > 0) {
+                // add the content
+                content += "\n" + extraMsg;
+            }
+            var retValue = false;
+            // opens message window
+            //Message d = new Message(header, content.ToString(), Message.MessageType.QUESTION);
+            //if (confirm(content))// d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    // if user clicks on OK button change the value
+            //    retValue = true;
+            //}
+
+            VIS.ADialogUI.askCustomUI(content, header,$rootDiv, callback);
 
             return retValue;
         },

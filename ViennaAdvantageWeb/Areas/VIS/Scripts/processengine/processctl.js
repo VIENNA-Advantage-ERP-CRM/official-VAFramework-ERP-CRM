@@ -9,11 +9,30 @@
         this.pi = pi;
         this.windowNo;
         this.paraList = null;
+        this.splitUI = parent.splitUI;
+        this.parameters = null;
         //this.isPdf = false;
         //this.isCsv = false;
         //this.PAGE_SIZE = VIS.context.ctx["#REPORT_PAGE_SIZE"];
         // this.pageNo = 1;
         //this.fileType = "P";
+
+        this.cansplitUI = function (split) {
+            splitUI = split;
+        };
+
+        this.getFileType = function () {
+            return parent.getFileType();
+        }
+
+        this.setBusy = function (busy) {
+            parent.setBusy(busy);
+        };
+
+        this.isBackground = function () {
+            return parent.isBackground();
+        };
+
     };
 
     ProcessCtl.prototype.REPORT_TYPE_CSV = "C";
@@ -54,6 +73,7 @@
         this.pi.setWindowNo(windowNo);
 
         var self = this; //self pointer
+        this.jObjectFromServer = null;
 
         var data = { processInfo: this.pi.toJson() };
         //{
@@ -96,14 +116,31 @@
      *  @param jObject process data contract from server
 	 */
     ProcessCtl.prototype.complete = function (jObject) {
+        this.jObjectFromServer = jObject;
+        this.pi.setAD_PInstance_ID(jObject.AD_PInstance_ID);
+        if (jObject && jObject.ReportProcessInfo) {
+            this.pi.setTotalPages(jObject.ReportProcessInfo.TotalPage);
+            this.pi.setSupportPaging(jObject.ReportProcessInfo.SupportPaging);
+            this.pi.setPageSize(jObject.ReportProcessInfo.PageSize);
+        }
 
         if (jObject.ShowParameter) { //Open Paramter Dialog
             this.pi.setAD_PInstance_ID(jObject.AD_PInstance_ID);
             try {
                 var pp = new VIS.ProcessParameter(this.pi, this, this.windowNo);
+                if (this.splitUI) {
+                    this.parent.parameterContainer.append(pp.getRoot());
+                    this.parent.setParameterHeights();
+                }
                 pp.initDialog(jObject.ProcessFields);
-                pp.showDialog();
-                pp = null;
+
+                if (this.splitUI) {
+                    pp.showCloseIcon(this.parent.getShowParameterCloseIcon());
+                }
+                else {
+                    pp.showDialog();
+                    pp = null;
+                }
             }
             catch (e) {
 
@@ -114,9 +151,9 @@
         else {
             ////this.pi.dispose(); // dispose current pi
             ////if (IsPosReport != "IsPosReport") {
-            this.pi.dispose(); // dispose current pi
+            //  this.pi.dispose(); // dispose current pi
             ////}
-            this.pi = this.pi.fromJson(jObject.ReportProcessInfo);
+            // this.pi = this.pi.fromJson(jObject.ReportProcessInfo);
 
             ////if (jObject.ReportFilePath && jObject.ReportFilePath.length > 10) { //report
             ////    if (this.parent) {
@@ -152,7 +189,7 @@
 
 
                     }
-                    else if(jObject.ReportFilePath) {
+                    else if (jObject.ReportFilePath) {
 
                         var ismobile = /ipad|iphone|ipod|mobile|android|blackberry|webos|windows phone/i.test(navigator.userAgent.toLowerCase());
                         if (ismobile) {
@@ -182,8 +219,20 @@
                             //this.parent.showReport(pdfViewer, jObject, this);// this.windowNo, this.paraList, jObject.AD_Table_ID, ispdf, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo, jObject.AD_ReportView_ID, jObject.IsJasperReport);
                         }
                     }
+                    else if (this.pi.getUseCrystalReportViewer() && this.pi.getIsReport()) {
+                        //var pdfViewer = new VIS.PdfViewer(null, null, true);
+                        //if (this.parent && this.parent.showReport) {
+                        //    this.parent.showReport(pdfViewer, jObject, this, true);
+                        //}
+                        //else {
+                        var repV = new VIS.ReportViewerContainer(this);
+                        repV.show();
+                        //}
+
+                    }
                 }
             }
+            this.setBusy(false);
             this.dispose();
 
             /*if (jObject.HTML && jObject.HTML.length > 0) {
@@ -246,7 +295,7 @@
         ////if (IsPosReport != "IsPosReport") {
             this.dispose();
         ////}*/
-
+            //this.pi.setAD_PInstance_ID(0);
         }
     };
 
@@ -308,7 +357,9 @@
                 ////else {
                 self.complete(json); // call process complete
                 ////}
-                self = null;
+                if (!this.splitUI) {
+                    self = null;
+                }
 
             });
         }
@@ -346,10 +397,14 @@
 	 *  Unlock UI & dispose 
 	 */
     ProcessCtl.prototype.unlock = function () {
-        var summary = this.pi.getSummary();
+        var summary = this.jObjectFromServer.Result;
         if (summary != null && summary.indexOf("@") != -1) {
             this.pi.setSummary(VIS.Msg.parseTranslation(VIS.Env.getCtx(), summary));
         }
+        else if (summary) {
+            this.pi.setSummary(summary);
+        }
+        this.pi.setError(this.jObjectFromServer.IsError);
         if (this.parent) {
             ////if (IsPosReport == "IsPosReport") {
             ////    this.parent.unlockUI(this.pi, "IsPosReport");
@@ -373,7 +428,9 @@
     *  dispose
     */
     ProcessCtl.prototype.dispose = function () {
-        this.parent = null;
+        if (!this.splitUI) {
+            this.parent = null;
+        }
         //if (this.pi)
         //    this.pi.dispose();
         //this.pi = null;
@@ -393,8 +450,8 @@
         var bsyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
         function initializedComponenet() {
 
-            $root = $("<div class='vis-height-full' style='overflow:scroll'>");
-            $rightDiv = $("<div class='vis-height-full' style='overflow:auto;background: #63BFE9;'>");
+            $root = $("<div class='vis-height-full'>");
+            $rightDiv = $("<div class='vis-height-full' style='background: #63BFE9;'>");
             $innerRightDiv = $("<div class='vis-height-full' style='padding:5px;'>");
             $root.append($rightDiv);
             $root.append(bsyDiv);
@@ -458,7 +515,7 @@
         };
 
         this.sizeChanged = function (height, width) {
-            $root.height(height - 40);
+            // $root.height(height - 40);
             //$root.width(width);
         };
 

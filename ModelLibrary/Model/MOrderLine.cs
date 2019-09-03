@@ -47,6 +47,8 @@ namespace VAdvantage.Model
         private MOrder _parent = null;
 
         private int I_Order_ID = 0;
+
+        private bool _fromProcess = false;
         #endregion
 
         /// <summary>
@@ -3699,21 +3701,36 @@ namespace VAdvantage.Model
                     return false;
             }	//	Product Changed
 
-            // commented - bcz on reactivate - we reverse dependeent transaction
+            //JID_1362 : Tax cant be change on Re-Activation 
+            if (!newRecord && Is_ValueChanged("C_Tax_ID"))
+            {
+                if (GetQtyDelivered() != 0)
+                {
+                    log.SaveError("Error", Msg.Translate(GetCtx(), "QtyDelivered") + "=" + GetQtyDelivered());
+                    return false;
+                }
+                if (GetQtyInvoiced() != 0)
+                {
+                    log.SaveError("Error", Msg.Translate(GetCtx(), "QtyInvoiced") + "=" + GetQtyDelivered());
+                    return false;
+                }
+            }
+
             //SI_0643: If we reactive the Sales order, System will not allow to save Ordered Qty less than delivered qty.
             // when we void a record, then not to check this record, because first we set qtyOrdered/qtyenetered as 0 after that we update qtydelivered on line
-            //if (!newRecord && GetQtyOrdered() < GetQtyDelivered() &&
-            //    (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided"))))
-            //{
-            //    log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_QtydeliveredNotLess"));
-            //    return false;
-            //}
+            // JID_1362: when qty delivered / invoicedcant be less than qtyordered
+            if (!newRecord && (GetQtyOrdered() < GetQtyDelivered() || GetQtyOrdered() < GetQtyInvoiced()) &&
+                (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided"))))
+            {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_QtydeliveredNotLess"));
+                return false;
+            }
 
             MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), Get_Trx());
 
             // Added by Vivek on 22/09/2017 assigned by Mukesh sir
             // if PO is drop ship type then new line should not allow 
-            if (!Ord.IsSOTrx() && !Ord.IsReturnTrx() && Ord.IsDropShip())
+            if (!Ord.IsSOTrx() && !Ord.IsReturnTrx() && Ord.IsDropShip() && !_fromProcess)
             {
                 if (newRecord)
                 {
@@ -3723,7 +3740,7 @@ namespace VAdvantage.Model
             }
 
             //JID_0211: System is allowing to save promised date smaller than order date on header as well as on order lines.. There should be a validation.
-            if (GetDateOrdered() != null && GetDatePromised() != null)
+            if (!Ord.IsReturnTrx() && GetDateOrdered() != null && GetDatePromised() != null)
             {
                 if (GetDateOrdered().Value.Date > GetDatePromised().Value.Date)
                 {
@@ -3768,7 +3785,7 @@ namespace VAdvantage.Model
                 decimal currentcostprice = 0;
                 if (!Ord.IsReturnTrx())
                 {
-                    currentcostprice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(), GetM_Product_ID(), Util.GetValueOfInt(GetM_AttributeSetInstance_ID()), Get_Trx());
+                    currentcostprice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(), GetM_Product_ID(), Util.GetValueOfInt(GetM_AttributeSetInstance_ID()), Get_Trx(), Ord.GetM_Warehouse_ID());
                     primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID from C_AcctSchema WHERE C_AcctSchema_ID = 
                                             (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
                     if (Ord.GetC_Currency_ID() != primaryAcctSchemaCurrency)
@@ -3979,8 +3996,7 @@ namespace VAdvantage.Model
                     }
                     //}
 
-                    MDocType docType = new MDocType(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID(), Get_Trx());
-
+                    MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID());
                     if (docType.GetDocBaseType() == "BOO")    ///docType.GetValue() == "BSO" || docType.GetValue() == "BPO")
                     {
                         QtyEstimation = GetQtyEstimation();
@@ -4004,140 +4020,8 @@ namespace VAdvantage.Model
 
 
                     //	Set Price if Actual = 0
-                    StringBuilder sql = new StringBuilder();
-                    Tuple<String, String, String> iInfo = null;
-                    if (Env.HasModulePrefix("ED011_", out iInfo))
+                    if (Env.IsModuleInstalled("ED011_"))
                     {
-                        //    decimal convertedprice = 0;
-                        //    MOrder order1 = new MOrder(GetCtx(), Util.GetValueOfInt(GetC_Order_ID()), null);
-                        //    MBPartner bPartner = new MBPartner(GetCtx(), order1.GetC_BPartner_ID(), null);
-
-                        //    string qry = "SELECT M_PriceList_Version_ID FROM m_pricelist_version WHERE IsActive = 'Y' AND m_pricelist_id = " + _M_PriceList_ID + @" AND VALIDFROM <= sysdate order by validfrom desc";
-                        //    int _Version_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry));
-                        //    sql.Append(@"SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + GetM_Product_ID()
-                        //                         + " AND M_PriceList_Version_ID = " + _Version_ID
-                        //                         + " AND M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + " AND C_UOM_ID=" + GetC_UOM_ID());
-
-                        //    DataSet ds = new DataSet();
-                        //    try
-                        //    {
-                        //        ds = DB.ExecuteDataset(sql.ToString(), null, null);
-                        //        if (ds.Tables.Count > 0)
-                        //        {
-                        //            if (ds.Tables[0].Rows.Count > 0)
-                        //            {
-                        //                convertedprice = FlatDiscount(Util.GetValueOfInt(GetM_Product_ID()), GetCtx().GetAD_Client_ID(),
-                        //                             Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
-                        //                             bPartner.GetM_DiscountSchema_ID(),
-                        //                             Util.GetValueOfDecimal(bPartner.GetFlatDiscount()),
-                        //                             GetQtyEntered());
-                        //                SetPriceList(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]));
-                        //                SetPriceLimit(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]));
-                        //                SetPriceActual(convertedprice);
-                        //                SetPriceEntered(convertedprice);
-                        //            }
-
-                        //            else
-                        //            {
-                        //                ds.Dispose();
-                        //                sql.Clear();
-                        //                sql.Append(@"SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + GetM_Product_ID()
-                        //                             + " AND M_PriceList_Version_ID = " + _Version_ID
-                        //                             + " AND M_AttributeSetInstance_ID = 0 AND C_UOM_ID=" + GetC_UOM_ID());
-                        //                ds = DB.ExecuteDataset(sql.ToString(), null, null);
-                        //                if (ds.Tables.Count > 0)
-                        //                {
-                        //                    if (ds.Tables[0].Rows.Count > 0)
-                        //                    {
-                        //                        convertedprice = FlatDiscount(Util.GetValueOfInt(GetM_Product_ID()), GetCtx().GetAD_Client_ID(),
-                        //                             Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
-                        //                             bPartner.GetM_DiscountSchema_ID(),
-                        //                             Util.GetValueOfDecimal(bPartner.GetFlatDiscount()),
-                        //                             GetQtyEntered());
-                        //                      SetPriceList(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]));
-                        //                        SetPriceLimit(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]));
-                        //                        SetPriceActual(convertedprice);
-                        //                        SetPriceEntered(convertedprice);
-                        //                    }
-
-                        //                    else
-                        //                    {
-                        //                        PriceActual = Util.GetValueOfDecimal(GetPriceEntered());
-                        //                        PriceEntered = (Decimal?)MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(),
-                        //                            GetC_UOM_ID(), PriceActual.Value);
-                        //                        if (PriceEntered == null)
-                        //                            PriceEntered = PriceActual;
-
-                        //                        MProduct prod = new MProduct(Env.GetCtx(), Util.GetValueOfInt(GetM_Product_ID()), null);
-                        //                        sql.Clear();
-                        //                        sql.Append(@"SELECT PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.GetValueOfInt(GetM_Product_ID())
-                        //                               + " AND M_PriceList_Version_ID = " + _Version_ID
-                        //                               + " AND M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + " AND C_UOM_ID=" + prod.GetC_UOM_ID());
-                        //                        decimal pricelist = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                        //                        if (pricelist == 0)
-                        //                        {
-                        //                            sql.Clear();
-                        //                            sql.Append(@"SELECT PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.GetValueOfInt(GetM_Product_ID())
-                        //                               + " AND M_PriceList_Version_ID = " + _Version_ID
-                        //                               + " AND M_AttributeSetInstance_ID = 0 AND C_UOM_ID=" + prod.GetC_UOM_ID());
-                        //                            pricelist = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                        //                        }
-                        //                        sql.Clear();
-                        //                        sql.Append(@"SELECT PriceStd FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.GetValueOfInt(GetM_Product_ID())
-                        //                            + " AND M_PriceList_Version_ID = " + _Version_ID
-                        //                            + " AND M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + " AND C_UOM_ID=" + prod.GetC_UOM_ID());
-                        //                        decimal pricestd = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                        //                        if (pricestd == 0)
-                        //                        {
-                        //                            sql.Clear();
-                        //                            sql.Append(@"SELECT PriceStd FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.GetValueOfInt(GetM_Product_ID())
-                        //                            + " AND M_PriceList_Version_ID = " + _Version_ID
-                        //                            + " AND M_AttributeSetInstance_ID = 0 AND C_UOM_ID=" + prod.GetC_UOM_ID());
-                        //                            pricestd = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                        //                        }
-                        //                        pricestd = FlatDiscount(Util.GetValueOfInt(GetM_Product_ID()), GetCtx().GetAD_Client_ID(),
-                        //                            pricestd,
-                        //                            bPartner.GetM_DiscountSchema_ID(),
-                        //                            Util.GetValueOfDecimal(bPartner.GetFlatDiscount()),
-                        //                            GetQtyEntered());
-                        //                        sql.Clear();
-                        //                        sql.Append(@"SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' AND con.M_Product_ID = " + Util.GetValueOfInt(GetM_Product_ID()) +
-                        //                               " AND con.C_UOM_ID = " + prod.GetC_UOM_ID() + " AND con.C_UOM_To_ID = " + GetC_UOM_ID());
-                        //                        decimal rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                        //                        if (rate == 0)
-                        //                        {
-                        //                            sql.Clear();
-                        //                            sql.Append(@"SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                        //                              " AND con.C_UOM_ID = " + prod.GetC_UOM_ID() + " AND con.C_UOM_To_ID = " + GetC_UOM_ID());
-
-                        //                            rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                        //                        }
-                        //                        if (rate > 0)
-                        //                        {
-                        //                            SetPriceList(Decimal.Multiply(pricelist, rate));
-                        //                            SetPriceActual(Decimal.Multiply(pricestd, rate));
-                        //                            SetPriceEntered(Decimal.Multiply(pricestd, rate));
-                        //                        }
-                        //                        else
-                        //                        {
-                        //                            SetPriceList(pricelist);
-                        //                            SetPriceActual(pricestd);
-                        //                            SetPriceEntered(pricestd);
-                        //                        }
-                        //                    }
-                        //                }
-                        //            }
-                        //        }
-                        //        ds.Dispose();
-                        //    }
-                        //    catch
-                        //    {
-
-                        //    }
-                        //    finally
-                        //    {
-                        //        ds.Dispose();
-                        //    }
                     }
                     else
                     {
@@ -4171,6 +4055,13 @@ namespace VAdvantage.Model
                     SetQtyEntered(GetQtyEntered());
                 if (newRecord || Is_ValueChanged("QtyOrdered"))
                     SetQtyOrdered(GetQtyOrdered());
+
+                // after delivering we cant change the price entered / price actual
+                if (Is_ValueChanged("PriceEntered") && (GetQtyDelivered() > 0 || GetQtyInvoiced() > 0))
+                {
+                    SetPriceEntered(Util.GetValueOfDecimal(Get_ValueOld("PriceEntered")));
+                    SetPriceActual(GetPriceEntered());
+                }
 
             }
             /////////////
@@ -4250,7 +4141,8 @@ namespace VAdvantage.Model
             }
 
             // Validate Return Policy for RMA
-            MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
+            //MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
+            MOrder order = Ord;
             bool isReturnTrx = order.IsReturnTrx();
             if (isReturnTrx)
             {
@@ -4526,6 +4418,17 @@ namespace VAdvantage.Model
             if (!tax.Save(Get_TrxName()))
                 return false;
 
+            MTax taxRate = tax.GetTax();
+
+            // If Tax selected is Summary Level then Create or Update Child Tax
+            if (taxRate.IsSummary())
+            {
+                if (!CalculateChildTax(GetParent(), tax, taxRate, Get_TrxName()))
+                {
+                    return false;
+                }
+            }
+
             //	Update Order Header
             String sql = "UPDATE C_Order i"
                 + " SET TotalLines="
@@ -4553,6 +4456,83 @@ namespace VAdvantage.Model
             }
             _parent = null;
             return no == 1;
+        }
+
+        /// <summary>
+        /// Create or Update Child Tax
+        /// </summary>
+        /// <param name="order">Order Hearder</param>
+        /// <param name="oTax">Order Tax</param>
+        /// <param name="tax">Tax</param>
+        /// <param name="trxName">Trx Object</param>
+        /// <returns>true, if Tax calculated</returns>
+        private bool CalculateChildTax(MOrder order, MOrderTax oTax, MTax tax, Trx trxName)
+        {
+            MTax[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
+            for (int j = 0; j < cTaxes.Length; j++)
+            {
+                MOrderTax newITax = null;
+                MTax cTax = cTaxes[j];
+                Decimal taxAmt = cTax.CalculateTax(oTax.GetTaxBaseAmt(), false, GetPrecision());
+
+                // check child tax record is avialable or not 
+                // if not then create new record
+                String sql = "SELECT * FROM C_OrderTax WHERE C_Order_ID=" + order.GetC_Order_ID() + " AND C_Tax_ID=" + cTax.GetC_Tax_ID();
+                try
+                {
+                    DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
+                    if (ds.Tables.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            newITax = new MOrderTax(GetCtx(), dr, trxName);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _log.Log(Level.SEVERE, sql, e);
+                }
+
+                if (newITax != null)
+                {
+                    newITax.Set_TrxName(trxName);
+                }
+
+                // Create New
+                if (newITax == null)
+                {
+                    newITax = new MOrderTax(GetCtx(), 0, Get_TrxName());
+                    newITax.SetClientOrg(this);
+                    newITax.SetC_Order_ID(GetC_Order_ID());
+                    newITax.SetC_Tax_ID(cTax.GetC_Tax_ID());
+                }
+
+                newITax.SetPrecision(GetPrecision());
+                newITax.SetIsTaxIncluded(IsTaxIncluded());
+                newITax.SetTaxBaseAmt(oTax.GetTaxBaseAmt());
+                newITax.SetTaxAmt(taxAmt);
+                //Set Tax Amount (Base Currency) on Invoice Tax Window 
+                //                if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
+                //                {
+                //                    decimal? baseTaxAmt = taxAmt;
+                //                    int primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
+                //                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                //                    if (order.GetC_Currency_ID() != primaryAcctSchemaCurrency)
+                //                    {
+                //                        baseTaxAmt = MConversionRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency, order.GetC_Currency_ID(),
+                //                                                                                   order.GetDateAcct(), order.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                //                    }
+                //                    newITax.Set_Value("TaxBaseCurrencyAmt", baseTaxAmt);
+                //                }
+                if (!newITax.Save(Get_TrxName()))
+                    return false;
+            }
+            // Delete Summary Level Tax Line
+            if (!oTax.Delete(true, Get_TrxName()))
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -4589,6 +4569,26 @@ namespace VAdvantage.Model
                 mLoc.Save();
             }
             return wh.GetM_Warehouse_ID();
+        }
+
+        // Added Methods to Set and Get from Process property, if record is created from Process or Window
+
+        /// <summary>
+        /// Set Value in From Process
+        /// </summary>
+        /// <param name="fromProcess">true or False</param>
+        public void SetFromProcess(bool fromProcess)
+        {
+            _fromProcess = fromProcess;
+        }
+
+        /// <summary>
+        /// Get Value of From Process
+        /// </summary>
+        /// <returns>bool, true if created from Process</returns>
+        public bool GetFromProcess()
+        {
+            return _fromProcess;
         }
     }
 }

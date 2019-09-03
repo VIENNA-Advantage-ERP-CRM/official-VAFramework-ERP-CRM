@@ -1,5 +1,12 @@
-﻿/*w2ui Grid*/
+﻿
+
+
+
+
+
+/*w2ui Grid*/
 /* align middle row data*/
+
 .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data
 {
     margin: 0px;
@@ -167,7 +174,6 @@ html[dir="rtl"] .ui-dialog .ui-dialog-title {
     float: right;
 }
 
-
 .ui-dialog
 {
     border-left: 2px solid #3892DA;
@@ -203,3 +209,29 @@ html[dir="rtl"] .ui-dialog .ui-dialog-title {
     font-family: helvetica;
     font-size: 1em;
 }
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: verdana, Arial,Helvetica,sans-serif;
+}
+
+
+/*JqueryUI properties override*/
+.ui-button {
+    background: #616364!important;
+    color: #fff !important;
+    padding: 0.611rem 1.5rem !important;
+}
+
+.ui-dialog {
+    border-left: 2px solid #3892da !important;
+    border-right: 2px solid #3892da !important;
+    border-bottom: 2px solid #3892da !important;
+}
+
+    .ui-dialog .ui-dialog-titlebar-close {
+        height: 44px !important;
+    }
+
+    .ui-dialog .ui-dialog-content {
+        overflow-x: hidden !important;
+    }

@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MOrderLineController:Controller
+    public class MOrderLineController : Controller
     {
         public ActionResult Index()
         {
@@ -18,26 +18,26 @@ namespace VIS.Controllers
         }
         public JsonResult GetOrderLine(string fields)
         {
-           
+
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MOrderLineModel objOrderLine = new MOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetOrderLine(ctx, fields));
-            }         
+            }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetNotReserved(string fields)
         {
-            
+
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MOrderLineModel objOrderLine = new MOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetNotReserved(ctx, fields));
-            }           
+            }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetTax(string fields)
@@ -230,5 +230,29 @@ namespace VIS.Controllers
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Calculate Discout based on Discount Schema selected on Business Partner
+        /// </summary>
+        /// <param name="fields">List of Parameters</param>
+        /// <returns>Discount value</returns>
+        public JsonResult FlatDiscount(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                string[] paramValue = fields.Split(',');
+                int ProductId = Util.GetValueOfInt(paramValue[0]);
+                int ClientId = Util.GetValueOfInt(paramValue[1]); ;
+                decimal amount = Util.GetValueOfDecimal(paramValue[2]);
+                int DiscountSchemaId = Util.GetValueOfInt(paramValue[3]);
+                decimal FlatDiscount = Util.GetValueOfDecimal(paramValue[4]);
+                decimal QtyEntered = Util.GetValueOfDecimal(paramValue[5]);
+
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MOrderLineModel objOrderLine = new MOrderLineModel();
+                retJSON = JsonConvert.SerializeObject(objOrderLine.FlatDiscount(ProductId, ClientId, amount, DiscountSchemaId, FlatDiscount, QtyEntered));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

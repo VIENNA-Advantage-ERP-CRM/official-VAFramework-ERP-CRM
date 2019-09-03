@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+		
+		<style>
+			#thePane{position:absolute;left:30px;top:30px}
+		</style>
+			
+		<script language="javascript">
+
+			var pane = newPaneWidget("thePane", "the tooltip", 300,300)
+			pane.add("fontPane","Font Formatting",'format.gif',16*4,0,"http://www.yahoo.com")
+			pane.add("objects","Variables handling",'treeicons.gif',0,0,"http://www.msn.com")
+			
+			leftRuler=newWidget("leftRuler")
+			rightRuler=newWidget("rightRuler")
+			
+			function loadCB()
+			{
+				pane.init()
+				leftRuler.init()
+				rightRuler.init()
+			}
+			
+			//alert(pane.getHTML())
+			
+			function resizeCB()
+			{
+				var w = Math.max(winWidth()-60,0)
+				var h = Math.max(winHeight()-60,0)
+
+				if (pane.layer)
+				{
+					leftRuler.resize(null,h)
+					rightRuler.resize(w,null)
+					pane.resize(w,h)
+				}				
+			}
+
+		</script>
+	</head>
+	<body onload="loadCB()" onresize="resizeCB()">
+		<div id="leftRuler"  style="background-color:black;position:absolute;top:30px;left:10px;width:2px;height:300px;overflow:hidden"></div>
+		<div id="rightRuler" style="background-color:black;position:absolute;top:10px;left:30px;width:300px;height:2px;overflow:hidden"></div>
+		<script language="javascript">pane.write()</script>
+	</body>
+	
+</html>

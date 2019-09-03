@@ -447,9 +447,23 @@ namespace VAdvantage.Model
         /** Get Current Cost.@return The currently used cost price */
         public Decimal GetCurrentCostPrice() { Object bd = Get_Value("CurrentCostPrice"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
+        /** Set Post Current Cost Price.
+@param PostCurrentCostPrice It indicate the Product Cost after cost calculation of the current record. */
+        public void SetPostCurrentCostPrice(Decimal? PostCurrentCostPrice) { Set_Value("PostCurrentCostPrice", (Decimal?)PostCurrentCostPrice); }/** Get Post Current Cost Price.
+@return It indicate the Product Cost after cost calculation of the current record. */
+        public Decimal GetPostCurrentCostPrice() { Object bd = Get_Value("PostCurrentCostPrice"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
-        //Anuj 28/6/2016
+        /** Set To Post Current  Cost Price.
+@param ToPostCurrentCostPrice To Post Current  Cost Price */
+        public void SetToPostCurrentCostPrice(Decimal? ToPostCurrentCostPrice) { Set_Value("ToPostCurrentCostPrice", (Decimal?)ToPostCurrentCostPrice); }/** Get To Post Current  Cost Price.
+@return To Post Current  Cost Price */
+        public Decimal GetToPostCurrentCostPrice() { Object bd = Get_Value("ToPostCurrentCostPrice"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
+        /** Set To Current Cost Price.
+@param ToCurrentCostPrice To Current Cost Price */
+        public void SetToCurrentCostPrice(Decimal? ToCurrentCostPrice) { Set_Value("ToCurrentCostPrice", (Decimal?)ToCurrentCostPrice); }/** Get To Current Cost Price.
+@return To Current Cost Price */
+        public Decimal GetToCurrentCostPrice() { Object bd = Get_Value("ToCurrentCostPrice"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
         /** Set Order Line.
 @param C_OrderLine_ID Order Line */

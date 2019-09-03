@@ -942,6 +942,25 @@ namespace VAdvantage.Model
 @return Identifies the address for this Account/Prospect. */
         public int GetC_BPartner_Location_ID() { Object ii = Get_Value("C_BPartner_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         //End Here
+        //Added by Manjot suggested by Mukesh sir. reason for adding is need to lock this record while allocation from allocation form
+        /** Set Process Now.
+        @param Processing Process Now */
+        public void SetProcessing(Boolean Processing)
+        {
+            Set_Value("Processing", Processing);
+        }
+        /** Get Process Now.
+        @return Process Now */
+        public Boolean IsProcessing()
+        {
+            Object oo = Get_Value("Processing");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
 
     }
 

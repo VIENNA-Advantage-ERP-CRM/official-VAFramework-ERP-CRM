@@ -1,0 +1,232 @@
+.pePromptFieldset
+{    
+    border: 1px solid;
+    border-color: #A3A3BC;
+    padding: 0;
+}
+
+.peRangeFieldsetLegend
+{
+    background-color:#E4E4EC;
+    color: black;
+    font-family: Arial, verdana;
+    font-size: 8pt;
+    font-weight: bold;
+}
+
+.pePromptBorder   
+{
+    border-top: 1px solid #FFFFFF;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;    
+}
+
+.pePromptUnitHeader   
+{
+    background-color: #E4E4EC;
+    color: black;
+    font-family: Arial, verdana;
+    font-size: 8pt;
+    font-weight: bold;    
+    border-bottom: 1px solid #A3A3BC;
+}
+
+.pePromptUnitHeaderTextLeft   
+{
+    background-color: #E4E4EC;
+    color: black;
+    font-family: Arial, verdana;
+    font-size: 8pt;
+    font-weight: bold;        
+}
+
+.pePromptUnitHeaderTextRight
+{
+    background-color: #E4E4EC;
+    color: black;
+    font-family: Arial, verdana;
+    font-size: 8pt;   
+}
+
+.pePromptElement  
+{
+    background-color: #E4E4EC;    
+}
+
+.pePromptElementText 
+{
+    color: black;
+    font-family: Arial, verdana;
+    font-size: 8pt;
+}
+
+.pePromptingText  
+{
+    color: black;
+    font-family: Arial, verdana;
+    font-size: 8pt;
+}
+
+.pePromptRuler    
+{
+    color: #A3A3BC;
+    height: 1px;
+}
+
+.pePromptMessage
+{
+    color: black;
+    font-family: Arial, verdana;
+    font-weight: bold;
+    font-size: 8pt;
+}
+            
+.pePromptTextBox 
+{
+    font-size: 8pt;
+    background-color: #FFFFFF;
+    font-family: Arial, verdana;
+    width: 300px;
+}
+
+td.pePromptButtonSpacer
+{
+    FONT-FAMILY: arial;
+    FONT-SIZE: 8pt;
+}
+
+td.pePromptButton
+{
+	color: black;
+	font-size: 8pt;
+	font-family: Arial;
+	font-weight: bold;
+	text-decoration:none;
+	cursor: pointer;
+}
+
+div.pePromptButton a
+{
+	color: black;
+	font-size: 8pt;
+	font-family: Arial;
+	font-weight: bold;
+	text-decoration:none;
+	cursor: pointer;
+}
+
+div.pePromptButton a:hover
+{
+	color: #0000FF;	
+}
+
+.pePromptDropDown 
+{
+    font-size: 8pt;
+    font-family: Arial, verdana;
+    width: 300px;
+}
+
+.pePromptListBox
+{
+    font-size: 8pt;
+    font-family: Arial, verdana;
+    width: 300px;    
+}
+
+.peExpandCollapseImageColumn
+{
+    width: 3%;
+}          
+
+.peExpandCollapseTitleColumn
+{
+    text-align: left;
+} 
+
+.pePromptUnitTable      
+{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-style:hidden;
+}
+
+.peExpandCollapseAnchor
+{
+    text-decoration: none;
+    font-size: 8pt;
+    font-family: Arial, verdana;
+    font-weight: bold;
+    color: black;
+}
+
+.peExpandCollapseImage
+{
+    border: 0;
+}                
+/*-----------------INcalendar------------------------------------------------*/
+div.INcalendarWindow
+{
+    position:absolute;
+    display: none;
+    background:#ffffff;
+    z-index:30000;
+} 
+div.INcalendarTitle
+{
+    border-left:1px solid #aaaaaa;
+    border-top:1px solid #999999;
+    border-right:1px solid #333333;
+
+    width:100%;
+    height:20px;
+} 
+td.INtitleText
+{
+    cursor:default;
+    width:100%;
+    color: black;
+    font-family: Arial, verdana;
+    font-weight: 900;
+    font-size: 9pt;
+} 
+td.INclose
+{
+    width:14px;
+    cursor:pointer;
+} 
+div.INcalendar
+{
+	width:100%;
+} 
+div.INcalendarTop
+{
+    border-left:1px solid #aaaaaa;
+    border-right:1px solid #333333;
+
+	height:70px;
+	width:100%;
+} 
+div.INcalendarBottom
+{
+    border-left:1px solid #aaaaaa;
+    border-right:1px solid #333333;
+    border-bottom:1px solid #222222;
+	height:160px;/*(250-20-70)*/
+	width:100%;
+} 
+A.focusDay:link { color:#ff0000; text-decoration: none; font:12pt arial, helvetica; }
+A.focusDay:hover { color: #ff0000; text-decoration: none; font:12pt arial, helvetica; }
+A.focusDay:visited { color: #ff0000; text-decoration: none; font:12pt arial, helvetica; }
+A.weekday:link { color: blue; text-decoration: none; font: 12pt arial, helvetica; }
+A.weekday:hover { color: darkred; font: 12pt arial, helvetica; }
+A.weekday:visited { color: blue; text-decoration: none; font:12pt arial, helvetica; }
+
+/*dateColor        = "blue";          // TEXT COLOR OF THE LISTED DATES (1-28+)
+//focusColor       = "#ff0000";       // TEXT COLOR OF THE SELECTED DATE (OR CURRENT DATE)
+//hoverColor       = "darkred";       // TEXT COLOR OF A LINK WHEN YOU HOVER OVER IT
+//fontStyle        = "12pt arial, helvetica";           // TEXT STYLE FOR DATES
+*/
+/*----------------------------------------------------------------------------------------------*/

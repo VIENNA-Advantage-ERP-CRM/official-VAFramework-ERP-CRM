@@ -350,7 +350,8 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct()))
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -478,15 +479,22 @@ namespace VAdvantage.Model
 
 
                         #region set Invoice Paid Amount
-                        MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_Trx());
-                        MCashLine cashline = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), Get_Trx());
+                        //added check for payment and cash if cash/payment exist than create object otherwise that will be null
+                        MPayment payment = null;
+                        if (line.GetC_Payment_ID() > 0)
+                            payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_Trx());
+
+                        MCashLine cashline = null;
+                        if (line.GetC_CashLine_ID() > 0)
+                            cashline = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), Get_Trx());
+
                         decimal currencymultiplyRate = 1;
-                        if (payment.GetC_Payment_ID() != 0)
+                        if (payment != null && payment.GetC_Payment_ID() != 0)
                         {
                             // new function called to get currency multiply rate by Vivek on 02/02/2018
                             currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline);
                         }
-                        else if (cashline.GetC_CashLine_ID() != 0)
+                        else if (cashline != null && cashline.GetC_CashLine_ID() != 0)
                         {
                             // new function called to get currency multiply rate by Vivek on 02/02/2018
                             currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline);
@@ -586,6 +594,10 @@ namespace VAdvantage.Model
                             PO.CopyValues(paySch, backupNewPaySch, paySch.GetAD_Client_ID(), paySch.GetAD_Org_ID());
                         }
 
+                        // update open amount in base / invoice currency when we splitted record
+                        paySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? (paySch.GetDueAmt() * multiplyRate) : paySch.GetDueAmt());
+                        paySch.SetVA009_OpnAmntInvce(paySch.GetDueAmt());
+
                         if (!paySch.Save(Get_Trx()))
                         {
                             log.Info("Not Updated Paid Amount on Invoice Schedule for this schedule <==> " + line.GetC_InvoicePaySchedule_ID());
@@ -657,6 +669,10 @@ namespace VAdvantage.Model
                             {
                                 newPaySch.SetDueAmt(Decimal.Add(newPaySch.GetDueAmt(), (Decimal.Subtract(invoice.GetGrandTotal(), matchedAmount))));
                             }
+
+                            // convert due amount into Base Currency
+                            newPaySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? Decimal.Multiply(newPaySch.GetDueAmt(), multiplyRate) : newPaySch.GetDueAmt());
+                            newPaySch.SetVA009_OpnAmntInvce(newPaySch.GetDueAmt());
 
                             if (!newPaySch.Save(Get_Trx()))
                             {
@@ -892,7 +908,8 @@ namespace VAdvantage.Model
             if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
                 throw new Exception("@PeriodClosed@");
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateTrx()))
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateTrx(), GetAD_Org_ID()))
             {
                 throw new Exception(Common.Common.NONBUSINESSDAY);
             }

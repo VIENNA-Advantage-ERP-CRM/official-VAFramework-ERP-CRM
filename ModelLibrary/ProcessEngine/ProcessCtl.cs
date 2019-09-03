@@ -581,7 +581,7 @@ namespace VAdvantage.ProcessEngine
                     if ("Y".Equals(dr[4].ToString()))
                     {
                         IsReport = true;
-                        //pi.SetIsReport(IsReport);
+                        pi.SetIsReport(IsReport);
                         IsCrystalReport = "Y".Equals(dr[10].ToString());
                         AD_ReportFormat_ID = dr[11].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[11].ToString());
                         IsTelerikReport = "T".Equals(dr[10].ToString());
@@ -612,7 +612,7 @@ namespace VAdvantage.ProcessEngine
 
             }
 
-           // _pi.SetUseCrystalReportViewer(ctx.GetUseCrystalReportViewer().Equals("Y"));
+            _pi.SetUseCrystalReportViewer(ctx.GetUseCrystalReportViewer().Equals("Y"));
 
             if (procedureName == null)
                 procedureName = "";
@@ -730,6 +730,12 @@ namespace VAdvantage.ProcessEngine
                     _pi.SetPrintAllPages(false);
                     re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
                     Unlock();
+
+                    // "#REPORT_PAGE_SIZE"
+                    int pageSize = Util.GetValueOfInt(ctx.GetContext("#REPORT_PAGE_SIZE")); //500;
+                    _pi.SetTotalPage(_pi.GetTotalPage());
+                    _pi.SetIsSupportPaging(true);
+
                     _pi.SetSummary("Report", re != null);
                 }
 
@@ -741,8 +747,14 @@ namespace VAdvantage.ProcessEngine
                 else if (IsJasperReport)
                 {
                     _pi.SetIsJasperReport(true);
-
                     re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
+                    try
+                    {
+                        int pageSize = Util.GetValueOfInt(ctx.GetContext("#REPORT_PAGE_SIZE")); //500;
+                        _pi.SetTotalPage(_pi.GetTotalPage());
+                        _pi.SetIsSupportPaging(true);
+                    }
+                    catch { }
                 }
                 else if (!IsCrystalReport)
                 {
@@ -807,8 +819,8 @@ namespace VAdvantage.ProcessEngine
                     _pi.SetIsTelerik(true);
                 }
                 // Execute Crystal report only if user don't want to use crystal report viewer.
-               // else if (!_pi.GetUseCrystalReportViewer())
-                else
+                else if (!_pi.GetUseCrystalReportViewer())
+                //else
                 {
                     _pi.SetIsCrystal(true);
                     string errorMsg = null;

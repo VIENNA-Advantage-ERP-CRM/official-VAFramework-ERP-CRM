@@ -48,7 +48,7 @@
 
         /* Containers likes left continer,right container */
         function createContainer() {
-            $mainDiv = $('<div style="height:100%">');
+            $mainDiv = $('<div class="vis-forms-container" style="height:100%">');
             //$mainLeftDiv = $('<div  class="vis-history-mainLeftDiv">');
 
             $inboxDiv = $('<div class="vis-history-inboxDiv">');
@@ -2521,8 +2521,8 @@
             }
 
             str += ' <p>' + result.CharacterData + '</p>' +
-             '</div></div><div class="vis-attachhistory-comment-dateTime"><p>' + new Date(result.Created).toLocaleString() + '</p>' +
-             '</div></div>';
+             '</div><div class="vis-attachhistory-comment-dateTime"><p>' + new Date(result.Created).toLocaleString() + '</p>' +
+             '</div></div></div>';
 
             return str;
         };

@@ -249,7 +249,7 @@
 
             if (displayType == VIS.DisplayType.Button) {
 
-                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID())
+                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
                 btn.setField(mField);
                 btn.setReferenceKey(mField.getAD_Reference_Value_ID());
                 ctrl = btn;
@@ -906,7 +906,7 @@
      *  @param AD_Process_ID process to start
     
      ***************************************************************************/
-    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink, AD_Form_ID) {
+    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink, AD_Form_ID, isBGProcess, isAskUserBGProcess) {
 
         this.actionListner;
         this.AD_Process_ID = AD_Process_ID;
@@ -919,6 +919,8 @@
         this.actionLink = null;
         this.isCsv = false;
         this.isPdf = false;
+        this.askUserBGProcess = isAskUserBGProcess;
+        this.isBackgroundProcess = isBGProcess;
 
         this.values = null;
 
@@ -1001,11 +1003,23 @@
                 var param = [];
                 param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
                 isReport = executeScalar(sqlQry, param);
-                if (isReport == 'Y') {
-                    $img.w2overlay($ulPopup.clone(true));
+
+
+                sqlQry = "VIS_149";
+                param = [];
+                param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
+                var isCrystalReport = executeScalar(sqlQry, param);
+
+                if (isCrystalReport == "Y" && VIS.context.getIsUseCrystalReportViewer()) {
+                    self.invokeActionPerformed({ source: self });
                 }
                 else {
-                    self.invokeActionPerformed({ source: self });
+                    if (isReport == 'Y') {
+                        $img.w2overlay($ulPopup.clone(true));
+                    }
+                    else {
+                        self.invokeActionPerformed({ source: self });
+                    }
                 }
             }
         });
@@ -1170,6 +1184,23 @@
     VButton.prototype.getHelp = function () {
         return this.help;
     };
+
+    /**
+    * return if user want to open confirmation popup or not
+    * @return Bool value
+    */
+    VButton.prototype.getAskUserBGProcess = function () {
+        return this.askUserBGProcess;
+    };
+
+    /**
+    * return if process is background or not
+    * @return Bool value
+    */
+    VButton.prototype.getIsBackgroundProcess = function () {
+        return this.isBackgroundProcess;
+    };
+
     //End Button 
 
 
@@ -1682,7 +1713,7 @@
                     //  we have lookup
                 else if (this.ctrl.val() == null) {
                     //  do-not add item in combobox if look up validated and loaded 
-                    if (this.inserting && !this.lookup.info.isParent && this.lookup.getIsValidated() && this.lookup.allLoaded) { 
+                    if (this.inserting && !this.lookup.info.isParent && this.lookup.getIsValidated() && this.lookup.allLoaded) {
                         //If Validated lookup ata source list not filled or not binded with combo 
                         this.lookup.fillCombobox(this.getIsMandatory(), false, false, false); // fill lookup list
                         if (!this.lookup.loading) { // if not from validated cache list 
@@ -2719,7 +2750,7 @@
 
             InfoWindow.onClose = function () {
                 //self.setValue(InfoWindow.getSelectedValues(), false, true);
-       
+
                 var objResult = InfoWindow.getSelectedValues();
 
                 if (objResult && objResult.length == 0) {

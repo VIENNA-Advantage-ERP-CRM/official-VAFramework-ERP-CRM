@@ -766,19 +766,19 @@ namespace VAdvantage.Model
 
         /** Set Release Document.
         @param IsReleaseDocument Release Document */
-        public void SetIsReleaseDocument (Boolean IsReleaseDocument)
+        public void SetIsReleaseDocument(Boolean IsReleaseDocument)
         {
-                Set_Value ("IsReleaseDocument", IsReleaseDocument);
+            Set_Value("IsReleaseDocument", IsReleaseDocument);
         }
         /** Get Release Document.
         @return Release Document */
-        public Boolean IsReleaseDocument() 
+        public Boolean IsReleaseDocument()
         {
             Object oo = Get_Value("IsReleaseDocument");
-            if (oo != null) 
-            { 
-                if (oo.GetType() == typeof(bool)) 
-                    return Convert.ToBoolean(oo); 
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo);
                 return "Y".Equals(oo);
             }
             return false;
@@ -786,18 +786,92 @@ namespace VAdvantage.Model
 
         /** Set Document Type for Releases.
         @param DocumentTypeforReleases Document Type for Releases */
-        public void SetDocumentTypeforReleases(int DocumentTypeforReleases) 
-        { 
-            Set_Value("DocumentTypeforReleases", DocumentTypeforReleases); 
+        public void SetDocumentTypeforReleases(int DocumentTypeforReleases)
+        {
+            Set_Value("DocumentTypeforReleases", DocumentTypeforReleases);
         }
         /** Get Document Type for Releases.
         @return Document Type for Releases */
-        public int GetDocumentTypeforReleases() 
+        public int GetDocumentTypeforReleases()
         {
-            Object ii = Get_Value("DocumentTypeforReleases"); 
+            Object ii = Get_Value("DocumentTypeforReleases");
+            if (ii == null)
+                return 0;
+            return Convert.ToInt32(ii);
+        }
+        /** Set Overwrite Date on Complete.
+        @param IsOverwriteDateOnComplete Overwrite Date on Complete */
+        public void SetIsOverwriteDateOnComplete(Boolean IsOverwriteDateOnComplete)
+        {
+            Set_Value("IsOverwriteDateOnComplete",
+                IsOverwriteDateOnComplete);
+        }
+
+        /** Get Overwrite Date on Complete.
+        @return Overwrite Date on Complete */
+        public Boolean IsOverwriteDateOnComplete()
+        {
+            Object oo = Get_Value("IsOverwriteDateOnComplete");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
+
+        /** Set Overwrite Sequence on Complete.
+        @param IsOverwriteSeqOnComplete Overwrite Sequence on Complete */
+        public void SetIsOverwriteSeqOnComplete(Boolean IsOverwriteSeqOnComplete)
+        {
+            Set_Value("IsOverwriteSeqOnComplete", IsOverwriteSeqOnComplete);
+        }
+
+        /** Get Overwrite Sequence on Complete.
+        @return Overwrite Sequence on Complete */
+        public Boolean IsOverwriteSeqOnComplete()
+        {
+            Object oo = Get_Value("IsOverwriteSeqOnComplete");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
+
+        /** CompletedSequence_ID AD_Reference_ID=128 */
+        public static int COMPLETEDSEQUENCE_ID_AD_Reference_ID = 128;
+        /** Set Document Sequence On Complete.
+        @param CompletedSequence_ID Document Sequence On Complete */
+        public void SetCompletedSequence_ID(int CompletedSequence_ID)
+        {
+            if (CompletedSequence_ID <= 0) 
+                Set_Value("CompletedSequence_ID", null);
+            else
+                Set_Value("CompletedSequence_ID", CompletedSequence_ID);
+        }
+        /** Get Document Sequence On Complete.
+        @return Document Sequence On Complete */
+        public int GetCompletedSequence_ID() 
+        {
+            Object ii = Get_Value("CompletedSequence_ID"); 
             if (ii == null) 
                 return 0; 
             return Convert.ToInt32(ii); 
         }
+
+        /// <summary>
+        /// Set Treat As Discount.
+        /// </summary>
+        /// <param name="TreatAsDiscount">This checkbox indicates if an invoice is considered as discount invoice while calculating product costing. Also the system will not allow to create return to vendor invoice.</param>
+        public void SetTreatAsDiscount(Boolean TreatAsDiscount) { Set_Value("TreatAsDiscount", TreatAsDiscount); }
+        /// <summary>
+        ///  Get Treat As Discount.
+        /// </summary>
+        /// <returns>This checkbox indicates if an invoice is considered as discount invoice while calculating product costing. Also the system will not allow to create return to vendor invoice.</returns>
+        public Boolean IsTreatAsDiscount() { Object oo = Get_Value("TreatAsDiscount"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
     }
 }

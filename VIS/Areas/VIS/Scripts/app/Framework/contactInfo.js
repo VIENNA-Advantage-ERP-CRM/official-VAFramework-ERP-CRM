@@ -464,13 +464,13 @@
                             }
                             else {
 
-                                if (category == "Employee")
+                                if (category == VIS.Msg.getMsg("Employee"))
                                     NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Employee Master&userID=" + userID;
-                                if (category == "Customer")
+                                if (category == VIS.Msg.getMsg("Customer"))
                                     NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Customer Master&userID=" + userID;
-                                if (category == "Vendor")
+                                if (category == VIS.Msg.getMsg("Vendor"))
                                     NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Vendor Master&userID=" + userID;
-                                if (category == "Prospect")
+                                if (category == VIS.Msg.getMsg("Prospect"))
                                     NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Prospects&userID=" + userID;
 
                                 OpenWindow(NavigateURL, true, e);
@@ -485,15 +485,15 @@
 
                         $editOption.on("click", "LI", function (e) {
                             $("#w2ui-overlay").hide();
-                            
+
                             var editOption = $(this).text();
-                            if (editOption == "Employee")
+                            if (editOption == VIS.Msg.getMsg("Employee"))
                                 NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Employee Master&userID=" + $slideruserID.text();
-                            if (editOption == "Customer")
+                            if (editOption == VIS.Msg.getMsg("Customer"))
                                 NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Customer Master&userID=" + $slideruserID.text();
-                            if (editOption == "Vendor")
+                            if (editOption == VIS.Msg.getMsg("Vendor"))
                                 NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Vendor Master&userID=" + $slideruserID.text();
-                            if (editOption == "Prospect")
+                            if (editOption == VIS.Msg.getMsg("Prospect"))
                                 NavigateURL = VIS.Application.contextUrl + "WSP/Contacts/GetWindowID?windowName=Prospects&userID=" + $slideruserID.text();
                             // CreateOrder(editOption, e, true);
                             OpenWindow(NavigateURL, true, e);
@@ -914,8 +914,8 @@
 "<input type='hidden' value='0' id='BPID_" + windowNo + "'></input>" +
 "<input type='hidden' value='0' id='BPGroupID_" + windowNo + "'></input>" +
 "<input type='hidden' value='' id='userTableID_" + windowNo + "'>" +
-"<p id='companyName_" + windowNo + "' class='wsp-view_profile_possession border'></p>" +
-"<p class='wsp-view_profile_possession border' style='border-bottom: 1px solid #DFDFDF; padding-bottom: 20px;' id='pContactTypeCategory_" + windowNo + "'></p>" +
+"<p id='companyName_" + windowNo + "' class='wsp-view_profile_possession'></p>" +
+"<p class='wsp-view_profile_possession' style='border-bottom: 1px solid #DFDFDF; padding-bottom: 20px;' id='pContactTypeCategory_" + windowNo + "'></p>" +
 
 "<div class='wsp-profile_big_img_mobile'>" +
 

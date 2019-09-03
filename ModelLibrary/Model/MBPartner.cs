@@ -702,13 +702,22 @@ namespace VAdvantage.Model
                     + " WHERE p.C_BPartner_ID=bp.C_BPartner_ID"
                     + " AND p.IsReceipt='Y' AND p.DocStatus IN('CO','CL')"
                     + " AND p.C_Charge_ID IS NULL)"
+                // JID_1224: Consider Cash Journal Transaction also to Get Total Open Balance of Business Partner
+                //                  - Unallocated Cash Receipts
+                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(cl.Amount,cl.C_Currency_ID,c.StatementDate, cl.AD_Client_ID,cl.AD_Org_ID, cl.C_CONVERSIONTYPE_ID)),0)"
+                    + " FROM C_CASHLINE cl INNER JOIN C_Cash C ON C.C_Cash_ID = cl.C_Cash_ID WHERE cl.C_BPartner_ID=bp.C_BPartner_ID"
+                    + " AND cl.VSS_PaymentType ='R' AND c.DocStatus IN('CO','CL') AND cl.C_Charge_ID IS NULL)"
                 //											- All Receipt Allocations
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.AD_Client_ID,a.AD_Org_ID, i.C_CONVERSIONTYPE_ID)),0) "
                     + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
                     + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
                     + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID"
                     + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL"
-                    + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')), "
+                    + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')) "
+                //                                          - All Cash Receipt Allocatioons
+                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.AD_Client_ID,a.AD_Org_ID, i.C_CONVERSIONTYPE_ID)),0)"
+                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID)"
+                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID AND A.IsActive ='Y' AND a.C_CashLine_ID IS NOT NULL AND i.isSoTrx ='Y' AND h.DocStatus IN('CO','CL')), "
 
                 //	Balance			= All Invoices
                 + "COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal*MultiplierAP,i.C_Currency_ID,i.DateOrdered, i.AD_Client_ID,i.AD_Org_ID, i.C_CONVERSIONTYPE_ID)) "
@@ -726,12 +735,23 @@ namespace VAdvantage.Model
                     + " WHERE p.C_BPartner_ID=bp.C_BPartner_ID"
                     + " AND p.DocStatus IN('CO','CL')"
                     + " AND p.C_Charge_ID IS NULL)"
+                // JID_1224: Consider Cash Journal Transaction also to Get Total Open Balance of Business Partner
+                //                  - Unallocated Cash Receipts
+                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(cl.Amount,cl.C_Currency_ID,c.StatementDate, cl.AD_Client_ID,cl.AD_Org_ID, cl.C_CONVERSIONTYPE_ID)),0)"
+                    + " FROM C_CASHLINE cl INNER JOIN C_Cash C ON C.C_Cash_ID = cl.C_Cash_ID WHERE cl.C_BPartner_ID=bp.C_BPartner_ID"
+                    + " AND c.DocStatus IN('CO','CL') AND cl.C_Charge_ID IS NULL)"
                 //											- All Allocations
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.AD_Client_ID,a.AD_Org_ID, i.C_CONVERSIONTYPE_ID)),0) "
                     + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
                     + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
                     + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID"
                     + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
+                //											- All Cash Allocations
+                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.AD_Client_ID,a.AD_Org_ID, i.C_CONVERSIONTYPE_ID)),0) "
+                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
+                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID"
+                    + " AND a.IsActive='Y' AND a.C_CashLine_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
                 //
                 + " FROM C_BPartner bp "
                 + " WHERE C_BPartner_ID=" + GetC_BPartner_ID();
@@ -842,7 +862,9 @@ namespace VAdvantage.Model
                 return;
 
             //	Above Credit Limit
-            if (creditLimit.CompareTo(GetTotalOpenBalance(!_TotalOpenBalanceSet)) < 0)
+            // changed this function for fetching open balance because in case of void it calculates again and fetches wrong value of open balance // Lokesh Chauhan
+            //if (creditLimit.CompareTo(GetTotalOpenBalance(!_TotalOpenBalanceSet)) < 0)
+            if (creditLimit.CompareTo(GetTotalOpenBalance()) <= 0)
                 SetSOCreditStatus(SOCREDITSTATUS_CreditHold);
             else
             {
@@ -1052,45 +1074,47 @@ namespace VAdvantage.Model
                 SetBPGroup(grp);	//	setDefaults
             }
 
-            // when we select payment method then need to update  payment rule accordingly
-            //if (Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0)
-            //{
-            //    if (Util.GetValueOfInt(GetVA009_PaymentMethod_ID()) > 0)
-            //    {
-            //        string paymentBaseType = Util.GetValueOfString(DB.ExecuteScalar(@"select VA009_PAYMENTBASETYPE from VA009_PAYMENTMETHOD where VA009_PAYMENTMETHOD_ID=" + GetVA009_PaymentMethod_ID()));
-            //        if (IsCustomer())
-            //        {
-            //            if (paymentBaseType == "C")  // Cash + Card
-            //            {
+            //when we select payment method then need to update  payment rule accordingly
+            if (Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0)
+            {
+                if ((GetVA009_PaymentMethod_ID() > 0) || (GetVA009_PO_PaymentMethod_ID() > 0))
+                {
 
-            //            }
-            //            else if (paymentBaseType == "W") // Wire Transfer
-            //            {
+                    if (IsCustomer())
+                    {
+                        string paymentBaseType = Util.GetValueOfString(DB.ExecuteScalar(@"select VA009_PAYMENTBASETYPE from VA009_PAYMENTMETHOD where VA009_PAYMENTMETHOD_ID=" + GetVA009_PaymentMethod_ID()));
+                        //if (paymentBaseType == "C")  // Cash + Card
+                        //{
 
-            //            }
-            //            else
-            //                SetPaymentRule(paymentBaseType);
-            //        }
-            //        if (IsVendor())
-            //        {
-            //            if (paymentBaseType == "C") // Cash + Card
-            //            {
+                        //}
+                        //else if (paymentBaseType == "W") // Wire Transfer
+                        //{
 
-            //            }
-            //            else if (paymentBaseType == "W") // Wire Transfer
-            //            {
+                        //}
+                        //else
+                        SetPaymentRule(paymentBaseType);
+                    }
+                    if (IsVendor())
+                    {
+                        string paymentBaseType = Util.GetValueOfString(DB.ExecuteScalar(@"select VA009_PAYMENTBASETYPE from VA009_PAYMENTMETHOD where VA009_PAYMENTMETHOD_ID=" + GetVA009_PO_PaymentMethod_ID()));
+                        //if (paymentBaseType == "C") // Cash + Card
+                        //{
 
-            //            }
-            //            else
-            //                SetPaymentRulePO(paymentBaseType);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        SetPaymentRulePO(null);
-            //        SetPaymentRule(null);
-            //    }
-            //}
+                        //}
+                        //else if (paymentBaseType == "W") // Wire Transfer
+                        //{
+
+                        //}
+                        //else
+                        SetPaymentRulePO(paymentBaseType);
+                    }
+                }
+                else
+                {
+                    SetPaymentRulePO(null);
+                    SetPaymentRule(null);
+                }
+            }
 
             // change done by mohit to handle the free seats and filled seats on creation and deletion of employee from employee master window.- asked by ravikant.- 22/01/2018
             if (IsEmployee())
@@ -1167,7 +1191,11 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            if (!success)
+                return false;
+
             StringBuilder _sql = new StringBuilder("");
+
             //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_BP_Customer_Acct'");
             _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Customer_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             int countC = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
@@ -1388,8 +1416,121 @@ namespace VAdvantage.Model
                 }
 
             }
+
+            int count = DB.ExecuteQuery("UPDATE C_BPartner_Location SET CreditStatusSettingOn = '" + GetCreditStatusSettingOn() + "' WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, null);
+
             //---------End----------------------------------------------------
             return success;
+        }
+
+        /// <summary>
+        /// Check whether credit Validation matches against the Credit Validation,
+        /// set either on Business Partner header Or Locaion based on the settings
+        /// </summary>
+        /// <param name="TrxType">Credit Validation type to match</param>
+        /// <param name="C_BPartner_Location_ID">Business Partner Locaion ID</param>
+        /// <returns>True/False</returns>
+        public bool ValidateCreditValidation(string TrxType, int C_BPartner_Location_ID)
+        {
+            if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerHeader)
+            {
+                if (TrxType.Contains(GetCreditValidation()))
+                    return true;
+            }
+            else if (C_BPartner_Location_ID > 0)
+            {
+                MBPartnerLocation loc = new MBPartnerLocation(GetCtx() , C_BPartner_Location_ID, Get_Trx());
+                if (TrxType.Contains(loc.GetCreditValidation()))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// function to check credit limit and other validations for Business partner,
+        /// based on the settings on Business partner 
+        /// </summary>
+        /// <param name="C_BPartner_Location_ID">Business partner location ID</param>
+        /// <param name="Amt">Amount</param>
+        /// <param name="retMsg">Return Message</param>
+        /// <returns>Status True/False (whether credit allowed or not)</returns>
+        public bool IsCreditAllowed(int C_BPartner_Location_ID, Decimal? Amt, out string retMsg)
+        {
+            Decimal? totOpnBal = 0;
+            Decimal? crdLmt = 0;
+            retMsg = "";
+            string creditStatus = GetSOCreditStatus();
+            if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerHeader)
+            {
+                //Credit Limit by Vivek on 30/09/2016
+                if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(GetSOCreditStatus()))
+                {
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                        + GetTotalOpenBalance()
+                        + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + GetSO_CreditLimit();
+                    return false;
+                }
+                if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(GetSOCreditStatus()))
+                {
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                        + GetTotalOpenBalance()
+                        + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + GetSO_CreditLimit();
+                    return false;
+                }
+                totOpnBal = GetTotalOpenBalance();
+                crdLmt = GetSO_CreditLimit();
+            }
+            else if (C_BPartner_Location_ID > 0 && GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+            {
+                MBPartnerLocation bploc = new MBPartnerLocation(GetCtx(), C_BPartner_Location_ID, Get_Trx());
+                creditStatus = bploc.GetSOCreditStatus();
+                if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(bploc.GetSOCreditStatus()))
+                {
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                        + bploc.GetTotalOpenBalance()
+                        + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + bploc.GetSO_CreditLimit();
+                    return false;
+                }
+                if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(bploc.GetSOCreditStatus()))
+                {
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                        + bploc.GetTotalOpenBalance()
+                        + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + bploc.GetSO_CreditLimit();
+                    return false;
+                }
+                totOpnBal = bploc.GetTotalOpenBalance();
+                crdLmt = bploc.GetSO_CreditLimit();
+            }
+            // check for payment if Total Open Balance + payment Amount exceeds Credit limit do not allow to complete transaction
+            if ((creditStatus != X_C_BPartner.SOCREDITSTATUS_NoCreditCheck) && (crdLmt > 0) && (crdLmt < (totOpnBal + Amt)))
+            {
+                retMsg = Msg.GetMsg(GetCtx(), "VIS_CreditLimitExceed") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                        + totOpnBal + ", " + Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " = " + Amt 
+                        + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + crdLmt;
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Check whether Business partner credit stauts is on Credit Watch
+        /// </summary>
+        /// <param name="C_BPartner_Location_ID">Business Partner Location ID</param>
+        /// <returns></returns>
+        public bool IsCreditWatch(int C_BPartner_Location_ID)
+        {
+            if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerHeader)
+            {
+                if (GetSOCreditStatus() == X_C_BPartner.SOCREDITSTATUS_CreditWatch)
+                    return true;
+            }
+            else if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+            {
+                MBPartnerLocation bploc = new MBPartnerLocation(GetCtx(), C_BPartner_Location_ID, Get_Trx());
+                if (bploc.GetSOCreditStatus() == X_C_BPartner.SOCREDITSTATUS_CreditWatch)
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>

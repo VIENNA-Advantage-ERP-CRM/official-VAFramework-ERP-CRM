@@ -145,6 +145,9 @@ namespace VIS.Controllers
 
                     ctx.SetContext(VAdvantage.Utility.Env.LANGUAGE, l.GetAD_Language());
                     ctx.SetContext(VAdvantage.Utility.Env.ISRIGHTTOLEFT, VAdvantage.Utility.Env.IsRightToLeft(loginLang) ? "Y" : "N");
+                    new VAdvantage.Login.LoginProcess(ctx).LoadSysConfig();
+
+
                     ViewBag.culture = ctx.GetAD_Language();
                     ViewBag.direction = ctx.GetIsRightToLeft() ? "rtl" : "ltr";
 
@@ -244,6 +247,20 @@ namespace VIS.Controllers
                             }
                         }
 
+                        ViewBag.LibSuffix = "";
+
+                        foreach (Bundle b in BundleTable.Bundles)
+                        {
+                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v"))
+                            {
+                                ViewBag.LibSuffix = Util.GetValueOfInt(ctx.GetContext("#FRONTEND_LIB_VERSION")) > 2
+                                                      ? "_v3" : "_v2";
+                                break;
+                            }
+                        }
+                        
+                        //check system setting// set to skipped lib
+                       
                     }
                 }
             }
@@ -263,6 +280,16 @@ namespace VIS.Controllers
                 ViewBag.ClientList = new List<KeyNamePair>();
                 Session["ctx"] = null;
                 ViewBag.direction = "ltr";
+
+                ViewBag.LibSuffix = "";
+                foreach (Bundle b in BundleTable.Bundles)
+                {
+                    if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v"))
+                    {
+                        ViewBag.LibSuffix = "_v2";
+                        break;
+                    }
+                }
             }
             return View(model);
 

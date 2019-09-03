@@ -50,7 +50,7 @@ namespace VAdvantage.Model
                         retValue = psc;
                     count++;
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
                 }
                 _log.Log(Level.SEVERE, sql, e);
             }
-            
+
             return bp;
         }
 
@@ -509,24 +509,29 @@ namespace VAdvantage.Model
                 }
                 _log.Log(Level.SEVERE, sql, e);
             }
-            
+
             return bp;
         }
 
-        /**
-         * 	Confirm Print.
-         * 	Create Payments the first time 
-         * 	@param checks checks
-         * 	@param batch batch
-         * 	@return last Document number or 0 if nothing printed
-         */
+        /// <summary>
+        /// Confirm Print. Create Payments the first time
+        /// </summary>
+        /// <param name="checks">checks</param>
+        /// <param name="batch">batch</param>
+        /// <returns>last Document number or 0 if nothing printed</returns>
         public static int ConfirmPrint(MPaySelectionCheck[] checks, MPaymentBatch batch)
         {
             int lastDocumentNo = 0;
+            int VA009_PaymentMethod_ID = 0;
+            MPaySelectionCheck check = null;
+            MPayment payment = null;
+            MPaySelectionLine[] psls = null;
+            string error = "";
             for (int i = 0; i < checks.Length; i++)
             {
-                MPaySelectionCheck check = checks[i];
-                MPayment payment = new MPayment(check.GetCtx(), check.GetC_Payment_ID(), null);
+                check = checks[i];
+                payment = new MPayment(check.GetCtx(), check.GetC_Payment_ID(), null);
+
                 //	Existing Payment
                 if (check.GetC_Payment_ID() != 0)
                 {
@@ -534,25 +539,34 @@ namespace VAdvantage.Model
                     if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
                     {
                         payment.SetCheckNo(check.GetDocumentNo());
+                        payment.SetCheckDate(check.GetParent().GetPayDate());           // Set Check date from Payment selection date
                         if (!payment.Save())
                         {
-                            _log.Log(Level.SEVERE, "Payment not saved: " + payment);
+                            error = "Payment not saved: " + payment;
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null)
+                            {
+                                error += ", " + pp.GetName();
+                            }
+                            _log.Log(Level.SEVERE, error);
                         }
                     }
                 }
                 else	//	New Payment
                 {
-                    int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
-                    int _CountColumnIPS = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE Columnname='C_InvoicePaySchedule_ID' AND AD_Table_ID=(SELECT AD_Table_ID FROM AD_Table WHERE tablename = 'C_PaySelectionLine' and export_id='VIS_427')"));
-                    if (_CountVA009 > 0)
+                    if (Env.IsModuleInstalled("VA009_"))
                     {
                         #region IF VA009 (VA Payment management is installed)
 
                         payment = new MPayment(check.GetCtx(), 0, null);
                         payment.SetAD_Org_ID(check.GetAD_Org_ID());
+                        payment.SetC_DocType_ID(false);
                         //
                         if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
+                        {
                             payment.SetBankCheck(check.GetParent().GetC_BankAccount_ID(), false, check.GetDocumentNo());
+                            payment.SetCheckDate(check.GetParent().GetPayDate());               // Set Check date from Payment selection date
+                        }
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_CreditCard))
                             payment.SetTenderType(X_C_Payment.TENDERTYPE_CreditCard);
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_DirectDeposit)
@@ -567,7 +581,21 @@ namespace VAdvantage.Model
                         payment.SetAmount(check.GetParent().GetC_Currency_ID(), check.GetPayAmt());
                         payment.SetDiscountAmt(check.GetDiscountAmt());
                         payment.SetDateTrx(check.GetParent().GetPayDate());
+                        payment.SetDateAcct(check.GetParent().GetPayDate());
                         payment.SetC_BPartner_ID(check.GetC_BPartner_ID());
+
+                        //to set VA009_PaymentMethod_ID on payment from Print Export Form
+                        VA009_PaymentMethod_ID = Util.GetValueOfInt(check.Get_Value("VA009_PaymentMethod_ID"));
+                        if (VA009_PaymentMethod_ID == 0)
+                        {
+                            VA009_PaymentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE IsActive='Y' 
+                                AND VA009_PaymentBaseType='S' AND rownum=1"));
+                        }
+                        if (VA009_PaymentMethod_ID > 0)
+                        {
+                            payment.SetVA009_PaymentMethod_ID(VA009_PaymentMethod_ID);
+                        }
+
                         //	Link to Batch
                         if (batch != null)
                         {
@@ -575,8 +603,9 @@ namespace VAdvantage.Model
                                 batch.Save();	//	new
                             payment.SetC_PaymentBatch_ID(batch.GetC_PaymentBatch_ID());
                         }
+
                         //	Link to Invoice
-                        MPaySelectionLine[] psls = check.GetPaySelectionLines(false);
+                        psls = check.GetPaySelectionLines(false);
                         _log.Fine("confirmPrint - " + check + " (#SelectionLines=" + psls.Length + ")");
                         if (check.GetQty() == 1 && psls != null && psls.Length == 1)
                         {
@@ -584,7 +613,7 @@ namespace VAdvantage.Model
                             _log.Fine("Map to Invoice " + psl);
                             //
                             payment.SetC_Invoice_ID(psl.GetC_Invoice_ID());
-                            if (_CountColumnIPS > 0)
+                            if (psl.Get_ColumnIndex("C_InvoicePaySchedule_ID") > 0)
                             {
                                 payment.SetC_InvoicePaySchedule_ID(psl.GetC_InvoicePaySchedule_ID());
                             }
@@ -595,13 +624,15 @@ namespace VAdvantage.Model
                                 payment.SetOverUnderAmt(psl.GetDifferenceAmt());
                         }
                         else
+                        {
                             payment.SetDiscountAmt(Env.ZERO);
+                        }
                         payment.SetWriteOffAmt(Env.ZERO);
 
                         if (psls.Length == 1)
                         {
                             MPaySelectionLine psl = psls[0];
-                            if (_CountColumnIPS > 0)
+                            if (psl.Get_ColumnIndex("C_InvoicePaySchedule_ID") > 0)
                             {
                                 payment.SetC_InvoicePaySchedule_ID(psl.GetC_InvoicePaySchedule_ID());
                             }
@@ -615,7 +646,49 @@ namespace VAdvantage.Model
 
                         if (!payment.Save())
                         {
-                            _log.Log(Level.SEVERE, "Payment not saved: " + payment);
+                            error = "Payment not saved: " + payment;
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null)
+                            {
+                                error += ", " + pp.GetName();
+                            }
+                            _log.Log(Level.SEVERE, error);
+                        }
+                        else
+                        {
+
+                            #region Payment Allocation Code
+                            //MPaySelectionLine[] psl = check.GetPaySelectionLinesAgainsPaySelection();
+                            if (psls.Length > 1)
+                            {
+                                for (int j = 0; j < psls.Length; j++)
+                                {
+                                    MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
+                                    PayAlocate.SetC_Payment_ID(payment.GetC_Payment_ID());
+                                    PayAlocate.SetC_Invoice_ID(psls[j].GetC_Invoice_ID());
+                                    PayAlocate.SetC_InvoicePaySchedule_ID(psls[j].GetC_InvoicePaySchedule_ID());
+                                    PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
+                                    PayAlocate.SetAmount(psls[j].GetPayAmt());
+                                    PayAlocate.SetInvoiceAmt(psls[j].GetOpenAmt());
+                                    PayAlocate.SetAD_Client_ID(psls[j].GetAD_Client_ID());
+                                    PayAlocate.SetAD_Org_ID(psls[j].GetAD_Org_ID());
+                                    PayAlocate.SetWriteOffAmt(0);
+                                    PayAlocate.SetOverUnderAmt(0);
+                                    if (!PayAlocate.Save())
+                                    {
+                                        //_log.Log(Level.SEVERE, Msg.GetMsg(check.GetCtx(), "VA009_PymentAllocateNotSaved") + payment);
+                                        error = Msg.GetMsg(check.GetCtx(), "VA009_PymentAllocateNotSaved") + payment;
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        if (pp != null)
+                                        {
+                                            error += ", " + pp.GetName();
+                                        }
+                                        _log.Log(Level.SEVERE, error);
+                                        break;
+                                    }
+                                }
+                            }
+                            #endregion
                         }
                         //
                         int C_Payment_ID = payment.Get_ID();
@@ -631,7 +704,13 @@ namespace VAdvantage.Model
                             payment.ProcessIt(DocActionVariables.ACTION_COMPLETE);
                             if (!payment.Save())
                             {
-                                _log.Log(Level.SEVERE, "Payment not saved: " + payment);
+                                error = "Payment not saved: " + payment;
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null)
+                                {
+                                    error += ", " + pp.GetName();
+                                }
+                                _log.Log(Level.SEVERE, error);
                             }
                         }
 
@@ -641,9 +720,13 @@ namespace VAdvantage.Model
                     {
                         payment = new MPayment(check.GetCtx(), 0, null);
                         payment.SetAD_Org_ID(check.GetAD_Org_ID());
+                        payment.SetC_DocType_ID(false);
                         //
                         if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
+                        {
                             payment.SetBankCheck(check.GetParent().GetC_BankAccount_ID(), false, check.GetDocumentNo());
+                            payment.SetCheckDate(check.GetParent().GetPayDate());                   // Set Check date from Payment selection date
+                        }
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_CreditCard))
                             payment.SetTenderType(X_C_Payment.TENDERTYPE_CreditCard);
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_DirectDeposit)
@@ -667,7 +750,7 @@ namespace VAdvantage.Model
                             payment.SetC_PaymentBatch_ID(batch.GetC_PaymentBatch_ID());
                         }
                         //	Link to Invoice
-                        MPaySelectionLine[] psls = check.GetPaySelectionLines(false);
+                        psls = check.GetPaySelectionLines(false);
                         _log.Fine("confirmPrint - " + check + " (#SelectionLines=" + psls.Length + ")");
                         if (check.GetQty() == 1 && psls != null && psls.Length == 1)
                         {
@@ -687,7 +770,48 @@ namespace VAdvantage.Model
                         payment.SetWriteOffAmt(Env.ZERO);
                         if (!payment.Save())
                         {
-                            _log.Log(Level.SEVERE, "Payment not saved: " + payment);
+                            error = "Payment not saved: " + payment;
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null)
+                            {
+                                error += ", " + pp.GetName();
+                            }
+                            _log.Log(Level.SEVERE, error);
+                        }
+                        else
+                        {
+                            #region Payment Allocation Code
+                            //MPaySelectionLine[] psl = check.GetPaySelectionLinesAgainsPaySelection();
+                            if (psls.Length > 1)
+                            {
+                                for (int j = 0; j < psls.Length; j++)
+                                {
+                                    MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
+                                    PayAlocate.SetC_Payment_ID(payment.GetC_Payment_ID());
+                                    PayAlocate.SetC_Invoice_ID(psls[j].GetC_Invoice_ID());
+                                    PayAlocate.SetC_InvoicePaySchedule_ID(psls[j].GetC_InvoicePaySchedule_ID());
+                                    PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
+                                    PayAlocate.SetAmount(psls[j].GetPayAmt());
+                                    PayAlocate.SetInvoiceAmt(psls[j].GetOpenAmt());
+                                    PayAlocate.SetAD_Client_ID(psls[j].GetAD_Client_ID());
+                                    PayAlocate.SetAD_Org_ID(psls[j].GetAD_Org_ID());
+                                    PayAlocate.SetWriteOffAmt(0);
+                                    PayAlocate.SetOverUnderAmt(0);
+                                    if (!PayAlocate.Save())
+                                    {
+                                        //_log.Log(Level.SEVERE, Msg.GetMsg(check.GetCtx(), "VA009_PymentAllocateNotSaved") + payment);
+                                        error = Msg.GetMsg(check.GetCtx(), "VA009_PymentAllocateNotSaved") + payment;
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        if (pp != null)
+                                        {
+                                            error += ", " + pp.GetName();
+                                        }
+                                        _log.Log(Level.SEVERE, error);
+                                        break;
+                                    }
+                                }
+                            }
+                            #endregion
                         }
                         //
                         int C_Payment_ID = payment.Get_ID();
@@ -703,7 +827,13 @@ namespace VAdvantage.Model
                             payment.ProcessIt(DocActionVariables.ACTION_COMPLETE);
                             if (!payment.Save())
                             {
-                                _log.Log(Level.SEVERE, "Payment not saved: " + payment);
+                                error = "Payment not saved: " + payment;
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null)
+                                {
+                                    error += ", " + pp.GetName();
+                                }
+                                _log.Log(Level.SEVERE, error);
                             }
                         }
                     }
@@ -966,12 +1096,54 @@ namespace VAdvantage.Model
                 {
                     idr.Close();
                 }
-                dt = null; }
+                dt = null;
+            }
             //
             _lines = new MPaySelectionLine[list.Count];
             _lines = list.ToArray();
             return _lines;
         }
+
+
+        //public MPaySelectionLine[] GetPaySelectionLinesAgainsPaySelection()
+        //{
+        //    List<MPaySelectionLine> list = new List<MPaySelectionLine>();
+        //    String sql = "SELECT * FROM C_PaySelectionLine WHERE C_PaySelection_ID=" + GetC_PaySelection_ID() + " ORDER BY Line";
+        //    DataTable dt = null;
+        //    IDataReader idr = null;
+        //    try
+        //    {
+        //        idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+        //        dt = new DataTable();
+        //        dt.Load(idr);
+        //        idr.Close();
+
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            list.Add(new MPaySelectionLine(GetCtx(), dr, Get_TrxName()));
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        if (idr != null)
+        //        {
+        //            idr.Close();
+        //        }
+        //        log.Log(Level.SEVERE, sql, e);
+        //    }
+        //    finally
+        //    {
+        //        if (idr != null)
+        //        {
+        //            idr.Close();
+        //        }
+        //        dt = null;
+        //    }
+        //    //
+        //    _lines = new MPaySelectionLine[list.Count];
+        //    _lines = list.ToArray();
+        //    return _lines;
+        //}
 
     }
 }

@@ -1,0 +1,32 @@
+﻿<!-- saved from url=(0017)http://localhost/ -->
+<html>
+	<head>
+		<meta http-equiv=content-type content="text/html; charset=utf-8">
+	</head>
+	<body>
+		<script language="javascript">
+			function setHtml()
+			{
+				try
+				{			
+					document.write(parent.parent.opener.calDocTop);
+				}
+				catch (e)
+				{
+					if (e.number == -2147418111)
+					{
+						// this is a 'Call was rejected by callee' exception
+						// which indicates that OLE Automation timed-out when
+						// waiting for a response from the process that spawned
+						// this window.  The process is probably busy so delay
+                                                // delay a bit, then try again.
+	
+						setTimeout("setHtml();", 50);
+					}
+				}
+			}
+
+			setHtml();
+		</script>
+	</body>
+</html>

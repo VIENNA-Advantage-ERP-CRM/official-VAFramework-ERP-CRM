@@ -329,11 +329,11 @@ namespace VAdvantage.Model
             }
         }
 
-        /**
-         * 	Before Save
-         *	@param newRecord new
-         *	@return true
-         */
+        /// <summary>
+        ///  Before Save
+        /// </summary>
+        /// <param name="newRecord">new</param>
+        /// <returns>true, on Save</returns>
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
@@ -353,6 +353,16 @@ namespace VAdvantage.Model
                           @" AND IsActive = 'Y' AND C_InvoicePaySchedule_ID = " + GetC_InvoicePaySchedule_ID(), null, Get_Trx())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
+                    return false;
+                }
+            }
+
+            // check schedule is hold or not, if hold then no to save record
+            if (Get_ColumnIndex("C_InvoicePaySchedule_ID") >= 0 && GetC_InvoicePaySchedule_ID() > 0)
+            {
+                if (payment.IsHoldpaymentSchedule(GetC_InvoicePaySchedule_ID()))
+                {
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PaymentisHold"));
                     return false;
                 }
             }

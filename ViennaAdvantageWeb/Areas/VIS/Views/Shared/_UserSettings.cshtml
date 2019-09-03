@@ -15,21 +15,23 @@
 
     <!-- App Top Header START -->
     <div class="container-fluid header">
-@if(!ViewBag.disableMenu)
-{
-        <ul class="vis-topMenu">
-            <li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-menu" title="@GetMsg((string)ViewBag.culture, "AppMenu")" id="vis_appMenu">App Menu</a></li>
-            <li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-Info-Home" title="@GetMsg((string)ViewBag.culture, "InfoWindow")">Info</a></li>
-            @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-alerts" title="Alerts">Alerts</a><span class="vis-notify-counter">55</span></li>*@
-            @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-call" title="@GetMsg((string)ViewBag.culture, "VA048_CallingInterface")" id="vis_appCall">Call</a></li>*@
-        </ul>
-}
-else
-{
-        <ul class="vis-topMenu vis-menuHeaderLogo" style="display:none;margin:5px 0 0 0">
-         <li><img src="~/Areas/VIS/Images/logo.jpg" /></li>
-        </ul>
-}
+        @if (!ViewBag.disableMenu)
+        {
+            <ul class="vis-topMenu">
+                <li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-menu" title="@GetMsg((string)ViewBag.culture, "AppMenu") @GetMsg((string)ViewBag.culture, "Shct_AppMenu")" id="vis_appMenu">App Menu</a></li>
+                <li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-Info-Home" title="@GetMsg((string)ViewBag.culture, "InfoWindow")">Info</a></li>
+                @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-alerts" title="Alerts">Alerts</a><span class="vis-notify-counter">55</span></li>*@
+                @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-call" title="@GetMsg((string)ViewBag.culture, "VA048_CallingInterface")" id="vis_appCall">Call</a></li>*@
+            </ul>
+        }
+        else
+        {
+            <ul class="vis-topMenu vis-menuHeaderLogo" style="display: none; margin: 5px 0 0 0">
+                <li>
+                    <img src="~/Areas/VIS/Images/logo.jpg" /></li>
+            </ul>
+        }
+
         <div class="vis-clouddaysleft">
             <p id="vis_cloud_daysleft"></p>
         </div>
@@ -40,22 +42,22 @@ else
             <li id="vis_userDisplayName"><span style="cursor: pointer" id="vis_userName">@User.Identity.Name</span>
                 @*
                 <div class="vis-div-userAvatar">*@
-                    @if (ViewBag.UserPic != null)
+                @if (ViewBag.UserPic != null)
+                {
+                    if (ViewBag.UserPic != "NoRecordFound" && ViewBag.UserPic != "FileDoesn'tExist")
                     {
-                        if (ViewBag.UserPic != "NoRecordFound" && ViewBag.UserPic != "FileDoesn'tExist")
-                        {
-                        <img id="vis_LoginUserImage" src="@ViewBag.UserPic" class="vis-userAvatar" />                
-                        }
-                        else
-                        {
-                        <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
-                        }
+                    <img id="vis_LoginUserImage" src="@ViewBag.UserPic" class="vis-userAvatar" />                
                     }
                     else
                     {
-                        <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
+                    <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
                     }
-                    @*
+                }
+                else
+                {
+                    <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
+                }
+                @*
                 </div>*@
 
 
@@ -64,7 +66,7 @@ else
                 @using (Html.BeginForm("LogOff", "Account", new { area = "VIS" }, FormMethod.Post, new { id = "logoutForm" }))
                 {
                     @Html.AntiForgeryToken() 
-                    <a href="javascript:document.getElementById('logoutForm').submit()" class="vis-icons-menuBar vis-icon-logout">Log Out</a>
+                    <a href="javascript:document.getElementById('logoutForm').submit()" class="vis-icons-menuBar vis-icon-logout" title="@GetMsg((string)ViewBag.culture, "Shct_LogOut")">Log Out</a>
                 }
             </li>
         </ul>

@@ -98,21 +98,28 @@ namespace VAdvantage.Process
                     //
                     MField field = new MField(tab);
                     field.SetColumn(column);
+                    field.SetMRIsDisplayed("Y");
                     if (column.IsKey())
+                    {
                         field.SetIsDisplayed(false);
+                        field.SetMRIsDisplayed("N");
+                    }
                     if (column.GetColumnName().ToString() == "AD_Client_ID")
                     {
                         field.SetSeqNo(10);
+                        field.SetMRSeqNo(10);
                     }
                     if (column.GetColumnName().ToString()=="AD_Org_ID")
                     {
                         field.SetIsSameLine(true);
                         field.SetSeqNo(20);
+                        field.SetMRSeqNo(20);
                     }
                     //Export_ID Check  [Hide Export Field]
                     if (column.GetColumnName().ToString() == "Export_ID")
                     {
                         field.SetIsDisplayed(false);
+                        field.SetMRIsDisplayed("N");
                     }
 
                     if (field.Save())

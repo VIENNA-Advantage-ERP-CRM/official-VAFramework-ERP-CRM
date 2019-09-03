@@ -560,7 +560,16 @@ namespace VIS.Controllers
 
 
         #region Create Line From
-
+        /// <summary>
+        /// Is used to get data based on sql query
+        /// </summary>
+        /// <param name="sql">query</param>
+        /// <param name="keyColumnName">Header Table Name</param>
+        /// <param name="tableName">pick record from the respective table</param>
+        /// <param name="recordID">Record ID (Header Table ID)</param>
+        /// <param name="pageNo">page no</param>
+        /// <param name="ctx">context</param>
+        /// <returns>class object of LinesData</returns>
         public LinesData GetData(string sql, string keyColumnName, string tableName, int recordID, int pageNo, VAdvantage.Utility.Ctx ctx)
         {
             LinesData _iData = new LinesData();
@@ -582,6 +591,26 @@ namespace VIS.Controllers
                 DataObject item = null;
                 List<object> values = null;
                 int recid = 0;
+
+                //
+                int C_InvoicePaymentTerm_ID = 0; // invoice header payment term
+                bool IsInvoicePTAdvance = false; // payment term binded on Invoice is advance or not
+
+                // get invoice header payment tern and is advance or not
+                if (keyColumnName == "C_Invoice_ID")
+                {
+                    DataSet ds = DB.ExecuteDataset(@"SELECT c_paymentterm.c_paymentterm_ID,
+                                    SUM(  CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS IsAdvance
+                                    FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID    = C_PaySchedule.c_paymentterm_ID
+                                    WHERE c_paymentterm.c_paymentterm_ID = (SELECT c_paymentterm_ID FROM C_Invoice WHERE C_Invoice_ID = " + recordID + @" )
+                                    GROUP BY c_paymentterm.c_paymentterm_ID ");
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        C_InvoicePaymentTerm_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["c_paymentterm_ID"]);
+                        IsInvoicePTAdvance = Convert.ToInt32(ds.Tables[0].Rows[0]["IsAdvance"]) > 0 ? true : false;
+                    }
+                }
+
                 for (int i = 0; i < data.Tables[0].Rows.Count; i++)  //columns
                 {
                     int recordid = 0;
@@ -593,11 +622,29 @@ namespace VIS.Controllers
                     recid += 1;
                     item = new DataObject();
                     item.recid = recid;
-                    item.Quantity = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["quantity"]);                    
+                    item.Quantity = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["quantity"]);
                     item.QuantityEntered = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["qtyenter"]);
                     item.C_UOM_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["uom"]);
                     item.M_Product_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["product"]);
                     item.M_AttributeSetInstance_ID = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
+
+                    //
+                    if (data.Tables[0].Columns.Contains("C_PaymentTerm_ID"))
+                    {
+                        if (data.Tables[0].Rows[i]["C_PaymentTerm_ID"] != DBNull.Value)
+                        {
+                            item.C_PaymentTerm_ID = Convert.ToInt32(data.Tables[0].Rows[i]["C_PaymentTerm_ID"]);
+                            item.PaymentTermName = Convert.ToString(data.Tables[0].Rows[i]["PaymentTermName"]);
+                            item.IsAdvance = Convert.ToInt32(data.Tables[0].Rows[i]["IsAdvance"]) > 0 ? true : false;
+                        }
+                    }
+                    // 
+                    if (keyColumnName == "C_Invoice_ID")
+                    {
+                        item.C_InvoicePaymentTerm_ID = C_InvoicePaymentTerm_ID;
+                        item.IsInvoicePTAdvance = IsInvoicePTAdvance;
+                    }
+
                     //Arpit Rai 20 Sept,2017
                     //item.IsDropShip = Util.GetValueOfString(data.Tables[0].Rows[i]["isdropship"]);
 
@@ -772,6 +819,7 @@ namespace VIS.Controllers
                 List<AccountObject> dyndata = new List<AccountObject>();
                 AccountObject item = null;
                 int recid = 0;
+                string desc = "";
                 for (int i = 0; i < data.Tables[0].Rows.Count; i++)  //columns
                 {
                     //int recordid = 0;
@@ -782,20 +830,27 @@ namespace VIS.Controllers
                     item = new AccountObject();
                     item.recid = recid;
                     //item.Select = false;
-                    item.Date = Util.GetValueOfString(data.Tables[0].Rows[i][0]);
-                    item.C_Payment_ID = Util.GetValueOfString(data.Tables[0].Rows[i][2]);
-                    item.C_Currency_ID = Util.GetValueOfString(data.Tables[0].Rows[i][4]);
-                    item.Amount = Util.GetValueOfDecimal(data.Tables[0].Rows[i][5]);
-                    item.ConvertedAmount = Util.GetValueOfDecimal(data.Tables[0].Rows[i][6]);
-                    item.C_BPartner_ID = Util.GetValueOfString(data.Tables[0].Rows[i][7]);
-                    item.Type = Util.GetValueOfString(data.Tables[0].Rows[i][8]);
-                    item.C_Payment_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i][1]);
-                    item.C_Currency_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i][3]);
+                    item.Date = Util.GetValueOfString(data.Tables[0].Rows[i]["DateTrx"]);
+                    item.C_Payment_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["DocumentNo"]);
+                    item.C_Currency_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["ISO_Code"]);
+                    item.Amount = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PayAmt"]);
+                    item.ConvertedAmount = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["ConvertedAmt"]);
+
+                    desc = Util.GetValueOfString(data.Tables[0].Rows[i]["Description"]);
+                    if (desc != null && desc.Length > 50)
+                    {
+                        desc.Substring(0, 50);
+                    }
+                    item.Description = desc;
+                    item.C_BPartner_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["Name"]);
+                    item.Type = Util.GetValueOfString(data.Tables[0].Rows[i]["Type"]);
+                    item.C_Payment_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["C_Payment_ID"]);
+                    item.C_Currency_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["C_Currency_ID"]);
 
 
                     int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA034_' AND IsActive='Y'"));
                     if (count > 0)
-                        item.VA034_DepositSlipNo = Util.GetValueOfString(data.Tables[0].Rows[i][9]);
+                        item.VA034_DepositSlipNo = Util.GetValueOfString(data.Tables[0].Rows[i]["VA034_DepositSlipNo"]);
                     else
                         item.VA034_DepositSlipNo = "";
                     // Change By Mohit To show trx no on create line from on bank statement
@@ -815,6 +870,9 @@ namespace VIS.Controllers
 
         public bool SaveShipmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_Locator_ID, int M_InOut_ID, int Container_ID)
         {
+            // chck pallet Functionality applicable or not
+            bool isContainerApplicable = MTransaction.ProductContainerApplicable(ctx);
+
             MOrder _order = null;
             if (C_Order_ID > 0)
             {
@@ -921,8 +979,11 @@ namespace VIS.Controllers
                             //{ JID_1096: Also check Locator while finding the line on Material receipt
                             SqlIOL += " AND NVL(M_AttributeSetInstance_ID , 0) = " + M_AttributeSetInstance_ID + " AND M_Locator_ID = " + M_Locator_ID;
                             //}
-                            // To check with containerID to get Record
-                            //SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                            if (isContainerApplicable)
+                            {
+                                // To check with containerID to get Record
+                                SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                            }
 
                             M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(SqlIOL));
                             if (M_InoutLine_ID == 0)
@@ -947,8 +1008,11 @@ namespace VIS.Controllers
                         //{ 
                         SqlIOL += " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_AttributeSetInstance_ID;
                         //}
-                        // To check with containerID to get Record
-                        //SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                        if (isContainerApplicable)
+                        {
+                            // To check with containerID to get Record
+                            SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                        }
 
                         M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(SqlIOL));
                         if (M_InoutLine_ID == 0)
@@ -958,8 +1022,11 @@ namespace VIS.Controllers
                             //{ JID_1096: Also check Locator while finding the line on Material receipt
                             SqlIOL += " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID + " AND M_Locator_ID = " + M_Locator_ID;
                             //}
-                            // To check with containerID to get Record
-                            //SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                            if (isContainerApplicable)
+                            {
+                                // To check with containerID to get Record
+                                SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                            }
 
                             M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(SqlIOL));
                             if (M_InoutLine_ID == 0)
@@ -1266,8 +1333,8 @@ namespace VIS.Controllers
                 }
                 po.Set_Value("M_Locator_ID", M_Locator_ID);
                 //To set Product Container ID 
-                //if (Container_ID > 0)
-                //    po.Set_Value("M_ProductContainer_ID", Container_ID);
+                if (isContainerApplicable && Container_ID > 0)
+                    po.Set_Value("M_ProductContainer_ID", Container_ID);
                 //iol.SetM_Locator_ID(M_Locator_ID);
 
                 if (!po.Save())
@@ -1877,6 +1944,7 @@ namespace VIS.Controllers
             public string C_Currency_ID { get; set; }
             public decimal Amount { get; set; }
             public decimal ConvertedAmount { get; set; }
+            public string Description { get; set; }
             public string C_BPartner_ID { get; set; }
             public string Type { get; set; }
             public int C_Payment_ID_K { get; set; }
@@ -1904,6 +1972,11 @@ namespace VIS.Controllers
             public int M_InOut_ID_K { get; set; }
             public int C_Invoice_ID_K { get; set; }
             public string IsDropShip { get; set; } // Arpit Rai
+            public int C_PaymentTerm_ID { get; set; }
+            public string PaymentTermName { get; set; }
+            public bool IsAdvance { get; set; }
+            public int C_InvoicePaymentTerm_ID { get; set; }
+            public bool IsInvoicePTAdvance { get; set; }
         }
 
         public class PageSetting
@@ -1937,29 +2010,29 @@ namespace VIS.Controllers
             Trx trx = null;
 
             //	Reset Selection
-            String sql = "UPDATE C_Order SET IsSelected = 'N' WHERE IsSelected='Y'"
-                + " AND AD_Client_ID=" + ctx.GetAD_Client_ID()
-                + " AND AD_Org_ID=" + ctx.GetAD_Org_ID();
+            //String sql = "UPDATE C_Order SET IsSelected = 'N' WHERE IsSelected='Y'"
+            //    + " AND AD_Client_ID=" + ctx.GetAD_Client_ID()
+            //    + " AND AD_Org_ID=" + ctx.GetAD_Org_ID();
 
-            int no = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, trx));
+            //int no = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, trx));
 
-            //log.Config("Reset=" + no);
+            //log.Config("Reset=" + no); 
 
             //	Set Selection
-            sql = "UPDATE C_Order SET IsSelected = 'Y' WHERE " + whereClause;
-            no = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, trx));
-            if (no == 0)
-            {
-                String msg = "No Invoices";     //  not translated!
-                //log.Config(msg);
-                //info.setText(msg);
-                lblStatusInfo = msg.ToString();
-                return msg.ToString();
-            }
+            //sql = "UPDATE C_Order SET IsSelected = 'Y' WHERE " + whereClause;
+            //no = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, trx));
+            //if (no == 0)
+            //{
+            //    String msg = "No Invoices";     //  not translated!
+            //    //log.Config(msg);
+            //    //info.setText(msg);
+            //    lblStatusInfo = msg.ToString();
+            //    return msg.ToString();
+            //}
             // log.Config("Set=" + no);
 
             lblStatusInfo = Msg.GetMsg(ctx, "InvGenerateGen");
-            statusBar += no.ToString();
+            //statusBar += no.ToString();
 
             //	Prepare Process
             int AD_Process_ID = 134;  // HARDCODED    C_InvoiceCreate
@@ -1977,8 +2050,8 @@ namespace VIS.Controllers
 
             //	Add Parameters
             MPInstancePara para = new MPInstancePara(instance, 10);
-            para.setParameter("Selection", "Y");
-            //para.setParameter("Selection", "N");
+            //para.setParameter("Selection", "Y");
+            para.setParameter("Selection", "N");
             if (!para.Save())
             {
                 String msg = "No Selection Parameter added";  //  not translated
@@ -1997,15 +2070,15 @@ namespace VIS.Controllers
                 return msg.ToString();
             }
 
-            //para = new MPInstancePara(instance, 30);
-            //para.setParameter("C_Order_ID", whereClause);
-            //if (!para.Save())
-            //{
-            //    String msg = "No C_Order_ID Parameter added";  //  not translated
-            //    lblStatusInfo = msg.ToString();
-            //    //log.Log(Level.SEVERE, msg);
-            //    return msg.ToString();
-            //}
+            para = new MPInstancePara(instance, 30);
+            para.setParameter("C_Order_ID", whereClause);
+            if (!para.Save())
+            {
+                String msg = "No C_Order_ID Parameter added";  //  not translated
+                lblStatusInfo = msg.ToString();
+                //log.Log(Level.SEVERE, msg);
+                return msg.ToString();
+            }
             //End Changes done for invoice generation when multiple users generate the invoices at the same time. 02-May-18
 
             ProcessCtl worker = new ProcessCtl(ctx, null, pi, trx);
@@ -2205,7 +2278,7 @@ namespace VIS.Controllers
                     else
                     {
                         qty = 0 - matchedQty;
-                    }                    
+                    }
 
                     trx = Trx.GetTrx("MatchPO" + DateTime.Now.Ticks);
 
@@ -2416,9 +2489,9 @@ namespace VIS.Controllers
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                msg += "Error";
+                msg += "Error " + e.Message;
                 if (trx != null)
                 {
                     trx.Rollback();

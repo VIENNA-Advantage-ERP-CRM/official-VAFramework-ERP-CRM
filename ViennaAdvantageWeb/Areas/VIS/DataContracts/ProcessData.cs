@@ -20,10 +20,14 @@ namespace VIS.DataContracts
         public int AD_CtxArea_ID { get; set; }
         public String IsSOTrx { get; set; }
         public String MessageText { get; set; }
+        public bool IsBackground { get; set; }
+        public bool AskUser { get; set; }
+        public bool IsCrystal { get; set; }
 
         public bool IsError { get; set; }
         public string Message { get; set; }
         public bool IsReport { get; set; }
+        public bool HasPara { get; set; }
     }
 
     /// <summary>
@@ -49,7 +53,10 @@ namespace VIS.DataContracts
 
     public class ProcessReportInfo
     {
-
+        int _record_ID;
+        string recIDs = "";
+        private bool isReport = false;
+        int _AD_Process_ID;             //2
         public int AD_PrintFormat_ID
         {
             get;
@@ -128,6 +135,44 @@ namespace VIS.DataContracts
 
         public bool IsTelerikReport { get; set; }
         public bool IsJasperReport { get; set; }
+
+        public string RecordIDs
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// record id
+        /// </summary>
+        /// <returns></returns>
+        public int RecordID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// get system will use crystal report viewer
+        /// </summary>
+        /// <returns></returns>
+        public bool IsReport
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// get process id
+        /// </summary>
+        /// <returns></returns>
+        public int AD_Process_ID
+        {
+            get;
+            set;
+        }
+
+        public string Result { get; set; }
     }
 
     public class GridReportInfo

@@ -131,6 +131,9 @@ namespace VIS.Models
         public string Description { get; set; }
         public string TableName { get; set; }
         public DateTime CDate { get; set; }
+        public bool SpecialTable { get; set; }
+        public string ProcessTableName { get; set; }
+        public int ProcessWindowID { get; set; }
     }
 
     #endregion

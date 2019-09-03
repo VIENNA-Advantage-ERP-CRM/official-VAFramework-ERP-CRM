@@ -80,6 +80,23 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
-    }
-   
+
+
+        /// <summary>
+        /// Get Price of Product
+        /// </summary>
+        /// <param name="fields">List of Parameters</param>
+        /// <returns>Data in JSON format</returns>
+        public JsonResult GetPrices(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInvoiceModel objInvoice = new MInvoiceModel();
+                retJSON = JsonConvert.SerializeObject(objInvoice.GetPrices(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+    }   
 }

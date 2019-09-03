@@ -3273,6 +3273,33 @@ namespace VAdvantage.Model
                 }
 
                 MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+
+                // when invoice having advance payment term, and lines already are created with order reference then user are not allowed to create manual line
+                // not to check this condition when record is in completed / closed / reversed / voided stage
+                if (Env.IsModuleInstalled("VA009_") && !inv.IsProcessing() &&
+                    !(inv.GetDocStatus() == "CO" || inv.GetDocStatus() == "CL" || inv.GetDocStatus() == "RE" || inv.GetDocStatus() == "VO"))
+                {
+                    bool isAdvance = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT SUM( CASE
+                            WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
+                        WHERE c_paymentterm.c_paymentterm_ID = " + inv.GetC_PaymentTerm_ID(), null, Get_Trx())) > 0 ? true : false;
+
+                    if (inv.GetC_Order_ID() > 0 && GetC_OrderLine_ID() == 0 && isAdvance)
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_CantSaveManualLine"));
+                        return false;
+                    }
+                    else if (isAdvance && GetC_OrderLine_ID() > 0)
+                    {
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_InvoiceLine_ID) FROM C_InvoiceLine WHERE NVL(C_OrderLine_ID, 0) = 0
+                        AND C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx())) > 0)
+                        {
+                            log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_CantSaveManualLine"));
+                            return false;
+                        }
+                    }
+                }
+
                 int primaryAcctSchemaCurrency = 0;
                 // get current cost from product cost on new record and when product changed
                 // currency conversion also required if order has different currency with base currency
@@ -3375,7 +3402,7 @@ namespace VAdvantage.Model
                             decimal qtyInv = Util.GetValueOfDecimal(DB.ExecuteScalar(invQry, null, Get_TrxName()));
                             if (receivedQty < qtyInv + QtyEntered)
                             {
-                                log.SaveError("Error", Msg.GetMsg(GetCtx(), "InvoiceQtyGreater"));
+                                log.SaveError("", Msg.GetMsg(GetCtx(), "InvoiceQtyGreater"));
                                 return false;
                             }
                         }
@@ -3726,6 +3753,17 @@ namespace VAdvantage.Model
                         log.Fine("Lines -> #" + no);
                     }
                 }
+
+                // when purchase order having setting as "Hold payment" then need to set "Hold payment" on Invoice header also.
+                // calling - when IsHoldPayment column exist, Purchase side record, not in processing (like prepareit, completeit..) , not a hold payment Invoice
+                if (inv.Get_ColumnIndex("IsHoldPayment") > 0 && !inv.IsSOTrx() && !inv.IsProcessing() && !inv.IsHoldPayment())
+                {
+                    if (!UpdateHoldPayment())
+                    {
+                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_HoldPaymentNotUpdated")); ;
+                        return false;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -3835,6 +3873,28 @@ namespace VAdvantage.Model
             _parent = null;
 
             return no == 1;
+        }
+
+        /// <summary>
+        /// Update Invoice as Hold Payment or not based on order selected on respective Invoice
+        /// </summary>
+        /// <returns>True, In case when record updated successfully or when no record found as Hold payment Order</returns>
+        private bool UpdateHoldPayment()
+        {
+            String sql = @"SELECT DISTINCT COALESCE(SUM(
+                          CASE WHEN IsHoldPayment!= 'N' THEN 1 ELSE 0 END) , 0) AS IsHoldPayment
+                        FROM C_InvoiceLine INNER JOIN C_OrderLine ON C_InvoiceLine.C_OrderLine_ID=C_OrderLine.C_OrderLine_ID
+                        INNER JOIN C_Order ON C_OrderLine.C_Order_ID = C_Order.C_Order_ID
+                        WHERE C_InvoiceLine.C_Invoice_ID =  " + GetC_Invoice_ID();
+            int no = DataBase.DB.GetSQLValue(Get_Trx(), sql, null);
+            if (no > 0)
+            {
+                no = DB.ExecuteQuery("UPDATE C_Invoice SET IsHoldPayment = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                log.Fine("Hold Payment Updated as TRUE -> #" + no);
+                if (no <= 0)
+                    return false;
+            }
+            return true;
         }
 
         // Create or Update Child Tax
@@ -3996,7 +4056,7 @@ namespace VAdvantage.Model
                             {
                                 //	Calculate total & base
                                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                                {                                    
+                                {
                                     total = Decimal.Add(total, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["LineNetAmt"]));
                                     dr.Add(ds.Tables[0].Rows[i]);
                                 }
@@ -4023,7 +4083,7 @@ namespace VAdvantage.Model
                                 double result = 0;
 
                                 for (int i = 0; i < dr.Count; i++)
-                                {                                    
+                                {
                                     mrPrice = Util.GetValueOfDecimal(dr[i]["LineNetAmt"]);
 
                                     //iol = (MInvoiceLine)list[i];
@@ -4055,16 +4115,16 @@ namespace VAdvantage.Model
                                     {
                                         pp = VLogger.RetrieveError();
                                         if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
-                                        {                                            
+                                        {
                                             return pp.GetName();
                                         }
                                         else
-                                        {                                           
+                                        {
                                             return Msg.GetMsg(GetCtx(), "LandedCostAllocNotSaved");
                                         }
                                     }
                                     inserted++;
-                                }                                
+                                }
 
                                 log.Info("Inserted " + inserted);
                                 AllocateLandedCostRounding();

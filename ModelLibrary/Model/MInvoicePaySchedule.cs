@@ -300,6 +300,14 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 SetProcessing(false);
+
+                // when schedile is not paid and invoice hedaer having "Hold Payment", then set "Hold payment" on schedule also
+                if (Get_ColumnIndex("IsHoldPayment") > 0 && (GetC_Payment_ID() == 0 && GetC_CashLine_ID() == 0))
+                {
+                    String sql = "SELECT IsHoldPayment FROM C_Invoice WHERE C_Invoice_ID = " + GetC_Invoice_ID();
+                    String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                    SetIsHoldPayment(IsHoldPayment.Equals("Y"));
+                }
             }
             return true;
         }
@@ -332,7 +340,7 @@ namespace VAdvantage.Model
                     if (GetVA009_OrderPaySchedule_ID() > 0 && GetC_Payment_ID() > 0)
                     {
                         DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y', C_Payment_ID=" + GetC_Payment_ID() +
-                                        @" where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID());
+                                        @" where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
                     }
                 }
                 else
@@ -347,7 +355,7 @@ namespace VAdvantage.Model
                     {
                         if (GetC_Payment_ID() > 0)
                         {
-                            DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y', C_Payment_ID=" + GetC_Payment_ID() + " where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID());
+                            DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y', C_Payment_ID=" + GetC_Payment_ID() + " where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
                         }
                     }
                 }

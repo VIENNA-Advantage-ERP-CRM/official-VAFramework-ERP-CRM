@@ -589,6 +589,58 @@ public int GetC_Year_ID() {Object ii = Get_Value("C_Year_ID");if (ii == null) re
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
+        /** Set Reversal.
+        @param IsReversal This is a reversing transaction */
+        public void SetIsReversal(Boolean IsReversal)
+        {
+            Set_Value("IsReversal", IsReversal);
+        }
+        /** Get Reversal.
+        @return This is a reversing transaction */
+        public Boolean IsReversal()
+        {
+            Object oo = Get_Value("IsReversal");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            } return false;
+        }
+        /** Set Reversal Document.
+        @param ReversalDoc_ID Reference of its original document */
+        public void SetReversalDoc_ID(int ReversalDoc_ID)
+        {
+            if (ReversalDoc_ID <= 0) Set_Value("ReversalDoc_ID", null);
+            else
+                Set_Value("ReversalDoc_ID", ReversalDoc_ID);
+        }
+        /** Get Reversal Document.
+        @return Reference of its original document */
+        public int GetReversalDoc_ID()
+        {
+            Object ii = Get_Value("ReversalDoc_ID");
+            if (ii == null) return 0;
+            return Convert.ToInt32(ii);
+        }
+
+        /** Set Temp Document No.
+        @param TempDocumentNo Temp Document No for this Document */
+        public void SetTempDocumentNo(String TempDocumentNo)
+        {
+            if (TempDocumentNo != null && TempDocumentNo.Length > 30)
+            {
+                log.Warning("Length > 30 - truncated");
+                TempDocumentNo = TempDocumentNo.Substring(0, 30);
+            }
+            Set_Value("TempDocumentNo", TempDocumentNo);
+        }
+        /** Get Temp Document No.
+        @return Temp Document No for this Document */
+        public String GetTempDocumentNo()
+        {
+            return (String)Get_Value("TempDocumentNo");
+        }
     }
 
 }
