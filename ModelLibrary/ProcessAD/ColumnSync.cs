@@ -169,7 +169,7 @@ namespace VAdvantage.Process
             }
 
             int no = 0;
-            if (sql.IndexOf("; ") == -1)
+            if (sql.IndexOf(";") == -1)
             {
                 //no = 
                 //ExecuteQuery.ExecuteNonQuery(sql, false, Get_Trx());
@@ -212,8 +212,13 @@ namespace VAdvantage.Process
             return sql + "; " + r;
         }	//	doIt
 
+        public void SetAD_Column_ID(int AD_Column_ID)
+        {
+            p_AD_Column_ID = AD_Column_ID;
+        }
 
-        private String createFK()
+        DataSet dsMetaData = null;
+        public String createFK()
         {
             String returnMessage = "";
             if (p_AD_Column_ID == 0)
@@ -287,7 +292,7 @@ namespace VAdvantage.Process
             }
 
             SqlParameter[] pstmt = null;
-            DataSet ds = null;
+
             try
             {
                 /*Find foreign key relation in Database
@@ -311,14 +316,16 @@ namespace VAdvantage.Process
 
                 /* Get foreign key information from DatabaseMetadata
                  * */
-                ds = md.GetForeignKeys(catalog, schema, tableName);
-                md.Dispose();
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                if (dsMetaData == null)
                 {
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    dsMetaData = md.GetForeignKeys(catalog, schema, tableName);
+                }
+                if (dsMetaData != null && dsMetaData.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < dsMetaData.Tables[0].Rows.Count; i++)
                     {
 
-                        Dictionary<String, String> fkcolumnDetail = md.GetForeignColumnDetail(ds.Tables[0].Rows[i]);
+                        Dictionary<String, String> fkcolumnDetail = md.GetForeignColumnDetail(dsMetaData.Tables[0].Rows[i]);
                         // string sql = "SELECT column_name FROM user_cons_columns WHERE constraint_name='" + ds.Tables[0].Rows[i]["FOREIGN_KEY_CONSTRAINT_NAME"].ToString() + "'";
                         //string fkcolumnName = Util.GetValueOfString(DB.ExecuteScalar(sql));
 
@@ -337,7 +344,7 @@ namespace VAdvantage.Process
                 pstmt = new SqlParameter[1];
                 pstmt[0] = new SqlParameter("@param", column.Get_ID());
 
-                ds = DB.ExecuteDataset(fk, pstmt, Get_Trx());
+                DataSet ds = DB.ExecuteDataset(fk, pstmt, Get_Trx());
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -494,6 +501,7 @@ namespace VAdvantage.Process
 
         }
 
+   
 
     }
 }

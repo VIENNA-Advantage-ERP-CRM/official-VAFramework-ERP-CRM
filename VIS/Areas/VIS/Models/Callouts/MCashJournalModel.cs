@@ -78,6 +78,26 @@ namespace VIS.Models
             return retValue;
         }
 
+        /// <summary>
+        /// To get beginning balance
+        /// </summary>
+        /// <param name="ctx"> Context Object </param>
+        /// <param name="fields">Ids of Org, Client and Cashbook</param>
+        /// <returns>beginning balance</returns>
+        public decimal GetBeginningBalCalc(Ctx ctx, string fields)
+        {
+            string[] paramValue = fields.Split(',');
+            int C_CashBook_ID = Util.GetValueOfInt(paramValue[0]);
+            int AD_Client_ID = Util.GetValueOfInt(paramValue[1]);
+            int AD_Org_ID = Util.GetValueOfInt(paramValue[2]);
+            string sql = "SELECT EndingBalance FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID + " AND" +
+             " AD_Client_ID=" + AD_Client_ID + " AND AD_Org_ID=" + AD_Org_ID + " AND " +
+             "c_cash_id IN (SELECT Max(c_cash_id) FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID
+             + "AND AD_Client_ID=" + AD_Client_ID + " AND AD_Org_ID=" + AD_Org_ID + ") AND Processed='Y'";
+
+            return Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
+        }
+
     }
 
 }

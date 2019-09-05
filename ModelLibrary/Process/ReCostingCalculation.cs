@@ -3137,7 +3137,10 @@ namespace VAdvantage.Process
                                     }
                                 }
                             }
-                            catch { }
+                            catch (Exception exProductionExecution)
+                            {
+                                _log.Info("Error Occured during Production Execution costing " + exProductionExecution.ToString());
+                            }
 
 
                             #endregion
@@ -3440,7 +3443,10 @@ namespace VAdvantage.Process
                                     }
                                 }
                             }
-                            catch { }
+                            catch (Exception exProductionExecution)
+                            {
+                                _log.Info("Error Occured during Production Execution costing " + exProductionExecution.ToString());
+                            }
 
 
                             #endregion
@@ -5917,13 +5923,13 @@ namespace VAdvantage.Process
                                                  WHERE  M_Product_ID IN 
                                                  (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                     if (countRecord > 0)
-                        countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 
-                                          WHERE VAMFG_M_WrkOdrTransaction_ID IN ( 
-                                           SELECT VAMFG_M_WrkOdrTransaction_ID FROM VAMFG_M_WrkOdrTrnsctionLine 
-                                            WHERE M_Product_ID IN 
-                                             (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
-                    else
-                        countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction SET   iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 
+                        countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' 
+                                                              WHERE VAMFG_M_WrkOdrTransaction_ID IN ( 
+                                                               SELECT VAMFG_M_WrkOdrTransaction_ID FROM VAMFG_M_WrkOdrTrnsctionLine 
+                                                                WHERE M_Product_ID IN 
+                                                                 (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
+
+                    countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction SET   iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 
                                                          WHERE  M_Product_ID IN 
                                                          ( SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                 }
@@ -6012,12 +6018,12 @@ namespace VAdvantage.Process
                     countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTrnsctionLine SET  iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 
                                                  WHERE M_Product_ID IN  (" + productID + " ) ", null, Get_Trx());
                     if (countRecord > 0)
-                        countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 
-                                                        WHERE VAMFG_M_WrkOdrTransaction_ID IN ( 
-                                                         SELECT VAMFG_M_WrkOdrTransaction_ID FROM VAMFG_M_WrkOdrTrnsctionLine
-                                                          WHERE  M_Product_ID IN  (" + productID + " ) )", null, Get_Trx());
-                    else
-                        countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 
+                        countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' 
+                                                                            WHERE VAMFG_M_WrkOdrTransaction_ID IN ( 
+                                                                             SELECT VAMFG_M_WrkOdrTransaction_ID FROM VAMFG_M_WrkOdrTrnsctionLine
+                                                                              WHERE  M_Product_ID IN  (" + productID + " ) )", null, Get_Trx());
+                    //else
+                    countRecord = DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 
                                                         WHERE  M_Product_ID IN  (" + productID + " )", null, Get_Trx());
                 }
 
@@ -7680,8 +7686,8 @@ namespace VAdvantage.Process
                            movementLine.GetM_Product_ID(), movementLine.GetM_AttributeSetInstance_ID(), Get_Trx(), locatorTo.GetM_Warehouse_ID());
 
                         DB.ExecuteQuery("UPDATE M_MovementLine SET  CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                            @" , ToCurrentCostPrice = CASE WHEN ToCurrentCostPrice <> 0 THEN ToCurrentCostPrice ELSE " + toCurrentCostPrice + @"
-                                                WHERE M_MovementLine_ID = " + movementLine.GetM_MovementLine_ID(), null, Get_Trx());
+                            @" END , ToCurrentCostPrice = CASE WHEN ToCurrentCostPrice <> 0 THEN ToCurrentCostPrice ELSE " + toCurrentCostPrice + @"
+                                                END  WHERE M_MovementLine_ID = " + movementLine.GetM_MovementLine_ID(), null, Get_Trx());
                     }
                     #endregion
 

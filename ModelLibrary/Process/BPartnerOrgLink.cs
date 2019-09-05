@@ -110,7 +110,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			org.SetDescription (bp.GetDescription());
             if (!org.Save())
             {
-                throw new Exception("Organization not saved");
+                return GetRetrievedError(org, "Organization not saved");
+                //throw new Exception("Organization not saved");
             }
 		}
 		else	//	check if linked to already
@@ -148,7 +149,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			wh = new MWarehouse(org);
             if (!wh.Save())
             {
-                throw new Exception("Warehouse not saved");
+                return GetRetrievedError(wh, "Warehouse not saved");
+                //throw new Exception("Warehouse not saved");
             }
 		}
 		//	Create Locator
@@ -164,7 +166,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		oInfo.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
         if (!oInfo.Save(Get_Trx()))
         {
-            throw new Exception("Organization Info not saved");
+            return GetRetrievedError(oInfo, "Organization Info not saved");
+            //throw new Exception("Organization Info not saved");
         }
 		
 		//	Update BPartner
@@ -177,7 +180,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Save BP
         if (!bp.Save())
         {
-            throw new Exception("Business Partner not updated");
+            return GetRetrievedError(bp, "Business Partner not updated");
+            //throw new Exception("Business Partner not updated");
         }
 		
 		//	Limit to specific Role

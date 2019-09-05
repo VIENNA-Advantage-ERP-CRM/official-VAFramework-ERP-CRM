@@ -1542,6 +1542,7 @@ namespace VAdvantage.Utility
             this.IsSendFromClient = sendFromClient;
             string username = null;
             string password = null;
+            string uName = null;   //By Sukhwinder on 3rd Jan, 2018, for getting FromName.
             int smtpport = 0;
             bool IsSmtpAuthorization = false;
             _ctx = ctx;
@@ -1549,6 +1550,12 @@ namespace VAdvantage.Utility
             MUserMailConfigration userConfig = new MUserMailConfigration(ctx, mailConfigID, null);
             username = userConfig.GetSmtpUsername();
             password = userConfig.GetSmtpPassword();
+
+
+            //By Sukhwinder on 3rd Jan, 2018, for getting FromName.
+            MUser user1 = new MUser(ctx, userConfig.GetAD_User_ID(), null);
+            uName = user1.GetName();
+            //
 
             SetSmtpHost(userConfig.GetSmtpHost());
             _isSmtpTLS = userConfig.IsSmtpIsSsl();
@@ -1564,7 +1571,7 @@ namespace VAdvantage.Utility
             if (string.IsNullOrEmpty(fromEMail))
             {
                 fromEMail = username;
-                fromName = username;
+                fromName = uName;   //username to Uname
             }
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(GetSmtpHost()) || sendFromClient)
             {
@@ -1590,7 +1597,7 @@ namespace VAdvantage.Utility
                     username = client.GetRequestUser();
                     password = client.GetRequestUserPW();
                     fromEMail = username;
-                    fromName = username;
+                    fromName = client.GetName();   //username to client.GetName()
                 }
             }
 

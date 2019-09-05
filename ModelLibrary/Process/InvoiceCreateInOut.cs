@@ -105,14 +105,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (ord.GetC_BPartner_ID() > 0)
             {
                 ship = new MInOut(invoice, _C_DocType_ID, null, _M_Warehouse_ID);
+                // Change by Mohit Asked by Amardeep sir 02/03/2016
+                ship.SetPOReference(invoice.GetPOReference());
+                // End
                 if (!ship.Save())
                 {
-                    throw new ArgumentException("@SaveError@ Receipt");
+                    return GetRetrievedError(ship, "@SaveError@ Receipt");
+                   // throw new ArgumentException("@SaveError@ Receipt");
                 }
             }
             else
             {
-                throw new ArgumentException("@InvoiceNotLinkedWithPO@");
+                return GetRetrievedError(ship, "InvoiceNotLinkedWithPO");
+                //throw new ArgumentException("@InvoiceNotLinkedWithPO@");
             }
             /*
              MInOut ship = new MInOut(invoice, _C_DocType_ID, null, _M_Warehouse_ID);
@@ -138,13 +143,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 if (!sLine.Save())
                 {
-                    throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");
+                    return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
+                    //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");
                 }
                 //
                 invoiceLine.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
                 if (!invoiceLine.Save())
                 {
-                    throw new ArgumentException("@SaveError@ @C_InvoiceLine_ID@");
+                    return GetRetrievedError(invoiceLine, "@SaveError@ @C_InvoiceLine_ID@");
+                    //throw new ArgumentException("@SaveError@ @C_InvoiceLine_ID@");
                 }
             }
             return ship.GetDocumentNo();

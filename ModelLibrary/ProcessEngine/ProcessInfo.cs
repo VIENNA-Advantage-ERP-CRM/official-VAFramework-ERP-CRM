@@ -116,7 +116,7 @@ namespace VAdvantage.ProcessEngine
         private int _AD_ReportMaster_ID;
         private bool useCrysalReportViewer = false;
         private bool isReport = false;
-        private bool isBackGround = false;
+
         private Dictionary<string, string> ctxLocal = new Dictionary<string, string>();
 
         public Dictionary<String, Object> ToList()
@@ -156,7 +156,6 @@ namespace VAdvantage.ProcessEngine
             lst.Add("AD_ReportView_ID", _AD_ReportView_ID);
             lst.Add("UseCrystalReportViewer", useCrysalReportViewer);
             lst.Add("IsReport", isReport);
-            lst.Add("IsBackground", isBackGround);
             return lst;
         }
 
@@ -197,7 +196,7 @@ namespace VAdvantage.ProcessEngine
 
             info._ad_window_ID = Util.GetValueOfInt(lst["AD_Window_ID"]);
             info._windowNo = Util.GetValueOfInt(lst["WindowNo"]);
-            info.isBackGround = Util.GetValueOfBool(lst["IsBackground"]); ;
+
             return info;
         }
 
@@ -425,25 +424,6 @@ namespace VAdvantage.ProcessEngine
         public void SetIsReport(bool isRep)
         {
             isReport = isRep;
-        }
-
-
-        /// <summary>
-        /// Get If process will execute in background thread
-        /// </summary>
-        /// <returns></returns>
-        public bool GetIsBackground()
-        {
-            return isBackGround;
-        }
-
-        /// <summary>
-        /// Set If process will execute in background thread
-        /// </summary>
-        /// <param name="useCRV"></param>
-        public void SetIsBackground(bool IsBackground)
-        {
-            isBackGround = IsBackground;
         }
 
 

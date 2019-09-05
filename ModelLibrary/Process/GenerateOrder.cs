@@ -13,6 +13,7 @@ using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.Logging;
 using VAdvantage.ProcessEngine;
+using VAdvantage.Model;
 
 namespace ViennaAdvantageServer.Process
 {
@@ -42,38 +43,58 @@ namespace ViennaAdvantageServer.Process
             _C_Project_ID = GetRecord_ID();
         } //	prepare
 
-        /** Generate Order  
-        */
+
+        /// <summary>
+        /// Generate Sales Order  
+        /// </summary>
+        /// <returns>Process Message</returns>
         protected override String DoIt()
         {
 
             Int32 value = 0;
             string msg = "";
+            ValueNamePair vp = null;
+            MBPartner bp = null;
+            MOrderLine ol = null;
+
             log.Info("C_Project_ID=" + _C_Project_ID);
             if (_C_Project_ID == 0)
             {
                 throw new ArgumentException("C_Project_ID == 0");
             }
-            VAdvantage.Model.MProject fromProject = new VAdvantage.Model.MProject(GetCtx(), _C_Project_ID, Get_TrxName());
+            MProject fromProject = new MProject(GetCtx(), _C_Project_ID, Get_TrxName());
             if (fromProject.GetGenerate_Order().Trim() == "Y")
             {
                 throw new ArgumentException("Sales Order already generated");
             }
-            VAdvantage.Model.MOrder order = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_TrxName());
+
+            // if Business Partner or Prospect is not selected then gives error
+            if (fromProject.GetC_BPartner_ID() == 0 && fromProject.GetC_BPartnerSR_ID() == 0)
+            {
+                return Msg.GetMsg(GetCtx(), "SelectBP/Prospect");
+            }
+
+            // if Business Partner/Prospect Location is not selected then gives error
+            if (fromProject.GetC_BPartner_Location_ID() == 0)
+            {
+                return Msg.GetMsg(GetCtx(), "SelectBPLocation");
+            }
+
+            MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
             order.SetAD_Client_ID(fromProject.GetAD_Client_ID());
             order.SetAD_Org_ID(fromProject.GetAD_Org_ID());
             C_Bpartner_id = fromProject.GetC_BPartner_ID();
             C_Bpartner_Location_id = fromProject.GetC_BPartner_Location_ID();
             C_BPartnerSR_ID = fromProject.GetC_BPartnerSR_ID();
-            // MBPartner bp = new MBPartner(GetCtx(), C_Bpartner_id, Get_TrxName());
-            VAdvantage.Model.MBPartnerLocation bpartnerloc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), C_Bpartner_Location_id, Get_TrxName());
-            String currentdate = DateTime.Now.ToString();
-            String sqlprjln = "select c_projectline_id from c_projectline where c_project_id=" + _C_Project_ID + "";
-            C_ProjectLine_ID = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln));
+            
+            MBPartnerLocation bpartnerloc = new MBPartnerLocation(GetCtx(), C_Bpartner_Location_id, Get_TrxName());
+            //String currentdate = DateTime.Now.ToString();
+            String sqlprjln = "SELECT COUNT(C_ProjectLine_ID) FROM C_ProjectLine WHERE C_Project_ID=" + _C_Project_ID;
+            C_ProjectLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln, null, Get_TrxName()));
             if (C_ProjectLine_ID != 0)
             {
-                order.SetDateOrdered(Convert.ToDateTime(currentdate));
-                order.SetDatePromised(Convert.ToDateTime(currentdate));
+                order.SetDateOrdered(DateTime.Now.ToLocalTime());
+                order.SetDatePromised(DateTime.Now.ToLocalTime());
                 if (C_Bpartner_id != 0)
                 {
                     order.SetC_BPartner_ID(fromProject.GetC_BPartner_ID());
@@ -90,14 +111,13 @@ namespace ViennaAdvantageServer.Process
                 }
                 if (C_BPartnerSR_ID != 0)
                 {
-                    String sqlcust = "update c_bpartner set iscustomer='Y', isprospect='N' where c_bpartner_id=" + C_BPartnerSR_ID + "";
+                    String sqlcust = "UPDATE C_BPartner SET IsCustomer='Y', IsProspect='N' WHERE C_BPartner_ID=" + C_BPartnerSR_ID;
                     value = DB.ExecuteQuery(sqlcust, null, Get_TrxName());
                     if (value == -1)
                     {
-
+                        return Msg.GetMsg(GetCtx(), "BPartnerNotSaved");
                     }
-                    //bp.SetIsCustomer(true);
-                    //bp.SetIsProspect(false);
+
                     order.SetC_BPartner_ID(fromProject.GetC_BPartnerSR_ID());
 
                     if (bpartnerloc.IsShipTo() == true)
@@ -111,69 +131,56 @@ namespace ViennaAdvantageServer.Process
                         order.SetBill_User_ID(fromProject.GetAD_User_ID());
                     }
                 }
-                // String sql = "select c_doctype_id from c_doctype where name = 'Standard Order'";
 
-                String sql = "select c_doctype_id from c_doctype where docbasetype = 'SOO' and docsubtypeso = 'SO' and isreturntrx = 'N' and ad_client_id = " + GetCtx().GetAD_Client_ID();
-                int Doctype_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql));
-                order.SetM_PriceList_ID(Util.GetValueOfInt(fromProject.GetM_PriceList_ID()));
-                //String sqlmpricelist = "select m_pricelist_id from m_pricelist where name='Export'";
-                //int MPriceList_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlmpricelist));
-                //if (MPriceList_id == order.GetM_PriceList_ID())
-                //{
-                //    String sqlconversiontype = "select c_conversiontype_id from c_conversiontype where value = 'C'";
-                //    int C_ConversionType_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlconversiontype));
-                //    order.SetC_ConversionType_ID(C_ConversionType_id);
-                //}
+                String sql = "SELECT C_DocType_ID FROM C_DocType WHERE DocBaseType = 'SOO' AND DocSubTypeSO = 'SO' AND IsReturnTrx = 'N' AND IsActive = 'Y' AND AD_Client_ID = "
+                            + GetAD_Client_ID() + " AND AD_Org_ID IN (0, " + GetAD_Org_ID() + ") ORDER BY  AD_Org_ID DESC";
+                int Doctype_id = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                order.SetM_PriceList_ID(fromProject.GetM_PriceList_ID());
+
                 order.SetC_Project_ID(GetRecord_ID());
                 if (fromProject.GetSalesRep_ID() > 0)
                 order.SetSalesRep_ID(fromProject.GetSalesRep_ID());
                 order.SetC_Currency_ID(fromProject.GetC_Currency_ID());
                 if (C_Bpartner_id != 0)
                 {
-                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_Bpartner_id, Get_TrxName());
+                    bp = new MBPartner(GetCtx(), C_Bpartner_id, Get_TrxName());
                     if (bp.GetC_Campaign_ID() == 0 && fromProject.GetC_Campaign_ID() > 0)
                         bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    //bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
+                    //bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
                         order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
-
                     }
 
                     if (!bp.Save())
                     {
-                        log.SaveError("CampaignIDtNotSaved", "");
-                        return Msg.GetMsg(GetCtx(), "CampaignIDtNotSaved");
+
+                        log.SaveError("BPartnerNotSaved", "");
+                        return Msg.GetMsg(GetCtx(), "BPartnerNotSaved");
                     }
                 }
                 else
                 {
-                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_BPartnerSR_ID, Get_TrxName());
+                    bp = new MBPartner(GetCtx(), C_BPartnerSR_ID, Get_TrxName());
                     if (bp.GetC_Campaign_ID() == 0 && fromProject.GetC_Campaign_ID() > 0)
                         bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    //bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
+                    //bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
                         order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
-
                     }
 
                     if (!bp.Save())
                     {
-                        log.SaveError("CampaignIDtNotSaved", "");
-                        return Msg.GetMsg(GetCtx(), "CampaignIDtNotSaved");
+                        log.SaveError("BPartnerNotSaved", "");
+                        return Msg.GetMsg(GetCtx(), "BPartnerNotSaved");
                     }
                 }
-                //if (bp.GetC_PaymentTerm_ID() != 0)
-                //{
-                //    order.SetPaymentMethod(bp.GetPaymentRule());
-                //    order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
 
-                //}
                 order.SetFreightCostRule("I");
                 if (order.GetC_Campaign_ID() == 0 && fromProject.GetC_Campaign_ID() > 0)
                     order.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
@@ -185,15 +192,25 @@ namespace ViennaAdvantageServer.Process
                 order.SetFreightCostRule("I");
                 if (!order.Save())
                 {
-                    log.SaveError("SaleOrdertNotSaved", "");
-                    return Msg.GetMsg(GetCtx(), "SaleOrdertNotSaved");
+                    Get_TrxName().Rollback();
+                    vp = VLogger.RetrieveError();
+                    if (vp != null)
+                    {
+                        msg = vp.GetName();
+                    }
+                    else
+                    {
+                        msg = Msg.GetMsg(GetCtx(), "SaleOrderNotSaved");
+                    }
+                    log.SaveError("SaleOrderNotSaved", "");
+                    return msg;
                 }
                 //Order Lines
                 int count = 0;
-                VAdvantage.Model.MProjectLine[] lines = fromProject.GetLines();
+                MProjectLine[] lines = fromProject.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(order);
+                    ol = new MOrderLine(order);
                     ol.SetLine(lines[i].GetLine());
                     ol.SetDescription(lines[i].GetDescription());
                     ol.SetM_Product_ID(lines[i].GetM_Product_ID(), true);
@@ -206,6 +223,21 @@ namespace ViennaAdvantageServer.Process
                     {
                         count++;
                     }
+                    else
+                    {
+                        Get_TrxName().Rollback();
+                        vp = VLogger.RetrieveError();
+                        if (vp != null)
+                        {
+                            msg = vp.GetName();
+                        }
+                        else
+                        {
+                            msg = Msg.GetMsg(GetCtx(), "OrderLineNotSaved");
+                        }
+                        log.SaveError("OrderLineNotSaved", "");
+                        return msg;
+                    }
                 }
                 fromProject.SetC_Order_ID(order.GetC_Order_ID());
                 fromProject.SetC_BPartner_ID(fromProject.GetC_BPartnerSR_ID());
@@ -214,6 +246,7 @@ namespace ViennaAdvantageServer.Process
 
                 if (!fromProject.Save())
                 {
+                    Get_TrxName().Rollback();
                     log.SaveError("ProjectNotSaved", "");
                     return Msg.GetMsg(GetCtx(), "ProjectNotSaved");
                 }
@@ -221,7 +254,7 @@ namespace ViennaAdvantageServer.Process
                 return Msg.GetMsg(GetCtx(), "OrderGenerationDone");
             }
             else
-                msg = Msg.GetMsg(GetCtx(), "No Lines");
+                msg = Msg.GetMsg(GetCtx(), "NoLines");
             return msg;
         }
     }

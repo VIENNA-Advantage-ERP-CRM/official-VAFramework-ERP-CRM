@@ -45,6 +45,8 @@ namespace ViennaAdvantage.Process
 
         /** Movement Line				*/
         private MMovementLine _line = null;
+        /**is container applicable */
+        private bool isContainerApplicable = false;
 
         /// <summary>
         /// Prepare - e.g., Get Parameters.
@@ -62,7 +64,7 @@ namespace ViennaAdvantage.Process
                 else if (name.Equals("M_LocatorTo_ID"))
                     _m_LocatorTo_ID = para[i].GetParameterAsInt();
                 else if (name.Equals("M_Product_ID"))
-                    _m_product_ID = (String)para[i].GetParameter();
+                    _m_product_ID = para[i].GetParameter().ToString();
                 else if (name.Equals("M_Product_Category_ID"))
                     _m_Product_Category_ID = para[i].GetParameterAsInt();
                 else if (name.Equals("QtyRange"))
@@ -91,6 +93,10 @@ namespace ViennaAdvantage.Process
                 throw new SystemException("Not found: M_Movement_ID=" + _m_Movement_ID);
             if (_movement.IsProcessed())
                 throw new SystemException("@M_Movement_ID@ @Processed@");
+
+            // is used to check Container applicable into system
+            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+
             //
             String sqlQry = "";
             if (_deleteOld)
@@ -126,14 +132,29 @@ namespace ViennaAdvantage.Process
                 log.Fine("'0' Inserted #" + no);
             }
 
-            StringBuilder sql = new StringBuilder(
-                "SELECT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID,"
-                + " s.qtyOnHand, p.M_AttributeSet_ID "
-                + "FROM M_Product p"
-                + " INNER JOIN M_Storage s ON (s.M_Product_ID=p.M_Product_ID)"
-                + " INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) "
-                + "WHERE l.M_Warehouse_ID=" + _movement.GetDTD001_MWarehouseSource_ID()
-                + " AND p.IsActive='Y' AND p.IsStocked='Y' and p.ProductType='I'");
+            StringBuilder sql = null;
+            if (!isContainerApplicable)
+            {
+                sql = new StringBuilder(
+                    "SELECT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID,"
+                    + " s.qtyOnHand, p.M_AttributeSet_ID, 0 AS M_ProductContainer_ID "
+                    + "FROM M_Product p"
+                    + " INNER JOIN M_Storage s ON (s.M_Product_ID=p.M_Product_ID)"
+                    + " INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) "
+                    + "WHERE l.M_Warehouse_ID=" + _movement.GetDTD001_MWarehouseSource_ID()
+                    + " AND p.IsActive='Y' AND p.IsStocked='Y' and p.ProductType='I'");
+            }
+            else
+            {
+                sql = new StringBuilder(
+                      "SELECT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID,"
+                      + " NVL(SUM(s.Qty) , 0) AS qtyOnHand , p.M_AttributeSet_ID, s.M_ProductContainer_ID "
+                      + "FROM M_Product p"
+                      + " INNER JOIN M_ContainerStorage s ON (s.M_Product_ID=p.M_Product_ID)"
+                      + " INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) "
+                      + "WHERE l.M_Warehouse_ID=" + _movement.GetDTD001_MWarehouseSource_ID()
+                      + " AND p.IsActive='Y' AND p.IsStocked='Y' and p.ProductType='I'");
+            }
             //
             if (_m_Locator_ID != 0)
                 sql.Append(" AND s.M_Locator_ID=" + _m_Locator_ID);
@@ -147,29 +168,50 @@ namespace ViennaAdvantage.Process
 
             //	Do not overwrite existing records
             if (!_deleteOld)
+            {
                 sql.Append(" AND NOT EXISTS (SELECT * FROM M_MovementLine il "
                 + "WHERE il.M_Movement_ID=" + _m_Movement_ID
                 + " AND il.M_Product_ID=s.M_Product_ID"
                 + " AND il.M_Locator_ID=s.M_Locator_ID"
-                + " AND COALESCE(il.M_AttributeSetInstance_ID,0)=COALESCE(s.M_AttributeSetInstance_ID,0))");
-            //	+ " AND il.M_AttributeSetInstance_ID=s.M_AttributeSetInstance_ID)");
+                + " AND COALESCE(il.M_AttributeSetInstance_ID,0)=COALESCE(s.M_AttributeSetInstance_ID,0)");
+                if (!isContainerApplicable)
+                {
+                    sql.Append(@" )  ");
+                }
+                else
+                {
+                    sql.Append(@" AND COALESCE(il.M_ProductContainer_ID,0)=COALESCE(s.M_ProductContainer_ID,0) )  ");
+                }
+            }
             //
-            sql.Append(" ORDER BY l.Value, p.Value, s.qtyOnHand DESC");	//	Locator/Product
+            if (!isContainerApplicable)
+            {
+                sql.Append(" ORDER BY l.Value, p.Value, s.qtyOnHand DESC");	//	Locator/Product
+            }
+            else
+            {
+                sql.Append(@" GROUP BY s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID, p.M_AttributeSet_ID, s.M_ProductContainer_ID, s.Qty
+ORDER BY s.M_Locator_ID, s.M_Product_ID, s.Qty DESC, s.M_AttributeSetInstance_ID, p.M_AttributeSet_ID,s.M_ProductContainer_ID");	//	Locator/Product
+            }
             //
             int count = 0;
             IDataReader idr = null;
+            MProduct product = null;
             try
             {
                 idr = DB.ExecuteReader(sql.ToString(), null, Get_Trx());
                 while (idr.Read())
                 {
                     int M_Product_ID = Util.GetValueOfInt(idr[0]);
+                    product = MProduct.Get(GetCtx(), M_Product_ID);
                     int M_Locator_ID = Util.GetValueOfInt(idr[1]);
                     int M_AttributeSetInstance_ID = Util.GetValueOfInt(idr[2]);
                     Decimal qtyOnHand = Util.GetValueOfDecimal(idr[3]);
-                    if (qtyOnHand == null)
-                        qtyOnHand = Env.ZERO;
+                    //if (qtyOnHand == null) commented by manjot Because Decimal is Never equals to Null 
+                    //  qtyOnHand = Env.ZERO;
                     int M_AttributeSet_ID = Util.GetValueOfInt(idr[4]);
+                    //container
+                    int container_Id = Util.GetValueOfInt(idr[5]);
                     //
                     int compare = qtyOnHand.CompareTo(Env.ZERO);
                     if (_qtyRange == null
@@ -189,9 +231,22 @@ namespace ViennaAdvantage.Process
                         _line.SetProcessed(false);
                         _line.SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
                         _line.SetM_Product_ID(M_Product_ID);
+                        if (isContainerApplicable && _line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
+                        {
+                            _line.SetM_ProductContainer_ID(container_Id);
+                        }
+                        if (_line.Get_ColumnIndex("C_UOM_ID") > 0 && product != null)
+                        {
+                            _line.SetC_UOM_ID(product.GetC_UOM_ID());
+                        }
+                        if (_line.Get_ColumnIndex("QtyEntered") > 0)
+                        {
+                            _line.SetQtyEntered(qtyOnHand);
+                        }
                         if (!_line.Save())
                         {
-                            log.Info("Movement Line Not Created for M_Product_ID = " + M_Product_ID + " M_AttributeSetInstance =  " + M_AttributeSetInstance_ID);
+                            return GetRetrievedError(_line, "Movement Line Not Created for M_Product_ID = " + M_Product_ID + " M_AttributeSetInstance =  " + M_AttributeSetInstance_ID);
+                            //log.Info("Movement Line Not Created for M_Product_ID = " + M_Product_ID + " M_AttributeSetInstance =  " + M_AttributeSetInstance_ID);
                         }
                         else
                         {

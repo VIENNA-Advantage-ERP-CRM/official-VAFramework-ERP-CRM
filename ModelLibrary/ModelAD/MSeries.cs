@@ -978,7 +978,15 @@ namespace VAdvantage.Model
                     IDataReader dr = DataBase.DB.ExecuteReader("SELECT MIN(" + m_colX + ") FROM " + m_tableName);
                     while (dr.Read())
                     {
-                        alternateDate = DateTime.Parse(dr[0].ToString());
+                        try
+                        {
+                            alternateDate = DateTime.Parse(dr[0].ToString());
+                        }
+                        catch 
+                        {
+                            alternateDate = DateTime.MinValue;
+                            continue;
+                        }
                     }
                     dr.Close();
                 }
@@ -1005,7 +1013,8 @@ namespace VAdvantage.Model
                         {
                             m_date_1 = (DateTime)alternateDate;
                             dt = alternateDate.AddMonths(-1);
-                            m_date1 = dt.Month + "/01/" + dt.Year;
+                            //m_date1 = dt.Month + "/01/" + dt.Year;
+                            m_date1 = dt.Month + "/" + dt.Day + "/" + dt.Year;
                         }
                     }
 

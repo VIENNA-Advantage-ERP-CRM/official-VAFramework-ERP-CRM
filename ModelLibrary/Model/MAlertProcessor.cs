@@ -17,11 +17,29 @@ namespace VAdvantage.Model
             List<MAlertProcessor> list = new List<MAlertProcessor>();
             String sql = "SELECT * FROM AD_AlertProcessor WHERE IsActive='Y'";
 
+            //Changed By Karan.....
+            string scheduleIP = null;
             try
             {
+                string machineIP = System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+
                 DataSet ds = DB.ExecuteDataset(sql);
-                foreach(DataRow dr in ds.Tables[0].Rows)
-                    list.Add(new MAlertProcessor(ctx, dr, null));
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_AlertProcessor WHERE AD_AlertProcessor_ID =" + dr["AD_AlertProcessor_ID"] + " )"));
+
+                    //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
+                    if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
+                    {
+                        list.Add(new MAlertProcessor(new Ctx(), dr, null));
+                    }
+                }
+                ds = null;
+
+                //foreach(DataRow dr in ds.Tables[0].Rows)
+                //    list.Add(new MAlertProcessor(ctx, dr, null));
             }
             catch (Exception e)
             {

@@ -1,4 +1,47 @@
 ﻿; (function (VIS, $) {
+
+    var baseUrl = VIS.Application.contextUrl;
+    var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
+
+    var executeReader = function (sql, param, callback) {
+        var async = callback ? true : false;
+
+        var dataIn = { sql: sql, page: 1, pageSize: 0 };
+        if (param) {
+            dataIn.param = param;
+        }
+        var dr = null;
+        getDataSetJString(dataIn, async, function (jString) {
+            dr = new VIS.DB.DataReader().toJson(jString);
+            if (callback) {
+                callback(dr);
+            }
+        });
+        return dr;
+    };
+
+    //DataSet String
+    function getDataSetJString(data, async, callback) {
+        var result = null;
+       // data.sql = VIS.secureEngine.encrypt(data.sql);
+        $.ajax({
+            url: dataSetUrl,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            async: async,
+            data: JSON.stringify(data)
+        }).done(function (json) {
+            result = json;
+            if (callback) {
+                callback(json);
+            }
+            //return result;
+        });
+        return result;
+    };
+
+
     function ARequest(invoker, AD_Table_ID, Record_ID, C_BPartner_ID, iBusy, container) {
         var AD_Window_ID = 232;
         var m_where = '';
@@ -7,8 +50,8 @@
 
         this.getRequests = function (item) {
 
-            var sql = "SELECT COUNT(*) FROM AD_Table WHERE TableName='R_Request'";
-            var dr = VIS.DB.executeReader(sql, null);
+            var sql = "VIS_72";
+            var dr = executeReader(sql, null);
             while (dr.read()) {
                 if (parseInt(dr.getString(0)) == 0) {
                     VIS.ADialog.error('VIS_NotSupported');
@@ -41,13 +84,24 @@
             else if (AD_Table_ID == 539) {// MAsset.Table_ID){
                 m_where += " OR A_Asset_ID=" + Record_ID;
             }
-            sql = "SELECT Processed, COUNT(*) "
-                + "FROM R_Request WHERE " + m_where
-                + " GROUP BY Processed "
-                + "ORDER BY Processed DESC";
+            //sql = "SELECT Processed, COUNT(*) "
+            //    + "FROM R_Request WHERE " + m_where
+            //    + " GROUP BY Processed "
+            //    + "ORDER BY Processed DESC";
 
-            dr = VIS.DB.executeReader(sql, null);
+            //dr = executeReader(sql, null);
 
+
+           var dr=null;
+              $.ajax({
+                type: 'Get',
+                async: false,
+                url: VIS.Application.contextUrl + "Form/GetProcessedRequest",
+                data: { AD_Table_ID: AD_Table_ID, Record_ID: Record_ID },
+                success: function (data) {
+                    dr = new VIS.DB.DataReader().toJson(data);
+                },
+            });
 
             var inactiveCount = 0;
             var activeCount = 0;

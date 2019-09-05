@@ -184,7 +184,7 @@ namespace VAdvantage.Process
             
             //return ("Word Count = " + noWords);
 
-             return Msg.GetMsg(GetCtx(), "WordCount") + " = " + noWords;  
+             return Msg.GetMsg(GetCtx(), "Word Count") + " = " + noWords;  
         }
     }
 }

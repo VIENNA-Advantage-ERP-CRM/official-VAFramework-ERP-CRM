@@ -60,6 +60,8 @@ namespace VAdvantage.Model
         // Log						
         private static VLogger s_log = VLogger.GetVLogger(typeof(MRole).FullName);
 
+        private static readonly object _lock = new object();
+
         #endregion
 
         /**	Cache						*/
@@ -170,7 +172,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="reload">if true forces load</param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        //  [MethodImpl(MethodImplOptions.Synchronized)]
         public static MRole GetDefault(Ctx ctx, bool reload)
         {
             int AD_Role_ID = ctx.GetAD_Role_ID();
@@ -179,18 +181,20 @@ namespace VAdvantage.Model
             //    AD_User_ID = 0; //Form Preference
 
             MRole role = (MRole)s_cache.Get(AD_Role_ID);
-            if (reload || role == null)
+            lock (_lock)
             {
-                role = Get(ctx, AD_Role_ID, AD_User_ID, true);
-                s_cache[AD_Role_ID] = role;
+                if (reload || role == null)
+                {
+                    role = Get(ctx, AD_Role_ID, AD_User_ID, true);
+                    s_cache[AD_Role_ID] = role;
+                }
+                else if (role.GetAD_Role_ID() != AD_Role_ID
+                || role.GetAD_User_ID() != AD_User_ID)
+                {
+                    role = Get(ctx, AD_Role_ID, AD_User_ID, true);
+                    s_cache[AD_Role_ID] = role;
+                }
             }
-            else if (role.GetAD_Role_ID() != AD_Role_ID
-            || role.GetAD_User_ID() != AD_User_ID)
-            {
-                role = Get(ctx, AD_Role_ID, AD_User_ID, true);
-                s_cache[AD_Role_ID] = role;
-            }
-
             return role;
 
 
@@ -636,6 +640,11 @@ namespace VAdvantage.Model
             {
                 UpdateAccessRecords();
             }
+                // if user change setting of Check Document Action Access on Role window
+            else if (Is_ValueChanged("CheckDocActionAccess"))
+            {
+                AddDocActionAccess();
+            }
 
             //	Default Role changed
             if (_defaultRole != null
@@ -703,7 +712,8 @@ namespace VAdvantage.Model
                 + " AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
                 + "SELECT w.AD_Workflow_ID, " + roleClientOrgUser
                 + "FROM AD_Workflow w "
-                + "WHERE AccessLevel IN ";
+                + "WHERE AccessLevel IN ";           
+
 
             /**
              *	Fill AD_xx_Access
@@ -756,22 +766,74 @@ namespace VAdvantage.Model
             int wfDel = DataBase.DB.ExecuteQuery("DELETE FROM AD_Workflow_Access" + whereDel, null, Get_TrxName());
             int wf = DataBase.DB.ExecuteQuery(sqlWorkflow + roleAccessLevel, null, Get_TrxName());
 
+            // called function to add Document action access
+            string daAccess = AddDocActionAccess();
+
             log.Fine("AD_Window_ID=" + winDel + "+" + win
                 + ", AD_Process_ID=" + procDel + "+" + proc
                 + ", AD_Form_ID=" + formDel + "+" + form
-                + ", AD_Workflow_ID=" + wfDel + "+" + wf);
+                + ", AD_Workflow_ID=" + wfDel + "+" + wf
+                + daAccess);
 
             LoadAccess(true);
             return "@AD_Window_ID@ #" + win
                 + " -  @AD_Process_ID@ #" + proc
                 + " -  @AD_Form_ID@ #" + form
-                + " -  @AD_Workflow_ID@ #" + wf;
+                + " -  @AD_Workflow_ID@ #" + wf
+                + daAccess;
+                
         }
 
+        /// <summary>
+        /// Add Access in Document Action Access Table if Manual checkbox is false 
+        /// and Check Document Action Access checkbox is true on Role window
+        /// </summary>
+        /// <returns>String Message</returns>
+        public string AddDocActionAccess()
+        {
+            if (IsManual())
+                return "";
+
+            string sqlcheck = "SELECT COUNT(AD_Role_ID) FROM AD_Document_Action_Access WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Role_ID = " + GetAD_Role_ID();
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(sqlcheck));
+
+            // Check applied if any record found on Document Action Access, then no need to insert all records again, user will do that manually
+            if (count <= 0)
+            {
+                String sqlDocAction = "INSERT INTO AD_Document_Action_Access "
+                    + "(AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
+                    + "C_DocType_ID , AD_Ref_List_ID, AD_Role_ID) "
+                    + "(SELECT "
+                    + GetAD_Client_ID() + ",0,'Y', SysDate,"
+                    + GetUpdatedBy() + ", SysDate," + GetUpdatedBy()
+                    + ", doctype.C_DocType_ID, action.AD_Ref_List_ID, rol.AD_Role_ID "
+                    + "FROM AD_Client client "
+                    + "INNER JOIN C_DocType doctype ON (doctype.AD_Client_ID=client.AD_Client_ID) "
+                    + "INNER JOIN AD_Ref_List action ON (action.AD_Reference_ID=135) "
+                    + "INNER JOIN AD_Role rol ON (rol.AD_Client_ID=client.AD_Client_ID "
+                    + "AND rol.AD_Role_ID=" + GetAD_Role_ID()
+                    + ") LEFT JOIN AD_Document_Action_Access da ON "
+                    + "(da.AD_Role_ID=" + GetAD_Role_ID()
+                    + " AND da.C_DocType_ID=doctype.C_DocType_ID AND da.AD_Ref_List_ID=action.AD_Ref_List_ID) "
+                    + "WHERE (da.C_DocType_ID IS NULL AND da.AD_Ref_List_ID IS NULL)) ";
+
+                // change done here to assign Document Action access based on setting on Role window
+                int daAccDel = 0;
+                int daAcc = 0;
+                if (IsCheckDocActionAccess())
+                {
+                    daAccDel = DataBase.DB.ExecuteQuery("DELETE FROM AD_Document_Action_Access WHERE AD_Role_ID=" + GetAD_Role_ID(), null, Get_TrxName());
+                    daAcc = DataBase.DB.ExecuteQuery(sqlDocAction, null, Get_TrxName());
+                }
+
+                return " @DocumentAccess@ " + daAcc;
+            }
+            return "";
+        }
 
         /// <summary>
         /// Check Process Access against role
-        /// </summary>
+         /// </summary>
         /// <param name="AD_Process_ID"></param>
         /// <returns></returns>
         public bool? GetProcessAccess(int AD_Process_ID)
@@ -2692,13 +2754,19 @@ namespace VAdvantage.Model
             if (maxIndex <= 0)
                 return options;
 
+            // Code Commented // as no need to check records on Document Action Access for validation of Doc Actions in dialog
+            //string sqlcheck = "SELECT COUNT(*) FROM AD_Document_Action_Access WHERE AD_Client_ID=" + GetCtx().GetAD_Client_ID();
+            //int count = Util.GetValueOfInt(DB.ExecuteScalar(sqlcheck));
 
-            string sqlcheck = "SELECT COUNT(*) FROM AD_Document_Action_Access WHERE AD_Client_ID=" + GetCtx().GetAD_Client_ID();
-            int count = Util.GetValueOfInt(DB.ExecuteScalar(sqlcheck));
+            //if (count == 0)
+            //{
+            //    maxIndex = maxIndex;
+            //    return options;
+            //}
 
-            if (count == 0)
+            // Check applied based on the Doc Action Access Checkbox to display options in the Doc Action Dialog
+            if(!IsCheckDocActionAccess())
             {
-                maxIndex = maxIndex;
                 return options;
             }
 

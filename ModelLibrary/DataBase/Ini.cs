@@ -8,15 +8,13 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using System.Data;
 using VAdvantage.Utility;
-//using System.Data.OracleClient;
+using System.Data.OracleClient;
 using System.Data.SqlClient;
 using System.Data.Common;
 using Npgsql;
 using MySql.Data.MySqlClient;
 using System.IO;
 using VAdvantage.Logging;
-using Oracle.ManagedDataAccess.Client;
-
 //using VAdvantage.Install;
 
 
@@ -26,7 +24,7 @@ namespace VAdvantage.DataBase
     {
         /** System environment prefix                                       */
         public static String ENV_PREFIX = "env.";
-        
+
         public static String VIENNA_HOME = "VIENNA_HOME";
         // XML file name				*/
         public static String VIENNA_PROPERTY_FILE = "vienna.properties";
@@ -260,11 +258,11 @@ namespace VAdvantage.DataBase
         /// Creates connection string by picking values from XML file.
         /// </summary>
         /// <returns>The connection string for creating connection to the database</returns>
-        
+
 
 
         public static string connectionString = null;// System.Configuration.ConfigurationSettings.AppSettings["oracleConnectionString"];
-            
+
 
         public static string CreateConnectionString(VConnection vconn)
         {
@@ -324,12 +322,12 @@ namespace VAdvantage.DataBase
             //    connection_string = "Server=" + host_name + ";Port=" + port_number + ";User Id=" + user_id + ";Password=" + password + ";Database=" + database;
             //}
 
-            if(connectionString == null)
+            if (connectionString == null)
             {
                 //connectionString = System.Configuration.ConfigurationSettings.AppSettings["oracleConnectionString"].ToString();
                 connectionString = System.Configuration.ConfigurationManager.AppSettings["oracleConnectionString"].ToString();
-                
-                
+
+
                 VConnection vconn = VConnection.Get();
                 vconn.SetAttributes(connectionString);
 
@@ -377,7 +375,7 @@ namespace VAdvantage.DataBase
 
             }
 
-            
+
             return connectionString;   //return the connection string to the caller
         }
 
@@ -514,7 +512,7 @@ namespace VAdvantage.DataBase
 
         /*************************************************************************/
 
-       
+
 
         /** IsClient Internal marker            */
         private static bool _client = true;
@@ -568,7 +566,7 @@ namespace VAdvantage.DataBase
 
         //    return GetConnection(vconn);
         //}
-//#pragma warning disable 612, 618
+        //#pragma warning disable 612, 618
         //public static IDbConnection GetConnection(VConnection vconn)
         //{
         //    if (vconn.IsOracle())
@@ -582,7 +580,7 @@ namespace VAdvantage.DataBase
 
         //    return null;
         //}
-//#pragma warning restore 612, 618
+        //#pragma warning restore 612, 618
 
         public static bool IsCacheWindow()
         {
@@ -676,7 +674,7 @@ namespace VAdvantage.DataBase
             }
             catch (FileNotFoundException e)
             {
-                log.Warning(filename + " not found <=>" +e.Message);
+                log.Warning(filename + " not found <=>" + e.Message);
                 loadOK = false;
             }
             catch (Exception e)

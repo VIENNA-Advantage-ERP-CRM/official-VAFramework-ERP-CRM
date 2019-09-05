@@ -46,7 +46,8 @@ namespace VAdvantage.Process
                     if (!tLine.Save())
                     {
                         ds.Dispose();
-                        return Msg.GetMsg(GetCtx(), "TaxLinesNotSaved");
+                        return GetRetrievedError(tLine, "TaxLinesNotSaved");
+                        //return Msg.GetMsg(GetCtx(), "TaxLinesNotSaved");
                     }
 
                     tax.SetIncomeTaxAmount(taxAmount);
@@ -55,7 +56,8 @@ namespace VAdvantage.Process
                     {
                         ds.Dispose();
                         Rollback();
-                        return Msg.GetMsg(GetCtx(), "TaxNotSaved");
+                        return GetRetrievedError(tax, "TaxNotSaved");
+                        //return Msg.GetMsg(GetCtx(), "TaxNotSaved");
                     }
                     ds.Dispose();
                     return Msg.GetMsg(GetCtx(), "LinesGenerated");

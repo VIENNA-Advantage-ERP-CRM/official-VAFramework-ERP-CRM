@@ -78,7 +78,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		bp.SetAD_OrgBP_ID(null);
         if (!bp.Save())
         {
-            throw new ArgumentException("Business Partner not changed");
+            return GetRetrievedError(bp, "Business Partner not changed");
+            //throw new ArgumentException("Business Partner not changed");
         }
 		
 		return "OK";

@@ -72,7 +72,8 @@ namespace VAdvantage.Process
             MOrder order = new MOrder(fromProject, true, MOrder.DocSubTypeSO_OnCredit);
             order.SetDescription(order.GetDescription() + " - " + fromPhase.GetName());
             if (!order.Save())
-                throw new Exception("Could not create Order");
+                return GetRetrievedError(order, "Could not create Order");
+                //throw new Exception("Could not create Order");
 
             //	Create an order on Phase Level
             if (fromPhase.GetM_Product_ID() != 0)

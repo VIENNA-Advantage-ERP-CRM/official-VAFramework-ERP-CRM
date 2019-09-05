@@ -168,7 +168,7 @@ namespace VIS.Controllers
             {
                 sql.Append(isBaseLangess);
             }
-            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs 
+            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs
                 + " AND l.M_Product_ID>0");
 
             if (!forInvoicees)
@@ -223,12 +223,13 @@ namespace VIS.Controllers
                 {
                     sql.Append(DelivDates);
                 }
+                
                 sql.Append(" GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
-                        + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                               + "l.M_Product_ID,c.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, l.IsDropShip , o.C_PaymentTerm_ID , t.Name  ");
+                      + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
+                      + "l.M_Product_ID,c.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
             }
-
-            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0";
+            // JID_1287: Line number sequence to be maintained when we create lines from the reference of other documents.
+            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0 ORDER BY LINE";
 
             return sqlNew;
         }
@@ -612,7 +613,7 @@ namespace VIS.Controllers
                 sql += " " + isBaseLangss + " ";
             }
 
-            sql += " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
+            sql += " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID AND p.ProductType='I') "  // JID_0350: In Grid of Material Receipt need to show the items type products only
                   + " LEFT JOIN C_Invoice o ON o.C_Invoice_ID = l.C_Invoice_ID LEFT JOIN C_PaymentTerm pt ON pt.C_PaymentTerm_ID = o.C_PaymentTerm_ID "
                 + " LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
                 + " "

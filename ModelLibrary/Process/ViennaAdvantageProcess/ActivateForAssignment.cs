@@ -39,7 +39,6 @@ namespace ViennaAdvantage.Process
 
         protected override String DoIt()
         {
-
             if (S_Resource_id == 0)
             {
                 throw new ArgumentException("C_Project_ID == 0");
@@ -88,8 +87,7 @@ namespace ViennaAdvantage.Process
                             bp.SetC_BP_Group_ID(Resource.GetC_BP_Group_ID());
                             if (!bp.Save())
                             {
-                                log.SaveError("BusinessPartnerNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "BusinessPartnerNotSaved");
+                                return GetRetrievedError(bp, "BusinessPartnerNotSaved");
                             }
 
                             VAdvantage.Model.MBPartnerLocation bploc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), 0, Get_Trx());
@@ -101,8 +99,10 @@ namespace ViennaAdvantage.Process
 
                             if (!bploc.Save())
                             {
-                                log.SaveError("BusinessPartnerLocationNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "BusinessPartnerLocationNotSaved,");
+                               
+                                //log.SaveError("BusinessPartnerLocationNotSaved", "");
+                               // return "Error:- BusinessPartnerLocation" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( bploc, "BusinessPartnerLocationNotSaved"); 
                             }
                         }
                         else
@@ -124,16 +124,18 @@ namespace ViennaAdvantage.Process
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {
-                                log.SaveError("UserNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserNotSaved");
+                                //log.SaveError("UserNotSaved", "");
+                               // return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user, "UserNotSaved"); 
                             }
                             string usrname = user.GetName();
                             string Password = GenratePassword(usrname);
                             user.SetPassword(Password);
                             if (!user.Save())
                             {
-                                log.SaveError("PasswordNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "PasswordNotSaved");
+                               // log.SaveError("PasswordNotSaved", "");
+                                //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
                             int ad_role_id = Resource.GetAD_Role_ID();
                             VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
@@ -144,8 +146,9 @@ namespace ViennaAdvantage.Process
 
                             if (!userrole.Save())
                             {
-                                log.SaveError("UserRoleNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserRoleNotSaved");
+                                //log.SaveError("UserRoleNotSaved", "");
+                                //return "Error:- User Role" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( userrole,  "UserRoleNotSaved"); 
                             }
 
                             Resource.SetActivateForAssignment("Y");
@@ -170,8 +173,9 @@ namespace ViennaAdvantage.Process
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {
-                                log.SaveError("UserNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserNotSaved");
+                                //log.SaveError("UserNotSaved", "");
+                                //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user,  "UserNotSaved"); 
                             }
                             //string sqlusr = "select name from Ad_user where ad_user_id=" + user.GetAD_User_ID() + "";
                             //string usrname = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlusr));
@@ -181,8 +185,9 @@ namespace ViennaAdvantage.Process
                             user.SetPassword(Password);
                             if (!user.Save())
                             {
-                                log.SaveError("PasswordNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "PasswordNotSaved");
+                               // log.SaveError("PasswordNotSaved", "");
+                                //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user, "PasswordNotSaved"); 
                             }
 
                             int ad_role_id = Resource.GetAD_Role_ID();
@@ -194,8 +199,9 @@ namespace ViennaAdvantage.Process
 
                             if (!userrole.Save())
                             {
-                                log.SaveError("UserRoleNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserRoleNotSaved");
+                                //log.SaveError("UserRoleNotSaved", "");
+                                //return "Error:- User Role" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( userrole,  "UserRoleNotSaved"); 
                             }
 
                             Resource.SetActivateForAssignment("Y");
@@ -232,8 +238,9 @@ namespace ViennaAdvantage.Process
                             // }
                             if (!bp.Save())
                             {
-                                log.SaveError("BusinessPartnerNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "BusinessPartnerNotSaved");
+                                //log.SaveError("BusinessPartnerNotSaved", "");
+                                //return "Error:- BusinessPartner" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( bp, "BusinessPartnerNotSaved"); 
                             }
 
                             VAdvantage.Model.MBPartnerLocation bploc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), 0, Get_Trx());
@@ -253,8 +260,9 @@ namespace ViennaAdvantage.Process
 
                             if (!bploc.Save())
                             {
-                                log.SaveError("BusinessPartnerLocationNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "BusinessPartnerLocationNotSaved,");
+                                //log.SaveError("BusinessPartnerLocationNotSaved", "");
+                                //return "Error:- BusinessPartnerLocation" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( bploc, "BusinessPartnerLocationNotSaved"); 
                             }
                         }
                         else
@@ -276,8 +284,9 @@ namespace ViennaAdvantage.Process
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {
-                                log.SaveError("UserNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserNotSaved");
+                                //log.SaveError("UserNotSaved", "");
+                                //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user,  "UserNotSaved"); 
                             }
                             //string sqlusr = "select name from Ad_user where ad_user_id=" + user.GetAD_User_ID() + "";
                             //string usrname = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlusr));
@@ -286,8 +295,9 @@ namespace ViennaAdvantage.Process
                             user.SetPassword(Password);
                             if (!user.Save())
                             {
-                                log.SaveError("PasswordNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "PasswordNotSaved");
+                                //log.SaveError("PasswordNotSaved", "");
+                                //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
 
                             int ad_role_id = Resource.GetAD_Role_ID();
@@ -299,8 +309,9 @@ namespace ViennaAdvantage.Process
 
                             if (!userrole.Save())
                             {
-                                log.SaveError("UserRoleNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserRoleNotSaved");
+                                //log.SaveError("UserRoleNotSaved", "");
+                                //return "Error:- User Role" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( userrole,  "UserRoleNotSaved"); 
                             }
 
                             Resource.SetActivateForAssignment("Y");
@@ -328,8 +339,9 @@ namespace ViennaAdvantage.Process
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {
-                                log.SaveError("UserNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserNotSaved");
+                                //log.SaveError("UserNotSaved", "");
+                                //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user,  "UserNotSaved"); 
                             }
                             //string sqlusr = "select name from Ad_user where ad_user_id=" + user.GetAD_User_ID() + "";
                             //string usrname = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlusr));
@@ -338,8 +350,9 @@ namespace ViennaAdvantage.Process
                             user.SetPassword(Password);
                             if (!user.Save())
                             {
-                                log.SaveError("PasswordNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "PasswordNotSaved");
+                                //log.SaveError("PasswordNotSaved", "");
+                                //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
 
                             int ad_role_id = Resource.GetAD_Role_ID();
@@ -351,8 +364,9 @@ namespace ViennaAdvantage.Process
 
                             if (!userrole.Save())
                             {
-                                log.SaveError("UserRoleNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "UserRoleNotSaved");
+                                //log.SaveError("UserRoleNotSaved", "");
+                                //return "Error:- User Role" + "-" + pp.GetValue() + "," + pp.GetName();
+                                return GetRetrievedError( userrole,  "UserRoleNotSaved"); 
                             }
 
                             Resource.SetActivateForAssignment("Y");
@@ -381,8 +395,9 @@ namespace ViennaAdvantage.Process
             }
             if (!Resource.Save())
             {
-                log.SaveError("ResourceNotSaved", "");
-                return Msg.GetMsg(GetCtx(), "ResourceNotSaved");
+                //log.SaveError("ResourceNotSaved", "");
+                //return "Error:- Resource" + "-" + "-" + pp.GetValue() + "," + pp.GetName();
+                return GetRetrievedError( Resource, "ResourceNotSaved"); 
             }
 
 
@@ -418,7 +433,6 @@ namespace ViennaAdvantage.Process
             return password;
 
         }
-
 
     }
 }

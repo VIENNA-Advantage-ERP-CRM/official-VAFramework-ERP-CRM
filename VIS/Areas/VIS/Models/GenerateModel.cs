@@ -206,8 +206,7 @@ namespace VAdvantage.Tool
             StringBuilder start = new StringBuilder()
                 .Append("namespace " + packageName + "\n"
                     + "/** Generated Model - DO NOT CHANGE */\n");
-            //if (!packageName.Equals("org.compiere.model"))
-            //    start.Append("import org.compiere.model.*;");
+           
             start.Append("using System;"
                 + "using System.Text;"
                 + "using VAdvantage.DataBase;"

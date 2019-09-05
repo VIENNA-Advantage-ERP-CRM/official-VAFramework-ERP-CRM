@@ -1371,6 +1371,7 @@ namespace VAdvantage.Model
                 {
                     System.IO.File.Delete(encryptedfile);
                 }
+                //VAdvantage.Classes.CleanUp.Get().Start();
             }
             catch
             {
@@ -1445,11 +1446,18 @@ namespace VAdvantage.Model
             //return base.AfterSave(newRecord, success);
             if (attachmentFiles != null && attachmentFiles.Count > 0)
             {
+                string res = null;
                 for (int i = 0; i < attachmentFiles.Count; i++)
                 {
-                    CreateAttachmentLine(attachmentFiles[i].Name, attachmentFiles[i].Size, FolderKey);
+                    res = CreateAttachmentLine(attachmentFiles[i].Name, attachmentFiles[i].Size, FolderKey);
+                    if (res.Equals("False"))
+                    {
+                        Directory.Delete(System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", FolderKey));
+                        return false;
+                    }
                 }
                 Directory.Delete(System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", FolderKey));
+               
             }
             return true;
         }

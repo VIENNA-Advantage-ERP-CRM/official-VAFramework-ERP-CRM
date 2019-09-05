@@ -42,16 +42,17 @@ namespace VIS.Models
                     projID = id;
                 }
             }
-
+            //Issue ID= SI_0468 Reported by Ankita Work Done by Manjot 
+            //To get the actual value from the right field
             Sql = "SELECT PriceList, PriceStd, PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM C_Project c WHERE c.C_Project_ID = "
                 + projID + ")  AND M_Product_ID=" + ProductID;
             DataSet ds = DB.ExecuteDataset(Sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 result = new Dictionary<string, object>();
-                result["PriceList"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PriceLimit"]);
-                result["PriceStd"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PriceLimit"]);
-                result["PriceLimit"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PriceLimit"]);
+                result["PriceList"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
+                result["PriceStd"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]);
+                result["PriceLimit"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
             }
             return result;
         }
