@@ -3131,6 +3131,7 @@ namespace VAdvantage.Process
                                         //                                        }
                                         #endregion
 
+                                        _log.Info("costng calculation start for production execution for document no =  " + Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["documentno"]));
                                         CalculateCostForProduction(Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["issotrx"]));
 
                                         continue;
@@ -7791,7 +7792,7 @@ namespace VAdvantage.Process
             sql.Clear();
             if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_Description")) != null &&
                 Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_Description")).Contains("{->") &&
-                Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CI" &&
+                Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CI" ||
                 Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CR")
             {
                 sql.Append("SELECT * FROM VAMFG_M_WrkOdrTrnsctionLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
@@ -7806,7 +7807,7 @@ namespace VAdvantage.Process
                 }
                 sql.Append(" ORDER BY VAMFG_Line");
             }
-            else if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CI" &&
+            else if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CI" ||
                 Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CR")
             {
                 sql.Append("SELECT * FROM VAMFG_M_WrkOdrTrnsctionLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
@@ -7964,22 +7965,22 @@ namespace VAdvantage.Process
                     {
                         object result = "";
 
-                        object[] parametersArrayConstructor = new object[] { GetCtx(), 
-                                                                VAMFG_M_WrkOdrTransaction_ID, 
+                        object[] parametersArrayConstructor = new object[] { GetCtx(),
+                                                                VAMFG_M_WrkOdrTransaction_ID,
                                                                 Get_Trx() };
                         object classInstance = Activator.CreateInstance(type, parametersArrayConstructor);
 
                         ParameterInfo[] parameters = methodInfo.GetParameters();
                         if (parameters.Length == 9)
                         {
-                            object[] parametersArray = new object[] { GetCtx(), 
-                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("AD_Client_ID")), 
-                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("AD_Org_ID")), 
-                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("M_Product_ID")), 
-                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("M_AttributeSetInstance_ID")), 
-                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")), 
-                                                                Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("GOM01_BatchNo")), 
-                                                                Util.GetValueOfDecimal(po_WrkOdrTransaction.Get_Value("GOM01_ActualLiter")), 
+                            object[] parametersArray = new object[] { GetCtx(),
+                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("AD_Client_ID")),
+                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("AD_Org_ID")),
+                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("M_Product_ID")),
+                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("M_AttributeSetInstance_ID")),
+                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")),
+                                                                Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("GOM01_BatchNo")),
+                                                                Util.GetValueOfDecimal(po_WrkOdrTransaction.Get_Value("GOM01_ActualLiter")),
                                                                 Get_Trx() };
                             result = methodInfo.Invoke(classInstance, parametersArray);
                             if (!(bool)result)
