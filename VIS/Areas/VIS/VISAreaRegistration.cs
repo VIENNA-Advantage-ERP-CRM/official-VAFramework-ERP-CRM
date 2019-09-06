@@ -190,11 +190,8 @@ namespace VIS
                );    
                 
               
-            //styleRTL.Include("~/Areas/VIS/Content/VIS.rtl.css");
-
             //style.Include("~/Areas/VIS/Content/vis.all.min.css");
             //modScript.Include("~/areas/vis/scripts/VIS.all.min.js"); 
-            ////"~/Areas/VIS/Scripts/TestPanel.js"); 
 
             VAdvantage.ModuleBundles.RegisterScriptBundle(modScript, "VIS", -1);
             VAdvantage.ModuleBundles.RegisterStyleBundle(style, "VIS", -1);
