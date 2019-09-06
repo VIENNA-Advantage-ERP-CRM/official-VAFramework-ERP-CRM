@@ -256,7 +256,7 @@ namespace VIS.Controllers
                 StringBuilder sbTextCopy = new StringBuilder();
                 string fileName = string.Empty;
 
-                var msg = VAdvantage.Tool.GenerateModel.StartProcess("ViennaAdvantage.Model", directory, chkStatus, tableId, classType, out  sbTextCopy, out  fileName);
+                var msg = VAdvantage.Tool.GenerateModel.StartProcess("ViennaAdvantage.Model", directory, chkStatus, tableId, classType, out sbTextCopy, out fileName);
                 string contant = sbTextCopy.ToString();
                 return Json(new { contant, fileName, msg }, JsonRequestBehavior.AllowGet);
             }
@@ -601,7 +601,7 @@ namespace VIS.Controllers
                 {
                     DataSet ds = DB.ExecuteDataset(@"SELECT c_paymentterm.c_paymentterm_ID,
                                     SUM(  CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS IsAdvance
-                                    FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID    = C_PaySchedule.c_paymentterm_ID
+                                    FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' )
                                     WHERE c_paymentterm.c_paymentterm_ID = (SELECT c_paymentterm_ID FROM C_Invoice WHERE C_Invoice_ID = " + recordID + @" )
                                     GROUP BY c_paymentterm.c_paymentterm_ID ");
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
