@@ -272,17 +272,18 @@ namespace VAdvantage.Model
             if (M_ProductContainer_ID > 0)
                 sql += " AND s.M_ProductContainer_ID = " + M_ProductContainer_ID;
             sql += " AND s.M_Product_ID=" + M_Product_ID + " AND s.Qty < 0 ";
+            // PT-225, PT-224 : get record specific attribte wise which is to be selected on document
+            if (M_AttributeSetInstance_ID > 0)
+            {
+                sql += "AND s.M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+            }
+            else if (M_AttributeSetInstance_ID == 0)
+            {
+                sql += "AND (s.M_AttributeSetInstance_ID=0 OR s.M_AttributeSetInstance_ID IS NULL) ";
+            }
             if (minGuaranteeDate != null)
             {
                 sql += "AND (asi.GuaranteeDate IS NULL OR asi.GuaranteeDate>" + GlobalVariable.TO_DATE(minGuaranteeDate, true) + ")";
-                if (M_AttributeSetInstance_ID > 0)
-                {
-                    sql += "AND s.M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
-                }
-                else if (M_AttributeSetInstance_ID == 0)
-                {
-                    sql += "AND (s.M_AttributeSetInstance_ID=0 OR s.M_AttributeSetInstance_ID IS NULL) ";
-                }
                 sql += "ORDER BY l.PriorityNo DESC, asi.GuaranteeDate, s.M_AttributeSetInstance_ID";	//	Has Prior over Locator
                 if (!FiFo)
                     sql += " DESC";
