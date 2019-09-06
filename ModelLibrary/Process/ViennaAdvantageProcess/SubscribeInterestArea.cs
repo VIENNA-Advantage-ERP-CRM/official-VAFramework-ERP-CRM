@@ -74,7 +74,8 @@ namespace ViennaAdvantage.Process
                 customer.SetEMail(mail);
                 if (!customer.Save())
                 {
-                    return Msg.GetMsg(GetCtx(), "NotSubscribed");
+                    return GetRetrievedError(customer, "NotSubscribed");
+                    //return Msg.GetMsg(GetCtx(), "NotSubscribed");
                    
                 }
                 lead.SetR_InterestArea_ID(customer.GetR_InterestArea_ID());
@@ -110,7 +111,8 @@ namespace ViennaAdvantage.Process
                 Prospect.SetEMail(mail);
                 if (!Prospect.Save())
                 {
-                    return Msg.GetMsg(GetCtx(), "NotSubscribed");
+                    return GetRetrievedError(Prospect, "NotSubscribed");
+                    //return Msg.GetMsg(GetCtx(), "NotSubscribed");
                     
                 }
                 lead.SetR_InterestArea_ID(Prospect.GetR_InterestArea_ID());
@@ -141,7 +143,8 @@ namespace ViennaAdvantage.Process
                 Ilead.SetSubscribeDate(DateTime.Today);
                 if (!Ilead.Save())
                 {
-                    return Msg.GetMsg(GetCtx(), "NotSubscribed");
+                    return GetRetrievedError(Ilead, "NotSubscribed");
+                    //return Msg.GetMsg(GetCtx(), "NotSubscribed");
                   
                 }
                 lead.SetR_InterestArea_ID(Ilead.GetR_InterestArea_ID());

@@ -290,7 +290,11 @@ namespace VAdvantage.Model
         public int GetC_TaxCategory_ID()
         {
             Object ii = Get_Value("C_TaxCategory_ID");
-            if (ii == null) return 0;
+            if (ii == null)
+            {
+                MProductCategory pCat = new MProductCategory(GetCtx(), GetM_Product_Category_ID(), null);
+                return pCat.GetC_TaxCategory_ID() == null ? 0 : pCat.GetC_TaxCategory_ID();
+            }
             return Convert.ToInt32(ii);
         }
         /** Set UOM Group.

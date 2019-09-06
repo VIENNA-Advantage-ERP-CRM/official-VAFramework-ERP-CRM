@@ -178,7 +178,7 @@ namespace VAdvantage.Report
                     defaultAccum.SetAD_Client_ID(ctx.GetAD_Client_ID());
                     defaultAccum.SetAD_Org_ID(ctx.GetAD_Org_ID());
                     defaultAccum.SetC_AcctSchema_ID(C_AcctSchema_ID);
-                    defaultAccum.SetBALANCEACCUMULATION(X_Fact_Accumulation.BALANCEACCUMULATION_Daily);
+                    defaultAccum.SetBALANCEACCUMULATION(X_Fact_Accumulation.BALANCEACCUMULATION_CalendarMonth);
                     defaultAccum.SetIsActive(true);
                     defaultAccum.SetIsDefault(true);
                     defaultAccum.SetISACTIVITY(true);
@@ -242,7 +242,7 @@ namespace VAdvantage.Report
                 }
                 else
                 {
-                    dateClause = " a.DateAcct ";
+                    dateClause = " TRUNC(a.DateAcct,'MM') ";
                     _log.Fine(trunc);
                     //dateClause = " TRUNC(a.DateAcct, '" + trunc + "' ) ";
                 }

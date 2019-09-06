@@ -113,6 +113,12 @@
         if (!value)
             return "";
         mTab.setValue("DateAcct", value);
+
+        // JID_1332: Set Value in Effective Date on selection of Statement date.
+        if (mTab.getTableName() == "C_BankStatementLine") {
+            mTab.setValue("ValutaDate", value);
+        }
+
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";

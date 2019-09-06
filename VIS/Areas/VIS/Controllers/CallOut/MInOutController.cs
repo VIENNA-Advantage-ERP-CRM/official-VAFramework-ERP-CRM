@@ -106,5 +106,58 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        // Change by mohit to remove client side queries- 19 May 2017
+        public JsonResult GetDOcTypeData(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInOutModel objInOut = new MInOutModel();
+                retJSON = JsonConvert.SerializeObject(objInOut.GetDocumentTypeData(fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetWHLocator(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInOutModel objInOut = new MInOutModel();
+                retJSON = JsonConvert.SerializeObject(objInOut.GetWarehouseLocator(fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
+        // Get Product, Uom Conversion
+        public JsonResult GetUOMConv(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInOutModel objInOut = new MInOutModel();
+                objInOut.GetUOMConversion(ctx, fields);
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
+        // Get Locator from product
+
+        // Added by Bharat on 19 May 2017
+        public JsonResult GetWarehouse(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInOutModel objInOut = new MInOutModel();
+                retJSON = JsonConvert.SerializeObject(objInOut.GetWarehouse(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -79,10 +79,7 @@ namespace ViennaAdvantage.Process
         /// <returns>document no</returns>
         protected override String DoIt()
         {
-            //log.info("M_InOut_ID=" + _M_InOut_ID 
-            //    + ", M_PriceList_ID=" + _M_PriceList_ID
-            //    + ", InvoiceDocumentNo=" + _InvoiceDocumentNo);
-            //  Message Display Wrong  Done  Vikas and Assigned by Gurinder
+            StringBuilder invDocumentNo = new StringBuilder();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT  Count(*)  FROM M_Inout WHERE  ISSOTRX='Y' AND  M_Inout_ID=" + GetRecord_ID()));
             MInOut ship = null;
             if (count > 0)
@@ -135,37 +132,61 @@ namespace ViennaAdvantage.Process
                     }
                 }
             }
-            //***********************END*****************************//
+
+            // When record contain more than single order and order having different Payment term or Price List then not to generate invoices
+            if (ship.GetC_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  c_order.m_pricelist_id) +  count(distinct c_order.c_paymentterm_id) as recordcount
+                            FROM m_inoutline INNER JOIN c_orderline ON m_inoutline.c_orderline_id = c_orderline.c_orderline_id 
+                            INNER JOIN c_order ON c_order.c_order_id = c_orderline.c_order_id
+                            WHERE m_inoutline.m_inout_id  = " + _M_InOut_ID + @"  GROUP BY   m_inoutline.m_inout_id ", null, Get_Trx())) > 2)
+            {
+                if (ship.IsSOTrx())
+                {
+                    //Different Payment Terms, Price list found against the selected orders, use "Generate Invoice" process to create multiple invoices.
+                    throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_SoDifferentPayAndPrice"));
+                }
+                else
+                {
+                    //Different Payment Terms, Price list found against the selected orders
+                    throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_DifferentPayAndPrice"));
+                }
+            }
+
+            // Create Invoice Header
             MInvoice invoice = new MInvoice(ship, null);
-            //-------------Column Added by Anuj----------------------
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+
+            //Payment Management
             int _CountVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
 
-            // Code by Mohit Amortization process
-            //int _CountVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_'  AND IsActive = 'Y'"));
+            // Amortization
             int _CountVA038 = Env.IsModuleInstalled("VA038_") ? 1 : 0;
-            // End Amortization Code
 
             if (_CountVA009 > 0)
             {
-                int _PaymentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VA009_PaymentMethod_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID()));
+                int _PaymentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VA009_PaymentMethod_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+
+                // during consolidation, payment method need to set that is defined on selected business partner. 
+                // If not defined on BP then it will set from order
+                int bpPamentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT " + (ship.IsSOTrx() ? " VA009_PaymentMethod_ID " : " VA009_PO_PaymentMethod_ID ") +
+                    @" FROM C_BPartner WHERE C_BPartner_ID = " + ship.GetC_BPartner_ID(), null, Get_Trx()));
+
+                if (bpPamentMethod_ID != 0)
+                {
+                    _PaymentMethod_ID = bpPamentMethod_ID;
+                }
                 if (_PaymentMethod_ID > 0)
                 {
                     invoice.SetVA009_PaymentMethod_ID(_PaymentMethod_ID);
                 }
-
             }
-            //-------------Column Added by Anuj----------------------
 
-            // added by Amit 26-may-2016
-            //int _CountVA026 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA026_'  AND IsActive = 'Y'"));
+            // Letter Of Credit
             int _CountVA026 = Env.IsModuleInstalled("VA026_") ? 1 : 0;
             if (_CountVA026 > 0)
             {
-                MOrder order = new MOrder(GetCtx(), ship.GetC_Order_ID(), Get_Trx());
-                if (order != null && order.GetC_Order_ID() > 0)
+                int VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VA026_LCDetail_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                if (VA026_LCDetail_ID > 0)
                 {
-                    invoice.SetVA026_LCDetail_ID(order.GetVA026_LCDetail_ID());
+                    invoice.SetVA026_LCDetail_ID(VA026_LCDetail_ID);
                 }
             }
             //end
@@ -176,16 +197,21 @@ namespace ViennaAdvantage.Process
                 {
                     // Purchase Return
                     // set target document from documnet type window -- based on documnet type available on material receipt / return to vendor
-                    if (invoice.GetC_DocTypeTarget_ID() == 0)
+
+                    // JID_0779: Create AP Credit memo if we run the Generate TO process from Returm to Vendor window.
+
+                    //if (invoice.GetC_DocTypeTarget_ID() == 0)
+                    //{
+                    int C_DocTypeTarget_ID = DB.GetSQLValue(null, "SELECT C_DocTypeInvoice_ID FROM C_DocType WHERE C_DocType_ID=@param1", ship.GetC_DocType_ID());
+                    if (C_DocTypeTarget_ID > 0)
                     {
-                        int C_DocTypeTarget_ID = DB.GetSQLValue(null,
-                      "SELECT C_DocTypeInvoice_ID FROM C_DocType WHERE C_DocType_ID=@param1",
-                      ship.GetC_DocType_ID());
-                        if (C_DocTypeTarget_ID >= 0)
-                            invoice.SetC_DocTypeTarget_ID(C_DocTypeTarget_ID);
-                        else
-                            invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        invoice.SetC_DocTypeTarget_ID(C_DocTypeTarget_ID);
                     }
+                    else
+                    {
+                        invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                    }
+                    //}
                     invoice.SetIsReturnTrx(ship.IsReturnTrx());
                     invoice.SetIsSOTrx(ship.IsSOTrx());
                 }
@@ -194,8 +220,8 @@ namespace ViennaAdvantage.Process
                     // Sales Return
                     if (ship.GetC_Order_ID() >= 0)
                     {
-                        MOrder order = new MOrder(GetCtx(), ship.GetC_Order_ID(), Get_Trx());
-                        MDocType dt = MDocType.Get(GetCtx(), order.GetC_DocType_ID());
+                        int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocType_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                        MDocType dt = MDocType.Get(GetCtx(), C_DocType_ID);
                         if (dt.GetC_DocTypeInvoice_ID() != 0)
                             invoice.SetC_DocTypeTarget_ID(dt.GetC_DocTypeInvoice_ID(), true);
                         else
@@ -217,13 +243,13 @@ namespace ViennaAdvantage.Process
             }
 
             // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
-
             if (invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
             {
                 invoice.SetC_IncoTerm_ID(ship.GetC_IncoTerm_ID());
             }
             //To get Payment Rule and set the Payment method
-            if (invoice.GetPaymentRule() != "") {
+            if (invoice.GetPaymentRule() != "")
+            {
                 invoice.SetPaymentMethod(invoice.GetPaymentRule());
             }
             if (!invoice.Save())
@@ -233,7 +259,6 @@ namespace ViennaAdvantage.Process
                 if (pp != null)
                     throw new ArgumentException("Cannot save Invoice. " + pp.GetName());
                 throw new ArgumentException("Cannot save Invoice");
-                //return GetReterivedError(invoice, "Cannot save Invoice");
             }
             MInOutLine[] shipLines = ship.GetLines(false);
             DateTime? AmortStartDate = null;
@@ -245,16 +270,25 @@ namespace ViennaAdvantage.Process
             {
                 MInOutLine sLine = shipLines[i];
                 // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
-                string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty-SUM(COALESCE(li.QtyInvoiced,0)) as QtyInvoiced 
+                string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty-SUM(COALESCE(li.QtyInvoiced,0)) as QtyInvoiced, ci.DocumentNo 
                 FROM M_InOutLine ml INNER JOIN C_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID 
-                WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.M_InOutLine_ID =" + sLine.GetM_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
+                WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.M_InOutLine_ID =" + sLine.GetM_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered, ci.DocumentNo";
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    decimal qtyEntered = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][0]);
-                    decimal qtyInvoiced = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][1]);
+                    decimal qtyEntered = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyEntered"]);
+                    decimal qtyInvoiced = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyInvoiced"]);
                     if (qtyEntered <= 0)
                     {
+                        // JID_1358: Need to show document number in message if Invoice already generated for Material Receipt
+                        if (invDocumentNo.Length > 0)
+                        {
+                            invDocumentNo.Append(", " + Util.GetValueOfString(ds.Tables[0].Rows[0]["DocumentNo"]));
+                        }
+                        else
+                        {
+                            invDocumentNo.Append(Util.GetValueOfString(ds.Tables[0].Rows[0]["DocumentNo"]));
+                        }
                         ds.Dispose();
                         log.Info("Invoice Line already exist for Receipt Line ID - " + sLine.GetM_InOutLine_ID());
                         continue;
@@ -263,8 +297,6 @@ namespace ViennaAdvantage.Process
                     {
                         MInvoiceLine line = new MInvoiceLine(invoice);
                         line.SetShipLine(sLine);
-                        //line.SetQtyEntered(sLine.GetQtyEntered());
-                        //line.SetQtyInvoiced(sLine.GetMovementQty());
                         line.SetQtyEntered(qtyEntered);
                         line.SetQtyInvoiced(qtyInvoiced);
                         // Change By Mohit Amortization process -------------
@@ -272,11 +304,13 @@ namespace ViennaAdvantage.Process
                         {
                             if (line.GetM_Product_ID() > 0)
                             {
-                                MProduct pro = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
-                                if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
+                                //MProduct pro = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
+                                int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
+                                     FROM M_Product WHERE M_Product_ID = " + sLine.GetM_Product_ID(), null, Get_Trx()));
+                                if (VA038_AmortizationTemplate_ID > 0)
                                 {
-                                    line.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
+                                    line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
+                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                     AmortStartDate = null;
                                     AmortEndDate = null;
                                     if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
@@ -306,11 +340,13 @@ namespace ViennaAdvantage.Process
                             }
                             if (line.GetC_Charge_ID() > 0)
                             {
-                                MCharge charge = new MCharge(GetCtx(), sLine.GetC_Charge_ID(), Get_TrxName());
-                                if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
+                                //MCharge charge = new MCharge(GetCtx(), sLine.GetC_Charge_ID(), Get_TrxName());
+                                int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
+                                     FROM C_Charge WHERE C_Charge_ID = " + sLine.GetC_Charge_ID(), null, Get_Trx()));
+                                if (VA038_AmortizationTemplate_ID > 0)
                                 {
-                                    line.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
+                                    line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
+                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                     AmortStartDate = null;
                                     AmortEndDate = null;
                                     if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
@@ -342,7 +378,6 @@ namespace ViennaAdvantage.Process
                         // End Change Amortization process--------------
                         if (!line.Save())
                         {
-                            //return GetReterivedError(line, "Cannot save Invoice Line");
                             //SI_0708 - message was not upto the mark
                             ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
                             if (pp != null)
@@ -365,11 +400,13 @@ namespace ViennaAdvantage.Process
                     {
                         if (line.GetM_Product_ID() > 0)
                         {
-                            MProduct pro = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
-                            if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
+                            //MProduct pro = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
+                            int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
+                                     FROM M_Product WHERE M_Product_ID = " + sLine.GetM_Product_ID(), null, Get_Trx()));
+                            if (VA038_AmortizationTemplate_ID > 0)
                             {
-                                line.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
+                                line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
+                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                 AmortStartDate = null;
                                 AmortEndDate = null;
                                 if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
@@ -399,11 +436,13 @@ namespace ViennaAdvantage.Process
                         }
                         if (line.GetC_Charge_ID() > 0)
                         {
-                            MCharge charge = new MCharge(GetCtx(), sLine.GetC_Charge_ID(), Get_TrxName());
-                            if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
+                            //MCharge charge = new MCharge(GetCtx(), sLine.GetC_Charge_ID(), Get_TrxName());
+                            int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
+                                     FROM C_Charge WHERE C_Charge_ID = " + sLine.GetC_Charge_ID(), null, Get_Trx()));
+                            if (VA038_AmortizationTemplate_ID > 0)
                             {
-                                line.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
+                                line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
+                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                 AmortStartDate = null;
                                 AmortEndDate = null;
                                 if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
@@ -435,7 +474,6 @@ namespace ViennaAdvantage.Process
                     // End Change Amortization process--------------
                     if (!line.Save())
                     {
-                        //return GetReterivedError(line, "Cannot save Invoice Line");
                         //SI_0708 - message was not upto the mark
                         ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
                         if (pp != null)
@@ -566,7 +604,6 @@ namespace ViennaAdvantage.Process
 
                                 if (!line.Save())
                                 {
-                                    //return GetReterivedError(line, "Cannot save Invoice Line");
                                     //SI_0708 - message was not upto the mark
                                     ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
                                     if (pp != null)
@@ -586,8 +623,8 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-                Get_Trx().Rollback();
-                return Msg.GetMsg(GetCtx(), "InvoiceExist");
+                //Get_Trx().Rollback();
+                throw new ArgumentException(Msg.GetMsg(GetCtx(), "InvoiceExist") + ": " + invDocumentNo.ToString());
             }
         }
     }

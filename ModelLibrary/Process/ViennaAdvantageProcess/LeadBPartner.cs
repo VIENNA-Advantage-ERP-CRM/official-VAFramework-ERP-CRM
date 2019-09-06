@@ -83,7 +83,8 @@ namespace ViennaAdvantage.Process
             String retValue = lead.CreateBP();
             if (retValue != null)
             {
-                throw new SystemException(retValue);
+                return GetRetrievedError(lead, retValue);
+                //throw new SystemException(retValue);
             }
             lead.Save();
             //

@@ -42,6 +42,7 @@ namespace VAdvantage.Model
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MInOutConfirm).FullName);
 
+        ValueNamePair pp = null;
 
         /**
 	 * 	Create Confirmation or return existing one
@@ -76,6 +77,11 @@ namespace VAdvantage.Model
                 MInOutLine sLine = shipLines[i];
                 MInOutLineConfirm cLine = new MInOutLineConfirm(confirm1);
                 cLine.SetInOutLine(sLine);
+                //Arpit Start Here to Set UOM from the shipment/Receipt Line to Confirmation Lines
+                cLine.SetC_UOM_ID(sLine.GetC_UOM_ID());
+                cLine.SetTargetQty(sLine.GetQtyEntered());
+                cLine.SetConfirmedQty(sLine.GetQtyEntered());
+                //Arpit 
                 cLine.Save(ship.Get_TrxName());
             }
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
@@ -373,6 +379,22 @@ namespace VAdvantage.Model
             return _lines;
         }	//	getLines
 
+        // JID_0125_1: System should not allow to delete the Ship/Receipt confirmation if Ship/receipt reference is available.
+        /// <summary>
+        /// Before Delete - do not delete
+        ///
+        /// </summary>
+        /// <returns>false </returns>
+        protected override Boolean BeforeDelete()
+        {
+            if (GetM_InOut_ID() > 0)
+            {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "CannotDelete"));
+                return false;
+            }
+            return true;
+        }
+
         /**
          * 	Add to Description
          *	@param description text
@@ -600,6 +622,76 @@ namespace VAdvantage.Model
          */
         public String CompleteIt()
         {
+            //////By Sukhwinder on 21 Dec, 2017
+            ////#region[Prevent from completing if on hand qty not available as per requirement and disallow negative is true at warehouse. By Sukhwinder on 21 Dec, 2017]
+            ////string sql = "";
+            ////sql = "SELECT ISDISALLOWNEGATIVEINV FROM M_Warehouse WHERE M_Warehouse_ID = (SELECT M_WAREHOUSE_ID FROM M_INOUT WHERE M_INOUT_ID = " + Util.GetValueOfInt(GetM_InOut_ID()) + " )";
+            ////string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+
+            ////if (disallow.ToUpper() == "Y")
+            ////{
+            ////    int[] ioLine = MInOutLineConfirm.GetAllIDs("M_InOutLineConfirm", "M_InOutConfirm_ID  = " + GetM_InOutConfirm_ID(), Get_TrxName());                
+            ////    int m_locator_id = 0;
+            ////    int m_product_id = 0;
+            ////    StringBuilder products = new StringBuilder();
+            ////    StringBuilder locators = new StringBuilder();
+            ////    bool check = false;
+            ////    for (int i = 0; i < ioLine.Length; i++)
+            ////    {
+            ////        MInOutLineConfirm iol = new MInOutLineConfirm(Env.GetCtx(), ioLine[i], Get_TrxName());
+            ////        MInOutLine iol1 = new MInOutLine(Env.GetCtx(), iol.GetM_InOutLine_ID() , Get_TrxName());
+            ////        m_locator_id = Util.GetValueOfInt(iol1.GetM_Locator_ID());
+            ////        m_product_id = Util.GetValueOfInt(iol1.GetM_Product_ID());
+
+
+
+            ////        sql = "SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + m_product_id;
+            ////        int m_attribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+            ////        if (m_attribute_ID == 0)
+            ////        {
+            ////            sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id;
+            ////            int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+            ////            int qtyToMove = Util.GetValueOfInt(iol.GetConfirmedQty());
+            ////            if (qty < qtyToMove)
+            ////            {
+            ////                check = true;
+            ////                products.Append(m_product_id + ", ");
+            ////                locators.Append(m_locator_id + ", ");
+            ////                continue;
+            ////            }
+            ////        }
+            ////        else
+            ////        {
+            ////            sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id + " AND M_AttributeSetInstance_ID = " + iol1.GetM_AttributeSetInstance_ID();
+            ////            int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+            ////            int qtyToMove = Util.GetValueOfInt(iol.GetConfirmedQty());
+            ////            if (qty < qtyToMove)
+            ////            {
+            ////                check = true;
+            ////                products.Append(m_product_id + ",");
+            ////                locators.Append(m_locator_id + ",");
+            ////                continue;
+            ////            }
+            ////        }
+            ////    }
+            ////    if (check)
+            ////    {
+            ////        sql = "SELECT SUBSTR (SYS_CONNECT_BY_PATH (value , ', '), 2) CSV FROM (SELECT value , ROW_NUMBER () OVER (ORDER BY value ) rn, COUNT (*) over () CNT FROM "
+            ////             + " (SELECT DISTINCT value FROM m_locator WHERE M_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + "))) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1";
+            ////        string loc = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+
+            ////        sql = "SELECT SUBSTR (SYS_CONNECT_BY_PATH (Name , ', '), 2) CSV FROM (SELECT Name , ROW_NUMBER () OVER (ORDER BY Name ) rn, COUNT (*) over () CNT FROM "
+            ////            + " M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ") ) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1";
+            ////        string prod = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+
+            ////        _processMsg = Msg.GetMsg(Env.GetCtx(), "InsufficientQuantityFor: ") + prod + Msg.GetMsg(Env.GetCtx(), "OnLocators: ") + loc;
+            ////        return DocActionVariables.STATUS_DRAFTED;
+            ////    }
+            ////}
+
+            ////#endregion
+            //////
+
             //	Re-Check
             if (!_justPrepared)
             {
@@ -616,7 +708,7 @@ namespace VAdvantage.Model
             MInOutLineConfirm[] lines = GetLines(false);
 
             /* created by sunil 19/9/2016*/
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix = 'DTD001_'")) > 0)
+            if (Env.IsModuleInstalled("DTD001_"))
             {
                 MPackage package = new MPackage(GetCtx(), inout.GetM_Package_ID(), Get_Trx());
                 if (inout.GetM_Package_ID() > 0 && !package.IsDTD001_IsPackgConfirm())
@@ -639,7 +731,17 @@ namespace VAdvantage.Model
                         _processMsg = "No Split Document Type defined for: " + dt.GetName();
                         return DocActionVariables.STATUS_INVALID;
                     }
-                    SplitInOut(inout, dt.GetC_DocTypeDifference_ID(), lines);
+                    //Arpit
+                    decimal? splitQty = 0;
+                    for (Int32 j = 0; j < lines.Length; j++)
+                    {
+                        splitQty += Util.GetValueOfDecimal(lines[j].GetDifferenceQty());
+                    }
+                    //Arpit to check if there is any difference qty on line of confirmation then we create the difference doc ..google doc issues of standard
+                    if (splitQty > 0)
+                    {
+                        SplitInOut(inout, dt.GetC_DocTypeDifference_ID(), lines);
+                    }
                     _lines = null;
                 }
             }
@@ -695,7 +797,63 @@ namespace VAdvantage.Model
             }
             #endregion
 
+            // Created By Sunil 17/9/2016
+            // Complete Shipment
+            //MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+            //if (io.GetDocStatus() == DOCSTATUS_Reversed)
+            //{
+            //    GetCtx().SetContext("DifferenceQty_", "0");
+            //    VoidIt(); //To set document void if MR is aleady in reversed case
+            //    SetDocAction(DOCACTION_Void);
+            //    return DocActionVariables.STATUS_VOIDED;
+            //}
+            //else if (io.GetDocStatus() == DOCSTATUS_Completed || io.GetDocStatus() == DOCSTATUS_Closed)
+            //{
+            //    SetProcessed(true);
+            //    //Not to Complete MR/Shipment when it is already comepleted/ handled case when a completed record generates a confirmation
+            //}
+            //else
+            //{
+            MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+            SetProcessed(true);
+            if (!Save(Get_TrxName()))
+            {
+                GetCtx().SetContext("DifferenceQty_", "0");
+                Get_Trx().Rollback();
+                _processMsg = "Confirmation Not Completed";
+                return DocActionVariables.STATUS_INVALID;
+            }
+            string Status_ = io.CompleteIt();
+            if (Status_ == "CO")
+            {
+
+                io.SetProcessed(true);
+                io.SetDocStatus(DocActionVariables.STATUS_COMPLETED);
+                io.SetDocAction(DocActionVariables.ACTION_CLOSE);
+                if (io.Save(Get_TrxName()))
+                {
+                    GetCtx().SetContext("DifferenceQty_", "0"); //To set difference Qty zero in context if document get comepleted
+                }
+                else
+                {
+                    GetCtx().SetContext("DifferenceQty_", "0");
+                    Get_Trx().Rollback();
+                    // SI_0713_1 - message should be correct
+                    _processMsg = io.GetProcessMsg() + "Shipment Not Completed";
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
+            else
+            {
+                GetCtx().SetContext("DifferenceQty_", "0");
+                Get_Trx().Rollback();
+                // SI_0713_1 - message should be correct
+                _processMsg = io.GetProcessMsg() + " Shipment Not Completed";
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             //	All lines
+            bool internalInventory = false; //Arpit
             for (int i = 0; i < lines.Length; i++)
             {
                 MInOutLineConfirm confirmLine = lines[i];
@@ -703,6 +861,7 @@ namespace VAdvantage.Model
                 confirmLine.Set_TrxName(Get_TrxName());
                 if (!confirmLine.ProcessLine(inout.IsSOTrx(), GetConfirmType()))
                 {
+                    GetCtx().SetContext("DifferenceQty_", "0");
                     _processMsg = "ShipLine not saved - " + confirmLine;
                     return DocActionVariables.STATUS_INVALID;
                 }
@@ -715,11 +874,13 @@ namespace VAdvantage.Model
                 {
                     if (CreateDifferenceDoc(inout, confirmLine))
                     {
+                        internalInventory = true;
                         confirmLine.SetProcessed(true);
                         confirmLine.Save(Get_TrxName());
                     }
                     else
                     {
+                        GetCtx().SetContext("DifferenceQty_", "0");
                         log.Log(Level.SEVERE, "Scrapped=" + confirmLine.GetScrappedQty()
                             + " - Difference=" + confirmLine.GetDifferenceQty());
 
@@ -727,9 +888,25 @@ namespace VAdvantage.Model
                     }
                 }
             }	//	for all lines
-            //To freeze Quality Control Lines
 
+            //To freeze Quality Control Lines
             FreezeQualityControlLines();
+
+            //Arpit to complete the internal inventory if found any
+            if (internalInventory && Util.GetValueOfInt(GetM_Inventory_ID()) > 0)
+            {
+                MInventory intInv = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
+                intInv.CompleteIt();
+                intInv.SetDocStatus(DOCSTATUS_Completed);
+                intInv.SetDocAction(DOCACTION_Close);
+                if (!intInv.Save(Get_TrxName()))
+                {
+                    GetCtx().SetContext("DifferenceQty_", "0");
+                    Get_TrxName().Rollback();
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
+            //End Here 
             if (_creditMemo != null)
                 _processMsg += " @C_Invoice_ID@=" + _creditMemo.GetDocumentNo();
             if (_inventory != null)
@@ -743,6 +920,7 @@ namespace VAdvantage.Model
                 ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
             if (valid != null)
             {
+                GetCtx().SetContext("DifferenceQty_", "0");
                 _processMsg = valid;
                 return DocActionVariables.STATUS_INVALID;
             }
@@ -751,49 +929,16 @@ namespace VAdvantage.Model
             SetProcessed(true);
             if (!Save(Get_Trx()))
             {
+                GetCtx().SetContext("DifferenceQty_", "0");
                 Get_Trx().Rollback();
                 _processMsg = "Ship/Receipt Confirmation Not saved";
                 return DocActionVariables.STATUS_INVALID;
             }
 
-            // Created By Sunil 17/9/2016
-            // Complete Shipment
-            MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            if (io.GetDocStatus() == DOCSTATUS_Reversed)
-            {
-                VoidIt(); //To set document void if MR is aleady in reversed case
-                SetDocAction(DOCACTION_Void);
-                return DocActionVariables.STATUS_VOIDED;
-            }
-            else if (io.GetDocStatus() == DOCSTATUS_Completed || io.GetDocStatus() == DOCSTATUS_Closed)
-            {
-                SetProcessed(true);
-                //Not to Complete MR/Shipment when it is already comepleted/ handled case when a completed record generates a confirmation
-            }
-            else
-            {
-                SetProcessed(true);
-                Save(Get_TrxName());
-                io.CompleteIt();
-                if (io.GetDocStatus() == DOCSTATUS_Completed || io.GetDocStatus() == DOCSTATUS_InProgress)
-                {
-                    io.SetProcessed(true);
-                    io.SetDocStatus(DocActionVariables.STATUS_COMPLETED);
-                    io.SetDocAction(DocActionVariables.ACTION_CLOSE);
-                    if (io.Save(Get_TrxName()))
-                    {
-                    }
-                    else
-                    {
-                        Get_Trx().Rollback();
-                        _processMsg = "Shipment Not Completed";
-                        return DocActionVariables.STATUS_INVALID;
-                    }
-                }
-            }
+            //}
             //end 
             //SetProcessed(true);
-            SetDocAction(DOCACTION_Complete);
+            SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -817,7 +962,14 @@ namespace VAdvantage.Model
                 throw new Exception("Cannot save Split");
             original.AddDescription("Split: " + split.GetDocumentNo());
             if (!original.Save(Get_TrxName()))
-                throw new Exception("Cannot update original Shipment");
+            {
+                pp = VLogger.RetrieveError();
+                if (!String.IsNullOrEmpty(pp.GetName()))
+                    _processMsg = "Cannot update original Shipment, " + pp.GetName();
+                else
+                    _processMsg = "Cannot update original Shipment";
+                throw new Exception(_processMsg);
+            }
 
             //	Go through confirmations 
             for (int i = 0; i < confirmLines.Length; i++)
@@ -855,20 +1007,45 @@ namespace VAdvantage.Model
                 }
                 //End
                 //  splitLine.SetM_Locator_ID(oldLine.GetM_Locator_ID());
-
                 splitLine.SetM_Product_ID(oldLine.GetM_Product_ID());
                 splitLine.SetM_Warehouse_ID(oldLine.GetM_Warehouse_ID());
                 splitLine.SetRef_InOutLine_ID(oldLine.GetRef_InOutLine_ID());
                 splitLine.AddDescription("Split: from " + oldLine.GetMovementQty());
                 //	Qtys
                 splitLine.SetQty(differenceQty);		//	Entered/Movement
-                if (!splitLine.Save(Get_TrxName()))
-                    throw new Exception("Cannot save Split Line");
-                //	Old
+
+                /* Update QtyEntered/Qtymovement on Shipment Line to whom we are splitting*/
+                /** Otherwise system can not save splited line because system founf mote qty to be shipped from Ordered Qty **/
                 oldLine.AddDescription("Splitted: from " + oldLine.GetMovementQty());
-                oldLine.SetQty(Decimal.Subtract(oldLine.GetMovementQty(), differenceQty));
+                MProduct Product_ = new MProduct(GetCtx(), splitLine.GetM_Product_ID(), Get_TrxName());
+                if (Product_.GetC_UOM_ID() != splitLine.GetC_UOM_ID())
+                {
+                    oldLine.SetQty(Decimal.Subtract(oldLine.GetQtyEntered(), differenceQty));
+                }
+                else
+                    oldLine.SetQty(Decimal.Subtract(oldLine.GetMovementQty(), differenceQty));
                 if (!oldLine.Save(Get_TrxName()))
-                    throw new Exception("Cannot save Splited Line");
+                {
+                    pp = VLogger.RetrieveError();
+                    if (!String.IsNullOrEmpty(pp.GetName()))
+                        _processMsg = "Cannot save Splited Line, " + pp.GetName();
+                    else
+                        _processMsg = "Cannot save Splited Line";
+                    throw new Exception(_processMsg);
+                }
+                /**End**/
+
+                // Now save Splitted Document
+                if (!splitLine.Save(Get_TrxName()))
+                {
+                    pp = VLogger.RetrieveError();
+                    if (!String.IsNullOrEmpty(pp.GetName()))
+                        _processMsg = "Cannot save Split Line, " + pp.GetName();
+                    else
+                        _processMsg = "Cannot save Split Line";
+                    throw new Exception(_processMsg);
+                }
+
                 //	Update Confirmation Line
                 confirmLine.SetTargetQty(Decimal.Subtract(confirmLine.GetTargetQty(), differenceQty));
                 confirmLine.SetDifferenceQty(Env.ZERO);
@@ -950,7 +1127,17 @@ namespace VAdvantage.Model
                 }
                 MInvoiceLine line = new MInvoiceLine(_creditMemo);
                 line.SetShipLine(confirm.GetLine());
-                line.SetQty(confirm.GetDifferenceQty());	//	Entered/Invoiced
+                //line.SetQty(confirm.GetDifferenceQty());	//	Entered/Invoiced
+                //Arpit for invoice --qty should be converted while saving on invoice line
+                MInOutLine iol = new MInOutLine(GetCtx(), confirm.GetM_InOutLine_ID(), Get_TrxName());
+                MProduct _Pro = new MProduct(GetCtx(), iol.GetM_Product_ID(), Get_TrxName());
+                if (confirm.GetC_UOM_ID() != _Pro.GetC_UOM_ID())
+                {
+                    decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), iol.GetM_Product_ID(), confirm.GetC_UOM_ID(), confirm.GetDifferenceQty());
+                    line.SetQty(Util.GetValueOfDecimal(pc));	//	Entered/Invoiced
+                }
+                else
+                    line.SetQty(confirm.GetDifferenceQty());	//	Entered/Invoiced
                 if (!line.Save(Get_TrxName()))
                 {
                     _processMsg += "Credit Memo Line not created";
@@ -965,7 +1152,10 @@ namespace VAdvantage.Model
                 log.Info("Scrapped=" + confirm.GetScrappedQty());
                 if (_inventory == null)
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), inout.GetM_Warehouse_ID());
+                    //MWarehouse wh = MWarehouse.Get(GetCtx(), inout.GetM_Warehouse_ID());
+
+                    MWarehouse wh = new MWarehouse(GetCtx(), inout.GetM_Warehouse_ID(), Get_TrxName());
+
                     _inventory = new MInventory(wh);
                     _inventory.SetDescription(Msg.Translate(GetCtx(),
                         "M_InOutConfirm_ID") + " " + GetDocumentNo());
@@ -1002,11 +1192,20 @@ namespace VAdvantage.Model
                     SetM_Inventory_ID(_inventory.GetM_Inventory_ID());
                 }
                 MInOutLine ioLine = confirm.GetLine();
-                MInventoryLine line = new MInventoryLine(_inventory,
-                    ioLine.GetM_Locator_ID(), ioLine.GetM_Product_ID(),
-                    ioLine.GetM_AttributeSetInstance_ID(),
-                    confirm.GetScrappedQty(), Env.ZERO);
+                // Removed the code as already handled on before save..
+                MInventoryLine line = new MInventoryLine(_inventory, ioLine.GetM_Locator_ID(), ioLine.GetM_Product_ID(), ioLine.GetM_AttributeSetInstance_ID(),
+                   confirm.GetScrappedQty(), Env.ZERO);
+
+                //Below code commented because we have to convert the Quantity for update in wareHouse as mentioned above
+                //MInventoryLine line = new MInventoryLine(_inventory,
+                //    ioLine.GetM_Locator_ID(), ioLine.GetM_Product_ID(),
+                //    ioLine.GetM_AttributeSetInstance_ID(),
+                //    confirm.GetScrappedQty(), Env.ZERO);
                 //new 15 jan
+
+                // Added by Bharat on 17 Jan 2019 to set new fields UOM and Qty Entered..
+                line.Set_Value("C_UOM_ID", ioLine.GetC_UOM_ID());
+                line.Set_Value("QtyEntered", line.GetQtyBook());
                 line.SetQtyInternalUse(line.GetQtyBook());
                 line.SetQtyBook(0);
                 line.SetIsInternalUse(true);
@@ -1019,7 +1218,15 @@ namespace VAdvantage.Model
                 // End
                 if (!line.Save(Get_TrxName()))
                 {
-                    _processMsg += "Inventory Line not created";
+                    pp = VLogger.RetrieveError();
+                    if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                    {
+                        _processMsg += pp.GetName();
+                    }
+                    else
+                    {
+                        _processMsg += "Inventory Line not created";
+                    }
                     return false;
                 }
                 confirm.SetM_InventoryLine_ID(line.GetM_InventoryLine_ID());
@@ -1126,6 +1333,33 @@ namespace VAdvantage.Model
         public bool CloseIt()
         {
             log.Info(ToString());
+
+            //JID_1163: If user close ship/recipt confirm. System should Close "Internal Use Inventory" and "Material Recipt"
+            MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+            if (io.GetDocStatus() != DOCACTION_Close)
+            {
+                DocumentEngine.ProcessIt(io, DOCACTION_Close);
+                if (!io.Save())
+                {
+                    pp = VLogger.RetrieveError();
+                    _processMsg = Msg.GetMsg(GetCtx(), "NotSavedInOut") + pp != null ? ": " + pp.GetName() : "";
+                }
+            }
+
+            if (GetM_Inventory_ID() > 0)
+            {
+                MInventory _Inventory = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
+                // If we Close  Ship/Recipt confirmation and Internal Use Inventory  is void or close. No effect.
+                if (_Inventory.GetDocStatus() != DOCSTATUS_Voided && _Inventory.GetDocStatus() != DOCSTATUS_Reversed && _Inventory.GetDocStatus() != DOCSTATUS_Closed)
+                {
+                    DocumentEngine.ProcessIt(_Inventory, DOCACTION_Close);
+                    if (!_Inventory.Save())
+                    {
+                        pp = VLogger.RetrieveError();
+                        _processMsg = Msg.GetMsg(GetCtx(), "NotSavedInventory") + pp != null ? ": " + pp.GetName() : "";
+                    }
+                }
+            }
 
             SetDocAction(DOCACTION_None);
             return true;
@@ -1237,7 +1471,7 @@ namespace VAdvantage.Model
                         idr.Close();
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _log.Log(Level.SEVERE, sql, ex);
                 }

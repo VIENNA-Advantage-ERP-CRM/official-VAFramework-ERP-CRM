@@ -6,7 +6,8 @@ using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Process;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+using VAdvantage.Utility;namespace VAdvantage.Process
 {
     public class DocumentEngine : DocActionVariables, DocAction
     {
@@ -885,5 +886,46 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             return null;
         }
+
+
+        /**
+         * Checks the access rights of the given role/client for the given document actions.
+         * @param clientId
+         * @param roleId
+         * @param docTypeId
+         * @param options
+         * @param maxIndex
+         * @return number of valid actions in the String[] options
+         */
+        public static string[] checkActionAccess(Ctx ctx, int clientId, int roleId, int docTypeId, String[] options,ref int maxIndex)
+        {
+            return MRole.Get(ctx, roleId).checkActionAccess(clientId, docTypeId, options,ref maxIndex);
+        }
+
     }
+
+
+    /**
+ *	Document Options Interface
+ *	
+ *  @author Carlos Ruiz
+ */
+    public interface DocOptions
+    {
+        /**
+         * 	Customize Valid Actions
+         * @param docStatus
+         * @param processing
+         * @param orderType
+         * @param isSOTrx
+         * @param AD_Table_ID
+         * @param docAction
+         * @param options
+         * @param index
+         * @return Number of valid options
+         */
+        int customizeValidActions(String docStatus, Object processing,
+                String orderType, String isSOTrx, int AD_Table_ID, String[] docAction, String[] options, int index);
+
+    }	//	DocAction
 }

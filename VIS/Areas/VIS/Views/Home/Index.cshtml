@@ -67,15 +67,8 @@
 
         foreach (Bundle b in BundleTable.Bundles)
         {
-                if (b.Path.EndsWith("bundles/jquery") || b.Path.EndsWith("bundles/boot"))
-                {
-                continue;
-                }
-
             if (b is StyleBundle)
-           {
-
-
+            {
                 if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v")  && ViewBag.LibSuffix != "" && !b.Path.Contains(ViewBag.LibSuffix))
                 {
                     continue;

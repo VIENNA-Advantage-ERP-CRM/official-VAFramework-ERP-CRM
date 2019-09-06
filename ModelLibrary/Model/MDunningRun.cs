@@ -185,8 +185,9 @@ namespace VAdvantage.Model
             MDunningRunEntry entry1 = new MDunningRunEntry(this);
             MBPartner bp = new MBPartner(GetCtx(), C_BPartnerRelated_ID, Get_TrxName());
             entry1.SetBPartner(bp, true);	//	AR hardcoded
-                        
-            // Change by mohit -1st Priority given to the sales rep selected in process parameter and 2nd given to the sales rep on customer master..- 1 May 2019.
+            //
+            //if (entry1.GetSalesRep_ID() == 0)
+            // Change done bu mohit to set sales rep selected.- 1 May 2019.
             if (SalesRep_ID > 0)
             {
                 entry1.SetSalesRep_ID(SalesRep_ID);
@@ -195,7 +196,6 @@ namespace VAdvantage.Model
             //
             _entries = null;
             return entry1;
-
         }
 
     }

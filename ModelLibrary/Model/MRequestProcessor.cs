@@ -43,14 +43,37 @@ namespace VAdvantage.Model
             List<MRequestProcessor> list = new List<MRequestProcessor>();
             String sql = "SELECT * FROM R_RequestProcessor WHERE IsActive='Y'";
             IDataReader idr = null;
+
+            //Changed By Karan.....
+            string scheduleIP = null;
             try
             {
+                //idr = DataBase.DB.ExecuteReader(sql, null, null);
+                //while (idr.Read())
+                //{
+                //    list.Add(new MRequestProcessor(ctx, idr, null));
+                //}
+                //idr.Close();
+
+                string machineIP = System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+
+
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
-                    list.Add(new MRequestProcessor(ctx, idr, null));
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                       AD_Schedule_ID = (SELECT AD_Schedule_ID FROM R_RequestProcessor WHERE R_RequestProcessor_ID =" + idr["R_RequestProcessor_ID"] + " )"));
+
+                    //list.Add(new MAcctProcessor(ctx, idr, null));
+
+                    if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
+                    {
+                        list.Add(new MRequestProcessor(new Ctx(), idr, null));
+                    }
+
                 }
                 idr.Close();
+
             }
             catch (Exception e)
             {

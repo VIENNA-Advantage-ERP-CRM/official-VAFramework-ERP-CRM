@@ -10,10 +10,6 @@ namespace VIS.Controllers
 {
     public class GenerateXModelController : Controller
     {
-        /// <summary>
-        /// get tabel records
-        /// </summary>
-        /// <returns></returns>
         public JsonResult GenXModelGetTable()
         {
             var ctx = Session["ctx"] as Ctx; 

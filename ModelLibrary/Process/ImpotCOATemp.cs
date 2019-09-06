@@ -172,8 +172,9 @@ namespace VAdvantage.Process
                                     mNode.SetParent_ID(C_ElementValue_ID_Parent);
                                     if (!mNode.Save())
                                     {
-                                        log.SaveError("NodeNotSaved", "");
-                                        return msg;
+                                        return GetRetrievedError(mNode, "NodeNotSaved");
+                                        //log.SaveError("NodeNotSaved", "");
+                                        //return msg;
                                     }
                                 }
                             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace ViennaBase
 {
@@ -27,6 +28,20 @@ namespace ViennaBase
 
             // Use camel case for JSON data.
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            try
+            {
+                Type type = null;
+                Assembly asm = Assembly.Load("Telerik.Reporting.Services.WebApi");
+                type = asm.GetType("Telerik.Reporting.Services.WebApi.ReportsControllerConfiguration");
+                MethodInfo mInfo = type.GetMethod("RegisterRoutes");
+                mInfo.Invoke(null, new object[] { config });
+            }
+            catch 
+            {
+ 
+            }
+
         }
     }
 }

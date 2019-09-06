@@ -31,6 +31,8 @@ namespace VAdvantage.Process
     public class InOutCreateConfirm : ProcessEngine.SvrProcess
     {
         #region Variables
+        //	Process Message 			
+        private String _processMsg = null;
         //	Shipment				
         private int _M_InOut_ID = 0;
         //	Confirmation Type		
@@ -73,6 +75,13 @@ namespace VAdvantage.Process
             if (shipment.Get_ID() == 0)
             {
                 throw new ArgumentException("Not found M_InOut_ID=" + _M_InOut_ID);
+            }
+
+            MInOutLine[] lines = shipment.GetLines();
+            if (lines == null || lines.Length == 0)
+            {
+                _processMsg = Msg.GetMsg(GetCtx(), "NoLines"); //Return Msg in Process Message
+                throw new ArgumentException(_processMsg);
             }
             //
             MInOutConfirm[] confirmations = shipment.GetConfirmations(false);

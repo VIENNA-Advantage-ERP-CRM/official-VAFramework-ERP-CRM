@@ -75,7 +75,7 @@
     function AZoomAcross(btn, tableName, qry, curWindowID, busy, container, KeyCol, Record_ID) {
 
         this.init = function () {
-
+            
             //	See What is there
             getZoomTargets();
             // set recordcount of query, so that lookup window does not opens while opening the window
@@ -84,7 +84,7 @@
 
         var list = [];
         var getZoomTargets = function () {
-
+           
 
             //var sql = "SELECT DISTINCT t.AD_Table_ID, t.TableName "
             //    + "FROM AD_Table t "
@@ -113,9 +113,9 @@
             // while (dr.read()) {
             if (dr != null && dr.length > 0) {
                 for (var a = 0; a < dr.length; a++) {
-                    // get table name
+                // get table name
                     var targetTableName = dr[a];
-                    // get target table names for above table
+                // get target table names for above table
                     // var zoomList = getZoomTarget(targetTableName, curWindowID, qry.getWhereClause());
 
                     $.ajax({
@@ -129,25 +129,25 @@
                     });
 
 
-                    if (zoomList != null) {
-                        for (var i in zoomList) {
-                            var pp = zoomList[i];
-                            var pushData = true;
-                            for (var itm in list) {
-                                if (list[itm].Key == zoomList[i].Key) {
-
-                                    pushData = false;
-                                    break;
-                                }
+                if (zoomList != null) {
+                    for (var i in zoomList) {
+                        var pp = zoomList[i];
+                        var pushData = true;
+                        for (var itm in list) {
+                            if (list[itm].Key == zoomList[i].Key) {
+                              
+                                pushData = false;
+                                break;
                             }
-                            if (pushData) {
-                                list.push(pp);
-                                //var windowName = pp.toString();
+                        }
+                        if (pushData) {
+                            list.push(pp);
+                            //var windowName = pp.toString();
 
-                            }
                         }
                     }
                 }
+            }
             }
             // close data reader
             dr = null;
@@ -162,12 +162,12 @@
                 var $root = $("<div>");
                 var ul = $('<ul class=vis-apanel-rb-ul>');
                 $root.append(ul);
-                for (var i in list) {
+                for (var i in list) {    
                     var li = $("<li data-id='" + list[i].Key + "'>");
                     li.append(list[i].Name);
                     li.on('click', function (e) {
                         e.stopImmediatePropagation();
-
+                       
                         var ad_window_Id = $(this).data('id');
                         var zoomQuery = new VIS.Query();
                         zoomQuery.addRestriction(KeyCol, VIS.Query.prototype.EQUAL, Record_ID);
@@ -180,14 +180,14 @@
                 }
                 //container.append(ul);
                 container.w2overlay($root.clone(true), { css: { height: '200px' } });
-
+                
             }
 
         };
 
-
+        
         //var getZoomTarget = function (targetTableName, curWindow_ID, targetWhereClause) {
-
+         
         //    //The Option List					
         //    var zoomList = [];
         //    var columns = [];
@@ -341,7 +341,7 @@
 
 
         //    return zoomList;
-
+           
         //};
 
 
