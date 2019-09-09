@@ -14,9 +14,10 @@
 
         // create Log
         this.log = VIS.Logging.VLogger.getVLogger("VCreateFromInvoice");
+
         function dynInit() {
             //DynInit
-            baseObj.title = VIS.Msg.getElement(VIS.Env.getCtx(), "C_Invoice_ID", false) + " .. " + VIS.Msg.translate(VIS.Env.getCtx(), "CreateFrom");
+            baseObj.title = VIS.Msg.getMsg("Invoice") + " .. " + VIS.Msg.getMsg("CreateFrom");
 
             //baseObj.lblInvoice.visible = false;
             //baseObj.cmbInvoice.visible = false;
@@ -44,7 +45,7 @@
 
         // Checked
         function getShipments(ctx, C_BPartner_ID) {
-            var pairs = [];
+            //var pairs = [];
 
             var display = ("s.DocumentNo||' - '||")
                 .concat(VIS.DB.to_char("s.MovementDate", VIS.DisplayType.Date, VIS.Env.getAD_Language(VIS.Env.getCtx())));
@@ -57,7 +58,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "VCreateFrom/GetShipments",
                 type: 'POST',
-                async: false,
+                //async: false,
                 data: {
                     displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx
                 },
@@ -68,15 +69,21 @@
                         for (var i = 0; i < ress.length; i++) {
                             key = VIS.Utility.Util.getValueOfInt(ress[i]["key"]);
                             value = VIS.Utility.encodeText(ress[i]["value"]);
-                            pairs.push({ ID: key, value: value });
+                            //pairs.push({ ID: key, value: value });
+
+                            if (i == 0) {
+                                baseObj.cmbShipment.getControl().append(" <option value=0> </option>");
+                            }
+                            baseObj.cmbShipment.getControl().append(" <option value=" + key + ">" + value + "</option>");
                         }
+                        baseObj.cmbShipment.getControl().prop('selectedIndex', 0);
                     }
                 },
                 error: function (e) {
                     selfChild.log.info(e);
                 },
             });
-            return pairs;
+            //return pairs;
         }
 
 
@@ -142,16 +149,18 @@
         //}
 
         function initBPDetails(C_BPartner_ID) {
-            baseObj.cmbShipment.getControl().html("");
-            var shipments = getShipments(VIS.Env.getCtx(), C_BPartner_ID);
 
-            for (var i = 0; i < shipments.length; i++) {
-                if (i == 0) {
-                    baseObj.cmbShipment.getControl().append(" <option value=0> </option>");
-                }
-                baseObj.cmbShipment.getControl().append(" <option value=" + shipments[i].ID + ">" + shipments[i].value + "</option>");
-            };
-            baseObj.cmbShipment.getControl().prop('selectedIndex', 0);
+            baseObj.cmbShipment.getControl().html("");
+            //var shipments = ;
+            getShipments(VIS.Env.getCtx(), C_BPartner_ID);
+
+            //for (var i = 0; i < shipments.length; i++) {
+            //    if (i == 0) {
+            //        baseObj.cmbShipment.getControl().append(" <option value=0> </option>");
+            //    }
+            //    baseObj.cmbShipment.getControl().append(" <option value=" + shipments[i].ID + ">" + shipments[i].value + "</option>");
+            //};
+            //baseObj.cmbShipment.getControl().prop('selectedIndex', 0);
         }
 
         this.disposeComponent = function () {

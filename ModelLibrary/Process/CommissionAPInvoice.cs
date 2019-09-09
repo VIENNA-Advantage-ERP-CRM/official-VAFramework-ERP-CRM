@@ -24,7 +24,8 @@ using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class CommissionAPInvoice : ProcessEngine.SvrProcess
     {
@@ -85,6 +86,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             invoice.SetClientOrg(com.GetAD_Client_ID(), com.GetAD_Org_ID());
             invoice.SetC_DocTypeTarget_ID(MDocBaseType.DOCBASETYPE_APINVOICE);	//	API
             invoice.SetBPartner(bp);
+
+            // JID_0101: When we generate the AP invoice from Commission run window, its giving price list error.
+            if (invoice.GetM_PriceList_ID() == 0)
+            {
+                string sql = "SELECT M_PriceList_ID FROM M_PriceList WHERE IsActive = 'Y' AND AD_Client_ID = " + com.GetAD_Client_ID() + " AND AD_Org_ID = " + com.GetAD_Org_ID()
+                            + " AND IsDefault='Y' AND IsSOPriceList='N'";
+                int pricelist = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+                if (pricelist == 0)
+                {
+                    pricelist = MPriceList.GetDefault(GetCtx(), false).Get_ID();
+                }
+                if (pricelist > 0)
+                {
+                    invoice.SetM_PriceList_ID(pricelist);
+                }
+            }
             //	invoice.setDocumentNo (comRun.getDocumentNo());		//	may cause unique constraint
             invoice.SetSalesRep_ID(GetAD_User_ID());	//	caller
             //
@@ -95,6 +112,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //		
             if (!invoice.Save())
             {
+                //return GetReterivedError(invoice, "CommissionAPInvoice - cannot save Invoice");
                 throw new Exception("CommissionAPInvoice - cannot save Invoice");
             }
 
@@ -106,6 +124,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             iLine.SetTax();
             if (!iLine.Save())
             {
+                //return GetReterivedError(iLine, "CommissionAPInvoice - cannot save Invoice Line");
                 throw new Exception("CommissionAPInvoice - cannot save Invoice Line");
             }
             //

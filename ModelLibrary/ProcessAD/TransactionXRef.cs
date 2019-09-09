@@ -170,8 +170,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		sql += " FROM M_Transaction_v "
 			+ "WHERE M_AttributeSetInstance_ID > 0 AND M_AttributeSetInstance_ID IN (" 
 			+ sqlSubSelect
-			+ ") ORDER BY M_Transaction_ID";
-		//
+			+ ") ";
+        //Code changes by Anuj (behalf of Kanchan Rana)
+         if (_Search_InOut_ID != 0)
+        {
+            sql += "AND M_InOut_ID=" + _Search_InOut_ID;
+        }
+
+         sql += " ORDER BY M_Transaction_ID";
+		// -------------code done------------
+
 		int no = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 		log.Fine(sql);
 		log.Config("#" + no);

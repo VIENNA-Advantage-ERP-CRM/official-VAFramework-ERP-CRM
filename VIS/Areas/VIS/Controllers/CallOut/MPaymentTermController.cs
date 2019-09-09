@@ -29,6 +29,17 @@ namespace VIS.Controllers
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
 
-     
+        // Added by Bharat on 13/May/2017
+        public JsonResult GetPaymentNote(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MPaymentTermModel objPaymentTerm = new MPaymentTermModel();
+                retJSON = JsonConvert.SerializeObject(objPaymentTerm.GetPaymentNote(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

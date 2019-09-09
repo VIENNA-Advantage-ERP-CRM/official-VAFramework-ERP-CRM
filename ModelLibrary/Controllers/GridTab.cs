@@ -373,37 +373,34 @@ namespace VAdvantage.Model
                 }
             }   //  for all fields
 
-            if (!GetTableName().Equals(X_AD_PInstance_Log.Table_Name))
-            { // globalqss, bug 1662433 
-                //  Add Standard Fields
-                if (_gridTable.GetField("Created") == null)
-                {
-                    GridField created = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
-                        _vo.windowNo, _vo.tabNo,
-                        _vo.AD_Window_ID, _vo.AD_Tab_ID, false, true, true));
-                    _gridTable.AddField(created);
-                }
-                if (_gridTable.GetField("CreatedBy") == null)
-                {
-                    GridField createdBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
-                        _vo.windowNo, _vo.tabNo,
-                        _vo.AD_Window_ID, _vo.AD_Tab_ID, false, true, false));
-                    _gridTable.AddField(createdBy);
-                }
-                if (_gridTable.GetField("Updated") == null)
-                {
-                    GridField updated = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
-                        _vo.windowNo, _vo.tabNo,
-                        _vo.AD_Window_ID, _vo.AD_Tab_ID, false, false, true));
-                    _gridTable.AddField(updated);
-                }
-                if (_gridTable.GetField("UpdatedBy") == null)
-                {
-                    GridField updatedBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
-                        _vo.windowNo, _vo.tabNo,
-                        _vo.AD_Window_ID, _vo.AD_Tab_ID, false, false, false));
-                    _gridTable.AddField(updatedBy);
-                }
+            //  Add Standard Fields
+            if (_gridTable.GetField("Created") == null)
+            {
+                GridField created = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
+                    _vo.windowNo, _vo.tabNo,
+                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, true, true));
+                _gridTable.AddField(created);
+            }
+            if (_gridTable.GetField("CreatedBy") == null)
+            {
+                GridField createdBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
+                    _vo.windowNo, _vo.tabNo,
+                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, true, false));
+                _gridTable.AddField(createdBy);
+            }
+            if (_gridTable.GetField("Updated") == null)
+            {
+                GridField updated = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
+                    _vo.windowNo, _vo.tabNo,
+                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, false, true));
+                _gridTable.AddField(updated);
+            }
+            if (_gridTable.GetField("UpdatedBy") == null)
+            {
+                GridField updatedBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
+                    _vo.windowNo, _vo.tabNo,
+                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, false, false));
+                _gridTable.AddField(updatedBy);
             }
             return true;
         }

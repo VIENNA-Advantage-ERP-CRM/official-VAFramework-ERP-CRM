@@ -11,18 +11,6 @@ namespace ViennaBase
         public static void RegisterBundles(BundleCollection bundles)
         {
 
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                      "~/Areas/ViennaBase/Scripts/jquery-2.1.0.min.js",
-                      "~/Areas/ViennaBase/Scripts/handlebars.min.js",
-                      "~/Areas/ViennaBase/Scripts/bootstrap.min.js"
-                    ));
-
-            bundles.Add(new StyleBundle("~/bundles/boot").Include(
-                "~/Areas/ViennaBase/Content/bootstrap-theme.min.css",
-                   "~/Areas/ViennaBase/Content/bootstrap.min.css"
-                ));
-
-
             bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/modernizr").Include(
                       "~/Areas/ViennaBase/Scripts/modernizr-2.6.2.js"));
             
@@ -100,9 +88,6 @@ namespace ViennaBase
             bundles.Add(new StyleBundle("~/Areas/ViennaBase/bundles/toastrcss").Include(
                 "~/Areas/ViennaBase/Content/Toastr/toastr.min.css"
                 ));
-
-
-         
 
 
             //bundles.Add(new ScriptBundle("~/bundles/CRV").Include(

@@ -112,6 +112,9 @@ namespace VAdvantage.Model
                 MMovementLine mLine = moveLines[i];
                 MMovementLineConfirm cLine = new MMovementLineConfirm(confirm);
                 cLine.SetMovementLine(mLine);
+                // setting QtyEntered in Target Qty on Confirmation Line
+                cLine.SetTargetQty(mLine.GetQtyEntered());
+                cLine.SetConfirmedQty(mLine.GetQtyEntered());
                 cLine.Save(move.Get_TrxName());
             }
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
@@ -472,7 +475,8 @@ namespace VAdvantage.Model
             }
 
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetUpdated()))
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetUpdated(), GetAD_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -779,9 +783,10 @@ namespace VAdvantage.Model
                 }
 
                 log.Info("createDifferenceDoc - Difference=" + confirm.GetDifferenceQty());
-                MInventoryLine line = new MInventoryLine(_inventoryFrom,
-                        mLine.GetM_Locator_ID(), mLine.GetM_Product_ID(), mLine.GetM_AttributeSetInstance_ID(),
-                        confirm.GetDifferenceQty(), Env.ZERO);
+                
+                MInventoryLine line = new MInventoryLine(_inventoryFrom, mLine.GetM_Locator_ID(), mLine.GetM_Product_ID(), 
+                        mLine.GetM_AttributeSetInstance_ID(), confirm.GetDifferenceQty(), Env.ZERO);                
+
                 //Added By amit 11-jun-2015 
                 //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
                 //As On Date Count = Opening Stock - Diff Qty
@@ -816,12 +821,18 @@ namespace VAdvantage.Model
                     }
                 }
                 //End
+
                 line.SetAdjustmentType("D");
                 line.SetDifferenceQty(Util.GetValueOfDecimal(confirm.GetDifferenceQty()));
                 line.SetQtyBook(currentQty);
                 line.SetOpeningStock(currentQty);
                 line.SetAsOnDateCount(Decimal.Subtract(Util.GetValueOfDecimal(line.GetOpeningStock()), Util.GetValueOfDecimal(confirm.GetDifferenceQty())));
                 line.SetQtyCount(Decimal.Subtract(Util.GetValueOfDecimal(line.GetQtyBook()), Util.GetValueOfDecimal(confirm.GetDifferenceQty())));
+
+                //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
+                line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
+                line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
+
                 line.SetDescription(Msg.Translate(GetCtx(), "DifferenceQty"));
                 if (!line.Save(Get_TrxName()))
                 {
@@ -865,6 +876,10 @@ namespace VAdvantage.Model
                     mLine.GetM_LocatorTo_ID(), mLine.GetM_Product_ID(), mLine.GetM_AttributeSetInstance_ID(),
                     confirm.GetScrappedQty(), Env.ZERO);
                 line.SetDescription(Msg.Translate(GetCtx(), "ScrappedQty"));
+                
+                //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
+                line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
+                line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
                 if (!line.Save(Get_TrxName()))
                 {
                     _processMsg += "Inventory Line not created";

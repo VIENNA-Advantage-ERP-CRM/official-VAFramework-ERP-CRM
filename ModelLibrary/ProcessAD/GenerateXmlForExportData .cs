@@ -346,7 +346,7 @@ namespace VAdvantage.Process
                     if (ValidationType.Equals("T"))
                         if (tmpDS != null && tmpDS.Tables[0].Rows.Count > 0)
                         {
-                            ds.AddOrCopy(tmpDS, refTableName, refVID, 0, null, rowNum++);
+                           // ds.AddOrCopy(tmpDS, refTableName, refVID, 0, null, rowNum++);
 
                         }
                 }
@@ -418,6 +418,11 @@ namespace VAdvantage.Process
                                     int refVID = columns[cols].GetAD_Reference_Value_ID();
                                     int refID = columns[cols].GetAD_Reference_ID();
 
+                                    // Special case applied for workflow table to bypass the start node on workflow- asked by mukesh sir- done by mohit- 1 February 2019.
+                                    if (tableName == "AD_Workflow" && colName == "AD_WF_Node_ID")
+                                    {
+                                        continue;
+                                    }
                                     if (!columns[cols].IsStandardColumn() && !columns[cols].IsKey())
                                     {
                                         if (colName.EndsWith("_ID"))    //only columns ending with _ID to be processed (indicated Foreign Key )
@@ -642,7 +647,7 @@ namespace VAdvantage.Process
         {
             List<ExportDataRecords> list = new List<ExportDataRecords>();
 
-            String _sql = "SELECT AD_Table_ID, Record_ID,AD_ColOne_ID FROM AD_ExportData WHERE IsActive = 'Y' AND AD_ModuleInfo_ID = @AD_ModuleInfo_ID";
+            String _sql = "SELECT AD_Table_ID, Record_ID,AD_ColOne_ID FROM AD_ExportData WHERE IsActive = 'Y' AND AD_ModuleInfo_ID = @AD_ModuleInfo_ID ";
 
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@AD_ModuleInfo_ID", _AD_ModuleInfo_ID);

@@ -77,7 +77,11 @@ namespace ViennaAdvantageServer.Process
                 {
                     return Msg.GetMsg(GetCtx(), "TargetListCreate");
                 }
-                return Msg.GetMsg(GetCtx(), "TargetListNotCreate");
+                else
+                {
+                    return GetRetrievedError(TList, "TargetListNotCreate");
+                    //return Msg.GetMsg(GetCtx(), "TargetListNotCreate");
+                }
             }
 
             if (Table_id == BPartnerTable_ID) // C_BPartner 
@@ -114,8 +118,11 @@ namespace ViennaAdvantageServer.Process
                 {
                     return Msg.GetMsg(GetCtx(), "TargetListCreate");
                 }
-
-                return Msg.GetMsg(GetCtx(), "TargetListNotCreate");
+                else
+                {
+                    return GetRetrievedError(TList, "TargetListNotCreate");
+                    //return Msg.GetMsg(GetCtx(), "TargetListNotCreate");
+                }
             }
 
 

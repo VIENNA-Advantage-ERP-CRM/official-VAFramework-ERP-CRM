@@ -51,6 +51,26 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Before Save
+        /// </summary>
+        /// <param name="newRecord">new record</param>
+        /// <returns>true if validated</returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            // JID_0487: System should not allow to save same product category or product with same break value.
+            string sql = "SELECT COUNT(M_DiscountSchemaBreak_ID) FROM M_DiscountSchemaBreak WHERE M_DiscountSchema_ID = " + GetM_DiscountSchema_ID()
+                + " AND NVL(M_Product_ID, 0) = " + GetM_Product_ID() + " AND NVL(M_Product_Category_ID, 0) = " + GetM_Product_Category_ID() + " AND BreakValue = " + GetBreakValue() 
+                + " AND IsActive='Y'  AND AD_Client_ID=" + GetAD_Client_ID() + " AND M_DiscountSchemaBreak_ID != " + Get_ID();
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+            if (count > 0)
+            {
+                log.SaveError(Msg.GetMsg(GetCtx(), "DiscountBreakUnique"), "");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Criteria apply
         /// </summary>
         /// <param name="Value">amt or qty</param>

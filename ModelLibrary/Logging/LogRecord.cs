@@ -118,10 +118,17 @@ namespace VAdvantage.Logging
             while (i < sf.Length)
             {
                 StackFrame frame = st.GetFrame(i);
-                string className = frame.GetMethod().ReflectedType.FullName;
-                if (className.Equals("VAdvantage.Logging.Logger") || className.Equals("VAdvantage.Logging.VLogger"))
+                System.Reflection.MethodBase bas = frame.GetMethod();
+                if (bas != null && bas.ReflectedType!=null)
                 {
-                    break;
+                    Type ty = bas.ReflectedType;
+                    string name = ty.FullName;
+
+                    string className = frame.GetMethod().ReflectedType.FullName;
+                    if (className.Equals("VAdvantage.Logging.Logger") || className.Equals("VAdvantage.Logging.VLogger"))
+                    {
+                        break;
+                    }
                 }
                 i++;
             }

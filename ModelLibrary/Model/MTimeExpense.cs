@@ -328,7 +328,8 @@ namespace VAdvantage.Model
             }
 
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateReport()))
+            // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateReport(), GetAD_Org_ID()))
             {
                 m_processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;

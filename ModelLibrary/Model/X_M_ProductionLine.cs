@@ -323,6 +323,16 @@ namespace VAdvantage.Model
         }
         /** Get Reversal Document.@return Reversal Document */
         public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Product Container.@param M_ProductContainer_ID Pallet No. / Container Name */
+        public void SetM_ProductContainer_ID(int M_ProductContainer_ID)
+        {
+            if (M_ProductContainer_ID <= 0) Set_Value("M_ProductContainer_ID", null);
+            else
+                Set_Value("M_ProductContainer_ID", M_ProductContainer_ID);
+        }
+        /** Get Product Container.@return Pallet No. / Container Name */
+        public int GetM_ProductContainer_ID() { Object ii = Get_Value("M_ProductContainer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

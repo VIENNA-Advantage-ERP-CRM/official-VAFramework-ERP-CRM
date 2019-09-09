@@ -112,7 +112,8 @@ namespace VAdvantage.Process
             MOrder order = new MOrder(fromProject, true, MOrder.DocSubTypeSO_OnCredit);
             if (!order.Save())
             {
-                throw new Exception("Could not create Order");
+                return GetRetrievedError(order, "Could not create Order");
+                //throw new Exception("Could not create Order");
             }
 
             //	***	Lines ***

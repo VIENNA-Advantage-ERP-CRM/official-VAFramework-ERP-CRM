@@ -30,9 +30,18 @@ namespace VIS.Models
             Dictionary<string, string> retVal = new Dictionary<string, string>();
             retVal["Apply"] = pt.Apply(C_Invoice_ID).ToString();
             retVal["Get_ID"] = pt.Get_ID().ToString();
-            return retVal;
-                
+            return retVal;                
         }
 
+        // Added by Bharat on 13/May/2017
+        public Dictionary<string, string> GetPaymentNote(Ctx ctx, string fields)
+        {        
+            int C_PaymentTerm_ID = 0;            
+            C_PaymentTerm_ID = Util.GetValueOfInt(fields);            
+            MPaymentTerm pt = new MPaymentTerm(ctx, C_PaymentTerm_ID, null);
+            Dictionary<string, string> retVal = new Dictionary<string, string>();
+            retVal["DocumentNote"] = pt.GetDocumentNote();            
+            return retVal;
+        }
     }
 }

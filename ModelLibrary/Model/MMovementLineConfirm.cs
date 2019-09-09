@@ -116,6 +116,19 @@ namespace VAdvantage.Model
             return line.Save(Get_TrxName());
         }
 
+        //Handle Reverse case
+        public Boolean ProcessLineReverse()
+        {
+            MMovementLine line = GetLine();
+
+            line.SetTargetQty(line.GetQtyEntered());
+            line.SetMovementQty(line.GetQtyEntered());
+            line.SetConfirmedQty(0);
+            line.SetScrappedQty(0);
+
+            return line.Save(Get_TrxName());
+        }
+
         /// <summary>
         /// Is Fully Confirmed
         /// </summary>

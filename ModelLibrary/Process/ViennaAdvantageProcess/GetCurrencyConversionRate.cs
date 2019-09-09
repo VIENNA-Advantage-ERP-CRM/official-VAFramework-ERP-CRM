@@ -155,9 +155,10 @@ namespace ViennaAdvantage.Process
                                          + "  AND Created=(SELECT Max(Created) FROM C_Conversion_Rate  WHERE isactive      ='Y' AND C_ConversionType_id=" + defaultconversionType + " AND "
                                          + "  C_Currency_ID   =" + _lstCurr[k].baseCurrencyID + "  AND C_Currency_To_ID=" + myCurrencyID + ") AND AD_Client_ID = " + _lstCurr[k].AD_Client_ID + "AND AD_Org_ID= " + _lstCurr[k].AD_Org_ID;
                                     //the Maximum date from Converted rate of every currency
-
-
-                                    if (DateTime.Now.Date > Convert.ToDateTime(DB.ExecuteScalar(sql.Trim(), null, null)).Date)
+                                    object validDate = DB.ExecuteScalar(sql.Trim(), null, null);
+                                    //Check if valid date available.. and less than current date..
+                                    //By Karan 22 June
+                                    if (validDate != null && validDate != DBNull.Value && DateTime.Now.Date > Convert.ToDateTime(validDate).Date)
                                     {
                                         if (!String.IsNullOrEmpty(myCurrency) && !String.IsNullOrEmpty(_lstCurr[k].baseCurrency)
                                               && !String.IsNullOrEmpty(currencySourceName) && (myCurrencyID != _lstCurr[k].baseCurrencyID))

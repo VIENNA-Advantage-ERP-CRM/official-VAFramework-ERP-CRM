@@ -19,7 +19,7 @@ namespace VAdvantage.Model
         private M_Element _element = null;
         /**	Cache						*/
         private static CCache<int, MColumn> s_cache = new CCache<int, MColumn>("AD_Column", 20);
-        private static Logging.VLogger s_log	= Logging.VLogger.GetVLogger(typeof(MColumn).FullName);
+        private static Logging.VLogger s_log = Logging.VLogger.GetVLogger(typeof(MColumn).FullName);
 
         public MColumn(MTable parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
@@ -104,7 +104,7 @@ namespace VAdvantage.Model
                 return null;
             return col.GetColumnName();
         }
-        
+
         /// <summary>
         ///Is Standard Column
         /// </summary>
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
             }
             return false;
         }
- 
+
         /// <summary>
         /// Is Virtual Column
         /// </summary>
@@ -174,7 +174,7 @@ namespace VAdvantage.Model
             string s = GetColumnSQL();
             return s != null && s.Length > 0;
         }
-          
+
         /// <summary>
         /// Get SQL Modify command
         /// </summary>
@@ -186,25 +186,185 @@ namespace VAdvantage.Model
         {
             StringBuilder sql = new StringBuilder();
             StringBuilder sqlBase = new StringBuilder("ALTER TABLE ")
-                .Append(table.GetTableName())
-                .Append(" MODIFY ").Append(GetColumnName());
+                .Append(table.GetTableName());
+
+            if (DatabaseType.IsOracle)
+            {
+                sqlBase.Append(" MODIFY ");
+            }
+            else if (DatabaseType.IsPostgre)
+            {
+                sqlBase.Append(" ALTER COLUMN ");
+            }
+
+
+            ////	Default
+            //StringBuilder sqlDefault = new StringBuilder(sqlBase.ToString())
+            //    .Append(" ").Append(getSQLDataType())
+            //    .Append(" DEFAULT ");
+            //string defaultValue = GetSQLDefaultValue();
+            //if (defaultValue.Length > 0)
+            //    sqlDefault.Append(defaultValue);
+            //else
+            //{
+            //    sqlDefault.Append(" NULL ");
+            //    defaultValue = null;
+            //}
+            //sql.Append(sqlDefault);
+
+            ////	Constraint
+
+            ////	Null Values
+            //if (IsMandatory() && defaultValue != null && defaultValue.Length > 0)
+            //{
+            //    StringBuilder sqlSet = new StringBuilder("UPDATE ")
+            //        .Append(table.GetTableName())
+            //        .Append(" SET ").Append(GetColumnName())
+            //        .Append("=").Append(defaultValue)
+            //        .Append(" WHERE ").Append(GetColumnName()).Append(" IS NULL");
+            //    sql.Append("; ").Append(sqlSet);
+            //}
+
+            ////	Null
+            //if (setNullOption)
+            //{
+            //    StringBuilder sqlNull = new StringBuilder(sqlBase.ToString());
+            //    if (IsMandatory())
+            //        sqlNull.Append(" NOT NULL");
+            //    else
+            //        sqlNull.Append(" NULL");
+            //    sql.Append("; ").Append(sqlNull);
+            //}
+            //
+            sql.Append(sqlBase.ToString()).Append(GetSQLModifyPerColumn(table, GetColumnName(), setNullOption));
+
+            string defaultVal = SetDefaultValue(table, GetColumnName());
+            if (!string.IsNullOrEmpty(defaultVal))
+            {
+                sql.Append(defaultVal);
+            }
+
+
+
+            string setNull = SetNullOption(setNullOption, table, GetColumnName());
+            if (setNull.Length > 0)
+            {
+                sql.Append(";").Append(setNull);
+            }
+
+            string updateQL = UpdateDefaultValue(table);
+            if (updateQL.Length > 0)
+            {
+                sql.Append(";").Append(updateQL);
+            }
+
+            return sql.ToString();
+        }
+
+
+
+        public string GetSQLModifyPerColumn(MTable table, string columnName, bool setNullOption)
+        {
+            //StringBuilder sql = new StringBuilder();
+            //sql.Append(" " + columnName + " ");
+
+            StringBuilder sqlBase = new StringBuilder(" " + columnName + " ");
+            if (DatabaseType.IsPostgre)
+            {
+                sqlBase.Append(" TYPE ");
+            }
 
             //	Default
             StringBuilder sqlDefault = new StringBuilder(sqlBase.ToString())
-                .Append(" ").Append(getSQLDataType())
-                .Append(" DEFAULT ");
-            string defaultValue = GetSQLDefaultValue();
-            if (defaultValue.Length > 0)
-                sqlDefault.Append(defaultValue);
-            else
-            {
-                sqlDefault.Append(" NULL ");
-                defaultValue = null;
-            }
-            sql.Append(sqlDefault);
+                .Append(" ").Append(getSQLDataType());
+
+            
+            //    .Append(" DEFAULT ");
+            //string defaultValue = GetSQLDefaultValue();
+            //if (defaultValue.Length > 0)
+            //    sqlDefault.Append(defaultValue);
+            //else
+            //{
+            //    sqlDefault.Append(" NULL ");
+            //    defaultValue = null;
+            //}
+
+            //sql.Append(sqlDefault);
+
+
+            //SetNullOption(setNullOption, table, columnName);
+
 
             //	Constraint
+            return sqlDefault.ToString();
+        }
 
+        public string SetDefaultValue(MTable table, string columnName)
+        {
+            StringBuilder sqlDefault = new StringBuilder("");
+
+            if (DatabaseType.IsOracle)
+            {
+                sqlDefault.Append(" DEFAULT ");
+                string defaultValue = GetSQLDefaultValue();
+                if (defaultValue.Length > 0)
+                    sqlDefault.Append(defaultValue);
+                else
+                {
+                    sqlDefault.Append(" NULL ");
+                    defaultValue = null;
+                }
+            }
+            else if (DatabaseType.IsPostgre)
+            {
+                //ALTER TABLE Test ALTER COLUMN  Description SET DEFAULT  NULL 
+                sqlDefault.Append("; ALTER TABLE " + table.GetTableName())
+                    .Append(" ALTER COLUMN " + columnName + " SET DEFAULT ");
+                string defaultValue = GetSQLDefaultValue();
+                if (defaultValue.Length > 0)
+                    sqlDefault.Append(defaultValue);
+                else
+                {
+                    sqlDefault.Append(" NULL ");
+                    defaultValue = null;
+                }
+
+            }
+            return sqlDefault.ToString();
+        }
+
+        public string SetNullOption(bool setNullOption, MTable table, string columnName)
+        {
+            if (setNullOption)
+            {
+                StringBuilder sqlBase1 = new StringBuilder("ALTER TABLE ")
+                .Append(table.GetTableName());
+
+                if (DatabaseType.IsOracle)
+                {
+                    sqlBase1.Append(" MODIFY " + columnName + " ");
+                }
+                else if (DatabaseType.IsPostgre)
+                {
+                    sqlBase1.Append(" ALTER " + columnName + " SET ");
+                }
+
+
+                StringBuilder sqlNull = new StringBuilder(sqlBase1.ToString());
+                if (IsMandatory())
+                    sqlNull.Append(" NOT NULL");
+                else
+                    sqlNull.Append(" NULL");
+                //sql.Append("; ").Append(sqlNull);
+                return sqlNull.ToString();
+            }
+            return "";
+        }
+
+
+        public string UpdateDefaultValue(MTable table)
+        {
+            string defaultValue = GetDefaultValue();
             //	Null Values
             if (IsMandatory() && defaultValue != null && defaultValue.Length > 0)
             {
@@ -213,23 +373,12 @@ namespace VAdvantage.Model
                     .Append(" SET ").Append(GetColumnName())
                     .Append("=").Append(defaultValue)
                     .Append(" WHERE ").Append(GetColumnName()).Append(" IS NULL");
-                sql.Append("; ").Append(sqlSet);
+                return sqlSet.ToString();
             }
-
-            //	Null
-            if (setNullOption)
-            {
-                StringBuilder sqlNull = new StringBuilder(sqlBase.ToString());
-                if (IsMandatory())
-                    sqlNull.Append(" NOT NULL");
-                else
-                    sqlNull.Append(" NULL");
-                sql.Append("; ").Append(sqlNull);
-            }
-            //
-            return sql.ToString();
+            return "";
         }
-         
+
+
         /// <summary>
         /// Get SQL Default Value
         /// </summary>
@@ -270,7 +419,7 @@ namespace VAdvantage.Model
                     }
                     else if (defaultValue.Equals("-1"))
                     {
-                         s_log.Finer("Get default: (invalid value) " + defaultValue);
+                        s_log.Finer("Get default: (invalid value) " + defaultValue);
                     }
                     else
                     {
@@ -336,8 +485,8 @@ namespace VAdvantage.Model
                 .Append(table.GetTableName())
                 .Append(" ADD ").Append(GetSQLDDL());
             return sql.ToString();
-        }	
-      
+        }
+
         /// <summary>
         /// Get SQL DDL
         /// </summary>
@@ -355,9 +504,9 @@ namespace VAdvantage.Model
             if (defaultValue != null && defaultValue.Length > 0)
             {
                 //if (defaultValue == "Y" || defaultValue == "N")
-                 //   sql.Append(" DEFAULT ").Append("'" + defaultValue + "'");
+                //   sql.Append(" DEFAULT ").Append("'" + defaultValue + "'");
                 //else
-                    sql.Append(" DEFAULT ").Append( defaultValue );
+                sql.Append(" DEFAULT ").Append(defaultValue);
             }
             //	Inline Constraint only for oracle now
             if (DatabaseType.IsOracle)
@@ -654,7 +803,7 @@ namespace VAdvantage.Model
         /// Selection Column
         /// </summary>
         /// <returns>true if Selection Column</returns>
-        public new  bool IsSelectionColumn()
+        public new bool IsSelectionColumn()
         {
             if (base.IsSelectionColumn())
                 return true;

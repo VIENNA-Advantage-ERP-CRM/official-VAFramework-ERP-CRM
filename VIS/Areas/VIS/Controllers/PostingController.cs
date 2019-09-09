@@ -31,10 +31,10 @@ namespace VIS.Controllers
             string res = "";
             try
             {
-                string clientName = ctx.GetAD_Org_Name() + "_" + ctx.GetAD_User_Name();
-                string storedPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "");
-                storedPath += clientName;
-                VLogMgt.Initialize(true, storedPath);
+                //string clientName = ctx.GetAD_Org_Name() + "_" + ctx.GetAD_User_Name();
+                //string storedPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "");
+                //storedPath += clientName;
+                //VLogMgt.Initialize(true, storedPath);
 
 
                 MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, AD_Client_ID);
