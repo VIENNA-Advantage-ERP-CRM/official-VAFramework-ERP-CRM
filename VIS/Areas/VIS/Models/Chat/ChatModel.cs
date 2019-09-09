@@ -41,7 +41,14 @@ namespace VIS.Models
 
 
         #region Parametrised Constructor
-
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="ct"></param>
+            /// <param name="Chat_ID"></param>
+            /// <param name="AD_Table_ID"></param>
+            /// <param name="Record_ID"></param>
+            /// <param name="description"></param>
         public ChatModel(Ctx ct, int Chat_ID, int AD_Table_ID, int Record_ID, string description)
         {
             // _chat = new MChat(ct, Chat_ID, null);
