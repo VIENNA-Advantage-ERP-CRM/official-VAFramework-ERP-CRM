@@ -1018,8 +1018,11 @@ namespace VAdvantage.Model
             QtyEntered = GetQtyEntered();
             movementQty = GetMovementQty();
             log.Fine("");
+
+            // JID_0899: If user do not select Product or Charge on Ship/Receipt Line, it will displayed the message "Please select the Product or charge
             if (GetC_Charge_ID() == 0 && GetM_Product_ID() == 0)
             {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NOProductOrCharge"));
                 return false;
             }
             //	Get Line No
