@@ -318,7 +318,7 @@
                 var M_Product_ID = Util.getValueOfInt(dr["M_Product_ID"]);
                 var Qty = Util.getValueOfInt(dr["Qty"]);
                 var QtyOrdered = Util.getValueOfInt(dr["QtyOrdered"]);
-                var QtyReleased = Util.getValueOfInt(dr["   "]);
+                var QtyReleased = Util.getValueOfInt(dr["QtyReleased"]);
                 var PriceList = Util.getValueOfDouble(dr["PriceList"]);
                 var PriceActual = Util.getValueOfDouble(dr["PriceActual"]);
                 var C_UOM_ID = Util.getValueOfDouble(dr["C_UOM_ID"]);
