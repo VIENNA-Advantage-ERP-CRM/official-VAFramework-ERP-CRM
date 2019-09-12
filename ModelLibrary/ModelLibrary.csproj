@@ -426,6 +426,7 @@
     <Compile Include="ModelAD\X_AD_CardView_Column.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Condition.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Role.cs" />
+    <Compile Include="ModelAD\X_AD_DefaultCardView.cs" />
     <Compile Include="ModelAD\X_AD_DefaultUserQuery.cs" />
     <Compile Include="ModelAD\X_AD_GmailConfiguration.cs" />
     <Compile Include="ModelAD\X_AD_Group_Form.cs" />
