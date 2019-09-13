@@ -1892,16 +1892,19 @@
             return "";
         }
         this.setCalloutActive(true);
-        try {
+        try {            
             if (mField.getColumnName() == "C_Tax_ID") {
                 if (Util.getValueOfDecimal(mTab.getValue("Amount")) != 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(value) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
-                        //var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("Amount"))) / 100);
+                    var dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", value.toString());
+                    var Rate = Util.getValueOfDecimal(dr);
+                    if (Rate > 0) {                        
                         var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("Amount")) - (Util.getValueOfDecimal(mTab.getValue("Amount")) / ((Rate / 100) + 1)));
-                        //
+
+                        // JID_1037: On cash line tax amount field was not working accordingling to currency precision                        
+                        var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", ctx.getContext(windowNo, "C_Currency_ID").toString());
+                        var StdPrecision = currency["StdPrecision"];
+                        TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+
                         mTab.setValue("TaxAmt", TaxAmt);
                     }
                     else {
@@ -1918,13 +1921,17 @@
             }
             else {
                 if (Util.getValueOfInt(mTab.getValue("C_Tax_ID")) > 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(mTab.getValue("C_Tax_ID")) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        // var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("Amount"))) / 100);
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
+                    var dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", mTab.getValue("C_Tax_ID").toString());
+                    var Rate = Util.getValueOfDecimal(dr);
+                    
+                    if (Rate > 0) {                       
                         var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("Amount")) - (Util.getValueOfDecimal(mTab.getValue("Amount")) / ((Rate / 100) + 1)));
-                        //
+
+                        // JID_1037: On cash line tax amount field was not working accordingling to currency precision
+                        var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", ctx.getContext(windowNo, "C_Currency_ID").toString());
+                        var StdPrecision = currency["StdPrecision"];
+                        TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+
                         mTab.setValue("TaxAmt", TaxAmt);
                     }
                     else {

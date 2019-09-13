@@ -537,7 +537,7 @@
         //  
         if ((value == null || value.toString() == "") && mField.getColumnName() != "C_ConversionType_ID") {
             //if (value == null || value.toString() == "") {
-            mTab.setValue("C_Currency_ID", 0);
+            //mTab.setValue("C_Currency_ID", 0);
             return "";
         }
         if (this.isCalloutActive())		// assuming it is resetting value
@@ -824,7 +824,7 @@
     */
     CalloutCashJournalLine.prototype.setAccountNo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
-            mTab.setValue("C_BankAccount_ID", null);
+            //mTab.setValue("C_BankAccount_ID", null);
             return "";
         }
         this.setCalloutActive(true);
