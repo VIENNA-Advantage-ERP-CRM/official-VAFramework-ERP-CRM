@@ -230,10 +230,7 @@
             //dr.close();
         }
         catch (err) {
-            this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
+            this.setCalloutActive(false);            
             this.log.log(Level.SEVERE, "BankStmt_Payment", err);
             //ErrorLog.FillErrorLog("BankStmt_Payment", sql, e.Message.toString(), VAdvantage.Framework.Message.MessageType.ERROR);
             //return e.getLocalizedMessage();
