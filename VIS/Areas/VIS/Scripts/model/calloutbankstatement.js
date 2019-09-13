@@ -206,6 +206,11 @@
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
         var statementDate = mTab.getValue("ValutaDate");
+
+        // JID_1418: When select payment on Bank statement line, system gives an error meassage
+        if (statementDate == null) {
+            statementDate = new Date();
+        }
         //var sql = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";		//	1
         //var dr = null;
         //var param = [];
@@ -275,10 +280,7 @@
             //}
         }
         catch (err) {
-            this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
+            this.setCalloutActive(false);            
             this.log.log(Level.SEVERE, "BankStmt_DateAcct", err);
             return err.toString();
         }
