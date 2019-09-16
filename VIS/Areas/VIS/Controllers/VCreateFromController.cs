@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using VAdvantage.DataBase;
 using VAdvantage.Utility;
+using VAdvantage.Model;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -142,6 +143,9 @@ namespace VIS.Controllers
         /// <returns>String, Query</returns>
         private string VcreateFormSqlQryOrg(bool forInvoicees, int? C_Ord_IDs, string isBaseLangess, string MProductIDss, string DelivDates)
         {
+            var ctx = Session["ctx"] as Ctx;
+            MClient tenant = MClient.Get(ctx);
+
             StringBuilder sql = new StringBuilder("SELECT "
                + "ROUND((l.QtyOrdered-SUM(COALESCE(m.Qty,0))) * "
                + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ), uom.stdprecision) as QUANTITY,"
@@ -163,7 +167,16 @@ namespace VIS.Controllers
                + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
             sql.Append(forInvoicees ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-            sql.Append(" IS NOT NULL) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)");
+
+            // Get lines from Order based on the setting taken on Tenant to allow non item Product
+            if (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
+            {
+                sql.Append(" IS NOT NULL) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)");
+            }
+            else
+            {
+                sql.Append(" IS NOT NULL) LEFT JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)");
+            }
 
             if (isBaseLangess != "")
             {
@@ -172,7 +185,8 @@ namespace VIS.Controllers
             sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs
                 + " AND l.M_Product_ID>0");
 
-            if (!forInvoicees)
+            // Get lines from Order based on the setting taken on Tenant to allow non item Product
+            if (!forInvoicees && tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
             {
                 sql.Append(" AND p.ProductType='I' ");
             }
@@ -591,8 +605,10 @@ namespace VIS.Controllers
                 precision = " uom.stdprecision ";
             }
 
-            string sql = "SELECT * FROM  ( "
+            var ctx = Session["ctx"] as Ctx;
+            MClient tenant = MClient.Get(ctx);
 
+            StringBuilder sql = new StringBuilder("SELECT * FROM  ( "
                         + " SELECT "
                         + " ROUND((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
                         + " (CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QUANTITY,"	//	2
@@ -608,39 +624,51 @@ namespace VIS.Controllers
                         + " NVL(l.QtyInvoiced,0) as qtyInv , o.C_PaymentTerm_ID , pt.Name AS PaymentTermName "
                         + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
                         FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' )
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance ";
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance ");
 
             if (isBaseLangss != "")
             {
-                sql += " " + isBaseLangss + " ";
+                sql.Append(isBaseLangss);
             }
 
-            sql += " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID AND p.ProductType='I') "  // JID_0350: In Grid of Material Receipt need to show the items type products only
-                  + " LEFT JOIN C_Invoice o ON o.C_Invoice_ID = l.C_Invoice_ID LEFT JOIN C_PaymentTerm pt ON pt.C_PaymentTerm_ID = o.C_PaymentTerm_ID "
-                + " LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
-                + " "
-                + " LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
-                + " WHERE l.C_Invoice_ID=" + cInvoiceID;
-            if (mProductIDs != "")
-            {
-                sql += " " + mProductIDs + " ";
-            }
-            sql += " GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description, "
-                + " p.IsCostAdjustmentOnLost, "
-                + " L.Qtyinvoiced , o.C_PaymentTerm_ID , pt.Name ";
+            sql.Append(" INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID");
 
-            if (isBaseLangss.ToUpper().Contains("C_UOM_TRL"))
+            // Get lines from Invoice based on the setting taken on Tenant to allow non item Product
+            if (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
             {
-                sql += " , uom1.stdprecision ORDER BY l.Line";
+                sql.Append(" AND p.ProductType = 'I') ");  // JID_0350: In Grid of Material Receipt need to show the items type products only
             }
             else
             {
-                sql += " , uom.stdprecision ORDER BY l.Line";
+                sql.Append(") ");
+            }
+
+            sql.Append(" LEFT JOIN C_Invoice o ON o.C_Invoice_ID = l.C_Invoice_ID LEFT JOIN C_PaymentTerm pt ON pt.C_PaymentTerm_ID = o.C_PaymentTerm_ID "
+             + " LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
+             + " "
+             + " LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
+             + " WHERE l.C_Invoice_ID=" + cInvoiceID);
+
+            if (mProductIDs != "")
+            {
+                sql.Append(mProductIDs);
+            }
+            sql.Append(" GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
+                + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description, "
+                + " p.IsCostAdjustmentOnLost, "
+                + " L.Qtyinvoiced , o.C_PaymentTerm_ID , pt.Name ");
+
+            if (isBaseLangss.ToUpper().Contains("C_UOM_TRL"))
+            {
+                sql.Append(" , uom1.stdprecision ORDER BY l.Line");
+            }
+            else
+            {
+                sql.Append(" , uom.stdprecision ORDER BY l.Line");
             }
 
 
-            sql += ") "
+            sql.Append(") "
                    + " WHERE (   "
                    + "   CASE    "
                    + "     WHEN Iscostadjustmentonlost = 'N' "
@@ -652,8 +680,8 @@ namespace VIS.Controllers
                    + "         Else  "
                    + "         0 "
                    + "       END "
-                   + "   END )=1 ";
-            return sql;
+                   + "   END )=1 ");
+            return sql.ToString();
         }
 
         /// <summary>
