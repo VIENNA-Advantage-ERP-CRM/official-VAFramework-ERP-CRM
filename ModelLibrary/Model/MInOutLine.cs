@@ -1098,25 +1098,19 @@ namespace VAdvantage.Model
                 SetMovementQty(movementQty);
             }
 
-            //MInOut inO = new MInOut(Env.GetCtx(), GetM_InOut_ID(), Get_Trx());
-            String qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
-            int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1));
-            Tuple<String, String, String> iInfo = null;
-            if (Env.HasModulePrefix("BTR002_", out iInfo))
+            String qry1 = "";
+
+            // for Service Type Product set value in Locator field
+            if (_Product.GetProductType() == MProduct.PRODUCTTYPE_Service && GetM_Locator_ID() == 0)
             {
-                if (!inO.IsSOTrx())
+                qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
+                int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));
+                if (il == 0)
                 {
-                    MProduct MProduct = new Model.MProduct(GetCtx(), GetM_Product_ID(), null);
-                    MLocator loc = new MLocator(GetCtx(), MProduct.GetM_Locator_ID(), null);
-                    if (inO.GetM_Warehouse_ID() == loc.GetM_Warehouse_ID())
-                    {
-                        SetM_Locator_ID(MProduct.GetM_Locator_ID());
-                    }
-                    else
-                    {
-                        SetM_Locator_ID(il);
-                    }
+                    qry1 = "SELECT MAX(M_Locator_ID) FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsActive = 'Y'";
+                    il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));
                 }
+                SetM_Locator_ID(il);
             }
 
             // check record is reversed or not
