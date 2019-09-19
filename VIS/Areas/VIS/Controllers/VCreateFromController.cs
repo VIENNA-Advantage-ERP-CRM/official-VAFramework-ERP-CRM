@@ -169,7 +169,7 @@ namespace VIS.Controllers
             sql.Append(forInvoicees ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
 
             // Get lines from Order based on the setting taken on Tenant to allow non item Product
-            if (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
+            if (!(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
             {
                 sql.Append(" IS NOT NULL) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)");
             }
@@ -182,11 +182,10 @@ namespace VIS.Controllers
             {
                 sql.Append(isBaseLangess);
             }
-            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs
-                + " AND l.M_Product_ID>0");
+            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs + " AND l.M_Product_ID>0");
 
             // Get lines from Order based on the setting taken on Tenant to allow non item Product
-            if (!forInvoicees && tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
+            if (!forInvoicees && !(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
             {
                 sql.Append(" AND p.ProductType='I' ");
             }
@@ -203,7 +202,7 @@ namespace VIS.Controllers
                     + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
                         + "l.M_Product_ID,p.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description,  uom.stdprecision,l.IsDropShip, o.C_PaymentTerm_ID , t.Name  "); //Arpit on  20th Sept,2017"	            
 
-            if (forInvoicees)
+            if (forInvoicees || (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
             {
                 sql.Append("UNION SELECT "
                   + "round((l.QtyOrdered-SUM(COALESCE(m.QtyInvoiced,0))) * "					//	1               
@@ -634,7 +633,7 @@ namespace VIS.Controllers
             sql.Append(" INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID");
 
             // Get lines from Invoice based on the setting taken on Tenant to allow non item Product
-            if (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
+            if (!(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
             {
                 sql.Append(" AND p.ProductType = 'I') ");  // JID_0350: In Grid of Material Receipt need to show the items type products only
             }

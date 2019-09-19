@@ -342,13 +342,9 @@ namespace ViennaAdvantage.Process
                 }
 
                 // Get the lines of Order based on the setting taken on Tenant to allow non item Product
-                if (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem())
+                if (!(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
                 {
-                    // For All type of Product shipment can be done
-                }
-                else
-                {
-                    // JID_1307: Shipment is not generating against the Sales Order which includes combination of ItemType & Service/Expense/Resource type of Products at SO lines
+                  // JID_1307: Shipment is not generating against the Sales Order which includes combination of ItemType & Service/Expense/Resource type of Products at SO lines
                     where.Append(" AND C_OrderLine_ID IN (SELECT ol.C_OrderLine_ID FROM C_OrderLine ol INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID WHERE ol.C_Order_ID = "
                     + order.GetC_Order_ID() + " AND p.ProductType = 'I')");
                 }
@@ -379,8 +375,8 @@ namespace ViennaAdvantage.Process
                             continue;
                         }
 
-                        // Added by Bharat on 07 April 2017 as code already on Admpiere but deleted here.
-                        if (line.GetC_Charge_ID() != 0)
+                        // Get the lines of Order based on the setting taken on Tenant to allow non item Product                        
+                        if (line.GetC_Charge_ID() != 0 && !(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
                         {
                             continue;
                         }
