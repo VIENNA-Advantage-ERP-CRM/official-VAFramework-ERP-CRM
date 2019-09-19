@@ -1105,7 +1105,13 @@ namespace VIS.Controllers
                 po = tbl.GetPO(ctx, 0, null);
                 po.Set_ValueNoCheck("M_InOut_ID", M_InOut_ID);
                 po.SetClientOrg(inout);
-                po.Set_Value("M_Product_ID", M_Product_ID);
+
+                // 
+                if (M_Product_ID > 0)
+                {
+                    po.Set_Value("M_Product_ID", M_Product_ID);
+                }
+
                 po.Set_ValueNoCheck("C_UOM_ID", C_UOM_ID);
                 po.Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
                 po.Set_Value("QtyEntered", (Decimal?)QtyEntered);

@@ -917,22 +917,42 @@ namespace VAdvantage.Login
             //	Other Settings
             m_ctx.SetContext("#YYYY", "Y");
 
-            
+
             //LoadSysConfig();
 
             string sql = "";
-            //	AccountSchema Info (first)
-            sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "       // Get AutoArchive from Tenant header
-                + "FROM C_AcctSchema a"
-                + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
-                + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
-                + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
-                + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
             IDataReader dr = null;
+            bool checkNonItem = true;           // to identify that on Tenant there exista new column "IsAllowNonItem".
+            //	AccountSchema Info (first)
+            try
+            {
+                sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive, t.IsAllowNonItem "  // 6. Get "Alloe Non Item on Ship/Receipt" from Tenant header
+                    + "FROM C_AcctSchema a"
+                    + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                    + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
+                    + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
+                    + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
+
+                dr = DataBase.DB.ExecuteReader(sql);
+            }
+            catch
+            {
+                checkNonItem = false;
+                sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "       // 5. Get AutoArchive from Tenant header
+                    + "FROM C_AcctSchema a"
+                    + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                    + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
+                    + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
+                    + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
+            }
+
             try
             {
                 int C_AcctSchema_ID = 0;
-                dr = DataBase.DB.ExecuteReader(sql);
+                if (!checkNonItem)
+                {
+                    dr = DataBase.DB.ExecuteReader(sql);
+                }
 
                 if (!dr.Read())
                 {
@@ -950,6 +970,12 @@ namespace VAdvantage.Login
                     m_ctx.SetContext("$CurrencyISO", dr[3].ToString());
                     m_ctx.SetStdPrecision(Utility.Util.GetValueOfInt(dr[4].ToString()));
                     m_ctx.SetContext("$AutoArchive", dr[5].ToString());
+
+                    // 
+                    if (checkNonItem)       // Get "Alloe Non Item on Ship/Receipt" from Tenant header if exist.
+                    {
+                        m_ctx.SetContext("$AllowNonItem", dr[6].ToString());
+                    }
                 }
                 dr.Close();
 
@@ -1008,7 +1034,7 @@ namespace VAdvantage.Login
                     LoadDefault(dr[0].ToString(), dr[1].ToString());
                 dr.Close();
 
-                
+
             }
             catch
             {
