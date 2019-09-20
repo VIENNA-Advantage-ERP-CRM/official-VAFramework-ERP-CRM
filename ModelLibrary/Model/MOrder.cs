@@ -73,8 +73,6 @@ namespace VAdvantage.Model
         public Decimal? OnHandQty = 0;
         /**is container applicable */
         private bool isContainerApplicable = false;
-
-        MClient tenant = null;
         #endregion
 
         /* 	Create new Order by copying
@@ -3624,8 +3622,7 @@ namespace VAdvantage.Model
 
                 ////	Create SO Shipment - Force Shipment
                 MInOut shipment = null;
-                // Shipment not created in case of Resturant
-                tenant = MClient.Get(GetCtx());
+                // Shipment not created in case of Resturant               
 
                 if (Util.GetValueOfString(dt.GetVAPOS_POSMode()) != "RS")
                 {
@@ -4277,7 +4274,7 @@ namespace VAdvantage.Model
                         
                         //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
                         if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
-                            && !(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
+                            && (Util.GetValueOfString(GetCtx().GetContext("#PRODUCT_CONTAINER_APPLICABLE")).Equals("N")))
                             continue;
 
                         //
@@ -4752,7 +4749,7 @@ namespace VAdvantage.Model
 
 
                     // Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-                    if (!(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
+                    if (Util.GetValueOfString(GetCtx().GetContext("#PRODUCT_CONTAINER_APPLICABLE")).Equals("N"))
                     {
                         // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
                         MOrderLine[] oLines = GetLinesOtherthanProduct();
