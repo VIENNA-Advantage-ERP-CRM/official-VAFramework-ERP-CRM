@@ -202,6 +202,7 @@ namespace VIS.Controllers
                     + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
                         + "l.M_Product_ID,p.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description,  uom.stdprecision,l.IsDropShip, o.C_PaymentTerm_ID , t.Name  "); //Arpit on  20th Sept,2017"	            
 
+            // Show Orderline with Charge also, based on the setting for Non Item type on Tenant.
             if (forInvoicees || (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
             {
                 sql.Append("UNION SELECT "
