@@ -1288,6 +1288,12 @@ namespace VAdvantage.Model
                             line.Set_ValueNoCheck("QtyEstimation", fromLines[i].GetQtyEstimation());
                     }
 
+                    // Set Reference of Blanket Order Line on Release Order Line.
+                    if (docType.IsReleaseDocument())
+                    {
+                        line.SetC_OrderLine_Blanket_ID(fromLines[i].GetC_OrderLine_ID());
+                    }
+
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
                     if (line.Get_ColumnIndex("C_Quotation_Line_ID") > 0)
                         line.Set_Value("C_Quotation_Line_ID", fromLines[i].GetC_OrderLine_ID());
