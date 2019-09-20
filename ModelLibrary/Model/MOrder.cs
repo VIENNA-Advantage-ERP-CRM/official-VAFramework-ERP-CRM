@@ -4274,7 +4274,7 @@ namespace VAdvantage.Model
                         
                         //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
                         if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
-                            && (Util.GetValueOfString(GetCtx().GetContext("#PRODUCT_CONTAINER_APPLICABLE")).Equals("N")))
+                            && (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")))
                             continue;
 
                         //
@@ -4749,7 +4749,7 @@ namespace VAdvantage.Model
 
 
                     // Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-                    if (Util.GetValueOfString(GetCtx().GetContext("#PRODUCT_CONTAINER_APPLICABLE")).Equals("N"))
+                    if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
                     {
                         // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
                         MOrderLine[] oLines = GetLinesOtherthanProduct();
