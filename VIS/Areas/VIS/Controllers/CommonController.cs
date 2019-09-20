@@ -1106,7 +1106,7 @@ namespace VIS.Controllers
                 po.Set_ValueNoCheck("M_InOut_ID", M_InOut_ID);
                 po.SetClientOrg(inout);
 
-                // 
+                // set value if the value is non zero
                 if (M_Product_ID > 0)
                 {
                     po.Set_Value("M_Product_ID", M_Product_ID);

@@ -2994,7 +2994,7 @@ namespace VAdvantage.Model
                 bool binding = !dt.IsProposal();
                 //	Not binding - i.e. Target=0
                 if (DOCACTION_Void.Equals(GetDocAction())
-                    //Closing Binding Quotation
+                //Closing Binding Quotation
                 || (MDocType.DOCSUBTYPESO_Quotation.Equals(dt.GetDocSubTypeSO())
                     && DOCACTION_Close.Equals(GetDocAction())))
                     //Commented this check for get binding by Vivek on 27/09/2017
@@ -3622,7 +3622,8 @@ namespace VAdvantage.Model
 
                 ////	Create SO Shipment - Force Shipment
                 MInOut shipment = null;
-                // Shipment not created in case of Resturant
+                // Shipment not created in case of Resturant               
+
                 if (Util.GetValueOfString(dt.GetVAPOS_POSMode()) != "RS")
                 {
                     if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)		//	(W)illCall(I)nvoice
@@ -4270,7 +4271,10 @@ namespace VAdvantage.Model
                     {
                         // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
                         MProduct oproduct = oLine.GetProduct();
-                        if (oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
+                        
+                        //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
+                        if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
+                            && (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")))
                             continue;
 
                         //
@@ -4744,24 +4748,28 @@ namespace VAdvantage.Model
                     }
 
 
-                    // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
-                    MOrderLine[] oLines = GetLinesOtherthanProduct();
-                    for (int i = 0; i < oLines.Length; i++)
+                    // Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
+                    if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
                     {
-                        MOrderLine oLine = oLines[i];
-                        //
-                        MInvoiceLine iLine = new MInvoiceLine(invoice);
-                        iLine.SetOrderLine(oLine);
-                        //	Qty = Ordered - Invoiced	
-                        iLine.SetQtyInvoiced(Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced()));
-                        if (oLine.GetQtyOrdered().CompareTo(oLine.GetQtyEntered()) == 0)
-                            iLine.SetQtyEntered(iLine.GetQtyInvoiced());
-                        else
-                            iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
-                        if (!iLine.Save(Get_TrxName()))
+                        // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
+                        MOrderLine[] oLines = GetLinesOtherthanProduct();
+                        for (int i = 0; i < oLines.Length; i++)
                         {
-                            _processMsg = "Could not create Invoice Line from Order Line";
-                            return null;
+                            MOrderLine oLine = oLines[i];
+                            //
+                            MInvoiceLine iLine = new MInvoiceLine(invoice);
+                            iLine.SetOrderLine(oLine);
+                            //	Qty = Ordered - Invoiced	
+                            iLine.SetQtyInvoiced(Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced()));
+                            if (oLine.GetQtyOrdered().CompareTo(oLine.GetQtyEntered()) == 0)
+                                iLine.SetQtyEntered(iLine.GetQtyInvoiced());
+                            else
+                                iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
+                            if (!iLine.Save(Get_TrxName()))
+                            {
+                                _processMsg = "Could not create Invoice Line from Order Line";
+                                return null;
+                            }
                         }
                     }
                 }
