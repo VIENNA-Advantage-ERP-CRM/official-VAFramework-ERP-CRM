@@ -1599,7 +1599,7 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             if (!success)
-            //if (!success || newRecord)
+                //if (!success || newRecord)
                 return success;
 
             if (!newRecord)
@@ -2295,7 +2295,8 @@ namespace VAdvantage.Model
                 }
 
                 #region done by Amit on behalf of surya 30-9-2015 vawms
-                if (sLine.GetC_OrderLine_ID() != 0 && IsSOTrx() && !IsReturnTrx())
+                // on Warehouse, Set Qty Allocated only for Item type Product
+                if (sLine.GetC_OrderLine_ID() != 0 && product != null && product.GetProductType() == MProduct.PRODUCTTYPE_Item && IsSOTrx() && !IsReturnTrx())
                 {
                     if (Env.IsModuleInstalled("VAWMS_"))
                     {
@@ -2546,7 +2547,7 @@ namespace VAdvantage.Model
                                         sLine.GetM_Locator_ID(), ord.GetM_Warehouse_ID(),
                                         sLine.GetM_Product_ID(),
                                         sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
-                                            //Qty, QtySO, QtyPO, Get_TrxName()))
+                                             //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -2563,7 +2564,7 @@ namespace VAdvantage.Model
                                         sLine.GetM_Locator_ID(), GetM_Warehouse_ID(),
                                         sLine.GetM_Product_ID(),
                                         sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
-                                            //Qty, QtySO, QtyPO, Get_TrxName()))
+                                             //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -2961,7 +2962,7 @@ namespace VAdvantage.Model
                             lineBlanket.Save();
                             lineBlanket1.Save();
                             //MOrderLine oLine1 = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                           
+
                         }
                     }
 
