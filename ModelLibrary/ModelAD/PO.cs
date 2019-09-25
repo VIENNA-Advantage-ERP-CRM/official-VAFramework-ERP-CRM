@@ -1939,7 +1939,7 @@ namespace VAdvantage.Model
 
         protected static int I_ZERO = 0;
 
-        
+
 
         /// <summary>
         /// Is new record
@@ -3393,11 +3393,14 @@ namespace VAdvantage.Model
             // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
             if (AD_Table_ID == X_AD_Org.Table_ID)
             {
-                MWindow win = new MWindow(GetCtx(), GetAD_Window_ID(), null);
-                if (win.GetName() == "Organization Units")
+                MOrg Org = new MOrg(GetCtx(), id, null);
+                if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
                 {
-                    int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(GetAD_Client_ID(), AD_Table_ID);
-                    sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
+                    if (Org.IsOrgUnit())
+                    {
+                        int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(GetAD_Client_ID(), AD_Table_ID);
+                        sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
+                    }
                 }
             }
             int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());

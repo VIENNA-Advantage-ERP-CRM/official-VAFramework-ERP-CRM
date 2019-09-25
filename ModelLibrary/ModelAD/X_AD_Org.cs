@@ -252,6 +252,12 @@ public String GetSAP001_CompanyCode()
         public void SetIsCostCenter(Boolean IsCostCenter) { Set_Value("IsCostCenter", IsCostCenter); }/** Get Cost Center.
 @return Cost Center */
         public Boolean IsCostCenter() { Object oo = Get_Value("IsCostCenter"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /** Set Organization Unit.
+@param IsOrgUnit Organization Unit */
+        public void SetIsOrgUnit(Boolean IsOrgUnit) { Set_Value("IsOrgUnit", IsOrgUnit); }/** Get Organization Unit.
+@return Organization Unit */
+        public Boolean IsOrgUnit() { Object oo = Get_Value("IsOrgUnit"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
     }
 
 }
