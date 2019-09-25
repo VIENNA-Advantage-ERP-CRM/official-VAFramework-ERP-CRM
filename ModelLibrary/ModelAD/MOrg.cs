@@ -233,13 +233,16 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            MWindow Win = new MWindow(GetCtx(), GetAD_Window_ID(), null);
-            if (Win.GetName() == "Organization Units")
+            // Check applied to restrict the records insertion from organization unit window if Cost center and profit center is not selected.
+            if (Get_ColumnIndex("IsOrgUnit") > -1)
             {
-                if (!IsProfitCenter() && !IsCostCenter())
+                if (IsOrgUnit())
                 {
-                    log.SaveError("CheckProfitCostCenter", "");
-                    return false;
+                    if (!IsProfitCenter() && !IsCostCenter())
+                    {
+                        log.SaveError("CheckProfitCostCenter", "");
+                        return false;
+                    }
                 }
             }
             return true;
