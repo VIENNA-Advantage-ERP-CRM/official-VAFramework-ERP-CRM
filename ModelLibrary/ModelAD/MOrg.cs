@@ -225,7 +225,25 @@ namespace VAdvantage.Model
             return true;
         }
 
-
+        /// <summary>
+        /// Before Save
+        /// </summary>
+        /// <param name="newRecord">new Record</param>
+        /// <param name="success">save success</param>
+        /// <returns>success</returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            MWindow Win = new MWindow(GetCtx(), GetAD_Window_ID(), null);
+            if (Win.GetName() == "Organization Units")
+            {
+                if (!IsProfitCenter() && !IsCostCenter())
+                {
+                    log.SaveError("CheckProfitCostCenter", "");
+                    return false;
+                }
+            }
+            return true;
+        }
         /// <summary>
         /// This is Done Bcoz in Organization Structure Form , new organization is being inserted by query. So to implementafter save , this function createad.
         /// 

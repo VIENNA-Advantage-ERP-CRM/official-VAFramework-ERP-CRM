@@ -241,9 +241,17 @@ public String GetSAP001_CompanyCode()
 {
     return (String)Get_Value("SAP001_CompanyCode");
 }
+        /** Set Profit Center.
+        @param IsProfitCenter Profit Center */
+        public void SetIsProfitCenter(Boolean IsProfitCenter) { Set_Value("IsProfitCenter", IsProfitCenter); }/** Get Profit Center.
+@return Profit Center */
+        public Boolean IsProfitCenter() { Object oo = Get_Value("IsProfitCenter"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
-
-
-}
+        /** Set Cost Center.
+@param IsCostCenter Cost Center */
+        public void SetIsCostCenter(Boolean IsCostCenter) { Set_Value("IsCostCenter", IsCostCenter); }/** Get Cost Center.
+@return Cost Center */
+        public Boolean IsCostCenter() { Object oo = Get_Value("IsCostCenter"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+    }
 
 }
