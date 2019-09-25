@@ -233,6 +233,7 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         protected override bool BeforeSave(bool newRecord)
         {
+
             // Check applied to restrict the records insertion from organization unit window if Cost center and profit center is not selected.
             if (Get_ColumnIndex("IsOrgUnit") > -1)
             {

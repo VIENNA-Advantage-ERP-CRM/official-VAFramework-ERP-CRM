@@ -3391,6 +3391,7 @@ namespace VAdvantage.Model
                 .Append("WHERE e.AD_Tree_ID=t.AD_Tree_ID AND Node_ID=").Append(id).Append(")");
             //
             // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
+
             if (AD_Table_ID == X_AD_Org.Table_ID)
             {
                 MOrg Org = new MOrg(GetCtx(), id, null);
