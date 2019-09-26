@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 // Get the lines of Invoice based on the setting taken on Tenant to allow non item Product         
                 if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N") 
-                    && (product != null && product.GetProductType() != MProduct.PRODUCTTYPE_Item || invoiceLine.GetC_Charge_ID() != 0))
+                    && ((product != null && product.GetProductType() != MProduct.PRODUCTTYPE_Item) || invoiceLine.GetC_Charge_ID() != 0))
                 {
                     continue;
                 }                

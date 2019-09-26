@@ -674,7 +674,7 @@ namespace VIS.Controllers
                 sql.Append(" , uom.stdprecision ");
             }
 
-            // Show Orderline with Charge also, based on the setting for Non Item type on Tenant.
+            // Show Invoice Line with Charge also, based on the setting for Non Item type on Tenant.
             if (isAllownonItem)
             {
                 sql.Append(" UNION SELECT "
