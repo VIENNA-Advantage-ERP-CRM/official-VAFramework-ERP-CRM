@@ -1068,8 +1068,15 @@ namespace VAdvantage.Model
             //Checking for conversion of UOM 
             MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
             MDocType dt = new MDocType(GetCtx(), inO.GetC_DocType_ID(), Get_TrxName());
-            MProduct _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
-            if (GetC_UOM_ID() != _Product.GetC_UOM_ID())
+            MProduct _Product = null;
+
+            // Check if Product_ID is non zero then only create the object
+            if (GetM_Product_ID() > 0)
+            {
+                _product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+            }
+
+            if (_product!= null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
                 decimal? differenceQty = Util.GetValueOfDecimal(GetCtx().GetContext("DifferenceQty_"));
                 if (differenceQty > 0 && !newRecord && !dt.IsSplitWhenDifference())
