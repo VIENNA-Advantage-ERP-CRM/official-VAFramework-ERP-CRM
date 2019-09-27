@@ -573,7 +573,13 @@ namespace VAdvantage.Model
 
             int AD_Sequence_ID = seq.GetAD_Sequence_ID();
             Boolean isStartNewYear = seq.IsStartNewYear();
+            Boolean isStartNewMonth = seq.IsStartNewMonth();
+
             Boolean addYearPrefix = seq.IsAddYearPrefix();
+            Boolean addMonthYear = seq.IsAddMonthYear();
+            String yearMonthFormat = seq.GetYearMonthFormat();
+            String separator = seq.GetSeparator();
+
             String dateColumn = seq.GetDateColumn();
             Boolean isUseOrgLevel = seq.IsOrgLevelSequence();
             String orgColumn = seq.GetOrgColumn();
@@ -586,7 +592,7 @@ namespace VAdvantage.Model
             String selectSQL = null;
             if (isStartNewYear || isUseOrgLevel)
             {
-                selectSQL = "SELECT y.CurrentNext, s.CurrentNextSys, y.prefix, y.suffix, y.ADDYEARPREFIX "
+                selectSQL = "SELECT y.CurrentNext, s.CurrentNextSys, y.prefix, y.suffix, y.ADDYEARPREFIX, y.AddMonthYear "
                         + "FROM AD_Sequence_No y, AD_Sequence s "
                         + "WHERE y.AD_Sequence_ID = s.AD_Sequence_ID "
                         + "AND s.AD_Sequence_ID = " + AD_Sequence_ID
@@ -617,6 +623,8 @@ namespace VAdvantage.Model
             //
 
             String calendarYearMonth = NoYearNorMonth;
+            String yearmonthPrefix = "";
+
             int docOrg_ID = 0;
             int next = -1;
 
@@ -624,16 +632,24 @@ namespace VAdvantage.Model
             DataSet rs = new DataSet();
             try
             {
+                DateTime? docDate = null;
+                if (po != null && dateColumn != null && dateColumn.Length > 0)
+                {
+                    docDate = (DateTime)po.Get_Value(dateColumn);
+                }
+                else
+                {
+                    docDate = DateTime.Now;
+                }
+
                 if (isStartNewYear)
                 {
-                    if (po != null && dateColumn != null && dateColumn.Length > 0)
-                    {
-                        DateTime docDate = (DateTime)po.Get_Value(dateColumn);
-                        calendarYearMonth = docDate.Year.ToString();
-                    }
-                    else
-                    {
-                        calendarYearMonth = DateTime.Now.Year.ToString();
+                    calendarYearMonth = docDate.Value.Year.ToString();
+
+                    // if Start Document Sequence every month value is True.
+                    if (isStartNewMonth)
+                    {                        
+                        calendarYearMonth += (docDate.Value.Month.ToString().Length > 1 ? docDate.Value.Month.ToString() : "0" + docDate.Value.Month.ToString());
                     }
                 }
 
@@ -656,6 +672,7 @@ namespace VAdvantage.Model
                         string _prefix = Convert.ToString(rs.Tables[0].Rows[0]["Prefix"]);
                         string _suffix = Convert.ToString(rs.Tables[0].Rows[0]["suffix"]);
                         char addyearprefix = Convert.ToChar(rs.Tables[0].Rows[0]["ADDYEARPREFIX"]);
+                        char addmonthyear = Convert.ToChar(rs.Tables[0].Rows[0]["addMonthYear"]);
 
                         // if any of these fields contains data, then override parent tab's data....
                         if (!string.IsNullOrEmpty(_prefix) || !string.IsNullOrEmpty(_suffix) || addyearprefix.Equals('Y'))
@@ -671,6 +688,8 @@ namespace VAdvantage.Model
                             {
                                 addYearPrefix = false;
                             }
+
+                            addMonthYear = addmonthyear.Equals('Y');
                         }
                     }
                 }
@@ -731,6 +750,25 @@ namespace VAdvantage.Model
                         next = -2;
                     }
                 }
+
+                if (addYearPrefix)
+                {
+                    calendarYearMonth = String.Format("YYYYMM", docDate.Value);
+                    yearmonthPrefix = docDate.Value.Year.ToString();
+
+                    // Appended the Year based on the Format selected in Year Month Format
+                    if (yearMonthFormat == "2")
+                    {
+                        yearmonthPrefix = yearmonthPrefix.Substring(yearmonthPrefix.Length - 2);
+                    }
+
+                    // if Add Month after Year value is True.
+                    if (addMonthYear)
+                    {
+                        // Appended the separator if selected in Year Month Separator.
+                        yearmonthPrefix += separator + (docDate.Value.Month.ToString().Length > 1 ? docDate.Value.Month.ToString() : "0" + docDate.Value.Month.ToString());
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -762,9 +800,9 @@ namespace VAdvantage.Model
                 doc.Append(prefix);
 
             // if Add Year to Prefix checkbox is true then append the year with prefix.
-            if (isStartNewYear && addYearPrefix && isAutoSequence)
+            if (addYearPrefix)
             {
-                doc.Append(calendarYearMonth);
+                doc.Append(yearmonthPrefix);
             }
             doc.Append(next);
             if (suffix != null && suffix.Length > 0)
