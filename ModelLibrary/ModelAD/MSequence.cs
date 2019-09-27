@@ -672,7 +672,7 @@ namespace VAdvantage.Model
                         string _prefix = Convert.ToString(rs.Tables[0].Rows[0]["Prefix"]);
                         string _suffix = Convert.ToString(rs.Tables[0].Rows[0]["suffix"]);
                         char addyearprefix = Convert.ToChar(rs.Tables[0].Rows[0]["ADDYEARPREFIX"]);
-                        char addmonthyear = Convert.ToChar(rs.Tables[0].Rows[0]["addMonthYear"]);
+                        char addmonthyear = Convert.ToChar(rs.Tables[0].Rows[0]["AddMonthYear"]);
 
                         // if any of these fields contains data, then override parent tab's data....
                         if (!string.IsNullOrEmpty(_prefix) || !string.IsNullOrEmpty(_suffix) || addyearprefix.Equals('Y'))
