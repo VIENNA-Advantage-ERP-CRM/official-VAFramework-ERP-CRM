@@ -1101,7 +1101,7 @@ namespace VAdvantage.Model
             String qry1 = "";
 
             // for Service Type Product set value in Locator field
-            if (_Product.GetProductType() != MProduct.PRODUCTTYPE_Item && GetM_Locator_ID() == 0)
+            if (_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item && GetM_Locator_ID() == 0)
             {
                 qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
                 int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));
@@ -1128,7 +1128,8 @@ namespace VAdvantage.Model
             //}
 
             // dont verify qty during completion
-            if ((!inO.IsProcessing() || newRecord) && _Product.IsStocked())
+            // on Ship/Receipt, do not check qty in warehouse for Lines of Charge.
+            if ((!inO.IsProcessing() || newRecord) && _Product != null && _Product.IsStocked())
             {
                 int M_Warehouse_ID = 0; MWarehouse wh = null;
                 StringBuilder qry = new StringBuilder();
