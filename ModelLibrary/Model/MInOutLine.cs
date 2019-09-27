@@ -1068,8 +1068,15 @@ namespace VAdvantage.Model
             //Checking for conversion of UOM 
             MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
             MDocType dt = new MDocType(GetCtx(), inO.GetC_DocType_ID(), Get_TrxName());
-            MProduct _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
-            if (GetC_UOM_ID() != _Product.GetC_UOM_ID())
+            MProduct _Product = null;
+
+            // Check if Product_ID is non zero then only create the object
+            if (GetM_Product_ID() > 0)
+            {
+                _product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+            }
+
+            if (_product!= null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
                 decimal? differenceQty = Util.GetValueOfDecimal(GetCtx().GetContext("DifferenceQty_"));
                 if (differenceQty > 0 && !newRecord && !dt.IsSplitWhenDifference())
@@ -1101,7 +1108,7 @@ namespace VAdvantage.Model
             String qry1 = "";
 
             // for Service Type Product set value in Locator field
-            if (_Product.GetProductType() != MProduct.PRODUCTTYPE_Item && GetM_Locator_ID() == 0)
+            if (_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item && GetM_Locator_ID() == 0)
             {
                 qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
                 int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));
@@ -1128,7 +1135,8 @@ namespace VAdvantage.Model
             //}
 
             // dont verify qty during completion
-            if ((!inO.IsProcessing() || newRecord) && _Product.IsStocked())
+            // on Ship/Receipt, do not check qty in warehouse for Lines of Charge.
+            if ((!inO.IsProcessing() || newRecord) && _Product != null && _Product.IsStocked())
             {
                 int M_Warehouse_ID = 0; MWarehouse wh = null;
                 StringBuilder qry = new StringBuilder();
