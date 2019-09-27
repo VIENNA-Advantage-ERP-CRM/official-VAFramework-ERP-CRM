@@ -1912,7 +1912,7 @@ namespace VAdvantage.Model
                     if (disallow.ToUpper() == "Y")
                     {
                         // is used to handle Non Stocked Item which are not in Storage
-                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @"AND M_Product_ID NOT IN 
+                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @" AND C_Charge_ID IS NULL AND M_Product_ID NOT IN 
                             (SELECT M_InoutLine.M_Product_ID FROM M_InoutLine INNER JOIN M_Product ON M_InoutLine.M_Product_ID = M_Product.M_Product_ID 
                             WHERE M_Product.IsStocked = 'N' AND M_InoutLine.M_Inout_ID  = " + GetM_InOut_ID() + " ) ";
                         int[] ioLine = MInOutLine.GetAllIDs("M_InoutLine", whereClause, Get_TrxName());

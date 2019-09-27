@@ -1073,10 +1073,10 @@ namespace VAdvantage.Model
             // Check if Product_ID is non zero then only create the object
             if (GetM_Product_ID() > 0)
             {
-                _product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
             }
 
-            if (_product!= null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
+            if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
                 decimal? differenceQty = Util.GetValueOfDecimal(GetCtx().GetContext("DifferenceQty_"));
                 if (differenceQty > 0 && !newRecord && !dt.IsSplitWhenDifference())
