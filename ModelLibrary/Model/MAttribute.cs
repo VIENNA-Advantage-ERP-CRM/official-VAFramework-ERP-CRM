@@ -110,6 +110,7 @@ namespace VAdvantage.Model
         /// <returns>Values or null if not list</returns>
         public MAttributeValue[] GetMAttributeValues()
         {
+            // for List type of Values
             if (m_values == null && ATTRIBUTEVALUETYPE_List.Equals(GetAttributeValueType()))
             {
                 List<MAttributeValue> list = new List<MAttributeValue>();
