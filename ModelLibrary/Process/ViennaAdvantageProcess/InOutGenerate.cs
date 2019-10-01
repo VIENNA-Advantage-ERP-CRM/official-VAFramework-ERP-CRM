@@ -73,7 +73,8 @@ namespace ViennaAdvantage.Process
         // container applicable
         private bool isContainerApplicable = false;
 
-        MClient tenant = null;
+        // Allow Non Item type Product also
+        private bool isAllowNonItem = false;
 
         #endregion
 
@@ -142,6 +143,9 @@ namespace ViennaAdvantage.Process
             // check container functionality applicable into system or not
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
+            // check Allow Non Item type Product setting on Tenant
+            isAllowNonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
+
             log.Info("Selection=" + _selection
                 + ", M_Warehouse_ID=" + _M_Warehouse_ID
                 + ", C_BPartner_ID=" + _C_BPartner_ID
@@ -153,8 +157,6 @@ namespace ViennaAdvantage.Process
             {
                 throw new Exception("@NotFound@ @M_Warehouse_ID@");
             }
-
-            tenant = MClient.Get(GetCtx());
 
             if (_selection)	//	VInOutGen
             {
@@ -184,14 +186,11 @@ namespace ViennaAdvantage.Process
                     + " AND EXISTS (SELECT C_OrderLine_ID FROM C_OrderLine ol ");
 
                 // Get the lines of Order based on the setting taken on Tenant to allow non item Product
-                if (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem())
-                {
-                    // For All type of Product shipment can be done
-                }
-                else
+                if (!isAllowNonItem)
                 {
                     _sql.Append("INNER JOIN M_Product prd ON (ol.M_Product_ID = prd.M_Product_ID AND prd.ProductType = 'I')");
                 }
+
                 _sql.Append("WHERE ol.M_Warehouse_ID=" + _M_Warehouse_ID);					//	#1
 
                 if (_datePromised != null)
@@ -342,9 +341,9 @@ namespace ViennaAdvantage.Process
                 }
 
                 // Get the lines of Order based on the setting taken on Tenant to allow non item Product
-                if (!(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
+                if (!isAllowNonItem)
                 {
-                  // JID_1307: Shipment is not generating against the Sales Order which includes combination of ItemType & Service/Expense/Resource type of Products at SO lines
+                    // JID_1307: Shipment is not generating against the Sales Order which includes combination of ItemType & Service/Expense/Resource type of Products at SO lines
                     where.Append(" AND C_OrderLine_ID IN (SELECT ol.C_OrderLine_ID FROM C_OrderLine ol INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID WHERE ol.C_Order_ID = "
                     + order.GetC_Order_ID() + " AND p.ProductType = 'I')");
                 }
@@ -376,7 +375,7 @@ namespace ViennaAdvantage.Process
                         }
 
                         // Get the lines of Order based on the setting taken on Tenant to allow non item Product                        
-                        if (line.GetC_Charge_ID() != 0 && !(tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && tenant.IsAllowNonItem()))
+                        if (line.GetC_Charge_ID() != 0 && !isAllowNonItem && Env.Signum(toDeliver) == 0)        // Nothing to Deliver
                         {
                             continue;
                         }
