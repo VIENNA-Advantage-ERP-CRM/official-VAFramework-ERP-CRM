@@ -375,7 +375,7 @@ namespace ViennaAdvantage.Process
                         }
 
                         // Get the lines of Order based on the setting taken on Tenant to allow non item Product                        
-                        if (line.GetC_Charge_ID() != 0 && !isAllowNonItem && Env.Signum(toDeliver) == 0)        // Nothing to Deliver
+                        if (line.GetC_Charge_ID() != 0 && (!isAllowNonItem || Env.Signum(toDeliver) == 0))        // Nothing to Deliver
                         {
                             continue;
                         }
