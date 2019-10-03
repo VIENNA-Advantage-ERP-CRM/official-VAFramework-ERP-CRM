@@ -1,7 +1,0 @@
-﻿; (function (VIS, $) {
-
-
-
-
-
-})(VIS, JQuery);
