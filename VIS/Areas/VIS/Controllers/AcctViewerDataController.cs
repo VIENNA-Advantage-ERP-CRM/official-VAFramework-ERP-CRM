@@ -106,7 +106,16 @@ namespace VIS.Controllers
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
 
-
-
+        /// <summary>
+        /// Method to check if organization unit window is available or not.
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult HasOrganizationUnit()
+        {
+            var ctx = Session["ctx"] as Ctx;
+            AcctViewerData obj = new AcctViewerData();
+            var value = obj.HasOrganizationUnit(ctx);
+            return Json(new { result = value }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Web;
 using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VIS.Classes;
+using VAdvantage.Model;
 
 namespace VIS.Models
 {
@@ -141,7 +142,17 @@ namespace VIS.Models
         public List<AcctViewerDataOrg> AcctViewerGetOrgData(Ctx ctx, int ad_client_id)
         {
             List<AcctViewerDataOrg> obj = new List<AcctViewerDataOrg>();
-            var sql = "SELECT AD_Org_ID, Name FROM AD_Org WHERE AD_Client_ID=" + ad_client_id + " ORDER BY Value";
+
+            var sql = "SELECT AD_Org_ID, Name FROM AD_Org WHERE AD_Client_ID=" + ad_client_id;
+            MOrg Org = new MOrg(ctx, ctx.GetAD_Org_ID(), null);
+            if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
+            {
+                sql += " AND IsActive='Y' AND IsCostCenter='N' AND IsProfitCenter='N' AND IsSummary='N' ORDER BY Value ";
+            }
+            else
+            {
+                sql += " AND IsActive='Y'  AND IsSummary='N' ORDER BY Value ";
+            }
             DataSet ds = DB.ExecuteDataset(sql);
 
             if (ds != null)
@@ -283,6 +294,21 @@ namespace VIS.Models
                 return "";
             }
             return "";
+        }
+
+        /// <summary>
+        /// Method to check if organization unit window is available or not.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+        public bool HasOrganizationUnit(Ctx ctx)
+        {
+            MOrg Org = new MOrg(ctx, ctx.GetAD_Org_ID(), null);
+            if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
+            {
+                return true;
+            }
+            return false;
         }
 
     }
