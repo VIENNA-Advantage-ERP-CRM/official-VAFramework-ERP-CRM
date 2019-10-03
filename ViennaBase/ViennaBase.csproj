@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -26,6 +27,7 @@
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
+    <TypeScriptToolsVersion>3.5</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -137,6 +139,8 @@
     <Content Include="Areas\ViennaBase\Content\bootstrap.css" />
     <Content Include="Areas\ViennaBase\Content\bootstrap.min.css" />
     <Content Include="Areas\ViennaBase\Content\custom\custom.css" />
+    <Content Include="Areas\ViennaBase\Content\fontlib\font-awesome.css" />
+    <Content Include="Areas\ViennaBase\Content\fontlib\font-awesome.min.css" />
     <Content Include="Areas\ViennaBase\Content\migration\ad-cust.css" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-grid.css" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-grid.min.css" />
@@ -145,7 +149,7 @@
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-reboot.min.css" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap.css" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap.min.css" />
-    <Content Include="Areas\ViennaBase\Content\migration\glyphicons.css" />
+    <Content Include="Areas\ViennaBase\Content\fontlib\glyphicons.css" />
     <Content Include="Areas\ViennaBase\Content\migration\themes\base\accordion.css" />
     <Content Include="Areas\ViennaBase\Content\migration\themes\base\all.css" />
     <Content Include="Areas\ViennaBase\Content\migration\themes\base\autocomplete.css" />
@@ -252,13 +256,11 @@
     <Content Include="Areas\ViennaBase\Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Areas\ViennaBase\Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Areas\ViennaBase\Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Areas\ViennaBase\Content\Toastr\toastr.min.css" />
-    <Content Include="Areas\ViennaBase\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Areas\ViennaBase\Content\toastr\toastr.min.css" />
+    <Content Include="Areas\ViennaBase\Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Areas\ViennaBase\Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Areas\ViennaBase\Scripts\bootstrap.js" />
     <Content Include="Areas\ViennaBase\Scripts\bootstrap.min.js" />
-    <Content Include="Areas\ViennaBase\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Areas\ViennaBase\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Areas\ViennaBase\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-grid.css.map" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-grid.min.css.map" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-reboot.css.map" />
@@ -267,6 +269,14 @@
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap.min.css.map" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\crsmarttag.jsp" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\preview.jsp" />
+    <Content Include="Areas\ViennaBase\Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Areas\ViennaBase\Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Areas\ViennaBase\Content\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Areas\ViennaBase\Content\fonts\FontAwesome.otf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Areas\ViennaBase\Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Areas\ViennaBase\Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\ActiveXControls\PrintControl.cab" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\ActiveXControls\PrintControl_res_cs.cab" />
@@ -1214,7 +1224,7 @@
     <Content Include="Areas\ViennaBase\Scripts\migration\popper.min.js" />
     <Content Include="Areas\ViennaBase\Scripts\spectrum.js" />
     <Content Include="Areas\ViennaBase\Content\w2ui\w2ui-1.4.3.css" />
-    <Content Include="Areas\ViennaBase\Scripts\Toastr\toastr.min.js" />
+    <Content Include="Areas\ViennaBase\Scripts\toastr\toastr.min.js" />
     <Content Include="Areas\ViennaBase\Scripts\w2ui\w2ui-1.4.3.js" />
     <Content Include="Areas\ViennaBase\Content\w2ui\w2ui-1.4.3.min.css" />
     <Content Include="Areas\ViennaBase\Scripts\w2ui\w2ui-1.4.3.min.js" />
@@ -1232,10 +1242,6 @@
     <Content Include="Dll\System.Web.WebPages.Deployment.dll" />
     <Content Include="Dll\System.Web.WebPages.dll" />
     <Content Include="Dll\System.Web.WebPages.Razor.dll" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\ViennaBase\Content\bootstrap-theme.css.map" />
     <Content Include="Areas\ViennaBase\Content\bootstrap.css.map" />
     <Content Include="Areas\ViennaBase\Scripts\jquery-2.1.0.min.map" />
@@ -1243,6 +1249,14 @@
     <Content Include="Areas\ViennaBase\Scripts\jquery-ui-1.10.4.min.js" />
     <Content Include="Areas\ViennaBase\Scripts\modernizr-2.6.2.js" />
     <Content Include="Areas\ViennaBase\Scripts\handlebars.min.js" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\bootstrap.js.map" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\bootstrap.min.js.map" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\jquery-3.4.1.min.map" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\jquery-3.4.1.slim.min.map" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\popper-utils.js.map" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\popper-utils.min.js.map" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\popper.js.map" />
+    <Content Include="Areas\ViennaBase\Scripts\migration\popper.min.js.map" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -1261,14 +1275,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Areas\ViennaBase\Views\web.config" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\bootstrap.js.map" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\bootstrap.min.js.map" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\jquery-3.4.1.min.map" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\jquery-3.4.1.slim.min.map" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\popper-utils.js.map" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\popper-utils.min.js.map" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\popper.js.map" />
-    <Content Include="Areas\ViennaBase\Scripts\migration\popper.min.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1282,11 +1288,15 @@
     <Folder Include="Content\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>

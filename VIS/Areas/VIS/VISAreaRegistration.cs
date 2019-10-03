@@ -30,6 +30,9 @@ namespace VIS
             ScriptBundle modScript = new ScriptBundle("~/Areas/VIS/Script/VISjs");
 
 
+
+
+
             modScript.Include(
                  "~/Areas/VIS/Scripts/app/native-extension.js",
                 "~/Areas/VIS/Scripts/app/utility.js",
@@ -44,7 +47,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/adialog.js",
                 "~/Areas/VIS/Scripts/app/lookup.js",
                 "~/Areas/VIS/Scripts/app/treepanel.js",
-                "~/Areas/VIS/Scripts/app/windowframe.js",
+               // "~/Areas/VIS/Scripts/app/windowframe.js",
                 "~/Areas/VIS/Scripts/app/controller.js",
                 "~/Areas/VIS/Scripts/app/formframe.js",
                 "~/Areas/VIS/Scripts/app/processframe.js",
@@ -172,6 +175,21 @@ namespace VIS
                   "~/Areas/VIS/Scripts/model/calloutpayment.js"//Bottom One
                    );
 
+            modScript.Include(
+                 //a Part 
+                 "~/Areas/VIS/Scripts/F20/wframe.js",
+                "~/Areas/VIS/Scripts/F20/atabpanel.js",
+                "~/Areas/VIS/Scripts/F20/veditview.js",
+                "~/Areas/VIS/Scripts/F20/vcardview.js",
+                "~/Areas/VIS/Scripts/F20/vgridview.js",
+                "~/Areas/VIS/Scripts/F20/vmapview.js",
+                "~/Areas/VIS/Scripts/F20/aviewcontroller.js",
+                "~/Areas/VIS/Scripts/F20/apanel.js",
+                "~/Areas/VIS/Scripts/F20/thememgr.js"
+                );
+
+
+
             style.Include("~/Areas/VIS/Content/Site.css",
                 //"~/Areas/VIS/Content/ad-cust.css",
                 "~/Areas/VIS/Content/VISAD.css",
@@ -187,8 +205,12 @@ namespace VIS
                  "~/Areas/VIS/Content/RecordAccessDialog.css",
                 "~/Areas/VIS/Content/GroupStyle.css",
                  "~/Areas/VIS/Content/ProductContainer.css"
-               );    
-                
+               );
+
+            style.Include("~/Areas/VIS/Content/F20/Color.css",
+                "~/Areas/VIS/Content/F20/Site.css",
+                "~/Areas/VIS/Content/F20/Window.css"
+                );
               
             //styleRTL.Include("~/Areas/VIS/Content/VIS.rtl.css");
 

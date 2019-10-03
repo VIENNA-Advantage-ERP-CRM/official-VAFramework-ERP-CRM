@@ -1,89 +1,131 @@
 ﻿@if (Request.IsAuthenticated)
-{    
+{
     @model VIS.Models.LoginModel
-    
+
     @functions{
 
-   
+
         public string GetMsg(string lang, string key)
         {
             return VAdvantage.Utility.Msg.GetMsg(lang, key);
         }
-       
-  }
+
+    }
 
 
     <!-- App Top Header START -->
-    <div class="container-fluid header">
-        @if (!ViewBag.disableMenu)
-        {
-            <ul class="vis-topMenu">
-                <li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-menu" title="@GetMsg((string)ViewBag.culture, "AppMenu") @GetMsg((string)ViewBag.culture, "Shct_AppMenu")" id="vis_appMenu">App Menu</a></li>
-                <li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-Info-Home" title="@GetMsg((string)ViewBag.culture, "InfoWindow")">Info</a></li>
-                @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-alerts" title="Alerts">Alerts</a><span class="vis-notify-counter">55</span></li>*@
-                @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-call" title="@GetMsg((string)ViewBag.culture, "VA048_CallingInterface")" id="vis_appCall">Call</a></li>*@
-            </ul>
-        }
-        else
-        {
-            <ul class="vis-topMenu vis-menuHeaderLogo" style="display: none; margin: 5px 0 0 0">
-                <li>
-                    <img src="~/Areas/VIS/Images/logo.jpg" /></li>
-            </ul>
-        }
 
-        <div class="vis-clouddaysleft">
-            <p id="vis_cloud_daysleft"></p>
-        </div>
-        <ul class="vis-userinfo">
-            <li id="vis_userDate"><span class="vis-icons-menuBar vis-icon-date"></span>@DateTime.Now.ToString("D", new System.Globalization.CultureInfo(ViewBag.culture.ToString().Replace("_", "-")))</li>
+    if (!ViewBag.disableMenu)
+    {
+        <ul class="vis-app-hdr-l">
+            <li>
+                <a href="javascript:void(0)" class="vis-app-hdr-l-menu" title="@GetMsg((string)ViewBag.culture, "AppMenu") @GetMsg((string)ViewBag.culture, "Shct_AppMenu")" id="vis_appMenu">
+                    <i class="fa fa-folder-o"></i>
+                </a>
+            </li>
+            <li>
+                <span class="vis-app-v-line"></span>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="vis-app-hdr-l-menu" title="@GetMsg((string)ViewBag.culture, "InfoWindow")">
+                    <i class="fa fa-info"></i>
+                </a>
+            </li>
+            @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-alerts" title="Alerts">Alerts</a><span class="vis-notify-counter">55</span></li>*@
+            @*<li><a href="javascript:void(0)" class="vis-icons-menuBar vis-icon-call" title="@GetMsg((string)ViewBag.culture, "VA048_CallingInterface")" id="vis_appCall">Call</a></li>*@
+        </ul>
+    }
+    else
+    {
+        <ul class="vis-app-hdr-l-menu" style="display: none; margin: 5px 0 0 0">
+            <li>
+                <img src="~/Areas/VIS/Images/logo.jpg" />
+            </li>
+        </ul>
+    }
+
+    <div class="vis-app.hdr-clouddaysleft">
+        <p id="vis_cloud_daysleft"></p>
+    </div>
+    <ul class="vis-app-hdr-r">
+        <li id="vis_userDate"><i class="fa fa-calendar"></i> @DateTime.Now.ToString("D", new System.Globalization.CultureInfo(ViewBag.culture.ToString().Replace("_", "-")))</li>
+        <li id="vis_theme">
+            <div class="dropdown">
+                <span class="dropdown-toggle vis-app-hdr-r-theme" data-toggle="dropdown">
+                    <i class="fa fa-paint-brush">
+                    </i>
+                </span>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="vis-theme-rec">
+                            <span class="vis-theme-color" style="background-color:#1aa0ed"></span>
+                            <span class="vis-theme-color" style="background-color:black"></span>
+                            <span class="vis-theme-color" style="background-color:white"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="vis-theme-rec">
+                            <span class="vis-theme-color" style="background-color:black"></span>
+                            <span class="vis-theme-color" style="background-color:#1aa0ed"></span>
+                            <span class="vis-theme-color" style="background-color:white"></span>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+            </div>
+
+            @*<select id="vis_cmbtheme"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option> </select>  </li>*@
             @*
-            <li id="vis_userTime"><span class="vis-icons-menuBar vis-icon-time"></span>@DateTime.Now.ToShortTimeString()</li>*@
-            <li id="vis_userDisplayName"><span style="cursor: pointer" id="vis_userName">@User.Identity.Name</span>
-                @*
+                <li id="vis_userTime"><span class="vis-icons-menuBar vis-icon-time"></span>@DateTime.Now.ToShortTimeString()*@
+        </li>
+        <li id="vis_userDisplayName" class="vis-app-hdr-r-user">
+            <a id="vis_userName">@User.Identity.Name</a>
+            @*
                 <div class="vis-div-userAvatar">*@
-                @if (ViewBag.UserPic != null)
+            @if (ViewBag.UserPic != null)
+            {
+                if (ViewBag.UserPic != "NoRecordFound" && ViewBag.UserPic != "FileDoesn'tExist")
                 {
-                    if (ViewBag.UserPic != "NoRecordFound" && ViewBag.UserPic != "FileDoesn'tExist")
-                    {
-                    <img id="vis_LoginUserImage" src="@ViewBag.UserPic" class="vis-userAvatar" />                
-                    }
-                    else
-                    {
-                    <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
-                    }
+                    <img id="vis_LoginUserImage" src="@ViewBag.UserPic" class="vis-userAvatar" />
                 }
                 else
                 {
                     <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
                 }
-                @*
+            }
+            else
+            {
+                <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
+            }
+            @*
                 </div>*@
 
 
-            </li>
-            <li>
-                @using (Html.BeginForm("LogOff", "Account", new { area = "VIS" }, FormMethod.Post, new { id = "logoutForm" }))
-                {
-                    @Html.AntiForgeryToken() 
-                    <a href="javascript:document.getElementById('logoutForm').submit()" class="vis-icons-menuBar vis-icon-logout" title="@GetMsg((string)ViewBag.culture, "Shct_LogOut")">Log Out</a>
-                }
-            </li>
-        </ul>
+        </li>
+        <li>
+            @using (Html.BeginForm("LogOff", "Account", new { area = "VIS" }, FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="vis-app-hdr-r-logout" title="@GetMsg((string)ViewBag.culture, "Shct_LogOut")">
+                    <i class="fa fa-power-off"></i>
+                </a>
+            }
+        </li>
+    </ul>
 
-    </div>
+
     <div id="vis_home_ca" class="vis-dialog vis-auth-dialog">
 
         @using (Html.BeginForm("JsonChangeAuthentication", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "vis_changeAuthForm" }))
         {
-            @Html.AntiForgeryToken() 
-    
+            @Html.AntiForgeryToken()
+
             var sty = "width: auto; text-align: left; padding-right: 5px;";
             if (ViewBag.direction == "rtl")
             {
                 sty = "width: auto; text-align: right; padding-left: 5px;";
             }
-            
+
             <table>
                 <tr>
                     <td style="@sty">
@@ -97,7 +139,7 @@
                 </tr>
                 <tr>
                     <td style="@sty">
-                    @Html.LabelFor(m => m.Login2Model.Client)
+                        @Html.LabelFor(m => m.Login2Model.Client)
                     <td style="width: 100%">
                         @Html.DropDownListFor(m => m.Login2Model.Client, new SelectList(ViewBag.ClientList, "Key", "Name", Convert.ToInt32(Model.Login2Model.Client)), new { id = "vis_home_client" })
                         @Html.HiddenFor(m => m.Login2Model.ClientName, new { id = "vis_home_clientName" })
@@ -139,10 +181,10 @@
                 </tr>
             </table>
 
-           
+
 
             @Html.ValidationSummary()
-    
+
         }
 
 
@@ -150,53 +192,4 @@
 
     </div>
     <!-- App Top Header END -->
-    
-    
-@*<table>
-    <tr>
-        <td>
-            <table>
-                <tr>
-                    <td class="td-big"><span>@DateTime.Now.ToShortTimeString()</span></td>
-                </tr>
-                <tr>
-                    <td class="td-small"><span>@DateTime.Now.ToLongDateString()</span></td>
-                </tr>
-            </table>
-        </td>
-
-
-
-        <td>
-            <div class="search">
-                <input id="txtSearch" type="text" placeholder="Search" list="leafNodes">
-                <datalist id="leafNodes">
-                    @foreach (var item in ViewBag.Menu.GetLeafNodes())
-                        {
-                            <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
-                    }
-                </datalist>
-                <img src="~/Areas/VIS/Images/base/Search24.png" width="22" />
-            </div>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td class="td-big"><span>@User.Identity.Name</span></td>
-                </tr>
-                <tr>
-                    <td class="td-small"><span>-</span></td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <img class="user-img" src="~/Areas/VIS/Images/user.png" />
-            @using (Html.BeginForm("LogOff", "Account", new { area = "VIS" }, FormMethod.Post, new { id = "logoutForm" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-            }
-        </td>
-    </tr>
-    </table>*@
 }
