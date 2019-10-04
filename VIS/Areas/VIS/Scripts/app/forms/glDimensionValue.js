@@ -49,7 +49,7 @@
 
         /** Is used to design GL Dimension Value Form */
         function createMainView() {
-            $mainpageContent = $('<div class="vis_gl-main-wrap">');
+            $mainpageContent = $('<div class="vis-gl-main-wrap">');
 
             // get User Element Column ID
             var paramStr = VIS.context.getWindowContext($self.windowNo, "AD_Column_ID", true);
@@ -62,14 +62,14 @@
             var columnName = VIS.dataContext.getJSONRecord("GlJournal/ColumnName", paramStr);
 
             // Row 1
-            $formWrap = $('<div class="vis_gl-form-wrap">');
-            $formDataRow = $('<div class="vis_gl-form-row">');
+            $formWrap = $('<div class="vis-gl-form-wrap">');
+            $formDataRow = $('<div class="vis-gl-form-row">');
 
-            $formData = $('<div class="vis_gl-form-col">');
+            $formData = $('<div class="vis-gl-form-col">');
             $lblUserElement = $('<label>' + VIS.Msg.translate(ctx, columnName) + '</label>');
             $formData.append($lblUserElement);
 
-            $formDataR = $('<div class="vis_gl-form-col2">');
+            $formDataR = $('<div class="vis-gl-form-col2">');
             var valueInfo = VIS.MLookupFactory.getMLookUp(ctx, $self.windowNo, VIS.Utility.Util.getValueOfString(paramStr), VIS.DisplayType.Search);
             $infoUserElement = new VIS.Controls.VTextBoxButton(columnName, false, false, true, VIS.DisplayType.Search, valueInfo);
             $formDataR.append($('<div>').append($infoUserElement).append($infoUserElement.getControl()).append($infoUserElement.getBtn(0)));
@@ -78,11 +78,11 @@
             $formWrap.append($formDataRow);
 
             //Action 
-            $actionPanel = $('<div class="VIS_buttons-wrap .vis_gl-buttons-wrap">');
+            $actionPanel = $('<div class="VIS_buttons-wrap .vis-gl-buttons-wrap">');
 
             $buttons = $('<div class="pull-right">');
-            $btnOk = $('<span class="btn vis_gl-buttons-wrap-span">' + VIS.Msg.translate(ctx, "VIS_OK") + '</span>');
-            $btnCancel = $('<span class="btn vis_gl-buttons-wrap-span">' + VIS.Msg.translate(ctx, "Cancel") + '</span>');
+            $btnOk = $('<span class="btn vis-gl-buttons-wrap-span">' + VIS.Msg.translate(ctx, "VIS_OK") + '</span>');
+            $btnCancel = $('<span class="btn vis-gl-buttons-wrap-span">' + VIS.Msg.translate(ctx, "Cancel") + '</span>');
             $buttons.append($btnOk).append($btnCancel);
             $actionPanel.append($buttons);
             $mainpageContent.append($formWrap).append($actionPanel);
