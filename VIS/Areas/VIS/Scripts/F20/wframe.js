@@ -1178,7 +1178,7 @@
         var $root = clone.find(".vis-ad-w-p-s-main");
 
         this.$statusLine = $root.find(".vis-ad-w-p-s-msg").find("span");// $("<span>");
-        this.$statusDB = $root.find(".vis.ad-w-p-s-statusdb");// $("<span class='vis-statusbar-statusDB'>").text("0/0");
+        this.$statusDB = $root.find(".vis-ad-w-p-s-statusdb");// $("<span class='vis-statusbar-statusDB'>").text("0/0");
         this.$infoLine = $root.find(".vis-ad-w-p-s-infoline");// $("<span class='vis-statusbar-infoLine'>").text("info");
 
         var $spanPageResult = $root.find(".vis-ad-w-p-s-result").find("span");// $("<span class='vis-statusbar-pageMsg'>");
