@@ -168,6 +168,7 @@ VIS.GridController = function (showRowNo, doPaging, id) {
     };
 
     this.sizeChanged = function (height, width) {
+        return;
         /* SetHeight */
         if (!height) {
             height = VIS.Env.getScreenHeight() - (AWINDOW_HEADER_HEIGHT + APANEL_HEADER_HEIGHT + APANEL_FOOTER_HEIGHT);

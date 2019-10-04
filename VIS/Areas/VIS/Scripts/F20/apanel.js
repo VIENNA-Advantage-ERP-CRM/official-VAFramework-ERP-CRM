@@ -190,7 +190,7 @@ function APanel() {
 
 
         //tolbar and search 
-        $ulToobar = $root.find(".vis-ad-w-p-tb-l");// $("<ul class='vis-appsaction-ul'>"); //toolbar item list
+        $ulToobar = $root.find(".vis-ad-w-p-tb-lc");// $("<ul class='vis-appsaction-ul'>"); //toolbar item list
         //$divSearch = $root.find(".vis-ad-w-p-tb-search");
         //$divToolbar = $("<div class='vis-apanel-toolbar'>").append($ulToobar); //toolbar
 
@@ -211,7 +211,7 @@ function APanel() {
        // $td0leftbar = $("<td style='width:40px;' style='height:100%' rowspan='3'>");
         
         $td0leftbar = $root.find(".vis-ad-w-p-action");
-        $btnlbToggle = $root.find(".vis-ad-w-p-tb-r-abar");
+        $btnlbToggle = $root.find(".vis-ad-w-p-tb-rc-abar");
 
         //$lb = $root.find(".vis-ad-w-p-a-container");
          //=  ;//$("<div class='vis-apanel-lb-toggle' ><img class='vis-apanel-lb-img' title='" + VIS.Msg.getMsg("Actions") + "' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/mt24.png'></div>");
@@ -2104,7 +2104,7 @@ APanel.prototype.initPanel = function (jsonData, query, $parent, goSingleRow, se
 
         this.vTabbedPane.addTab(id, gTab, tabElement, tabActions[i]);
         if (tabElement) {
-            ///*this.getLayout().append(tabElement.getRoot());
+            this.getLayout().append(tabElement.getRoot());
         }
         //TabChange Action Callback
         tabActions[i].onAction = this.onTabChange; //Perform tab Change
