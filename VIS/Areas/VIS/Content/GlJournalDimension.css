@@ -1,0 +1,30 @@
+﻿.VIS_gl-main-wrap, .VIS_gl-form-wrap, .VIS_gl-form-row {
+    float: left;
+    width: 100%;
+    height: 73% !important
+}
+
+.VIS_gl-form-col {
+    float: left;
+    width: 30%;
+}
+
+    .VIS_gl-form-col label {
+        font-size: 14px;
+        font-weight: normal;
+        padding-left: 7px;
+    }
+
+.VIS_gl-form-col2 {
+    float: left;
+    width: 70%;
+}
+
+.VIS_gl-buttons-wrap {
+    padding-top: 15px;
+}
+
+.VIS_gl-buttons-wrap-span {
+    font-size: 14px;
+    padding: 6px 12px;
+}
