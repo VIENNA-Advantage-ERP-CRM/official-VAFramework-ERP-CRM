@@ -441,7 +441,7 @@
      *  @param callback to add menu item for form
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initForm = function (AD_Form_ID, callback, action) {
+    AWindow.prototype.initForm = function (AD_Form_ID, callback, action, workflowInfo) {
 
         this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT); //initlize AForm
 
@@ -474,7 +474,7 @@
             self.setName(jsonData.DisplayName);
 
 
-            if (!self.cPanel.openForm(jsonData, self, windowNo)) {
+            if (!self.cPanel.openForm(jsonData, self, windowNo, workflowInfo)) {
                 self.dispose();
                 self = null;
                 return;

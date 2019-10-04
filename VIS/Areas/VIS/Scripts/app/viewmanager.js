@@ -164,13 +164,13 @@
         /* Start form
         *@param id id of form
         */
-        function startForm(id) {
+        function startForm(id, workflowInfo) {
             var windw = new VIS.AWindow();
             if (VIS.MRole.getIsDisableMenu())
             {
                 windw.hideCloseIcon(true);
             }
-            if (windw.initForm(id, addShortcut, ACTION_FORM)) {
+            if (windw.initForm(id, addShortcut, ACTION_FORM, workflowInfo)) {
                 windw.onClosed = removeShortcut;
                 windw.show($mainConatiner);
                 registerView(windw);
