@@ -38,7 +38,7 @@
         if (param) {
             dataIn.param = param;
         }
-asdfsadf
+
         var dataSet = null;
 
         getDataSetJString(dataIn, async, function (jString) {
