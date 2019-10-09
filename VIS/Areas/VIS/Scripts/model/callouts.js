@@ -2631,6 +2631,11 @@
                     var dr = null;
                     taxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
                     mTab.setValue("TaxAmt", taxAmt);
+
+                    // Set Surcharge Amount to zero
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        mTab.setValue("SurchargeAmt", 0);
+                    }
                 }
             }
 
@@ -13563,17 +13568,12 @@
                     ); //7          
                     var dr = null;
                     taxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
-                    //
-
-
-                    //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                    // taxAmt = dr[0];
-
-
-
-                    //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                    //taxAmt = tax.CalculateTax(lineNetAmt, IsTaxIncluded(windowNo), StdPrecision);
                     mTab.setValue("TaxAmt", taxAmt);
+
+                    // Set Surcharge Amount to zero
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        mTab.setValue("SurchargeAmt", 0);
+                    }
                 }
             }
             //	Added by Vivek Kumar 14/12/2015
@@ -14531,13 +14531,13 @@
                     StdPrecision.toString() //4 
                 ); //7          
                 var dr = null;
-                TaxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
-                //
-
-
-                //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                //TaxAmt = dr[0];
+                TaxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);                
                 mTab.setValue("TaxAmt", TaxAmt);
+
+                // Set Surcharge Amount to zero
+                if (mTab.getField("SurchargeAmt") != null) {
+                    mTab.setValue("SurchargeAmt", 0);
+                }
             }
         }
 
