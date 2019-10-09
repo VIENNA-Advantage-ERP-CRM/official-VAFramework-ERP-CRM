@@ -246,7 +246,8 @@ namespace VAdvantage.Model
         /// <summary>
         /// Calculate/Set Surcharge Tax Amt from Order Lines
         /// </summary>
-        /// <returns>true if aclculated</returns>
+        /// <param name="taxRate">Tax Rate</param>
+        /// <returns>true if calculated</returns>
         public bool CalculateSurchargeFromLines(MTax taxRate)
         {
             Decimal taxBaseAmt = Env.ZERO;
