@@ -104,6 +104,7 @@
                 busyDiv(true);
 
                 if ($infoUserElement.getValue() == null) {
+                    busyDiv(false);
                     VIS.ADialog.error("VIS_DimensionNotSelected", true, "", "");
                     return false;
                 };
