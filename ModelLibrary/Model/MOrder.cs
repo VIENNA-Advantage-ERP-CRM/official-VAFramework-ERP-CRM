@@ -3240,6 +3240,20 @@ namespace VAdvantage.Model
                         if (!oTax.Save(Get_TrxName()))
                             return false;
                         taxList.Add(taxID);
+
+                        // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                        if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                        {
+                            oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
+                            if (oTax != null)
+                            {
+                                MTax taxRate = MTax.Get(GetCtx(), taxID);
+                                if (!oTax.CalculateSurchargeFromLines(taxRate))
+                                    return false;
+                                if (!oTax.Save(Get_TrxName()))
+                                    return false;
+                            }
+                        }
                     }
                     totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
                 }
@@ -3300,7 +3314,7 @@ namespace VAdvantage.Model
                         _taxes = null;
                     }
                     else
-                    {
+                    {                        
                         if (!IsTaxIncluded())
                             grandTotal = Decimal.Add(grandTotal, oTax.GetTaxAmt());
                     }
