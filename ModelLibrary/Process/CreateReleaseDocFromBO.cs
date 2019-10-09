@@ -68,7 +68,9 @@ namespace VAdvantage.Process
 
                 rposo.SetPOReference(Util.GetValueOfString(from.GetDocumentNo()));
                 rposo.Set_Value("IsBlanketTrx", false);
-                rposo.SetOrig_Order_ID(order_ID);
+
+                // JID_0890: On Blanket Sales/Purchase Order, Create Release Purchase/Sales Order Process was not working.
+                //rposo.SetOrig_Order_ID(order_ID);
                 rposo.SetC_Order_Blanket(GetRecord_ID()); //Set Blanket Order ID to release SO/PO
                 rposo.SetIsSOTrx(dt.IsSOTrx());
                 //Set Same Document Sequence FROM Document type-- for Document is Number Controlled

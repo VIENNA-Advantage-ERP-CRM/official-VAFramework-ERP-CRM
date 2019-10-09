@@ -544,6 +544,43 @@ namespace VAdvantage.Acct
             {
                 SetAD_OrgTrx_ID(_doc.GetAD_OrgTrx_ID());
             }
+            //	Set User Dimension
+            if (_docLine != null)
+            {
+                SetUserElement1_ID(_docLine.GetUserElement1());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement2_ID(_docLine.GetUserElement2());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement3_ID(_docLine.GetUserElement3());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement4_ID(_docLine.GetUserElement4());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement5_ID(_docLine.GetUserElement5());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement6_ID(_docLine.GetUserElement6());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement7_ID(_docLine.GetUserElement7());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement8_ID(_docLine.GetUserElement8());
+            }
+            if (_docLine != null)
+            {
+                SetUserElement9_ID(_docLine.GetUserElement9());
+            }
             //	Project
             if (_docLine != null)
             {

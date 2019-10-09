@@ -76,6 +76,7 @@ namespace VAdvantage.Acct
         /// <returns>DocLine Array</returns>
         private DocLine[] LoadLines(MJournal journal)
         {
+            MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
             List<DocLine> list = new List<DocLine>();
             MJournalLine[] lines = journal.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
@@ -116,14 +117,14 @@ namespace VAdvantage.Acct
 
 
                             decimal cRate = line.GetCurrencyRate();
-                            if (cRate == 0 || cRate == null)
+                            if (cRate == 0)
                             {
                                 cRate = 1;
                             }
                             decimal amtAcctCr = 0;
                             decimal amtAcctDr = 0;
 
-                            MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
+                            //MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
 
 
                             if (line.GetAmtSourceDr() > 0)
@@ -152,22 +153,66 @@ namespace VAdvantage.Acct
                             // -- Date
                             docLine.SetDateAcct(journal.GetDateAcct());
 
+                            // -- User Dimension
+                            docLine = SetUserDimension(lDim, docLine);
+
                             //	--	Organization of Line was set to Org of Account
                             list.Add(docLine);
                         }
                     }
-
                 }
-
-
-
-
             }
             //	Return Array
             int size = list.Count;
             DocLine[] dls = new DocLine[size];
             dls = list.ToArray();
             return dls;
+        }
+
+        /// <summary>
+        /// is used to set User Element Dimension
+        /// </summary>
+        /// <param name="journalLineDimension">journal line dimension object</param>
+        /// <param name="docLine">document line object</param>
+        private DocLine SetUserDimension(X_GL_LineDimension journalLineDimension, DocLine docLine)
+        {
+            if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement1 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement1(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement2 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement2(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement3 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement3(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement4 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement4(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement5 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement5(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement6 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement6(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement7 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement7(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement8 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement8(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement9 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement9(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            return docLine;
         }
 
 

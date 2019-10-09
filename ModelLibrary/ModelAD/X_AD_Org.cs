@@ -241,9 +241,40 @@ public String GetSAP001_CompanyCode()
 {
     return (String)Get_Value("SAP001_CompanyCode");
 }
+        /// <summary>
+        /// Set Profit Center
+        /// </summary>
+        /// <param name="IsProfitCenter"></param>
+        public void SetIsProfitCenter(Boolean IsProfitCenter) { Set_Value("IsProfitCenter", IsProfitCenter); }
 
+        /// <summary>
+        /// Get Profit Center.
+        /// </summary>
+        /// <returns></returns>
+        public Boolean IsProfitCenter() { Object oo = Get_Value("IsProfitCenter"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
+        /// <summary>
+        /// Set Cost Center
+        /// </summary>
+        /// <param name="IsCostCenter"></param>
+        public void SetIsCostCenter(Boolean IsCostCenter) { Set_Value("IsCostCenter", IsCostCenter); }
 
-}
+        /// <summary>
+        /// Get Cost Center.
+        /// </summary>
+        /// <returns></returns>
+        public Boolean IsCostCenter() { Object oo = Get_Value("IsCostCenter"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /// <summary>
+        /// Set Organization Unit.
+        /// </summary>
+        /// <param name="IsOrgUnit"></param>
+        public void SetIsOrgUnit(Boolean IsOrgUnit) { Set_Value("IsOrgUnit", IsOrgUnit); }
+        /// <summary>
+        /// Get Organization Unit.
+        /// </summary>
+        /// <returns></returns>
+        public Boolean IsOrgUnit() { Object oo = Get_Value("IsOrgUnit"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+    }
 
 }
