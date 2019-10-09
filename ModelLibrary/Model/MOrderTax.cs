@@ -79,11 +79,11 @@ namespace VAdvantage.Model
             }
             catch (Exception e)
             {
-              s_log.Log(Level.SEVERE, sql, e);
+                s_log.Log(Level.SEVERE, sql, e);
             }
 
             // JID_1303: On Order tax calculate tax according to selected pricelist. If user delete lines and change pricelist, it should check IsTaxIncluded on selected Pricelist.
-            bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = " 
+            bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
                 + line.GetC_Order_ID() + ")")) == "Y";
 
             if (retValue != null)
@@ -105,7 +105,88 @@ namespace VAdvantage.Model
             retValue.SetC_Tax_ID(line.GetC_Tax_ID());
             retValue.SetPrecision(precision);
             retValue.SetIsTaxIncluded(line.IsTaxIncluded());
-             s_log.Fine("(new) " + retValue);
+            s_log.Fine("(new) " + retValue);
+            return retValue;
+        }
+
+        /// <summary>
+        /// Get Surcharge Tax Line for Order Line
+        /// </summary>
+        /// <param name="line">line</param>
+        /// <param name="precision">currenct precision</param>
+        /// <param name="oldTax">get old tax</param>
+        /// <param name="trxName">transaction</param>
+        /// <returns>existing or new tax</returns>
+        public static MOrderTax GetSurcharge(MOrderLine line, int precision, bool oldTax, Trx trxName)
+        {
+            MOrderTax retValue = null;
+            if (line == null || line.GetC_Order_ID() == 0)
+            {
+                //s_log.fine("No Order");
+                return null;
+            }
+            int C_Tax_ID = line.GetC_Tax_ID();
+            if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
+            {
+                Object old = line.Get_ValueOld("C_Tax_ID");
+                if (old == null)
+                {
+                    //s_log.fine("No Old Tax");
+                    return null;
+                }
+                C_Tax_ID = int.Parse(old.ToString());
+            }
+
+            // Get Surcharge Tax ID from Tax selected on Line
+            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Surcharge_Tax_ID FROM C_Tax WHERE C_Tax_ID = " + C_Tax_ID, null, trxName));
+
+            if (C_Tax_ID == 0)
+            {
+                s_log.Fine("No Tax");
+                return null;
+            }
+
+            String sql = "SELECT * FROM C_OrderTax WHERE C_Order_ID=" + line.GetC_Order_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+            DataSet ds = null;
+            try
+            {
+                ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        DataRow dr = ds.Tables[0].Rows[i];
+                        retValue = new MOrderTax(line.GetCtx(), dr, trxName);
+                    }
+                    ds = null;
+                }
+            }
+            catch (Exception e)
+            {
+                s_log.Log(Level.SEVERE, sql, e);
+            }
+
+            bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
+                + line.GetC_Order_ID() + ")")) == "Y";
+
+            if (retValue != null)
+            {
+                retValue.SetPrecision(precision);
+                retValue.SetIsTaxIncluded(isTaxIncluded);
+                retValue.Set_TrxName(trxName);
+                s_log.Fine("(old=" + oldTax + ") " + retValue);
+                return retValue;
+            }
+
+            //	Create New
+            retValue = new MOrderTax(line.GetCtx(), 0, trxName);
+            retValue.Set_TrxName(trxName);
+            retValue.SetClientOrg(line);
+            retValue.SetC_Order_ID(line.GetC_Order_ID());
+            retValue.SetC_Tax_ID(C_Tax_ID);
+            retValue.SetPrecision(precision);
+            retValue.SetIsTaxIncluded(isTaxIncluded);
+            s_log.Fine("(new) " + retValue);
             return retValue;
         }
 
@@ -120,8 +201,9 @@ namespace VAdvantage.Model
             //
             bool documentLevel = GetTax().IsDocumentLevel();
             MTax tax = GetTax();
-            //
-            String sql = "SELECT LineNetAmt FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + GetC_Tax_ID();
+            
+            // Calculate Tax on TaxAble Amount
+            String sql = "SELECT TaxAbleAmt FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + GetC_Tax_ID();
             IDataReader idr = null;
             try
             {
@@ -132,7 +214,7 @@ namespace VAdvantage.Model
                     taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     //
                     if (!documentLevel)		// calculate line tax
-                        taxAmt = Decimal.Add(taxAmt, tax.CalculateTax(baseAmt, IsTaxIncluded(), GetPrecision()));
+                        taxAmt = Decimal.Add(taxAmt, tax.CalculateTax(baseAmt, false, GetPrecision()));
                 }
                 idr.Close();
             }
@@ -143,40 +225,101 @@ namespace VAdvantage.Model
                     idr.Close();
                 }
                 log.Log(Level.SEVERE, "CalculateTaxFromLines", e);
+                log.Log(Level.SEVERE, sql, e);
                 taxBaseAmt = Utility.Util.GetValueOfDecimal(null);
-            }
-           
-            ////
-            //if (taxBaseAmt == null)
-            //{
-            //    return false;
-            //}
+            }            
 
             //	Calculate Tax
             if (documentLevel)		//	document level
-                taxAmt = tax.CalculateTax(taxBaseAmt, IsTaxIncluded(), GetPrecision());
+                taxAmt = tax.CalculateTax(taxBaseAmt, false, GetPrecision());
             SetTaxAmt(taxAmt);
 
             //	Set Base
-            if (IsTaxIncluded())
-                SetTaxBaseAmt(Decimal.Subtract(taxBaseAmt, taxAmt));
-            else
-                SetTaxBaseAmt(taxBaseAmt);
+            //if (IsTaxIncluded())
+            //    SetTaxBaseAmt(Decimal.Subtract(taxBaseAmt, taxAmt));
+            //else
+            SetTaxBaseAmt(taxBaseAmt);
             //log.fine(toString());
             return true;
         }
 
-     /**
-	 * 	Load Constructor.
-	 * 	Set Precision and TaxIncluded for tax calculations!
-	 *	@param ctx context
-	 *	@param dr result set
-	 *	@param trxName transaction
-	 */
+        /// <summary>
+        /// Calculate/Set Surcharge Tax Amt from Order Lines
+        /// </summary>
+        /// <returns>true if aclculated</returns>
+        public bool CalculateSurchargeFromLines(MTax taxRate)
+        {
+            Decimal taxBaseAmt = Env.ZERO;
+            Decimal surTaxAmt = Env.ZERO;
+            //            
+            MTax surTax = new MTax(GetCtx(), taxRate.GetSurcharge_Tax_ID(), Get_TrxName());
+            bool documentLevel = surTax.IsDocumentLevel();
+
+            //
+            String sql = "SELECT TaxAbleAmt, TaxAmt FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + taxRate.GetC_Tax_ID();
+            IDataReader idr = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                while (idr.Read())
+                {
+                    Decimal baseAmt = Util.GetValueOfDecimal(idr[0]);
+                    Decimal taxAmt = Util.GetValueOfDecimal(idr[1]);
+
+                    // for Surcharge Calculation type - Line Amount + Tax Amount
+                    if (taxRate.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmountPlusTax)
+                    {
+                        baseAmt = Decimal.Add(baseAmt, taxAmt);
+                        taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
+                    }
+                    // for Surcharge Calculation type - Line Amount 
+                    else if (taxRate.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmount)
+                    {
+                        taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
+                    }
+                    // for Surcharge Calculation type - Tax Amount
+                    else
+                    {
+                        baseAmt = taxAmt;
+                        taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
+                    }
+                    //
+                    if (!documentLevel)		// calculate Surcharge tax
+                        surTaxAmt = Decimal.Add(surTaxAmt, surTax.CalculateTax(baseAmt, false, GetPrecision()));
+                }
+                idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, "CalculateSurchargeFromLines", e);
+                taxBaseAmt = Utility.Util.GetValueOfDecimal(null);
+            }
+            
+            //	Calculate Tax
+            if (documentLevel)      //	document level
+            {
+                surTaxAmt = surTax.CalculateTax(taxBaseAmt, false, GetPrecision());
+            }
+            SetTaxAmt(surTaxAmt);
+            SetTaxBaseAmt(taxBaseAmt);
+            return true;
+        }
+
+        /**
+        * 	Load Constructor.
+        * 	Set Precision and TaxIncluded for tax calculations!
+        *	@param ctx context
+        *	@param dr result set
+        *	@param trxName transaction
+        */
         public MOrderTax(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
-            
+
         }
 
         /**************************************************************************
@@ -188,7 +331,7 @@ namespace VAdvantage.Model
         public MOrderTax(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            
+
             if (ignored != 0)
                 throw new ArgumentException("Multi-Key");
             SetTaxAmt(Env.ZERO);
