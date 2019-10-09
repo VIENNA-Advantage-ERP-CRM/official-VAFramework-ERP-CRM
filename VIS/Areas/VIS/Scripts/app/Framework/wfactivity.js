@@ -889,12 +889,12 @@
                     aZoomDMS.on(VIS.Events.onTouchStartOrClick, function (e) {
                         var id = $(this).data("id");
 
-                        var $workflowInfo = {
+                        var $additionalInfo = {
                             DocNo: id,
                             DocFolderID: folderofDoc
                         };
                         if (formID > 0) {
-                            VIS.viewManager.startForm(formID, $workflowInfo);
+                            VIS.viewManager.startForm(formID, $additionalInfo);
                         }
                         else {
 
