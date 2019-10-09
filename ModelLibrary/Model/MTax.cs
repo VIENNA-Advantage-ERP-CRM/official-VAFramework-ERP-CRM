@@ -318,6 +318,127 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Calculate Tax and Surcharge
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="taxIncluded">if true tax is calculated from gross otherwise from net </param>
+        /// <param name="scale"></param>
+        /// <returns>tax amount</returns>
+        public Decimal CalculateSurcharge(Decimal amount, Boolean taxIncluded, int scale, out Decimal SurchargeAmt)
+        {
+            //	Null Tax
+            SurchargeAmt = Env.ZERO;
+            Decimal TaxAmt = Env.ZERO;
+
+            if (IsZeroTax())
+            {
+                return Env.ZERO;
+            }
+
+            Decimal multiplier = Env.ZERO;
+            Decimal taxBase = amount;
+            Decimal taxRate = GetRate();
+            MTax surTax = MTax.Get(GetCtx(), GetSurcharge_Tax_ID());
+            Decimal surRate = surTax.GetRate();
+
+            // for Surcharge Calculation type - Line Amount + Tax Amount
+            if (GetSurchargeType() == MTax.SURCHARGETYPE_LineAmountPlusTax)
+            {
+
+                if (!taxIncluded)   //	$100 * 6 / 100 == $6 == $100 * 0.06
+                {
+                    // Calculate Tax Amount on Line Amount
+                    multiplier = Decimal.Round(Decimal.Divide(taxRate, 100), 12, MidpointRounding.AwayFromZero);
+                    TaxAmt = Decimal.Multiply(amount, multiplier);
+
+                    // Calculate Surcharge Tax Amount on Line Amount + Tax Amount
+                    amount = amount + TaxAmt;
+                    multiplier = Decimal.Round(Decimal.Divide(surRate, 100), 12, MidpointRounding.AwayFromZero);
+                    SurchargeAmt = Decimal.Multiply(amount, multiplier);
+
+                    TaxAmt = Decimal.Round(TaxAmt, scale, MidpointRounding.AwayFromZero);
+                    SurchargeAmt = Decimal.Round(SurchargeAmt, scale, MidpointRounding.AwayFromZero);
+                }
+                else            //	$106 - ($106 / (100+6)/100) == $6 == $106 - ($106/1.06)
+                {
+                    multiplier = Decimal.Round(Decimal.Divide(surRate, 100), 12, MidpointRounding.AwayFromZero);
+                    multiplier = Decimal.Add(multiplier, Env.ONE);
+
+                    taxBase = Decimal.Divide(amount, multiplier);
+                    taxBase = Decimal.Round(taxBase, 12, MidpointRounding.AwayFromZero);
+                    amount = taxBase;
+
+                    multiplier = Decimal.Round(Decimal.Divide(taxRate, 100), 12, MidpointRounding.AwayFromZero);
+                    multiplier = Decimal.Add(multiplier, Env.ONE);
+
+                    taxBase = Decimal.Divide(amount, multiplier);
+
+                    TaxAmt = CalculateTax(taxBase, false, scale);
+                    SurchargeAmt = surTax.CalculateTax(Decimal.Add(taxBase, TaxAmt), false, scale);
+                }
+            }
+            // for Surcharge Calculation type - Line Amount 
+            else if (GetSurchargeType() == MTax.SURCHARGETYPE_LineAmount)
+            {
+                if (!taxIncluded)   //	$100 * 6 / 100 == $6 == $100 * 0.06
+                {
+                    // Calculate Tax Amount on Line Amount
+                    multiplier = Decimal.Round(Decimal.Divide(taxRate, 100), 12, MidpointRounding.AwayFromZero);
+                    TaxAmt = Decimal.Multiply(amount, multiplier);
+                    TaxAmt = Decimal.Round(TaxAmt, scale, MidpointRounding.AwayFromZero);
+
+                    // Calculate Surcharge Tax Amount on Line Amount                
+                    multiplier = Decimal.Round(Decimal.Divide(surRate, 100), 12, MidpointRounding.AwayFromZero);
+                    SurchargeAmt = Decimal.Multiply(amount, multiplier);
+                    SurchargeAmt = Decimal.Round(SurchargeAmt, scale, MidpointRounding.AwayFromZero);
+                }
+                else            //	$106 - ($106 / (100+6)/100) == $6 == $106 - ($106/1.06)
+                {
+                    multiplier = Decimal.Round(Decimal.Divide(Decimal.Add(taxRate, surRate), 100), 12, MidpointRounding.AwayFromZero);
+                    multiplier = Decimal.Add(multiplier, Env.ONE);
+
+                    taxBase = Decimal.Divide(amount, multiplier);
+                    taxBase = Decimal.Round(taxBase, 12, MidpointRounding.AwayFromZero);
+
+                    TaxAmt = CalculateTax(taxBase, false, scale);
+                    SurchargeAmt = surTax.CalculateTax(taxBase, false, scale);
+                }
+            }
+            // for Surcharge Calculation type - Tax Amount
+            else
+            {
+                if (!taxIncluded)   //	$100 * 6 / 100 == $6 == $100 * 0.06
+                {
+                    // Calculate Tax Amount on Line Amount
+                    multiplier = Decimal.Round(Decimal.Divide(taxRate, 100), 12, MidpointRounding.AwayFromZero);
+                    TaxAmt = Decimal.Multiply(amount, multiplier);
+
+                    // Calculate Surcharge Tax Amount on Line Amount + Tax Amount                    
+                    multiplier = Decimal.Round(Decimal.Divide(surRate, 100), 12, MidpointRounding.AwayFromZero);
+                    SurchargeAmt = Decimal.Multiply(TaxAmt, multiplier);
+
+                    TaxAmt = Decimal.Round(TaxAmt, scale, MidpointRounding.AwayFromZero);
+                    SurchargeAmt = Decimal.Round(SurchargeAmt, scale, MidpointRounding.AwayFromZero);
+                }
+                else            //	$106 - ($106 / (100+6)/100) == $6 == $106 - ($106/1.06)
+                {
+                    multiplier = Decimal.Round(Decimal.Divide(surRate, 100), 12, MidpointRounding.AwayFromZero);
+                    multiplier = Decimal.Multiply(taxRate, multiplier);
+                    multiplier = Decimal.Add(taxRate, multiplier);
+                    multiplier = Decimal.Round(Decimal.Divide(multiplier, 100), 12, MidpointRounding.AwayFromZero);
+                    multiplier = Decimal.Add(multiplier, Env.ONE);
+
+                    taxBase = Decimal.Divide(amount, multiplier);
+                    taxBase = Decimal.Round(taxBase, 12, MidpointRounding.AwayFromZero);
+
+                    TaxAmt = CalculateTax(taxBase, false, scale);
+                    SurchargeAmt = surTax.CalculateTax(TaxAmt, false, scale);
+                }
+            }
+            return TaxAmt;
+        }
+
+        /// <summary>
         /// After Save
         /// </summary>
         /// <param name="newRecord"></param>
@@ -380,13 +501,13 @@ namespace VAdvantage.Model
             }
             else if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
             {
-               bool sucs= Insert_Accounting("C_Tax_Acct", "C_AcctSchema_Default", null);
-               //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
-               // Before this, data was being saved but giving message "record not saved".
-               if (!sucs)
-               {
-                   log.SaveWarning("AcctNotSaved", "");
-               }
+                bool sucs = Insert_Accounting("C_Tax_Acct", "C_AcctSchema_Default", null);
+                //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
+                // Before this, data was being saved but giving message "record not saved".
+                if (!sucs)
+                {
+                    log.SaveWarning("AcctNotSaved", "");
+                }
             }
 
             return success;
