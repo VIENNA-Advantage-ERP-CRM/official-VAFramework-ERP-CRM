@@ -900,20 +900,38 @@ namespace VAdvantage.Model
                 MTax tax = MTax.Get(GetCtx(), GetC_Tax_ID());
                 if (tax.IsDocumentLevel() && _IsSOTrx)		//	AR Inv Tax
                     return;
-                //
-                TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
-                if (IsTaxIncluded())
-                    SetLineTotalAmt(GetLineNetAmt());
+
+                // if Surcharge Tax is selected on Tax, then calculate Tax accordingly
+                if (Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    Decimal surchargeAmt = Env.ZERO;
+
+                    // Calculate Surcharge Amount
+                    TaxAmt = tax.CalculateSurcharge(GetLineNetAmt(), IsTaxIncluded(), GetPrecision(), out surchargeAmt);
+
+                    if (IsTaxIncluded())
+                        SetLineTotalAmt(GetLineNetAmt());
+                    else
+                        SetLineTotalAmt(Decimal.Add(Decimal.Add(GetLineNetAmt(), TaxAmt), surchargeAmt));
+                    base.SetTaxAmt(TaxAmt);
+                    SetSurchargeAmt(surchargeAmt);
+                }
                 else
-                    SetLineTotalAmt(Decimal.Add(GetLineNetAmt(), TaxAmt));
-                base.SetTaxAmt(TaxAmt);
+                {
+                    TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
+                    if (IsTaxIncluded())
+                        SetLineTotalAmt(GetLineNetAmt());
+                    else
+                        SetLineTotalAmt(Decimal.Add(GetLineNetAmt(), TaxAmt));
+                    base.SetTaxAmt(TaxAmt);
+                }
             }
             catch (Exception ex)
             {
                 // MessageBox.Show("MInvoiceLine--SetTaxAmt");
             }
         }
-
+        
         /// <summary>
         /// Calculate Extended Amt.
         /// May or may not include tax
@@ -3729,7 +3747,7 @@ namespace VAdvantage.Model
             {
                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_QtydeliveredNotLess"));
                 return false;
-            }            
+            }
 
             // Added by Vivek on 22/09/2017 assigned by Mukesh sir
             // if PO is drop ship type then new line should not allow 
@@ -3998,7 +4016,7 @@ namespace VAdvantage.Model
                         QtyReserved = qtyRes;
                     }
                     //}
-                    
+
                     if (docType.GetDocBaseType() == "BOO")    ///docType.GetValue() == "BSO" || docType.GetValue() == "BPO")
                     {
                         QtyEstimation = GetQtyEstimation();
@@ -4093,11 +4111,11 @@ namespace VAdvantage.Model
             SetDiscount();
 
             // JID_1073: 
-            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0)
+            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
                 SetTaxAmt();
 
             // set Tax Amount in base currency
-            if (Get_ColumnIndex("TaxBaseAmt") >= 0)
+            if (Get_ColumnIndex("TaxBaseAmt") > 0)
             {
                 decimal taxAmt = 0;
                 primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
@@ -4117,8 +4135,16 @@ namespace VAdvantage.Model
             // set Taxable Amount -- (Line Total-Tax Amount)
             if (Get_ColumnIndex("TaxAbleAmt") >= 0)
             {
-                SetTaxAbleAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                if (Get_ColumnIndex("SurchargeAmt") > 0)
+                {
+                    SetTaxAbleAmt(Decimal.Subtract(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()), GetSurchargeAmt()));
+                }
+                else
+                {
+                    SetTaxAbleAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                }
             }
+
             if (Get_ColumnIndex("BasePrice") >= 0)
             {
                 if (newRecord)
@@ -4350,6 +4376,20 @@ namespace VAdvantage.Model
                         if (!tax.Save(Get_TrxName()))
                             return false;
                     }
+
+                    // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                    if (Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        tax = MOrderTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
+                        if (tax != null)
+                        {
+                            MTax taxRate = MTax.Get(GetCtx(), Util.GetValueOfInt(Get_ValueOld("C_Tax_ID")));
+                            if (!tax.CalculateSurchargeFromLines(taxRate))
+                                return false;
+                            if (!tax.Save(Get_TrxName()))
+                                return false;
+                        }
+                    }
                 }
                 if (!UpdateHeaderTax())
                     return false;
@@ -4433,6 +4473,16 @@ namespace VAdvantage.Model
                 {
                     return false;
                 }
+            }
+
+            // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+            else if (Get_ColumnIndex("SurchargeAmt") > 0 && taxRate.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && taxRate.GetSurcharge_Tax_ID() > 0)
+            {
+                tax = MOrderTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
+                if (!tax.CalculateSurchargeFromLines(taxRate))
+                    return false;
+                if (!tax.Save(Get_TrxName()))
+                    return false;
             }
 
             //	Update Order Header
