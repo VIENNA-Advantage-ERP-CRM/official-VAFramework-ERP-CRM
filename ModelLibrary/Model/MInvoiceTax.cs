@@ -346,7 +346,8 @@ namespace VAdvantage.Model
         /// <summary>
         /// Calculate/Set Surcharge Tax Amt from Invoice Lines
         /// </summary>
-        /// <returns>true if aclculated</returns>
+        /// <param name="taxRate">Tax Rate</param>
+        /// <returns>true if calculated</returns>
         public bool CalculateSurchargeFromLines(MTax taxRate)
         {
             Decimal taxBaseAmt = Env.ZERO;
@@ -435,8 +436,7 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("TaxBaseCurrencyAmt") >= 0)
             {
                 decimal taxAmtBaseCurrency = GetTaxAmt();
-                int primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                 if (c_Currency_ID != primaryAcctSchemaCurrency)
                 {
                     taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, c_Currency_ID,

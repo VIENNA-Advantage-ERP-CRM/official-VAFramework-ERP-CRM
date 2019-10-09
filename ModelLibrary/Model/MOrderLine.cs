@@ -4118,8 +4118,7 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("TaxBaseAmt") > 0)
             {
                 decimal taxAmt = 0;
-                primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_TrxName()));
+                primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                 if (Ord.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                 {
                     taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, Ord.GetC_Currency_ID(),
