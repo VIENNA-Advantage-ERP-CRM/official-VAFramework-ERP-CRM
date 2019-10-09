@@ -86,7 +86,11 @@ namespace VIS.Models
                 sql = @"SELECT mytable.* FROM (";
             }
 
-            sql += @" SELECT a.*
+            sql += @" SELECT a.*,
+(SELECT 
+Name || VADMS_FileType || '_' || Value 
+FROM VADMS_Document 
+WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VADMS_MetaData_ID = a.Record_ID)) AS DocumentNameValue 
                             FROM AD_WF_Activity a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
@@ -199,6 +203,9 @@ namespace VIS.Models
                     itm.CreatedBy = Util.GetValueOfInt(dr["CreatedBy"]);
                     itm.DynPriorityStart = Util.GetValueOfInt(dr["DynPriorityStart"]);
                     itm.Record_ID = Util.GetValueOfInt(dr["Record_ID"]);
+
+                    itm.DocumentNameValue = Util.GetValueOfString(dr["DocumentNameValue"]);
+
                     itm.TxtMsg = Util.GetValueOfString(dr["TextMsg"]);
                     itm.WfState = Util.GetValueOfString(dr["WfState"]);
                     itm.EndWaitTime = Util.GetValueOfDateTime(dr["EndWaitTime"]);
@@ -1171,6 +1178,12 @@ namespace VIS.Models
         }
 
         public int AD_Window_ID
+        {
+            get;
+            set;
+        }
+
+        public string DocumentNameValue
         {
             get;
             set;
