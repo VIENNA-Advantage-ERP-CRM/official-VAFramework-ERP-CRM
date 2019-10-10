@@ -36,9 +36,9 @@ namespace ViennaBase
             bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/jquery_v3").Include(
                          "~/Areas/ViennaBase/Scripts/migration/jquery-3.4.1.min.js",
                            "~/Areas/ViennaBase/Scripts/migration/jquery-migrate-3.1.0.min.js",
-                         "~/Areas/ViennaBase/Scripts/migration/bootstrap.min.js",
-                         "~/Areas/ViennaBase/Content/migration/popper-utils.min.js",
-                         "~/Areas/ViennaBase/Content/migration/popper.min.js"
+                         "~/Areas/ViennaBase/Scripts/migration/popper-utils.min.js",
+                         "~/Areas/ViennaBase/Scripts/migration/popper.min.js",
+                         "~/Areas/ViennaBase/Scripts/migration/bootstrap.min.js"
                        ));
 
             
