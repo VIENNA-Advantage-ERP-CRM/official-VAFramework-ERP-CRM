@@ -10,7 +10,7 @@
 
         this.onClose = null;
 
-        var inforoot = $("<div>");
+        var inforoot = $("<div class='vis-forms-container'>");
         var isExpanded = true;
         var subroot = $("<div>");
         var sSContainer = null;
