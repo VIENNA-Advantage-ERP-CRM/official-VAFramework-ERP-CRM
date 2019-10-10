@@ -108,9 +108,9 @@ namespace VIS.Models
 
             Dictionary<String, Object> retval = new Dictionary<String, Object>();
             //Assign parameter value
-            C_Tax_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            Decimal LineNetAmt = Util.GetValueOfDecimal(paramValue[1].ToString());            
-            int StdPrecision = Util.GetValueOfInt(paramValue[2].ToString());
+            C_Tax_ID = Util.GetValueOfInt(paramValue[0]);
+            Decimal LineNetAmt = Util.GetValueOfDecimal(paramValue[1]);            
+            int StdPrecision = Util.GetValueOfInt(paramValue[2]);
             Boolean IsTaxIncluded = true;
             //End Assign parameter value
             MTax tax = new MTax(ctx, C_Tax_ID, null);
