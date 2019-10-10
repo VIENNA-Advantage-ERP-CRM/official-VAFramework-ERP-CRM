@@ -10,7 +10,7 @@
         this.onClose = null;
 
 
-        var inforoot = $("<div>");
+        var inforoot = $("<div class='vis-forms-container'>");
         var subroot = $("<div>");
         var isExpanded = true;
         var sSContainer, ssHeader, btnExpander, searchTab, searchSec, datasec, btnsec;   /* decalare Variable */
@@ -53,7 +53,7 @@
                 searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
                 searchTab.append(searchSec);
                 datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
-                btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
+                btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 0px;'>");
             }
             else {
                 searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;display: inline-block; float: left;width:23%;height:87.8%;overflow:auto;'>");
