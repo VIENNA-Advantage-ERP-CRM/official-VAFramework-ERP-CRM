@@ -101,6 +101,10 @@ namespace ViennaBase
                 "~/Areas/ViennaBase/Content/Toastr/toastr.min.css"
                 ));
 
+            // For image select work
+            bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/imgareaselecterjs").Include(
+                "~/Areas/ViennaBase/Scripts/jquery.imgareaselect.js"
+                ));
 
          
 
