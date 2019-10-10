@@ -66,5 +66,23 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Calculate Surcharge Tax
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns>Tax Amount and Surcharge Amount</returns>
+        public JsonResult CalculateSurcharge(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MTaxModel tax = new MTaxModel();
+                retJSON = JsonConvert.SerializeObject(tax.CalculateSurcharge(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }
