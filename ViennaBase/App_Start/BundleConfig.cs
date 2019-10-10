@@ -89,6 +89,10 @@ namespace ViennaBase
                 "~/Areas/ViennaBase/Content/Toastr/toastr.min.css"
                 ));
 
+            // For image select work
+            bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/imgareaselecterjs").Include(
+                "~/Areas/ViennaBase/Scripts/jquery.imgareaselect.js"
+                ));
 
             //bundles.Add(new ScriptBundle("~/bundles/CRV").Include(
             //         "~/Areas/ViennaBase/Scripts/crystalreportviewers13/js/crviewer/crv.js"
