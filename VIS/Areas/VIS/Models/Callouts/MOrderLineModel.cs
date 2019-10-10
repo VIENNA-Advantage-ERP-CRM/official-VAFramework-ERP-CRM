@@ -42,6 +42,9 @@ namespace VIS.Models
             retDic["Discount"] = Util.GetValueOfString(orderline.GetDiscount());
             retDic["Discount"] = Util.GetValueOfString(orderline.GetDiscount());
             retDic["M_Product_ID"] = Util.GetValueOfString(orderline.GetM_Product_ID());
+
+            // when order line contains charge, it will be selected on Shipment Line on selection of Order Line
+            retDic["C_Charge_ID"] = Util.GetValueOfString(orderline.GetC_Charge_ID());
             retDic["Qty"] = Util.GetValueOfString(orderline.GetQtyEntered());
             retDic["C_UOM_ID"] = Util.GetValueOfString(orderline.GetC_UOM_ID());
             retDic["C_BPartner_ID"] = Util.GetValueOfString(orderline.GetC_BPartner_ID());

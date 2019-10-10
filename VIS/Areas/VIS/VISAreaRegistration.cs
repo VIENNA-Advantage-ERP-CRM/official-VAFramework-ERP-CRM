@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Web.Mvc;
 using System.Web.Optimization;
 namespace VIS
@@ -142,6 +142,8 @@ namespace VIS
                  "~/Areas/VIS/Scripts/app/forms/productContainerMove.js",
                  "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
 
+                 "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
+
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
                   "~/Areas/VIS/Scripts/TestPanel.js",
                   "~/Areas/VIS/Scripts/app/initialize.js",
@@ -186,7 +188,8 @@ namespace VIS
                  "~/Areas/VIS/Content/reportstyle.css",
                  "~/Areas/VIS/Content/RecordAccessDialog.css",
                 "~/Areas/VIS/Content/GroupStyle.css",
-                 "~/Areas/VIS/Content/ProductContainer.css"
+                 "~/Areas/VIS/Content/ProductContainer.css",
+                 "~/Areas/VIS/Content/GlJournalDimension.css"
                );    
                 
               

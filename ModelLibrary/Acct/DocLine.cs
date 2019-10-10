@@ -84,6 +84,24 @@ namespace VAdvantage.Acct
         private int _C_ConversionType_ID = -1;
         // Period						
         private int _C_Period_ID = -1;
+        // User Element 1
+        private int _UserElement1 = -1;
+        // User Element 2
+        private int _UserElement2 = -1;
+        // User Element 3
+        private int _UserElement3 = -1;
+        // User Element 4
+        private int _UserElement4 = -1;
+        // User Element 5
+        private int _UserElement5 = -1;
+        // User Element 6
+        private int _UserElement6 = -1;
+        // User Element 7
+        private int _UserElement7 = -1;
+        // User Element 8
+        private int _UserElement8 = -1;
+        // User Element 9
+        private int _UserElement9 = -1;
 
         #endregion
 
@@ -1054,6 +1072,160 @@ namespace VAdvantage.Acct
             }
             return 0;
         }
+
+        /// <summary>
+        /// Get User Element 1
+        /// </summary>
+        /// <returns>_UserElement1</returns>
+        public int GetUserElement1()
+        {
+            return _UserElement1;
+        }
+
+        /// <summary>
+        /// Set UserElement 1
+        /// </summary>
+        public void SetUserElement1(int UserElement1)
+        {
+            _UserElement1 = UserElement1;
+        }
+
+        /// <summary>
+        /// Get User Element 2
+        /// </summary>
+        /// <returns>_UserElement2</returns>
+        public int GetUserElement2()
+        {
+            return _UserElement2;
+        }
+
+        /// <summary>
+        /// Set UserElement 2
+        /// </summary>
+        public void SetUserElement2(int UserElement2)
+        {
+            _UserElement2 = UserElement2;
+        }
+
+        /// <summary>
+        /// Get User Element 3
+        /// </summary>
+        /// <returns>_UserElement3</returns>
+        public int GetUserElement3()
+        {
+            return _UserElement3;
+        }
+
+        /// <summary>
+        /// Set UserElement 3
+        /// </summary>
+        public void SetUserElement3(int UserElement3)
+        {
+            _UserElement3 = UserElement3;
+        }
+
+        /// <summary>
+        /// Get User Element 4
+        /// </summary>
+        /// <returns>_UserElement4</returns>
+        public int GetUserElement4()
+        {
+            return _UserElement4;
+        }
+
+        /// <summary>
+        /// Set UserElement 4
+        /// </summary>
+        public void SetUserElement4(int UserElement4)
+        {
+            _UserElement4 = UserElement4;
+        }
+
+        /// <summary>
+        /// Get User Element 5
+        /// </summary>
+        /// <returns>_UserElement5</returns>
+        public int GetUserElement5()
+        {
+            return _UserElement5;
+        }
+
+        /// <summary>
+        /// Set UserElement 5
+        /// </summary>
+        public void SetUserElement5(int UserElement5)
+        {
+            _UserElement5 = UserElement5;
+        }
+
+        /// <summary>
+        /// Get User Element 6
+        /// </summary>
+        /// <returns>_UserElement6</returns>
+        public int GetUserElement6()
+        {
+            return _UserElement6;
+        }
+
+        /// <summary>
+        /// Set UserElement 6
+        /// </summary>
+        public void SetUserElement6(int UserElement6)
+        {
+            _UserElement6 = UserElement6;
+        }
+
+        /// <summary>
+        /// Get User Element 7
+        /// </summary>
+        /// <returns>_UserElement7</returns>
+        public int GetUserElement7()
+        {
+            return _UserElement7;
+        }
+
+        /// <summary>
+        /// Set UserElement 7
+        /// </summary>
+        public void SetUserElement7(int UserElement7)
+        {
+            _UserElement7 = UserElement7;
+        }
+
+        /// <summary>
+        /// Get User Element 8
+        /// </summary>
+        /// <returns>_UserElement8</returns>
+        public int GetUserElement8()
+        {
+            return _UserElement8;
+        }
+
+        /// <summary>
+        /// Set UserElement 8
+        /// </summary>
+        public void SetUserElement8(int UserElement8)
+        {
+            _UserElement8 = UserElement8;
+        }
+
+        /// <summary>
+        /// Get User Element 9
+        /// </summary>
+        /// <returns>_UserElement9</returns>
+        public int GetUserElement9()
+        {
+            return _UserElement9;
+        }
+
+        /// <summary>
+        /// Set UserElement 9
+        /// </summary>
+        public void SetUserElement9(int UserElement9)
+        {
+            _UserElement9 = UserElement9;
+        }
+
 
         /// <summary>
         /// Get User 1
