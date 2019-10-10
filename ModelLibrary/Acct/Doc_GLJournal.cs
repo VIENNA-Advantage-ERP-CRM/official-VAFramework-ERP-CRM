@@ -35,7 +35,6 @@ namespace VAdvantage.Acct
         //Posting Type				
         private String _PostingType = null;
         private int _C_AcctSchema_ID = 0;
-        private int record_Id = 0;
 
         /// <summary>
         ///   Constructor
@@ -80,8 +79,6 @@ namespace VAdvantage.Acct
             MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
             List<DocLine> list = new List<DocLine>();
             MJournalLine[] lines = journal.GetLines(false);
-            record_Id = lines[0].GetGL_Journal_ID();
-
             for (int i = 0; i < lines.Length; i++)
             {
                 MJournalLine line = lines[i];
@@ -89,7 +86,6 @@ namespace VAdvantage.Acct
                 if (line.GetElementType() == null)
                 {
                     DocLine docLine = new DocLine(line, this);
-                    docLine.SetConversionRate(conversionRate);
                     //  --  Source Amounts
                     docLine.SetAmount(line.GetAmtAcctDr(), line.GetAmtAcctCr());
                     //  --  Converted Amounts
@@ -117,7 +113,6 @@ namespace VAdvantage.Acct
                             X_GL_LineDimension lDim = new X_GL_LineDimension(GetCtx(), dr, null);
 
                             DocLine docLine = new DocLine(lDim, this);
-                            docLine.SetConversionRate(conversionRate);
                             //  --  Source Amounts
 
 
@@ -132,7 +127,7 @@ namespace VAdvantage.Acct
                             //MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
 
 
-                            if (line.GetAmtSourceDr() != 0)
+                            if (line.GetAmtSourceDr() > 0)
                             {
                                 amtAcctDr = lDim.GetAmount() * cRate;
                                 docLine.SetAmount(amtAcctDr, 0);
@@ -217,7 +212,7 @@ namespace VAdvantage.Acct
             {
                 docLine.SetUserElement9(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
             }
-            else if (journalLineDimension.GetLineType().Equals(MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
+            else if (journalLineDimension.GetLineType().Equals( MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
             {
                 docLine.SetAD_OrgTrx_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
             }
@@ -272,22 +267,15 @@ namespace VAdvantage.Acct
             //  create Fact Header
             Fact fact = new Fact(this, as1, _PostingType);
 
-            // get conversion rate from Assigned accounting schema tab - 
-            Decimal conversionRate = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT CurrencyRate FROM GL_AssignAcctSchema WHERE 
-                                     C_AcctSchema_ID = " + as1.GetC_AcctSchema_ID() + " AND GL_Journal_ID = " + record_Id, null, null));
-
             //  GLJ
             if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_GLJOURNAL))
             {
                 //  account     DR      CR
                 for (int i = 0; i < _lines.Length; i++)
                 {
-
                     // need to Post GL Journal for Multiple Accounting Schema that's why commented this condition
                     //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
                     //{
-                    // set conversion rate on line, so that amount to be converted based on that multiply rate
-                    _lines[i].SetConversionRate(conversionRate);
                     fact.CreateLine(_lines[i],
                                     _lines[i].GetAccount(),
                                     GetC_Currency_ID(),
