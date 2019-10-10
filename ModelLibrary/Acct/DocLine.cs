@@ -102,6 +102,10 @@ namespace VAdvantage.Acct
         private int _UserElement8 = -1;
         // User Element 9
         private int _UserElement9 = -1;
+        // Transaction Organization
+        private int _AD_OrgTrx_ID = -1;
+        // Organization
+        private int _AD_Org_ID = -1;
 
         #endregion
 
@@ -537,7 +541,23 @@ namespace VAdvantage.Acct
         /// <returns>org</returns>
         public int GetAD_Org_ID()
         {
-            return _po.GetAD_Org_ID();
+            if (_AD_Org_ID <= 0)
+            {
+                return _po.GetAD_Org_ID();
+            }
+            else
+            {
+                return _AD_Org_ID;
+            }
+        }
+
+        /// <summary>
+        /// This Function is used to set Organization Value
+        /// </summary>
+        /// <param name="AD_Org_ID"></param>
+        public void SetAD_Org_ID(int AD_Org_ID)
+        {
+            _AD_Org_ID = AD_Org_ID;
         }
 
         /// <summary>
@@ -974,6 +994,10 @@ namespace VAdvantage.Acct
         /// <returns>AD_OrgTrx_ID</returns>
         public int GetAD_OrgTrx_ID()
         {
+            if (_AD_OrgTrx_ID > 0)
+            {
+                return _AD_OrgTrx_ID;
+            }
             int index = _po.Get_ColumnIndex("AD_OrgTrx_ID");
             if (index != -1)
             {
@@ -984,6 +1008,15 @@ namespace VAdvantage.Acct
                 }
             }
             return 0;
+        }
+
+        /// <summary>
+        /// This Function is used to set Transaction Organization
+        /// </summary>
+        /// <param name="AD_OrgTrx_ID"></param>
+        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        {
+            _AD_OrgTrx_ID = AD_OrgTrx_ID;
         }
 
         /// <summary>
@@ -1310,9 +1343,9 @@ namespace VAdvantage.Acct
             if (index != -1)
             {
                 int ii = Util.GetValueOfInt(_po.Get_Value(index));
-                
-                    return ii;
-                
+
+                return ii;
+
             }
             return 0;
         }
