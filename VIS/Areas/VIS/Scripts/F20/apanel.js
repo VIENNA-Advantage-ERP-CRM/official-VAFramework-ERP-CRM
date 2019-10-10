@@ -233,7 +233,7 @@ function APanel() {
         $td1parentDetail = $root.find(".vis-ad-w-p-header-l");
         //Emptyt td
         //$td3IncludedEmpty = $("<td class='vis-apanel-table-td3' style='height:100%;' rowspan='3'>");
-        $td3IncludedEmpty = $root.find(".vis-ad-w-p-center-r2");
+        $td3IncludedEmpty = $root.find(".vis-ad-w-p-center-inctab");
 
         //right pane
         /* Right Pane */
@@ -259,7 +259,7 @@ function APanel() {
         $td2_tr1 = $("<td style='height:" + APANEL_HEADER_HEIGHT + "px;position:relative'setwi>");//.append($divHeaderNav); //row 1 col2 //Tab Control
         // var $tdNav = $("<td style='width:250px'>").append($divNav); //row 1 col2 Navigation
         //$tdContentArea = $("<td style='height:100%;'>"); //w remianing full area 
-        $tdContentArea = $root.find(".vis-ad-w-p-center-r1");
+        $tdContentArea = $root.find(".vis-ad-w-p-center-view");
 
         //StatusBar
         //$divStatus = $("<div class='vis-apanel-statusbar'>").hide();

@@ -21,7 +21,7 @@ VIS.VGridPanel = function () {
 
 
     function initComponent() {
-        $table = $("<table class='vis-gc-vpanel-table'>");
+        $table = $("<div class='vis-ad-w-p-vc-editview'>"); //   $("<table class='vis-gc-vpanel-table'>");
         //<tr><td class='vis-gc-vpanel-table-td0'><td class='vis-gc-vpanel-table-td1'>" +
         //"<td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'><td class='vis-gc-vpanel-table-td2'>" +
         //"<td  class='vis-gc-vpanel-table-td3'><td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'>" +
@@ -32,14 +32,19 @@ VIS.VGridPanel = function () {
 
     function addRow() {
         $td0 = $td1 = $td11 = $td12 = $td2 = $td3 = $td31 = $td32 = $td4 = $row = null;
-        $td0 = $("<td  class='vis-gc-vpanel-table-td0'>");
-        $td1 = $("<td colspan = '3' class='vis-gc-vpanel-table-td1'>");
-        $td2 = $("<td class='vis-gc-vpanel-table-td2'>");
-        $td3 = $("<td colspan='3' class='vis-gc-vpanel-table-td3'>");
-        $td4 = $("<td class='vis-gc-vpanel-table-td4'>");
-        $row = $("<tr>");
-        $table.append($row);
-        $row.append($td0).append($td1).append($td2).append($td3).append($td4);
+       // $td0 = $("<td  class='vis-gc-vpanel-table-td0'>");
+        $td0 = $("<div class='vis-ev-col'></div>");
+        //$td1 = $("<td colspan = '3' class='vis-gc-vpanel-table-td1'>");
+        $td1 = $("<div class='vis-ev-col vis-ev-col-start2'></div>");
+        //$td2 = $("<td class='vis-gc-vpanel-table-td2'>");
+        $td2 = $("<div class='vis-ev-col vis-ev-col-start3'></div>");
+        //$td3 = $("<td colspan='3' class='vis-gc-vpanel-table-td3'>");
+        $td3 = $("<div class='vis-ev-col vis-ev-col-start4'></div>");
+        //$td4 = $("<td class='vis-gc-vpanel-table-td4'>");
+
+       // $row = $("<tr>");
+       // $table.append($row);
+        $table.append($td0).append($td1).append($td2).append($td3);//.append($td4);
     }
 
     function onGroupClick(e) {
@@ -130,7 +135,7 @@ VIS.VGridPanel = function () {
 
         if (sameLine) {
             ++columnIndex;
-            if (columnIndex > 2) {
+            if (columnIndex > 4) {
                 sameLine = false;
                 addRow();
                 columnIndex = 0;
@@ -148,9 +153,14 @@ VIS.VGridPanel = function () {
 
         if (label != null) {
             if (sameLine) {
-                $td3.append(label.getControl());
+                if (columnIndex == 1)
+                    $td1.append(label.getControl());
+                else if (columnIndex == 2)
+                    $td2.append(label.getControl());
+                else
+                    $td3.append(label.getControl());
             } else {
-                $td1.append(label.getControl());
+                $td0.append(label.getControl());
             }
 
             if (mField.getDescription().length > 0) {
@@ -164,9 +174,14 @@ VIS.VGridPanel = function () {
         }
         if (editor != null) {
             if (sameLine) {
-                $td3.append(editor.getControl());
+                if (columnIndex == 1)
+                    $td1.append(editor.getControl());
+                else if (columnIndex==2)
+                    $td2.append(editor.getControl());
+                else
+                    $td3.append(editor.getControl());
             } else {
-                $td1.append(editor.getControl());
+                $td0.append(editor.getControl());
             }
             var fieldVFormat = mField.getVFormat();
             switch (fieldVFormat) {
@@ -195,7 +210,8 @@ VIS.VGridPanel = function () {
 
             var count = editor.getBtnCount();
 
-            if (count > 0) {
+           // if (count > 0) {
+            if (0 > 0) {
 
                 while (count > 0) {
                     var ctrl = editor.getBtn(count - 1);
@@ -221,18 +237,24 @@ VIS.VGridPanel = function () {
 
 
             if (!sameLine && mField.getIsLongField()) {
+                $td1.remove();
                 $td2.remove();
                 $td3.remove();
-                $td1.prop('colspan', 8 - count);
-                $td1.css('width', '100%');
-                columnIndex = 2;
+                $td0.addClass("vis-ev-col-end4");
+                columnIndex = 4;
             }
             else {
                 if (sameLine) {
-                    $td3.prop('colspan', 3 - count);
-                    columnIndex = 2;
+                    //if (columnIndex == 1)
+                    //    $td1.addClass("vis-ev-col-start2 vis-ev-col-end2");
+                    //else if (columnIndex == 2)
+                    //    $td2.addClass("vis-ev-col-start3 vis-ev-col-end3");
+                    //else 
+                    //    $td3.addClass("vis-ev-col-start4 vis-ev-col-end4");
+
+                    columnIndex += 1;
                 } else {
-                    $td1.prop('colspan', 3 - count);
+                   // $td1.prop('colspan', 3 - count);
                     //$td3.prop('colspan', 3);
                 }
             }
