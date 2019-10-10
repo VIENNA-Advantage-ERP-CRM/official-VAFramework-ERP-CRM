@@ -6,6 +6,9 @@
     var APANEL_FOOTER_HEIGHT = 40
 
 
+    var tmpvc = document.querySelector('#vis-ad-viewctrltmp').content;// $("#vis-ad-windowtmp");
+
+
 //****************************************************//
 //**            Grid Controller                    **//
 //**************************************************//
@@ -66,27 +69,31 @@ VIS.GridController = function (showRowNo, doPaging, id) {
 
     function initlizeComponent() {
 
+        var clone = $(document.importNode(tmpvc, true));
+
         //            $tableMain = $("<div class='vis-height-full'>").hide();
 
-        td1_tr1 = $("<td colspan='2' class='vis-height-auto'>");
-        td1_tr2 = $("<td colspan='2' class='vis-height-auto'>");
-        td1_tr3 = $("<td style='width:100%'>");
+      //  td1_tr1 = $("<td colspan='2' class='vis-height-auto'>");
+        //td1_tr2 = $("<td colspan='2' class='vis-height-auto'>");
+        //td1_tr3 = $("<td style='width:100%'>");
 
         /* Tree Div */
         $divTree = $("<div>"); //tree div
 
-        $td0_tr3 = $("<td>").append($divTree).hide();
+        $td0_tr3 = clone.find(".vis-ad-w-p-vc-tree").append($divTree).hide();
 
-        $tableMain = $("<table class='vis-gc-table'>").append($("<tr>").append(td1_tr1))
-            .append($("<tr>").append(td1_tr2))
-            .append($("<tr  class='vis-height-full'>").append($td0_tr3).append(td1_tr3)).hide();
+        $tableMain = clone.find(".vis-ad-w-p-vc").hide();
+
+        //$tableMain = $("<table class='vis-gc-table'>").append($("<tr>").append(td1_tr1))
+        //    .append($("<tr>").append(td1_tr2))
+        //    .append($("<tr  class='vis-height-full'>").append($td0_tr3).append(td1_tr3)).hide();
 
         /* Tab Control */
-        $tabControl = $("<ul  class='vis-appsaction-ul vis-gc-tabcontrol'>").hide();
+        $tabControl = clone.find(".vis-ad-w-p-vc-actions").hide();
         /* End */
 
         /*divHeader*/
-        $divHeader = $("<div class='vis-gc-header'>").hide();
+        $divHeader = clone.find(".vis-ad-w-p-vc-actions");// $("<div class='vis-gc-header'>").hide();
         /*end*/
 
         /* Multi,card and single view */
@@ -96,13 +103,13 @@ VIS.GridController = function (showRowNo, doPaging, id) {
         $divMap = $("<div class='vis-gc-vmap'>");
         /* End */
 
-        td1_tr1.append($divHeader); //first Row
-        td1_tr2.append($tabControl); //Second Row
+       // td1_tr1.append($divHeader); //first Row
+        //td1_tr2.append($tabControl); //Second Row
 
-        $divContent = $("<div class='vis-height-full' style='overflow:hidden'>"); //Main Contant
-        $divMain = $("<div class='vis-height-full'>");
+        $divContent = clone.find(".vis-ad-w-p-vc-gc"); // $("<div class='vis-height-full' style='overflow:hidden'>"); //Main Contant
+        //$divMain = $("<div class='vis-height-full'>");
         $divContent.append($divGrid).append($divPanel).append($divCard).append($divMap);
-        td1_tr3.append($divContent);
+       // td1_tr3.append($divContent);
 
     }
 
