@@ -2960,10 +2960,25 @@ namespace VAdvantage.Model
                             lineBlanket.SetDateDelivered(GetMovementDate());	//	overwrite=last
                             lineBlanket1.SetDateDelivered(GetMovementDate());	//	overwrite=last                            
 
-                            lineBlanket.Save();
-                            lineBlanket1.Save();
-                            //MOrderLine oLine1 = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
+                            if (!lineBlanket.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                                    _processMsg = "Could not update Blanket Order Line. " + pp.GetName();
+                                else
+                                    _processMsg = "Could not update Blanket Order Line";
+                                return DocActionVariables.STATUS_INVALID;
+                            }
 
+                            if (!lineBlanket1.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                                    _processMsg = "Could not update Blanket Order Line. " + pp.GetName();
+                                else
+                                    _processMsg = "Could not update Blanket Order Line";
+                                return DocActionVariables.STATUS_INVALID;
+                            }
                         }
                     }
 
