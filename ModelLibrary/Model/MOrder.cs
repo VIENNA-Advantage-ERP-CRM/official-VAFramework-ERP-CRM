@@ -1315,7 +1315,12 @@ namespace VAdvantage.Model
                     // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.
                     if (GetM_PriceList_ID() != otherOrder.GetM_PriceList_ID())
                         line.SetTaxAmt();		//	recalculate Tax Amount
-                    //
+
+                    // ReCalculate Surcharge Amount
+                    if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        line.SetSurchargeAmt(Env.ZERO);
+                    }
 
                     //
                     line.SetProcessed(false);
