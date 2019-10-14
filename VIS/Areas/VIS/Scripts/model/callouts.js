@@ -434,8 +434,8 @@
                     mTab.setValue("C_UOM_ID", C_UOM_ID);
                 }
 
-                if (Qty != 0 && Qty != null && QtyReleased != null) {
-                    mTab.setValue("QtyBlanket", ((Qty + QtyReleased) - QtyReleased));
+                if (QtyOrdered != 0 && QtyOrdered != null && QtyReleased != null) {
+                    mTab.setValue("QtyBlanket", ((QtyOrdered + QtyReleased) - QtyReleased));
                 }
 
                 if (M_AttributeSetInstance_ID != 0 && M_AttributeSetInstance_ID != null) {
@@ -4691,7 +4691,7 @@
         //  
         if ((value == null || value.toString() == "") && mField.getColumnName() != "C_ConversionType_ID") {
             //if (value == null || value.toString() == "") {
-            mTab.setValue("C_Currency_ID", 0);
+            //mTab.setValue("C_Currency_ID", 0);
             return "";
         }
         if (this.isCalloutActive())		// assuming it is resetting value
@@ -5472,6 +5472,12 @@
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
         var statementDate = mTab.getValue("ValutaDate");
+
+        // JID_1418: When select payment on Bank statement line, system gives an error meassage
+        if (statementDate == null) {
+            statementDate = new Date();
+        }
+
         //var sql = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";		//	1
         //var dr = null;
         //var param = [];
@@ -5497,12 +5503,7 @@
         }
         catch (err) {
             this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
             this.log.log(Level.SEVERE, "BankStmt_Payment", err);
-            //ErrorLog.FillErrorLog("BankStmt_Payment", sql, e.Message.toString(), VAdvantage.Framework.Message.MessageType.ERROR);
-            //return e.getLocalizedMessage();
             return err.toString();
         }
         //  Recalculate Amounts
@@ -5544,10 +5545,7 @@
             //}
         }
         catch (err) {
-            this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
+            this.setCalloutActive(false);            
             this.log.log(Level.SEVERE, "BankStmt_DateAcct", err);
             return err.toString();
         }
@@ -21827,7 +21825,7 @@
     */
     CalloutCashJournalLine.prototype.setAccountNo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
-            mTab.setValue("C_BankAccount_ID", null);
+            //mTab.setValue("C_BankAccount_ID", null);
             return "";
         }
         this.setCalloutActive(true);
