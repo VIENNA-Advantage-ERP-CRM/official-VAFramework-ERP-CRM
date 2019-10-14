@@ -1292,6 +1292,9 @@ namespace VAdvantage.Model
                     if (docType.IsReleaseDocument())
                     {
                         line.SetC_OrderLine_Blanket_ID(fromLines[i].GetC_OrderLine_ID());
+
+                        // Blanket order qty not updated correctly by Release order process
+                        line.SetQtyBlanket(fromLines[i].GetQtyOrdered());
                     }
 
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
