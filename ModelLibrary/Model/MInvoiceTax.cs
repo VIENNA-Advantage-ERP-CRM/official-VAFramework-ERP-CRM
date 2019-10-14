@@ -345,8 +345,7 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Calculate/Set Surcharge Tax Amt from Invoice Lines
-        /// </summary>
-        /// <param name="taxRate">Tax Rate</param>
+        /// </summary>        
         /// <returns>true if calculated</returns>
         public bool CalculateSurchargeFromLines()
         {
