@@ -1582,7 +1582,7 @@ namespace VAdvantage.Model
         public static Boolean DeleteTableSequence(Ctx ctx, String TableName, Trx trxName)
         {
             MSequence seq = Get(ctx, TableName, trxName);
-            return seq.Delete(true);
+            return seq.Delete(true,trxName);
         }	//	deleteTableSequence
 
 
