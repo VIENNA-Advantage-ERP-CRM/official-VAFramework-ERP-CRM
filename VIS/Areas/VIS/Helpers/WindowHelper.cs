@@ -1998,12 +1998,12 @@ namespace VIS.Helpers
                 {
                     if (OldValue != null)
                     {
-                        bool yes = OldValue.Equals("true") || OldValue.Equals("Y");
+                        bool yes = OldValue.Equals("True") || OldValue.Equals("Y");
                         showOldValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                     if (NewValue != null)
                     {
-                        bool yes = NewValue.Equals("true") || NewValue.Equals("Y");
+                        bool yes = NewValue.Equals("True") || NewValue.Equals("Y");
                         showNewValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                 }

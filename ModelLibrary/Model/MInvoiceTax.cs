@@ -345,21 +345,21 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Calculate/Set Surcharge Tax Amt from Invoice Lines
-        /// </summary>
-        /// <param name="taxRate">Tax Rate</param>
+        /// </summary>        
         /// <returns>true if calculated</returns>
-        public bool CalculateSurchargeFromLines(MTax taxRate)
+        public bool CalculateSurchargeFromLines()
         {
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //
-            MTax surTax = new MTax(GetCtx(), taxRate.GetSurcharge_Tax_ID(), Get_TrxName());
+            MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
             //
-            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID "
+            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID, tax.SurchargeType "
                 + "FROM C_InvoiceLine il"
                 + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
-                + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND il.C_Tax_ID=" + taxRate.GetC_Tax_ID();
+                + " INNER JOIN C_Tax tax ON il.C_Tax_ID=tax.C_Tax_ID "
+                + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND tax.Surcharge_Tax_ID=" + GetC_Tax_ID();
             IDataReader idr = null;
             int c_Currency_ID = 0;
             DateTime? dateAcct = null;
@@ -377,15 +377,16 @@ namespace VAdvantage.Model
                     Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr[0]);
                     //	TaxAmt
                     Decimal taxAmt = Utility.Util.GetValueOfDecimal(idr[1]);
+                    string surchargeType = Util.GetValueOfString(idr[2]);
 
                     // for Surcharge Calculation type - Line Amount + Tax Amount
-                    if (taxRate.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmountPlusTax)
+                    if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmountPlusTax))
                     {
                         baseAmt = Decimal.Add(baseAmt, taxAmt);
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
                     // for Surcharge Calculation type - Line Amount 
-                    else if (taxRate.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmount)
+                    else if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmount))
                     {
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
