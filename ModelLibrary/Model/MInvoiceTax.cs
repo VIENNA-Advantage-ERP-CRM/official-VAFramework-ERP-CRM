@@ -377,7 +377,7 @@ namespace VAdvantage.Model
                     Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr[0]);
                     //	TaxAmt
                     Decimal taxAmt = Utility.Util.GetValueOfDecimal(idr[1]);
-                    string surchargeType = Util.GetValueOfString(idr[2]);
+                    string surchargeType = Util.GetValueOfString(idr[6]);
 
                     // for Surcharge Calculation type - Line Amount + Tax Amount
                     if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmountPlusTax))
