@@ -142,7 +142,9 @@ namespace VIS
                  "~/Areas/VIS/Scripts/app/forms/productContainerMove.js",
                  "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
 
+
                  "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
+
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
                   "~/Areas/VIS/Scripts/TestPanel.js",
@@ -171,6 +173,9 @@ namespace VIS
                   "~/Areas/VIS/Scripts/model/calloutorderline.js",
                   "~/Areas/VIS/Scripts/model/calloutcontract.js",
                   "~/Areas/VIS/Scripts/model/calloutinout.js",
+
+                  "~/Areas/VIS/Scripts/model/CalloutColumn.js",
+
                   "~/Areas/VIS/Scripts/model/calloutpayment.js"//Bottom One
                    );
 
@@ -188,16 +193,19 @@ namespace VIS
                  "~/Areas/VIS/Content/reportstyle.css",
                  "~/Areas/VIS/Content/RecordAccessDialog.css",
                 "~/Areas/VIS/Content/GroupStyle.css",
+
                  "~/Areas/VIS/Content/ProductContainer.css",
-                 "~/Areas/VIS/Content/GlJournalDimension.css"
-               );    
+                    "~/Areas/VIS/Content/GlJournalDimension.css"
+               );
+
+
+            //styleRTL.Include("~/Areas/VIS/Content/VIS.rtl.css");
+
+            //style.Include("~/Areas/VIS/Content/vis.all.min.css");
+            //modScript.Include("~/areas/vis/scripts/VIS.all.min.js");
+            ////"~/Areas/VIS/Scripts/TestPanel.js"); 
                 
               
-            //style.Include("~/Areas/VIS/Content/vis.all.min.css");
-
-            //modScript.Include("~/areas/vis/scripts/VIS.all.min.js"); 
-
-
             VAdvantage.ModuleBundles.RegisterScriptBundle(modScript, "VIS", -1);
             VAdvantage.ModuleBundles.RegisterStyleBundle(style, "VIS", -1);
             ////VAdvantage.ModuleBundles.RegisterRTLStyleBundle(styleRTL, "VIS", -1);
