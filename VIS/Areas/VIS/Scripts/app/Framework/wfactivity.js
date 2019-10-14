@@ -599,7 +599,13 @@
 
                 var para = $("<p>");
 
-                para.append(VIS.Utility.encodeText(data[item].Summary));
+                if (data[item].DocumentNameValue == undefined || data[item].DocumentNameValue == '') {
+                    para.append(VIS.Utility.encodeText(data[item].Summary));
+                }
+                else {
+                    para.append(VIS.Utility.encodeText(data[item].DocumentNameValue + " - " + data[item].Summary));
+                }
+
                 var br = $("<br>");
                 para.append(br);
                 para.append(VIS.Utility.encodeText(VIS.Msg.getMsg('Priority') + " " + data[item].Priority));
@@ -818,7 +824,7 @@
             var detailCtrl = {};
             lstDetailCtrls = [];
             detailCtrl.Index = index;
-
+            var docnameval;
             // var info = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/GetActivityInfo", { "activityID": wfActivityID, "nodeID": data[index].AD_Node_ID, "wfProcessID": data[index].AD_WF_Process_ID })).result;
 
 
@@ -832,15 +838,80 @@
             divHeader.append(hHeader);
             // if  any checkbox is checked, then don't show History in middle panel.
             if (selectedItems.length <= 1) {
-                var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton  vis-workflowActivityIcons' data-id='" + index + "'>");
-                //aZoom.css("data-id", index);
-                aZoom.append($("<span class='vis-btn-ico vis-btn-zoom-bg vis-btn-zoom-border'>"));
-                aZoom.append(VIS.Msg.getMsg('Zoom'));
-                divHeader.append(aZoom);
-                aZoom.on(VIS.Events.onTouchStartOrClick, function (e) {
-                    var id = $(this).data("id");
-                    zoom(id);
-                });
+
+                //info.ColName == 'VADMS_IsSigned'
+                if (info.ColName == 'VADMS_SignStatus') {
+
+                    docnameval = fulldata[index].DocumentNameValue.split('_');
+
+                    var docno = {
+                        DocumentNo : parseInt(docnameval[docnameval.length - 1])
+                    };
+
+                    var folderofDoc = '';
+                    // Get certificate status
+                    $.post(VIS.Application.contextUrl + 'VADMS/Document/GetFolderID', docno, function (res) {
+                        if (res && res.result != '' && !res.result.contains('ERR-') && !res.result.contains('F')) {
+                            folderofDoc = parseInt(res.result);
+                        }
+                        else {
+                            VIS.ADialog.error(VIS.Msg.getMsg("VA055_FolderNotFound"));
+                        }
+                    }, 'json').fail(function (jqXHR, exception) {
+                        VIS.ADialog.error(exception);
+                    });
+
+                    var formName = {
+                        FromName: 'VADMS_Document'
+                    };
+
+                    var formID = '';
+                    // Get certificate status
+                    $.post(VIS.Application.contextUrl + 'VADMS/Document/GetFormID', formName, function (res) {
+                        if (res && res.result != '') {
+                            formID = res.result;
+                        }
+                        else {
+                            VIS.ADialog.error(VIS.Msg.getMsg("VA055_FormNotFound"));
+                        }
+                    }, 'json').fail(function (jqXHR, exception) {
+                        VIS.ADialog.error(exception);
+                    });
+
+                    // Dms Zoom
+                    var aZoomDMS = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton vis-workflowActivityIcons' style='margin-left:10px;' data-id='" +
+                        docnameval[docnameval.length-1] +
+                        "'>");
+                    aZoomDMS.append($("<span class='vis-btn-ico vis-btn-zoom-bg vis-btn-zoom-border'>"));
+                    aZoomDMS.append(VIS.Msg.getMsg('Zoom'));
+                    divHeader.append(aZoomDMS);
+
+                    aZoomDMS.on(VIS.Events.onTouchStartOrClick, function (e) {
+                        var id = $(this).data("id");
+
+                        var $additionalInfo = {
+                            DocNo: id,
+                            DocFolderID: folderofDoc
+                        };
+                        if (formID > 0) {
+                            VIS.viewManager.startForm(formID, $additionalInfo);
+                        }
+                        else {
+
+                        }
+                    });
+                }
+                else {
+                    var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton  vis-workflowActivityIcons' data-id='" + index + "'>");
+                    //aZoom.css("data-id", index);
+                    aZoom.append($("<span class='vis-btn-ico vis-btn-zoom-bg vis-btn-zoom-border'>"));
+                    aZoom.append(VIS.Msg.getMsg('Zoom'));
+                    divHeader.append(aZoom);
+                    aZoom.on(VIS.Events.onTouchStartOrClick, function (e) {
+                        var id = $(this).data("id");
+                        zoom(id);
+                    });
+                }
             }
 
             divHeader.append($("<div class='clearfix'>"));
@@ -967,8 +1038,48 @@
             liDoit.append(aOk);
             aOk.on(VIS.Events.onTouchStartOrClick, function (e) {
 
-                var id = $(this).data("id");
-                approveIt(id);
+                // Digital signature work - Apply default sign at default location with selected status
+                if (window.VA055 && window.VADMS && info.ColName == 'VADMS_SignStatus') {
+
+                    var signData = {
+                        documentNo: docnameval[docnameval.length - 1],
+                        defaultReasonKey: $('[name="VADMS_SignStatus"]').children("option:selected").val(),
+                        defaultReason: $('[name="VADMS_SignStatus"]').children("option:selected").text(),
+                        //defaultDigitalSignatureID: $('#pdfsignreason').children("option:selected").data('digitalsignatureid')
+                    };
+
+                    if (signData.defaultReasonKey == undefined || signData.defaultReasonKey == '' || signData.defaultReason == undefined || signData.defaultReason == '') {
+                        VIS.ADialog.info('VA055_ChooseStatus');
+                        return;
+                    }
+
+                    $.post(VIS.Application.contextUrl + 'VADMS/Document/SignatureUsingWorkflow', signData, function (res) {
+
+                        if (res && res != 'null' && res.result == 'success') {
+
+                            $("#divfeedbsy")[0].style.visibility = "hidden";
+                            divScroll.empty();
+                            adjust_size();
+                            lstDetailCtrls = [];
+                            selectedItems = [];
+                            $busyIndicator.show();
+
+                            window.setTimeout(function () {
+                                loadWindows(true);
+                            }, 5000);
+                        }
+                        else {
+                            VIS.ADialog.error(res.result);
+                        }
+
+                    }, 'json').fail(function (jqXHR, exception) {
+                        VIS.ADialog.error(exception);
+                    });
+                }
+                else {
+                    var id = $(this).data("id");
+                    approveIt(id);
+                }
             });
             ulA.append(liDoit);
 

@@ -10,7 +10,7 @@
         this.onClose = null;
 
 
-        var inforoot = $("<div>");
+        var inforoot = $("<div class='vis-forms-container'>");
         var subroot = $("<div>");
         var isExpanded = true;
         var sSContainer, ssHeader, btnExpander, searchTab, searchSec, datasec, btnsec;   /* decalare Variable */
@@ -37,6 +37,7 @@
             subroot.css("position", "absolute");
             // subroot.css("margin-left", "-10px");
             subroot.css('overflow', 'auto');
+
 
 
             // sSContainer = $("<div style='display: inline-block; float: left;width:23%;height:87.8%;overflow:auto;'>");

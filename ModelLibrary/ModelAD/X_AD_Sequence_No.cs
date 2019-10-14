@@ -135,27 +135,28 @@ public KeyNamePair GetKeyNamePair()
 {
 return new KeyNamePair(Get_ID(), GetAD_Sequence_ID().ToString());
 }
-/** Set Year.
-@param CalendarYear Calendar Year */
-public void SetCalendarYear (String CalendarYear)
+/** Set Year & Month.
+@param CalendarYear Calendar Year & Month */
+public void SetCalendarYear(String CalendarYear)
 {
-if (CalendarYear == null) throw new ArgumentException ("CalendarYear is mandatory.");
-if (CalendarYear.Length > 4)
+    if (CalendarYear == null)
+        throw new ArgumentException("CalendarYear is mandatory.");
+    if (CalendarYear.Length > 6)
+    {
+        log.Warning("Length > 6 - truncated");
+        CalendarYear = CalendarYear.Substring(0, 6);
+    }
+    Set_ValueNoCheck("CalendarYear", CalendarYear);
+}
+/** Get Year & Month.
+@return Calendar Year & Month */
+public String GetCalendarYear()
 {
-log.Warning("Length > 4 - truncated");
-CalendarYear = CalendarYear.Substring(0,4);
+    return (String)Get_Value("CalendarYear");
 }
-Set_ValueNoCheck ("CalendarYear", CalendarYear);
-}
-/** Get Year.
-@return Calendar Year */
-public String GetCalendarYear() 
-{
-return (String)Get_Value("CalendarYear");
-}
-/** Set Current Next.
+        /** Set Current Next.
 @param CurrentNext The next number to be used */
-public void SetCurrentNext (int CurrentNext)
+        public void SetCurrentNext (int CurrentNext)
 {
 Set_Value ("CurrentNext", CurrentNext);
 }

@@ -2208,6 +2208,19 @@ namespace VAdvantage.Model
                             if (!iTax.Save())
                                 return false;
                             taxList.Add(taxID);
+
+                            // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                            if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                            {
+                                iTax = MInvoiceTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
+                                if (iTax != null)
+                                {                                    
+                                    if (!iTax.CalculateSurchargeFromLines())
+                                        return false;
+                                    if (!iTax.Save(Get_TrxName()))
+                                        return false;
+                                }
+                            }
                         }
                     }
                     totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());

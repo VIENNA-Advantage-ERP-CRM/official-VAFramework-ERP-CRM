@@ -46,7 +46,7 @@
                 baseObj.cmbContainer.getControl().css('display', 'block');
 
             //  Set Default
-            var DocumentNos = VIS.Env.getCtx().getContextAsInt(baseObj.windowNo, "DocumentNo");
+            var DocumentNos = VIS.Env.getCtx().getContext(baseObj.windowNo, "DocumentNo");
             baseObj.DocumentNoRef.setValue(DocumentNos);
 
             var C_BPartner_ID = baseObj.initBPartner(false);
