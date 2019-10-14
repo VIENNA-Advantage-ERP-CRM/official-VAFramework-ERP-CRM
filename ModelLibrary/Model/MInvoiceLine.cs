@@ -3757,9 +3757,8 @@ namespace VAdvantage.Model
                     {
                         tax = MInvoiceTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
-                        {
-                            MTax taxRate = MTax.Get(GetCtx(), Util.GetValueOfInt(Get_ValueOld("C_Tax_ID")));
-                            if (!tax.CalculateSurchargeFromLines(taxRate))
+                        {                           
+                            if (!tax.CalculateSurchargeFromLines())
                                 return false;
                             if (!tax.Save(Get_TrxName()))
                                 return false;
@@ -3884,7 +3883,7 @@ namespace VAdvantage.Model
                 else if (Get_ColumnIndex("SurchargeAmt") > 0 && taxRate.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && taxRate.GetSurcharge_Tax_ID() > 0)
                 {
                     tax = MInvoiceTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
-                    if (!tax.CalculateSurchargeFromLines(taxRate))
+                    if (!tax.CalculateSurchargeFromLines())
                         return false;
                     if (!tax.Save(Get_TrxName()))
                         return false;

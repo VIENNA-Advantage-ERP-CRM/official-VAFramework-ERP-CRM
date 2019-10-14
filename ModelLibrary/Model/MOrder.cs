@@ -3249,9 +3249,8 @@ namespace VAdvantage.Model
                         {
                             oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                             if (oTax != null)
-                            {
-                                MTax taxRate = MTax.Get(GetCtx(), taxID);
-                                if (!oTax.CalculateSurchargeFromLines(taxRate))
+                            {                               
+                                if (!oTax.CalculateSurchargeFromLines())
                                     return false;
                                 if (!oTax.Save(Get_TrxName()))
                                     return false;

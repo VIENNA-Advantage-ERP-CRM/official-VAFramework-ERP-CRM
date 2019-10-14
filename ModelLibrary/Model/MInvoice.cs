@@ -2192,9 +2192,8 @@ namespace VAdvantage.Model
                             {
                                 iTax = MInvoiceTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                                 if (iTax != null)
-                                {
-                                    MTax taxRate = MTax.Get(GetCtx(), taxID);
-                                    if (!iTax.CalculateSurchargeFromLines(taxRate))
+                                {                                    
+                                    if (!iTax.CalculateSurchargeFromLines())
                                         return false;
                                     if (!iTax.Save(Get_TrxName()))
                                         return false;
