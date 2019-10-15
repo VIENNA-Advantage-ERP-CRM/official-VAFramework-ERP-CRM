@@ -5,8 +5,9 @@
     --v-c-primary: 26, 160, 237; /*#1aa0ed;*/
     --v-c-on-primary: 255, 255, 255; /*white*/
     /*Secondary*/
-    --v-c-secondary: 0,0,0; /*black*/
-    --v-c-on-secondary: 255,255,255; /*black*/
+    --v-c-secondary: 255,255,255;
+     /*black*/
+    --v-c-on-secondary: 0,0,0; /*black*/
     /* common*/
     --v-c-common: 255,255,255;
     --v-c-on-common: 0,0,0;

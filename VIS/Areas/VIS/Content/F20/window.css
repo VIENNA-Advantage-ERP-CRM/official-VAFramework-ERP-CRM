@@ -303,8 +303,10 @@
 .vis-ad-w-p-vc {
     flex: 1;
     display: grid;
-    grid-template-rows:  auto 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-columns: auto 1fr;
+    background-color: rgba(var(--v-c-secondary));
+    color: rgba(var(--v-c-on-secondary));
 }
 .vis-ad-w-p-vc-tree 
 {
@@ -480,9 +482,11 @@
     grid-column-end:5;
 }
 .vis-ev-col * {
-    margin:0;
-    padding:1px;
-    font-weight:normal;
+    margin: 0;
+    padding: 1px;
+    font-weight: normal;
+    background-color: rgba(var(--v-c-secondary)) !important;
+    color: rgba(var(--v-c-on-secondary)) !important;
 }
 /* End Single */
 /*  */
