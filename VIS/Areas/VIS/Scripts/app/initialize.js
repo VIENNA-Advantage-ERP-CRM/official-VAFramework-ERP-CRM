@@ -47,9 +47,7 @@
             initLogger();
             VIS.desktopMgr.start(); //Invoke Desktop mgr 's start function
 
-
-            $('[data-toggle="popover"]').popover();  
-
+            VIS.themeMgr.init();
 
             //Set Page Size of Window
             VIS.Env.setWINDOW_PAGE_SIZE(VIS.Ini.getLocalStorage(VIS.IniConstants.WIN_PAGESIZE));
