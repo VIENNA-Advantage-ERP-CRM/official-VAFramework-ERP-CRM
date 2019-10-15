@@ -8,15 +8,27 @@
 
         function init() {
 
-            var li = $("#vis_theme");
+                var cmb = $("#vis_cmbtheme");
                 var root = document.documentElement;
-            li.on("click", "div.vis-theme-rec", function (e) {
-                var clr = $(e.currentTarget).data("color");
-                var clrs = clr.split("|");
-                root.style.setProperty('--v-c-primary', clrs[0]);
-                root.style.setProperty('--v-c-on-primary', clrs[1]);
-                root.style.setProperty('--v-c-secondary', clrs[2]);
-                root.style.setProperty('--v-c-on-secondary', clrs[3]);
+                cmb.on("change", function (e) {
+
+                    switch (this.selectedIndex) {
+                        case 0:
+                            root.style.setProperty('--color', 'black');
+                            root.style.setProperty('--bgcolor', 'white');
+                            root.style.setProperty('--hdrbgcolor', '#58B1E2');
+                            break
+                        case 1:
+                            root.style.setProperty('--bgcolor', '#B3E5FC');
+                            root.style.setProperty('--color', '#37474F');
+                            root.style.setProperty('--hdrbgcolor', '#4f6098');
+                            break
+                        case 2:
+                            root.style.setProperty('--bgcolor', 'lightpink');
+                            root.style.setProperty('--color', 'red');
+                            root.style.setProperty('--hdrbgcolor', '#a56969');
+                            break
+                    }
                 });
         }
         return {
