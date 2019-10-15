@@ -975,10 +975,11 @@
             }
             else {
                 //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
-                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i><span>' + this.text + '</span>');
+                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" data-toggle="popover" data-placement="right" data-content="Attachment"></i><span>' + this.text + '</span>');
                 this.img = li.find("i");
             }
             this.$li = li;
+            li.popover
             if (listId) {
                 this.items[listId] = li;
             }

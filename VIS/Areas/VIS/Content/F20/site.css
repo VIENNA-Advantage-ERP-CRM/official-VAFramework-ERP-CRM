@@ -24,7 +24,9 @@
 .vis-app-hdr {
     /*flex-basis: 42px;*/
     height: 42px;
-    display: flex
+    display: flex;
+    border-bottom: 1px solid rgba(var(--v-c-secondary),0.07);
+    padding-right: 5px;
 }
 
     .vis-app-hdr ul {
@@ -39,7 +41,7 @@
 
     .vis-app-hdr a:hover {
         text-decoration: none;
-        color: rgba(var(--v-c-on-primary),1);
+        color: rgba(var(--v-c-secondary),0.30);
     }
 
 .vis-app-hdr-l {
@@ -51,10 +53,10 @@
 }
 
 .vis-app-hdr-l-menu {
-    background-color: rgba(var(--v-c-primary),1);
-    color: rgba(var(--v-c-on-primary),1);
+    background-color: rgba(var(--v-c-secondary),0.04);
+    color: rgba(var(--v-c-secondary),0.30);
     height: 100%;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     display: flex;
     width: 42px;
     align-items: center;
@@ -93,7 +95,9 @@
 .vis-app-hdr-r-theme {
     color: rgba(var(--v-c-primary),1);
 }
-
+.vis-app-hdr-r li:first-child {
+    color: rgba(var(--v-c-secondary),0.60);
+}
 .vis-app-hdr-r-user {
     color: rgba(var(--v-c-primary),1);
     font-size: 1.2rem;
@@ -103,10 +107,10 @@
     font-size: 1.4rem;
     margin-right: 2px;
     display: flex;
-    padding: 6px;
+    /*padding: 6px;*/
     border-radius: 10px;
-    background-color: rgba(var(--v-c-primary),1);
-    color: rgba(var(--v-c-on-primary),1);
+    /*background-color: rgba(var(--v-c-primary),1);*/
+    color: rgba(var(--v-c-secondary),0.28);
 }
 
 .vis-app-overlay {

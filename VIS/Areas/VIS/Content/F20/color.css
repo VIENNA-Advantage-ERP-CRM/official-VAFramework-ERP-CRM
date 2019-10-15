@@ -2,7 +2,7 @@
 /* Theme based color - schema */
 /* va color */
 :root {
-    --v-c-primary: 26, 160, 237; /*#1aa0ed;*/
+    --v-c-primary: 0, 152, 247; /*#1aa0ed;*/
     --v-c-on-primary: 255, 255, 255; /*white*/
     /*Secondary*/
     --v-c-secondary: 0,0,0; /*black*/

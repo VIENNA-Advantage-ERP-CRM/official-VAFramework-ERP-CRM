@@ -914,7 +914,7 @@
 .vis-gc-vtable {
     height: 100%;
     /*float: left;*/
-    width: 99%;
+    width: 100%;
     max-width: 100%;
     padding: 0;
     margin: 0 auto;
