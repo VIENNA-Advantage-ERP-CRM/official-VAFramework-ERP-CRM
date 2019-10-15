@@ -1035,17 +1035,22 @@ namespace VAdvantage.Model
                 {
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
 
-                    Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
-                        GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-                    if (payAmt == null || payAmt == 0)
+                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                    // If Amount is ZERO then no need to check currency conversion
+                    if (!payAmt.Equals(Env.ZERO))
                     {
-                        // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        payAmt = MConversionRate.ConvertBase(GetCtx(), payAmt,
+                        GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                        if (payAmt == 0)
+                        {
+                            // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                            MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                                + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        }
                     }
 
-                    payAmt = Decimal.Subtract(0, payAmt.Value);
+                    payAmt = Decimal.Subtract(0, payAmt);
 
                     string retMsg = "";
                     bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), payAmt, out retMsg);
@@ -2576,19 +2581,24 @@ namespace VAdvantage.Model
                 {
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
 
-                    Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
-                        GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-                    if (payAmt == null || payAmt == 0)
+                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                    // If Amount is ZERO then no need to check currency conversion
+                    if (!payAmt.Equals(Env.ZERO))
                     {
-                        // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
+                        GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                        if (payAmt == 0)
+                        {
+                            // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                            MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                                + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
-                        return DocActionVariables.STATUS_INVALID;
+                            return DocActionVariables.STATUS_INVALID;
+                        }
                     }
 
-                    payAmt = Decimal.Subtract(0, payAmt.Value);
+                    payAmt = Decimal.Subtract(0, payAmt);
 
                     string retMsg = "";
                     bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), payAmt, out retMsg);
@@ -2859,15 +2869,21 @@ namespace VAdvantage.Model
                     watchPer = 90;
 
                 Decimal? newCreditAmt = 0;
-                Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
-                    GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-                if (payAmt == null || payAmt == 0)
+
+                Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                // If Amount is ZERO then no need to check currency conversion
+                if (!payAmt.Equals(Env.ZERO))
                 {
-                    // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                    MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                    _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                        + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
-                    return DocActionVariables.STATUS_INVALID;
+                    payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),
+                    GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                    if (payAmt == 0)
+                    {
+                        // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
+                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        return DocActionVariables.STATUS_INVALID;
+                    }
                 }
 
                 if (bp.GetCreditStatusSettingOn() == "CH")
@@ -2917,7 +2933,7 @@ namespace VAdvantage.Model
                 else if (bp.GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
                     MBPartnerLocation loc = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), Get_Trx());
-                    
+
                     //	Total Balance
                     Decimal? newBalance = loc.GetTotalOpenBalance();
                     if (newBalance == null)
@@ -2945,7 +2961,7 @@ namespace VAdvantage.Model
                             + ") Balance=" + loc.GetTotalOpenBalance() + " -> " + newBalance);
                     }
                     loc.SetTotalOpenBalance(Convert.ToDecimal(newBalance));
-                    Decimal? bptotalopenbal = Decimal.Negate((Decimal)payAmt) + bp.GetTotalOpenBalance();                    
+                    Decimal? bptotalopenbal = Decimal.Negate((Decimal)payAmt) + bp.GetTotalOpenBalance();
                     bp.SetTotalOpenBalance(bptotalopenbal);
                     // commented this as we will use existing function on MBPartner to calculate logic for setting credit status
                     //if (bp.GetSO_CreditLimit() > 0)
