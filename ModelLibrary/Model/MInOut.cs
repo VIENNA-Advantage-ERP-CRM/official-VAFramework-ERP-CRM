@@ -2945,15 +2945,11 @@ namespace VAdvantage.Model
                         {
                             if (IsSOTrx())
                             {
-                                lineBlanket1.SetQtyDelivered(Decimal.Subtract(lineBlanket1.GetQtyDelivered(), Qty));
-                                //JID_0688: On MR Complete against the Released Purchase order, need to decrease the Reserved Qty from Blanket order.
-                                lineBlanket1.SetQtyReserved(Decimal.Add(lineBlanket1.GetQtyReserved(), Qty));
+                                lineBlanket1.SetQtyDelivered(Decimal.Subtract(lineBlanket1.GetQtyDelivered(), Qty));                               
                             }
                             else
                             {
-                                lineBlanket1.SetQtyDelivered(Decimal.Add(lineBlanket1.GetQtyDelivered(), Qty));
-                                //JID_0688: On MR Complete against the Released Purchase order, need to decrease the Reserved Qty from Blanket order.
-                                lineBlanket1.SetQtyReserved(Decimal.Subtract(lineBlanket1.GetQtyReserved(), Qty));
+                                lineBlanket1.SetQtyDelivered(Decimal.Add(lineBlanket1.GetQtyDelivered(), Qty));                                
                             }
 
                             lineBlanket1.SetDateDelivered(GetMovementDate());   //	overwrite=last                            
