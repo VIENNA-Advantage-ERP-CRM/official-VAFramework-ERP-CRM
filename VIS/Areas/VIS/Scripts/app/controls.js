@@ -931,7 +931,7 @@
         var $ctrl = null;
         //Init Control
         if (!isLink) {
-            $ctrl = $('<button class="vis-gc-vpanel-table-btn-blue">', { type: 'button', name: columnName });
+            $ctrl = $('<button class="vis-gc-vpanel-table-btn-blue1">', { type: 'button', name: columnName });
             $img.css("margin-right", "8px");
         }
         else

@@ -904,32 +904,42 @@
                 }
                 //	Data
                 if (!this.toolTipText)
-                    this.toolTipText = VIS.Msg.getMsg(this.action);
+                    this.toolTipText = this.text;// VIS.Msg.getMsg(this.action);
                 else {
-                    this.toolTipText = VIS.Msg.getMsg(this.toolTipText);
-                    this.text = this.text + " " + this.toolTipText;
+                    this.toolTipText = this.text + VIS.Msg.getMsg(this.toolTipText);
+                    //this.text = this.text + " " + this.toolTipText;
                 }
                 if (this.toolTipText.contains("&")) {
-                    this.toolTipText = this.toolTipText.replace('&', '');
+                    this.toolTipText = this.text + this.toolTipText.replace('&', '');
                 }
             }
-            var imgUrl = this.getPath();
-            var imgUrlX = this.getPath();
+            var imgUrl = ''; // this.getPath();
+            var imgUrlX = ''; //this.getPath();
+
+            //var cls = '';
+            //var clsX = '';
 
             if (this.isSmall) {
-                imgUrl += this.action + "16.png";
+                //imgUrl += this.action + "16.png";
+                imgUrl = this.action.toLowerCase();
                 if (this.toggle || this.enableDisable) {
-                    imgUrlX += this.action + "X16.png";
+                   // imgUrlX += this.action + "X16.png";
+                    imgUrlX = imgUrl + 'x';
                 }
             }
             else {
-                imgUrl += this.action + "24.png";
+                //imgUrl += this.action + "24.png";
+                //if (this.toggle || this.enableDisable) {
+                //    imgUrlX += this.action + "X24.png";
+                //}
+                imgUrl = this.action.toLowerCase();
                 if (this.toggle || this.enableDisable) {
-                    imgUrlX += this.action + "X24.png";
+                    // imgUrlX += this.action + "X16.png";
+                    imgUrlX = imgUrl + 'x';
                 }
             }
-            this.imgUrl = imgUrl;
-            this.imgUrlX = imgUrlX;
+            this.imgUrl = "vis-"+imgUrl;
+            this.imgUrlX = "vis-"+imgUrlX;
         }
 
         var that = this;
@@ -944,8 +954,6 @@
                     if (that.toggle) {
                         that.setPressed(!that.pressed);
                     }
-
-
                     fired = false;
                     d.css('background-color', 'red')
                     setTimeout(function () {
@@ -953,42 +961,33 @@
                         that.onAction(that.action);
                         fired = true;
                     }, 10);
-
                 }
             });
-
-
             if (this.textOnly) {
                 // li.text(this.text);
                 li.append($('<h5>').text(this.text));
             }
             else if (this.imageOnly) {
-                this.img = $('<img />').attr({ 'src': this.imgUrl, 'alt': this.text, 'title': this.text });
-
+                //this.img = $('<img />').attr({ 'src': this.imgUrl, 'alt': this.text, 'title': this.text });
+                this.img = $('<i class="vis ' + this.imgUrl + '" title = "' + this.toolTipText + '"})>');
                 li.append(d);
                 d.append(this.img);
             }
             else {
-                li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
-                this.img = li.find("img");
+                //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
+                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i><span>' + this.text + '</span>');
+                this.img = li.find("i");
             }
-
-
-
             this.$li = li;
-
             if (listId) {
                 this.items[listId] = li;
             }
-
             return this.$li;
         };
-
 
         this.getListItmIT = function (listId) {
             if (this.$li)
                 return this.$li;
-
             var li = $("<li>");
             var d = $("<div></div>");
             var fired = true;
@@ -1014,24 +1013,24 @@
                 li.text(this.text);
             }
             else if (this.imageOnly) {
-                this.img = $('<img />').attr({ 'src': this.imgUrl, 'alt': this.text, 'title': this.text });
-
+                //this.img = $('<img />').attr({ 'src': this.imgUrl, 'alt': this.text, 'title': this.text });
+                //li.append(d);
+                //d.append(this.img);
+                this.img = $('<i class="vis ' + this.imgUrl + '" title = "' + this.toolTipText + '"})>');
                 li.append(d);
                 d.append(this.img);
             }
             else {
-                li.append('<img src="' + this.imgUrl + '"  title="' + this.text + '"   /><span> ' + this.text + '</span>');
-                this.img = li.find("img");
+                //li.append('<img src="' + this.imgUrl + '"  title="' + this.text + '"   /><span> ' + this.text + '</span>');
+                //this.img = li.find("img");
+                //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
+                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i><span>' + this.text + '</span>');
+                this.img = li.find("i");
             }
-
-
-
             this.$li = li;
-
             if (listId) {
                 this.items[listId] = li;
             }
-
             return this.$li;
         }
 
@@ -1043,12 +1042,21 @@
     };
 
     AppsAction.prototype.setPressed = function (pressed) {
-        if (!this.toggle)
+        if (!this.toggle || this.pressed == pressed)
             return;
         this.pressed = pressed;
         if (this.img) {
-            if (this.toggle)
-                this.img.prop("src", !pressed ? this.imgUrl : this.imgUrlX);
+            if (this.toggle) {
+                //this.img.toggleClass(!pressed ? this.imgUrl : this.imgUrlX);
+                if (pressed) {
+                    this.img.removeClass(this.imgUrl);
+                    this.img.addClass(this.imgUrlX);
+                }
+                else {
+                    this.img.removeClass(this.imgUrlX);
+                    this.img.addClass(this.imgUrl);
+                }
+            }
         }
     };
 
@@ -1157,9 +1165,6 @@
     };
 
     AppsAction.prototype.setIsRo;
-
-
-
 
     //****************** END ********************//
 
@@ -1345,9 +1350,6 @@
         this.$statusLine.text(text);
     };//
 
-
-
-
     StatusBar.prototype.setInfo = function (text) {
         if (!this.$infoLine.is(':visible')) {
             this.$infoLine.show(); //infoLine.setVisible(true);
@@ -1362,7 +1364,6 @@
     //****************************************************//
     //**            End                    **//
     //**************************************************//
-
 
 
     VIS.AParentDetail = function (gc, $root) {
@@ -1606,8 +1607,6 @@
     VIS.AParentDetail.prototype.dispose = function () {
         this.disposeComponenet();
     };
-
-
 
 
     //****************************************************//

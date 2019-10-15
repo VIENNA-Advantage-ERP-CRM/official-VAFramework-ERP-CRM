@@ -82,7 +82,8 @@ namespace ViennaBase
                 "~/Areas/ViennaBase/Content/spectrum.css",
                 "~/Areas/ViennaBase/Content/custom/custom.css",
                 "~/Areas/ViennaBase/Content/fontlib/font-awesome.min.css",
-                "~/Areas/ViennaBase/Content/fontlib/glyphicons.css"
+                "~/Areas/ViennaBase/Content/fontlib/glyphicons.css",
+                "~/Areas/ViennaBase/Content/fontlib/vis-fonts.css"
               ));
 
             bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/externaljs").Include(
