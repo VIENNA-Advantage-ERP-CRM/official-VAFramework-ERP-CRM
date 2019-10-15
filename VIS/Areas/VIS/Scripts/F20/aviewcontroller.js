@@ -98,7 +98,7 @@ VIS.GridController = function (showRowNo, doPaging, id) {
 
         /* Multi,card and single view */
         $divGrid = $("<div class='vis-gc-vtable'>");
-        $divPanel = $("<div class='vis-gc-vpanel' id='AS_" + id + "'>");
+        $divPanel = $("<div class='vis-ad-w-p-vc-editview' id='AS_" + id + "'>");
         $divCard = $("<div class='vis-gc-vcard'>");
         $divMap = $("<div class='vis-gc-vmap'>");
         /* End */

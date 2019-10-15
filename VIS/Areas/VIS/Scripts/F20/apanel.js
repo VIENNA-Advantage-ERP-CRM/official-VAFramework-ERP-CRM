@@ -592,7 +592,7 @@ function APanel() {
         //1. toolbar action
         this.aRefresh = this.addActions(this.ACTION_NAME_REFRESH, null, true, true, false, onAction, null, "Shct_Refresh");
         this.aDelete = this.addActions(this.ACTION_NAME_DELETE, null, true, true, false, onAction, null, "Shct_Delete");
-        this.aNew = this.addActions(this.ACTION_NAME_NEW, null, true, true, false, onAction, null, "Shct_New");
+        this.aNew = this.addActions(this.ACTION_NAME_NEW, null, true, false, false, onAction, null, "Shct_New");
         this.aIgnore = this.addActions("Ignore", null, true, true, false, onAction, null, "Shct_Ignore");
         this.aSave = this.addActions("Save", null, true, true, false, onAction, null, "Shct_Save");
         this.aFind = this.addActions("Find", null, true, true, false, onAction, null, "Shct_Find");

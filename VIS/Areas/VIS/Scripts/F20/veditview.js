@@ -21,7 +21,7 @@ VIS.VGridPanel = function () {
 
 
     function initComponent() {
-        $table = $("<div class='vis-ad-w-p-vc-editview'>"); //   $("<table class='vis-gc-vpanel-table'>");
+        $table = $("<div class='vis-ad-w-p-vc-ev-grid'>"); //   $("<table class='vis-gc-vpanel-table'>");
         //<tr><td class='vis-gc-vpanel-table-td0'><td class='vis-gc-vpanel-table-td1'>" +
         //"<td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'><td class='vis-gc-vpanel-table-td2'>" +
         //"<td  class='vis-gc-vpanel-table-td3'><td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'>" +
@@ -37,7 +37,7 @@ VIS.VGridPanel = function () {
         //$td1 = $("<td colspan = '3' class='vis-gc-vpanel-table-td1'>");
         $td1 = $("<div class='vis-ev-col vis-ev-col-start2'></div>");
         //$td2 = $("<td class='vis-gc-vpanel-table-td2'>");
-        $td2 = $("<div class='vis-ev-col vis-ev-col-start3'></div>");
+        $td2 = $("<div class='vis-ev-col vis-ev-col-start3' ></div>");
         //$td3 = $("<td colspan='3' class='vis-gc-vpanel-table-td3'>");
         $td3 = $("<div class='vis-ev-col vis-ev-col-start4'></div>");
         //$td4 = $("<td class='vis-gc-vpanel-table-td4'>");
@@ -82,15 +82,14 @@ VIS.VGridPanel = function () {
             return false;
         oldFieldGroup = fieldGroup;
 
+        setColumns(columnIndex);
         addRow();
         var gSpan = $("<span class='vis-gc-vpanel-fieldgroup-span'>" + fieldGroup + "</span>");
         var gImg = $("<img class='vis-gc-vpanel-fieldgroup-img' src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/base/fieldgrpdown.png' >");
         var gDiv = $("<div class='vis-gc-vpanel-fieldgroup' data-name='" + fieldGroup + "' data-display='show' >").append(gImg).append(gSpan);
-        //$td1.attr("colspan", 3);
-        $td3.remove();
-        $td2.remove();
-        $td1.prop('colspan', 8);
-        $td1.append(gDiv);
+       
+        $td0.append(gDiv);
+        columnIndex = 8;
 
         //VLine fp = new VLine(fieldGroup);
         gDiv.on("click", onGroupClick);
@@ -115,7 +114,26 @@ VIS.VGridPanel = function () {
         }
     };
 
+    function setColumns() {
+        if ($td0 != null) {
+            if (columnIndex < 2) {
+                $td0.addClass("vis-ev-col-end2");
+                $td1.removeClass("vis-ev-col-start2").addClass("vis-ev-col-start3").addClass("vis-ev-col-end4");
+                $td2.remove();
+                $td3.remove();
+            }
+            else if (columnIndex == 8) {
+                $td3.remove();
+                $td2.remove();
+                $td2.remove();
+                $td0.addClass("vis-ev-col-end4");
+            }
+        }
+    }
+    
     this.addField = function (editor, mField) {
+
+        var insertRow = false;
 
         /* Dont Add in control panel */
         if (mField.getIsLink()) {
@@ -129,36 +147,47 @@ VIS.VGridPanel = function () {
         if (label == null && editor == null)
             return;
         var sameLine = mField.getIsSameLine();
-        if (addGroup(mField.getFieldGroup())) {
+        if (addGroup(mField.getFieldGroup(),columnIndex)) {
             sameLine = false;
         }
 
         if (sameLine) {
             ++columnIndex;
-            if (columnIndex > 4) {
+            if (columnIndex > 3) {
                 sameLine = false;
-                addRow();
-                columnIndex = 0;
+                insertRow = true;
+               // columnIndex = 0;
             }
             else if (columnIndex < 0) {
-                addRow();
-                columnIndex = 0;
+                //addRow();
+                insertRow = true;
+                //columnIndex = 0;
             }
-
         }
         else {
-            columnIndex = 0;
+            //columnIndex = 0;
+            insertRow = true;
+            //addRow();
+        }
+
+        if (insertRow) {
+            setColumns();
             addRow();
+            columnIndex = 0;
         }
 
         if (label != null) {
             if (sameLine) {
-                if (columnIndex == 1)
+                if (columnIndex == 1) {
                     $td1.append(label.getControl());
-                else if (columnIndex == 2)
+                }
+                else if (columnIndex == 2) {
                     $td2.append(label.getControl());
-                else
+                   
+                }
+                else {
                     $td3.append(label.getControl());
+                }
             } else {
                 $td0.append(label.getControl());
             }
@@ -174,15 +203,19 @@ VIS.VGridPanel = function () {
         }
         if (editor != null) {
             if (sameLine) {
-                if (columnIndex == 1)
+                if (columnIndex == 1) {
                     $td1.append(editor.getControl());
-                else if (columnIndex==2)
+                }
+                else if (columnIndex == 2) {
                     $td2.append(editor.getControl());
-                else
+                }
+                else {
                     $td3.append(editor.getControl());
+                }
             } else {
                 $td0.append(editor.getControl());
             }
+
             var fieldVFormat = mField.getVFormat();
             switch (fieldVFormat) {
                 case '': {
@@ -252,7 +285,7 @@ VIS.VGridPanel = function () {
                     //else 
                     //    $td3.addClass("vis-ev-col-start4 vis-ev-col-end4");
 
-                    columnIndex += 1;
+                   // columnIndex += 1;
                 } else {
                    // $td1.prop('colspan', 3 - count);
                     //$td3.prop('colspan', 3);
@@ -314,3 +347,5 @@ VIS.VGridPanel = function () {
     
 };
 }(VIS, jQuery));
+
+

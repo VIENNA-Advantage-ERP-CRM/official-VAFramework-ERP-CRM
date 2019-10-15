@@ -104,7 +104,7 @@
 /* toolbar action */
 .vis-ad-w-p-tb-lc {
     margin: 0;
-    font-size: 1em;
+    font-size: 1.3rem;
     padding: 0;
     flex: 1;
     display: flex;
@@ -272,7 +272,7 @@
 
 .vis-ad-w-p-center-tc {
     grid-row: 2/2;
-    background-color: floralwhite;
+    /*background-color: floralwhite;*/
     /*height:200px;*/
 }
 
@@ -432,13 +432,30 @@
 /* views */
 
 /* Single */
-.vis-ad-w-p-vc-editview 
-{
-    display:grid;
+.vis-ad-w-p-vc-editview {
+    padding: 0;
+    margin: 0 auto;
+    vertical-align: top;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    flex: 1;
+     max-height: 100%; 
+     padding:10px 2px;
+}
+
+
+.vis-ad-w-p-vc-ev-grid {
+    display: grid;
     grid-template-columns: repeat(4,1fr);
+    grid-column-gap: 15px;
+    grid-row-gap: 10px;
 }
 .vis-ev-col {
-   grid-column-start:1;
+    grid-column-start: 1;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
 }
 .vis-ev-col-start2 {
     grid-column-start: 2;
@@ -462,8 +479,12 @@
 {
     grid-column-end:5;
 }
+.vis-ev-col * {
+    margin:0;
+    padding:1px;
+    font-weight:normal;
+}
 /* End Single */
-
 /*  */
 @media (max-width:600px) {
     .vis-ad-w-p-header-l {
