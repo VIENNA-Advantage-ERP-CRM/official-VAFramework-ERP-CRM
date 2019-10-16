@@ -2208,7 +2208,7 @@ namespace VAdvantage.Model
                             false, Get_TrxName());	//	current Tax
                         if (iTax != null)
                         {
-                            iTax.SetIsTaxIncluded(IsTaxIncluded());
+                            //iTax.SetIsTaxIncluded(IsTaxIncluded());
                             if (!iTax.CalculateTaxFromLines())
                                 return false;
                             if (!iTax.Save())
