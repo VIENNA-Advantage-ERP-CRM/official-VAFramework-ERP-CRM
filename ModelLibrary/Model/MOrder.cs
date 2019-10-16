@@ -3244,7 +3244,7 @@ namespace VAdvantage.Model
                     {
                         MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
-                        oTax.SetIsTaxIncluded(IsTaxIncluded());
+                        //oTax.SetIsTaxIncluded(IsTaxIncluded());
                         if (!oTax.CalculateTaxFromLines())
                             return false;
                         if (!oTax.Save(Get_TrxName()))
