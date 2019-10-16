@@ -644,11 +644,12 @@ namespace VAdvantage.Model
             }
             if (newRecord)
             {
-                string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "') as productID FROM Dual";
+                // Added new Parameter "Client ID" to check UPC unique
+                string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "', " + GetAD_Client_ID() + ") as productID FROM Dual";
                 int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 if (manu_ID > 0)
                 {
-                    _log.SaveError("UPC is Unique", "");
+                    _log.SaveError("UPCUnique", "");
                     return false;
                 }
             }
@@ -657,12 +658,13 @@ namespace VAdvantage.Model
                 if (!String.IsNullOrEmpty(GetUPC()) &&
                    Util.GetValueOfString(Get_ValueOld("UPC")) != GetUPC())
                 {
-                    string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "') as productID FROM Dual";
+                    // Added new Parameter "Client ID" to check UPC unique
+                    string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "', " + GetAD_Client_ID() + ") as productID FROM Dual";
                     int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
                     if (manu_ID > 0)
                     {
-                        _log.SaveError("UPC is Unique", "");
+                        _log.SaveError("UPCUnique", "");
                         return false;
                     }
                 }
