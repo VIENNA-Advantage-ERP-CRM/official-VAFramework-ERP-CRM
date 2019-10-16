@@ -1659,6 +1659,7 @@
     <Compile Include="ProcessEngine\SvrProcess.cs" />
     <Compile Include="Process\AcctSchemaCopyAcct.cs" />
     <Compile Include="Process\AcctSchemaDefaultCopy.cs" />
+    <Compile Include="Process\ActivateProductContainer.cs" />
     <Compile Include="Process\Aging.cs" />
     <Compile Include="Process\AllocationAuto.cs" />
     <Compile Include="Process\AllocationReset.cs" />
@@ -1704,6 +1705,7 @@
     <Compile Include="Process\DistributionVerify.cs" />
     <Compile Include="Process\DocTypeCounterValidate.cs" />
     <Compile Include="Process\DocumentTypeVerify.cs" />
+    <Compile Include="Process\DropFullMoveContainerLines.cs" />
     <Compile Include="Process\DunningPrint.cs" />
     <Compile Include="Process\DunningRunCreate.cs" />
     <Compile Include="Process\EMailTest.cs" />
