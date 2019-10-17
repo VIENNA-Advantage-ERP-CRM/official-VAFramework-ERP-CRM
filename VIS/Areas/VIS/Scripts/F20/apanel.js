@@ -530,6 +530,10 @@ function APanel() {
         $divStatus.show();
        // $table.append($tr).append($tr2).append($tr3);
         //$tr3 = $tr2 = $tr = null;
+        if (VIS.Application.isMobile) {
+            $divlbNav.hide();
+            $divlbMain.addClass("vis-ad-w-p-a-main-mob");
+        }
     }
     /* Tool bar */
     var self = this;
@@ -631,17 +635,21 @@ function APanel() {
         //this.aBack = this.addActions("Back", null, false, true, true, onAction);
         //Create Navigation
         //$ulNav.append(this.aPrevious.getListItm()).append(this.aFirst.getListItm()).append(this.aLast.getListItm()).append(this.aNext.getListItm());
-        $ulNav.append(this.aFirst.getListItm()).append(this.aPrevious.getListItm()).append(this.aNext.getListItm()).append(this.aLast.getListItm());
+        $ulNav
+            //.append(this.aFirst.getListItm())
+            .append(this.aPrevious.getListItm())
+            .append(this.aNext.getListItm())
+            //.append(this.aLast.getListItm());
         $ulNav.append(this.aMulti.getListItm());
         $ulNav.append(this.aCard.getListItm());
         $ulNav.append(this.aMap.getListItm().hide());
 
         // Mohit - Shortcut as title.
         ///3. bottom toolbar 
-        this.aPageUp = this.addActions("PageUp", null, true, true, true, onAction, null, "Shct_PageUp");
+        this.aPageUp = this.addActions(this.ACTION_NAME_PAGEUP, null, true, true, true, onAction, null, "Shct_PageUp");
         this.aPageFirst = this.addActions("PageFirst", null, true, true, true, onAction, null, "Shct_PageFirst");
         this.aPageLast = this.addActions("PageLast", null, true, true, true, onAction, null, "Shct_PageLast");
-        this.aPageDown = this.addActions("PageDown", null, true, true, true, onAction, null, "Shct_PageDown");
+        this.aPageDown = this.addActions(this.ACTION_NAME_PAGEDOWN, null, true, true, true, onAction, null, "Shct_PageDown");
 
         //Action Bar[Left] 
 
@@ -650,26 +658,33 @@ function APanel() {
         actionItemCount_Right = 0;
         if (mWindow.getIsAppointment()) {
             this.aAppointment = this.addActions("Appointment", null, false, false, false, onAction); //1
+            this.aAppointment.setTextDirection("r");
             $ulLefttoolbar.append(this.aAppointment.getListItmIT());
         }
         if (mWindow.getIsTask()) {
             this.aTask = this.addActions("Task", null, false, false, false, onAction); //1
+            this.aTask.setTextDirection("r");
             $ulLefttoolbar.append(this.aTask.getListItmIT());
+
         }
         if (mWindow.getIsEmail()) {
             this.aEmail = this.addActions("EMail", null, false, false, false, onAction); //1
+            this.aEmail.setTextDirection("r");
             $ulLefttoolbar.append(this.aEmail.getListItmIT());
         }
         if (mWindow.getIsLetter()) {
             this.aLetter = this.addActions("Letter", null, false, false, false, onAction); //1
+            this.aLetter.setTextDirection("r");
             $ulLefttoolbar.append(this.aLetter.getListItmIT());
         }
         if (mWindow.getIsSms()) {
             this.aSms = this.addActions("Sms", null, false, false, false, onAction); //1
+            this.aSms.setTextDirection("r");
             $ulLefttoolbar.append(this.aSms.getListItmIT());
         }
         if (mWindow.getIsFaxEmail()) {
             this.aFaxEmail = this.addActions("FaxEmail", null, false, false, false, onAction); //1
+            this.aFaxEmail.setTextDirection("r");
             $ulLefttoolbar.append(this.aFaxEmail.getListItmIT());
         }
 
@@ -681,62 +696,76 @@ function APanel() {
         //add
         if (mWindow.getIsChat()) {
             this.aChat = this.addActions(this.ACTION_NAME_CHAT, null, false, false, false, onAction, true);  //1
+            this.aChat.setTextDirection("r");
             $ulLefttoolbar.append(this.aChat.getListItmIT());
         }
         if (mWindow.getIsAttachment()) {
             this.aAttachment = this.addActions("Attachment", null, false, false, false, onAction, true); //1
+            this.aAttachment.setTextDirection("r");
             $ulLefttoolbar.append(this.aAttachment.getListItmIT());
         }
         if (mWindow.getIsHistory()) {
             this.aHistory = this.addActions("History", null, false, false, false, onAction); //1
+            this.aHistory.setTextDirection("r");
             $ulLefttoolbar.append(this.aHistory.getListItmIT());
         }
         if (mWindow.getIsCheckRequest()) {
             this.aRequest = this.addActions("Request", null, true, false, false, onAction);
+            this.aRequest.setTextDirection("r");
             $ulLefttoolbar.append(this.aRequest.getListItmIT());
         }
 
 
         if (VIS.AEnv.getIsWorkflowProcess()) {
             this.aWorkflow = this.addActions("Workflow", null, true, false, false, onAction);
+            this.aWorkflow.setTextDirection("r");
             $ulLefttoolbar.append(this.aWorkflow.getListItmIT());
         }
 
         if (mWindow.getIsCopyReocrd()) {
             this.aCopy = this.addActions("Copy", null, false, false, false, onAction);
+            this.aCopy.setTextDirection("r");
             $ulLefttoolbar.append(this.aCopy.getListItmIT());
         }
         if (mWindow.getIsSubscribedRecord()) {
             this.aSubscribe = this.addActions("Subscribe", null, true, false, false, onAction, true);
+            this.aSubscribe.setTextDirection("r");
             $ulLefttoolbar.append(this.aSubscribe.getListItmIT());
         }
         if (mWindow.getIsZoomAcross()) {
             this.aZoomAcross = this.addActions("ZoomAcross", null, true, false, false, onAction);
+            this.aZoomAcross.setTextDirection("r");
             $ulLefttoolbar.append(this.aZoomAcross.getListItmIT());
         }
         if (mWindow.getIsCreatedDocument()) {
             this.aCreateDocument = this.addActions("CreateDocument", null, false, false, false, onAction); //1
+            this.aCreateDocument.setTextDirection("r");
             $ulLefttoolbar.append(this.aCreateDocument.getListItmIT());
         }
         if (mWindow.getIsUploadedDocument()) {
             this.aUploadDocument = this.addActions("UploadDocument", null, false, false, false, onAction); //1
+            this.aUploadDocument.setTextDirection("r");
             $ulLefttoolbar.append(this.aUploadDocument.getListItmIT());
         }
         if (mWindow.getIsViewDocument()) {
             this.aViewDocument = this.addActions("ViewDocument", null, false, false, false, onAction, true); //1
+            this.aViewDocument.setTextDirection("r");
             $ulLefttoolbar.append(this.aViewDocument.getListItmIT());
         }
         if (mWindow.getIsAttachDocumentFrom()) {
             this.aAttachFrom = this.addActions("AttachDocumentFrom", null, false, false, false, onAction, true); //1
+            this.aAttachFrom.setTextDirection("r");
             $ulLefttoolbar.append(this.aAttachFrom.getListItmIT());
         }
         if (mWindow.getIsMarkToExport()) {
             this.aMarkToExport = this.addActions("Mark", null, false, false, false, onAction, true); //1
+            this.aMarkToExport.setTextDirection("r");
             $ulLefttoolbar.append(this.aMarkToExport.getListItmIT());
         }
 
         if (mWindow.getIsImportMap()) {
             this.aImportMap = this.addActions("Import", null, false, false, false, onAction); //1
+            this.aImportMap.setTextDirection("r");
             $ulLefttoolbar.append(this.aImportMap.getListItmIT());
         }
 
@@ -757,8 +786,10 @@ function APanel() {
 
         if (this.isPersonalLock) {
             this.aLock = this.addActions("Lock", null, true, false, false, onAction, true);
+            this.aLock.setTextDirection("r");
             $ulLefttoolbar.append(this.aLock.getListItmIT());
             this.aRecAccess = this.addActions("RecordAccess", null, true, false, false, onAction, true);
+            this.aRecAccess.setTextDirection("r");
             $ulLefttoolbar.append(this.aRecAccess.getListItmIT());
         }
 
@@ -813,11 +844,11 @@ function APanel() {
         //2
 
 
-        this.statusBar.setPageItem(this.aPageFirst.getListItm());
+        //this.statusBar.setPageItem(this.aPageFirst.getListItm());
         this.statusBar.setPageItem(this.aPageUp.getListItm());
         this.statusBar.setComboPage();
         this.statusBar.setPageItem(this.aPageDown.getListItm());
-        this.statusBar.setPageItem(this.aPageLast.getListItm());
+        //this.statusBar.setPageItem(this.aPageLast.getListItm());
         this.statusBar.render();
         this.toolbarCreated = true;
 
@@ -1577,19 +1608,25 @@ function APanel() {
     $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
         e.stopPropagation();
         e.preventDefault();
-        var w = $td0leftbar.width();
+        var w = parseInt($divlbMain.width());
 
         if (w > 50) {
             $ulLefttoolbar.find('span').hide();
         }
+        else 
+            $divlbMain.css({ "position": "absolute" }); 
 
-        $td0leftbar.animate({
-            "width": w > 50 ? 40 : 200
+        $divlbMain.animate({
+            "width": w > 50 ? "16" : "200",
         }, 300, 'swing', function () {
 
-            if (w < 50) {
-                $ulLefttoolbar.find('span').show();
-            }
+                if (w < 50) {
+                    $ulLefttoolbar.find('span').show();
+                }
+                else {
+                    $divlbMain.css({ "position": "" }); 
+                    $divlbMain.css({ "width": "" }); 
+                }
             if (self.curGC) {
                 self.curGC.multiRowResize();
             }
@@ -1777,8 +1814,10 @@ function APanel() {
 /** Shared action names*/
 APanel.prototype.ACTION_NAME_FIRST = "First";
 APanel.prototype.ACTION_NAME_LAST = "Last";
-APanel.prototype.ACTION_NAME_PREV = "Previous";
-APanel.prototype.ACTION_NAME_NEXT = "Next";
+    APanel.prototype.ACTION_NAME_PREV = "Previous";// "Previous";
+    APanel.prototype.ACTION_NAME_NEXT = "Next";// "Next";
+    APanel.prototype.ACTION_NAME_PAGEDOWN = "PageDown";// "Previous";
+APanel.prototype.ACTION_NAME_PAGEUP = "PageUp";// "Next";
 
 APanel.prototype.ACTION_NAME_NEW = "New";
 APanel.prototype.ACTION_NAME_DELETE = "Delete";

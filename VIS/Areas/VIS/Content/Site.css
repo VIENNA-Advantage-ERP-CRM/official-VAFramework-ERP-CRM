@@ -258,11 +258,11 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
     padding-right: 20px;
 }
 
-#vis_userDisplayName
+/*#vis_userDisplayName
 {
     font-size: 14pt;
     color: #1aa0ed;
-}
+}*/
 
 .vis-div-userAvatar
 {

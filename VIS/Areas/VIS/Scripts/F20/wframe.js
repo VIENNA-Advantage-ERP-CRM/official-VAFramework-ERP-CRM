@@ -878,6 +878,9 @@
        textOnly:
        isSmall:
        this.onAction=null;
+       isPopoverText:
+       direction:
+
     */
     function AppsAction(options) {
         if (options) {
@@ -892,6 +895,8 @@
             this.textOnly;
             this.onAction = null;
             this.isSmall;
+            
+            this.direction = "right";
             $.extend(true, this, options);
             this.items = {};
 
@@ -973,9 +978,12 @@
                 li.append(d);
                 d.append(this.img);
             }
-            else {
+            else {  
                 //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
-                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" data-toggle="popover" data-placement="right" data-content="Attachment"></i><span>' + this.text + '</span>');
+                if (this.direction == "r")
+                    li.append('<span>' + this.text + '</span> <i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i>');
+                else
+                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '"></i><span>' + this.text + '</span>');
                 this.img = li.find("i");
             }
             this.$li = li;
@@ -1022,9 +1030,9 @@
                 d.append(this.img);
             }
             else {
-                //li.append('<img src="' + this.imgUrl + '"  title="' + this.text + '"   /><span> ' + this.text + '</span>');
-                //this.img = li.find("img");
-                //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
+                if (this.direction == "r")
+                    li.append('<span>' + this.text + '</span> <i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i>');
+                else
                 li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i><span>' + this.text + '</span>');
                 this.img = li.find("i");
             }
@@ -1059,6 +1067,10 @@
                 }
             }
         }
+    };
+
+    AppsAction.prototype.setTextDirection = function (dir) {
+        this.direction = dir;
     };
 
     AppsAction.prototype.getIsPressed = function () {
