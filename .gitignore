@@ -9,7 +9,7 @@
 *.lock
 /.vs/slnx.sqlite
 /.vs/
-
+.vs
 /ViennaAdvantageWeb/Areas/
 
 ## Ignore Visual Studio temporary files, build results, and
