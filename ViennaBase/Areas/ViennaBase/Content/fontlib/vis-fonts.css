@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'vis-fonts';
-    src: url('../fonts/vis-fonts.eot?7guy47');
-    src: url('../fonts/vis-fonts.eot?7guy47#iefix') format('embedded-opentype'), url('../fonts/vis-fonts.ttf?7guy47') format('truetype'), url('../fonts/vis-fonts.woff?7guy47') format('woff'), url('fonts/vis-fonts.svg?7guy47#vis-fonts') format('svg');
+    src: url('../fonts/vis-fonts.eot?22zgxr');
+    src: url('../fonts/vis-fonts.eot?22zgxr#iefix') format('embedded-opentype'), url('../fonts/vis-fonts.ttf?22zgxr') format('truetype'), url('../fonts/vis-fonts.woff?22zgxr') format('woff'), url('../fonts/vis-fonts.svg?22zgxr#vis-fonts') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -21,43 +21,75 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.vis-next:before {
-    content: "\e941";
-}
-
-.vis-previous:before {
-    content: "\e942";
-}
-
-.vis-pageup:before {
-    content: "\e943";
-}
-
-.vis-pagedown:before {
-    content: "\e944";
-}
-
-.vis-attachmentx:before {
-    content: "\e93c";
-}
-
-.vis-chatx:before {
-    content: "\e937";
-}
-
-.vis-createdocumentx:before {
-    content: "\e90c";
-}
-
-.vis-viewdocumentx:before {
-    content: "\e90d";
+.vis-attachdocumentfrom:before {
+    content: "\e92f";
 }
 
 .vis-attachdocumentfromx:before {
-    content: "\e90d";
+    content: "\e930";
+}
+
+.vis-zoomacross:before {
+    content: "\e931";
+}
+
+.vis-arrow-down:before {
+    content: "\e900";
+}
+
+.vis-arrow-right:before {
+    content: "\e901";
+}
+
+.vis-arrow-left:before {
+    content: "\e902";
+}
+
+.vis-arrow-up:before {
+    content: "\e903";
+}
+
+.vis-viewdocumentx:before {
+    content: "\e904";
+}
+
+.vis-createdocumentx:before {
+    content: "\e905";
+}
+
+.vis-viewdocument:before {
+    content: "\e906";
 }
 
 .vis-uploaddocumentx:before {
+    content: "\e907";
+}
+
+.vis-uploaddocument:before {
+    content: "\e908";
+}
+
+.vis-createdocument:before {
+    content: "\e909";
+}
+
+.vis-attachmentx:before {
+    content: "\e90a";
+}
+
+.vis-attachment:before {
+    content: "\e90b";
+}
+
+.vis-email:before {
+    content: "\e90c";
+}
+
+.vis-edit:before {
+    content: "\e90d";
+}
+
+.vis-multi:before {
     content: "\e90e";
 }
 
@@ -65,261 +97,96 @@
     content: "\e90f";
 }
 
-.vis-attachment:before {
-    content: "\e91a";
-}
-
-.vis-createdocument:before {
-    content: "\e938";
-}
-
-.vis-removedocument:before {
-    content: "\e939";
-}
-
-.vis-uploaddocument:before {
-    content: "\e93a";
-}
-
-.vis-viewdocument:before {
-    content: "\e93b";
-}
-.vis-attachdocumentfrom:before {
-    content: "\e93b";
-}
-
-
-.vis-multi .path1:before {
-    content: "\e93d";
-    color: rgb(0, 166, 81);
-}
-
-.vis-multi .path2:before {
-    content: "\e93e";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-multi .path3:before {
-    content: "\e93f";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-multi .path4:before {
-    content: "\e940";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-search:before {
-    content: "\e900";
-}
-
-.vis-arrow-down:before {
-    content: "\e901";
-}
-
-.vis-arrow-up:before {
-    content: "\e902";
-}
-
-.vis-arrow-left:before {
-    content: "\e907";
-}
-
-.vis-arrow-right:before {
-    content: "\e920";
-}
-
-.vis-appointment .path1:before {
-    content: "\e921";
-    color: rgb(0, 166, 81);
-}
-
-.vis-appointment .path2:before {
-    content: "\e922";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-appointment .path3:before {
-    content: "\e923";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-appointment .path4:before {
-    content: "\e927";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-appointment .path5:before {
-    content: "\e928";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-appointment .path6:before {
-    content: "\e929";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-appointment .path7:before {
-    content: "\e92a";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-appointment .path8:before {
-    content: "\e92b";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-appointment .path9:before {
-    content: "\e92c";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-refresh .path1:before {
-    content: "\e92d";
-    color: rgb(0, 0, 0);
-}
-
-.vis-refresh .path2:before {
-    content: "\e92e";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-refresh .path3:before {
-    content: "\e92f";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-refresh .path4:before {
-    content: "\e930";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 166, 81);
-}
-
-.vis-mark .path1:before {
-    content: "\e931";
-    color: rgb(0, 0, 0);
-}
-
-.vis-mark .path2:before {
-    content: "\e932";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 166, 81);
-}
-
-.vis-mark .path3:before {
-    content: "\e933";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-email .path1:before {
-    content: "\e934";
-    color: rgb(0, 166, 81);
-}
-
-.vis-email .path2:before {
-    content: "\e935";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-sms:before {
-    content: "\e936";
-}
-
-.vis-edit .path1:before {
-    content: "\e903";
-    color: rgb(0, 166, 81);
-}
-
-.vis-edit .path2:before {
-    content: "\e904";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-edit .path3:before {
-    content: "\e905";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-edit .path4:before {
-    content: "\e906";
-    margin-left: -0.9482421875em;
-    color: rgb(0, 0, 0);
-}
-
-.vis-letter:before {
-    content: "\e908";
-}
-
-.vis-plus:before {
-    content: "\e909";
-}
-
-.vis-find:before {
-    content: "\e90a";
-}
-.vis-zoomacross:before {
-    content: "\e90a";
-}
-
-.vis-report:before {
-    content: "\e90b";
-}
-
-.vis-task:before {
+.vis-chatx:before {
     content: "\e910";
 }
 
-.vis-workflow:before {
+.vis-mark:before {
     content: "\e911";
 }
 
-.vis-recordaccess:before {
+.vis-refresh:before {
     content: "\e912";
 }
 
-.vis-subscribex:before {
+.vis-ignore:before {
     content: "\e913";
 }
 
-.vis-subscribe:before {
+.vis-search:before {
     content: "\e914";
 }
 
-.vis-ignore:before {
+.vis-appointment:before {
     content: "\e915";
 }
 
-.vis-new:before {
+.vis-next:before {
     content: "\e916";
 }
 
-.vis-delete:before {
+.vis-previous:before {
     content: "\e917";
 }
 
-.vis-print:before {
+.vis-pagedown:before {
     content: "\e918";
 }
 
-.vis-save:before {
+.vis-pageup:before {
     content: "\e919";
+}
+
+.vis-find:before {
+    content: "\e91a";
+}
+
+.vis-print:before {
+    content: "\e920";
+}
+
+.vis-save:before {
+    content: "\e921";
+}
+
+.vis-new:before {
+    content: "\e922";
+}
+
+.vis-plus:before {
+    content: "\e923";
+}
+
+.vis-delete:before {
+    content: "\e927";
+}
+
+.vis-subscribe:before {
+    content: "\e928";
+}
+
+.vis-subscribex:before {
+    content: "\e929";
+}
+
+.vis-task:before {
+    content: "\e92a";
+}
+
+.vis-letter:before {
+    content: "\e92b";
+}
+
+.vis-report:before {
+    content: "\e92c";
+}
+
+.vis-recordaccess:before {
+    content: "\e92d";
+}
+
+.vis-recordaccessx:before {
+    content: "\e92e";
 }
 
 .vis-home:before {
@@ -398,7 +265,7 @@
     content: "\e9b8";
 }
 
-.vis-tree:before {
+.vis-workflow:before {
     content: "\e9bc";
 }
 
@@ -410,7 +277,7 @@
     content: "\e9c6";
 }
 
-.vis-attachmentold:before {
+.vis-attachment1:before {
     content: "\e9cd";
 }
 

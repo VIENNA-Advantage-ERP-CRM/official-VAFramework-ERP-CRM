@@ -1617,7 +1617,7 @@ function APanel() {
             $divlbMain.css({ "position": "absolute" }); 
 
         $divlbMain.animate({
-            "width": w > 50 ? "16" : "200",
+            "width": w > 50 ? "30" : "220",
         }, 300, 'swing', function () {
 
                 if (w < 50) {
