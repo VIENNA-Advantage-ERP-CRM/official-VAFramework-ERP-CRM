@@ -28,6 +28,9 @@
     vertical-align: middle;
    
 }
+.w2ui-grid .w2ui-grid-body {
+    background-color: transparent;
+}
 /*end*/
 
 /*change color row odd and even*/
@@ -69,7 +72,7 @@
 .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-selected,
 .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr td.w2ui-selected {
     color: #000000 !important;
-    background-color: rgba(var(--v-c-on-secondary), 0.04) !important;
+    background-color: rgba(var(--v-c-on-secondary), 0.05) !important;
 }
 
 
@@ -256,3 +259,30 @@ html[dir="rtl"] .ui-dialog .ui-dialog-title {
         color: inherit;
         background-color: rgba(var(--v-c-on-secondary), 0.04);
     }
+
+    .w2ui-grid .w2ui-grid-body table .w2ui-col-select div input[type=checkbox] {
+        border: 1px solid rgba(var(--v-c-on-secondary), 0.3);
+        -webkit-appearance: none;
+        border-radius: 2px;
+        position: relative;
+    }
+
+        .w2ui-grid .w2ui-grid-body table .w2ui-col-select div input[type=checkbox]:checked {
+            background: rgba(var(--v-c-primary));
+            border: 1px solid rgba(var(--v-c-primary));
+        }
+
+            .w2ui-grid .w2ui-grid-body table .w2ui-col-select div input[type=checkbox]:checked:before {
+                position: absolute;
+                content: '';
+                width: 4px;
+                height: 6px;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                border: solid rgba(var(--v-c-on-primary));
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }

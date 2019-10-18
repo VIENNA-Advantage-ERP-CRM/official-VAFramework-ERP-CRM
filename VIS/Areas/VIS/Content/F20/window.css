@@ -7,6 +7,7 @@
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr;
+    background-color: rgba(var(--v-c-primary),.02);
 }
 
 .vis-ad-w-header {
@@ -316,11 +317,12 @@
         padding: 0 5px;
         cursor: pointer;
         font-size: 1rem;
+    color: rgba(var(--v-c-on-secondary), 0.6);
     }
 
         .vis-ad-w-p-nav-btns li:hover, .vis-ad-w-p-tb-lc li:hover {
             color: rgba(var(--v-c-primary), 1);
-            ;
+            
         }
 /* end tab controls*/
 .vis-ad-w-p-center {
@@ -330,7 +332,7 @@
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto auto auto;
     overflow: auto;
-    background: rgba(var(--v-c-on-secondary), 0.03);
+    
 }
 
 .vis-ad-w-p-center-view {
@@ -374,7 +376,7 @@
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: auto 1fr;
-    background-color: rgba(var(--v-c-secondary),.3);
+    
     color: rgba(var(--v-c-on-secondary));
 }
 
@@ -545,12 +547,16 @@
 
     .vis-ad-w-p-s-plst li select {
         border: none;
+        background-color: transparent;
     }
+        .vis-ad-w-p-s-plst li select:focus{
+            outline: none;
+        }
 
-li.vis-page-item-select {
-    background: rgba(var(--v-c-primary)) !important;
-    color: rgba(var(--v-c-on-primary));
-}
+        li.vis-page-item-select {
+            background: rgba(var(--v-c-primary)) !important;
+            color: rgba(var(--v-c-on-primary));
+        }
 
 
 
@@ -587,11 +593,21 @@ li.vis-page-item-select {
 }
 
 .vis-ad-w-p-s-statusdb {
-    grid-row: 2/2;
-    grid-column: 2/2;
-    text-align: center;
     cursor: pointer;
+    padding: 0 10px;
+    position: relative;
+    margin-right: 10px;
 }
+
+    .vis-ad-w-p-s-statusdb:after {
+        position: absolute;
+        content: '';
+        width: 1px;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.28);
+        display: inline-block;
+        right: 0;
+    }
 
 .vis-ad-w-p-s-pages {
     grid-row: 2/2;
@@ -637,10 +653,17 @@ li.vis-page-item-select {
     flex-flow: column;
     justify-content: flex-end;
 }
+    .vis-ev-col select, .vis-ev-col input {
+        height: 35px;
+        border-radius: 5px;
+    }
+    .vis-ev-col textarea{
+        border-radius: 5px;
+    }
 
-.vis-ev-col-start2 {
-    grid-column-start: 2;
-}
+    .vis-ev-col-start2 {
+        grid-column-start: 2;
+    }
 
 .vis-ev-col-start3 {
     grid-column-start: 3;

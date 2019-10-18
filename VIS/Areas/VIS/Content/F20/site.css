@@ -44,10 +44,10 @@
         /*color: rgba(var(--v-c-primary),1);*/
     }
 
-    .vis-app-hdr a:hover {
-        text-decoration: none;
-        color: rgba(var(--v-c-primary), 1);
-    }
+        .vis-app-hdr a:hover {
+            text-decoration: none;
+            color: rgba(var(--v-c-primary), 1);
+        }
 
 .vis-app-hdr-l {
     flex: 0;
@@ -100,15 +100,18 @@
 .vis-app-hdr-r-theme {
     /*color: rgba(var(--v-c-primary),1);*/
 }
+
 .vis-app-hdr-r li:first-child {
     color: rgba(var(--v-c-on-secondary),0.60);
 }
+
 .vis-app-hdr-r-user {
     /*color: rgba(var(--v-c-primary),1);*/
     display: inline-flex;
     align-items: center;
     font-size: 1.1rem;
 }
+
     .vis-app-hdr-r-user a {
         padding-right: 5px;
     }
@@ -146,7 +149,7 @@
     height: 23px;
     grid-column-start: 1;
     grid-row-start: 3;
-    background-color: rgba(var(--v-c-primary),.1);
+    background-color: rgba(var(--v-c-on-secondary),0.16);
 }
 
     .vis-app-footer ul {
@@ -159,8 +162,39 @@
     .vis-app-footer li {
         flex-basis: auto;
         padding: 1px;
+        text-align: left;
+        cursor: pointer;
+        display: inline-flex;
+        background-color: transparent;
+        margin: 0;
+        /*margin-right: 10px;
+        margin-left: 10px;*/
+        padding: 0px 10px 0px 10px;
+        color: rgba(var(--v-c-on-secondary), 0.8);
+        align-items: center;
+        min-height: 23px;
     }
 
+        .vis-app-footer li:first-child {
+            background: rgba(var(--v-c-primary));
+            color: rgba(var(--v-c-on-primary));
+        }
+
+        .vis-app-footer li.vis-app-f-selected {
+            background: rgba(var(--v-c-on-secondary), 0.07);
+            box-shadow: 0px 0px 5px rgba(var(--v-c-on-secondary), 0.39);
+        }
+
+.vis-app-f-taskbar li span {
+    font-size: 0.975rem;
+}
+
+.vis-app-f-taskbar li a {
+    font-size: 0.75rem;
+    word-wrap: break-word;
+    text-decoration: none;
+    padding-left: 5px;
+}
 
 .vis-app-footer-c {
     display: flex;
@@ -186,8 +220,7 @@
     margin-bottom: 5px;
 }
 
-.vis-theme-color 
-{
+.vis-theme-color {
     height: 100%;
     flex: 1;
 }

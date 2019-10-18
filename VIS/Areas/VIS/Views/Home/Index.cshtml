@@ -188,12 +188,13 @@
             @*taskbar div*@
             <div class="vis-app-footer-c">
                 <div class="vis-app-footer-c-l">
-                    <ul id="vis_taskbar" class="vis-taskbar">
+                    <ul id="vis_taskbar" class="vis-app-f-taskbar">
                         <li id="vis_lhome" style="display: none">
-                            <img src="~/Areas/VIS/Images/base/icon-home.png" style="vertical-align: text-top;" />
+                            @*<img src="~/Areas/VIS/Images/base/icon-home.png" style="vertical-align: text-top;" />*@
+                            <span class="vis vis-home"></span>
                             <a>@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Home")</a>
                         </li>
-                        |
+                        
                     </ul>
                 </div>
                 <div class="vis-footer-c-r">

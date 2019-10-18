@@ -103,7 +103,7 @@
 
                 if (event.target.nodeName === "I" || event.target.nodeName === "SPAN") {
                     //close
-                    closeContainer($(event.currentTarget)[0].id);
+                    closeFrame($(event.currentTarget));
                     return;
                 }
 
@@ -339,13 +339,19 @@
          *@param itm
          */
         function activateTaskBarItem(itm) {
-            //select unselect taskbar items
-            if (curSelTaskBarItem) {
-                curSelTaskBarItem.css('background-color', '');
+            if (itm.length > 0) {
+                if (itm[0].id == "vis_lhome")
+                    return;
+                //select unselect taskbar items
+                if (curSelTaskBarItem) {
+                    //curSelTaskBarItem.css('background-color', '');
+                    curSelTaskBarItem.removeClass('vis-app-f-selected');
+                }
+                //curSelTaskBarItem = itm.css('background-color', '#D7E3E7');
+                curSelTaskBarItem = itm.addClass('vis-app-f-selected');
+                itm = null;
             }
-            curSelTaskBarItem = itm.css('background-color', '#D7E3E7');
-            itm = null;
-        };
+        }; 
 
 
         function activateTaskBarItemUsingID(item) {
@@ -360,8 +366,13 @@
      *
      * @param  name name or id of view
      */
-        function closeContainer(id) {
-            VIS.viewManager.closeFrame(id)
+        function closeFrame(ele) {
+            if (viewsZIndexCache[viewsZIndexCache.length - 1] == ele[0].id)
+                VIS.viewManager.closeFrame(ele[0].id);
+            else {
+                toggleContainer(ele[0].id);
+                activateTaskBarItem(ele);
+            }
         };
 
         /* 
