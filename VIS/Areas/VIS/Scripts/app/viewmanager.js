@@ -43,10 +43,20 @@
             startWindow: startWindow,
             startForm: startForm,
             startCFrame: startCFrame,
-            startActionInNewTab: startActionInNewTab
+            startActionInNewTab: startActionInNewTab,
+            closeFrame:closeFrame
         };
 
         return mainPage; // return mainpage object and public functions
+
+    /*
+     * close the window
+     * @param id id of item
+     */
+ 
+        function closeFrame(id) {
+            return windowObjects[id].dispose(); 
+        }
 
 
         /*
@@ -512,6 +522,7 @@
         if (target.hasClass('vis-nav-window') || target.hasClass('vis-nav-window-img')) {
             showSelectedFrame(target);
         }
+       
     };
 
 };
