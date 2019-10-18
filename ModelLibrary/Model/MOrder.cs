@@ -1304,6 +1304,7 @@ namespace VAdvantage.Model
                     line.SetQtyDelivered(Env.ZERO);
                     line.SetQtyInvoiced(Env.ZERO);
                     line.SetQtyReserved(Env.ZERO);
+                    line.SetQtyReleased(Env.ZERO);      // set Qty Released to Zero.
                     line.SetDateDelivered(null);
                     line.SetDateInvoiced(null);
                     //	Tax
@@ -3179,7 +3180,7 @@ namespace VAdvantage.Model
 
                         if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))  //if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO") // if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")
                         {
-                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), null);
+                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), Get_TrxName());
 
                             if (qtyRel != null)
                             {
