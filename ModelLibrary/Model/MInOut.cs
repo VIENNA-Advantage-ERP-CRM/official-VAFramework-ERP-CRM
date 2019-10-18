@@ -1599,7 +1599,7 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             if (!success)
-            //if (!success || newRecord)
+                //if (!success || newRecord)
                 return success;
 
             if (!newRecord)
@@ -1912,7 +1912,7 @@ namespace VAdvantage.Model
                     if (disallow.ToUpper() == "Y")
                     {
                         // is used to handle Non Stocked Item which are not in Storage
-                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @"AND M_Product_ID NOT IN 
+                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @" AND C_Charge_ID IS NULL AND M_Product_ID NOT IN 
                             (SELECT M_InoutLine.M_Product_ID FROM M_InoutLine INNER JOIN M_Product ON M_InoutLine.M_Product_ID = M_Product.M_Product_ID 
                             WHERE M_Product.IsStocked = 'N' AND M_InoutLine.M_Inout_ID  = " + GetM_InOut_ID() + " ) ";
                         int[] ioLine = MInOutLine.GetAllIDs("M_InoutLine", whereClause, Get_TrxName());
@@ -2295,7 +2295,8 @@ namespace VAdvantage.Model
                 }
 
                 #region done by Amit on behalf of surya 30-9-2015 vawms
-                if (sLine.GetC_OrderLine_ID() != 0 && IsSOTrx() && !IsReturnTrx())
+                // on Warehouse, Set Qty Allocated only for Item type Product
+                if (sLine.GetC_OrderLine_ID() != 0 && product != null && product.GetProductType() == MProduct.PRODUCTTYPE_Item && IsSOTrx() && !IsReturnTrx())
                 {
                     if (Env.IsModuleInstalled("VAWMS_"))
                     {
@@ -2546,7 +2547,7 @@ namespace VAdvantage.Model
                                         sLine.GetM_Locator_ID(), ord.GetM_Warehouse_ID(),
                                         sLine.GetM_Product_ID(),
                                         sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
-                                            //Qty, QtySO, QtyPO, Get_TrxName()))
+                                             //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -2563,7 +2564,7 @@ namespace VAdvantage.Model
                                         sLine.GetM_Locator_ID(), GetM_Warehouse_ID(),
                                         sLine.GetM_Product_ID(),
                                         sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
-                                            //Qty, QtySO, QtyPO, Get_TrxName()))
+                                             //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -2938,30 +2939,64 @@ namespace VAdvantage.Model
                     {
                         MOrderLine lineBlanket1 = new MOrderLine(GetCtx(), oLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
                         MOrderLine origOrderLine = new MOrderLine(GetCtx(), oLine.GetOrig_OrderLine_ID(), Get_TrxName());
-                        MOrderLine lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+                        MOrderLine lineBlanket = null;
 
-                        if ((lineBlanket != null && lineBlanket.Get_ID() > 0) || (lineBlanket1 != null && lineBlanket1.Get_ID() > 0))
+                        if (lineBlanket1 != null && lineBlanket1.Get_ID() > 0)
                         {
                             if (IsSOTrx())
                             {
                                 lineBlanket1.SetQtyDelivered(Decimal.Subtract(lineBlanket1.GetQtyDelivered(), Qty));
-                                lineBlanket.SetQtyReturned(Decimal.Add(lineBlanket.GetQtyReturned(), Qty));
+                                //JID_0688: On MR Complete against the Released Purchase order, need to decrease the Reserved Qty from Blanket order.
+                                lineBlanket1.SetQtyReserved(Decimal.Add(lineBlanket1.GetQtyReserved(), Qty));
                             }
                             else
                             {
                                 lineBlanket1.SetQtyDelivered(Decimal.Add(lineBlanket1.GetQtyDelivered(), Qty));
-                                lineBlanket.SetQtyReturned(Decimal.Subtract(lineBlanket.GetQtyReturned(), Qty));
+                                //JID_0688: On MR Complete against the Released Purchase order, need to decrease the Reserved Qty from Blanket order.
+                                lineBlanket1.SetQtyReserved(Decimal.Subtract(lineBlanket1.GetQtyReserved(), Qty));
                             }
-                            lineBlanket.SetDateDelivered(GetMovementDate());	//	overwrite=last
-                            lineBlanket1.SetDateDelivered(GetMovementDate());	//	overwrite=last
 
-                            //JID_0688: On MR Complete against the Released Purchase order, need to decrease the Reserved Qty from Blanket order.
-                            lineBlanket1.SetQtyReserved(oLine.GetQtyReserved());
+                            lineBlanket1.SetDateDelivered(GetMovementDate());   //	overwrite=last                            
 
-                            lineBlanket.Save();
-                            lineBlanket1.Save();
-                            //MOrderLine oLine1 = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                           
+                            if (!lineBlanket1.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                                    _processMsg = "Could not update Blanket Order Line. " + pp.GetName();
+                                else
+                                    _processMsg = "Could not update Blanket Order Line";
+                                return DocActionVariables.STATUS_INVALID;
+                            }
+                        }
+
+                        // For Return Order created for Blanket Order
+                        if (origOrderLine.GetC_OrderLine_Blanket_ID() > 0)
+                        {
+                            lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+                        }
+
+                        if (lineBlanket != null && lineBlanket.Get_ID() > 0)
+                        {
+                            if (IsSOTrx())
+                            {
+                                lineBlanket.SetQtyReturned(Decimal.Add(lineBlanket.GetQtyReturned(), Qty));
+                            }
+                            else
+                            {
+                                lineBlanket.SetQtyReturned(Decimal.Subtract(lineBlanket.GetQtyReturned(), Qty));                               
+                            }
+
+                            lineBlanket.SetDateDelivered(GetMovementDate());	//	overwrite=last                            
+
+                            if (!lineBlanket.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                                    _processMsg = "Could not update Blanket Order Line. " + pp.GetName();
+                                else
+                                    _processMsg = "Could not update Blanket Order Line";
+                                return DocActionVariables.STATUS_INVALID;
+                            }
                         }
                     }
 

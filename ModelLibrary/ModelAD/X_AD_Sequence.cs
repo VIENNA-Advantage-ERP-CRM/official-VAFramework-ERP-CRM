@@ -137,6 +137,26 @@ Object ii = Get_Value("AD_Sequence_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
+
+/** Set Append Month After Year.
+@param AddMonthYear Append the Month after the year in document number */
+ public void SetAddMonthYear(Boolean AddMonthYear)
+{
+    Set_Value("AddMonthYear", AddMonthYear);
+}
+/** Get Append Month After Year.
+@return Append the Month after the year in document number */
+public Boolean IsAddMonthYear()
+{
+    Object oo = Get_Value("AddMonthYear");
+    if (oo != null)
+    {
+        if (oo.GetType() == typeof(bool))
+            return Convert.ToBoolean(oo);
+        return "Y".Equals(oo);
+    }
+    return false;
+}
 /** Set Append Year as Prefix.
 @param AddYearPrefix Append the Year to the Prefix in document number */
 public void SetAddYearPrefix(Boolean AddYearPrefix)
@@ -363,6 +383,42 @@ public String GetPrefix()
 {
 return (String)Get_Value("Prefix");
 }
+/** Set Year & Month Separator.
+@param Separator Element Separator */
+public void SetSeparator(String Separator)
+{
+    if (Separator != null && Separator.Length > 1)
+    {
+        log.Warning("Length > 1 - truncated");
+        Separator = Separator.Substring(0, 1);
+    }
+    Set_Value("Separator", Separator);
+}
+/** Get Year & Month Separator.
+@return Element Separator */
+public String GetSeparator()
+{
+    return (String)Get_Value("Separator");
+}
+/** Set Restart Sequence Every Month.
+@param StartNewMonth Restart the sequence with Start on every month */
+public void SetStartNewMonth(Boolean StartNewMonth)
+{
+    Set_Value("StartNewMonth", StartNewMonth);
+}
+/** Get Restart Sequence Every Month.
+@return Restart the sequence with Start on every month */
+public Boolean IsStartNewMonth()
+{
+    Object oo = Get_Value("StartNewMonth");
+    if (oo != null)
+    {
+        if (oo.GetType() == typeof(bool))
+            return Convert.ToBoolean(oo);
+        return "Y".Equals(oo);
+    }
+    return false;
+}
 /** Set Restart sequence every Year.
 @param StartNewYear Restart the sequence with Start on every 1/1 */
 public void SetStartNewYear (Boolean StartNewYear)
@@ -430,6 +486,35 @@ Set_Value ("VFormat", VFormat);
 public String GetVFormat() 
 {
 return (String)Get_Value("VFormat");
+}
+/** YearMonthFormat AD_Reference_ID=1000221 */
+public static int YEARMONTHFORMAT_AD_Reference_ID = 1000221;/** YYYYMM = 1 */
+public static String YEARMONTHFORMAT_YYYYMM = "1";/** YYMM = 2 */
+public static String YEARMONTHFORMAT_YYMM = "2";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+public bool IsYearMonthFormatValid(String test)
+{
+    return test == null || test.Equals("1") || test.Equals("2");
+}
+/** Set Year and Month Format.
+@param YearMonthFormat The Format in which the year and month will be displayed in Prefix. */
+public void SetYearMonthFormat(String YearMonthFormat)
+{
+    if (!IsYearMonthFormatValid(YearMonthFormat))
+        throw new ArgumentException("YearMonthFormat Invalid value - " + YearMonthFormat + " - Reference_ID=1000221 - 1 - 2");
+    if (YearMonthFormat != null && YearMonthFormat.Length > 1)
+    {
+        log.Warning("Length > 1 - truncated");
+        YearMonthFormat = YearMonthFormat.Substring(0, 1);
+    }
+    Set_Value("YearMonthFormat", YearMonthFormat);
+}
+/** Get Year and Month Format.
+@return The Format in which the year and month will be displayed in Prefix. */
+public String GetYearMonthFormat()
+{
+    return (String)Get_Value("YearMonthFormat");
 }
 }
 

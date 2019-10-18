@@ -3716,17 +3716,20 @@ namespace VAdvantage.Model
                 }
             }
 
+            MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), Get_Trx());
+            MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID());
+
             //SI_0643: If we reactive the Sales order, System will not allow to save Ordered Qty less than delivered qty.
             // when we void a record, then not to check this record, because first we set qtyOrdered/qtyenetered as 0 after that we update qtydelivered on line
             // JID_1362: when qty delivered / invoicedcant be less than qtyordered
-            if (!newRecord && (GetQtyOrdered() < GetQtyDelivered() || GetQtyOrdered() < GetQtyInvoiced()) &&
-                (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided"))))
+            // JID_1403 : System do not allow to create order with -ve qty, On Completion system give error "Can't Server Qty" (for comparison - make absolute)
+            if (!newRecord && (Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyDelivered()) || Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyInvoiced())) &&
+                (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided")))
+                && docType.GetDocBaseType() != "BOO")       // Skip for Blanket Order
             {
                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_QtydeliveredNotLess"));
                 return false;
-            }
-
-            MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), Get_Trx());
+            }            
 
             // Added by Vivek on 22/09/2017 assigned by Mukesh sir
             // if PO is drop ship type then new line should not allow 
@@ -3995,8 +3998,7 @@ namespace VAdvantage.Model
                         QtyReserved = qtyRes;
                     }
                     //}
-
-                    MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID());
+                    
                     if (docType.GetDocBaseType() == "BOO")    ///docType.GetValue() == "BSO" || docType.GetValue() == "BPO")
                     {
                         QtyEstimation = GetQtyEstimation();
@@ -4007,10 +4009,14 @@ namespace VAdvantage.Model
                         }
                     }
 
-                    if (docType.IsReleaseDocument() && (docType.GetDocBaseType() == "SOO" || docType.GetDocBaseType() == "POO")) // if (docType.GetValue() == "RSO" || docType.GetValue() == "RPO")  ///if (docType.IsSOTrx() && docType.GetDocBaseType() == "SOO" && docType.GetDocSubTypeSO() == "BO")  ///if (docType.GetValue() == "RSO")
+                    // JID_0969: System should not allow to set Qty Order more than blanket order qty.
+                    if (docType.IsReleaseDocument() && (docType.GetDocBaseType() == "SOO" || docType.GetDocBaseType() == "POO"))
                     {
                         QtyBlanketPending = GetQtyBlanket();
-                        if (Decimal.Subtract(Convert.ToDecimal(QtyOrdered), Convert.ToDecimal(QtyReserved)) > QtyBlanketPending)
+                        QtyOrdered = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(QtyOrdered) FROM C_Order o INNER JOIN C_OrderLine ol ON ol.C_Order_ID = o.C_Order_ID
+                            WHERE ol.C_OrderLine_Blanket_ID = " + GetC_OrderLine_Blanket_ID() + @" AND ol.IsActive = 'Y' AND o.DocStatus NOT IN ('RE' , 'VO' , 'CL' , 'CO') AND ol.C_OrderLine_ID <> "
+                                                                + Get_ID(), null, Get_Trx()));
+                        if (Decimal.Add(Convert.ToDecimal(QtyOrdered), GetQtyOrdered()) > QtyBlanketPending)
                         {
                             log.SaveError("VIS_OrderQtyMoreThnBlanketPending", "");
                             return false;
