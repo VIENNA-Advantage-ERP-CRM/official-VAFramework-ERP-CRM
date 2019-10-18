@@ -95,18 +95,30 @@
             };
 
             // task bar click event
-            $shortcutUL.on(VIS.Events.onClick, function (event) {
+            $shortcutUL.on(VIS.Events.onClick,"LI", function (event) {
                 event.preventDefault();
                 //if (VIS.context.getContext("#DisableMenu") == 'Y') {
                 //    return;
                 //}
+
+                if (event.target.nodeName === "I" || event.target.nodeName === "SPAN") {
+                    //close
+                    closeContainer($(event.currentTarget)[0].id);
+                    return;
+                }
+
+
                 var $c = null;
                 if (event.target.nodeName === "LI") {
                     $c = $(event.target);
                 }
+                
                 else if (event.target.parentNode.nodeName === "LI") {
                     $c = $(event.target.parentNode);
                 }
+
+
+
                 if ($c) {
 
                     toggleContainer($c[0].id);
@@ -341,6 +353,17 @@
             activateTaskBarItem($shortcutUL.find("LI#" + nId));
         };
 
+
+    /*
+       close active view
+       and get container by passed name or id to set as current active view
+     *
+     * @param  name name or id of view
+     */
+        function closeContainer(id) {
+            VIS.viewManager.closeFrame(id)
+        };
+
         /* 
            hide current active view 
            and get container by passed name or id to set as current active view
@@ -495,7 +518,7 @@
         *a@param name name to diplay
         */
         function addTaskBarItem(id, imgPath, name) {
-            var $li = $("<li id=" + id + "><img src= " + imgPath + " /> <a >" + name + "</a></li>");
+            var $li = $('<li id=' + id + '><img src= "' + imgPath + '" /> <a>' + name + '</a><span style="padding:0 7px;"><i class="fa fa-times-circle-o" /></span></li>');
             $shortcutUL.append($li);
             activateTaskBarItem($li);
             $li = null;

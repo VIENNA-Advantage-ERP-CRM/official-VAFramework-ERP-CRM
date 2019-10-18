@@ -670,6 +670,7 @@
 
 
         this.disposeComponent();
+        return true;
     };
 
 
