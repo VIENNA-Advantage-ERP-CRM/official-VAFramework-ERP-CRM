@@ -144,32 +144,7 @@ namespace VIS
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
                   "~/Areas/VIS/Scripts/TestPanel.js",
-                  "~/Areas/VIS/Scripts/app/initialize.js",
-                  "~/Areas/VIS/Scripts/model/CalloutOrder.js",
-                  "~/Areas/VIS/Scripts/model/CalloutInventoryMove.js",
-                  "~/Areas/VIS/Scripts/model/CalloutAssignment.js",
-                  "~/Areas/VIS/Scripts/model/CalloutCashJournal.js",
-                  "~/Areas/VIS/Scripts/model/CalloutSetAttributeCode.js",
-                  "~/Areas/VIS/Scripts/model/CalloutProduct.js",
-                  "~/Areas/VIS/Scripts/model/calloutpayment.js",
-                  "~/Areas/VIS/Scripts/model/calloutproject.js",
-                  "~/Areas/VIS/Scripts/model/calloutbankstatement.js",
-                  "~/Areas/VIS/Scripts/model/calloutofferserincluded.js",
-                  "~/Areas/VIS/Scripts/model/calloutofferservices.js",
-                  "~/Areas/VIS/Scripts/model/calloutcheckinout.js",
-                  "~/Areas/VIS/Scripts/model/calloutinventory.js",
-                  "~/Areas/VIS/Scripts/model/calloutinvoice.js",
-                  "~/Areas/VIS/Scripts/model/calloutinvoicebatch.js",
-                  "~/Areas/VIS/Scripts/model/calloutmovement.js",
-                  "~/Areas/VIS/Scripts/model/calloutgljournal.js",
-                  "~/Areas/VIS/Scripts/model/calloutproduction.js",
-                  "~/Areas/VIS/Scripts/model/calloutrequest.js",
-                  "~/Areas/VIS/Scripts/model/calloutrequisition.js",
-                  "~/Areas/VIS/Scripts/model/calloutpayselection.js",
-                  "~/Areas/VIS/Scripts/model/calloutorderline.js",
-                  "~/Areas/VIS/Scripts/model/calloutcontract.js",
-                  "~/Areas/VIS/Scripts/model/calloutinout.js",
-                  "~/Areas/VIS/Scripts/model/calloutpayment.js"//Bottom One
+                  "~/Areas/VIS/Scripts/app/initialize.js"//Bottom One
                    );
 
             style.Include("~/Areas/VIS/Content/Site.css",
