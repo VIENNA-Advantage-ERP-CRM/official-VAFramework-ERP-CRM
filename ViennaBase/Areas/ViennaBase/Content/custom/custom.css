@@ -35,7 +35,7 @@
 {
     color: inherit;
     background-color: #ffffff;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), 0.09);
 }
 
     /*.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd:hover
@@ -49,11 +49,10 @@
         background-color: #ffffff;
     }*/
 
-.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even
-{
+.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even {
     color: inherit;
     background-color: #ffffff;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), 0.09);
 }
 
     /*.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even:hover
@@ -68,23 +67,23 @@
     }*/
 
 .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-selected,
-.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr td.w2ui-selected
-{
+.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr td.w2ui-selected {
     color: #000000 !important;
-    background-color: #63BFE9 !important;
+    background-color: rgba(var(--v-c-on-secondary), 0.04) !important;
 }
 
 
 
 /* grid Header*/
-.w2ui-grid .w2ui-grid-body table .w2ui-head
-{
+.w2ui-grid .w2ui-grid-body table .w2ui-head {
     margin: 0px;
     padding: 0px;
-    border-right: 1px solid #c5c5c5;
-    border-bottom: 1px solid #c5c5c5;
-    color: #000000;
-    background: #E8EEF0;
+    border-right: 0;
+    border-top: 2px solid rgba(var(--v-c-on-secondary), 0.09);
+    border-bottom: 2px solid rgba(var(--v-c-on-secondary), 0.09);
+    color: rgba(0, 0, 0, 0.70);
+    background: transparent;
+    font-weight: 600;
     /*background-image: -webkit-linear-gradient(#f9f9f9, #e4e4e4);
   background-image: -moz-linear-gradient(#f9f9f9, #e4e4e4);
   background-image: -ms-linear-gradient(#f9f9f9, #e4e4e4);
@@ -93,12 +92,12 @@
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fff9f9f9', endColorstr='#ffe4e4e4', GradientType=0);*/
 }
 
-    .w2ui-grid .w2ui-grid-body table .w2ui-head > div
-    {
-        padding: 7px 3px;
+    .w2ui-grid .w2ui-grid-body table .w2ui-head > div {
+        padding: 12px 3px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+        color: rgba(var(--v-c-on-secondary), 0.8);
     }
 
 
@@ -234,4 +233,26 @@ html[dir="rtl"] .ui-dialog .ui-dialog-title {
 
     .ui-dialog .ui-dialog-content {
         overflow-x: hidden !important;
+    }
+
+
+.w2ui-grid {
+    border: none;
+}
+
+    .w2ui-grid .w2ui-grid-body table td {
+        border-right: none;
+    }
+
+    .w2ui-grid .w2ui-grid-body .w2ui-grid-columns {
+        box-shadow: none;
+    }
+
+    .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data > div {
+        padding: 12px 3px;
+        color: rgba(var(--v-c-on-secondary), 0.65);
+    }
+    .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even:hover, .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd:hover {
+        color: inherit;
+        background-color: rgba(var(--v-c-on-secondary), 0.04);
     }

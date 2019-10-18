@@ -41,12 +41,12 @@
     }
 
     .vis-app-hdr a {
-        color: rgba(var(--v-c-primary),1);
+        /*color: rgba(var(--v-c-primary),1);*/
     }
 
     .vis-app-hdr a:hover {
         text-decoration: none;
-        color: rgba(var(--v-c-primary),0.30);
+        color: rgba(var(--v-c-primary), 1);
     }
 
 .vis-app-hdr-l {
@@ -58,8 +58,8 @@
 }
 
 .vis-app-hdr-l-menu {
-    background-color: rgba(var(--v-c-primary),0.04);
-    color: rgba(var(--v-c-primary),0.30);
+    background-color: rgba(var(--v-c-on-secondary),0.04);
+    color: rgba(var(--v-c-on-secondary),0.40);
     height: 100%;
     font-size: 1.3rem;
     display: flex;
@@ -101,12 +101,17 @@
     /*color: rgba(var(--v-c-primary),1);*/
 }
 .vis-app-hdr-r li:first-child {
-    /*color: rgba(var(--v-c-primary),0.60);*/
+    color: rgba(var(--v-c-on-secondary),0.60);
 }
 .vis-app-hdr-r-user {
     /*color: rgba(var(--v-c-primary),1);*/
-    font-size: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.1rem;
 }
+    .vis-app-hdr-r-user a {
+        padding-right: 5px;
+    }
 
 .vis-app-hdr-r-logout {
     font-size: 1.4rem;
@@ -115,7 +120,7 @@
     /*padding: 6px;*/
     border-radius: 10px;
     /*background-color: rgba(var(--v-c-primary),1);*/
-    /*color: rgba(var(--v-c-primary),0.28);*/
+    color: rgba(var(--v-c-on-secondary),0.40);
 }
 
 .vis-app-overlay {
