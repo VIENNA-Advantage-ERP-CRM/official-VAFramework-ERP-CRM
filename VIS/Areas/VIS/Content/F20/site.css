@@ -143,7 +143,7 @@
     flex: 1;
 }
 
-
+/*footer*/
 
 .vis-app-footer {
     height: 23px;
@@ -209,6 +209,8 @@
     flex: 0;
     flex-basis: 23px;
 }
+
+/*end footer*/
 
 .vis-theme-rec {
     width: 138px;
