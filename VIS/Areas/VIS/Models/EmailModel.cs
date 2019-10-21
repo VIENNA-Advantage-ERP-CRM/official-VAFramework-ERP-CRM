@@ -680,7 +680,7 @@ namespace VIS.Models
                                                 //    cell.Table. = 5;
                                                 //    firstRow = false;
                                                 //}
-                                                cell.BorderColor = new Color(150, 150, 150);
+                                                cell.BorderColor = new BaseColor(150, 150, 150);
                                                 cell.BorderWidth = 1;
                                             }
                                         }
