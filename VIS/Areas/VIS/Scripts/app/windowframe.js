@@ -2606,6 +2606,10 @@
                 tabElement = st;
 
             }
+            else if (gTab.getIsHeaderPanel())
+            {
+                var hPanel = new VIS.HeaderPanel(gTab);
+            }
             else	//	normal tab
             {
                 var gc = new VIS.GridController(true, true, id);

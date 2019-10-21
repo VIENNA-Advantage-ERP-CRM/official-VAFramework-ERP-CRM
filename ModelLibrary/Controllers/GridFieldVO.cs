@@ -277,6 +277,44 @@ namespace VAdvantage.Controller
                     {
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
+                    /******************************/
+                    else if (columnName.Equals("Isheaderpanelitem"))
+                    {
+                        vo.IsHeaderPanelitem = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("Headeroverridereference"))
+                    {
+                        vo.HeaderOverrideReference = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("HeaderStyle"))
+                    {
+                        vo.HeaderStyle = dr[i].ToString();
+                    }
+                    else if (columnName.Equals("HeaderHeadingOnly"))
+                    {
+                        vo.HeaderHeadingOnly = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("HeaderSeqno"))
+                    {
+                        vo.HeaderSeqno = Utility.Util.GetValueOfDecimal(dr[i]);
+                    }
+                    else if (columnName.Equals("HeaderIconOnly"))
+                    {
+                        vo.HeaderIconOnly = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("HtmlStyle"))
+                    {
+                        vo.HtmlStyle = dr[i].ToString();
+                    }
+                    else if (columnName.Equals("ShowIcon"))
+                    {
+                        vo.ShowIcon = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("AD_Image_ID"))
+                    {
+                        vo.AD_Image_ID = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+
 
                 }
                 if (vo.Header == null)
