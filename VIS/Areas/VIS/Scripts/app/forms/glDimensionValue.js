@@ -59,7 +59,7 @@
             }
 
             // get User Element Column Name
-            var columnName = VIS.dataContext.getJSONRecord("GlJournal/ColumnName", paramStr);
+            var columnName = VIS.dataContext.getJSONRecord("GlJournall/ColumnName", paramStr);
 
             // Row 1
             $formWrap = $('<div class="vis-gl-form-wrap">');
@@ -116,7 +116,7 @@
                 var paramStr = recordId.toString().concat(",", $infoUserElement.getValue().toString());
 
                 // Update record with Dimenssion Value
-                var result = VIS.dataContext.getJSONRecord("GlJournal/SaveDimensionReference", paramStr);
+                var result = VIS.dataContext.getJSONRecord("GlJournall/SaveDimensionReference", paramStr);
                 if (result <= 0) {
                     busyDiv(false);
                     VIS.ADialog.error("VIS_NotSaved", true, "", "");
