@@ -16,7 +16,7 @@ namespace VIS.Controllers
     [AjaxAuthorizeAttribute] // redirect to login page if request is not Authorized
     [AjaxSessionFilterAttribute] // redirect to Login/Home page if session expire
     [AjaxValidateAntiForgeryToken] // validate antiforgery token 
-    public class GlJournalController : Controller
+    public class GlJournallController : Controller
     {
         /// <summary>
         /// Is Used to get ColumnName
