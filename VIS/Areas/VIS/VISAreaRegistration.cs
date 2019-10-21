@@ -141,11 +141,7 @@ namespace VIS
                  "~/Areas/VIS/Scripts/app/forms/productContainer.js",
                  "~/Areas/VIS/Scripts/app/forms/productContainerMove.js",
                  "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
-
-
                  "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
-
-
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
                   "~/Areas/VIS/Scripts/TestPanel.js",
                   "~/Areas/VIS/Scripts/app/initialize.js"//Bottom One

@@ -4110,8 +4110,8 @@ namespace VAdvantage.Model
             SetLineNetAmt();	//	extended Amount with or without tax
             SetDiscount();
 
-            // JID_1073: 
-            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
+            // if change the Quantity then recalculate tax and surcharge amount.
+            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
                 SetTaxAmt();
 
             // set Tax Amount in base currency
