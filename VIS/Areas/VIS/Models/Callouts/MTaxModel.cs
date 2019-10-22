@@ -112,6 +112,11 @@ namespace VIS.Models
             Decimal LineNetAmt = Util.GetValueOfDecimal(paramValue[1]);            
             int StdPrecision = Util.GetValueOfInt(paramValue[2]);
             Boolean IsTaxIncluded = true;
+
+            if (paramValue.Length == 4)
+            {
+                IsTaxIncluded = Util.GetValueOfBool(paramValue[3]);
+            }
             //End Assign parameter value
             MTax tax = new MTax(ctx, C_Tax_ID, null);
             Decimal surchargeAmt = Env.ZERO;
