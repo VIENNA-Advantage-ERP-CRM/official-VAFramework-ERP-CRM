@@ -2585,7 +2585,11 @@ namespace VAdvantage.Model
                     // If Amount is ZERO then no need to check currency conversion
                     if (!payAmt.Equals(Env.ZERO))
                     {
+
+
+
                         payAmt = MConversionRate.ConvertBase(GetCtx(), payAmt,
+
                         GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                         if (payAmt == 0)
                         {
@@ -2874,7 +2878,11 @@ namespace VAdvantage.Model
                 // If Amount is ZERO then no need to check currency conversion
                 if (!payAmt.Equals(Env.ZERO))
                 {
+
+                    
+
                     payAmt = MConversionRate.ConvertBase(GetCtx(), payAmt,
+
                     GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                     if (payAmt == 0)
                     {

@@ -243,5 +243,27 @@ namespace VAdvantage.Model
         public void SetSeqNo(int SeqNo) { Set_Value("SeqNo", SeqNo); }/** Get Sequence.
 @return Method of ordering elements; lowest number comes first */
         public int GetSeqNo() { Object ii = Get_Value("SeqNo"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /// <summary>
+        ///  Set Dimension Value.
+       /// </summary>
+       /// <param name="DimensionValue">Dimension Value </param>
+        public void SetDimensionValue(String DimensionValue) { if (DimensionValue != null && DimensionValue.Length > 10) { log.Warning("Length > 10 - truncated"); DimensionValue = DimensionValue.Substring(0, 10); } Set_Value("DimensionValue", DimensionValue); }
+        /// <summary>
+        /// Get Dimension Value.
+        /// </summary>
+        /// <returns>Dimension Value</returns>
+        public String GetDimensionValue() { return (String)Get_Value("DimensionValue"); }
+
+        /// <summary>
+        /// Set Dimension Value.
+        /// </summary>
+        /// <param name="DimensionName">Dimension Value</param>
+        public void SetDimensionName(String DimensionName) { throw new ArgumentException("DimensionName Is virtual column"); }
+        /// <summary>
+        /// Get Dimension Value.
+        /// </summary>
+        /// <returns>Dimension Value</returns>
+        public String GetDimensionName() { return (String)Get_Value("DimensionName"); }
     }
 }
