@@ -44,6 +44,8 @@
         this.FUNCTION_COUNT = "Count";
         this.FUNCTION_SUM = "Sum";
 
+        this.onLoaded = null;
+
 
         if (this.AD_Client_ID == 0) {
             this.AD_Client_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "AD_Client_ID");
@@ -58,8 +60,7 @@
 
 
 
-        this.ASchemas = getClientAcctSchema(this.AD_Client_ID, this.AD_Org_ID);
-        this.ASchema = this.ASchemas[0];
+
 
         this.ELEMENTTYPE_AD_Reference_ID = 181;
         this.ELEMENTTYPE_Account = "AC";
@@ -82,8 +83,9 @@
 
 
         // get Accounting Schema
-        function getClientAcctSchema(AD_Client_ID, OrgID) {
+        this.getClientAcctSchema = function (AD_Client_ID, OrgID) {
             var obj = [];
+            var that = this;
             $.ajax({
                 url: VIS.Application.contextUrl + "AcctViewerData/GetClientAcctSchema",
                 type: 'POST',
@@ -109,16 +111,24 @@
                             obj.push(lineObj);
                         }
                     }
-
+                    that.ASchemas = obj;
+                    that.ASchema = obj[0];
+                    if (that.onLoaded)
+                        that.onLoaded();
                 },
                 error: function (e) {
                     $selfObj.log.info(e);
+                    if (that.onLoaded)
+                        that.onLoaded();
                 },
             });
             return obj;
         };
 
 
+        this.getClientAcctSchema(this.AD_Client_ID, this.AD_Org_ID);
+        //this.ASchemas = this.getClientAcctSchema(this.AD_Client_ID, this.AD_Org_ID);
+        // this.ASchema = this.ASchemas[0];
         //function getClientAcctSchema(AD_Client_ID, OrgID) {
         //    var obj = [];
 
@@ -192,7 +202,7 @@
         $.ajax({
             url: VIS.Application.contextUrl + "AcctViewerData/AcctViewerGetTabelData",
             type: 'POST',
-            async: true,
+            async: false,
             success: function (data) {
 
                 if (this.tableInfo == undefined || this.tableInfo == null) {
@@ -268,7 +278,7 @@
         $.ajax({
             url: VIS.Application.contextUrl + "AcctViewerData/AcctViewerGetOrgData",
             type: 'POST',
-            async: true,
+            async: false,
             data: { client_id: cID },
             success: function (data) {
                 var res = data.result;
@@ -310,7 +320,7 @@
         $.ajax({
             url: VIS.Application.contextUrl + "AcctViewerData/AcctViewerGetPostingType",
             type: 'POST',
-            async: true,
+            async: false,
             data: { reference_id: AD_Reference_ID },
             success: function (data) {
                 var res = data.result;
@@ -463,7 +473,7 @@
         $.ajax({
             url: VIS.Application.contextUrl + "AcctViewerData/AcctViewerGetButtonText",
             type: 'POST',
-            async: true,
+            async: false,
             data: {
                 lookupDirEmbeded: lookupDirEmbed,
                 tName: tableName,
@@ -656,6 +666,11 @@
         var SELECT_DOCUMENT = "SelectDocument";
         var ACCT_DATE = "AcctDateFrom";//DateAcct
 
+        var PROD = "M_Product_ID";
+        var BPARTNER = "C_BPartner_ID";
+        var PROJECT = "C_Project_ID";
+        var CAMPAIGN = "C_Campaign_ID";
+
         var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Find24.gif";
         var srcz = VIS.Application.contextUrl + "Areas/VIS/Images/cancel-18.png";
         var srcRefresh = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
@@ -667,12 +682,12 @@
         var btnRePost = $("<button id='" + "btnRePost_" + windowNo + "' style='float: left; display: inline-block;height: 30px;margin-top: 10px;margin-left: 5px;' ><img src='" + src + "'/></button>");
 
 
-        var btnSelctDoc = $("<button Name='btnSelctDoc' id='" + "btnSelctDoc_" + windowNo + "' style='height:30px; margin-top: 1px;'><img src='" + src + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnAccount = $("<button  Name='btnAccount' id='" + "btnAccount_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnProduct = $("<button  Name='btnProduct' id='" + "btnProduct_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnBPartner = $("<button Name='btnBPartner' id='" + "btnBPartner_" + windowNo + "' style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnProject = $("<button  Name='btnProject' id='" + "btnProject_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnCampaning = $("<button Name='btnCampaning' id='" + "btnCampaning_" + windowNo + "' style=' height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 3px;'></span></button>");
+        var btnSelctDoc = $("<button Name='btnSelctDoc' id='" + "btnSelctDoc_" + windowNo + "' style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
+        var btnAccount = $("<button  Name='btnAccount' id='" + "btnAccount_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
+        var btnProduct = $("<button  Name='btnProduct' id='" + "btnProduct_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
+        var btnBPartner = $("<button Name='btnBPartner' id='" + "btnBPartner_" + windowNo + "' style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
+        var btnProject = $("<button  Name='btnProject' id='" + "btnProject_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
+        var btnCampaning = $("<button Name='btnCampaning' id='" + "btnCampaning_" + windowNo + "' style=' height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
 
 
         var btnSelctDocClear = $("<button Name='btnSelctDocClear' id='" + "btnSelctDocClear_" + windowNo + "' class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
@@ -770,7 +785,7 @@
         var selectDivHeight = $(window).height() - 200;
         var _data = null;
         //var _data = _data = new AcctViewerData(windowNo, AD_Client_ID, AD_Table_ID);;
-
+    
 
         function jbInit() {
             //Selection
@@ -783,6 +798,13 @@
             lblAcc.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), ACCT));
             lblAccDate.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), ACCT_DATE));
             lblAccDateTo.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "AcctDateTo"));
+            // Mohit- added labels
+            lblProduct.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), PROD));
+            lblBP.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), BPARTNER));
+            lblProject.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Project"));
+            lblCompaning.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), CAMPAIGN));
+
+
 
             //Display
             groupBox2.getControl().text(VIS.Msg.getMsg("Display"));
@@ -1235,6 +1257,7 @@
             tr.append(td);
             td.append(lblProduct.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
+
             //line15
             // tr = $("<tr>");
             td = $("<td style='padding: 0px 15px 0px;'>");
@@ -1387,11 +1410,12 @@
         }
 
         function dynInit(AD_Table_ID, Record_ID) {
-            if (!_data) {
-                _data = new AcctViewerData(windowNo, AD_Client_ID, AD_Table_ID);
-            }
-
-            setTimeout(function () {
+            //if (!_data) {
+            _data = new AcctViewerData(windowNo, AD_Client_ID, AD_Table_ID);
+            _data.onLoaded = function () {
+                // }
+                //setTimeout(10);
+                // setTimeout(function () {
                 fillComboBox(cmbAccSchema.getControl(), _data.getAcctSchema());
 
                 cmbAccSchemaFilter.getControl().append("<option value='-1' ></option>");
@@ -1400,30 +1424,50 @@
                 fillComboBox(cmbSelectDoc.getControl(), _data.getTable());
                 fillComboBox(cmbPostType.getControl(), _data.getPostingType());
                 fillComboBox(cmbOrg.getControl(), _data.getOrg());
-            }, 2);
+                // }, 2);
 
-            btnSelctDoc.find('span').text('');
-            btnAccount.attr("Name", ACCT);
-            btnAccountClear.attr("Name", ACCT);
-            btnAccount.find('span').text('')
+                btnSelctDoc.find('span').text('');
+                btnAccount.attr("Name", ACCT);
+                btnAccountClear.attr("Name", ACCT);
+                btnAccount.find('span').text('');
 
-            //  Document Select
-            var haveDoc = AD_Table_ID != 0 && Record_ID != 0;
+                // Change done to resolve the issue of dimentions control not opening.
+                btnProduct.attr("Name", PROD);
+                btnProductClear.attr("Name", PROD);
+                btnProduct.find('span').text('');
 
-            if (haveDoc) {
-                chkSelectDoc.prop("checked", true);
-            }
+                btnBPartner.attr("Name", BPARTNER);
+                btnBPartnerClear.attr("Name", BPARTNER);
+                btnBPartner.find('span').text('');
 
-            actionDocument();
-            actionTable();
-            lblstatusLine.getControl().text(VIS.Msg.getMsg("VIS_EnterSelctionAndDisplayToQueryFind"));
-            lblstatusLine.getControl().css("color", "#19A0ED");//css("font-size", "28px").
-            ////  Initial Query
-            if (haveDoc) {
-                _data.AD_Table_ID = AD_Table_ID;
-                _data.Record_ID = Record_ID;
-                //actionQuery();
-            }
+                btnProject.attr("Name", PROJECT);
+                btnProjectClear.attr("Name", PROJECT);
+                btnProject.find('span').text('');
+
+                btnCampaning.attr("Name", CAMPAIGN);
+                btnCampaningClear.attr("Name", CAMPAIGN);
+                btnCampaning.find('span').text('');
+
+
+                //  Document Select
+                var haveDoc = AD_Table_ID != 0 && Record_ID != 0;
+
+                if (haveDoc) {
+                    chkSelectDoc.prop("checked", true);
+                }
+
+                actionDocument();
+                actionTable();
+                lblstatusLine.getControl().text(VIS.Msg.getMsg("VIS_EnterSelctionAndDisplayToQueryFind"));
+                lblstatusLine.getControl().css("color", "#19A0ED");//css("font-size", "28px").
+                ////  Initial Query
+                if (haveDoc) {
+                    _data.AD_Table_ID = AD_Table_ID;
+                    _data.Record_ID = Record_ID;
+
+                }
+                actionQuery();
+            };
         }
 
         function actionAcctSchema() {
@@ -1447,10 +1491,7 @@
             sortAddItem({ 'Key': "C_Period_ID", 'Name': VIS.Msg.translate(VIS.Env.getCtx(), "C_Period_ID") });
 
             var labels = [];
-            labels.push(lblProduct);
-            labels.push(lblBP);
-            labels.push(lblProject);
-            labels.push(lblCompaning);
+           
             labels.push(lblSel5);
             labels.push(lblSel6);
             labels.push(lblSel7);
@@ -1617,17 +1658,17 @@
             //and allow other threads to execute. 
             //setModel(_data.Query(VIS.Env.getCtx()));
 
-            setTimeout(function () {
-                // var dataValue = _data.Query(AD_Client_ID);
-                _data.Query(AD_Client_ID, callbackGetDataModel);
-                //if (dataValues != null) {
-                if (_data.C_AcctSchema_ID > 0) {
-                    cmbAccSchemaFilter.setValue(_data.C_AcctSchema_ID);
-                }
-                //setModel(dataValues);
-                //    setBusy(false);
-                //};
-            }, 2);
+            //setTimeout(function () {
+            // var dataValue = _data.Query(AD_Client_ID);
+            _data.Query(AD_Client_ID, callbackGetDataModel);
+            //if (dataValues != null) {
+            if (_data.C_AcctSchema_ID > 0) {
+                cmbAccSchemaFilter.setValue(_data.C_AcctSchema_ID);
+            }
+            //setModel(dataValues);
+            //    setBusy(false);
+            //};
+            //}, 2);
             btnRefresh.Enabled = true;
             //2nd tab status line text
             lblstatusLine.getControl().text(VIS.Msg.getMsg("VIS_EnterSelctionAndDisplayToQueryFind"));
@@ -1636,8 +1677,8 @@
         function callbackGetDataModel(dataValues) {
             if (dataValues != null) {
                 setModel(dataValues);
-                setBusy(false);
             };
+            setBusy(false);
         };
 
         function actionDocument() {
@@ -1748,8 +1789,16 @@
             }
 
             var tableName = lookupColumn.substring(0, lookupColumn.length - 3);
-
-            var info = new VIS.infoGeneral(true, _data.windowNo, "", tableName, lookupColumn, false, whereClause);
+            var info;
+            if (keyColumn == "M_Product_ID") {
+                info = new VIS.InfoWindow(101, "", _data.windowNo, "", false);
+            }
+            else if (keyColumn == "C_BPartner_ID") {
+                info = new VIS.InfoWindow(100, "", _data.windowNo, "", false);
+            }
+            else {
+                info = new VIS.infoGeneral(true, _data.windowNo, "", tableName, lookupColumn, false, whereClause);
+            }
             info.onClose = function () {
 
                 //button.Text = "";
@@ -1911,10 +1960,10 @@
             chkforcePost.hide();
             btnPrint.hide();
 
-            setTimeout(function () {
-                jbInit();
-                events();
-            }, 2);
+            /// setTimeout(function () {
+            jbInit();
+            events();
+            ///}, 2);
 
             dynInit(_AD_Table_ID, _Record_ID);
 
@@ -1936,7 +1985,7 @@
                     $root = null;
                 }
             });
-            actionQuery();
+            // actionQuery();
             //setBusy(false);
         };
 

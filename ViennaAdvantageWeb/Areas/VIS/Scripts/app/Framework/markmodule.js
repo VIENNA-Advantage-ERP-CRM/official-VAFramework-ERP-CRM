@@ -71,22 +71,41 @@
 
             lstModules = [];
             var module = null;
-            var dr = VIS.DB.executeReader("SELECT AD_ModuleInfo_ID, Name FROM AD_Moduleinfo WHERE isActive='Y' ORDER BY Upper(Name) ");
+            //var dr = VIS.DB.executeReader("SELECT AD_ModuleInfo_ID, Name FROM AD_Moduleinfo WHERE isActive='Y' ORDER BY Upper(Name) ");
+            var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "MarkModule/LoadModules", null, null);
+            //while (dr.read()) {
+            //    module = {};
+            //    module.AD_ModuleInfo_ID = dr.getInt(0);
+            //    module.Name = dr.getString(1);
+            //    lstModules.push(module);
+            //}
+            //dr = null;
 
-            while (dr.read()) {
-                module = {};
-                module.AD_ModuleInfo_ID = dr.getInt(0);
-                module.Name = dr.getString(1);
-                lstModules.push(module);
-            }
-            dr = null;
-            if (_recordID.length == 1) {
-                dr = VIS.DB.executeReader("select AD_moduleinfo_id  from ad_exportdata e  where e.record_id=" + _recordID[0] + " and e.ad_table_id=" + _tableID);
-                while (dr.read()) {
-                    lstExistingRec.push(dr.getInt(0));
+            if (dr != null) {
+                for (var i in dr) {
+                    module = {};
+                    module.AD_ModuleInfo_ID = dr[i]["AD_ModuleInfo_ID"];
+                    module.Name = dr[i]["Name"];
+                    lstModules.push(module);
                 }
             }
-            dr = null;
+            if (_recordID.length == 1) {
+                //dr = VIS.DB.executeReader("select AD_moduleinfo_id  from ad_exportdata e  where e.record_id=" + _recordID[0] + " and e.ad_table_id=" + _tableID);
+                //while (dr.read()) {
+                //    lstExistingRec.push(dr.getInt(0));
+                //}
+                var data = {                    
+                    RecordID: _recordID[0],
+                    TableID: _tableID,                   
+                };
+                var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "MarkModule/GetExportData", data, null);
+                if (dr != null) {
+                    for (var i in dr) {
+                        lstExistingRec.push(dr[i]);
+                    }
+                }
+            }
+            //dr = null;
             //var htmlstr = "<Table>";
             var tr = null;
             var td = null;
@@ -116,28 +135,28 @@
             else {
 
                 //for (var i = 0; i < lstExistingRec.length; i++) {
-                    for (var j = 0; j < lstModules.length; j++) {
+                for (var j = 0; j < lstModules.length; j++) {
 
-                        tr = $('<tr>');
-                        td = $('<td>');
-                        lbl = $('<label class="vis-gc-vpanel-table-label-checkbox" style="display: inline-block; opacity: 1;">');
-                        if (lstExistingRec.indexOf(lstModules[j].AD_ModuleInfo_ID)>-1) {
-                            chkbox = $("<input type='checkbox' checked>");
-                            // htmlstr += "<tr><td><label class='vis-gc-vpanel-table-label-checkbox' style='display: inline-block; opacity: 1;'><input type='checkbox' checked>" + lstModules[j].Name + "</label></td></tr>";
-                        }
-                        else {
-                            chkbox = $("<input type='checkbox'>");
-                            // htmlstr += "<tr><td><label class='vis-gc-vpanel-table-label-checkbox' style='display: inline-block; opacity: 1;'><input type='checkbox'>" + lstModules[j].Name + "</label></td></tr>";
-                        }
-                        lbl.append(chkbox);
-                        lbl.append(lstModules[j].Name);
-                        td.append(lbl);
-                        tr.append(td);
-                        table.append(tr);
-                        var ctrlItem = {};
-                        ctrlItem.Ctrl = chkbox;
-                        ctrlItem.AD_ModuleInfo_ID = lstModules[j].AD_ModuleInfo_ID;
-                        lstCtrl.push(ctrlItem);
+                    tr = $('<tr>');
+                    td = $('<td>');
+                    lbl = $('<label class="vis-gc-vpanel-table-label-checkbox" style="display: inline-block; opacity: 1;">');
+                    if (lstExistingRec.indexOf(lstModules[j].AD_ModuleInfo_ID)>-1) {
+                        chkbox = $("<input type='checkbox' checked>");
+                        // htmlstr += "<tr><td><label class='vis-gc-vpanel-table-label-checkbox' style='display: inline-block; opacity: 1;'><input type='checkbox' checked>" + lstModules[j].Name + "</label></td></tr>";
+                    }
+                    else {
+                        chkbox = $("<input type='checkbox'>");
+                        // htmlstr += "<tr><td><label class='vis-gc-vpanel-table-label-checkbox' style='display: inline-block; opacity: 1;'><input type='checkbox'>" + lstModules[j].Name + "</label></td></tr>";
+                    }
+                    lbl.append(chkbox);
+                    lbl.append(lstModules[j].Name);
+                    td.append(lbl);
+                    tr.append(td);
+                    table.append(tr);
+                    var ctrlItem = {};
+                    ctrlItem.Ctrl = chkbox;
+                    ctrlItem.AD_ModuleInfo_ID = lstModules[j].AD_ModuleInfo_ID;
+                    lstCtrl.push(ctrlItem);
                     //}
                 }
 
@@ -152,12 +171,12 @@
         var saveData = function () {
             bsyDiv[0].style.visibility = "visible";
             var lstselectedID = [];
-           // var selectedID = '';
+            // var selectedID = '';
             for (var i = 0; i < lstCtrl.length; i++) {
                 var chkbox = lstCtrl[i].Ctrl;
                 if (chkbox.prop('checked')) {
                     lstselectedID.push(lstCtrl[i].AD_ModuleInfo_ID);
-                   // selectedID += lstCtrl[i].AD_ModuleInfo_ID + ',';
+                    // selectedID += lstCtrl[i].AD_ModuleInfo_ID + ',';
                 }
             }
            
@@ -223,12 +242,12 @@
             bsyDiv = null;
             lstModules = null;
 
-             _recordID = null;
-             _strRecordID = null;
-             _tableID = null;
+            _recordID = null;
+            _strRecordID = null;
+            _tableID = null;
             _tableName = null;
 
-             lstExistingRec = null;
+            lstExistingRec = null;
             lstCtrl = null;
             table = null;
             if (root != null) {

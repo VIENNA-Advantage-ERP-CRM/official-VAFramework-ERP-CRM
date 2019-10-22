@@ -426,6 +426,7 @@
     <Compile Include="ModelAD\X_AD_CardView_Column.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Condition.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Role.cs" />
+    <Compile Include="ModelAD\X_AD_DefaultCardView.cs" />
     <Compile Include="ModelAD\X_AD_DefaultUserQuery.cs" />
     <Compile Include="ModelAD\X_AD_GmailConfiguration.cs" />
     <Compile Include="ModelAD\X_AD_Group_Form.cs" />
@@ -445,6 +446,7 @@
     <Compile Include="ModelAD\X_AD_WF_Recipient.cs" />
     <Compile Include="ModelAD\X_AD_WindowAction.cs" />
     <Compile Include="ModelAD\X_CM_Subscribe.cs" />
+    <Compile Include="Model\MAssignAcctSchema.cs" />
     <Compile Include="Model\MAccountGroupBatch.cs" />
     <Compile Include="Model\MBankAccountLine.cs" />
     <Compile Include="Model\MCostDetail.cs" />
@@ -1273,6 +1275,7 @@
     <Compile Include="Model\X_Fact_Acct.cs" />
     <Compile Include="Model\X_Fact_Acct_Balance.cs" />
     <Compile Include="Model\X_Fact_Accumulation.cs" />
+    <Compile Include="Model\X_GL_AssignAcctSchema.cs" />
     <Compile Include="Model\X_GL_Budget.cs" />
     <Compile Include="Model\X_GL_BudgetControl.cs" />
     <Compile Include="Model\X_GL_Category.cs" />

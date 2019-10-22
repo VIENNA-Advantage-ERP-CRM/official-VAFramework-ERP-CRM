@@ -77,6 +77,8 @@ namespace VAdvantage.Acct
         private DocLine[] LoadLines(MJournal journal)
         {
             MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
+            Decimal conversionRate = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT CurrencyRate FROM GL_AssignAcctSchema WHERE 
+                                     C_AcctSchema_ID = " + mSc.GetC_AcctSchema_ID(), null, null));
             List<DocLine> list = new List<DocLine>();
             MJournalLine[] lines = journal.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
@@ -86,6 +88,7 @@ namespace VAdvantage.Acct
                 if (line.GetElementType() == null)
                 {
                     DocLine docLine = new DocLine(line, this);
+                    docLine.SetConversionRate(conversionRate);
                     //  --  Source Amounts
                     docLine.SetAmount(line.GetAmtAcctDr(), line.GetAmtAcctCr());
                     //  --  Converted Amounts
@@ -113,6 +116,7 @@ namespace VAdvantage.Acct
                             X_GL_LineDimension lDim = new X_GL_LineDimension(GetCtx(), dr, null);
 
                             DocLine docLine = new DocLine(lDim, this);
+                            docLine.SetConversionRate(conversionRate);
                             //  --  Source Amounts
 
 
@@ -212,7 +216,7 @@ namespace VAdvantage.Acct
             {
                 docLine.SetUserElement9(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
             }
-            else if (journalLineDimension.GetLineType().Equals( MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
+            else if (journalLineDimension.GetLineType().Equals(MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
             {
                 docLine.SetAD_OrgTrx_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
             }

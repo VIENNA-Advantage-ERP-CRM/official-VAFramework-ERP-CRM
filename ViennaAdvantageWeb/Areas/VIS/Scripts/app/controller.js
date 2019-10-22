@@ -407,9 +407,13 @@
         this.gridTable.addDataStatusListener(this);
         this.gridTable.setAD_Tab_ID(this.vo.AD_Tab_ID);
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTab");
+      
         this.loadData(windowVo);
         windowVo = null;
+
     };
+
+    
 
     GridTab.prototype.getAD_Tab_ID = function () {
         return this.vo.AD_Tab_ID;
@@ -564,6 +568,9 @@
     };
 
     GridTab.prototype.getOnlyCurrentDays = function () {
+        // if zoom enabled- return 0, no need to check any thing regarding transaction window.
+        if (this.getIsZoomAction())
+            return 0;
         return this.vo.onlyCurrentDays;
     };
 
@@ -1346,6 +1353,8 @@
     };
 
 
+
+
     GridTab.prototype.setTreeNodeID = function (nodeID) {
         this.treeNode_ID = nodeID;
         this.gridTable.treeNode_ID = nodeID;
@@ -1370,7 +1379,11 @@
         this.isZoomAction = ZoomAction;
         this.gridTable.isZoomAction = ZoomAction;
     };
+    GridTab.prototype.getIsZoomAction = function () {
+        return this.isZoomAction;
 
+    };
+   
 
     GridTab.prototype.prepareQuery = function (onlyCurrentDays, maxRows, created, isVisualEdtr) {
 
@@ -1404,6 +1417,7 @@
             where += this.vo.WhereClause;
         }
 
+
         if (!this.ShowSummaryNodes && this.getShowSummaryLevel()) {
             if (where.length > 0) {
                 where += " AND IsSummary='N'";
@@ -1414,7 +1428,8 @@
         }
 
         //    _vo.WhereClause);
-        if (this.vo.onlyCurrentDays > 0) {
+        
+        if (this.getOnlyCurrentDays() > 0) {
             if (where.length > 0)
                 where += " AND ";
 
@@ -1444,6 +1459,7 @@
                     success = false;
                 }
                 else {
+                    
                     var value = VIS.context.getWindowContext(this.vo.windowNo, lc);
                     //	Same link value?
                     if (refresh) {
@@ -1482,13 +1498,15 @@
         this.extendedWhere = where.toString();
 
         //	Final Query
-        if (this.query.getIsActive()) {
+        if (this.query.getIsActive()) {          
+            
             var q = this.validateQuery(this.query);
             if (q != null && !queryDetailAll) {
                 if (where.length > 0)
                     where += " AND ";
                 where += q;
             }
+           
         }
 
         /* Query */
@@ -1555,6 +1573,7 @@
             this.gridTable.setSelectWhereClause(where.toString());
             this.gridTable.open(maxRows);
         }
+
         return success;
     };
 
@@ -1989,7 +2008,7 @@
 
         //var ret = array[key];
         //if (ret) { return true; }
-        
+
         //return false;s
 
     };

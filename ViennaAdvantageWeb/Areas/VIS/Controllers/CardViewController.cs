@@ -8,7 +8,7 @@ using VAdvantage.Utility;
 using VIS.Models;
 namespace VIS.Controllers
 {
-    
+
     public class CardViewController : Controller
     {
         //
@@ -17,7 +17,7 @@ namespace VIS.Controllers
         {
             return View();
         }
-        
+
         public JsonResult GetCardView(int ad_Window_ID, int ad_Tab_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
@@ -39,7 +39,7 @@ namespace VIS.Controllers
                 lstCardViewData = lstCardView,
                 lstRoleData = lstRole,
                 lstCardViewRoleData = lstCardViewRole,
-                lstCardViewConditonData=lstCVConditon
+                lstCardViewConditonData = lstCVConditon
 
             };
             List<ParameterPropeties> lstParamProperties = new List<ParameterPropeties>();
@@ -48,8 +48,8 @@ namespace VIS.Controllers
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
-        
-        
+
+
         public JsonResult GetCardViewColumns(int ad_CardView_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
@@ -70,7 +70,7 @@ namespace VIS.Controllers
             return jsonResult;
         }
 
-        [HttpPost] 
+        [HttpPost]
         public JsonResult SaveCardViewColumns(List<CardViewPropeties> lstCardView, List<CardViewPropeties> lstCardViewColumns, List<RolePropeties> LstRoleID, List<CardViewConditionPropeties> lstCardViewCondition)
         {
             bool isNewRecord = lstCardView[0].isNewRecord;
@@ -85,6 +85,11 @@ namespace VIS.Controllers
             {
                 objCardViewModel.DeleteAllCardViewColumns(lstCardView[0].CardViewID, ctx);
                 id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID, LstRoleID, lstCardViewCondition);
+            }
+
+            if (lstCardView[0].IsDefault)
+            {
+                objCardViewModel.SetDefaultCardView(ctx, id, lstCardView[0].AD_Tab_ID);
             }
 
             int sqNo = 0;
@@ -113,6 +118,15 @@ namespace VIS.Controllers
             CardViewModel objCardViewModel = new CardViewModel();
             objCardViewModel.DeleteCardViewRecord(ad_CardView_ID, ctx);
             var jsonResult = Json(JsonConvert.SerializeObject(""), JsonRequestBehavior.AllowGet); jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+
+        public JsonResult SetDefaultView(int AD_Tab_ID, int cardView)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            CardViewModel objCardViewModel = new CardViewModel();
+            objCardViewModel.SetDefaultView(ctx, AD_Tab_ID, cardView);
+            var jsonResult = Json(JsonConvert.SerializeObject(""), JsonRequestBehavior.AllowGet);
             return jsonResult;
         }
     }

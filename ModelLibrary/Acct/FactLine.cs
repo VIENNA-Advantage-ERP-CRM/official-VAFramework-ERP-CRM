@@ -947,6 +947,12 @@ namespace VAdvantage.Acct
             {
                 convDate = GetDateTrx();
             }
+            else if(_doc is Doc_GLJournal)
+            {
+                SetAmtAcctDr(Decimal.Multiply( GetAmtSourceDr() , _docLine.GetConversionRate()));
+                SetAmtAcctCr(Decimal.Multiply(GetAmtSourceCr(), _docLine.GetConversionRate()));
+                return true;
+            }
 
             SetAmtAcctDr(MConversionRate.Convert(GetCtx(),
                 GetAmtSourceDr(), GetC_Currency_ID(), _acctSchema.GetC_Currency_ID(),
