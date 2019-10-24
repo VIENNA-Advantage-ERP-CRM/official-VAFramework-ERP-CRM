@@ -282,6 +282,7 @@ namespace VAdvantage.Acct
                 //  account     DR      CR
                 for (int i = 0; i < _lines.Length; i++)
                 {
+
                     // need to Post GL Journal for Multiple Accounting Schema that's why commented this condition
                     //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
                     //{
