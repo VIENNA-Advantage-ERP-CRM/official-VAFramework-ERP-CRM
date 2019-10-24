@@ -84,7 +84,7 @@ namespace VAdvantage.Model
 
             // JID_1303: On Order tax calculate tax according to selected pricelist. If user delete lines and change pricelist, it should check IsTaxIncluded on selected Pricelist.
             bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
-                + line.GetC_Order_ID() + ")")) == "Y";
+                + line.GetC_Order_ID() + ")", null, trxName)) == "Y";
 
             if (retValue != null)
             {
@@ -166,8 +166,9 @@ namespace VAdvantage.Model
                 s_log.Log(Level.SEVERE, sql, e);
             }
 
+            // Get IsTaxincluded from selected PriceList on header
             bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
-                + line.GetC_Order_ID() + ")")) == "Y";
+                + line.GetC_Order_ID() + ")", null, trxName)) == "Y";
 
             if (retValue != null)
             {
