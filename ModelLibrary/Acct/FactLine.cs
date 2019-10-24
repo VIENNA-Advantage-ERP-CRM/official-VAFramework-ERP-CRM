@@ -117,7 +117,7 @@ namespace VAdvantage.Acct
             //	User Defined References
             MAcctSchemaElement ud1 = _acctSchema.GetAcctSchemaElement(
                     X_C_AcctSchema_Element.ELEMENTTYPE_UserElement1);
-            if (ud1 != null)
+            if (ud1 != null && GetUserElement1_ID() <= 0)
             {
                 String ColumnName1 = ud1.GetDisplayColumnName();
                 if (ColumnName1 != null)
@@ -143,7 +143,7 @@ namespace VAdvantage.Acct
             }
             MAcctSchemaElement ud2 = _acctSchema.GetAcctSchemaElement(
                     X_C_AcctSchema_Element.ELEMENTTYPE_UserElement2);
-            if (ud2 != null)
+            if (ud2 != null && GetUserElement2_ID() <= 0)
             {
                 String ColumnName2 = ud2.GetDisplayColumnName();
                 if (ColumnName2 != null)
@@ -173,7 +173,7 @@ namespace VAdvantage.Acct
             //user element 3
             MAcctSchemaElement ud3 = _acctSchema.GetAcctSchemaElement(
                    X_C_AcctSchema_Element.ELEMENTTYPE_UserElement3);
-            if (ud3 != null)
+            if (ud3 != null && GetUserElement3_ID() <= 0)
             {
                 String ColumnName3 = ud3.GetDisplayColumnName();
                 if (ColumnName3 != null)
@@ -200,7 +200,7 @@ namespace VAdvantage.Acct
             //user element 4
             MAcctSchemaElement ud4 = _acctSchema.GetAcctSchemaElement(
                    X_C_AcctSchema_Element.ELEMENTTYPE_UserElement4);
-            if (ud4 != null)
+            if (ud4 != null && GetUserElement4_ID() <= 0)
             {
                 String ColumnName4 = ud4.GetDisplayColumnName();
                 if (ColumnName4 != null)
@@ -228,7 +228,7 @@ namespace VAdvantage.Acct
             //user element 5
             MAcctSchemaElement ud5 = _acctSchema.GetAcctSchemaElement(
                    X_C_AcctSchema_Element.ELEMENTTYPE_UserElement5);
-            if (ud5 != null)
+            if (ud5 != null && GetUserElement5_ID() <= 0)
             {
                 String ColumnName5 = ud5.GetDisplayColumnName();
                 if (ColumnName5 != null)
@@ -255,7 +255,7 @@ namespace VAdvantage.Acct
             //user element 6
             MAcctSchemaElement ud6 = _acctSchema.GetAcctSchemaElement(
                  X_C_AcctSchema_Element.ELEMENTTYPE_UserElement6);
-            if (ud6 != null)
+            if (ud6 != null && GetUserElement6_ID() <= 0)
             {
                 String ColumnName6 = ud6.GetDisplayColumnName();
                 if (ColumnName6 != null)
@@ -282,7 +282,7 @@ namespace VAdvantage.Acct
             //user element 7
             MAcctSchemaElement ud7 = _acctSchema.GetAcctSchemaElement(
                  X_C_AcctSchema_Element.ELEMENTTYPE_UserElement7);
-            if (ud7 != null)
+            if (ud7 != null && GetUserElement7_ID() <= 0)
             {
                 String ColumnName7 = ud7.GetDisplayColumnName();
                 if (ColumnName7 != null)
@@ -310,7 +310,7 @@ namespace VAdvantage.Acct
             //user element 8
             MAcctSchemaElement ud8 = _acctSchema.GetAcctSchemaElement(
                  X_C_AcctSchema_Element.ELEMENTTYPE_UserElement8);
-            if (ud8 != null)
+            if (ud8 != null && GetUserElement8_ID() <= 0)
             {
                 String ColumnName8 = ud8.GetDisplayColumnName();
                 if (ColumnName8 != null)
@@ -338,7 +338,7 @@ namespace VAdvantage.Acct
             //user element 9
             MAcctSchemaElement ud9 = _acctSchema.GetAcctSchemaElement(
                  X_C_AcctSchema_Element.ELEMENTTYPE_UserElement9);
-            if (ud8 != null)
+            if (ud9 != null && GetUserElement9_ID() <= 0)
             {
                 String ColumnName9 = ud9.GetDisplayColumnName();
                 if (ColumnName9 != null)
@@ -427,6 +427,11 @@ namespace VAdvantage.Acct
         {
             _doc = doc;
             _docLine = docLine;
+
+            // Get Dimension which is to be posted respective to Accounting Schema
+            Dictionary<string, string> acctSchemaElementRecord = new Dictionary<string, string>();
+            acctSchemaElementRecord = GetDimenssion(GetC_AcctSchema_ID());
+
             //	reset
             SetAD_Org_ID(0);
             SetC_SalesRegion_ID(0);
@@ -484,13 +489,16 @@ namespace VAdvantage.Acct
             SetGL_Category_ID(_doc.GetGL_Category_ID());
 
             //	Product
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Product))
             {
-                SetM_Product_ID(_docLine.GetM_Product_ID());
-            }
-            if (GetM_Product_ID() == 0)
-            {
-                SetM_Product_ID(_doc.GetM_Product_ID());
+                if (_docLine != null)
+                {
+                    SetM_Product_ID(_docLine.GetM_Product_ID());
+                }
+                if (GetM_Product_ID() == 0)
+                {
+                    SetM_Product_ID(_doc.GetM_Product_ID());
+                }
             }
             //	UOM
             if (_docLine != null)
@@ -507,107 +515,136 @@ namespace VAdvantage.Acct
                 }
             }
 
-            //	Loc From (maybe set earlier)
-            if (GetC_LocFrom_ID() == 0 && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_LocationFrom))
             {
-                SetC_LocFrom_ID(_docLine.GetC_LocFrom_ID());
+                //	Loc From (maybe set earlier)
+                if (GetC_LocFrom_ID() == 0 && _docLine != null)
+                {
+                    SetC_LocFrom_ID(_docLine.GetC_LocFrom_ID());
+                }
+                if (GetC_LocFrom_ID() == 0)
+                {
+                    SetC_LocFrom_ID(_doc.GetC_LocFrom_ID());
+                }
             }
-            if (GetC_LocFrom_ID() == 0)
+
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_LocationTo))
             {
-                SetC_LocFrom_ID(_doc.GetC_LocFrom_ID());
+                //	Loc To (maybe set earlier)
+                if (GetC_LocTo_ID() == 0 && _docLine != null)
+                {
+                    SetC_LocTo_ID(_docLine.GetC_LocTo_ID());
+                }
+                if (GetC_LocTo_ID() == 0)
+                {
+                    SetC_LocTo_ID(_doc.GetC_LocTo_ID());
+                }
             }
-            //	Loc To (maybe set earlier)
-            if (GetC_LocTo_ID() == 0 && _docLine != null)
+
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_BPartner))
             {
-                SetC_LocTo_ID(_docLine.GetC_LocTo_ID());
+                //	BPartner
+                if (_docLine != null)
+                {
+                    SetC_BPartner_ID(_docLine.GetC_BPartner_ID());
+                }
+                if (GetC_BPartner_ID() == 0)
+                {
+                    SetC_BPartner_ID(_doc.GetC_BPartner_ID());
+                }
             }
-            if (GetC_LocTo_ID() == 0)
+
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
             {
-                SetC_LocTo_ID(_doc.GetC_LocTo_ID());
+                //	Sales Region from BPLocation/Sales Rep
+                //	Trx Org
+                if (_docLine != null)
+                {
+                    SetAD_OrgTrx_ID(_docLine.GetAD_OrgTrx_ID());
+                }
+                if (GetAD_OrgTrx_ID() == 0)
+                {
+                    SetAD_OrgTrx_ID(_doc.GetAD_OrgTrx_ID());
+                }
             }
-            //	BPartner
-            if (_docLine != null)
-            {
-                SetC_BPartner_ID(_docLine.GetC_BPartner_ID());
-            }
-            if (GetC_BPartner_ID() == 0)
-            {
-                SetC_BPartner_ID(_doc.GetC_BPartner_ID());
-            }
-            //	Sales Region from BPLocation/Sales Rep
-            //	Trx Org
-            if (_docLine != null)
-            {
-                SetAD_OrgTrx_ID(_docLine.GetAD_OrgTrx_ID());
-            }
-            if (GetAD_OrgTrx_ID() == 0)
-            {
-                SetAD_OrgTrx_ID(_doc.GetAD_OrgTrx_ID());
-            }
+
             //	Set User Dimension
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement1) && _docLine != null)
             {
                 SetUserElement1_ID(_docLine.GetUserElement1());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement2) && _docLine != null)
             {
                 SetUserElement2_ID(_docLine.GetUserElement2());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement3) && _docLine != null)
             {
                 SetUserElement3_ID(_docLine.GetUserElement3());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement4) && _docLine != null)
             {
                 SetUserElement4_ID(_docLine.GetUserElement4());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement5) && _docLine != null)
             {
                 SetUserElement5_ID(_docLine.GetUserElement5());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement6) && _docLine != null)
             {
                 SetUserElement6_ID(_docLine.GetUserElement6());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement7) && _docLine != null)
             {
                 SetUserElement7_ID(_docLine.GetUserElement7());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement8) && _docLine != null)
             {
                 SetUserElement8_ID(_docLine.GetUserElement8());
             }
-            if (_docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement9) && _docLine != null)
             {
                 SetUserElement9_ID(_docLine.GetUserElement9());
             }
-            //	Project
-            if (_docLine != null)
+
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Project))
             {
-                SetC_Project_ID(_docLine.GetC_Project_ID());
+                //	Project
+                if (_docLine != null)
+                {
+                    SetC_Project_ID(_docLine.GetC_Project_ID());
+                }
+                if (GetC_Project_ID() == 0)
+                {
+                    SetC_Project_ID(_doc.GetC_Project_ID());
+                }
             }
-            if (GetC_Project_ID() == 0)
+
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Campaign))
             {
-                SetC_Project_ID(_doc.GetC_Project_ID());
+                //	Campaign
+                if (_docLine != null)
+                {
+                    SetC_Campaign_ID(_docLine.GetC_Campaign_ID());
+                }
+                if (GetC_Campaign_ID() == 0)
+                {
+                    SetC_Campaign_ID(_doc.GetC_Campaign_ID());
+                }
             }
-            //	Campaign
-            if (_docLine != null)
+
+            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Activity))
             {
-                SetC_Campaign_ID(_docLine.GetC_Campaign_ID());
+                //	Activity
+                if (_docLine != null)
+                {
+                    SetC_Activity_ID(_docLine.GetC_Activity_ID());
+                }
+                if (GetC_Activity_ID() == 0)
+                {
+                    SetC_Activity_ID(_doc.GetC_Activity_ID());
+                }
             }
-            if (GetC_Campaign_ID() == 0)
-            {
-                SetC_Campaign_ID(_doc.GetC_Campaign_ID());
-            }
-            //	Activity
-            if (_docLine != null)
-            {
-                SetC_Activity_ID(_docLine.GetC_Activity_ID());
-            }
-            if (GetC_Activity_ID() == 0)
-            {
-                SetC_Activity_ID(_doc.GetC_Activity_ID());
-            }
+
             //	User List 1
             if (_docLine != null)
             {
@@ -627,6 +664,82 @@ namespace VAdvantage.Acct
                 SetUser2_ID(_doc.GetUser2_ID());
             }
             //	References in setAccount
+        }
+
+
+        /// <summary>
+        /// Get Dimension define on accounting schema
+        /// </summary>
+        /// <param name="as1">accounting schema</param>
+        /// <returns>dimensions</returns>
+        private Dictionary<string, string> GetDimenssion(int C_AcctSchema_ID)
+        {
+            Dictionary<string, string> acctSchemaElementRecord = new Dictionary<string, string>();
+            try
+            {
+                string sql = @"SELECT ase.ad_client_id ,   ase.ElementType ,   ase.c_activity_id ,   ase.c_bpartner_id ,
+                                     ase.c_campaign_id ,   ase.c_location_id ,   ase.c_project_id ,   ase.c_salesregion_id ,
+                                     ase.m_product_id ,   ase.org_id ,   c.columnname
+                             FROM C_AcctSchema_Element ase LEFT JOIN ad_column c ON ase.ad_column_id   = c.ad_column_id 
+                             WHERE ase.C_AcctSchema_ID = " + C_AcctSchema_ID + " AND ase.IsActive = 'Y'";
+                DataSet dsAcctSchemaElement = DB.ExecuteDataset(sql, null, null);
+                if (dsAcctSchemaElement != null && dsAcctSchemaElement.Tables.Count > 0 && dsAcctSchemaElement.Tables[0].Rows.Count > 0)
+                {
+                    for (int ase = 0; ase < dsAcctSchemaElement.Tables[0].Rows.Count; ase++)
+                    {
+                        if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "AY")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "C_Activity_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "BP")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "C_BPartner_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "LF" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "LT")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "C_Location_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "MC")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "C_Campaign_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "OT")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "AD_OrgTrx_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "PJ")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "C_Project_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "PR")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "M_Product_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "SR")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "C_SalesRegion_ID";
+                        }
+                        else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X1" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X2" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X3" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X4" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X5" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X6" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X7" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X8" ||
+                                 System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "X9")
+                        {
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["columnname"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "GetDimenssion: error occure -> " + ex.ToString(), ex);
+            }
+            return acctSchemaElementRecord;
         }
 
         /// <summary>
@@ -946,6 +1059,12 @@ namespace VAdvantage.Acct
             if (_doc is Doc_Bank)
             {
                 convDate = GetDateTrx();
+            }
+            else if (_doc is Doc_GLJournal)
+            {
+                SetAmtAcctDr(Decimal.Multiply(GetAmtSourceDr(), _docLine.GetConversionRate()));
+                SetAmtAcctCr(Decimal.Multiply(GetAmtSourceCr(), _docLine.GetConversionRate()));
+                return true;
             }
 
             SetAmtAcctDr(MConversionRate.Convert(GetCtx(),
