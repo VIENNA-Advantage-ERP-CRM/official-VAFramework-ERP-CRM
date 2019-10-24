@@ -68,7 +68,9 @@ namespace VAdvantage.Model
                     _log.Log(Level.SEVERE, sql, e);
                 }
 
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + line.GetC_Invoice_ID() + ")")) == "Y";
+                // Get IsTaxincluded from selected PriceList on header
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " 
+                    + line.GetC_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
                 {
@@ -150,7 +152,9 @@ namespace VAdvantage.Model
                     _log.Log(Level.SEVERE, sql, e);
                 }
 
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + line.GetC_Invoice_ID() + ")")) == "Y";
+                // Get IsTaxincluded from selected PriceList on header
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " 
+                    + line.GetC_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
                 {
