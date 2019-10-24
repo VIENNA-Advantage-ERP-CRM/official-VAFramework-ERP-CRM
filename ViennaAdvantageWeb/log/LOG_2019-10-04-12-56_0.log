@@ -1,0 +1,21 @@
+*** 10/4/2019 12:57:00 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+12:57:00.570    (INFO)     Trx.Start: **** ConnSH637057906208352355System.Random
+12:57:00.570    (INFO)     Trx.Commit: **C** ConnSH637057906208352355System.Random
+12:57:02.572    (INFO)     Trx.Start: **** ConnSH637057906229158386System.Random
+12:57:02.572    (INFO)     Trx.Commit: **C** ConnSH637057906229158386System.Random
+12:57:05.575    (INFO)     Trx.Start: **** ConnSH637057906250702589System.Random

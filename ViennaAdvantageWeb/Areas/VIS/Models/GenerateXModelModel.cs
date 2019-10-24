@@ -7,7 +7,6 @@ using VAdvantage.DataBase;
 using VIS.Areas.VIS.Models;
 using System.Collections.Generic;
 using VAdvantage.Utility;
-using VAdvantage.Model;
 
 namespace ViennaAdvantage.Tool.Model
 {
@@ -43,8 +42,7 @@ namespace ViennaAdvantage.Tool.Model
         {
             List<GenXModelGetTableClass> obj = new List<GenXModelGetTableClass>();
 
-            string strQuery = "SELECT Name, AD_TABLE_ID,TableName FROM AD_TABLE ORDER BY NAME";
-            strQuery = MRole.GetDefault(ctx).AddAccessSQL(strQuery, "AD_TABLE", true, true);
+            string strQuery = "select Name, AD_TABLE_ID,TableName from AD_TABLE order by name";
             DataSet ds = DB.ExecuteDataset(strQuery, null);
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)

@@ -967,7 +967,20 @@ namespace VIS.Controllers
             serializedObject = se1r.Serialize(new { item = 1, message = "" });
             return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
         }
-
+        /// <summary>
+        /// Method to get parent tab records ID.
+        /// </summary>
+        /// <param name="SelectColumn">Column  to be selected</param>
+        /// <param name="SelectTable">From table</param>
+        /// <param name="WhereColumn">Where column</param>
+        /// <param name="WhereValue">ID of child column</param>
+        /// <returns></returns>
+        public ActionResult GetZoomParentRec(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
+        {
+            
+            WindowHelper obj = new WindowHelper();
+            return Json(JsonConvert.SerializeObject(obj.GetZoomParentRecord(SelectColumn, SelectTable, WhereColumn, WhereValue)), JsonRequestBehavior.AllowGet);
+        }
     }
 
 
@@ -996,5 +1009,7 @@ namespace VIS.Controllers
             var m = new MenuHelper(ctx);
             return Json(JsonConvert.SerializeObject(m.updateTree(ctx, nodeID, oldParentID, newParentID, AD_Tree_ID)), JsonRequestBehavior.AllowGet);
         }
+
+       
     }
 }

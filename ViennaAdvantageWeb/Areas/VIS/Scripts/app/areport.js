@@ -242,6 +242,11 @@
                         rv.show(d.HTML, d.AD_PrintFormat_ID, pp, TableID, queryInfo, query.getCode(0), dres.pSetting);
                         rv.setReportBytes(d.Report);
                         rv.setIteration(dres.pSetting.TotalPage);
+
+                        // Archive Document automatically, if selected on Tenant
+                        if (VIS.context.ctx["$AutoArchive"] == '1' || VIS.context.ctx["$AutoArchive"] == '2') {
+                            rv.archiveDocument(queryInfo, TableID, d.Report);                           
+                        }
                     }
                 }
             });
@@ -348,6 +353,30 @@
         this.setIteration = function (iteration) {
             Iteration = iteration;
         };
+
+        // to Archive Document
+        this.archiveDocument = function (queryInfo, Ad_Table_ID, reportBytes) {
+            setBusy(true);
+            $.ajax({
+                url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
+                dataType: "json",
+                type: "post",
+                data: {
+                    AD_Process_ID: 0,
+                    Name: queryInfo[0],
+                    AD_Table_ID: Ad_Table_ID,
+                    Record_ID: 0,
+                    C_BPartner_ID: 0,
+                    isReport: true,
+                    binaryData: reportBytes
+                },
+                success: function (data) {
+                    VIS.ADialog.info('Archived', true, "", "");
+                    setBusy(false);
+                }
+            });
+        };
+
         var download = function () {
             for (var i = 0; i < arguments.length; i++) {
                 var iframe = $('<iframe style="visibility: collapse;"></iframe>');
@@ -769,27 +798,30 @@
                 };
                 find.show();
             });
+
             btnArchive.on('click', function () {
-                setBusy(true);
-                $.ajax({
-                    url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
-                    dataType: "json",
-                    type: "post",
-                    data: {
-                        AD_Process_ID: 0,
-                        Name: queryInfo[0],
-                        AD_Table_ID: Ad_Table_ID,
-                        Record_ID: 0,
-                        C_BPartner_ID: 0,
-                        isReport: true,
-                        binaryData: reportBytes
-                    },
-                    success: function (data) {
-                        VIS.ADialog.info('Archived', true, "", "");
-                        setBusy(false);
-                    }
-                });
+                self.archiveDocument(queryInfo, Ad_Table_ID, reportBytes);
+                //setBusy(true);
+                //$.ajax({
+                //    url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
+                //    dataType: "json",
+                //    type: "post",
+                //    data: {
+                //        AD_Process_ID: 0,
+                //        Name: queryInfo[0],
+                //        AD_Table_ID: Ad_Table_ID,
+                //        Record_ID: 0,
+                //        C_BPartner_ID: 0,
+                //        isReport: true,
+                //        binaryData: reportBytes
+                //    },
+                //    success: function (data) {
+                //        VIS.ADialog.info('Archived', true, "", "");
+                //        setBusy(false);
+                //    }
+                //});
             });
+
             //}
             //if (showPaging == true) {
             //    btnSaveCsvAll.on("click", function () {

@@ -290,5 +290,17 @@ namespace VIS.Controllers
              UserPreferenceModel model = new UserPreferenceModel();
              return Json(JsonConvert.SerializeObject(model.GetWindowID(WindowName)), JsonRequestBehavior.AllowGet);
          }
+
+        /// <summary>
+        /// Controller function to zip log file for the selected date passed as parameter
+        /// </summary>
+        /// <param name="logDate">Log Date</param>
+        /// <returns>String (name of zip file)</returns>
+         public JsonResult DownloadServerLog(DateTime? logDate)
+         {
+             Ctx ct = Session["ctx"] as Ctx;
+             UserPreferenceModel model = new UserPreferenceModel();
+             return Json(model.DownloadServerLog(logDate), JsonRequestBehavior.AllowGet);
+         }
     }
 }

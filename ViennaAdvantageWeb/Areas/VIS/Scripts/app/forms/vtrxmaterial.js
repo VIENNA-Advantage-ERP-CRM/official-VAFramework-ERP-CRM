@@ -13,7 +13,7 @@
         var $root = $("<div style='width: 100%; height: 100%; background-color: white;'>");
         var $self = this;
         var $divContainer = null;
-        var $divPSelectInfo = null;      
+        var $divPSelectInfo = null;
         var $divGridPSelect = null;
         var $divProcessPSelect = null;
         var $divLabel = null;
@@ -24,7 +24,7 @@
         var $cmbLocator = null;
         var $cmbProduct = null;
         var $dtpFromDate = null;
-        var $dtpToDate = null;       
+        var $dtpToDate = null;
         var arrListColumns = [];
         var dGrid = null;
         var $btnRequery = null;
@@ -36,14 +36,14 @@
         var controlsData = null;
         var paymentAmount = 0;
         var $divBusy = null;
-        var $locator=null;
-        var $product=null;
-        var gridController = null;     
+        var $locator = null;
+        var $product = null;
+        var gridController = null;
         var query = null;
         var _mTab = null;
 
         var baseUrl = VIS.Application.contextUrl;
-        var dataSetUrl = baseUrl + "JsonData/JDataSet";
+        var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
 
         this.initialize = function () {
             busyIndicator();
@@ -82,19 +82,19 @@
         //******************
         function customDesign() {
             var height = ($(window).height()) * (96 / 100);
-           
 
-            var lookupOrg = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, null);         
-           $cmbOrganization = new VIS.Controls.VComboBox("AD_Org_ID", false, false, true, lookupOrg, 50);
-            
-           // var lookupMoventType = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3666, VIS.DisplayType.List, "MovementType",189, false, null);
+
+            var lookupOrg = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, null);
+            $cmbOrganization = new VIS.Controls.VComboBox("AD_Org_ID", false, false, true, lookupOrg, 50);
+
+            // var lookupMoventType = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3666, VIS.DisplayType.List, "MovementType",189, false, null);
             var lookupMoventType = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.List, "MovementType", 189, false, null);
             $cmbMoventType = new VIS.Controls.VComboBox("MovementType", false, false, true, lookupMoventType, 29);
-              
+
             //*************Lookup for Locator************            
             var containerdivLocator = $('<div></div>');
             var lookupLocator = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Locator_ID", 0, false, "");
-             $locator = new VIS.Controls.VTextBoxButton("M_Locator_ID", false, false, true, VIS.DisplayType.Search, lookupLocator);
+            $locator = new VIS.Controls.VTextBoxButton("M_Locator_ID", false, false, true, VIS.DisplayType.Search, lookupLocator);
             containerdivLocator.append($locator.getControl());
             containerdivLocator.append($locator.getBtn(0));
             containerdivLocator.append($locator.getBtn(1));
@@ -102,8 +102,8 @@
             $locator.getControl().addClass("vis-lookupTextboxes");
             $locator.getBtn(0).addClass("vis-lookupButtons");
             $locator.getBtn(1).addClass("vis-lookupButtons");
-           // $locator.getBtn(0).css("float", "left");
-          //  $locator.getBtn(1).css("float", "right");
+            // $locator.getBtn(0).css("float", "left");
+            //  $locator.getBtn(1).css("float", "right");
             $locator.getBtn(0).css("height", "30");
             $locator.getBtn(0).css("width", "30");
             $locator.getBtn(1).css("width", "30");
@@ -114,7 +114,7 @@
             //*************Lookup for Product************            
             var containerdivProduct = $('<div></div>');
             var lookupProduct = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Product_ID", 0, false, "");
-             $product = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, lookupProduct);
+            $product = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, lookupProduct);
             containerdivProduct.append($product.getControl());
             containerdivProduct.append($product.getBtn(0));
             containerdivProduct.append($product.getBtn(1));
@@ -167,7 +167,7 @@
             $divInfo.append($divToDate);
 
             var $divRefresh = $("<div class='vis-paymentselect-field' style='float:right;width:20%;'>");
-           // $divRefresh.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateTo") + " </label>"));
+            // $divRefresh.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateTo") + " </label>"));
             $divRefresh.append($("<button class='VIS_Pref_btn-2' id='VIS_btnRefresh_" + $self.windowNo + "' style='margin-top: 5px;'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/requery.png'></button>"));
             $divInfo.append($divRefresh);
             var $divZoom = $("<div class='vis-paymentselect-field' style='float:right;width:20%;'>");
@@ -197,10 +197,10 @@
         //Find Controls through ID
         //******************
         function findControls() {
-         //   $cmbOrganization = $('#VIS_cmbOrg_' + $self.windowNo);
-           // $cmbMoventType = $('#VIS_cmbMovementType_' + $self.windowNo);
-          //  $cmbLocator = $('#VIS_cmbLocator_' + $self.windowNo);
-           // $cmbProduct = $('#VIS_cmbProduct_' + $self.windowNo);
+            //   $cmbOrganization = $('#VIS_cmbOrg_' + $self.windowNo);
+            // $cmbMoventType = $('#VIS_cmbMovementType_' + $self.windowNo);
+            //  $cmbLocator = $('#VIS_cmbLocator_' + $self.windowNo);
+            // $cmbProduct = $('#VIS_cmbProduct_' + $self.windowNo);
             $dtpFromDate = $('#VIS_dtpFromDate' + $self.windowNo);
             $dtpToDate = $('#VIS_dtpToDate' + $self.windowNo);
             $btnRequery = $('#VIS_btnRefresh_' + $self.windowNo);
@@ -212,9 +212,9 @@
             var day = ("0" + now.getDate()).slice(-2);
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
             var today = now.getFullYear() + "-" + (month) + "-" + (day);
-          //  $dtpFromDate.val(today);
-           // $dtpToDate.val(today);
-           
+            //  $dtpFromDate.val(today);
+            // $dtpToDate.val(today);
+
 
         };
         //******************
@@ -236,7 +236,7 @@
             //**On click of OK Button**//
             $btnOk.on("click", function () {
                 refresh();
-               
+
             });
 
             //**On click of Cancel Button**//
@@ -244,9 +244,9 @@
                 $self.dispose();
             });
 
-          
 
-           
+
+
 
 
 
@@ -294,7 +294,7 @@
         //Refresh grid records
         //********************
         function refresh() {
-           
+
             var localquery = null;
             if (query != null) {
                 //localquery = query;//query.DeepCopy();
@@ -307,49 +307,41 @@
             //  Organization
             var value = $cmbOrganization.getValue();
             //no selected value in the Combo
-            if (value == null || value.toString() == "-1" || value.toString().trim().length == 0)
-            {
+            if (value == null || value.toString() == "-1" || value.toString().trim().length == 0) {
                 value = null;
             }
-            if (value != null && value.toString().length > 0)
-            {
+            if (value != null && value.toString().length > 0) {
                 localquery.addRestriction("AD_Org_ID", VIS.Query.prototype.EQUAL, value);
             }
             //  Locator
             value = $locator.getValue();
-            if (value != null && value.toString().length > 0)
-            {
+            if (value != null && value.toString().length > 0) {
                 localquery.addRestriction("M_Locator_ID", VIS.Query.prototype.EQUAL, value);
             }
             //  Product
             value = $product.getValue();;
-            if (value != null && value.toString().length > 0)
-            {
+            if (value != null && value.toString().length > 0) {
                 localquery.addRestriction("M_Product_ID", VIS.Query.prototype.EQUAL, value);
             }
             //  MovementType
             value = $cmbMoventType.getValue();
-            if (value == null || value.toString() == "-1" || value.toString().trim().length == 0)
-            {
+            if (value == null || value.toString() == "-1" || value.toString().trim().length == 0) {
                 value = null;
             }
-            if (value != null && value.toString().length > 0)
-            {
+            if (value != null && value.toString().length > 0) {
                 localquery.addRestriction("MovementType", VIS.Query.prototype.EQUAL, value);
             }
             //  DateFrom
             var ts = $dtpFromDate.val().toString();
-            
-            if (ts != null && ts.length > 0)
-            {
+
+            if (ts != null && ts.length > 0) {
                 ts = new Date(ts);
                 localquery.addRestriction("TRUNC(MovementDate,'DD')", VIS.Query.prototype.GREATER_EQUAL, ts);
             }
             //  DateTO
             ts = $dtpToDate.val().toString();
-           
-            if (ts != null && ts.length>0)
-            {
+
+            if (ts != null && ts.length > 0) {
                 ts = new Date(ts);
                 localquery.addRestriction("TRUNC(MovementDate,'DD')", VIS.Query.prototype.LESS_EQUAL, ts);
             }
@@ -362,81 +354,74 @@
         //Zoom record
         //********************
         function zoom() {
-          
+
             var AD_Window_ID = 0;
             var ColumnName = null;
             var SQL = null;
+            var params = [];
             //
-            var lineID = VIS.context.getContextAsInt($self.windowNo,"M_InOutLine_ID");
-            if (lineID != 0)
-            {
-               
-                if (VIS.context.getContext($self.windowNo, "MovementType").equals("C-"))
-                {
+            var lineID = VIS.context.getContextAsInt($self.windowNo, "M_InOutLine_ID");
+            if (lineID != 0) {
+
+                if (VIS.context.getContext($self.windowNo, "MovementType").equals("C-")) {
                     AD_Window_ID = 169;     //  Customer Shipment
                 }
-                else if (VIS.context.getContext($self.windowNo, "MovementType").equals("C+"))
-                {
+                else if (VIS.context.getContext($self.windowNo, "MovementType").equals("C+")) {
                     AD_Window_ID = 409;     //  Customer Return
                 }
-                else if (VIS.context.getContext($self.windowNo, "MovementType").equals("V+"))
-                {
+                else if (VIS.context.getContext($self.windowNo, "MovementType").equals("V+")) {
                     AD_Window_ID = 184;     //  Vendor Receipt
                 }
-                else if (VIS.context.getContext($self.windowNo, "MovementType").equals("V-"))
-                {
+                else if (VIS.context.getContext($self.windowNo, "MovementType").equals("V-")) {
                     AD_Window_ID = 411;     //  Vendor Return
                 }
 
                 ColumnName = "M_InOut_ID";
-                SQL = "SELECT M_InOut_ID FROM M_InOutLine WHERE M_InOutLine_ID=" + lineID;
+                SQL = "VIS_140";
+                params[0] = new VIS.DB.SqlParam("@lineID", lineID);
             }
-            else
-            {
+            else {
                 lineID = VIS.context.getContextAsInt($self.windowNo, "M_InventoryLine_ID");
-                if (lineID != 0)
-                {
-                  //  log.Fine("M_InventoryLine_ID=" + lineID);
+                if (lineID != 0) {
+                    //  log.Fine("M_InventoryLine_ID=" + lineID);
                     AD_Window_ID = 168;
                     ColumnName = "M_Inventory_ID";
-                    SQL = "SELECT M_Inventory_ID FROM M_InventoryLine WHERE M_InventoryLine_ID=" + lineID;
+                    SQL = "VIS_141";
+                    params[0] = new VIS.DB.SqlParam("@lineID", lineID);
+                    ///SQL = "SELECT M_Inventory_ID FROM M_InventoryLine WHERE M_InventoryLine_ID=" + lineID;
                 }
-                else
-                {
+                else {
                     lineID = VIS.context.getContextAsInt($self.windowNo, "M_MovementLine_ID");
-                    if (lineID != 0)
-                    {
-                       // log.Fine("M_MovementLine_ID=" + lineID);
+                    if (lineID != 0) {
+                        // log.Fine("M_MovementLine_ID=" + lineID);
                         AD_Window_ID = 170;
                         ColumnName = "M_Movement_ID";
-                        SQL = "SELECT M_Movement_ID FROM M_MovementLine WHERE M_MovementLine_ID=" + lineID;
+                        SQL = "VIS_142";
+                        params[0] = new VIS.DB.SqlParam("@lineID", lineID);
                     }
-                    else
-                    {
+                    else {
                         lineID = VIS.context.getContextAsInt($self.windowNo, "M_ProductionLine_ID");
-                        if (lineID != 0)
-                        {
-                           // log.Fine("M_ProductionLine_ID=" + lineID);
+                        if (lineID != 0) {
+                            // log.Fine("M_ProductionLine_ID=" + lineID);
                             AD_Window_ID = 191;
                             ColumnName = "M_Production_ID";
-                            SQL = "SELECT M_Production_ID FROM M_ProductionLine WHERE M_ProductionLine_ID=" + lineID;
+                            SQL = "VIS_143";
+                            params[0] = new VIS.DB.SqlParam("@lineID", lineID);
                         }
-                        else
-                        {
-                           // log.Fine("Not found WindowNo=" + $self.windowNo);
+                        else {
+                            // log.Fine("Not found WindowNo=" + $self.windowNo);
                         }
                     }
                 }
             }
-            if (AD_Window_ID == 0)
-            {
+            if (AD_Window_ID == 0) {
                 return;
             }
 
             //  Get Parent ID
             var parentID = 0;
-            
-           
+
+
             //*********************** When No Record Selected on Grid than display Msg  Done by Vikas And Assigned by Gurvinder***************
             var GridSelectedRowCount = 0;
             GridSelectedRowCount = gridController.getSelectedRows();
@@ -455,7 +440,7 @@
             /*   parentID = VIS.Utility.Util.getValueOfInt((VIS.DB.executeScalar(SQL, null, null)));
             // System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => ShowWindow(ColumnName, parentID, AD_Window_ID, SQL, lineID));
               showWindow(ColumnName, lineID, AD_Window_ID,parentID);*/
-       
+
 
         };
 
@@ -515,7 +500,7 @@
         //******************
         //Show window
         //******************
-        function showWindow(columnName, recordID, windowID, parentID) {          
+        function showWindow(columnName, recordID, windowID, parentID) {
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction(columnName, VIS.Query.prototype.EQUAL, parentID);
             VIS.viewManager.startWindow(windowID, zoomQuery);
@@ -529,7 +514,7 @@
         //*******************
         //dataStatusChanged
         //*******************
-        this.dataStatusChanged = function (e) {           
+        this.dataStatusChanged = function (e) {
         };
         //*******************
         //set Busy

@@ -31,5 +31,18 @@ namespace VIS.Controllers
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
 
+        //Added by Bharat on 13/May/2017
+        public JsonResult GetPriceListData(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MPriceListModel objPriceList = new MPriceListModel();
+                retJSON = JsonConvert.SerializeObject(objPriceList.GetPriceListData(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

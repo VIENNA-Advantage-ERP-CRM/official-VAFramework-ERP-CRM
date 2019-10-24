@@ -494,8 +494,7 @@
 
             // check if did not logged in as System Administrator Role, 
             // then hide download server log and Date section from user preference
-            // commented this line to hide button always, need to enable this in later versions
-            //if (VIS.context && !VIS.context.getAD_Role_ID() == 0)
+            if (VIS.context && !VIS.context.getAD_Role_ID() == 0)
                 root.find(".VIS_Pref_err_btnLeft").hide();
 
             $btnlogDate = root.find("#vbtnLogDate_" + windowNo);
