@@ -7,6 +7,7 @@
     font-display: block;
 }
 
+
 .vis {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'vis-fonts' !important;
@@ -19,6 +20,38 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.vis-chat:before {
+    content: "\e90f";
+}
+
+.vis-sms:before {
+    content: "\e936";
+}
+
+.vis-smsx:before {
+    content: "\e937";
+}
+
+.vis-subscribe:before {
+    content: "\e928";
+}
+
+.vis-tl-4:before {
+    content: "\e935";
+}
+
+.vis-tl-3:before {
+    content: "\e932";
+}
+
+.vis-tl-2:before {
+    content: "\e933";
+}
+
+.vis-tl-1:before {
+    content: "\e934";
 }
 
 .vis-attachdocumentfrom:before {
@@ -93,10 +126,6 @@
     content: "\e90e";
 }
 
-.vis-chat:before {
-    content: "\e90f";
-}
-
 .vis-chatx:before {
     content: "\e910";
 }
@@ -159,10 +188,6 @@
 
 .vis-delete:before {
     content: "\e927";
-}
-
-.vis-subscribe:before {
-    content: "\e928";
 }
 
 .vis-subscribex:before {

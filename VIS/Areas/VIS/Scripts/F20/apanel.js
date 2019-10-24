@@ -2063,7 +2063,16 @@ APanel.prototype.initPanel = function (jsonData, query, $parent, goSingleRow, se
     for (var i = 0; i < tabs.length; i++) {
 
         var id = curWindowNo + "_" + tabs[i].getAD_Tab_ID(); //uniqueID
-        tabActions[i] = new VIS.AppsAction({ action: id, text: tabs[i].getName(), toolTipText: tabs[i].getDescription, textOnly: true }); //Create Apps Action
+        var tObj = { action: id, text: tabs[i].getName(), toolTipText: tabs[i].getDescription(), textOnly: true, iconName: ''};
+        if (tabs[i].getTabLevel() > 0) {
+            tObj.textOnly = false;
+            if (tabs[i].getTabLevel() > 3)
+                tObj.iconName = 'tl-4';
+            else
+                tObj.iconName = 'tl-' + tabs[i].getTabLevel();
+        }
+
+        tabActions[i] = new VIS.AppsAction(tObj); //Create Apps Action
 
         gTab = tabs[i];
         if (i === 0) {

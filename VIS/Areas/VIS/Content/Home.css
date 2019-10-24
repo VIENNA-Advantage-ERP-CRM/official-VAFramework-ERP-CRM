@@ -443,7 +443,7 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
 }
 
 
-::-webkit-scrollbar {
+/*::-webkit-scrollbar {
     width: 4px;
     height: 4px;
 }
@@ -468,7 +468,7 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
 
     ::-webkit-scrollbar-thumb:window-inactive {
         background: #999999;
-    }
+    }*/
 /*end default Scroll design*/
 
 .vis-workflowActivityContainer {

@@ -139,7 +139,7 @@
         <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
             <div class="vis-menuTitle">
                 <p>@ViewBag.Menu.GetRootNode().Text</p>
-                <a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose" id="vis_closeMenu">close menu</a>
+                <a href="javascript:void(0)" id="vis_closeMenu"><i class="fa fa-times" aria-hidden="true"></i></a>
             </div>
             <!-- Menu Search  -->
             <div class="vis-menuSearch" dir="ltr">
@@ -152,8 +152,8 @@
                     }
                 </datalist>
 
-                <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="vis-mainMenuIcons vis-icon-searchfilter"></a>
-                <a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-search">search</a>
+                <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="fa fa-filter"></a>
+                <a href="javascript:void(0)" class="fa fa-search"></a>
             </div>
             <!-- App Tree  -->
             <div class="vis-sidebarMenuWrapper">

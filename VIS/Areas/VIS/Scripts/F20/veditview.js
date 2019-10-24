@@ -344,8 +344,35 @@ VIS.VGridPanel = function () {
         addRow = null;
         addToCompList = null;
     };
-    
-};
+
+
+
+
+
+
+
+    };
+
+    VIS.CWrapper = function () {
+
+        //<div class="input-group vis-input-wrap">
+        //    <div class="vis-inner-wrap">
+        //        <input class="form-control" type="text" placeholder="Enter your text here">
+        //            <label class="vis-input-label">--</label>
+        //        </div>
+        //        <div class="input-group-append">
+        //            <span class="input-group-text">
+        //                <i class="fal fa-handshake"></i>
+        //            </span>
+        //        </div>
+        //        <div class="input-group-append">
+        //            <span class="input-group-text">
+        //                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+        //            </span>
+        //        </div>
+
+    }
+
 }(VIS, jQuery));
 
 

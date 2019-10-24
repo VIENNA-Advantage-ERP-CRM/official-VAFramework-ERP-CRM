@@ -54,10 +54,6 @@
         </div>
 
         <div class="vis-ad-w-p-tabs-t">
-            <div class="vis-ad-w-p-t-c">
-                <ul class="vis-ad-w-p-t-c-tc">
-                </ul>
-            </div>
             <div class="vis-ad-w-p-tabs-oflow">
                 <a href="javascript:void(0)">
                     <i data-dir="bf" class="fa fa-angle-double-left"> </i>
@@ -66,63 +62,70 @@
                     <i data-dir="b" class="fa fa-angle-left"></i>
 
                 </a>
-                <a href="javascript:void(0)">
-                    <i data-dir="r" class="fa fa-angle-right"></i>
-                </a>
-                <a href="javascript:void(0)">
-                    <i data-dir="rl" class="fa fa-angle-double-right"></i>
-                </a>
+                </div>
+                <div class="vis-ad-w-p-t-c">
+                    <ul class="vis-ad-w-p-t-c-tc">
+                    </ul>
+                </div>
+                <div class="vis-ad-w-p-tabs-oflow">
+                    
+                    <a href="javascript:void(0)">
+                        <i data-dir="r" class="fa fa-angle-right"></i>
+                    </a>
+                    <a href="javascript:void(0)">
+                        <i data-dir="rl" class="fa fa-angle-double-right"></i>
+                    </a>
+                </div>
+
+
+
             </div>
 
-            
+            <div class="vis-ad-w-p-nav">
+                <ul class="vis-ad-w-p-nav-btns">
+                </ul>
+            </div>
 
+
+            <div class="vis-ad-w-p-center">
+
+                <div class="vis-ad-w-p-center-view">
+                    @*main View*@
+                </div>
+                <div class="vis-ad-w-p-center-tc">
+                    @*tab control*@
+                </div>
+                <div class="vis-ad-w-p-center-inctab">
+                    @*Incluxde Tab*@
+                </div>
+                <div class="vis-ad-w-p-center-footer">
+                    @*Footer *@
+                </div>
+                <div class="vis-ad-w-p-actionpanel-r">
+                    @* Tab Panel*@
+                </div>
+            </div>
+            <div class="vis-ad-w-p-action">
+                <div class="vis-ad-w-a-arrow">
+                    <i class="fa fa-sort-down"></i>
+                </div>
+                <div class="vis-ad-w-p-a-main">
+                    <ul class="vis-ad-w-p-a-m-lst"></ul>
+                </div>
+                <div class="vis-ad-w-p-a-oflow">
+                    <span data-dir="u">
+                        <i data-dir="u" class="fa fa-angle-up"> </i>
+                    </span>
+                    <span data-dir="d">
+                        <i data-dir="d" class="fa fa-angle-down"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="vis-ad-w-p-status">
+
+
+            </div>
         </div>
-
-        <div class="vis-ad-w-p-nav">
-             <ul class="vis-ad-w-p-nav-btns">
-            </ul>
-        </div>
-
-
-        <div class="vis-ad-w-p-center">
-
-            <div class="vis-ad-w-p-center-view">
-                @*main View*@
-            </div>
-            <div class="vis-ad-w-p-center-tc">
-                @*tab control*@
-            </div>
-            <div class="vis-ad-w-p-center-inctab">
-                @*Incluxde Tab*@
-            </div>
-            <div class="vis-ad-w-p-center-footer">
-                @*Footer *@
-            </div>
-            <div class="vis-ad-w-p-actionpanel-r">
-                @* Tab Panel*@
-            </div>
-        </div>
-        <div class="vis-ad-w-p-action">
-            <div class="vis-ad-w-a-arrow">
-                <i class="fa fa-sort-down"></i>
-            </div>
-            <div class="vis-ad-w-p-a-main">
-                <ul class="vis-ad-w-p-a-m-lst"></ul>
-            </div>
-            <div class="vis-ad-w-p-a-oflow">
-                <span data-dir="u" >
-                    <i data-dir="u" class="fa fa-angle-up"> </i>
-                </span>
-                <span data-dir="d" >
-                    <i data-dir="d" class="fa fa-angle-down"></i>
-                </span>
-            </div>
-        </div>
-        <div class="vis-ad-w-p-status">
-
-
-        </div>
-    </div>
 </template>
 
 <template id="vis-ad-statusbartmp">
@@ -163,6 +166,29 @@
 
         <div class="vis-ad-w-p-vc-v2">
             @*Mutirecord  view level 1*@
+        </div>
+    </div>
+</template>
+
+
+@*Controls*@
+<template id="vis-ad-ctrlstmp">
+    <div id="vis-ctrl-vtextbox">
+        <div class="input-group vis-input-wrap">
+            <div class="vis-inner-wrap">
+                <input class="form-control" type="text" placeholder="Enter your text here">
+                <label class="vis-input-label">--</label>
+            </div>
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="fal fa-handshake"></i>
+                </span>
+            </div>
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                </span>
+            </div>
         </div>
     </div>
 </template>

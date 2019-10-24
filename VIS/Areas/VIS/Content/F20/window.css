@@ -140,7 +140,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-on-secondary), 0.05);
+    background: rgba(var(--v-c-secondary),1);
     color: rgba(var(--v-c-on-secondary), 0.45);
     border-radius: 50px;
     padding-right: 10px;
@@ -212,7 +212,7 @@
     grid-row: 3 / 3;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-on-secondary), 0.03);
+    background: rgba(var(--v-c-secondary), 0.5);
     padding-top: 10px;
 }
 
@@ -221,6 +221,7 @@
         display: flex;
         overflow-x: auto;
         width: 1px;
+        overflow:hidden;
     }
 
     .vis-ad-w-p-tabs-t ul {
@@ -266,6 +267,17 @@
     color: rgba(var(--v-c-on-secondary),0.60);
     padding: 0 10px 3px;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+.vis-ad-w-p-t-c-tc i {
+    font-size: 1.4rem;
+    display: inline-flex;
+    padding-top: 5px;
+}
+
+.vis-ad-w-p-t-c-tc span {
+    font-size: 0.9rem;
 }
 
     .vis-ad-w-p-t-c li.vis-apanel-tab-selected {
@@ -299,7 +311,7 @@
     grid-row: 3;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-on-secondary), 0.03);
+    background: rgba(var(--v-c-secondary), 0.5);
     padding-right: 5px;
 }
 
@@ -509,7 +521,7 @@
 }
 /* action end */
 .vis-ad-w-p-status {
-    background-color: rgba(var(--v-c-on-secondary), 0.03);
+    background-color: rgba(var(--v-c-secondary), 0.5);
     grid-column: 4/6;
     grid-row: 6/7;
     display: flex;
@@ -597,6 +609,7 @@
     padding: 0 10px;
     position: relative;
     margin-right: 10px;
+    color: rgba(var(--v-c-primary),1);
 }
 
     .vis-ad-w-p-s-statusdb:after {
@@ -621,8 +634,6 @@
     list-style: none;
 }
 
-.vis-ad-w-p-s-statusdb {
-}
 
 
 /* views */
@@ -699,7 +710,7 @@
         grid-column: 3 /6;
         grid-row: 2 /2;
         background-color: red;
-        height: 20px;
+        height: 0px;
         width: auto;
     }
 
@@ -707,7 +718,7 @@
         grid-column: 1/1;
         grid-row: 4/4;
         background-color: lightpink;
-        height: 40px;
+        height: 0px;
         width: auto;
     }
 
@@ -735,6 +746,10 @@
 
     .vis-ad-w-p-tabs-l ul {
         flex-flow: row;
+    }
+
+    #vis_userDate {
+        display: none;
     }
 }
 

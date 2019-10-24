@@ -194,6 +194,7 @@
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
     <Content Include="Areas\VIS\Content\F20\Color.css" />
+    <Content Include="Areas\VIS\Content\F20\Controls.css" />
     <Content Include="Areas\VIS\Content\F20\Site.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />

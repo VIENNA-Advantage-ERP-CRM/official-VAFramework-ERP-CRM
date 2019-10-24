@@ -896,7 +896,7 @@
             this.textOnly;
             this.onAction = null;
             this.isSmall;
-            
+            this.iconName = '';
             this.direction = "right";
             $.extend(true, this, options);
             this.items = {};
@@ -927,7 +927,7 @@
 
             if (this.isSmall) {
                 //imgUrl += this.action + "16.png";
-                imgUrl = this.action.toLowerCase();
+                imgUrl = this.iconName != '' ? this.iconName.toLowerCase() : this.action.toLowerCase();
                 if (this.toggle || this.enableDisable) {
                    // imgUrlX += this.action + "X16.png";
                     imgUrlX = imgUrl + 'x';
@@ -938,7 +938,7 @@
                 //if (this.toggle || this.enableDisable) {
                 //    imgUrlX += this.action + "X24.png";
                 //}
-                imgUrl = this.action.toLowerCase();
+                imgUrl = this.iconName != '' ? this.iconName.toLowerCase() : this.action.toLowerCase();
                 if (this.toggle || this.enableDisable) {
                     // imgUrlX += this.action + "X16.png";
                     imgUrlX = imgUrl + 'x';

@@ -499,6 +499,18 @@
      * 	@return control
      */
     IControl.prototype.getControl = function () { return this.ctrl };
+
+    /**
+    *	Get root
+    * 	@return control
+    */
+    IControl.prototype.getRoot = function () {
+        if (!this.root) {
+            return this.ctrl;
+        }
+        return this.root;
+    };
+
     /**
      *	Get model field
      * 	@return field
@@ -787,6 +799,9 @@
 
         //Init Control
         var $ctrl = $('<input>', { type: (isPwdField) ? 'password' : 'text', name: columnName, maxlength: fieldLength });
+
+
+
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
