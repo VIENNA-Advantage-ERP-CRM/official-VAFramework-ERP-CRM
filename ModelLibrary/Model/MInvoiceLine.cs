@@ -1094,12 +1094,30 @@ namespace VAdvantage.Model
                 if (tax.IsDocumentLevel() && _IsSOTrx)		//	AR Inv Tax
                     return;
                 //
-                TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
-                if (IsTaxIncluded())
-                    SetLineTotalAmt(GetLineNetAmt());
+                // if Surcharge Tax is selected on Tax, then calculate Tax accordingly
+                if (Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    Decimal surchargeAmt = Env.ZERO;
+
+                    // Calculate Surcharge Amount
+                    TaxAmt = tax.CalculateSurcharge(GetLineNetAmt(), IsTaxIncluded(), GetPrecision(), out surchargeAmt);
+
+                    if (IsTaxIncluded())
+                        SetLineTotalAmt(GetLineNetAmt());
+                    else
+                        SetLineTotalAmt(Decimal.Add(Decimal.Add(GetLineNetAmt(), TaxAmt), surchargeAmt));
+                    base.SetTaxAmt(TaxAmt);
+                    SetSurchargeAmt(surchargeAmt);
+                }
                 else
-                    SetLineTotalAmt(Decimal.Add(GetLineNetAmt(), TaxAmt));
-                base.SetTaxAmt(TaxAmt);
+                {
+                    TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
+                    if (IsTaxIncluded())
+                        SetLineTotalAmt(GetLineNetAmt());
+                    else
+                        SetLineTotalAmt(Decimal.Add(GetLineNetAmt(), TaxAmt));
+                    base.SetTaxAmt(TaxAmt);
+                }
             }
             catch (Exception ex)
             {
@@ -3641,7 +3659,7 @@ namespace VAdvantage.Model
 
                 //	Calculations & Rounding
                 SetLineNetAmt();
-                if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0)
+                if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
                     SetTaxAmt();
 
                 // set Tax Amount in base currency
@@ -3665,9 +3683,17 @@ namespace VAdvantage.Model
                 // set Taxable Amount -- (Line Total-Tax Amount)
                 if (Get_ColumnIndex("TaxBaseAmt") >= 0)
                 {
-                    SetTaxBaseAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                    if (Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        SetTaxBaseAmt(Decimal.Subtract(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()), GetSurchargeAmt()));
+                    }
+                    else
+                    {
+                        SetTaxBaseAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                    }
                 }
 
+                
                 // Change by mohit Asked by ravikant 21/03/2016
                 //if (!_IsSOTrx)
                 //{
@@ -3724,6 +3750,19 @@ namespace VAdvantage.Model
                             return false;
                         if (!tax.Save(Get_TrxName()))
                             return true;
+                    }
+
+                    // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                    if (Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        tax = MInvoiceTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
+                        if (tax != null)
+                        {                           
+                            if (!tax.CalculateSurchargeFromLines())
+                                return false;
+                            if (!tax.Save(Get_TrxName()))
+                                return false;
+                        }
                     }
                 }
 
@@ -3839,6 +3878,16 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
+
+                // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                else if (Get_ColumnIndex("SurchargeAmt") > 0 && taxRate.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && taxRate.GetSurcharge_Tax_ID() > 0)
+                {
+                    tax = MInvoiceTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
+                    if (!tax.CalculateSurchargeFromLines())
+                        return false;
+                    if (!tax.Save(Get_TrxName()))
+                        return false;
+                }
             }
             catch (Exception ex)
             {
@@ -3858,7 +3907,7 @@ namespace VAdvantage.Model
 
             if (IsTaxIncluded())
                 sql = "UPDATE C_Invoice i "
-                    + "SET GrandTotal=TotalLines "
+                    + "SET GrandTotal=TotalLines "                    
                     + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             else
                 sql = "UPDATE C_Invoice i "

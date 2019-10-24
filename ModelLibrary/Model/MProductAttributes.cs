@@ -92,12 +92,13 @@ namespace VAdvantage.Model
             if (!String.IsNullOrEmpty(GetUPC()) &&
                        Util.GetValueOfString(Get_ValueOld("UPC")) != GetUPC())
             {
-                sql.Append(@"SELECT UPCUNIQUE('a','" + GetUPC() + "') as productID FROM Dual");
+                // Added new Parameter "Client ID" to check UPC unique
+                sql.Append(@"SELECT UPCUNIQUE('a','" + GetUPC() + "', " + GetAD_Client_ID() + ") as productID FROM Dual");
                 manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                 //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
                 if (manu_ID > 0)
                 {
-                    _log.SaveError(Msg.GetMsg(GetCtx(), "UPCUnique"), "");
+                    _log.SaveError("UPCUnique", "");
                     return false;
                 }
             }

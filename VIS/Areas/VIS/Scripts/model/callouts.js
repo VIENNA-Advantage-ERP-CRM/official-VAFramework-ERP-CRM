@@ -352,7 +352,7 @@
 
             var param = C_BlanketOrderLine.toString();
             dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", param);
-            if (dr != null) {                
+            if (dr != null) {
                 var M_Product_ID = Util.getValueOfInt(dr["M_Product_ID"]);
                 var C_Charge_ID = Util.getValueOfInt(dr["C_Charge_ID"]);
                 var Qty = Util.getValueOfInt(dr["Qty"]);
@@ -438,8 +438,8 @@
                     mTab.setValue("C_UOM_ID", C_UOM_ID);
                 }
 
-                if (Qty != 0 && Qty != null && QtyReleased != null) {
-                    mTab.setValue("QtyBlanket", ((Qty + QtyReleased) - QtyReleased));
+                if (QtyOrdered != 0 && QtyOrdered != null && QtyReleased != null) {
+                    mTab.setValue("QtyBlanket", ((QtyOrdered + QtyReleased) - QtyReleased));
                 }
 
                 if (M_AttributeSetInstance_ID != 0 && M_AttributeSetInstance_ID != null) {
@@ -2631,6 +2631,11 @@
                     var dr = null;
                     taxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
                     mTab.setValue("TaxAmt", taxAmt);
+
+                    // Set Surcharge Amount to zero
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        mTab.setValue("SurchargeAmt", 0);
+                    }
                 }
             }
 
@@ -4695,7 +4700,7 @@
         //  
         if ((value == null || value.toString() == "") && mField.getColumnName() != "C_ConversionType_ID") {
             //if (value == null || value.toString() == "") {
-            mTab.setValue("C_Currency_ID", 0);
+            //mTab.setValue("C_Currency_ID", 0);
             return "";
         }
         if (this.isCalloutActive())		// assuming it is resetting value
@@ -5476,6 +5481,12 @@
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
         var statementDate = mTab.getValue("ValutaDate");
+
+        // JID_1418: When select payment on Bank statement line, system gives an error meassage
+        if (statementDate == null) {
+            statementDate = new Date();
+        }
+
         //var sql = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";		//	1
         //var dr = null;
         //var param = [];
@@ -5501,12 +5512,7 @@
         }
         catch (err) {
             this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
             this.log.log(Level.SEVERE, "BankStmt_Payment", err);
-            //ErrorLog.FillErrorLog("BankStmt_Payment", sql, e.Message.toString(), VAdvantage.Framework.Message.MessageType.ERROR);
-            //return e.getLocalizedMessage();
             return err.toString();
         }
         //  Recalculate Amounts
@@ -5548,10 +5554,7 @@
             //}
         }
         catch (err) {
-            this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
+            this.setCalloutActive(false);            
             this.log.log(Level.SEVERE, "BankStmt_DateAcct", err);
             return err.toString();
         }
@@ -12839,21 +12842,17 @@
             /**** Start Amit For Tax Type Module ****/
             var taxRule = "";
             var sql = "";
-            //var paramString = "";
-            var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", (mTab.getValue("M_Product_ID")).toString() +
+            //Removed tostring() from M_Product_ID because when someone select only charge than M_Product_ID becomes null and exception occur Can not convert Null into String.
+            var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", (mTab.getValue("M_Product_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")));
+
             var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
 
-            //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
             var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
-            //paramString = mTab.getValue("C_Invoice_ID").toString();
-            //var invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
-
-            //sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + Util.getValueOfInt(invoice["AD_Org_ID"]) + " AND IsActive ='Y' AND AD_Client_ID =" + ctx.getAD_Client_ID();
-
+            
             if (_CountVATAX > 0) {
                 //taxRule = Util.getValueOfString(VIS.DB.executeScalar(sql));
                 taxRule = Util.getValueOfString(recDic["taxRule"]);
@@ -12861,25 +12860,6 @@
             if (taxRule == "T") {
                 var taxid = Util.getValueOfInt(recDic["taxId"]);
 
-                //var taxid = 0;
-                //sql = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'C_Tax_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_TaxCategory')";
-                //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
-                //    paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("M_Product_ID")).toString() +
-                //        "," + Util.getValueOfInt(mTab.getValue("C_Charge_ID")).toString();
-                //    taxid = VIS.dataContext.getJSONRecord("MInvoice/GetTax", paramString);
-                //}
-                //else {
-                //    sql = "select vatax_taxtype_id from c_bpartner_location where c_bpartner_id =" + util.getvalueofint(invoice["c_bpartner_id"]) +
-                //                      " and isactive = 'Y'  and c_bpartner_location_id = " + util.getvalueofint(invoice["c_bpartner_location_id"]);
-                //    var taxtype = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //    if (taxtype == 0) {
-                //        sql = "select vatax_taxtype_id from c_bpartner where c_bpartner_id =" + util.getvalueofint(invoice["c_bpartner_id"]) + " and isactive = 'Y'";
-                //        taxtype = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //    }
-                //    var prodtaxcategory = vis.datacontext.getjsonrecord("MProduct/GetTaxCategory", value.tostring());
-                //    sql = "select c_tax_id from vatax_taxcatrate where c_taxcategory_id = " + prodtaxcategory + " and isactive ='Y' and vatax_taxtype_id =" + taxtype;
-                //    taxid = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //}
                 if (taxid > 0) {
                     mTab.setValue("C_Tax_ID", taxid);
                 }
@@ -13565,17 +13545,12 @@
                     ); //7          
                     var dr = null;
                     taxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
-                    //
-
-
-                    //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                    // taxAmt = dr[0];
-
-
-
-                    //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                    //taxAmt = tax.CalculateTax(lineNetAmt, IsTaxIncluded(windowNo), StdPrecision);
                     mTab.setValue("TaxAmt", taxAmt);
+
+                    // Set Surcharge Amount to zero
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        mTab.setValue("SurchargeAmt", 0);
+                    }
                 }
             }
             //	Added by Vivek Kumar 14/12/2015
@@ -14534,12 +14509,12 @@
                 ); //7          
                 var dr = null;
                 TaxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
-                //
-
-
-                //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                //TaxAmt = dr[0];
                 mTab.setValue("TaxAmt", TaxAmt);
+
+                // Set Surcharge Amount to zero
+                if (mTab.getField("SurchargeAmt") != null) {
+                    mTab.setValue("SurchargeAmt", 0);
+                }
             }
         }
 
@@ -16071,7 +16046,7 @@
         }
 
         var price = Util.getValueOfDecimal(mTab.getValue("PriceActual"));
-        var val = Util.getValueOfDecimal(value);
+        var val = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
         //
         var C_Tax_ID = 0;
         var Rate = VIS.Env.ZERO;
@@ -16080,13 +16055,45 @@
         mTab.setValue("LineNetAmt", price * val);
 
         C_Tax_ID = Util.getValueOfInt(mTab.getValue("C_Tax_ID"));
-        var sqltax = "select rate from c_tax WHERE c_tax_id=" + C_Tax_ID + "";
-        Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));
-        var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
-        TotalRate = Util.getValueOfDecimal((Util.getValueOfDecimal(LineNetAmt) * Util.getValueOfDecimal(Rate)) / 100);
-        TotalRate = TotalRate.toFixed(2);
-        mTab.setValue("taxamt", TotalRate);
-        mTab.setValue("GrandTotal", ((price * val) + Util.getValueOfDecimal(mTab.getValue("TaxAmt"))));
+
+        // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+        if (mTab.getField("SurchargeAmt") != null) {
+            var StdPrecision = 0;
+            var IsTaxIncluded = false;
+
+            var currency = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", mTab.getValue("M_PriceList_ID").toString());
+            if (currency != null) {
+                StdPrecision = currency["StdPrecision"];
+                IsTaxIncluded = "Y" == currency["IsTaxIncluded"];
+            }
+
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+
+            var dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", C_Tax_ID.toString() + "," + LineNetAmt.toString() + "," + StdPrecision.toString()
+                + "," + IsTaxIncluded.toString());
+
+            TotalRate = dr["TaxAmt"];
+            mTab.setValue("TaxAmt", TotalRate);
+            mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
+
+            if (!IsTaxIncluded) {
+                mTab.setValue("GrandTotal", (LineNetAmt + TotalRate + dr["SurchargeAmt"]));
+            }
+            else {
+                mTab.setValue("GrandTotal", LineNetAmt);
+            }
+        }
+        else {
+            //var sqltax = "select rate from c_tax WHERE c_tax_id=" + C_Tax_ID + "";
+            //Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));
+
+            Rate = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", C_Tax_ID.toString());
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+            TotalRate = Util.getValueOfDecimal((Util.getValueOfDecimal(LineNetAmt) * Util.getValueOfDecimal(Rate)) / 100);
+            TotalRate = TotalRate.toFixed(2);
+            mTab.setValue("taxamt", TotalRate);
+            mTab.setValue("GrandTotal", ((price * val) + Util.getValueOfDecimal(mTab.getValue("TaxAmt"))));
+        }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
@@ -16625,7 +16632,7 @@
     VIS.Utility.inheritPrototype(CalloutTax, VIS.CalloutEngine); //inherit prototype
     CalloutTax.prototype.Tax = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
-        if (value == null || value.toString() == "") {
+        if (value == null || value == 0 ||value.toString() == "") {
             return "";
         }
         var C_Tax_ID = 0;
@@ -16634,17 +16641,46 @@
         var TotalRate = VIS.Env.ZERO;
         C_Tax_ID = Util.getValueOfInt(mTab.getValue("C_Tax_ID"));
         //var sqltax = "select rate from c_tax WHERE c_tax_id=" + C_Tax_ID + "";
-        //Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));
+        //Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));        
 
-        // JID_0872: Grand Total is not calculating right
-        Rate = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", C_Tax_ID.toString());
-        var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
-        TotalRate = Util.getValueOfDecimal((LineNetAmt * Rate) / 100);
+        // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+        if (mTab.getField("SurchargeAmt") != null) {
+            var StdPrecision = 0;
+            var IsTaxIncluded = false;
 
-        TotalRate = Util.getValueOfDecimal(TotalRate.toFixed(2));
+            var currency = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", mTab.getValue("M_PriceList_ID").toString());
+            if (currency != null) {
+                StdPrecision = currency["StdPrecision"];
+                IsTaxIncluded = "Y" == currency["IsTaxIncluded"];
+            }
 
-        mTab.setValue("GrandTotal", (TotalRate + LineNetAmt));
-        mTab.setValue("taxamt", TotalRate);
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+
+            var dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", C_Tax_ID.toString() + "," + LineNetAmt.toString() + "," + StdPrecision.toString()
+                + "," + IsTaxIncluded.toString());
+
+            TotalRate = dr["TaxAmt"];
+            mTab.setValue("TaxAmt", TotalRate);
+            mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
+
+            if (!IsTaxIncluded) {
+                mTab.setValue("GrandTotal", (LineNetAmt + TotalRate + dr["SurchargeAmt"]));
+            }
+            else {
+                mTab.setValue("GrandTotal", LineNetAmt);
+            }           
+        }
+        else {
+            // JID_0872: Grand Total is not calculating right
+            Rate = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", C_Tax_ID.toString());
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+            TotalRate = Util.getValueOfDecimal((LineNetAmt * Rate) / 100);
+
+            TotalRate = Util.getValueOfDecimal(TotalRate.toFixed(2));
+
+            mTab.setValue("GrandTotal", (TotalRate + LineNetAmt));
+            mTab.setValue("taxamt", TotalRate);
+        }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
@@ -17228,7 +17264,7 @@
             //	Get Details
             if (Util.getValueOfInt(dr["GetID"]) != 0) {
 
-                 // when order line contains charge, it will be selected on Shipment Line on selection of Order Line
+                // when order line contains charge, it will be selected on Shipment Line on selection of Order Line
                 if (Util.getValueOfInt(dr["M_Product_ID"]) > 0) {
                     mTab.setValue("M_Product_ID", Util.getValueOfInt(dr["M_Product_ID"]));
                 }
@@ -19333,7 +19369,7 @@
 
         var sql = "";
         try {
-            if (value == null || value.toString() == "") {
+            if (value == null || value == 0 || value.toString() == "") {
                 return "";
             }
             var C_BPartner_ID = 0;
@@ -19527,7 +19563,7 @@
     CalloutOrderContract.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
 
-        if (value == null || value.toString() == "") {
+        if (value == null || value == 0 ||value.toString() == "") {
             return "";
         }
         try {  ///
@@ -21103,23 +21139,38 @@
         }
         this.setCalloutActive(true);
         try {
+            // get precision from currency
+            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", mTab.getValue("C_Currency_ID").toString());
+            var StdPrecision = currency["StdPrecision"];
+
             if (mField.getColumnName() == "C_Tax_ID") {
                 if (Util.getValueOfDecimal(mTab.getValue("PayAmt")) > 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(value) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        // var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("PayAmt"))) / 100);
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
-                        var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("PayAmt")) - (Util.getValueOfDecimal(mTab.getValue("PayAmt")) / ((Rate / 100) + 1)));
-                        //
-                        mTab.setValue("TaxAmount", TaxAmt);
-                    }
-                    else {
-                        mTab.setValue("TaxAmount", 0);
+                    var dr = null;
+                    // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", value.toString() + "," + mTab.getValue("PayAmt").toString() + "," + StdPrecision.toString());
+                        mTab.setValue("TaxAmount", dr["TaxAmt"]);
+                        mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
                         this.setCalloutActive(false);
                         return "";
                     }
+                    else {
+                        dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", value.toString());
+                        var Rate = Util.getValueOfDecimal(dr);
+                        if (Rate > 0) {
+                            //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
+                            var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("PayAmt")) - (Util.getValueOfDecimal(mTab.getValue("PayAmt")) / ((Rate / 100) + 1)));
 
+                            // Round the amount according to currency precision
+                            TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+                            mTab.setValue("TaxAmount", TaxAmt);
+                        }
+                        else {
+                            mTab.setValue("TaxAmount", 0);
+                            this.setCalloutActive(false);
+                            return "";
+                        }
+                    }
                 }
                 else {
                     this.setCalloutActive(false);
@@ -21128,19 +21179,31 @@
             }
             else {
                 if (Util.getValueOfInt(mTab.getValue("C_Tax_ID")) > 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(mTab.getValue("C_Tax_ID")) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        //var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("PayAmt"))) / 100);
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
-                        var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("PayAmt")) - (Util.getValueOfDecimal(mTab.getValue("PayAmt")) / ((Rate / 100) + 1)));
-                        //
-                        mTab.setValue("TaxAmount", TaxAmt);
-                    }
-                    else {
-                        mTab.setValue("TaxAmount", 0);
+                    var dr = null;
+                    // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", mTab.getValue("C_Tax_ID").toString() + "," + mTab.getValue("PayAmt").toString() + "," + StdPrecision.toString());
+                        mTab.setValue("TaxAmount", dr["TaxAmt"]);
+                        mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
                         this.setCalloutActive(false);
                         return "";
+                    }
+                    else {
+                        dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", mTab.getValue("C_Tax_ID").toString());
+                        var Rate = Util.getValueOfDecimal(dr);
+                        if (Rate > 0) {
+                            //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
+                            var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("PayAmt")) - (Util.getValueOfDecimal(mTab.getValue("PayAmt")) / ((Rate / 100) + 1)));
+
+                            // Round the amount according to currency precision                        
+                            TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+                            mTab.setValue("TaxAmount", TaxAmt);
+                        }
+                        else {
+                            mTab.setValue("TaxAmount", 0);
+                            this.setCalloutActive(false);
+                            return "";
+                        }
                     }
                 }
                 else {
@@ -21167,23 +21230,38 @@
         }
         this.setCalloutActive(true);
         try {
+            // get precision from currency
+            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", ctx.getContext(windowNo, "C_Currency_ID").toString());
+            var StdPrecision = currency["StdPrecision"];
+
             if (mField.getColumnName() == "C_Tax_ID") {
                 if (Util.getValueOfDecimal(mTab.getValue("Amount")) != 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(value) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
-                        //var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("Amount"))) / 100);
-                        var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("Amount")) - (Util.getValueOfDecimal(mTab.getValue("Amount")) / ((Rate / 100) + 1)));
-                        //
-                        mTab.setValue("TaxAmt", TaxAmt);
-                    }
-                    else {
-                        mTab.setValue("TaxAmt", 0);
+                    var dr = null;
+                    // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", value.toString() + "," + mTab.getValue("Amount").toString() + "," + StdPrecision.toString());
+                        mTab.setValue("TaxAmt", dr["TaxAmt"]);
+                        mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
                         this.setCalloutActive(false);
                         return "";
                     }
+                    else {
+                        dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", value.toString());
+                        var Rate = Util.getValueOfDecimal(dr);
+                        if (Rate > 0) {
+                            //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
+                            var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("Amount")) - (Util.getValueOfDecimal(mTab.getValue("Amount")) / ((Rate / 100) + 1)));
 
+                            // JID_1037: On cash line tax amount field was not working accordingling to currency precision                            
+                            TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+                            mTab.setValue("TaxAmt", TaxAmt);
+                        }
+                        else {
+                            mTab.setValue("TaxAmt", 0);
+                            this.setCalloutActive(false);
+                            return "";
+                        }
+                    }
                 }
                 else {
                     this.setCalloutActive(false);
@@ -21192,19 +21270,32 @@
             }
             else {
                 if (Util.getValueOfInt(mTab.getValue("C_Tax_ID")) > 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(mTab.getValue("C_Tax_ID")) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        // var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("Amount"))) / 100);
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
-                        var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("Amount")) - (Util.getValueOfDecimal(mTab.getValue("Amount")) / ((Rate / 100) + 1)));
-                        //
-                        mTab.setValue("TaxAmt", TaxAmt);
-                    }
-                    else {
-                        mTab.setValue("TaxAmt", 0);
+                    var dr = null;
+                    // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", mTab.getValue("C_Tax_ID").toString() + "," + mTab.getValue("Amount").toString() + "," + StdPrecision.toString());
+                        mTab.setValue("TaxAmt", dr["TaxAmt"]);
+                        mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
                         this.setCalloutActive(false);
                         return "";
+                    }
+                    else {
+                        dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", mTab.getValue("C_Tax_ID").toString());
+                        var Rate = Util.getValueOfDecimal(dr);
+
+                        if (Rate > 0) {
+                            //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
+                            var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("Amount")) - (Util.getValueOfDecimal(mTab.getValue("Amount")) / ((Rate / 100) + 1)));
+
+                            // JID_1037: On cash line tax amount field was not working accordingling to currency precision
+                            TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+                            mTab.setValue("TaxAmt", TaxAmt);
+                        }
+                        else {
+                            mTab.setValue("TaxAmt", 0);
+                            this.setCalloutActive(false);
+                            return "";
+                        }
                     }
                 }
                 else {
@@ -21232,30 +21323,40 @@
         this.setCalloutActive(true);
         var paramString = "";
         try {
+            // Need to round Tax Amount according to Currency Precision  
+            paramString = mTab.getValue("C_Currency_ID").toString();
+            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", paramString);
+            var StdPrecision = currency["StdPrecision"];
+
             if (mField.getColumnName() == "C_Tax_ID") {
                 if (Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) != 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(value) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        //var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("ChargeAmt"))) / 100);
-
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
-                        var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) - (Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) / ((Rate / 100) + 1)));
-
-                        // JID_0333: Need to round Tax Amount according to Currency Precision
-                        paramString = mTab.getValue("C_Currency_ID").toString();
-                        var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", paramString);
-                        var StdPrecision = currency["StdPrecision"];
-                        TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
-                        mTab.setValue("TaxAmt", TaxAmt);
-                    }
-                    else {
-                        mTab.setValue("TaxAmt", 0);
+                    var dr = null;
+                    // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", value.toString() + "," + mTab.getValue("ChargeAmt").toString() + "," + StdPrecision.toString());
+                        mTab.setValue("TaxAmt", dr["TaxAmt"]);
+                        mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
                         this.setCalloutActive(false);
-                        ctx = windowNo = mTab = mField = value = oldValue = null;
                         return "";
                     }
+                    else {
+                        dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", value.toString());
+                        var Rate = Util.getValueOfDecimal(dr);
+                        if (Rate > 0) {
+                            //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
+                            var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) - (Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) / ((Rate / 100) + 1)));
 
+                            // JID_0333: Need to round Tax Amount according to Currency Precision                            
+                            TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+                            mTab.setValue("TaxAmt", TaxAmt);
+                        }
+                        else {
+                            mTab.setValue("TaxAmt", 0);
+                            this.setCalloutActive(false);
+                            ctx = windowNo = mTab = mField = value = oldValue = null;
+                            return "";
+                        }
+                    }
                 }
                 else {
                     this.setCalloutActive(false);
@@ -21265,26 +21366,32 @@
             }
             else {
                 if (Util.getValueOfInt(mTab.getValue("C_Tax_ID")) > 0) {
-                    var Rate = Util.getValueOfDecimal(VIS.DB.executeScalar("Select Rate From C_Tax Where C_Tax_ID=" + Util.getValueOfInt(mTab.getValue("C_Tax_ID")) + " AND IsActive='Y'"));
-                    if (Rate > 0) {
-                        //var TaxAmt = Util.getValueOfDecimal((Rate * Util.getValueOfDecimal(mTab.getValue("ChargeAmt"))) / 100);
-
-                        // Change by amit 6-11-2015
-                        //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
-                        var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) - (Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) / ((Rate / 100) + 1)));
-
-                        // JID_0333: Need to round Tax Amount according to Currency Precision
-                        paramString = mTab.getValue("C_Currency_ID").toString();
-                        var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", paramString);
-                        var StdPrecision = currency["StdPrecision"];
-                        TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
-                        mTab.setValue("TaxAmt", TaxAmt);
+                    var dr = null;
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+                        dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", mTab.getValue("C_Tax_ID").toString() + "," + mTab.getValue("ChargeAmt").toString() + "," + StdPrecision.toString());
+                        mTab.setValue("TaxAmt", dr["TaxAmt"]);
+                        mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
+                        this.setCalloutActive(false);
+                        return "";
                     }
                     else {
-                        mTab.setValue("TaxAmt", 0);
-                        this.setCalloutActive(false);
-                        ctx = windowNo = mTab = mField = value = oldValue = null;
-                        return "";
+                        dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", mTab.getValue("C_Tax_ID").toString());
+                        var Rate = Util.getValueOfDecimal(dr);
+                        if (Rate > 0) {                            
+                            //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
+                            var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) - (Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) / ((Rate / 100) + 1)));
+
+                            // JID_0333: Need to round Tax Amount according to Currency Precision                           
+                            TaxAmt = Util.getValueOfDecimal(TaxAmt.toFixed(StdPrecision));
+                            mTab.setValue("TaxAmt", TaxAmt);
+                        }
+                        else {
+                            mTab.setValue("TaxAmt", 0);
+                            this.setCalloutActive(false);
+                            ctx = windowNo = mTab = mField = value = oldValue = null;
+                            return "";
+                        }
                     }
                 }
                 else {
@@ -21821,7 +21928,7 @@
     */
     CalloutCashJournalLine.prototype.setAccountNo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
-            mTab.setValue("C_BankAccount_ID", null);
+            //mTab.setValue("C_BankAccount_ID", null);
             return "";
         }
         this.setCalloutActive(true);

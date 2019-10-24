@@ -94,5 +94,44 @@ namespace VIS.Models
             MTax tax = new MTax(ctx, C_Tax_ID, null);
             return tax.GetRate();
         }
+
+        /// <summary>
+        /// Calculate Surcharge Tax
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public Dictionary<String, Object> CalculateSurcharge(Ctx ctx, string fields)
+        {
+            string[] paramValue = fields.Split(',');
+            int C_Tax_ID;
+
+            Dictionary<String, Object> retval = new Dictionary<String, Object>();
+            //Assign parameter value
+            C_Tax_ID = Util.GetValueOfInt(paramValue[0]);
+            Decimal LineNetAmt = Util.GetValueOfDecimal(paramValue[1]);            
+            int StdPrecision = Util.GetValueOfInt(paramValue[2]);
+            Boolean IsTaxIncluded = true;
+
+            if (paramValue.Length == 4)
+            {
+                IsTaxIncluded = Util.GetValueOfBool(paramValue[3]);
+            }
+            //End Assign parameter value
+            MTax tax = new MTax(ctx, C_Tax_ID, null);
+            Decimal surchargeAmt = Env.ZERO;
+            Decimal TaxAmt = Env.ZERO;
+            if (tax.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && tax.GetSurcharge_Tax_ID() > 0)
+            {
+                TaxAmt = tax.CalculateSurcharge(LineNetAmt, IsTaxIncluded, StdPrecision, out surchargeAmt);
+            }
+            else
+            {
+                TaxAmt = tax.CalculateTax(LineNetAmt, IsTaxIncluded, StdPrecision);
+            }
+            retval["TaxAmt"] = TaxAmt;
+            retval["SurchargeAmt"] = surchargeAmt;
+            return retval;
+        }
     }
 }
