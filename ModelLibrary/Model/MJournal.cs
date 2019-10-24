@@ -682,7 +682,7 @@ namespace VAdvantage.Model
             // selected accounting schema currency
             int selectedAcctSchemaCurrency = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID()).GetC_Currency_ID();
 
-            // this query return a record of assigned org accounting schema having  same chart of account
+            // this query return a record of assigned org accounting schema having same chart of account
             String sql = @"SELECT DISTINCT CA.C_ACCTSCHEMA_ID , Ca.C_Currency_ID , " + C_DefaultCurrencyType_ID + @" AS C_ConversionType_ID , 
   CURRENCYRATE(" + selectedAcctSchemaCurrency + @" , Ca.C_Currency_ID , " + GlobalVariable.TO_DATE(GetDateAcct(), true) +
   @" , " + C_DefaultCurrencyType_ID + @" , " + GetAD_Client_ID() + " , " + GetAD_Org_ID() + @") AS Rate
