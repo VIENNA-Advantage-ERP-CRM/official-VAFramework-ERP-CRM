@@ -1552,7 +1552,7 @@ namespace VAdvantage.Model
          */
         public new void SetM_PriceList_ID(int M_PriceList_ID)
         {
-            String sql = "SELECT M_PriceList_ID, C_Currency_ID "
+            String sql = "SELECT M_PriceList_ID, C_Currency_ID, IsTaxIncluded " // Set IsTaxIncluded from Price List
                 + "FROM M_PriceList WHERE M_PriceList_ID=" + M_PriceList_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -1566,6 +1566,7 @@ namespace VAdvantage.Model
                 {
                     base.SetM_PriceList_ID(Convert.ToInt32(dr[0]));
                     SetC_Currency_ID(Convert.ToInt32(dr[1]));
+                    SetIsTaxIncluded(Util.GetValueOfString(dr[2]).Equals("Y"));
                 }
             }
             catch (Exception e)

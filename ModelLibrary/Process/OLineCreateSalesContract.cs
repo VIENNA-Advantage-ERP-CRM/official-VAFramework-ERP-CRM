@@ -20,6 +20,8 @@ namespace ViennaAdvantageServer.Process
     class OLineCreateSalesContract : SvrProcess
     {
         int orderLineID;
+        bool isTaxIncluded = false;
+        int StdPrecision = 0;
         VAdvantage.Model.X_C_Contract contact = null;
 
         protected override void Prepare()
@@ -72,14 +74,13 @@ namespace ViennaAdvantageServer.Process
                 {
                     DataRow dr1 = ds.Tables[0].Rows[i];
                     //	Tax Included
-
-                    isTaxIncluded = Util.GetValueOfString(ds.Tables[0].Rows[i]["IsTaxIncluded"]).Equals("Y");
-
+                    isTaxIncluded = Util.GetValueOfBool(ds.Tables[0].Rows[i]["IsTaxIncluded"]);
+                    
                     //	Currency                    
-C_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
-                    // int prislst = Util.GetValueOfInt(dr[4].ToString());
-                    //	PriceList Version
-                    //M_PriceList_Version_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_PriceList_Version_ID"]);
+                    C_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
+
+                    // Std Precision
+                    StdPrecision = Util.GetValueOfInt(ds.Tables[0].Rows[i]["StdPrecision"]);
                 }
                 //int M_PriceList_Version_ID = GetCtx().GetContextAsInt(WindowNo, "M_PriceList_Version_ID");
                 //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
@@ -142,15 +143,48 @@ C_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
                 // contact.SetDiscount(line.GetDiscount());
                 contact.SetC_Tax_ID(line.GetC_Tax_ID());
                 contact.SetC_Campaign_ID(order.GetC_Campaign_ID());
-                //Neha---Calculate TaxAmt,GrandTotal,Line Amount,Bill Start Date on the basis of Actual Price(Sales Order Line)--17 Sep,2018
-                sql = "SELECT Rate FROM C_Tax WHERE C_Tax_ID = " + line.GetC_Tax_ID();
-                Decimal? rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                Decimal? amt = Decimal.Multiply(line.GetPriceActual(), (Decimal.Divide(rate.Value, 100)));
-                amt = Decimal.Round(amt.Value, 2, MidpointRounding.AwayFromZero);
-                Decimal? taxAmt = Decimal.Multiply(amt.Value, line.GetQtyPerCycle());
-                contact.SetTaxAmt(taxAmt);
-                contact.SetGrandTotal(Decimal.Add(Decimal.Multiply(line.GetQtyPerCycle(), line.GetPriceActual()), taxAmt.Value));
+
                 contact.SetLineNetAmt(Decimal.Multiply(line.GetQtyPerCycle(), line.GetPriceActual()));
+
+                // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
+                MTax tax = MTax.Get(GetCtx(), line.GetC_Tax_ID());
+                if (contact.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    Decimal surchargeAmt = Env.ZERO;
+
+                    // Calculate Surcharge Amount
+                    Decimal TotalRate = tax.CalculateSurcharge(contact.GetLineNetAmt(), isTaxIncluded, StdPrecision, out surchargeAmt);
+                    contact.SetTaxAmt(TotalRate);
+                    contact.SetSurchargeAmt(surchargeAmt);
+                }
+                else
+                {
+                    //Neha---Calculate TaxAmt,GrandTotal,Line Amount,Bill Start Date on the basis of Actual Price(Sales Order Line)--17 Sep,2018
+                    sql = "SELECT Rate FROM C_Tax WHERE C_Tax_ID = " + line.GetC_Tax_ID();
+                    Decimal? rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                    Decimal? amt = Decimal.Multiply(line.GetPriceActual(), (Decimal.Divide(rate.Value, 100)));
+                    amt = Decimal.Round(amt.Value, 2, MidpointRounding.AwayFromZero);
+                    Decimal? taxAmt = Decimal.Multiply(amt.Value, line.GetQtyPerCycle());
+                    contact.SetTaxAmt(taxAmt);
+                }
+
+                // Set Grand Total Amount
+                if (isTaxIncluded)
+                {
+                    contact.SetGrandTotal(contact.GetLineNetAmt());
+                }
+                else
+                {
+                    if (contact.Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        contact.SetGrandTotal(Decimal.Add(Decimal.Add(contact.GetLineNetAmt(), contact.GetTaxAmt()), contact.GetSurchargeAmt()));
+                    }
+                    else
+                    {
+                        contact.SetGrandTotal(Decimal.Add(contact.GetLineNetAmt(), contact.GetTaxAmt()));
+                    }
+                }
+
                 contact.SetBillStartDate(line.GetStartDate());
 
                 contact.SetDocStatus("DR");
