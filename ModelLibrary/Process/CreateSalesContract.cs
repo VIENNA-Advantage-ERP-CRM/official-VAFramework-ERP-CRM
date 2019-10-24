@@ -82,7 +82,7 @@ namespace ViennaAdvantageServer.Process
                         {
                             DataRow dr1 = ds.Tables[0].Rows[i];
                             //	Tax Included
-                            bool isTaxIncluded = Util.GetValueOfBool(ds.Tables[0].Rows[i]["IsTaxIncluded"]);
+                            bool isTaxIncluded = Util.GetValueOfString(ds.Tables[0].Rows[i]["IsTaxIncluded"]).Equals("Y");
 
                             //	Currency                            
                             C_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
