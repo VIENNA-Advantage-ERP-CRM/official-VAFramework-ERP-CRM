@@ -1,0 +1,96 @@
+*** 10/21/2019 8:03:07 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+08:03:08.380    (INFO)     Trx.Start: **** ConnSH637072849880966916System.Random
+08:03:20.320    (INFO)     Trx.Commit: **C** ConnSH637072849880966916System.Random
+08:03:38.338    (INFO)     Trx.Start: **** ConnSH637072850188277141System.Random
+08:03:51.351    (INFO)     Trx.Commit: **C** ConnSH637072850188277141System.Random
+08:03:58.358    (INFO)     Trx.Start: **** ConnSH637072850385431159System.Random
+08:03:58.358    (INFO)     Trx.Commit: **C** ConnSH637072850385431159System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+08:04:08.480    (INFO)     Trx.Start: **** ConnSH637072850487940152System.Random
+08:04:08.480    (INFO)     Trx.Commit: **C** ConnSH637072850487940152System.Random
+08:04:11.411    (INFO)     Trx.Start: **** ConnSH637072850512455361System.Random
+08:04:11.411    (INFO)     Trx.Commit: **C** ConnSH637072850512455361System.Random
+08:04:18.418    (INFO)     Trx.Start: **** GridDel637072850578696650
+08:04:19.419    (INFO)     MChangeLog.FillChangeLog: #9
+08:04:19.419    (INFO)     MJournal.DeleteRecord: True
+08:04:19.419    (INFO)     Trx.Commit: **C** GridDel637072850578696650
+08:04:45.445    (INFO)     Trx.Start: **** ConnSH637072850853369949System.Random
+08:04:54.454    (INFO)     Trx.Commit: **C** ConnSH637072850853369949System.Random
+08:04:54.454    (INFO)     Trx.Start: **** ConnDDH637072850947723763System.Random
+08:04:54.454    (INFO)     Trx.ExecuteDataSet: Trx Dataset ConnDDH637072850947723763System.Random 56
+08:04:54.454    (INFO)     Trx.ExecuteQuery: Trx non-query ConnDDH637072850947723763System.Random 56
+08:04:54.454    (INFO)     Trx.Commit: **C** ConnDDH637072850947723763System.Random
+08:04:54.454    (INFO)     Trx.Start: **** ConnSH637072850948830824System.Random
+08:04:54.454    (INFO)     Trx.Commit: **C** ConnSH637072850948830824System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON C_AcctSchema CA, FRPT_AssignedOrg AO ON CA.C_AcctSchema_ID = AO.C_AcctSchema_ID
+INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON C_AcctSchema CA, FRPT_AssignedOrg AO ON CA.C_AcctSchema_ID = AO.C_AcctSchema_ID
+INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')
+08:06:45.645    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+08:06:45.645    (INFO)     MTable.GetPO: Using GenericPO for FRPT_AssignedOrg
+08:06:45.645    (INFO)     Trx.Start: **** ConnSH637072852055712371System.Random
+08:06:45.645    (INFO)     Trx.Commit: **C** ConnSH637072852055712371System.Random
+08:06:45.645    (INFO)     Trx.Start: **** ConnSH637072852058087268System.Random
+08:06:46.646    (INFO)     Trx.Commit: **C** ConnSH637072852058087268System.Random
+08:06:55.655    (INFO)     Trx.Start: **** GridDel637072852152896096
+08:06:55.655    (INFO)     MJournal.DeleteRecord: True
+08:06:55.655    (INFO)     Trx.Commit: **C** GridDel637072852152896096
+08:07:05.750    (INFO)     Trx.Start: **** ConnSH637072852255280542System.Random
+08:07:05.750    (INFO)     Trx.Commit: **C** ConnSH637072852255280542System.Random
+08:07:05.750    (INFO)     Trx.Start: **** ConnDDH637072852255861908System.Random
+08:07:05.750    (INFO)     Trx.ExecuteDataSet: Trx Dataset ConnDDH637072852255861908System.Random 44
+08:07:05.750    (INFO)     Trx.ExecuteQuery: Trx non-query ConnDDH637072852255861908System.Random 44
+08:07:05.750    (INFO)     Trx.Commit: **C** ConnDDH637072852255861908System.Random
+08:07:05.750    (INFO)     Trx.Start: **** ConnSH637072852257564665System.Random
+08:07:05.750    (INFO)     Trx.Commit: **C** ConnSH637072852257564665System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON C_AcctSchema CA, FRPT_AssignedOrg AO ON CA.C_AcctSchema_ID = AO.C_AcctSchema_ID
+INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')
+08:07:24.724    (INFO)     Trx.Start: **** ConnSH637072852442786962System.Random
+08:07:24.724    (INFO)     Trx.Commit: **C** ConnSH637072852442786962System.Random
+08:07:24.724    (INFO)     Trx.Start: **** ConnSH637072852444038978System.Random
+08:07:24.724    (INFO)     Trx.Commit: **C** ConnSH637072852444038978System.Random
+08:07:31.731    (INFO)     Trx.Start: **** ConnSH637072852516505646System.Random
+08:07:31.731    (INFO)     Trx.Commit: **C** ConnSH637072852516505646System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'

@@ -27,6 +27,8 @@ namespace VIS.Controllers
         public JsonResult JsonLogin(LoginModel model, string returnUrl)
         {
 
+
+
             if (ModelState.IsValid)
             {
                 VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
@@ -171,14 +173,14 @@ namespace VIS.Controllers
 
                     // Update the authCookie's Value to use the encrypted version of newTicket
 
-                   // authCookie.Value = FormsAuthentication.Encrypt(newTicket);
+                    // authCookie.Value = FormsAuthentication.Encrypt(newTicket);
 
                     //Response.Cookies.  .Add(authCookie);
 
                     Response.Cookies[".ASPXAUTH"].Value = FormsAuthentication.Encrypt(newTicket);
 
                     // Determine redirect URL and send user there
-                     
+
                     //string redirUrl = FormsAuthentication.GetRedirectUrl(model.Login1Model.UserName, false);
 
                     //RedirectToAction("Index", "Home");
@@ -227,7 +229,7 @@ namespace VIS.Controllers
         // POST: /Account/LogOff
 
         [HttpPost]
-       // [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         //[Authorize]
         public ActionResult LogOff()
         {
@@ -244,7 +246,7 @@ namespace VIS.Controllers
 
             }
 
-            
+
             FormsAuthentication.SignOut();
             //if (Session != null)
             //    Session.Abandon();
@@ -253,7 +255,7 @@ namespace VIS.Controllers
 
 
         [HttpPost]
-        
+
         // on close Tab and browser window
         public JsonResult LogOffHandler()
         {
@@ -267,7 +269,7 @@ namespace VIS.Controllers
             catch
             {
             }
-            return Json("OK" , JsonRequestBehavior.AllowGet);
+            return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -275,7 +277,7 @@ namespace VIS.Controllers
         /// </summary>
         /// <returns></returns>
         /// 
-       
+
         public JsonResult Refresh()
         {
             if (Session.Timeout > 15)
@@ -669,7 +671,7 @@ namespace VIS.Controllers
     {
         LoginModel _model = null;
         Thread _thread = null;
-            
+
         public AccountManager(LoginModel model)
         {
             _model = model;
@@ -686,7 +688,7 @@ namespace VIS.Controllers
         {
             try
             {
-                    LoginHelper.SaveLoginSetting(_model);
+                LoginHelper.SaveLoginSetting(_model);
             }
             catch
             {

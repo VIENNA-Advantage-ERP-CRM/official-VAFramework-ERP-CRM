@@ -704,10 +704,10 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                     assignAcctSchema.SetAD_Client_ID(GetAD_Client_ID());
                     assignAcctSchema.SetAD_Org_ID(GetAD_Org_ID());
                     assignAcctSchema.SetGL_Journal_ID(GetGL_Journal_ID());
-                    assignAcctSchema.SetC_AcctSchema_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["C_ACCTSCHEMA_ID"]));
-                    assignAcctSchema.SetC_Currency_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["C_Currency_ID"]));
-                    assignAcctSchema.SetC_ConversionType_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["C_ConversionType_ID"]));
-                    assignAcctSchema.SetCurrencyRate(Convert.ToDecimal(ds.Tables[0].Rows[i]["Rate"]));
+                    assignAcctSchema.SetC_AcctSchema_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ACCTSCHEMA_ID"]));
+                    assignAcctSchema.SetC_Currency_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]));
+                    assignAcctSchema.SetC_ConversionType_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ConversionType_ID"]));
+                    assignAcctSchema.SetCurrencyRate(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Rate"]));
                     if (!assignAcctSchema.Save())
                     {
                         ValueNamePair pp = VLogger.RetrieveError();

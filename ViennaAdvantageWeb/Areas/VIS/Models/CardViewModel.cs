@@ -15,9 +15,19 @@ namespace VIS.Models
         {
             List<CardViewPropeties> lstCardView = null;
             //string sqlQuery = "SELECT * FROM AD_CardView WHERE AD_Window_id=" + ad_Window_ID + " and AD_Tab_id=" + ad_Tab_ID + " AND (createdby=" + ctx.GetAD_User_ID() + " OR AD_USER_ID Is NULL OR AD_User_ID = " + ctx.GetAD_User_ID() + ") AND AD_Client_ID=" + ctx.GetAD_Client_ID();
-            string sqlQuery = " SELECT * FROM AD_CardView c WHERE c.AD_Window_id=" + ad_Window_ID + " and c.AD_Tab_id=" + ad_Tab_ID + " AND (c.createdby=" + ctx.GetAD_User_ID() +
-                              " OR ((c.AD_USER_ID    IS NULL) AND exists (select * from ad_cardview_role r where r.ad_cardview_id = c.ad_cardview_id and r.ad_role_id = " + ctx.GetAD_Role_ID() + ")) OR c.AD_User_ID     = " + ctx.GetAD_User_ID() +
-                              " ) AND c.AD_Client_ID  =" + ctx.GetAD_Client_ID();
+            //string sqlQuery = " SELECT * FROM AD_CardView c WHERE c.AD_Window_id=" + ad_Window_ID + " and c.AD_Tab_id=" + ad_Tab_ID + " AND (c.createdby=" + ctx.GetAD_User_ID() +
+            //                  " OR ((c.AD_USER_ID    IS NULL) AND exists (select * from ad_cardview_role r where r.ad_cardview_id = c.ad_cardview_id and r.ad_role_id = " + ctx.GetAD_Role_ID() + ")) OR c.AD_User_ID     = " + ctx.GetAD_User_ID() +
+            //                  " ) AND c.AD_Client_ID  =" + ctx.GetAD_Client_ID();
+
+            //   string sqlQuery = " SELECT * FROM AD_CardView c WHERE c.AD_Window_id=" + ad_Window_ID + " and c.AD_Tab_id=" + ad_Tab_ID + " AND c.AD_Client_ID  =" + ctx.GetAD_Client_ID();
+
+            string sqlQuery = @"SELECT AD_CardView.*,AD_DefaultCardView.AD_DefaultCardView_ID,AD_DefaultCardView.AD_User_ID as userID
+                            FROM AD_CardView
+                            LEFT OUTER JOIN AD_DefaultCardView
+                            ON AD_CardView.AD_CardView_ID=AD_DefaultCardView.AD_CardView_ID
+                            WHERE AD_CardView.AD_Window_id=" + ad_Window_ID + " and AD_CardView.AD_Tab_id=" + ad_Tab_ID + " AND AD_CardView.AD_Client_ID  =" + ctx.GetAD_Client_ID() + @" 
+                            ORDER BY AD_CardView.Name Asc";
+
 
             DataSet ds = DB.ExecuteDataset(sqlQuery);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -25,12 +35,23 @@ namespace VIS.Models
                 lstCardView = new List<CardViewPropeties>();
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
+                    bool isDefault=false;
+                    if(ds.Tables[0].Rows[i]["AD_DefaultCardView_ID"] != null && ds.Tables[0].Rows[i]["AD_DefaultCardView_ID"] != DBNull.Value
+                       && ds.Tables[0].Rows[i]["userID"] != null && ds.Tables[0].Rows[i]["userID"] != DBNull.Value 
+                       && ctx.GetAD_User_ID() == Util.GetValueOfInt(ds.Tables[0].Rows[i]["userID"]))
+                    {
+                        isDefault = true;
+                    }
+
+
                     CardViewPropeties objCardView = new CardViewPropeties()
                     {
                         CardViewName = Convert.ToString(ds.Tables[0].Rows[i]["NAME"]),
                         CardViewID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
                         UserID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_USER_ID"]),
-                        AD_GroupField_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_FIELD_ID"])
+                        AD_GroupField_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_FIELD_ID"]),
+                        CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["CREATEDBY"]),
+                        DefaultID = isDefault
                     };
                     lstCardView.Add(objCardView);
                 }
@@ -145,7 +166,7 @@ namespace VIS.Models
                 fid = VAdvantage.Utility.Util.GetValueOfInt(ds1.Tables[0].Rows[0][1]);
             }
             string sqlQuery = "SELECT * FROM(SELECT crdcol.*,fl.name FROM ad_cardview_column crdcol INNER JOIN ad_field fl on crdcol.ad_field_id=fl.ad_field_id  WHERE ad_cardview_id=" + ad_cardview_id + ") cardviewcols";
-            sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "cardviewcols", false, false);
+            //  sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "cardviewcols", false, false);
             sqlQuery += " ORDER BY seqno";
             DataSet ds = DB.ExecuteDataset(sqlQuery);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -239,6 +260,24 @@ namespace VIS.Models
                 }
             }
             return objCardView.Get_ID();
+        }
+
+        public void SetDefaultCardView(Ctx ctx, int cardViewID, int AD_Tab_ID)
+        {
+            string sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
+            object id = DB.ExecuteScalar(sql);
+
+            int AD_DefaultCardView_ID = 0;
+            if (id != null && id != DBNull.Value)
+            {
+                AD_DefaultCardView_ID = Convert.ToInt32(id);
+            }
+
+            X_AD_DefaultCardView cardView = new X_AD_DefaultCardView(ctx, AD_DefaultCardView_ID, null);
+            cardView.SetAD_Tab_ID(AD_Tab_ID);
+            cardView.SetAD_User_ID(ctx.GetAD_User_ID());
+            cardView.SetAD_CardView_ID(Convert.ToInt32(cardViewID));
+            cardView.Save();
         }
 
 
@@ -343,6 +382,27 @@ namespace VIS.Models
             DeleteAllCardViewColumns(ad_CardView_ID, ctx);
             DeleteAllCardViewRole(ad_CardView_ID, ctx);
         }
+
+
+        public void SetDefaultView(Ctx ctx, int AD_Tab_ID, int cardView)
+        {
+
+            string sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
+            object id = DB.ExecuteScalar(sql);
+            int AD_DefaultcarView_ID = 0;
+            if (id != null && id != DBNull.Value)
+            {
+                AD_DefaultcarView_ID = Convert.ToInt32(id);
+            }
+
+
+            X_AD_DefaultCardView userQuery = new X_AD_DefaultCardView(ctx, AD_DefaultcarView_ID, null);
+            userQuery.SetAD_Tab_ID(AD_Tab_ID);
+            userQuery.SetAD_User_ID(ctx.GetAD_User_ID());
+            userQuery.SetAD_CardView_ID(cardView);
+            userQuery.Save();
+        }
+
     }
 
     public class CardViewPropeties
@@ -359,6 +419,9 @@ namespace VIS.Models
         public int AD_CardViewColumn_ID { get; set; }
         public int SeqNo { get; set; }
         public bool isNewRecord { get; set; }
+        public bool IsDefault { get; set; }
+        public int CreatedBy { get; set; }
+        public bool DefaultID { get; set; }
     }
 
     public class UserPropeties

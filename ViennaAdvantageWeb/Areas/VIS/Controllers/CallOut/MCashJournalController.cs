@@ -40,5 +40,17 @@ namespace VIS.Controllers
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// To get beginning balance
+        /// </summary>
+        /// <param name="fields">Ids of Org, Client and Cashbook</param>
+        /// <returns>beginning balance</returns>
+        public JsonResult GetBeginningBalCalc(string fields)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            MCashJournalModel objCJModel = new MCashJournalModel();
+            return Json(JsonConvert.SerializeObject(objCJModel.GetBeginningBalCalc(ctx, fields)), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
