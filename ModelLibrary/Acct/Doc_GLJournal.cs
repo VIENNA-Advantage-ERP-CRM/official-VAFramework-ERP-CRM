@@ -35,6 +35,7 @@ namespace VAdvantage.Acct
         //Posting Type				
         private String _PostingType = null;
         private int _C_AcctSchema_ID = 0;
+        private int record_Id = 0;
 
         /// <summary>
         ///   Constructor
@@ -76,8 +77,11 @@ namespace VAdvantage.Acct
         /// <returns>DocLine Array</returns>
         private DocLine[] LoadLines(MJournal journal)
         {
+            MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
             List<DocLine> list = new List<DocLine>();
             MJournalLine[] lines = journal.GetLines(false);
+            record_Id = lines[0].GetGL_Journal_ID();
+
             for (int i = 0; i < lines.Length; i++)
             {
                 MJournalLine line = lines[i];
@@ -85,6 +89,7 @@ namespace VAdvantage.Acct
                 if (line.GetElementType() == null)
                 {
                     DocLine docLine = new DocLine(line, this);
+                    docLine.SetConversionRate(conversionRate);
                     //  --  Source Amounts
                     docLine.SetAmount(line.GetAmtAcctDr(), line.GetAmtAcctCr());
                     //  --  Converted Amounts
@@ -112,18 +117,19 @@ namespace VAdvantage.Acct
                             X_GL_LineDimension lDim = new X_GL_LineDimension(GetCtx(), dr, null);
 
                             DocLine docLine = new DocLine(lDim, this);
+                            docLine.SetConversionRate(conversionRate);
                             //  --  Source Amounts
 
 
                             decimal cRate = line.GetCurrencyRate();
-                            if (cRate == 0 || cRate == null)
+                            if (cRate == 0)
                             {
                                 cRate = 1;
                             }
                             decimal amtAcctCr = 0;
                             decimal amtAcctDr = 0;
 
-                            MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
+                            //MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
 
 
                             if (line.GetAmtSourceDr() != 0)
@@ -152,22 +158,74 @@ namespace VAdvantage.Acct
                             // -- Date
                             docLine.SetDateAcct(journal.GetDateAcct());
 
+                            // -- User Dimension
+                            docLine = SetUserDimension(lDim, docLine);
+
                             //	--	Organization of Line was set to Org of Account
                             list.Add(docLine);
                         }
                     }
-
                 }
-
-
-
-
             }
             //	Return Array
             int size = list.Count;
             DocLine[] dls = new DocLine[size];
             dls = list.ToArray();
             return dls;
+        }
+
+        /// <summary>
+        /// is used to set User Element Dimension
+        /// </summary>
+        /// <param name="journalLineDimension">journal line dimension object</param>
+        /// <param name="docLine">document line object</param>
+        private DocLine SetUserDimension(X_GL_LineDimension journalLineDimension, DocLine docLine)
+        {
+            if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement1 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement1(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement2 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement2(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement3 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement3(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement4 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement4(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement5 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement5(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement6 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement6(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement7 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement7(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement8 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement8(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement9 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
+            {
+                docLine.SetUserElement9(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
+            }
+            else if (journalLineDimension.GetLineType().Equals(MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
+            {
+                docLine.SetAD_OrgTrx_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
+            }
+            else if (journalLineDimension.GetLineType().Equals(MJournalLine.ELEMENTTYPE_Organization) && journalLineDimension.GetOrg_ID() > 0)
+            {
+                docLine.SetAD_Org_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
+            }
+            return docLine;
         }
 
 
@@ -214,6 +272,10 @@ namespace VAdvantage.Acct
             //  create Fact Header
             Fact fact = new Fact(this, as1, _PostingType);
 
+            // get conversion rate from Assigned accounting schema tab - 
+            Decimal conversionRate = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT CurrencyRate FROM GL_AssignAcctSchema WHERE 
+                                     C_AcctSchema_ID = " + as1.GetC_AcctSchema_ID() + " AND GL_Journal_ID = " + record_Id, null, null));
+
             //  GLJ
             if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_GLJOURNAL))
             {
@@ -223,6 +285,8 @@ namespace VAdvantage.Acct
                     // need to Post GL Journal for Multiple Accounting Schema that's why commented this condition
                     //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
                     //{
+                    // set conversion rate on line, so that amount to be converted based on that multiply rate
+                    _lines[i].SetConversionRate(conversionRate);
                     fact.CreateLine(_lines[i],
                                     _lines[i].GetAccount(),
                                     GetC_Currency_ID(),
