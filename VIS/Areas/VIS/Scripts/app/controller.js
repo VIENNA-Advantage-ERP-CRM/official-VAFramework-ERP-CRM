@@ -4997,6 +4997,14 @@
         return this.vo.IsFieldOnly;
     };
 
+    GridField.prototype.getShowLabel = function () {
+        return true;
+    };
+
+    GridField.prototype.getShowIcon = function () {
+        return true;
+    };
+
     GridField.prototype.getIsKey = function () {
         return this.vo.IsKey;
     };

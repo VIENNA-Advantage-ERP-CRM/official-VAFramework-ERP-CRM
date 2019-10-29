@@ -350,7 +350,7 @@
 .vis-ad-w-p-center-view {
     grid-row: 1/1;
     display: flex;
-    padding: 0 10px;
+    padding: 0 10px 0 0;
 }
 
 .vis-ad-w-p-center-tc {
