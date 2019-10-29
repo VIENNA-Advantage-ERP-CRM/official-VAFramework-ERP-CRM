@@ -1631,31 +1631,31 @@
                         if (C_ConversionType_ID == 0) {
                             C_ConversionType_ID = $gridInvoice.get(event.recid).C_ConversionType_ID;
                         }
-                        else if (C_ConversionType_ID != $gridInvoice.get(event.recid).C_ConversionType_ID) {
+                        //else if (C_ConversionType_ID != $gridInvoice.get(event.recid).C_ConversionType_ID) {
 
-                            var $x = document.getElementsByName(event.target);
-                            if ($x.length > 0)
-                                $x = $x[0];
+                        //    var $x = document.getElementsByName(event.target);
+                        //    if ($x.length > 0)
+                        //        $x = $x[0];
 
-                            var $z = $($x).find("#grid_openformatgridinvoice_rec_" + event.recid + "");
+                        //    var $z = $($x).find("#grid_openformatgridinvoice_rec_" + event.recid + "");
 
-                            if ($z.length > 0)
-                                $z = $z[0];
-                            if ($($z).find("input:checked").prop('checked')) {
-                                $($z).find("input:checked").prop('checked', false);
-                            }
+                        //    if ($z.length > 0)
+                        //        $z = $z[0];
+                        //    if ($($z).find("input:checked").prop('checked')) {
+                        //        $($z).find("input:checked").prop('checked', false);
+                        //    }
 
-                            $gridInvoice.get(event.recid).changes = false;
-                            $gridInvoice.columns[colIndex].editable = false;
-                            $gridInvoice.get(event.recid).changes.AppliedAmt = "0";
-                            $gridInvoice.refreshCell(0, "AppliedAmt");
-                            $gridInvoice.get(event.recid).changes.Discount = "0";
-                            $gridInvoice.refreshCell(0, "Discount");
-                            $gridInvoice.get(event.recid).changes.Writeoff = "0";
-                            $gridInvoice.refreshCell(0, "Writeoff");
-                            //alert("Conversion Type not matched");
-                            VIS.ADialog.warn(("VIS_ConversionNotMatched"));
-                        }
+                        //    $gridInvoice.get(event.recid).changes = false;
+                        //    $gridInvoice.columns[colIndex].editable = false;
+                        //    $gridInvoice.get(event.recid).changes.AppliedAmt = "0";
+                        //    $gridInvoice.refreshCell(0, "AppliedAmt");
+                        //    $gridInvoice.get(event.recid).changes.Discount = "0";
+                        //    $gridInvoice.refreshCell(0, "Discount");
+                        //    $gridInvoice.get(event.recid).changes.Writeoff = "0";
+                        //    $gridInvoice.refreshCell(0, "Writeoff");
+                        //    //alert("Conversion Type not matched");
+                        //    VIS.ADialog.warn(("VIS_ConversionNotMatched"));
+                        //}
                         if ($vchkMultiCurrency.is(':checked')) {
                             if ($conversionDate.val() == "") {
                                 VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -1715,27 +1715,27 @@
                         if (C_ConversionType_ID == 0) {
                             C_ConversionType_ID = $gridPayment.get(event.recid).C_ConversionType_ID;
                         }
-                        else if (C_ConversionType_ID != $gridPayment.get(event.recid).C_ConversionType_ID) {
+                        //else if (C_ConversionType_ID != $gridPayment.get(event.recid).C_ConversionType_ID) {
 
-                            var $x = document.getElementsByName(event.target);
-                            if ($x.length > 0)
-                                $x = $x[0];
+                        //    var $x = document.getElementsByName(event.target);
+                        //    if ($x.length > 0)
+                        //        $x = $x[0];
 
-                            var $z = $($x).find("#grid_openformatgrid_rec_" + event.recid + "");
+                        //    var $z = $($x).find("#grid_openformatgrid_rec_" + event.recid + "");
 
-                            if ($z.length > 0)
-                                $z = $z[0];
-                            if ($($z).find("input:checked").prop('checked')) {
-                                $($z).find("input:checked").prop('checked', false);
-                            }
+                        //    if ($z.length > 0)
+                        //        $z = $z[0];
+                        //    if ($($z).find("input:checked").prop('checked')) {
+                        //        $($z).find("input:checked").prop('checked', false);
+                        //    }
 
-                            $gridPayment.get(event.recid).changes = false;
-                            $gridPayment.unselect(event.recid);
-                            $gridPayment.columns[colIndex].editable = false;
-                            $gridPayment.get(event.recid).changes.AppliedAmt = "0";
-                            $gridPayment.refreshCell(event.recid, "AppliedAmt");
-                            VIS.ADialog.warn(("VIS_ConversionNotMatched"));
-                        }
+                        //    $gridPayment.get(event.recid).changes = false;
+                        //    $gridPayment.unselect(event.recid);
+                        //    $gridPayment.columns[colIndex].editable = false;
+                        //    $gridPayment.get(event.recid).changes.AppliedAmt = "0";
+                        //    $gridPayment.refreshCell(event.recid, "AppliedAmt");
+                        //    VIS.ADialog.warn(("VIS_ConversionNotMatched"));
+                        //}
                         if ($vchkMultiCurrency.is(':checked')) {
                             if ($conversionDate.val() == "") {
                                 VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -1804,27 +1804,27 @@
                         if (C_ConversionType_ID == 0) {
                             C_ConversionType_ID = $gridCashline.get(event.recid).C_ConversionType_ID;
                         }
-                        else if (C_ConversionType_ID != $gridCashline.get(event.recid).C_ConversionType_ID) {
+                        //else if (C_ConversionType_ID != $gridCashline.get(event.recid).C_ConversionType_ID) {
 
-                            var $x = document.getElementsByName(event.target);
-                            if ($x.length > 0)
-                                $x = $x[0];
+                        //    var $x = document.getElementsByName(event.target);
+                        //    if ($x.length > 0)
+                        //        $x = $x[0];
 
-                            var $z = $($x).find("#grid_openformatgridcash_rec_" + event.recid + "");
+                        //    var $z = $($x).find("#grid_openformatgridcash_rec_" + event.recid + "");
 
-                            if ($z.length > 0)
-                                $z = $z[0];
-                            if ($($z).find("input:checked").prop('checked')) {
-                                $($z).find("input:checked").prop('checked', false);
-                            }
+                        //    if ($z.length > 0)
+                        //        $z = $z[0];
+                        //    if ($($z).find("input:checked").prop('checked')) {
+                        //        $($z).find("input:checked").prop('checked', false);
+                        //    }
 
-                            $gridCashline.get(event.recid).changes = false;
-                            $gridCashline.unselect(event.recid);
-                            $gridCashline.columns[colIndex].editable = false;
-                            //$gridCashline.get(0).changes.AppliedAmt = "0";
-                            $gridCashline.refreshCell(0, "AppliedAmt");
-                            VIS.ADialog.warn(("VIS_ConversionNotMatched"));
-                        }
+                        //    $gridCashline.get(event.recid).changes = false;
+                        //    $gridCashline.unselect(event.recid);
+                        //    $gridCashline.columns[colIndex].editable = false;
+                        //    //$gridCashline.get(0).changes.AppliedAmt = "0";
+                        //    $gridCashline.refreshCell(0, "AppliedAmt");
+                        //    VIS.ADialog.warn(("VIS_ConversionNotMatched"));
+                        //}
 
                         if ($vchkMultiCurrency.is(':checked')) {
                             if ($conversionDate.val() == "") {
