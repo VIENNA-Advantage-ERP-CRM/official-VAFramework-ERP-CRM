@@ -305,16 +305,16 @@
                 if (sameLine) {
                     if (columnIndex == 1) {
                         //$td1.append(editor.getControl());
-                        $td1.append(VIS.CWrapper.addCtrl(label, editor));
+                        $td1.append(getCWrapper(label, editor));
                     }
                     else if (columnIndex == 2) {
-                        $td2.append(VIS.CWrapper.addCtrl(label, editor));
+                        $td2.append(getCWrapper(label, editor));
                     }
                     else {
-                        $td3.append(VIS.CWrapper.addCtrl(label, editor));
+                        $td3.append(getCWrapper(label, editor));
                     }
                 } else {
-                    $td0.append(VIS.CWrapper.addCtrl(label, editor));
+                    $td0.append(getCWrapper(label, editor));
                 }
 
                 if (!sameLine && mField.getIsLongField()) {
@@ -397,14 +397,49 @@
 
 
     function getCWrapper(label, editor) {
-        var ctrl = $('<div class="vis-inner-wrap">');
-        if (editor && editor.getControl().getType() == 'INPUT') {
+        var ctrl = '';
+        if (editor && editor.getControl()[0].tagName == 'INPUT') {
             ctrl = $('<div class="vis-inner-wrap">');
             ctrl.append(editor.getControl());
             if (label != null) {
-                ctrl.append(label);
-                return ctrl;
+                ctrl.append(label.getControl());
             }
+        }
+        else if (editor && editor.getControl()[0].tagName == "SELECT") {
+                ctrl = $('<div class="select-wrap">');
+                ctrl.append(editor.getControl());
+                if (label != null) {
+                    ctrl.append(label.getControl());
+                }
+            }
+            if (ctrl != '') {
+                ctrl = $('<div class="input-group vis-input-wrap">').append(ctrl);
+
+                var count = editor.getBtnCount();
+
+                if (count > 0) {
+                    while (count > 0) {
+                        var btn = editor.getBtn(count - 1);
+                        if (btn != null) {
+                            ctrl.append($('<div class="input-group-append"><span class="input-group-text">' +
+                                '<i class="fal fa-handshake"></i></span></div>'));
+                        }
+                        --count;
+                    }
+                    count = -1;
+                    ctrl = null;
+                }
+            }
+        
+        else {
+            ctrl = $('<div class="vis-control-wrap">');
+            if (label)
+                ctrl.append(label.getControl());
+            if (editor) {
+                ctrl.append(editor.getControl());
+            }
+        }
+        return ctrl;
 
      //       <div class="input-group vis-input-wrap">
      //           <div class="vis-inner-wrap">
@@ -423,11 +458,7 @@
      //               </div>
      //           </div>
                 
-        }
-
-        else {
-        }
-}
+    }
 
 }(VIS, jQuery));
 
