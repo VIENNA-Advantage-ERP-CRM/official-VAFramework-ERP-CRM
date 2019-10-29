@@ -2591,6 +2591,11 @@
                     var dr = null;
                     taxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
                     mTab.setValue("TaxAmt", taxAmt);
+
+                    // Set Surcharge Amount to zero
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        mTab.setValue("SurchargeAmt", 0);
+                    }
                 }
             }
 

@@ -190,6 +190,47 @@ namespace VIS.Controllers
             PaymentAllocation payments = new PaymentAllocation(ct);
             return Json(JsonConvert.SerializeObject(payments.GetOrganization(ct)), JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetGLData(int _C_Currency_ID, int _C_BPartner_ID, int page, int size)
+        {
+            Ctx ct = Session["ctx"] as Ctx;
+            PaymentAllocation payments = new PaymentAllocation(ct);
+            return Json(JsonConvert.SerializeObject(payments.GetGLData(_C_Currency_ID, _C_BPartner_ID, page, size)), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public string saveGLJData(string paymentData, string invoiceData, string cashData, string glData, string DateTrx, string _windowNo, int C_Currency_ID, int C_BPartner_ID, string AD_Org_ID, int C_CurrencyType_ID)
+        {
+            List<Dictionary<string, string>> pData = null;
+            List<Dictionary<string, string>> cData = null;
+            List<Dictionary<string, string>> gData = null;
+            List<Dictionary<string, string>> iData = null;
+            Ctx ct = Session["ctx"] as Ctx;
+            string msg = string.Empty;
+            DateTime date = Convert.ToDateTime(DateTrx);
+            if (paymentData != null)
+            {
+                pData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(paymentData);
+            }
+            if (cashData != null)
+            {
+                cData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(cashData);
+            }
+            if (glData != null)
+            {
+                gData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(glData);
+            }
+            if (invoiceData != null)
+            {
+
+                iData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(invoiceData);
+            }
+
+            PaymentAllocation payments = new PaymentAllocation(ct);
+            msg = payments.SaveGLData(pData, iData, cData, gData, date, Util.GetValueOfInt(_windowNo), Util.GetValueOfInt(C_Currency_ID), Util.GetValueOfInt(C_BPartner_ID), Util.GetValueOfInt(AD_Org_ID), Util.GetValueOfInt(C_CurrencyType_ID));
+            return msg;
+        }
+
     }
 
 

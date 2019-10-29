@@ -1021,21 +1021,14 @@
         try {
             /**** Start Amit For Tax Type Module ****/
             var taxRule = "";
-            var sql = "";
-            //var paramString = "";
-            var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", (mTab.getValue("M_Product_ID")).toString() +
+            //Removed tostring() from M_Product_ID because when someone select only charge than M_Product_ID becomes null and exception occur Can not convert Null into String.
+            var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", (mTab.getValue("M_Product_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")));
-            var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
 
-            //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
+            var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
             var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
-
-            //paramString = mTab.getValue("C_Invoice_ID").toString();
-            //var invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
-
-            //sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + Util.getValueOfInt(invoice["AD_Org_ID"]) + " AND IsActive ='Y' AND AD_Client_ID =" + ctx.getAD_Client_ID();
 
             if (_CountVATAX > 0) {
                 //taxRule = Util.getValueOfString(VIS.DB.executeScalar(sql));
@@ -1044,25 +1037,6 @@
             if (taxRule == "T") {
                 var taxid = Util.getValueOfInt(recDic["taxId"]);
 
-                //var taxid = 0;
-                //sql = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'C_Tax_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_TaxCategory')";
-                //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
-                //    paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("M_Product_ID")).toString() +
-                //        "," + Util.getValueOfInt(mTab.getValue("C_Charge_ID")).toString();
-                //    taxid = VIS.dataContext.getJSONRecord("MInvoice/GetTax", paramString);
-                //}
-                //else {
-                //    sql = "select vatax_taxtype_id from c_bpartner_location where c_bpartner_id =" + util.getvalueofint(invoice["c_bpartner_id"]) +
-                //                      " and isactive = 'Y'  and c_bpartner_location_id = " + util.getvalueofint(invoice["c_bpartner_location_id"]);
-                //    var taxtype = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //    if (taxtype == 0) {
-                //        sql = "select vatax_taxtype_id from c_bpartner where c_bpartner_id =" + util.getvalueofint(invoice["c_bpartner_id"]) + " and isactive = 'Y'";
-                //        taxtype = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //    }
-                //    var prodtaxcategory = vis.datacontext.getjsonrecord("MProduct/GetTaxCategory", value.tostring());
-                //    sql = "select c_tax_id from vatax_taxcatrate where c_taxcategory_id = " + prodtaxcategory + " and isactive ='Y' and vatax_taxtype_id =" + taxtype;
-                //    taxid = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //}
                 if (taxid > 0) {
                     mTab.setValue("C_Tax_ID", taxid);
                 }
@@ -1748,17 +1722,13 @@
                                                     ); //7          
                     var dr = null;
                     taxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
-                    //
 
-
-                    //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                    // taxAmt = dr[0];
-
-
-
-                    //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                    //taxAmt = tax.CalculateTax(lineNetAmt, IsTaxIncluded(windowNo), StdPrecision);
                     mTab.setValue("TaxAmt", taxAmt);
+
+                    // Set Surcharge Amount to zero
+                    if (mTab.getField("SurchargeAmt") != null) {
+                        mTab.setValue("SurchargeAmt", 0);
+                    }
                 }
             }
             //	Added by Vivek Kumar 14/12/2015

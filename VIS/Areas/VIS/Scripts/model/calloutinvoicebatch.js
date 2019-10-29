@@ -402,12 +402,12 @@
                                                              ); //7          
                 var dr = null;
                 TaxAmt = VIS.dataContext.getJSONRecord("MTax/CalculateTax", paramString);
-                //
-
-
-                //MTax tax = new MTax(ctx, C_Tax_ID, null);
-                //TaxAmt = dr[0];
                 mTab.setValue("TaxAmt", TaxAmt);
+
+                // Set Surcharge Amount to zero
+                if (mTab.getField("SurchargeAmt") != null) {
+                    mTab.setValue("SurchargeAmt", 0);
+                }
             }
         }
 
