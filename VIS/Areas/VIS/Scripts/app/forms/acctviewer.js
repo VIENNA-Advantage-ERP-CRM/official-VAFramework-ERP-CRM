@@ -216,7 +216,14 @@
                     for (var i = 0; i < res.length; i++) {
                         var id = res[i].AD_Table_ID;
                         var tableName = VIS.Utility.encodeText(res[i].TableName);
-                        var name = VIS.Msg.translate(VIS.Env.getCtx(), tableName + "_ID");
+                        var name = "";
+                        // Change done to show order instead of purchase order in selection 
+                        if (tableName == "C_Order") {
+                            name = VIS.Msg.getMsg("Order");
+                        }
+                        else {
+                            name = VIS.Msg.translate(VIS.Env.getCtx(), tableName + "_ID");
+                        }
 
                         options.push({ "Key": tableName, "Name": name });
 
@@ -1071,7 +1078,7 @@
 
             if (btnOrgUnit != null) {
                 btnOrgUnit.on("click", function () {
-                /** Open the info window according to the button clicked. **/
+                    /** Open the info window according to the button clicked. **/
                     actionButton(btnOrgUnit);
                 });
             }
