@@ -195,17 +195,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\VIS\Content\ad-cust.css" />
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
-    <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
     <Content Include="Areas\VIS\Content\Home.css" />
     <Content Include="Areas\VIS\Content\Login.css" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
-    <Content Include="Areas\VIS\Content\ProductContainer.css" />
     <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />
     <Content Include="Areas\VIS\Content\ReportStyle.css" />
     <Content Include="Areas\VIS\Content\Site.css" />
@@ -643,9 +640,6 @@
     <Content Include="Areas\VIS\Scripts\app\forms\acctviewer.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\glDimensionValue.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\productcontainer.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\productcontainermove.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\productContainerTree.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vallocation.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vattributegrid.js" />
@@ -662,7 +656,6 @@
     <Content Include="Areas\VIS\Scripts\app\forms\vpayselect.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vtrxmaterial.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\accountform.js" />
-    <Content Include="Areas\VIS\Scripts\app\Framework\amountdivision.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\appointments.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\archiveviewer.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\attachmentform.js" />
@@ -756,7 +749,6 @@
     <Compile Include="Areas\VIS\Controllers\AccountController.cs" />
     <Compile Include="Areas\VIS\Controllers\AccountFormController.cs" />
     <Compile Include="Areas\VIS\Controllers\AcctViewerDataController.cs" />
-    <Compile Include="Areas\VIS\Controllers\AmountDivisionController.cs" />
     <Compile Include="Areas\VIS\Controllers\ASearchController.cs" />
     <Compile Include="Areas\VIS\Controllers\AttachmentController.cs" />
     <Compile Include="Areas\VIS\Controllers\AttachmentHistoryController.cs" />
@@ -824,6 +816,7 @@
     <Compile Include="Areas\VIS\Controllers\OrderController.cs" />
     <Compile Include="Areas\VIS\Controllers\PAttributesController.cs" />
     <Compile Include="Areas\VIS\Controllers\PaymentAllocationController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PaymentController.cs" />
     <Compile Include="Areas\VIS\Controllers\PaymentRuleController.cs" />
     <Compile Include="Areas\VIS\Controllers\PostingController.cs" />
     <Compile Include="Areas\VIS\Controllers\ProductContainerController.cs" />
@@ -869,11 +862,11 @@
     <Compile Include="Areas\VIS\Models\AccountFormModel.cs" />
     <Compile Include="Areas\VIS\Models\AccountModels.cs" />
     <Compile Include="Areas\VIS\Models\AcctViewerData.cs" />
-    <Compile Include="Areas\VIS\Models\AmountDivisionModel.cs" />
     <Compile Include="Areas\VIS\Models\ASearchModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
     <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
+    <Compile Include="Areas\VIS\Models\CalloutPaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MAcctSchemaModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MBankStatementModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MBPartnerModel.cs" />
