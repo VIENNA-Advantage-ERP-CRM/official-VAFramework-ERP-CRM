@@ -771,3 +771,24 @@
     position: relative;
 }*/
 /* END */
+
+
+
+/*Header panel css START*/
+.vis-w-p-header-data-f {
+    padding: 10px 10px 0;
+    color: #fff;
+}
+
+    .vis-w-p-header-data-f h3 {
+        font-weight: normal;
+        font-size: 0.875rem;
+        margin-bottom: 3px;
+    }
+
+    .vis-w-p-header-data-f p {
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+/*Header panel css END*/

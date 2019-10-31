@@ -19,6 +19,7 @@ VIS.GridController = function (showRowNo, doPaging, id) {
     this.vTable = new VIS.VTable();
     this.vCardView = new VIS.VCardView();
     this.vMapView = new VIS.VMapView();
+    this.vHeaderPanel = new VIS.HeaderPanel();
     this.windowNo = 0;
     this.aPanel = null;
     this.singleRow = false;
@@ -1351,6 +1352,12 @@ VIS.GridController.prototype.navigate = function (tRow, force) {
     else if (recid > -1) {
         this.vCardView.navigate(recid, true);
     }
+
+    if (this.gTab.getIsHeaderPanel())
+    {
+        this.vHeaderPanel.navigate(this.gTab);
+    }
+    
 
     if (recid == -1) {
         this.cancelSel = true;

@@ -146,6 +146,9 @@ namespace VIS
                  "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
+                 "~/Areas/VIS/Scripts/app/headerPanelFrame.js",
+
+
                   "~/Areas/VIS/Scripts/TestPanel.js",
                   "~/Areas/VIS/Scripts/app/initialize.js",
                   "~/Areas/VIS/Scripts/model/CalloutOrder.js",

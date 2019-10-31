@@ -2678,8 +2678,8 @@
     //date:19-01-2016
     //Change/Update for:Zoom from workflow on home page
     APanel.prototype.selectFirstTab = function (isSelect) {
-        this.curGC.isZoomAction = isSelect;
-        this.curTab.setIsZoomAction(isSelect);
+        that.curGC.isZoomAction = isSelect;
+        that.curTab.setIsZoomAction(isSelect);
         setTimeout(function (that) {
             that.curGC.isZoomAction = isSelect;
             that.tabActionPerformed(that.firstTabId);
