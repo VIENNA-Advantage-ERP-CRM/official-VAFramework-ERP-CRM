@@ -77,4 +77,4 @@ public String GetName() {return (String)Get_Value("Name");}/** Set Sequence.
 public void SetSeqNo (int SeqNo){Set_Value ("SeqNo", SeqNo);}/** Get Sequence.
 @return Method of ordering elements; lowest number comes first */
 public int GetSeqNo() {Object ii = Get_Value("SeqNo");if (ii == null) return 0;return Convert.ToInt32(ii);}}
-} 
+}
