@@ -1,0 +1,86 @@
+*** 10/30/2019 6:26:45 PM VAdvantage Log  ***
+06:26:45.264    (INFO)     Trx.Start: **** ConnSH637080568053752229System.Random
+06:26:45.264    (INFO)     Trx.Commit: **C** ConnSH637080568053752229System.Random
+06:26:45.264    (INFO)     MChangeLog.FillChangeLog: #9
+06:26:52.265    (INFO)     Trx.Start: **** ConnSH637080568126014021System.Random
+06:26:52.265    (INFO)     Trx.Commit: **C** ConnSH637080568126014021System.Random
+06:27:10.271    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000007DateFrom=10/30/2019 12:00:00 AM
+06:27:10.271    (INFO)     Trx.Start: **** SvrProcess
+06:27:11.271    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000007,DateAcct= #=0
+06:27:11.271    (INFO)     FinBalance.AddLog: 0 -  - 0 - Deleted
+06:27:11.271    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:11.271    (INFO)     Trx.Start: **** SvrProcess
+06:27:11.271    (INFO)     FinBalance.AddLog: 0 -  - 42 - Inserts in MFactAccumulation[1000007,BalanceAccumulation=,C_Calendar_ID=1000006]
+06:27:11.271    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:11.271    (INFO)     FinBalance.UpdateBalance: 0 sec
+06:27:11.271    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:27:11.271    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169064,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#42]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N
+06:27:18.271    (INFO)     Trx.Start: **** ConnSH637080568389585952System.Random
+06:27:18.271    (INFO)     Trx.Commit: **C** ConnSH637080568389585952System.Random
+06:27:22.272    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000007DateFrom=10/30/2019 12:00:00 AM
+06:27:22.272    (INFO)     Trx.Start: **** SvrProcess
+06:27:22.272    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000007,DateAcct= #=42
+06:27:22.272    (INFO)     FinBalance.AddLog: 0 -  - 42 - Deleted
+06:27:22.272    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:22.272    (INFO)     Trx.Start: **** SvrProcess
+06:27:22.272    (INFO)     FinBalance.AddLog: 0 -  - 42 - Inserts in MFactAccumulation[1000007,BalanceAccumulation=,C_Calendar_ID=1000006]
+06:27:22.272    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:22.272    (INFO)     FinBalance.UpdateBalance: 0 sec
+06:27:22.272    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:27:22.272    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169065,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#42]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N
+06:27:28.272    (INFO)     Trx.Start: **** ConnSH637080568485021564System.Random
+06:27:28.272    (INFO)     Trx.Commit: **C** ConnSH637080568485021564System.Random
+06:27:29.272    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000007DateFrom=10/30/2019 12:00:00 AM
+06:27:29.272    (INFO)     Trx.Start: **** SvrProcess
+06:27:30.273    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000007,DateAcct=3/31/2018 12:00:00 AM #=51
+06:27:30.273    (INFO)     FinBalance.AddLog: 0 - 3/31/2018 12:00:00 AM - 51 - Deleted
+06:27:30.273    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:30.273    (INFO)     Trx.Start: **** SvrProcess
+06:27:30.273    (INFO)     FinBalance.AddLog: 0 - 3/31/2018 12:00:00 AM - 55 - Inserts in MFactAccumulation[1000005,BalanceAccumulation=M,C_Calendar_ID=1000006]
+06:27:30.273    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:30.273    (INFO)     FinBalance.UpdateBalance: 0 sec
+06:27:30.273    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:27:30.273    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169066,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#55]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N
+06:27:35.273    (INFO)     Trx.Start: **** ConnSH637080568559271776System.Random
+06:27:35.273    (INFO)     Trx.Commit: **C** ConnSH637080568559271776System.Random
+06:27:37.273    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000007DateFrom=10/30/2019 12:00:00 AM
+06:27:37.273    (INFO)     Trx.Start: **** SvrProcess
+06:27:37.273    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000007,DateAcct=3/31/2018 12:00:00 AM #=55
+06:27:37.273    (INFO)     FinBalance.AddLog: 0 - 3/31/2018 12:00:00 AM - 55 - Deleted
+06:27:37.273    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:37.273    (INFO)     Trx.Start: **** SvrProcess
+06:27:37.273    (INFO)     FinBalance.AddLog: 0 - 3/31/2018 12:00:00 AM - 55 - Inserts in MFactAccumulation[1000005,BalanceAccumulation=M,C_Calendar_ID=1000006]
+06:27:37.273    (INFO)     Trx.Commit: **C** SvrProcess
+06:27:37.273    (INFO)     FinBalance.UpdateBalance: 0 sec
+06:27:37.273    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:27:37.273    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169067,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#55]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:28:02.282    (INFO)     Trx.Start: **** ConnSH637080568829052869System.Random
+06:28:02.282    (INFO)     Trx.Commit: **C** ConnSH637080568829052869System.Random
+06:28:04.284    (INFO)     Trx.Start: **** ConnSH637080568845634037System.Random
+06:28:04.284    (INFO)     Trx.Commit: **C** ConnSH637080568845634037System.Random
+06:28:29.282    (INFO)     Trx.Start: **** ConnSH637080569095591431System.Random
+06:28:29.282    (INFO)     Trx.Commit: **C** ConnSH637080569095591431System.Random
+06:28:34.283    (INFO)     Trx.Start: **** ConnSH637080569149806985System.Random
+06:28:34.283    (INFO)     Trx.Commit: **C** ConnSH637080569149806985System.Random
+06:34:11.341    (INFO)     Trx.Start: **** ConnSH637080572517879773System.Random
+06:34:11.341    (INFO)     Trx.Commit: **C** ConnSH637080572517879773System.Random
+06:34:27.342    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000007DateFrom=10/30/2019 12:00:00 AM
+06:34:27.342    (INFO)     Trx.Start: **** SvrProcess
+06:34:29.342    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000007,DateAcct= #=42
+06:34:29.342    (INFO)     FinBalance.AddLog: 0 -  - 42 - Deleted
+06:34:29.342    (INFO)     Trx.Commit: **C** SvrProcess
+06:35:52.355    (INFO)     Trx.Start: **** SvrProcess
+06:35:52.355    (INFO)     FinBalance.AddLog: 0 -  - 42 - Inserts in MFactAccumulation[1000007,BalanceAccumulation=,C_Calendar_ID=1000006]
+06:35:52.355    (INFO)     Trx.Commit: **C** SvrProcess
+06:35:52.355    (INFO)     FinBalance.UpdateBalance: 84 sec
+06:35:52.355    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:35:52.355    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169068,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#42]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N

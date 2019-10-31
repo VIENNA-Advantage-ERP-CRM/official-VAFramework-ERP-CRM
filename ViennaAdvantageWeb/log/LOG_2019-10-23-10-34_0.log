@@ -1,0 +1,29 @@
+*** 10/23/2019 10:34:59 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:34:59.345    (INFO)     Trx.Start: **** ConnSH637074236993129046System.Random
+10:34:59.345    (INFO)     Trx.Commit: **C** ConnSH637074236993129046System.Random
+10:35:06.356    (INFO)     Trx.Start: **** ConnSH637074237066164419System.Random
+10:35:06.356    (INFO)     Trx.Commit: **C** ConnSH637074237066164419System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00903: invalid table name [Query DR] SELECT DISTINCT  C_ACCTSCHEMA_ID FROM ( UNION SELECT  CA.C_ACCTSCHEMA_ID  FROM C_AcctSchema CA INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')   
+                        WHERE ASE.C_Element_ID = 1000021 AND ASE.IsActive = 'Y' AND CA.C_ACCTSCHEMA_ID in (SELECT C_AcctSchema1_ID FROM AD_ClientInfo WHERE AD_Client_ID=11))
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00903: invalid table name [Query DR] SELECT DISTINCT  C_ACCTSCHEMA_ID FROM ( UNION SELECT  CA.C_ACCTSCHEMA_ID  FROM C_AcctSchema CA INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')   
+                        WHERE ASE.C_Element_ID = 1000021 AND ASE.IsActive = 'Y' AND CA.C_ACCTSCHEMA_ID in (SELECT C_AcctSchema1_ID FROM AD_ClientInfo WHERE AD_Client_ID=11))
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00903: invalid table name [Query DR] SELECT DISTINCT  C_ACCTSCHEMA_ID FROM ( UNION SELECT  CA.C_ACCTSCHEMA_ID  FROM C_AcctSchema CA INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')   
+                        WHERE ASE.C_Element_ID = 1000021 AND ASE.IsActive = 'Y' AND CA.C_ACCTSCHEMA_ID in (SELECT C_AcctSchema1_ID FROM AD_ClientInfo WHERE AD_Client_ID=11))
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00903: invalid table name [Query DR] SELECT DISTINCT  C_ACCTSCHEMA_ID FROM ( UNION SELECT  CA.C_ACCTSCHEMA_ID  FROM C_AcctSchema CA INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')   
+                        WHERE ASE.C_Element_ID = 1000021 AND ASE.IsActive = 'Y' AND CA.C_ACCTSCHEMA_ID in (SELECT C_AcctSchema1_ID FROM AD_ClientInfo WHERE AD_Client_ID=11))

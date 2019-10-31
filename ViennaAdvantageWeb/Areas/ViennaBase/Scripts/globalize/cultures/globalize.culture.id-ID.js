@@ -102,7 +102,7 @@ Globalize.addCultureInfo( "id-ID", "default", {
     "Cancel": "Batal",
     "VersionConflict": "Konflik Versi",
     "VersionInfo": "Info Versi",
-    "PleaseUpgrade": "Silahkan download Versi baru dari Server",
+    "PleaseUpgrade": "Mohon hubungi partner Compiere anda untuk upgrade",
 
 
     //New Resource

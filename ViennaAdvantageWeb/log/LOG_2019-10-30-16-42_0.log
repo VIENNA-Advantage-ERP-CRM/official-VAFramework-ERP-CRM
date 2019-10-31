@@ -1,0 +1,21 @@
+*** 10/30/2019 4:42:33 PM VAdvantage Log  ***
+04:42:33.423    (INFO)     Trx.Start: **** ConnSH637080505531844196System.Random
+04:42:33.423    (INFO)     Trx.Commit: **C** ConnSH637080505531844196System.Random
+04:42:33.423    (INFO)     MChangeLog.FillChangeLog: #9
+04:42:48.424    (INFO)     Trx.Start: **** ConnSH637080505685781603System.Random
+04:42:48.424    (INFO)     Trx.Commit: **C** ConnSH637080505685781603System.Random
+04:43:21.432    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000006DateFrom=10/30/2019 12:00:00 AM
+04:43:26.432    (INFO)     Trx.Start: **** SvrProcess
+04:44:12.441    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000006,DateAcct= #=0
+04:44:12.441    (INFO)     FinBalance.AddLog: 0 -  - 0 - Deleted
+04:44:13.441    (INFO)     Trx.Commit: **C** SvrProcess
+04:44:45.444    (INFO)     Trx.Start: **** SvrProcess
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-01400: cannot insert NULL into ("RAGHUVA4MARCH"."FACT_ACCT_BALANCE"."DATEACCT") [Query NQTrx]INSERT INTO Fact_Acct_Balance (AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID, DateAcct, Account_ID, PostingType, Fact_Accumulation_ID, M_Product_ID, C_BPartner_ID,	C_Project_ID,	C_SalesRegion_ID,C_Activity_ID, C_Campaign_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, GL_Budget_ID, UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID,UserElement9_ID,  AmtAcctDr, AmtAcctCr, Qty)  SELECT AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID  , NULL  ,Account_ID, PostingType, 1000007 ,M_Product_ID  ,NULL  , NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,UserElement9_ID  ,COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0), COALESCE(SUM(Qty),0)  FROM Fact_Acct a  WHERE C_AcctSchema_ID= 1000006 GROUP BY AD_Client_ID,C_AcctSchema_ID, AD_Org_ID,  AD_OrgTrx_ID,Account_ID, PostingType  ,M_Product_ID , UserElement9_ID 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-01400: cannot insert NULL into ("RAGHUVA4MARCH"."FACT_ACCT_BALANCE"."DATEACCT")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("RAGHUVA4MARCH"."FACT_ACCT_BALANCE"."DATEACCT")
+04:47:41.474    (INFO)     FinBalance.AddLog: 0 -  - -1 - Inserts in MFactAccumulation[1000007,BalanceAccumulation=,C_Calendar_ID=1000006]
+04:47:41.474    (INFO)     Trx.Commit: **C** SvrProcess
+04:47:41.474    (INFO)     FinBalance.UpdateBalance: 257 sec
+04:47:41.474    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:47:41.474    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169060,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#-1]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N

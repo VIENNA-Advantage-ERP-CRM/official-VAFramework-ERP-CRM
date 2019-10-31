@@ -104,7 +104,7 @@ Globalize.addCultureInfo( "nl-NL", "default", {
     "Cancel": "Annuleren",
     "VersionConflict": "Versie Conflict:",
     "VersionInfo": "Server <> Client",
-    "PleaseUpgrade": "Gelieve de nieuwe versie van de server te downloaden",
+    "PleaseUpgrade": "Uw Compiere installatie dient te worden bijgewerkt.",
 
     //New Resource
 
