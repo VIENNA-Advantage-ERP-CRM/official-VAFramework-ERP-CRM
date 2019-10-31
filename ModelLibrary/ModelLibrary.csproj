@@ -446,8 +446,8 @@
     <Compile Include="ModelAD\X_AD_WF_Recipient.cs" />
     <Compile Include="ModelAD\X_AD_WindowAction.cs" />
     <Compile Include="ModelAD\X_CM_Subscribe.cs" />
-    <Compile Include="Model\MAccountGroupBatch.cs" />
     <Compile Include="Model\MAssignAcctSchema.cs" />
+    <Compile Include="Model\MAccountGroupBatch.cs" />
     <Compile Include="Model\MBankAccountLine.cs" />
     <Compile Include="Model\MCostDetail.cs" />
     <Compile Include="Model\MCostElement.cs" />
