@@ -52,15 +52,15 @@ namespace VAdvantage.Report
                 {
                     ;
                 }
-                else if (name.Equals("C_AcctSchema_ID"))
+                else if (name.Equals("C_AcctSchema_ID", StringComparison.OrdinalIgnoreCase))
                 {
                     p_C_AcctSchema_ID = Util.GetValueOfInt(element.GetParameter());
                 }
-                else if (name.Equals("DateFrom"))
+                else if (name.Equals("DateFrom", StringComparison.OrdinalIgnoreCase))
                 {
                     p_DateFrom = Util.GetValueOfDateTime(element.GetParameter());
                 }
-                else if (name.Equals("Fact_Accumulation_ID"))
+                else if (name.Equals("Fact_Accumulation_ID", StringComparison.OrdinalIgnoreCase))
                 {
                     p_Fact_Accumulation_ID = Util.GetValueOfInt(element.GetParameter());
                 }
@@ -194,6 +194,13 @@ namespace VAdvantage.Report
                     defaultAccum.SetISUSERLIST2(true);
                     defaultAccum.SetISUSERELEMENT1(true);
                     defaultAccum.SetISUSERELEMENT2(true);
+                    defaultAccum.SetIsUserElement3(true);
+                    defaultAccum.SetIsUserElement4(true);
+                    defaultAccum.SetIsUserElement5(true);
+                    defaultAccum.SetIsUserElement6(true);
+                    defaultAccum.SetIsUserElement7(true);
+                    defaultAccum.SetIsUserElement8(true);
+                    defaultAccum.SetIsUserElement9(true);
                     if (!defaultAccum.Save(trx))
                     {
                         _log.Log(Level.SEVERE, "Unable to create Default Balance Aggregation");
@@ -214,11 +221,16 @@ namespace VAdvantage.Report
 
             foreach (MFactAccumulation accum in accums)
             {
-                
-               // dateFrom = MFactAccumulation.GetDateFrom(accum, dateFrom);
+
+                // dateFrom = MFactAccumulation.GetDateFrom(accum, dateFrom);
                 dateFrom = accum.GetDateFrom();
                 String type = accum.GetBALANCEACCUMULATION();
                 String trunc = null;
+
+                if (String.IsNullOrEmpty(type))
+                {
+                    dateFrom = null;
+                }
 
                 if (X_Fact_Accumulation.BALANCEACCUMULATION_Daily.Equals(type))
                     trunc = TimeUtil.TRUNC_DAY;
@@ -238,9 +250,8 @@ namespace VAdvantage.Report
                 if (X_Fact_Accumulation.BALANCEACCUMULATION_PeriodOfAViennaCalendar.Equals(type))
                 {
                     dateClause = " Period.StartDate ";
-
                 }
-                else
+                else if (!String.IsNullOrEmpty(type))
                 {
                     dateClause = " TRUNC(a.DateAcct,'MM') ";
                     _log.Fine(trunc);
@@ -258,11 +269,21 @@ namespace VAdvantage.Report
                     + " Account_ID, PostingType, Fact_Accumulation_ID, M_Product_ID, C_BPartner_ID,"
                     + "	C_Project_ID,	C_SalesRegion_ID,C_Activity_ID,"
                     + " C_Campaign_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, GL_Budget_ID,"
-                    + " UserElement1_ID, UserElement2_ID, "
+                    + " UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID,"
+                    + " UserElement7_ID, UserElement8_ID,UserElement9_ID, "
                     + " AmtAcctDr, AmtAcctCr, Qty) ";
 
-                String select = " SELECT AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID, ";
-                select = select + dateClause;
+                String select = " SELECT AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID ";
+
+                if (!String.IsNullOrEmpty(type))
+                {
+                    select = select + " , " + dateClause;
+                }
+                else
+                {
+                    // when balance Accumulation type = null, then consider system date as account date
+                    select = select + " , SYSDATE  ";
+                }
                 select = select + " ,Account_ID, PostingType, " + accum.GetFACT_ACCUMULATION_ID();
                 if (accum.IsPRODUCT())
                     select = select + " ,M_Product_ID ";
@@ -329,6 +350,42 @@ namespace VAdvantage.Report
                 else
                     select = select + " ,NULL ";
 
+                if (accum.IsUserElement3())
+                    select = select + " ,UserElement3_ID ";
+                else
+                    select = select + " ,NULL ";
+
+                if (accum.IsUserElement4())
+                    select = select + " , UserElement4_ID ";
+                else
+                    select = select + " ,NULL ";
+
+                if (accum.IsUserElement5())
+                    select = select + " ,UserElement5_ID ";
+                else
+                    select = select + " ,NULL ";
+
+                if (accum.IsUserElement6())
+                    select = select + " , UserElement6_ID ";
+                else
+                    select = select + " ,NULL ";
+
+                if (accum.IsUserElement7())
+                    select = select + " ,UserElement7_ID ";
+                else
+                    select = select + " ,NULL ";
+
+                if (accum.IsUserElement8())
+                    select = select + " , UserElement8_ID ";
+                else
+                    select = select + " ,NULL ";
+
+                if (accum.IsUserElement9())
+                    select = select + " ,UserElement9_ID ";
+                else
+                    select = select + " ,NULL ";
+
+
                 select = select + " ,COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0), COALESCE(SUM(Qty),0) ";
 
                 String from = " FROM Fact_Acct a ";
@@ -355,7 +412,13 @@ namespace VAdvantage.Report
                 }
 
                 String groupBy = " GROUP BY AD_Client_ID,C_AcctSchema_ID, AD_Org_ID, "
-                    + " AD_OrgTrx_ID,Account_ID, PostingType," + dateClause;
+                    + " AD_OrgTrx_ID,Account_ID, PostingType ";
+
+                if (!String.IsNullOrEmpty(type))
+                {
+                    // when balance Accumulation type != null, then to consider in group by else not required
+                    groupBy = groupBy + " , " + dateClause;
+                }
                 if (accum.IsPRODUCT())
                     groupBy = groupBy + " ,M_Product_ID ";
                 if (accum.IsBUSINESSPARTNER())
@@ -382,6 +445,20 @@ namespace VAdvantage.Report
                     groupBy = groupBy + ", UserElement1_ID ";
                 if (accum.IsUSERELEMENT2())
                     groupBy = groupBy + ", UserElement2_ID ";
+                if (accum.IsUserElement3())
+                    groupBy = groupBy + ", UserElement3_ID ";
+                if (accum.IsUserElement4())
+                    groupBy = groupBy + ", UserElement4_ID ";
+                if (accum.IsUserElement5())
+                    groupBy = groupBy + ", UserElement5_ID ";
+                if (accum.IsUserElement6())
+                    groupBy = groupBy + ", UserElement6_ID ";
+                if (accum.IsUserElement7())
+                    groupBy = groupBy + ", UserElement7_ID ";
+                if (accum.IsUserElement8())
+                    groupBy = groupBy + ", UserElement8_ID ";
+                if (accum.IsUserElement9())
+                    groupBy = groupBy + ", UserElement9_ID ";
 
                 String sql = insert + select + from + where + groupBy;
                 no = DB.ExecuteQuery(sql, null, trx);

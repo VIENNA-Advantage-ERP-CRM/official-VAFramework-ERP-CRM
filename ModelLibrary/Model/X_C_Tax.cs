@@ -294,29 +294,6 @@ namespace VAdvantage.Model
             }
             return false;
         }
-        /// <summary>
-        /// Set Surcharge.
-        /// </summary>
-        /// <param name="IsSurcharge">an additional charge or payment.</param>        
-        public void SetIsSurcharge(Boolean IsSurcharge)
-        {
-            Set_Value("IsSurcharge", IsSurcharge);
-        }
-        /// <summary>
-        /// Get Surcharge.
-        /// </summary>
-        /// <returns>an additional charge or payment.</returns>
-        public Boolean IsSurcharge()
-        {
-            Object oo = Get_Value("IsSurcharge");
-            if (oo != null)
-            {
-                if (oo.GetType() == typeof(bool))
-                    return Convert.ToBoolean(oo);
-                return "Y".Equals(oo);
-            }
-            return false;
-        }
         /** Set Tax exempt.
         @param IsTaxExempt Business partner is exempt from tax */
         public void SetIsTaxExempt(Boolean IsTaxExempt)
@@ -446,70 +423,6 @@ namespace VAdvantage.Model
         public String GetSOPOType()
         {
             return (String)Get_Value("SOPOType");
-        }
-        /** SurchargeType AD_Reference_ID=1000222 */
-        public static int SURCHARGETYPE_AD_Reference_ID = 1000222;
-        /** Line Amount = LA */
-        public static String SURCHARGETYPE_LineAmount = "LA";
-        /** Line Amount + Tax = LT */
-        public static String SURCHARGETYPE_LineAmountPlusTax = "LT";
-        /** Tax Amount = TA */
-        public static String SURCHARGETYPE_TaxAmount = "TA";
-        /// <summary>
-        /// Is test a valid value.
-        /// </summary>
-        /// <param name="test">testvalue</param>
-        /// <returns>true if valid</returns>
-        public bool IsSurchargeTypeValid(String test)
-        {
-            return test == null || test.Equals("LA") || test.Equals("LT") || test.Equals("TA");
-        }
-        /// <summary>
-        /// Set Surcharge Type.
-        /// </summary>
-        /// <param name="SurchargeType">it identifies the type of Surcharge.</param>
-        public void SetSurchargeType(String SurchargeType)
-        {
-            if (!IsSurchargeTypeValid(SurchargeType))
-                throw new ArgumentException("SurchargeType Invalid value - " + SurchargeType + " - Reference_ID=1000222 - LA - LT - TA");
-            if (SurchargeType != null && SurchargeType.Length > 2)
-            {
-                log.Warning("Length > 2 - truncated");
-                SurchargeType = SurchargeType.Substring(0, 2);
-            }
-            Set_Value("SurchargeType", SurchargeType);
-        }
-        /// <summary>
-        /// Get Surcharge Type.
-        /// </summary>
-        /// <returns>it identifies the type of Surcharge.</returns>
-        public String GetSurchargeType()
-        {
-            return (String)Get_Value("SurchargeType");
-        }
-        /** Surcharge_Tax_ID AD_Reference_ID=158 */
-        public static int SURCHARGE_TAX_ID_AD_Reference_ID = 158;
-        /// <summary>
-        /// Set Surcharge Tax.
-        /// </summary>
-        /// <param name="Surcharge_Tax_ID">Surcharge Tax Rate</param>
-        public void SetSurcharge_Tax_ID(int Surcharge_Tax_ID)
-        {
-            if (Surcharge_Tax_ID <= 0)
-                Set_Value("Surcharge_Tax_ID", null);
-            else
-                Set_Value("Surcharge_Tax_ID", Surcharge_Tax_ID);
-        }
-        /// <summary>
-        /// Get Surcharge Tax.
-        /// </summary>
-        /// <returns>Surcharge Tax Rate</returns>
-        public int GetSurcharge_Tax_ID()
-        {
-            Object ii = Get_Value("Surcharge_Tax_ID");
-            if (ii == null)
-                return 0;
-            return Convert.ToInt32(ii);
         }
         /** Set Tax Indicator.
         @param TaxIndicator Short form for Tax to be printed on documents */

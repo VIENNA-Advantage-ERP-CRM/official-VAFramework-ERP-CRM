@@ -1770,25 +1770,7 @@ namespace VAdvantage.Model
         /** Get Discount Amount after Total Discount.@return It is the Total amount deducted with respect to Line amount based on the calculation of Overall Discount on the Grand Total. */
         public Decimal GetAmountAfterApplyDiscount() { Object bd = Get_Value("AmountAfterApplyDiscount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
-        /// <summary>
-        /// Set Surcharge Amount.
-        /// </summary>
-        /// <param name="SurchargeAmt">Surcharge Amount for a document</param>
-        public void SetSurchargeAmt(Decimal? SurchargeAmt)
-        {
-            Set_Value("SurchargeAmt", (Decimal?)SurchargeAmt);
-        }
-        /// <summary>
-        /// Get Surcharge Amount.
-        /// </summary>
-        /// <returns>Surcharge Amount for a document</returns>
-        public Decimal GetSurchargeAmt()
-        {
-            Object bd = Get_Value("SurchargeAmt");
-            if (bd == null)
-                return Env.ZERO;
-            return Convert.ToDecimal(bd);
-        }
+
     }
 
 }

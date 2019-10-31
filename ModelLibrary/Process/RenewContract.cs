@@ -75,13 +75,13 @@ namespace ViennaAdvantageServer.Process
             {
                 while (dr.Read())
                 {
-                    contact = new X_C_Contract(GetCtx(), Util.GetValueOfInt(dr[0]), Get_TrxName());
+                    contact = new X_C_Contract(GetCtx(), Util.GetValueOfInt(dr[0]), Get_TrxName());                    
                     if (contact.GetRenewalType() == "M")
                     {
                         // SI_0772: By Clicking on Renew Contract, System is throwing an error as 'NoContractReNewed'.
                         CDate = contact.GetCancellationDate();
                         cycles = Util.GetValueOfInt(contact.GetCycles());
-
+                        
                         if (CDate != null)
                         {
                             continue;
@@ -92,15 +92,15 @@ namespace ViennaAdvantageServer.Process
                         New.SetC_Order_ID(contact.GetC_Order_ID());
                         New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
                         OldStart = (DateTime)(contact.GetStartDate());
-                        Start = (DateTime)(contact.GetEndDate());
-                        New.SetStartDate(Start.AddDays(1));
+                        Start = (DateTime)(contact.GetEndDate());                                          
+                        New.SetStartDate(Start.AddDays(1));                        
                         New.SetC_BPartner_ID(contact.GetC_BPartner_ID());
                         New.SetBill_Location_ID(contact.GetBill_Location_ID());
                         New.SetBill_User_ID(contact.GetBill_User_ID());
-                        New.SetSalesRep_ID(contact.GetSalesRep_ID());
+                        New.SetSalesRep_ID(contact.GetSalesRep_ID());                        
                         New.SetC_ConversionType_ID(contact.GetC_ConversionType_ID());
                         New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
-
+                        
                         frequency = contact.GetC_Frequency_ID();
                         New.SetC_Frequency_ID(frequency);
 
@@ -117,8 +117,8 @@ namespace ViennaAdvantageServer.Process
                             New.SetM_PriceList_ID(contact.GetRef_PriceList_ID());
                             priceList = new MPriceList(GetCtx(), contact.GetRef_PriceList_ID(), Get_TrxName());
                             Sql.Clear();
-                            Sql.Append("SELECT pp.PriceList, pp.PriceStd FROM M_ProductPrice pp INNER JOIN M_PriceList_Version plv ON pp.M_PriceList_Version_ID = plv.M_PriceList_Version_ID"
-                                + " WHERE pp.M_Product_ID=" + contact.GetM_Product_ID() + " AND plv.IsActive='Y' AND plv.M_PriceList_ID=" + contact.GetRef_PriceList_ID()
+                            Sql.Append("SELECT pp.PriceList, pp.PriceStd FROM M_ProductPrice pp INNER JOIN M_PriceList_Version plv ON pp.M_PriceList_Version_ID = plv.M_PriceList_Version_ID" 
+                                + " WHERE pp.M_Product_ID=" + contact.GetM_Product_ID() + " AND plv.IsActive='Y' AND plv.M_PriceList_ID=" + contact.GetRef_PriceList_ID() 
                                 + " AND plv.VALIDFROM <= SYSDATE ORDER BY plv.VALIDFROM DESC");
                             DataSet ds = DB.ExecuteDataset(Sql.ToString(), null, Get_TrxName());
                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -157,15 +157,15 @@ namespace ViennaAdvantageServer.Process
                         }
                         New.SetC_Currency_ID(priceList.GetC_Currency_ID());
                         New.SetC_UOM_ID(contact.GetC_UOM_ID());
-                        New.SetM_Product_ID(contact.GetM_Product_ID());
+                        New.SetM_Product_ID(contact.GetM_Product_ID());                        
                         New.SetM_AttributeSetInstance_ID(contact.GetM_AttributeSetInstance_ID());
-                        New.SetQtyEntered(contact.GetQtyEntered());
+                        New.SetQtyEntered(contact.GetQtyEntered());                       
                         New.SetC_Tax_ID(contact.GetC_Tax_ID());
                         New.SetC_Campaign_ID(contact.GetC_Campaign_ID());
                         New.SetRef_Contract_ID(contact.GetC_Contract_ID());
                         New.SetC_Project_ID(contact.GetC_Project_ID());
-                        New.SetDescription(contact.GetDescription());
-                        //New.SetTaxAmt(contact.GetTaxAmt());
+                        New.SetDescription(contact.GetDescription());                        
+                        New.SetTaxAmt(contact.GetTaxAmt());
                         New.SetCancelBeforeDays(contact.GetCancelBeforeDays());
                         New.SetCycles(contact.GetCycles());
                         New.SetRenewContract("N");
@@ -176,30 +176,18 @@ namespace ViennaAdvantageServer.Process
 
                         //String sqltax = "SELECT Rate FROM C_Tax WHERE C_Tax_ID=" + contact.GetC_Tax_ID();
                         //Decimal? Rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sqltax, null, Get_TrxName()));                       
-
+                        
                         //Decimal? TotalRate = Util.GetValueOfDecimal((Util.GetValueOfDecimal(New.GetLineNetAmt()) * Util.GetValueOfDecimal(Rate)) / 100);
                         //TotalRate = Decimal.Round(TotalRate.Value, 2);
 
-                        // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
-                        if (New.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
-                        {
-                            Decimal surchargeAmt = Env.ZERO;
+                        // Calculate Tax Amount
+                        tax = MTax.Get(GetCtx(), contact.GetC_Tax_ID());
+                        TotalRate = tax.CalculateTax(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetPricePrecision());
 
-                            // Calculate Surcharge Amount
-                            TotalRate = tax.CalculateSurcharge(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetStandardPrecision(), out surchargeAmt);
-                            New.SetTaxAmt(TotalRate);
-                            New.SetSurchargeAmt(surchargeAmt);
-                        }
-                        else
-                        {
-                            // Calculate Tax Amount
-                            tax = MTax.Get(GetCtx(), contact.GetC_Tax_ID());
-                            TotalRate = tax.CalculateTax(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetPricePrecision());
-                            New.SetTaxAmt(TotalRate);
-                        }
                         // Calculate Discount %
                         Decimal? dis = Decimal.Multiply(Decimal.Divide(Decimal.Subtract(New.GetPriceList(), New.GetPriceEntered()), New.GetPriceList()), 100);
-                        New.SetDiscount(dis);                        
+                        New.SetDiscount(dis);
+                        New.SetTaxAmt(TotalRate);
 
                         // Set Grand Total Amount
                         if (priceList.IsTaxIncluded())
@@ -208,14 +196,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         else
                         {
-                            if (New.Get_ColumnIndex("SurchargeAmt") > 0)
-                            {
-                                New.SetGrandTotal(Decimal.Add(Decimal.Add(New.GetLineNetAmt(), New.GetTaxAmt()), New.GetSurchargeAmt()));
-                            }
-                            else
-                            {
-                                New.SetGrandTotal(Decimal.Add(New.GetLineNetAmt(), New.GetTaxAmt()));
-                            }
+                            New.SetGrandTotal(Decimal.Add(New.GetLineNetAmt(), New.GetTaxAmt()));
                         }
 
                         if (contact.GetBillStartDate() != null)
@@ -261,18 +242,18 @@ namespace ViennaAdvantageServer.Process
                     {
                         // SI_0772: By Clicking on Renew Contract, System is throwing an error as 'NoContractReNewed'.
                         CDate = contact.GetCancellationDate();
-                        cycles = contact.GetCycles();
+                        cycles =contact.GetCycles();                        
                         if (CDate != null)
                         {
                             continue;
                         }
-
+                       
                         New = new X_C_Contract(GetCtx(), 0, Get_TrxName());
                         New.SetRefContract(contact.GetDocumentNo());
                         New.SetC_Order_ID(contact.GetC_Order_ID());
                         New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
                         OldStart = (DateTime)(contact.GetStartDate());
-                        Start = (DateTime)(contact.GetEndDate());
+                        Start = (DateTime)(contact.GetEndDate());                        
                         New.SetStartDate(Start.AddDays(1));
 
                         frequency = contact.GetC_Frequency_ID();
@@ -283,18 +264,18 @@ namespace ViennaAdvantageServer.Process
 
                         endDate = New.GetStartDate().Value.AddMonths(duration);
                         endDate = endDate.AddDays(-1);
-
+                        
                         New.SetEndDate(endDate);
                         New.SetC_BPartner_ID(contact.GetC_BPartner_ID());
                         New.SetBill_Location_ID(contact.GetBill_Location_ID());
                         New.SetBill_User_ID(contact.GetBill_User_ID());
-                        New.SetSalesRep_ID(contact.GetSalesRep_ID());
+                        New.SetSalesRep_ID(contact.GetSalesRep_ID());                        
                         New.SetC_ConversionType_ID(contact.GetC_ConversionType_ID());
                         New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
                         New.SetC_Frequency_ID(frequency);
 
                         // invoice Count Start                       
-
+                        
                         if (Record_id != 0)
                         {
                             if (contact.GetRef_PriceList_ID() == 0)
@@ -345,19 +326,19 @@ namespace ViennaAdvantageServer.Process
                             New.SetPriceActual(contact.GetPriceActual());
                             New.SetPriceList(contact.GetPriceList());
                             New.SetPriceEntered(contact.GetPriceEntered());
-
+                            
                         }
                         New.SetTotalInvoice(contact.GetCycles());
                         New.SetC_Currency_ID(priceList.GetC_Currency_ID());
                         New.SetC_UOM_ID(contact.GetC_UOM_ID());
-                        New.SetM_Product_ID(contact.GetM_Product_ID());
+                        New.SetM_Product_ID(contact.GetM_Product_ID());                        
                         New.SetM_AttributeSetInstance_ID(contact.GetM_AttributeSetInstance_ID());
                         New.SetQtyEntered(contact.GetQtyEntered());
                         New.SetC_Tax_ID(contact.GetC_Tax_ID());
                         New.SetC_Campaign_ID(contact.GetC_Campaign_ID());
                         New.SetRef_Contract_ID(contact.GetC_Contract_ID());
                         New.SetC_Project_ID(contact.GetC_Project_ID());
-                        New.SetDescription(contact.GetDescription());
+                        New.SetDescription(contact.GetDescription());                        
                         New.SetCancelBeforeDays(contact.GetCancelBeforeDays());
                         New.SetCycles(contact.GetCycles());
                         New.SetRenewContract("N");
@@ -368,22 +349,9 @@ namespace ViennaAdvantageServer.Process
 
                         // Calculate Tax Amount
                         tax = MTax.Get(GetCtx(), contact.GetC_Tax_ID());
+                        TotalRate = tax.CalculateTax(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetPricePrecision());
+                        New.SetTaxAmt(TotalRate);
 
-                        // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
-                        if (New.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
-                        {
-                            Decimal surchargeAmt = Env.ZERO;
-
-                            // Calculate Surcharge Amount
-                            TotalRate = tax.CalculateSurcharge(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetStandardPrecision(), out surchargeAmt);
-                            New.SetTaxAmt(TotalRate);
-                            New.SetSurchargeAmt(surchargeAmt);
-                        }
-                        else
-                        {
-                            TotalRate = tax.CalculateTax(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetPricePrecision());
-                            New.SetTaxAmt(TotalRate);
-                        }
                         // Calculate Discount %
                         Decimal? dis = Decimal.Multiply(Decimal.Divide(Decimal.Subtract(New.GetPriceList(), New.GetPriceEntered()), New.GetPriceList()), 100);
                         New.SetDiscount(dis);
@@ -395,14 +363,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         else
                         {
-                            if (New.Get_ColumnIndex("SurchargeAmt") > 0)
-                            {
-                                New.SetGrandTotal(Decimal.Add(Decimal.Add(New.GetLineNetAmt(), New.GetTaxAmt()), New.GetSurchargeAmt()));
-                            }
-                            else
-                            {
-                                New.SetGrandTotal(Decimal.Add(New.GetLineNetAmt(), New.GetTaxAmt()));
-                            }
+                            New.SetGrandTotal(Decimal.Add(New.GetLineNetAmt(), New.GetTaxAmt()));
                         }
 
                         if (contact.GetBillStartDate() != null)
@@ -456,7 +417,7 @@ namespace ViennaAdvantageServer.Process
                         }
                     }
                 }
-                dr.Close();
+                dr.Close();               
                 if (count != 0 && Record_id != 0)
                 {
                     return Msg.GetMsg(GetCtx(), "ContractReNewed") + ": " + newcon;
@@ -497,16 +458,16 @@ namespace ViennaAdvantageServer.Process
         {
             X_C_ContractSchedule CSchedule = null;
             X_C_Contract contract = new X_C_Contract(GetCtx(), C_Contract_ID, Get_TrxName());
-            DateTime start = (DateTime)contract.GetStartDate();
+            DateTime start = (DateTime)contract.GetStartDate();            
             int frequency = contract.GetC_Frequency_ID();
 
             string Sql = "SELECT NoOfMonths FROM C_Frequency WHERE C_Frequency_ID=" + frequency;
             int months = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, Get_TrxName()));
             int totalcount = months * cycles;
             DateTime end = start.AddMonths(totalcount);
-
+            
             if (cycles > 0)
-            {
+            {                
                 for (int i = 1; i <= cycles; i++)
                 {
                     CSchedule = new X_C_ContractSchedule(GetCtx(), 0, Get_TrxName());
@@ -517,24 +478,17 @@ namespace ViennaAdvantageServer.Process
                     if (i != cycles)
                     {
                         CSchedule.SetEndDate(start.AddMonths(months).AddDays(-1));
-                        start = start.AddMonths(months);
+                        start = start.AddMonths(months);                        
                     }
                     else
                     {
-                        CSchedule.SetEndDate(end);
+                        CSchedule.SetEndDate(end);                       
                     }
-                    CSchedule.SetM_Product_ID(contract.GetM_Product_ID());
+                    CSchedule.SetM_Product_ID(contract.GetM_Product_ID());                  
                     CSchedule.SetM_AttributeSetInstance_ID(contract.GetM_AttributeSetInstance_ID());
                     CSchedule.SetTotalAmt(contract.GetLineNetAmt());
                     CSchedule.SetGrandTotal(contract.GetGrandTotal());
                     CSchedule.SetTaxAmt(contract.GetTaxAmt());
-
-                    // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
-                    if (CSchedule.Get_ColumnIndex("SurchargeAmt") > 0)
-                    {
-                        CSchedule.SetSurchargeAmt(contract.GetSurchargeAmt());
-                    }
-
                     CSchedule.SetC_UOM_ID(contract.GetC_UOM_ID());
                     CSchedule.SetPriceEntered(contract.GetPriceEntered());
                     CSchedule.SetProcessed(true);
@@ -543,7 +497,7 @@ namespace ViennaAdvantageServer.Process
                         log.Info("Contract Schedule not Saved for Service Contract no: " + contract.GetDocumentNo());
                         return false;
                     }
-                }
+                }                
             }
             return true;
         }

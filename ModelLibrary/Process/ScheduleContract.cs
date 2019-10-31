@@ -69,13 +69,6 @@ namespace ViennaAdvantageServer.Process
                 CSchedule.SetTotalAmt(contract.GetLineNetAmt()); 
                 CSchedule.SetGrandTotal(contract.GetGrandTotal());
                 CSchedule.SetTaxAmt(contract.GetTaxAmt());
-
-                // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
-                if (CSchedule.Get_ColumnIndex("SurchargeAmt") > 0)
-                {
-                    CSchedule.SetSurchargeAmt(contract.GetSurchargeAmt());
-                }
-
                 CSchedule.SetC_UOM_ID(contract.GetC_UOM_ID());
                 CSchedule.SetPriceEntered(contract.GetPriceEntered());
                 if (CSchedule.Save())

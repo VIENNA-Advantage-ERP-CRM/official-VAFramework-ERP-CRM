@@ -1697,7 +1697,6 @@
     <Compile Include="Process\CreateCurrencySourceEntries.cs" />
     <Compile Include="Process\CreateInviteeList.cs" />
     <Compile Include="Process\CreatePendingTranslations.cs" />
-    <Compile Include="Process\CreateReleaseDocFromBO.cs" />
     <Compile Include="Process\CreateSalesContract.cs" />
     <Compile Include="Process\CreateTargetList.cs" />
     <Compile Include="Process\CreateTaxLines.cs" />

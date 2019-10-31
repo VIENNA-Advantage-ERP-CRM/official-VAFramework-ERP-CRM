@@ -1292,9 +1292,6 @@ namespace VAdvantage.Model
                     if (docType.IsReleaseDocument())
                     {
                         line.SetC_OrderLine_Blanket_ID(fromLines[i].GetC_OrderLine_ID());
-
-                        // Blanket order qty not updated correctly by Release order process
-                        line.SetQtyBlanket(fromLines[i].GetQtyOrdered());
                     }
 
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
@@ -1304,12 +1301,9 @@ namespace VAdvantage.Model
                     if (line.Get_ColumnIndex("C_Order_Quotation") > 0)
                         line.Set_Value("C_Order_Quotation", fromLines[i].GetC_Order_ID());
 
-                    // JID_0416 If we create SO/PO by using "Copy From" process system update return qty on new order.. we set this ZERO When we copy any order
-                    line.SetQtyReturned(I_ZERO);
                     line.SetQtyDelivered(Env.ZERO);
                     line.SetQtyInvoiced(Env.ZERO);
                     line.SetQtyReserved(Env.ZERO);
-                    line.SetQtyReleased(Env.ZERO);      // set Qty Released to Zero.
                     line.SetDateDelivered(null);
                     line.SetDateInvoiced(null);
                     //	Tax
@@ -1321,12 +1315,7 @@ namespace VAdvantage.Model
                     // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.
                     if (GetM_PriceList_ID() != otherOrder.GetM_PriceList_ID())
                         line.SetTaxAmt();		//	recalculate Tax Amount
-
-                    // ReCalculate Surcharge Amount
-                    if (line.Get_ColumnIndex("SurchargeAmt") > 0)
-                    {
-                        line.SetSurchargeAmt(Env.ZERO);
-                    }
+                    //
 
                     //
                     line.SetProcessed(false);
@@ -3185,7 +3174,7 @@ namespace VAdvantage.Model
 
                         if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))  //if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO") // if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")
                         {
-                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), null);
 
                             if (qtyRel != null)
                             {
@@ -3245,25 +3234,12 @@ namespace VAdvantage.Model
                     {
                         MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
-                        //oTax.SetIsTaxIncluded(IsTaxIncluded());
+                        oTax.SetIsTaxIncluded(IsTaxIncluded());
                         if (!oTax.CalculateTaxFromLines())
                             return false;
                         if (!oTax.Save(Get_TrxName()))
                             return false;
                         taxList.Add(taxID);
-
-                        // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
-                        if (line.Get_ColumnIndex("SurchargeAmt") > 0)
-                        {
-                            oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
-                            if (oTax != null)
-                            {                               
-                                if (!oTax.CalculateSurchargeFromLines())
-                                    return false;
-                                if (!oTax.Save(Get_TrxName()))
-                                    return false;
-                            }
-                        }
                     }
                     totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
                 }
@@ -3324,7 +3300,7 @@ namespace VAdvantage.Model
                         _taxes = null;
                     }
                     else
-                    {                        
+                    {
                         if (!IsTaxIncluded())
                             grandTotal = Decimal.Add(grandTotal, oTax.GetTaxAmt());
                     }
