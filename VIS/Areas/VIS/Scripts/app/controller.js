@@ -398,25 +398,22 @@
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
-        this.isHeaderPanel = false;
-        this.headerPanel = null;
 
         this.mDataStatusEvent;
         this.mDataListenerList = [];
 
         this.loadFields();
         this.loadTabPanels();
-        this.loadHeaderPanel();
         this.gridTable.addDataStatusListener(this);
         this.gridTable.setAD_Tab_ID(this.vo.AD_Tab_ID);
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTab");
-
+      
         this.loadData(windowVo);
         windowVo = null;
 
     };
 
-
+    
 
     GridTab.prototype.getAD_Tab_ID = function () {
         return this.vo.AD_Tab_ID;
@@ -700,7 +697,7 @@
     };	//	getIncluded_Tab_ID
 
     GridTab.prototype.getIsAlwaysUpdateField = function () {
-        for (var i = 0; i < this.gridTable.getColumnCount(); i++) {
+        for (var i = 0; i < this.gridTable.getColumnCount() ; i++) {
             var field = this.gridTable.getField(i);
             if (field.getIsAlwaysUpdateable())
                 return true;
@@ -999,8 +996,8 @@
         //  inform APanel/..    -> dataStatus with row updated
         if (this.mDataStatusEvent == null) {
             this.mDataStatusEvent = new DataStatusEvent(null, this.getRowCount(),
-                this.gridTable.getIsInserting(),		//	changed
-                //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
+                    this.gridTable.getIsInserting(),		//	changed
+                    //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
 
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
@@ -1019,8 +1016,8 @@
         //  inform APanel/..    -> dataStatus with row updated
         if (this.mDataStatusEvent == null) {
             this.mDataStatusEvent = new DataStatusEvent(null, this.getRowCount(),
-                this.gridTable.getIsInserting(),		//	changed
-                //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
+                    this.gridTable.getIsInserting(),		//	changed
+                    //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
 
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
@@ -1131,7 +1128,8 @@
                 this.parents.push(columnName);
             //	Order By
             var sortNo = gridField.getSortNo();
-            if (sortNo == 0) { }
+            if (sortNo == 0)
+            { }
             else if (Math.abs(sortNo) == 1) {
                 this.orderBys[0] = columnName;
                 if (sortNo < 0)
@@ -1178,53 +1176,6 @@
         else {
             this.hasPanel = false;
         }
-    };
-
-    GridTab.prototype.loadHeaderPanelItems = function () {
-        if (this.gTab.hItems && this.gTab.hItems.length > 0) {
-            this.isHeaderPanel = true;
-            headerPanel = this.gTab.hItems;
-        }
-    };
-
-    GridTab.prototype.getIsHeaderPanel = function () {
-        return this.isHeaderPanel;
-    };
-
-    GridTab.prototype.getHeaderPanelItems = function () {
-        return headerPanel;
-    }
-
-    GridTab.prototype.getHeaderHeight = function () {
-        return this.gTab.HeaderHeight;
-    };
-
-
-    GridTab.prototype.getHeaderBackColor = function () {
-        return this.gTab.HeaderBackColor;
-    };
-
-
-    GridTab.prototype.getHeaderAlignment = function () {
-        return this.gTab.HeaderAlignment;
-    };
-
-
-    GridTab.prototype.getHeaderName = function () {
-        return this.gTab.HeaderName;
-    };
-
-
-    GridTab.prototype.getHeaderTotalColumn = function () {
-        return this.gTab.HeaderTotalColumn;
-    };
-
-    GridTab.prototype.getHeaderTotalRow = function () {
-        return this.gTab.HeaderTotalRow;
-    };
-    
-    GridTab.prototype.getAD_GridLayout_ID = function () {
-        return this.gTab.AD_GridLayout_ID;
     };
 
     GridTab.prototype.getHasPanel = function () {
@@ -1373,8 +1324,8 @@
         //	e.g. Column=UPPER(Name), Key=AD_Element_IDS, Query=UPPER(AD_Element.Name) LIKE '%CUSTOMER%'
         if (tableName == null) {
             this.log.info("Not successfull - Column="
-                + colName + ", Key=" + tabKeyColumn
-                + ", Query=" + query);
+                    + colName + ", Key=" + tabKeyColumn
+                    + ", Query=" + query);
             return query.getWhereClause();
         }
         //else if(tableName.equals("M_WorkOrderComponent") && tabKeyColumn.equals("M_WorkOrder_ID")){
@@ -1392,10 +1343,10 @@
 
         query.setTableName("xx");
         var result = "EXISTS (SELECT * FROM "
-            + tableName + " xx WHERE "
-            + (query.getWhereClause(true))
-            + " AND xx." + tabKeyColumn + "="
-            + this.getTableName() + "." + tabKeyColumn + ")";
+         + tableName + " xx WHERE "
+         + (query.getWhereClause(true))
+         + " AND xx." + tabKeyColumn + "="
+         + this.getTableName() + "." + tabKeyColumn + ")";
         this.log.fine(result);
         return result;
         // return "";
@@ -1432,7 +1383,7 @@
         return this.isZoomAction;
 
     };
-
+   
 
     GridTab.prototype.prepareQuery = function (onlyCurrentDays, maxRows, created, isVisualEdtr) {
 
@@ -1477,7 +1428,7 @@
         }
 
         //    _vo.WhereClause);
-
+        
         if (this.getOnlyCurrentDays() > 0) {
             if (where.length > 0)
                 where += " AND ";
@@ -1492,7 +1443,7 @@
                 where += "Updated>=";
             //	where.append("addDays(current_timestamp, -");
             where += "addDays(SysDate, -" +
-                this.vo.onlyCurrentDays + ")";
+                 this.vo.onlyCurrentDays + ")";
             if (showNotProcessed)
                 where += ")";
         }
@@ -1508,7 +1459,7 @@
                     success = false;
                 }
                 else {
-
+                    
                     var value = VIS.context.getWindowContext(this.vo.windowNo, lc);
                     //	Same link value?
                     if (refresh) {
@@ -1547,15 +1498,15 @@
         this.extendedWhere = where.toString();
 
         //	Final Query
-        if (this.query.getIsActive()) {
-
+        if (this.query.getIsActive()) {          
+            
             var q = this.validateQuery(this.query);
             if (q != null && !queryDetailAll) {
                 if (where.length > 0)
                     where += " AND ";
                 where += q;
             }
-
+           
         }
 
         /* Query */
@@ -1693,10 +1644,10 @@
         this.setCurrentRow(this.currentRow + 1, true);
         //  process all Callouts (no dependency check - assumed that settings are valid)
         var count = this.getFieldCount();
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < count ; i++)
             this.processCallout(this.getField(i));
         //  check validity of defaults
-        for (var i = 0; i < count; i++) {
+        for (var i = 0; i < count ; i++) {
             //this.getField(i).refreshLookup();
             // getField(i).validateValue();
             this.getField(i).setError(false);
@@ -1812,14 +1763,14 @@
             //  We have a key column
             if (this.keyColumnName != null && this.keyColumnName.length > 0) {
                 info.append(" - ")
-                    .append(this.keyColumnName).append("=").append(e.Record_ID);
+                .append(this.keyColumnName).append("=").append(e.Record_ID);
             }
             else    //  we have multiple parents
             {
                 for (var i = 0; i < this.parents.length; i++) {
                     var keyCol = this.parents[i];
                     info.append(" - ")
-                        .append(keyCol).append("=").append(this.getValue(keyCol));
+                    .append(keyCol).append("=").append(this.getValue(keyCol));
                 }
             }
             e.Info = info.toString();
@@ -2186,12 +2137,12 @@
 
 
             if (this._subscribe == null)
-            //create new list for chat
+                //create new list for chat
             {
                 this._subscribe = {};
             }
             else
-            //if contain chat then clear list
+                //if contain chat then clear list
             {
                 this._subscribe.length = 0;
             }
@@ -2258,12 +2209,12 @@
 
 
             if (this.viewDocument == null)
-            //create new list for chat
+                //create new list for chat
             {
                 this.viewDocument = {};
             }
             else
-            //if contain chat then clear list
+                //if contain chat then clear list
             {
                 this.viewDocument.length = 0;
             }
@@ -2307,12 +2258,12 @@
 
 
             if (this.chats == null)
-            //create new list for chat
+                //create new list for chat
             {
                 this.chats = {};
             }
             else
-            //if contain chat then clear list
+                //if contain chat then clear list
             {
                 this.chats.length = 0;
             }
@@ -2881,10 +2832,10 @@
                 }
                 if (columnName.toUpperCase().endsWith("_ID"))
                     singleRowWHERE = new StringBuilder(columnName)
-                        .append("=").append(value);
+                .append("=").append(value);
                 else
                     singleRowWHERE = new StringBuilder(columnName)
-                        .append("=").append(VIS.DB.to_string(value.toString()));
+                .append("=").append(VIS.DB.to_string(value.toString()));
             }
             else if (field.getIsParentColumn()) {
                 var columnName = field.getColumnName().toLowerCase();
@@ -2899,10 +2850,10 @@
                     multiRowWHERE.append(" AND ");
                 if (columnName.toUpperCase().endsWith("_ID"))
                     multiRowWHERE.append(columnName)
-                        .append("=").append(value);
+                    .append("=").append(value);
                 else
                     multiRowWHERE.append(columnName)
-                        .append("=").append(VIS.DB.to_string(value.toString()));
+                    .append("=").append(VIS.DB.to_string(value.toString()));
             }
         }	//	for all columns
         if (singleRowWHERE != null)
@@ -3235,8 +3186,8 @@
     GridTable.prototype.setValueAt = function (value, row, col, force) {
         //	Can we edit?
         if (!this.isOpen //  not accessible
-            || row < 0 || col < 0   //  invalid index
-            || this.rowCount == 0)     //  no rows
+                || row < 0 || col < 0   //  invalid index
+                || this.rowCount == 0)     //  no rows
         {
             //console.finest("r=" + row + " c=" + col + " - R/O=" + m_readOnly + ", Rows=" + m_rowCount + " - Ignored");
             return;
@@ -3248,8 +3199,8 @@
         //  update MField
 
         if (!force && (
-            oldValue == null && value == null
-            || oldValue === value)) {
+                oldValue == null && value == null
+                || oldValue === value)) {
             // log.finest("r=" + row + " c=" + col + " - New=" + value + "==Old=" + oldValue + " - Ignored");
             return;
         }
@@ -3406,9 +3357,9 @@
         if (gt._withAccessControl) {
 
             this.SQL = VIS.MRole.addAccessSQL(this.SQL,
-                gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
+            gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
             this.SQL_Count = VIS.MRole.addAccessSQL(this.SQL_Count,
-                gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
+             gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
         }
 
         //	ORDER BY
@@ -3452,7 +3403,8 @@
                 success: function (resultt) {
                     rCount = JSON.parse(resultt);
                 },
-                error: function (e) { }
+                error: function (e)
+                { }
             });
         }
         else {
@@ -3471,7 +3423,8 @@
         }
         else {
             //console.log("clear");
-            if (this.bufferList != null) { this.bufferList.length = 0; };
+            if (this.bufferList != null)
+            { this.bufferList.length = 0; };
             if (this.mSortList != null) {
                 this.mSortList = null;
             }
@@ -3626,16 +3579,16 @@
                 var displayType = field.getDisplayType();
                 //	Integer, ID, Lookup (UpdatedBy is a numeric column)
                 if ((VIS.DisplayType.IsID(displayType) // JJ: don't touch!
-                    && (columnName.endsWith("_ID") || columnName.endsWith("_Acct")))
+                        && (columnName.endsWith("_ID") || columnName.endsWith("_Acct")))
                     || columnName.endsWith("atedBy") || columnName.endsWith("_ID_1") || columnName.endsWith("_ID_2")
                     || columnName.endsWith("_ID_3") || displayType == VIS.DisplayType.Integer) {
                     colValue = VIS.Utility.Util.getValueOfInt(colValue);	//	Integer
                 }
-                //	Number
+                    //	Number
                 else if (VIS.DisplayType.IsNumeric(displayType)) {
                     colValue = VIS.Utility.Util.getValueOfDecimal(colValue);			//	BigDecimal
                 }
-                //	Date
+                    //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
 
 
@@ -3645,17 +3598,17 @@
                     //colValue = dte.toISOString();
                     dte = null;
                 }
-                //	RowID or Key (and Selection)
+                    //	RowID or Key (and Selection)
                 else if (displayType == VIS.DisplayType.RowID)
                     colValue = null;
-                //	YesNo
+                    //	YesNo
                 else if (displayType == VIS.DisplayType.YesNo) {
                     var str = colValue.toString();
                     if (field.getIsEncryptedColumn())
                         str = this.decrypt(str);
                     colValue = str.equals("Y");	//	Boolean
                 }
-                //	LOB
+                    //	LOB
                 else if (VIS.DisplayType.IsLOB(displayType)) {
                     var value = colValue;
                     if (value == null)
@@ -3668,7 +3621,7 @@
                         colValue = value;
                     }
                 }
-                //	String
+                    //	String
                 else
                     colValue = colValue.toString();//string
                 //	Encrypted
@@ -3754,7 +3707,7 @@
         }
 
         if (this.readOnly)
-        //	If Processed - not editable (Find always editable)  -> ok for changing payment terms, etc.
+            //	If Processed - not editable (Find always editable)  -> ok for changing payment terms, etc.
         {
             log.warning("IsReadOnly - ignored");
             this.dataIgnore();
@@ -3983,12 +3936,12 @@
                         this.gFieldLessData.push(
                             //{
                             //IsVirtualColumn: field.getIsVirtualColumn(),
-                            // DisplayType: field.getDisplayType(),
+                           // DisplayType: field.getDisplayType(),
                             field.getColumnName().toLowerCase()
-                            // IsKey: field.getIsKey(),
-                            // ColumnSQL: field.getColumnSQL(true),
-                            // IsEncrypted: field.getIsEncrypted(),
-                            // IsParentColumn: field.getIsParentColumn()
+                           // IsKey: field.getIsKey(),
+                           // ColumnSQL: field.getColumnSQL(true),
+                           // IsEncrypted: field.getIsEncrypted(),
+                           // IsParentColumn: field.getIsParentColumn()
                         );
                 }
                 return this.gFieldLessData;
@@ -4142,24 +4095,24 @@
                 if (field.getIsVirtualColumn())
                     ;
                 else if (field.getIsKey()
-                    || columnName.equals("AD_Client_ID")
-                    || columnName.equals("IsActive")
+                        || columnName.equals("AD_Client_ID")
+                        || columnName.equals("IsActive")
                     //
-                    || columnName.startsWith("Created") || columnName.startsWith("Updated")
-                    || columnName.equals("EntityType") || columnName.equals("DocumentNo")
-                    || columnName.equals("Processed") || columnName.equals("IsSelfService")
-                    || columnName.equals("DocAction") || columnName.equals("DocStatus")
-                    || columnName.startsWith("Ref_")
-                    || columnName.equals("Posted")
+                        || columnName.startsWith("Created") || columnName.startsWith("Updated")
+                        || columnName.equals("EntityType") || columnName.equals("DocumentNo")
+                        || columnName.equals("Processed") || columnName.equals("IsSelfService")
+                        || columnName.equals("DocAction") || columnName.equals("DocStatus")
+                        || columnName.startsWith("Ref_")
+                        || columnName.equals("Posted")
                     //	Order/Invoice
-                    || columnName.equals("GrandTotal") || columnName.equals("TotalLines")
-                    || columnName.equals("C_CashLine_ID") || columnName.equals("C_Payment_ID")
-                    || columnName.equals("IsPaid") || columnName.equals("IsAllocated")
-                    || columnName.equalsIgnoreCase("C_Location_ID")
-                    || columnName.equals("IsApproved") || columnName.equals("IsDelivered")
-                    || columnName.equals("IsInvoiced") || columnName.equals("TotalDr")
-                    || columnName.equals("TotalCr")
-                    || columnName.equalsIgnoreCase("I_IsImported")) {
+                        || columnName.equals("GrandTotal") || columnName.equals("TotalLines")
+                        || columnName.equals("C_CashLine_ID") || columnName.equals("C_Payment_ID")
+                        || columnName.equals("IsPaid") || columnName.equals("IsAllocated")
+                        || columnName.equalsIgnoreCase("C_Location_ID")
+                        || columnName.equals("IsApproved") || columnName.equals("IsDelivered")
+                        || columnName.equals("IsInvoiced") || columnName.equals("TotalDr")
+                        || columnName.equals("TotalCr")
+                        || columnName.equalsIgnoreCase("I_IsImported")) {
                     var oo = field.getDefault(this.ctx, tempWindowNo);
                     rowData[colNameLower] = oo;
 
@@ -4590,29 +4543,29 @@
             this.defaultModel[columnName.toLowerCase()] = new Number();
         }
 
-        //	Number
+            //	Number
         else if (VIS.DisplayType.IsNumeric(displayType)) {
             //dc = new DataColumn(columnName, typeof(Decimal));			//	BigDecimal
             this.defaultModel[columnName.toLowerCase()] = new Number();
         }
-        //	Date
+            //	Date
         else if (VIS.DisplayType.IsDate(displayType)) {
             //dc = new DataColumn(columnName, typeof(DateTime));	//	Timestamp
             this.defaultModel[columnName.toLowerCase()] = new Date();
         }
-        //	RowID or Key (and Selection)
+            //	RowID or Key (and Selection)
         else if (displayType == VIS.DisplayType.RowID) {
             dc = new DataColumn(columnName, typeof (Object));
             this.defaultModel[columnName.toLowerCase()] = new Object();
         }
-        //	YesNo
+            //	YesNo
         else if (displayType == VIS.DisplayType.YesNo) {
             //if (field.isEncryptedColumn())
             //	str = (String)decrypt(str);
             //dc = new DataColumn(columnName, typeof(String));	//	Boolean
             this.defaultModel[columnName.toLowerCase()] = new Boolean();
         }
-        //	LOB
+            //	LOB
         else if (VIS.DisplayType.IsLOB(displayType)) {
             //if (DisplayType.Binary == displayType)
             // {
@@ -4624,8 +4577,8 @@
             this.defaultModel[columnName.toLowerCase()] = new String();
             // }
         }
-        // For EnterpriseDB (Vienna Type Long Text is stored as Text in EDB)
-        //	String
+            // For EnterpriseDB (Vienna Type Long Text is stored as Text in EDB)
+            //	String
         else {
             //dc = new DataColumn(columnName, typeof(String));
             this.defaultModel[columnName.toLowerCase()] = new String();
@@ -4873,10 +4826,10 @@
         //	DocumentNo/Value/ASI ars not mandatory (persistency layer manages them)
         var _vo = this.vo;
         if ((_vo.IsKey && _vo.ColumnName.endsWith("_ID"))
-            || _vo.ColumnName.startsWith("Created") || _vo.ColumnName.startsWith("Updated")
-            || _vo.ColumnName.equals("Value")
-            || _vo.ColumnName.equals("DocumentNo")
-            || _vo.ColumnName.equals("M_AttributeSetInstance_ID"))	//	0 is valid
+                || _vo.ColumnName.startsWith("Created") || _vo.ColumnName.startsWith("Updated")
+                || _vo.ColumnName.equals("Value")
+                || _vo.ColumnName.equals("DocumentNo")
+                || _vo.ColumnName.equals("M_AttributeSetInstance_ID"))	//	0 is valid
             return false;
 
         //  Mandatory if displayed
@@ -4949,7 +4902,7 @@
             // the window to be rendered read only.
             if (_vo.ColumnName.equals("AD_Org_ID")) {
                 if (ctx.getWindowContext(_vo.windowNo, "AD_Org_ID") == null ||
-                    ctx.getWindowContext(_vo.windowNo, "AD_Org_ID").length == 0) {
+                        ctx.getWindowContext(_vo.windowNo, "AD_Org_ID").length == 0) {
                     ctx.setWindowContext(_vo.windowNo, "AD_Org_ID", ctx.getContext("#AD_Org_ID"));
                 }
             }
@@ -4969,8 +4922,8 @@
 
 
             if (!VIS.MRole.canUpdate(
-                AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID, false)
-                || !VIS.MRole.getWindowAccess(AD_Window_ID))
+           AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID, false)
+               || !VIS.MRole.getWindowAccess(AD_Window_ID))
                 return false;
             if (!VIS.MRole.getIsColumnAccess(AD_Table_ID, this.vo.AD_Column_ID, false))
                 return false;
@@ -4986,8 +4939,8 @@
 
         //  Always editable if Active
         if (_vo.ColumnName.equals("Processing")
-            || _vo.ColumnName.equals("DocAction")
-            || _vo.ColumnName.equals("GenerateTo"))
+                || _vo.ColumnName.equals("DocAction")
+                || _vo.ColumnName.equals("GenerateTo"))
             return true;
 
         //  Record is Processed	***
@@ -5333,7 +5286,7 @@
             this.log.fine("[SystemAccess] " + vo.ColumnName + "=0");
             return 0;
         }
-        //	Set Org to System, if Client access
+            //	Set Org to System, if Client access
         else if (VIS.Consts.ACCESSLEVEL_SystemPlusClient.equals(ctx.getWindowTabContext(vo.windowNo, vo.tabNo, "AccessLevel"))
             && vo.ColumnName.equals("AD_Org_ID")) {
             this.log.fine("[ClientAccess] " + vo.ColumnName + "=0");
@@ -5555,7 +5508,7 @@
             this.log.fine("[SystemAccess] " + vo.ColumnName + "=0");
             return 0;
         }
-        //	Set Org to System, if Client access
+            //	Set Org to System, if Client access
         else if (VIS.Consts.ACCESSLEVEL_SystemPlusClient.equals(ctx.getWindowTabContext(vo.windowNo, vo.tabNo, "AccessLevel"))
             && vo.ColumnName.equals("AD_Org_ID")) {
             this.log.fine("[ClientAccess] " + vo.ColumnName + "=0");
@@ -5755,7 +5708,7 @@
         try {
             //	IDs & Integer & CreatedBy/UpdatedBy
             if (this.vo.ColumnName.endsWith("atedBy")
-                || this.vo.ColumnName.toUpperCase().endsWith("_ID")) {
+                    || this.vo.ColumnName.toUpperCase().endsWith("_ID")) {
                 try	//	defaults -1 => null
                 {
                     var ii = parseInt(value);
@@ -5952,43 +5905,10 @@
         return this.vo.IsBackgroundProcess;
     };
 
-    /****************************************/
-
-    GridField.prototype.getIsHeaderPanelitem = function () {
-        return this.vo.IsHeaderPanelitem;
+    GridField.prototype.getAskUserBGProcess = function () {
+        return this.vo.AskUserBGProcess;
     };
 
-    GridField.prototype.getHeaderOverrideReference = function () {
-        return this.vo.HeaderOverrideReference;
-    };
-
-    GridField.prototype.getHeaderStyle = function () {
-        return this.vo.HeaderStyle;
-    };
-
-    GridField.prototype.getHeaderHeadingOnly = function () {
-        return this.vo.HeaderHeadingOnly;
-    };
-
-    GridField.prototype.getHeaderSeqno = function () {
-        return this.vo.HeaderSeqno;
-    };
-
-    GridField.prototype.getHeaderIconOnly = function () {
-        return this.vo.HeaderIconOnly;
-    };
-
-    GridField.prototype.getHtmlStyle = function () {
-        return this.vo.HtmlStyle;
-    };
-
-    GridField.prototype.getShowIcon = function () {
-        return this.vo.ShowIcon;
-    };
-
-    GridField.prototype.getAD_Image_ID = function () {
-        return this.vo.AD_Image_ID;
-    };
 
     /**
      *  Refresh Lookup if the lookup is unstable
