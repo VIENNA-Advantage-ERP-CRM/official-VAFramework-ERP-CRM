@@ -80,11 +80,11 @@ namespace ViennaAdvantageServer.Process
                         {
                             DataRow dr1 = ds.Tables[0].Rows[i];
                             //	Tax Included
-                            //  bool isTaxIncluded = Util.GetValueOfBool(ds.Tables[0].Rows[i]["IsTaxIncluded"]);
-                            //	Price Limit Enforce
-                            //  bool isTaxIncluded = Util.GetValueOfBool(ds.Tables[0].Rows[i]["IsTaxIncluded"]);
-                            //	Currency
-                            //  int ii = Util.GetValueOfInt(dr[2].ToString());
+
+                            isTaxIncluded = Util.GetValueOfString(ds.Tables[0].Rows[i]["IsTaxIncluded"]).Equals("Y");
+
+                            //	Currency                            
+
                             C_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
                             // int prislst = Util.GetValueOfInt(dr[4].ToString());
                             //	PriceList Version
