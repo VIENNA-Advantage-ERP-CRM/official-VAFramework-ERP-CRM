@@ -1259,6 +1259,19 @@ namespace VAdvantage.Model
                 string docBaseType = docType.GetDocBaseType();
                 for (int i = 0; i < fromLines.Length; i++)
                 {
+
+                    //issue JID_1474 If full quantity of any line is released from blanket order then system will not create that line in Release order
+                    if (docType.IsReleaseDocument())
+                    {
+                        if (docBaseType == MDocBaseType.DOCBASETYPE_BLANKETSALESORDER || docBaseType == MDocBaseType.DOCBASETYPE_SALESORDER)
+                        {
+                            if (fromLines[i].GetQtyEntered() == 0)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+
                     MOrderLine line = new MOrderLine(this);
                     PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
 
@@ -3254,7 +3267,7 @@ namespace VAdvantage.Model
                         {
                             oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                             if (oTax != null)
-                            {                               
+                            {
                                 if (!oTax.CalculateSurchargeFromLines())
                                     return false;
                                 if (!oTax.Save(Get_TrxName()))
@@ -3321,7 +3334,7 @@ namespace VAdvantage.Model
                         _taxes = null;
                     }
                     else
-                    {                        
+                    {
                         if (!IsTaxIncluded())
                             grandTotal = Decimal.Add(grandTotal, oTax.GetTaxAmt());
                     }
@@ -4298,7 +4311,7 @@ namespace VAdvantage.Model
                     {
                         // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
                         MProduct oproduct = oLine.GetProduct();
-                        
+
                         //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
                         if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
                             && (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")))
@@ -4936,6 +4949,16 @@ namespace VAdvantage.Model
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
             String DocSubTypeSO = dt.GetDocSubTypeSO();
+
+            //JID_1474 If quantity released is greater than 0, then system will not allow to void blanket order record and give message: 'Please Void/Reverse its dependent transactions first'
+            if (dt.GetDocBaseType() == MDocBaseType.DOCBASETYPE_BLANKETSALESORDER)
+            {
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyreleased) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID(), null, Get_Trx())) > 0)
+                {
+                    _processMsg = "Please Void/Reverse its dependent transactions first";
+                    return false;
+                }
+            }
 
             // Added by Vivek on 08/11/2017 assigned by Mukesh sir
             // return false if linked document is in completed or closed stage

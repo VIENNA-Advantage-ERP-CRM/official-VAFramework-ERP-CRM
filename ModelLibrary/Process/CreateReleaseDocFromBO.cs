@@ -62,6 +62,13 @@ namespace VAdvantage.Process
                     throw new Exception(Msg.GetMsg(GetCtx(), "VIS_ReleaseDocumentnotFound"));
                 }
 
+                // JID_1474 if full quantity of all lines are released from blanket order and user run Release order process then system will not allow to create 
+                // Release order and give message: 'All quantity are released'.
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyentered) FROM C_OrderLine WHERE C_Order_ID = " + GetRecord_ID(), null, Get_Trx())) == 0)
+                {
+                    return Msg.GetMsg(GetCtx(), "VIS_AllQtyReleased");
+                }
+
                 //Creating Release PO/SO against blanket Orders
                 MOrder rposo = MOrder.CopyFrom(from, from.GetDateAcct(),
                    dtt.GetC_DocType_ID(), false, true, Get_TrxName(), false);
