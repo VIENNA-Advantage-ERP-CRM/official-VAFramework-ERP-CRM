@@ -31,9 +31,9 @@ namespace VIS.Models
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             var dis = display;
             MClient tenant = MClient.Get(ctx);
-
+            //Added O.ISSALESQUOTATION='N' in where condition(Sales quotation will not display in Order dropdown)
             StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
-                + "' AND O.IsBlanketTrx = 'N' AND o.DocStatus IN ('CL','CO') ");
+                + "' AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION='N' AND o.DocStatus IN ('CL','CO') ");
 
             if (OrgId > 0)
             {
