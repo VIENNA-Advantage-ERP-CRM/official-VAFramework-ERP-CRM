@@ -3266,7 +3266,7 @@ namespace VAdvantage.Model
                         {
                             oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                             if (oTax != null)
-                            {                               
+                            {
                                 if (!oTax.CalculateSurchargeFromLines())
                                     return false;
                                 if (!oTax.Save(Get_TrxName()))
@@ -3333,7 +3333,7 @@ namespace VAdvantage.Model
                         _taxes = null;
                     }
                     else
-                    {                        
+                    {
                         if (!IsTaxIncluded())
                             grandTotal = Decimal.Add(grandTotal, oTax.GetTaxAmt());
                     }
@@ -4310,7 +4310,7 @@ namespace VAdvantage.Model
                     {
                         // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
                         MProduct oproduct = oLine.GetProduct();
-                        
+
                         //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
                         if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
                             && (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")))
