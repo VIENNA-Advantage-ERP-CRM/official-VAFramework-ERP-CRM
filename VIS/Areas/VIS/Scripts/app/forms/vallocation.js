@@ -471,7 +471,7 @@
                     $(chk[i]).prop('checked', $glSelectAll.prop("checked"));
                     //$(chk[i]).change(e);
                     glLineGrid.editChange.call(glLineGrid, chk[i], i, 0, e);
-                    var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
+                    var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i + 1, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
                     glLineGrid.trigger(eData);
                 }
             });
@@ -1626,7 +1626,7 @@
 
             for (var r = 0; r < data.length; r++) {
                 var singleRow = {};
-                singleRow['recid'] = r;
+                singleRow['recid'] = count + r;
                 for (var c = 0; c < colkeys.length; c++) {
                     var colna = colkeys[c];
                     if (colna == "SelectRow") {
@@ -1757,7 +1757,7 @@
 
             for (var r = 0; r < data.length; r++) {
                 var singleRow = {};
-                singleRow['recid'] = r;
+                singleRow['recid'] = count + r;
                 for (var c = 0; c < colkeys.length; c++) {
                     var colna = colkeys[c];
                     if (colna.toLower() == "selectrow") {
@@ -1917,7 +1917,7 @@
 
             for (var r = 0; r < data.length; r++) {
                 var singleRow = {};
-                singleRow['recid'] = r + count;
+                singleRow['recid'] = count + r;
                 for (var c = 0; c < colkeys.length; c++) {
                     var colna = colkeys[c];
                     if (colna.toLower() == "selectrow") {
