@@ -6335,7 +6335,7 @@
                 mField = fields[i];
 
                 if (mField.getIsDisplayed()) {
-                    var iControl = VIS.VControlFactory.getControl(mTab, mField, false, false, false);
+                    var iControl = VIS.VControlFactoryOverride.getControl(mTab, mField, false, false, false);
                     if (iControl == null && !mField.getIsHeading()) {
                         //log.warning("Editor not created for " + mField.getColumnName());
                         continue;

@@ -2136,13 +2136,14 @@
                 if (gTab.getIncluded_Tab_ID() != 0) {
 
                     includedMap[gTab.getIncluded_Tab_ID()] = gc;
-                    if (i == 0)
-                        this.aParentDetail = new VIS.AParentDetail(gc, this.getParentDetailPane());
+                    //if (i == 0)
+                    //    this.aParentDetail = new VIS.AParentDetail(gc, this.getParentDetailPane());
                 }
-                 if (gTab.getIsHeaderPanel()) {
-                    var hPanel = gc.vHeaderPanel;
-                    hPanel.init(gTab, this.getParentDetailPane());
-                    this.getLayout().append(this.getParentDetailPane());
+                if (gTab.getIsHeaderPanel()) {
+                    gc.vHeaderPanel = new VIS.HeaderPanel();
+                    var parentDetailPane = this.getParentDetailPane();
+                    gc.vHeaderPanel.init(gTab, parentDetailPane);
+                    //this.getLayout().append(parentDetailPane);
                 }
 
                 //	Is this tab included?

@@ -339,6 +339,14 @@
         return this.vo.hasPanel;
     }
 
+    GridWindow.prototype.getFontName = function () {
+        return this.vo.FontName;
+    }
+
+    GridWindow.prototype.getAD_Image_ID = function () {
+        return this.vo.AD_Image_ID;
+    }
+
     GridWindow.prototype.dispose = function () {
 
         originalLength = this.tabs.length;
@@ -5066,9 +5074,9 @@
         return true;
     };
 
-    GridField.prototype.getShowIcon = function () {
-        return true;
-    };
+    //GridField.prototype.getShowIcon = function () {
+    //    return true;
+    //};
 
     GridField.prototype.getIsKey = function () {
         return this.vo.IsKey;
@@ -5999,6 +6007,14 @@
 
     GridField.prototype.getAD_Image_ID = function () {
         return this.vo.AD_Image_ID;
+    };
+
+    GridField.prototype.getFontName = function () {
+        return this.vo.FontName;
+    };
+
+    GridField.prototype.getPlaceHolder = function () {
+        return this.vo.PlaceHolder;
     };
 
     /**

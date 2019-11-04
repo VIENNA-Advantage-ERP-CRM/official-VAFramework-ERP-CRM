@@ -314,7 +314,14 @@ namespace VAdvantage.Controller
                     {
                         vo.AD_Image_ID = Utility.Util.GetValueOfInt(dr[i]);
                     }
-
+                   else if (columnName.Equals("FontName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.FontName = Utility.Util.GetValueOfString(dr[i]);
+                    }
+                    else if (columnName.Equals("PlaceHolder", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.PlaceHolder = Utility.Util.GetValueOfString(dr[i]);
+                    }
 
                 }
                 if (vo.Header == null)
@@ -800,6 +807,7 @@ namespace VAdvantage.Controller
             clone.HtmlStyle = HtmlStyle;
             clone.ShowIcon = ShowIcon;
             clone.AD_Image_ID = AD_Image_ID;
+            clone.FontName = FontName;
 
             //         public bool IsHeaderPanelitem = false;
             //public int HeaderOverrideReference = 0;

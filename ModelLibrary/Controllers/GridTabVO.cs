@@ -900,6 +900,7 @@ namespace VAdvantage.Controller
             clone.locationCols = locationCols;
 
             clone.HeaderHeight = HeaderHeight;
+            clone.IsHeaderPanel = IsHeaderPanel;
             clone.AD_GridLayout_ID = AD_GridLayout_ID;
 
             clone.fields = new List<GridFieldVO>();
