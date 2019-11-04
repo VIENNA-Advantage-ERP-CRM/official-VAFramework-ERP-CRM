@@ -2678,8 +2678,8 @@
     //date:19-01-2016
     //Change/Update for:Zoom from workflow on home page
     APanel.prototype.selectFirstTab = function (isSelect) {
-        this.curGC.isZoomAction = isSelect;
-        this.curTab.setIsZoomAction(isSelect);
+        that.curGC.isZoomAction = isSelect;
+        that.curTab.setIsZoomAction(isSelect);
         setTimeout(function (that) {
             that.curGC.isZoomAction = isSelect;
             that.tabActionPerformed(that.firstTabId);
@@ -6335,7 +6335,7 @@
                 mField = fields[i];
 
                 if (mField.getIsDisplayed()) {
-                    var iControl = VIS.VControlFactory.getControl(mTab, mField, false, false, false);
+                    var iControl = VIS.VControlFactoryOverride.getControl(mTab, mField, false, false, false);
                     if (iControl == null && !mField.getIsHeading()) {
                         //log.warning("Editor not created for " + mField.getColumnName());
                         continue;

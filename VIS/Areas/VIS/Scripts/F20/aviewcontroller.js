@@ -19,6 +19,7 @@ VIS.GridController = function (showRowNo, doPaging, id) {
     this.vTable = new VIS.VTable();
     this.vCardView = new VIS.VCardView();
     this.vMapView = new VIS.VMapView();
+    this.vHeaderPanel = null;
     this.windowNo = 0;
     this.aPanel = null;
     this.singleRow = false;
@@ -670,6 +671,10 @@ VIS.GridController.prototype.initGrid = function (onlyMultiRow, curWindowNo, aPa
     else
         this.switchSingleRow(true);
 };
+
+    VIS.GridController.prototype.getIsHeaderPanel = function () {
+        return this.gTab.getIsHeaderPanel();
+    };
 
 VIS.GridController.prototype.detachDynamicAction = function () {
     var i = 0;
@@ -1351,6 +1356,12 @@ VIS.GridController.prototype.navigate = function (tRow, force) {
     else if (recid > -1) {
         this.vCardView.navigate(recid, true);
     }
+
+    if (this.vHeaderPanel)
+    {
+        this.vHeaderPanel.navigate();
+    }
+    
 
     if (recid == -1) {
         this.cancelSel = true;

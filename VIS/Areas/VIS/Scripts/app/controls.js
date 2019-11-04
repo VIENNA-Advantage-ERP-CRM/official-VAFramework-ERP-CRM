@@ -136,15 +136,15 @@
         },
         IsText: function (displayType) {
             if (displayType == VIS.DisplayType.String || displayType == VIS.DisplayType.Text
-               || displayType == VIS.DisplayType.TextLong || displayType == VIS.DisplayType.Memo
-               || displayType == VIS.DisplayType.FilePath || displayType == VIS.DisplayType.FileName
-               || displayType == VIS.DisplayType.URL || displayType == VIS.DisplayType.PrinterName)
+                || displayType == VIS.DisplayType.TextLong || displayType == VIS.DisplayType.Memo
+                || displayType == VIS.DisplayType.FilePath || displayType == VIS.DisplayType.FileName
+                || displayType == VIS.DisplayType.URL || displayType == VIS.DisplayType.PrinterName)
                 return true;
             return false;
         },
         IsLookup: function (displayType) {
             if (VIS.DisplayType.List == displayType || displayType == VIS.DisplayType.TableDir || displayType == VIS.DisplayType.Table
-                   || displayType == VIS.DisplayType.Search || displayType == VIS.DisplayType.MultiKey || displayType == VIS.DisplayType.ProductContainer) {
+                || displayType == VIS.DisplayType.Search || displayType == VIS.DisplayType.MultiKey || displayType == VIS.DisplayType.ProductContainer) {
                 return true;
             }
             return false;
@@ -266,7 +266,7 @@
                 //}
                 //else {
                 var txt = new VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(),
-                                        mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
+                    mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
                 txt.setField(mField);
                 ctrl = txt;
                 //}
@@ -282,7 +282,7 @@
                 if (displayType == VIS.DisplayType.DateTime)
                     readOnly = true;
                 var vd = new VDate(columnName, isMandatory, isReadOnly, isUpdateable,
-                     displayType, mField.getHeader());
+                    displayType, mField.getHeader());
                 vd.setName(columnName);
                 vd.setField(mField);
                 ctrl = vd;
@@ -431,7 +431,7 @@
 
             if (ctrl == null) {
                 var txt = new VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(),
-                                        mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
+                    mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
                 txt.setField(mField);
                 ctrl = txt;
                 //ctrl = new VTextBox(columnName, mandatory, isReadOnly, isUpdateable, 40, 20, null, "");
@@ -456,13 +456,188 @@
 
             //	No Label for FieldOnly, CheckBox, Button
             if (mField.getIsFieldOnly()
-                    || displayType == VIS.DisplayType.YesNo
-                    || displayType == VIS.DisplayType.Button
-                    || displayType == VIS.DisplayType.Label)
+                || displayType == VIS.DisplayType.YesNo
+                || displayType == VIS.DisplayType.Button
+                || displayType == VIS.DisplayType.Label)
                 return null;
             return new VIS.Controls.VLabel(mField.getHeader(), mField.getColumnName(), mField.getIsMandatory());
+        },
+
+        getReadOnlyControl: function (Tab, mField, tableEditor, disableValidation, other) {
+            if (!mField)
+                return null;
+            var columnName = mField.getColumnName();
+            var isMandatory = mField.getIsMandatory(false);      //  no context check
+            //  Not a Field
+            if (mField.getIsHeading())
+                return null;
+
+            var ctrl = null;
+            var displayType = mField.getHeaderOverrideReference() || mField.getDisplayType();
+
+            var isReadOnly = mField.getIsReadOnly();
+            var isUpdateable = mField.getIsEditable(false);
+            var windowNo = mField.getWindowNo();
+
+            //if (displayType == VIS.DisplayType.Button) {
+
+            //    var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
+            //    btn.setField(mField);
+            //    btn.setReferenceKey(mField.getAD_Reference_Value_ID());
+            //    ctrl = btn;
+            //}
+
+            if (displayType == VIS.DisplayType.String || displayType == VIS.DisplayType.YesNo
+                || VIS.DisplayType.Text == displayType || VIS.DisplayType.TextLong == displayType || VIS.DisplayType.Memo == displayType
+                || VIS.DisplayType.IsNumeric(displayType || displayType == VIS.DisplayType.URL || displayType == VIS.DisplayType.Button)) {
+                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
+                ctrl = $ctrl;
+            }
+
+            else if (VIS.DisplayType.IsDate(displayType)) {
+
+                //if (displayType == VIS.DisplayType.DateTime)
+                //    readOnly = true;
+                //var vd = new VDate(columnName, isMandatory, isReadOnly, isUpdateable,
+                //    displayType, mField.getHeader());
+                //vd.setName(columnName);
+                //vd.setField(mField);
+                //ctrl = vd;
+                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
+                ctrl = $ctrl;
+            }
+            else if (VIS.DisplayType.IsLookup(displayType) || VIS.DisplayType.ID == displayType) {
+                var lookup = mField.getLookup();
+                if (disableValidation && lookup != null)
+                    lookup.disableValidation();
+
+                if (!disableValidation) {
+
+                    if (displayType != VIS.DisplayType.Search && displayType != VIS.DisplayType.MultiKey && displayType != VIS.DisplayType.ProductContainer) {
+
+                        var cmb = new VComboBox(columnName, isMandatory, isReadOnly, isUpdateable, lookup, mField.getDisplayLength(), displayType, mField.getZoomWindow_ID());
+                        cmb.setField(mField);
+                        ctrl = cmb;
+                        //ctrl = new VComboBox();
+                    }
+                    else if (displayType == VIS.DisplayType.ProductContainer) {
+                        var txtAmtDiv = new VProductContainer(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo);
+                        txtAmtDiv.setField(mField);
+                        ctrl = txtAmtDiv;
+                    }
+                    else {
+
+                        var txtb = new VTextBoxButton(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, mField.getZoomWindow_ID());
+                        txtb.setField(mField);
+                        ctrl = txtb;
+                    }
+                }
+
+                else {
+                    if (lookup == null || (displayType != VIS.DisplayType.Search && lookup.getDisplayType() != VIS.DisplayType.Search)) {
+                        var cmb = new VComboBox(columnName, isMandatory, isReadOnly, isUpdateable, lookup, mField.getDisplayLength(), displayType, mField.getZoomWindow_ID());
+                        cmb.setDisplayType(displayType);
+                        cmb.setField(mField);
+                        ctrl = cmb;
+                        // ctrl = new VComboBox();
+                    }
+                    else {
+                        displayType = VIS.DisplayType.Search;
+                        var txtb = new VTextBoxButton(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, mField.getZoomWindow_ID());
+                        txtb.setField(mField);
+                        ctrl = txtb;
+                    }
+                }
+            }
+            else if (displayType == VIS.DisplayType.Location) {
+
+                var txtLoc = new VLocation(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup());
+                txtLoc.setField(mField);
+                ctrl = txtLoc;
+            }
+            else if (displayType == VIS.DisplayType.Locator) {
+                var txtLocator = new VLocator(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup());
+                txtLocator.setField(mField);
+                ctrl = txtLocator;
+            }
+            else if (displayType == VIS.DisplayType.PAttribute) {
+
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true);
+                txtP.setField(mField);
+                ctrl = txtP;
+            }
+            else if (displayType == VIS.DisplayType.GAttribute) {
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false);
+                txtP.setField(mField);
+                ctrl = txtP;
+            }
+            else if (displayType == VIS.DisplayType.Account) {
+                var txtA = new VAccount(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, mField.getHeader());
+                txtA.setField(mField);
+                ctrl = txtA;
+            }
+            else if (displayType == VIS.DisplayType.Binary) {
+                var bin = new VBinary(columnName, isMandatory, isReadOnly, isUpdateable, windowNo);
+                bin.setField(mField);
+                ctrl = bin;
+            }
+            else if (displayType == VIS.DisplayType.Image) {
+                var image = new VImage(columnName, isMandatory, true, windowNo);
+                //image.setField(mField);
+                ctrl = image;
+            }
+            else if (displayType == VIS.DisplayType.FileName || displayType == VIS.DisplayType.FilePath) {
+                var vs = new VFile(columnName, isMandatory, isReadOnly, isUpdateable, windowNo, displayType);
+                vs.setField(mField);
+                ctrl = vs;
+            }
+
+            else if (displayType == VIS.DisplayType.Label) {
+                ///******14/2/2012 *******///
+                ///implement Action pane 
+                ///
+
+                var txt = new VLabel(mField.getHelp(), columnName, false, true);
+                txt.setField(mField);
+                ctrl = txt;
+            }
+            else if (displayType == VIS.DisplayType.AmtDimension) {
+                var txtAmtDiv = new VAmtDimension(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo);
+                txtAmtDiv.setField(mField);
+                txtAmtDiv.setDefaultValue(mField.vo.DefaultValue);
+                ctrl = txtAmtDiv;
+            }
+            else if (displayType == VIS.DisplayType.ProductContainer) {
+                var txtAmtDiv = new VProductContainer(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo);
+                txtAmtDiv.setField(mField);
+                ctrl = txtAmtDiv;
+            }
+
+            if (ctrl == null) {
+                var txt = new VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(),
+                    mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
+                txt.setField(mField);
+                ctrl = txt;
+                //ctrl = new VTextBox(columnName, mandatory, isReadOnly, isUpdateable, 40, 20, null, "");
+            }
+
+
+            return ctrl;
+
+        },
+
+        getIcon: function (mField) {
+            if (mField.getFontName()) {
+                return "<i class='" + mField.getFontName() + "'> </i>";
+            }
+
+            if (mField.getAD_Image_ID() > 0) {
+                return "<img src='" + VIS.Application.contextUrl + "Images/Thumb16x16/" + mField.getAD_Image_ID() + ".jpg' > ";
+            }
         }
+
     };
+
 
 
 
@@ -890,8 +1065,25 @@
         }
     };
 
+
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
+    VLabel.prototype.setValue = function (newValue) {
+        if (this.oldValue != newValue) {
+            this.oldValue = newValue;
+            this.ctrl.text(newValue);
+        }
+    };
+
+
+    VLabel.prototype.getValue = function () {
+        if (this.value != null) {
+            return this.ctrl.text().toString();
+        }
+        else {
+            return null;
+        }
+    };
 
 
     // END VLabel 
@@ -1376,8 +1568,8 @@
 
             if ((this.lookup &&
                 (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                 || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                 || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
+                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -1725,7 +1917,7 @@
                     if (this.inserting)
                         this.ctrl.trigger("change");
                 }
-                    //  we have lookup
+                //  we have lookup
                 else if (this.ctrl.val() == null) {
                     //  do-not add item in combobox if look up validated and loaded 
                     if (this.inserting && !this.lookup.info.isParent && this.lookup.getIsValidated() && this.lookup.allLoaded) {
@@ -1881,7 +2073,6 @@
             var val = newValue.substring(0, newValue.length - 1);
             var indexTime = newValue.indexOf("T");
             if (this.displayType == VIS.DisplayType.DateTime) {
-
                 this.ctrl.val(val);
             }
             else if (this.displayType == VIS.DisplayType.Date) {
@@ -1911,7 +2102,7 @@
             d = new Date(0);
             var parts = val.match(/(\d+)\:(\d+)/);
             var hours = parseInt(parts[1], 10),
-            minutes = parseInt(parts[2], 10);
+                minutes = parseInt(parts[2], 10);
             d.setHours(hours);
             d.setMinutes(minutes);
         }
@@ -1984,11 +2175,11 @@
         }
         else if (displayType == VIS.DisplayType.Search) {
             if (columnName.equals("C_BPartner_ID")
-            || (columnName.equals("C_BPartner_To_ID") && lookup.getColumnName().equals("C_BPartner.C_BPartner_ID"))) {
+                || (columnName.equals("C_BPartner_To_ID") && lookup.getColumnName().equals("C_BPartner.C_BPartner_ID"))) {
                 src += "BPartner20.png";
             }
             else if (columnName.equals("M_Product_ID")
-            || (columnName.equals("M_Product_To_ID") && lookup.getColumnName().equals("M_Product.M_Product_ID"))) {
+                || (columnName.equals("M_Product_To_ID") && lookup.getColumnName().equals("M_Product.M_Product_ID"))) {
                 src += "Product20.png";
             }
             else {
@@ -2034,8 +2225,8 @@
 
             if ((this.lookup &&
                 (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                 || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                 || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
+                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -2653,7 +2844,7 @@
                 });
 
             }
-                // Get info window from field if exist.
+            // Get info window from field if exist.
             else if (self.getField() != null & infoWinID == 0) {
                 infoWinID = self.getField().getAD_InfoWindow_ID();
             }
@@ -2723,17 +2914,17 @@
                     var multipleSelection = false;
                     if (self.lookup.windowNo > 0) {
                         multipleSelection = (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_OrderLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_InvoiceLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InOutLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_PackageLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_MovementLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InventoryLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_ProductPrice_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_ProjectLine_ID") ||
-                                     (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_RequisitionLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 0, "KeyColumnName") == "M_PriceList_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "SAP001_StockTransferLine_ID") //;
-                        ;
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_InvoiceLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InOutLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_PackageLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_MovementLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InventoryLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_ProductPrice_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_ProjectLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_RequisitionLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 0, "KeyColumnName") == "M_PriceList_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "SAP001_StockTransferLine_ID") //;
+                            ;
                     }
                     InfoWindow = new VIS.infoProduct(true, self.lookup.windowNo, M_Warehouse_ID, M_PriceList_ID,
                         text, tableName, _keyColumnName, multipleSelection, wc);
@@ -3248,13 +3439,13 @@
             //}
 
             if ((event.keyCode >= 37 && event.keyCode <= 40) || // Left, Up, Right and Down        
-        event.keyCode == 8 || // backspaceASKII
-        event.keyCode == 9 || // tabASKII
-        event.keyCode == 16 || // shift
-        event.keyCode == 17 || // control
-        event.keyCode == 35 || // End
-        event.keyCode == 36 || // Home
-        event.keyCode == 46) // deleteASKII
+                event.keyCode == 8 || // backspaceASKII
+                event.keyCode == 9 || // tabASKII
+                event.keyCode == 16 || // shift
+                event.keyCode == 17 || // control
+                event.keyCode == 35 || // End
+                event.keyCode == 36 || // Home
+                event.keyCode == 46) // deleteASKII
             {
                 return true;
             }
@@ -3413,13 +3604,13 @@
             //}
 
             if ((event.keyCode >= 37 && event.keyCode <= 40) || // Left, Up, Right and Down        
-        event.keyCode == 8 || // backspaceASKII
-        event.keyCode == 9 || // tabASKII
-        event.keyCode == 16 || // shift
-        event.keyCode == 17 || // control
-        event.keyCode == 35 || // End
-        event.keyCode == 36 || // Home
-        event.keyCode == 46) // deleteASKII
+                event.keyCode == 8 || // backspaceASKII
+                event.keyCode == 9 || // tabASKII
+                event.keyCode == 16 || // shift
+                event.keyCode == 17 || // control
+                event.keyCode == 35 || // End
+                event.keyCode == 36 || // Home
+                event.keyCode == 46) // deleteASKII
             {
                 return true;
             }
@@ -4436,11 +4627,11 @@
         this.log = VIS.Logging.VLogger.getVLogger("VImage");
         var windowNo = winNo;
         var columnName = colName;// "AD_Image_ID";
-        var $img = $("<img style='width: 20px;height: 20px;'>");
+        var $img = $("<img >");
         var $txt = $("<span>").text("-");
         var $ctrl = null;
 
-        $ctrl = $('<button>', { type: 'button', name: columnName });
+        $ctrl = $('<button style="width: 100px; height: 100px;">', { type: 'button', name: columnName });
         $txt.css("color", "blue");
 
 
@@ -4539,6 +4730,9 @@
             if (newValue == null) {
                 this.setIcon(null);
                 this.value = 0;
+                if (this) {
+                    this.ctrl.val(null);
+                }
                 return;
             }
             var neValue = newValue;
@@ -4553,7 +4747,7 @@
             //By Ajex request
             var localObj = this;
             $.ajax({
-                url: VIS.Application.contextUrl + "VImageForm/GetImageAsByte",
+                url: VIS.Application.contextUrl + "VImageForm/GetImageForWindowControl",
                 dataType: "json",
                 data: {
                     ad_image_id: neValue

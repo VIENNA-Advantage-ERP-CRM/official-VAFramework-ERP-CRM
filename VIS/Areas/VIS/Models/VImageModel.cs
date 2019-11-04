@@ -31,6 +31,22 @@ namespace VIS.Models
             }
         }
 
+
+        public void GetImageForWindowControl(Ctx ctx, int ad_image_id, int height,int width)
+        {
+            MImage mimg = new MImage(ctx, ad_image_id, null);
+            var value = mimg.GetThumbnailByte(height, width);
+            if (value != null)
+            {
+                UsrImage = Convert.ToBase64String(value);
+                //obj.UsrImage = Convert.ToBase64String(mimg.GetBinaryData());
+                if (mimg.GetBinaryData() != null)
+                {
+                    Isdatabase = true;
+                }
+            }
+        }
+
         /// <summary>
         /// Save images
         /// </summary>

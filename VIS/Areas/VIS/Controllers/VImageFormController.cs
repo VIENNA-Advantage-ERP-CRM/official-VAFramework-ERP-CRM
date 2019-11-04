@@ -77,12 +77,26 @@ namespace VIS.Controllers
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 16);
+                obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 320);
             }
             string userImage = obj.UsrImage;
             obj = null;
             return Json(new { result = userImage }, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetImageForWindowControl(int ad_image_id)
+        {
+            VImageModel obj = new VImageModel();
+            if (Session["Ctx"] != null)
+            {
+                var ctx = Session["ctx"] as Ctx;
+                obj.GetImageForWindowControl(ctx, Convert.ToInt32(ad_image_id), 320, 185);
+            }
+            string userImage = obj.UsrImage;
+            obj = null;
+            return Json(new { result = userImage }, JsonRequestBehavior.AllowGet);
+        }
+
 
         public JsonResult GetFileByteArray(HttpPostedFileBase file)
         {
