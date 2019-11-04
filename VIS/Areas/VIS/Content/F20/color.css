@@ -11,4 +11,16 @@
     /* common*/
     --v-c-common: 255,255,255;
     --v-c-on-common: 0,0,0;
+
+
+    --v-c-mandatory:255,182,193;
+    --v-c-readonly:241,241,241;
+
+}
+
+
+.vis-color-primary {
+    color:rgba(var(--v-c-primary),1);
+}
+.vis-color-mandatory {
 }

@@ -674,7 +674,7 @@ html[dir="rtl"] .vis-hasSubMenu:after
 
         .vis-css-treeview ul li {
             margin-bottom: 2px;
-            background-color: rgba(var(--v-c-secondary), 0.8);
+            background-color: rgba(var(--v-c-secondary), 0.5);
             position: relative;
         }
 

@@ -30,6 +30,7 @@
 ::-webkit-scrollbar-thumb {
     background-color: rgba(var(--v-c-primary),.8);
     outline: 1px solid slategrey;
+    border-radius: 5px;
 }
     ::-webkit-scrollbar-thumb:hover {
         background-color: rgba(var(--v-c-primary),1);
