@@ -1207,6 +1207,9 @@
         return this.vo.HeaderHeight;
     };
 
+    GridTab.prototype.getHeaderWidth = function () {
+        return this.vo.HeaderWidth;
+    };
 
     GridTab.prototype.getHeaderBackColor = function () {
         return this.vo.HeaderBackColor;
@@ -6009,13 +6012,18 @@
         return this.vo.AD_Image_ID;
     };
 
-    GridField.prototype.getFontName = function () {
-        return this.vo.FontName;
+    GridField.prototype.getFontClass = function () {
+        return this.vo.FontClass;
     };
 
     GridField.prototype.getPlaceHolder = function () {
         return this.vo.PlaceHolder;
     };
+
+    GridField.prototype.getImageName = function () {
+        return this.vo.ImageName;
+    };
+
 
     /**
      *  Refresh Lookup if the lookup is unstable

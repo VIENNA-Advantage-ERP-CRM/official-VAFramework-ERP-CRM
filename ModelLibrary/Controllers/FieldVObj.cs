@@ -255,8 +255,9 @@ namespace VAdvantage.Controller
         public string HtmlStyle = null;
         public bool ShowIcon = false;
         public int AD_Image_ID = 0;
-        public string FontName = "";
+        public string FontClass = "";
         public string PlaceHolder = "";
+        public string ImageName = "";
 
         /// <summary>
         /// calaculate MaxDisplayLength
