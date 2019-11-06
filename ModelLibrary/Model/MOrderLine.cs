@@ -934,7 +934,7 @@ namespace VAdvantage.Model
                 // MessageBox.Show("MInvoiceLine--SetTaxAmt");
             }
         }
-        
+
         /// <summary>
         /// Calculate Extended Amt.
         /// May or may not include tax
@@ -4099,6 +4099,15 @@ namespace VAdvantage.Model
                 }
                 //end
 
+                //JID_1474 : if document is closed then we need to set Delivered qty as Ordered qty Suggested by Gagandeep kaur and Puneet that we do not
+                // need to add return trx check and it will work for all orders
+                if (Ord.GetDocAction().Equals(MOrder.DOCACTION_Close))
+                {
+                    if (GetQtyDelivered() > 0)
+                        SetQtyOrdered(GetQtyDelivered());
+                }
+                //end
+
             }
             /////////////
 
@@ -4412,7 +4421,7 @@ namespace VAdvantage.Model
                     {
                         tax = MOrderTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
-                        {                            
+                        {
                             if (!tax.CalculateSurchargeFromLines())
                                 return false;
                             if (!tax.Save(Get_TrxName()))
