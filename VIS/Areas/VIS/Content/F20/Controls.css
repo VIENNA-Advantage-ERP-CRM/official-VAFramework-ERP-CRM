@@ -34,9 +34,6 @@
     margin-bottom: 20px;
 }
 
-label {
-    margin-bottom: 0;
-}
 
 .vis-input-wrap input, .vis-input-wrap select {
     font-size: 14px;
@@ -159,13 +156,13 @@ label {
 }
 
 
-.vis-input-wrap input:focus ~ label, .vis-input-wrap select:focus ~ label {
-    color: rgba(var(--v-c-primary),1);
-}
+    .vis-input-wrap input:focus ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap input:focus ~ label sup, .vis-input-wrap select:focus ~ label sup {
+        color: rgba(var(--v-c-primary),1);
+    }
 
 .vis-control-wrap:focus-within ~ .input-group-append .input-group-text, .vis-select-wrap:focus-within ~ .input-group-append .input-group-text {
     border: 1px solid rgba(var(--v-c-primary),1);
-    border-left: 1px solid rgba(var(--v-c-secondary),1);
+    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
 }
 
 .input-group:focus-within .input-group-prepend > .input-group-text {
@@ -233,222 +230,6 @@ label.vis-gc-vpanel-table-label-checkbox {
 }
 /****** Style Inputs Control END*****/
 
-
-/****** Style Traffic Light Control START*****/
-.traffic-light {
-    display: inline-block;
-    background-color: #333;
-    height: auto;
-    width: auto;
-    border-radius: 5px;
-    padding: 0px 8px;
-}
-
-    .traffic-light input {
-        appearance: none;
-        -webkit-appearance: none;
-        position: relative;
-        width: 16px;
-        height: 16px;
-        background-color: grey;
-        vertical-align: middle;
-        border-radius: 100%;
-        display: inline-block;
-        margin-left: 10px;
-        cursor: pointer;
-    }
-
-        .traffic-light input:nth-child(1) {
-            background-color: #b30000;
-            margin-left: 0;
-        }
-
-            .traffic-light input:nth-child(1):hover {
-                animation: blink1 1.1s step-end infinite;
-            }
-
-            .traffic-light input:nth-child(1):checked {
-                background-color: #FF0000;
-                box-shadow: 0 0 1.2em 2px #ff3333;
-            }
-
-        .traffic-light input:nth-child(2) {
-            background-color: #b2b300;
-        }
-
-            .traffic-light input:nth-child(2):hover {
-                animation: blink2 1s step-end infinite;
-            }
-
-            .traffic-light input:nth-child(2):checked {
-                background-color: #FFFF00;
-                box-shadow: 0 0 1.2em 2px #ffff33;
-            }
-
-        .traffic-light input:nth-child(3) {
-            background-color: #00b300;
-        }
-
-            .traffic-light input:nth-child(3):hover {
-                animation: blink3 1s step-end infinite;
-            }
-
-            .traffic-light input:nth-child(3):checked {
-                background-color: #00FF00;
-                box-shadow: 0 0 1.2em 2px #33ff33;
-            }
-
-@keyframes blink1 {
-    0% {
-        background-color: #FF0000;
-        box-shadow: 0 0 1.2em 2px #ff3333;
-    }
-
-    50% {
-        background-color: #b30000;
-        box-shadow: 0 0 0em 0 transparent;
-    }
-}
-
-@keyframes blink2 {
-    0% {
-        background-color: #FFFF00;
-        box-shadow: 0 0 1.2em 2px #ffff33;
-    }
-
-    50% {
-        background-color: #b2b300;
-        box-shadow: 0 0 0em 0 transparent;
-    }
-}
-
-@keyframes blink3 {
-    0% {
-        background-color: #00FF00;
-        box-shadow: 0 0 1.2em 2px #33ff33;
-    }
-
-    50% {
-        background-color: #00b300;
-        box-shadow: 0 0 0em 0 transparent;
-    }
-}
-/****** Style Traffic Light Control END*****/
-
-/****** Style Progress Bar Control STRAT*****/
-.bg-clr-primary {
-    background-color: rgba(var(--v-c-primary),1);
-}
-
-.vis-control-wrap .progress {
-    border-radius: .6rem;
-}
-/****** Style Progress Bar Control END*****/
-
-/****** Style Toggle Control STRAT*****/
-.vis-switch {
-    position: relative;
-    display: inline-block;
-    width: 45px;
-    height: 10px;
-    margin-bottom: 0;
-    top: 7px;
-}
-
-    .vis-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-.vis-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ecf1f4;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-    .vis-slider:before {
-        position: absolute;
-        content: "";
-        height: 20px;
-        width: 20px;
-        left: 0;
-        bottom: 0;
-        top: 0;
-        margin: auto;
-        background-color: rgba(var(--v-c-primary),1);
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-input:checked + .vis-slider {
-    background-color: rgba(var(--v-c-primary),1);
-}
-
-input:focus + .vis-slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .vis-slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-/* Rounded sliders */
-.vis-slider.vis-round {
-    border-radius: 34px;
-}
-
-    .vis-slider.vis-round:before {
-        border-radius: 50%;
-    }
-
-.vis-checkbox-cont label:first-child {
-    width: auto;
-    display: inline;
-    padding-right: 10px;
-}
-/****** Style Toggle Control STRAT*****/
-
-/****** Style Image Control STRAT*****/
-.vis-image-wrap {
-    height: 150px;
-    border: 1px solid rgba(var(--v-c-primary),1);
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.vis-edit-icon {
-    position: absolute;
-    right: -1px;
-    top: -1px;
-    background: var(--light-gray);
-    border-top-right-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border: 1px solid rgba(var(--v-c-primary),1);
-    color: rgba(var(--v-c-secondary),1);
-    cursor: pointer;
-    height: 40px;
-    width: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-/****** Style Image Control END*****/
-
-
-
-
-
 /***************************** Control Prop *******************************************/
 
 .vis-ev-col-readonly {
@@ -456,13 +237,50 @@ input:checked + .vis-slider:before {
     background: rgba(var(--v-c-on-secondary),.04) !important;
     cursor: not-allowed;
 }
-..vis-input-wrap select.vis-ev-col-readonly ~ label{
-
+select.vis-ev-col-readonly ~ label {
+    background: linear-gradient(0deg, #f2f6f8, #fbfeff);  /*Dynamic color*/
 }
 
+
+/*mendatory*/
 .vis-ev-col-mandatory {
     color: rgba(var(--v-c-mandatory),1);
+    
 }
+/*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
+    border: 1px solid #ec3f3f;
+}*/
+
+.vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
+    color: rgba(var(--v-c-mandatory),1);
+}
+
+.vis-ev-col-msign {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    color: rgba(var(--v-c-mandatory),1);
+    display: none;
+}
+.vis-ev-col-msign i {
+    color:inherit;
+}
+
+
+
+.vis-input-wrap .vis-ev-col-mandatory ~ span {
+    display: flex;
+}
+
+
+/*.vis-ev-col-mandatory .input-group-text {
+    border: 1px solid #ec3f3f;
+    border-left: 1px solid var(--input-border);
+}*/
+/*END mendatory*/
 
 
 /***************************** Control Prop End ****************************************/

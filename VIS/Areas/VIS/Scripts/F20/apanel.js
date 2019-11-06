@@ -155,7 +155,7 @@
         var $root, $busyDiv;
         var $rightBarLPart, $rightBarRPart, $rightBar, $ulRightBar1, $ulRightBar2, $ulRightActionbar //right bar
         var $td0leftbar, $btnlbToggle, $ulLefttoolbar, $divlbMain, $divlbNav; //left bar
-        var $td1parentDetail = "", $td3IncludedEmpty, $lb, $divHeaderNav, $rigthBarAction;
+        var $hdrPanel = "", $td3IncludedEmpty, $lb, $divHeaderNav, $rigthBarAction;
 
         var $tr3, $tr2, $tr;
         var $td2_tr3, $td2_tr1, $td5_tr1;
@@ -229,8 +229,8 @@
 
 
             //parentDetail
-            // $td1parentDetail = $("<td style='width:auto;height:100%;' rowspan='3'>");
-            $td1parentDetail = $root.find(".vis-ad-w-p-header-l");
+            // $hdrPanel = $("<td style='width:auto;height:100%;' rowspan='3'>");
+            $hdrPanel = $root.find(".vis-ad-w-p-header-l");
             //Emptyt td
             //$td3IncludedEmpty = $("<td class='vis-apanel-table-td3' style='height:100%;' rowspan='3'>");
             $td3IncludedEmpty = $root.find(".vis-ad-w-p-center-inctab");
@@ -268,7 +268,7 @@
 
             $tr3 = $("<tr>");//.append($td2_tr3);
             $tr2 = $("<tr>");//.append($tdContentArea); //row 2
-            $tr = $("<tr>");//.append($td0leftbar).append($td1parentDetail).append($td2_tr1).append($td3IncludedEmpty).append($td5_tr1).append($td4); //row 1
+            $tr = $("<tr>");//.append($td0leftbar).append($hdrPanel).append($td2_tr1).append($td3IncludedEmpty).append($td5_tr1).append($td4); //row 1
 
             /********* Tab Panels **************/
             $divTabPanelOuterWrap = $('<div class="vis-window-tab-panel-outerwrap">');
@@ -288,6 +288,8 @@
             $divTabPanelsHead.append($headerTabPanel).append($spanPin);
             $divTabPanels.append($divTabPanelsHead).append($divTabPanelsContent);
             $divTabPanelOuterWrap.append($divTabPanels).append($divTabPanelIconBar);
+           // $td5_tr1.append($divTabPanelOuterWrap);
+            $td5_tr1 = $root.find('.vis-ad-w-p-actionpanel-r');
             $td5_tr1.append($divTabPanelOuterWrap);
 
 
@@ -904,7 +906,7 @@
         /*left bar */
 
         this.getParentDetailPane = function () {
-            return $td1parentDetail;
+            return $hdrPanel;
         };
 
 
@@ -1798,8 +1800,8 @@
             $rightBarLPart = null;
             $rightBarRPart = null;
 
-            $td1parentDetail.remove();
-            $td1parentDetail = null;
+            $hdrPanel.remove();
+            $hdrPanel = null;
             this.getParentDetailPane = null;
             if (tabItems) {
                 for (var i = 0; i < tabItems.length; i++) {
