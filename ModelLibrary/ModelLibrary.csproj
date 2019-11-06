@@ -218,6 +218,7 @@
     <Compile Include="Controllers\GridTabPanelVO.cs" />
     <Compile Include="Controllers\GridTabVO.cs" />
     <Compile Include="Controllers\GridWindowVO.cs" />
+    <Compile Include="Controllers\HeaderPanelItemsVO.cs" />
     <Compile Include="Controllers\Lookup\MAmtDivision.cs" />
     <Compile Include="Controllers\Lookup\MProductContainerLookup.cs" />
     <Compile Include="CRM\Model\MCampaignPhase.cs" />

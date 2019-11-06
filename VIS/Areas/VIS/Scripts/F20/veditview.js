@@ -305,16 +305,16 @@
                 if (sameLine) {
                     if (columnIndex == 1) {
                         //$td1.append(editor.getControl());
-                        insertCWrapper(label, editor, $td1);
+                        insertCWrapper(label, editor, $td1, mField);
                     }
                     else if (columnIndex == 2) {
-                        insertCWrapper(label, editor, $td2);
+                        insertCWrapper(label, editor, $td2, mField);
                     }
                     else {
-                        insertCWrapper(label, editor, $td3);
+                        insertCWrapper(label, editor, $td3, mField);
                     }
                 } else {
-                    insertCWrapper(label, editor, $td0);
+                    insertCWrapper(label, editor, $td0, mField);
                 }
 
                 if (!sameLine && mField.getIsLongField()) {
@@ -396,7 +396,7 @@
 
 
 
-    function insertCWrapper(label, editor,parent) {
+    function insertCWrapper(label, editor,parent,mfiled) {
         var ctrl = '';
         var lblAdded = true;
         if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName =='TEXTAREA') && editor.getControl()[0].type != 'checkbox' ) {
@@ -417,6 +417,7 @@
         }
         else {
             ctrl = $('<div class="vis-control-wrap">');
+            if(editor)
             ctrl.append(editor.getControl());
             if (label != null) {
                 lblAdded = false;
@@ -424,8 +425,13 @@
         }
 
         if (ctrl != '') {
+
+            ctrl.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
+
             var wctrl = $('<div class="input-group vis-input-wrap">');
-            
+
+            if (mfiled.)
+
             if (false) {// image or font lib 
                 wctrl.append($('<div class="input-group-prepend">' +
                                     '<span class="input-group-text vis-color-primary">' +
