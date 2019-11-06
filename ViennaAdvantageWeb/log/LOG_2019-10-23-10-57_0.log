@@ -1,0 +1,61 @@
+*** 10/23/2019 10:57:29 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:57:29.572    (INFO)     Trx.Start: **** ConnSH637074250491971037System.Random
+10:57:29.572    (INFO)     Trx.Commit: **C** ConnSH637074250491971037System.Random
+10:57:35.573    (INFO)     Trx.Start: **** ConnSH637074250557920767System.Random
+10:57:35.573    (INFO)     Trx.Commit: **C** ConnSH637074250557920767System.Random
+10:57:48.574    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+10:57:49.574    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000759,trtrtr,DR=100,CR=100]: Constructor invoke check 
+10:57:49.574    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000759
+10:57:51.575    (INFO)     Trx.Start: **** PostGLJ1000759
+10:57:51.575    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:57:51.575    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:57:51.575    (INFO)     MAcctSchema.CheckCosting: AcctSchema[101-IdeaInc. US/A/US Dollar]
+10:57:51.575    (INFO)     MChangeLog.FillChangeLog: #9
+10:57:51.575    (INFO)     CacheMgt.Reset: C_AcctSchema: #1 (4)
+10:58:02.582    (INFO)     Doc_GLJournal.Post: (1) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:58:02.582    (INFO)     Doc_GLJournal.PostLogic: (1) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:58:02.582    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=114, 10/23/2019 12:00:00 AM, Type=114, Client=11, Org=1000037
+10:58:10.581    (INFO)     Doc_GLJournal.Post: (2) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:58:10.581    (INFO)     Doc_GLJournal.PostLogic: (2) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:58:10.581    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=102, 10/23/2019 12:00:00 AM, Type=114, Client=11, Org=1000037
+10:59:29.592    (INFO)     Doc_GLJournal.PostCommit: Sta=Y DT=GLJ ID=1000759
+10:59:29.592    (INFO)     Trx.Start: **** ConnSH637074251695291845System.Random
+10:59:29.592    (INFO)     Trx.Commit: **C** ConnSH637074251695291845System.Random
+10:59:29.592    (INFO)     Trx.Start: **** ConnSH637074251695741803System.Random
+10:59:29.592    (INFO)     Trx.Commit: **C** ConnSH637074251695741803System.Random
+10:59:29.592    (INFO)     Trx.Start: **** ConnSH637074251699421427System.Random
+10:59:29.592    (INFO)     Trx.Commit: **C** ConnSH637074251699421427System.Random
+10:59:29.592    (INFO)     Trx.Start: **** ConnSH637074251699721395System.Random
+10:59:29.592    (INFO)     Trx.Commit: **C** ConnSH637074251699721395System.Random
+10:59:30.593    (INFO)     Trx.Start: **** ConnSH637074251703371027System.Random
+10:59:30.593    (INFO)     Trx.Commit: **C** ConnSH637074251703371027System.Random
+10:59:30.593    (INFO)     Trx.Start: **** ConnSH637074251703710990System.Random
+10:59:30.593    (INFO)     Trx.Commit: **C** ConnSH637074251703710990System.Random
+10:59:30.593    (INFO)     Trx.Start: **** ConnSH637074251707600594System.Random
+10:59:30.593    (INFO)     Trx.Commit: **C** ConnSH637074251707600594System.Random
+10:59:30.593    (INFO)     Trx.Start: **** ConnSH637074251707900565System.Random
+10:59:30.593    (INFO)     Trx.Commit: **C** ConnSH637074251707900565System.Random
+10:59:31.593    (INFO)     Trx.Start: **** ConnSH637074251711240226System.Random
+10:59:31.593    (INFO)     Trx.Commit: **C** ConnSH637074251711240226System.Random
+10:59:31.593    (INFO)     Trx.Start: **** ConnSH637074251711550198System.Random
+10:59:31.593    (INFO)     Trx.Commit: **C** ConnSH637074251711550198System.Random
+10:59:31.593    (INFO)     Trx.Start: **** ConnSH637074251714879890System.Random
+10:59:31.593    (INFO)     Trx.Commit: **C** ConnSH637074251714879890System.Random
+10:59:31.593    (INFO)     Trx.Start: **** ConnSH637074251715239825System.Random
+10:59:31.593    (INFO)     Trx.Commit: **C** ConnSH637074251715239825System.Random

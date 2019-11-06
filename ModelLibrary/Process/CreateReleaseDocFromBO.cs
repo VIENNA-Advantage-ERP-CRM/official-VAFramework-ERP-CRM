@@ -37,21 +37,13 @@ namespace VAdvantage.Process
                 {
                     throw new ArgumentException("No Order");
                 }
-
                 MOrder from = new MOrder(GetCtx(), order_ID, Get_TrxName());
-
-                // Check Validity date of Blanket Order.
-                if (from.GetOrderValidTo() < DateTime.Now.Date)
-                {
-                    return Msg.GetMsg(GetCtx(), "VIS_BlanketNotValid");
-                }
 
                 MDocType dt = MDocType.Get(GetCtx(), from.GetC_DocType_ID());
 
-                //Document Type against Release Order
                 if (dt.GetDocumentTypeforReleases() == 0)
                 {
-                    return Msg.GetMsg(GetCtx(), "VIS_ReleaseDocumentnotFound");
+                    throw new ArgumentException("No Document Type for Releases Defined");
                 }
 
                 if (from.GetDocStatus() == MOrder.DOCSTATUS_Drafted ||
@@ -63,11 +55,19 @@ namespace VAdvantage.Process
                 }
 
                 //Document Type against Release Order
-                //MDocType dtt = MDocType.Get(GetCtx(), dt.GetDocumentTypeforReleases());
-                //if (dtt == null)
-                //{
-                //    throw new Exception(Msg.GetMsg(GetCtx(), "VIS_ReleaseDocumentnotFound"));
-                //}
+                MDocType dtt = MDocType.Get(GetCtx(), dt.GetDocumentTypeforReleases());
+
+                if (dtt == null)
+                {
+                    throw new Exception(Msg.GetMsg(GetCtx(), "VIS_ReleaseDocumentnotFound"));
+                }
+
+                // JID_1474 if full quantity of all lines are released from blanket order and user run Release order process then system will not allow to create 
+                // Release order and give message: 'All quantity are released'.
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyentered) FROM C_OrderLine WHERE C_Order_ID = " + GetRecord_ID(), null, Get_Trx())) == 0)
+                {
+                    return ("All quantity are released");
+                }
 
                 // JID_1474 if full quantity of all lines are released from blanket order and user run Release order process then system will not allow to create 
                 // Release order and give message: 'All quantity are released'.
@@ -78,7 +78,7 @@ namespace VAdvantage.Process
 
                 //Creating Release PO/SO against blanket Orders
                 MOrder rposo = MOrder.CopyFrom(from, from.GetDateAcct(),
-                   dt.GetDocumentTypeforReleases(), false, true, Get_TrxName(), false);
+                   dtt.GetC_DocType_ID(), false, true, Get_TrxName(), false);
 
                 rposo.SetPOReference(Util.GetValueOfString(from.GetDocumentNo()));
                 rposo.Set_Value("IsBlanketTrx", false);
