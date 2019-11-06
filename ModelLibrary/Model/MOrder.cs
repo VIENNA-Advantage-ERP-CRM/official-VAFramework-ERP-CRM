@@ -1316,6 +1316,7 @@ namespace VAdvantage.Model
                     line.SetQtyDelivered(Env.ZERO);
                     line.SetQtyInvoiced(Env.ZERO);
                     line.SetQtyReserved(Env.ZERO);
+                    line.SetQtyReleased(Env.ZERO);      // set Qty Released to Zero.
                     line.SetDateDelivered(null);
                     line.SetDateInvoiced(null);
                     //	Tax
@@ -1327,7 +1328,12 @@ namespace VAdvantage.Model
                     // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.
                     if (GetM_PriceList_ID() != otherOrder.GetM_PriceList_ID())
                         line.SetTaxAmt();		//	recalculate Tax Amount
-                    //
+
+                    // ReCalculate Surcharge Amount
+                    if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        line.SetSurchargeAmt(Env.ZERO);
+                    }
 
                     //
                     line.SetProcessed(false);
@@ -3186,7 +3192,7 @@ namespace VAdvantage.Model
 
                         if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))  //if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO") // if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")
                         {
-                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), null);
+                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), Get_TrxName());
 
                             if (qtyRel != null)
                             {
@@ -3246,12 +3252,25 @@ namespace VAdvantage.Model
                     {
                         MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
-                        oTax.SetIsTaxIncluded(IsTaxIncluded());
+                        //oTax.SetIsTaxIncluded(IsTaxIncluded());
                         if (!oTax.CalculateTaxFromLines())
                             return false;
                         if (!oTax.Save(Get_TrxName()))
                             return false;
                         taxList.Add(taxID);
+
+                        // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                        if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                        {
+                            oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
+                            if (oTax != null)
+                            {                               
+                                if (!oTax.CalculateSurchargeFromLines())
+                                    return false;
+                                if (!oTax.Save(Get_TrxName()))
+                                    return false;
+                            }
+                        }
                     }
                     totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
                 }
@@ -3312,7 +3331,7 @@ namespace VAdvantage.Model
                         _taxes = null;
                     }
                     else
-                    {
+                    {                        
                         if (!IsTaxIncluded())
                             grandTotal = Decimal.Add(grandTotal, oTax.GetTaxAmt());
                     }
