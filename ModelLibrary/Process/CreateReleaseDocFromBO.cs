@@ -64,7 +64,7 @@ namespace VAdvantage.Process
 
                 // JID_1474 if full quantity of all lines are released from blanket order and user run Release order process then system will not allow to create 
                 // Release order and give message: 'All quantity are released'.
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyentered) FROM C_OrderLine WHERE C_Order_ID = " + GetRecord_ID(), null, Get_Trx())) == 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyentered) FROM C_OrderLine WHERE C_Order_ID = " + GetRecord_ID(), null, Get_TrxName())) == 0)
                 {
                     return ("All quantity are released");
                 }
@@ -104,9 +104,11 @@ namespace VAdvantage.Process
             }
             catch (Exception e)
             {
+                //JID_1474 : if exception is found then we have to rollback and return that exception as suggested by Puneet and Gagandeep kaur
+                Get_TrxName().Rollback();
                 _log.SaveError("Could not create new Release Order", e);
+                return e.Message;
             }
-            return "";
         }
 
         protected override void Prepare()
