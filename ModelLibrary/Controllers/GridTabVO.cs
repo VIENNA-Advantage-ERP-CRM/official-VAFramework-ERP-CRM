@@ -131,6 +131,10 @@ namespace VAdvantage.Controller
         /****   Header Total Row   ***/
         public int HeaderTotalRow = 0;
 
+
+        /****   Header Total Row   ***/
+        public Decimal HeaderWidth = 0;
+
         /****   Header Items   ***/
         public Dictionary<int, object> hItems = null;
 
@@ -470,6 +474,8 @@ namespace VAdvantage.Controller
                 vo.AD_GridLayout_ID = Util.GetValueOfInt(dr["Ad_Gridlayout_Id"]);
 
                 vo.HeaderHeight = Utility.Util.GetValueOfDecimal(dr["HeaderHeight"]);
+
+                vo.HeaderWidth = Utility.Util.GetValueOfDecimal(dr["HeaderWidth"]);
 
                 vo.HeaderBackColor = Utility.Util.GetValueOfString(dr["HeaderBackcolor"]);
 
@@ -900,6 +906,7 @@ namespace VAdvantage.Controller
             clone.locationCols = locationCols;
 
             clone.HeaderHeight = HeaderHeight;
+            clone.HeaderWidth = HeaderWidth;
             clone.IsHeaderPanel = IsHeaderPanel;
             clone.AD_GridLayout_ID = AD_GridLayout_ID;
 
