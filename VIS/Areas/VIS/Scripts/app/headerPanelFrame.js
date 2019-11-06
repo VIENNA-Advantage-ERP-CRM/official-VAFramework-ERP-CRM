@@ -111,7 +111,12 @@
 
                         var style = document.createElement('style');
                         style.type = 'text/css';
-                        style.innerHTML = ".clsFieldGroup" + headerSeqNo + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + "}";
+                        if (headerStyle) {
+                            style.innerHTML = ".clsFieldGroup" + headerSeqNo + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + "}";
+                        }
+                        else {
+                            style.innerHTML = ".clsFieldGroup" + headerSeqNo + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle+"}";
+                        }
                         $($('head')[0]).append(style);
 
 

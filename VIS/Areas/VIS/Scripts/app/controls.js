@@ -628,7 +628,7 @@
 
         getIcon: function (mField) {
             if (mField.getFontName()) {
-                return "<i class='" + mField.getFontName() + "'> </i>";
+                return "<i class='" + mField.getFontClass() + "'> </i>";
             }
 
             if (mField.getAD_Image_ID() > 0) {
