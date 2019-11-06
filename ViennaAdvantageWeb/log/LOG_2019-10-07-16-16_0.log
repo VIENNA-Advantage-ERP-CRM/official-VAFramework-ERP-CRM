@@ -1,0 +1,51 @@
+*** 10/7/2019 4:16:42 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+04:16:42.164    (INFO)     Trx.Start: **** ConnSH637060618022536708System.Random
+04:16:42.164    (INFO)     Trx.Commit: **C** ConnSH637060618022536708System.Random
+04:16:45.164    (INFO)     Trx.Start: **** ConnSH637060618051612929System.Random
+04:16:45.164    (INFO)     Trx.Commit: **C** ConnSH637060618051612929System.Random
+04:16:58.165    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+04:16:58.165    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000443,user dimension 2,DR=1000,CR=1000]: Constructor invoke check 
+04:16:59.165    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000443
+04:16:59.165    (INFO)     Trx.Start: **** PostGLJ1000443
+04:16:59.165    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+04:16:59.165    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+04:16:59.165    (INFO)     Doc_GLJournal.PostCommit: Sta=Y DT=GLJ ID=1000443
+04:16:59.165    (INFO)     Trx.Start: **** ConnSH637060618194778020System.Random
+04:16:59.165    (INFO)     Trx.Commit: **C** ConnSH637060618194778020System.Random
+04:16:59.165    (INFO)     MChangeLog.FillChangeLog: #9
+04:16:59.165    (INFO)     Trx.Start: **** ConnSH637060618196398645System.Random
+04:16:59.165    (INFO)     Trx.Commit: **C** ConnSH637060618196398645System.Random
+04:16:59.165    (INFO)     Trx.Start: **** ConnSH637060618198529162System.Random
+04:16:59.165    (INFO)     Trx.Commit: **C** ConnSH637060618198529162System.Random
+04:16:59.165    (INFO)     Trx.Commit: **C** PostGLJ1000443
+04:17:08.178    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+04:17:08.178    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000442,Dimension Test ,DR=1000,CR=1000]: Constructor invoke check 
+04:17:08.178    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000442
+04:17:08.178    (INFO)     Trx.Start: **** PostGLJ1000442
+04:17:09.179    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000442,Dimension Test ,DR=1000,CR=1000]
+04:17:09.179    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000442,Dimension Test ,DR=1000,CR=1000]
+04:17:09.179    (INFO)     Doc_GLJournal.PostCommit: Sta=Y DT=GLJ ID=1000442
+04:17:09.179    (INFO)     Trx.Start: **** ConnSH637060618290750144System.Random
+04:17:09.179    (INFO)     Trx.Commit: **C** ConnSH637060618290750144System.Random
+04:17:09.179    (INFO)     Trx.Start: **** ConnSH637060618291860003System.Random
+04:17:09.179    (INFO)     Trx.Commit: **C** ConnSH637060618291860003System.Random
+04:17:09.179    (INFO)     Trx.Start: **** ConnSH637060618293299830System.Random
+04:17:09.179    (INFO)     Trx.Commit: **C** ConnSH637060618293299830System.Random
+04:17:09.179    (INFO)     Trx.Start: **** ConnSH637060618294680009System.Random
+04:17:09.179    (INFO)     Trx.Commit: **C** ConnSH637060618294680009System.Random
+04:17:09.179    (INFO)     Trx.Commit: **C** PostGLJ1000442

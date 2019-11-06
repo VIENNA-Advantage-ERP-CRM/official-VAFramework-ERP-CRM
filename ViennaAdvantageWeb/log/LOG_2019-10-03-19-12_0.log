@@ -1,0 +1,51 @@
+*** 10/3/2019 7:12:45 PM VAdvantage Log  ***
+07:12:45.124    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+07:12:45.124    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+07:12:45.124    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+07:12:46.124    (INFO)     Trx.Start: **** ConnSH637057267663839893System.Random
+07:12:46.124    (INFO)     Trx.Commit: **C** ConnSH637057267663839893System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+07:13:19.131    (INFO)     AEnv.GetMWindowVO: Cached=VAdvantage.Controller.GridWindowVO
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+07:13:19.131    (INFO)     Trx.Start: **** ConnSH637057267996533199System.Random
+07:13:19.131    (INFO)     Trx.Commit: **C** ConnSH637057267996533199System.Random
+07:13:21.132    (INFO)     Trx.Start: **** ConnSH637057268018718668System.Random
+07:13:21.132    (INFO)     Trx.Commit: **C** ConnSH637057268018718668System.Random
+07:13:23.132    (INFO)     Trx.Start: **** ConnSH637057268039613755System.Random
+07:13:23.132    (INFO)     Trx.Commit: **C** ConnSH637057268039613755System.Random
+07:13:28.132    (INFO)     Trx.Start: **** ConnSH637057268086155655System.Random
+07:13:28.132    (INFO)     Trx.Commit: **C** ConnSH637057268086155655System.Random
+07:13:31.133    (INFO)     Trx.Start: **** ConnSH637057268111800421System.Random
+07:13:31.133    (INFO)     Trx.Commit: **C** ConnSH637057268111800421System.Random
+07:13:50.135    (INFO)     Trx.Start: **** ConnSH637057268300886054System.Random
+07:13:50.135    (INFO)     Trx.Commit: **C** ConnSH637057268300886054System.Random
+07:13:50.135    (INFO)     Trx.Start: **** ConnSH637057268301675967System.Random
+07:13:50.135    (INFO)     Trx.Commit: **C** ConnSH637057268301675967System.Random
+07:13:53.135    (INFO)     Trx.Start: **** ConnSH637057268332592506System.Random
+07:13:53.135    (INFO)     Trx.Commit: **C** ConnSH637057268332592506System.Random
+07:14:01.141    (INFO)     Trx.Start: **** ConnSH637057268415324108System.Random
+07:14:01.141    (INFO)     Trx.Commit: **C** ConnSH637057268415324108System.Random
+07:14:20.142    (INFO)     Trx.Start: **** ConnSH637057268603283282System.Random
+07:14:20.142    (INFO)     Trx.Commit: **C** ConnSH637057268603283282System.Random
+07:15:46.154    (INFO)     Trx.Start: **** ConnSH637057269464814577System.Random
+07:15:46.154    (INFO)     Trx.Commit: **C** ConnSH637057269464814577System.Random
+07:15:47.154    (INFO)     Trx.Start: **** ConnSH637057269473422090System.Random
+07:15:47.154    (INFO)     Trx.Commit: **C** ConnSH637057269473422090System.Random
+07:24:16.241    (INFO)     MSession.Logout: 06:42:31.717
+*** 10/4/2019 10:26:41 AM VAdvantage Log ***

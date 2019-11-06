@@ -1509,17 +1509,22 @@ namespace VAdvantage.Model
             if (IsSOTrx() && !IsReversal() && !(GetDocStatus() == DOCSTATUS_Completed || GetDocStatus() == DOCSTATUS_Closed))
             {
                 string retMsg = "";
-                Decimal invAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(true),	//	CM adjusted 
-                    GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-
-                if (invAmt == 0)
+                Decimal invAmt = GetGrandTotal(true);
+                // If Amount is ZERO then no need to check currency conversion
+                if (!invAmt.Equals(Env.ZERO))
                 {
-                    // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
-                    MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                    retMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                        + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                    invAmt = MConversionRate.ConvertBase(GetCtx(), invAmt,  //	CM adjusted 
+                        GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
 
-                    log.SaveWarning("Warning", retMsg);
+                    if (invAmt == 0)
+                    {
+                        // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
+                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        retMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                        log.SaveWarning("Warning", retMsg);
+                    }
                 }
 
                 if (IsSOTrx())
@@ -1528,7 +1533,7 @@ namespace VAdvantage.Model
                     invAmt = Decimal.Subtract(0, invAmt);
 
                 MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-                
+
                 bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
                 if (!crdAll)
                     log.SaveWarning("Warning", retMsg);
@@ -1547,7 +1552,7 @@ namespace VAdvantage.Model
          */
         public new void SetM_PriceList_ID(int M_PriceList_ID)
         {
-            String sql = "SELECT M_PriceList_ID, C_Currency_ID "
+            String sql = "SELECT M_PriceList_ID, C_Currency_ID, IsTaxIncluded " // Set IsTaxIncluded from Price List
                 + "FROM M_PriceList WHERE M_PriceList_ID=" + M_PriceList_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -1561,6 +1566,7 @@ namespace VAdvantage.Model
                 {
                     base.SetM_PriceList_ID(Convert.ToInt32(dr[0]));
                     SetC_Currency_ID(Convert.ToInt32(dr[1]));
+                    SetIsTaxIncluded(Util.GetValueOfString(dr[2]).Equals("Y"));
                 }
             }
             catch (Exception e)
@@ -2010,7 +2016,7 @@ namespace VAdvantage.Model
                         }
                         else if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID())) > 0)
                         {
-                            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND IsValid = 'Y' AND C_PaymentTerm_ID=" 
+                            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND IsValid = 'Y' AND C_PaymentTerm_ID="
                                                                     + GetC_PaymentTerm_ID() + " AND VA009_Advance='Y'")) == 1)
                             {
                                 _processMsg = Msg.GetMsg(GetCtx(), "PaymentTermIsInValid");
@@ -2054,17 +2060,22 @@ namespace VAdvantage.Model
 
                 if (checkCreditStatus)
                 {
-                    Decimal invAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(true),	//	CM adjusted 
-                    GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-
-                    if (invAmt == 0)
+                    Decimal invAmt = GetGrandTotal(true);
+                    // If Amount is ZERO then no need to check currency conversion
+                    if (!invAmt.Equals(Env.ZERO))
                     {
-                        // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
-                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        invAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(true), //	CM adjusted 
+                     GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
 
-                        return DocActionVariables.STATUS_INVALID;
+                        if (invAmt == 0)
+                        {
+                            // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
+                            MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                                + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                            return DocActionVariables.STATUS_INVALID;
+                        }
                     }
 
                     if (IsSOTrx())
@@ -2208,7 +2219,7 @@ namespace VAdvantage.Model
                             false, Get_TrxName());	//	current Tax
                         if (iTax != null)
                         {
-                            iTax.SetIsTaxIncluded(IsTaxIncluded());
+                            //iTax.SetIsTaxIncluded(IsTaxIncluded());
                             if (!iTax.CalculateTaxFromLines())
                                 return false;
                             if (!iTax.Save())
@@ -2220,7 +2231,7 @@ namespace VAdvantage.Model
                             {
                                 iTax = MInvoiceTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                                 if (iTax != null)
-                                {                                    
+                                {
                                     if (!iTax.CalculateSurchargeFromLines())
                                         return false;
                                     if (!iTax.Save(Get_TrxName()))
@@ -3828,7 +3839,7 @@ namespace VAdvantage.Model
                     }
                     bpl.SetTotalOpenBalance(newBalance);
                     bpl.SetSOCreditStatus();
-                    
+
                     Decimal bptotalopenbal = bp.GetTotalOpenBalance();
                     Decimal bpSOcreditUsed = bp.GetSO_CreditUsed();
                     if (IsSOTrx())
@@ -3841,7 +3852,7 @@ namespace VAdvantage.Model
                     {
                         bptotalopenbal = bptotalopenbal - invAmt;
                     }
-                    
+
                     bp.SetTotalOpenBalance(bptotalopenbal);
                     //if (bp.GetSO_CreditLimit() > 0)
                     //{
@@ -4214,7 +4225,7 @@ namespace VAdvantage.Model
                 // Change Multicurrency DayEnd
                 foreach (int currency in CurrencyAmounts.Keys)
                 {
-                   
+
                     if (Util.GetValueOfDecimal(CurrencyAmounts[currency]) != 0)
                         CreateUpdateCash(order, CashBooks[currency], Util.GetValueOfDecimal(CurrencyAmounts[currency]), currency);
                 }
@@ -4251,7 +4262,7 @@ namespace VAdvantage.Model
         /// <param name="CurrencyAmounts"></param>
         /// <param name="CashBooks"></param>
         /// <returns>retrun list of currency cash book id and amount</returns>
-        public bool GetCashbookAndAmountList(MOrder order, StringBuilder Info, out Dictionary<int, Decimal?> CurrencyAmounts, out   Dictionary<int, int> CashBooks)
+        public bool GetCashbookAndAmountList(MOrder order, StringBuilder Info, out Dictionary<int, Decimal?> CurrencyAmounts, out Dictionary<int, int> CashBooks)
         {
             int C_CashBook_ID = GetC_CashBook_ID(order, order.GetC_Currency_ID());// Util.GetValueO
             string _currencies = order.GetVA205_Currencies();

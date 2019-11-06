@@ -27,6 +27,10 @@ namespace VAdvantage.Model
 {
     public class MJournal : X_GL_Journal, DocAction
     {
+
+        /** Is record save from GL Voucher form **/
+        private bool _isSaveFromForm;
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -658,8 +662,79 @@ namespace VAdvantage.Model
             {
                 return success;
             }
+            // create Assigned Accounting Schema Entry for assigned org only - in case of new record
+            if (newRecord && !GetIsFormData())
+            {
+                CreateAssignAccountingSchemaRecord();
+            }
+
             return UpdateBatch();
         }	//	afterSave
+
+        /// <summary>
+        /// This function is used to create record on Assign Accounting Schema Tab for Posting
+        /// </summary>
+        private void CreateAssignAccountingSchemaRecord()
+        {
+            // default conversion type 
+            int C_DefaultCurrencyType_ID = MConversionType.GetDefault(GetAD_Client_ID());
+
+            // selected accounting schema currency
+            int selectedAcctSchemaCurrency = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID()).GetC_Currency_ID();
+
+            // this query return a record of assigned org accounting schema having same chart of account
+            String sql = @"SELECT DISTINCT CA.C_ACCTSCHEMA_ID , Ca.C_Currency_ID , " + C_DefaultCurrencyType_ID + @" AS C_ConversionType_ID , 
+  CURRENCYRATE(" + selectedAcctSchemaCurrency + @" , Ca.C_Currency_ID , " + GlobalVariable.TO_DATE(GetDateAcct(), true) +
+  @" , " + C_DefaultCurrencyType_ID + @" , " + GetAD_Client_ID() + " , " + GetAD_Org_ID() + @") AS Rate
+FROM C_AcctSchema CA INNER JOIN FRPT_AssignedOrg AO ON CA.C_AcctSchema_ID = AO.C_AcctSchema_ID
+INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')
+WHERE CA.ISACTIVE = 'Y' AND ASE.IsActive = 'Y' AND AO.IsActive = 'Y' AND AO.AD_Org_ID IN(0," + GetAD_Org_ID() + @")
+AND ASE.C_Element_ID = (SELECT C_Element_ID FROM C_AcctSchema_Element WHERE ElementType = 'AC' AND IsActive = 'Y' AND C_AcctSchema_ID = " + GetC_AcctSchema_ID() + @" )
+AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
+            sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_AcctSchema", true, true);
+
+            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+            MAssignAcctSchema assignAcctSchema = null;
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    // create new record 
+                    assignAcctSchema = new MAssignAcctSchema(GetCtx(), 0, Get_Trx());
+                    assignAcctSchema.SetAD_Client_ID(GetAD_Client_ID());
+                    assignAcctSchema.SetAD_Org_ID(GetAD_Org_ID());
+                    assignAcctSchema.SetGL_Journal_ID(GetGL_Journal_ID());
+                    assignAcctSchema.SetC_AcctSchema_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ACCTSCHEMA_ID"]));
+                    assignAcctSchema.SetC_Currency_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]));
+                    assignAcctSchema.SetC_ConversionType_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ConversionType_ID"]));
+                    assignAcctSchema.SetCurrencyRate(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Rate"]));
+                    if (!assignAcctSchema.Save())
+                    {
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        log.Severe(@"Error Occured when try to save record on Assigned Accounting Schema.
+                                        Error Name : " + (pp != null && !String.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : ""));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// setter property for checking data to be manual creation of through process
+        /// </summary>
+        /// <param name="isformData">true, if data saved through process</param>
+        public void SetIsFormData(bool isformData)
+        {
+            _isSaveFromForm = isformData;
+        }
+
+        /// <summary>
+        /// getter property for checking data saved from procss or manual
+        /// </summary>
+        /// <returns></returns>
+        public bool GetIsFormData()
+        {
+            return _isSaveFromForm;
+        }
 
         /// <summary>
         /// After Delete
@@ -684,7 +759,7 @@ namespace VAdvantage.Model
             // Manish 18/7/2016 ..  check gl_journalbatch_id is in window or not.
             string sqlquery = @"SELECT gl_journalbatch_id FROM gl_journal WHERE gl_journal_id =" + GetGL_Journal_ID();
             int nooo = Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sqlquery, null, null));
-            if (nooo == null || nooo <= 0)
+            if (nooo <= 0)
             {
                 return true;
             }

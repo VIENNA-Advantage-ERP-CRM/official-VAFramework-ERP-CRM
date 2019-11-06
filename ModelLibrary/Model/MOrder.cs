@@ -1305,9 +1305,6 @@ namespace VAdvantage.Model
                     if (docType.IsReleaseDocument())
                     {
                         line.SetC_OrderLine_Blanket_ID(fromLines[i].GetC_OrderLine_ID());
-
-                        // Blanket order qty not updated correctly by Release order process
-                        line.SetQtyBlanket(fromLines[i].GetQtyOrdered());
                     }
 
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
@@ -1320,6 +1317,7 @@ namespace VAdvantage.Model
                     line.SetQtyDelivered(Env.ZERO);
                     line.SetQtyInvoiced(Env.ZERO);
                     line.SetQtyReserved(Env.ZERO);
+                    line.SetQtyReleased(Env.ZERO);      // set Qty Released to Zero.
                     line.SetDateDelivered(null);
                     line.SetDateInvoiced(null);
                     //	Tax
@@ -3195,7 +3193,7 @@ namespace VAdvantage.Model
 
                         if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))  //if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO") // if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")
                         {
-                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), null);
+                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), Get_TrxName());
 
                             if (qtyRel != null)
                             {
@@ -3255,7 +3253,7 @@ namespace VAdvantage.Model
                     {
                         MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
-                        oTax.SetIsTaxIncluded(IsTaxIncluded());
+                        //oTax.SetIsTaxIncluded(IsTaxIncluded());
                         if (!oTax.CalculateTaxFromLines())
                             return false;
                         if (!oTax.Save(Get_TrxName()))

@@ -562,8 +562,11 @@ namespace VAdvantage.Acct
                     Unlock();
                     return "PeriodClosed";
                 }
-                //	delete it
-                DeleteAcct();
+                if (Get_TableName() != "GL_Journal")
+                {
+                    //	delete it
+                    DeleteAcct(0);
+                }
             }
             else if (IsPosted())
             {
@@ -583,6 +586,10 @@ namespace VAdvantage.Acct
             {
                 for (int i = 0; OK && i < _ass.Length; i++)
                 {
+                    if (Get_TableName() == "GL_Journal")
+                    {
+                        DeleteAcct(_ass[i].GetC_AcctSchema_ID());
+                    }
                     //	if acct schema has "only" org, skip
                     bool skip = false;
                     if (_ass[i].GetAD_OrgOnly_ID() != 0)
@@ -681,11 +688,15 @@ namespace VAdvantage.Acct
         /// Delete Accounting
         /// </summary>
         /// <returns>number of records</returns>
-        private int DeleteAcct()
+        private int DeleteAcct(int accountingSchema_ID)
         {
             StringBuilder sql = new StringBuilder("DELETE FROM Fact_Acct WHERE AD_Table_ID=")
                 .Append(Get_Table_ID())
                 .Append(" AND Record_ID=").Append(_po.Get_ID());
+            if (accountingSchema_ID > 0)
+            {
+                sql.Append(" AND C_ACCTSCHEMA_ID=").Append(accountingSchema_ID);
+            }
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
             if (no != 0)
             {
@@ -1314,7 +1325,7 @@ namespace VAdvantage.Acct
                 para_1 = GetC_BPartner_ID();
             }
 
-                //*********** Change
+            //*********** Change
             else if (AcctType == ACCTTYPE_E_Prepayment)
             {
                 // Case for Cash Journal
@@ -1671,7 +1682,7 @@ namespace VAdvantage.Acct
                 para_1 = BPartner_ID;
             }
 
-                //*********** Change
+            //*********** Change
             else if (AcctType == ACCTTYPE_E_Prepayment)
             {
                 sql = "SELECT E_Prepayment_Acct FROM C_BP_Employee_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";

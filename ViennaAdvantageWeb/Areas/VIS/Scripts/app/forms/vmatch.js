@@ -95,6 +95,9 @@
         var _xMatchedTo = 0;
         var _match_ID = "";
 
+        var btnClearBP = null;
+        var btnClearPrd = null;
+
         // Added by Bharat on 20 July 2017 to restrict multiclick issue
         var isProcess = false;
         //Match Options  
@@ -113,6 +116,15 @@
         function initializeComponent() {
 
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
+
+            // JID_1250: Clear option required on Business partner and Product parameter.
+            var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
+            var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
+            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
+                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
+            btnClearPrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
+                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
+
             //Top Div
             $self.topDiv = $("<div id='" + "topDiv_" + $self.windowNo + "' style='float: left; width: 100%; height: 45px; margin-bottom: 2px;margin-left: 0px;'>" +
                        "<div id='" + "btnSpaceDiv_" + $self.windowNo + "' style='width: 260px; height: 45px;float: left;padding-left: 11px; padding-top: 11px;; background-color: #F1F1F1;'>" +
@@ -198,7 +210,8 @@
             td = $("<td style='padding: 0px 15px 0px;'>");
             tble.append(tr);
             tr.append(td);
-            td.append($self.onlyVendor.getControl().css('width', '206px')).append($self.onlyVendor.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+            td.append($self.onlyVendor.getControl().css('width', '176px')).append($self.onlyVendor.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
+            .append(btnClearBP);
 
             //line9
             tr = $("<tr>");
@@ -212,7 +225,8 @@
             td = $("<td style='padding: 0px 15px 0px;'>");
             tble.append(tr);
             tr.append(td);
-            td.append($self.onlyProduct.getControl().css('width', '206px')).append($self.onlyProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+            td.append($self.onlyProduct.getControl().css('width', '176px')).append($self.onlyProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
+            .append(btnClearPrd);
 
             //line11
             tr = $("<tr>");
@@ -1465,6 +1479,23 @@
                 cmd_SearchTo();
                 //$self.$busyDiv[0].style.visibility = "hidden";
             });
+
+            // JID_1250: Clear option required on Business partner and Product parameter.
+            if (btnClearBP != null) {
+                btnClearBP.on(VIS.Events.onTouchStartOrClick, function () {
+                    if ($self.onlyVendor.isReadOnly)
+                        return;
+                    $self.onlyVendor.setValue(null, false, true);
+                });
+            }
+
+            if (btnClearPrd != null) {
+                btnClearPrd.on(VIS.Events.onTouchStartOrClick, function () {
+                    if ($self.onlyProduct.isReadOnly)
+                        return;
+                    $self.onlyProduct.setValue(null, false, true);
+                });
+            }
 
             //if (this.onlyProduct != null)
             //    this.onlyProduct.addVetoableChangeListener(this);

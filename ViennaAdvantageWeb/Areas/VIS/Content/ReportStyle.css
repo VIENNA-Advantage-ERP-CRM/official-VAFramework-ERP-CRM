@@ -53,6 +53,32 @@
 	margin: 0 8px;
 	background-repeat:no-repeat;	
 }
+
+/*===========POS===============*/
+.vis-repformat-ico-pos{
+	background-image:url(../Images/repformatpos.png);	
+}
+.vis-savecsv-ico-pos{
+	background-image:url(../Images/savecsvpos.png);	
+}
+.vis-savepdf-ico-pos{
+	background-image:url(../Images/savepdfpos.png);	
+}
+.vis-archive-ico-pos{
+	background-image:url(../Images/archivepos.png);	
+}
+.vis-requery-ico-pos{
+	background-image:url(../Images/requerypos.png);	
+}
+.vis-customize-ico-pos{
+	background-image:url(../Images/customizepos.png);	
+}
+.vis-print-ico-pos{
+	background-image:url(../Images/printpos.png);	
+}
+/*===========POS===============*/
+
+
 .vis-archive-ico{
 	background-image:url(../Images/archive.png);	
 }
@@ -175,3 +201,19 @@
 	padding:0 5px;
 	outline:none;
 }
+.VAPOS-ReportHeadRap {
+    float: left;
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.VAPOS-ReportHeadRap h4 {
+    margin: 0;
+    line-height: 26px;
+}
+    .VAPOS-ReportHeadRap ul {
+        margin-top: 0 !important;
+    }
+.VAPOS-ReportHeadRap ul li a {width: 22px;height: 25px;}

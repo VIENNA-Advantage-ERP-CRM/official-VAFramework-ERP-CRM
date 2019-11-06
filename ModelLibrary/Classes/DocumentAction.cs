@@ -17,7 +17,7 @@ namespace VAdvantage.Classes
             try
             {
                 Assembly assembly = Assembly.Load("VADMSSvc");
-                Type type = assembly.GetType("ViennaAdvantage.VADMS.Model.Classes.DocumentOperation");
+                Type type = assembly.GetType("ViennaAdvantage.Classes.DocumentOperation");
                 if (type != null)
                 {
                     MethodInfo methodInfo = type.GetMethod("MoveDocument");
@@ -76,7 +76,7 @@ namespace VAdvantage.Classes
             {
                 StringBuilder userNames = new StringBuilder();
                 Assembly assembly = Assembly.Load("VADMSSvc");
-                Type type = assembly.GetType("ViennaAdvantage.VADMS.Model.Classes.DocumentOperation");
+                Type type = assembly.GetType("ViennaAdvantage.Classes.DocumentOperation");
                 if (type != null)
                 {
                     MethodInfo methodInfo = type.GetMethod("ForwardDocument");
@@ -150,7 +150,7 @@ namespace VAdvantage.Classes
             try
             {
                 Assembly assembly = Assembly.Load("VADMSSvc");
-                Type type = assembly.GetType("ViennaAdvantage.VADMS.Model.Classes.DocumentOperation");
+                Type type = assembly.GetType("ViennaAdvantage.Classes.DocumentOperation");
                 if (type != null)
                 {
                     MethodInfo methodInfo = type.GetMethod("AllocateDocAccesstoUser");
@@ -201,7 +201,7 @@ namespace VAdvantage.Classes
             {
 
                 Assembly assembly = Assembly.Load("VADMSSvc");
-                Type type = assembly.GetType("ViennaAdvantage.VADMS.Model.Classes.DocumentOperation");
+                Type type = assembly.GetType("ViennaAdvantage.Classes.DocumentOperation");
                 if (type != null)
                 {
                     MethodInfo methodInfo = type.GetMethod("DocumentContainText");
@@ -256,7 +256,7 @@ namespace VAdvantage.Classes
             try
             {
                 Assembly assembly = Assembly.Load("VADMSSvc");
-                Type type = assembly.GetType("ViennaAdvantage.VADMS.Model.Classes.DocumentOperation");
+                Type type = assembly.GetType("ViennaAdvantage.Classes.DocumentOperation");
                 if (type != null)
                 {
                     MethodInfo methodInfo = type.GetMethod("SaveActionLog");
