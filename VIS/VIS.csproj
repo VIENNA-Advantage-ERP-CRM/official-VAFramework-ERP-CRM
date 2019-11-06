@@ -641,6 +641,7 @@
     <Content Include="Areas\VIS\Scripts\app\favouritehelper.js" />
     <Content Include="Areas\VIS\Scripts\app\formframe.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\acctviewer.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\acctviewermenu.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\glDimensionValue.js" />
