@@ -396,7 +396,7 @@
 
 
 
-    function insertCWrapper(label, editor,parent,mfiled) {
+    function insertCWrapper(label, editor, parent, mField) {
         var ctrl = '';
         var lblAdded = true;
         if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName =='TEXTAREA') && editor.getControl()[0].type != 'checkbox' ) {
@@ -434,9 +434,9 @@
                //if (false) {// image or font lib 
                 var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
                 if (mField.getFontClass() != '') 
-                    btns.push('<i class="' + mField.getFontClass()+'></i>');
+                    btns.push('<i class="' + mField.getFontClass()+'"></i>');
                 else 
-                    btns.push('<img src="' + VIS.Application.contextUrl +'Images/Thumb16x16/'+ mFiled.getImageName() +'"');
+                    btns.push('<img src="' + VIS.Application.contextUrl +'Images/Thumb16x16/'+ mFiled.getImageName() +'"></img>');
 
                 btns.push('</span></div>');
                 wctrl.append($(btns.join(' ')));

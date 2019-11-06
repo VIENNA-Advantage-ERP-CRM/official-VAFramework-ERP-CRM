@@ -627,7 +627,7 @@
         },
 
         getIcon: function (mField) {
-            if (mField.getFontName()) {
+            if (mField.getFontClass()) {
                 return "<i class='" + mField.getFontName() + "'> </i>";
             }
 
@@ -1573,7 +1573,8 @@
                 options[VIS.Actions.contact] = true;
             }
 
-            $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+           // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+            $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" class="fa fa-ellipsis-v" /></button>');
             options[VIS.Actions.refresh] = true;
             if (VIS.MRole.getIsShowPreference())
                 options[VIS.Actions.preference] = true;
@@ -2215,7 +2216,8 @@
             // btnCount += 1;
             options[VIS.Actions.zoom] = disabled;
 
-            $btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+            //$btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+            $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
             //	VBPartner quick entry link
             var isBP = false;
             if (columnName === "C_BPartner_ID") {
@@ -5562,7 +5564,8 @@
         var $ctrl = $('<input>', { type: 'text', name: columnName });
         var $btnpContainer = $('<button class="input-group-text"><img src="' + VIS.Application.contextUrl
             + "Areas/VIS/Images/base/pContainer.png" + '" /></button>');
-        var $btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+        //var $btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+        var $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
         var btnCount = 1;
         btnCount += 1;
         var self = this;
