@@ -399,7 +399,8 @@
     function insertCWrapper(label, editor, parent, mField) {
         var ctrl = '';
         var lblAdded = true;
-        if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName =='TEXTAREA') && editor.getControl()[0].type != 'checkbox' ) {
+        if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName == "SELECT" ||
+            editor.getControl()[0].tagName == 'TEXTAREA') && editor.getControl()[0].type != 'checkbox') {
        // if (1 == 2) {
             ctrl = $('<div class="vis-control-wrap">');
             ctrl.append(editor.getControl().attr("placeholder", " ").attr("data-placeholder", ""));
@@ -407,14 +408,14 @@
                 ctrl.append(label.getControl());
             }
         }
-        else if (editor && editor.getControl()[0].tagName == "SELECT") {
-        //else if (2 == 3) {
-            ctrl = $('<div class="vis-select-wrap">');
-            ctrl.append(editor.getControl());
-            if (label != null) {
-                ctrl.append(label.getControl());
-            }
-        }
+        //else if (editor && editor.getControl()[0].tagName == "SELECT") {
+        ////else if (2 == 3) {
+        //    ctrl = $('<div class="vis-control-wrap">');
+        //    ctrl.append(editor.getControl());
+        //    if (label != null) {
+        //        ctrl.append(label.getControl());
+        //    }
+        //}
         else {
             ctrl = $('<div class="vis-control-wrap">');
             if(editor)
