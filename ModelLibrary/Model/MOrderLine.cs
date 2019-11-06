@@ -4110,16 +4110,15 @@ namespace VAdvantage.Model
             SetLineNetAmt();	//	extended Amount with or without tax
             SetDiscount();
 
-            // JID_1073: 
-            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
+            // if change the Quantity then recalculate tax and surcharge amount.
+            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
                 SetTaxAmt();
 
             // set Tax Amount in base currency
             if (Get_ColumnIndex("TaxBaseAmt") > 0)
             {
                 decimal taxAmt = 0;
-                primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_TrxName()));
+                primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                 if (Ord.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                 {
                     taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, Ord.GetC_Currency_ID(),
@@ -4382,9 +4381,8 @@ namespace VAdvantage.Model
                     {
                         tax = MOrderTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
-                        {
-                            MTax taxRate = MTax.Get(GetCtx(), Util.GetValueOfInt(Get_ValueOld("C_Tax_ID")));
-                            if (!tax.CalculateSurchargeFromLines(taxRate))
+                        {                            
+                            if (!tax.CalculateSurchargeFromLines())
                                 return false;
                             if (!tax.Save(Get_TrxName()))
                                 return false;
@@ -4479,7 +4477,7 @@ namespace VAdvantage.Model
             else if (Get_ColumnIndex("SurchargeAmt") > 0 && taxRate.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && taxRate.GetSurcharge_Tax_ID() > 0)
             {
                 tax = MOrderTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
-                if (!tax.CalculateSurchargeFromLines(taxRate))
+                if (!tax.CalculateSurchargeFromLines())
                     return false;
                 if (!tax.Save(Get_TrxName()))
                     return false;

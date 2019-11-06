@@ -84,7 +84,7 @@ namespace VAdvantage.Model
 
             // JID_1303: On Order tax calculate tax according to selected pricelist. If user delete lines and change pricelist, it should check IsTaxIncluded on selected Pricelist.
             bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
-                + line.GetC_Order_ID() + ")")) == "Y";
+                + line.GetC_Order_ID() + ")", null, trxName)) == "Y";
 
             if (retValue != null)
             {
@@ -166,8 +166,9 @@ namespace VAdvantage.Model
                 s_log.Log(Level.SEVERE, sql, e);
             }
 
+            // Get IsTaxincluded from selected PriceList on header
             bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
-                + line.GetC_Order_ID() + ")")) == "Y";
+                + line.GetC_Order_ID() + ")", null, trxName)) == "Y";
 
             if (retValue != null)
             {
@@ -245,18 +246,20 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Calculate/Set Surcharge Tax Amt from Order Lines
-        /// </summary>
-        /// <returns>true if aclculated</returns>
-        public bool CalculateSurchargeFromLines(MTax taxRate)
+        /// </summary>        
+        /// <returns>true if calculated</returns>
+        public bool CalculateSurchargeFromLines()
         {
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //            
-            MTax surTax = new MTax(GetCtx(), taxRate.GetSurcharge_Tax_ID(), Get_TrxName());
+            MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
 
             //
-            String sql = "SELECT TaxAbleAmt, TaxAmt FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + taxRate.GetC_Tax_ID();
+            String sql = "SELECT ol.TaxAbleAmt, ol.TaxAmt, tax.SurchargeType FROM C_OrderLine ol"
+                + " INNER JOIN C_Tax tax ON ol.C_Tax_ID=tax.C_Tax_ID WHERE ol.C_Order_ID=" + GetC_Order_ID() 
+                + " AND tax.Surcharge_Tax_ID=" + GetC_Tax_ID();
             IDataReader idr = null;
             try
             {
@@ -265,15 +268,16 @@ namespace VAdvantage.Model
                 {
                     Decimal baseAmt = Util.GetValueOfDecimal(idr[0]);
                     Decimal taxAmt = Util.GetValueOfDecimal(idr[1]);
+                    string surchargeType = Util.GetValueOfString(idr[2]);
 
                     // for Surcharge Calculation type - Line Amount + Tax Amount
-                    if (taxRate.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmountPlusTax)
+                    if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmountPlusTax))
                     {
                         baseAmt = Decimal.Add(baseAmt, taxAmt);
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
                     // for Surcharge Calculation type - Line Amount 
-                    else if (taxRate.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmount)
+                    else if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmount))
                     {
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
