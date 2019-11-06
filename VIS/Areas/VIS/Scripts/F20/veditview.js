@@ -430,14 +430,16 @@
 
             var wctrl = $('<div class="input-group vis-input-wrap">');
 
-            if (mfiled.)
+            if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName()!='')) {
+               //if (false) {// image or font lib 
+                var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
+                if (mField.getFontClass() != '') 
+                    btns.push('<i class="' + mField.getFontClass()+'></i>');
+                else 
+                    btns.push('<img src="' + VIS.Application.contextUrl +'Images/Thumb16x16/'+ mFiled.getImageName() +'"');
 
-            if (false) {// image or font lib 
-                wctrl.append($('<div class="input-group-prepend">' +
-                                    '<span class="input-group-text vis-color-primary">' +
-                                        '<i class="fa fa-envelope"></i>' +
-                                    '</span>' +
-                               '</div>'));
+                btns.push('</span></div>');
+                wctrl.append($(btns.join(' ')));
             }
             ctrl =  wctrl.append(ctrl);
             wctrl = null;

@@ -6009,7 +6009,7 @@
         return this.vo.AD_Image_ID;
     };
 
-    GridField.prototype.getFontName = function () {
+    GridField.prototype.getFontClass = function () {
         return this.vo.FontName;
     };
 
