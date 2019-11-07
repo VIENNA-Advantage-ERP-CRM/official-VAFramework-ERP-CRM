@@ -38,5 +38,36 @@ namespace VIS.Models
             }
         }
 
+        /// <summary>
+        /// Get Price List Data
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Parameters</param>
+        /// <returns>List of Data</returns>
+        public Dictionary<String, Object> GetPriceListData(Ctx ctx, string fields)
+        {            
+                int M_PriceList_ID;                
+                M_PriceList_ID = Util.GetValueOfInt(fields);
+                Dictionary<String, Object> retDic = null;
+                string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.C_Currency_ID,c.StdPrecision,"
+                + "plv.M_PriceList_Version_ID,plv.ValidFrom "
+                + "FROM M_PriceList pl,C_Currency c,M_PriceList_Version plv "
+                + "WHERE pl.C_Currency_ID=c.C_Currency_ID"
+                + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
+                + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
+                + "ORDER BY plv.ValidFrom DESC";
+                DataSet ds = DB.ExecuteDataset(sql, null, null);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    retDic = new Dictionary<String, Object>();
+                    retDic["IsTaxIncluded"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxIncluded"]);
+                    retDic["EnforcePriceLimit"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["EnforcePriceLimit"]);
+                    retDic["StdPrecision"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["StdPrecision"]);
+                    retDic["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
+                    retDic["M_PriceList_Version_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_Version_ID"]);                    
+                    retDic["ValidFrom"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["ValidFrom"]);
+                }
+                return retDic;
+        }
     }
 }
