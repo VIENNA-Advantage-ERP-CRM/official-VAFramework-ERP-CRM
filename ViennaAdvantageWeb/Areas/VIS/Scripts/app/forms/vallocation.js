@@ -628,7 +628,7 @@
 
             //$resultDiv.append('<div class="vis-allocation-leftControls"><input  class="vis-allocation-autowriteoff"  type="checkbox"><label>' + VIS.Msg.getMsg("AutoWriteOff") + '</label></div>');
             //Hide the privious Process Button
-            // $resultDiv.append(' <a class="vis-group-btn vis-group-create vis-group-grayBtn" style="float: right; display: none; ">' + VIS.Msg.getMsg('Process') + '</a>');
+           // $resultDiv.append(' <a class="vis-group-btn vis-group-create vis-group-grayBtn" style="float: right; display: none; ">' + VIS.Msg.getMsg('Process') + '</a>');
 
             $innerRow.append($resultDiv);
             $date = $innerRow.find('#VIS_cmbDate_' + $self.windowNo);

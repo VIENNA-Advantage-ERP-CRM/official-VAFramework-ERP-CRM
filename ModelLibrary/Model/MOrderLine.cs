@@ -49,6 +49,9 @@ namespace VAdvantage.Model
         private int I_Order_ID = 0;
 
         private bool _fromProcess = false;
+
+        /** is Closed Document*/
+        private bool isClosed = false;
         #endregion
 
         /// <summary>
@@ -931,7 +934,7 @@ namespace VAdvantage.Model
                 // MessageBox.Show("MInvoiceLine--SetTaxAmt");
             }
         }
-        
+
         /// <summary>
         /// Calculate Extended Amt.
         /// May or may not include tax
@@ -4087,6 +4090,15 @@ namespace VAdvantage.Model
                     SetPriceActual(GetPriceEntered());
                 }
 
+                //JID_1474 : if document is closed then we need to set Delivered qty as Ordered qty Suggested by Gagandeep kaur and Puneet that we do not
+                // need to add return trx check and it will work for all orders
+                if (isClosed)
+                {
+                    if (GetQtyDelivered() > 0)
+                        SetQtyOrdered(GetQtyDelivered());
+                }
+                //end
+
             }
             /////////////
 
@@ -4297,6 +4309,25 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Set property to check wheater order's close event is called or any other event is called
+        /// </summary>
+        /// <param name="closed"> True/False</param>
+        public void SetIsClosedDocument(bool closed)
+        {
+            isClosed = closed;
+        }
+
+        /// <summary>
+        /// Get property to check wheater order's close event is called or any other event is called
+        /// </summary>
+        /// <returns>True if document is closing</returns>
+        public bool GetIsClosedDocument()
+        {
+            return isClosed;
+        }
+        //end
+
+        /// <summary>
         /// Before Delete
         /// </summary>
         /// <returns>true if it can be deleted</returns>
@@ -4381,7 +4412,7 @@ namespace VAdvantage.Model
                     {
                         tax = MOrderTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
-                        {                            
+                        {
                             if (!tax.CalculateSurchargeFromLines())
                                 return false;
                             if (!tax.Save(Get_TrxName()))

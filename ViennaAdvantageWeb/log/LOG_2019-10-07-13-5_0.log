@@ -1,0 +1,131 @@
+*** 10/7/2019 1:06:36 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+01:06:36.636    (INFO)     Trx.Start: **** ConnSH637060503965704142System.Random
+01:06:36.636    (INFO)     Trx.Commit: **C** ConnSH637060503965704142System.Random
+01:06:41.641    (INFO)     Trx.Start: **** ConnSH637060504011856722System.Random
+01:06:41.641    (INFO)     Trx.Commit: **C** ConnSH637060504011856722System.Random
+01:06:58.658    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+01:06:58.658    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000443,user dimension 2,DR=1000,CR=1000]: Constructor invoke check 
+01:06:58.658    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000443
+01:06:58.658    (INFO)     Trx.Start: **** PostGLJ1000443
+01:06:58.658    (INFO)     Doc_GLJournal.DeleteAcct: #=3
+01:06:58.658    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+01:06:58.658    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+01:07:13.713    (INFO)     Doc_GLJournal.PostCommit: Sta=Y DT=GLJ ID=1000443
+01:07:13.713    (INFO)     Trx.Start: **** ConnSH637060504338390511System.Random
+01:07:13.713    (INFO)     Trx.Commit: **C** ConnSH637060504338390511System.Random
+01:07:13.713    (INFO)     MChangeLog.FillChangeLog: #9
+01:07:13.713    (INFO)     Trx.Start: **** ConnSH637060504339250403System.Random
+01:07:13.713    (INFO)     Trx.Commit: **C** ConnSH637060504339250403System.Random
+01:07:13.713    (INFO)     Trx.Start: **** ConnSH637060504339500416System.Random
+01:07:13.713    (INFO)     Trx.Commit: **C** ConnSH637060504339500416System.Random
+01:07:13.713    (INFO)     Trx.Commit: **C** PostGLJ1000443
+01:07:24.724    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+01:07:24.724    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000442,Dimension Test ,DR=1000,CR=1000]: Constructor invoke check 
+01:07:24.724    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000442
+01:07:24.724    (INFO)     Trx.Start: **** PostGLJ1000442
+01:07:24.724    (INFO)     Doc_GLJournal.DeleteAcct: #=4
+01:07:24.724    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000442,Dimension Test ,DR=1000,CR=1000]
+01:07:24.724    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000442,Dimension Test ,DR=1000,CR=1000]
+01:07:24.724    (INFO)     Doc_GLJournal.PostCommit: Sta=Y DT=GLJ ID=1000442
+01:07:24.724    (INFO)     Trx.Start: **** ConnSH637060504446029702System.Random
+01:07:24.724    (INFO)     Trx.Commit: **C** ConnSH637060504446029702System.Random
+01:07:24.724    (INFO)     Trx.Start: **** ConnSH637060504446265462System.Random
+01:07:24.724    (INFO)     Trx.Commit: **C** ConnSH637060504446265462System.Random
+01:07:24.724    (INFO)     Trx.Start: **** ConnSH637060504446505824System.Random
+01:07:24.724    (INFO)     Trx.Commit: **C** ConnSH637060504446505824System.Random
+01:07:24.724    (INFO)     Trx.Start: **** ConnSH637060504446779770System.Random
+01:07:24.724    (INFO)     Trx.Commit: **C** ConnSH637060504446779770System.Random
+01:07:24.724    (INFO)     Trx.Commit: **C** PostGLJ1000442
+01:10:33.103    (INFO)     MSession.Logout: 06:35:25.706
+01:14:32.143    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+01:14:32.143    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+01:14:32.143    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:14:38.143    (INFO)     Trx.Start: **** ConnSH637060508781455691System.Random
+01:14:38.143    (INFO)     Trx.Commit: **C** ConnSH637060508781455691System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/06/19','mm/dd/yy') and to_date('10/14/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/07/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+01:15:03.153    (INFO)     Trx.Start: **** ConnSH637060509031330994System.Random
+01:15:03.153    (INFO)     Trx.Commit: **C** ConnSH637060509031330994System.Random
+01:15:03.153    (INFO)     CacheReset.DoIt: 
+01:15:03.153    (INFO)     Env.Reset: finalCall=False
+01:15:03.153    (INFO)     CacheMgt.Reset: #28 (6089)
+01:15:03.153    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:15:03.153    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:15:03.153    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+01:15:03.153    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+01:15:03.153    (INFO)     MChangeLog.FillChangeLog: #9
+01:15:03.153    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+01:15:09.159    (INFO)     Trx.Start: **** ConnSH637060509093603479System.Random
+01:15:09.159    (INFO)     Trx.Commit: **C** ConnSH637060509093603479System.Random
+01:15:09.159    (INFO)     Trx.Start: **** ConnSH637060509093853502System.Random
+01:15:09.159    (INFO)     Trx.Commit: **C** ConnSH637060509093853502System.Random
+01:15:11.151    (INFO)     Trx.Start: **** ConnSH637060509116253300System.Random
+01:15:11.151    (INFO)     Trx.Commit: **C** ConnSH637060509116253300System.Random
+01:15:11.151    (INFO)     Trx.Start: **** ConnSH637060509116533325System.Random
+01:15:11.151    (INFO)     Trx.Commit: **C** ConnSH637060509116533325System.Random
+01:15:25.152    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+01:15:25.152    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000443,user dimension 2,DR=1000,CR=1000]: Constructor invoke check 
+01:15:25.152    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000443
+01:15:25.152    (INFO)     Trx.Start: **** PostGLJ1000443
+01:15:25.152    (INFO)     Doc_GLJournal.DeleteAcct: #=3
+01:15:25.152    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+01:15:25.152    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+01:15:25.152    (INFO)     Doc_GLJournal.PostCommit: Sta=Y DT=GLJ ID=1000443
+01:15:25.152    (INFO)     Trx.Start: **** ConnSH637060509255745740System.Random
+01:15:25.152    (INFO)     Trx.Commit: **C** ConnSH637060509255745740System.Random
+01:15:25.152    (INFO)     Trx.Start: **** ConnSH637060509256026077System.Random
+01:15:25.152    (INFO)     Trx.Commit: **C** ConnSH637060509256026077System.Random
+01:15:25.152    (INFO)     Trx.Start: **** ConnSH637060509256646544System.Random
+01:15:25.152    (INFO)     Trx.Commit: **C** ConnSH637060509256646544System.Random
+01:15:25.152    (INFO)     Trx.Commit: **C** PostGLJ1000443
+01:18:05.185    (INFO)     Trx.Start: **** ConnSH637060510854100188System.Random
+01:18:05.185    (INFO)     Trx.Commit: **C** ConnSH637060510854100188System.Random
+01:18:07.187    (INFO)     Trx.Start: **** ConnSH637060510874077732System.Random
+01:18:07.187    (INFO)     Trx.Commit: **C** ConnSH637060510874077732System.Random
+01:37:47.374    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+01:37:47.374    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000443,user dimension 2,DR=1000,CR=1000]: Constructor invoke check 
+01:37:47.374    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000443
+01:37:47.374    (INFO)     Trx.Start: **** PostGLJ1000443
+01:37:47.374    (INFO)     Doc_GLJournal.DeleteAcct: #=3
+01:37:47.374    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+01:37:47.374    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000443,user dimension 2,DR=1000,CR=1000]
+01:37:47.374    (INFO)     Doc_GLJournal.PostCommit: Sta=Y DT=GLJ ID=1000443
+01:37:47.374    (INFO)     Trx.Start: **** ConnSH637060522676232697System.Random
+01:37:47.374    (INFO)     Trx.Commit: **C** ConnSH637060522676232697System.Random
+01:37:47.374    (INFO)     Trx.Start: **** ConnSH637060522677261994System.Random
+01:37:47.374    (INFO)     Trx.Commit: **C** ConnSH637060522677261994System.Random
+01:37:47.374    (INFO)     Trx.Start: **** ConnSH637060522677591879System.Random
+01:37:47.374    (INFO)     Trx.Commit: **C** ConnSH637060522677591879System.Random
+01:37:47.374    (INFO)     Trx.Commit: **C** PostGLJ1000443
+*** 10/7/2019 4:06:21 PM VAdvantage Log ***

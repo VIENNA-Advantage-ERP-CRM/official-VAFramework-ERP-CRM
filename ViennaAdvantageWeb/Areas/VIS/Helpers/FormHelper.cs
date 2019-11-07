@@ -70,11 +70,6 @@ namespace VIS.Helpers
                                 {
                                     prefix = "VIS_";
                                 }
-                                if (className.Contains("org.compiere.apps.form"))
-                                {
-                                    className = className.Replace("org.compiere.apps.form", "VAdvantage.Apps.AForms");
-                                }
-                                className = className.Replace("org.compiere.install", "VAdvantage.Install");
 
                                 nSpace = "VAdvantage";
                                 if (className.Contains(nSpace))
@@ -122,8 +117,6 @@ namespace VIS.Helpers
             }
             else
             {
-                className = className.Replace("org.compiere.apps.form", "VAdvantage.Apps.AForms");
-                className = className.Replace("org.compiere.install", "VAdvantage.Install");
                 // bool success = OpenForm(AD_Form_ID, className, name);
                 //	Log
                 MSession session = MSession.Get(ctx, true);

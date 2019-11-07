@@ -1,0 +1,92 @@
+*** 10/30/2019 4:07:19 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000178
+04:07:20.720    (INFO)     Trx.Start: **** ConnSH637080484401540367System.Random
+04:07:20.720    (INFO)     Trx.Commit: **C** ConnSH637080484401540367System.Random
+04:07:23.723    (INFO)     Trx.Start: **** ConnSH637080484431255032System.Random
+04:07:23.723    (INFO)     Trx.Commit: **C** ConnSH637080484431255032System.Random
+04:08:42.842    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+04:08:42.842    (INFO)     Trx.Start: **** ConnSH637080485220670123System.Random
+04:08:42.842    (INFO)     Trx.Commit: **C** ConnSH637080485220670123System.Random
+04:08:42.842    (INFO)     MChangeLog.FillChangeLog: #9
+04:08:46.846    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+04:08:46.846    (INFO)     Trx.Start: **** GridDel637080485263272339
+04:08:46.846    (INFO)     GenericPO.DeleteRecord: True
+04:08:46.846    (INFO)     Trx.Commit: **C** GridDel637080485263272339
+04:08:52.852    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+04:08:52.852    (INFO)     Trx.Start: **** GridDel637080485322815269
+04:08:52.852    (INFO)     GenericPO.DeleteRecord: True
+04:08:52.852    (INFO)     Trx.Commit: **C** GridDel637080485322815269
+04:09:11.911    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+04:09:11.911    (INFO)     Trx.Start: **** ConnSH637080485513355028System.Random
+04:09:11.911    (INFO)     Trx.Commit: **C** ConnSH637080485513355028System.Random
+04:09:21.921    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+04:09:21.921    (INFO)     Trx.Start: **** GridDel637080485609952903
+04:09:21.921    (INFO)     GenericPO.DeleteRecord: True
+04:09:21.921    (INFO)     Trx.Commit: **C** GridDel637080485609952903
+04:10:09.109    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+04:10:09.109    (INFO)     Trx.Start: **** ConnSH637080486092375591System.Random
+04:10:09.109    (INFO)     Trx.Commit: **C** ConnSH637080486092375591System.Random
+04:21:17.211    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+04:21:17.211    (INFO)     Trx.Start: **** GridDel637080492773764861
+04:21:17.211    (INFO)     GenericPO.DeleteRecord: True
+04:21:17.211    (INFO)     Trx.Commit: **C** GridDel637080492773764861
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000585
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000587
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000586
+04:23:44.234    (INFO)     Trx.Start: **** ConnSH637080494242113933System.Random
+04:23:44.234    (INFO)     Trx.Commit: **C** ConnSH637080494242113933System.Random
+04:23:45.234    (INFO)     Trx.Start: **** ConnSH637080494251822870System.Random
+04:23:45.234    (INFO)     Trx.Commit: **C** ConnSH637080494251822870System.Random
+04:23:53.235    (INFO)     Trx.Start: **** ConnSH637080494330151303System.Random
+04:23:53.235    (INFO)     Trx.Commit: **C** ConnSH637080494330151303System.Random
+04:25:20.252    (INFO)     MSession.Logout: 06:49:46.426
+04:28:10.281    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+04:28:10.281    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+04:28:10.281    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+04:28:10.281    (INFO)     Trx.Start: **** ConnSH637080496908017272System.Random
+04:28:10.281    (INFO)     Trx.Commit: **C** ConnSH637080496908017272System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/29/19','mm/dd/yy') and to_date('11/06/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/30/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+04:28:28.282    (INFO)     Trx.Start: **** ConnSH637080497080655832System.Random
+04:28:28.282    (INFO)     Trx.Commit: **C** ConnSH637080497080655832System.Random
+04:28:43.284    (INFO)     Trx.Start: **** ConnSH637080497233771422System.Random
+04:28:43.284    (INFO)     Trx.Commit: **C** ConnSH637080497233771422System.Random
+===========>     (SEVERE)   FinBalance.Prepare: Unknown Parameter: FACT_ACCUMULATION_ID
+04:28:58.285    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000007DateFrom=10/1/2019 12:00:00 AM
+04:29:50.295    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:29:50.295    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169057,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=Unable to create Default Balance Aggregation]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N
+04:29:58.295    (INFO)     Trx.Start: **** ConnSH637080497989559887System.Random
+04:29:58.295    (INFO)     Trx.Commit: **C** ConnSH637080497989559887System.Random
+04:30:24.302    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000007DateFrom=10/1/2019 12:00:00 AM
+04:30:27.302    (INFO)     Trx.Start: **** SvrProcess
+04:31:57.315    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000007,DateAcct=3/31/2019 12:00:00 AM #=0
+04:31:58.315    (INFO)     FinBalance.AddLog: 0 - 3/31/2019 12:00:00 AM - 0 - Deleted
+04:31:58.315    (INFO)     Trx.Commit: **C** SvrProcess
+04:32:59.325    (INFO)     Trx.Start: **** SvrProcess
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00947: not enough values [Query NQTrx]INSERT INTO Fact_Acct_Balance (AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID, DateAcct, Account_ID, PostingType, Fact_Accumulation_ID, M_Product_ID, C_BPartner_ID,	C_Project_ID,	C_SalesRegion_ID,C_Activity_ID, C_Campaign_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, GL_Budget_ID, UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID,UserElement9_ID,  AmtAcctDr, AmtAcctCr, Qty)  SELECT AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID  ,Account_ID, PostingType, 1000007 ,M_Product_ID  ,NULL  , NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,NULL  ,UserElement9_ID  ,COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0), COALESCE(SUM(Qty),0)  FROM Fact_Acct a  WHERE C_AcctSchema_ID= 1000007 GROUP BY AD_Client_ID,C_AcctSchema_ID, AD_Org_ID,  AD_OrgTrx_ID,Account_ID, PostingType  ,M_Product_ID , UserElement9_ID 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00947: not enough values
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00947: not enough values
+04:35:49.354    (INFO)     FinBalance.AddLog: 0 - 3/31/2019 12:00:00 AM - -1 - Inserts in MFactAccumulation[1000007,BalanceAccumulation=,C_Calendar_ID=1000006]
+04:35:49.354    (INFO)     Trx.Commit: **C** SvrProcess
+04:35:49.354    (INFO)     FinBalance.UpdateBalance: 325 sec
+04:35:50.355    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:35:50.355    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169058,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#-1]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N

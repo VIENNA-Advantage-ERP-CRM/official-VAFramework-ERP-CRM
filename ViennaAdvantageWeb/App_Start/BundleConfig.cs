@@ -10,7 +10,9 @@ namespace ViennaAdvantageWeb
         {
             ViennaBase.BundleConfig.RegisterBundles(bundles);
 
+
             BundleTable.EnableOptimizations= false;
+
         }
     }
 }

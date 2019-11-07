@@ -56,6 +56,7 @@ namespace VIS.Models
                 return uInfo;
             }
 
+
             string sql = @"SELECT AD_User.Name,
                                       AD_User.Email,
                                       AD_User.AD_User_ID,

@@ -1,0 +1,272 @@
+*** 10/3/2019 11:31:45 AM VAdvantage Log  ***
+11:31:44.314    (INFO)     MSession.Logout: 06:30:17.987
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1016619]
+11:31:45.314    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+11:31:45.314    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+11:31:45.314    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+11:31:45.314    (INFO)     Trx.Start: **** ConnSH637056991055164378System.Random
+11:31:45.314    (INFO)     Trx.Commit: **C** ConnSH637056991055164378System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+11:34:23.342    (INFO)     Trx.Start: **** ConnSH637056992635810418System.Random
+11:34:23.342    (INFO)     Trx.Commit: **C** ConnSH637056992635810418System.Random
+11:34:26.342    (INFO)     Trx.Start: **** ConnSH637056992661177512System.Random
+11:34:26.342    (INFO)     Trx.Commit: **C** ConnSH637056992661177512System.Random
+11:34:28.342    (INFO)     Trx.Start: **** ConnSH637056992682213919System.Random
+11:34:28.342    (INFO)     Trx.Commit: **C** ConnSH637056992682213919System.Random
+11:34:33.343    (INFO)     Trx.Start: **** ConnSH637056992737632680System.Random
+11:34:33.343    (INFO)     Trx.Commit: **C** ConnSH637056992737632680System.Random
+11:34:33.343    (INFO)     MChangeLog.FillChangeLog: #9
+11:34:33.343    (INFO)     Trx.Start: **** ConnSH637056992739067315System.Random
+11:34:33.343    (INFO)     Trx.Commit: **C** ConnSH637056992739067315System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+11:34:57.345    (INFO)     Trx.Start: **** ConnSH637056992975562891System.Random
+11:34:57.345    (INFO)     Trx.Commit: **C** ConnSH637056992975562891System.Random
+11:35:36.353    (INFO)     Trx.Start: **** ConnSH637056993361047424System.Random
+11:35:36.353    (INFO)     Trx.Commit: **C** ConnSH637056993361047424System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+11:37:47.374    (INFO)     MSession.Logout: 06:36:02.137
+11:40:02.402    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+11:40:02.402    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+11:40:02.402    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+11:40:02.402    (INFO)     Trx.Start: **** ConnSH637056996028605830System.Random
+11:40:02.402    (INFO)     Trx.Commit: **C** ConnSH637056996028605830System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:03:33.333    (INFO)     AEnv.GetMWindowVO: Cached=VAdvantage.Controller.GridWindowVO
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+12:03:34.334    (INFO)     Trx.Start: **** ConnSH637057010139991095System.Random
+12:03:34.334    (INFO)     Trx.Commit: **C** ConnSH637057010139991095System.Random
+12:03:35.335    (INFO)     Trx.Start: **** ConnSH637057010152143654System.Random
+12:03:35.335    (INFO)     Trx.Commit: **C** ConnSH637057010152143654System.Random
+12:03:37.337    (INFO)     Trx.Start: **** ConnSH637057010170721406System.Random
+12:03:37.337    (INFO)     Trx.Commit: **C** ConnSH637057010170721406System.Random
+12:03:38.338    (INFO)     Trx.Start: **** ConnSH637057010181841895System.Random
+12:03:38.338    (INFO)     Trx.Commit: **C** ConnSH637057010181841895System.Random
+12:03:40.340    (INFO)     Trx.Start: **** ConnSH637057010202603776System.Random
+12:03:40.340    (INFO)     Trx.Commit: **C** ConnSH637057010202603776System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+12:04:42.442    (INFO)     MSession.Logout: 06:55:41.640
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1016621]
+12:04:42.442    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+12:04:42.442    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+12:04:42.442    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:04:43.443    (INFO)     Trx.Start: **** ConnSH637057010833031376System.Random
+12:04:43.443    (INFO)     Trx.Commit: **C** ConnSH637057010833031376System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:06:50.650    (INFO)     AEnv.GetMWindowVO: Cached=VAdvantage.Controller.GridWindowVO
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+12:06:51.651    (INFO)     Trx.Start: **** ConnSH637057012111346093System.Random
+12:06:51.651    (INFO)     Trx.Commit: **C** ConnSH637057012111346093System.Random
+12:06:53.653    (INFO)     Trx.Start: **** ConnSH637057012138708445System.Random
+12:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637057012138708445System.Random
+12:06:58.658    (INFO)     Trx.Start: **** ConnSH637057012181831940System.Random
+12:06:58.658    (INFO)     Trx.Commit: **C** ConnSH637057012181831940System.Random
+12:07:02.720    (INFO)     Trx.Start: **** ConnSH637057012225976353System.Random
+12:07:02.720    (INFO)     Trx.Commit: **C** ConnSH637057012225976353System.Random
+12:07:05.750    (INFO)     Trx.Start: **** ConnSH637057012251145020System.Random
+12:07:05.750    (INFO)     Trx.Commit: **C** ConnSH637057012251145020System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-12899: value too large for column "RAGHUVA4MARCH"."GL_LINEDIMENSION"."DIMENSIONVALUE" (actual: 7, maximum: 1)
+12:08:35.835    (INFO)     MSession.Logout: 06:34:53.733
+12:08:37.837    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+12:08:37.837    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+12:08:37.837    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:08:38.838    (INFO)     Trx.Start: **** ConnSH637057013180592069System.Random
+12:08:38.838    (INFO)     Trx.Commit: **C** ConnSH637057013180592069System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:08:50.850    (INFO)     Trx.Start: **** ConnSH637057013305899125System.Random
+12:08:50.850    (INFO)     Trx.Commit: **C** ConnSH637057013305899125System.Random
+12:08:50.850    (INFO)     CacheReset.DoIt: 
+12:08:50.850    (INFO)     Env.Reset: finalCall=False
+12:08:50.850    (INFO)     CacheMgt.Reset: #21 (6068)
+12:08:50.850    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+12:08:50.850    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:08:50.850    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+12:08:50.850    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+12:08:50.850    (INFO)     MChangeLog.FillChangeLog: #9
+12:08:50.850    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+12:08:58.858    (INFO)     Trx.Start: **** ConnSH637057013380330420System.Random
+12:08:58.858    (INFO)     Trx.Commit: **C** ConnSH637057013380330420System.Random
+12:08:58.858    (INFO)     Trx.Start: **** ConnSH637057013381281108System.Random
+12:08:58.858    (INFO)     Trx.Commit: **C** ConnSH637057013381281108System.Random
+12:08:59.859    (INFO)     Trx.Start: **** ConnSH637057013394493172System.Random
+12:08:59.859    (INFO)     Trx.Commit: **C** ConnSH637057013394493172System.Random
+12:08:59.859    (INFO)     Trx.Start: **** ConnSH637057013395383131System.Random
+12:08:59.859    (INFO)     Trx.Commit: **C** ConnSH637057013395383131System.Random
+12:09:01.910    (INFO)     Trx.Start: **** ConnSH637057013419210501System.Random
+12:09:01.910    (INFO)     Trx.Commit: **C** ConnSH637057013419210501System.Random
+12:09:03.930    (INFO)     Trx.Start: **** ConnSH637057013433898065System.Random
+12:09:03.930    (INFO)     Trx.Commit: **C** ConnSH637057013433898065System.Random
+12:09:04.940    (INFO)     Trx.Start: **** ConnSH637057013448499496System.Random
+12:09:04.940    (INFO)     Trx.Commit: **C** ConnSH637057013448499496System.Random
+12:09:13.913    (INFO)     Trx.Start: **** ConnSH637057013533503447System.Random
+12:09:13.913    (INFO)     Trx.Commit: **C** ConnSH637057013533503447System.Random
+12:11:32.113    (INFO)     Trx.Start: **** ConnSH637057014920673811System.Random
+12:11:32.113    (INFO)     Trx.Commit: **C** ConnSH637057014920673811System.Random
+12:11:52.115    (INFO)     Trx.Start: **** ConnSH637057015122319895System.Random
+12:11:52.115    (INFO)     Trx.Commit: **C** ConnSH637057015122319895System.Random
+12:11:57.115    (INFO)     Trx.Start: **** ConnSH637057015172978165System.Random
+12:11:57.115    (INFO)     Trx.Commit: **C** ConnSH637057015172978165System.Random
+12:12:22.122    (INFO)     Trx.Start: **** ConnSH637057015426897439System.Random
+12:12:22.122    (INFO)     Trx.Commit: **C** ConnSH637057015426897439System.Random
+12:15:47.154    (INFO)     MSession.Logout: 06:37:49.553
+12:17:05.175    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+12:17:05.175    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+12:17:05.175    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:17:06.176    (INFO)     Trx.Start: **** ConnSH637057018260075662System.Random
+12:17:06.176    (INFO)     Trx.Commit: **C** ConnSH637057018260075662System.Random
+12:17:13.171    (INFO)     Msg.InitMsg: Records=3692 - en_US
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:18:11.181    (INFO)     AEnv.GetMWindowVO: Cached=VAdvantage.Controller.GridWindowVO
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+12:18:11.181    (INFO)     Trx.Start: **** ConnSH637057018916023515System.Random
+12:18:11.181    (INFO)     Trx.Commit: **C** ConnSH637057018916023515System.Random
+12:18:13.181    (INFO)     Trx.Start: **** ConnSH637057018933260499System.Random
+12:18:13.181    (INFO)     Trx.Commit: **C** ConnSH637057018933260499System.Random
+12:18:16.181    (INFO)     Trx.Start: **** ConnSH637057018961461637System.Random
+12:18:16.181    (INFO)     Trx.Commit: **C** ConnSH637057018961461637System.Random
+12:18:18.181    (INFO)     Trx.Start: **** ConnSH637057018987596872System.Random
+12:18:18.181    (INFO)     Trx.Commit: **C** ConnSH637057018987596872System.Random
+12:18:20.182    (INFO)     Trx.Start: **** ConnSH637057019006027374System.Random
+12:18:20.182    (INFO)     Trx.Commit: **C** ConnSH637057019006027374System.Random
+12:18:45.184    (INFO)     Trx.Start: **** ConnSH637057019252752398System.Random
+12:18:45.184    (INFO)     Trx.Commit: **C** ConnSH637057019252752398System.Random
+12:19:02.192    (INFO)     Trx.Start: **** ConnSH637057019426898727System.Random
+12:19:02.192    (INFO)     Trx.Commit: **C** ConnSH637057019426898727System.Random
+12:22:07.227    (INFO)     MSession.Logout: 06:35:00.44
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1016627]
+12:22:07.227    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+12:22:07.227    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+12:22:07.227    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:22:07.227    (INFO)     Trx.Start: **** ConnSH637057021275902608System.Random
+12:22:07.227    (INFO)     Trx.Commit: **C** ConnSH637057021275902608System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:22:27.222    (INFO)     MSession.Logout: 06:30:20.402
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1016628]
+12:22:27.222    (INFO)     MRole.Get: AD_Role_ID=1000118, AD_User_ID=1005338, reload=True
+12:22:27.222    (INFO)     MRole.Get: MRole[1000118,Vienna Group Admin,UserLevel= CO,AD_Client_ID IN(0,1000005),AD_Org_ID IN(0,1000008,1000009,1000017,1000018,1000019,1000020,1000021)]
+12:22:27.222    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=1005338, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:22:28.222    (INFO)     Trx.Start: **** ConnSH637057021480161809System.Random
+12:22:28.222    (INFO)     Trx.Commit: **C** ConnSH637057021480161809System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 1005338  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 1005338 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/02/19','mm/dd/yy') and to_date('10/10/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/03/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=1005338 AND AppointmentsInfo.AD_User_ID  = 1005338)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:22:46.224    (INFO)     AEnv.GetMWindowVO: Cached=VAdvantage.Controller.GridWindowVO
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =224
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =226
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000666
+12:22:46.224    (INFO)     Trx.Start: **** ConnSH637057021668570084System.Random
+12:22:46.224    (INFO)     Trx.Commit: **C** ConnSH637057021668570084System.Random
+12:22:48.224    (INFO)     Trx.Start: **** ConnSH637057021685096076System.Random
+12:22:48.224    (INFO)     Trx.Commit: **C** ConnSH637057021685096076System.Random
+12:22:49.224    (INFO)     Trx.Start: **** ConnSH637057021699024396System.Random
+12:22:49.224    (INFO)     Trx.Commit: **C** ConnSH637057021699024396System.Random
+12:22:50.225    (INFO)     Trx.Start: **** ConnSH637057021709940201System.Random
+12:22:51.225    (INFO)     Trx.Commit: **C** ConnSH637057021709940201System.Random
+12:22:53.225    (INFO)     Trx.Start: **** ConnSH637057021733130222System.Random
+12:22:53.225    (INFO)     Trx.Commit: **C** ConnSH637057021733130222System.Random
+*** 10/3/2019 1:32:08 PM VAdvantage Log ***
