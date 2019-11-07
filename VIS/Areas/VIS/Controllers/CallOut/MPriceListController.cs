@@ -31,7 +31,12 @@ namespace VIS.Controllers
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
 
-        //Added by Bharat on 13/May/2017
+        /// <summary>
+        /// Get Price List Data
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Parameters</param>
+        /// <returns>List of Data</returns>
         public JsonResult GetPriceListData(string fields)
         {
 
