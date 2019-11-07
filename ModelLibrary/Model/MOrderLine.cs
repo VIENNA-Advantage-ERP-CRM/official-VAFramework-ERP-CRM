@@ -49,6 +49,9 @@ namespace VAdvantage.Model
         private int I_Order_ID = 0;
 
         private bool _fromProcess = false;
+
+        /** is Closed Document*/
+        private bool isClosed = false;
         #endregion
 
         /// <summary>
@@ -4089,7 +4092,7 @@ namespace VAdvantage.Model
 
                 //JID_1474 : if document is closed then we need to set Delivered qty as Ordered qty Suggested by Gagandeep kaur and Puneet that we do not
                 // need to add return trx check and it will work for all orders
-                if (Ord.GetDocAction().Equals(MOrder.DOCACTION_Close))
+                if (isClosed)
                 {
                     if (GetQtyDelivered() > 0)
                         SetQtyOrdered(GetQtyDelivered());
@@ -4304,6 +4307,18 @@ namespace VAdvantage.Model
 
             return true;
         }
+
+        //Set property to check wheater order's close event is called or any other event is called
+        public void SetIsClosedDocument(bool closed)
+        {
+            isClosed = closed;
+        }
+
+        public bool GetIsClosedDocument()
+        {
+            return isClosed;
+        }
+        //end
 
         /// <summary>
         /// Before Delete
