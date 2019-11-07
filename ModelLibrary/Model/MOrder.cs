@@ -5206,7 +5206,6 @@ namespace VAdvantage.Model
         public bool CloseIt()
         {
             log.Info(ToString());
-
             //	Close Not delivered Qty - SO/PO
             MOrderLine[] lines = GetLines(true, "M_Product_ID");
             for (int i = 0; i < lines.Length; i++)
@@ -5217,6 +5216,8 @@ namespace VAdvantage.Model
                 {
                     line.SetQtyLostSales(Decimal.Subtract(line.GetQtyOrdered(), line.GetQtyDelivered()));
                     line.SetQtyOrdered(line.GetQtyDelivered());
+                    //Set property to true because close event is called
+                    line.SetIsClosedDocument(true);
                     //	QtyEntered unchanged
                     line.AddDescription("Close (" + old + ")");
                     line.Save(Get_TrxName());
