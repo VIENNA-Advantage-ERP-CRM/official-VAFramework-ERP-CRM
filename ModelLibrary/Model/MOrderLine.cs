@@ -4311,7 +4311,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set property to check wheater order's close event is called or any other event is called
         /// </summary>
-        /// <param name="closed"></param>
+        /// <param name="closed"> True/False</param>
         public void SetIsClosedDocument(bool closed)
         {
             isClosed = closed;
@@ -4320,7 +4320,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get property to check wheater order's close event is called or any other event is called
         /// </summary>
-        /// <returns>bool </returns>
+        /// <returns>True if document is closing</returns>
         public bool GetIsClosedDocument()
         {
             return isClosed;
