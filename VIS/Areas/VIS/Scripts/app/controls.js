@@ -824,7 +824,7 @@
         if (typeof (e) == "boolean") {
             // console.log("1");
             if (e)
-                this.setBackground("vis-gc-vpanel-table-error");
+                this.setBackground("vis-ev-col-error");
             else if (this.isReadOnly)
                 this.setBackground("vis-ev-col-readonly");
             else if (this.isMandatory) {
@@ -1138,7 +1138,7 @@
         var $ctrl = null;
         //Init Control
         if (!isLink) {
-            $ctrl = $('<button class="vis-gc-vpanel-table-btn-blue1">', { type: 'button', name: columnName });
+            $ctrl = $('<button>', { type: 'button', name: columnName });
             $img.css("margin-right", "8px");
         }
         else
@@ -1428,7 +1428,7 @@
 
     function VCheckBox(columnName, mandatory, isReadOnly, isUpdateable, text, description) {
         var $ctrl = $('<input>', { type: 'checkbox', name: columnName, value: text });
-        var $lbl = $('<label class="vis-gc-vpanel-table-label-checkbox" />').html(text).prepend($ctrl);
+        var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text).prepend($ctrl);
         IControl.call(this, $lbl, VIS.DisplayType.YesNo, isReadOnly, columnName, mandatory);
 
         this.cBox = $ctrl;
@@ -1573,8 +1573,8 @@
                 options[VIS.Actions.contact] = true;
             }
 
-            // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
-            $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" class="fa fa-ellipsis-v" /></button>');
+           // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+            $btnPop = $('<button tabindex="-1" class="input-group-text"><i tabindex="-1" class="fa fa-ellipsis-v" /></button>');
             options[VIS.Actions.refresh] = true;
             if (VIS.MRole.getIsShowPreference())
                 options[VIS.Actions.preference] = true;

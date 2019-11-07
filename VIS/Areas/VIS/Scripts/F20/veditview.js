@@ -375,101 +375,48 @@
 
     };
 
-
-
-
-    //<div class="input-group vis-input-wrap">
-    //    <div class="vis-inner-wrap">
-    //        <input class="form-control" type="text" placeholder="Enter your text here">
-    //            <label class="vis-input-label">--</label>
-    //        </div>
-    //        <div class="input-group-append">
-    //            <span class="input-group-text">
-    //                <i class="fal fa-handshake"></i>
-    //            </span>
-    //        </div>
-    //        <div class="input-group-append">
-    //            <span class="input-group-text">
-    //                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-    //            </span>
-    //        </div>
-
-
-
     function insertCWrapper(label, editor, parent, mField) {
-        var ctrl = '';
-        var lblAdded = true;
-        if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName =='TEXTAREA') && editor.getControl()[0].type != 'checkbox' ) {
-       // if (1 == 2) {
-            ctrl = $('<div class="vis-control-wrap">');
-            ctrl.append(editor.getControl().attr("placeholder", " ").attr("data-placeholder", ""));
-            if (label != null) {
-                ctrl.append(label.getControl());
-            }
+        var ctrl = $('<div class="input-group vis-input-wrap">');
+        if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
+            var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
+            if (mField.getFontClass() != '')
+                btns.push('<i class="' + mField.getFontClass() + '"></i>');
+            else
+                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
+            btns.push('</span></div>');
+            ctrl.append($(btns.join(' ')));
         }
-        else if (editor && editor.getControl()[0].tagName == "SELECT") {
-        //else if (2 == 3) {
-            ctrl = $('<div class="vis-select-wrap">');
-            ctrl.append(editor.getControl());
+
+        var ctrlP = $("<div class='vis-control-wrap'>");
+
+        if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName == "SELECT" ||
+            editor.getControl()[0].tagName == 'TEXTAREA') && editor.getControl()[0].type != 'checkbox') {
+            //editor.getControl().addClass("custom-select");
+            ctrlP.append(editor.getControl().attr("placeholder", " ").attr("data-placeholder", ""));
             if (label != null) {
-                ctrl.append(label.getControl());
+                ctrlP.append(label.getControl());
             }
         }
         else {
-            ctrl = $('<div class="vis-control-wrap">');
-            if(editor)
-            ctrl.append(editor.getControl());
-            if (label != null) {
-                lblAdded = false;
-            }
+            if (label != null)
+                ctrlP.append(label.getControl());
+            if (editor)
+                ctrlP.append(editor.getControl());
         }
-
-        if (ctrl != '') {
-
-            ctrl.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
-
-            var wctrl = $('<div class="input-group vis-input-wrap">');
-
-            if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName()!='')) {
-               //if (false) {// image or font lib 
-                var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
-                if (mField.getFontClass() != '') 
-                    btns.push('<i class="' + mField.getFontClass()+'"></i>');
-                else 
-                    btns.push('<img src="' + VIS.Application.contextUrl +'Images/Thumb16x16/'+ mFiled.getImageName() +'"></img>');
-
-                btns.push('</span></div>');
-                wctrl.append($(btns.join(' ')));
-            }
-            ctrl =  wctrl.append(ctrl);
-            wctrl = null;
+        ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
+        ctrl.append(ctrlP);
             var count = editor.getBtnCount();
-
-            if (count > 0) {
-                while (count > 0) {
-                    var btn = editor.getBtn(count - 1);
-                    if (btn != null) {
-                        //ctrl.append($('<div class="input-group-append">').append($('<span class="input-group-text">').append(btn)));
-                        ctrl.append($('<div class="input-group-append">').append(btn));
-                    }
-                    --count;
+        if (count > 0) {
+            editor.getControl().attr("data-hasBtn", " ");
+            while (count > 0) {
+                var btn = editor.getBtn(count - 1);
+                if (btn != null) {
+                    ctrl.append($('<div class="input-group-append">').append(btn));
                 }
-                count = -1;
+                --count;
             }
+            count = -1;
         }
-        else {
-            ctrl = $('<div class="vis-control-wrap">');
-
-            if (label)
-                ctrl.append(label.getControl());
-            if (editor) {
-                ctrl.append(editor.getControl());
-            }
-        }
-
-        if (!lblAdded)
-            parent.append(label.getControl());
-
         parent.append(ctrl);
     }
 
