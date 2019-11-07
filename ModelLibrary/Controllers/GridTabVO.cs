@@ -907,8 +907,14 @@ namespace VAdvantage.Controller
 
             clone.HeaderHeight = HeaderHeight;
             clone.HeaderWidth = HeaderWidth;
+            clone.HeaderBackColor = HeaderBackColor;
             clone.IsHeaderPanel = IsHeaderPanel;
             clone.AD_GridLayout_ID = AD_GridLayout_ID;
+            clone.HeaderAlignment = HeaderAlignment;
+            clone.HeaderTotalColumn = HeaderTotalColumn;
+            clone.HeaderTotalRow = HeaderTotalRow;
+            clone.hItems = hItems;
+            clone.HeaderName = HeaderName;
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)

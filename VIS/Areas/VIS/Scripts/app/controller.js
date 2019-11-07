@@ -1189,7 +1189,7 @@
     };
 
     GridTab.prototype.loadHeaderPanelItems = function () {
-        if (this.vo.hItems ) {
+        if (this.vo.hItems) {
             this.isHeaderPanel = true;
             headerPanel = this.vo.hItems;
         }
@@ -1204,11 +1204,23 @@
     }
 
     GridTab.prototype.getHeaderHeight = function () {
-        return this.vo.HeaderHeight;
+        if (this.vo.HeaderHeight && this.vo.HeaderHeight > 0) {
+
+            return this.vo.HeaderHeight + 'px';
+        }
+        else {
+            return '200px';
+        }
     };
 
     GridTab.prototype.getHeaderWidth = function () {
-        return this.vo.HeaderWidth;
+        if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
+            return this.vo.HeaderWidth;
+        }
+        else {
+            return '250px';
+        }
+        
     };
 
     GridTab.prototype.getHeaderBackColor = function () {
@@ -1216,8 +1228,13 @@
     };
 
 
-    GridTab.prototype.getHeaderAlignment = function () {
-        return this.vo.HeaderAlignment;
+    GridTab.prototype.getHeaderHorizontal = function () {
+        if (this.vo.HeaderAlignment.equals("H")) {
+            return true
+        }
+        else {
+            return false;
+        }
     };
 
 
