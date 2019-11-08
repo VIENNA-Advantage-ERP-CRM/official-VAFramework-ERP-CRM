@@ -16,36 +16,44 @@ namespace VIS.Models
         public string UsrImage { get; set; }
         public bool Isdatabase { get; set; }
 
-        public void GetImage(Ctx ctx, int ad_image_id, int size)
+        public ImagePathInfo GetImage(Ctx ctx, int ad_image_id, int height, int width, string URI)
         {
             MImage mimg = new MImage(ctx, ad_image_id, null);
-            var value = mimg.GetThumbnailByte(size, size);
-            if (value != null)
+            bool url = false;
+            var value = mimg.GetThumbnail(height, width, out url);
+            if (url)
             {
-                UsrImage = Convert.ToBase64String(value);
-                //obj.UsrImage = Convert.ToBase64String(mimg.GetBinaryData());
-                if (mimg.GetBinaryData() != null)
-                {
-                    Isdatabase = true;
-                }
+                UsrImage = URI + "/Images/" + value;
+                return new ImagePathInfo() { Path = value, IsUrl = true };
+            }
+            else
+            {
+                UsrImage = "data:image/jpg;base64," + UsrImage;
+                return new ImagePathInfo() { Bytes = value, IsUrl = false };
             }
         }
 
 
-        public void GetImageForWindowControl(Ctx ctx, int ad_image_id, int height,int width)
-        {
-            MImage mimg = new MImage(ctx, ad_image_id, null);
-            var value = mimg.GetThumbnailByte(height, width);
-            if (value != null)
-            {
-                UsrImage = Convert.ToBase64String(value);
-                //obj.UsrImage = Convert.ToBase64String(mimg.GetBinaryData());
-                if (mimg.GetBinaryData() != null)
-                {
-                    Isdatabase = true;
-                }
-            }
-        }
+        //public ImagePathInfo GetImageForWindowControl(Ctx ctx, int ad_image_id, int height, int width)
+        //{
+        //    MImage mimg = new MImage(ctx, ad_image_id, null);
+        //    if (!string.IsNullOrEmpty(mimg.GetFontName()))
+        //    {
+        //        return new ImagePathInfo() { ClassName = mimg.GetFontName() };
+        //    }
+        //    var value = mimg.GetThumbnailByte(height, width);
+        //    if (value != null)
+        //    {
+        //        UsrImage = Convert.ToBase64String(value);
+        //        //obj.UsrImage = Convert.ToBase64String(mimg.GetBinaryData());
+        //        if (mimg.GetBinaryData() != null)
+        //        {
+        //            Isdatabase = true;
+        //        }
+        //        return new ImagePathInfo() { Path = UsrImage };
+        //    }
+        //    return null;
+        //}
 
         /// <summary>
         /// Save images
@@ -139,7 +147,7 @@ namespace VIS.Models
                 hpf = file as HttpPostedFileBase;
                 string savedFileName = Path.Combine(serverPath, Path.GetFileName(hpf.FileName));
                 hpf.SaveAs(savedFileName);
-               ms= new MemoryStream();
+                ms = new MemoryStream();
                 hpf.InputStream.CopyTo(ms);
                 byte[] byteArray = ms.ToArray();
                 FileInfo file1 = new FileInfo(savedFileName);
@@ -147,7 +155,7 @@ namespace VIS.Models
                 {
                     file1.Delete(); //Delete Temporary file             
                 }
-                
+
                 imgByte = Convert.ToBase64String(byteArray);
             }
             finally
@@ -157,11 +165,21 @@ namespace VIS.Models
                     ms.Dispose();
                     ms = null;
                 }
-                
+
                 hpf = null;
             }
             return imgByte;
         }
 
     }
+
+    public class ImagePathInfo
+    {
+        public string Path { get; set; }
+
+        public byte[] Bytes { get; set; }
+
+        public bool IsUrl = false;
+    }
+
 }

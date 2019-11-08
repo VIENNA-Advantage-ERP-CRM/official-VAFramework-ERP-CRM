@@ -288,7 +288,7 @@
             $divTabPanelsHead.append($headerTabPanel).append($spanPin);
             $divTabPanels.append($divTabPanelsHead).append($divTabPanelsContent);
             $divTabPanelOuterWrap.append($divTabPanels).append($divTabPanelIconBar);
-           // $td5_tr1.append($divTabPanelOuterWrap);
+            // $td5_tr1.append($divTabPanelOuterWrap);
             $td5_tr1 = $root.find('.vis-ad-w-p-actionpanel-r');
             $td5_tr1.append($divTabPanelOuterWrap);
 
@@ -3300,6 +3300,9 @@
 
         /*******    END Tab Panels     ******/
 
+
+        
+
         if (this.aParentDetail)
             this.aParentDetail.evaluate(tabEle);
 
@@ -3692,7 +3695,11 @@
             this.curWinTab.evaluate(null);
         }
 
+        /*****Header Panel******/
+        if (this.curGC.vHeaderPanel)
+            this.curGC.vHeaderPanel.navigate();
 
+    /******End Header Panel******/
 
 
     };   //
@@ -4629,6 +4636,11 @@
             this.ctx.setAutoCommit(this.$parentWindow.getWindowNo(), false);
             this.ctx.removeWindow(this.$parentWindow.getWindowNo());
             VIS.MLookupCache.cacheReset(this.$parentWindow.getWindowNo());
+        }
+
+        if (this.curGC.vHeaderPanel) {
+            this.curGC.vHeaderPanel.dispose();
+            this.curGC.vHeaderPanel = null;
         }
 
         this.ctx = null;

@@ -774,10 +774,11 @@ li.vis-page-item-select {
 
 /*Header panel css START*/
 .vis-w-p-header-data-f {
+    font-size: 0.875rem;
     padding: 10px 10px 0;
     color: #fff;
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
 }
 
 
@@ -793,10 +794,10 @@ li.vis-page-item-select {
     }
 
     .vis-w-p-header-data-f label {
-        font-size: 0.875rem;
         display: block;
         font-weight: normal;
         margin-bottom: 3px;
+        word-break: break-all;
     }
 
 
@@ -808,17 +809,19 @@ li.vis-page-item-select {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-left:10px;
 }
 
 .vis-w-p-header-Label-f {
-    padding-left: 10px;
+    /*padding-left: 10px;*/
+    flex: 1;
 }
 
     .vis-w-p-header-Label-f button {
         border-radius: 50%;
         border: 2px solid #fff;
         overflow: hidden;
-        margin: auto;
+        /*margin: auto;*/
     }
 
     .vis-w-p-header-Label-f img {
@@ -829,9 +832,9 @@ li.vis-page-item-select {
     }
 
 .vis-w-p-header-Label-center-f {
-    width: calc(100% - 35px);
+    /*width: calc(100% - 35px);*/
     display: flex;
-    flex-direction: column;
+    /*flex-direction: column;*/
     justify-content: center;
 }
 

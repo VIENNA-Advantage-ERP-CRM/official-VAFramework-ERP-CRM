@@ -4630,6 +4630,7 @@
         var windowNo = winNo;
         var columnName = colName;// "AD_Image_ID";
         var $img = $("<img >");
+        var $icon = $("<i>");
         var $txt = $("<span>").text("-");
         var $ctrl = null;
 
@@ -4638,7 +4639,7 @@
 
 
 
-        $ctrl.append($img).append($txt);
+        $ctrl.append($img).append($icon).append($txt);
 
         IControl.call(this, $ctrl, VIS.DisplayType.Button, isReadOnly, columnName, mandatoryField);
 
@@ -4694,11 +4695,19 @@
             $txt.text(text);
         };
 
-        this.setIcon = function (resImg) {
+        this.setIcon = function (resImg, imgPath) {
             //$img.attr('src', rootPath + img);
-            if (resImg != null) {
+
+            if (imgPath) {
+                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb320x240/" + imgPath);
+                $img.show();
+                $icon.hide();
+                $txt.text("");
+            }
+            else if (resImg != null) {
                 $img.attr('src', "data:image/jpg;base64," + resImg);
                 $img.show();
+                $icon.hide();
                 $txt.text("");
             }
             else {
@@ -4749,14 +4758,19 @@
             //By Ajex request
             var localObj = this;
             $.ajax({
-                url: VIS.Application.contextUrl + "VImageForm/GetImageForWindowControl",
+                url: VIS.Application.contextUrl + "VImageForm/GetImageAsByte",
                 dataType: "json",
                 data: {
                     ad_image_id: neValue
                 },
                 success: function (data) {
-                    var returnValue = data.result;
-                    localObj.setIcon(returnValue);
+                    var data = JSON.parse(data);
+                    if (data) {
+                        localObj.setIcon(data.Bytes, data.Path);
+                    }
+                    else {
+                        localObj.setIcon(null, null);
+                    }
                     localObj.ctrl.val(neValue);
                     localObj = null;
                 }

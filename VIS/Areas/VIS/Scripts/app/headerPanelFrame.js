@@ -6,6 +6,9 @@
         var $self = this;
         this.gTab = null;
         this.controls = [];
+        var textAlignEnum = { "C": "Center", "R": "Right", "L": "Left" };
+        var alignItemEnum = { "C": "Center", "T": "flex-start", "B": "flex-end" };
+
         var setHeaderLayout = function (_gTab, $parentRoot) {
             //if Tab is market as Header Panel, only then execute further code.
             if (_gTab.getIsHeaderPanel()) {
@@ -16,15 +19,15 @@
                     var rows = $self.gTab.getHeaderTotalRow();
                     var columns = $self.gTab.getHeaderTotalColumn();
                     var backColor = $self.gTab.getHeaderBackColor();
-                    var alignment = $self.gTab.getHeaderAlignment();
-                    var height = $self.gTab.getHeaderHeight() || '150px';
-                    var width = $self.gTab.getHeaderWidth() || '250px';
+                    var alignment = $self.gTab.getHeaderHorizontal();
+                    var height = $self.gTab.getHeaderHeight();
+                    var width = $self.gTab.getHeaderWidth();
 
                     /*Set Alignment and Height/Width of Header Panel
                     * Default Height is 150 px
                     * Default Width is 250px
                     */
-                    if (alignment.equals("H")) {
+                    if (alignment) {
                         $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
                         $parentRoot.height(height);
                     }
@@ -58,6 +61,7 @@
                 }
             }
         };
+        this.windowNo = 0;
 
 
         this.setHeaderItems = function () {
@@ -95,6 +99,10 @@
                         var colSpan = headerItem.ColumnSpan;
                         var startRow = headerItem.StartRow;
                         var rowSpan = headerItem.RowSpan;
+                        var justyFy = headerItem.JustifyItems;
+                        var alignItem = headerItem.AlignItems;
+
+                        $self.windowNo = $self.gTab.getWindowNo();
                         var $div = null;
 
                         var $divIcon = null;
@@ -104,20 +112,11 @@
                         var $label = null;
                         var iControl = null;
 
-                        //var clsFieldGroup = $("<style type='text / css'> .clsFieldGroup" + headerSeqNo+" {'background-color':'green', 'grid-column': '" + startCol + "/ span " + colSpan + "'; 'grid-row': '" + startRow + "/ span " + rowSpan + "'} </style>");
-                        //$('html > head').append(clsFieldGroup);
-
-                        var headerStyle = mField.getHeaderStyle();
-
-                        var style = document.createElement('style');
-                        style.type = 'text/css';
-                        style.innerHTML = ".clsFieldGroup" + headerSeqNo + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + "}";
-                        $($('head')[0]).append(style);
+                        //Apply HTML Style
+                        var dynamicClassName = applyCustomUISettings(mField, headerSeqNo, startCol, colSpan, startRow, rowSpan);
 
 
-
-
-                        $div = $('<div class="vis-w-p-header-data-f clsFieldGroup' + headerSeqNo +'">');
+                        $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
 
                         $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
 
@@ -126,6 +125,14 @@
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-header-Label-center-f');
+                            var dynamicClassForImageJustyfy = justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                            $divLabel.addClass(dynamicClassForImageJustyfy);
+                        }
+                        else {
+                            if (justyFy || alignItem) {
+                                var dynamicClassForJustyfy = justifyAlignTextItems(headerSeqNo, justyFy, alignItem);
+                                $divLabel.addClass(dynamicClassForJustyfy)
+                            }
                         }
 
                         // Get Controls to be displayed in Header Panel
@@ -156,15 +163,15 @@
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
                         if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
                             $div.append($divIcon);
-                            $divIcon.append($spanIcon);
+                            $divIcon.append($spanIcon.append(icon));
                             $divLabel.append($lblControl);
                         }
                         else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                            $div.append($divIcon);
+                            $div.append($divLabel);
                         }
                         else if (mField.getHeaderIconOnly()) {
                             $div.append($divIcon);
-                            $divIcon.append($spanIcon);
+                            $divIcon.append($spanIcon.append(icon));
                         }
                         else if (mField.getHeaderHeadingOnly()) {
                             $divLabel.append($lblControl);
@@ -179,6 +186,60 @@
 
         };
 
+        /**
+         * Create CSS Class and Addd to dome and Apply to element.
+         * @param {any} mField
+         * @param {any} headerSeqNo
+         * @param {any} startCol
+         * @param {any} colSpan
+         * @param {any} startRow
+         * @param {any} rowSpan
+         */
+        var applyCustomUISettings = function (mField, headerSeqNo, startCol, colSpan, startRow, rowSpan) {
+            var headerStyle = mField.getHeaderStyle();
+            var style = document.createElement('style');
+
+            var dynamicClassName = "clsFieldGroup_" + headerSeqNo + "_" + $self.windowNo;
+
+
+            $(style).attr('id', dynamicClassName);
+
+            style.type = 'text/css';
+            if (headerStyle) {
+                style.innerHTML = "." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + "}";
+            }
+            else {
+                style.innerHTML = "." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + "}";
+            }
+            $($('head')[0]).append(style);
+
+            return dynamicClassName;
+        };
+
+        var justifyAlignTextItems = function (headerSeqNo, justify, alignItem) {
+            var style = document.createElement('style');
+            var dynamicClassName = "vis-w-p-header-label-justify_" + headerSeqNo + "_" + $self.windowNo;
+            $(style).attr('id', dynamicClassName);
+            style.type = 'text/css';
+            style.innerHTML = "." + dynamicClassName + " {text-align:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
+            $($('head')[0]).append(style);
+            return dynamicClassName;
+        };
+
+        var justifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
+            var style = document.createElement('style');
+            var dynamicClassName = "vis-w-p-header-label-center-justify_" + headerSeqNo + "_" + $self.windowNo;
+            $(style).attr('id', dynamicClassName);
+            style.type = 'text/css';
+            style.innerHTML = "." + dynamicClassName + " {justify-content:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
+            $($('head')[0]).append(style);
+            return dynamicClassName;
+        };
+
+        /**
+         * Get value for current field for current field
+         * @param {any} mField
+         */
         var getFieldValue = function (mField) {
             var colValue = mField.getValue();
 
@@ -223,10 +284,35 @@
             return $root;
         };
 
+        /**
+         * Dispose component
+         * */
+        this.disposeComponent = function () {
+            var keys = Object.keys(this.headerItems);
+
+            // Find Dynamically added classes from DOM and remove them.
+            for (var i = 0; i < keys.length; i++) {
+                $('#clsFieldGroup_' + keys[i] + "_" + this.windowNo).remove();
+            }
+
+
+            this.headerItems = null;
+            $self = null;
+            this.gTab = null;
+            this.controls = null;
+            $root.remove();
+            $root = null;
+
+        };
+
     };
 
     HeaderPanel.prototype.navigate = function () {
         this.setHeaderItems();
+    };
+
+    HeaderPanel.prototype.dispose = function () {
+        this.disposeComponent();
     };
 
     VIS.HeaderPanel = HeaderPanel;
