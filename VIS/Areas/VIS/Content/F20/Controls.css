@@ -2,14 +2,11 @@
 :root {
     --button-bg: #eee;
     --input-border: #ddd;
-    /*--white: #ffffff;*/
 }
 
 .vis-ev-col * {
-    /*margin: 0;*/
     padding: 0px;
     font-weight: normal;
-    /*background-color: inherit;*/
     color: rgba(var(--v-c-on-secondary));
     margin-bottom: 0;
     margin-top: 0;
@@ -21,11 +18,8 @@
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary));
     background-color: transparent;
-    /*line-height: normal;*/
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
-
-
-
 
 .vis-form-wrap {
     padding: 15px;
@@ -36,40 +30,25 @@
     margin-bottom: 20px;
 }
 
-
-.vis-input-wrap input, .vis-input-wrap select {
-    font-size: 14px;
-    /*padding: 5px 14px;*/
+.vis-input-wrap input, .vis-input-wrap select, .vis-control-wrap > button {
     height: 35px;
-    /*border: 1px solid rgba(var(--v-c-on-secondary),1);*/
 }
-.vis-control-wrap {
-   
+.vis-control-wrap {   
     flex: 1;
     position: relative;
 }
 .vis-input-wrap input {
     display: block;
-    /*line-height: 1.5;*/
-    /*color: #495057;*/
-    /*background-color: #fff;*/
     background-clip: padding-box;
-    /*border-radius: .25rem;*/
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 .vis-input-wrap input, .vis-input-wrap textarea, .vis-input-wrap select, .vis-input-wrap > button {
     width: 100%;
+    font-size: 14px;
 }
 
 
 .vis-input-wrap select {
-    display: inline-block;
-    /*width: 100%;*/
-    /*line-height: 1.5;*/
-    /*color: #495057;*/
-    /*vertical-align: middle;*/
-    /*border-radius: .25rem;*/
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -81,15 +60,9 @@
 }
 
 .vis-control-wrap > button {
-    /*border: 1px solid rgba(var(--v-c-on-secondary),1);*/
     background: rgba(var(--v-c-on-secondary),.1);
-    height: 35px;
     width: 100%;
 }
-
-/*.vis-input-wrap input:focus, .vis-input-wrap select:focus {
-    outline: none;
-}*/
 
 .vis-input-wrap input:not([data-placeholder=""]) ~ label {
     opacity: 0;
@@ -111,11 +84,9 @@
     height: 100%;
     align-items: center;
     display: flex;
-    /*  opacity: 1;*/
 }
 .vis-input-wrap textarea ~ label {
     align-items: flex-start;
-    /*margin-top: 5px;*/
 }
 
 .vis-input-wrap input:focus, .vis-input-wrap select:focus, .vis-input-wrap textarea:focus, .vis-control-wrap > button:focus {
@@ -136,7 +107,7 @@
     .vis-input-wrap *[data-hasBtn]:focus{
         border-right: 1px solid rgba(var(--v-c-secondary),1);
     }
-.vis-input-wrap .input-group-prepend + .vis-control-wrap *:focus /*, .vis-input-wrap .input-group-prepend ~ select:focus*/ {
+.vis-input-wrap .input-group-prepend + .vis-control-wrap *:focus {
     border-left: 1px solid rgba(var(--v-c-secondary),1);
 }
 
@@ -151,13 +122,7 @@
     left: 5px;
     opacity: 1;
 }
-    /*.vis-input-wrap .input-group-prepend ~ label {
-        left: 45px;
-    }
-
-    .vis-input-wrap .input-group-prepend ~ input:focus ~ label, .vis-input-wrap .input-group-prepend ~ input:not(:placeholder-shown) ~ label, .vis-input-wrap .input-group-prepend ~ select:focus ~ label, .vis-input-wrap .input-group-prepend ~ select:not([value=""]):not([value="-1"]) ~ label {
-        left: 40px;
-    }*/
+    
     .vis-input-wrap input:focus ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap input:focus ~ label sup, .vis-input-wrap select:focus ~ label sup {
         color: rgba(var(--v-c-primary),1);
     }
@@ -203,33 +168,35 @@
 }
 .vis-control-wrap > label:first-child {
     position: relative;
-    /*display: block;*/
     height: auto;
     left: 0;
 }
-/*bootstrap
-.input-group .input-group-append:last-child .btn:not(:last-child):not(.dropdown-toggle), .input-group > .input-group-append:last-child .input-group-text:not(:last-child), .input-group .input-group-append:not(:last-child) .btn, .input-group .input-group-append:not(:last-child) .input-group-text, .input-group .input-group-prepend .btn, .input-group .input-group-prepend .input-group-text {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+
+/* field group css STart*/
+.vis-ev-col-fg-hdr {
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 1rem;
+    font-family: 'NoirPro-Medium';
+    flex: 1;
 }
 
-.input-group .input-group-append .btn, .input-group .input-group-append .input-group-text, .input-group .input-group-prepend:first-child .btn:not(:first-child), .input-group .input-group-prepend:first-child .input-group-text:not(:first-child), .input-group .input-group-prepend:not(:first-child) .btn, .input-group .input-group-prepend:not(:first-child) .input-group-text {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+.vis-ev-col-fieldgroup {
+    background: rgba(var(--v-c-primary), 0.05);
+    margin-bottom: 10px;
+    padding: 5px 0 5px 10px;
+    display: flex;
+    cursor: pointer;
+}
+.vis-ev-col-fieldgroup i {
+    font-size: 1.5rem;
+    color: rgba(var(--v-c-primary));
+    padding: 0 10px;
 }
 
-.input-group .vis-control-wrap:not(:last-child) select, .input-group .vis-control-wrap:not(:last-child) input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    position: relative;
-    z-index: 0;
-}
+/* field group css END*/
 
-.input-group .vis-control-wrap select:not(:first-child), .input-group .vis-control-wrap input:not(:first-child), .input-group .vis-control-wrap:not(:first-child) input {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
-}*/
+
+
 /****** Style Inputs Control END*****/
 /***************************** Control Prop *******************************************/
 .vis-ev-col-readonly {

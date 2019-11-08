@@ -84,9 +84,17 @@
 
             setColumns(columnIndex);
             addRow();
-            var gSpan = $("<span class='vis-gc-vpanel-fieldgroup-span'>" + fieldGroup + "</span>");
-            var gImg = $("<img class='vis-gc-vpanel-fieldgroup-img' src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/base/fieldgrpdown.png' >");
-            var gDiv = $("<div class='vis-gc-vpanel-fieldgroup' data-name='" + fieldGroup + "' data-display='show' >").append(gImg).append(gSpan);
+            //var gSpan = $("<span class='vis-gc-vpanel-fieldgroup-span'>" + fieldGroup + "</span>");
+            //var gImg = $("<i class='fa fa-angle-down'>");
+            //var gDiv = $("<div class='vis-gc-vpanel-fieldgroup' data-name='" + fieldGroup + "' data-display='show' >").append(gImg).append(gSpan);
+
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="show">' +
+                            '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
+                            '<span class="vis-ev-col-fg-more"><i class="fa fa-ellipsis-h"></i></span>'+
+                                '<i class= "fa fa-angle-down">'+
+                            '</span>' +
+                          '</div>');
+
 
             $td0.append(gDiv);
             columnIndex = 8;

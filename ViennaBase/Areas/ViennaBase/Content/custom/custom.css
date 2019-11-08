@@ -15,7 +15,10 @@
     font-family: 'NoirPro-Medium';
     src: url('../fonts/NoirPro-Medium.ttf') format('truetype');
 }
-
+@font-face {
+    font-family: 'NoirPro-Bold';
+    src: url('../fonts/NoirPro-Bold.ttf') format('truetype');
+}
 /*Scroll bar*/
 ::-webkit-scrollbar {
     width: 0.4rem;
