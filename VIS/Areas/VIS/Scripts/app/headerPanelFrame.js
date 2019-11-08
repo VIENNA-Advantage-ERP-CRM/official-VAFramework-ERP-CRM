@@ -6,6 +6,9 @@
         var $self = this;
         this.gTab = null;
         this.controls = [];
+        var textAlignEnum = { "C": "Center", "R": "Right", "L": "Left" };
+        var alignItemEnum = { "C": "Center", "T": "flex-start", "B": "flex-end" };
+
         var setHeaderLayout = function (_gTab, $parentRoot) {
             //if Tab is market as Header Panel, only then execute further code.
             if (_gTab.getIsHeaderPanel()) {
@@ -119,18 +122,17 @@
 
                         $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
 
-
-
-
-                        if (justyFy || alignItem) {
-                            var dynamicClassForJustyfy = JustifyAlignTextItems(headerSeqNo, justyFy, alignItem);
-                            $divLabel.addClass(dynamicClassForJustyfy)
-                        }
-
-
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-header-Label-center-f');
+                            var dynamicClassForImageJustyfy = justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                            $divLabel.addClass(dynamicClassForImageJustyfy);
+                        }
+                        else {
+                            if (justyFy || alignItem) {
+                                var dynamicClassForJustyfy = justifyAlignTextItems(headerSeqNo, justyFy, alignItem);
+                                $divLabel.addClass(dynamicClassForJustyfy)
+                            }
                         }
 
                         // Get Controls to be displayed in Header Panel
@@ -214,22 +216,22 @@
             return dynamicClassName;
         };
 
-        var JustifyAlignTextItems = function (headerSeqNo, justify, alignItem) {
+        var justifyAlignTextItems = function (headerSeqNo, justify, alignItem) {
             var style = document.createElement('style');
             var dynamicClassName = "vis-w-p-header-label-justify_" + headerSeqNo + "_" + $self.windowNo;
             $(style).attr('id', dynamicClassName);
             style.type = 'text/css';
-            style.innerHTML = "." + dynamicClassName + " {text-align:" + justify + ";align-item:" + alignItem+"}";
+            style.innerHTML = "." + dynamicClassName + " {text-align:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
             $($('head')[0]).append(style);
             return dynamicClassName;
         };
 
-        var JustifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
+        var justifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
             var style = document.createElement('style');
             var dynamicClassName = "vis-w-p-header-label-center-justify_" + headerSeqNo + "_" + $self.windowNo;
             $(style).attr('id', dynamicClassName);
             style.type = 'text/css';
-            style.innerHTML = "." + dynamicClassName + " {text-align:" + justify + ";align-item:" + alignItem + "}";
+            style.innerHTML = "." + dynamicClassName + " {justify-content:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
             $($('head')[0]).append(style);
             return dynamicClassName;
         };
