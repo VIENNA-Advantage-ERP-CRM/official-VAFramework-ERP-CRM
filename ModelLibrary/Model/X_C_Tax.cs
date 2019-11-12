@@ -596,6 +596,17 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("VA007_RefTaxRate_ID");
         }
+
+        /// <summary>
+        /// Set Include In Cost.
+        /// </summary>
+        /// <param name="IsIncludeInCost">This checkbox indicates whether the credit of tax paid on input goods and services is recoverable.If this checkbox is false than tax amount going to add in product cost</param>
+        public void SetIsIncludeInCost(Boolean IsIncludeInCost) { Set_Value("IsIncludeInCost", IsIncludeInCost); }
+        /// <summary>
+        /// Get Include In Cost.
+        /// </summary>
+        /// <returns>This checkbox indicates whether the credit of tax paid on input goods and services is recoverable.If this checkbox is false than tax amount going to add in product cost</returns>
+        public Boolean IsIncludeInCost() { Object oo = Get_Value("IsIncludeInCost"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
     }
 
 }
