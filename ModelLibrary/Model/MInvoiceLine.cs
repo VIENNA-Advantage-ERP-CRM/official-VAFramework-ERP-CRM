@@ -2916,6 +2916,51 @@ namespace VAdvantage.Model
             return _product;
         }
 
+        /// <summary>
+        /// This function is used for costing calculation
+        /// It gives consolidated product cost (taxable amt + tax amount + surcharge amt) based on setting
+        /// </summary>
+        /// <param name="invoiceline">Invoice Line reference</param>
+        /// <returns>LineNetAmount of Product</returns>
+        public Decimal GetProductLineCost(MInvoiceLine invoiceline)
+        {
+            if (invoiceline == null || invoiceline.Get_ID() <= 0)
+            {
+                return 0;
+            }
+
+            // Get Taxable amount from invoiceline
+            Decimal amt = invoiceline.GetTaxBaseAmt();
+
+            // create object of tax - for checking tax to be include in cost or not
+            MTax tax = MTax.Get(invoiceline.GetCtx(), invoiceline.GetC_Tax_ID());
+            if (tax.Get_ColumnIndex("IsIncludeInCost") >= 0)
+            {
+                // add Tax amount in product cost
+                if (tax.IsIncludeInCost())
+                {
+                    amt += invoiceline.GetTaxAmt();
+                }
+
+                // add Surcharge amount in product cost
+                if (tax.Get_ColumnIndex("Surcharge_Tax_ID") >= 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    if (MTax.Get(invoiceline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
+                    {
+                        amt += invoiceline.GetSurchargeAmt();
+                    }
+                }
+            }
+
+            // if amount is ZERO, then calculate as usual with Line net amount
+            if (amt == 0)
+            {
+                amt = invoiceline.GetLineNetAmt();
+            }
+
+            return amt;
+        }
+
         /**
          * 	Get C_Project_ID
          *	@return project
