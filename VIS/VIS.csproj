@@ -960,18 +960,10 @@
     <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.designer.cs">
       <DependentUpon>CreateUser.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.cs">
-      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.designer.cs">
-      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
-    <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
     <Content Include="LibDll\DotNetOpenAuth.dll" />
     <Content Include="LibDll\Google.Apis.Authentication.OAuth2.dll" />
     <Content Include="LibDll\Google.Apis.Calendar.v3.dll" />

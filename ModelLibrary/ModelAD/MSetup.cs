@@ -3117,9 +3117,9 @@ namespace VAdvantage.Model
                     640000, GL_MM, MDocType.POSTINGCODE_PROJECTISSUE);
 
                 //  Order Entry
-                //CreateDocType("Binding offer", "Quotation",
-                //    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Quotation, 0, 0,
-                //    10000, GL_None, MDocType.POSTINGCODE_BINDINGOFFER);
+                CreateDocType("Binding offer", "Quotation",
+                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Quotation, 0, 0,
+                    10000, GL_None, MDocType.POSTINGCODE_BINDINGOFFER);
                 CreateDocType("Non binding offer", "Proposal",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Proposal, 0, 0,
                     20000, GL_None, MDocType.POSTINGCODE_NONBINDINGOFFER);
@@ -3138,27 +3138,6 @@ namespace VAdvantage.Model
                 CreateDocType("Warehouse Order", "Order Confirmation",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_WarehouseOrder, DT_S, DT_I,
                     70000, GL_None, MDocType.POSTINGCODE_WAREHOUSEORDER);    //  LS
-
-                // Release Sales Order
-                int DT_R = CreateDocType("Release Sales Order", "Blanket Order",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_BlanketOrder, DT_S, DT_I,
-                    72000, GL_None, MDocType.POSTINGCODE_RELEASESALESORDER);
-
-                // Blanket Sales Order
-                CreateDocType("Blanket Sales Order", "Blanket Order",
-                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, MDocType.DOCSUBTYPESO_BlanketOrder, DT_R, 0,
-                    71000, GL_None, MDocType.POSTINGCODE_BLANKETSALESORDER);
-
-                // Release Purchase Order
-                DT_R = CreateDocType("Release Purchase Order", "Blanket Order",
-                    MDocBaseType.DOCBASETYPE_PURCHASEORDER, MDocType.DOCSUBTYPESO_BlanketOrder, 0, 0,
-                    720000, GL_None, MDocType.POSTINGCODE_RELEASEPURCHASEORDER);
-
-                // Blanket Purchase Order
-                CreateDocType("Blanket Purchase Order", "Blanket Order",
-                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, MDocType.DOCSUBTYPESO_BlanketOrder, DT_R, 0,
-                    710000, GL_None, MDocType.POSTINGCODE_BLANKETPURCHASESORDER);
-
                 int DT = CreateDocType("POS Order", "Order Confirmation",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_POSOrder, DT_SI, DT_II,
                     80000, GL_None, MDocType.POSTINGCODE_POSORDER);    // Bar
@@ -3304,18 +3283,8 @@ namespace VAdvantage.Model
                 dt.SetPrintName(PrintName);	//	Defaults to Name
             if (DocSubTypeSO != null)
                 dt.SetDocSubTypeSO(DocSubTypeSO);
-            // For Blanket Order Set Document Type of Release
             if (C_DocTypeShipment_ID != 0)
-            {
-                if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER))
-                {
-                    dt.SetDocumentTypeforReleases(C_DocTypeShipment_ID);
-                }
-                else
-                {
-                    dt.SetC_DocTypeShipment_ID(C_DocTypeShipment_ID);
-                }
-            }
+                dt.SetC_DocTypeShipment_ID(C_DocTypeShipment_ID);
             if (C_DocTypeInvoice_ID != 0)
                 dt.SetC_DocTypeInvoice_ID(C_DocTypeInvoice_ID);
             if (GL_Category_ID != 0)
@@ -3330,19 +3299,6 @@ namespace VAdvantage.Model
             dt.SetIsSOTrx();
             dt.SetIsReturnTrx(isReturnTrx);
             dt.SetIsCreateCounter(IsCreateCounter);
-
-            // Set Blanket Transaction for Blanket Order
-            if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER))
-            {
-                dt.Set_Value("IsBlanketTrx", true);
-            }
-
-            // Set Release Document for Release Order
-            if (postingCode.Equals(MDocType.POSTINGCODE_RELEASESALESORDER) || postingCode.Equals(MDocType.POSTINGCODE_RELEASEPURCHASEORDER))
-            {
-                dt.SetIsReleaseDocument(true);
-            }
-
             //Add by Raghu for New accountig logic
             try
             {

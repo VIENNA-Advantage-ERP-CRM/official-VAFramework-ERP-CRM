@@ -1394,25 +1394,6 @@ namespace VAdvantage.WF
                 GetPO(Get_TrxName());
                 DocumentAction docAction = new DocumentAction();
                 bool ok = docAction.ForwardDocument(GetRecipientUser(), (int)_po.Get_Value("VADMS_Document_ID"), GetCtx(), out res);
-
-                // Get Signed PDF document and forward it too.
-
-                string relatedSignDocSql = @"
-SELECT MIN(VADMS_MetaData_ID), VADMS_DigitalDocument_ID 
-FROM VADMS_MetaData 
-WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND ROWNUM = 1 GROUP BY VADMS_DigitalDocument_ID
-";
-                DataSet relatedSignDocDS = DB.ExecuteDataset(relatedSignDocSql);
-
-                if (relatedSignDocDS != null && relatedSignDocDS.Tables.Count > 0 && relatedSignDocDS.Tables[0].Rows.Count > 0)
-                {
-                    int relatedSignDocID = Util.GetValueOfInt(relatedSignDocDS.Tables[0].Rows[0]["VADMS_DigitalDocument_ID"]);
-                    if (relatedSignDocID > 0)
-                    {
-                        ok = docAction.ForwardDocument(GetRecipientUser(), relatedSignDocID, GetCtx(), out res);
-                    }
-                }
-
                 SetTextMsg(res);
                 return ok;
             }
@@ -1436,26 +1417,6 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 DocumentAction docAction = new DocumentAction();
                 bool ok = docAction.AllocateAccess(GetRecipientUserOnly(), GetRecipientRoles(), (int)_po.Get_Value("VADMS_Document_ID"), _node.GetVADMS_Access(), GetCtx(), out res);
                 SetTextMsg(res);
-
-
-                // Get Signed PDF document and give its access too.
-
-                string relatedSignDocSql = @"
-SELECT MIN(VADMS_MetaData_ID), VADMS_DigitalDocument_ID 
-FROM VADMS_MetaData 
-WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND ROWNUM = 1 GROUP BY VADMS_DigitalDocument_ID
-";
-                DataSet relatedSignDocDS = DB.ExecuteDataset(relatedSignDocSql);
-
-                if (relatedSignDocDS != null && relatedSignDocDS.Tables.Count > 0 && relatedSignDocDS.Tables[0].Rows.Count > 0)
-                {
-                    int relatedSignDocID = Util.GetValueOfInt(relatedSignDocDS.Tables[0].Rows[0]["VADMS_DigitalDocument_ID"]);
-                    if (relatedSignDocID > 0)
-                    {
-                        ok = docAction.AllocateAccess(GetRecipientUserOnly(), GetRecipientRoles(), relatedSignDocID, _node.GetVADMS_Access(), GetCtx(), out res);
-                    }
-                }
-
                 return ok;
             }
             //
