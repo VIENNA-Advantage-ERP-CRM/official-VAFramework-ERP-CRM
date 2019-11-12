@@ -4099,15 +4099,6 @@ namespace VAdvantage.Model
                 }
                 //end
 
-                //JID_1474 : if document is closed then we need to set Delivered qty as Ordered qty Suggested by Gagandeep kaur and Puneet that we do not
-                // need to add return trx check and it will work for all orders
-                if (Ord.GetDocAction().Equals(MOrder.DOCACTION_Close))
-                {
-                    if (GetQtyDelivered() > 0)
-                        SetQtyOrdered(GetQtyDelivered());
-                }
-                //end
-
             }
             /////////////
 
