@@ -5,7 +5,7 @@ html, body {
     margin: 0;
     font-weight: 200;
     overflow: hidden;
-    font-family: 'NoirPro-Regular';
+    font-family: 'NoirPro-Regular' !important;
 }
 
 * {

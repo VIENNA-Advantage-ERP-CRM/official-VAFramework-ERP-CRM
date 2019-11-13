@@ -742,10 +742,11 @@ li.vis-page-item-select {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-left:10px;
 }
 
 .vis-w-p-header-Label-f {
-    padding-left: 10px;
+    /*padding-left: 10px;*/
     flex: 1;
 }
 
