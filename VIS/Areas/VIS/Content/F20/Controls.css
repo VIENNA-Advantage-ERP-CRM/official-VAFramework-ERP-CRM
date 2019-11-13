@@ -44,9 +44,9 @@
     /*border: 1px solid rgba(var(--v-c-on-secondary),1);*/
 }
 .vis-control-wrap {
-   
     flex: 1;
     position: relative;
+    display:flex;
 }
 .vis-input-wrap input {
     display: block;

@@ -384,7 +384,7 @@
             else
                 btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
             btns.push('</span></div>');
-            ctrl.append($(btns.join(' ')));
+            ctrl.append(btns.join(' '));
         }
 
         var ctrlP = $("<div class='vis-control-wrap'>");

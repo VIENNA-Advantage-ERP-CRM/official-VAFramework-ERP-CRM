@@ -158,7 +158,7 @@
         var $hdrPanel = "", $td3IncludedEmpty, $lb, $divHeaderNav, $rigthBarAction;
 
         var $tr3, $tr2, $tr;
-        var $td2_tr3, $td2_tr1, $td5_tr1;
+        var $td2_tr3, $td2_tr1, $tabpanel;
         var $td4;
 
         /***Tab panel**/
@@ -248,12 +248,12 @@
             $ulRightBar2 = $("<ul class='vis-apanel-rb-ul'>");
 
 
-            if (VIS.Application.isRTL) {//vis-window-tab-td-rtl
-                $td5_tr1 = $("<td class='vis-window-tab-td-rtl' style='display:none; max-width:" + panelMaxWidth + "px' rowspan='3' >");
-            }
-            else {
-                $td5_tr1 = $("<td class='vis-window-tab-td' style='display:none;max-width:" + panelMaxWidth + "px' rowspan='3'>");
-            }
+            //if (VIS.Application.isRTL) {//vis-window-tab-td-rtl
+            //    $tabpanel = $("<td class='vis-window-tab-td-rtl' style='display:none; max-width:" + panelMaxWidth + "px'  >");
+            //}
+            //else {
+               // $tabpanel = $("<td class='vis-window-tab-td' style='display:none;max-width:" + panelMaxWidth + "px' >");
+            //}
 
             //center content 
             $td2_tr1 = $("<td style='height:" + APANEL_HEADER_HEIGHT + "px;position:relative'setwi>");//.append($divHeaderNav); //row 1 col2 //Tab Control
@@ -268,7 +268,7 @@
 
             $tr3 = $("<tr>");//.append($td2_tr3);
             $tr2 = $("<tr>");//.append($tdContentArea); //row 2
-            $tr = $("<tr>");//.append($td0leftbar).append($hdrPanel).append($td2_tr1).append($td3IncludedEmpty).append($td5_tr1).append($td4); //row 1
+            $tr = $("<tr>");//.append($td0leftbar).append($hdrPanel).append($td2_tr1).append($td3IncludedEmpty).append($tabpanel).append($td4); //row 1
 
             /********* Tab Panels **************/
             $divTabPanelOuterWrap = $('<div class="vis-window-tab-panel-outerwrap">');
@@ -288,9 +288,9 @@
             $divTabPanelsHead.append($headerTabPanel).append($spanPin);
             $divTabPanels.append($divTabPanelsHead).append($divTabPanelsContent);
             $divTabPanelOuterWrap.append($divTabPanels).append($divTabPanelIconBar);
-            // $td5_tr1.append($divTabPanelOuterWrap);
-            $td5_tr1 = $root.find('.vis-ad-w-p-actionpanel-r');
-            $td5_tr1.append($divTabPanelOuterWrap);
+            // $tabpanel.append($divTabPanelOuterWrap);
+            $tabpanel = $root.find('.vis-ad-w-p-actionpanel-r');
+            //$tabpanel.append($divTabPanelOuterWrap);
 
 
             /********* END Tab Panels **************/
@@ -922,76 +922,78 @@
 
 
 
-        this.setTabPanelIcons = function () {
-            if (this.curGC) {
-                $ulIconList.empty();
-                $ulIconList.append(this.curGC.createTabPanel(this.curTab.getTabPanels()));
-                if (!this.curGC.getCurrentPanel()) {// if no panel opened then check for default panel.
-                    var defaultPanel = $ulIconList.find("[default='true']").first();
-                    if (defaultPanel && defaultPanel.length > 0) {
-                        setPanelPositionRelative();
-                        defaultPanel.trigger("click");
-                        this.showPanelContainer(true);
-                    }
-                    else {
-                        this.showPanelContainer(false);
-                    }
-                }
-                else { // if panel opened then check for that panel.
-                    var panelID = this.curGC.getCurrentPanelID();
-                    var defaultPanel = $ulIconList.find("[data-panelid='" + panelID + "']").first();
-                    if (defaultPanel && defaultPanel.length > 0) {
-                        setPanelPositionRelative();
-                        defaultPanel.trigger("click");
-                        this.showPanelContainer(true);
-                    }
-                    else {
-                        this.showPanelContainer(false);
-                    }
-                }
-            }
-        };
+        //this.setTabPanelIcons = function () {
+        //    if (this.curGC) {
+        //        $ulIconList.empty();
+        //        $ulIconList.append(this.curGC.createTabPanel(this.curTab.getTabPanels()));
+        //        if (!this.curGC.getCurrentPanel()) {// if no panel opened then check for default panel.
+        //            var defaultPanel = $ulIconList.find("[default='true']").first();
+        //            if (defaultPanel && defaultPanel.length > 0) {
+        //                setPanelPositionRelative();
+        //                defaultPanel.trigger("click");
+        //                this.showPanelContainer(true);
+        //            }
+        //            else {
+        //                this.showPanelContainer(false);
+        //            }
+        //        }
+        //        else { // if panel opened then check for that panel.
+        //            var panelID = this.curGC.getCurrentPanelID();
+        //            var defaultPanel = $ulIconList.find("[data-panelid='" + panelID + "']").first();
+        //            if (defaultPanel && defaultPanel.length > 0) {
+        //                setPanelPositionRelative();
+        //                defaultPanel.trigger("click");
+        //                this.showPanelContainer(true);
+        //            }
+        //            else {
+        //                this.showPanelContainer(false);
+        //            }
+        //        }
+        //    }
+        //};
 
         /*
         *   Set current Panel for tab
         */
-        this.setCurrentTabPanel = function () {
-            if (this.curGC) {
-                // Get Current panel for tab
-                var panel = this.curGC.getCurrentPanel();
-                if (panel) {
-                    $divTabPanelsContent.empty();
-                    // if panel found, open it in container
-                    $divTabPanelsContent.append(panel.getRoot());
-                    this.showPanelContainer(true);
-                }
-            }
-        };
+        //this.setCurrentTabPanel = function () {
+        //    if (this.curGC) {
+        //        // Get Current panel for tab
+        //        var panel = this.curGC.getCurrentPanel();
+        //        if (panel) {
+        //            $divTabPanelsContent.empty();
+        //            // if panel found, open it in container
+        //            $divTabPanelsContent.append(panel.getRoot());
+        //            this.showPanelContainer(true);
+        //        }
+        //    }
+        //};
 
         /*
         *   Show OR hide tab panel depending on, if linked tab panel or not
         */
         this.showTabPanel = function (show) {
             if (show) {
-                $td5_tr1.css({ "display": "" });
-                if (this.curTab.getIncluded_Tab_ID() > 0) {
-                    $td3IncludedEmpty.css('width', '');
-                    var style = $td3IncludedEmpty.attr('style', style);
-                }
-                else {
-                    if ($td5_tr1.width() <= 40) {
-                        $td3IncludedEmpty.css({ 'width': '', 'padding-left': '', 'padding-right': '' });
-                    }
-                    else {
-                        $td3IncludedEmpty.width(0);
-                    }
-                }
+                $tabpanel.empty();
+                $tabpanel.append(this.curGC.getTabPanel());
+                $tabpanel.css({ "display": "grid" });
+                //if (this.curTab.getIncluded_Tab_ID() > 0) {
+                //    $td3IncludedEmpty.css('width', '');
+                //    var style = $td3IncludedEmpty.attr('style', style);
+                //}
+                //else {
+                //    if ($tabpanel.width() <= 40) {
+                //        $td3IncludedEmpty.css({ 'width': '', 'padding-left': '', 'padding-right': '' });
+                //    }
+                //    else {
+                //        $td3IncludedEmpty.width(0);
+                //    }
+                //}
             }
             else {
-                $td3IncludedEmpty.css('width', '');
-                $td5_tr1.css({ "display": "" });
-                $td5_tr1.css("width", "40px");
-                $divTabPanels.css("display", "none");
+               // $td3IncludedEmpty.css('width', '');
+                $tabpanel.css({ "display": "none" });
+                //$tabpanel.css("width", "40px");
+                //$divTabPanels.css("display", "none");
             }
         };
 
@@ -1012,18 +1014,18 @@
           */
         this.showPanelContainer = function (show) {
             if (show) {
-                $td5_tr1.css("width", this.panelWidth + 'px');
+                $tabpanel.css("width", this.panelWidth + 'px');
                 $divTabPanels.css({ "display": "", "z-index": "" });
             }
             else {
-                $td5_tr1.css({ "display": "" });
-                $td5_tr1.css("width", "40px");
+                $tabpanel.css({ "display": "" });
+                $tabpanel.css("width", "40px");
                 $divTabPanels.css("display", "none");
                 $divTabControl.css('width', '');
                 //$table.find('.vis-apanel-tabcontrol').css('max-width', '')
 
-                if ($td5_tr1.is('.ui-resizable')) {
-                    $td5_tr1.resizable('destroy');
+                if ($tabpanel.is('.ui-resizable')) {
+                    $tabpanel.resizable('destroy');
                 }
             }
             this.setTabNavigation();
@@ -1037,52 +1039,19 @@
             //window.setTimeout(function () {
             if (width) {
                 if (width > 0) {
-                    //$td5_tr1.css({ "width": width + "%" });
-                    //$td5_tr1.attr("width", width + "%");
+                    //$tabpanel.css({ "width": width + "%" });
+                    //$tabpanel.attr("width", width + "%");
                     // self.panelWidth = $table.find('.vis-window-tab-td').width();
                     width = 100 - width;
                     width = ($(document).width() * width) / 100;
                     if (width > panelMaxWidth) {
                         width = panelMaxWidth;
                     }
-                    $td5_tr1.css({ "width": width + "px" });
+                    $tabpanel.css({ "width": width + "px" });
                     self.panelWidth = width;
 
                 }
-                // $divTabControl.css('display', 'none');
-                // var extraWidth = 44;
-
-                // if (this.curTab.getIncluded_Tab_ID() > 0 && $divHeaderNav.width() <= 752) {
-                //if (openPanel && self.curTab.getHasPanel()) {
-                // extraWidth += 96;// Tab Navigation width
-                // extraWidth += 188;// Record Navigation width
-                //   extraWidth += $divTabControl.width(); // Tabs Width
-
-                //   if (extraWidth >= $divHeaderNav.width()) {
-                //       extraWidth = $divHeaderNav.width() - ($divTabControl.width() + $table.find('.vis-apanel-tab-oflow').width())
-                //   }
-                //   else {
-                //       extraWidth = 44;
-                //  }
-
-                // }
-
-                ////if ($divHeaderNav.width() <= 400) {
-                ////    $ulNav.removeClass('vis-apanel-nav-ul li');
-                ////    $ulNav.find('li').css('margin', '0px 1px 0px 1px');
-                ////}
-                ////else {
-                ////    $ulNav.addClass('vis-apanel-nav-ul li');
-                ////}
-
-                // panel width vala code dekhna hai
-                //if ($divHeaderNav.width() <= 800) {
-                //        $divTabControl.css('width', ($divHeaderNav.width() - (96 + extraWidth + 188)) + 'px');
-                //}
-                //else {
-                //    $divTabControl.css('width', '');
-                //}
-                // $divTabControl.width($divHeaderNav.width() - 305);
+                
 
                 // $divTabControl.css('display', '');
                 this.refresh();
@@ -1117,23 +1086,23 @@
 
         function setPanelPositionRelative() {
             //$spanPin.addClass('vis-window-unpin-icon');
-            $td5_tr1.css({ 'position': 'relative', "z-index": "" });
+            $tabpanel.css({ 'position': 'relative', "z-index": "" });
             var dragType = 'w';
             if (VIS.Application.isRTL) {
                 dragType = 'e';
             }
 
-            if (!$td5_tr1.is('.ui-resizable')) {
-                $td5_tr1.resizable({
+            if (!$tabpanel.is('.ui-resizable')) {
+                $tabpanel.resizable({
                     handles: dragType,
                     minWidth: 102,
                     maxWidth: panelMaxWidth,
                     resize: function (event, ui) {
                         self.panelWidth = ui.size.width;
-                        $td5_tr1.css({ 'position': 'absolute', "left": "", "z-index": "99" });
+                        $tabpanel.css({ 'position': 'absolute', "left": "", "z-index": "99" });
                     },
                     start: function (event, ui) {
-                        $td5_tr1.css({ 'position': 'absolute', "z-index": "99" });
+                        $tabpanel.css({ 'position': 'absolute', "z-index": "99" });
                         //windowWidth=
                     },
                     stop: function (event, ui) {
@@ -1159,10 +1128,10 @@
 
 
                         if (VIS.Application.isRTL) {
-                            $td5_tr1.css({ 'position': 'relative', "right": "", "z-index": "" });
+                            $tabpanel.css({ 'position': 'relative', "right": "", "z-index": "" });
                         }
                         else {
-                            $td5_tr1.css({ 'position': 'relative', "left": "", "z-index": "" });
+                            $tabpanel.css({ 'position': 'relative', "left": "", "z-index": "" });
                         }
                         self.setWidth(-1, true);
                         if (self.curTab.getIncluded_Tab_ID() > 0) {
@@ -1177,9 +1146,9 @@
         function setPanelPositionAbsolute() {
             // $spanPin.removeClass('vis-window-unpin-icon');
             self.setWidth(-1, false);
-            $td5_tr1.css({ 'position': 'relative', 'left': '', 'z-index': '' });
-            //if ($td5_tr1.is('.ui-resizable')) {
-            //    $td5_tr1.resizable('destroy');
+            $tabpanel.css({ 'position': 'relative', 'left': '', 'z-index': '' });
+            //if ($tabpanel.is('.ui-resizable')) {
+            //    $tabpanel.resizable('destroy');
             //}
         };
 
@@ -1217,7 +1186,7 @@
             self.curGC.setCurrentPanel($target.data('cname'), self.$parentWindow.getWindowNo());
             $divTabPanelsContent.append(self.curGC.getCurrentPanel().getRoot());
             setPanelPositionRelative();
-            if ($td5_tr1.width() <= 40) {
+            if ($tabpanel.width() <= 40) {
                 self.showPanelContainer(true);
 
             }
@@ -2051,16 +2020,17 @@
 
         var includedMap = {};
 
-        if (gridWindow.getHasPanel()) {
-            var panelwidth = gridWindow.getWindowWidth();
-            if (panelwidth && panelwidth > 0 && panelwidth < 75) {
-                this.setWidth(panelwidth, true);
-            }
-            else {
-                this.setWidth(75, true);
-            }
-        }
+        //if (gridWindow.getHasPanel()) {
+        //    var panelwidth = gridWindow.getWindowWidth();
+        //    if (panelwidth && panelwidth > 0 && panelwidth < 75) {
+        //        this.setWidth(panelwidth, true);
+        //    }
+        //    else {
+        //        this.setWidth(75, true);
+        //    }
+        //}
 
+      
 
         for (var i = 0; i < tabs.length; i++) {
 
@@ -2109,11 +2079,17 @@
                 if (i === 0) {
                     this.curGC = gc;
                     this.firstTabId = id;
+                    if (gTab.getIsTPBottomAligned()) {
+                        $tabPanel.removeClass();
+                        $tabPanel.addClass("vis-ad-w-p-actionpanel-b");
+                    }
                 }
+
+
 
                 tabElement = gc;
                 //	If we have a zoom query, switch to single row
-                if (i === 0 && goSingleRow)
+                if (i === 0  && goSingleRow)
                     gc.switchSingleRow();
 
                 // For first tab, if panel avilable, then set width for window
@@ -2147,6 +2123,11 @@
                     gc.vHeaderPanel.init(gTab, parentDetailPane);
                     //this.getLayout().append(parentDetailPane);
                 }
+
+                if (gTab.getHasPanel()) {
+                    gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);
+                }
+
 
                 //	Is this tab included?
                 if (!$.isEmptyObject(includedMap)) {
@@ -3244,6 +3225,8 @@
             else {
                 this.aShowSummaryLevel.hide();
             }
+
+           
         }
 
         //	Order Tab
@@ -3283,16 +3266,16 @@
         curEle.setVisible(false);
         tabEle.setVisible(true);
 
-        /*******     Tab Panels      ******/
-        if (this.curTab.getHasPanel()) {
-            this.setCurrentTabPanel();
-            this.setTabPanelIcons();
-            this.showTabPanel(true);
-        }
-        else {
-            this.setTabPanelIcons();
-            this.showTabPanel(false);
-        }
+        ///*******     Tab Panels      ******/
+        //if (this.curTab.getHasPanel()) {
+        //    this.setCurrentTabPanel();
+        //    this.setTabPanelIcons();
+        //    this.showTabPanel(true);
+        //}
+        //else {
+        //    this.setTabPanelIcons();
+        this.showTabPanel(this.curTab.getHasPanel());
+        //}
 
         this.refresh();
 

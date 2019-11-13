@@ -136,7 +136,9 @@ namespace VAdvantage.Controller
         public Decimal HeaderWidth = 0;
 
         /****   Header Items   ***/
-        public Dictionary<int, object> hItems = null;
+        private Dictionary<int, object> hItems = null;
+
+        public string TabPanelAlignment = "V";
 
         public List<GridFieldVO> GetFields()
         {
@@ -487,6 +489,7 @@ namespace VAdvantage.Controller
 
                 vo.HeaderTotalRow = Utility.Util.GetValueOfInt(dr["HeadertRow"]);
 
+                vo.TabPanelAlignment = Utility.Util.GetValueOfString(dr["TabPanelAlignment"]);
                 /***************** End Header panel work ***************/
 
             }
@@ -913,6 +916,7 @@ namespace VAdvantage.Controller
             clone.HeaderAlignment = HeaderAlignment;
             clone.HeaderTotalColumn = HeaderTotalColumn;
             clone.HeaderTotalRow = HeaderTotalRow;
+            clone.TabPanelAlignment = TabPanelAlignment;
             clone.hItems = hItems;
             clone.HeaderName = HeaderName;
 

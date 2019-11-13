@@ -180,8 +180,9 @@ namespace VIS
 
             modScript.Include(
                  //a Part 
+                 "~/Areas/VIS/Scripts/F20/atabpanel.js",
                  "~/Areas/VIS/Scripts/F20/wframe.js",
-                "~/Areas/VIS/Scripts/F20/atabpanel.js",
+                "~/Areas/VIS/Scripts/F20/atabbedpane.js",
                 "~/Areas/VIS/Scripts/F20/veditview.js",
                 "~/Areas/VIS/Scripts/F20/vcardview.js",
                 "~/Areas/VIS/Scripts/F20/vgridview.js",
@@ -213,7 +214,8 @@ namespace VIS
             style.Include("~/Areas/VIS/Content/F20/Color.css",
                 "~/Areas/VIS/Content/F20/Site.css",
                 "~/Areas/VIS/Content/F20/Window.css",
-                        "~/Areas/VIS/Content/F20/Controls.css"
+                        "~/Areas/VIS/Content/F20/Controls.css",
+                         "~/Areas/VIS/Content/F20/Media.css"
                 );
               
             //styleRTL.Include("~/Areas/VIS/Content/VIS.rtl.css");

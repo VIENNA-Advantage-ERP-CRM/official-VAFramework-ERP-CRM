@@ -593,6 +593,9 @@
         return this.vo.ShowSummaryLevel;
     };
 
+    GridTab.prototype.getIsTPBottomAligned = function (){
+        return this.vo.TabPanelAlignment == "V";
+    };
 
 
     /* <summary>
