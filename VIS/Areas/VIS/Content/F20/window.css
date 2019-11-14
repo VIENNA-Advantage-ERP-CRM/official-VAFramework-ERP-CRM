@@ -346,13 +346,13 @@
     grid-template-rows: 1fr auto auto auto;
     overflow: auto;
     background: rgba(var(--v-c-secondary), 0.5);
-    padding: 0 10px;
+    
 }
 
 .vis-ad-w-p-center-view {
     grid-row: 1/1;
     display: flex;
-    padding: 0;
+    padding: 0 10px;
     background: rgba(var(--v-c-common), 0.7)
 }
 
@@ -648,7 +648,7 @@ li.vis-page-item-select {
     position: absolute;
     height: 100%;
     width: 100%;
-    padding: 10px;
+    padding-top:10px;
     min-height: 100%;
 }
 
@@ -834,17 +834,18 @@ li.vis-page-item-select {
 }
 .vis-ad-w-p-ap-tp-o-icorbar li {
     list-style: none;
-    padding: 7px 0 7px 9px;
+    padding: 7px 0 7px 5px;
     margin: 0;
     position: relative;
     display: flex;
     align-items: center;
     border-left: 3px solid transparent;
+    justify-content:center;
 }
 
 .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-outerwrap {
     height: auto !important;
-    margin-left: 10px;
+   
 }
 
 .vis-ad-w-p-actionpanel-b .vis-ad-w-p-ap-tp-outerwrap {
