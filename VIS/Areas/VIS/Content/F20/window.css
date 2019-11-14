@@ -787,33 +787,42 @@ li.vis-page-item-select {
     justify-content: flex-end;
     position: relative;
     width: 250px;
+    background: #fff;
 }
 
 .vis-ad-w-p-ap-tp-o-icorbar {
-    width: 35px;
+    width: 40px;
     /* height: 100%; */
     order: 2;
     display: flex;
     flex-direction: column;
-    flex-basis: 35px;
+    flex-basis: 40px;
+    align-items: center;
 }
 
 .vis-ad-w-p-ap-tp-o-body {
     order: 1;
     flex: 1;
-   
+    box-shadow: -1px 0px 5px rgba(0, 0, 0, 0.10);
+    border-top-left-radius: .60rem;
 }
 
 .vis-ad-w-p-ap-tp-o-b-head {
     display: flex;
     background: rgba(var(--v-c-primary),1);
     color: rgba(var(--v-c-on-primary),1);
-    padding: 8px 10px;
+    padding: 7px 10px;
+    border-top-left-radius: .50rem;
 }
 
     .vis-ad-w-p-ap-tp-o-b-head h6 {
         flex: 1;
         margin: 0;
+        font-size: .875rem;
+        display: inline-flex;
+    }
+    .vis-ad-w-p-ap-tp-o-b-head span {
+        display: inline-flex;
     }
 
 .vis-ad-w-p-ap-tp-o-icorbar ul {
@@ -825,12 +834,17 @@ li.vis-page-item-select {
 }
 .vis-ad-w-p-ap-tp-o-icorbar li {
     list-style: none;
-    padding: 0;
-    margin: 5px 5px;
+    padding: 7px 0 7px 9px;
+    margin: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid transparent;
 }
 
 .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-outerwrap {
     height: auto !important;
+    margin-left: 10px;
 }
 
 .vis-ad-w-p-actionpanel-b .vis-ad-w-p-ap-tp-outerwrap {
@@ -849,10 +863,21 @@ li.vis-page-item-select {
     flex-direction: row;
 }
 
-.vis-ad-w-p-ap-tp-o-li-selected {
+li.vis-ad-w-p-ap-tp-o-li-selected {
     /*border-bottom: 1px solid #1aa0ed;
     border-top: 1px solid #1aa0ed;*/
-    background: rgba(var(--v-c--primary),1);
+    /*background: rgba(var(--v-c--primary),1);*/
+    border-left: 3px solid rgba(var(--v-c-primary),1);
 }
+    li.vis-ad-w-p-ap-tp-o-li-selected:before {
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid rgba(var(--v-c-primary),1);
+        content: '';
+        position: absolute;
+        left: 0px;
+    }
 
 /* End Tab Panel*/
