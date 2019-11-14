@@ -553,6 +553,14 @@ namespace VAdvantage.Model
          */
         public String CompleteIt()
         {
+
+            // To check weather future date records are available in Transaction window
+            if (MInOut.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Inventory_ID(), Get_Trx()))
+            {
+                _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_AlreadyFound");
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             // is used to check Container applicable into system
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
