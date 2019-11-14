@@ -45,9 +45,7 @@
         this.FUNCTION_SUM = "Sum";
 
         this.onLoaded = null;
-
         this.HasOrgUnit = null;
-
 
 
         if (this.AD_Client_ID == 0) {
@@ -218,7 +216,14 @@
                     for (var i = 0; i < res.length; i++) {
                         var id = res[i].AD_Table_ID;
                         var tableName = VIS.Utility.encodeText(res[i].TableName);
-                        var name = VIS.Msg.translate(VIS.Env.getCtx(), tableName + "_ID");
+                        var name = "";
+                        // Change done to show order instead of purchase order in selection 
+                        if (tableName == "C_Order") {
+                            name = VIS.Msg.getMsg("Order");
+                        }
+                        else {
+                            name = VIS.Msg.translate(VIS.Env.getCtx(), tableName + "_ID");
+                        }
 
                         options.push({ "Key": tableName, "Name": name });
 
@@ -379,8 +384,7 @@
                     for (var i = 0; i < res.length; i++) {
                         var ase = [];
                         ase.push({
-                            'c_acctschema_element_id': res[i].C_AcctSchema_Element_ID, 'name': VIS.Utility.encodeText(res[i].ElementName),
-                            'elementtype': res[i].ElementType, 'c_elementvalue_id': res[i].C_ElementValue_ID,
+                            'c_acctschema_element_id': res[i].C_AcctSchema_Element_ID, 'name': VIS.Utility.encodeText(res[i].ElementName),                            'elementtype': res[i].ElementType, 'c_elementvalue_id': res[i].C_ElementValue_ID,
                             'seqno': res[i].SeqNo, 'detail': res[i].Detail, 'c_element_id': res[i].C_Element_ID
                         });
                         currentThis.push(ase);
@@ -698,9 +702,7 @@
         var btnBPartner = $("<button Name='btnBPartner' id='" + "btnBPartner_" + windowNo + "' style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
         var btnProject = $("<button  Name='btnProject' id='" + "btnProject_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
         var btnCampaning = $("<button Name='btnCampaning' id='" + "btnCampaning_" + windowNo + "' style=' height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-
         var btnOrgUnit = $("<button Name='btnOrgUnit' id='" + "btnOrgUnit_" + windowNo + "' style=' height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-
 
         var btnSelctDocClear = $("<button Name='btnSelctDocClear' id='" + "btnSelctDocClear_" + windowNo + "' class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
         var btnAccountClear = $("<button  Name='btnAccountClear' id='" + "btnAccountClear_" + windowNo + "'   class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
@@ -802,7 +804,7 @@
         var selectDivHeight = $(window).height() - 200;
         var _data = null;
         //var _data = _data = new AcctViewerData(windowNo, AD_Client_ID, AD_Table_ID);;
-    
+
 
         function jbInit() {
             //Selection
@@ -820,9 +822,7 @@
             lblBP.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), BPARTNER));
             lblProject.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Project"));
             lblCompaning.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), CAMPAIGN));
-
             lblOrgUnit.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "OrganizationUnit"));
-
 
 
             //Display
@@ -1078,6 +1078,7 @@
 
             if (btnOrgUnit != null) {
                 btnOrgUnit.on("click", function () {
+                    /** Open the info window according to the button clicked. **/
                     actionButton(btnOrgUnit);
                 });
             }
@@ -1119,6 +1120,7 @@
             }
             if (btnOrgUnitClear != null) {
                 btnOrgUnitClear.on("click", function () {
+                    /** Clear data from info button and the from the array maintained at backend. **/
                     cleardata(btnOrgUnit);
                 });
             }
@@ -1488,7 +1490,6 @@
                 fillComboBox(cmbPostType.getControl(), _data.getPostingType());
                 fillComboBox(cmbOrg.getControl(), _data.getOrg());
 
-
                 // }, 2);
 
                 btnSelctDoc.find('span').text('');
@@ -1505,7 +1506,6 @@
                 btnBPartnerClear.attr("Name", BPARTNER);
                 btnBPartner.find('span').text('');
 
-
                 btnProject.attr("Name", PROJECT);
                 btnProjectClear.attr("Name", PROJECT);
                 btnProject.find('span').text('');
@@ -1513,7 +1513,6 @@
                 btnCampaning.attr("Name", CAMPAIGN);
                 btnCampaningClear.attr("Name", CAMPAIGN);
                 btnCampaning.find('span').text('');
-
 
                 btnOrgUnit.attr("Name", TRXORG);
                 btnOrgUnitClear.attr("Name", TRXORG);
@@ -1888,7 +1887,6 @@
             }
             else {
 
-
                 /** Check applied if to show the records from organization unit  **/
                 if (keyColumn == TRXORG) {
                     lookupColumn = ORG;
@@ -1901,7 +1899,6 @@
                 else {
                     info = new VIS.infoGeneral(true, _data.windowNo, "", tableName, lookupColumn, false, whereClause);
                 }
-
             }
             info.onClose = function () {
 

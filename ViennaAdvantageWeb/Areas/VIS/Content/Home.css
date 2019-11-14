@@ -2949,7 +2949,6 @@ p.vis-maintain-customer-p span {
     float: left;
     width: 100%;
 }
-
 /* new Changes */
 
 /* new Changes after latest lib */
@@ -2974,3 +2973,12 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li a, html[dir="rtl"] .vis-mainMenuIco
 html[dir="rtl"] #favLinks .row.userLinks_activeTab {
     padding-right: 15px;
 }
+html[dir="rtl"] .vis-apanel-search span {
+    text-align: left;
+    left: 45px;
+    right: auto !important;
+}
+
+    html[dir="rtl"] .vis-apanel-search span:nth-child(2) {
+        left: 63px;
+    }

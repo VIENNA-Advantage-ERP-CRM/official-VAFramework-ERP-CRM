@@ -218,7 +218,8 @@
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2223, VIS.DisplayType.TableDir, "M_Warehouse_ID", 0, false, "M_Warehouse.IsActive='Y'");
             $self.cmbWarehouse = new VIS.Controls.VComboBox("M_Warehouse_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
-            var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search);
+            // Handled issue when there is no default Document type, no data was coming in Info.
+            var value = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search, "C_BPartner_ID", 0, false, "C_BPartner.IsActive ='Y' And C_Bpartner.Issummary ='N'");
             $self.vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value);
 
 
