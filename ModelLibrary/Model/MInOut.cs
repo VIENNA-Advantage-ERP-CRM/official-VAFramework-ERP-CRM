@@ -1893,9 +1893,9 @@ namespace VAdvantage.Model
             //{
 
             // To check weather future date records are available in Transaction window
-            if (CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx()))
+            _processMsg = CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx());
+            if (string.IsNullOrEmpty(_processMsg))
             {
-                _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_AlreadyFound");
                 return DocActionVariables.STATUS_INVALID;
             }
 
@@ -5562,11 +5562,11 @@ namespace VAdvantage.Model
         /// To check weather future date records are available in Transaction window 
         /// </summary>
         /// <param name="MovementDate">Movement Date</param>
-        /// <param name="TableName">Name Of Table (M_INOUT,M_INVENTORY,M_MOVEMENT,M_PRODUCTION)</param>
+        /// <param name="TableName">Name Of Table (M_INOUT,M_INVENTORY,M_MOVEMENT)</param>
         /// <param name="Record_ID">ID of Current Record</param>
         /// <param name="Trx">Current Transaction Object</param>
         /// <returns>true if any record found on transaction window or false if not found</returns>
-        public static bool CheckFutureDateRecord(DateTime? MovementDate, string TableName, int Record_ID, Trx trx)
+        public static string CheckFutureDateRecord(DateTime? MovementDate, string TableName, int Record_ID, Trx trx)
         {
             int retval = 0;
             IDbConnection dbConnection = trx.GetConnection();
@@ -5588,21 +5588,21 @@ namespace VAdvantage.Model
                     retval = Util.GetValueOfInt(cmd.Parameters[3].Value.ToString());
                     if (retval > 0) // If Record Found
                     {
-                        return true;
+                        return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
                     }
                     else
-                    {
-                        return false;
+                    {// if no future date record found on MTransaction
+                        return string.Empty;
                     }
                 }
                 catch (Exception ex)
                 {// If any exception comes then we will not complete the record
-                    _log.Severe("Exception: {0} " +  ex.ToString());
-                    return true;
+                    _log.Severe("Exception: {0} " +  ex.Message);
+                    return ex.Message;
                 }
             }
             _log.Severe("Connection Closed");
-            return true;
+            return Msg.GetMsg(Env.GetCtx(), "NoDBConnection");
         }
 
     }
