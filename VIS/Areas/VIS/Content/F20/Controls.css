@@ -36,7 +36,6 @@
 .vis-control-wrap {
     flex: 1;
     position: relative;
-    display:flex;
 }
 .vis-input-wrap input {
     display: block;
@@ -194,10 +193,10 @@
     padding: 0 10px;
 }
 
+.vis-ev-col-fg-rotate {
+    transform:rotateX(180deg);
+}
 /* field group css END*/
-
-
-
 /****** Style Inputs Control END*****/
 /***************************** Control Prop *******************************************/
 .vis-ev-col-readonly {

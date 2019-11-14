@@ -46,11 +46,12 @@
         function setContent($target) {
             if (selLI)
                 selLI.removeClass("vis-ad-w-p-ap-tp-o-li-selected");
+            selLI = null;
 
             $divContent.empty();
 
             if ($target) {
-                $target.addClass('vis-ad-w-p-ap-tp-o-li-selected');
+                selLI= $target.addClass('vis-ad-w-p-ap-tp-o-li-selected');
                 $spnName.text($target.data('name'));
                 self.setCurrentPanel($target.data('cname'), windowNo);
             }
@@ -103,6 +104,7 @@
 
         this.disposeComponent = function () {
             $outerwrap.remove();
+            selLI = null;
             self = null;
         }
     }
