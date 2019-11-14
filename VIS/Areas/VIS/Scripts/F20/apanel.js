@@ -162,7 +162,7 @@
         var $td4;
 
         /***Tab panel**/
-        var $divTabPanelOuterWrap, $divTabPanels, $divTabPanelsHead, $divTabPanelsContent, $divTabPanelIconBar, $divTabPanelsIcon, $headerTabPanel, $infoIconspan, $ulIconList, $spanPin;
+       // var $divTabPanelOuterWrap, $divTabPanels, $divTabPanelsHead, $divTabPanelsContent, $divTabPanelIconBar, $divTabPanelsIcon, $headerTabPanel, $infoIconspan, $ulIconList, $spanPin;
         var panelMaxWidth = $(document).width() / 2;
         /***END Tab panel**/
 
@@ -271,28 +271,28 @@
             $tr = $("<tr>");//.append($td0leftbar).append($hdrPanel).append($td2_tr1).append($td3IncludedEmpty).append($tabpanel).append($td4); //row 1
 
             /********* Tab Panels **************/
-            $divTabPanelOuterWrap = $('<div class="vis-window-tab-panel-outerwrap">');
-            $divTabPanels = $('<div class="vis-window-tab-panels vis-pull-left">');
-            $divTabPanelsHead = $('<div class="vis-window-tabpanel-head vis-pull-left">');
-            $divTabPanelsContent = $('<div class="vis-window-tab-panelContent">');
-            $divTabPanelIconBar = $(' <div class="vis-window-tab-panels-iconsbar vis-pull-right">');
-            $divTabPanelsIcon = $('<div class="vis-window-tab-icons">');
-            $headerTabPanel = $('<h3 class="vis-pull-left">');
-            $infoIconspan = $('<span class="vis-window-tab-infoicon">');
-            $ulIconList = $('<ul>');
-            $spanPin = $('<span class="vis-pull-right">').append('<i class="glyphicon glyphicon-remove"></i>');
+            //$divTabPanelOuterWrap = $('<div class="vis-window-tab-panel-outerwrap">');
+            //$divTabPanels = $('<div class="vis-window-tab-panels vis-pull-left">');
+            //$divTabPanelsHead = $('<div class="vis-window-tabpanel-head vis-pull-left">');
+            //$divTabPanelsContent = $('<div class="vis-window-tab-panelContent">');
+            //$divTabPanelIconBar = $(' <div class="vis-window-tab-panels-iconsbar vis-pull-right">');
+            //$divTabPanelsIcon = $('<div class="vis-window-tab-icons">');
+            //$headerTabPanel = $('<h3 class="vis-pull-left">');
+            //$infoIconspan = $('<span class="vis-window-tab-infoicon">');
+            //$ulIconList = $('<ul>');
+            //$spanPin = $('<span class="vis-pull-right">').append('<i class="glyphicon glyphicon-remove"></i>');
 
 
-            $divTabPanelsIcon.append($ulIconList);
-            $divTabPanelIconBar.append($infoIconspan).append($divTabPanelsIcon);
-            $divTabPanelsHead.append($headerTabPanel).append($spanPin);
-            $divTabPanels.append($divTabPanelsHead).append($divTabPanelsContent);
-            $divTabPanelOuterWrap.append($divTabPanels).append($divTabPanelIconBar);
-            // $tabpanel.append($divTabPanelOuterWrap);
+            //$divTabPanelsIcon.append($ulIconList);
+            //$divTabPanelIconBar.append($infoIconspan).append($divTabPanelsIcon);
+            //$divTabPanelsHead.append($headerTabPanel).append($spanPin);
+            //$divTabPanels.append($divTabPanelsHead).append($divTabPanelsContent);
+            //$divTabPanelOuterWrap.append($divTabPanels).append($divTabPanelIconBar);
+            //// $tabpanel.append($divTabPanelOuterWrap);
+            
+            ////$tabpanel.append($divTabPanelOuterWrap);
+
             $tabpanel = $root.find('.vis-ad-w-p-actionpanel-r');
-            //$tabpanel.append($divTabPanelOuterWrap);
-
-
             /********* END Tab Panels **************/
 
             $table = $("<table class='vis-apanel-table' >"); //main root
@@ -912,9 +912,9 @@
 
         /* Set Tab Panel Icons */
 
-        $infoIconspan.on("click", function () {
-            $rightBarLPart.trigger("click");
-        });
+        //$infoIconspan.on("click", function () {
+        //    $rightBarLPart.trigger("click");
+        //});
 
         /*
         *   Set Icons of tab panels for tab
@@ -1012,68 +1012,68 @@
         /*
           *   Show or hide panel container depending on panel linked to tab or not
           */
-        this.showPanelContainer = function (show) {
-            if (show) {
-                $tabpanel.css("width", this.panelWidth + 'px');
-                $divTabPanels.css({ "display": "", "z-index": "" });
-            }
-            else {
-                $tabpanel.css({ "display": "" });
-                $tabpanel.css("width", "40px");
-                $divTabPanels.css("display", "none");
-                $divTabControl.css('width', '');
-                //$table.find('.vis-apanel-tabcontrol').css('max-width', '')
+        //this.showPanelContainer = function (show) {
+        //    if (show) {
+        //        $tabpanel.css("width", this.panelWidth + 'px');
+        //        $divTabPanels.css({ "display": "", "z-index": "" });
+        //    }
+        //    else {
+        //        $tabpanel.css({ "display": "" });
+        //        $tabpanel.css("width", "40px");
+        //        $divTabPanels.css("display", "none");
+        //        $divTabControl.css('width', '');
+        //        //$table.find('.vis-apanel-tabcontrol').css('max-width', '')
 
-                if ($tabpanel.is('.ui-resizable')) {
-                    $tabpanel.resizable('destroy');
-                }
-            }
-            this.setTabNavigation();
-        };
+        //        if ($tabpanel.is('.ui-resizable')) {
+        //            $tabpanel.resizable('destroy');
+        //        }
+        //    }
+        //    this.setTabNavigation();
+        //};
 
         /*
           *   Set width
           */
-        this.setWidth = function (width, openPanel) {
-            var self = this;
-            //window.setTimeout(function () {
-            if (width) {
-                if (width > 0) {
-                    //$tabpanel.css({ "width": width + "%" });
-                    //$tabpanel.attr("width", width + "%");
-                    // self.panelWidth = $table.find('.vis-window-tab-td').width();
-                    width = 100 - width;
-                    width = ($(document).width() * width) / 100;
-                    if (width > panelMaxWidth) {
-                        width = panelMaxWidth;
-                    }
-                    $tabpanel.css({ "width": width + "px" });
-                    self.panelWidth = width;
+        //this.setWidth = function (width, openPanel) {
+        //    var self = this;
+        //    //window.setTimeout(function () {
+        //    if (width) {
+        //        if (width > 0) {
+        //            //$tabpanel.css({ "width": width + "%" });
+        //            //$tabpanel.attr("width", width + "%");
+        //            // self.panelWidth = $table.find('.vis-window-tab-td').width();
+        //            width = 100 - width;
+        //            width = ($(document).width() * width) / 100;
+        //            if (width > panelMaxWidth) {
+        //                width = panelMaxWidth;
+        //            }
+        //            $tabpanel.css({ "width": width + "px" });
+        //            self.panelWidth = width;
 
-                }
+        //        }
                 
 
-                // $divTabControl.css('display', '');
-                this.refresh();
-            }
-            // }, 100);
-        };
+        //        // $divTabControl.css('display', '');
+        //        this.refresh();
+        //    }
+        //    // }, 100);
+        //};
 
         /*
           *   Close tab panel.
           */
-        $spanPin.on("click", function () {
-            self.showPanelContainer(false);
-            self.setIncludedTabWidth(true);
-            self.setWidth(-1, false);
-            self.curGC.setCurrentPanel(null);
-            self.setTabNavigation();
-            var selected = $ulIconList.find('.vis-selected-list')[0];
-            $(selected).removeClass('vis-selected-list');
+        //$spanPin.on("click", function () {
+        //    self.showPanelContainer(false);
+        //    self.setIncludedTabWidth(true);
+        //    self.setWidth(-1, false);
+        //    self.curGC.setCurrentPanel(null);
+        //    self.setTabNavigation();
+        //    var selected = $ulIconList.find('.vis-selected-list')[0];
+        //    $(selected).removeClass('vis-selected-list');
 
 
 
-        });
+        //});
 
         //function setPanelPosition() {
         //    if ($spanPin.hasClass('vis-window-unpin-icon')) {
@@ -1084,127 +1084,127 @@
         //    }
         //};
 
-        function setPanelPositionRelative() {
-            //$spanPin.addClass('vis-window-unpin-icon');
-            $tabpanel.css({ 'position': 'relative', "z-index": "" });
-            var dragType = 'w';
-            if (VIS.Application.isRTL) {
-                dragType = 'e';
-            }
+        //function setPanelPositionRelative() {
+        //    //$spanPin.addClass('vis-window-unpin-icon');
+        //    $tabpanel.css({ 'position': 'relative', "z-index": "" });
+        //    var dragType = 'w';
+        //    if (VIS.Application.isRTL) {
+        //        dragType = 'e';
+        //    }
 
-            if (!$tabpanel.is('.ui-resizable')) {
-                $tabpanel.resizable({
-                    handles: dragType,
-                    minWidth: 102,
-                    maxWidth: panelMaxWidth,
-                    resize: function (event, ui) {
-                        self.panelWidth = ui.size.width;
-                        $tabpanel.css({ 'position': 'absolute', "left": "", "z-index": "99" });
-                    },
-                    start: function (event, ui) {
-                        $tabpanel.css({ 'position': 'absolute', "z-index": "99" });
-                        //windowWidth=
-                    },
-                    stop: function (event, ui) {
+        //    if (!$tabpanel.is('.ui-resizable')) {
+        //        $tabpanel.resizable({
+        //            handles: dragType,
+        //            minWidth: 102,
+        //            maxWidth: panelMaxWidth,
+        //            resize: function (event, ui) {
+        //                self.panelWidth = ui.size.width;
+        //                $tabpanel.css({ 'position': 'absolute', "left": "", "z-index": "99" });
+        //            },
+        //            start: function (event, ui) {
+        //                $tabpanel.css({ 'position': 'absolute', "z-index": "99" });
+        //                //windowWidth=
+        //            },
+        //            stop: function (event, ui) {
 
-                        //var style = $td3IncludedEmpty.attr('style');
-                        //if (self.curTab.getIncluded_Tab_ID() == 0) {
-                        //    style += 'width:0px;padding-left: 1px !important; padding-right: 1px !important';
-                        //}
-                        //else {
-                        //    style += 'padding-left: 1px !important; padding-right: 1px !important';
-                        //}
-                        //$td3IncludedEmpty.attr('style', style);
-                        if (self.curTab.getIncluded_Tab_ID() == 0) {
-                            $td3IncludedEmpty.css('width', '0px');
-                        }
-                        else {
-                            $td3IncludedEmpty.css('width', '');
-                        }
-                        var curPanel = self.curGC.getCurrentPanel();
-                        if (curPanel && curPanel.sizeChanged) {
-                            curPanel.sizeChanged(ui.originalSize.width);
-                        }
-
-
-                        if (VIS.Application.isRTL) {
-                            $tabpanel.css({ 'position': 'relative', "right": "", "z-index": "" });
-                        }
-                        else {
-                            $tabpanel.css({ 'position': 'relative', "left": "", "z-index": "" });
-                        }
-                        self.setWidth(-1, true);
-                        if (self.curTab.getIncluded_Tab_ID() > 0) {
-                            self.curGC.vIncludedGC.vTable.resize();
-                        }
-                        self.setTabNavigation();
-                    }
-                });
-            }
-        };
-
-        function setPanelPositionAbsolute() {
-            // $spanPin.removeClass('vis-window-unpin-icon');
-            self.setWidth(-1, false);
-            $tabpanel.css({ 'position': 'relative', 'left': '', 'z-index': '' });
-            //if ($tabpanel.is('.ui-resizable')) {
-            //    $tabpanel.resizable('destroy');
-            //}
-        };
-
-        $ulIconList.on("click", function (e) {
-            var $target = $(e.target);
-            if ($target.is('li')) {
-
-                var sibling = $target.siblings('.vis-selected-list');
-                if (sibling) {
-                    sibling.removeClass('vis-selected-list');
-                }
-                sibling.removeClass('vis-selected-list');
-                $target.addClass('vis-selected-list');
-                $target = $target.find('img');
-
-            }
-            else if ($target.is('img')) {
-                var $parent = $($target.parent());
-                var sibling = $parent.siblings('.vis-selected-list');
-                if (sibling) {
-                    sibling.removeClass('vis-selected-list');
-                }
-                $parent.addClass('vis-selected-list');
-            }
-            $headerTabPanel.text($target.data('name'));
-
-            $divTabPanelsContent.empty();
-            //var type = VIS.Utility.getFunctionByName($target.data('cname'), window);
-            //panel = new type();
-            //panel.startPanel(self.$parentWindow.getWindowNo(), self.curTab);
-            //panel.refreshPanelData(self.curTab.getRecord_ID(), self.curGC.getSelectedRows());
-            //self.curGC.setCurrentPanel(panel);
-            //$divTabPanelsContent.append(panel.getRoot());
-            self.curGC.setCurrentPanelID($target.data('panelid'));
-            self.curGC.setCurrentPanel($target.data('cname'), self.$parentWindow.getWindowNo());
-            $divTabPanelsContent.append(self.curGC.getCurrentPanel().getRoot());
-            setPanelPositionRelative();
-            if ($tabpanel.width() <= 40) {
-                self.showPanelContainer(true);
-
-            }
-            if (self.curTab.getIncluded_Tab_ID() == 0) {
-                self.setIncludedTabWidth(false);
-
-            }
-            else {
-                self.setIncludedTabWidth(true);
-            }
-
-            self.showTabPanel(true);
-            self.setWidth(-1, true);
-            self.setTabNavigation();
+        //                //var style = $td3IncludedEmpty.attr('style');
+        //                //if (self.curTab.getIncluded_Tab_ID() == 0) {
+        //                //    style += 'width:0px;padding-left: 1px !important; padding-right: 1px !important';
+        //                //}
+        //                //else {
+        //                //    style += 'padding-left: 1px !important; padding-right: 1px !important';
+        //                //}
+        //                //$td3IncludedEmpty.attr('style', style);
+        //                if (self.curTab.getIncluded_Tab_ID() == 0) {
+        //                    $td3IncludedEmpty.css('width', '0px');
+        //                }
+        //                else {
+        //                    $td3IncludedEmpty.css('width', '');
+        //                }
+        //                var curPanel = self.curGC.getCurrentPanel();
+        //                if (curPanel && curPanel.sizeChanged) {
+        //                    curPanel.sizeChanged(ui.originalSize.width);
+        //                }
 
 
+        //                if (VIS.Application.isRTL) {
+        //                    $tabpanel.css({ 'position': 'relative', "right": "", "z-index": "" });
+        //                }
+        //                else {
+        //                    $tabpanel.css({ 'position': 'relative', "left": "", "z-index": "" });
+        //                }
+        //                self.setWidth(-1, true);
+        //                if (self.curTab.getIncluded_Tab_ID() > 0) {
+        //                    self.curGC.vIncludedGC.vTable.resize();
+        //                }
+        //                self.setTabNavigation();
+        //            }
+        //        });
+        //    }
+        //};
 
-        });
+        //function setPanelPositionAbsolute() {
+        //    // $spanPin.removeClass('vis-window-unpin-icon');
+        //    self.setWidth(-1, false);
+        //    $tabpanel.css({ 'position': 'relative', 'left': '', 'z-index': '' });
+        //    //if ($tabpanel.is('.ui-resizable')) {
+        //    //    $tabpanel.resizable('destroy');
+        //    //}
+        //};
+
+        //$ulIconList.on("click", function (e) {
+        //    var $target = $(e.target);
+        //    if ($target.is('li')) {
+
+        //        var sibling = $target.siblings('.vis-selected-list');
+        //        if (sibling) {
+        //            sibling.removeClass('vis-selected-list');
+        //        }
+        //        sibling.removeClass('vis-selected-list');
+        //        $target.addClass('vis-selected-list');
+        //        $target = $target.find('img');
+
+        //    }
+        //    else if ($target.is('img')) {
+        //        var $parent = $($target.parent());
+        //        var sibling = $parent.siblings('.vis-selected-list');
+        //        if (sibling) {
+        //            sibling.removeClass('vis-selected-list');
+        //        }
+        //        $parent.addClass('vis-selected-list');
+        //    }
+        //    $headerTabPanel.text($target.data('name'));
+
+        //    $divTabPanelsContent.empty();
+        //    //var type = VIS.Utility.getFunctionByName($target.data('cname'), window);
+        //    //panel = new type();
+        //    //panel.startPanel(self.$parentWindow.getWindowNo(), self.curTab);
+        //    //panel.refreshPanelData(self.curTab.getRecord_ID(), self.curGC.getSelectedRows());
+        //    //self.curGC.setCurrentPanel(panel);
+        //    //$divTabPanelsContent.append(panel.getRoot());
+        //    self.curGC.setCurrentPanelID($target.data('panelid'));
+        //    self.curGC.setCurrentPanel($target.data('cname'), self.$parentWindow.getWindowNo());
+        //    $divTabPanelsContent.append(self.curGC.getCurrentPanel().getRoot());
+        //    setPanelPositionRelative();
+        //    if ($tabpanel.width() <= 40) {
+        //        self.showPanelContainer(true);
+
+        //    }
+        //    if (self.curTab.getIncluded_Tab_ID() == 0) {
+        //        self.setIncludedTabWidth(false);
+
+        //    }
+        //    else {
+        //        self.setIncludedTabWidth(true);
+        //    }
+
+        //    self.showTabPanel(true);
+        //    self.setWidth(-1, true);
+        //    self.setTabNavigation();
+
+
+
+        //});
 
         /* END Set Tab Panel Icons */
 
@@ -1576,35 +1576,35 @@
 
         /* left bar toggle */
         // $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
-        $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            var w = parseInt($divlbMain.width());
+        //$btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
+        //    e.stopPropagation();
+        //    e.preventDefault();
+        //    var w = parseInt($divlbMain.width());
 
-            if (w > 50) {
-                $ulLefttoolbar.find('span').hide();
-            }
-            else
-                $divlbMain.css({ "position": "absolute" });
+        //    if (w > 50) {
+        //        $ulLefttoolbar.find('span').hide();
+        //    }
+        //    else
+        //        $divlbMain.css({ "position": "absolute" });
 
-            $divlbMain.animate({
-                "width": w > 50 ? "30" : "220",
-            }, 300, 'swing', function () {
+        //    $divlbMain.animate({
+        //        "width": w > 50 ? "30" : "220",
+        //    }, 300, 'swing', function () {
 
-                if (w < 50) {
-                    $ulLefttoolbar.find('span').show();
-                }
-                else {
-                    $divlbMain.css({ "position": "" });
-                    $divlbMain.css({ "width": "" });
-                }
-                if (self.curGC) {
-                    self.curGC.multiRowResize();
-                }
-                self.setWidth(-1, true);
-                self.setTabNavigation();
-            });
-        });
+        //        if (w < 50) {
+        //            $ulLefttoolbar.find('span').show();
+        //        }
+        //        else {
+        //            $divlbMain.css({ "position": "" });
+        //            $divlbMain.css({ "width": "" });
+        //        }
+        //        if (self.curGC) {
+        //            self.curGC.multiRowResize();
+        //        }
+        //        self.setWidth(-1, true);
+        //        self.setTabNavigation();
+        //    });
+        //});
 
         /*Right Bar */
         $rightBarLPart.on("click", function (e) {
