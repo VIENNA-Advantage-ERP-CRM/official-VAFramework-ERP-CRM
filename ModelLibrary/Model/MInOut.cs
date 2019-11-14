@@ -24,8 +24,8 @@ using VAdvantage.Utility;
 using System.Data;
 using System.IO;
 using VAdvantage.Logging;
+using Oracle.ManagedDataAccess.Client;
 using System.Data.SqlClient;
-
 
 namespace VAdvantage.Model
 {
@@ -1891,6 +1891,14 @@ namespace VAdvantage.Model
             //Dictionary<int, MInOutLineMA[]> lineAttributes = null;
             //if (IsSOTrx())
             //{
+
+            // To check weather future date records are available in Transaction window
+            _processMsg = CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx());
+            if (string.IsNullOrEmpty(_processMsg))
+            {
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             String MovementTyp = GetMovementType();
 
             int VAPOS_POSTerminal_ID = 0;
@@ -5548,6 +5556,53 @@ namespace VAdvantage.Model
                 log.Severe("Error in generating shipment  - " + e.Message);
             }
             //Arpit
+        }
+
+        /// <summary>
+        /// To check weather future date records are available in Transaction window 
+        /// </summary>
+        /// <param name="MovementDate">Movement Date</param>
+        /// <param name="TableName">Name Of Table (M_INOUT,M_INVENTORY,M_MOVEMENT)</param>
+        /// <param name="Record_ID">ID of Current Record</param>
+        /// <param name="Trx">Current Transaction Object</param>
+        /// <returns>true if any record found on transaction window or false if not found</returns>
+        public static string CheckFutureDateRecord(DateTime? MovementDate, string TableName, int Record_ID, Trx trx)
+        {
+            int retval = 0;
+            IDbConnection dbConnection = trx.GetConnection();
+            if (dbConnection != null)
+            {
+                // execute procedure for updating cost of components
+                OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = (OracleConnection)dbConnection;
+                cmd.CommandText = "CheckFutureDateRecord";
+                cmd.Parameters.Add("p_movementdate", OracleDbType.Date, MovementDate, ParameterDirection.Input);
+                cmd.Parameters.Add("p_TableName", OracleDbType.Varchar2, TableName.ToUpper(), ParameterDirection.Input);
+                cmd.Parameters.Add("p_Record_ID", OracleDbType.Int32, Record_ID, ParameterDirection.Input);
+                cmd.Parameters.Add("results", OracleDbType.Int32, 4, ParameterDirection.Output);
+                cmd.BindByName = true;
+                try
+                {
+                    retval = cmd.ExecuteNonQuery();
+                    retval = Util.GetValueOfInt(cmd.Parameters[3].Value.ToString());
+                    if (retval > 0) // If Record Found
+                    {
+                        return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
+                    }
+                    else
+                    {// if no future date record found on MTransaction
+                        return string.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {// If any exception comes then we will not complete the record
+                    _log.Severe("Exception: {0} " +  ex.Message);
+                    return ex.Message;
+                }
+            }
+            _log.Severe("Connection Closed");
+            return Msg.GetMsg(Env.GetCtx(), "NoDBConnection");
         }
 
     }
