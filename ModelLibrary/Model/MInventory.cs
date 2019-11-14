@@ -547,17 +547,17 @@ namespace VAdvantage.Model
         }
 
 
-        /**
-         * 	Complete Document
-         * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
-         */
+        /// <summary>
+        /// Complete Document
+        /// </summary>
+        /// <returns>new status (Complete, In Progress, Invalid, Waiting ..)</returns>
         public String CompleteIt()
         {
 
             // To check weather future date records are available in Transaction window
-            if (MInOut.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Inventory_ID(), Get_Trx()))
+            _processMsg = MInOut.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Inventory_ID(), Get_Trx());
+            if (string.IsNullOrEmpty(_processMsg))
             {
-                _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_AlreadyFound");
                 return DocActionVariables.STATUS_INVALID;
             }
 
