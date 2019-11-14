@@ -880,6 +880,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
         position: absolute;
         left: 0px;
     }
+    /* selection for bottom*/
 .vis-ad-w-p-actionpanel-b li {
     border-bottom: 3px solid transparent;
     border-left: none;
@@ -897,4 +898,5 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
         margin: auto;
         right: 0;
     }
+
 /* End Tab Panel*/
