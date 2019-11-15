@@ -13,7 +13,7 @@
         grid-column: 1/1;
         grid-row: 4/4;
         background-color: lightpink;
-        height: 0px;
+        height: auto;
         width: auto;
     }
 
@@ -59,6 +59,8 @@
         order: 1;
         height: 40px;
         width: auto;
+        align-items: flex-start;
+        flex-basis: auto;
     }
 
     .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-outerwrap {
@@ -69,6 +71,25 @@
     .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-o-icorbar ul {
         flex-direction: row;
     }
+    .vis-ad-w-p-actionpanel-r li {
+        border-bottom: 3px solid transparent;
+        border-left: none;
+        padding: 7px 9px;
+    }
+
+        li.vis-ad-w-p-ap-tp-o-li-selected {
+            border-bottom: 3px solid rgba(var(--v-c-primary),1);
+        }
+
+             li.vis-ad-w-p-ap-tp-o-li-selected:before {
+                border-right: 5px solid transparent;
+                border-left: 5px solid transparent;
+                /*border-bottom: 5px solid transparent;*/
+                border-bottom: 5px solid rgba(var(--v-c-primary),1);
+                bottom: 0px;
+                margin: auto;
+                right: 0;
+            }
 }
 /*.vis-w-ap-toolbar 
 {
