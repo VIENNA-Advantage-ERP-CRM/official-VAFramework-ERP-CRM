@@ -1,0 +1,49 @@
+*** 11/7/2019 12:09:58 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =208
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =808
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =817
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000643
+12:09:59.959    (INFO)     Trx.Start: **** ConnSH637087253991787279System.Random
+12:09:59.959    (INFO)     Trx.Commit: **C** ConnSH637087253991787279System.Random
+12:10:01.101    (INFO)     Trx.Start: **** ConnSH637087254013306560System.Random
+12:10:01.101    (INFO)     Trx.Commit: **C** ConnSH637087254013306560System.Random
+01:03:01.310    (INFO)     Trx.Start: **** ConnSH637087285818826030System.Random
+01:03:01.310    (INFO)     Trx.Commit: **C** ConnSH637087285818826030System.Random
+01:03:32.332    (INFO)     Trx.Start: **** ConnSH637087286120710206System.Random
+01:03:32.332    (INFO)     Trx.Commit: **C** ConnSH637087286120710206System.Random
+01:03:32.332    (INFO)     MChangeLog.FillChangeLog: #9
+01:03:43.343    (INFO)     Trx.Start: **** ConnSH637087286233541765System.Random
+01:03:43.343    (INFO)     Trx.Commit: **C** ConnSH637087286233541765System.Random
+01:03:52.352    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start on 11/7/2019 1:03:52 PM
+01:03:54.354    (INFO)     Trx.Start: **** SvrProcess
+01:03:54.354    (INFO)     Trx.Commit: **C** SvrProcess
+01:03:59.359    (INFO)     ReCostingCalculation.DoIt: Successfully Ended Cost Calculation 
+01:03:59.359    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:07:12.712    (INFO)     Trx.Start: **** ConnSH637087288329633943System.Random
+01:07:13.713    (INFO)     Trx.Commit: **C** ConnSH637087288329633943System.Random
+01:07:15.715    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start on 11/7/2019 1:07:15 PM
+01:07:15.715    (INFO)     Trx.Start: **** SvrProcess
+01:07:16.716    (INFO)     Trx.Commit: **C** SvrProcess
+01:07:17.717    (INFO)     Trx.Start: **** SvrProcess
+01:07:19.719    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/2/2017 12:00:00 AM
+01:08:25.825    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/3/2017 12:00:00 AM
+*** 11/7/2019 1:10:19 PM VAdvantage Log ***

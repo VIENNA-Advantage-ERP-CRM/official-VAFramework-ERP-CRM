@@ -1,0 +1,43 @@
+*** 11/5/2019 1:32:24 PM VAdvantage Log  ***
+01:32:24.322    (INFO)     Trx.Start: **** ConnSH637085575444500055System.Random
+01:32:24.322    (INFO)     Trx.Commit: **C** ConnSH637085575444500055System.Random
+01:32:24.322    (INFO)     MChangeLog.FillChangeLog: #9
+01:32:31.323    (INFO)     Trx.Start: **** SvrProcess
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00918: column ambiguously defined [Query DTrx] SELECT M_Transaction.AD_client_ID , M_Transaction.AD_Org_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
+                                  M_Transaction.M_AttributeSetInstance_ID , M_Transaction.M_Transaction_ID , M_Transaction.MovementDate ,
+                                  M_Transaction.MovementQty , M_Transaction.CurrentQty , M_Transaction.MovementType ,
+                                  CASE WHEN M_Transaction.M_InventoryLine_ID > 0
+                                    AND (SELECT IsInternalUse FROM M_InventoryLine
+                                      WHERE M_InventoryLine.M_InventoryLine_ID = M_Transaction.M_InventoryLine_ID ) = 'N'
+                                    THEN 'Y' ELSE 'N' END AS PhysicalInventory,
+                                    (SELECT MMPolicy FROM M_Product_Category WHERE M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID) AS MMPolicy
+                                FROM M_Transaction 
+                                INNER JOIN M_Product ON M_Product.M_Product_ID = M_Transaction.M_Product_ID WHERE M_Product_ID = 1004399 
+                                ORDER BY M_Transaction.AD_Client_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
+                                M_Transaction.M_AttributeSetInstance_ID , M_Transaction.MovementDate , M_Transaction.M_Transaction_ID ASC
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00918: column ambiguously defined [Query DTrx] SELECT M_Transaction.AD_client_ID , M_Transaction.AD_Org_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
+                                  M_Transaction.M_AttributeSetInstance_ID , M_Transaction.M_Transaction_ID , M_Transaction.MovementDate ,
+                                  M_Transaction.MovementQty , M_Transaction.CurrentQty , M_Transaction.MovementType ,
+                                  CASE WHEN M_Transaction.M_InventoryLine_ID > 0
+                                    AND (SELECT IsInternalUse FROM M_InventoryLine
+                                      WHERE M_InventoryLine.M_InventoryLine_ID = M_Transaction.M_InventoryLine_ID ) = 'N'
+                                    THEN 'Y' ELSE 'N' END AS PhysicalInventory,
+                                    (SELECT MMPolicy FROM M_Product_Category WHERE M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID) AS MMPolicy
+                                FROM M_Transaction 
+                                INNER JOIN M_Product ON M_Product.M_Product_ID = M_Transaction.M_Product_ID WHERE M_Product_ID = 1004399 
+                                ORDER BY M_Transaction.AD_Client_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
+                                M_Transaction.M_AttributeSetInstance_ID , M_Transaction.MovementDate , M_Transaction.M_Transaction_ID ASC
+01:34:40.344    (INFO)     Trx.Start: **** ConnSH637085576802061179System.Random
+01:34:40.344    (INFO)     Trx.Commit: **C** ConnSH637085576802061179System.Random
+01:35:24.352    (INFO)     Trx.Start: **** ConnSH637085577245431038System.Random
+01:35:24.352    (INFO)     Trx.Commit: **C** ConnSH637085577245431038System.Random
+01:36:50.365    (INFO)     Trx.Start: **** ConnSH637085578109021875System.Random
+01:36:50.365    (INFO)     Trx.Commit: **C** ConnSH637085578109021875System.Random
+01:36:55.365    (INFO)     Trx.Start: **** ConnSH637085578155955769System.Random
+01:36:55.365    (INFO)     Trx.Commit: **C** ConnSH637085578155955769System.Random
+01:36:55.365    (INFO)     Trx.Start: **** ConnSH637085578156235771System.Random
+01:36:55.365    (INFO)     Trx.Commit: **C** ConnSH637085578156235771System.Random
+01:36:55.365    (INFO)     Trx.Start: **** ConnSH637085578156605776System.Random
+01:36:55.365    (INFO)     Trx.Commit: **C** ConnSH637085578156605776System.Random
+01:36:55.365    (INFO)     Trx.Start: **** ConnSH637085578156885783System.Random
+01:36:55.365    (INFO)     Trx.Commit: **C** ConnSH637085578156885783System.Random

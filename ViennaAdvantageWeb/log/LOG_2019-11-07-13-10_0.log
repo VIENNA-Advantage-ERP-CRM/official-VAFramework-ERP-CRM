@@ -1,0 +1,291 @@
+*** 11/7/2019 1:10:19 PM VAdvantage Log  ***
+01:10:19.101    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/6/2019 12:00:00 AM
+01:10:25.102    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399 - 0
+01:10:25.102    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399
+01:10:42.104    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Material Receipt and product = 1004399 AND ASI 0
+01:10:42.104    (INFO)     Trx.Start: **** ConnSH637087290424432802System.Random
+01:10:42.104    (INFO)     Trx.Commit: **C** ConnSH637087290424432802System.Random
+01:10:42.104    (INFO)     Trx.Start: **** ConnSH637087290425942830System.Random
+01:10:42.104    (INFO)     Trx.Commit: **C** ConnSH637087290425942830System.Random
+01:10:42.104    (INFO)     Trx.Start: **** ConnSH637087290427092858System.Random
+01:10:42.104    (INFO)     Trx.Commit: **C** ConnSH637087290427092858System.Random
+01:10:42.104    (INFO)     Trx.Start: **** ConnSH637087290427592922System.Random
+01:10:42.104    (INFO)     Trx.Commit: **C** ConnSH637087290427592922System.Random
+01:10:42.104    (INFO)     Trx.Start: **** ConnSH637087290427892868System.Random
+01:10:42.104    (INFO)     Trx.Commit: **C** ConnSH637087290427892868System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:43.104    (INFO)     Trx.Start: **** ConnSH637087290431012922System.Random
+01:10:43.104    (INFO)     Trx.Commit: **C** ConnSH637087290431012922System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:43.104    (INFO)     Trx.Start: **** ConnSH637087290432473018System.Random
+01:10:43.104    (INFO)     Trx.Commit: **C** ConnSH637087290432473018System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:43.104    (INFO)     Trx.Start: **** ConnSH637087290433242966System.Random
+01:10:43.104    (INFO)     Trx.Commit: **C** ConnSH637087290433242966System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:44.104    (INFO)     Trx.Start: **** ConnSH637087290446193229System.Random
+01:10:44.104    (INFO)     Trx.Commit: **C** ConnSH637087290446193229System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:44.104    (INFO)     Trx.Start: **** ConnSH637087290449093294System.Random
+01:10:44.104    (INFO)     Trx.Commit: **C** ConnSH637087290449093294System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290452463356System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290452463356System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290455953499System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290455953499System.Random
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290456573451System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290456573451System.Random
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290457203464System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290457203464System.Random
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290457473453System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290457473453System.Random
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290458253483System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290458253483System.Random
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290458523481System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290458523481System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:45.104    (INFO)     Trx.Start: **** ConnSH637087290459333549System.Random
+01:10:45.104    (INFO)     Trx.Commit: **C** ConnSH637087290459333549System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:46.104    (INFO)     Trx.Start: **** ConnSH637087290461013600System.Random
+01:10:46.104    (INFO)     Trx.Commit: **C** ConnSH637087290461013600System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:46.104    (INFO)     Trx.Start: **** ConnSH637087290461763565System.Random
+01:10:46.104    (INFO)     Trx.Commit: **C** ConnSH637087290461763565System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:47.104    (INFO)     Trx.Start: **** ConnSH637087290470003715System.Random
+01:10:47.104    (INFO)     Trx.Commit: **C** ConnSH637087290470003715System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:47.104    (INFO)     Trx.Start: **** ConnSH637087290472783770System.Random
+01:10:47.104    (INFO)     Trx.Commit: **C** ConnSH637087290472783770System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:47.104    (INFO)     Trx.Start: **** ConnSH637087290475573833System.Random
+01:10:47.104    (INFO)     Trx.Commit: **C** ConnSH637087290475573833System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:47.104    (INFO)     Trx.Start: **** ConnSH637087290478463937System.Random
+01:10:47.104    (INFO)     Trx.Commit: **C** ConnSH637087290478463937System.Random
+01:10:47.104    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1 1004399- 0
+01:10:47.104    (INFO)     Trx.Commit: **C** SvrProcess
+01:10:47.104    (INFO)     Trx.Start: **** SvrProcess
+01:10:47.104    (INFO)     Trx.Commit: **C** SvrProcess
+01:10:47.104    (INFO)     Trx.Start: **** SvrProcess
+01:10:56.105    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor) and product = 1004399 AND ASI 0
+01:10:56.105    (INFO)     Trx.Start: **** ConnSH637087290562875895System.Random
+01:10:56.105    (INFO)     Trx.Commit: **C** ConnSH637087290562875895System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:56.105    (INFO)     Trx.Start: **** ConnSH637087290568101071System.Random
+01:10:56.105    (INFO)     Trx.Commit: **C** ConnSH637087290568101071System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:57.105    (INFO)     Trx.Start: **** ConnSH637087290570597730System.Random
+01:10:57.105    (INFO)     Trx.Commit: **C** ConnSH637087290570597730System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:57.105    (INFO)     Trx.Start: **** ConnSH637087290571787210System.Random
+01:10:57.105    (INFO)     Trx.Commit: **C** ConnSH637087290571787210System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:57.105    (INFO)     Trx.Start: **** ConnSH637087290573237228System.Random
+01:10:57.105    (INFO)     Trx.Commit: **C** ConnSH637087290573237228System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:57.105    (INFO)     Trx.Start: **** ConnSH637087290575267228System.Random
+01:10:57.105    (INFO)     Trx.Commit: **C** ConnSH637087290575267228System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:57.105    (INFO)     Trx.Start: **** ConnSH637087290577697265System.Random
+01:10:57.105    (INFO)     Trx.Commit: **C** ConnSH637087290577697265System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:58.105    (INFO)     Trx.Start: **** ConnSH637087290587425962System.Random
+01:10:58.105    (INFO)     Trx.Commit: **C** ConnSH637087290587425962System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:59.105    (INFO)     Trx.Start: **** ConnSH637087290590131063System.Random
+01:10:59.105    (INFO)     Trx.Commit: **C** ConnSH637087290590131063System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:59.105    (INFO)     Trx.Start: **** ConnSH637087290593122309System.Random
+01:10:59.105    (INFO)     Trx.Commit: **C** ConnSH637087290593122309System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:59.105    (INFO)     Trx.Start: **** ConnSH637087290595766314System.Random
+01:10:59.105    (INFO)     Trx.Commit: **C** ConnSH637087290595766314System.Random
+01:10:59.105    (INFO)     Trx.Start: **** ConnSH637087290596297112System.Random
+01:10:59.105    (INFO)     Trx.Commit: **C** ConnSH637087290596297112System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:10:59.105    (INFO)     Trx.Start: **** ConnSH637087290599225684System.Random
+01:10:59.105    (INFO)     Trx.Commit: **C** ConnSH637087290599225684System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:00.110    (INFO)     Trx.Start: **** ConnSH637087290601438931System.Random
+01:11:00.110    (INFO)     Trx.Commit: **C** ConnSH637087290601438931System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:00.110    (INFO)     Trx.Start: **** ConnSH637087290602848950System.Random
+01:11:00.110    (INFO)     Trx.Commit: **C** ConnSH637087290602848950System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:00.110    (INFO)     Trx.Start: **** ConnSH637087290604471639System.Random
+01:11:00.110    (INFO)     Trx.Commit: **C** ConnSH637087290604471639System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:00.110    (INFO)     Trx.Start: **** ConnSH637087290606550951System.Random
+01:11:00.110    (INFO)     Trx.Commit: **C** ConnSH637087290606550951System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:00.110    (INFO)     Trx.Start: **** ConnSH637087290608906645System.Random
+01:11:00.110    (INFO)     Trx.Commit: **C** ConnSH637087290608906645System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:01.111    (INFO)     Trx.Start: **** ConnSH637087290617970514System.Random
+01:11:01.111    (INFO)     Trx.Commit: **C** ConnSH637087290617970514System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:02.112    (INFO)     Trx.Start: **** ConnSH637087290620921292System.Random
+01:11:02.112    (INFO)     Trx.Commit: **C** ConnSH637087290620921292System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:02.112    (INFO)     Trx.Start: **** ConnSH637087290623560170System.Random
+01:11:02.112    (INFO)     Trx.Commit: **C** ConnSH637087290623560170System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:11:02.112    (INFO)     Trx.Start: **** ConnSH637087290626265317System.Random
+01:11:02.112    (INFO)     Trx.Commit: **C** ConnSH637087290626265317System.Random
+01:11:02.112    (INFO)     Trx.Commit: **C** SvrProcess
+01:11:02.112    (INFO)     Trx.Start: **** SvrProcess
+01:11:02.112    (INFO)     Trx.Start: **** ConnSH637087290628383125System.Random
+01:11:02.112    (INFO)     Trx.Commit: **C** ConnSH637087290628383125System.Random
+01:11:02.112    (INFO)     Trx.Commit: **C** SvrProcess
+01:11:02.112    (INFO)     Trx.Start: **** SvrProcess
+01:11:02.112    (INFO)     Trx.Commit: **C** SvrProcess
+01:11:02.112    (INFO)     Trx.Start: **** SvrProcess
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+01:11:03.113    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399 - 1.8620
+01:11:03.113    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399
+01:21:49.214    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Material Receipt and product = 1004399 AND ASI 0
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+01:21:49.214    (INFO)     Trx.Start: **** ConnSH637087297094030437System.Random
+01:21:49.214    (INFO)     Trx.Commit: **C** ConnSH637087297094030437System.Random
+01:21:49.214    (INFO)     Trx.Start: **** ConnSH637087297094600786System.Random
+01:21:49.214    (INFO)     Trx.Commit: **C** ConnSH637087297094600786System.Random
+01:21:49.214    (INFO)     Trx.Start: **** ConnSH637087297094920789System.Random
+01:21:49.214    (INFO)     Trx.Commit: **C** ConnSH637087297094920789System.Random
+01:21:49.214    (INFO)     Trx.Start: **** ConnSH637087297095310851System.Random
+01:21:49.214    (INFO)     Trx.Commit: **C** ConnSH637087297095310851System.Random
+01:21:49.214    (INFO)     Trx.Start: **** ConnSH637087297095590818System.Random
+01:21:49.214    (INFO)     Trx.Commit: **C** ConnSH637087297095590818System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:49.214    (INFO)     Trx.Start: **** ConnSH637087297098160454System.Random
+01:21:49.214    (INFO)     Trx.Commit: **C** ConnSH637087297098160454System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:50.215    (INFO)     Trx.Start: **** ConnSH637087297102067514System.Random
+01:21:50.215    (INFO)     Trx.Commit: **C** ConnSH637087297102067514System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:50.215    (INFO)     Trx.Start: **** ConnSH637087297104152270System.Random
+01:21:50.215    (INFO)     Trx.Commit: **C** ConnSH637087297104152270System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:51.215    (INFO)     Trx.Start: **** ConnSH637087297114842081System.Random
+01:21:51.215    (INFO)     Trx.Commit: **C** ConnSH637087297114842081System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:51.215    (INFO)     Trx.Start: **** ConnSH637087297117946762System.Random
+01:21:51.215    (INFO)     Trx.Commit: **C** ConnSH637087297117946762System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297120716800System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297120716800System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297123828092System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297123828092System.Random
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297124618171System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297124618171System.Random
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297125030989System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297125030989System.Random
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297125342762System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297125342762System.Random
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297127179198System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297127179198System.Random
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297127479759System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297127479759System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:52.215    (INFO)     Trx.Start: **** ConnSH637087297129511453System.Random
+01:21:52.215    (INFO)     Trx.Commit: **C** ConnSH637087297129511453System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:53.215    (INFO)     Trx.Start: **** ConnSH637087297133186748System.Random
+01:21:53.215    (INFO)     Trx.Commit: **C** ConnSH637087297133186748System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:53.215    (INFO)     Trx.Start: **** ConnSH637087297135198676System.Random
+01:21:53.215    (INFO)     Trx.Commit: **C** ConnSH637087297135198676System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:54.215    (INFO)     Trx.Start: **** ConnSH637087297145534443System.Random
+01:21:54.215    (INFO)     Trx.Commit: **C** ConnSH637087297145534443System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:54.215    (INFO)     Trx.Start: **** ConnSH637087297148139783System.Random
+01:21:54.215    (INFO)     Trx.Commit: **C** ConnSH637087297148139783System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:55.215    (INFO)     Trx.Start: **** ConnSH637087297150793699System.Random
+01:21:55.215    (INFO)     Trx.Commit: **C** ConnSH637087297150793699System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:21:55.215    (INFO)     Trx.Start: **** ConnSH637087297153411680System.Random
+01:21:55.215    (INFO)     Trx.Commit: **C** ConnSH637087297153411680System.Random
+01:21:55.215    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1 1004399- 1.8620
+01:21:55.215    (INFO)     Trx.Commit: **C** SvrProcess
+01:21:55.215    (INFO)     Trx.Start: **** SvrProcess
+01:21:55.215    (INFO)     Trx.Commit: **C** SvrProcess
+01:21:55.215    (INFO)     Trx.Start: **** SvrProcess
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+01:22:01.221    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor) and product = 1004399 AND ASI 0
+01:22:01.221    (INFO)     Trx.Start: **** ConnSH637087297211770033System.Random
+01:22:01.221    (INFO)     Trx.Commit: **C** ConnSH637087297211770033System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:01.221    (INFO)     Trx.Start: **** ConnSH637087297214039486System.Random
+01:22:01.221    (INFO)     Trx.Commit: **C** ConnSH637087297214039486System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:01.221    (INFO)     Trx.Start: **** ConnSH637087297216049527System.Random
+01:22:01.221    (INFO)     Trx.Commit: **C** ConnSH637087297216049527System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:01.221    (INFO)     Trx.Start: **** ConnSH637087297217619604System.Random
+01:22:01.221    (INFO)     Trx.Commit: **C** ConnSH637087297217619604System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:01.221    (INFO)     Trx.Start: **** ConnSH637087297218900330System.Random
+01:22:01.221    (INFO)     Trx.Commit: **C** ConnSH637087297218900330System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:02.222    (INFO)     Trx.Start: **** ConnSH637087297221160046System.Random
+01:22:02.222    (INFO)     Trx.Commit: **C** ConnSH637087297221160046System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:02.222    (INFO)     Trx.Start: **** ConnSH637087297223338645System.Random
+01:22:02.222    (INFO)     Trx.Commit: **C** ConnSH637087297223338645System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:03.223    (INFO)     Trx.Start: **** ConnSH637087297233427437System.Random
+01:22:03.223    (INFO)     Trx.Commit: **C** ConnSH637087297233427437System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:03.223    (INFO)     Trx.Start: **** ConnSH637087297236465917System.Random
+01:22:03.223    (INFO)     Trx.Commit: **C** ConnSH637087297236465917System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:03.223    (INFO)     Trx.Start: **** ConnSH637087297239186314System.Random
+01:22:03.223    (INFO)     Trx.Commit: **C** ConnSH637087297239186314System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:04.224    (INFO)     Trx.Start: **** ConnSH637087297241936509System.Random
+01:22:04.224    (INFO)     Trx.Commit: **C** ConnSH637087297241936509System.Random
+01:22:04.224    (INFO)     Trx.Start: **** ConnSH637087297242450154System.Random
+01:22:04.224    (INFO)     Trx.Commit: **C** ConnSH637087297242450154System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:04.224    (INFO)     Trx.Start: **** ConnSH637087297244745425System.Random
+01:22:04.224    (INFO)     Trx.Commit: **C** ConnSH637087297244745425System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:04.224    (INFO)     Trx.Start: **** ConnSH637087297247145944System.Random
+01:22:04.224    (INFO)     Trx.Commit: **C** ConnSH637087297247145944System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:04.224    (INFO)     Trx.Start: **** ConnSH637087297248293903System.Random
+01:22:04.224    (INFO)     Trx.Commit: **C** ConnSH637087297248293903System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:04.224    (INFO)     Trx.Start: **** ConnSH637087297249445927System.Random
+01:22:04.224    (INFO)     Trx.Commit: **C** ConnSH637087297249445927System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:05.225    (INFO)     Trx.Start: **** ConnSH637087297251416135System.Random
+01:22:05.225    (INFO)     Trx.Commit: **C** ConnSH637087297251416135System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:05.225    (INFO)     Trx.Start: **** ConnSH637087297253366091System.Random
+01:22:05.225    (INFO)     Trx.Commit: **C** ConnSH637087297253366091System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:06.226    (INFO)     Trx.Start: **** ConnSH637087297262894775System.Random
+01:22:06.226    (INFO)     Trx.Commit: **C** ConnSH637087297262894775System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:06.226    (INFO)     Trx.Start: **** ConnSH637087297265882499System.Random
+01:22:06.226    (INFO)     Trx.Commit: **C** ConnSH637087297265882499System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:06.226    (INFO)     Trx.Start: **** ConnSH637087297268480245System.Random
+01:22:06.226    (INFO)     Trx.Commit: **C** ConnSH637087297268480245System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:22:07.227    (INFO)     Trx.Start: **** ConnSH637087297271113566System.Random
+01:22:07.227    (INFO)     Trx.Commit: **C** ConnSH637087297271113566System.Random
+01:22:07.227    (INFO)     Trx.Commit: **C** SvrProcess
+01:22:07.227    (INFO)     Trx.Start: **** SvrProcess
+01:22:07.227    (INFO)     Trx.Start: **** ConnSH637087297272254634System.Random
+01:22:07.227    (INFO)     Trx.Commit: **C** ConnSH637087297272254634System.Random
+01:22:07.227    (INFO)     Trx.Commit: **C** SvrProcess
+01:22:07.227    (INFO)     Trx.Start: **** SvrProcess

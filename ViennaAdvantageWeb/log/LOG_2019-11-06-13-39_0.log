@@ -1,0 +1,252 @@
+*** 11/6/2019 1:40:00 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:40:00.400    (INFO)     Trx.Start: **** ConnSH637086444007267186System.Random
+01:40:00.400    (INFO)     Trx.Commit: **C** ConnSH637086444007267186System.Random
+01:40:02.402    (INFO)     Trx.Start: **** ConnSH637086444025424727System.Random
+01:40:02.402    (INFO)     Trx.Commit: **C** ConnSH637086444025424727System.Random
+01:42:33.423    (INFO)     Trx.Start: **** ConnSH637086445531521634System.Random
+01:42:33.423    (INFO)     Trx.Commit: **C** ConnSH637086445531521634System.Random
+----------->     (WARNING)  MInOut.GetActions: Column not found - C_DocTypeTarget_ID
+01:42:39.423    (INFO)     Trx.Start: **** ConnSH637086445599954557System.Random
+01:42:40.424    (INFO)     Trx.Commit: **C** ConnSH637086445599954557System.Random
+01:42:40.424    (INFO)     MChangeLog.FillChangeLog: #9
+01:42:40.424    (INFO)     Trx.Start: **** ConnSH637086445603467710System.Random
+01:42:40.424    (INFO)     Trx.Commit: **C** ConnSH637086445603467710System.Random
+01:42:40.424    (INFO)     Trx.Start: **** ConnSH637086445605979915System.Random
+01:42:40.424    (INFO)     Trx.Commit: **C** ConnSH637086445605979915System.Random
+01:42:40.424    (INFO)     Trx.Start: **** ConnSH637086445606409883System.Random
+01:42:40.424    (INFO)     Trx.Commit: **C** ConnSH637086445606409883System.Random
+01:42:40.424    (INFO)     MWFActivity.Run: MWFActivity[1233384,Node=(Start),State=ON,AD_User_ID=1005338,11/6/2019 8:12:40 AM]
+01:42:40.424    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080258, AD_Workflow_ID=117, WFState=OR]
+01:42:40.424    (INFO)     MWFActivity.PerformWork: MWFNode[187-(Start),Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+01:42:40.424    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080258, AD_Workflow_ID=117, WFState=OR]
+01:42:40.424    (INFO)     Trx.Start: **** ConnSH637086445609708299System.Random
+01:42:40.424    (INFO)     Trx.Commit: **C** ConnSH637086445609708299System.Random
+01:42:40.424    (INFO)     Trx.Start: **** ConnSH637086445609958542System.Random
+01:42:41.424    (INFO)     Trx.Commit: **C** ConnSH637086445609958542System.Random
+01:42:41.424    (INFO)     MWFActivity.Run: MWFActivity[1233385,Node=(DocPrepare),State=ON,AD_User_ID=1005338,11/6/2019 8:12:40 AM]
+01:42:41.424    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080258, AD_Workflow_ID=117, WFState=OR]
+01:42:41.424    (INFO)     MWFActivity.PerformWork: MWFNode[189-(DocPrepare),Action=DocumentAction=PR] [VAdvantage.DataBase.Trx]
+01:42:41.424    (INFO)     Trx.Start: **** WF_1573027961032
+01:42:41.424    (INFO)     MInOut.PrepareIt: MInOut[1015101-1001499,DocStatus=DR]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/6/2019', 'MM-DD-YY')
+01:42:41.424    (INFO)     Trx.Commit: **C** WF_1573027961032
+01:42:41.424    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080258, AD_Workflow_ID=117, WFState=OR]
+01:42:41.424    (INFO)     Trx.Start: **** ConnSH637086445615081792System.Random
+01:42:41.424    (INFO)     Trx.Commit: **C** ConnSH637086445615081792System.Random
+01:42:41.424    (INFO)     Trx.Start: **** ConnSH637086445615351788System.Random
+01:42:41.424    (INFO)     Trx.Commit: **C** ConnSH637086445615351788System.Random
+01:42:41.424    (INFO)     MWFActivity.Run: MWFActivity[1233386,Node=(DocComplete),State=ON,AD_User_ID=1005338,11/6/2019 8:12:41 AM]
+01:42:41.424    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080258, AD_Workflow_ID=117, WFState=OR]
+01:42:41.424    (INFO)     MWFActivity.PerformWork: MWFNode[190-(DocComplete),Action=DocumentAction=CO] [VAdvantage.DataBase.Trx]
+01:42:41.424    (INFO)     Trx.Start: **** WF_1573027961581
+01:42:41.424    (INFO)     MInOut.PrepareIt: MInOut[1015101-1001499,DocStatus=IP]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/6/2019', 'MM-DD-YY')
+01:42:41.424    (INFO)     MInOut.ApproveIt: MInOut[1015101-1001499,DocStatus=IP]
+01:42:41.424    (INFO)     MInOut.CompleteIt: MInOut[1015101-1001499,DocStatus=IP]
+01:42:41.424    (INFO)     MInOut.CompleteIt: Line=10 - Qty=10Return False
+----------->     (WARNING)  MStorage.GetQty: Column not found - Qty
+01:42:42.424    (INFO)     Trx.Start: **** ConnSH637086445621533104System.Random
+01:42:42.424    (INFO)     Trx.Commit: **C** ConnSH637086445621533104System.Random
+01:42:42.424    (INFO)     Trx.Start: **** ConnSH637086445622183950System.Random
+01:42:42.424    (INFO)     Trx.Commit: **C** ConnSH637086445622183950System.Random
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier [Query DR] SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier [Query DR] SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802
+===========>     (SEVERE)   DB.GetSQLValue: SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802 => ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier
+01:42:42.424    (INFO)     Trx.Start: **** ConnSH637086445626626039System.Random
+01:42:42.424    (INFO)     Trx.Commit: **C** ConnSH637086445626626039System.Random
+01:42:42.424    (INFO)     Trx.ExecuteDataSet: Trx Dataset WF_1573027961581 36
+01:42:42.424    (INFO)     Trx.ExecuteQuery: Trx non-query WF_1573027961581 36
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier [Query DR] SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier [Query DR] SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802
+===========>     (SEVERE)   DB.GetSQLValue: SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802 => ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier
+01:43:43.434    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Material Receipt and product = 1004399 AND ASI 0
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446230582288System.Random
+01:43:43.434    (INFO)     Trx.Commit: **C** ConnSH637086446230582288System.Random
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446231686985System.Random
+01:43:43.434    (INFO)     Trx.Commit: **C** ConnSH637086446231686985System.Random
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446232136989System.Random
+01:43:43.434    (INFO)     Trx.Commit: **C** ConnSH637086446232136989System.Random
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446232487008System.Random
+01:43:43.434    (INFO)     Trx.Commit: **C** ConnSH637086446232487008System.Random
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446232776994System.Random
+01:43:43.434    (INFO)     Trx.Commit: **C** ConnSH637086446232776994System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446238966284System.Random
+01:43:43.434    (INFO)     Trx.Commit: **C** ConnSH637086446238966284System.Random
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446239414614System.Random
+01:43:43.434    (INFO)     Trx.Commit: **C** ConnSH637086446239414614System.Random
+01:43:43.434    (INFO)     Trx.Start: **** ConnSH637086446239856296System.Random
+01:43:44.434    (INFO)     Trx.Commit: **C** ConnSH637086446239856296System.Random
+01:43:44.434    (INFO)     Trx.Start: **** ConnSH637086446240120977System.Random
+01:43:44.434    (INFO)     Trx.Commit: **C** ConnSH637086446240120977System.Random
+01:43:44.434    (INFO)     Trx.Start: **** ConnSH637086446240404089System.Random
+01:43:44.434    (INFO)     Trx.Commit: **C** ConnSH637086446240404089System.Random
+01:43:44.434    (INFO)     Trx.Start: **** ConnSH637086446240661110System.Random
+01:43:44.434    (INFO)     Trx.Commit: **C** ConnSH637086446240661110System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:43:44.434    (INFO)     Trx.Start: **** ConnSH637086446245762006System.Random
+01:43:44.434    (INFO)     Trx.Commit: **C** ConnSH637086446245762006System.Random
+01:43:44.434    (INFO)     Trx.Commit: **C** WF_1573027961581
+01:43:44.434    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080258, AD_Workflow_ID=117, WFState=OR]
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:44:56.445    (INFO)     Trx.Start: **** ConnSH637086446965797528System.Random
+01:44:56.445    (INFO)     Trx.Commit: **C** ConnSH637086446965797528System.Random
+01:44:58.445    (INFO)     Trx.Start: **** ConnSH637086446986852265System.Random
+01:44:58.445    (INFO)     Trx.Commit: **C** ConnSH637086446986852265System.Random
+01:45:07.457    (INFO)     Trx.Start: **** ConnSH637086447071112095System.Random
+01:45:07.457    (INFO)     Trx.Commit: **C** ConnSH637086447071112095System.Random
+01:45:07.457    (INFO)     Trx.Start: **** ConnSH637086447074706713System.Random
+01:45:07.457    (INFO)     Trx.Commit: **C** ConnSH637086447074706713System.Random
+01:45:07.457    (INFO)     Trx.Start: **** ConnSH637086447076421047System.Random
+01:45:07.457    (INFO)     Trx.Commit: **C** ConnSH637086447076421047System.Random
+01:45:07.457    (INFO)     Trx.Start: **** ConnSH637086447076702156System.Random
+01:45:07.457    (INFO)     Trx.Commit: **C** ConnSH637086447076702156System.Random
+01:45:07.457    (INFO)     MWFActivity.Run: MWFActivity[1233387,Node=(Start),State=ON,AD_User_ID=1005338,11/6/2019 8:15:07 AM]
+01:45:07.457    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080259, AD_Workflow_ID=118, WFState=OR]
+01:45:07.457    (INFO)     MWFActivity.PerformWork: MWFNode[191-(Start),Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+01:45:07.457    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080259, AD_Workflow_ID=118, WFState=OR]
+01:45:08.458    (INFO)     Trx.Start: **** ConnSH637086447080179798System.Random
+01:45:08.458    (INFO)     Trx.Commit: **C** ConnSH637086447080179798System.Random
+01:45:08.458    (INFO)     Trx.Start: **** ConnSH637086447080447581System.Random
+01:45:08.458    (INFO)     Trx.Commit: **C** ConnSH637086447080447581System.Random
+01:45:08.458    (INFO)     MWFActivity.Run: MWFActivity[1233388,Node=(DocPrepare),State=ON,AD_User_ID=1005338,11/6/2019 8:15:07 AM]
+01:45:08.458    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080259, AD_Workflow_ID=118, WFState=OR]
+01:45:08.458    (INFO)     MWFActivity.PerformWork: MWFNode[193-(DocPrepare),Action=DocumentAction=PR] [VAdvantage.DataBase.Trx]
+01:45:08.458    (INFO)     Trx.Start: **** WF_1573028108081
+01:45:08.458    (INFO)     MInvoice.PrepareIt: MInvoice[1118674-1001161,GrandTotal=1232]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/6/2019', 'MM-DD-YY')
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+01:45:08.458    (INFO)     Trx.Start: **** ConnSH637086447084260341System.Random
+01:45:08.458    (INFO)     Trx.Commit: **C** ConnSH637086447084260341System.Random
+01:45:08.458    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+01:45:08.458    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+01:45:08.458    (INFO)     Trx.Commit: **C** WF_1573028108081
+01:45:08.458    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080259, AD_Workflow_ID=118, WFState=OR]
+01:45:08.458    (INFO)     Trx.Start: **** ConnSH637086447087853487System.Random
+01:45:08.458    (INFO)     Trx.Commit: **C** ConnSH637086447087853487System.Random
+01:45:08.458    (INFO)     Trx.Start: **** ConnSH637086447088149974System.Random
+01:45:08.458    (INFO)     Trx.Commit: **C** ConnSH637086447088149974System.Random
+01:45:08.458    (INFO)     MWFActivity.Run: MWFActivity[1233389,Node=(DocComplete),State=ON,AD_User_ID=1005338,11/6/2019 8:15:08 AM]
+01:45:08.458    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080259, AD_Workflow_ID=118, WFState=OR]
+01:45:08.458    (INFO)     MWFActivity.PerformWork: MWFNode[194-(DocComplete),Action=DocumentAction=CO] [VAdvantage.DataBase.Trx]
+01:45:08.458    (INFO)     Trx.Start: **** WF_1573028108853
+----------->     (WARNING)  MInvoice.CompleteIt: TStart time of invoice completion : 11/6/2019 8:15:08 AM
+01:45:08.458    (INFO)     MInvoice.PrepareIt: MInvoice[1118674-1001161,GrandTotal=1232]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/6/2019', 'MM-DD-YY')
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+01:45:09.459    (INFO)     Trx.Start: **** ConnSH637086447091383837System.Random
+01:45:09.459    (INFO)     Trx.Commit: **C** ConnSH637086447091383837System.Random
+01:45:09.459    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+01:45:09.459    (INFO)     MInvoice.ApproveIt: MInvoice[1118674-1001161,GrandTotal=1232 (#1)]
+01:45:09.459    (INFO)     MInvoice.CompleteIt: MInvoice[1118674-1001161,GrandTotal=1232 (#1)]
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+----------->     (WARNING)  MOrder.GetVAPOS_POSTerminal_ID: Column not found - VAPOS_POSTerminal_ID
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier [Query DR] SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier [Query DR] SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802
+===========>     (SEVERE)   DB.GetSQLValue: SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = 1014802 => ORA-00904: "VAPOS_POSTERMINAL_ID": invalid identifier
+01:45:09.459    (INFO)     Trx.Start: **** ConnSH637086447095206249System.Random
+01:45:09.459    (INFO)     Trx.Commit: **C** ConnSH637086447095206249System.Random
+01:45:09.459    (INFO)     Trx.ExecuteDataSet: Trx Dataset WF_1573028108853 52
+01:45:09.459    (INFO)     Trx.ExecuteQuery: Trx non-query WF_1573028108853 52
+01:46:21.462    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor) and product = 1004399 AND ASI 0
+01:46:21.462    (INFO)     Trx.Start: **** ConnSH637086447811141624System.Random
+01:46:21.462    (INFO)     Trx.Commit: **C** ConnSH637086447811141624System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:46:21.462    (INFO)     Trx.Start: **** ConnSH637086447815107350System.Random
+01:46:21.462    (INFO)     Trx.Commit: **C** ConnSH637086447815107350System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:46:22.462    (INFO)     Trx.Start: **** ConnSH637086447820357417System.Random
+01:46:22.462    (INFO)     Trx.Commit: **C** ConnSH637086447820357417System.Random
+01:46:22.462    (INFO)     Trx.Start: **** ConnSH637086447820837468System.Random
+01:46:22.462    (INFO)     Trx.Commit: **C** ConnSH637086447820837468System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:46:22.462    (INFO)     Trx.Start: **** ConnSH637086447822847471System.Random
+01:46:22.462    (INFO)     Trx.Commit: **C** ConnSH637086447822847471System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+01:46:22.462    (INFO)     Trx.Start: **** ConnSH637086447828491974System.Random
+01:46:22.462    (INFO)     Trx.Commit: **C** ConnSH637086447828491974System.Random
+01:46:23.462    (INFO)     Trx.Start: **** ConnSH637086447830043521System.Random
+01:46:23.462    (INFO)     Trx.Commit: **C** ConnSH637086447830043521System.Random
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_BIUserName
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_YellowfinRoles_ID
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_BIUser
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_IsLinkExistingUser
+----------->     (WARNING)  MUser.AfterSave: Aftersave start - 
+----------->     (WARNING)  MUser.AfterSave: Aftersave success - 
+----------->     (WARNING)  MUser.AfterSave: Aftersave createJasperUser - 
+01:46:23.462    (INFO)     CacheMgt.Reset: AD_User: #1 (1)
+----------->     (WARNING)  MInvoice.CompleteIt:  start at  11/6/2019 8:15:08 AM -  End at 11/6/2019 8:16:23 AM - 1001161
+01:46:23.462    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+01:46:23.462    (INFO)     Trx.Commit: **C** WF_1573028108853
+01:46:23.462    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080259, AD_Workflow_ID=118, WFState=OR]
+*** 11/6/2019 3:00:39 PM VAdvantage Log ***

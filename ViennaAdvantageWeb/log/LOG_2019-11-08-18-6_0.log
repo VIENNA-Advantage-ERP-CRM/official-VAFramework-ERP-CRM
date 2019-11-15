@@ -1,0 +1,1034 @@
+*** 11/8/2019 6:06:19 PM VAdvantage Log  ***
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON M_InOut M_InOut, C_BPartner bp ON bp.C_BPartner_ID=M_InOut.C_BPartner_ID
+
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+06:06:45.645    (INFO)     Trx.Start: **** ConnSH637088332052852641System.Random
+06:06:45.645    (INFO)     Trx.Commit: **C** ConnSH637088332052852641System.Random
+06:06:45.645    (INFO)     Trx.Start: **** SvrProcess
+06:06:45.645    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=Q,M_CostElement_ID=1000056,M_InOut_ID=1015102]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+06:06:45.645    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #2
+06:06:45.645    (INFO)     Trx.Start: **** ConnSH637088332054483681System.Random
+06:06:45.645    (INFO)     Trx.Commit: **C** ConnSH637088332054483681System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+06:06:45.645    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 1
+06:06:45.645    (INFO)     Trx.Commit: **C** SvrProcess
+06:06:45.645    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:06:47.647    (INFO)     Trx.Start: **** ConnSH637088332070587530System.Random
+06:06:47.647    (INFO)     Trx.Commit: **C** ConnSH637088332070587530System.Random
+06:14:10.141    (INFO)     Trx.Start: **** ConnSH637088336502087319System.Random
+06:14:10.141    (INFO)     Trx.Commit: **C** ConnSH637088336502087319System.Random
+06:14:15.141    (INFO)     Trx.Start: **** ConnSH637088336555807106System.Random
+06:14:15.141    (INFO)     Trx.Commit: **C** ConnSH637088336555807106System.Random
+06:14:15.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start on 11/8/2019 6:14:15 PM
+06:14:15.141    (INFO)     Trx.Start: **** SvrProcess
+06:14:16.141    (INFO)     Trx.Commit: **C** SvrProcess
+06:14:16.141    (INFO)     ReCostingCalculation.DoIt: Successfully Ended Cost Calculation 
+06:14:16.141    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:14:17.141    (INFO)     Trx.Start: **** ConnSH637088336576440390System.Random
+06:14:17.141    (INFO)     Trx.Commit: **C** ConnSH637088336576440390System.Random
+06:14:17.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start on 11/8/2019 6:14:17 PM
+06:14:17.141    (INFO)     Trx.Start: **** SvrProcess
+06:14:18.141    (INFO)     Trx.Commit: **C** SvrProcess
+06:14:18.141    (INFO)     Trx.Start: **** SvrProcess
+06:14:18.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/2/2017 12:00:00 AM
+06:14:18.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/3/2017 12:00:00 AM
+06:14:18.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/4/2017 12:00:00 AM
+06:14:18.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/5/2017 12:00:00 AM
+06:14:18.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/6/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/7/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/8/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/9/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/10/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/11/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/12/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/13/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/14/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/15/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/16/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/17/2017 12:00:00 AM
+06:14:19.141    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/18/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/19/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/20/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/21/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/22/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/23/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/24/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/25/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/26/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/27/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/28/2017 12:00:00 AM
+06:14:20.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/29/2017 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/30/2017 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/31/2017 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/1/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/2/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/3/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/4/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/5/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/6/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/7/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/8/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/9/2018 12:00:00 AM
+06:14:21.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/10/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/11/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/12/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/13/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/14/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/15/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/16/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/17/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/18/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/19/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/20/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/21/2018 12:00:00 AM
+06:14:22.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/22/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/23/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/24/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/25/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/26/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/27/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/28/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/29/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/30/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/31/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/1/2018 12:00:00 AM
+06:14:23.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/2/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/3/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/4/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/5/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/6/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/7/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/8/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/9/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/10/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/11/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/12/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/13/2018 12:00:00 AM
+06:14:24.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/14/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/15/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/16/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/17/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/18/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/19/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/20/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/21/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/22/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/23/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/24/2018 12:00:00 AM
+06:14:25.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/25/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/26/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/27/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/28/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/1/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/2/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/3/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/4/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/5/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/6/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/7/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/8/2018 12:00:00 AM
+06:14:26.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/9/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/10/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/11/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/12/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/13/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/14/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/15/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/16/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/17/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/18/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/19/2018 12:00:00 AM
+06:14:27.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/20/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/21/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/22/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/23/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/24/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/25/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/26/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/27/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/28/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/29/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/30/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/31/2018 12:00:00 AM
+06:14:28.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/1/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/2/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/3/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/4/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/5/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/6/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/7/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/8/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/9/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/10/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/11/2018 12:00:00 AM
+06:14:29.142    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/12/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/13/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/14/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/15/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/16/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/17/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/18/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/19/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/20/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/21/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/22/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/23/2018 12:00:00 AM
+06:14:30.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/24/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/25/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/26/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/27/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/28/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/29/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/30/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/1/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/2/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/3/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/4/2018 12:00:00 AM
+06:14:31.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/5/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/6/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/7/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/8/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/9/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/10/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/11/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/12/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/13/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/14/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/15/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/16/2018 12:00:00 AM
+06:14:32.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/17/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/18/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/19/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/20/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/21/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/22/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/23/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/24/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/25/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/26/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/27/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/28/2018 12:00:00 AM
+06:14:33.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/29/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/30/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/31/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/1/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/2/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/3/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/4/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/5/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/6/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/7/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/8/2018 12:00:00 AM
+06:14:34.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/9/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/10/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/11/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/12/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/13/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/14/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/15/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/16/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/17/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/18/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/19/2018 12:00:00 AM
+06:14:35.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/20/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/21/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/22/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/23/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/24/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/25/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/26/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/27/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/28/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/29/2018 12:00:00 AM
+06:14:36.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/30/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/1/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/2/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/3/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/4/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/5/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/6/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/7/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/8/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/9/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/10/2018 12:00:00 AM
+06:14:37.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/11/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/12/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/13/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/14/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/15/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/16/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/17/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/18/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/19/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/20/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/21/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/22/2018 12:00:00 AM
+06:14:38.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/23/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/24/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/25/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/26/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/27/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/28/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/29/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/30/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/31/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/1/2018 12:00:00 AM
+06:14:39.143    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/2/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/3/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/4/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/5/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/6/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/7/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/8/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/9/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/10/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/11/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/12/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/13/2018 12:00:00 AM
+06:14:40.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/14/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/15/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/16/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/17/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/18/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/19/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/20/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/21/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/22/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/23/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/24/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/25/2018 12:00:00 AM
+06:14:41.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/26/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/27/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/28/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/29/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/30/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/31/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/1/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/2/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/3/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/4/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/5/2018 12:00:00 AM
+06:14:42.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/6/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/7/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/8/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/9/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/10/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/11/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/12/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/13/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/14/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/15/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/16/2018 12:00:00 AM
+06:14:43.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/17/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/18/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/19/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/20/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/21/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/22/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/23/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/24/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/25/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/26/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/27/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/28/2018 12:00:00 AM
+06:14:44.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/29/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/30/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/1/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/2/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/3/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/4/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/5/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/6/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/7/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/8/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/9/2018 12:00:00 AM
+06:14:45.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/10/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/11/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/12/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/13/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/14/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/15/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/16/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/17/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/18/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/19/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/20/2018 12:00:00 AM
+06:14:46.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/21/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/22/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/23/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/24/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/25/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/26/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/27/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/28/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/29/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/30/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/31/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/1/2018 12:00:00 AM
+06:14:47.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/2/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/3/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/4/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/5/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/6/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/7/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/8/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/9/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/10/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/11/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/12/2018 12:00:00 AM
+06:14:48.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/13/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/14/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/15/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/16/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/17/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/18/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/19/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/20/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/21/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/22/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/23/2018 12:00:00 AM
+06:14:49.144    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/24/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/25/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/26/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/27/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/28/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/29/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/30/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/1/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/2/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/3/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/4/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/5/2018 12:00:00 AM
+06:14:50.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/6/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/7/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/8/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/9/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/10/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/11/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/12/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/13/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/14/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/15/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/16/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/17/2018 12:00:00 AM
+06:14:51.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/18/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/19/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/20/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/21/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/22/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/23/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/24/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/25/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/26/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/27/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/28/2018 12:00:00 AM
+06:14:52.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/29/2018 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/30/2018 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 12/31/2018 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/1/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/2/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/3/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/4/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/5/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/6/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/7/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/8/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/9/2019 12:00:00 AM
+06:14:53.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/10/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/11/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/12/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/13/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/14/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/15/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/16/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/17/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/18/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/19/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/20/2019 12:00:00 AM
+06:14:54.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/21/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/22/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/23/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/24/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/25/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/26/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/27/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/28/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/29/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/30/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 1/31/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/1/2019 12:00:00 AM
+06:14:55.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/2/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/3/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/4/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/5/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/6/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/7/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/8/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/9/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/10/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/11/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/12/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/13/2019 12:00:00 AM
+06:14:56.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/14/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/15/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/16/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/17/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/18/2019 12:00:00 AM
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/19/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/20/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/21/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/22/2019 12:00:00 AM
+06:14:57.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/23/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/24/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/25/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/26/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/27/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 2/28/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/1/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/2/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/3/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/4/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/5/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/6/2019 12:00:00 AM
+06:14:58.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/7/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/8/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/9/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/10/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/11/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/12/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/13/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/14/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/15/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/16/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/17/2019 12:00:00 AM
+06:14:59.145    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/18/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/19/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/20/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/21/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/22/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/23/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/24/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/25/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/26/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/27/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/28/2019 12:00:00 AM
+06:15:00.150    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/29/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/30/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 3/31/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/1/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/2/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/3/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/4/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/5/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/6/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/7/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/8/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/9/2019 12:00:00 AM
+06:15:01.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/10/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/11/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/12/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/13/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/14/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/15/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/16/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/17/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/18/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/19/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/20/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/21/2019 12:00:00 AM
+06:15:02.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/22/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/23/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/24/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/25/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/26/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/27/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/28/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/29/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 4/30/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/1/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/2/2019 12:00:00 AM
+06:15:03.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/3/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/4/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/5/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/6/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/7/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/8/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/9/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/10/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/11/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/12/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/13/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/14/2019 12:00:00 AM
+06:15:04.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/15/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/16/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/17/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/18/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/19/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/20/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/21/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/22/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/23/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/24/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/25/2019 12:00:00 AM
+06:15:05.155    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/26/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/27/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/28/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/29/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/30/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 5/31/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/1/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/2/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/3/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/4/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/5/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/6/2019 12:00:00 AM
+06:15:06.156    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/7/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/8/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/9/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/10/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/11/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/12/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/13/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/14/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/15/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/16/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/17/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/18/2019 12:00:00 AM
+06:15:07.157    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/19/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/20/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/21/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/22/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/23/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/24/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/25/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/26/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/27/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/28/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/29/2019 12:00:00 AM
+06:15:08.158    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 6/30/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/1/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/2/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/3/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/4/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/5/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/6/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/7/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/8/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/9/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/10/2019 12:00:00 AM
+06:15:09.159    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/11/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/12/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/13/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/14/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/15/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/16/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/17/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/18/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/19/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/20/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/21/2019 12:00:00 AM
+06:15:10.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/22/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/23/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/24/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/25/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/26/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/27/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/28/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/29/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/30/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 7/31/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/1/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/2/2019 12:00:00 AM
+06:15:11.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/3/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/4/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/5/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/6/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/7/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/8/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/9/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/10/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/11/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/12/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/13/2019 12:00:00 AM
+06:15:12.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/14/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/15/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/16/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/17/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/18/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/19/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/20/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/21/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/22/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/23/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/24/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/25/2019 12:00:00 AM
+06:15:13.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/26/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/27/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/28/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/29/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/30/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 8/31/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/1/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/2/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/3/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/4/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/5/2019 12:00:00 AM
+06:15:14.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/6/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/7/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/8/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/9/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/10/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/11/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/12/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/13/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/14/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/15/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/16/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/17/2019 12:00:00 AM
+06:15:15.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/18/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/19/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/20/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/21/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/22/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/23/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/24/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/25/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/26/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/27/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/28/2019 12:00:00 AM
+06:15:16.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/29/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 9/30/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/1/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/2/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/3/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/4/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/5/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/6/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/7/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/8/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/9/2019 12:00:00 AM
+06:15:17.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/10/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/11/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/12/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/13/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/14/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/15/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/16/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/17/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/18/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/19/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/20/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/21/2019 12:00:00 AM
+06:15:18.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/22/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/23/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/24/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/25/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/26/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/27/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/28/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/29/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/30/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 10/31/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/1/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/2/2019 12:00:00 AM
+06:15:19.151    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/3/2019 12:00:00 AM
+06:15:20.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/4/2019 12:00:00 AM
+06:15:20.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/5/2019 12:00:00 AM
+06:15:20.152    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/6/2019 12:00:00 AM
+06:15:21.152    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399 - 0
+06:15:21.152    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399
+06:15:21.152    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Material Receipt and product = 1004399 AND ASI 0
+06:15:21.152    (INFO)     Trx.Start: **** ConnSH637088337216244623System.Random
+06:15:21.152    (INFO)     Trx.Commit: **C** ConnSH637088337216244623System.Random
+06:15:21.152    (INFO)     Trx.Start: **** ConnSH637088337219017522System.Random
+06:15:21.152    (INFO)     Trx.Commit: **C** ConnSH637088337219017522System.Random
+06:15:21.152    (INFO)     Trx.Start: **** ConnSH637088337219955176System.Random
+06:15:22.152    (INFO)     Trx.Commit: **C** ConnSH637088337219955176System.Random
+06:15:22.152    (INFO)     Trx.Start: **** ConnSH637088337221162405System.Random
+06:15:22.152    (INFO)     Trx.Commit: **C** ConnSH637088337221162405System.Random
+06:15:22.152    (INFO)     Trx.Start: **** ConnSH637088337222058050System.Random
+06:15:22.152    (INFO)     Trx.Commit: **C** ConnSH637088337222058050System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:22.152    (INFO)     Trx.Start: **** ConnSH637088337225456427System.Random
+06:15:22.152    (INFO)     Trx.Commit: **C** ConnSH637088337225456427System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:23.152    (INFO)     Trx.Start: **** ConnSH637088337231654576System.Random
+06:15:23.152    (INFO)     Trx.Commit: **C** ConnSH637088337231654576System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:23.152    (INFO)     Trx.Start: **** ConnSH637088337235015694System.Random
+06:15:23.152    (INFO)     Trx.Commit: **C** ConnSH637088337235015694System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:25.152    (INFO)     Trx.Start: **** ConnSH637088337251211338System.Random
+06:15:25.152    (INFO)     Trx.Commit: **C** ConnSH637088337251211338System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:25.152    (INFO)     Trx.Start: **** ConnSH637088337255656549System.Random
+06:15:25.152    (INFO)     Trx.Commit: **C** ConnSH637088337255656549System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:25.152    (INFO)     Trx.Start: **** ConnSH637088337259940071System.Random
+06:15:26.152    (INFO)     Trx.Commit: **C** ConnSH637088337259940071System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:26.152    (INFO)     Trx.Start: **** ConnSH637088337264145372System.Random
+06:15:26.152    (INFO)     Trx.Commit: **C** ConnSH637088337264145372System.Random
+06:15:26.152    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1 1004399- 0
+06:15:26.152    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:26.152    (INFO)     Trx.Start: **** SvrProcess
+06:15:26.152    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:26.152    (INFO)     Trx.Start: **** SvrProcess
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+06:15:26.152    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399 - 0
+06:15:27.152    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1004399
+06:15:27.152    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Material Receipt and product = 1004399 AND ASI 0
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+06:15:27.152    (INFO)     Trx.Start: **** ConnSH637088337272458127System.Random
+06:15:27.152    (INFO)     Trx.Commit: **C** ConnSH637088337272458127System.Random
+06:15:27.152    (INFO)     Trx.Start: **** ConnSH637088337274479714System.Random
+06:15:27.152    (INFO)     Trx.Commit: **C** ConnSH637088337274479714System.Random
+06:15:27.152    (INFO)     Trx.Start: **** ConnSH637088337275480652System.Random
+06:15:27.152    (INFO)     Trx.Commit: **C** ConnSH637088337275480652System.Random
+06:15:27.152    (INFO)     Trx.Start: **** ConnSH637088337276639659System.Random
+06:15:27.152    (INFO)     Trx.Commit: **C** ConnSH637088337276639659System.Random
+06:15:27.152    (INFO)     Trx.Start: **** ConnSH637088337277613185System.Random
+06:15:27.152    (INFO)     Trx.Commit: **C** ConnSH637088337277613185System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:28.152    (INFO)     Trx.Start: **** ConnSH637088337281938027System.Random
+06:15:28.152    (INFO)     Trx.Commit: **C** ConnSH637088337281938027System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:28.152    (INFO)     Trx.Start: **** ConnSH637088337288395751System.Random
+06:15:28.152    (INFO)     Trx.Commit: **C** ConnSH637088337288395751System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:29.152    (INFO)     Trx.Start: **** ConnSH637088337292578444System.Random
+06:15:29.152    (INFO)     Trx.Commit: **C** ConnSH637088337292578444System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:30.153    (INFO)     Trx.Start: **** ConnSH637088337308839962System.Random
+06:15:30.153    (INFO)     Trx.Commit: **C** ConnSH637088337308839962System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:31.153    (INFO)     Trx.Start: **** ConnSH637088337313022990System.Random
+06:15:31.153    (INFO)     Trx.Commit: **C** ConnSH637088337313022990System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:31.153    (INFO)     Trx.Start: **** ConnSH637088337317470015System.Random
+06:15:31.153    (INFO)     Trx.Commit: **C** ConnSH637088337317470015System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:32.153    (INFO)     Trx.Start: **** ConnSH637088337322157780System.Random
+06:15:32.153    (INFO)     Trx.Commit: **C** ConnSH637088337322157780System.Random
+06:15:32.153    (INFO)     ReCostingCalculation.CalculateCostForMaterial: product cost 1 1004399- 0
+06:15:32.153    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:32.153    (INFO)     Trx.Start: **** SvrProcess
+06:15:32.153    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:32.153    (INFO)     Trx.Start: **** SvrProcess
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+----------->     (WARNING)  MOrder.Load: (rs) - 117: C_Order.AmtDimGrandTotal (System.Int32)
+06:15:32.153    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor) and product = 1004399 AND ASI 0
+06:15:33.153    (INFO)     Trx.Start: **** ConnSH637088337330694226System.Random
+06:15:33.153    (INFO)     Trx.Commit: **C** ConnSH637088337330694226System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:33.153    (INFO)     Trx.Start: **** ConnSH637088337339354455System.Random
+06:15:33.153    (INFO)     Trx.Commit: **C** ConnSH637088337339354455System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:34.153    (INFO)     Trx.Start: **** ConnSH637088337343610004System.Random
+06:15:34.153    (INFO)     Trx.Commit: **C** ConnSH637088337343610004System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:34.153    (INFO)     Trx.Start: **** ConnSH637088337346582579System.Random
+06:15:34.153    (INFO)     Trx.Commit: **C** ConnSH637088337346582579System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:34.153    (INFO)     Trx.Start: **** ConnSH637088337349195734System.Random
+06:15:34.153    (INFO)     Trx.Commit: **C** ConnSH637088337349195734System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:35.153    (INFO)     Trx.Start: **** ConnSH637088337352853684System.Random
+06:15:35.153    (INFO)     Trx.Commit: **C** ConnSH637088337352853684System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:35.153    (INFO)     Trx.Start: **** ConnSH637088337357135127System.Random
+06:15:35.153    (INFO)     Trx.Commit: **C** ConnSH637088337357135127System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:37.153    (INFO)     Trx.Start: **** ConnSH637088337372007276System.Random
+06:15:37.153    (INFO)     Trx.Commit: **C** ConnSH637088337372007276System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:37.153    (INFO)     Trx.Start: **** ConnSH637088337376676286System.Random
+06:15:37.153    (INFO)     Trx.Commit: **C** ConnSH637088337376676286System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:38.153    (INFO)     Trx.Start: **** ConnSH637088337381516943System.Random
+06:15:38.153    (INFO)     Trx.Commit: **C** ConnSH637088337381516943System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:38.153    (INFO)     Trx.Start: **** ConnSH637088337386147962System.Random
+06:15:38.153    (INFO)     Trx.Commit: **C** ConnSH637088337386147962System.Random
+06:15:38.153    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:38.153    (INFO)     Trx.Start: **** SvrProcess
+06:15:38.153    (INFO)     Trx.Start: **** ConnSH637088337389748163System.Random
+06:15:39.153    (INFO)     Trx.Commit: **C** ConnSH637088337389748163System.Random
+06:15:39.153    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:39.153    (INFO)     Trx.Start: **** SvrProcess
+06:15:39.153    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:39.153    (INFO)     Trx.Start: **** SvrProcess
+06:15:39.153    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/7/2019 12:00:00 AM
+06:15:39.153    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Shipment and product = 1004399 AND ASI 0
+06:15:39.153    (INFO)     Trx.Start: **** ConnSH637088337396352937System.Random
+06:15:39.153    (INFO)     Trx.Commit: **C** ConnSH637088337396352937System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:40.154    (INFO)     Trx.Start: **** ConnSH637088337400621453System.Random
+06:15:40.154    (INFO)     Trx.Commit: **C** ConnSH637088337400621453System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:40.154    (INFO)     Trx.Start: **** ConnSH637088337402904814System.Random
+06:15:40.154    (INFO)     Trx.Commit: **C** ConnSH637088337402904814System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:40.154    (INFO)     Trx.Start: **** ConnSH637088337405580965System.Random
+06:15:40.154    (INFO)     Trx.Commit: **C** ConnSH637088337405580965System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:40.154    (INFO)     Trx.Start: **** ConnSH637088337408161463System.Random
+06:15:40.154    (INFO)     Trx.Commit: **C** ConnSH637088337408161463System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:41.154    (INFO)     Trx.Start: **** ConnSH637088337410802045System.Random
+06:15:41.154    (INFO)     Trx.Commit: **C** ConnSH637088337410802045System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:41.154    (INFO)     Trx.Start: **** ConnSH637088337413308180System.Random
+06:15:41.154    (INFO)     Trx.Commit: **C** ConnSH637088337413308180System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:41.154    (INFO)     Trx.Start: **** ConnSH637088337416073657System.Random
+06:15:41.154    (INFO)     Trx.Commit: **C** ConnSH637088337416073657System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:41.154    (INFO)     Trx.Start: **** ConnSH637088337418617770System.Random
+06:15:41.154    (INFO)     Trx.Commit: **C** ConnSH637088337418617770System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:42.154    (INFO)     Trx.Start: **** ConnSH637088337421447123System.Random
+06:15:42.154    (INFO)     Trx.Commit: **C** ConnSH637088337421447123System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:44.154    (INFO)     Trx.Start: **** ConnSH637088337442256735System.Random
+06:15:44.154    (INFO)     Trx.Commit: **C** ConnSH637088337442256735System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:44.154    (INFO)     Trx.Start: **** ConnSH637088337447354000System.Random
+06:15:44.154    (INFO)     Trx.Commit: **C** ConnSH637088337447354000System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:45.154    (INFO)     Trx.Start: **** ConnSH637088337452105885System.Random
+06:15:45.154    (INFO)     Trx.Commit: **C** ConnSH637088337452105885System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:15:45.154    (INFO)     Trx.Start: **** ConnSH637088337457512648System.Random
+06:15:45.154    (INFO)     Trx.Commit: **C** ConnSH637088337457512648System.Random
+06:15:46.154    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:46.154    (INFO)     Trx.Start: **** SvrProcess
+06:15:46.154    (INFO)     MConversionRate.GetRate: Not found - CurFrom=0, CurTo=100, 11/7/2019 12:00:00 AM, Type=115, Client=1000005, Org=1000008
+06:15:46.154    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:46.154    (INFO)     Trx.Start: **** SvrProcess
+06:15:46.154    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Customer) and product = 1004399 AND ASI 0
+06:15:46.154    (INFO)     Trx.Start: **** ConnSH637088337463405670System.Random
+06:15:46.154    (INFO)     Trx.Commit: **C** ConnSH637088337463405670System.Random
+06:15:47.154    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:47.154    (INFO)     Trx.Start: **** SvrProcess
+06:15:47.154    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+06:15:47.154    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:47.154    (INFO)     Trx.Start: **** SvrProcess
+06:15:48.154    (INFO)     ReCostingCalculation.DoIt: RE Cost Calculation Start for 11/8/2019 12:00:00 AM
+06:15:48.154    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+06:15:48.154    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:48.154    (INFO)     Trx.Start: **** SvrProcess
+06:15:48.154    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+06:15:48.154    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:48.154    (INFO)     Trx.Start: **** SvrProcess
+06:15:48.154    (INFO)     ReCostingCalculation.DoIt: Successfully Ended Cost Calculation 
+06:15:48.154    (INFO)     Trx.Commit: **C** SvrProcess
+06:15:48.154    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:34.163    (INFO)     Trx.Start: **** ConnSH637088337944537265System.Random
+06:16:34.163    (INFO)     Trx.Commit: **C** ConnSH637088337944537265System.Random
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+06:16:34.163    (INFO)     Trx.Start: **** ConnSH637088337949564174System.Random
+06:16:34.163    (INFO)     Trx.Commit: **C** ConnSH637088337949564174System.Random
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:35.163    (INFO)     Trx.Start: **** ConnSH637088337951968954System.Random
+06:16:35.163    (INFO)     Trx.Commit: **C** ConnSH637088337951968954System.Random
+06:16:35.163    (INFO)     Trx.Start: **** ConnSH637088337952409797System.Random
+06:16:35.163    (INFO)     Trx.Commit: **C** ConnSH637088337952409797System.Random
+06:16:35.163    (INFO)     MWFActivity.Run: MWFActivity[1233515,Node=(Start),State=ON,AD_User_ID=1005338,11/8/2019 12:46:34 PM]
+06:16:35.163    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080301, AD_Workflow_ID=118, WFState=OR]
+06:16:35.163    (INFO)     MWFActivity.PerformWork: MWFNode[191-(Start),Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+06:16:35.163    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080301, AD_Workflow_ID=118, WFState=OR]
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:35.163    (INFO)     Trx.Start: **** ConnSH637088337956498519System.Random
+06:16:35.163    (INFO)     Trx.Commit: **C** ConnSH637088337956498519System.Random
+06:16:35.163    (INFO)     Trx.Start: **** ConnSH637088337956788677System.Random
+06:16:35.163    (INFO)     Trx.Commit: **C** ConnSH637088337956788677System.Random
+06:16:35.163    (INFO)     MWFActivity.Run: MWFActivity[1233516,Node=(DocPrepare),State=ON,AD_User_ID=1005338,11/8/2019 12:46:35 PM]
+06:16:35.163    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080301, AD_Workflow_ID=118, WFState=OR]
+06:16:35.163    (INFO)     MWFActivity.PerformWork: MWFNode[193-(DocPrepare),Action=DocumentAction=PR] [VAdvantage.DataBase.Trx]
+06:16:35.163    (INFO)     Trx.Start: **** WF_1573217195718
+----------->     (WARNING)  MInvoice.GetPO: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:35.163    (INFO)     MInvoice.PrepareIt: MInvoice[1118691-1001173,GrandTotal=224]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/8/2019', 'MM-DD-YY')
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+06:16:35.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=304, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+06:16:35.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=304, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+06:16:35.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=304, CurTo=100, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637088337960091825System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637088337960091825System.Random
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:36.163    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+06:16:36.163    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #1
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637088337963464349System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637088337963464349System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+06:16:36.163    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 1
+06:16:36.163    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+06:16:36.163    (INFO)     Trx.Commit: **C** WF_1573217195718
+06:16:36.163    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080301, AD_Workflow_ID=118, WFState=OR]
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637088337966088983System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637088337966088983System.Random
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637088337966340261System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637088337966340261System.Random
+06:16:36.163    (INFO)     MWFActivity.Run: MWFActivity[1233517,Node=(DocComplete),State=ON,AD_User_ID=1005338,11/8/2019 12:46:36 PM]
+06:16:36.163    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080301, AD_Workflow_ID=118, WFState=OR]
+06:16:36.163    (INFO)     MWFActivity.PerformWork: MWFNode[194-(DocComplete),Action=DocumentAction=CO] [VAdvantage.DataBase.Trx]
+06:16:36.163    (INFO)     Trx.Start: **** WF_1573217196682
+----------->     (WARNING)  MInvoice.GetPO: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+----------->     (WARNING)  MInvoice.CompleteIt: TStart time of invoice completion : 11/8/2019 12:46:36 PM
+06:16:36.163    (INFO)     MInvoice.PrepareIt: MInvoice[1118691-1001173,GrandTotal=224]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/8/2019', 'MM-DD-YY')
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+06:16:36.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=304, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+06:16:36.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=304, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+06:16:36.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=304, CurTo=100, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637088337969098142System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637088337969098142System.Random
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:36.163    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+06:16:37.163    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #1
+06:16:37.163    (INFO)     Trx.Start: **** ConnSH637088337970633671System.Random
+06:16:37.163    (INFO)     Trx.Commit: **C** ConnSH637088337970633671System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+06:16:37.163    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 1
+06:16:37.163    (INFO)     MInvoice.CompleteIt: MInvoice[1118691-1001173,GrandTotal=224 (#1)]
+06:16:37.163    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor)
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:37.163    (INFO)     Trx.Start: **** ConnSH637088337972942842System.Random
+06:16:37.163    (INFO)     Trx.Commit: **C** ConnSH637088337972942842System.Random
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+06:16:38.163    (INFO)     Trx.Start: **** ConnSH637088337981364426System.Random
+06:16:38.163    (INFO)     Trx.Commit: **C** ConnSH637088337981364426System.Random
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:38.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=304, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+----------->     (WARNING)  MInvoice.Load: (rs) - 90: C_Invoice.AmtDimGrandTotal (System.Int32)
+06:16:38.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=304, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+06:16:38.163    (INFO)     MConversionRate.GetRate: Not found - CurFrom=100, CurTo=304, 11/8/2019 12:00:00 AM, Type=114, Client=1000005, Org=1000008
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_BIUserName
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_YellowfinRoles_ID
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_BIUser
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_IsLinkExistingUser
+----------->     (WARNING)  MUser.AfterSave: Aftersave start - 
+----------->     (WARNING)  MUser.AfterSave: Aftersave success - 
+----------->     (WARNING)  MUser.AfterSave: Aftersave createJasperUser - 
+06:16:39.163    (INFO)     CacheMgt.Reset: AD_User: #1 (1)
+----------->     (WARNING)  MInvoice.CompleteIt:  start at  11/8/2019 12:46:36 PM -  End at 11/8/2019 12:46:39 PM - 1001173
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+06:16:39.163    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+06:16:39.163    (INFO)     Trx.Commit: **C** WF_1573217196682
+06:16:40.164    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080301, AD_Workflow_ID=118, WFState=OR]
+06:16:48.164    (INFO)     Trx.Start: **** ConnSH637088338086258720System.Random
+06:16:48.164    (INFO)     Trx.Commit: **C** ConnSH637088338086258720System.Random

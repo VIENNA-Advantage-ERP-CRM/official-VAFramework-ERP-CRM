@@ -1,0 +1,31 @@
+*** 11/15/2019 11:01:01 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] => SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =1000178
+11:01:01.110    (INFO)     Trx.Start: **** ConnSH637094124615554342System.Random
+11:01:01.110    (INFO)     Trx.Commit: **C** ConnSH637094124615554342System.Random
+11:01:02.120    (INFO)     Trx.Start: **** ConnSH637094124626316619System.Random
+11:01:02.120    (INFO)     Trx.Commit: **C** ConnSH637094124626316619System.Random
+11:01:06.160    (INFO)     Trx.Start: **** ConnSH637094124662277953System.Random
+11:01:06.160    (INFO)     Trx.Commit: **C** ConnSH637094124662277953System.Random
+11:01:29.129    (INFO)     MTable.GetPO: Using GenericPO for Fact_Accumulation
+11:01:29.129    (INFO)     MChangeLog.FillChangeLog: #9
+11:01:39.139    (INFO)     Trx.Start: **** ConnSH637094124992908172System.Random
+11:01:39.139    (INFO)     Trx.Commit: **C** ConnSH637094124992908172System.Random
+11:01:51.151    (INFO)     Trx.Start: **** ConnSH637094125109998612System.Random
+11:01:51.151    (INFO)     Trx.Commit: **C** ConnSH637094125109998612System.Random
+11:01:51.151    (INFO)     FinBalance.UpdateBalance: C_AcctSchema_ID=1000006DateFrom=11/15/2019 12:00:00 AM
+11:01:51.151    (INFO)     Trx.Start: **** SvrProcess
+11:01:51.151    (INFO)     FinBalance.DeleteBalance: C_AcctSchema_ID=1000006,DateAcct=3/31/2019 12:00:00 AM #=2
+11:01:51.151    (INFO)     FinBalance.AddLog: 0 - 3/31/2019 12:00:00 AM - 2 - Deleted
+11:01:51.151    (INFO)     Trx.Commit: **C** SvrProcess
+11:16:47.164    (INFO)     Trx.Start: **** SvrProcess
+11:16:47.164    (INFO)     FinBalance.AddLog: 0 - 3/31/2019 12:00:00 AM - 18 - Inserts in MFactAccumulation[1000007,BalanceAccumulation=W,C_Calendar_ID=1000006]
+11:16:47.164    (INFO)     Trx.Commit: **C** SvrProcess
+11:16:47.164    (INFO)     FinBalance.UpdateBalance: 895 sec
+11:16:47.164    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:16:47.164    (INFO)     ReportCtl.Start: ProcessInfo[Update Accounting Balance,Process_ID=203,AD_PInstance_ID=1169270,ClassName=VAdvantage.Report.FinBalance,Error=False,Summary=#18]
+===========>     (SEVERE)   ReportCtl.StartStandardReport: No ReportEngine_N
+11:16:56.165    (INFO)     MSession.Logout: 06:46:22.31

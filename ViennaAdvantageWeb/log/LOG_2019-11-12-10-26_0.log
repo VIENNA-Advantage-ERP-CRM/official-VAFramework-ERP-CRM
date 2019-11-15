@@ -1,0 +1,66 @@
+*** 11/12/2019 10:40:01 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:40:01.401    (INFO)     Trx.Start: **** ConnSH637091520018018837System.Random
+10:40:01.401    (INFO)     Trx.Commit: **C** ConnSH637091520018018837System.Random
+10:40:04.404    (INFO)     Trx.Start: **** ConnSH637091520043512710System.Random
+10:40:04.404    (INFO)     Trx.Commit: **C** ConnSH637091520043512710System.Random
+10:40:07.407    (INFO)     Trx.Start: **** ConnSH637091520070655950System.Random
+10:40:07.407    (INFO)     Trx.Commit: **C** ConnSH637091520070655950System.Random
+10:40:07.407    (INFO)     Trx.Start: **** ConnSH637091520078845083System.Random
+10:40:07.407    (INFO)     Trx.Commit: **C** ConnSH637091520078845083System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON M_InOut M_InOut, C_BPartner bp ON bp.C_BPartner_ID=M_InOut.C_BPartner_ID
+
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON M_InOut M_InOut, C_BPartner bp ON bp.C_BPartner_ID=M_InOut.C_BPartner_ID
+
+10:40:19.401    (INFO)     Trx.Start: **** ConnSH637091520191070445System.Random
+10:40:19.401    (INFO)     Trx.Commit: **C** ConnSH637091520191070445System.Random
+10:40:19.401    (INFO)     MChangeLog.FillChangeLog: #9
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+10:40:20.402    (INFO)     Trx.Start: **** ConnSH637091520202186364System.Random
+10:40:20.402    (INFO)     Trx.Commit: **C** ConnSH637091520202186364System.Random
+10:40:20.402    (INFO)     Trx.Start: **** SvrProcess
+10:40:20.402    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000141,CostDistribution=Q,M_CostElement_ID=1000034,M_InOut_ID=1015103]
+10:40:20.402    (INFO)     Trx.Start: **** ConnSH637091520206506237System.Random
+10:40:20.402    (INFO)     Trx.Commit: **C** ConnSH637091520206506237System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+10:40:20.402    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 1
+10:40:20.402    (INFO)     Trx.Commit: **C** SvrProcess
+10:40:20.402    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+10:40:23.402    (INFO)     Trx.Start: **** ConnSH637091520231489045System.Random
+10:40:23.402    (INFO)     Trx.Commit: **C** ConnSH637091520231489045System.Random
+*** 11/12/2019 11:50:52 AM VAdvantage Log ***

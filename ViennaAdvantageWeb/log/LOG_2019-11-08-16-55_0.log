@@ -1,0 +1,504 @@
+*** 11/8/2019 5:10:26 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+05:10:26.102    (INFO)     Trx.Start: **** ConnSH637088298266459545System.Random
+05:10:26.102    (INFO)     Trx.Commit: **C** ConnSH637088298266459545System.Random
+05:10:28.102    (INFO)     Trx.Start: **** ConnSH637088298280909238System.Random
+05:10:28.102    (INFO)     Trx.Commit: **C** ConnSH637088298280909238System.Random
+05:10:31.103    (INFO)     Trx.Start: **** ConnSH637088298310699956System.Random
+05:10:31.103    (INFO)     Trx.Commit: **C** ConnSH637088298310699956System.Random
+05:10:31.103    (INFO)     Trx.Start: **** ConnSH637088298318510220System.Random
+05:10:31.103    (INFO)     Trx.Commit: **C** ConnSH637088298318510220System.Random
+05:10:35.103    (INFO)     Trx.Start: **** ConnSH637088298354036279System.Random
+05:10:35.103    (INFO)     Trx.Commit: **C** ConnSH637088298354036279System.Random
+05:10:38.103    (INFO)     Trx.Start: **** ConnSH637088298388580069System.Random
+05:10:38.103    (INFO)     Trx.Commit: **C** ConnSH637088298388580069System.Random
+05:10:38.103    (INFO)     MChangeLog.FillChangeLog: #9
+05:10:39.103    (INFO)     Trx.Start: **** SvrProcess
+05:10:39.103    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000136,CostDistribution=Q,M_CostElement_ID=1000056,M_InOut_ID=1015102]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:10:39.103    (INFO)     Trx.Start: **** ConnSH637088298394613491System.Random
+05:10:39.103    (INFO)     Trx.Commit: **C** ConnSH637088298394613491System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:10:39.103    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 1
+05:10:39.103    (INFO)     Trx.Commit: **C** SvrProcess
+05:10:39.103    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:10:42.104    (INFO)     Trx.Start: **** ConnSH637088298420887795System.Random
+05:10:42.104    (INFO)     Trx.Commit: **C** ConnSH637088298420887795System.Random
+----------->     (WARNING)  MLandedCost.BeforeSave: Error - * Not found * Product | Invoice | Invoice Line
+----------->     (WARNING)  MLandedCost.DataSavePO: beforeSave failed - MLandedCost[1000136,CostDistribution=I,M_CostElement_ID=1000056,M_InOut_ID=1015102]
+05:11:00.110    (INFO)     Trx.Start: **** ConnSH637088298608794082System.Random
+05:11:00.110    (INFO)     Trx.Commit: **C** ConnSH637088298608794082System.Random
+05:11:08.118    (INFO)     Trx.Start: **** GridDel637088298681352764
+----------->     (WARNING)  MLandedCost.DeleteRecord: Column not found - IsActive
+05:11:08.118    (INFO)     MLandedCost.DeleteRecord: True
+05:11:08.118    (INFO)     Trx.Commit: **C** GridDel637088298681352764
+05:13:25.132    (INFO)     Trx.Start: **** ConnSH637088300053729637System.Random
+05:13:25.132    (INFO)     Trx.Commit: **C** ConnSH637088300053729637System.Random
+05:13:26.132    (INFO)     Trx.Start: **** ConnSH637088300060759899System.Random
+05:13:26.132    (INFO)     Trx.Commit: **C** ConnSH637088300060759899System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON M_InOut M_InOut, C_BPartner bp ON bp.C_BPartner_ID=M_InOut.C_BPartner_ID
+
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON M_InOut M_InOut, C_BPartner bp ON bp.C_BPartner_ID=M_InOut.C_BPartner_ID
+
+05:13:51.135    (INFO)     Trx.Start: **** ConnSH637088300311584599System.Random
+05:13:51.135    (INFO)     Trx.Commit: **C** ConnSH637088300311584599System.Random
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:13:54.135    (INFO)     Trx.Start: **** ConnSH637088300349243893System.Random
+05:13:54.135    (INFO)     Trx.Commit: **C** ConnSH637088300349243893System.Random
+05:13:54.135    (INFO)     Trx.Start: **** SvrProcess
+05:13:54.135    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=C,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:13:55.135    (INFO)     Trx.Commit: **C** SvrProcess
+05:13:55.135    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:13:56.135    (INFO)     Trx.Start: **** ConnSH637088300369354220System.Random
+05:13:56.135    (INFO)     Trx.Commit: **C** ConnSH637088300369354220System.Random
+05:14:10.141    (INFO)     Trx.Start: **** ConnSH637088300509293424System.Random
+05:14:10.141    (INFO)     Trx.Commit: **C** ConnSH637088300509293424System.Random
+05:14:10.141    (INFO)     Trx.Start: **** SvrProcess
+05:14:10.141    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=C,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:14:10.141    (INFO)     Trx.Commit: **C** SvrProcess
+05:14:11.141    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:14:24.142    (INFO)     Trx.Start: **** ConnSH637088300643330687System.Random
+05:14:24.142    (INFO)     Trx.Commit: **C** ConnSH637088300643330687System.Random
+05:14:24.142    (INFO)     Trx.Start: **** SvrProcess
+05:14:24.142    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=C,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:14:28.142    (INFO)     Trx.Commit: **C** SvrProcess
+05:14:28.142    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:14:37.143    (INFO)     Trx.Start: **** ConnSH637088300772635496System.Random
+05:14:37.143    (INFO)     Trx.Commit: **C** ConnSH637088300772635496System.Random
+05:14:37.143    (INFO)     Trx.Start: **** SvrProcess
+05:14:37.143    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=Q,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:14:41.144    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #1
+05:14:41.144    (INFO)     Trx.Start: **** ConnSH637088300815858303System.Random
+05:14:41.144    (INFO)     Trx.Commit: **C** ConnSH637088300815858303System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:14:41.144    (INFO)     Trx.Start: **** ConnSH637088300816268312System.Random
+05:14:41.144    (INFO)     Trx.Commit: **C** ConnSH637088300816268312System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:14:41.144    (INFO)     Trx.Start: **** ConnSH637088300816668792System.Random
+05:14:41.144    (INFO)     Trx.Commit: **C** ConnSH637088300816668792System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:14:41.144    (INFO)     Trx.Start: **** ConnSH637088300816984574System.Random
+05:14:41.144    (INFO)     Trx.Commit: **C** ConnSH637088300816984574System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:14:41.144    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 4
+05:14:41.144    (INFO)     Trx.Commit: **C** SvrProcess
+05:14:41.144    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:14:43.144    (INFO)     Trx.Start: **** ConnSH637088300839259246System.Random
+05:14:43.144    (INFO)     Trx.Commit: **C** ConnSH637088300839259246System.Random
+05:14:46.144    (INFO)     Trx.Start: **** ConnSH637088300868063280System.Random
+05:14:46.144    (INFO)     Trx.Commit: **C** ConnSH637088300868063280System.Random
+05:16:23.162    (INFO)     Trx.Start: **** ConnSH637088301832656057System.Random
+05:16:23.162    (INFO)     Trx.Commit: **C** ConnSH637088301832656057System.Random
+05:16:24.162    (INFO)     Trx.Start: **** ConnSH637088301842130833System.Random
+05:16:24.162    (INFO)     Trx.Commit: **C** ConnSH637088301842130833System.Random
+05:16:26.162    (INFO)     Trx.Start: **** ConnSH637088301866433508System.Random
+05:16:26.162    (INFO)     Trx.Commit: **C** ConnSH637088301866433508System.Random
+05:16:27.162    (INFO)     Trx.Start: **** ConnSH637088301879269805System.Random
+05:16:27.162    (INFO)     Trx.Commit: **C** ConnSH637088301879269805System.Random
+05:16:31.163    (INFO)     Trx.Start: **** ConnSH637088301916910638System.Random
+05:16:31.163    (INFO)     Trx.Commit: **C** ConnSH637088301916910638System.Random
+05:16:48.164    (INFO)     Trx.Start: **** ConnSH637088302081441499System.Random
+05:16:48.164    (INFO)     Trx.Commit: **C** ConnSH637088302081441499System.Random
+05:17:00.170    (INFO)     Trx.Start: **** ConnSH637088302202093999System.Random
+05:17:00.170    (INFO)     Trx.Commit: **C** ConnSH637088302202093999System.Random
+05:17:17.171    (INFO)     Trx.Start: **** ConnSH637088302370599238System.Random
+05:17:17.171    (INFO)     Trx.Commit: **C** ConnSH637088302370599238System.Random
+05:17:17.171    (INFO)     Trx.Start: **** ConnSH637088302376833996System.Random
+05:17:17.171    (INFO)     Trx.Commit: **C** ConnSH637088302376833996System.Random
+05:17:17.171    (INFO)     Trx.Start: **** ConnSH637088302378912214System.Random
+05:17:17.171    (INFO)     Trx.Commit: **C** ConnSH637088302378912214System.Random
+05:17:17.171    (INFO)     Trx.Start: **** ConnSH637088302379372215System.Random
+05:17:17.171    (INFO)     Trx.Commit: **C** ConnSH637088302379372215System.Random
+05:17:17.171    (INFO)     MWFActivity.Run: MWFActivity[1233512,Node=(Start),State=ON,AD_User_ID=1005338,11/8/2019 11:47:17 AM]
+05:17:17.171    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080300, AD_Workflow_ID=118, WFState=OR]
+05:17:18.171    (INFO)     MWFActivity.PerformWork: MWFNode[191-(Start),Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+05:17:18.171    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080300, AD_Workflow_ID=118, WFState=OR]
+05:17:18.171    (INFO)     Trx.Start: **** ConnSH637088302383567625System.Random
+05:17:18.171    (INFO)     Trx.Commit: **C** ConnSH637088302383567625System.Random
+05:17:18.171    (INFO)     Trx.Start: **** ConnSH637088302383917633System.Random
+05:17:18.171    (INFO)     Trx.Commit: **C** ConnSH637088302383917633System.Random
+05:17:18.171    (INFO)     MWFActivity.Run: MWFActivity[1233513,Node=(DocPrepare),State=ON,AD_User_ID=1005338,11/8/2019 11:47:18 AM]
+05:17:18.171    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080300, AD_Workflow_ID=118, WFState=OR]
+05:17:18.171    (INFO)     MWFActivity.PerformWork: MWFNode[193-(DocPrepare),Action=DocumentAction=PR] [VAdvantage.DataBase.Trx]
+05:17:18.171    (INFO)     Trx.Start: **** WF_1573213638432
+05:17:18.171    (INFO)     MInvoice.PrepareIt: MInvoice[1118692-1001174,GrandTotal=565.60]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/8/2019', 'MM-DD-YY')
+05:17:19.171    (INFO)     Trx.Start: **** ConnSH637088302394888300System.Random
+05:17:19.171    (INFO)     Trx.Commit: **C** ConnSH637088302394888300System.Random
+05:17:19.171    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+05:17:35.173    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+05:17:35.173    (INFO)     Trx.Commit: **C** WF_1573213638432
+05:17:35.173    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080300, AD_Workflow_ID=118, WFState=OR]
+05:17:35.173    (INFO)     Trx.Start: **** ConnSH637088302553099539System.Random
+05:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637088302553099539System.Random
+05:17:35.173    (INFO)     Trx.Start: **** ConnSH637088302553469604System.Random
+05:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637088302553469604System.Random
+05:17:35.173    (INFO)     MWFActivity.Run: MWFActivity[1233514,Node=(DocComplete),State=ON,AD_User_ID=1005338,11/8/2019 11:47:35 AM]
+05:17:35.173    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080300, AD_Workflow_ID=118, WFState=OR]
+05:17:35.173    (INFO)     MWFActivity.PerformWork: MWFNode[194-(DocComplete),Action=DocumentAction=CO] [VAdvantage.DataBase.Trx]
+05:17:35.173    (INFO)     Trx.Start: **** WF_1573213655390
+----------->     (WARNING)  MInvoice.CompleteIt: TStart time of invoice completion : 11/8/2019 11:47:35 AM
+05:17:35.173    (INFO)     MInvoice.PrepareIt: MInvoice[1118692-1001174,GrandTotal=565.60]
+===========>     (SEVERE)   MRole.AddAccessSQL: TableName not correctly parsed - TableNameIn=C_NonBusinessDay - VAdvantage.Classes.AccessSqlParser - #1 C_NONBUSINESSDAY
+ = SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=1000006 AND AD_Org_ID IN (0, 1000008) AND DATE1=TO_DATE('11/8/2019', 'MM-DD-YY')
+05:17:35.173    (INFO)     Trx.Start: **** ConnSH637088302559703241System.Random
+05:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637088302559703241System.Random
+05:17:36.173    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+05:17:38.173    (INFO)     MInvoice.ApproveIt: MInvoice[1118692-1001174,GrandTotal=565.60 (#4)]
+05:17:38.173    (INFO)     MInvoice.CompleteIt: MInvoice[1118692-1001174,GrandTotal=565.60 (#4)]
+05:17:38.173    (INFO)     Trx.Start: **** ConnSH637088302586374398System.Random
+05:17:38.173    (INFO)     Trx.Commit: **C** ConnSH637088302586374398System.Random
+05:17:38.173    (INFO)     Trx.ExecuteDataSet: Trx Dataset WF_1573213655390 12
+05:17:38.173    (INFO)     Trx.ExecuteQuery: Trx non-query WF_1573213655390 12
+05:17:38.173    (INFO)     Trx.Start: **** ConnSH637088302589338291System.Random
+05:17:38.173    (INFO)     Trx.Commit: **C** ConnSH637088302589338291System.Random
+05:17:39.173    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor) and product = 1004475 AND ASI 0
+05:17:39.173    (INFO)     Trx.Start: **** ConnSH637088302594863431System.Random
+05:17:39.173    (INFO)     Trx.Commit: **C** ConnSH637088302594863431System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+05:17:40.174    (INFO)     Trx.Start: **** ConnSH637088302602514261System.Random
+05:17:40.174    (INFO)     Trx.Commit: **C** ConnSH637088302602514261System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+05:17:40.174    (INFO)     Trx.Start: **** ConnSH637088302608169020System.Random
+05:17:40.174    (INFO)     Trx.Commit: **C** ConnSH637088302608169020System.Random
+05:17:40.174    (INFO)     Trx.Start: **** ConnSH637088302609671172System.Random
+05:17:40.174    (INFO)     Trx.Commit: **C** ConnSH637088302609671172System.Random
+05:17:41.174    (INFO)     Trx.Start: **** ConnSH637088302611140712System.Random
+05:17:41.174    (INFO)     Trx.Commit: **C** ConnSH637088302611140712System.Random
+05:17:41.174    (INFO)     Trx.ExecuteDataSet: Trx Dataset WF_1573213655390 12
+05:17:41.174    (INFO)     Trx.ExecuteQuery: Trx non-query WF_1573213655390 12
+05:17:41.174    (INFO)     Trx.Start: **** ConnSH637088302611801012System.Random
+05:17:41.174    (INFO)     Trx.Commit: **C** ConnSH637088302611801012System.Random
+05:17:41.174    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor) and product = 1004474 AND ASI 0
+05:17:41.174    (INFO)     Trx.Start: **** ConnSH637088302613787707System.Random
+05:17:41.174    (INFO)     Trx.Commit: **C** ConnSH637088302613787707System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+05:17:41.174    (INFO)     Trx.Start: **** ConnSH637088302617028520System.Random
+05:17:41.174    (INFO)     Trx.Commit: **C** ConnSH637088302617028520System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+05:17:42.174    (INFO)     Trx.Start: **** ConnSH637088302622305503System.Random
+05:17:42.174    (INFO)     Trx.Commit: **C** ConnSH637088302622305503System.Random
+05:17:42.174    (INFO)     Trx.Start: **** ConnSH637088302623526081System.Random
+05:17:42.174    (INFO)     Trx.Commit: **C** ConnSH637088302623526081System.Random
+05:17:42.174    (INFO)     Trx.Start: **** ConnSH637088302624372143System.Random
+05:17:42.174    (INFO)     Trx.Commit: **C** ConnSH637088302624372143System.Random
+05:17:42.174    (INFO)     Trx.ExecuteDataSet: Trx Dataset WF_1573213655390 12
+05:17:42.174    (INFO)     Trx.ExecuteQuery: Trx non-query WF_1573213655390 12
+05:17:42.174    (INFO)     Trx.Start: **** ConnSH637088302625192201System.Random
+05:17:42.174    (INFO)     Trx.Commit: **C** ConnSH637088302625192201System.Random
+05:17:42.174    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Material Receipt and product = 1004473 AND ASI 0
+05:17:42.174    (INFO)     Trx.Start: **** ConnSH637088302627055340System.Random
+05:17:42.174    (INFO)     Trx.Commit: **C** ConnSH637088302627055340System.Random
+05:17:42.174    (INFO)     Trx.Start: **** ConnSH637088302629227064System.Random
+05:17:42.174    (INFO)     Trx.Commit: **C** ConnSH637088302629227064System.Random
+05:17:42.174    (INFO)     Trx.Start: **** ConnSH637088302629867225System.Random
+05:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637088302629867225System.Random
+05:17:43.174    (INFO)     Trx.Start: **** ConnSH637088302630238051System.Random
+05:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637088302630238051System.Random
+05:17:43.174    (INFO)     Trx.Start: **** ConnSH637088302630597968System.Random
+05:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637088302630597968System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+05:17:43.174    (INFO)     Trx.Start: **** ConnSH637088302631223884System.Random
+05:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637088302631223884System.Random
+----------->     (WARNING)  MCostDetail.GetA_Asset_ID: Column not found - A_Asset_ID
+05:17:43.174    (INFO)     Trx.Start: **** ConnSH637088302636316514System.Random
+05:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637088302636316514System.Random
+05:17:43.174    (INFO)     Trx.Start: **** ConnSH637088302637153844System.Random
+05:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637088302637153844System.Random
+05:17:43.174    (INFO)     Trx.ExecuteDataSet: Trx Dataset WF_1573213655390 12
+05:17:43.174    (INFO)     Trx.ExecuteQuery: Trx non-query WF_1573213655390 12
+05:17:43.174    (INFO)     Trx.Start: **** ConnSH637088302638012987System.Random
+05:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637088302638012987System.Random
+05:17:43.174    (INFO)     MCostQueue.CreateProductCostsDetails: costing Calculation Start for window = Invoice(Vendor) and product = 1004398 AND ASI 1008392
+05:17:44.174    (INFO)     Trx.Start: **** ConnSH637088302640186514System.Random
+05:17:44.174    (INFO)     Trx.Commit: **C** ConnSH637088302640186514System.Random
+05:17:44.174    (INFO)     Trx.Start: **** ConnSH637088302644000173System.Random
+05:17:44.174    (INFO)     Trx.Commit: **C** ConnSH637088302644000173System.Random
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_BIUserName
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_YellowfinRoles_ID
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_BIUser
+----------->     (WARNING)  MUser.BeforeSave: Column not found - VA037_IsLinkExistingUser
+----------->     (WARNING)  MUser.AfterSave: Aftersave start - 
+----------->     (WARNING)  MUser.AfterSave: Aftersave success - 
+----------->     (WARNING)  MUser.AfterSave: Aftersave createJasperUser - 
+05:17:45.174    (INFO)     CacheMgt.Reset: AD_User: #1 (1)
+----------->     (WARNING)  MInvoice.CompleteIt:  start at  11/8/2019 11:47:35 AM -  End at 11/8/2019 11:47:45 AM - 1001174
+05:17:46.174    (INFO)     CacheMgt.Reset: C_Invoice: #1 (0)
+05:17:46.174    (INFO)     Trx.Commit: **C** WF_1573213655390
+05:17:46.174    (INFO)     MWFProcess.CheckActivities: MWFProcess[1080300, AD_Workflow_ID=118, WFState=OR]
+05:17:54.175    (INFO)     Trx.Start: **** ConnSH637088302741630573System.Random
+05:17:54.175    (INFO)     Trx.Commit: **C** ConnSH637088302741630573System.Random
+05:17:54.175    (INFO)     Trx.Start: **** ConnSH637088302748410691System.Random
+05:17:54.175    (INFO)     Trx.Commit: **C** ConnSH637088302748410691System.Random
+05:17:55.175    (INFO)     Trx.Start: **** ConnSH637088302755791273System.Random
+05:17:55.175    (INFO)     Trx.Commit: **C** ConnSH637088302755791273System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON   C_Invoice C_Invoice  
+INNER JOIN C_DocType C_DocType
+     ON C_Invoice.C_DocType_ID=C_DocType.C_DocType_ID
+LEFT OUTER JOIN C_InvoicePaySchedule C_InvoicePaySchedule
+     ON (C_Invoice.C_Invoice_ID=C_InvoicePaySchedule.C_Invoice_ID
+AND C_InvoicePaySchedule.IsValid                = 'Y')
+
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON   C_Invoice C_Invoice  
+INNER JOIN C_DocType C_DocType
+     ON C_Invoice.C_DocType_ID=C_DocType.C_DocType_ID
+LEFT OUTER JOIN C_InvoicePaySchedule C_InvoicePaySchedule
+     ON (C_Invoice.C_Invoice_ID=C_InvoicePaySchedule.C_Invoice_ID
+AND C_InvoicePaySchedule.IsValid                = 'Y')
+
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:18:08.188    (INFO)     Trx.Start: **** ConnSH637088302886642455System.Random
+05:18:08.188    (INFO)     Trx.Commit: **C** ConnSH637088302886642455System.Random
+05:18:08.188    (INFO)     Trx.Start: **** SvrProcess
+05:18:08.188    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=I,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:18:10.181    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #4
+05:18:10.181    (INFO)     Trx.Start: **** ConnSH637088302907290679System.Random
+05:18:10.181    (INFO)     Trx.Commit: **C** ConnSH637088302907290679System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:18:10.181    (INFO)     Trx.Start: **** ConnSH637088302907621723System.Random
+05:18:10.181    (INFO)     Trx.Commit: **C** ConnSH637088302907621723System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:18:10.181    (INFO)     Trx.Start: **** ConnSH637088302907927765System.Random
+05:18:10.181    (INFO)     Trx.Commit: **C** ConnSH637088302907927765System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:18:10.181    (INFO)     Trx.Start: **** ConnSH637088302908260379System.Random
+05:18:10.181    (INFO)     Trx.Commit: **C** ConnSH637088302908260379System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:18:10.181    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 4
+05:18:10.181    (INFO)     Trx.Commit: **C** SvrProcess
+05:18:10.181    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:18:13.181    (INFO)     Trx.Start: **** ConnSH637088302930878498System.Random
+05:18:13.181    (INFO)     Trx.Commit: **C** ConnSH637088302930878498System.Random
+05:18:25.182    (INFO)     Trx.Start: **** ConnSH637088303050382159System.Random
+05:18:25.182    (INFO)     Trx.Commit: **C** ConnSH637088303050382159System.Random
+05:24:18.241    (INFO)     Trx.Start: **** ConnSH637088306581027525System.Random
+05:24:18.241    (INFO)     Trx.Commit: **C** ConnSH637088306581027525System.Random
+05:24:18.241    (INFO)     Trx.Start: **** ConnSH637088306587407696System.Random
+05:24:18.241    (INFO)     Trx.Commit: **C** ConnSH637088306587407696System.Random
+05:24:19.241    (INFO)     Trx.Start: **** ConnSH637088306598961281System.Random
+05:24:19.241    (INFO)     Trx.Commit: **C** ConnSH637088306598961281System.Random
+05:24:22.242    (INFO)     Trx.Start: **** ConnSH637088306625964010System.Random
+05:24:22.242    (INFO)     Trx.Commit: **C** ConnSH637088306625964010System.Random
+05:24:22.242    (INFO)     Trx.Start: **** SvrProcess
+05:24:22.242    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=I,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:24:24.242    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #4
+05:24:24.242    (INFO)     Trx.Start: **** ConnSH637088306643973079System.Random
+05:24:24.242    (INFO)     Trx.Commit: **C** ConnSH637088306643973079System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:24:24.242    (INFO)     Trx.Start: **** ConnSH637088306645213201System.Random
+05:24:24.242    (INFO)     Trx.Commit: **C** ConnSH637088306645213201System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:24:24.242    (INFO)     Trx.Start: **** ConnSH637088306645633097System.Random
+05:24:24.242    (INFO)     Trx.Commit: **C** ConnSH637088306645633097System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:24:24.242    (INFO)     Trx.Start: **** ConnSH637088306646013406System.Random
+05:24:24.242    (INFO)     Trx.Commit: **C** ConnSH637088306646013406System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:24:24.242    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 4
+05:24:24.242    (INFO)     Trx.Commit: **C** SvrProcess
+05:24:24.242    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:24:26.242    (INFO)     Trx.Start: **** ConnSH637088306660221565System.Random
+05:24:26.242    (INFO)     Trx.Commit: **C** ConnSH637088306660221565System.Random
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:39:52.395    (INFO)     Trx.Start: **** ConnSH637088315927045128System.Random
+05:39:52.395    (INFO)     Trx.Commit: **C** ConnSH637088315927045128System.Random
+05:39:52.395    (INFO)     Trx.Start: **** SvrProcess
+05:39:52.395    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=Q,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:39:54.395    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #4
+05:39:54.395    (INFO)     Trx.Start: **** ConnSH637088315944383910System.Random
+05:39:54.395    (INFO)     Trx.Commit: **C** ConnSH637088315944383910System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:39:54.395    (INFO)     Trx.Start: **** ConnSH637088315945153919System.Random
+05:39:54.395    (INFO)     Trx.Commit: **C** ConnSH637088315945153919System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:39:54.395    (INFO)     Trx.Start: **** ConnSH637088315945483941System.Random
+05:39:54.395    (INFO)     Trx.Commit: **C** ConnSH637088315945483941System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:39:54.395    (INFO)     Trx.Start: **** ConnSH637088315945866458System.Random
+05:39:54.395    (INFO)     Trx.Commit: **C** ConnSH637088315945866458System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:39:54.395    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 4
+05:39:54.395    (INFO)     Trx.Commit: **C** SvrProcess
+05:39:54.395    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:39:56.395    (INFO)     Trx.Start: **** ConnSH637088315965016199System.Random
+05:39:56.395    (INFO)     Trx.Commit: **C** ConnSH637088315965016199System.Random
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:41:27.412    (INFO)     Trx.Start: **** ConnSH637088316871141012System.Random
+05:41:27.412    (INFO)     Trx.Commit: **C** ConnSH637088316871141012System.Random
+05:41:27.412    (INFO)     Trx.Start: **** SvrProcess
+05:41:27.412    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=L,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:41:28.412    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #4
+05:41:28.412    (INFO)     Trx.Start: **** ConnSH637088316889924919System.Random
+05:41:29.412    (INFO)     Trx.Commit: **C** ConnSH637088316889924919System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:41:29.412    (INFO)     Trx.Start: **** ConnSH637088316890704933System.Random
+05:41:29.412    (INFO)     Trx.Commit: **C** ConnSH637088316890704933System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:41:29.412    (INFO)     Trx.Start: **** ConnSH637088316891034938System.Random
+05:41:29.412    (INFO)     Trx.Commit: **C** ConnSH637088316891034938System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:41:29.412    (INFO)     Trx.Start: **** ConnSH637088316891355015System.Random
+05:41:29.412    (INFO)     Trx.Commit: **C** ConnSH637088316891355015System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:41:29.412    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 4
+05:41:29.412    (INFO)     Trx.Commit: **C** SvrProcess
+05:41:29.412    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:42:20.422    (INFO)     Trx.Start: **** ConnSH637088317400596602System.Random
+05:42:20.422    (INFO)     Trx.Commit: **C** ConnSH637088317400596602System.Random
+05:42:20.422    (INFO)     Trx.Start: **** SvrProcess
+05:42:20.422    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=L,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:42:22.422    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #4
+05:42:22.422    (INFO)     Trx.Start: **** ConnSH637088317424334735System.Random
+05:42:22.422    (INFO)     Trx.Commit: **C** ConnSH637088317424334735System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:42:22.422    (INFO)     Trx.Start: **** ConnSH637088317424734740System.Random
+05:42:22.422    (INFO)     Trx.Commit: **C** ConnSH637088317424734740System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:42:22.422    (INFO)     Trx.Start: **** ConnSH637088317425044801System.Random
+05:42:22.422    (INFO)     Trx.Commit: **C** ConnSH637088317425044801System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:42:22.422    (INFO)     Trx.Start: **** ConnSH637088317425354810System.Random
+05:42:22.422    (INFO)     Trx.Commit: **C** ConnSH637088317425354810System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:42:22.422    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 4
+05:42:22.422    (INFO)     Trx.Commit: **C** SvrProcess
+05:42:22.422    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:42:32.423    (INFO)     Trx.Start: **** ConnSH637088317524543350System.Random
+05:42:32.423    (INFO)     Trx.Commit: **C** ConnSH637088317524543350System.Random
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:43:20.432    (INFO)     Trx.Start: **** ConnSH637088318009784231System.Random
+05:43:20.432    (INFO)     Trx.Commit: **C** ConnSH637088318009784231System.Random
+05:43:21.432    (INFO)     Trx.Start: **** SvrProcess
+05:43:21.432    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=V,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:43:21.432    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #4
+05:43:21.432    (INFO)     Trx.Commit: **C** SvrProcess
+05:43:21.432    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:43:33.433    (INFO)     Trx.Start: **** ConnSH637088318139423708System.Random
+05:43:33.433    (INFO)     Trx.Commit: **C** ConnSH637088318139423708System.Random
+05:43:33.433    (INFO)     Trx.Start: **** SvrProcess
+05:43:33.433    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=W,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:43:34.433    (INFO)     Trx.Commit: **C** SvrProcess
+05:43:34.433    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:43:52.435    (INFO)     Trx.Start: **** ConnSH637088318325488854System.Random
+05:43:52.435    (INFO)     Trx.Commit: **C** ConnSH637088318325488854System.Random
+05:43:52.435    (INFO)     Trx.Start: **** SvrProcess
+05:43:52.435    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000137,CostDistribution=I,M_CostElement_ID=1000056,M_InOut_ID=1015113]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:43:53.435    (INFO)     Trx.Start: **** ConnSH637088318330344139System.Random
+05:43:53.435    (INFO)     Trx.Commit: **C** ConnSH637088318330344139System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:43:53.435    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 1
+05:43:53.435    (INFO)     Trx.Commit: **C** SvrProcess
+05:43:53.435    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:43:54.435    (INFO)     Trx.Start: **** ConnSH637088318348162084System.Random
+05:43:54.435    (INFO)     Trx.Commit: **C** ConnSH637088318348162084System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON   C_Invoice C_Invoice  
+INNER JOIN C_DocType C_DocType
+     ON C_Invoice.C_DocType_ID=C_DocType.C_DocType_ID
+LEFT OUTER JOIN C_InvoicePaySchedule C_InvoicePaySchedule
+     ON (C_Invoice.C_Invoice_ID=C_InvoicePaySchedule.C_Invoice_ID
+AND C_InvoicePaySchedule.IsValid                = 'Y')
+
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON   C_Invoice C_Invoice  
+INNER JOIN C_DocType C_DocType
+     ON C_Invoice.C_DocType_ID=C_DocType.C_DocType_ID
+LEFT OUTER JOIN C_InvoicePaySchedule C_InvoicePaySchedule
+     ON (C_Invoice.C_Invoice_ID=C_InvoicePaySchedule.C_Invoice_ID
+AND C_InvoicePaySchedule.IsValid                = 'Y')
+
+05:44:19.441    (INFO)     Trx.Start: **** ConnSH637088318593564415System.Random
+05:44:19.441    (INFO)     Trx.Commit: **C** ConnSH637088318593564415System.Random
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:44:25.442    (INFO)     Trx.Start: **** ConnSH637088318655707664System.Random
+05:44:25.442    (INFO)     Trx.Commit: **C** ConnSH637088318655707664System.Random
+05:44:25.442    (INFO)     Trx.Start: **** SvrProcess
+05:44:25.442    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000138,CostDistribution=I,M_CostElement_ID=1000034]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:44:25.442    (INFO)     MInvoiceLine.AllocateLandedCosts: Deleted #1
+05:44:25.442    (INFO)     Trx.Commit: **C** SvrProcess
+05:44:25.442    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:44:34.443    (INFO)     Trx.Start: **** ConnSH637088318742844629System.Random
+05:44:34.443    (INFO)     Trx.Commit: **C** ConnSH637088318742844629System.Random
+05:44:34.443    (INFO)     Trx.Start: **** SvrProcess
+05:44:34.443    (INFO)     LandedCostDistribute.DoIt: MLandedCost[1000138,CostDistribution=I,M_CostElement_ID=1000056]
+----------->     (WARNING)  MInvoiceLine.Load: (rs) - 72: C_InvoiceLine.AmtDimLineTotalAmt (System.Int32)
+05:44:34.443    (INFO)     Trx.Start: **** ConnSH637088318745072480System.Random
+05:44:34.443    (INFO)     Trx.Commit: **C** ConnSH637088318745072480System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:44:34.443    (INFO)     Trx.Start: **** ConnSH637088318745385693System.Random
+05:44:34.443    (INFO)     Trx.Commit: **C** ConnSH637088318745385693System.Random
+----------->     (WARNING)  MLandedCostAllocation.AllocateLandedCosts: Column not found - IsActive
+05:44:34.443    (INFO)     MInvoiceLine.AllocateLandedCosts: Inserted 2
+05:44:34.443    (INFO)     Trx.Commit: **C** SvrProcess
+05:44:34.443    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:44:36.443    (INFO)     Trx.Start: **** ConnSH637088318761547168System.Random
+05:44:36.443    (INFO)     Trx.Commit: **C** ConnSH637088318761547168System.Random
+05:45:03.453    (INFO)     Trx.Start: **** ConnSH637088319037391833System.Random
+05:45:03.453    (INFO)     Trx.Commit: **C** ConnSH637088319037391833System.Random
+05:45:05.455    (INFO)     Trx.Start: **** ConnSH637088319054036768System.Random
+05:45:05.455    (INFO)     Trx.Commit: **C** ConnSH637088319054036768System.Random
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+05:46:26.462    (INFO)     Trx.Start: **** ConnSH637088319862928750System.Random
+05:46:26.462    (INFO)     Trx.Commit: **C** ConnSH637088319862928750System.Random
+05:49:17.491    (INFO)     Trx.Start: **** GridDel637088321574084015
+----------->     (WARNING)  MLandedCost.DeleteRecord: Column not found - IsActive
+05:49:17.491    (INFO)     MLandedCost.DeleteRecord: True
+05:49:17.491    (INFO)     Trx.Commit: **C** GridDel637088321574084015
+----------->     (WARNING)  MLandedCost.DataSavePO: Column not found - IsActive
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON M_InOut M_InOut, C_BPartner bp ON bp.C_BPartner_ID=M_InOut.C_BPartner_ID
+
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON M_InOut M_InOut, C_BPartner bp ON bp.C_BPartner_ID=M_InOut.C_BPartner_ID
+
+*** 11/8/2019 6:06:19 PM VAdvantage Log ***
