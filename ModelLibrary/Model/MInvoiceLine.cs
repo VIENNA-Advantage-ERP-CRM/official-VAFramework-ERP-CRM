@@ -3738,7 +3738,7 @@ namespace VAdvantage.Model
                     }
                 }
 
-                
+
                 // Change by mohit Asked by ravikant 21/03/2016
                 //if (!_IsSOTrx)
                 //{
@@ -3802,7 +3802,7 @@ namespace VAdvantage.Model
                     {
                         tax = MInvoiceTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
-                        {                           
+                        {
                             if (!tax.CalculateSurchargeFromLines())
                                 return false;
                             if (!tax.Save(Get_TrxName()))
@@ -3952,7 +3952,7 @@ namespace VAdvantage.Model
 
             if (IsTaxIncluded())
                 sql = "UPDATE C_Invoice i "
-                    + "SET GrandTotal=TotalLines "                    
+                    + "SET GrandTotal=TotalLines "
                     + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             else
                 sql = "UPDATE C_Invoice i "
@@ -4121,9 +4121,26 @@ namespace VAdvantage.Model
                             decimal mrPrice = Env.ZERO;
                             List<DataRow> dr = new List<DataRow>();
 
-                            qry.Append(@"SELECT il.M_Product_ID, il.M_AttributeSetInstance_ID, sum(mi.Qty) as Qty, SUM(mi.Qty * il.PriceActual) AS LineNetAmt, io.M_Warehouse_ID
+                            // now in landed cost distribution, consider "tax amt" and "surcharge amt" based on setting applicable on tax rate
+                            qry.Append(@"SELECT il.M_Product_ID, il.M_AttributeSetInstance_ID, sum(mi.Qty) as Qty, ");
+                            //SUM(mi.Qty * il.PriceActual) AS LineNetAmt , 
+                            qry.Append(@" SUM(mi.Qty *
+                                                CASE
+                                                WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'Y'
+                                                AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'Y'
+                                                THEN ROUND((il.taxbaseamt + il.taxamt + il.surchargeamt) / il.qtyinvoiced , 4)
+                                                WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'N'
+                                                AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'Y'
+                                                THEN ROUND((il.taxbaseamt + il.taxamt) / il.qtyinvoiced , 4)
+                                                WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'Y'
+                                                AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'N'
+                                                THEN ROUND((il.taxbaseamt + il.surchargeamt) / il.qtyinvoiced, 4)
+                                                ELSE ROUND(il.taxbaseamt  / il.qtyinvoiced, 4)
+                                              END) AS LineNetAmt , io.M_Warehouse_ID
                             FROM C_InvoiceLine il INNER JOIN M_Matchinv mi ON Mi.C_Invoiceline_ID = Il.C_Invoiceline_ID INNER JOIN M_InoutLine iol ON iol.M_InoutLine_ID = mi.M_InoutLine_ID
-                            INNER JOIN M_InOut io ON io.M_InOut_ID = iol.M_InOut_ID INNER JOIN M_Warehouse wh ON wh.M_Warehouse_ID = io.M_Warehouse_ID
+                            INNER JOIN M_InOut io ON io.M_InOut_ID = iol.M_InOut_ID INNER JOIN M_Warehouse wh ON wh.M_Warehouse_ID = io.M_Warehouse_ID 
+                            INNER JOIN c_tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID 
+                            LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID 
                             WHERE il.C_Invoice_ID = " + lc.GetRef_Invoice_ID());
 
                             //	Single Invoice Line
@@ -4142,7 +4159,8 @@ namespace VAdvantage.Model
                                 qry.Append(" AND il.M_AttributeSetInstance_ID = " + lc.GetM_AttributeSetInstance_ID());
                             }
 
-                            qry.Append(" GROUP BY il.M_Product_ID, il.M_AttributeSetInstance_ID, io.M_Warehouse_ID");
+                            qry.Append(@" GROUP BY il.M_Product_ID, il.M_AttributeSetInstance_ID, io.M_Warehouse_ID 
+                                        ,  il.taxbaseamt , il.taxamt , il.surchargeamt , C_SurChargeTax.IsIncludeInCost , C_Tax.IsIncludeInCost, il.qtyinvoiced");
 
                             ds = DB.ExecuteDataset(qry.ToString(), null, Get_TrxName());
 
@@ -4189,7 +4207,8 @@ namespace VAdvantage.Model
                                     lca.SetBase(base1);
                                     if (Env.Signum(mrPrice) != 0)
                                     {
-                                        result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), mrPrice));
+                                        //result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), mrPrice));
+                                        result = Decimal.ToDouble(Decimal.Multiply(GetProductLineCost(this), mrPrice));
                                         result /= Decimal.ToDouble(total);
                                         lca.SetAmt(result, GetPrecision());
                                     }
@@ -4237,7 +4256,8 @@ namespace VAdvantage.Model
                             // create landed cost allocation
                             MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetM_CostElement_ID());
                             lca.SetM_Product_ID(lc.GetM_Product_ID());	//	No ASI
-                            lca.SetAmt(GetLineNetAmt());
+                            //lca.SetAmt(GetLineNetAmt());
+                            lca.SetAmt(GetProductLineCost(this));
 
                             // System distributes and allocates the Landed Cost of individual Product or variant, based on the quantity and amount defined for the Charge in the same Invoice Line.
                             lca.SetQty(GetQtyEntered());
@@ -4287,7 +4307,8 @@ namespace VAdvantage.Model
                             MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetM_CostElement_ID());
                             lca.SetM_Product_ID(iol.GetM_Product_ID());
                             lca.SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
-                            lca.SetAmt(GetLineNetAmt());
+                            //lca.SetAmt(GetLineNetAmt());
+                            lca.SetAmt(GetProductLineCost(this));
                             lca.SetBase(iol.GetBase(lc.GetLandedCostDistribution()));            // Get Base value based on Landed cost distribution
                             lca.SetQty(iol.GetQtyEntered());
 
@@ -4388,7 +4409,8 @@ namespace VAdvantage.Model
                                 lca.SetBase(base1);
                                 if (Env.Signum(base1) != 0)
                                 {
-                                    result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                                    //result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                                    result = Decimal.ToDouble(Decimal.Multiply(GetProductLineCost(this), base1));
                                     result /= Decimal.ToDouble(total);
                                     lca.SetAmt(result, GetPrecision());
                                 }
@@ -4440,7 +4462,8 @@ namespace VAdvantage.Model
                             MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetM_CostElement_ID());
                             lca.SetM_Product_ID(iol.GetM_Product_ID());
                             lca.SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
-                            lca.SetAmt(GetLineNetAmt());
+                            //lca.SetAmt(GetLineNetAmt());
+                            lca.SetAmt(GetProductLineCost(this));
                             lca.SetBase(iol.GetBase(lc.GetLandedCostDistribution()));            // Get Base value based on Landed cost distribution
                             lca.SetQty(iol.GetQtyEntered());
 
@@ -4544,7 +4567,8 @@ namespace VAdvantage.Model
                                 lca.SetBase(base1);
                                 if (Env.Signum(base1) != 0)
                                 {
-                                    result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                                    //result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                                    result = Decimal.ToDouble(Decimal.Multiply(GetProductLineCost(this), base1));
                                     result /= Decimal.ToDouble(total);
                                     lca.SetAmt(result, GetPrecision());
                                 }
@@ -4584,7 +4608,8 @@ namespace VAdvantage.Model
                             // Craete landed cost allocation
                             MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetM_CostElement_ID());
                             lca.SetM_Product_ID(lc.GetM_Product_ID());	//	No ASI
-                            lca.SetAmt(GetLineNetAmt());
+                            //lca.SetAmt(GetLineNetAmt());
+                            lca.SetAmt(GetProductLineCost(this));
 
                             // System distributes and allocates the Landed Cost of individual Product or variant, based on the quantity and amount defined for the Charge in the same Invoice Line.
                             lca.SetQty(GetQtyEntered());
@@ -4692,9 +4717,25 @@ namespace VAdvantage.Model
                         MLandedCost lc = lcs[ii];
 
                         qry.Clear();
-                        qry.Append(@"SELECT il.M_Product_ID, il.M_AttributeSetInstance_ID, sum(mi.Qty) as Qty, SUM(mi.Qty * il.PriceActual) AS LineNetAmt, io.M_Warehouse_ID
+                        qry.Append(@"SELECT il.M_Product_ID, il.M_AttributeSetInstance_ID, sum(mi.Qty) as Qty, ");
+                        //SUM(mi.Qty * il.PriceActual) AS LineNetAmt,
+                        qry.Append(@" SUM(mi.Qty *
+                                      CASE
+                                        WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'Y'
+                                        AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'Y'
+                                        THEN ROUND((il.taxbaseamt + il.taxamt + il.surchargeamt) / il.qtyinvoiced , 4)
+                                        WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'N'
+                                        AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'Y'
+                                        THEN ROUND((il.taxbaseamt + il.taxamt) / il.qtyinvoiced , 4)
+                                        WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'Y'
+                                        AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'N'
+                                        THEN ROUND((il.taxbaseamt + il.surchargeamt) / il.qtyinvoiced, 4)
+                                        ELSE ROUND(il.taxbaseamt  / il.qtyinvoiced, 4)
+                                      END) AS LineNetAmt , io.M_Warehouse_ID
                             FROM C_InvoiceLine il INNER JOIN M_Matchinv mi ON Mi.C_Invoiceline_ID = Il.C_Invoiceline_ID INNER JOIN M_InoutLine iol ON iol.M_InoutLine_ID = mi.M_InoutLine_ID
-                            INNER JOIN M_InOut io ON io.M_InOut_ID = iol.M_InOut_ID INNER JOIN M_Warehouse wh ON wh.M_Warehouse_ID = io.M_Warehouse_ID
+                            INNER JOIN M_InOut io ON io.M_InOut_ID = iol.M_InOut_ID INNER JOIN M_Warehouse wh ON wh.M_Warehouse_ID = io.M_Warehouse_ID 
+                            INNER JOIN C_Tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID
+                            LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID 
                             WHERE il.C_Invoice_ID = " + lc.GetRef_Invoice_ID());
 
                         //	Single Invoice Line
@@ -4713,7 +4754,8 @@ namespace VAdvantage.Model
                             qry.Append(" AND il.M_AttributeSetInstance_ID = " + lc.GetM_AttributeSetInstance_ID());
                         }
 
-                        qry.Append(" GROUP BY il.M_Product_ID, il.M_AttributeSetInstance_ID, io.M_Warehouse_ID");
+                        qry.Append(" GROUP BY il.M_Product_ID, il.M_AttributeSetInstance_ID, io.M_Warehouse_ID ," +
+                            "  il.taxbaseamt , il.taxamt , il.surchargeamt , C_SurChargeTax.IsIncludeInCost , C_Tax.IsIncludeInCost, il.qtyinvoiced ");
 
                         ds = DB.ExecuteDataset(qry.ToString(), null, Get_TrxName());
 
@@ -4760,7 +4802,8 @@ namespace VAdvantage.Model
                         lca.SetBase(base1);
                         if (Env.Signum(mrPrice) != 0)
                         {
-                            result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), mrPrice));
+                            //result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), mrPrice));
+                            result = Decimal.ToDouble(Decimal.Multiply(GetProductLineCost(this), mrPrice));
                             result /= Decimal.ToDouble(total1);
                             lca.SetAmt(result, GetPrecision());
                         }
@@ -4887,7 +4930,8 @@ namespace VAdvantage.Model
                         lca.SetBase(base1);
                         if (Env.Signum(base1) != 0)
                         {
-                            result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                            //result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                            result = Decimal.ToDouble(Decimal.Multiply(GetProductLineCost(this), base1));
                             result /= Decimal.ToDouble(total1);
                             lca.SetAmt(result, GetPrecision());
                         }
@@ -5026,7 +5070,8 @@ namespace VAdvantage.Model
 
                         if (Env.Signum(base1) != 0)
                         {
-                            result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                            //result = Decimal.ToDouble(Decimal.Multiply(GetLineNetAmt(), base1));
+                            result = Decimal.ToDouble(Decimal.Multiply(GetProductLineCost(this), base1));
                             result /= Decimal.ToDouble(total1);
                             lca.SetAmt(result, GetPrecision());
                         }
@@ -5057,9 +5102,9 @@ namespace VAdvantage.Model
             return "";
         }
 
-        /**
-         * 	Allocate Landed Cost - Enforce Rounding
-         */
+        /// <summary>
+        /// Allocate Landed Cost - Enforce Rounding
+        /// </summary>
         private void AllocateLandedCostRounding()
         {
             try
@@ -5076,7 +5121,8 @@ namespace VAdvantage.Model
                         largestAmtAllocation = allocation;
                     allocationAmt = Decimal.Add(allocationAmt, allocation.GetAmt());
                 }
-                Decimal difference = Decimal.Subtract(GetLineNetAmt(), allocationAmt);
+                //Decimal difference = Decimal.Subtract(GetLineNetAmt(), allocationAmt);
+                Decimal difference = Decimal.Subtract(GetProductLineCost(this), allocationAmt);
                 if (Env.Signum(difference) != 0)
                 {
                     largestAmtAllocation.SetAmt(Decimal.Add(largestAmtAllocation.GetAmt(), difference));

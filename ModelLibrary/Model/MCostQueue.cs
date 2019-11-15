@@ -1596,7 +1596,7 @@ namespace VAdvantage.Model
                                 {
                                     #region Calculate amount of matched Invoice
                                     query.Clear();
-                                    query.Append(@"SELECT il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual
+                                    query.Append(@"SELECT il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual, 
                                                     CASE
                                                     WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'Y'
                                                     AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'Y'
@@ -1608,11 +1608,13 @@ namespace VAdvantage.Model
                                                     AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'N'
                                                     THEN ROUND((il.taxbaseamt + il.surchargeamt) / il.qtyinvoiced, 4)
                                                     ELSE ROUND(il.taxbaseamt  / il.qtyinvoiced, 4)
-                                                  END AS PriceActualIncludedTax,
+                                                  END AS PriceActualIncludedTax
                                                     , mi.qty ,  SUM(mi.qty) AS matchedqty 
                                           FROM m_inout io INNER JOIN m_inoutline iol ON io.m_inout_id = iol.m_inout_id
                                           INNER JOIN m_matchInv mi ON iol.m_inoutline_id = mi.m_inoutline_id
                                           INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id
+                                          INNER JOIN c_tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID 
+                                          LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID
                                           WHERE mi.isactive      = 'Y' AND io.M_InOut_ID      =" + inoutline.GetM_InOut_ID() +
                                           " AND iol.m_inoutline_ID = " + inoutline.GetM_InOutLine_ID() +
                                          @" GROUP BY  il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty , 
@@ -1833,6 +1835,8 @@ namespace VAdvantage.Model
                                           FROM m_inout io INNER JOIN m_inoutline iol ON io.m_inout_id = iol.m_inout_id
                                           INNER JOIN m_matchInv mi ON iol.m_inoutline_id = mi.m_inoutline_id
                                           INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id
+                                          INNER JOIN c_tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID 
+                                          LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID
                                           WHERE mi.isactive      = 'Y' AND io.M_InOut_ID      =" + inoutline.GetM_InOut_ID() +
                                                      " AND iol.m_inoutline_ID = " + inoutline.GetM_InOutLine_ID() +
                                                       @" GROUP BY  il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty , 
