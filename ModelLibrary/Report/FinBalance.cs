@@ -225,19 +225,19 @@ namespace VAdvantage.Report
                 // dateFrom = MFactAccumulation.GetDateFrom(accum, dateFrom);
                 dateFrom = accum.GetDateFrom();
                 String type = accum.GetBALANCEACCUMULATION();
-                String trunc = null;
+                //String trunc = null;
 
                 if (String.IsNullOrEmpty(type))
                 {
                     dateFrom = null;
                 }
 
-                if (X_Fact_Accumulation.BALANCEACCUMULATION_Daily.Equals(type))
-                    trunc = TimeUtil.TRUNC_DAY;
-                else if (X_Fact_Accumulation.BALANCEACCUMULATION_CalendarWeek.Equals(type))
-                    trunc = TimeUtil.TRUNC_WEEK;
-                else if (X_Fact_Accumulation.BALANCEACCUMULATION_CalendarMonth.Equals(type))
-                    trunc = TimeUtil.TRUNC_MONTH;
+                //if (X_Fact_Accumulation.BALANCEACCUMULATION_Daily.Equals(type))
+                //    trunc = TimeUtil.TRUNC_DAY;
+                //else if (X_Fact_Accumulation.BALANCEACCUMULATION_CalendarWeek.Equals(type))
+                //    trunc = TimeUtil.TRUNC_WEEK;
+                //else if (X_Fact_Accumulation.BALANCEACCUMULATION_CalendarMonth.Equals(type))
+                //    trunc = TimeUtil.TRUNC_MONTH;
 
                 if (X_Fact_Accumulation.BALANCEACCUMULATION_PeriodOfAViennaCalendar.Equals(type) &&
                         !CheckPeriod(accum, dateFrom))
@@ -251,12 +251,24 @@ namespace VAdvantage.Report
                 {
                     dateClause = " Period.StartDate ";
                 }
-                else if (!String.IsNullOrEmpty(type))
+                else if (X_Fact_Accumulation.BALANCEACCUMULATION_Daily.Equals(type))
+                {
+                    dateClause = " TRUNC(a.DateAcct,'DD') ";
+                }
+                else if (X_Fact_Accumulation.BALANCEACCUMULATION_CalendarMonth.Equals(type))
                 {
                     dateClause = " TRUNC(a.DateAcct,'MM') ";
-                    _log.Fine(trunc);
-                    //dateClause = " TRUNC(a.DateAcct, '" + trunc + "' ) ";
                 }
+                else if (X_Fact_Accumulation.BALANCEACCUMULATION_CalendarWeek.Equals(type))
+                {
+                    dateClause = " TRUNC(a.DateAcct,'WW') "; // Calendar Week - WW  , Month Week - W
+                }
+                //else if (!String.IsNullOrEmpty(type))
+                //{
+                //    dateClause = " a.DateAcct ";
+                //    //_log.Fine(trunc);
+                //    //dateClause = " TRUNC(a.DateAcct, '" + trunc + "' ) ";
+                //}
 
                 // Delete the balances
                 DeleteBalance(ctx.GetAD_Client_ID(), C_AcctSchema_ID,
