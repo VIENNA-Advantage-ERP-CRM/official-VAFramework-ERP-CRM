@@ -263,12 +263,12 @@ namespace VAdvantage.Report
                 {
                     dateClause = " TRUNC(a.DateAcct,'WW') "; // Calendar Week - WW  , Month Week - W
                 }
-                else if (X_Fact_Accumulation.BALANCEACCUMULATION_AccountDate.Equals(type))
-                {
-                    dateClause = " a.DateAcct ";
-                    //_log.Fine(trunc);
-                    //dateClause = " TRUNC(a.DateAcct, '" + trunc + "' ) ";
-                }
+                //else if (!String.IsNullOrEmpty(type))
+                //{
+                //    dateClause = " a.DateAcct ";
+                //    //_log.Fine(trunc);
+                //    //dateClause = " TRUNC(a.DateAcct, '" + trunc + "' ) ";
+                //}
 
                 // Delete the balances
                 DeleteBalance(ctx.GetAD_Client_ID(), C_AcctSchema_ID,
