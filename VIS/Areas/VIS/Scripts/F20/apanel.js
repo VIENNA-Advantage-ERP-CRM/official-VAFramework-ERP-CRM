@@ -973,41 +973,15 @@
         */
         this.showTabPanel = function (show) {
             if (show) {
-                $tabpanel.empty();
+                //$tabpanel.empty();
                 $tabpanel.append(this.curGC.getTabPanel());
                 $tabpanel.css({ "display": "grid" });
-                //if (this.curTab.getIncluded_Tab_ID() > 0) {
-                //    $td3IncludedEmpty.css('width', '');
-                //    var style = $td3IncludedEmpty.attr('style', style);
-                //}
-                //else {
-                //    if ($tabpanel.width() <= 40) {
-                //        $td3IncludedEmpty.css({ 'width': '', 'padding-left': '', 'padding-right': '' });
-                //    }
-                //    else {
-                //        $td3IncludedEmpty.width(0);
-                //    }
-                //}
             }
             else {
-               // $td3IncludedEmpty.css('width', '');
                 $tabpanel.css({ "display": "none" });
-                //$tabpanel.css("width", "40px");
-                //$divTabPanels.css("display", "none");
             }
         };
-
-        /*
-            *   Change width of included tab, if no included tab linked
-            */
-        this.setIncludedTabWidth = function (show) {
-            if (show) {
-                $td3IncludedEmpty.css('width', '');
-            }
-            else {
-                $td3IncludedEmpty.css('width', '0px');
-            }
-        }
+        
 
         /*
           *   Show or hide panel container depending on panel linked to tab or not
@@ -1062,14 +1036,7 @@
         /*
           *   Close tab panel.
           */
-        //$spanPin.on("click", function () {
-        //    self.showPanelContainer(false);
-        //    self.setIncludedTabWidth(true);
-        //    self.setWidth(-1, false);
-        //    self.curGC.setCurrentPanel(null);
-        //    self.setTabNavigation();
-        //    var selected = $ulIconList.find('.vis-selected-list')[0];
-        //    $(selected).removeClass('vis-selected-list');
+       
 
 
 

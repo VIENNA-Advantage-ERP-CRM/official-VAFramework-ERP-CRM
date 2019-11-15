@@ -96,7 +96,7 @@
             /* End */
 
             /*divHeader*/
-            $divHeader = clone.find(".vis-ad-w-p-vc-actions");// $("<div class='vis-gc-header'>").hide();
+            $divHeader = clone.find(".vis-ad-w-p-vc-header");// $("<div class='vis-gc-header'>").hide();
             /*end*/
 
             /* Multi,card and single view */
@@ -123,12 +123,12 @@
         var onsubToolBarClick = function (action) {
             //console.log(action);
 
-            if (action == "Edit_sub") {
+            if (action == "edit") {
                 if (self.displayAsIncludedGC) {
                     //fire Tab changed and open in edit mode
                     if (self.aPanel.tabActionPerformed(self.id)) {
                         self.switchSingleRow();
-                        $tabControl.find('.vis-apanel-tab-selected')[0].scrollIntoView();
+                       // $tabControl.find('.vis-apanel-tab-selected')[0].scrollIntoView();
                     }
                     return;
                 }
@@ -150,8 +150,8 @@
 
         function createToolbar() {
 
-            aAdd = new VIS.AppsAction({ action: "Add_sub", parent: null, enableDisable: true, toggle: false, imageOnly: true, isSmall: true, onAction: onsubToolBarClick }); //Create Apps Action
-            aEdit = new VIS.AppsAction({ action: "Edit_sub", parent: null, enableDisable: true, toggle: false, imageOnly: true, isSmall: true, onAction: onsubToolBarClick }); //Create Apps Action
+            aAdd = new VIS.AppsAction({ action: "new", parent: null, enableDisable: true, toggle: false, imageOnly: true, isSmall: true, onAction: onsubToolBarClick }); //Create Apps Action
+            aEdit = new VIS.AppsAction({ action: "edit", parent: null, enableDisable: true, toggle: false, imageOnly: true, isSmall: true, onAction: onsubToolBarClick }); //Create Apps Action
             $tabControl.append(aEdit.getListItm()).append(aAdd.getListItm());
         };
         createToolbar();
@@ -222,13 +222,13 @@
             return id;
         };
 
-        this.getReocrdDiv = function () {
-            return $divHeader;
-        };
+        //this.getReocrdDiv = function () {
+        //    return $divHeader;
+        //};
 
-        this.getTabControl = function () {
-            return $tabControl;
-        };
+        //this.getTabControl = function () {
+        //    return $tabControl;
+        //};
 
         this.setRecord = function (record) {
 
@@ -257,15 +257,15 @@
         this.setUI = function (isIncluded) {
             if (isIncluded) {
                 $divHeader.html(this.gTab.getName());
-                $divHeader.css('white-space', 'nowrap');
-                $divHeader.show();
-                $tabControl.show();
+                //$divHeader.css('white-space', 'nowrap');
+                $divHeader.css('display','block');
+                $tabControl.css('display', 'flex');
                 aEdit.setEnabled(false);
                 this.vTable.grid.show.selectColumn = false;
             }
             else {
-                $divHeader.hide();
-                $tabControl.hide();
+                $divHeader.css('display', 'none');
+                $tabControl.css('display', 'none');
                 this.vTable.grid.show.selectColumn = true;
             }
         };
@@ -701,6 +701,10 @@ VIS.GridController.prototype.detachDynamicAction = function () {
     }
     i = null;
     j = null;
+
+    if (this.vTabPanel) {
+        this.vTabPanel.getRoot().detach();
+    }
 };
 
 VIS.GridController.prototype.switchRowPresentation = function () {
@@ -973,8 +977,6 @@ VIS.GridController.prototype.setDefaultFocus = function () {
             }
         }
     }
-
-
 };
 
 VIS.GridController.prototype.setVisible = function (visible) {
@@ -983,7 +985,6 @@ VIS.GridController.prototype.setVisible = function (visible) {
         this.initLayout();
 
     }
-
 
     if (visible) {
         this.getRoot().show();
@@ -1058,7 +1059,7 @@ VIS.GridController.prototype.activate = function (oldGC) {
         this.getRoot().detach();
         tdArea.append(this.getRoot());
         this.displayAsIncludedGC = false;
-        this.aPanel.getIncludedEmptyArea().css({ 'width': '', "padding": '' });
+        this.aPanel.getIncludedEmptyArea().css({ 'height': '', "padding": '' });
     }
     else if (this.gTab.getIncluded_Tab_ID() == 0) {
         var olcIncludedTab = oldGC.vIncludedGC;
@@ -1066,6 +1067,7 @@ VIS.GridController.prototype.activate = function (oldGC) {
             var tdArea = olcIncludedTab.aPanel.getLayout();
             olcIncludedTab.setUI(false);
             olcIncludedTab.getRoot().detach();
+            this.aPanel.getIncludedEmptyArea().css({ 'height': '', "padding": '' });
         }
         //tdArea.append(oldGC.getRoot());
         //oldGC.displayAsIncludedGC = false;
@@ -1756,13 +1758,13 @@ VIS.GridController.prototype.switchIncludedGC = function () {
         //});
         tdArea.append(inGc);
 
-        if (this.gTab.getHasPanel()) {
-            tdArea.css("padding", "0px 1px 0px 1px");
-        }
-        else {
-            tdArea.css("padding", "0px 5px 0px 7px");
-        }
-        tdArea.width(VIS.Application.isMobile ? 250 : 350);
+        //if (this.gTab.getHasPanel()) {
+        //    tdArea.css("padding", "0px 1px 0px 1px");
+        //}
+        //else {
+        //    tdArea.css("padding", "0px 5px 0px 7px");
+        //}
+        tdArea.height(VIS.Application.isMobile ? 250 : 350);
 
         inGc.show();
         this.vIncludedGC.vTable.activate();
@@ -1796,9 +1798,9 @@ VIS.GridController.prototype.switchIncludedGC = function () {
         //this.vIncludedGC.toggleTabItems();
 
         this.vTable.resize();
-        if (this.gTab.getHasPanel()) {
-            this.aPanel.setWidth(-1, true);
-        }
+        //if (this.gTab.getHasPanel()) {
+        //    this.aPanel.setWidth(-1, true);
+        //}
 
         //setTimeout(function (that) {
         //    // that.vTable.refresh();

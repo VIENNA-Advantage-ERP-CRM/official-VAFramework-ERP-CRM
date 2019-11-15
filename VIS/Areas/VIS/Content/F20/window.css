@@ -352,7 +352,7 @@
 .vis-ad-w-p-center-view {
     grid-row: 1/1;
     display: flex;
-    padding: 0 10px;
+    padding: 0 2px 0 10px;
     background: rgba(var(--v-c-common), 0.7)
 }
 
@@ -364,7 +364,15 @@
 
 .vis-ad-w-p-center-inctab {
     grid-row: 3/3;
+    display: flex;
+    padding: 0 10px;
 }
+
+/* */
+
+
+
+
 
 .vis-ad-w-p-center-footer {
     grid-row: 4/4;
@@ -399,6 +407,7 @@
 .vis-ad-w-p-vc-acontainer {
     grid-row: 1/1;
     grid-column: 2/2;
+    display:flex;
 }
 
 .vis-ad-w-p-vc-gc {
@@ -414,9 +423,23 @@
 }
 
 /* end View controller*/
+/* vc include tab setting*/
+.vis-ad-w-p-vc-header {
+    margin-top: 10px;
+    display:none;
+}
+.vis-ad-w-p-vc-actions {
+    margin:0;
+    margin-top: 10px;
+    display:none;
+    list-style:none;
+}
 
-/* action bar*/
-.vis-ad-w-p-action {
+    .vis-ad-w-p-vc-actions li {
+        padding:0 5px;
+    }
+    /* action bar*/
+    .vis-ad-w-p-action {
     grid-column: 6/7;
     grid-row: 2/7;
     width: 45px;
