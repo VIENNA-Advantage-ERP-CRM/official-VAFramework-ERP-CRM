@@ -634,6 +634,7 @@
     <Content Include="Areas\VIS\Scripts\app\favouritehelper.js" />
     <Content Include="Areas\VIS\Scripts\app\formframe.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\acctviewer.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\acctviewermenu.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\productContainerTree.js" />
@@ -725,6 +726,7 @@
     <Content Include="Areas\VIS\Scripts\home\favourite.js" />
     <Content Include="Areas\VIS\Scripts\home\home.js" />
     <Content Include="Areas\VIS\Scripts\home\shortcut.js" />
+    <Content Include="Areas\VIS\Scripts\model\calloutColumn.js" />
     <Content Include="Areas\VIS\Scripts\model\callouts.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
@@ -751,6 +753,7 @@
     <Compile Include="Areas\VIS\Controllers\Bitmap.cs" />
     <Compile Include="Areas\VIS\Controllers\BPartnerController.cs" />
     <Compile Include="Areas\VIS\Controllers\CalloutOrderController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\CalloutColumnController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MAcctSchemaController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MBankStatementController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MBPartnerController.cs" />

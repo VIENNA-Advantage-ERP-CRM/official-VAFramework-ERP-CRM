@@ -144,7 +144,9 @@ namespace VIS
 
             //     "~/Areas/VIS/Scripts/app/windowformcontainer.js",
             //      "~/Areas/VIS/Scripts/TestPanel.js",
-            //      "~/Areas/VIS/Scripts/app/initialize.js"//Bottom One
+            //      "~/Areas/VIS/Scripts/app/initialize.js",
+            //      "~/Areas/VIS/Scripts/app/forms/acctviewermenu.js",
+            //      "~/Areas/VIS/Scripts/model/calloutColumn.js"//Bottom One
             //       );
 
             //style.Include("~/Areas/VIS/Content/Site.css",
