@@ -194,14 +194,44 @@
     font-size: 1.2rem;
     color: rgba(var(--v-c-on-secondary),0.60);
 }
+    .vis-ad-w-p-tb-rc-action .dropdown-toggle:after {
+        display: none;
+    }
+    .vis-ad-w-p-tb-rc-action .dropdown-menu {
+        padding: 0;
+        background: rgba(var(--v-c-common), 1);
+        margin-top: 5px;
+        border: 1px solid rgba(var(--v-c-primary), .05);
+        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.16862745098039217);
+    }
 
+    .vis-ad-w-p-tb-rc-action .dropdown-item {
+        font-weight: normal;
+        font-size: .875rem;
+        padding: .25rem 1rem;
+    }
 
-.vis-ad-w-p-tb-rc-abar {
-    color: rgba(var(--v-c-on-primary),1);
-    background-color: rgba(var(--v-c-primary),1);
-    border-radius: 25px;
-    padding: 4px 9px;
-}
+        .vis-ad-w-p-tb-rc-action .dropdown-item:hover {
+            background: rgba(var(--v-c-primary), 1);
+            color: rgba(var(--v-c-on-primary), 1);
+        }
+
+        .vis-ad-w-p-tb-rc-action .dropdown-item:first-child {
+            border-top-right-radius: .25rem;
+            border-top-left-radius: .25rem;
+        }
+
+        .vis-ad-w-p-tb-rc-action .dropdown-item:last-child {
+            border-bottom-right-radius: .25rem;
+            border-bottom-left-radius: .25rem;
+        }
+
+    .vis-ad-w-p-tb-rc-abar {
+        color: rgba(var(--v-c-on-primary),1);
+        background-color: rgba(var(--v-c-primary),1);
+        border-radius: 25px;
+        padding: 4px 9px;
+    }
 
 /*End toolbar */
 
@@ -344,7 +374,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto auto auto;
-    overflow: auto;
+    /*overflow: auto;*/
     background: rgba(var(--v-c-secondary), 0.5);
     
 }
@@ -882,6 +912,7 @@ li.vis-page-item-select {
     height: 40px;
     width: auto;
     align-items: flex-start;
+    flex-basis: auto;
 }
 
 .vis-ad-w-p-actionpanel-b .vis-ad-w-p-ap-tp-o-icorbar ul {
@@ -904,7 +935,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
         position: absolute;
         left: 0px;
     }
-    /* selection for bottom*/
+   
 .vis-ad-w-p-actionpanel-b li {
     border-bottom: 3px solid transparent;
     border-left: none;
