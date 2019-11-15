@@ -1894,7 +1894,7 @@ namespace VAdvantage.Model
 
             // To check weather future date records are available in Transaction window
             _processMsg = CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx());
-            if (string.IsNullOrEmpty(_processMsg))
+            if (!string.IsNullOrEmpty(_processMsg))
             {
                 return DocActionVariables.STATUS_INVALID;
             }
