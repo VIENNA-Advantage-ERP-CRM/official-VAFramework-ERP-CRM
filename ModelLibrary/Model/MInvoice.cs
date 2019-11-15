@@ -4779,6 +4779,12 @@ namespace VAdvantage.Model
                 rLine.SetLineNetAmt(Decimal.Negate(rLine.GetLineNetAmt()));
                 if (((Decimal)rLine.GetTaxAmt()).CompareTo(Env.ZERO) != 0)
                     rLine.SetTaxAmt(Decimal.Negate((Decimal)rLine.GetTaxAmt()));
+
+                // In Case of Reversal set Surcharge Amount as Negative if available.
+                if (rLine.Get_ColumnIndex("SurchargeAmt") >  0&& (((Decimal)rLine.GetSurchargeAmt()).CompareTo(Env.ZERO) != 0))
+                {
+                        rLine.SetSurchargeAmt(Decimal.Negate((Decimal)rLine.GetSurchargeAmt()));
+                }
                 if (((Decimal)rLine.GetLineTotalAmt()).CompareTo(Env.ZERO) != 0)
                     rLine.SetLineTotalAmt(Decimal.Negate((Decimal)rLine.GetLineTotalAmt()));
                 // bcz we set this field value as ZERO in Copy From Process

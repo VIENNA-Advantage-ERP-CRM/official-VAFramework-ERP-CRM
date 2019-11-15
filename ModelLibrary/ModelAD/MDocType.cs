@@ -93,15 +93,6 @@ namespace VAdvantage.Model
         public const String POSTINGCODE_STANDARDORDER = "SOO-SO";
         //Warehouse Order
         public const String POSTINGCODE_WAREHOUSEORDER = "SOO-WO";
-        //Blanket Sales Order
-        public const String POSTINGCODE_BLANKETSALESORDER = "BSO";
-        //Blanket Purchase Order
-        public const String POSTINGCODE_BLANKETPURCHASESORDER = "BPO";
-        //Release Sales Order
-        public const String POSTINGCODE_RELEASESALESORDER = "RSO";
-        //Release Purchase Order
-        public const String POSTINGCODE_RELEASEPURCHASEORDER = "RPO";
-
 
         //Posting code for future update
         /*

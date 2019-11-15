@@ -1,0 +1,211 @@
+*** 10/23/2019 9:56:56 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+09:56:56.565    (INFO)     Trx.Start: **** ConnSH637074214164485351System.Random
+09:56:56.565    (INFO)     Trx.Commit: **C** ConnSH637074214164485351System.Random
+09:57:04.574    (INFO)     Trx.Start: **** ConnSH637074214247609534System.Random
+09:57:04.574    (INFO)     Trx.Commit: **C** ConnSH637074214247609534System.Random
+09:57:32.573    (INFO)     Trx.Start: **** ConnSH637074214520080723System.Random
+09:57:32.573    (INFO)     Trx.Commit: **C** ConnSH637074214520080723System.Random
+09:57:40.574    (INFO)     Trx.Start: **** ConnSH637074214607070422System.Random
+09:57:40.574    (INFO)     Trx.Commit: **C** ConnSH637074214607070422System.Random
+----------->     (WARNING)  MJournal.GetActions: Column not found - C_DocTypeTarget_ID
+09:57:48.574    (INFO)     Trx.Start: **** ConnSH637074214682881396System.Random
+09:57:48.574    (INFO)     Trx.Commit: **C** ConnSH637074214682881396System.Random
+09:57:48.574    (INFO)     MChangeLog.FillChangeLog: #9
+09:57:49.574    (INFO)     Trx.Start: **** ConnSH637074214690163224System.Random
+09:57:49.574    (INFO)     Trx.Commit: **C** ConnSH637074214690163224System.Random
+09:57:49.574    (INFO)     Trx.Start: **** ConnSH637074214691175838System.Random
+09:57:49.574    (INFO)     Trx.Commit: **C** ConnSH637074214691175838System.Random
+09:57:49.574    (INFO)     Trx.Start: **** ConnSH637074214696272707System.Random
+09:57:49.574    (INFO)     Trx.Commit: **C** ConnSH637074214696272707System.Random
+09:57:49.574    (INFO)     Trx.Start: **** ConnSH637074214699849141System.Random
+09:57:50.575    (INFO)     Trx.Commit: **C** ConnSH637074214699849141System.Random
+09:57:50.575    (INFO)     Trx.Start: **** ConnSH637074214700439006System.Random
+09:57:50.575    (INFO)     Trx.Commit: **C** ConnSH637074214700439006System.Random
+09:57:50.575    (INFO)     Trx.Start: **** ConnSH637074214705118949System.Random
+09:57:50.575    (INFO)     Trx.Commit: **C** ConnSH637074214705118949System.Random
+09:57:50.575    (INFO)     Trx.Start: **** ConnSH637074214705508858System.Random
+09:57:50.575    (INFO)     Trx.Commit: **C** ConnSH637074214705508858System.Random
+09:57:50.575    (INFO)     MWFActivity.Run: MWFActivity[1246234,Node=(Start),State=ON,AD_User_ID=101,10/23/2019 4:27:49 AM]
+09:57:50.575    (INFO)     Trx.Start: **** ConnSH637074214709860798System.Random
+09:57:51.575    (INFO)     Trx.Commit: **C** ConnSH637074214709860798System.Random
+09:57:51.575    (INFO)     Trx.Start: **** ConnSH637074214710611697System.Random
+09:57:51.575    (INFO)     Trx.Commit: **C** ConnSH637074214710611697System.Random
+09:57:51.575    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082777, AD_Workflow_ID=121, WFState=OR]
+09:57:51.575    (INFO)     MWFActivity.PerformWork: MWFNode[203-(Start),Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+09:57:51.575    (INFO)     Trx.Start: **** ConnSH637074214711981749System.Random
+09:57:51.575    (INFO)     Trx.Commit: **C** ConnSH637074214711981749System.Random
+09:57:51.575    (INFO)     Trx.Start: **** ConnSH637074214712633239System.Random
+09:57:51.575    (INFO)     Trx.Commit: **C** ConnSH637074214712633239System.Random
+09:57:51.575    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082777, AD_Workflow_ID=121, WFState=OR]
+09:57:51.575    (INFO)     Trx.Start: **** ConnSH637074214713627444System.Random
+09:57:51.575    (INFO)     Trx.Commit: **C** ConnSH637074214713627444System.Random
+09:57:51.575    (INFO)     Trx.Start: **** ConnSH637074214717429939System.Random
+09:57:51.575    (INFO)     Trx.Commit: **C** ConnSH637074214717429939System.Random
+09:57:51.575    (INFO)     Trx.Start: **** ConnSH637074214717740143System.Random
+09:57:51.575    (INFO)     Trx.Commit: **C** ConnSH637074214717740143System.Random
+09:57:52.575    (INFO)     Trx.Start: **** ConnSH637074214721228832System.Random
+09:57:52.575    (INFO)     Trx.Commit: **C** ConnSH637074214721228832System.Random
+09:57:52.575    (INFO)     Trx.Start: **** ConnSH637074214721612879System.Random
+09:57:52.575    (INFO)     Trx.Commit: **C** ConnSH637074214721612879System.Random
+09:57:52.575    (INFO)     MWFActivity.Run: MWFActivity[1246235,Node=(DocPrepare),State=ON,AD_User_ID=101,10/23/2019 4:27:51 AM]
+09:57:52.575    (INFO)     Trx.Start: **** ConnSH637074214724134633System.Random
+09:57:52.575    (INFO)     Trx.Commit: **C** ConnSH637074214724134633System.Random
+09:57:52.575    (INFO)     Trx.Start: **** ConnSH637074214724718336System.Random
+09:57:52.575    (INFO)     Trx.Commit: **C** ConnSH637074214724718336System.Random
+09:57:52.575    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082777, AD_Workflow_ID=121, WFState=OR]
+09:57:52.575    (INFO)     MWFActivity.PerformWork: MWFNode[205-(DocPrepare),Action=DocumentAction=PR] [VAdvantage.DataBase.Trx]
+09:57:52.575    (INFO)     Trx.Start: **** WF_1571804872541
+09:57:52.575    (INFO)     MJournal.PrepareIt: MJournal[1000759,trtrtr,DR=100,CR=100]
+09:57:52.575    (INFO)     Trx.Start: **** ConnSH637074214729357164System.Random
+09:57:52.575    (INFO)     Trx.Commit: **C** ConnSH637074214729357164System.Random
+----------->     (WARNING)  MWFActivity.Run: MWFNode[205-(DocPrepare),Action=DocumentAction=PR] => @PeriodNotValid@
+09:58:04.584    (INFO)     Trx.Rollback: **R** WF_1571804872541
+----------->     (WARNING)  MWFActivity.Run: Cause
+09:58:04.584    (INFO)     Trx.Start: **** ConnSH637074214842675447System.Random
+09:58:04.584    (INFO)     Trx.Commit: **C** ConnSH637074214842675447System.Random
+09:58:04.584    (INFO)     Trx.Start: **** ConnSH637074214843335297System.Random
+09:58:04.584    (INFO)     Trx.Commit: **C** ConnSH637074214843335297System.Random
+09:58:04.584    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082777, AD_Workflow_ID=121, WFState=OR]
+09:58:04.584    (INFO)     Trx.Start: **** ConnSH637074214844315064System.Random
+09:58:04.584    (INFO)     Trx.Commit: **C** ConnSH637074214844315064System.Random
+09:58:04.584    (INFO)     Trx.Start: **** ConnSH637074214844834935System.Random
+09:58:04.584    (INFO)     Trx.Commit: **C** ConnSH637074214844834935System.Random
+10:00:26.026    (INFO)     Trx.Start: **** ConnSH637074216265270518System.Random
+10:00:26.026    (INFO)     Trx.Commit: **C** ConnSH637074216265270518System.Random
+----------->     (WARNING)  MJournal.GetActions: Column not found - C_DocTypeTarget_ID
+10:00:33.033    (INFO)     Trx.Start: **** ConnSH637074216333069607System.Random
+10:00:33.033    (INFO)     Trx.Commit: **C** ConnSH637074216333069607System.Random
+10:00:33.033    (INFO)     Trx.Start: **** ConnSH637074216335195076System.Random
+10:00:33.033    (INFO)     Trx.Commit: **C** ConnSH637074216335195076System.Random
+10:00:33.033    (INFO)     Trx.Start: **** ConnSH637074216335566264System.Random
+10:00:33.033    (INFO)     Trx.Commit: **C** ConnSH637074216335566264System.Random
+10:00:33.033    (INFO)     Trx.Start: **** ConnSH637074216338775942System.Random
+10:00:33.033    (INFO)     Trx.Commit: **C** ConnSH637074216338775942System.Random
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216340605771System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216340605771System.Random
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216340926045System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216340926045System.Random
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216344202015System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216344202015System.Random
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216344593453System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216344593453System.Random
+10:00:34.034    (INFO)     MWFActivity.Run: MWFActivity[1246236,Node=(Start),State=ON,AD_User_ID=101,10/23/2019 4:30:33 AM]
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216347043853System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216347043853System.Random
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216347640165System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216347640165System.Random
+10:00:34.034    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082778, AD_Workflow_ID=121, WFState=OR]
+10:00:34.034    (INFO)     MWFActivity.PerformWork: MWFNode[203-(Start),Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216348547018System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216348547018System.Random
+10:00:34.034    (INFO)     Trx.Start: **** ConnSH637074216349217339System.Random
+10:00:34.034    (INFO)     Trx.Commit: **C** ConnSH637074216349217339System.Random
+10:00:35.035    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082778, AD_Workflow_ID=121, WFState=OR]
+10:00:35.035    (INFO)     Trx.Start: **** ConnSH637074216350366222System.Random
+10:00:35.035    (INFO)     Trx.Commit: **C** ConnSH637074216350366222System.Random
+10:00:35.035    (INFO)     Trx.Start: **** ConnSH637074216353446459System.Random
+10:00:35.035    (INFO)     Trx.Commit: **C** ConnSH637074216353446459System.Random
+10:00:35.035    (INFO)     Trx.Start: **** ConnSH637074216353916370System.Random
+10:00:35.035    (INFO)     Trx.Commit: **C** ConnSH637074216353916370System.Random
+10:00:35.035    (INFO)     Trx.Start: **** ConnSH637074216357641848System.Random
+10:00:35.035    (INFO)     Trx.Commit: **C** ConnSH637074216357641848System.Random
+10:00:35.035    (INFO)     Trx.Start: **** ConnSH637074216358008860System.Random
+10:00:35.035    (INFO)     Trx.Commit: **C** ConnSH637074216358008860System.Random
+10:00:36.036    (INFO)     MWFActivity.Run: MWFActivity[1246237,Node=(DocPrepare),State=ON,AD_User_ID=101,10/23/2019 4:30:35 AM]
+10:00:36.036    (INFO)     Trx.Start: **** ConnSH637074216360702860System.Random
+10:00:36.036    (INFO)     Trx.Commit: **C** ConnSH637074216360702860System.Random
+10:00:36.036    (INFO)     Trx.Start: **** ConnSH637074216361428059System.Random
+10:00:36.036    (INFO)     Trx.Commit: **C** ConnSH637074216361428059System.Random
+10:00:36.036    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082778, AD_Workflow_ID=121, WFState=OR]
+10:00:36.036    (INFO)     MWFActivity.PerformWork: MWFNode[205-(DocPrepare),Action=DocumentAction=PR] [VAdvantage.DataBase.Trx]
+10:00:36.036    (INFO)     Trx.Start: **** WF_1571805036212
+10:00:36.036    (INFO)     MJournal.PrepareIt: MJournal[1000759,trtrtr,DR=100,CR=100]
+10:00:36.036    (INFO)     MAcctSchema.CheckCosting: AcctSchema[101-IdeaInc. US/A/US Dollar]
+10:00:36.036    (INFO)     CacheMgt.Reset: C_AcctSchema: #1 (1)
+10:00:36.036    (INFO)     Trx.Start: **** ConnSH637074216366766860System.Random
+10:00:36.036    (INFO)     Trx.Commit: **C** ConnSH637074216366766860System.Random
+10:00:37.037    (INFO)     Trx.Commit: **C** WF_1571805036212
+10:00:37.037    (INFO)     Trx.Start: **** ConnSH637074216374642574System.Random
+10:00:37.037    (INFO)     Trx.Commit: **C** ConnSH637074216374642574System.Random
+10:00:37.037    (INFO)     Trx.Start: **** ConnSH637074216375535214System.Random
+10:00:37.037    (INFO)     Trx.Commit: **C** ConnSH637074216375535214System.Random
+10:00:37.037    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082778, AD_Workflow_ID=121, WFState=OR]
+10:00:37.037    (INFO)     Trx.Start: **** ConnSH637074216376602849System.Random
+10:00:37.037    (INFO)     Trx.Commit: **C** ConnSH637074216376602849System.Random
+10:00:37.037    (INFO)     Trx.Start: **** ConnSH637074216378522960System.Random
+10:00:37.037    (INFO)     Trx.Commit: **C** ConnSH637074216378522960System.Random
+10:00:37.037    (INFO)     Trx.Start: **** ConnSH637074216378885837System.Random
+10:00:37.037    (INFO)     Trx.Commit: **C** ConnSH637074216378885837System.Random
+10:00:38.038    (INFO)     Trx.Start: **** ConnSH637074216381890545System.Random
+10:00:38.038    (INFO)     Trx.Commit: **C** ConnSH637074216381890545System.Random
+10:00:38.038    (INFO)     Trx.Start: **** ConnSH637074216382321806System.Random
+10:00:38.038    (INFO)     Trx.Commit: **C** ConnSH637074216382321806System.Random
+10:00:38.038    (INFO)     MWFActivity.Run: MWFActivity[1246238,Node=(DocComplete),State=ON,AD_User_ID=101,10/23/2019 4:30:37 AM]
+10:00:38.038    (INFO)     Trx.Start: **** ConnSH637074216385105039System.Random
+10:00:38.038    (INFO)     Trx.Commit: **C** ConnSH637074216385105039System.Random
+10:00:38.038    (INFO)     Trx.Start: **** ConnSH637074216385629385System.Random
+10:00:38.038    (INFO)     Trx.Commit: **C** ConnSH637074216385629385System.Random
+10:00:38.038    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082778, AD_Workflow_ID=121, WFState=OR]
+10:00:38.038    (INFO)     MWFActivity.PerformWork: MWFNode[206-(DocComplete),Action=DocumentAction=CO] [VAdvantage.DataBase.Trx]
+10:00:38.038    (INFO)     Trx.Start: **** WF_1571805038628
+10:00:38.038    (INFO)     MJournal.PrepareIt: MJournal[1000759,trtrtr,DR=100,CR=100]
+10:00:38.038    (INFO)     MAcctSchema.CheckCosting: AcctSchema[101-IdeaInc. US/A/US Dollar]
+10:00:38.038    (INFO)     CacheMgt.Reset: C_AcctSchema: #1 (1)
+----------->     (WARNING)  MJournal.GetDocumentNoFromSeq: Column not found - DateInvoiced
+===========>     (SEVERE)   MSequence.GetDocumentNoFromSeq: (DocType) [VAdvantage.DataBase.Trx] => Object reference not set to an instance of an object.
+10:00:38.038    (INFO)     MJournal.CompleteIt: MJournal[1000759,trtrtr,DR=100,CR=100]
+10:00:38.038    (INFO)     Trx.Start: **** ConnSH637074216389180384System.Random
+10:00:38.038    (INFO)     Trx.Commit: **C** ConnSH637074216389180384System.Random
+10:00:40.040    (INFO)     Trx.Commit: **C** WF_1571805038628
+10:00:40.040    (INFO)     Trx.Start: **** ConnSH637074216401535856System.Random
+10:00:40.040    (INFO)     Trx.Commit: **C** ConnSH637074216401535856System.Random
+10:00:40.040    (INFO)     Trx.Start: **** ConnSH637074216402268902System.Random
+10:00:40.040    (INFO)     Trx.Commit: **C** ConnSH637074216402268902System.Random
+10:00:40.040    (INFO)     MWFProcess.CheckActivities: MWFProcess[1082778, AD_Workflow_ID=121, WFState=OR]
+10:00:40.040    (INFO)     Trx.Start: **** ConnSH637074216403165657System.Random
+10:00:40.040    (INFO)     Trx.Commit: **C** ConnSH637074216403165657System.Random
+10:00:40.040    (INFO)     Trx.Start: **** ConnSH637074216403706232System.Random
+10:00:40.040    (INFO)     Trx.Commit: **C** ConnSH637074216403706232System.Random
+10:01:28.128    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+10:01:28.128    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000759,trtrtr,DR=100,CR=100]: Constructor invoke check 
+10:01:28.128    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000759
+10:01:39.139    (INFO)     Trx.Start: **** PostGLJ1000759
+10:02:10.210    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:02:10.210    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:02:10.210    (INFO)     MAcctSchema.CheckCosting: AcctSchema[101-IdeaInc. US/A/US Dollar]
+10:02:10.210    (INFO)     CacheMgt.Reset: C_AcctSchema: #1 (1)
+===========>     (SEVERE)   Doc_GLJournal.Post:  => Object reference not set to an instance of an object.
+10:02:18.218    (INFO)     Doc_GLJournal.PostCommit: Sta=E DT=GLJ ID=1000759
+10:02:18.218    (INFO)     Trx.Commit: **C** PostGLJ1000759
+10:02:18.218    (INFO)     Trx.Start: **** ConnSH637074217389700679System.Random
+10:02:19.219    (INFO)     Trx.Commit: **C** ConnSH637074217389700679System.Random
+10:02:19.219    (INFO)     Trx.Start: **** ConnSH637074217390190621System.Random
+10:02:19.219    (INFO)     Trx.Commit: **C** ConnSH637074217390190621System.Random
+10:02:22.222    (INFO)     MDocBaseType.GetAccountingInstance: .ctor: Constructor check 
+10:02:22.222    (INFO)     MDocBaseType.GetAccountingInstance: MJournal[1000759,trtrtr,DR=100,CR=100]: Constructor invoke check 
+10:02:22.222    (INFO)     Doc_GLJournal.Post: Locked: GL_Journal_ID=1000759
+10:02:23.223    (INFO)     Trx.Start: **** PostGLJ1000759
+10:02:44.244    (INFO)     Doc_GLJournal.Post: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:02:46.246    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:02:49.249    (INFO)     MAcctSchema.CheckCosting: AcctSchema[101-IdeaInc. US/A/US Dollar]
+10:02:49.249    (INFO)     CacheMgt.Reset: C_AcctSchema: #2 (2)
+10:03:11.311    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:03:19.319    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+10:03:54.354    (INFO)     Doc_GLJournal.PostLogic: (0) MJournal[1000759,trtrtr,DR=100,CR=100]
+===========>     (SEVERE)   Doc_GLJournal.Post:  => Object reference not set to an instance of an object.
