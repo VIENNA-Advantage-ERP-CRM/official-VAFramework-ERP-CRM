@@ -53,7 +53,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Before Delete
         /// </summary>
-        /// <returns>true of it can be deleted</returns>
+        /// <returns>true if it can be deleted</returns>
         protected override bool BeforeDelete()
         {
             int AD_Table_ID = Get_Table_ID("GL_ReDistribution");
