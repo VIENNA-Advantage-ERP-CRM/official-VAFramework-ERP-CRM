@@ -195,6 +195,7 @@
     <Content Include="Areas\VIS\Content\Email.css" />
     <Content Include="Areas\VIS\Content\F20\Color.css" />
     <Content Include="Areas\VIS\Content\F20\Controls.css" />
+    <Content Include="Areas\VIS\Content\F20\Media.css" />
     <Content Include="Areas\VIS\Content\F20\Site.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
@@ -725,6 +726,7 @@
     <Content Include="Areas\VIS\Scripts\app\viewmanager.js" />
     <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\wframe.js" />
     <Content Include="Areas\VIS\Scripts\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\home\changeuserimage.js" />
@@ -1029,7 +1031,7 @@
     <Content Include="Areas\VIS\Scripts\F20\veditview.js" />
     <Content Include="Areas\VIS\Scripts\F20\vgridview.js" />
     <Content Include="Areas\VIS\Scripts\F20\vmapview.js" />
-    <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabbedpane.js" />
     <Content Include="Areas\VIS\Scripts\F20\vcardview.js" />
     <Content Include="Areas\VIS\Views\Shared\_UserSettings.cshtml" />
     <Content Include="Areas\VIS\Views\Home\Index.cshtml" />

@@ -19,6 +19,8 @@
         /** Map of group name to list of components in group. */
         var groupToCompsMap = {};
 
+        var fieldToCompParentMap = {};
+       
 
         function initComponent() {
             $table = $("<div class='vis-ad-w-p-vc-ev-grid'>"); //   $("<table class='vis-gc-vpanel-table'>");
@@ -58,18 +60,27 @@
             var show = false;
             if (dis === "show") {
                 o.data("display", "hide");
-                $(o.children()[0]).addClass("vis-gc-vpanel-fieldgroup-img-rotate");
+                $(o.children()[2]).addClass("vis-ev-col-fg-rotate");
             } else {
                 o.data("display", "show");
                 show = true;
-                $(o.children()[0]).removeClass("vis-gc-vpanel-fieldgroup-img-rotate");
+                $(o.children()[2]).removeClass("vis-ev-col-fg-rotate");
             }
 
             var list = groupToCompsMap[name];
+           
             for (var i = 0; i < list.length; i++) {
-                var field = compToFieldMap[list[i].getName()];
-                list[i].tag = show;
-                list[i].setVisible(show && field.getIsDisplayed(true));
+                var field = list[i];
+                var ctrls = compToFieldMap[field.getColumnName()];
+
+                for (var j = 0; j < ctrls.length; j++) {
+                    ctrls[j].tag = show;
+                    ctrls[j].setVisible(show && field.getIsDisplayed(true));
+                }
+                if (show && field.getIsDisplayed(true))
+                    fieldToCompParentMap[field.getColumnName()].show();
+                else 
+                    fieldToCompParentMap[field.getColumnName()].hide();
             }
         };
 
@@ -84,9 +95,13 @@
 
             setColumns(columnIndex);
             addRow();
-            var gSpan = $("<span class='vis-gc-vpanel-fieldgroup-span'>" + fieldGroup + "</span>");
-            var gImg = $("<img class='vis-gc-vpanel-fieldgroup-img' src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/base/fieldgrpdown.png' >");
-            var gDiv = $("<div class='vis-gc-vpanel-fieldgroup' data-name='" + fieldGroup + "' data-display='show' >").append(gImg).append(gSpan);
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="show">' +
+                            '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
+                            '<span class="vis-ev-col-fg-more" style="display:none"><i class="fa fa-ellipsis-h"></i></span>'+
+                                '<i class= "fa fa-angle-up">'+
+                            '</span>' +
+                          '</div>');
+
 
             $td0.append(gDiv);
             columnIndex = 8;
@@ -114,6 +129,35 @@
             }
         };
 
+
+        function addCompToFieldList(name, comp) {
+
+            if (compToFieldMap[name])
+                compToFieldMap[name].push(comp);
+            else {
+                compToFieldMap[name] = [];
+                compToFieldMap[name].push(comp);
+            }
+        }
+
+        function addFieldToGroupList(mField) {
+
+            if (oldFieldGroup != null && !oldFieldGroup.equals("")) {
+                var fieldList = null;
+
+                if (groupToCompsMap[oldFieldGroup]) {
+                    fieldList = groupToCompsMap[oldFieldGroup];
+                }
+
+                if (fieldList == null) {
+                    fieldList = [];
+                    groupToCompsMap[oldFieldGroup] = fieldList;
+                }
+                fieldList.push(mField);
+            }
+        };
+
+
         function setColumns() {
             if ($td0 != null) {
                 if (columnIndex < 2) {
@@ -125,7 +169,7 @@
                 else if (columnIndex == 8) {
                     $td3.remove();
                     $td2.remove();
-                    $td2.remove();
+                    $td1.remove();
                     $td0.addClass("vis-ev-col-end4");
                 }
             }
@@ -197,8 +241,9 @@
                 }
 
 
-                addToCompList(label);
-                compToFieldMap[label.getName()] = mField;
+                //addToCompList(label);
+                //compToFieldMap[label.getName()] = mField;
+                addCompToFieldList(mField.getColumnName(),label);
                 allControls[++allControlCount] = label;
             }
 
@@ -294,27 +339,35 @@
                 //}
                 count = 0;
 
-                addToCompList(editor);
-                compToFieldMap[editor.getName()] = mField;
+                //addToCompList(editor);
+               // compToFieldMap[editor.getName()] = mField;
+                addCompToFieldList(mField.getColumnName(),editor);
                 allControls[++allControlCount] = editor;
+
             }
 
 
             //new design container
             if (label != null || editor != null) {
+                addFieldToGroupList(mField);
+                var ctnr = null;
                 if (sameLine) {
                     if (columnIndex == 1) {
                         //$td1.append(editor.getControl());
                         insertCWrapper(label, editor, $td1, mField);
+                        ctnr = $td1;
                     }
                     else if (columnIndex == 2) {
                         insertCWrapper(label, editor, $td2, mField);
+                        ctnr = $td2;
                     }
                     else {
                         insertCWrapper(label, editor, $td3, mField);
+                        ctnr = $td3;
                     }
                 } else {
                     insertCWrapper(label, editor, $td0, mField);
+                    ctnr = $td0;
                 }
 
                 if (!sameLine && mField.getIsLongField()) {
@@ -324,6 +377,8 @@
                     $td0.addClass("vis-ev-col-end4");
                     columnIndex = 4;
                 }
+
+                fieldToCompParentMap[mField.getColumnName()] = ctnr;
             }
         };
 
@@ -355,6 +410,8 @@
                 delete compToFieldMap[p];
             }
             compToFieldMap = null;
+            fieldToCompParentMap = {};
+            fieldToCompParentMap = null;
 
             // console.log(groupToCompsMap);
             for (var p1 in groupToCompsMap) {
@@ -376,6 +433,8 @@
     };
 
     function insertCWrapper(label, editor, parent, mField) {
+        
+
         var ctrl = $('<div class="input-group vis-input-wrap">');
         if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
             var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
@@ -384,7 +443,7 @@
             else
                 btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
             btns.push('</span></div>');
-            ctrl.append($(btns.join(' ')));
+            ctrl.append(btns.join(' '));
         }
 
         var ctrlP = $("<div class='vis-control-wrap'>");

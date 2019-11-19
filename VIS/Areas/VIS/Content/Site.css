@@ -339,7 +339,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
     }
 
     #vis_mainMenu .vis-menuSearch input[type=text] {
-        padding: 5px 40px 5px 10px;
+        padding: 5px 1s0px 5px 10px;
         background-color: rgba(var(--v-c-secondary), 0.7);
         border: 1px solid rgba(var(--v-c-primary), 0.09);
         border-radius: 3px;

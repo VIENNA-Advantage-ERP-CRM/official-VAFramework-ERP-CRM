@@ -44,9 +44,16 @@
                 <span class="vis-ad-w-p-tb-rc-action">
                     <i class="fa fa-filter" aria-hidden="true"></i>
                 </span>
-                <span class="vis-ad-w-p-tb-rc-action">
-                    <i class="fa fa-cog"></i>
-                </span>
+                <div class="dropdown vis-ad-w-p-tb-rc-action">
+                    <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-cog"></i>
+                    </span>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
                 <span class="vis-ad-w-p-tb-rc-abar">
                     <i class="fa fa-bars"></i>
                 </span>
@@ -153,6 +160,7 @@
         <div class="vis-ad-w-p-vc-tree">
         </div>
         <div class="vis-ad-w-p-vc-acontainer">
+            <span class="vis-ad-w-p-vc-header" ></span>
             @*toolbar*@
             @*toolbar*@
             <ul class="vis-ad-w-p-vc-actions"></ul>
@@ -171,23 +179,26 @@
 
 <template id="vis-ad-tabpnltmp">
 
-    <div class="vis-ad-w-p-ap-outerwrap">
-        <div class="vis-window-tab-panels vis-pull-left" style="">
-            <div class="vis-window-tabpanel-head vis-pull-left">
-                <h3 class="vis-pull-left"></h3>
-                <span class="vis-pull-right">
-                    <i class="glyphicon glyphicon-remove"></i>
-                </span>
-            </div>
-            <div class="vis-window-tab-panelContent">
-            </div>
-        </div>
-        <div class="vis-window-tab-icons">
+    <div class="vis-ad-w-p-ap-tp-outerwrap">
+        <div class="vis-ad-w-p-ap-tp-o-icorbar">
             <ul>
+                
             </ul>
         </div>
-    </div>
+        <div class="vis-ad-w-p-ap-tp-o-body">
+            <div class="vis-ad-w-p-ap-tp-o-b-head">
+                <h6 class=""></h6>
+                <span class=""><i class="glyphicon glyphicon-remove"></i></span>
+            </div>
+            <div class="vis-ad-w-p-ap-tp-o-b-content">
+            </div>
+
+        </div><!-- vis-window-tab-panels -->
+    </div><!-- vis-window-tab-panel-outerwrap -->
 </template>
+
+
+
 
 
 

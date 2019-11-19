@@ -1,0 +1,110 @@
+﻿/*  */
+@media (max-width:600px) {
+
+    .vis-ad-w-p-header-l {
+        grid-column: 3 /6;
+        grid-row: 2 /2;
+        background-color: red;
+        height: 0px;
+        width: auto;
+    }
+
+    .vis-ad-w-p-actionpanel-r {
+        grid-column: 1/1;
+        grid-row: 4/4;
+        background-color: lightpink;
+        height: auto;
+        width: auto;
+    }
+
+    .vis-ad-w-p-tabs-l {
+        grid-column: 4/4;
+        grid-row: 3 / 3;
+        /*height: 22px;*/
+        width: auto;
+        flex-flow: row;
+    }
+
+    .vis-ad-w-p-tb-search {
+        display: none;
+    }
+
+    .vis-ad-w-p-s-result {
+        display: none;
+    }
+
+    .vis-ad-w-p-tabs-l .vis-ad-w-p-t-c {
+        overflow: unset;
+        overflow-x: auto;
+        width: 1px;
+    }
+
+    .vis-ad-w-p-tabs-l ul {
+        flex-flow: row;
+    }
+
+    #vis_userDate {
+        display: none;
+    }
+
+
+
+    /* tab Panel*/
+    .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-outerwrap {
+        flex-direction: column;
+        width: auto !important;
+    }
+
+    .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-o-icorbar {
+        order: 1;
+        height: 40px;
+        width: auto;
+        align-items: flex-start;
+        flex-basis: auto;
+    }
+
+    .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-outerwrap {
+        width: auto;
+        height: 500px;
+    }
+
+    .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-o-icorbar ul {
+        flex-direction: row;
+    }
+    .vis-ad-w-p-actionpanel-r li {
+        border-bottom: 3px solid transparent;
+        border-left: none;
+        padding: 7px 9px;
+    }
+
+        li.vis-ad-w-p-ap-tp-o-li-selected {
+            border-bottom: 3px solid rgba(var(--v-c-primary),1);
+        }
+
+             li.vis-ad-w-p-ap-tp-o-li-selected:before {
+                border-right: 5px solid transparent;
+                border-left: 5px solid transparent;
+                /*border-bottom: 5px solid transparent;*/
+                border-bottom: 5px solid rgba(var(--v-c-primary),1);
+                bottom: 0px;
+                margin: auto;
+                right: 0;
+            }
+}
+/*.vis-w-ap-toolbar 
+{
+    margin: 0;
+    flex-basis: auto;
+}
+
+.vis-w-ap-search 
+{
+    padding: 7px 10px;
+    height: 91%;
+    font-size: 13px;
+    margin-right: 10px;
+    flex-basis: 300px;
+    vertical-align: middle;
+    position: relative;
+}*/
+/* END */

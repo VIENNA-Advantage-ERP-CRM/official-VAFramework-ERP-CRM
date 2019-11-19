@@ -1,188 +1,184 @@
 ﻿; (function (VIS, $) {
-//****************************************************//
-//**             VTabbedPane                       **//
-//**************************************************//
 
-/**
- *  Tabbed Pane - Window Tab
- *  
- */
 
-VIS.VTabbedPane = function (isWorkBench) {
-    /** Workbench 				*/
-    var _workbenchTab = false;
-    /** List of dependent Variables		*/
-    this.oldTabIndex = -1;
+    var tmpTabPnl = document.querySelector('#vis-ad-tabpnltmp').content;// $("#vis-ad-windowtmp");
 
-    this.Items = [];
-    this.ItemsIds = [];
-    this.count = 0;
-    this.dependents = [];
-    this.TabItems = [];
+    function VTabPanel(windowNo,wWidth) {
 
-    this.getIsWorkbench = function () {
-        return _workbenchTab;
-    }
-};
+        this.tabPanels = [];
+       // this.panelSize = 50;
+        //var panelMaxWidth = $(document).width() / 2;
 
-VIS.VTabbedPane.prototype.setTabObject = function (obj) {
-    this.tabObj = obj
-}
+        var clone = $(document.importNode(tmpTabPnl, true));
 
-/**
- * 	Add Tab
- *	@param id tab id
- *	@param gTab grid tab model
- *	@param tabElement GridController or VSortTab
- */
-VIS.VTabbedPane.prototype.addTab = function (id, gTab, tabElement, tabItem) {
+        var $outerwrap = clone.find(".vis-ad-w-p-ap-tp-outerwrap");
+        var $ulIconList = $outerwrap.find('.vis-ad-w-p-ap-tp-o-icorbar ul');
+        var $divHead = $outerwrap.find('.vis-ad-w-p-ap-tp-o-b-head');
+        var $spnName = $outerwrap.find(".vis-ad-w-p-ap-tp-o-b-head h6");
+        var $spnClose = $outerwrap.find(".vis-ad-w-p-ap-tp-o-b-head span");
+        var $divContent = $outerwrap.find(".vis-ad-w-p-ap-tp-o-b-content");
 
-    this.ItemsIds[this.count] = id;
-    this.Items[this.count] = tabElement;
-    this.TabItems.push(tabItem);
+        this.isClosed = true;
 
-    var tabDependents = gTab.getDependentOn();
+        
+        if (wWidth <= 50) {
+            if (wWidth <= 0)
+                wWidth = 75;
+            else
+                wWidth = 50;
+        }
+        else if (wWidth > 75)
+            wWidth = 75
 
-    for (var i = 0; i < tabDependents.length; i++) {
-        var name = tabDependents[i];
-        if (this.dependents.indexOf(name) < 0) { // this.dependents.contains(name)) {
-            this.dependents.push(name);
+       
+            wWidth = 100 - wWidth;
+            wWidth = ($(document).width() * wWidth) / 100;
+        
+
+    /********************************* END Tab Panels ***********************************/
+        var self = this;
+        var selLI = null;
+
+        $ulIconList.on("click", 'LI', function (e) {
+            setContent($(e.currentTarget));
+        });
+
+        function setContent($target) {
+            if (selLI)
+                selLI.removeClass("vis-ad-w-p-ap-tp-o-li-selected");
+            selLI = null;
+
+            $divContent.empty();
+
+            if ($target) {
+                selLI= $target.addClass('vis-ad-w-p-ap-tp-o-li-selected');
+                $spnName.text($target.data('name'));
+                self.setCurrentPanel($target.data('cname'), windowNo);
+            }
+            else 
+                self.setCurrentPanel(null);
+            if (self.curTabPanel) {
+                $divContent.append(self.curTabPanel.getRoot());
+                self.setSize(wWidth);
+            }
+            else
+                self.setSize(35);
+        };
+
+        $spnClose.on("click", function () {
+            setContent(null);
+            //$divContent.empty();
+            //self.setCurrentPanel(null);
+            //self.setWidth(35);
+            //if (selLI)
+            //    selLI.removeClass("vis-selected-list");
+        });
+
+        this.getRoot = function () {
+            return $outerwrap;
+        }
+
+        this.setPanelList = function (htm, defPnlId) {
+            $ulIconList.append(htm);
+            setContent($($ulIconList.find('li[data-panelid="' + defPnlId + '"]')));
+        };
+
+        this.setSize = function (size) {
+
+            if (!this.isClosed && size && size > 40) {
+                return;
+            }
+            if (size && size > 40) {
+                $outerwrap.css('height', size + 'px');
+                $outerwrap.css('width', size + 'px');
+                this.isClosed = false;
+                $divHead.show();
+            }
+            else {
+                $outerwrap.css('height', '35px');
+                $outerwrap.css('width', '35px');
+                this.isClosed = true;
+                $divHead.hide();
+            }
+        }
+
+        this.disposeComponent = function () {
+            $outerwrap.remove();
+            selLI = null;
+            self = null;
         }
     }
-    this.count++;
-};
 
-/**
-* 	is tab really change
-*	@param action tab id
-*/
-VIS.VTabbedPane.prototype.getIsTabChanged = function (action) {
+    VTabPanel.prototype.init = function (gTab) {
+        this.gTab = gTab;
+        var panels = this.gTab.getTabPanels();
 
-    var index = this.ItemsIds.indexOf(action);
-    var oldIndex = this.oldTabIndex;
+        var defPnlId = 0;
 
-    if (index === oldIndex) {  //Same Tab 
-        console.log("same tab");
-        return false;
-    }
+        if (panels && panels.length > 0) {
+            var str = [];
+            defPnlId = panels[0].getAD_TabPanel_ID();
 
-
-
-    var oldGC = this.Items[index];
-    var newGC = null;
-
-    if (oldGC instanceof VIS.GridController) {
-        newGC = oldGC;
-        var display = newGC.getIsDisplayed(); // if tab is not displayed
-        if (!display) {
-            //VLogger.Get().Info("Not displayed - " + newGC.ToString());
-            return false;
-        }
-    }
-
-    if (newGC != null && oldIndex >= 0 && index != oldIndex) {
-        var oldGC = this.Items[oldIndex];//.Controls[0];
-        if (oldGC != null && (oldGC instanceof VIS.GridController)) {
-
-            /* check for tab Level of tab */
-            if (newGC.getTabLevel() > oldGC.getTabLevel() + 1) {
-                //	Search for right tab
-                for (var i = index - 1; i >= 0; i--) {
-                    var rightC = this.Items[i];// .Controls[0];// getComponentAt(i);
-                    var rightGC = null;
-                    if (rightC instanceof VIS.GridController) {
-                        rightGC = rightC;
-                        if (rightGC.getTabLevel() == oldGC.getTabLevel() + 1) {
-                            VIS.ADialog.warn("TabSwitchJumpGo", true, "", rightGC.getTitle());
-                            return false;;
-                        }
-                    }
+            for (var i = 0; i < panels.length; i++) {
+                var iconPath = '';
+                if (panels[i].getIconPath()) {
+                    iconPath = panels[i].getIconPath();
                 }
-                VIS.ADialog.warn("TabSwitchJump");
-                return false;
+                else {
+                    iconPath = 'VIS/Images/base/defPanel.ico';
+                }
+                str.push('<li default="' + panels[i].getIsDefault() + '" data-panelid="' + panels[i].getAD_TabPanel_ID() +
+                    '" data-cname="' + panels[i].getClassName() + '" data-name="' + panels[i].getName() + '">');
+                if (iconPath.indexOf('.'))
+                    str.push('<img alt = "' + panels[i].getName() + '" title = "' + panels[i].getName() +
+                        '"  src = "' + VIS.Application.contextUrl + 'Areas/' + iconPath + '" ></img >');
+                else
+                    str.push('<span> <i  class="' + iconPath + '" ></i></span>');
+
+                str.push('</li>');
+
+                if (panels[i].getIsDefault())
+                    defPnlId = panels[i].getAD_TabPanel_ID();
             }
-            oldGC.setMnemonics(false);
         }
-    }
-    //	Switch
-    if (newGC != null) {
-        newGC.setMnemonics(true);
-    }
-    this.oldTabIndex = index;
+        this.setPanelList(str.join(' '),defPnlId);
+    };
 
-    return true;
-};
-
-VIS.VTabbedPane.prototype.restoreTabChange = function () {
-    this.oldTabIndex = -1;
-}
-
-/**
- *  current selected tab element either GridController or VSortTab
- */
-VIS.VTabbedPane.prototype.getTabElement = function (action) {
-    return this.Items[this.oldTabIndex];
-};
-/**
- *  current selected tab index
- */
-VIS.VTabbedPane.prototype.getSelectedIndex = function () {
-    return this.oldTabIndex;
-};
-
-VIS.VTabbedPane.prototype.sizeChanged = function (height, width) {
-    for (var prop in this.Items) {
-        this.Items[prop].sizeChanged(height, width);
-    }
-}
-
-VIS.VTabbedPane.prototype.evaluate = function (e) {
-    var process = e == null;
-    var columnName = null;
-    if (!process) {
-        columnName = e;
-        if (columnName != null)
-            process = this.dependents.indexOf(columnName) > -1;//  contains(columnName);
-        else
-            process = true;
-    }
-
-    if (process) {
-        //VLogger.Get().Config(columnName == null ? "" : columnName);
-        for (var i = 0; i < this.TabItems.length; i++) {
-            var c = this.Items[i];
-            if (c instanceof VIS.GridController) {
-                var gc = c;
-                var display = gc.getIsDisplayed();
-                this.TabItems[i].setEnabled(display);
+    VTabPanel.prototype.setCurrentPanel = function (className, windowNo) {
+        if (this.curTabPanel) {
+            if (this.curTabPanel.dispose) {
+                this.curTabPanel.dispose();
+            }
+            this.curTabPanel = null;
+        }
+        if (className) {
+            var type = VIS.Utility.getFunctionByName(className, window);
+            if (type) {
+                var panel = new type();
+                panel.startPanel(windowNo, this.gTab);
+                if (this.gTab.getRecord_ID() > -1) {
+                    panel.refreshPanelData(this.gTab.getRecord_ID(), this.gTab.getTableModel().getRow(this.gTab.getCurrentRow()));
+                }
+                this.curTabPanel = panel;
             }
         }
     }
-};
 
-
-/**
- *  Dispose all contained VTabbedPanes and GridControllers
- */
-VIS.VTabbedPane.prototype.dispose = function () {
-    for (var prop in this.Items) {
-        this.Items[prop].dispose();
-        this.Items[prop] = null;
+    VTabPanel.prototype.refreshPanelData = function (rec_Id,dataRow) {
+        if (this.curTabPanel) {
+            this.curTabPanel.refreshPanelData(rec_Id, dataRow);
+        }
     }
 
-    this.TabItems.length = 0;
-    this.TabItems = null;
+    VTabPanel.prototype.dispose = function () {
+        this.disposeComponent();
+        this.gTab = null;
+        if (this.curTabPanel) {
+            this.curTabPanel.dispose();
+            this.curTabPanel = null;
+        }
+    }
 
-    this.Items.length = 0;
-    this.Items = null;
-    this.ItemsIds.length = 0;
-    this.ItemsIds = null;
-
-    this.dependents.length = 0;
-    this.dependents = null;
-};
-    //****************APanel END************************//
-    //Assignment Gobal Namespace
-    
+    VIS.VTabPanel = VTabPanel;
 
 }(VIS, jQuery));
