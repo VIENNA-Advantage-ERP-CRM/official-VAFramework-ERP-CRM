@@ -23,7 +23,9 @@
     background-color: transparent;
     /*line-height: normal;*/
 }
-
+.vis-input-wrap label + button {
+    height: auto;
+}
 
 
 
