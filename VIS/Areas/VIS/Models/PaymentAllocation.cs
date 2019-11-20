@@ -2333,12 +2333,12 @@ namespace VIS.Models
                     int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
                     String sql = "SELECT invoiceOpen(C_Invoice_ID, 0) "
                         + "FROM C_Invoice WHERE C_Invoice_ID=@param1";
-                    Decimal opens = Util.GetValueOfDecimal(DB.GetSQLValueBD(null, sql, C_Invoice_ID));
+                    Decimal opens = Util.GetValueOfDecimal(DB.GetSQLValueBD(trx, sql, C_Invoice_ID));
                     if (Env.Signum(opens) == 0)
                     {
                         sql = "UPDATE C_Invoice SET IsPaid='Y' "
                             + "WHERE C_Invoice_ID=" + C_Invoice_ID;
-                        int no = DB.ExecuteQuery(sql, null, null);
+                        int no = DB.ExecuteQuery(sql, null, trx);
                     }
                 }
                 #endregion
@@ -2349,7 +2349,7 @@ namespace VIS.Models
                     for (int i = 0; i < rowsPayment.Count; i++)
                     {
                         int C_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]);
-                        MPayment pay = new MPayment(ctx, C_Payment_ID, null);
+                        MPayment pay = new MPayment(ctx, C_Payment_ID, trx);
                         if (pay.TestAllocation())
                         {
                             if (!pay.Save())
@@ -2362,8 +2362,8 @@ namespace VIS.Models
 
                         }
 
-                        string sqlGetOpenPayments = "SELECT  currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,260,p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID) FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
-                        object result = DB.ExecuteScalar(sqlGetOpenPayments, null, null);
+                        string sqlGetOpenPayments = "SELECT  NVL(currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,260,p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID),0) as amt FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
+                        object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
                         Decimal? amtPayment = 0;
                         if (result == null || result == DBNull.Value)
                         {
@@ -2398,10 +2398,10 @@ namespace VIS.Models
                     for (int i = 0; i < rowsCash.Count; i++)
                     {
                         int _cashine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
-                        MCashLine cash = new MCashLine(ctx, _cashine_ID, null);
+                        MCashLine cash = new MCashLine(ctx, _cashine_ID, trx);
 
                         string sqlGetOpenPayments = "SELECT  ALLOCCASHAVAILABLE(cl.C_CashLine_ID)  FROM C_CashLine cl Where C_CashLine_ID = " + _cashine_ID;
-                        object result = DB.ExecuteScalar(sqlGetOpenPayments, null, null);
+                        object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
                         Decimal? amtPayment = 0;
                         if (result == null || result == DBNull.Value)
                         {
