@@ -4180,10 +4180,7 @@
                 mTab.setValue("DiscountAmt", VIS.Env.ZERO);
                 mTab.setValue("WriteOffAmt", VIS.Env.ZERO);
                 mTab.setValue("OverUnderAmt", VIS.Env.ZERO);
-                //changed by abhishek to resolve issue JID_1536
-                if (mTab.getValue("C_Order_ID") == null || mTab.getValue("C_Order_ID") == 0) {
-                    mTab.getField("C_ConversionType_ID").setReadOnly(false);
-                }
+                
                 this.setCalloutActive(false);
             }
             return "";
@@ -4227,10 +4224,7 @@
         }
         //-------------
         if (C_Invoice_ID == null || C_Invoice_ID == 0) {
-            //changed by abhishek to resolve issue JID_1536
-            if (mTab.getValue("C_Order_ID") == null || mTab.getValue("C_Order_ID") == 0) {
-                mTab.getField("C_ConversionType_ID").setReadOnly(false);
-            }
+           
             mTab.setValue("C_Currency_ID", null);
             // commented by Arpit
             /*
@@ -4244,10 +4238,7 @@
             */
             this.setCalloutActive(false);
             return "";
-        }
-        else { //changed by abhishek to resolve issue JID_1536
-            mTab.getField("C_ConversionType_ID").setReadOnly(true);
-        }
+        }       
         // Date
         // var ts = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateAcct"));
         //DateTime billDate = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateOrdered"));
@@ -5346,7 +5337,7 @@
     /// <param name="value">value</param>
     /// <returns>null or error message</returns>
     CalloutBankStatement.prototype.Amount = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        if (value == null || value.toString() == "") {
+        if (value == null || value.toString() == "") {            
             return "";
         }
         if (this.isCalloutActive()) {
@@ -16866,10 +16857,7 @@
         // 
 
         if (value == null || value.toString() == "") {
-            //changed by abhishek to resolve issue JID_1536
-            if (mTab.getValue("C_Invoice_ID") == null || mTab.getValue("C_Invoice_ID") == 0) {
-                mTab.getField("C_ConversionType_ID").setReadOnly(false);
-            }
+           
             return "";
         }
         try {
@@ -17821,20 +17809,10 @@
         //	No Invoice
         var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
         if (C_Invoice_ID == 0) {
-            //changed by abhishek to resolve issue JID_1536
-            if (mTab.getValue("C_Order_ID") == 0 || mTab.getValue("C_Order_ID") ==null) {
-                mTab.getField("C_ConversionType_ID").setReadOnly(false);
-            }
+            
             return "";
         }
-        //changed by abhishek to resolve issue JID_1536
-        if (mField.getColumnName() == "C_ConversionType_ID" && (mTab.getValue("C_Invoice_ID") > 0 || mTab.getValue("C_Order_ID") > 0)) {
-
-            value = oldValue;
-            mField.setValue(oldValue);
-            mField.setReadOnly(true);
-            return;
-        }
+        
         this.setCalloutActive(true);
         //	Get Info from Tab
         // Added by Bharat on 23 June 2017
@@ -18019,15 +17997,24 @@
     CalloutPayment.prototype.Invoice = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         if (value == null || value.toString() == "") {
+            //changed by abhishek to resolve issue JID_1536
+            if (mTab.getValue("C_Order_ID") == null || mTab.getValue("C_Order_ID") == 0) {
+                mTab.getField("C_ConversionType_ID").setReadOnly(false);
+            }
             return "";
         }
         var C_Invoice_ID = Util.getValueOfInt(value.toString());//(int)value;
         if (this.isCalloutActive()		//	assuming it is resetting value
             || C_Invoice_ID == null
             || C_Invoice_ID == 0) {
+            //changed by abhishek to resolve issue JID_1536
+            if (mTab.getValue("C_Order_ID") == null || mTab.getValue("C_Order_ID") == 0) {
+                mTab.getField("C_ConversionType_ID").setReadOnly(false);
+            }
             return "";
         }
         this.setCalloutActive(true);
+        mTab.getField("C_ConversionType_ID").setReadOnly(true);
         mTab.setValue("C_Order_ID", null);
         mTab.setValue("C_Charge_ID", null);
         mTab.setValue("IsPrepayment", false);//Boolean.FALSE);
@@ -18318,6 +18305,10 @@
     CalloutPayment.prototype.Order = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         if (value == null || value.toString() == "") {
+            //changed by abhishek to resolve issue JID_1536
+            if (mTab.getValue("C_Invoice_ID") == null || mTab.getValue("C_Invoice_ID") == 0) {
+                mTab.getField("C_ConversionType_ID").setReadOnly(false);
+            }
             return "";
         }
         var C_Order_ID = value;
@@ -18327,6 +18318,7 @@
             return "";
         }
         this.setCalloutActive(true);
+        mTab.getField("C_ConversionType_ID").setReadOnly(true);
         mTab.setValue("C_Invoice_ID", null);
         mTab.setValue("C_Charge_ID", null);
         mTab.setValue("IsPrepayment", true);// Boolean.TRUE);
@@ -18698,6 +18690,14 @@
         var cur = mTab.getValue("C_Currency_ID");
         if (cur == null) {
             return "";
+        }
+        //changed by abhishek to resolve issue JID_1536
+        if (mField.getColumnName() == "C_ConversionType_ID" && (mTab.getValue("C_Invoice_ID") > 0 || mTab.getValue("C_Order_ID") > 0) && Util.getValueOfInt(mTab.getValue("C_Payment_ID"))>0) {
+
+            value = oldValue;
+            mField.setValue(oldValue);
+            mField.setReadOnly(true);
+            return;
         }
         // added by Bharat as discussed with Vivek
         if (C_Invoice_ID != 0) {
