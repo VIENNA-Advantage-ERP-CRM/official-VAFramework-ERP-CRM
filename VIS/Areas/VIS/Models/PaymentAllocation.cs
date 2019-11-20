@@ -1964,7 +1964,10 @@ namespace VIS.Models
                         if (openAmt == 0)
                         {
                             aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]), null);
-                            aline.Save();
+                            if (!aline.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation Line not created");
+                            }
                             continue;
                         }
                         openAmt = getAmount(Util.GetValueOfString(ds.Tables[0].Rows[i]["AccountType"]), isCustomer, isVendor, openAmt, 0);
@@ -1979,7 +1982,10 @@ namespace VIS.Models
                         if (openAmt == 0)
                         {
                             aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]), null);
-                            aline.Save();
+                            if (!aline.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation Line not created");
+                            }
                             continue;
                         }
                         openAmt = getAmount(Util.GetValueOfString(ds.Tables[0].Rows[i]["AccountType"]), isCustomer, isVendor, 0, openAmt);
@@ -2094,8 +2100,9 @@ namespace VIS.Models
             decimal amtToAllocate = 0, remainingAmt = 0, netAmt = 0;
             decimal balanceAmt = 0;
             string msg = string.Empty;
+            Trx trx = Trx.GetTrx(Trx.CreateTrxName("GL"));
             MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
-               DateTime.Now, C_Currency_ID, ctx.GetContext("#AD_User_Name"), null);
+               DateTime.Now, C_Currency_ID, ctx.GetContext("#AD_User_Name"), trx);
             alloc.SetAD_Org_ID(AD_Org_ID);
             alloc.SetDateAcct(DateTrx);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
             alloc.Set_Value("C_ConversionType_ID", C_CurrencyType_ID); // to set Conversion Type on allocation header because posting and conversion are calculating on the basis of Conversion Type
@@ -2103,6 +2110,7 @@ namespace VIS.Models
             alloc.Set_Value("C_BPartner_ID", C_BPartner_ID);
             if (alloc.Save())
             {
+                //create allocation line if cash row selected
                 for (int i = 0; i < rowsCash.Count; i++)
                 {
                     amtToAllocate = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]);
@@ -2135,7 +2143,10 @@ namespace VIS.Models
                         aLine.SetC_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
                         if (!aLine.Save())
                         {
-                            _log.SaveError("Error: ", "Allocation Line not created");
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
                         }
                         else
                         {
@@ -2156,6 +2167,7 @@ namespace VIS.Models
                     }
                 }
 
+                //create allocation line if payment row selected
                 for (int i = 0; i < rowsPayment.Count; i++)
                 {
                     amtToAllocate = Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]);
@@ -2188,7 +2200,10 @@ namespace VIS.Models
                         aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]));
                         if (!aLine.Save())
                         {
-                            _log.SaveError("Error: ", "Allocation Line not created");
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
                         }
                         else
                         {
@@ -2208,7 +2223,9 @@ namespace VIS.Models
                         }
                     }
                 }
+
                 decimal overUnderAmt = 0;
+                //create allocation line if invoice row selected
                 for (int i = 0; i < rowsInvoice.Count; i++)
                 {
                     amtToAllocate = Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]);
@@ -2250,7 +2267,10 @@ namespace VIS.Models
                         aLine.SetOverUnderAmt(overUnderAmt);
                         if (!aLine.Save())
                         {
-                            _log.SaveError("Error: ", "Allocation Line not created");
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
                         }
                         else
                         {
@@ -2271,7 +2291,7 @@ namespace VIS.Models
                     }
                 }
 
-
+                //create allocation line if GL to GL Allocation
                 if (rowsCash.Count == 0 && rowsPayment.Count == 0 && rowsInvoice.Count == 0)
                 {
                     for (int i = 0; i < rowsGL.Count; i++)
@@ -2283,7 +2303,10 @@ namespace VIS.Models
                         aLine.SetDateTrx(DateTrx);
                         if (!aLine.Save())
                         {
-                            _log.SaveError("Error: ", "Allocation Line not created");
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
                         }
                     }
                 }
@@ -2294,6 +2317,10 @@ namespace VIS.Models
                     if (alloc.Save())
                     {
                         msg = alloc.GetDocumentNo();
+                    }
+                    else
+                    {
+                        _log.SaveError("Error: ", "Allocation not completed");
                     }
                 }
 
@@ -2313,10 +2340,6 @@ namespace VIS.Models
                             + "WHERE C_Invoice_ID=" + C_Invoice_ID;
                         int no = DB.ExecuteQuery(sql, null, null);
                     }
-                    else
-                    {
-                        //  log.Config("Invoice #" + i + " is not paid - " + open);
-                    }
                 }
                 #endregion
 
@@ -2329,7 +2352,11 @@ namespace VIS.Models
                         MPayment pay = new MPayment(ctx, C_Payment_ID, null);
                         if (pay.TestAllocation())
                         {
-                            pay.Save();
+                            if (!pay.Save())
+                            {
+                                _log.SaveError("Error: ", "Payment not allocated");
+                            }
+
                         }
 
                         string sqlGetOpenPayments = "SELECT  currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,260,p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID) FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
@@ -2352,8 +2379,10 @@ namespace VIS.Models
                         {
                             pay.SetIsAllocated(false);
                         }
-                        pay.Save();
-
+                        if (!pay.Save())
+                        {
+                            _log.SaveError("Error: ", "Payment not allocated");
+                        }
                     }
                 #endregion
 
@@ -2385,13 +2414,18 @@ namespace VIS.Models
                         {
                             cash.SetIsAllocated(false);
                         }
-                        cash.Save();
+                        if (!cash.Save())
+                        {
+                            _log.SaveError("Error: ", "Cash Line not allocated");
+                        }
                     }
                 #endregion
 
             }
             else
             {
+                trx.Rollback();
+                trx.Close();
                 ValueNamePair pp = VLogger.RetrieveError();
                 msg += "Error: " + pp != null ? pp.GetName() : "";
                 return msg;
