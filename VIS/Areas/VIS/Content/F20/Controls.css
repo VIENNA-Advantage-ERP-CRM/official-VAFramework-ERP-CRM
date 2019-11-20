@@ -183,14 +183,14 @@
 .vis-ev-col-fieldgroup {
     background: rgba(var(--v-c-primary), 0.05);
     margin-bottom: 10px;
-    padding: 5px 0 5px 10px;
+    padding: 5px 10px;
     display: flex;
     cursor: pointer;
 }
 .vis-ev-col-fieldgroup i {
     font-size: 1.5rem;
     color: rgba(var(--v-c-primary));
-    padding: 0 10px;
+    /*padding: 0 10px;*/
 }
 
 .vis-ev-col-fg-rotate {
