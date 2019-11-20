@@ -1700,10 +1700,95 @@ html[dir="rtl"] .vis-input-wrap label{
     right: 15px;
     left: auto;
 }
+html[dir="rtl"] .vis-input-wrap select {
+    background-position: calc(9% - 25px) calc(1em + 2px), calc(9% - 20px) calc(1em + 2px), calc(9% - 2.5em) 0.5em;
+}
+
+html[dir="rtl"] .input-group > .input-group-append > .btn,
+html[dir="rtl"] .input-group > .input-group-append > .input-group-text,
+html[dir="rtl"] .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+html[dir="rtl"] .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child),
+html[dir="rtl"] .input-group > .input-group-prepend:not(:first-child) > .btn,
+html[dir="rtl"] .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+html[dir="rtl"] .vis-input-wrap *[data-hasBtn],
+html[dir="rtl"] .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+html[dir="rtl"] .input-group > .input-group-append:last-child > .input-group-text:not(:last-child),
+html[dir="rtl"] .input-group > .input-group-append:not(:last-child) > .btn,
+html[dir="rtl"] .input-group > .input-group-prepend > .btn,
+html[dir="rtl"] .input-group > .input-group-prepend > .input-group-text {
+    border-top-right-radius: .25rem !important;
+    border-bottom-right-radius: .25rem !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap * {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: .25rem !important;
+    border-bottom-left-radius: .25rem !important;
+}
+html[dir="rtl"] .input-group > .input-group-append:not(:last-child) > .input-group-text {
+    border-radius: 0 !important;
+}
+html[dir="rtl"] .vis-input-wrap *[data-hasBtn]:focus {
+    border-left: 1px solid rgba(var(--v-c-secondary),1);
+    border-right: 1px solid rgba(var(--v-c-primary));
+}
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap *:focus {
+    border-right: 1px solid rgba(var(--v-c-secondary),1);
+    border-left: 1px solid rgba(var(--v-c-primary));
+}
+html[dir="rtl"] .input-group:focus-within .input-group-append .input-group-text {
+    border: 1px solid rgba(var(--v-c-primary),1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+
+html[dir="rtl"] .input-group:focus-within .input-group-prepend .input-group-text {
+    border: 1px solid rgba(var(--v-c-primary),1);
+    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+html[dir="rtl"] .input-group:focus-within .input-group-append:not(:last-child) .input-group-text {
+    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+html[dir="rtl"] .input-group-append {
+    margin-right: -1px;
+    margin-left: 0;
+}
+html[dir="rtl"] .input-group-prepend {
+    margin-right: 0;
+    margin-left: -1px;
+}
+html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2) {
+    margin-left: -1px;
+    margin-right: 10px;
+    transform: rotate(180deg);
+}
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+    margin-right: -1px;
+    margin-left: 0;
+    transform: rotate(-180deg);
+}
+html[dir="rtl"] .vis-control-wrap > button {
+    text-align: center;
+}
+html[dir="rtl"] .vis-ad-w-p-tb-search {
+    padding-left: 10px;
+    padding-right: 0;
+}
+html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i{
+    transform: rotate(90deg);
+}
+html[dir="rtl"] .vis-app-f-taskbar li a {
+    padding-left: 0;
+    padding-right: 5px;
+}
 /*rtl css End here*/
-
-
-
 /* Media Queries for different screen resolutions and devices START */
 @media (max-width:1920px) and (min-width:1681px) {
     .vis-welcomeScreenTabMenu .vis-icon-userprofile {

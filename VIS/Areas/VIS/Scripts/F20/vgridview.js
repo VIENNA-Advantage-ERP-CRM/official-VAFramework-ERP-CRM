@@ -635,6 +635,11 @@ VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name,
                     return val;
                 }
                 return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
+                //var img = $('img').error(function () {
+                //    $(this).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val + ".jpeg ");
+                //}).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val+".png ");
+
+                //return img.html();
             }
         }
 

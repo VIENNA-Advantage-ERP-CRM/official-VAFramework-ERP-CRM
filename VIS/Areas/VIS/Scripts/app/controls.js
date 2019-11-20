@@ -444,11 +444,12 @@
         /**
          *  Create Label for MField. (null for YesNo/Button)
          *  The Name is set to the column name for dynamic display management
-         *
+         *  ignoreCheckbox is used to create label for checkbox from header panel.
          *  @param mField MField
+         *  @param ignoreCheckbox bool
          *  @return Label
          */
-        getLabel: function (mField) {
+        getLabel: function (mField, ignoreCheckbox) {
             if (mField == null)
                 return null;
 
@@ -456,176 +457,38 @@
 
             //	No Label for FieldOnly, CheckBox, Button
             if (mField.getIsFieldOnly()
-                || displayType == VIS.DisplayType.YesNo
+                || (displayType == VIS.DisplayType.YesNo && !ignoreCheckbox)
                 || displayType == VIS.DisplayType.Button
                 || displayType == VIS.DisplayType.Label)
                 return null;
             return new VIS.Controls.VLabel(mField.getHeader(), mField.getColumnName(), mField.getIsMandatory());
         },
 
+        ///Return label for almost all the references. Used in header panel.
         getReadOnlyControl: function (Tab, mField, tableEditor, disableValidation, other) {
             if (!mField)
                 return null;
             var columnName = mField.getColumnName();
-            var isMandatory = mField.getIsMandatory(false);      //  no context check
-            //  Not a Field
-            if (mField.getIsHeading())
-                return null;
-
-            var ctrl = null;
+            var isMandatory = mField.getIsMandatory(false);
+            var windowNo = mField.getWindowNo();//  no context check
             var displayType = mField.getHeaderOverrideReference() || mField.getDisplayType();
-
-            var isReadOnly = mField.getIsReadOnly();
-            var isUpdateable = mField.getIsEditable(false);
-            var windowNo = mField.getWindowNo();
-
-            //if (displayType == VIS.DisplayType.Button) {
-
-            //    var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
-            //    btn.setField(mField);
-            //    btn.setReferenceKey(mField.getAD_Reference_Value_ID());
-            //    ctrl = btn;
-            //}
-
-            if (displayType == VIS.DisplayType.String || displayType == VIS.DisplayType.YesNo
-                || VIS.DisplayType.Text == displayType || VIS.DisplayType.TextLong == displayType || VIS.DisplayType.Memo == displayType
-                || VIS.DisplayType.IsNumeric(displayType || displayType == VIS.DisplayType.URL || displayType == VIS.DisplayType.Button)) {
-                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
-                ctrl = $ctrl;
-            }
-
-            else if (VIS.DisplayType.IsDate(displayType)) {
-
-                //if (displayType == VIS.DisplayType.DateTime)
-                //    readOnly = true;
-                //var vd = new VDate(columnName, isMandatory, isReadOnly, isUpdateable,
-                //    displayType, mField.getHeader());
-                //vd.setName(columnName);
-                //vd.setField(mField);
-                //ctrl = vd;
-                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
-                ctrl = $ctrl;
-            }
-            else if (VIS.DisplayType.IsLookup(displayType) || VIS.DisplayType.ID == displayType) {
-                var lookup = mField.getLookup();
-                if (disableValidation && lookup != null)
-                    lookup.disableValidation();
-
-                if (!disableValidation) {
-
-                    if (displayType != VIS.DisplayType.Search && displayType != VIS.DisplayType.MultiKey && displayType != VIS.DisplayType.ProductContainer) {
-
-                        var cmb = new VComboBox(columnName, isMandatory, isReadOnly, isUpdateable, lookup, mField.getDisplayLength(), displayType, mField.getZoomWindow_ID());
-                        cmb.setField(mField);
-                        ctrl = cmb;
-                        //ctrl = new VComboBox();
-                    }
-                    else if (displayType == VIS.DisplayType.ProductContainer) {
-                        var txtAmtDiv = new VProductContainer(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo);
-                        txtAmtDiv.setField(mField);
-                        ctrl = txtAmtDiv;
-                    }
-                    else {
-
-                        var txtb = new VTextBoxButton(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, mField.getZoomWindow_ID());
-                        txtb.setField(mField);
-                        ctrl = txtb;
-                    }
-                }
-
-                else {
-                    if (lookup == null || (displayType != VIS.DisplayType.Search && lookup.getDisplayType() != VIS.DisplayType.Search)) {
-                        var cmb = new VComboBox(columnName, isMandatory, isReadOnly, isUpdateable, lookup, mField.getDisplayLength(), displayType, mField.getZoomWindow_ID());
-                        cmb.setDisplayType(displayType);
-                        cmb.setField(mField);
-                        ctrl = cmb;
-                        // ctrl = new VComboBox();
-                    }
-                    else {
-                        displayType = VIS.DisplayType.Search;
-                        var txtb = new VTextBoxButton(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, mField.getZoomWindow_ID());
-                        txtb.setField(mField);
-                        ctrl = txtb;
-                    }
-                }
-            }
-            else if (displayType == VIS.DisplayType.Location) {
-
-                var txtLoc = new VLocation(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup());
-                txtLoc.setField(mField);
-                ctrl = txtLoc;
-            }
-            else if (displayType == VIS.DisplayType.Locator) {
-                var txtLocator = new VLocator(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup());
-                txtLocator.setField(mField);
-                ctrl = txtLocator;
-            }
-            else if (displayType == VIS.DisplayType.PAttribute) {
-
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true);
-                txtP.setField(mField);
-                ctrl = txtP;
-            }
-            else if (displayType == VIS.DisplayType.GAttribute) {
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false);
-                txtP.setField(mField);
-                ctrl = txtP;
-            }
-            else if (displayType == VIS.DisplayType.Account) {
-                var txtA = new VAccount(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, mField.getHeader());
-                txtA.setField(mField);
-                ctrl = txtA;
-            }
-            else if (displayType == VIS.DisplayType.Binary) {
-                var bin = new VBinary(columnName, isMandatory, isReadOnly, isUpdateable, windowNo);
-                bin.setField(mField);
-                ctrl = bin;
-            }
-            else if (displayType == VIS.DisplayType.Image) {
+            var ctrl = null;
+            if (displayType == VIS.DisplayType.Image) {
                 var image = new VImage(columnName, isMandatory, true, windowNo);
                 //image.setField(mField);
                 ctrl = image;
             }
-            else if (displayType == VIS.DisplayType.FileName || displayType == VIS.DisplayType.FilePath) {
-                var vs = new VFile(columnName, isMandatory, isReadOnly, isUpdateable, windowNo, displayType);
-                vs.setField(mField);
-                ctrl = vs;
-            }
-
-            else if (displayType == VIS.DisplayType.Label) {
-                ///******14/2/2012 *******///
-                ///implement Action pane 
-                ///
-
-                var txt = new VLabel(mField.getHelp(), columnName, false, true);
-                txt.setField(mField);
-                ctrl = txt;
-            }
-            else if (displayType == VIS.DisplayType.AmtDimension) {
-                var txtAmtDiv = new VAmtDimension(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo);
-                txtAmtDiv.setField(mField);
-                txtAmtDiv.setDefaultValue(mField.vo.DefaultValue);
-                ctrl = txtAmtDiv;
-            }
-            else if (displayType == VIS.DisplayType.ProductContainer) {
-                var txtAmtDiv = new VProductContainer(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo);
-                txtAmtDiv.setField(mField);
-                ctrl = txtAmtDiv;
-            }
-
-            if (ctrl == null) {
-                var txt = new VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(),
-                    mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
-                txt.setField(mField);
-                ctrl = txt;
-                //ctrl = new VTextBox(columnName, mandatory, isReadOnly, isUpdateable, 40, 20, null, "");
+            else {
+                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
+                ctrl = $ctrl;
             }
 
 
             return ctrl;
 
         },
-
+        ///Checks if class is applied, then return i tag with className
+        //Otherwise return image tag along with source.
         getIcon: function (mField) {
             if (mField.getFontClass()) {
                 return "<i class='" + mField.getFontClass() + "'> </i>";
@@ -1573,7 +1436,7 @@
                 options[VIS.Actions.contact] = true;
             }
 
-           // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
+            // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button tabindex="-1" class="input-group-text"><i tabindex="-1" class="fa fa-ellipsis-v" /></button>');
             options[VIS.Actions.refresh] = true;
             if (VIS.MRole.getIsShowPreference())
@@ -4634,7 +4497,7 @@
         var $txt = $("<span>").text("-");
         var $ctrl = null;
 
-        $ctrl = $('<button style="width: 100px; height: 100px;">', { type: 'button', name: columnName });
+        $ctrl = $('<button >', { type: 'button', name: columnName });
         $txt.css("color", "blue");
 
 
