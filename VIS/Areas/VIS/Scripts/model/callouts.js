@@ -4180,6 +4180,10 @@
                 mTab.setValue("DiscountAmt", VIS.Env.ZERO);
                 mTab.setValue("WriteOffAmt", VIS.Env.ZERO);
                 mTab.setValue("OverUnderAmt", VIS.Env.ZERO);
+                //changed by abhishek to resolve issue JID_1536
+                if (mTab.getValue("C_Order_ID") == null || mTab.getValue("C_Order_ID") == 0) {
+                    mTab.getField("C_ConversionType_ID").setReadOnly(false);
+                }
                 this.setCalloutActive(false);
             }
             return "";
@@ -4223,6 +4227,10 @@
         }
         //-------------
         if (C_Invoice_ID == null || C_Invoice_ID == 0) {
+            //changed by abhishek to resolve issue JID_1536
+            if (mTab.getValue("C_Order_ID") == null || mTab.getValue("C_Order_ID") == 0) {
+                mTab.getField("C_ConversionType_ID").setReadOnly(false);
+            }
             mTab.setValue("C_Currency_ID", null);
             // commented by Arpit
             /*
@@ -4237,7 +4245,9 @@
             this.setCalloutActive(false);
             return "";
         }
-
+        else { //changed by abhishek to resolve issue JID_1536
+            mTab.getField("C_ConversionType_ID").setReadOnly(true);
+        }
         // Date
         // var ts = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateAcct"));
         //DateTime billDate = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateOrdered"));
@@ -16856,11 +16866,18 @@
         // 
 
         if (value == null || value.toString() == "") {
+            //changed by abhishek to resolve issue JID_1536
+            if (mTab.getValue("C_Invoice_ID") == null || mTab.getValue("C_Invoice_ID") == 0) {
+                mTab.getField("C_ConversionType_ID").setReadOnly(false);
+            }
             return "";
         }
         try {
             var C_Order_ID = Util.getValueOfInt(value.toString());
             if (C_Order_ID == null || C_Order_ID == 0) {
+                if (mTab.getValue("C_Invoice_ID") == null || mTab.getValue("C_Invoice_ID") == 0) {
+                    mTab.getField("C_ConversionType_ID").setReadOnly(false);
+                }
                 return "";
             }
             //	No Callout Active to fire dependent values
@@ -16868,6 +16885,7 @@
             {
                 return "";
             }
+            mTab.getField("C_ConversionType_ID").setReadOnly(true);
             var paramString = C_Order_ID.toString();
             var dr = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
 
@@ -17803,7 +17821,19 @@
         //	No Invoice
         var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
         if (C_Invoice_ID == 0) {
+            //changed by abhishek to resolve issue JID_1536
+            if (mTab.getValue("C_Order_ID") == 0 || mTab.getValue("C_Order_ID") ==null) {
+                mTab.getField("C_ConversionType_ID").setReadOnly(false);
+            }
             return "";
+        }
+        //changed by abhishek to resolve issue JID_1536
+        if (mField.getColumnName() == "C_ConversionType_ID" && (mTab.getValue("C_Invoice_ID") > 0 || mTab.getValue("C_Order_ID") > 0)) {
+
+            value = oldValue;
+            mField.setValue(oldValue);
+            mField.setReadOnly(true);
+            return;
         }
         this.setCalloutActive(true);
         //	Get Info from Tab
