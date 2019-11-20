@@ -1141,7 +1141,11 @@ namespace VIS.Models
             return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
         }
 
-        // checking period is open ornot for allocation
+        /// <summary>
+        /// to check period is open or not for allocation
+        /// </summary>
+        /// <param name="DateTrx">Transaction Date</param>
+        /// <returns>Return Empty if period is OPEN else it will return ErrorMsg</returns>
         public string CheckPeriodState(DateTime DateTrx)
         {
             if (!MPeriod.IsOpen(ctx, DateTrx, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
@@ -1156,6 +1160,16 @@ namespace VIS.Models
             return "";
         }
 
+        /// <summary>
+        /// To get all the unallocated payments
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <param name="_C_BPartner_ID">Business Partner</param>
+        /// <param name="isInterBPartner">Inter-Business Partner</param>
+        /// <param name="chk">For MultiCurrency Check</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Page Size</param>
+        /// <returns>No of unallocated payments</returns>
         public List<VIS_PaymentData> GetPayments(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size)
         {
             //used to get related business partner against selected business partner 
@@ -1441,6 +1455,16 @@ namespace VIS.Models
 
         }
 
+        /// <summary>
+        /// To get all the unallocated Cash Lines
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <param name="_C_BPartner_ID">Business Partner</param>
+        /// <param name="isInterBPartner">Inter-Business Partner</param>
+        /// <param name="chk">For MultiCurrency Check</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Page Size</param>
+        /// <returns>No of unallocated Cash Lines</returns>
         public List<VIS_CashData> GetCashJounral(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size)
         {
             //used to get related business partner against selected business partner 
@@ -1550,6 +1574,23 @@ namespace VIS.Models
 
         }
 
+        //Added new parameters---Neha---
+        /// <summary>
+        /// To get all the invoices 
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency ID</param>
+        /// <param name="_C_BPartner_ID"> Business Partner ID</param>
+        /// <param name="isInterBPartner">bool Value </param>
+        /// <param name="chk">bool Value </param>
+        /// <param name="date">Transaction Date</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Total Page Size</param>
+        /// <param name="docNo">Document Number</param>
+        /// <param name="c_docType_ID">Document Type ID</param>
+        /// <param name="fromDate">From Date</param>
+        /// <param name="toDate">To Date</param>
+        /// <param name="conversionDate">ConversionType Date</param>
+        /// <returns></returns>
         public List<VIS_InvoiceData> GetInvoice(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID, DateTime? fromDate, DateTime? toDate, string conversionDate)
         {
             //used to get related business partner against selected business partner 
@@ -1685,7 +1726,10 @@ namespace VIS.Models
 
         }
 
-        //Neha 
+        /// <summary>
+        /// to get DataTypes
+        /// </summary>
+        /// <returns>List of Data Types</returns>
         public List<VIS_DocType> GetDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
@@ -1704,6 +1748,11 @@ namespace VIS.Models
         }
         //Neha
 
+        /// <summary>
+        /// TO get currency precision from currency window
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <returns>precision of currency</returns>
         public int GetCurrencyPrecision(int _C_Currency_ID)
         {
             int precision = 0;
@@ -1861,9 +1910,12 @@ namespace VIS.Models
         }
 
         /// <summary>
-        /// To get all the data from Gl Journal 
-        /// </summary>
-        /// <returns>list of class of gl lines</returns>
+        /// To get all the unallocated GL Lines
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <param name="_C_BPartner_ID">Business Partner</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Page Size</param>
+        /// <returns>No of unallocated GL Lines</returns>
         public List<GLData> GetGLData(int _C_Currency_ID, int _C_BPartner_ID, int page, int size)
         {
             List<GLData> glData = new List<GLData>();
@@ -2022,6 +2074,20 @@ namespace VIS.Models
             return amt;
         }
 
+        /// <summary>
+        /// to create view allocation against GL journal line
+        /// </summary>
+        /// <param name="paymentData">Selected payment data</param>
+        /// <param name="invoiceData">Selected invoice data</param>
+        /// <param name="cashData"> Selected cash line data</param>
+        /// <param name="glData"> Selected gl line data</param>
+        /// <param name="DateTrx"> Transaction Date </param>
+        /// <param name="_windowNo"> Window Number</param>
+        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="C_BPartner_ID"> Business Partner</param>
+        /// <param name="AD_Org_ID">Org ID</param>
+        /// <param name="C_CurrencyType_ID">Currency ConversionType ID</param>
+        /// <returns>Will Return Msg Either Allocation is Saved or Not Saved</returns>
         public string SaveGLData(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsInvoice, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsGL, DateTime DateTrx, int _windowNo, int C_Currency_ID, int C_BPartner_ID, int AD_Org_ID, int C_CurrencyType_ID)
         {
             decimal paid = 0; decimal actualAmt = 0;
@@ -2334,6 +2400,7 @@ namespace VIS.Models
             return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
         }
 
+        #region Properties 
         public class NameValue
         {
             public string Name { get; set; }
@@ -2453,6 +2520,8 @@ namespace VIS.Models
         //    public int cpaymentid { get; set; }
         //    public int c_invoicepayschedule_id { get; set; }
         //}
+
+        #endregion
 
     }
 }
