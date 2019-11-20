@@ -1132,7 +1132,7 @@ namespace VIS.Models
             {
                 if (trx != null)
                 {
-                   // trx.Rollback();
+                    // trx.Rollback();
                     trx.Close();
                     trx = null;
                 }
@@ -1141,7 +1141,11 @@ namespace VIS.Models
             return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
         }
 
-        // checking period is open ornot for allocation
+        /// <summary>
+        /// to check period is open or not for allocation
+        /// </summary>
+        /// <param name="DateTrx">Transaction Date</param>
+        /// <returns>Return Empty if period is OPEN else it will return ErrorMsg</returns>
         public string CheckPeriodState(DateTime DateTrx)
         {
             if (!MPeriod.IsOpen(ctx, DateTrx, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
@@ -1156,6 +1160,16 @@ namespace VIS.Models
             return "";
         }
 
+        /// <summary>
+        /// To get all the unallocated payments
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <param name="_C_BPartner_ID">Business Partner</param>
+        /// <param name="isInterBPartner">Inter-Business Partner</param>
+        /// <param name="chk">For MultiCurrency Check</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Page Size</param>
+        /// <returns>No of unallocated payments</returns>
         public List<VIS_PaymentData> GetPayments(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size)
         {
             //used to get related business partner against selected business partner 
@@ -1183,12 +1197,12 @@ namespace VIS.Models
               + "ROUND(currencyConvert(p.PayAmt ,p.C_Currency_ID ," + _C_Currency_ID + ",p.DATEACCT ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID ), " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1
               + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.C_Payment_ID) ,p.C_Currency_ID ," + _C_Currency_ID + ",p.DATEACCT ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
               + "p.MultiplierAP as MULTIPLIERAP, 0 as APPLIEDAMT ,   p.DATEACCT AS DATEACCT, p.AD_Org_ID , o.Name "
-                //+ " , dc.name AS DocTypeName "
+              //+ " , dc.name AS DocTypeName "
               + "FROM C_Payment_v p"		//	Corrected for AP/AR
               + " INNER JOIN AD_Org o ON o.AD_Org_ID = p.AD_Org_ID "
               + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID) "
               + " INNER JOIN C_Payment cp ON (p.C_Payment_ID = cp.C_Payment_ID) "
-                // + " INNER JOIN C_DOCTYPE DC ON (P.C_DOCTYPE_ID=DC.C_DOCTYPE_ID) "
+              // + " INNER JOIN C_DOCTYPE DC ON (P.C_DOCTYPE_ID=DC.C_DOCTYPE_ID) "
               + " WHERE   ((p.IsAllocated ='N' and p.c_charge_id is null) "
               + " OR (p.isallocated = 'N' AND p.c_charge_id is not null and p.isprepayment = 'Y'))"
               + " AND p.Processed='Y' AND p.processing ='N' AND p.DocStatus IN ('CO','CL') "
@@ -1441,6 +1455,16 @@ namespace VIS.Models
 
         }
 
+        /// <summary>
+        /// To get all the unallocated Cash Lines
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <param name="_C_BPartner_ID">Business Partner</param>
+        /// <param name="isInterBPartner">Inter-Business Partner</param>
+        /// <param name="chk">For MultiCurrency Check</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Page Size</param>
+        /// <returns>No of unallocated Cash Lines</returns>
         public List<VIS_CashData> GetCashJounral(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size)
         {
             //used to get related business partner against selected business partner 
@@ -1468,17 +1492,17 @@ namespace VIS.Models
                                   ROUND(cn.amount, " + objCurrency.GetStdPrecision() + ") AS AMOUNT, "
                              + " ROUND(currencyConvert(cn.Amount ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT ,cn.C_ConversionType_ID  ,cn.AD_Client_ID ,cn.AD_Org_ID ) , " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1cn.amount as OPENAMT,"
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID) ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT,cn.C_ConversionType_ID ,cn.AD_Client_ID ,cn.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
-                //+ " currencyConvert(cn.Amount ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.Created ,114 ,cn.AD_Client_ID ,cn.AD_Org_ID ) as OPENAMT,"
+                                                                                                                                                                                                                                                               //+ " currencyConvert(cn.Amount ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.Created ,114 ,cn.AD_Client_ID ,cn.AD_Org_ID ) as OPENAMT,"
                              + " cn.MultiplierAP AS MULTIPLIERAP,0 as APPLIEDAMT,cn.DATEACCT , o.AD_Org_ID  , o.Name  from c_cashline_new cn"
                               + " INNER JOIN AD_Org o ON o.AD_Org_ID = cn.AD_Org_ID "
                              + " INNER join c_currency c ON (cn.C_Currency_ID=c.C_Currency_ID) WHERE cn.IsAllocated   ='N' AND cn.Processed ='Y'"
-                //+ " and cn.cashtype IN ('I' , 'B') and cn.docstatus in ('CO','CL') "
+                             //+ " and cn.cashtype IN ('I' , 'B') and cn.docstatus in ('CO','CL') "
 
-                //Enhancement ID- JID_0593,  Cash line  is created with refrence of Invoice. Void View allocation. Cash line do not show on payment allocation. 
+                             //Enhancement ID- JID_0593,  Cash line  is created with refrence of Invoice. Void View allocation. Cash line do not show on payment allocation. 
                              + " and cn.cashtype IN ('B', 'I') and cn.docstatus in ('CO','CL') "// AND cn.Processing = 'N' "
 
-                // Commented because Against Business Partner there is no charge
-                // + " AND cn.C_Charge_ID  IS Not NULL"
+                             // Commented because Against Business Partner there is no charge
+                             // + " AND cn.C_Charge_ID  IS Not NULL"
                              + " AND cn.C_BPartner_ID=" + _C_BPartner_ID;
             if (!chk)
             {
@@ -1550,6 +1574,23 @@ namespace VIS.Models
 
         }
 
+        //Added new parameters---Neha---
+        /// <summary>
+        /// To get all the invoices 
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency ID</param>
+        /// <param name="_C_BPartner_ID"> Business Partner ID</param>
+        /// <param name="isInterBPartner">bool Value </param>
+        /// <param name="chk">bool Value </param>
+        /// <param name="date">Transaction Date</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Total Page Size</param>
+        /// <param name="docNo">Document Number</param>
+        /// <param name="c_docType_ID">Document Type ID</param>
+        /// <param name="fromDate">From Date</param>
+        /// <param name="toDate">To Date</param>
+        /// <param name="conversionDate">ConversionType Date</param>
+        /// <returns></returns>
         public List<VIS_InvoiceData> GetInvoice(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID, DateTime? fromDate, DateTime? toDate, string conversionDate)
         {
             //used to get related business partner against selected business partner 
@@ -1578,12 +1619,12 @@ namespace VIS.Models
                                 + " ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID)                                         *i.MultiplierAP , " + objCurrency.GetStdPrecision() + ") AS AMOUNT,"
                                 + "  ROUND((currencyConvert(invoiceDiscount(i.C_Invoice_ID ," + date + ",C_InvoicePaySchedule_ID),i.C_Currency_ID ," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + " ,i.C_ConversionType_ID ,i.AD_Client_ID ,i.AD_Org_ID )*i.Multiplier*i.MultiplierAP) , " + objCurrency.GetStdPrecision() + ") AS DISCOUNT ,"
                                 + "  i.MultiplierAP ,i.docbasetype  ,0 as WRITEOFF ,0 as APPLIEDAMT ,i.DATEACCT, i.C_InvoicePaySchedule_ID,(select TO_CHAR(Ip.Duedate,'YYYY-MM-DD') from C_InvoicePaySchedule ip where C_InvoicePaySchedule_ID=i.C_InvoicePaySchedule_ID) Scheduledate "
-                //  + ", dc.name AS DocTypeName "
+                                //  + ", dc.name AS DocTypeName "
                                 + " , i.AD_Org_ID , o.Name "
                                 + " FROM C_Invoice_v i"		//  corrected for CM/Split
                                 + " INNER JOIN AD_Org o ON o.AD_Org_ID = i.AD_Org_ID "
                                 + " INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) "
-                // + " INNER JOIN C_DOCTYPE DC ON (i.C_DOCTYPE_ID =DC.C_DOCTYPE_ID)"
+                                // + " INNER JOIN C_DOCTYPE DC ON (i.C_DOCTYPE_ID =DC.C_DOCTYPE_ID)"
                                 + " WHERE i.IsPaid='N' AND i.Processed='Y'"
                                 + " AND i.C_BPartner_ID=" + _C_BPartner_ID;                                            //  #5
             if (!chk)
@@ -1685,7 +1726,10 @@ namespace VIS.Models
 
         }
 
-        //Neha 
+        /// <summary>
+        /// to get DataTypes
+        /// </summary>
+        /// <returns>List of Data Types</returns>
         public List<VIS_DocType> GetDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
@@ -1704,6 +1748,11 @@ namespace VIS.Models
         }
         //Neha
 
+        /// <summary>
+        /// TO get currency precision from currency window
+        /// </summary>
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <returns>precision of currency</returns>
         public int GetCurrencyPrecision(int _C_Currency_ID)
         {
             int precision = 0;
@@ -1860,6 +1909,542 @@ namespace VIS.Models
             return bpids.ToString();
         }
 
+        /// <summary>
+        /// To get all the unallocated GL Lines
+        /// <param name="_C_Currency_ID">Currency</param>
+        /// <param name="_C_BPartner_ID">Business Partner</param>
+        /// <param name="page">Page Number</param>
+        /// <param name="size">Page Size</param>
+        /// <returns>No of unallocated GL Lines</returns>
+        public List<GLData> GetGLData(int _C_Currency_ID, int _C_BPartner_ID, int page, int size)
+        {
+            List<GLData> glData = new List<GLData>();
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@" SELECT EV.AccountType, JL.C_BPARTNER_ID,  CB.ISCUSTOMER,  CB.ISVENDOR, J.DATEDOC, J.DATEACCT, J.DOCUMENTNO,  NVL(JL.AMTSOURCEDR, 0),  NVL(JL.AMTSOURCECR,0),
+                    J.C_CONVERSIONTYPE_ID, CT.name as CONVERSIONNAME, 
+                     NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ," + _C_Currency_ID + @",J.DATEACCT ,J.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), 2),0) as AMTACCTDR, 
+                     NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.C_Currency_ID ," + _C_Currency_ID + @",j.DATEACCT ,j.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), 2),0) AS AMTACCTCR, 
+                    j.GL_Journal_ID, jl.GL_JOURNALLINE_ID FROM GL_Journal j INNER JOIN GL_JOURNALLINE JL ON JL.GL_JOURNAL_ID=J.GL_JOURNAL_ID 
+                    INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= j.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
+                    ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE jl.isallocated ='N' ");
+
+            if (_C_BPartner_ID > 0)
+                sql.Append(" AND JL.C_BPartner_ID= " + _C_BPartner_ID);
+
+            DataSet ds = DB.ExecuteDataset(sql.ToString(), null, null);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                decimal? openAmt = 0;
+                decimal? alreadyPaidAmt = 0;
+                bool isVendor = false;
+                bool isCustomer = false;
+                MJournalLine aline = null;
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    isCustomer = ds.Tables[0].Rows[i]["ISCUSTOMER"].ToString() == "Y" ? true : false;
+                    isVendor = ds.Tables[0].Rows[i]["ISVENDOR"].ToString() == "Y" ? true : false;
+                    GLData gData = new GLData();
+                    gData.GLRecords = ds.Tables[0].Rows.Count;
+                    gData.DATEDOC = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DATEDOC"]);
+                    gData.DATEACCT = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DATEACCT"]);
+                    gData.DOCUMENTNO = ds.Tables[0].Rows[i]["DOCUMENTNO"].ToString();
+                    gData.C_BPartner_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPARTNER_ID"]);
+                    gData.isCustomer = isCustomer;
+                    gData.isVendor = isVendor;
+                    gData.C_ConversionType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_CONVERSIONTYPE_ID"]);
+                    gData.ConversionName = Util.GetValueOfString(ds.Tables[0].Rows[i]["ConversionName"]);
+                    gData.OpenAmount = Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AmtAcctCr"]);
+                    gData.GL_Journal_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_Journal_ID"]);
+                    gData.GL_JOURNALLINE_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]);
+                    alreadyPaidAmt = getAlreadyPaidAmount(_C_Currency_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]));
+                    if (Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AMTACCTDR"]) > 0)
+                    {
+                        openAmt = Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AMTACCTDR"]);
+                        openAmt = openAmt - alreadyPaidAmt;
+                        if (openAmt == 0)
+                        {
+                            aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]), null);
+                            if (!aline.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation Line not created");
+                            }
+                            continue;
+                        }
+                        openAmt = getAmount(Util.GetValueOfString(ds.Tables[0].Rows[i]["AccountType"]), isCustomer, isVendor, openAmt, 0);
+                        gData.OpenAmount = openAmt;
+                        gData.ConvertedAmount = getAmount(Util.GetValueOfString(ds.Tables[0].Rows[i]["AccountType"]), isCustomer, isVendor, Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AMTACCTDR"]), 0);
+                        gData.AppliedAmt = 0;
+                    }
+                    else if (Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AmtAcctCr"]) > 0)
+                    {
+                        openAmt = Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AmtAcctCr"]);
+                        openAmt = openAmt - alreadyPaidAmt;
+                        if (openAmt == 0)
+                        {
+                            aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]), null);
+                            if (!aline.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation Line not created");
+                            }
+                            continue;
+                        }
+                        openAmt = getAmount(Util.GetValueOfString(ds.Tables[0].Rows[i]["AccountType"]), isCustomer, isVendor, 0, openAmt);
+                        gData.OpenAmount = openAmt;
+                        gData.ConvertedAmount = getAmount(Util.GetValueOfString(ds.Tables[0].Rows[i]["AccountType"]), isCustomer, isVendor, 0, Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AmtAcctCr"]));
+                        gData.AppliedAmt = 0;
+                    }
+                    glData.Add(gData);
+                }
+            }
+            return glData;
+        }
+
+        /// <summary>
+        /// to get amount from given conditions
+        /// </summary>
+        /// <param name="AccountType">Account Type</param>
+        /// <param name="isCustomer">Is Customer</param>
+        /// <param name="isVendor">Is Vendor</param>
+        /// <param name="crAmt">Source Credit</param>
+        /// <param name="dbAmt">Source Debit</param>
+        /// <returns> Amount </returns>
+        public decimal? getAmount(string AccountType, bool isCustomer, bool isVendor, decimal? dbAmt, decimal? crAmt)
+        {
+            decimal? amt = 0;
+            if (isCustomer && isVendor) // Customer & Vendor Both
+            {
+                if (AccountType == "A")
+                {
+                    if (dbAmt > 0)
+                    {
+                        amt = dbAmt;
+                    }
+                    if (crAmt > 0)
+                    {
+                        amt = (-1 * crAmt);
+                    }
+                }
+                else if (AccountType == "L")
+                {
+                    if (dbAmt > 0)
+                    {
+                        amt = dbAmt;
+                    }
+                    if (crAmt > 0)
+                    {
+                        amt = (-1 * crAmt);
+                    }
+                }
+            }
+            else if (isCustomer && !isVendor) // Only Customer
+            {
+                if (dbAmt > 0)
+                {
+                    amt = dbAmt;
+                }
+                if (crAmt > 0)
+                {
+                    amt = (-1 * crAmt);
+                }
+            }
+            else if (!isCustomer && isVendor) // Only Vendor
+            {
+                if (dbAmt > 0)
+                {
+                    amt = dbAmt;
+                }
+                if (crAmt > 0)
+                {
+                    amt = (-1 * crAmt);
+                }
+            }
+            return amt;
+        }
+
+        /// <summary>
+        /// To get already paid amount
+        /// </summary>
+        /// <param name="C_Currency_ID"> Currency ID</param>
+        /// <param name="GL_JOURNALLINE_ID">GL Journal Line ID</param>
+        /// <returns>Already Paid Amount</returns>
+        public decimal? getAlreadyPaidAmount(int C_Currency_ID, int GL_JOURNALLINE_ID)
+        {
+            string sql = @"SELECT NVL(SUM(ROUND(CURRENCYCONVERT(AL.AMOUNT ,AR.C_CURRENCY_ID ," + C_Currency_ID + @",AR.DATEACCT ,AR.C_CONVERSIONTYPE_ID ,AR.AD_CLIENT_ID ,AR.AD_ORG_ID ), 2)),0) AS PaidAmt
+                        FROM C_ALLOCATIONLINE AL
+                        INNER JOIN C_ALLOCATIONHDR AR
+                        ON ar.C_AllocationHdr_ID   =al.C_AllocationHdr_ID
+                        WHERE al.GL_JOURNALLINE_ID = " + GL_JOURNALLINE_ID + " AND AR.DOCSTATUS ='CO'";
+            decimal? amt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
+            if (amt < 0)
+                amt = -1 * amt;
+            return amt;
+        }
+
+        /// <summary>
+        /// to create view allocation against GL journal line
+        /// </summary>
+        /// <param name="paymentData">Selected payment data</param>
+        /// <param name="invoiceData">Selected invoice data</param>
+        /// <param name="cashData"> Selected cash line data</param>
+        /// <param name="glData"> Selected gl line data</param>
+        /// <param name="DateTrx"> Transaction Date </param>
+        /// <param name="_windowNo"> Window Number</param>
+        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="C_BPartner_ID"> Business Partner</param>
+        /// <param name="AD_Org_ID">Org ID</param>
+        /// <param name="C_CurrencyType_ID">Currency ConversionType ID</param>
+        /// <returns>Will Return Msg Either Allocation is Saved or Not Saved</returns>
+        public string SaveGLData(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsInvoice, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsGL, DateTime DateTrx, int _windowNo, int C_Currency_ID, int C_BPartner_ID, int AD_Org_ID, int C_CurrencyType_ID)
+        {
+            decimal paid = 0; decimal actualAmt = 0;
+            decimal amtToAllocate = 0, remainingAmt = 0, netAmt = 0;
+            decimal balanceAmt = 0;
+            string msg = string.Empty;
+            Trx trx = Trx.GetTrx(Trx.CreateTrxName("GL"));
+            MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
+               DateTime.Now, C_Currency_ID, ctx.GetContext("#AD_User_Name"), trx);
+            alloc.SetAD_Org_ID(AD_Org_ID);
+            alloc.SetDateAcct(DateTrx);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
+            alloc.Set_Value("C_ConversionType_ID", C_CurrencyType_ID); // to set Conversion Type on allocation header because posting and conversion are calculating on the basis of Conversion Type
+            alloc.SetDateTrx(DateTrx);
+            alloc.Set_Value("C_BPartner_ID", C_BPartner_ID);
+            if (alloc.Save())
+            {
+                //create allocation line if cash row selected
+                for (int i = 0; i < rowsCash.Count; i++)
+                {
+                    amtToAllocate = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]);
+                    remainingAmt = amtToAllocate;
+                    if (Util.GetValueOfBool(rowsCash[i]["IsPaid"]))
+                        continue;
+
+                    for (int j = 0; j < rowsGL.Count; j++)
+                    {
+                        if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
+                            continue;
+
+                        actualAmt = (Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"]) - (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"])));
+                        if (remainingAmt >= actualAmt)
+                        {
+                            remainingAmt = remainingAmt - actualAmt;
+                            netAmt = actualAmt;
+                            balanceAmt = 0;
+                        }
+                        else
+                        {
+                            netAmt = remainingAmt;
+                            balanceAmt = actualAmt - remainingAmt;
+                            remainingAmt = 0;
+                        }
+                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
+                        aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
+                        aLine.SetDateTrx(DateTrx);
+                        aLine.SetC_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
+                        if (!aLine.Save())
+                        {
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                        }
+                        else
+                        {
+                            paid = (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt);
+                            rowsGL[j]["paidAmt"] = paid.ToString();
+
+                            if (balanceAmt == 0)
+                            {
+                                rowsGL[j]["IsPaid"] = true.ToString();
+                            }
+                            if (remainingAmt == 0)
+                            {
+                                rowsCash[i]["IsPaid"] = true.ToString();
+                                break;
+                            }
+
+                        }
+                    }
+                }
+
+                //create allocation line if payment row selected
+                for (int i = 0; i < rowsPayment.Count; i++)
+                {
+                    amtToAllocate = Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]);
+                    remainingAmt = amtToAllocate;
+                    if (Util.GetValueOfBool(rowsPayment[i]["IsPaid"]))
+                        continue;
+
+                    for (int j = 0; j < rowsGL.Count; j++)
+                    {
+                        if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
+                            continue;
+
+                        actualAmt = (Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"]) - (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"])));
+                        if (remainingAmt >= actualAmt)
+                        {
+                            remainingAmt = remainingAmt - actualAmt;
+                            netAmt = actualAmt;
+                            balanceAmt = 0;
+                        }
+                        else
+                        {
+                            netAmt = remainingAmt;
+                            balanceAmt = actualAmt - remainingAmt;
+                            remainingAmt = 0;
+                        }
+                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
+                        aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
+                        aLine.SetDateTrx(DateTrx);
+                        aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]));
+                        if (!aLine.Save())
+                        {
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                        }
+                        else
+                        {
+                            paid = (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt);
+                            rowsGL[j]["paidAmt"] = paid.ToString();
+
+                            if (balanceAmt == 0)
+                            {
+                                rowsGL[j]["IsPaid"] = true.ToString();
+                            }
+                            if (remainingAmt == 0)
+                            {
+                                rowsPayment[i]["IsPaid"] = true.ToString();
+                                break;
+                            }
+
+                        }
+                    }
+                }
+
+                decimal overUnderAmt = 0;
+                //create allocation line if invoice row selected
+                for (int i = 0; i < rowsInvoice.Count; i++)
+                {
+                    amtToAllocate = Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]);
+                    remainingAmt = amtToAllocate;
+                    if (Util.GetValueOfBool(rowsInvoice[i]["IsPaid"]))
+                        continue;
+
+                    overUnderAmt = 0;
+                    for (int j = 0; j < rowsGL.Count; j++)
+                    {
+                        if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
+                            continue;
+
+                        actualAmt = (Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"]) - (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"])));
+                        overUnderAmt = (Util.GetValueOfDecimal(rowsInvoice[i]["Amount"]) - Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]));
+
+                        // if amount is negetive than * by -1 to convert it into positive.
+                        if (overUnderAmt < 0)
+                            overUnderAmt = -1 * overUnderAmt;
+
+                        if (remainingAmt >= actualAmt)
+                        {
+                            remainingAmt = remainingAmt - actualAmt;
+                            netAmt = actualAmt;
+                            balanceAmt = 0;
+                        }
+                        else
+                        {
+                            netAmt = remainingAmt;
+                            balanceAmt = actualAmt - remainingAmt;
+                            remainingAmt = 0;
+                        }
+                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
+                        aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
+                        aLine.SetDateTrx(DateTrx);
+                        aLine.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
+                        aLine.SetC_Invoice_ID(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
+                        aLine.SetOverUnderAmt(overUnderAmt);
+                        if (!aLine.Save())
+                        {
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                        }
+                        else
+                        {
+                            paid = (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt);
+                            rowsGL[j]["paidAmt"] = paid.ToString();
+
+                            if (balanceAmt == 0)
+                            {
+                                rowsGL[j]["IsPaid"] = true.ToString();
+                            }
+                            if (remainingAmt == 0)
+                            {
+                                rowsInvoice[i]["IsPaid"] = true.ToString();
+                                break;
+                            }
+
+                        }
+                    }
+                }
+
+                //create allocation line if GL to GL Allocation
+                if (rowsCash.Count == 0 && rowsPayment.Count == 0 && rowsInvoice.Count == 0)
+                {
+                    for (int i = 0; i < rowsGL.Count; i++)
+                    {
+                        amtToAllocate = Util.GetValueOfDecimal(rowsGL[i]["AppliedAmt"]);
+                        MAllocationLine aLine = new MAllocationLine(alloc, amtToAllocate, 0, 0, 0);
+                        aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]));
+                        aLine.SetDateTrx(DateTrx);
+                        if (!aLine.Save())
+                        {
+                            _log.SaveError("Error: ", "Allocation not created");
+                            trx.Rollback();
+                            trx.Close();
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                        }
+                    }
+                }
+
+                if (alloc.Get_ID() != 0)
+                {
+                    alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
+                    if (alloc.Save())
+                    {
+                        msg = alloc.GetDocumentNo();
+                    }
+                    else
+                    {
+                        _log.SaveError("Error: ", "Allocation not completed");
+                    }
+                }
+
+                //  Test/Set IsPaid for Invoice - requires that allocation is posted
+                #region Set Invoice IsPaid
+                for (int i = 0; i < rowsInvoice.Count; i++)
+                {
+                    //  Invoice line is selected
+                    //  Invoice variables
+                    int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
+                    String sql = "SELECT invoiceOpen(C_Invoice_ID, 0) "
+                        + "FROM C_Invoice WHERE C_Invoice_ID=@param1";
+                    Decimal opens = Util.GetValueOfDecimal(DB.GetSQLValueBD(null, sql, C_Invoice_ID));
+                    if (Env.Signum(opens) == 0)
+                    {
+                        sql = "UPDATE C_Invoice SET IsPaid='Y' "
+                            + "WHERE C_Invoice_ID=" + C_Invoice_ID;
+                        int no = DB.ExecuteQuery(sql, null, null);
+                    }
+                }
+                #endregion
+
+                //  Test/Set Payment is fully allocated
+                #region Set Payment Allocated
+                if (rowsPayment.Count > 0)
+                    for (int i = 0; i < rowsPayment.Count; i++)
+                    {
+                        int C_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]);
+                        MPayment pay = new MPayment(ctx, C_Payment_ID, null);
+                        if (pay.TestAllocation())
+                        {
+                            if (!pay.Save())
+                            {
+                                trx.Rollback();
+                                trx.Close();
+                                _log.SaveError("Error: ", "Payment not allocated");
+                                return Msg.GetMsg(ctx, "Allocationnotcreated");
+                            }
+
+                        }
+
+                        string sqlGetOpenPayments = "SELECT  currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,260,p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID) FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
+                        object result = DB.ExecuteScalar(sqlGetOpenPayments, null, null);
+                        Decimal? amtPayment = 0;
+                        if (result == null || result == DBNull.Value)
+                        {
+                            amtPayment = -1;
+                        }
+                        else
+                        {
+                            amtPayment = Util.GetValueOfDecimal(result);
+                        }
+
+                        if (amtPayment == 0)
+                        {
+                            pay.SetIsAllocated(true);
+                        }
+                        else
+                        {
+                            pay.SetIsAllocated(false);
+                        }
+                        if (!pay.Save())
+                        {
+                            trx.Rollback();
+                            trx.Close();
+                            _log.SaveError("Error: ", "Payment not allocated");
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                        }
+                    }
+                #endregion
+
+                // CashLine set IsAllocated 
+                #region Set CashLine Allocated
+                if (rowsCash.Count > 0)
+                    for (int i = 0; i < rowsCash.Count; i++)
+                    {
+                        int _cashine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
+                        MCashLine cash = new MCashLine(ctx, _cashine_ID, null);
+
+                        string sqlGetOpenPayments = "SELECT  ALLOCCASHAVAILABLE(cl.C_CashLine_ID)  FROM C_CashLine cl Where C_CashLine_ID = " + _cashine_ID;
+                        object result = DB.ExecuteScalar(sqlGetOpenPayments, null, null);
+                        Decimal? amtPayment = 0;
+                        if (result == null || result == DBNull.Value)
+                        {
+                            amtPayment = -1;
+                        }
+                        else
+                        {
+                            amtPayment = Util.GetValueOfDecimal(result);
+                        }
+
+                        if (amtPayment == 0)
+                        {
+                            cash.SetIsAllocated(true);
+                        }
+                        else
+                        {
+                            cash.SetIsAllocated(false);
+                        }
+                        if (!cash.Save())
+                        {
+                            trx.Rollback();
+                            trx.Close();
+                            _log.SaveError("Error: ", "Cash Line not allocated");
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                        }
+                    }
+                #endregion
+
+            }
+            else
+            {
+                trx.Rollback();
+                trx.Close();
+                ValueNamePair pp = VLogger.RetrieveError();
+                msg += "Error: " + pp != null ? pp.GetName() : "";
+                return msg;
+            }
+            trx.Commit();
+            trx.Close();
+            return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
+        }
+
+        #region Properties 
         public class NameValue
         {
             public string Name { get; set; }
@@ -1938,6 +2523,28 @@ namespace VIS.Models
 
         }
 
+        public class GLData
+        {
+            public string DOCUMENTNO { get; set; }
+            public decimal? AMTSOURCEDR { get; set; }
+            public decimal? AMTSOURCECR { get; set; }
+            public decimal? AMTACCTDR { get; set; }
+            public decimal? AmtAcctCr { get; set; }
+            public decimal? AppliedAmt { get; set; }
+            public decimal? ConvertedAmount { get; set; }
+            public decimal? OpenAmount { get; set; }
+            public int GL_JOURNALLINE_ID { get; set; }
+            public int GL_Journal_ID { get; set; }
+            public int C_ConversionType_ID { get; set; }
+            public string ConversionName { get; set; }
+            public DateTime? DATEACCT { get; set; }
+            public DateTime? DATEDOC { get; set; }
+            public int GLRecords { get; set; }
+            public int C_BPartner_ID { get; set; }
+            public bool isCustomer { get; set; }
+            public bool isVendor { get; set; }
+        }
+
         //public class PaymentDetails
         //{
         //    public decimal appliedAmt { get; set; }
@@ -1957,6 +2564,8 @@ namespace VIS.Models
         //    public int cpaymentid { get; set; }
         //    public int c_invoicepayschedule_id { get; set; }
         //}
+
+        #endregion
 
     }
 }
