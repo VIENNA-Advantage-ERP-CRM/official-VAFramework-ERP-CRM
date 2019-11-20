@@ -86,6 +86,7 @@
 .vis-ad-w-p-header-l {
     grid-column: 2/2;
     grid-row: 1/7;
+    display: flex;
     /*width: 15px;*/
     /*background-color: red;*/
 }
@@ -95,6 +96,7 @@
     grid-row: 2/2;
     background-color: red;
     height: 100px;
+    display: flex;
 }
 
 .vis-ad-w-p-tb {
@@ -382,7 +384,7 @@
 .vis-ad-w-p-center-view {
     grid-row: 1/1;
     display: flex;
-    padding: 0 10px;
+    padding: 0 2px 0 10px;
     background: rgba(var(--v-c-common), 0.7)
 }
 
@@ -394,7 +396,15 @@
 
 .vis-ad-w-p-center-inctab {
     grid-row: 3/3;
+    display: flex;
+    padding: 0 10px;
 }
+
+/* */
+
+
+
+
 
 .vis-ad-w-p-center-footer {
     grid-row: 4/4;
@@ -429,6 +439,7 @@
 .vis-ad-w-p-vc-acontainer {
     grid-row: 1/1;
     grid-column: 2/2;
+    display:flex;
 }
 
 .vis-ad-w-p-vc-gc {
@@ -444,9 +455,23 @@
 }
 
 /* end View controller*/
+/* vc include tab setting*/
+.vis-ad-w-p-vc-header {
+    margin-top: 10px;
+    display:none;
+}
+.vis-ad-w-p-vc-actions {
+    margin:0;
+    margin-top: 10px;
+    display:none;
+    list-style:none;
+}
 
-/* action bar*/
-.vis-ad-w-p-action {
+    .vis-ad-w-p-vc-actions li {
+        padding:0 5px;
+    }
+    /* action bar*/
+    .vis-ad-w-p-action {
     grid-column: 6/7;
     grid-row: 2/7;
     width: 45px;
@@ -742,6 +767,7 @@ li.vis-page-item-select {
     color: #fff;
     display: flex;
     /*align-items: center;*/
+    flex: 1;
 }
 
 
@@ -772,7 +798,7 @@ li.vis-page-item-select {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-left:10px;
+    margin-right: 10px;
 }
 
 .vis-w-p-header-Label-f {
@@ -781,17 +807,22 @@ li.vis-page-item-select {
 }
 
     .vis-w-p-header-Label-f button {
-        border-radius: 50%;
+        /*border-radius: 50%;
         border: 2px solid #fff;
-        overflow: hidden;
+        overflow: hidden;*/
         /*margin: auto;*/
+        width: 100%;
+        border: none;
+        height: 100%;
+        background: rgba(var(--v-c-secondary), .30);
+        overflow: hidden;
     }
 
     .vis-w-p-header-Label-f img {
         max-width: 100%;
         max-height: 100%;
         border: none;
-        transform: scale(1.3);
+        /*transform: scale(1.3);*/
     }
 
 .vis-w-p-header-Label-center-f {
@@ -805,6 +836,21 @@ li.vis-page-item-select {
         text-align: center;
     }
 
+.vis-grid-img-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin: auto;
+}
+
+    /*.vis-grid-img-thumb img {
+        max-width: 100%;
+    }*/
+
+/*@media for header panel*/
+@media (max-width: 600px){
+   
+}
 /*Header panel css END*/
 
 
