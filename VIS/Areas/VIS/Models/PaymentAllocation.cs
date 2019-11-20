@@ -1926,7 +1926,7 @@ namespace VIS.Models
                      NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.C_Currency_ID ," + _C_Currency_ID + @",j.DATEACCT ,j.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), 2),0) AS AMTACCTCR, 
                     j.GL_Journal_ID, jl.GL_JOURNALLINE_ID FROM GL_Journal j INNER JOIN GL_JOURNALLINE JL ON JL.GL_JOURNAL_ID=J.GL_JOURNAL_ID 
                     INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= j.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
-                    ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE jl.isallocated ='Y' ");
+                    ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE jl.isallocated ='N' ");
 
             if (_C_BPartner_ID > 0)
                 sql.Append(" AND JL.C_BPartner_ID= " + _C_BPartner_ID);
