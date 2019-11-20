@@ -1543,35 +1543,35 @@
 
         /* left bar toggle */
         // $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
-        //$btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
-        //    e.stopPropagation();
-        //    e.preventDefault();
-        //    var w = parseInt($divlbMain.width());
+        $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var w = parseInt($divlbMain.width());
 
-        //    if (w > 50) {
-        //        $ulLefttoolbar.find('span').hide();
-        //    }
-        //    else
-        //        $divlbMain.css({ "position": "absolute" });
+            if (w > 50) {
+                $ulLefttoolbar.find('span').hide();
+            }
+            else
+                $divlbMain.css({ "position": "absolute" });
 
-        //    $divlbMain.animate({
-        //        "width": w > 50 ? "30" : "220",
-        //    }, 300, 'swing', function () {
+            $divlbMain.animate({
+                "width": w > 50 ? "30" : "220",
+            }, 300, 'swing', function () {
 
-        //        if (w < 50) {
-        //            $ulLefttoolbar.find('span').show();
-        //        }
-        //        else {
-        //            $divlbMain.css({ "position": "" });
-        //            $divlbMain.css({ "width": "" });
-        //        }
-        //        if (self.curGC) {
-        //            self.curGC.multiRowResize();
-        //        }
-        //        self.setWidth(-1, true);
-        //        self.setTabNavigation();
-        //    });
-        //});
+                if (w < 50) {
+                    $ulLefttoolbar.find('span').show();
+                }
+                else {
+                    $divlbMain.css({ "position": "" });
+                    $divlbMain.css({ "width": "" });
+                }
+                if (self.curGC) {
+                    self.curGC.multiRowResize();
+                }
+                //self.setWidth(-1, true);
+                self.setTabNavigation();
+            });
+        });
 
         /*Right Bar */
         $rightBarLPart.on("click", function (e) {
