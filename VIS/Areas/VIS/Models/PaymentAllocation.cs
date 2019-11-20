@@ -2362,7 +2362,7 @@ namespace VIS.Models
 
                         }
 
-                        string sqlGetOpenPayments = "SELECT  NVL(currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,260,p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID),0) as amt FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
+                        string sqlGetOpenPayments = "SELECT  NVL(currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,"+ C_Currency_ID + ",p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID),0) as amt FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
                         object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
                         Decimal? amtPayment = 0;
                         if (result == null || result == DBNull.Value)
