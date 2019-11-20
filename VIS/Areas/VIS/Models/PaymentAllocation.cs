@@ -2354,7 +2354,10 @@ namespace VIS.Models
                         {
                             if (!pay.Save())
                             {
+                                trx.Rollback();
+                                trx.Close();
                                 _log.SaveError("Error: ", "Payment not allocated");
+                                return Msg.GetMsg(ctx, "Allocationnotcreated");
                             }
 
                         }
@@ -2381,7 +2384,10 @@ namespace VIS.Models
                         }
                         if (!pay.Save())
                         {
+                            trx.Rollback();
+                            trx.Close();
                             _log.SaveError("Error: ", "Payment not allocated");
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
                         }
                     }
                 #endregion
@@ -2416,7 +2422,10 @@ namespace VIS.Models
                         }
                         if (!cash.Save())
                         {
+                            trx.Rollback();
+                            trx.Close();
                             _log.SaveError("Error: ", "Cash Line not allocated");
+                            return Msg.GetMsg(ctx, "Allocationnotcreated");
                         }
                     }
                 #endregion
@@ -2430,7 +2439,8 @@ namespace VIS.Models
                 msg += "Error: " + pp != null ? pp.GetName() : "";
                 return msg;
             }
-
+            trx.Commit();
+            trx.Close();
             return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
         }
 
