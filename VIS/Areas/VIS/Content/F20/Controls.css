@@ -262,6 +262,9 @@ label.vis-ec-col-lblchkbox {
         margin-left: 4px;
         margin-right: 4px;
     }
+.vis-ev-col input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0px 9999px rgba(var(--v-c-common), 0.7);
+}
 
     /*.vis-ev-col-mandatory .input-group-text {
     border: 1px solid #ec3f3f;

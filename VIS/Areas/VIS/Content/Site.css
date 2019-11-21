@@ -1069,12 +1069,11 @@ html[dir="rtl"] .vis-taskbar-right
 }
 
 
-.vis-dialog
-{
+.vis-dialog {
     z-index: 99999;
     display: block;
     position: absolute;
-    background: #494D50;
+    background: rgba(var(--v-c-secondary), 1);
     border-radius: 10px;
     padding: 10px;
 }
@@ -1088,14 +1087,15 @@ html[dir="rtl"] .vis-taskbar-right
     }
 
 
-.vis-auth-dialog
-{
+.vis-auth-dialog {
     top: 50px;
     right: 20px;
     width: 310px;
     padding-top: 20px;
     display: none;
-    color: white;
+    color: rgba(var(--v-c-on-secondary), 1);
+    box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
+    border: 1px solid rgba(var(--v-c-primary), .15);
 }
 
 html[dir="rtl"] .vis-auth-dialog
@@ -1105,49 +1105,64 @@ html[dir="rtl"] .vis-auth-dialog
 }
 
 
-    .vis-auth-dialog::before
-    {
-        border: 10px solid transparent;
-        border-bottom-color: #494D50;
-        bottom: 100%;
-        left: 70%;
-    }
-
-    .vis-auth-dialog select
-    {
-        width: 98%;
-        margin: 5px 0px 5px 0px;
-    }
-
-    .vis-auth-dialog input[type=submit]
-    {
-        background-color: #616364;
-        color: white;
-    }
-
-    .vis-auth-dialog input[disabled]
-    {
-        text-decoration: line-through;
-    }
-
-
-
-.vis-filter-dialog
-{
-    top: 145px;
-    left: 200px;
-    padding: 20px;
-    display: none;
-    color: white;
+.vis-auth-dialog::before {
+    border: 10px solid transparent;
+    border-bottom-color: rgba(var(--v-c-secondary), 1);
+    bottom: 100%;
+    left: 70%;
 }
 
-    .vis-filter-dialog::before
-    {
-        border: 10px solid transparent;
-        border-bottom-color: #494D50;
-        bottom: 100%;
-        left: 47%;
-    }
+.vis-auth-dialog label {
+    font-weight: normal;
+    margin: 0;
+}
+
+.vis-auth-dialog select {
+    background-color: rgba(var(--v-c-primary), .07);
+    border: 1px solid rgba(var(--v-c-primary), .07);
+    border-radius: .25rem;
+    width: 100%;
+    height: 30px;
+    color: rgba(var(--v-c-on-secondary), 1);
+    margin: 5px 0px 5px 0px;
+    background-image: linear-gradient(45deg, transparent 50%, rgba(var(--v-c-primary),1) 50%), linear-gradient(135deg, rgba(var(--v-c-primary),1) 50%, transparent 50%);
+    background-position: calc(100% - 15px) calc(1em + 0px), calc(100% - 10px) calc(1em + 0px), calc(100% - 2.5em) 0.5em;
+    background-size: 5px 4px, 5px 4px, 1px 1.5em;
+    background-repeat: no-repeat;
+}
+
+.vis-auth-dialog input[type=submit], .vis-filter-dialog input[type="button"] {
+    background-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
+
+.vis-auth-dialog input[disabled] {
+    text-decoration: line-through;
+}
+
+
+
+.vis-filter-dialog {
+    top: 132px;
+    left: 200px;
+    padding: 15px;
+    display: none;
+    color: rgba(var(--v-c-on-secondary), 1);
+    box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
+    border: 1px solid rgba(var(--v-c-primary), .15);
+}
+.vis-filter-dialog label {
+    font-weight: normal;
+    padding-left: 5px;
+}
+
+.vis-filter-dialog::before {
+    border: 10px solid transparent;
+    border-bottom-color: rgba(var(--v-c-secondary), 1);
+    bottom: 100%;
+    right: 25%;
+}
 
 html[dir="rtl"] .vis-filter-dialog
 {

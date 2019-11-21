@@ -955,7 +955,7 @@
                       '<input type="radio" name="filter" id="vis_filter_radio_3" value="X" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_3">' + VIS.Msg.getMsg("Form") + '</label><br>' +
                       '<input type="radio" name="filter" id="vis_filter_radio_4" value="P" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_4">' + VIS.Msg.getMsg("Process") + '</label><br>' +
                       '<input type="radio" name="filter" id="vis_filter_radio_5" value="R" style="margin-bottom:20px;margin:1px;"/><label for="vis_filter_radio_5">' + VIS.Msg.getMsg("Report") + '</label><br/>' +
-                      '<input type="button" name="filter" style="background-color: #616364;color:white" value=' + VIS.Msg.getMsg("Filter") + '></input>');
+                      '<input type="button" name="filter" value=' + VIS.Msg.getMsg("Filter") + '></input>');
 
             menuUL = menuTree.find(">ul"); //menu UL element
             var options = [], itm = null;

@@ -1788,6 +1788,20 @@ html[dir="rtl"] .vis-app-f-taskbar li a {
     padding-left: 0;
     padding-right: 5px;
 }
+html[dir="rtl"] .vis-ad-w-p-a-main {
+    right: auto;
+    left: 2px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-a-m-lst span {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    text-align: left;
+    box-shadow: 3px 0px 3px 0px rgba(var(--v-c-on-common), 0.15);
+}
+
 /*rtl css End here*/
 /* Media Queries for different screen resolutions and devices START */
 @media (max-width:1920px) and (min-width:1681px) {
