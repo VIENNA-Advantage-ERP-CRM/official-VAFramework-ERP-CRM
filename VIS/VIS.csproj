@@ -197,6 +197,7 @@
     <Content Include="Areas\VIS\Content\F20\Controls.css" />
     <Content Include="Areas\VIS\Content\F20\Media.css" />
     <Content Include="Areas\VIS\Content\F20\Site.css" />
+    <Content Include="Areas\VIS\Content\F20\site-rtl.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
     <Content Include="Areas\VIS\Content\Home.css" />

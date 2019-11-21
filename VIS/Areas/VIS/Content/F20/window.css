@@ -696,6 +696,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     padding: inherit;
     bottom: 40px;
     background-color: inherit;
+    z-index: 2;
 }
 
 .vis-ad-w-p-a-main-mob {
