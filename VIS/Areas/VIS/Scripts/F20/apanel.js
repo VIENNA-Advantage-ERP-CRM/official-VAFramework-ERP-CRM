@@ -151,7 +151,7 @@
         this.isSummaryVisible = false;
         //private 
         var $table, $divNav, $tdContentArea, $ulNav, $divSearch, $divToolbar, $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
-        var $txtSearch, $arrowSearch, $imgSearch;
+        var $txtSearch, $arrowSearch, $imgSearch,$btnClrSearch,$imgdownSearch;
         var $root, $busyDiv;
         var $rightBarLPart, $rightBarRPart, $rightBar, $ulRightBar1, $ulRightBar2, $ulRightActionbar //right bar
         var $td0leftbar, $btnlbToggle, $ulLefttoolbar, $divlbMain, $divlbNav; //left bar
@@ -160,7 +160,7 @@
         var $tr3, $tr2, $tr;
         var $td2_tr3, $td2_tr1, $tabpanel;
         var $td4;
-
+        var $spnAdvSearch = null;
         /***Tab panel**/
        // var $divTabPanelOuterWrap, $divTabPanels, $divTabPanelsHead, $divTabPanelsContent, $divTabPanelIconBar, $divTabPanelsIcon, $headerTabPanel, $infoIconspan, $ulIconList, $spanPin;
         var panelMaxWidth = $(document).width() / 2;
@@ -179,15 +179,9 @@
         function initComponenet() {
 
             var clone = $(document.importNode(tmpAPanel, true));
-
-
             $root = clone.find(".vis-ad-w-p");
-
             // $root = $("<div style='position:relative;'>"); //main div
-            $busyDiv = $("<div class='vis-apanel-busy'>"); // busy indicator
-
-
-
+            $busyDiv = clone.find(".vis-ad-w-p-busy"); // busy indicator
 
             //tolbar and search 
             $ulToobar = $root.find(".vis-ad-w-p-tb-lc");// $("<ul class='vis-appsaction-ul'>"); //toolbar item list
@@ -245,7 +239,10 @@
             $td4 = $("<td rowspan='3' style='height:100%;vertical-align:top;max-width:8px;display:none'>").append($rightBar);
             $ulRightActionbar = $("<ul class='vis-apanel-rb-ul'>");
             $ulRightBar1 = $("<ul class='vis-apanel-rb-ul'>");
-            $ulRightBar2 = $("<ul class='vis-apanel-rb-ul'>");
+
+
+
+            $ulRightBar2 = $root.find(".vis-ad-w-p-tb-rc-a-list");
 
 
             //if (VIS.Application.isRTL) {//vis-window-tab-td-rtl
@@ -297,19 +294,17 @@
 
             $table = $("<table class='vis-apanel-table' >"); //main root
 
-            //$root.append($table);
-            //$root.append($busyDiv);
-
             //Search 
-            //$arrowSearch = $("<span style='float:right'>").text(">");
             $txtSearch = $root.find(".vis-ad-w-p-tb-s-input");
-            // $("<input type='text' class='vis-ad-w-p-tb-s-input' placeholder='" + VIS.Msg.getMsg("Search") + "'><span style='display:none' class='glyphicon glyphicon glyphicon-remove VIS-winSearch-autocom'></span><span style='display:none' class='glyphicon glyphicon-chevron-down VIS-winSearch-autocom'></span>");
-            //$txtSearch = $("<input type='text' class='vis-apanel-search' placeholder='" + VIS.Msg.getMsg("Search") + "'>");
+            $btnClrSearch = $root.find(".vis-ad-w-p-tb-s-icon");
+            $imgdownSearch = $root.find(".vis-ad-w-p-tb-s-icon-down");
+
+            $txtSearch.attr('placeholder', VIS.Msg.getMsg("Search")); 
             // Mohit - Shortcut as title.
             $imgSearch = $root.find(".vis-ad-w-p-tb-s-btn");
-            // $("<img  title='" + VIS.Msg.getMsg("Search") + " " + VIS.Msg.getMsg("Shct_Search") + "' src='" + VIS.AppsAction.prototype.getPath() + "Sear.png'>");
 
-            // $divSearch.append($txtSearch).append($imgSearch);//.append($arrowSearch).
+            //Advance Search 
+            $spnAdvSearch = $root.find(".vis-ad-w-p-tb-advsrch");
         };
 
         this.createSearchAutoComplete = function (text) {
@@ -317,100 +312,100 @@
 
 
                 var $selfpanel = this;
-                $($txtSearch[0]).autocomplete({
-                    source: function (request, response) {
-                        if (request.term.trim().length == 0) {
-                            return;
-                        }
+                $txtSearch.autocomplete({
+                    //source: function (request, response) {
+                    //    if (request.term.trim().length == 0) {
+                    //        return;
+                    //    }
 
-                        $($txtSearch[2]).css("transform", "rotate(180deg)");
+                    //    $imgdownSearch.css("transform", "rotate(180deg)");
 
-                        //                        var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.AD_Tab_ID, "
-                        //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )  "
-                        //+ "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )   ELSE null End as AD_DefaultUserQuery_ID"
-                        //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =" + self.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
-                        //       + " AND (AD_UserQuery.AD_Tab_ID           =" + self.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID           =" + self.curTab.getAD_Table_ID() + ")"
-                        //       + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
+                    //    //                        var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.AD_Tab_ID, "
+                    //    //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )  "
+                    //    //+ "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )   ELSE null End as AD_DefaultUserQuery_ID"
+                    //    //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =" + self.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
+                    //    //       + " AND (AD_UserQuery.AD_Tab_ID           =" + self.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID           =" + self.curTab.getAD_Table_ID() + ")"
+                    //    //       + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
 
-                        var sqlUserSearch = "VIS_114";
-
-
-                        var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
-                        param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
-                        param[2] = new VIS.DB.SqlParam("@AD_Tab_ID1", self.curTab.getAD_Tab_ID());
-                        param[3] = new VIS.DB.SqlParam("@AD_User_ID1", self.ctx.getAD_User_ID());
-                        param[4] = new VIS.DB.SqlParam("@AD_Client_ID", self.ctx.getAD_Client_ID());
-                        param[5] = new VIS.DB.SqlParam("@AD_Tab_ID2", self.curTab.getAD_Tab_ID());
-                        param[6] = new VIS.DB.SqlParam("@AD_Table_ID", self.curTab.getAD_Table_ID());
-                        param[7] = new VIS.DB.SqlParam("@queryData", request.term);
-
-                        executeDataSet(sqlUserSearch, param, function (data) {
-                            var userQueries = [];
-
-                            if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
-                                userQueries.push({ 'title': VIS.Msg.getMsg("All"), 'name': VIS.Msg.getMsg("All"), 'code': VIS.Msg.getMsg("All") });
-                                $($txtSearch[1]).css('display', 'block');
-                                $($txtSearch[2]).css('display', 'block');
-                                var hasDefaultSearch = false;
-                                for (var i = 0; i < data.tables[0].rows.length; i++) {
-                                    if (data.tables[0].rows[i].cells["ad_defaultuserquery_id"] > 0) {
-                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["ad_defaultuserquery_id"], 'userid': data.tables[0].rows[i].cells["ad_defaultuserquery_id"] });
-                                        hasDefaultSearch = true;
-                                    }
-                                    else {
-                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"] });
-                                    }
-                                }
-                                $selfpanel.toggleASearchIcons(true, hasDefaultSearch);
-                            }
-                            else {
-
-                                //          var sqlUserSearch = "SELECT count(*) "
-                                //+ " FROM AD_UserQuery AD_UserQuery LEFT OUTER JOIN AD_DefaultUserQuery AD_DefaultUserQuery ON AD_DefaultUserQuery.AD_UserQuery_ID=AD_UserQuery.AD_UserQuery_ID WHERE"
-                                //                   + " AD_UserQuery.AD_Client_ID=" + self.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive='Y'"
-                                //                   + " AND (AD_UserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID=" + self.curTab.getAD_Table_ID() + ")";
-                                //          sqlUserSearch += " ORDER BY AD_UserQuery.AD_UserQuery_ID";
+                    //    var sqlUserSearch = "VIS_114";
 
 
-                                var sqlUserSearch = "VIS_115";
+                    //    var param = [];
+                    //    param[0] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
+                    //    param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
+                    //    param[2] = new VIS.DB.SqlParam("@AD_Tab_ID1", self.curTab.getAD_Tab_ID());
+                    //    param[3] = new VIS.DB.SqlParam("@AD_User_ID1", self.ctx.getAD_User_ID());
+                    //    param[4] = new VIS.DB.SqlParam("@AD_Client_ID", self.ctx.getAD_Client_ID());
+                    //    param[5] = new VIS.DB.SqlParam("@AD_Tab_ID2", self.curTab.getAD_Tab_ID());
+                    //    param[6] = new VIS.DB.SqlParam("@AD_Table_ID", self.curTab.getAD_Table_ID());
+                    //    param[7] = new VIS.DB.SqlParam("@queryData", request.term);
 
-                                var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Client_ID", self.ctx.getAD_Client_ID());
-                                param[1] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
-                                param[2] = new VIS.DB.SqlParam("@AD_Table_ID", self.curTab.getAD_Table_ID());
+                    //    executeDataSet(sqlUserSearch, param, function (data) {
+                    //        var userQueries = [];
 
-                                executeDataSet(sqlUserSearch, param, function (data) {
-                                    var userQueries = [];
-                                    if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
-                                        if (data.tables[0].rows[0].cells[0] > 0) {
-                                            $selfpanel.toggleASearchIcons(true, false);
-                                        }
-                                        else {
-                                            $selfpanel.toggleASearchIcons(false, false);
-                                        }
-                                    }
+                    //        if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
+                    //            userQueries.push({ 'title': VIS.Msg.getMsg("All"), 'name': VIS.Msg.getMsg("All"), 'code': VIS.Msg.getMsg("All") });
+                    //            //$btnClrSearch.css('display', 'block');
+                    //            //$imgdownSearch.css('display', 'block');
+                    //            var hasDefaultSearch = false;
+                    //            for (var i = 0; i < data.tables[0].rows.length; i++) {
+                    //                if (data.tables[0].rows[i].cells["ad_defaultuserquery_id"] > 0) {
+                    //                    userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["ad_defaultuserquery_id"], 'userid': data.tables[0].rows[i].cells["ad_defaultuserquery_id"] });
+                    //                    hasDefaultSearch = true;
+                    //                }
+                    //                else {
+                    //                    userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"] });
+                    //                }
+                    //            }
+                    //            $selfpanel.toggleASearchIcons(true, hasDefaultSearch);
+                    //        }
+                    //        else {
 
-                                });
+                    //            //          var sqlUserSearch = "SELECT count(*) "
+                    //            //+ " FROM AD_UserQuery AD_UserQuery LEFT OUTER JOIN AD_DefaultUserQuery AD_DefaultUserQuery ON AD_DefaultUserQuery.AD_UserQuery_ID=AD_UserQuery.AD_UserQuery_ID WHERE"
+                    //            //                   + " AD_UserQuery.AD_Client_ID=" + self.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive='Y'"
+                    //            //                   + " AND (AD_UserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID=" + self.curTab.getAD_Table_ID() + ")";
+                    //            //          sqlUserSearch += " ORDER BY AD_UserQuery.AD_UserQuery_ID";
 
-                            }
 
-                            response($.map(userQueries, function (item) {
-                                return {
-                                    label: item.name,
-                                    value: item.name,
-                                    code: item.code,
-                                    title: item.title,
-                                    id: item.id,
-                                    defid: item.defaultids,
-                                    userid: item.userid,
-                                }
-                            }));
-                        });
-                        //$(self.div).autocomplete("search", "");
-                        //$(self.div).trigger("focus");
+                    //            var sqlUserSearch = "VIS_115";
 
-                    },
+                    //            var param = [];
+                    //            param[0] = new VIS.DB.SqlParam("@AD_Client_ID", self.ctx.getAD_Client_ID());
+                    //            param[1] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
+                    //            param[2] = new VIS.DB.SqlParam("@AD_Table_ID", self.curTab.getAD_Table_ID());
+
+                    //            executeDataSet(sqlUserSearch, param, function (data) {
+
+                    //                if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
+                    //                    if (data.tables[0].rows[0].cells[0] > 0) {
+                    //                        $selfpanel.toggleASearchIcons(true, false);
+                    //                    }
+                    //                    else {
+                    //                        $selfpanel.toggleASearchIcons(false, false);
+                    //                    }
+                    //                }
+
+                    //            });
+
+                    //        }
+
+                    //        response($.map(userQueries, function (item) {
+                    //            return {
+                    //                label: item.name,
+                    //                value: item.name,
+                    //                code: item.code,
+                    //                title: item.title,
+                    //                id: item.id,
+                    //                defid: item.defaultids,
+                    //                userid: item.userid,
+                    //            }
+                    //        }));
+                    //    });
+                    //    //$(self.div).autocomplete("search", "");
+                    //    //$(self.div).trigger("focus");
+
+                    //},
                     select: function (ev, ui) {
                         //self.cmd_find(ui.item.code);
 
@@ -443,9 +438,8 @@
                         //	Confirmed query
                         self.curTab.setQuery(query);
                         self.curGC.query(0, 0, false);   //  autoSize
-                        $($txtSearch[1]).css("display", "inherit");
-                        $($txtSearch[2]).css("display", "inherit");
-                        $($txtSearch[2]).css("transform", "rotate(360deg)");
+                        $btnClrSearch.css("visibility", "visible");
+                        $imgdownSearch.css("visibility", "visible").css("transform", "rotate(360deg)");
                         ev.stopPropagation();
                     },
                     minLength: 0,
@@ -453,19 +447,17 @@
                         $selfpanel.isAutoCompleteOpen = true;
                     },
                     close: function (event, ui) {
-                        $($txtSearch[2]).css("transform", "rotate(360deg)");
+                        $imgdownSearch.css("transform", "rotate(360deg)");
                         window.setTimeout(function () {
-
                             $selfpanel.isAutoCompleteOpen = false;
 
                         }, 400);
                     }
-                })
+                });
 
-                window.setTimeout(function () {
+                //window.setTimeout(function () {
 
-                    $($txtSearch[0]).autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
-
+                    $txtSearch.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
 
                         var span = null;
                         if ($selfpanel.curTab.getTabLevel() == 0) {
@@ -513,11 +505,7 @@
 
                     //});
 
-                }, 200);
-
-
-
-
+                //}, 200);
             }
         };
 
@@ -525,7 +513,7 @@
             //$divHeaderNav.append($divTabControl).append($divTabNav).append($divNav);
             $rightBarRPart.append("<h1 class='vis-apnel-rb-header'>" + VIS.Msg.getMsg("Action") + "</h1>").append($ulRightActionbar);
             //$rightBarRPart.append("<h1 class='vis-apnel-rb-header'>" + VIS.Msg.getMsg("Setting") + "</h1>").append($ulRightBar1);
-            $rightBarRPart.append("<h1 class='vis-apnel-rb-header'>" + VIS.Msg.getMsg("Related") + "</h1>").append($ulRightBar2);
+           // $rightBarRPart.append("<h1 class='vis-apnel-rb-header'>" + VIS.Msg.getMsg("Related") + "</h1>").append($ulRightBar2);
 
             // $divlbMain.append($ulLefttoolbar);
             $divHeaderNav.show();
@@ -620,8 +608,10 @@
             //lakhwinder
             //$ulToobar.append(this.aInfo.getListItm());
 
-            $ulToobar.append(new VIS.AppsAction().getSeprator(false, true));
-            $ulToobar.append(this.aFind.getListItm());
+           // $ulToobar.append(new VIS.AppsAction().getSeprator(false, true));
+            //$ulToobar.append(this.aFind.getListItm());
+
+            $spnAdvSearch.append(this.aFind.getListItm());
 
             // Mohit - Shortcut as title.
             ////2.Navigation sub-tollbar
@@ -1329,109 +1319,109 @@
             //  e.stopPropagation();
             //   e.preventDefault();
 
-            if ($($txtSearch[1]).is(':visible') == true) {
-                $($txtSearch[1]).css("display", "none");
-                $($txtSearch[0]).val("");
-                self.curTab.searchText = "";
-                var query = new VIS.Query();
-                //query.addRestriction(" 1 = 1 ");
-                self.findRecords(query);
-            }
-            else {
+            //if ($txtSearch.is(':visible') == true) {
+            //    $txtSearch.css("display", "none");
+            //    $txtSearch.val("");
+            //    self.curTab.searchText = "";
+            //    var query = new VIS.Query();
+            //    //query.addRestriction(" 1 = 1 ");
+            //    self.findRecords(query);
+            //}
+            //else {
                 self.cmd_find($txtSearch.val());
-                $($txtSearch[1]).css("display", "none");
+                //$txtSearch.css("display", "none");
                 self.curTab.searchText = "";
                 $txtSearch.val("");
-            }
+           // }
             e.stopPropagation();
 
         });
 
         if (!VIS.Application.isMobile) {
-            $($txtSearch[0]).on("keyup", function (e) {
+            $txtSearch.on("keyup", function (e) {
                 var code = e.charCode || e.keyCode;
                 if (code == 13) {
                     if (!self.defaultSearch) {
                         //self.defaultSearch = true;
                         return;
                     }
-                    $($txtSearch[1]).css("display", "none");
-                    self.cmd_find($($txtSearch[0]).val());
-                    $($txtSearch[0]).val("");
+                   // $txtSearch.css("display", "none");
+                    self.cmd_find($txtSearch.val());
+                    $txtSearch.val("");
                 }
                 else if (code == 8) {
-                    if ($($txtSearch[1]).is(':visible') == true) {
+                    //if ($txtSearch.is(':visible') == true) {
                         e.preventDefault();
                         self.defaultSearch = true;
-                        $($txtSearch[1]).css("display", "none");
-                        $($txtSearch[0]).val("");
+                        //$txtSearch.css("display", "none");
+                        $txtSearch.val("");
                         var query = new VIS.Query();
                         query.addRestriction(" 1 = 1 ");
                         self.findRecords(query);
-                    }
+                   // }
                 }
             });
         }
 
-        $($txtSearch[2]).on("click", function () {
+        $imgdownSearch.on("click", function () {
 
             //if($($txtSearch[0]).autocomplete('widget')[0].style.display === 'none') {
 
             if (!self.isAutoCompleteOpen) {
                 //$(this).autocomplete('search','');
-                $($txtSearch[2]).css("transform", "rotate(180deg)");
+                $imgdownSearch.css("transform", "rotate(180deg)");
                 self.refreshSavedASearchList(true);
             }
             else {
-                $($txtSearch[2]).css("transform", "rotate(360deg)");
+                $imgdownSearch.css("transform", "rotate(360deg)");
             }
             //self.refreshSavedASearchList(true);
         });
 
-        $($txtSearch[1]).on("click", function () {
-            $($txtSearch[1]).css("display", "none");
+        $btnClrSearch.on("click", function () {
+            $btnClrSearch.css("visibility", "hidden");
             self.defaultSearch = true;
             self.curTab.searchText = "";
-            $($txtSearch[0]).val("");
+            $txtSearch.val("");
             var query = new VIS.Query();
             //query.addRestriction(" 1 = 1 ");
             self.findRecords(query);
-            $($txtSearch[2]).css("transform", "rotate(360deg)");
+            $imgdownSearch.css("transform", "rotate(360deg)");
         });
 
         this.setAdvancedSerachText = function (hideicon, text) {
             if (hideicon) {
-                $($txtSearch[1]).css("display", "none");
+                $btnClrSearch.css("visibility", "hidden");
             }
             else {
-                $($txtSearch[1]).css("display", "inherit");
-                $($txtSearch[2]).css("display", "inherit");
+                $btnClrSearch.css("visibility", "visible");
+                $imgdownSearch.css("visibility", "visible");
             }
-            $($txtSearch[0]).val(text);
+            $txtSearch.val(text);
 
         };
 
         this.toggleASearchIcons = function (show, hasDefault) {
             if (show && hasDefault) {
-                $($txtSearch[1]).css('display', 'inherit');
-                $($txtSearch[2]).css('display', 'inherit');
+                $btnClrSearch.css('visibility', 'visible');
+                $imgdownSearch.css('visibility', 'visible');
             }
             else if (show && !hasDefault) {
-                $($txtSearch[1]).css('display', 'none');
-                $($txtSearch[2]).css('display', 'inherit');
+                $btnClrSearch.css('visibility', 'hidden');
+                $imgdownSearch.css('visibility', 'visible');
             }
             else {
-                $($txtSearch[1]).css('display', 'none');
-                $($txtSearch[2]).css('display', 'none');
+                $btnClrSearch.css('visibility', 'hidden');
+                $imgdownSearch.css('visibility', 'hidden');
             }
         };
 
         this.setSearchFocus = function (focus) {
             if (focus) {
-                $($txtSearch[0]).focus();
+                $txtSearch.focus();
             }
             else {
-                $($txtSearch[0]).trigger('focusout');
+                $txtSearch.trigger('focusout');
             }
         };
 
@@ -1462,7 +1452,7 @@
                 if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
 
                     //$($txtSearch[1]).css("display", "inherit");
-                    $($txtSearch[2]).css('display', 'inherit');
+                    $imgdownSearch.css('visibility', 'visible');
                     userQueries.push({ 'label': VIS.Msg.getMsg("All"), 'value': VIS.Msg.getMsg("All"), 'code': VIS.Msg.getMsg("All") });
                     var hasDefaultSearch = false;
                     for (var i = 0; i < data.tables[0].rows.length; i++) {
@@ -1482,28 +1472,28 @@
                 }
 
                 if (!text) {
-                    text = $($txtSearch[0]).val();
+                    text = $txtSearch.val();
                 }
 
                 if (text && text.length > 0) {
 
                     if (text.length > 25) {
-                        $($txtSearch[0]).val(text.substr(0, 25) + '...');
+                        $txtSearch.val(text.substr(0, 25) + '...');
                     }
                     else {
-                        $($txtSearch[0]).val(text);
+                        $txtSearch.val(text);
                     }
-                    $($txtSearch[1]).css('display', 'inherit');
+                    $btnClrSearch.css('visibility', 'visible');
                     $selfpanel.defaultSearch = false;
                 }
                 else {
-                    $($txtSearch[1]).css('display', 'none');
+                    $btnClrSearch.css('visibility', 'hidden');
                 }
 
-                $($txtSearch[0]).autocomplete('option', 'source', userQueries);
+                $txtSearch.autocomplete('option', 'source', userQueries);
                 if (showData) {
-                    $($txtSearch[0]).autocomplete("search", "");
-                    $($txtSearch[0]).trigger("focus");
+                    $txtSearch.autocomplete("search", "");
+                    $txtSearch.trigger("focus");
                 }
             })
         };
