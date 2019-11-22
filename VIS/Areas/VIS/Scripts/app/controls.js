@@ -994,7 +994,7 @@
 
         this.values = null;
 
-        var $img = $("<img style='min-width:15px'>");
+        var $img = $("<i>");
         var $txt = $("<span>").text(text);
         var rootPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/";
 
@@ -1003,42 +1003,41 @@
         if (!isLink) {
             $ctrl = $('<button>', { type: 'button', name: columnName });
             $img.css("margin-right", "8px");
+            $ctrl.append($img).append($txt);
         }
-        else
+        else {
             $ctrl = $('<li>');
-
-
-
+            $ctrl.append($txt).append($img);
+        }
 
         //	Special Buttons
         if (columnName.equals("PaymentRule")) {
             this.readReference(195);
-            $txt.css("color", "blue"); //
-            setIcon("Payment20.png");    //  29*14
+            $ctrl.css("color", "blue"); //
+            setIcon("vis vis-payment");    //  29*14
         }
         else if (columnName.equals("DocAction")) {
             this.readReference(135);
-            $txt.css("color", "blue"); //
-            setIcon("Process20.png");    //  16*16
+            $ctrl.css("color", "blue"); //
+            setIcon("vis vis-cog");    //  16*16
         }
         else if (columnName.equals("CreateFrom")) {
-            setIcon("Copy16.png");       //  16*16
+            setIcon("vis vis-copy");       //  16*16
         }
         else if (columnName.equals("Record_ID")) {
-            setIcon("Zoom20.png");       //  16*16
-            $txt.text(VIS.Msg.getMsg("ZoomDocument"));
+            setIcon("vis vis-find");       //  16*16
+            $ctrl.text(VIS.Msg.getMsg("ZoomDocument"));
         }
         else if (columnName.equals("Posted")) {
             this.readReference(234);
-            $txt.css("color", "magenta"); //
-            setIcon("InfoAccount20.png");    //  16*16
+            $ctrl.css("color", "magenta"); //
+            setIcon("fa fa-line-chart");    //  16*16
         }
 
         function setIcon(img) {
-            $img.attr('src', rootPath + img);
+            $img.addClass(img);
         };
 
-        $ctrl.append($img).append($txt);
         IControl.call(this, $ctrl, VIS.DisplayType.Button, isReadOnly, columnName, mandatory);
 
         if (isReadOnly || !isUpdateable) {
@@ -1050,7 +1049,6 @@
         }
 
         var self = this; //self pointer
-
         var $ulPopup = null;
 
         $ulPopup = getPopupList();

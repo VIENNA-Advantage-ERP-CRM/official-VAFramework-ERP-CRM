@@ -3473,21 +3473,36 @@ html[dir="rtl"] .vis-cvd-editbtn {
 }
 
 .vis-alert-close-info {
-    background: url(../Images/Home/Mainmenu.png);
-    background-repeat: no-repeat;
+    /*background: url(../Images/Home/Mainmenu.png);
+    background-repeat: no-repeat;*/
 }
 
 .vis-alert-close-warn {
-    background: url(../Images/Home/Mainmenu.png);
-    background-repeat: no-repeat;
+    /*background: url(../Images/Home/Mainmenu.png);
+    background-repeat: no-repeat;*/
 }
 
 .vis-alert-close-error {
-    background: url(../Images/Home/Mainmenu.png);
-    background-repeat: no-repeat;
+    /*background: url(../Images/Home/Mainmenu.png);
+    background-repeat: no-repeat;*/
 }
 
 
+.vis-PopupWrap-alert {
+    border: 2px solid rgba(var(--v-c-primary), 1) !important;
+    display: flex;
+    flex-direction: column;
+    border-radius: .50rem;
+    box-shadow: 0px 0px 9px 3px rgba(0, 0, 0, 0.23);
+    width: 300px;
+    margin: auto;
+    background: rgba(var(--v-c-secondary), 1);
+}
+
+.vis-PopupHeader-alert span {
+    padding: 0 10px;
+    color: rgba(var(--v-c-on-primary), 1);
+}
 /* header */
 .vis-PopupHeader-alert {
     float: left;
@@ -3495,19 +3510,23 @@ html[dir="rtl"] .vis-cvd-editbtn {
     /*border-bottom: 1px solid #047784;*/
     /*border-top-left-radius: 7px;
     border-top-right-radius: 7px;*/
-    border-radius: 4px;
+    border-top-left-radius: .30rem;
+    border-top-right-radius: .30rem;
+    display: flex;
+    align-items: center;
+    background-color: rgba(var(--v-c-primary), 1);
 }
 
 .vis-PopupHeader-alert-info {
-    background-color: #1aa0ed;
+    /*background-color: rgba(var(--v-c-primary), 1);*/
 }
 
 .vis-PopupHeader-alert-warn {
-    background-color: #1aa0ed;
+    /*background-color: rgba(var(--v-c-primary), 1);*/
 }
 
 .vis-PopupHeader-alert-error {
-    background-color: #1aa0ed;
+    /*background-color: rgba(var(--v-c-primary), 1);*/
 }
 
 /*Image header*/
@@ -3516,16 +3535,14 @@ html[dir="rtl"] .vis-cvd-editbtn {
 
 
 .vis-PopupHeader-alert > h4 {
-    float: left;
-    color: #FFFFFF;
-    padding: 0;
+    color: rgba(var(--v-c-on-primary), 1);
     margin: 0;
-    padding: 13px 15px;
-    font-size: 15px;
+    padding: .4em 1em;
+    font-size: 14px;
     font-family: inherit;
     font-weight: 500;
     line-height: 1.1;
-    font-weight: bold;
+    flex: 1;
 }
 
 /* Content*/
@@ -3538,33 +3555,34 @@ html[dir="rtl"] .vis-cvd-editbtn {
     box-sizing: border-box;
     padding-bottom: 0px;
     padding-top: 10px;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
 .vis-popup-headerContainer {
-    padding: 3px;
+    /*padding: 3px;
     background-color: white;
-    height: 50px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    height: 50px;*/
+    border-top-left-radius: .50rem;
+    border-top-right-radius: .50rem;
 }
 
 .vis-popup-headerContainer-info {
-    border-top: #1aa0ed 1px solid;
+    /*border-top: #1aa0ed 1px solid;
     border-left: #1aa0ed 1px solid;
-    border-right: #1aa0ed 1px solid;
+    border-right: #1aa0ed 1px solid;*/
 }
 
 .vis-popup-headerContainer-warn {
-    border-top: #1aa0ed 1px solid;
+    /*border-top: #1aa0ed 1px solid;
     border-left: #1aa0ed 1px solid;
-    border-right: #1aa0ed 1px solid;
+    border-right: #1aa0ed 1px solid;*/
 }
 
 
 .vis-popup-headerContainer-error {
-    border-top: #1aa0ed 1px solid;
+    /*border-top: #1aa0ed 1px solid;
     border-left: #1aa0ed 1px solid;
-    border-right: #1aa0ed 1px solid;
+    border-right: #1aa0ed 1px solid;*/
 }
 
 .vis-PopupContent-alert-info {
@@ -3587,16 +3605,16 @@ html[dir="rtl"] .vis-cvd-editbtn {
 }
 
 .vis-PopupContent-alert-error {
-    color: #c11515;
-    background-color: white;
+    /*color: #c11515;*/
+    /*background-color: white;
     border: 1px #1aa0ed solid;
-    border-top: 0px;
+    border-top: 0px;*/
 }
 
 .vis-PopupInput-alert {
     float: left;
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .vis-Dialog-buttons {
@@ -3605,10 +3623,11 @@ html[dir="rtl"] .vis-cvd-editbtn {
 
     .vis-Dialog-buttons input {
         margin-left: 10px;
-        background: #535455;
+        background:  rgba(var(--v-c-primary), 1);
         border: none;
-        color: #fff;
-        padding: 4px 12px;
+        color: rgba(var(--v-c-on-primary), 1);
+        padding: 0.5rem 1.5rem;
+        border-radius: .25rem;
     }
 
 .vis-PopupInput-alert > label {
