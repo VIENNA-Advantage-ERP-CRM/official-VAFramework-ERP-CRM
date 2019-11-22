@@ -506,6 +506,8 @@
                 }
                 else
                     $allocationFrom.css("background-color", SetMandatory(false));
+                //if allocation from is change then we have to clear the selection of invoices
+                clearInvoiceArrays(e);
 
                 if ($allocationFrom.val() == "P") { // In case of Payment Cash Option must be Hide
                     $allocationTo.find("option[value=C]").hide();
@@ -514,7 +516,7 @@
                 }
                 else if ($allocationFrom.val() == "C") { // In case of Cash Payment Option must be Hide
                     $allocationTo.find("option[value=P]").hide();
-                    $allocationTo.find("option[value=C]").show();
+                    $allocationTo.find("option[value=C]").hide();
                     $allocationTo.find("option[value=G]").show();
                 }
                 else if ($allocationFrom.val() == "G") { // In case of GL Journal GL Journal Option must be Hide
@@ -539,6 +541,8 @@
                 }
                 else
                     $allocationTo.css("background-color", SetMandatory(false));
+                //if allocation from is change then we have to clear the selection of invoices
+                clearInvoiceArrays(e);
 
                 var allocfrm = $allocationFrom.val();
                 var allocto = $allocationTo.val();
@@ -720,6 +724,20 @@
                 loadGLVoucher();
             }
         };
+        //function to clear the selection of invoices
+        function clearInvoiceArrays(e) {
+            if ($gridInvoice != null) {
+                var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
+                for (var i = 0; i < chk.length; i++) {
+                    $(chk[i]).prop('checked', false);
+                    //$(chk[i]).change(e);
+                    $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, e);
+                    var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
+                    $gridInvoice.trigger(eData);
+                }
+                selectedInvoices = [];
+            }
+        };
         //end
 
         function fillLookups() {
@@ -867,14 +885,14 @@
             $allocationTo.empty();
             $allocationFrom.append("<option value=0></option>");
             $allocationTo.append("<option value=0></option>");
-            $allocationFrom.append('<option value="P">' + VIS.translatedTexts.C_Payment_ID + '</option>');
-            $allocationTo.append('<option value="P">' + VIS.translatedTexts.C_Payment_ID + '</option>');
             $allocationFrom.append('<option value="C">' + VIS.translatedTexts.C_Cash_ID + '</option>');
             $allocationTo.append('<option value="C">' + VIS.translatedTexts.C_Cash_ID + '</option>');
             $allocationFrom.append('<option value="I">' + VIS.translatedTexts.C_Invoice_ID + '</option>');
             $allocationTo.append('<option value="I">' + VIS.translatedTexts.C_Invoice_ID + '</option>');
             $allocationFrom.append('<option value="G">' + VIS.translatedTexts.GL_Journal_ID + '</option>');
             $allocationTo.append('<option value="G">' + VIS.translatedTexts.GL_Journal_ID + '</option>');
+            $allocationFrom.append('<option value="P">' + VIS.translatedTexts.C_Payment_ID + '</option>');
+            $allocationTo.append('<option value="P">' + VIS.translatedTexts.C_Payment_ID + '</option>');
         };
 
         function createRow1() {
@@ -2753,7 +2771,9 @@
         function autoWriteOff() {
             invoiceTotal = 0;
             paymentTotal = 0;
-            if ($vchkAllocation.is(':checked')) {
+            // if cash record is selected means our cash grid is not readonly
+            //if ($vchkAllocation.is(':checked')) {
+            if (!readOnlyCash) {
                 var cashChanges = $gridCashline.getChanges();
                 for (var i = 0; i < cashChanges.length; i++) {
                     if (cashChanges[i].SelectRow == true) {
@@ -3159,7 +3179,9 @@
             //added for gl-allocation
             $vchkGlInvoice.prop('checked', false);
             //end
-            if ($vchkAllocation.is(':checked')) {
+            // if cash record is selected means our cash grid is not readonly
+            //if ($vchkAllocation.is(':checked')) {
+            if (!readOnlyCash) {
                 readOnlyCash = false;
                 readOnlyPayment = true;
                 if (rowsPayment != null) {
@@ -3252,7 +3274,7 @@
                 //   needs to check in case of Party JV allocation weather you are allocating payment with JV Or you are allocating CashLine with JV.
                 glData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, DateAcct);
             }
-            else if ($vchkAllocation.is(':checked')) {
+            else if ($allocationFrom.val() == "C" || $allocationTo.val() == "C") {
                 saveCashData(rowsPayment, rowsCash, rowsInvoice, DateTrx, DateAcct);
             }
             else {
@@ -3361,7 +3383,7 @@
                             type: 'POST',
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
-                                isCash: $vchkAllocation.is(':checked'), _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
+                                isCash: true, _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
                                 , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
                             }),
                             success: function (result) {
@@ -3482,14 +3504,18 @@
                                 }
                             }
                         }
-
+                        // if cash record is selected means our cash grid is not readonly
+                        var cashcheck = false;
+                        if (!readOnlyCash) {
+                            cashcheck = true;
+                        }
 
                         $.ajax({
                             url: VIS.Application.contextUrl + "PaymentAllocation/SavePaymentData",
                             type: 'POST',
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
-                                isCash: $vchkAllocation.is(':checked'), _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
+                                isCash: cashcheck, _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
                                 , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
                             }),
                             success: function (result) {
