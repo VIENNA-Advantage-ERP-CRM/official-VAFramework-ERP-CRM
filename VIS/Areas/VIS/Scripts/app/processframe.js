@@ -328,7 +328,7 @@
             }
             this.reportContainer.height(this.reportAreaContainer.height() - (this.$divDesc.height() + 20));
             //if (this.calculateWidth) {
-            this.reportAreaContainer.width(this.partitionContainer.width() - (this.parameterContainer.width()));
+            //this.reportAreaContainer.width(this.partitionContainer.width() - (this.parameterContainer.width()));
             //this.calculateWidth = false;
             //}
         };
@@ -344,7 +344,7 @@
             var wrapperHeight = $divOuterWrap.height();
             var paraRoot = $(selff.partitionContainer.find('.vis-pro-para-root')[0]);// $root.closest('.vis-process-outer-main-wrap').height();
             paraRoot.height((wrapperHeight - 114) + 'px');
-            this.reportAreaContainer.width(width - this.parameterContainer.width());
+            //this.reportAreaContainer.width(width - this.parameterContainer.width());
 
         };
 

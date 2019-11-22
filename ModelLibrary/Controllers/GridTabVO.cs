@@ -111,32 +111,32 @@ namespace VAdvantage.Controller
         public bool IsHeaderPanel = false;
 
         /****   Grid Layout   ***/
-        public int AD_GridLayout_ID = 0;
+        public int AD_HeaderLayout_ID = 0;
 
-        /****   Header Height   ***/
-        public decimal HeaderHeight = 0;
+        ///****   Header Height   ***/
+        //public decimal HeaderHeight = 0;
 
-        /****   Header Back Color   ***/
-        public string HeaderBackColor = "";
+        ///****   Header Back Color   ***/
+        //public string HeaderBackColor = "";
 
         /****   Header Alignment   ***/
         public string HeaderAlignment = "";
 
-        /****   Header Name   ***/
-        public string HeaderName = "";
+        ///****   Header Name   ***/
+        //public string HeaderName = "";
 
-        /****   Header Total Column   ***/
-        public int HeaderTotalColumn = 0;
+        ///****   Header Total Column   ***/
+        //public int HeaderTotalColumn = 0;
 
-        /****   Header Total Row   ***/
-        public int HeaderTotalRow = 0;
+        ///****   Header Total Row   ***/
+        //public int HeaderTotalRow = 0;
 
 
-        /****   Header Total Row   ***/
-        public Decimal HeaderWidth = 0;
+        ///****   Header Total Row   ***/
+        //public Decimal HeaderWidth = 0;
 
         /****   Header Items   ***/
-        private Dictionary<int, object> hItems = null;
+        public Dictionary<decimal, object> HeaderItems = null;
 
         public string TabPanelAlignment = "V";
 
@@ -473,21 +473,9 @@ namespace VAdvantage.Controller
                 /***************Worked For Header Panel By Karan*****************/
                 vo.IsHeaderPanel = dr["Isheaderpanel"].Equals("Y");
 
-                vo.AD_GridLayout_ID = Util.GetValueOfInt(dr["Ad_Gridlayout_Id"]);
-
-                vo.HeaderHeight = Utility.Util.GetValueOfDecimal(dr["HeaderHeight"]);
-
-                vo.HeaderWidth = Utility.Util.GetValueOfDecimal(dr["HeaderWidth"]);
-
-                vo.HeaderBackColor = Utility.Util.GetValueOfString(dr["HeaderBackcolor"]);
+                vo.AD_HeaderLayout_ID = Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
 
                 vo.HeaderAlignment = Utility.Util.GetValueOfString(dr["HeaderAlignment"]);
-
-                vo.HeaderName = Utility.Util.GetValueOfString(dr["HeaderName"]);
-
-                vo.HeaderTotalColumn = Utility.Util.GetValueOfInt(dr["HeadertColumn"]);
-
-                vo.HeaderTotalRow = Utility.Util.GetValueOfInt(dr["HeadertRow"]);
 
                 vo.TabPanelAlignment = Utility.Util.GetValueOfString(dr["TabPanelAlignment"]);
                 /***************** End Header panel work ***************/
@@ -597,27 +585,53 @@ namespace VAdvantage.Controller
         /// <param name="mTabVO"></param>
         private static void CreateHeaderPanel(GridTabVO mTabVO)
         {
-            if (mTabVO.AD_GridLayout_ID > 0)
+            if (mTabVO.AD_HeaderLayout_ID > 0)
             {
-                DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Flow,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                    " AD_GridLayoutItems_ID FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + mTabVO.AD_GridLayout_ID);
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID);
+                if (dsGridLayout != null && dsGridLayout.Tables[0].Rows.Count > 0)
                 {
-                    mTabVO.hItems = new Dictionary<int, object>();
-                    foreach (DataRow row in ds.Tables[0].Rows)
+                    mTabVO.HeaderItems = new Dictionary<decimal, object>();
+                    foreach (DataRow dr in dsGridLayout.Tables[0].Rows)
                     {
-                        mTabVO.hItems[Convert.ToInt32(row["SeqNo"])] = new HeaderPanelItemsVO
+                        HeaderPanelGrid hGrid = new HeaderPanelGrid
                         {
-                            AD_GridLayoutItems_ID = Convert.ToInt32(row["AD_GridLayoutItems_ID"]),
-                            ColumnSpan = Convert.ToInt32(row["ColumnSpan"]),
-                            AlignItems = Convert.ToString(row["AlignItems"]),
-                            Flow = Convert.ToString(row["Flow"]),
-                            JustifyItems = Convert.ToString(row["JustifyItems"]),
-                            RowSpan = Convert.ToInt32(row["RowSpan"]),
-                            SeqNo = Convert.ToInt32(row["SeqNo"]),
-                            StartColumn = Convert.ToInt32(row["StartColumn"]),
-                            StartRow = Convert.ToInt32(row["StartRow"]),
+                            HeaderHeight = Utility.Util.GetValueOfDecimal(dr["HeaderHeight"]),
+
+                            HeaderWidth = Utility.Util.GetValueOfDecimal(dr["HeaderWidth"]),
+
+                            HeaderBackColor = Utility.Util.GetValueOfString(dr["HeaderBackcolor"]),
+
+                            HeaderName = Utility.Util.GetValueOfString(dr["HeaderName"]),
+
+                            HeaderTotalColumn = Utility.Util.GetValueOfInt(dr["HeadertColumn"]),
+
+                            HeaderTotalRow = Utility.Util.GetValueOfInt(dr["HeadertRow"]),
                         };
+
+                        DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Flow,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
+                            " AD_GridLayoutItems_ID FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + mTabVO.AD_HeaderLayout_ID);
+                        if (ds != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                           
+                            foreach (DataRow row in ds.Tables[0].Rows)
+                            {
+                                hGrid.HeaderItems[Convert.ToInt32(row["SeqNo"])] = new HeaderPanelItemsVO
+                                {
+                                    AD_GridLayoutItems_ID = Convert.ToInt32(row["AD_GridLayoutItems_ID"]),
+                                    ColumnSpan = Convert.ToInt32(row["ColumnSpan"]),
+                                    AlignItems = Convert.ToString(row["AlignItems"]),
+                                    Flow = Convert.ToString(row["Flow"]),
+                                    JustifyItems = Convert.ToString(row["JustifyItems"]),
+                                    RowSpan = Convert.ToInt32(row["RowSpan"]),
+                                    SeqNo = Convert.ToInt32(row["SeqNo"]),
+                                    StartColumn = Convert.ToInt32(row["StartColumn"]),
+                                    StartRow = Convert.ToInt32(row["StartRow"]),
+                                };
+                            }
+                        }
+
+                        mTabVO.HeaderItems[Convert.ToInt32(dr["SeqNo"])] = hGrid;
+
                     }
                 }
             }
@@ -834,7 +848,7 @@ namespace VAdvantage.Controller
         /// <returns></returns>
         public String Get_ValueAsString(String variableName)
         {
-            return ctx.GetContext(windowNo, variableName, false);	// not just window
+            return ctx.GetContext(windowNo, variableName, false);   // not just window
         }
 
         /// <summary>
@@ -908,17 +922,12 @@ namespace VAdvantage.Controller
 
             clone.locationCols = locationCols;
 
-            clone.HeaderHeight = HeaderHeight;
-            clone.HeaderWidth = HeaderWidth;
-            clone.HeaderBackColor = HeaderBackColor;
             clone.IsHeaderPanel = IsHeaderPanel;
-            clone.AD_GridLayout_ID = AD_GridLayout_ID;
+            clone.AD_HeaderLayout_ID = AD_HeaderLayout_ID;
             clone.HeaderAlignment = HeaderAlignment;
-            clone.HeaderTotalColumn = HeaderTotalColumn;
-            clone.HeaderTotalRow = HeaderTotalRow;
             clone.TabPanelAlignment = TabPanelAlignment;
-            clone.hItems = hItems;
-            clone.HeaderName = HeaderName;
+            clone.HeaderItems = HeaderItems;
+           
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)
