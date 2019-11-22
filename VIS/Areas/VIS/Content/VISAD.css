@@ -4236,7 +4236,7 @@ li.vis-selected-list {
 .vis-process-left-sidebar {
     display: flex;
     flex-basis: 280px;
-    height: 100%;
+    /*height: 100%;*/
     flex-direction: column;
     background: #616364;
 }
@@ -4245,6 +4245,7 @@ li.vis-selected-list {
     display: flex;
     height: 100%;
     flex-direction: column;
+    width:100%;
 }
 
 .vis-process-main-wrap {
@@ -4252,6 +4253,7 @@ li.vis-selected-list {
     flex: 1;
     height: 100%;
     flex-direction: column;
+    width:100%;
 }
 
 .vis-process-toolbar {
