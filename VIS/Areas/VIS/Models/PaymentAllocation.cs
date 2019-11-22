@@ -83,7 +83,7 @@ namespace VIS.Models
             //  log.Config("Client=" + AD_Client_ID + ", Org=" + AD_Org_ID
             //    + ", BPartner=" + C_BPartner_ID + ", Date=" + DateTrx);
 
-            Trx trx = Trx.Get(Trx.CreateTrxName("AL"), true);
+            Trx trx = Trx.GetTrx(Trx.CreateTrxName("AL"));
             // trx.TrxIsolationLevel = IsolationLevel.RepeatableRead;
 
             msg = ValidateRecords(paymentData, "cpaymentid", false, false, trx); //Payment
@@ -112,6 +112,14 @@ namespace VIS.Models
 
             msg = string.Empty;
 
+            //Stop Cash to Cash Allocation
+            if (paymentData.Count == 0 && rowsInvoice.Count == 0)
+            {
+                trx.Rollback();
+                trx.Close();
+                return Msg.GetMsg(ctx, "Allocationnotpossible");
+            }
+            //end
 
             /**
              * Generation of allocations:               amount/discount/writeOff
@@ -151,8 +159,8 @@ namespace VIS.Models
             for (int i = 0; i < rowsCash.Count; i++)
             {
                 //  Payment line is selected
-                bool boolValue = false;
-                bool flag = false;
+                //bool boolValue = false;
+                //bool flag = false;
                 // if (boolValue)
                 {
                     //  Payment variables
@@ -200,8 +208,8 @@ namespace VIS.Models
             for (int i = 0; i < rowsInvoice.Count; i++)
             {
                 //  Invoice line is selected
-                bool boolValue = false;
-                bool flag = false;
+               // bool boolValue = false;
+                //bool flag = false;
                 isScheduleAllocated = false;
                 // if (boolValue)
                 {
@@ -266,7 +274,9 @@ namespace VIS.Models
                                 _log.SaveError("Error: ", "Allocation not created");
                                 trx.Rollback();
                                 trx.Close();
-                                return Msg.GetMsg(ctx, "Allocationnotcreated");
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
 
                             // when 
@@ -281,7 +291,16 @@ namespace VIS.Models
                                 else
                                     mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
                                                    Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
-                                mpay.Save(trx);
+                                if (!mpay.Save(trx))
+                                {
+                                    _log.SaveError("Error: ", "Due amount not set at Invoice Schedule");
+                                    trx.Rollback();
+                                    trx.Close();
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    msg += "Error: " + pp != null ? pp.GetName() : "";
+                                    return msg;
+                                }
+
                             }
                             // Create New schedule with split 
                             else if (isScheduleAllocated)
@@ -298,7 +317,16 @@ namespace VIS.Models
                                 }
                                 else
                                     mpay2.SetDueAmt(Math.Abs(amount));
-                                mpay2.Save(trx);
+
+                                if (!mpay2.Save(trx))
+                                {
+                                    _log.SaveError("Error: ", "Due amount not set at Invoice Schedule");
+                                    trx.Rollback();
+                                    trx.Close();
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    msg += "Error: " + pp != null ? pp.GetName() : "";
+                                    return msg;
+                                }
                             }
 
                             if (C_InvoicePaySchedule_ID == Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]))
@@ -329,6 +357,11 @@ namespace VIS.Models
                             if (!aLine.Save())
                             {
                                 _log.SaveError("Error: ", "Allocation Line not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
                             //  Apply Discounts and WriteOff only first time
                             DiscountAmt = Env.ZERO;
@@ -369,7 +402,9 @@ namespace VIS.Models
                                 _log.SaveError("Error: ", "Allocation not created");
                                 trx.Rollback();
                                 trx.Close();
-                                return Msg.GetMsg(ctx, "Allocationnotcreated");
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
                             //	Allocation Line
                             MAllocationLine aLine = new MAllocationLine(alloc, AppliedAmt,
@@ -389,6 +424,11 @@ namespace VIS.Models
                             if (!aLine.Save())
                             {
                                 _log.SaveError("Error: ", "Allocation Line not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
                             #endregion
                         }
@@ -412,7 +452,16 @@ namespace VIS.Models
                                 }
                                 else
                                     mpay2.SetDueAmt(Math.Abs(AppliedAmt));
-                                mpay2.Save(trx);
+
+                                if (!mpay2.Save(trx))
+                                {
+                                    _log.SaveError("Error: ", "Due amount not set on invoice schedule");
+                                    trx.Rollback();
+                                    trx.Close();
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    msg += "Error: " + pp != null ? pp.GetName() : "";
+                                    return msg;
+                                }
                             }
 
                             //	Allocation Header
@@ -421,7 +470,9 @@ namespace VIS.Models
                                 _log.SaveError("Error: ", "Allocation not created");
                                 trx.Rollback();
                                 trx.Close();
-                                return Msg.GetMsg(ctx, "Allocationnotcreated");
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
 
                             //	Allocation Line
@@ -454,6 +505,11 @@ namespace VIS.Models
                             if (!aLine.Save(trx))
                             {
                                 _log.SaveError("Error: ", "Allocation Line not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
                             #endregion
                         }
@@ -471,7 +527,15 @@ namespace VIS.Models
             if (alloc.Get_ID() != 0)
             {
                 alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
-                alloc.Save();
+                if (!alloc.Save())
+                {
+                    _log.SaveError("Error: ", "Allocation not completed");
+                    trx.Rollback();
+                    trx.Close();
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    msg += "Error: " + pp != null ? pp.GetName() : "";
+                    return msg;
+                }
                 msg = alloc.GetDocumentNo();
             }
 
@@ -479,9 +543,9 @@ namespace VIS.Models
             #region Set Invoice IsPaid
             for (int i = 0; i < rowsInvoice.Count; i++)
             {
-                bool boolValue = false;
+               // bool boolValue = false;
                 //  Invoice line is selected
-                bool flag = false;
+               // bool flag = false;
                 //Dispatcher.BeginInvoke(delegate
                 //{
                 //    boolValue = GetBoolValue(vdgvInvoice, i, 0);
@@ -563,7 +627,15 @@ namespace VIS.Models
                     {
                         cash.SetIsAllocated(false);
                     }
-                    cash.Save();
+                    if (!cash.Save())
+                    {
+                        _log.SaveError("Error: ", "Cash Line not set allocated");
+                        trx.Rollback();
+                        trx.Close();
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        msg += "Error: " + pp != null ? pp.GetName() : "";
+                        return msg;
+                    }
                     //log.Config("Payment #" + i + (pay.IsAllocated() ? " not" : " is")
                     //    + " fully allocated");
                 }
@@ -609,7 +681,7 @@ namespace VIS.Models
             int C_BPartner_ID = _C_BPartner_ID;
             int C_Order_ID = 0;
             string msg = string.Empty;
-            Trx trx = Trx.Get(Trx.CreateTrxName("AL"), true);
+            Trx trx = Trx.GetTrx(Trx.CreateTrxName("AL"));
 
             msg = ValidateRecords(rowsPayment, "cpaymentid", false, false, trx); //Payment
             if (msg != string.Empty)
@@ -804,7 +876,15 @@ namespace VIS.Models
                                     else
                                         mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
                                                        Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
-                                    mpay.Save(trx);
+                                    if (!mpay.Save(trx))
+                                    {
+                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
+                                        trx.Rollback();
+                                        trx.Close();
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        msg += "Error: " + pp != null ? pp.GetName() : "";
+                                        return msg;
+                                    }
                                 }
                                 // Create New schedule with split 
                                 else if (isScheduleAllocated)
@@ -822,7 +902,16 @@ namespace VIS.Models
                                     }
                                     else
                                         mpay2.SetDueAmt(Math.Abs(amount));
-                                    mpay2.Save(trx);
+                                    if (!mpay2.Save(trx))
+                                    {
+                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
+                                        trx.Rollback();
+                                        trx.Close();
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        msg += "Error: " + pp != null ? pp.GetName() : "";
+                                        return msg;
+                                    }
+
                                 }
 
                                 //	Allocation Header
@@ -832,7 +921,9 @@ namespace VIS.Models
                                     _log.SaveError("Error: ", "Allocation not created");
                                     trx.Rollback();
                                     trx.Close();
-                                    return Msg.GetMsg(ctx, "Allocationnotcreated");
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    msg += "Error: " + pp != null ? pp.GetName() : "";
+                                    return msg;
                                 }
                                 _log.SaveError("First Allocation Saved", "First Allocation Saved");
 
@@ -866,7 +957,12 @@ namespace VIS.Models
 
                                 if (!aLine.Save())
                                 {
-                                    // log.Log(Level.SEVERE, "Allocation Line not written - Invoice=" + C_Invoice_ID);
+                                    _log.SaveError("Error: ", "Allocation line not created");
+                                    trx.Rollback();
+                                    trx.Close();
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    msg += "Error: " + pp != null ? pp.GetName() : "";
+                                    return msg;
                                 }
                                 //  Apply Discounts and WriteOff only first time
                                 DiscountAmt = Env.ZERO;
@@ -897,7 +993,9 @@ namespace VIS.Models
                                 _log.SaveError("Error: ", "Allocation not created");
                                 trx.Rollback();
                                 trx.Close();
-                                return Msg.GetMsg(ctx, "Allocationnotcreated");
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
                             //	Allocation Line
                             MAllocationLine aLine = new MAllocationLine(alloc, AppliedAmt,
@@ -922,7 +1020,12 @@ namespace VIS.Models
 
                             if (!aLine.Save())
                             {
-                                //Log(Level.SEVERE, "Allocation Line not written - Invoice=" + C_Invoice_ID);
+                                _log.SaveError("Error: ", "Allocation line not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
                             #endregion
                         }
@@ -945,7 +1048,15 @@ namespace VIS.Models
                                 }
                                 else
                                     mpay2.SetDueAmt(Math.Abs(AppliedAmt));
-                                mpay2.Save(trx);
+                                if (!mpay2.Save(trx))
+                                {
+                                    _log.SaveError("Error: ", "Due amount not saved on invoice schedule");
+                                    trx.Rollback();
+                                    trx.Close();
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    msg += "Error: " + pp != null ? pp.GetName() : "";
+                                    return msg;
+                                }
                             }
 
                             //	Allocation Header
@@ -954,7 +1065,9 @@ namespace VIS.Models
                                 _log.SaveError("Error: ", "Allocation not created");
                                 trx.Rollback();
                                 trx.Close();
-                                return Msg.GetMsg(ctx, "Allocationnotcreated");
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
 
                             //	Allocation Line
@@ -988,7 +1101,12 @@ namespace VIS.Models
 
                             if (!aLine.Save(trx))
                             {
-
+                                _log.SaveError("Error: ", "Allocation line not saved");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
                             #endregion
                         }
@@ -1016,7 +1134,9 @@ namespace VIS.Models
                             _log.SaveError("Error: ", "Allocation not created");
                             trx.Rollback();
                             trx.Close();
-                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
                         }
                         //	Allocation Line
                         MAllocationLine aLine = new MAllocationLine(alloc, PaymentAmt,
@@ -1027,7 +1147,12 @@ namespace VIS.Models
                         aLine.SetDateTrx(DateTrx);
                         if (!aLine.Save())
                         {
-                            //  log.Log(Level.SEVERE, "Allocation Line not saved - Payment=" + C_Payment_ID);
+                            _log.SaveError("Error: ", "Allocation line not saved");
+                            trx.Rollback();
+                            trx.Close();
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
                         }
                     }
                 }	//	onlyPayments
@@ -1042,7 +1167,16 @@ namespace VIS.Models
                 if (alloc.Get_ID() != 0)
                 {
                     alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
-                    if (alloc.Save())
+                    if (!alloc.Save())
+                    {
+                        _log.SaveError("Error: ", "Allocation not completed");
+                        trx.Rollback();
+                        trx.Close();
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        msg += "Error: " + pp != null ? pp.GetName() : "";
+                        return msg;
+                    }
+                    else
                     {
                         msg = alloc.GetDocumentNo();
                     }
@@ -1080,7 +1214,15 @@ namespace VIS.Models
                         MPayment pay = new MPayment(ctx, C_Payment_ID, trx);
                         if (pay.TestAllocation())
                         {
-                            pay.Save();
+                            if (!pay.Save())
+                            {
+                                _log.SaveError("Error: ", "Payment not saved");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
+                            }
                         }
 
                         string sqlGetOpenPayments = "SELECT  currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,260,p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID) FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
@@ -1103,7 +1245,15 @@ namespace VIS.Models
                         {
                             pay.SetIsAllocated(false);
                         }
-                        pay.Save();
+                        if (!pay.Save())
+                        {
+                            _log.SaveError("Error: ", "Payment not saved");
+                            trx.Rollback();
+                            trx.Close();
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
+                        }
 
                         //log.Config("Payment #" + i + (pay.IsAllocated() ? " not" : " is")
                         //    + " fully allocated");
@@ -2013,6 +2163,20 @@ namespace VIS.Models
             decimal? amt = 0;
             if (isCustomer && isVendor) // Customer & Vendor Both
             {
+                if (AccountType == "A" || AccountType == "L")
+                {
+                    if (dbAmt > 0)
+                    {
+                        amt =  dbAmt;
+                    }
+                    if (crAmt > 0)
+                    {
+                        amt = crAmt;
+                    }
+                }
+            }
+            else if (isCustomer && !isVendor) // Only Customer
+            {
                 if (AccountType == "A")
                 {
                     if (dbAmt > 0)
@@ -2024,7 +2188,7 @@ namespace VIS.Models
                         amt = (-1 * crAmt);
                     }
                 }
-                else if (AccountType == "L")
+                if (AccountType == "L")
                 {
                     if (dbAmt > 0)
                     {
@@ -2035,27 +2199,31 @@ namespace VIS.Models
                         amt = (-1 * crAmt);
                     }
                 }
-            }
-            else if (isCustomer && !isVendor) // Only Customer
-            {
-                if (dbAmt > 0)
-                {
-                    amt = dbAmt;
-                }
-                if (crAmt > 0)
-                {
-                    amt = (-1 * crAmt);
-                }
+
             }
             else if (!isCustomer && isVendor) // Only Vendor
             {
-                if (dbAmt > 0)
+                if (AccountType == "A")
                 {
-                    amt = dbAmt;
+                    if (dbAmt > 0)
+                    {
+                        amt = (-1 * dbAmt);
+                    }
+                    if (crAmt > 0)
+                    {
+                        amt = crAmt;
+                    }
                 }
-                if (crAmt > 0)
+                if (AccountType == "L")
                 {
-                    amt = (-1 * crAmt);
+                    if (dbAmt > 0)
+                    {
+                        amt = (-1 * dbAmt);
+                    }
+                    if (crAmt > 0)
+                    {
+                        amt = crAmt;
+                    }
                 }
             }
             return amt;
@@ -2146,7 +2314,9 @@ namespace VIS.Models
                             _log.SaveError("Error: ", "Allocation not created");
                             trx.Rollback();
                             trx.Close();
-                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
                         }
                         else
                         {
@@ -2203,7 +2373,9 @@ namespace VIS.Models
                             _log.SaveError("Error: ", "Allocation not created");
                             trx.Rollback();
                             trx.Close();
-                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
                         }
                         else
                         {
@@ -2270,7 +2442,9 @@ namespace VIS.Models
                             _log.SaveError("Error: ", "Allocation not created");
                             trx.Rollback();
                             trx.Close();
-                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
                         }
                         else
                         {
@@ -2294,21 +2468,24 @@ namespace VIS.Models
                 //create allocation line if GL to GL Allocation
                 if (rowsCash.Count == 0 && rowsPayment.Count == 0 && rowsInvoice.Count == 0)
                 {
-                    for (int i = 0; i < rowsGL.Count; i++)
-                    {
-                        amtToAllocate = Util.GetValueOfDecimal(rowsGL[i]["AppliedAmt"]);
-                        MAllocationLine aLine = new MAllocationLine(alloc, amtToAllocate, 0, 0, 0);
-                        aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]));
-                        aLine.SetDateTrx(DateTrx);
-                        if (!aLine.Save())
-                        {
-                            _log.SaveError("Error: ", "Allocation not created");
-                            trx.Rollback();
-                            trx.Close();
-                            return Msg.GetMsg(ctx, "Allocationnotcreated");
-                        }
-                    }
+                    trx.Rollback();
+                    trx.Close();
+                    return Msg.GetMsg(ctx, "Allocationnotpossible");
+                    //    for (int i = 0; i < rowsGL.Count; i++)
+                    //    {
+                    //        amtToAllocate = Util.GetValueOfDecimal(rowsGL[i]["AppliedAmt"]);
+                    //        MAllocationLine aLine = new MAllocationLine(alloc, amtToAllocate, 0, 0, 0);
+                    //        aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                    //        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]));
+                    //        aLine.SetDateTrx(DateTrx);
+                    //        if (!aLine.Save())
+                    //        {
+                    //            _log.SaveError("Error: ", "Allocation not created");
+                    //            trx.Rollback();
+                    //            trx.Close();
+                    //            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                    //        }
+                    //    }
                 }
 
                 if (alloc.Get_ID() != 0)
@@ -2357,12 +2534,14 @@ namespace VIS.Models
                                 trx.Rollback();
                                 trx.Close();
                                 _log.SaveError("Error: ", "Payment not allocated");
-                                return Msg.GetMsg(ctx, "Allocationnotcreated");
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                msg += "Error: " + pp != null ? pp.GetName() : "";
+                                return msg;
                             }
 
                         }
 
-                        string sqlGetOpenPayments = "SELECT  NVL(currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ,"+ C_Currency_ID + ",p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID),0) as amt FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
+                        string sqlGetOpenPayments = "SELECT  NVL(currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.C_Currency_ID ," + C_Currency_ID + ",p.DateTrx ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID),0) as amt FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
                         object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
                         Decimal? amtPayment = 0;
                         if (result == null || result == DBNull.Value)
@@ -2387,7 +2566,9 @@ namespace VIS.Models
                             trx.Rollback();
                             trx.Close();
                             _log.SaveError("Error: ", "Payment not allocated");
-                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
                         }
                     }
                 #endregion
@@ -2425,7 +2606,9 @@ namespace VIS.Models
                             trx.Rollback();
                             trx.Close();
                             _log.SaveError("Error: ", "Cash Line not allocated");
-                            return Msg.GetMsg(ctx, "Allocationnotcreated");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
                         }
                     }
                 #endregion
