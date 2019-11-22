@@ -427,13 +427,13 @@
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto auto auto;
     /*overflow: auto;*/
-    background: rgba(var(--v-c-secondary), 0.09);
+    background: rgba(var(--v-c-secondary), 0.5);
 }
 
 .vis-ad-w-p-center-view {
     grid-row: 1/1;
     display: flex;
-    padding: 0 2px 0 10px;
+    padding: 0 10px;
     /*background: rgba(var(--v-c-common), 0.7)*/
 }
 
@@ -478,6 +478,7 @@
     grid-template-rows: auto 1fr;
     grid-template-columns: auto 1fr;
     color: rgba(var(--v-c-on-secondary));
+    background: rgba(var(--v-c-common), 0.7);
 }
 /*tree css START here*/
 .vis-ad-w-p-vc-tree {

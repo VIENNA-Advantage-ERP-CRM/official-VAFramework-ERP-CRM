@@ -262,7 +262,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     /*border-right: 2px solid rgba(var(--v-c-primary), 1) !important;
     border-bottom: 2px solid rgba(var(--v-c-primary), 1) !important;*/
     padding: 0;
-    border-radius: 0.35rem;
+    border-radius: 0.50rem;
     box-shadow: 0px 0px 9px 3px rgba(0, 0, 0, 0.23);
 }
 
@@ -276,7 +276,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     }
 
     .ui-dialog .ui-dialog-titlebar {
-        padding: .2em 1em;
+        padding: .4em 1em;
         border: none;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
@@ -292,8 +292,8 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     border-bottom-right-radius: .40rem;
 }
 .ui-widget.ui-widget-content {
-    border: 1px solid rgba(var(--v-c-on-secondary),.1);
-    border-radius: .25rem;
+    /*border: 1px solid rgba(var(--v-c-on-secondary),.1);*/
+    /*border-radius: .25rem;*/
 }
 
 
