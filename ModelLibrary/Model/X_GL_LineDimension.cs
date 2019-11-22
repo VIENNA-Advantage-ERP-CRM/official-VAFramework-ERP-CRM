@@ -72,9 +72,9 @@ namespace VAdvantage.Model
 @return Column in the table */
         public int GetAD_Column_ID() { Object ii = Get_Value("AD_Column_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Amount.
 @param Amount Amount in a defined currency */
-        public void SetAmount(int Amount) { Set_Value("Amount", Amount); }/** Get Amount.
+        public void SetAmount(Decimal Amount) { Set_Value("Amount", Amount); }/** Get Amount.
 @return Amount in a defined currency */
-        public int GetAmount() { Object ii = Get_Value("Amount"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Activity.
+        public Decimal GetAmount() { Object ii = Get_Value("Amount"); if (ii == null) return 0; return Convert.ToDecimal(ii); }/** Set Activity.
 @param C_Activity_ID Business Activity */
         public void SetC_Activity_ID(int C_Activity_ID)
         {
@@ -203,17 +203,18 @@ namespace VAdvantage.Model
         public void SetLineType(String LineType)
         {
             if (LineType == null) throw new ArgumentException("LineType is mandatory"); if (!IsLineTypeValid(LineType))
-                throw new ArgumentException("LineType Invalid value - " + LineType + " - Reference_ID=181 - OO - AC - PR - BP - OT - LF - LT - SR - PJ - MC - U1 - U2 - AY - SA - X1 - X2 - X3 - X4 - X5 - X6 - X7 - X8 - X9"); if (LineType.Length > 2) { log.Warning("Length > 2 - truncated"); LineType = LineType.Substring(0, 2); } Set_ValueNoCheck("LineType", LineType);
+                throw new ArgumentException("LineType Invalid value - " + LineType + " - Reference_ID=181 - OO - AC - PR - BP - OT - LF - LT - SR - PJ - MC - U1 - U2 - AY - SA - X1 - X2 - X3 - X4 - X5 - X6 - X7 - X8 - X9"); if (LineType.Length > 2) { log.Warning("Length > 2 - truncated"); LineType = LineType.Substring(0, 2); }
+            Set_ValueNoCheck("LineType", LineType);
         }/** Get Line Type.
 @return ElementType */
-        public String GetLineType() { return (String)Get_Value("LineType"); } 
-    
-    
+        public String GetLineType() { return (String)Get_Value("LineType"); }
 
-        
-        
-        
-        
+
+
+
+
+
+
         /** Set Product.
 @param M_Product_ID Product, Service, Item */
         public void SetM_Product_ID(int M_Product_ID)
@@ -246,8 +247,8 @@ namespace VAdvantage.Model
 
         /// <summary>
         ///  Set Dimension Value.
-       /// </summary>
-       /// <param name="DimensionValue">Dimension Value </param>
+        /// </summary>
+        /// <param name="DimensionValue">Dimension Value </param>
         public void SetDimensionValue(String DimensionValue) { if (DimensionValue != null && DimensionValue.Length > 10) { log.Warning("Length > 10 - truncated"); DimensionValue = DimensionValue.Substring(0, 10); } Set_Value("DimensionValue", DimensionValue); }
         /// <summary>
         /// Get Dimension Value.
