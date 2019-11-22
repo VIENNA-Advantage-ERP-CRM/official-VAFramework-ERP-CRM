@@ -30,6 +30,9 @@ namespace VAdvantage.Model
 
         /** Is record save from GL Voucher form **/
         private bool _isSaveFromForm;
+        //	Process Message 			
+        private String _processMsg = null;
+        private ValueNamePair pp = null;
 
         /// <summary>
         /// Standard Constructor
@@ -477,7 +480,7 @@ namespace VAdvantage.Model
                 if (toLine.Save())
                 {
                     count++;
-                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID());
+                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID() , typeCR);
                 }
             }
             if (fromLines.Length != count)
@@ -870,7 +873,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             }
 
             //Manish 18/7/2016 .. Because if line dimention (Amount) column sum is not equals to debit or credit value complete process will not done. 
-            int journalDRAndCR = 0;
+            Decimal journalDRAndCR = 0;
             string getlinevalues = "SELECT NVL(ElementType,null) AS ElementType,AmtSourceDr,AmtAcctCr,AmtSourceCr,GL_JournalLine_ID FROM GL_JournalLine where GL_Journal_ID=" + Get_Value("GL_Journal_ID");
             DataSet dts = DB.ExecuteDataset(getlinevalues, null, null);
 
@@ -885,20 +888,20 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                         continue;
                     }
 
-                    if (Convert.ToInt32(dts.Tables[0].Rows[i]["AmtSourceDr"]) > 0)
+                    if (Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["AmtSourceDr"]) > 0)
                     {
-                        journalDRAndCR = Convert.ToInt32(dts.Tables[0].Rows[i]["AmtSourceDr"]);
+                        journalDRAndCR = Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["AmtSourceDr"]);
                     }
                     else
                     {
-                        if (Convert.ToInt32(dts.Tables[0].Rows[i]["AmtSourceCr"]) > 0)
+                        if (Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["AmtSourceCr"]) > 0)
                         {
-                            journalDRAndCR = Convert.ToInt32(dts.Tables[0].Rows[i]["AmtSourceCr"]);
+                            journalDRAndCR = Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["AmtSourceCr"]);
                         }
                     }
 
                     string getlineval = "SELECT SUM(amount) FROM gl_linedimension where GL_JournalLine_ID=" + Convert.ToInt32(dts.Tables[0].Rows[i]["GL_JournalLine_ID"]);
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar(getlineval));
+                    Decimal count = Util.GetValueOfDecimal(DB.ExecuteScalar(getlineval));
 
                     if (journalDRAndCR != count)
                     {
@@ -938,7 +941,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
 
             //	Control Amount
             if (Env.ZERO.CompareTo(GetControlAmt()) != 0
-                && GetControlAmt().CompareTo(GetTotalDr()) != 0)
+                && GetControlAmt().CompareTo(GetTotalDr()) < 0)
             {
                 m_processMsg = "@ControlAmtError@";
                 return DocActionVariables.STATUS_INVALID;
@@ -1154,6 +1157,15 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             {
                 return null;
             }
+            else
+            {
+                // Create record on Assign Accounting Schema Tab if any
+                _processMsg = CopyAssignAccountingSchema(GetGL_Journal_ID(), reverse.GetGL_Journal_ID(), reverse.Get_Trx());
+                if (!String.IsNullOrEmpty(_processMsg))
+                {
+                    return null;
+                }
+            }
 
             //	Lines
             reverse.CopyLinesFrom(this, null, 'C');
@@ -1162,6 +1174,81 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             SetDocAction(DOCACTION_None);
             return reverse;
         }	//	reverseCorrectionIt
+
+        /// <summary>
+        /// This process is used to copy assign accounting schema record from olg Gl Journal record to new journal record
+        /// </summary>
+        /// <param name="oldjournal_Id">old GL journal ID</param>
+        /// <param name="newJournal_Id">new GL Journal ID</param>
+        /// <param name="trxName">current Transaction</param>
+        /// <returns>if not saved, then return error message</returns>
+        public String CopyAssignAccountingSchema(int oldjournal_Id, int newJournal_Id, Trx trxName)
+        {
+            if (oldjournal_Id <= 0 && newJournal_Id <= 0)
+            {
+                return "";
+            }
+            MAssignAcctSchema[] fromLines = GetAssignAcctSchemaLines();
+            for (int i = 0; i < fromLines.Length; i++)
+            {
+                MAssignAcctSchema toAssignAcctSchemaLine = new MAssignAcctSchema(GetCtx(), 0, trxName);
+                PO.CopyValues(fromLines[i], toAssignAcctSchemaLine, GetAD_Client_ID(), GetAD_Org_ID());
+                toAssignAcctSchemaLine.SetGL_Journal_ID(newJournal_Id);
+                if (!toAssignAcctSchemaLine.Save())
+                {
+                    pp = VLogger.RetrieveError();
+                    if (!String.IsNullOrEmpty(pp.GetName()))
+                        _processMsg = Msg.GetMsg(GetCtx(), "NotCreatedAssignAcctSchema") + ", " + pp.GetName();
+                    else
+                        _processMsg = Msg.GetMsg(GetCtx(), "NotCreatedAssignAcctSchema"); //Could not create Assign Accounting Schmea
+                    return _processMsg;
+                }
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Get lines of Assign Accounting Schema against GL journal
+        /// </summary>
+        /// <returns>array of assign accounting schema</returns>
+        public MAssignAcctSchema[] GetAssignAcctSchemaLines()
+        {
+            List<MAssignAcctSchema> list = new List<MAssignAcctSchema>();
+            String sql = "SELECT * FROM GL_AssignAcctSchema WHERE GL_Journal_ID=@Param1";
+            SqlParameter[] Param = new SqlParameter[1];
+            IDataReader idr = null;
+            DataTable dt = null;
+            try
+            {
+                Param[0] = new SqlParameter("@Param1", GetGL_Journal_ID());
+
+                idr = DataBase.DB.ExecuteReader(sql, Param, Get_TrxName());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(new MAssignAcctSchema(GetCtx(), dr, Get_TrxName()));
+                }
+                dt = null;
+            }
+            catch (Exception ex)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                if (dt != null)
+                {
+                    dt = null;
+                }
+                log.Log(Level.SEVERE, "getLines", ex);
+            }
+            //
+            MAssignAcctSchema[] retValue = new MAssignAcctSchema[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
 
         /// <summary>
         /// Reverse Accrual (sane batch).	Flip Dr/Cr - Use Today's date
@@ -1354,7 +1441,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
 
         public void SetProcessMsg(string processMsg)
         {
-
+            _processMsg = processMsg;
         }
 
 
