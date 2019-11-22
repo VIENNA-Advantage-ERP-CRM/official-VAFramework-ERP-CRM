@@ -1127,6 +1127,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             reverse.SetDateDoc(GetDateDoc());
             reverse.SetC_Period_ID(GetC_Period_ID());
             reverse.SetDateAcct(GetDateAcct());
+            reverse.SetIsFormData(true);
             //	Reverse indicator
             String description = reverse.GetDescription();
             if (description == null)
@@ -1160,7 +1161,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             else
             {
                 // Create record on Assign Accounting Schema Tab if any
-                _processMsg = CopyAssignAccountingSchema(GetGL_Journal_ID(), reverse.GetGL_Journal_ID(), reverse.Get_Trx());
+                _processMsg = CopyAssignAccountingSchema(GetGL_Journal_ID(), reverse.GetGL_Journal_ID(), reverse.Get_TrxName());
                 if (!String.IsNullOrEmpty(_processMsg))
                 {
                     return null;
@@ -1168,7 +1169,18 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             }
 
             //	Lines
-            reverse.CopyLinesFrom(this, null, 'C');
+            if (reverse.CopyLinesFrom(this, null, 'C') > 0)
+            {
+                if (!reverse.ProcessIt(DocActionVariables.ACTION_COMPLETE))
+                {
+                    _processMsg = "Reversal ERROR: " + reverse.GetProcessMsg();
+                    return null;
+                }
+                reverse.SetProcessing(false);
+                reverse.SetDocStatus(DOCSTATUS_Reversed);
+                reverse.SetDocAction(DOCACTION_None);
+                reverse.Save(Get_TrxName());
+            }
             //
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
