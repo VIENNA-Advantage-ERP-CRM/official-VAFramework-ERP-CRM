@@ -7,7 +7,59 @@
 
 
     var tmpvc = document.querySelector('#vis-ad-viewctrltmp').content;// $("#vis-ad-windowtmp");
+    //executeDataSet
+    //DataSet String
+    function getDataSetJString(data, async, callback) {
+        var result = null;
+        // data.sql = VIS.secureEngine.encrypt(data.sql);
+        $.ajax({
+            url: dataSetUrl,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            async: async,
+            data: JSON.stringify(data)
+        }).done(function (json) {
+            result = json;
+            if (callback) {
+                callback(json);
+            }
+            //return result;
+        });
+        return result;
+    };
 
+    var executeScalar = function (sql, params, callback) {
+        var async = callback ? true : false;
+        var dataIn = { sql: sql, page: 1, pageSize: 0 }
+        if (params) {
+            dataIn.param = params;
+        }
+
+        var value = null;
+
+
+        getDataSetJString(dataIn, async, function (jString) {
+            dataSet = new VIS.DB.DataSet().toJson(jString);
+            var dataSet = new VIS.DB.DataSet().toJson(jString);
+            if (dataSet.getTable(0).getRows().length > 0) {
+                value = dataSet.getTable(0).getRow(0).getCell(0);
+
+            }
+            else { value = null; }
+            dataSet.dispose();
+            dataSet = null;
+            if (async) {
+                callback(value);
+            }
+        });
+
+        return value;
+    };
+
+    var baseUrl = VIS.Application.contextUrl;
+    var dSetUrl = baseUrl + "Form/JDataSet";
+    var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
 
     //****************************************************//
     //**            Grid Controller                    **//
@@ -81,9 +133,9 @@
             //td1_tr3 = $("<td style='width:100%'>");
 
             /* Tree Div */
-            $divTree = $("<div>"); //tree div
+            //$divTree = $("<div>"); //tree div
 
-            $td0_tr3 = clone.find(".vis-ad-w-p-vc-tree").append($divTree).hide();
+            $divTree = clone.find(".vis-ad-w-p-vc-tree").hide();
 
             $tableMain = clone.find(".vis-ad-w-p-vc").hide();
 
@@ -213,9 +265,9 @@
             return $divTree;
         };
 
-        this.setTreePanelWidth = function (width) {
-            $td0_tr3.show();
-        };
+        //this.setTreePanelWidth = function (width) {
+        //    $td0_tr3.show();
+        //};
 
 
         this.getId = function () {
@@ -645,9 +697,9 @@ VIS.GridController.prototype.initGrid = function (onlyMultiRow, curWindowNo, aPa
 
 
 
-            this.setTreePanelWidth("300px");
-            this.getTreeArea().width("300px");
-            this.m_tree.setSize(this.getTreeArea().height());
+           // this.setTreePanelWidth("300px");
+            this.getTreeArea().show();
+           // this.m_tree.setSize(this.getTreeArea().height());
 
         }
         else    //  No Graphics - hide

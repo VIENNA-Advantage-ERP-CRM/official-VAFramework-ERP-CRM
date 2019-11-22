@@ -217,8 +217,8 @@ namespace VIS
                         "~/Areas/VIS/Content/F20/Controls.css",
                          "~/Areas/VIS/Content/F20/Media.css"
                 );
-              
-            //styleRTL.Include("~/Areas/VIS/Content/VIS.rtl.css");
+
+            style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
             //style.Include("~/Areas/VIS/Content/vis.all.min.css");
             //modScript.Include("~/areas/vis/scripts/VIS.all.min.js"); 

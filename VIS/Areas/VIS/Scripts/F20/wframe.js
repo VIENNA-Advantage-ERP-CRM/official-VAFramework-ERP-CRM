@@ -1,11 +1,5 @@
 ﻿; (function (VIS, $) {
 
- 
-
-
-
-
-
     var AWINDOW_HEADER_HEIGHT = 43;
     var APANEL_HEADER_HEIGHT = 50; //margin adjust of first tr
     var APANEL_FOOTER_HEIGHT = 40
@@ -204,11 +198,7 @@
         function initComponent() {
             // $contentGrid = $("<div class='vis-awindow-body'>");
 
-
             var clone = $(document.importNode(tmpWindow, true));
-
-           
-
             
 
             $table = clone.find(".vis-ad-w");
