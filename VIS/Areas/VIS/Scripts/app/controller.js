@@ -1192,9 +1192,9 @@
     };
 
     GridTab.prototype.loadHeaderPanelItems = function () {
-        if (this.vo.hItems) {
+        if (this.vo.HeaderItems) {
             this.isHeaderPanel = true;
-            headerPanel = this.vo.hItems;
+            headerPanel = this.vo.HeaderItems;
         }
     };
 
@@ -1216,19 +1216,19 @@
         }
     };
 
-    GridTab.prototype.getHeaderWidth = function () {
-        if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
-            return this.vo.HeaderWidth;
-        }
-        else {
-            return '250px';
-        }
+    //GridTab.prototype.getHeaderWidth = function () {
+    //    if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
+    //        return this.vo.HeaderWidth;
+    //    }
+    //    else {
+    //        return '250px';
+    //    }
         
-    };
+    //};
 
-    GridTab.prototype.getHeaderBackColor = function () {
-        return this.vo.HeaderBackColor;
-    };
+    //GridTab.prototype.getHeaderBackColor = function () {
+    //    return this.vo.HeaderBackColor;
+    //};
 
 
     GridTab.prototype.getHeaderHorizontal = function () {
@@ -1241,22 +1241,22 @@
     };
 
 
-    GridTab.prototype.getHeaderName = function () {
-        return this.vo.HeaderName;
-    };
+    //GridTab.prototype.getHeaderName = function () {
+    //    return this.vo.HeaderName;
+    //};
 
 
-    GridTab.prototype.getHeaderTotalColumn = function () {
-        return this.vo.HeaderTotalColumn;
-    };
+    //GridTab.prototype.getHeaderTotalColumn = function () {
+    //    return this.vo.HeaderTotalColumn;
+    //};
 
-    GridTab.prototype.getHeaderTotalRow = function () {
-        return this.vo.HeaderTotalRow;
-    };
+    //GridTab.prototype.getHeaderTotalRow = function () {
+    //    return this.vo.HeaderTotalRow;
+    //};
 
-    GridTab.prototype.getAD_GridLayout_ID = function () {
-        return this.vo.AD_GridLayout_ID;
-    };
+    //GridTab.prototype.getAD_GridLayout_ID = function () {
+    //    return this.vo.AD_GridLayout_ID;
+    //};
 
     GridTab.prototype.getHasPanel = function () {
         return this.hasPanel;
