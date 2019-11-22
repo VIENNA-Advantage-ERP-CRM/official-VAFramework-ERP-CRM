@@ -427,7 +427,7 @@
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto auto auto;
     /*overflow: auto;*/
-    background: rgba(var(--v-c-secondary), 0.5);
+    background: rgba(var(--v-c-secondary), 0.09);
 }
 
 .vis-ad-w-p-center-view {
