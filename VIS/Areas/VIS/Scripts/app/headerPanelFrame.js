@@ -22,29 +22,38 @@
                 $self.headerItems = _gTab.getHeaderPanelItems();
                 $self.gTab = _gTab;
                 $self.windowNo = $self.gTab.getWindowNo();
+
                 if ($self.headerItems) {
-                    var rows = $self.gTab.getHeaderTotalRow();
-                    var columns = $self.gTab.getHeaderTotalColumn();
-                    var backColor = $self.gTab.getHeaderBackColor();
                     var alignmentHorizontal = $self.gTab.getHeaderHorizontal();
-                    var height = $self.gTab.getHeaderHeight();
-                    var width = $self.gTab.getHeaderWidth();
-
-
-                    if (alignmentHorizontal) {
-                        $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
-                    }
-
-                    var headerCustom = headerParentCustomUISettings(width, backColor, height, alignmentHorizontal);
-                    $parentRoot.addClass(headerCustom);
-
                     // Create Root for header Panel
                     $root = $('<div>');
                     var rootCustomStyle = headerUISettings(columns, rows, alignmentHorizontal);
                     $root.addClass(rootCustomStyle);
 
-                    //Load Header Panel Items and add them to UI.
-                    $self.setHeaderItems();
+                    if (alignmentHorizontal) {
+                        $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
+                    }
+
+                    for (var j = 0; j < $self.headerItems.length; j++) {
+
+                        var currentItem = $self.headerItems[j];
+
+                        var rows = currentItem.HeaderTotalRow;
+                        var columns = currentItem.HeaderTotalColumn;
+                        var backColor = currentItem.HeaderBackColor;
+
+                        //var height = currentItem.getHeaderHeight();
+                        //var width = currentItem.getHeaderWidth();
+
+                        var headerCustom = headerParentCustomUISettings("", backColor, "", alignmentHorizontal, j);
+                        $parentRoot.addClass(headerCustom);
+
+                        var $containerDiv = $('<div style="display:grid;grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', 1fr);background-color:' + backColor + '">');
+                        $root.append($containerDiv);
+
+                        //Load Header Panel Items and add them to UI.
+                        $self.setHeaderItems(currentItem, $containerDiv);
+                    }
 
                     // Add Header Panel to Parent Control
                     $parentRoot.append($root);
@@ -57,12 +66,12 @@
          * This method create headr panel items when user open header panel first time. After that when user change record, system simply change values of label
          * and icons.
          * */
-        this.setHeaderItems = function () {
+        this.setHeaderItems = function (currentItem, $containerDiv) {
 
             /*If controls are already loaded, then do not manipulate DOM.Only fetch there reference from DOM and Change Values.
              *Else create header panel items. 
              */
-            if ($self.controls && $self.controls.length > 0) {
+            if ($self.controls && $self.controls.length > 0 && !currentItem && !$containerDiv) {
                 for (var i = 0; i < $self.controls.length; i++) {
                     var objControl = $self.controls[i];
                     if (objControl) {
@@ -96,7 +105,7 @@
                     if (mField.getIsHeaderPanelitem()) {
                         var controls = {};
                         var headerSeqNo = mField.getHeaderSeqno();
-                        var headerItem = $self.headerItems[headerSeqNo];
+                        var headerItem = currentItem.HeaderItems[headerSeqNo];
 
                         if (!headerItem || headerItem.length <= 0) {
                             continue;
@@ -178,7 +187,7 @@
                         /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
                         $divLabel.append(iControl.getControl());
                         $div.append($divLabel);
-                        $root.append($div);
+                        $containerDiv.append($div);
                     }
                 }
             }
@@ -206,7 +215,7 @@
                 style.innerHTML += "flex-direction:column";
             }
 
-            style.innerHTML +="}"
+            style.innerHTML += "}"
             $($('head')[0]).append(style);
             return dynamicClassName;
         };
@@ -218,9 +227,9 @@
          * @param {any} height
          * @param {any} alignment
          */
-        var headerParentCustomUISettings = function (width, backColor, height, alignmentHorizontal) {
+        var headerParentCustomUISettings = function (width, backColor, height, alignmentHorizontal, seqNo) {
             var style = document.createElement('style');
-            var dynamicClassName = "vis-ad-w-p-header_Custom_" + $self.windowNo;
+            var dynamicClassName = "vis-ad-w-p-header_Custom_" + $self.windowNo + "_" + seqNo;
 
             $(style).attr('id', dynamicClassName);
             style.type = 'text/css';
@@ -386,15 +395,15 @@
         this.disposeComponent = function () {
             var keys = Object.keys(this.headerItems);
             // Find Dynamically added classes from DOM and remove them.
-            for (var i = 1; i <= keys.length; i++) {
-                var startCol = this.headerItems[i].StartColumn;
-                var startRow = this.headerItems[i].StartRow;
-                $('#vis-hp-FieldGroup_' + startRow + "_" + startCol + "_" + this.windowNo).remove();
+            //for (var i = 1; i <= keys.length; i++) {
+            //    var startCol = this.headerItems[i].StartColumn;
+            //    var startRow = this.headerItems[i].StartRow;
+            //    $('#vis-hp-FieldGroup_' + startRow + "_" + startCol + "_" + this.windowNo).remove();
 
-                $("#vis-w-p-header-label-justify_" + keys[i] + "_" + this.windowNo).remove();
+            //    $("#vis-w-p-header-label-justify_" + keys[i] + "_" + this.windowNo).remove();
 
-                $("#vis-w-p-header-label-center-justify_" + keys[i] + "_" + this.windowNo).remove();
-            }
+            //    $("#vis-w-p-header-label-center-justify_" + keys[i] + "_" + this.windowNo).remove();
+            //}
             this.headerItems = null;
             $self = null;
             this.gTab = null;

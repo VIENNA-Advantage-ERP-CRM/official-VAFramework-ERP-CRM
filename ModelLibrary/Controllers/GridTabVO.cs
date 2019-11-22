@@ -136,7 +136,7 @@ namespace VAdvantage.Controller
         //public Decimal HeaderWidth = 0;
 
         /****   Header Items   ***/
-        public Dictionary<decimal, object> HeaderItems = null;
+        public List<HeaderPanelGrid> HeaderItems = null;
 
         public string TabPanelAlignment = "V";
 
@@ -587,32 +587,35 @@ namespace VAdvantage.Controller
         {
             if (mTabVO.AD_HeaderLayout_ID > 0)
             {
-                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID);
+                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID +" ORDER BY SeqNo Asc");
                 if (dsGridLayout != null && dsGridLayout.Tables[0].Rows.Count > 0)
                 {
-                    mTabVO.HeaderItems = new Dictionary<decimal, object>();
+                    mTabVO.HeaderItems = new List<HeaderPanelGrid>();
+                    
                     foreach (DataRow dr in dsGridLayout.Tables[0].Rows)
                     {
                         HeaderPanelGrid hGrid = new HeaderPanelGrid
                         {
-                            HeaderHeight = Utility.Util.GetValueOfDecimal(dr["HeaderHeight"]),
+                            HeaderHeight = Utility.Util.GetValueOfDecimal(dr["Height"]),
 
-                            HeaderWidth = Utility.Util.GetValueOfDecimal(dr["HeaderWidth"]),
+                            HeaderWidth = Utility.Util.GetValueOfDecimal(dr["Width"]),
 
-                            HeaderBackColor = Utility.Util.GetValueOfString(dr["HeaderBackcolor"]),
+                            HeaderBackColor = Utility.Util.GetValueOfString(dr["BackgroundColor"]),
 
-                            HeaderName = Utility.Util.GetValueOfString(dr["HeaderName"]),
+                            HeaderName = Utility.Util.GetValueOfString(dr["Name"]),
 
-                            HeaderTotalColumn = Utility.Util.GetValueOfInt(dr["HeadertColumn"]),
+                            HeaderTotalColumn = Utility.Util.GetValueOfInt(dr["TotalColumns"]),
 
-                            HeaderTotalRow = Utility.Util.GetValueOfInt(dr["HeadertRow"]),
+                            HeaderTotalRow = Utility.Util.GetValueOfInt(dr["TotalRows"]),
+
+                            AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
                         };
 
                         DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Flow,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                            " AD_GridLayoutItems_ID FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + mTabVO.AD_HeaderLayout_ID);
+                            " AD_GridLayoutItems_ID FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
-                           
+                            hGrid.HeaderItems = new Dictionary<int, object>();
                             foreach (DataRow row in ds.Tables[0].Rows)
                             {
                                 hGrid.HeaderItems[Convert.ToInt32(row["SeqNo"])] = new HeaderPanelItemsVO
@@ -629,8 +632,7 @@ namespace VAdvantage.Controller
                                 };
                             }
                         }
-
-                        mTabVO.HeaderItems[Convert.ToInt32(dr["SeqNo"])] = hGrid;
+                        mTabVO.HeaderItems.Add(hGrid);
 
                     }
                 }
