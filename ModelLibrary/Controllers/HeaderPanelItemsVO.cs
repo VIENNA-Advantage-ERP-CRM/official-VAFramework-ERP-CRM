@@ -58,4 +58,28 @@ namespace VAdvantage.Controller
         public float SeqNo = 0;
 
     }
+
+    public class HeaderPanelGrid
+    {
+        /****   Header Height   ***/
+        public decimal HeaderHeight = 0;
+
+        /****   Header Back Color   ***/
+        public string HeaderBackColor = "";
+
+        /****   Header Name   ***/
+        public string HeaderName = "";
+
+        /****   Header Total Column   ***/
+        public int HeaderTotalColumn = 0;
+
+        /****   Header Total Row   ***/
+        public int HeaderTotalRow = 0;
+
+        /****   Header Total Row   ***/
+        public Decimal HeaderWidth = 0;
+
+        /****   Header Items   ***/
+        public Dictionary<int, object> HeaderItems = null;
+    }
 }

@@ -16,7 +16,12 @@
 </template>
 
 <template id="vis-ad-paneltmp">
-    <div class="vis-ad-w-p ">
+    <div class="vis-ad-w-p">
+        <div class="vis-ad-w-p-busy">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </div>
+
+
         <div class="vis-ad-w-p-filter">
 
         </div>
@@ -28,12 +33,12 @@
             <ul class="vis-ad-w-p-tb-lc">
             </ul>
             <div class="vis-ad-w-p-tb-search">
-                <span><i class="vis vis-find" aria-hidden="true"></i></span>
+                <span class="vis-ad-w-p-tb-advsrch"></span>
                 <input type="text" class="vis-ad-w-p-tb-s-input">
                 <span class="vis-ad-w-p-tb-s-icon">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </span>
-                <span class="vis-ad-w-p-tb-s-icon">
+                <span class="vis-ad-w-p-tb-s-icon-down">
                     <i class="fa fa-chevron-down" aria-hidden="true"></i>
                 </span>
                 <span class="vis-ad-w-p-tb-s-btn">
@@ -49,9 +54,9 @@
                         <i class="fa fa-cog"></i>
                     </span>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <ul class="vis-ad-w-p-tb-rc-a-list">
+
+                        </ul>
                     </div>
                 </div>
                 <span class="vis-ad-w-p-tb-rc-abar">
@@ -114,7 +119,10 @@
                 <i class="fa fa-sort-down"></i>
             </div>
             <div class="vis-ad-w-p-a-main">
-                <ul class="vis-ad-w-p-a-m-lst"></ul>
+                <ul class="vis-ad-w-p-a-m-lst vis-ad-w-p-a-m-dlist" style="flex: initial;">
+
+                </ul>
+                <ul class="vis-ad-w-p-a-m-lst vis-ad-w-p-a-m-slist"></ul>
             </div>
             <div class="vis-ad-w-p-a-oflow">
                 <span data-dir="u">

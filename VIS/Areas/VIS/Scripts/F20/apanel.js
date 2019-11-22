@@ -3,18 +3,8 @@
     //**             APanel                            **//
     //**************************************************//
 
-
-    var AWINDOW_HEADER_HEIGHT = 43;
-    var APANEL_HEADER_HEIGHT = 50; //margin adjust of first tr
-    var APANEL_FOOTER_HEIGHT = 40
-
     var baseUrl = VIS.Application.contextUrl;
     var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
-    var nonQueryUrl = baseUrl + "JsonData/ExecuteNonQuer";
-    var dSetUrl = baseUrl + "Form/JDataSet";
-
-
-
     //executeDataSet
     var executeDataSet = function (sql, param, callback) {
         var async = callback ? true : false;
@@ -35,7 +25,6 @@
 
         return dataSet;
     };
-
     var executeScalar = function (sql, params, callback) {
         var async = callback ? true : false;
         var dataIn = { sql: sql, page: 1, pageSize: 0 }
@@ -63,9 +52,6 @@
 
         return value;
     };
-
-
-
     //DataSet String
     function getDataSetJString(data, async, callback) {
         var result = null;
@@ -86,45 +72,24 @@
         });
         return result;
     };
-    function getDSetJString(data, async, callback) {
-        var result = null;
-        data.sql = VIS.secureEngine.encrypt(data.sql);
-        $.ajax({
-            url: dSetUrl,
-            type: "POST",
-            datatype: "json",
-            contentType: "application/json; charset=utf-8",
-            async: async,
-            data: JSON.stringify(data)
-        }).done(function (json) {
-            result = json;
-            if (callback) {
-                callback(json);
-            }
-            //return result;
-        });
-        return result;
-    };
-
 
 
     var tmpAPanel = document.querySelector('#vis-ad-paneltmp').content;// $("#vis-ad-windowtmp");
 
-
     /**
      *	Main Application Panel.
      *  Structure:
+     *  HeaderPanel
      *	ToolBar
      *  tabPanel
+     *  Actionpanel
      *  StatusBar
      *
      */
     function APanel() {
-
         //This variable public to Instance
         this.$parentWindow;
         this.ctx = VIS.Env.getCtx();
-        //this.tabPages = {};
         this.curGC;
         this.curST;
         this.curTab;
@@ -137,287 +102,85 @@
         /* Sort Tab */
         this.firstTabId = null;
 
-        var actionItemCount_Left = 0;;
-        var actionItemCount_Right = 0;
-
-
         this.toolbarCreated = false;
         this.errorDisplayed = false;
 
         this.isPersonalLock = VIS.MRole.getIsPersonalLock();
-
         this.log = VIS.Logging.VLogger.getVLogger("APanel");
-        var isLocked = false;
+       
         this.isSummaryVisible = false;
         //private 
-        var $table, $divNav, $tdContentArea, $ulNav, $divSearch, $divToolbar, $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
-        var $txtSearch, $arrowSearch, $imgSearch;
+        var   $divContentArea, $ulNav,  $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
+        var $txtSearch, $imgSearch,$btnClrSearch,$imgdownSearch;
         var $root, $busyDiv;
-        var $rightBarLPart, $rightBarRPart, $rightBar, $ulRightBar1, $ulRightBar2, $ulRightActionbar //right bar
-        var $td0leftbar, $btnlbToggle, $ulLefttoolbar, $divlbMain, $divlbNav; //left bar
-        var $hdrPanel = "", $td3IncludedEmpty, $lb, $divHeaderNav, $rigthBarAction;
-
-        var $tr3, $tr2, $tr;
-        var $td2_tr3, $td2_tr1, $tabpanel;
-        var $td4;
-
-        /***Tab panel**/
-       // var $divTabPanelOuterWrap, $divTabPanels, $divTabPanelsHead, $divTabPanelsContent, $divTabPanelIconBar, $divTabPanelsIcon, $headerTabPanel, $infoIconspan, $ulIconList, $spanPin;
-        var panelMaxWidth = $(document).width() / 2;
+        var   $ulRightBar2; //right bar
+        var  $btnlbToggle, $ulactionbar, $uldynactionbar, $divlbMain, $divlbNav; //right bar
+        var $hdrPanel = "", $divIncludeTab,  $divHeaderNav;
+        var  $tabpanel;
+        var $spnAdvSearch = null;
         /***END Tab panel**/
-
-
-
-
 
         var tabItems = [], tabLIObj = {};
         this.defaultSearch = true;
         this.isAutoCompleteOpen = false;
-        this.panelWidth = 0;
-        this.windowWidth = 0;
 
         function initComponenet() {
 
             var clone = $(document.importNode(tmpAPanel, true));
-
-
             $root = clone.find(".vis-ad-w-p");
-
-            // $root = $("<div style='position:relative;'>"); //main div
-            $busyDiv = $("<div class='vis-apanel-busy'>"); // busy indicator
-
-
-
+            $busyDiv = clone.find(".vis-ad-w-p-busy"); // busy indicator
 
             //tolbar and search 
             $ulToobar = $root.find(".vis-ad-w-p-tb-lc");// $("<ul class='vis-appsaction-ul'>"); //toolbar item list
-            //$divSearch = $root.find(".vis-ad-w-p-tb-search");
-            //$divToolbar = $("<div class='vis-apanel-toolbar'>").append($ulToobar); //toolbar
-
-            //$root.find(".vis-ad-w-p-toolbar").append($ulToobar).append($divSearch);
-
             //navigation and tab control
             $ulNav = $root.find(".vis-ad-w-p-nav-btns");   // $("<ul class='vis-appsaction-ul vis-apanel-nav-ul'>"); //navigation list
-            // $divNav = $("<div class='vis-apanel-nav'>").append($ulNav); //navigation container
             $ulTabControl = $root.find(".vis-ad-w-p-t-c-tc");;  // $("<ul class='vis-appsaction-ul vis-apanel-tabcontrol-ul'>");//tab control
             $divTabControl = $root.find(".vis-ad-w-p-t-c");// $("<div class='vis-apanel-tabcontrol'>").append($ulTabControl);
             $divTabNav = $root.find(".vis-ad-w-p-tabs-oflow");// $("<div class='vis-apanel-tab-oflow'>").hide();
-            //$divTabNav.html("<a href='javascript:void(0)'><img data-dir='bf' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/thumb-" + (VIS.Application.isRTL ? "last" : "first") + ".png'></a><a href='javascript:void(0)'><img data-dir='b' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/thumb-" + (VIS.Application.isRTL ? "forward" : "back") + ".png'></a><a href='javascript:void(0)' ><img data-dir='r' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/thumb-" + (VIS.Application.isRTL ? "back" : "forward") + ".png' /></a><a href='javascript:void(0)' ><img data-dir='rl' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/thumb-" + (VIS.Application.isRTL ? "first" : "last") + ".png' /></a>");
-            //$divHeaderNav = $("<div class='vis-apanel-header-nav'>").hide();
             $divHeaderNav = $root.find(".vis-ad-w-p-tabs-t");
-
-
-            //left bar 
-            // $td0leftbar = $("<td style='width:40px;' style='height:100%' rowspan='3'>");
-
-            $td0leftbar = $root.find(".vis-ad-w-p-action");
+         
+           // $td0leftbar = $root.find(".vis-ad-w-p-action");
             $btnlbToggle = $root.find(".vis-ad-w-p-tb-rc-abar");
 
-            //$lb = $root.find(".vis-ad-w-p-a-container");
-            //=  ;//$("<div class='vis-apanel-lb-toggle' ><img class='vis-apanel-lb-img' title='" + VIS.Msg.getMsg("Actions") + "' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/mt24.png'></div>");
-            $ulLefttoolbar = $root.find('.vis-ad-w-p-a-m-lst');   // $ ("<ul class='vis-apanel-lb-ul'>");
+            $ulactionbar = $root.find('.vis-ad-w-p-a-m-slist');   // $ ("<ul class='vis-apanel-lb-ul'>");
+            $uldynactionbar = $root.find('.vis-ad-w-p-a-m-dlist');   // $ ("<ul class='vis-apanel-lb-ul'>");
+
             $divlbMain = $root.find('.vis-ad-w-p-a-main');//  ( '<div class="vis-ad-w-p-a-main">');
             $divlbNav = $root.find('.vis-ad-w-p-a-oflow');// ("<div class='vis-ad-w-p-a-oflow'>").hide();
-            //$divlbNav.html("<a data-dir='u' href='javascript:void(0)'><img style='margin-left:10px' data-dir='u' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-top.png' ></a><a data-dir='d' href='javascript:void(0)' ><img style='margin-left:10px' data-dir='d' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-bottom.png' /></a>");
-
-
-            //$lb.append($btnlbToggle);
-            //$lb.append($divlbMain);
-            // $lb.append($divlbNav);
-
-            //$td0leftbar.append($lb);
-
-
-            //parentDetail
-            // $hdrPanel = $("<td style='width:auto;height:100%;' rowspan='3'>");
+            
             $hdrPanel = $root.find(".vis-ad-w-p-header-l");
-            //Emptyt td
-            //$td3IncludedEmpty = $("<td class='vis-apanel-table-td3' style='height:100%;' rowspan='3'>");
-            $td3IncludedEmpty = $root.find(".vis-ad-w-p-center-inctab");
+            
+            $divIncludeTab = $root.find(".vis-ad-w-p-center-inctab");
 
-            //right pane
-            /* Right Pane */
-            $rigthBarAction = $("<a href='javascript:void(0)' class='vis-flex-prev vis-apanel-sliderBackground'>").html("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/arrow-slider.png'>");
-            $rightBarLPart = $("<div class='vis-apanel-bar-fixpart' style='position:absolute'>").append($rigthBarAction);
-
-            $rightBarRPart = $("<div class='vis-apanel-bar-varpart' style='overflow-y:auto'>");
-            $rightBar = $("<div class='vis-apanel-bar' style='position:relative'>").append($rightBarLPart).append($rightBarRPart);
-            $td4 = $("<td rowspan='3' style='height:100%;vertical-align:top;max-width:8px;display:none'>").append($rightBar);
-            $ulRightActionbar = $("<ul class='vis-apanel-rb-ul'>");
-            $ulRightBar1 = $("<ul class='vis-apanel-rb-ul'>");
-            $ulRightBar2 = $("<ul class='vis-apanel-rb-ul'>");
-
-
-            //if (VIS.Application.isRTL) {//vis-window-tab-td-rtl
-            //    $tabpanel = $("<td class='vis-window-tab-td-rtl' style='display:none; max-width:" + panelMaxWidth + "px'  >");
-            //}
-            //else {
-               // $tabpanel = $("<td class='vis-window-tab-td' style='display:none;max-width:" + panelMaxWidth + "px' >");
-            //}
-
-            //center content 
-            $td2_tr1 = $("<td style='height:" + APANEL_HEADER_HEIGHT + "px;position:relative'setwi>");//.append($divHeaderNav); //row 1 col2 //Tab Control
-            // var $tdNav = $("<td style='width:250px'>").append($divNav); //row 1 col2 Navigation
-            //$tdContentArea = $("<td style='height:100%;'>"); //w remianing full area 
-            $tdContentArea = $root.find(".vis-ad-w-p-center-view");
+            $ulRightBar2 = $root.find(".vis-ad-w-p-tb-rc-a-list");
+            
+            $divContentArea = $root.find(".vis-ad-w-p-center-view");
 
             //StatusBar
             //$divStatus = $("<div class='vis-apanel-statusbar'>").hide();
             $divStatus = $root.find(".vis-ad-w-p-status");
-            ///*$td2_tr3 = $("<td style='height:" + APANEL_FOOTER_HEIGHT + "px'>").append($divStatus);
-
-            $tr3 = $("<tr>");//.append($td2_tr3);
-            $tr2 = $("<tr>");//.append($tdContentArea); //row 2
-            $tr = $("<tr>");//.append($td0leftbar).append($hdrPanel).append($td2_tr1).append($td3IncludedEmpty).append($tabpanel).append($td4); //row 1
-
-            /********* Tab Panels **************/
-            //$divTabPanelOuterWrap = $('<div class="vis-window-tab-panel-outerwrap">');
-            //$divTabPanels = $('<div class="vis-window-tab-panels vis-pull-left">');
-            //$divTabPanelsHead = $('<div class="vis-window-tabpanel-head vis-pull-left">');
-            //$divTabPanelsContent = $('<div class="vis-window-tab-panelContent">');
-            //$divTabPanelIconBar = $(' <div class="vis-window-tab-panels-iconsbar vis-pull-right">');
-            //$divTabPanelsIcon = $('<div class="vis-window-tab-icons">');
-            //$headerTabPanel = $('<h3 class="vis-pull-left">');
-            //$infoIconspan = $('<span class="vis-window-tab-infoicon">');
-            //$ulIconList = $('<ul>');
-            //$spanPin = $('<span class="vis-pull-right">').append('<i class="glyphicon glyphicon-remove"></i>');
-
-
-            //$divTabPanelsIcon.append($ulIconList);
-            //$divTabPanelIconBar.append($infoIconspan).append($divTabPanelsIcon);
-            //$divTabPanelsHead.append($headerTabPanel).append($spanPin);
-            //$divTabPanels.append($divTabPanelsHead).append($divTabPanelsContent);
-            //$divTabPanelOuterWrap.append($divTabPanels).append($divTabPanelIconBar);
-            //// $tabpanel.append($divTabPanelOuterWrap);
-            
-            ////$tabpanel.append($divTabPanelOuterWrap);
 
             $tabpanel = $root.find('.vis-ad-w-p-actionpanel-r');
             /********* END Tab Panels **************/
 
-            $table = $("<table class='vis-apanel-table' >"); //main root
-
-            //$root.append($table);
-            //$root.append($busyDiv);
-
             //Search 
-            //$arrowSearch = $("<span style='float:right'>").text(">");
             $txtSearch = $root.find(".vis-ad-w-p-tb-s-input");
-            // $("<input type='text' class='vis-ad-w-p-tb-s-input' placeholder='" + VIS.Msg.getMsg("Search") + "'><span style='display:none' class='glyphicon glyphicon glyphicon-remove VIS-winSearch-autocom'></span><span style='display:none' class='glyphicon glyphicon-chevron-down VIS-winSearch-autocom'></span>");
-            //$txtSearch = $("<input type='text' class='vis-apanel-search' placeholder='" + VIS.Msg.getMsg("Search") + "'>");
+            $btnClrSearch = $root.find(".vis-ad-w-p-tb-s-icon");
+            $imgdownSearch = $root.find(".vis-ad-w-p-tb-s-icon-down");
+
+            $txtSearch.attr('placeholder', VIS.Msg.getMsg("Search")); 
             // Mohit - Shortcut as title.
             $imgSearch = $root.find(".vis-ad-w-p-tb-s-btn");
-            // $("<img  title='" + VIS.Msg.getMsg("Search") + " " + VIS.Msg.getMsg("Shct_Search") + "' src='" + VIS.AppsAction.prototype.getPath() + "Sear.png'>");
-
-            // $divSearch.append($txtSearch).append($imgSearch);//.append($arrowSearch).
+            //Advance Search 
+            $spnAdvSearch = $root.find(".vis-ad-w-p-tb-advsrch");
         };
 
         this.createSearchAutoComplete = function (text) {
             if ($txtSearch) {
 
-
                 var $selfpanel = this;
-                $($txtSearch[0]).autocomplete({
-                    source: function (request, response) {
-                        if (request.term.trim().length == 0) {
-                            return;
-                        }
-
-                        $($txtSearch[2]).css("transform", "rotate(180deg)");
-
-                        //                        var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.AD_Tab_ID, "
-                        //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )  "
-                        //+ "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )   ELSE null End as AD_DefaultUserQuery_ID"
-                        //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =" + self.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
-                        //       + " AND (AD_UserQuery.AD_Tab_ID           =" + self.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID           =" + self.curTab.getAD_Table_ID() + ")"
-                        //       + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
-
-                        var sqlUserSearch = "VIS_114";
-
-
-                        var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
-                        param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
-                        param[2] = new VIS.DB.SqlParam("@AD_Tab_ID1", self.curTab.getAD_Tab_ID());
-                        param[3] = new VIS.DB.SqlParam("@AD_User_ID1", self.ctx.getAD_User_ID());
-                        param[4] = new VIS.DB.SqlParam("@AD_Client_ID", self.ctx.getAD_Client_ID());
-                        param[5] = new VIS.DB.SqlParam("@AD_Tab_ID2", self.curTab.getAD_Tab_ID());
-                        param[6] = new VIS.DB.SqlParam("@AD_Table_ID", self.curTab.getAD_Table_ID());
-                        param[7] = new VIS.DB.SqlParam("@queryData", request.term);
-
-                        executeDataSet(sqlUserSearch, param, function (data) {
-                            var userQueries = [];
-
-                            if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
-                                userQueries.push({ 'title': VIS.Msg.getMsg("All"), 'name': VIS.Msg.getMsg("All"), 'code': VIS.Msg.getMsg("All") });
-                                $($txtSearch[1]).css('display', 'block');
-                                $($txtSearch[2]).css('display', 'block');
-                                var hasDefaultSearch = false;
-                                for (var i = 0; i < data.tables[0].rows.length; i++) {
-                                    if (data.tables[0].rows[i].cells["ad_defaultuserquery_id"] > 0) {
-                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["ad_defaultuserquery_id"], 'userid': data.tables[0].rows[i].cells["ad_defaultuserquery_id"] });
-                                        hasDefaultSearch = true;
-                                    }
-                                    else {
-                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"] });
-                                    }
-                                }
-                                $selfpanel.toggleASearchIcons(true, hasDefaultSearch);
-                            }
-                            else {
-
-                                //          var sqlUserSearch = "SELECT count(*) "
-                                //+ " FROM AD_UserQuery AD_UserQuery LEFT OUTER JOIN AD_DefaultUserQuery AD_DefaultUserQuery ON AD_DefaultUserQuery.AD_UserQuery_ID=AD_UserQuery.AD_UserQuery_ID WHERE"
-                                //                   + " AD_UserQuery.AD_Client_ID=" + self.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive='Y'"
-                                //                   + " AND (AD_UserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID=" + self.curTab.getAD_Table_ID() + ")";
-                                //          sqlUserSearch += " ORDER BY AD_UserQuery.AD_UserQuery_ID";
-
-
-                                var sqlUserSearch = "VIS_115";
-
-                                var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Client_ID", self.ctx.getAD_Client_ID());
-                                param[1] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
-                                param[2] = new VIS.DB.SqlParam("@AD_Table_ID", self.curTab.getAD_Table_ID());
-
-                                executeDataSet(sqlUserSearch, param, function (data) {
-                                    var userQueries = [];
-                                    if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
-                                        if (data.tables[0].rows[0].cells[0] > 0) {
-                                            $selfpanel.toggleASearchIcons(true, false);
-                                        }
-                                        else {
-                                            $selfpanel.toggleASearchIcons(false, false);
-                                        }
-                                    }
-
-                                });
-
-                            }
-
-                            response($.map(userQueries, function (item) {
-                                return {
-                                    label: item.name,
-                                    value: item.name,
-                                    code: item.code,
-                                    title: item.title,
-                                    id: item.id,
-                                    defid: item.defaultids,
-                                    userid: item.userid,
-                                }
-                            }));
-                        });
-                        //$(self.div).autocomplete("search", "");
-                        //$(self.div).trigger("focus");
-
-                    },
+                $txtSearch.autocomplete({
                     select: function (ev, ui) {
-                        //self.cmd_find(ui.item.code);
-
-                        //if (ev.originalEvent.keyCode == 13) {
-                        //    self.defaultSearch = false;
-                        //}
-
                         self.defaultSearch = false;
                         if (self.isSummaryVisible) {
                             self.curTab.setShowSummaryNodes(true);
@@ -433,9 +196,6 @@
                         if (ui.item.code != VIS.Msg.getMsg("All")) {
                             query.addRestriction(ui.item.code);
                         }
-                        //else {
-                        //    query.addRestriction(" 1 = 1 ");
-                        //}
                         //	History
 
                         //Set Page value to 1
@@ -443,9 +203,8 @@
                         //	Confirmed query
                         self.curTab.setQuery(query);
                         self.curGC.query(0, 0, false);   //  autoSize
-                        $($txtSearch[1]).css("display", "inherit");
-                        $($txtSearch[2]).css("display", "inherit");
-                        $($txtSearch[2]).css("transform", "rotate(360deg)");
+                        $btnClrSearch.css("visibility", "visible");
+                        $imgdownSearch.css("visibility", "visible").css("transform", "rotate(360deg)");
                         ev.stopPropagation();
                     },
                     minLength: 0,
@@ -453,122 +212,73 @@
                         $selfpanel.isAutoCompleteOpen = true;
                     },
                     close: function (event, ui) {
-                        $($txtSearch[2]).css("transform", "rotate(360deg)");
+                        $imgdownSearch.css("transform", "rotate(360deg)");
                         window.setTimeout(function () {
-
                             $selfpanel.isAutoCompleteOpen = false;
 
                         }, 400);
                     }
-                })
+                });
+                $txtSearch.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
 
-                window.setTimeout(function () {
-
-                    $($txtSearch[0]).autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
-
-
-                        var span = null;
-                        if ($selfpanel.curTab.getTabLevel() == 0) {
-                            if (item.defaultids && item.userid > 0) {
-                                span = $("<span title='" + VIS.Msg.getMsg("DefaultSearch") + "'  data-id='" + item.id + "' class='VIS-winSearch-defaultIcon'></span>");
-                            }
-                            else {
-                                span = $("<span title='" + VIS.Msg.getMsg("MakeDefaultSearch") + "' data-id='" + item.id + "' class='VIS-winSearch-NonDefaultIcon'></span>");
-                            }
+                    var span = null;
+                    if ($selfpanel.curTab.getTabLevel() == 0) {
+                        if (item.defaultids && item.userid > 0) {
+                            span = $("<span title='" + VIS.Msg.getMsg("DefaultSearch") + "'  data-id='" + item.id + "' class='VIS-winSearch-defaultIcon'></span>");
                         }
                         else {
-                            span = $("<span title='" + VIS.Msg.getMsg("DefaultSearch") + "'  data-id='" + item.id + "'></span>");
+                            span = $("<span title='" + VIS.Msg.getMsg("MakeDefaultSearch") + "' data-id='" + item.id + "' class='VIS-winSearch-NonDefaultIcon'></span>");
                         }
+                    }
+                    else {
+                        span = $("<span title='" + VIS.Msg.getMsg("DefaultSearch") + "'  data-id='" + item.id + "'></span>");
+                    }
 
 
-                        var li = $("<li>")
-                            .append($("<a style='display:block' title='" + item.title + "'>" + item.label + "</a>").append(span))
-                            .appendTo(ul);
+                    var li = $("<li>")
+                        .append($("<a style='display:block' title='" + item.title + "'>" + item.label + "</a>").append(span))
+                        .appendTo(ul);
 
 
-                        span.on("click", function (e) {
+                    span.on("click", function (e) {
 
-                            var uQueryID = $(this).data('id');
+                        var uQueryID = $(this).data('id');
 
-                            $.ajax({
-                                url: VIS.Application.contextUrl + "JsonData/InsertUpdateDefaultSearch",
-                                dataType: "json",
-                                data: { AD_Tab_ID: self.curTab.getAD_Tab_ID(), AD_Table_ID: self.curTab.getAD_Table_ID(), AD_User_ID: self.ctx.getAD_User_ID(), AD_UserQuery_ID: uQueryID },
-                                success: function (data) {
+                        $.ajax({
+                            url: VIS.Application.contextUrl + "JsonData/InsertUpdateDefaultSearch",
+                            dataType: "json",
+                            data: { AD_Tab_ID: self.curTab.getAD_Tab_ID(), AD_Table_ID: self.curTab.getAD_Table_ID(), AD_User_ID: self.ctx.getAD_User_ID(), AD_UserQuery_ID: uQueryID },
+                            success: function (data) {
 
-                                },
-                                error: function (er) {
-                                    console.log(er);
-                                }
+                            },
+                            error: function (er) {
+                                console.log(er);
+                            }
 
-                            });
                         });
+                    });
 
-                        return li;
-                    };
-                    // $($txtSearch[0]).autocomplete().data('ui-autocomplete').find('.VIS-winSearch-defaultIcon').off("click");
-                    // $($txtSearch[0]).autocomplete().data('ui-autocomplete').find('.VIS-winSearch-defaultIcon').on("click", function (e) {
-
-                    //  console(this);
-
-                    //});
-
-                }, 200);
-
-
-
-
+                    return li;
+                };
             }
         };
 
         function finishLayout() {
-            //$divHeaderNav.append($divTabControl).append($divTabNav).append($divNav);
-            $rightBarRPart.append("<h1 class='vis-apnel-rb-header'>" + VIS.Msg.getMsg("Action") + "</h1>").append($ulRightActionbar);
-            //$rightBarRPart.append("<h1 class='vis-apnel-rb-header'>" + VIS.Msg.getMsg("Setting") + "</h1>").append($ulRightBar1);
-            $rightBarRPart.append("<h1 class='vis-apnel-rb-header'>" + VIS.Msg.getMsg("Related") + "</h1>").append($ulRightBar2);
-
-            // $divlbMain.append($ulLefttoolbar);
             $divHeaderNav.show();
             $divStatus.show();
-            // $table.append($tr).append($tr2).append($tr3);
-            //$tr3 = $tr2 = $tr = null;
             if (VIS.Application.isMobile) {
                 $divlbNav.hide();
                 $divlbMain.addClass("vis-ad-w-p-a-main-mob");
             }
-        }
+        };
         /* Tool bar */
         var self = this;
         initComponenet();
-
         $divStatus.append(this.statusBar.getRoot()); //Status bar
-
-        var h = VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT;
-        //$table.height(h);
-        //$busyDiv.height(h);
 
         this.setSize = function (height, width) {
             return;
-            $table.height(height);
-            //$lb.height(height);
-            $rightBar.height(height);
-            $divStatus.height(APANEL_FOOTER_HEIGHT);
-            $divlbMain.height(height - 43); //left bar overflow
-
-            if ($ulLefttoolbar.height() > $divlbMain.height()) {
-                if (!VIS.Application.isMobile) {
-                    $divlbMain.height(height - (43 + 40));
-                    $divlbNav.show();
-                }
-            }
-            if (this.aParentDetail) {
-                this.aParentDetail.setSize(height);
-            }
-            $busyDiv.height(height);
-            height = null;
-
-        }
-
+        };
 
         //Action Perormed
         var onAction = function (action) {
@@ -576,10 +286,8 @@
         };
 
         //tabAction
-
         this.onTabChange = function (action) {
             self.tabActionPerformed(action);
-
         };
 
         this.statusBar.onComboChange = function (index) {
@@ -620,8 +328,10 @@
             //lakhwinder
             //$ulToobar.append(this.aInfo.getListItm());
 
-            $ulToobar.append(new VIS.AppsAction().getSeprator(false, true));
-            $ulToobar.append(this.aFind.getListItm());
+           // $ulToobar.append(new VIS.AppsAction().getSeprator(false, true));
+            //$ulToobar.append(this.aFind.getListItm());
+
+            $spnAdvSearch.append(this.aFind.getListItm());
 
             // Mohit - Shortcut as title.
             ////2.Navigation sub-tollbar
@@ -633,10 +343,7 @@
             this.aCard = this.addActions("Card", null, false, true, true, onAction, null, "Shct_CardView");
 
             this.aMap = this.addActions("Map", null, false, true, true, onAction);
-
-            //this.aBack = this.addActions("Back", null, false, true, true, onAction);
-            //Create Navigation
-            //$ulNav.append(this.aPrevious.getListItm()).append(this.aFirst.getListItm()).append(this.aLast.getListItm()).append(this.aNext.getListItm());
+            
             $ulNav
                 //.append(this.aFirst.getListItm())
                 .append(this.aPrevious.getListItm())
@@ -655,168 +362,136 @@
 
             //Action Bar[Left] 
 
-
             var mWindow = this.gridWindow;
             actionItemCount_Right = 0;
             if (mWindow.getIsAppointment()) {
                 this.aAppointment = this.addActions("Appointment", null, false, false, false, onAction); //1
                 this.aAppointment.setTextDirection("r");
-                $ulLefttoolbar.append(this.aAppointment.getListItmIT());
+                $ulactionbar.append(this.aAppointment.getListItmIT());
             }
             if (mWindow.getIsTask()) {
                 this.aTask = this.addActions("Task", null, false, false, false, onAction); //1
                 this.aTask.setTextDirection("r");
-                $ulLefttoolbar.append(this.aTask.getListItmIT());
+                $ulactionbar.append(this.aTask.getListItmIT());
 
             }
             if (mWindow.getIsEmail()) {
                 this.aEmail = this.addActions("EMail", null, false, false, false, onAction); //1
                 this.aEmail.setTextDirection("r");
-                $ulLefttoolbar.append(this.aEmail.getListItmIT());
+                $ulactionbar.append(this.aEmail.getListItmIT());
             }
             if (mWindow.getIsLetter()) {
                 this.aLetter = this.addActions("Letter", null, false, false, false, onAction); //1
                 this.aLetter.setTextDirection("r");
-                $ulLefttoolbar.append(this.aLetter.getListItmIT());
+                $ulactionbar.append(this.aLetter.getListItmIT());
             }
             if (mWindow.getIsSms()) {
                 this.aSms = this.addActions("Sms", null, false, false, false, onAction); //1
                 this.aSms.setTextDirection("r");
-                $ulLefttoolbar.append(this.aSms.getListItmIT());
+                $ulactionbar.append(this.aSms.getListItmIT());
             }
             if (mWindow.getIsFaxEmail()) {
                 this.aFaxEmail = this.addActions("FaxEmail", null, false, false, false, onAction); //1
                 this.aFaxEmail.setTextDirection("r");
-                $ulLefttoolbar.append(this.aFaxEmail.getListItmIT());
+                $ulactionbar.append(this.aFaxEmail.getListItmIT());
             }
-
-
-
-
-
 
             //add
             if (mWindow.getIsChat()) {
                 this.aChat = this.addActions(this.ACTION_NAME_CHAT, null, false, false, false, onAction, true);  //1
                 this.aChat.setTextDirection("r");
-                $ulLefttoolbar.append(this.aChat.getListItmIT());
+                $ulactionbar.append(this.aChat.getListItmIT());
             }
             if (mWindow.getIsAttachment()) {
                 this.aAttachment = this.addActions("Attachment", null, false, false, false, onAction, true); //1
                 this.aAttachment.setTextDirection("r");
-                $ulLefttoolbar.append(this.aAttachment.getListItmIT());
+                $ulactionbar.append(this.aAttachment.getListItmIT());
             }
             if (mWindow.getIsHistory()) {
                 this.aHistory = this.addActions("History", null, false, false, false, onAction); //1
                 this.aHistory.setTextDirection("r");
-                $ulLefttoolbar.append(this.aHistory.getListItmIT());
+                $ulactionbar.append(this.aHistory.getListItmIT());
             }
             if (mWindow.getIsCheckRequest()) {
                 this.aRequest = this.addActions("Request", null, true, false, false, onAction);
                 this.aRequest.setTextDirection("r");
-                $ulLefttoolbar.append(this.aRequest.getListItmIT());
+                $ulactionbar.append(this.aRequest.getListItmIT());
             }
-
 
             if (VIS.AEnv.getIsWorkflowProcess()) {
                 this.aWorkflow = this.addActions("Workflow", null, true, false, false, onAction);
                 this.aWorkflow.setTextDirection("r");
-                $ulLefttoolbar.append(this.aWorkflow.getListItmIT());
+                $ulactionbar.append(this.aWorkflow.getListItmIT());
             }
 
             if (mWindow.getIsCopyReocrd()) {
                 this.aCopy = this.addActions("Copy", null, false, false, false, onAction);
                 this.aCopy.setTextDirection("r");
-                $ulLefttoolbar.append(this.aCopy.getListItmIT());
+                $ulactionbar.append(this.aCopy.getListItmIT());
             }
             if (mWindow.getIsSubscribedRecord()) {
                 this.aSubscribe = this.addActions("Subscribe", null, true, false, false, onAction, true);
                 this.aSubscribe.setTextDirection("r");
-                $ulLefttoolbar.append(this.aSubscribe.getListItmIT());
+                $ulactionbar.append(this.aSubscribe.getListItmIT());
             }
             if (mWindow.getIsZoomAcross()) {
                 this.aZoomAcross = this.addActions("ZoomAcross", null, true, false, false, onAction);
                 this.aZoomAcross.setTextDirection("r");
-                $ulLefttoolbar.append(this.aZoomAcross.getListItmIT());
+                $ulactionbar.append(this.aZoomAcross.getListItmIT());
             }
             if (mWindow.getIsCreatedDocument()) {
                 this.aCreateDocument = this.addActions("CreateDocument", null, false, false, false, onAction); //1
                 this.aCreateDocument.setTextDirection("r");
-                $ulLefttoolbar.append(this.aCreateDocument.getListItmIT());
+                $ulactionbar.append(this.aCreateDocument.getListItmIT());
             }
             if (mWindow.getIsUploadedDocument()) {
                 this.aUploadDocument = this.addActions("UploadDocument", null, false, false, false, onAction); //1
                 this.aUploadDocument.setTextDirection("r");
-                $ulLefttoolbar.append(this.aUploadDocument.getListItmIT());
+                $ulactionbar.append(this.aUploadDocument.getListItmIT());
             }
             if (mWindow.getIsViewDocument()) {
                 this.aViewDocument = this.addActions("ViewDocument", null, false, false, false, onAction, true); //1
                 this.aViewDocument.setTextDirection("r");
-                $ulLefttoolbar.append(this.aViewDocument.getListItmIT());
+                $ulactionbar.append(this.aViewDocument.getListItmIT());
             }
             if (mWindow.getIsAttachDocumentFrom()) {
                 this.aAttachFrom = this.addActions("AttachDocumentFrom", null, false, false, false, onAction, true); //1
                 this.aAttachFrom.setTextDirection("r");
-                $ulLefttoolbar.append(this.aAttachFrom.getListItmIT());
+                $ulactionbar.append(this.aAttachFrom.getListItmIT());
             }
             if (mWindow.getIsMarkToExport()) {
                 this.aMarkToExport = this.addActions("Mark", null, false, false, false, onAction, true); //1
                 this.aMarkToExport.setTextDirection("r");
-                $ulLefttoolbar.append(this.aMarkToExport.getListItmIT());
+                $ulactionbar.append(this.aMarkToExport.getListItmIT());
             }
 
             if (mWindow.getIsImportMap()) {
                 this.aImportMap = this.addActions("Import", null, false, false, false, onAction); //1
                 this.aImportMap.setTextDirection("r");
-                $ulLefttoolbar.append(this.aImportMap.getListItmIT());
+                $ulactionbar.append(this.aImportMap.getListItmIT());
             }
-
-
 
             if (mWindow.getIsArchive()) {
                 //this.aArchive = this.addActions("Archive", null, false, false, false, onAction); //1
-                //$ulLefttoolbar.append(this.aArchive.getListItmIT());
+                //$ulactionbar.append(this.aArchive.getListItmIT());
             }
             if (mWindow.getIsAttachmail()) {
                 //this.aEmailAttach = this.addActions("EmailAttach", null, false, false, false, onAction); //1
-                //$ulLefttoolbar.append(this.aEmailAttach.getListItmIT());
+                //$ulactionbar.append(this.aEmailAttach.getListItmIT());
             }
             if (mWindow.getIsRoleCenterView()) {
                 //this.aRoleCenterView = this.addActions("RoleCenterView", null, false, false, false, onAction); //1
-                //$ulLefttoolbar.append(this.aRoleCenterView.getListItmIT());
+                //$ulactionbar.append(this.aRoleCenterView.getListItmIT());
             }
 
             if (this.isPersonalLock) {
                 this.aLock = this.addActions("Lock", null, true, false, false, onAction, true);
                 this.aLock.setTextDirection("r");
-                $ulLefttoolbar.append(this.aLock.getListItmIT());
+                $ulactionbar.append(this.aLock.getListItmIT());
                 this.aRecAccess = this.addActions("RecordAccess", null, true, false, false, onAction, true);
                 this.aRecAccess.setTextDirection("r");
-                $ulLefttoolbar.append(this.aRecAccess.getListItmIT());
+                $ulactionbar.append(this.aRecAccess.getListItmIT());
             }
-
-
-            //if (mWindow.getIsCall()) {
-            //    this.aCall = this.addActions("Call", null, false, false, false, onAction, true);  //1
-            //    $ulLefttoolbar.append(this.aCall.getListItmIT());
-            //}
-
-            //$ulLefttoolbar.append(this.aImportMap.getListItmIT());
-            // $ulLefttoolbar.append(this.aMarkToExport.getListItmIT());
-            // $ulLefttoolbar.append(this.aArchive.getListItmIT());
-            // $ulLefttoolbar.append(this.aEmailAttach.getListItmIT());
-            //$ulLefttoolbar.append(this.aRoleCenterView.getListItmIT());
-
-
-
-
-
-
-
-
-
-
-
 
             this.aPreference = this.addActions("Preference", null, false, false, true, onAction); //2
             /////5 Right bar
@@ -834,17 +509,7 @@
             this.aShowSummaryLevel = this.addActions("ShowSummaryNodes", null, true, false, true, onAction, true);
             $ulRightBar2.append(this.aShowSummaryLevel.getListItmIT());
 
-
             mWindow = null;
-
-
-
-
-            //Up
-            //$ulRightBar1.append(this.aSubscribe.getListItmIT());
-            //$ulRightBar1.append(this.aZoomAcross.getListItmIT());
-            //2
-
 
             //this.statusBar.setPageItem(this.aPageFirst.getListItm());
             this.statusBar.setPageItem(this.aPageUp.getListItm());
@@ -855,40 +520,28 @@
             this.toolbarCreated = true;
 
             /* Set Tool Bar */
-            //this.$parentWindow.setToolbar($divToolbar);
-            //this.$parentWindow.setToolbar($divSearch);
+            
             finishLayout();
 
 
         };
 
         this.setDynamicActions = function () {
-
             if (this.curGC == null)
                 return;
-
-            ///* Clear Previous */
-            //var rightActionCount = $ulRightActionbar.children().length;
-
-            //if (rightActionCount > actionItemCount_Right) {
-
-            //}
-
             var index = 0;
             var actions = [];
             if (this.curGC.leftPaneLinkItems.length > 0) {
                 actions = this.curGC.leftPaneLinkItems;
                 for (index = 0; index < actions.length; index++) {
-                    $ulRightActionbar.append(actions[index].getControl());
-
+                    $uldynactionbar.append(actions[index].getControl());
                 }
             }
             index = 0;
             if (this.curGC.rightPaneLinkItems.length > 0) {
                 actions = this.curGC.rightPaneLinkItems;
                 for (index = 0; index < actions.length; index++) {
-                    $ulRightActionbar.append(actions[index].getControl());
-
+                    $uldynactionbar.append(actions[index].getControl());
                 }
             }
             actions = null;
@@ -897,79 +550,20 @@
         //privilized function
         this.getRoot = function () { return $root; };
 
-        this.getLayout = function () { return $tdContentArea; };
+        this.getLayout = function () { return $divContentArea; };
 
         this.getIncludedEmptyArea = function () {
-            return $td3IncludedEmpty;
+            return $divIncludeTab;
         }
-
         /*left bar */
 
         this.getParentDetailPane = function () {
             return $hdrPanel;
         };
-
-
-        /* Set Tab Panel Icons */
-
-        //$infoIconspan.on("click", function () {
-        //    $rightBarLPart.trigger("click");
-        //});
-
-        /*
-        *   Set Icons of tab panels for tab
-        */
-
-
-
-        //this.setTabPanelIcons = function () {
-        //    if (this.curGC) {
-        //        $ulIconList.empty();
-        //        $ulIconList.append(this.curGC.createTabPanel(this.curTab.getTabPanels()));
-        //        if (!this.curGC.getCurrentPanel()) {// if no panel opened then check for default panel.
-        //            var defaultPanel = $ulIconList.find("[default='true']").first();
-        //            if (defaultPanel && defaultPanel.length > 0) {
-        //                setPanelPositionRelative();
-        //                defaultPanel.trigger("click");
-        //                this.showPanelContainer(true);
-        //            }
-        //            else {
-        //                this.showPanelContainer(false);
-        //            }
-        //        }
-        //        else { // if panel opened then check for that panel.
-        //            var panelID = this.curGC.getCurrentPanelID();
-        //            var defaultPanel = $ulIconList.find("[data-panelid='" + panelID + "']").first();
-        //            if (defaultPanel && defaultPanel.length > 0) {
-        //                setPanelPositionRelative();
-        //                defaultPanel.trigger("click");
-        //                this.showPanelContainer(true);
-        //            }
-        //            else {
-        //                this.showPanelContainer(false);
-        //            }
-        //        }
-        //    }
-        //};
-
-        /*
-        *   Set current Panel for tab
-        */
-        //this.setCurrentTabPanel = function () {
-        //    if (this.curGC) {
-        //        // Get Current panel for tab
-        //        var panel = this.curGC.getCurrentPanel();
-        //        if (panel) {
-        //            $divTabPanelsContent.empty();
-        //            // if panel found, open it in container
-        //            $divTabPanelsContent.append(panel.getRoot());
-        //            this.showPanelContainer(true);
-        //        }
-        //    }
-        //};
-
-        /*
+       
+        /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
+        *   @param {boolean} show - show tab panel if true
         */
         this.showTabPanel = function (show) {
             if (show) {
@@ -981,197 +575,6 @@
                 $tabpanel.css({ "display": "none" });
             }
         };
-        
-
-        /*
-          *   Show or hide panel container depending on panel linked to tab or not
-          */
-        //this.showPanelContainer = function (show) {
-        //    if (show) {
-        //        $tabpanel.css("width", this.panelWidth + 'px');
-        //        $divTabPanels.css({ "display": "", "z-index": "" });
-        //    }
-        //    else {
-        //        $tabpanel.css({ "display": "" });
-        //        $tabpanel.css("width", "40px");
-        //        $divTabPanels.css("display", "none");
-        //        $divTabControl.css('width', '');
-        //        //$table.find('.vis-apanel-tabcontrol').css('max-width', '')
-
-        //        if ($tabpanel.is('.ui-resizable')) {
-        //            $tabpanel.resizable('destroy');
-        //        }
-        //    }
-        //    this.setTabNavigation();
-        //};
-
-        /*
-          *   Set width
-          */
-        //this.setWidth = function (width, openPanel) {
-        //    var self = this;
-        //    //window.setTimeout(function () {
-        //    if (width) {
-        //        if (width > 0) {
-        //            //$tabpanel.css({ "width": width + "%" });
-        //            //$tabpanel.attr("width", width + "%");
-        //            // self.panelWidth = $table.find('.vis-window-tab-td').width();
-        //            width = 100 - width;
-        //            width = ($(document).width() * width) / 100;
-        //            if (width > panelMaxWidth) {
-        //                width = panelMaxWidth;
-        //            }
-        //            $tabpanel.css({ "width": width + "px" });
-        //            self.panelWidth = width;
-
-        //        }
-                
-
-        //        // $divTabControl.css('display', '');
-        //        this.refresh();
-        //    }
-        //    // }, 100);
-        //};
-
-        /*
-          *   Close tab panel.
-          */
-       
-
-
-
-        //});
-
-        //function setPanelPosition() {
-        //    if ($spanPin.hasClass('vis-window-unpin-icon')) {
-        //        setPanelPositionAbsolute();
-        //    }
-        //    else {
-        //        setPanelPositionRelative();
-        //    }
-        //};
-
-        //function setPanelPositionRelative() {
-        //    //$spanPin.addClass('vis-window-unpin-icon');
-        //    $tabpanel.css({ 'position': 'relative', "z-index": "" });
-        //    var dragType = 'w';
-        //    if (VIS.Application.isRTL) {
-        //        dragType = 'e';
-        //    }
-
-        //    if (!$tabpanel.is('.ui-resizable')) {
-        //        $tabpanel.resizable({
-        //            handles: dragType,
-        //            minWidth: 102,
-        //            maxWidth: panelMaxWidth,
-        //            resize: function (event, ui) {
-        //                self.panelWidth = ui.size.width;
-        //                $tabpanel.css({ 'position': 'absolute', "left": "", "z-index": "99" });
-        //            },
-        //            start: function (event, ui) {
-        //                $tabpanel.css({ 'position': 'absolute', "z-index": "99" });
-        //                //windowWidth=
-        //            },
-        //            stop: function (event, ui) {
-
-        //                //var style = $td3IncludedEmpty.attr('style');
-        //                //if (self.curTab.getIncluded_Tab_ID() == 0) {
-        //                //    style += 'width:0px;padding-left: 1px !important; padding-right: 1px !important';
-        //                //}
-        //                //else {
-        //                //    style += 'padding-left: 1px !important; padding-right: 1px !important';
-        //                //}
-        //                //$td3IncludedEmpty.attr('style', style);
-        //                if (self.curTab.getIncluded_Tab_ID() == 0) {
-        //                    $td3IncludedEmpty.css('width', '0px');
-        //                }
-        //                else {
-        //                    $td3IncludedEmpty.css('width', '');
-        //                }
-        //                var curPanel = self.curGC.getCurrentPanel();
-        //                if (curPanel && curPanel.sizeChanged) {
-        //                    curPanel.sizeChanged(ui.originalSize.width);
-        //                }
-
-
-        //                if (VIS.Application.isRTL) {
-        //                    $tabpanel.css({ 'position': 'relative', "right": "", "z-index": "" });
-        //                }
-        //                else {
-        //                    $tabpanel.css({ 'position': 'relative', "left": "", "z-index": "" });
-        //                }
-        //                self.setWidth(-1, true);
-        //                if (self.curTab.getIncluded_Tab_ID() > 0) {
-        //                    self.curGC.vIncludedGC.vTable.resize();
-        //                }
-        //                self.setTabNavigation();
-        //            }
-        //        });
-        //    }
-        //};
-
-        //function setPanelPositionAbsolute() {
-        //    // $spanPin.removeClass('vis-window-unpin-icon');
-        //    self.setWidth(-1, false);
-        //    $tabpanel.css({ 'position': 'relative', 'left': '', 'z-index': '' });
-        //    //if ($tabpanel.is('.ui-resizable')) {
-        //    //    $tabpanel.resizable('destroy');
-        //    //}
-        //};
-
-        //$ulIconList.on("click", function (e) {
-        //    var $target = $(e.target);
-        //    if ($target.is('li')) {
-
-        //        var sibling = $target.siblings('.vis-selected-list');
-        //        if (sibling) {
-        //            sibling.removeClass('vis-selected-list');
-        //        }
-        //        sibling.removeClass('vis-selected-list');
-        //        $target.addClass('vis-selected-list');
-        //        $target = $target.find('img');
-
-        //    }
-        //    else if ($target.is('img')) {
-        //        var $parent = $($target.parent());
-        //        var sibling = $parent.siblings('.vis-selected-list');
-        //        if (sibling) {
-        //            sibling.removeClass('vis-selected-list');
-        //        }
-        //        $parent.addClass('vis-selected-list');
-        //    }
-        //    $headerTabPanel.text($target.data('name'));
-
-        //    $divTabPanelsContent.empty();
-        //    //var type = VIS.Utility.getFunctionByName($target.data('cname'), window);
-        //    //panel = new type();
-        //    //panel.startPanel(self.$parentWindow.getWindowNo(), self.curTab);
-        //    //panel.refreshPanelData(self.curTab.getRecord_ID(), self.curGC.getSelectedRows());
-        //    //self.curGC.setCurrentPanel(panel);
-        //    //$divTabPanelsContent.append(panel.getRoot());
-        //    self.curGC.setCurrentPanelID($target.data('panelid'));
-        //    self.curGC.setCurrentPanel($target.data('cname'), self.$parentWindow.getWindowNo());
-        //    $divTabPanelsContent.append(self.curGC.getCurrentPanel().getRoot());
-        //    setPanelPositionRelative();
-        //    if ($tabpanel.width() <= 40) {
-        //        self.showPanelContainer(true);
-
-        //    }
-        //    if (self.curTab.getIncluded_Tab_ID() == 0) {
-        //        self.setIncludedTabWidth(false);
-
-        //    }
-        //    else {
-        //        self.setIncludedTabWidth(true);
-        //    }
-
-        //    self.showTabPanel(true);
-        //    self.setWidth(-1, true);
-        //    self.setTabNavigation();
-
-
-
-        //});
 
         /* END Set Tab Panel Icons */
 
@@ -1179,19 +582,10 @@
         this.setTabControl = function (tabs) {
             tabItems = tabs;
             for (var i = 0; i < tabs.length; i++) {
-                // tabItems[i] = tabs[i].getTabBtnListItm();
                 var li = tabs[i].getListItm();
-                //if (tabItems[i].action === id) {
-
-                //  this.selectedTab = li;
-                //  this.selTabIndex = i;
-                //  this.seletedTab.addClass("vis-apanel-tab-selected");
-                // }
                 tabLIObj[tabItems[i].action] = li;
                 $ulTabControl.append(li);
             }
-
-            //this.vTabbedPane.setTabObject(tabLIObj);
             if ($ulTabControl.width() > $divTabControl.width()) {
                 if (!VIS.Application.isMobile)
                     $divTabNav.show();
@@ -1214,7 +608,6 @@
             this.selectedTab = tabLIObj[id];
             this.selectedTab.addClass("vis-apanel-tab-selected");
         };
-
 
         this.navigateThroghtShortcut = function (forward) {
 
@@ -1240,16 +633,16 @@
         };
 
         this.setBusy = function (busy, focus) {
-            isLocked = busy;
+            this.isLocked = busy;
             if (busy) {
-                //		setStatusLine(processing);
+               
                 $busyDiv[0].style.visibility = 'visible';// .show();
             }
             else {
                 //$busyDiv.hide();
                 $busyDiv[0].style.visibility = 'hidden';
                 if (focus) {
-                    //curGC.requestFocusInWindow();
+                    
                 }
             }
         };
@@ -1302,7 +695,7 @@
             if (!dir) return;
 
             var dHeight = $divlbMain.height();
-            var ulheight = $ulLefttoolbar.height();
+            var ulheight = $ulactionbar.height() + $uldynactionbar.height();
             var cPos = $divlbMain.scrollTop();
             var offSet = Math.ceil(dHeight / 2);
             var s = 0;
@@ -1318,133 +711,97 @@
                     return;
                 s = (cPos - offSet);
                 $divlbMain.animate({ scrollTop: s < 0 ? 0 : s }, 1000, "easeOutBounce");
-                //$divTabControl.scrollLeft(cPos - offSet);
             }
         });
-
-
 
         //Search
         $imgSearch.on(VIS.Events.onTouchStartOrClick, function (e) {
-            //  e.stopPropagation();
-            //   e.preventDefault();
-
-            if ($($txtSearch[1]).is(':visible') == true) {
-                $($txtSearch[1]).css("display", "none");
-                $($txtSearch[0]).val("");
-                self.curTab.searchText = "";
-                var query = new VIS.Query();
-                //query.addRestriction(" 1 = 1 ");
-                self.findRecords(query);
-            }
-            else {
                 self.cmd_find($txtSearch.val());
-                $($txtSearch[1]).css("display", "none");
                 self.curTab.searchText = "";
                 $txtSearch.val("");
-            }
             e.stopPropagation();
-
         });
 
         if (!VIS.Application.isMobile) {
-            $($txtSearch[0]).on("keyup", function (e) {
+            $txtSearch.on("keyup", function (e) {
                 var code = e.charCode || e.keyCode;
                 if (code == 13) {
                     if (!self.defaultSearch) {
-                        //self.defaultSearch = true;
                         return;
                     }
-                    $($txtSearch[1]).css("display", "none");
-                    self.cmd_find($($txtSearch[0]).val());
-                    $($txtSearch[0]).val("");
+                    self.cmd_find($txtSearch.val());
+                    $txtSearch.val("");
                 }
                 else if (code == 8) {
-                    if ($($txtSearch[1]).is(':visible') == true) {
                         e.preventDefault();
                         self.defaultSearch = true;
-                        $($txtSearch[1]).css("display", "none");
-                        $($txtSearch[0]).val("");
+                        $txtSearch.val("");
                         var query = new VIS.Query();
                         query.addRestriction(" 1 = 1 ");
                         self.findRecords(query);
-                    }
                 }
             });
         }
 
-        $($txtSearch[2]).on("click", function () {
-
-            //if($($txtSearch[0]).autocomplete('widget')[0].style.display === 'none') {
-
+        $imgdownSearch.on("click", function () {
             if (!self.isAutoCompleteOpen) {
-                //$(this).autocomplete('search','');
-                $($txtSearch[2]).css("transform", "rotate(180deg)");
+                $imgdownSearch.css("transform", "rotate(180deg)");
                 self.refreshSavedASearchList(true);
             }
             else {
-                $($txtSearch[2]).css("transform", "rotate(360deg)");
+                $imgdownSearch.css("transform", "rotate(360deg)");
             }
-            //self.refreshSavedASearchList(true);
         });
 
-        $($txtSearch[1]).on("click", function () {
-            $($txtSearch[1]).css("display", "none");
+        $btnClrSearch.on("click", function () {
+            $btnClrSearch.css("visibility", "hidden");
             self.defaultSearch = true;
             self.curTab.searchText = "";
-            $($txtSearch[0]).val("");
+            $txtSearch.val("");
             var query = new VIS.Query();
             //query.addRestriction(" 1 = 1 ");
             self.findRecords(query);
-            $($txtSearch[2]).css("transform", "rotate(360deg)");
+            $imgdownSearch.css("transform", "rotate(360deg)");
         });
 
         this.setAdvancedSerachText = function (hideicon, text) {
             if (hideicon) {
-                $($txtSearch[1]).css("display", "none");
+                $btnClrSearch.css("visibility", "hidden");
             }
             else {
-                $($txtSearch[1]).css("display", "inherit");
-                $($txtSearch[2]).css("display", "inherit");
+                $btnClrSearch.css("visibility", "visible");
+                $imgdownSearch.css("visibility", "visible");
             }
-            $($txtSearch[0]).val(text);
+            $txtSearch.val(text);
 
         };
 
         this.toggleASearchIcons = function (show, hasDefault) {
             if (show && hasDefault) {
-                $($txtSearch[1]).css('display', 'inherit');
-                $($txtSearch[2]).css('display', 'inherit');
+                $btnClrSearch.css('visibility', 'visible');
+                $imgdownSearch.css('visibility', 'visible');
             }
             else if (show && !hasDefault) {
-                $($txtSearch[1]).css('display', 'none');
-                $($txtSearch[2]).css('display', 'inherit');
+                $btnClrSearch.css('visibility', 'hidden');
+                $imgdownSearch.css('visibility', 'visible');
             }
             else {
-                $($txtSearch[1]).css('display', 'none');
-                $($txtSearch[2]).css('display', 'none');
+                $btnClrSearch.css('visibility', 'hidden');
+                $imgdownSearch.css('visibility', 'hidden');
             }
         };
 
         this.setSearchFocus = function (focus) {
             if (focus) {
-                $($txtSearch[0]).focus();
+                $txtSearch.focus();
             }
             else {
-                $($txtSearch[0]).trigger('focusout');
+                $txtSearch.trigger('focusout');
             }
         };
 
         this.refreshSavedASearchList = function (showData, text) {
-            //            var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END  AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.AD_Tab_ID, "
-            //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )  "
-            //+ "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=" + self.curTab.getAD_Tab_ID() + " AND AD_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "   )   ELSE null End as AD_DefaultUserQuery_ID"
-            //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =" + self.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
-            //       + " AND (AD_UserQuery.AD_Tab_ID           =" + self.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID           =" + self.curTab.getAD_Table_ID() + ")"
-            //                   + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
-
             var sqlUserSearch = "VIS_116";
-
             var param = [];
             param[0] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
             param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
@@ -1458,11 +815,10 @@
             executeDataSet(sqlUserSearch, param, function (data) {
                 var userQueries = [];
 
-
                 if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
 
                     //$($txtSearch[1]).css("display", "inherit");
-                    $($txtSearch[2]).css('display', 'inherit');
+                    $imgdownSearch.css('visibility', 'visible');
                     userQueries.push({ 'label': VIS.Msg.getMsg("All"), 'value': VIS.Msg.getMsg("All"), 'code': VIS.Msg.getMsg("All") });
                     var hasDefaultSearch = false;
                     for (var i = 0; i < data.tables[0].rows.length; i++) {
@@ -1475,35 +831,34 @@
                             userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"] });
                         }
                     }
-                    //$selfpanel.toggleASearchIcons(true, hasDefaultSearch);
                 }
                 else {
                     $selfpanel.toggleASearchIcons(false, false);
                 }
 
                 if (!text) {
-                    text = $($txtSearch[0]).val();
+                    text = $txtSearch.val();
                 }
 
                 if (text && text.length > 0) {
 
                     if (text.length > 25) {
-                        $($txtSearch[0]).val(text.substr(0, 25) + '...');
+                        $txtSearch.val(text.substr(0, 25) + '...');
                     }
                     else {
-                        $($txtSearch[0]).val(text);
+                        $txtSearch.val(text);
                     }
-                    $($txtSearch[1]).css('display', 'inherit');
+                    $btnClrSearch.css('visibility', 'visible');
                     $selfpanel.defaultSearch = false;
                 }
                 else {
-                    $($txtSearch[1]).css('display', 'none');
+                    $btnClrSearch.css('visibility', 'hidden');
                 }
 
-                $($txtSearch[0]).autocomplete('option', 'source', userQueries);
+                $txtSearch.autocomplete('option', 'source', userQueries);
                 if (showData) {
-                    $($txtSearch[0]).autocomplete("search", "");
-                    $($txtSearch[0]).trigger("focus");
+                    $txtSearch.autocomplete("search", "");
+                    $txtSearch.trigger("focus");
                 }
             })
         };
@@ -1538,18 +893,17 @@
             }
         };
 
-
         //End
 
         /* left bar toggle */
-        // $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
         $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
             e.stopPropagation();
             e.preventDefault();
             var w = parseInt($divlbMain.width());
 
             if (w > 50) {
-                $ulLefttoolbar.find('span').hide();
+                $ulactionbar.find('span').hide();
+                $uldynactionbar.find('span').hide();
             }
             else
                 $divlbMain.css({ "position": "absolute" });
@@ -1559,7 +913,8 @@
             }, 300, 'swing', function () {
 
                 if (w < 50) {
-                    $ulLefttoolbar.find('span').show();
+                    $ulactionbar.find('span').show();
+                    $uldynactionbar.find('span').show();
                 }
                 else {
                     $divlbMain.css({ "position": "" });
@@ -1571,57 +926,6 @@
                 //self.setWidth(-1, true);
                 self.setTabNavigation();
             });
-        });
-
-        /*Right Bar */
-        $rightBarLPart.on("click", function (e) {
-            e.stopPropagation();
-            var rtl = VIS.Application.isRTL;
-            if ($rightBar.width() > 100) {
-                $rightBar.animate({
-                    "left": rtl ? 0 : $root.width() - 8 + "px",
-                    "width": "8px"
-                }, 500, "swing", function () {
-                    //$rightBar.css("position", "static");
-                    $rightBarRPart.css({ "width": "0px" });
-                });
-                $rightBarRPart.animate({
-                    "width": "0px"
-                }, 500, "swing");
-                if (self.curTab.getHasPanel()) {
-                    $($rigthBarAction.find('img')).css({ 'transform': 'rotate(360deg)', 'display': 'none' });
-                    $td4.css('display', 'none');
-                }
-                else {
-                    $($rigthBarAction.find('img')).css({ 'transform': 'rotate(360deg)' });
-                    $td4.css('display', 'none');
-                }
-            }
-            else {
-                $rightBar.css({
-                    "position": "absolute",
-                    // "height": $rightBar.height(),
-                    "width": "8px",
-                    "left": rtl ? 0 : $root.width() - 8
-                });
-
-                $rightBar.animate({
-                    "left": rtl ? 0 : $root.width() - 220 + "px",
-                    "width": "220px"
-                }, 500, "swing");
-
-                $rightBarRPart.animate({
-                    "width": "212px"
-                }, 500, "swing");
-                if (self.curTab.getHasPanel()) {
-                    $($rigthBarAction.find('img')).css({ 'transform': 'rotate(180deg)', 'display': '' });
-                    $td4.css('display', '');
-                }
-                else {
-                    $($rigthBarAction.find('img')).css({ 'transform': 'rotate(180deg)' });
-                    $td4.css('display', '');
-                }
-            }
         });
 
         this.disposeComponent = function () {
@@ -1638,8 +942,8 @@
 
             $root.remove();
             $busyDiv.remove();
-            $table.remove();
-            $root = $busyDiv = $table = $divNav = $tdContentArea = $ulNav = $divSearch = $divToolbar = $ulToobar = $divStatus = null;
+           
+            $root = $busyDiv =  $divContentArea = $ulNav =   $ulToobar = $divStatus = null;
             self = null;
             onAction = null;
             //
@@ -1731,10 +1035,7 @@
             /* Sort Tab */
             this.firstTabId = null;
 
-            //Right bar
-            $rightBarLPart.off("click");
-            $rightBarLPart = null;
-            $rightBarRPart = null;
+          
 
             $hdrPanel.remove();
             $hdrPanel = null;
@@ -1891,9 +1192,7 @@
 
     APanel.prototype.sizeChanged = function (height, width) {
         return;
-        this.setSize(height, width);
-        if (this.vTabbedPane)
-            this.vTabbedPane.sizeChanged(height - (APANEL_HEADER_HEIGHT + APANEL_FOOTER_HEIGHT), width);
+        
     };
 
     APanel.prototype.refresh = function () {
@@ -1903,7 +1202,6 @@
                 this.curGC.vIncludedGC.vTable.refresh();
             }
         }
-
     };
 
     APanel.prototype.refreshData = function () {
@@ -1928,8 +1226,8 @@
         return action;
     };
 
-    /**************************************************************************
-     *	Dynamic Panel Initialization - either single window or workbench.
+    /** ************************************************************************
+     *	Dynamic Panel Initialization -  single window .
      *  <pre>
      *  - Workbench tabPanel    (VTabbedPane)
      *      - Tab               (GridController)
@@ -2137,19 +1435,6 @@
         $parent = null;
         // this.curGC.setVisible(true);
     };
-
-    /**
-    *  Activate first tab 
-    */
-    //APanel.prototype.selectFirstTab = function () {
-    //    setTimeout(function (that) {
-    //        that.tabActionPerformed(that.firstTabId);
-    //        that.setTabNavigation();
-    //        //that.setBusy(false, false);
-    //        that = null;
-    //    }, 10, this);
-
-    //};
 
     //Updated by raghu 
     //date:19-01-2016
@@ -2932,9 +2217,6 @@
         return false;
     };
 
-
-
-
     function btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName, isbackground) {
         var title = vButton.getDescription();
         if (title == null || title.length == 0)
@@ -2966,7 +2248,6 @@
         actionProcessAfterSave = null;
         return ret;
     };
-
 
     /**
      *	tab change
@@ -3110,7 +2391,6 @@
         oldGC = this.curGC;
         this.curGC = null;
     }
-
 
     APanel.prototype.tabActionPerformedCallback3 = function (curEle, isAPanelTab, gc, tpIndex) {
         if (this.curST != null) {
@@ -3271,20 +2551,9 @@
         }
     };
 
-
-
     APanel.prototype.setDefaultSearch = function (gc) {
 
         var $selfpanel = this;
-
-        //       var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END  AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.AD_Tab_ID, "
-        //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM AD_DefaultUserQuery WHERE AD_DefaultUserQuery.AD_Tab_ID=" + this.curTab.getAD_Tab_ID() + "  AND AD_DefaultUserQuery.AD_User_ID=" + this.ctx.getAD_User_ID() + "  )  "
-        //+ "then (Select AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery  WHERE AD_DefaultUserQuery.AD_Tab_ID=" + this.curTab.getAD_Tab_ID() + "  AND AD_DefaultUserQuery.AD_User_ID=" + this.ctx.getAD_User_ID() + "  )   ELSE null End as AD_DefaultUserQuery_ID"
-        //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.AD_Client_ID       =" + this.ctx.getAD_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
-        //       + " AND (AD_UserQuery.AD_Tab_ID           =" + this.curTab.getAD_Tab_ID() + " OR AD_UserQuery.AD_Table_ID           =" + this.curTab.getAD_Table_ID() + ")"
-        //       + " ORDER BY UPPER(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
-
-
 
         var sqlUserSearch = "VIS_117";
 
@@ -3662,9 +2931,6 @@
     APanel.prototype.setStatusLine = function (text, error) {
         this.statusBar.setStatusLine(text, error);
     };
-
-
-
 
     //Cmd_Actions
 
@@ -4503,7 +3769,6 @@
         //markM.show();
     };
 
-
     APanel.prototype.cmd_lock = function () {
         var locked = false;
         if (!this.isPersonalLock) {
@@ -4519,6 +3784,7 @@
         locked = this.curTab.getIsLocked();
         this.aLock.setPressed(locked);
     };
+
     APanel.prototype.cmd_recAccess = function () {
         var recAccessDialog = new VIS.RecordAccessDialog();
         recAccessDialog.Load(this.curTab.getAD_Table_ID(), this.curTab.getRecord_ID());
@@ -4564,7 +3830,6 @@
 
     /* END */
 
-
     /** 
      *  dispose
      */
@@ -4588,7 +3853,7 @@
             VIS.MLookupCache.cacheReset(this.$parentWindow.getWindowNo());
         }
 
-        if (this.curGC.vHeaderPanel) {
+        if (this.curGC && this.curGC.vHeaderPanel) {
             this.curGC.vHeaderPanel.dispose();
             this.curGC.vHeaderPanel = null;
         }
@@ -4603,11 +3868,8 @@
         this.disposeComponent();
 
     };
-
-
+     
     //****************** APanel END ***********************//
-
-
 
     //Assignment Gobal Namespace
     VIS.APanel = APanel;

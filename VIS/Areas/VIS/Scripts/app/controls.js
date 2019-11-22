@@ -994,7 +994,7 @@
 
         this.values = null;
 
-        var $img = $("<img style='min-width:15px'>");
+        var $img = $("<i>");
         var $txt = $("<span>").text(text);
         var rootPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/";
 
@@ -1006,8 +1006,6 @@
         }
         else
             $ctrl = $('<li>');
-
-
 
 
         //	Special Buttons
@@ -1035,10 +1033,10 @@
         }
 
         function setIcon(img) {
-            $img.attr('src', rootPath + img);
+            $img.addClass(img);
         };
 
-        $ctrl.append($img).append($txt);
+        $ctrl.append($txt).append($img);
         IControl.call(this, $ctrl, VIS.DisplayType.Button, isReadOnly, columnName, mandatory);
 
         if (isReadOnly || !isUpdateable) {

@@ -75,6 +75,23 @@
     overflow: auto;
 }
 
+.vis-ad-w-p-busy {
+    width: 100%;
+    /*background-color: red;*/
+    opacity: 1;
+    position: absolute;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:1;
+    bottom: 0;
+    top:0;
+    color:rgba(var(--v-c-primary),1);
+    /*background: url("../Images/busy.gif") no-repeat;
+    background-position: center center;*/
+}
+
+
 
 .vis-ad-w-p-filter {
     grid-column: 1/1;
@@ -149,26 +166,31 @@
     height: 32px;
 }
 
-    .vis-ad-w-p-tb-search span:first-child {
-        background: rgba(var(--v-c-primary),1);
-        border-radius: 50px;
-        height: 100%;
-        width: 30px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(var(--v-c-on-primary),1);
-        cursor: pointer;
-        font-size: 1.2rem;
+.vis-ad-w-p-tb-advsrch {
+    background: rgba(var(--v-c-primary),1);
+    border-radius: 50px;
+    height: 100%;
+    width: 30px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(var(--v-c-on-primary),1);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+    .vis-ad-w-p-tb-advsrch li {
+        display:flex;
     }
 
-    .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input {
-        border: none;
-        background: transparent;
-        height: 100%;
-    }
+
+.vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input {
+    border: none;
+    background: transparent;
+    height: 100%;
+}
 
         .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input:focus {
             outline: none;
@@ -185,11 +207,19 @@
     text-align: center;
 }
 
+.vis-ad-w-p-tb-s-icon-down {
+    width: 20px;
+    cursor: pointer;
+    text-align: center;
+}
+
 .vis-ad-w-p-tb-rc {
     font-size: 1rem;
     display: flex;
     align-items: center;
 }
+
+
 
 .vis-ad-w-p-tb-rc-action {
     margin: 0 5px;
@@ -203,7 +233,7 @@
 
     .vis-ad-w-p-tb-rc-action .dropdown-menu {
         padding: 0;
-        background: rgba(var(--v-c-common), 1);
+        background: rgba(var(--v-c-secondary), 1);
         margin-top: 5px;
         border: 1px solid rgba(var(--v-c-primary), .05);
         box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.16862745098039217);
@@ -237,19 +267,37 @@
     padding: 4px 9px;
 }
 
-/*End toolbar */
-
-
-/* tab controls*/
-.vis-ad-w-p-tabs-t {
-    grid-column: 4/4;
-    grid-row: 3 / 3;
-    display: flex;
-    align-items: center;
-    background: rgba(var(--v-c-secondary), 0.5);
-    padding-top: 10px;
-    padding-left: 8px;
+.vis-ad-w-p-tb-rc-a-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
+
+    .vis-ad-w-p-tb-rc-a-list li {
+        font-size: 12px;
+        cursor: pointer;
+        padding: 5px;
+    }
+        .vis-ad-w-p-tb-rc-a-list li:hover {
+            background-color: rgba(var(--v-c-primary),1);
+            color: rgba(var(--v-c-on-primary),1);
+        }
+
+        .vis-ad-w-p-tb-rc-a-list li span {
+            font-size: 0.8rem;
+            padding-left: 2px;
+        }
+    /*End toolbar */
+    /* tab controls*/
+    .vis-ad-w-p-tabs-t {
+            grid-column: 4/4;
+            grid-row: 3 / 3;
+            display: flex;
+            align-items: center;
+            background: rgba(var(--v-c-secondary), 0.5);
+            padding-top: 10px;
+            padding-left: 8px;
+        }
 
     .vis-ad-w-p-tabs-t .vis-ad-w-p-t-c {
         flex: 1;
@@ -379,13 +427,13 @@
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto auto auto;
     /*overflow: auto;*/
-    background: rgba(var(--v-c-secondary), 0.5);
+    background: rgba(var(--v-c-secondary), 0.09);
 }
 
 .vis-ad-w-p-center-view {
     grid-row: 1/1;
     display: flex;
-    padding: 0 10px;
+    padding: 0 2px 0 10px;
     /*background: rgba(var(--v-c-common), 0.7)*/
 }
 
@@ -429,7 +477,6 @@
     grid-template-rows: auto 1fr;
     grid-template-columns: auto 1fr;
     color: rgba(var(--v-c-on-secondary));
-    background: rgba(var(--v-c-common), 0.7);
 }
 /*tree css START here*/
 .vis-ad-w-p-vc-tree {
@@ -696,7 +743,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     padding: inherit;
     bottom: 40px;
     background-color: inherit;
-    z-index: 2;
+    z-index:1;
 }
 
 .vis-ad-w-p-a-main-mob {
@@ -891,6 +938,7 @@ li.vis-page-item-select {
 
 /* Single */
 .vis-ad-w-p-vc-editview {
+    padding: 0;
     overflow-y: auto;
     display: none;
     position: absolute;
