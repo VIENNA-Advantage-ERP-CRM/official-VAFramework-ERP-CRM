@@ -898,9 +898,12 @@
                     }
                     else {
                         if (row[j] != null && dataObj.Columns[j].indexOf("Date") > 0) {
-                            var date = new Date(parseInt(row[j].substr(6)));
-                            if (data != null)
-                                line[dataObj.Columns[j]] = date.toDateString();
+                            if (row[j] != "") {
+                                var date = new Date(parseInt(row[j].substr(6)));
+                                if (data != null)
+                                    line[dataObj.Columns[j]] = date.toDateString();
+
+                            }
                         }
                         else {
                             line[dataObj.Columns[j]] = row[j];
