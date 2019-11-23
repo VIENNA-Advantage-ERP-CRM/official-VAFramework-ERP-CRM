@@ -130,7 +130,6 @@ namespace VAdvantage.Acct
             line.SetDocumentInfo(_doc, docLine);
             line.SetPostingType(_postingType);
             line.SetAccount(_acctSchema, account);
-
             //  Amounts - one needs to not zero
             if (!line.SetAmtSource(C_Currency_ID, debitAmt, creditAmt))
             {
@@ -385,6 +384,12 @@ namespace VAdvantage.Acct
 
             //	Account
             line.SetAccount(_acctSchema, _acctSchema.GetSuspenseBalancing_Acct());
+
+            // Conversion rate
+            if (_lines != null && _lines.Count > 0 && _lines[0].GetConversionRate() > 0)
+            {
+                line.SetConversionRate(_lines[0].GetConversionRate());
+            }
 
             //  Convert
             line.Convert();
