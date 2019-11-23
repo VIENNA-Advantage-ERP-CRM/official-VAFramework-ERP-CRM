@@ -130,7 +130,7 @@ namespace VAdvantage.Acct
                             //MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
 
 
-                            if (line.GetAmtSourceDr() > 0)
+                            if (line.GetAmtSourceDr() != 0)
                             {
                                 amtAcctDr = lDim.GetAmount() * cRate;
                                 docLine.SetAmount(amtAcctDr, 0);
