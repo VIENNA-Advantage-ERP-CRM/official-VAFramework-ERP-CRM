@@ -508,7 +508,7 @@
                             txtAcctElementValue.setValue("-1");
                         }//User List 1//User List 2
                         else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
-                                    dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
+                            dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
                             addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbUserElement.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbUserElement.find("option:selected").val(), -1, 0);
                             cmbUserElement.val(-1);
                         }//User Element 1 to User Element 9
@@ -577,7 +577,7 @@
                         txtAcctElementValue.setValue("-1");
                     }//User List 1//User List 2
                     else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
-                                dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
+                        dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
                         addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbUserElement.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbUserElement.find("option:selected").val(), -1, 0);
                         cmbUserElement.val(-1);
                     }//User Element 1 to User Element 9
@@ -667,7 +667,7 @@
                             modalTxtAcctElementValue.setValue("-1");
                         }//User List 1//User List 2
                         else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
-                                    dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
+                            dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
                             addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbUserElement.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbUserElement.find("option:selected").val(), -1, dimensionLineID);
                             modalCmbUserElement.val(-1);
                         }//User Element 1 to User Element 9
@@ -735,7 +735,7 @@
                         modalTxtAcctElementValue.setValue("-1");
                     }//User List 1//User List 2
                     else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
-                                dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
+                        dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
                         addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbUserElement.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbUserElement.find("option:selected").val(), -1, dimensionLineID);
                         modalCmbUserElement.val(-1);
                     }//User Element 1 to User Element 9
@@ -940,10 +940,10 @@
             //            " group by ac.name,ct.c_dimamt_id having ct.c_dimamt_id=" + C_DimAmt_ID + " order by Amount desc ) " +
             //             " main where rownum=1";
             var sql = " select distinct ct.totaldimlineamout as amount,ac.name from c_dimamtaccttype ct " +
-                     " inner join c_dimamtline cl on ct.c_dimamt_id=cl.c_dimamt_id and ct.c_dimamtaccttype_id=cl.c_dimamtaccttype_id " +
-                     " inner join c_acctschema ac on ac.c_acctschema_id=ct.c_acctschema_id " +
-                     "  where ct.totaldimlineamout in (Select max(totaldimlineamout) from c_Dimamtaccttype " +
-                     "   where c_dimamt_id=" + C_DimAmt_ID + ") and ct.c_dimamt_id=" + C_DimAmt_ID + "";
+                " inner join c_dimamtline cl on ct.c_dimamt_id=cl.c_dimamt_id and ct.c_dimamtaccttype_id=cl.c_dimamtaccttype_id " +
+                " inner join c_acctschema ac on ac.c_acctschema_id=ct.c_acctschema_id " +
+                "  where ct.totaldimlineamout in (Select max(totaldimlineamout) from c_Dimamtaccttype " +
+                "   where c_dimamt_id=" + C_DimAmt_ID + ") and ct.c_dimamt_id=" + C_DimAmt_ID + "";
             var maxDimension = VIS.DB.executeReader(sql);
             while (maxDimension.read()) {
                 if (maxDimension.getInt(0) != null) {
@@ -1178,7 +1178,7 @@
 
                     }//User List 1//User List 2
                     else if (cmbDimensionType.val() == "X1" || cmbDimensionType.val() == "X2" || cmbDimensionType.val() == "X3" || cmbDimensionType.val() == "X4" || cmbDimensionType.val() == "X5" || cmbDimensionType.val() == "X6" ||
-                             cmbDimensionType.val() == "X7" || cmbDimensionType.val() == "X8" || cmbDimensionType.val() == "X9") {
+                        cmbDimensionType.val() == "X7" || cmbDimensionType.val() == "X8" || cmbDimensionType.val() == "X9") {
                         if (cmbUserElement.val() == -1 || cmbUserElement.val() == null) {
                             VIS.ADialog.warn("ValidateUElement");
                             cmbUserElement.focus();
@@ -1296,7 +1296,7 @@
 
                     }//User List 1//User List 2
                     else if (cmbDimensionType.val() == "X1" || cmbDimensionType.val() == "X2" || cmbDimensionType.val() == "X3" || cmbDimensionType.val() == "X4" || cmbDimensionType.val() == "X5" || cmbDimensionType.val() == "X6" ||
-                             cmbDimensionType.val() == "X7" || cmbDimensionType.val() == "X8" || cmbDimensionType.val() == "X9") {
+                        cmbDimensionType.val() == "X7" || cmbDimensionType.val() == "X8" || cmbDimensionType.val() == "X9") {
                         if (modalCmbUserElement.val() == -1 || modalCmbUserElement.val() == null) {
                             VIS.ADialog.warn("ValidateUElement");
                             modalCmbUserElement.focus();
@@ -1415,7 +1415,7 @@
                                     totalRecords = result[j].TotalRecord;
                                     var countPG = calculateNoofPages();
                                     cmbStausRecordCount.empty();
-                                    for (b = 1; b < countPG + 1 ; b++) {
+                                    for (b = 1; b < countPG + 1; b++) {
 
                                         cmbStausRecordCount.empty().append('<option value=' + b + '>' + b + '</option>');
                                     }
@@ -1557,8 +1557,8 @@
             }
             if (checkValUpdate) {
                 var sql = "select nvl(cline.c_dimamtline_id,0) as DimLineID from c_dimamt cd inner join c_dimamtaccttype cact on cd.c_dimamt_id=cact.c_dimamt_id " +
-                        " inner join c_dimamtline cline on cd.c_Dimamt_id=cline.c_dimamt_id and cact.c_dimamtaccttype_id=cline.c_dimamtaccttype_id " +
-                        " where cd.c_dimamt_id=" + C_DimAmt_ID + " and cact.elementtype='" + DimensionTypeVal + "' and cact.c_acctschema_id in(" + arrAcctSchemaID.toString() + ") and cline.c_dimamtline_id not in (" + DimensionLineID + ") ";
+                    " inner join c_dimamtline cline on cd.c_Dimamt_id=cline.c_dimamt_id and cact.c_dimamtaccttype_id=cline.c_dimamtaccttype_id " +
+                    " where cd.c_dimamt_id=" + C_DimAmt_ID + " and cact.elementtype='" + DimensionTypeVal + "' and cact.c_acctschema_id in(" + arrAcctSchemaID.toString() + ") and cline.c_dimamtline_id not in (" + DimensionLineID + ") ";
                 if (DimensionTypeVal == "AC") {
                     sql += " and C_ElementValue_ID=" + DimensionNameVal;
                 }//Account
@@ -1575,7 +1575,7 @@
                     sql += " and C_ElementValue_ID=" + DimensionNameVal;
                 }//User List 1//User List 2
                 else if (DimensionTypeVal == "X1" || DimensionTypeVal == "X2" || DimensionTypeVal == "X3" || DimensionTypeVal == "X4" || DimensionTypeVal == "X5" || DimensionTypeVal == "X6" ||
-                         DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and AD_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
+                    DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and AD_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
                 chkDuplicate = VIS.DB.executeScalar(sql);
                 if (chkDuplicate == null) {
                     var tempLineAmount = VIS.DB.executeScalar("select amount from c_dimamtline where c_dimamtline_id in (" + DimensionLineID + ") and rownum=1");
@@ -1621,7 +1621,7 @@
                         sql += " and C_ElementValue_ID=" + DimensionNameVal;
                     }//User List 1//User List 2
                     else if (DimensionTypeVal == "X1" || DimensionTypeVal == "X2" || DimensionTypeVal == "X3" || DimensionTypeVal == "X4" || DimensionTypeVal == "X5" || DimensionTypeVal == "X6" ||
-                             DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and AD_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
+                        DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and AD_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
 
                     chkDuplicate = VIS.DB.executeScalar(sql);
 
@@ -1690,15 +1690,15 @@
             else if (dimensionValue == "LF") { getAddress(); }//Location From
             else if (dimensionValue == "LT") { getAddress(); }//Location To
             else if (dimensionValue == "MC") { getCampaign(); }//Campaign
-            else if (dimensionValue == "OO") { getOrg(); }//Organization
-            else if (dimensionValue == "OT") { getOrg(); }//Org Trx
+            else if (dimensionValue == "OO") { getOrg(dimensionValue); }//Organization
+            else if (dimensionValue == "OT") { getOrg(dimensionValue); }//Org Trx
             else if (dimensionValue == "PJ") { getProject(); }//Project
             else if (dimensionValue == "PR") { getProduct(); }//Product
             else if (dimensionValue == "SA") { }//Sub Account
             else if (dimensionValue == "SR") { getSalesRegion(); }//Sales Region
             else if (dimensionValue == "U1" || dimensionValue == "U2") { getAccountElement(); }//User List 1//User List 2
             else if (dimensionValue == "X1" || dimensionValue == "X2" || dimensionValue == "X3" || dimensionValue == "X4" || dimensionValue == "X5" || dimensionValue == "X6" ||
-                     dimensionValue == "X7" || dimensionValue == "X8" || dimensionValue == "X9") { getUserElement(); }//User Element 1 to User Element 9
+                dimensionValue == "X7" || dimensionValue == "X8" || dimensionValue == "X9") { getUserElement(); }//User Element 1 to User Element 9
 
 
         };
@@ -1762,7 +1762,7 @@
         };
 
         // Funcion to Generate dynamic control
-        var getOrg = function () {
+        var getOrg = function (orgType) {
             generateControl.css({ "width": "32.3%" });
             modalGenerateControl.css({ "width": "32.3%" });
             divAmount.css("width", "33.3%");
@@ -1770,8 +1770,16 @@
             modalDivAmount.css("width", "33.3%");
             lblOrg = $("<label>");
             modalLblOrg = $("<label>");
-            var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org_ID<>0");
-            var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org_ID<>0");
+            var orgWhere = "";
+            // Get Organizations based on element type selected
+            if (orgType == "OO") {
+                orgWhere = " AND IsSummary='N' AND IsCostCenter='N' AND IsProfitCenter='N'";
+            }
+            else {
+                orgWhere = " AND IsSummary='N' AND (IsCostCenter='Y' OR IsProfitCenter='Y')";
+            }
+            var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org_ID<>0" + orgWhere);
+            var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org_ID<>0" + orgWhere);
             var cmb = new VIS.Controls.VComboBox("Org_ID", false, false, true, lookup, 50);
             var modalCmb = new VIS.Controls.VComboBox("Org_ID", false, false, true, modalLookup, 50);
             cmbOrg = cmb.getControl();
@@ -1884,9 +1892,9 @@
             cmbUserElement = $("<select>");
             modalCmbUserElement = $("<select>");
             var sql = "select adt.ad_column_id,adt.columnname,adtab.TableName from c_acctschema_element ac inner join ad_column ad on ac.ad_column_id=ad.ad_column_id " +
-                      " inner join ad_column adt on ad.ad_table_ID=adt.ad_table_ID and adt.isactive='Y' " +
-                      "  inner join ad_table adtab on adtab.ad_table_id=ad.ad_table_ID " +
-                    " where ac.c_acctschema_id=" + arrAcctSchemaID[0] + " and ac.elementtype='" + cmbDimensionType.find("option:selected").val() + "' and adt.isidentifier='Y' order by adt.ad_column_ID";
+                " inner join ad_column adt on ad.ad_table_ID=adt.ad_table_ID and adt.isactive='Y' " +
+                "  inner join ad_table adtab on adtab.ad_table_id=ad.ad_table_ID " +
+                " where ac.c_acctschema_id=" + arrAcctSchemaID[0] + " and ac.elementtype='" + cmbDimensionType.find("option:selected").val() + "' and adt.isidentifier='Y' order by adt.ad_column_ID";
             var dr = VIS.DB.executeReader(sql);
             var tblName = "";
             var colName = "";
@@ -1910,7 +1918,7 @@
             cmbUserElement.empty().append('<option value=-1></option>');
             modalCmbUserElement.empty().append('<option value=-1></option>');
             if (tblName != "") {
-                var sql = "SELECT " + tblName + "_ID ,(" + colName + ") as Name FROM " + tblName + " WHERE isactive='Y'";
+                var sql = "SELECT " + tblName + "_ID ,(" + colName + ") as Name FROM " + tblName + " WHERE isactive='Y' ORDER BY " + colName;   // Order by Identifier
                 sql = VIS.MRole.addAccessSQL(sql, tblName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RW);
                 var drTbl = VIS.DB.executeReader(sql);
                 while (drTbl.read()) {
@@ -2258,8 +2266,8 @@
                     busyDiv("visible");
                     VIS.DB.executeQuery("delete from c_dimamtline where c_dimamtline_id in(" + dimensionLineID + ")");
                     var sql = "select nvl((sum(cd.amount)),0) as Amount from c_dimamtline cd inner join c_dimamtaccttype ct on cd.c_dimamt_id=ct.c_dimamt_id " +
-                    " and cd.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
-                    " where cd.c_dimamt_id=" + C_DimAmt_ID + " and ct.c_acctSchema_id=" + arrAcctSchemaID[0] + "";
+                        " and cd.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
+                        " where cd.c_dimamt_id=" + C_DimAmt_ID + " and ct.c_acctSchema_id=" + arrAcctSchemaID[0] + "";
                     var amount = VIS.DB.executeScalar(sql);
                     VIS.DB.executeQuery("update c_dimamtaccttype set totaldimlineamout=" + amount + " where c_dimamt_id=" + C_DimAmt_ID + " and c_acctSchema_id=" + arrAcctSchemaID[0] + "");
                     w2ui[LineGridName].select(gridRecordID);
@@ -2340,7 +2348,7 @@
                             modalTxtAcctElementValue.setValue(DimensionNameVal);
                         }//User List 1//User List 2
                         else if (dimensionValue == "X1" || dimensionValue == "X2" || dimensionValue == "X3" || dimensionValue == "X4" || dimensionValue == "X5" || dimensionValue == "X6" ||
-                                 dimensionValue == "X7" || dimensionValue == "X8" || dimensionValue == "X9") { modalCmbUserElement.focus(); modalCmbUserElement.val(DimensionNameVal); }//User Element 1 to User Element 9
+                            dimensionValue == "X7" || dimensionValue == "X8" || dimensionValue == "X9") { modalCmbUserElement.focus(); modalCmbUserElement.val(DimensionNameVal); }//User Element 1 to User Element 9
                         busyDiv("hidden");
                     }
                 }

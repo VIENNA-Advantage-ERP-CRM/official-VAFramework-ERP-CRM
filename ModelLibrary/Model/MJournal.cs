@@ -480,7 +480,7 @@ namespace VAdvantage.Model
                 if (toLine.Save())
                 {
                     count++;
-                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID() , typeCR);
+                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
                 }
             }
             if (fromLines.Length != count)
@@ -644,10 +644,15 @@ namespace VAdvantage.Model
                 SetDateAcct(GetDateDoc());
             }
 
+
             // set currency of selected accounting schema
-            int c_Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = " + GetC_AcctSchema_ID(), null, null));
+            MAcctSchema acctSchema = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID());
+            int c_Currency_ID = acctSchema.GetC_Currency_ID();
             SetC_Currency_ID(c_Currency_ID);
             SetCurrencyRate(1);
+
+            // rounding control amount based on standard precision defined on currency
+            SetControlAmt(Decimal.Round(GetControlAmt(), acctSchema.GetStdPrecision()));
 
             return true;
         }	//	beforeSave

@@ -36,6 +36,8 @@ namespace VAdvantage.Acct
         private Doc _doc = null;
         // Document Line 			
         private DocLine _docLine = null;
+        // conversion Rate
+        private Decimal _ConversionRate = Env.ZERO;
 
         /// <summary>
         /// Constructor
@@ -419,6 +421,24 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
+        /// Get Conversion Rate
+        /// </summary>
+        /// <returns>Conversion Rate Value</returns>
+        public Decimal GetConversionRate()
+        {
+            return _ConversionRate;
+        }
+
+        /// <summary>
+        /// Set Conversion Rate
+        /// </summary>
+        /// <param name="conversionRate">Conversion Rate Value</param>
+        public void SetConversionRate(Decimal conversionRate)
+        {
+            _ConversionRate = conversionRate;
+        }
+
+        /// <summary>
         /// Set Document Info
         /// </summary>
         /// <param name="doc">document</param>
@@ -604,6 +624,10 @@ namespace VAdvantage.Acct
             if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement9) && _docLine != null)
             {
                 SetUserElement9_ID(_docLine.GetUserElement9());
+            }
+            if (_docLine != null && _docLine.GetConversionRate() > 0)
+            {
+                SetConversionRate(_docLine.GetConversionRate());
             }
 
             if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Project))
@@ -1062,8 +1086,8 @@ namespace VAdvantage.Acct
             }
             else if (_doc is Doc_GLJournal)
             {
-                SetAmtAcctDr(Decimal.Multiply(GetAmtSourceDr(), _docLine.GetConversionRate()));
-                SetAmtAcctCr(Decimal.Multiply(GetAmtSourceCr(), _docLine.GetConversionRate()));
+                SetAmtAcctDr(Decimal.Multiply(GetAmtSourceDr(), _docLine != null ? Util.GetValueOfDecimal(_docLine.GetConversionRate()) : Util.GetValueOfDecimal(GetConversionRate())));
+                SetAmtAcctCr(Decimal.Multiply(GetAmtSourceCr(), _docLine != null ? Util.GetValueOfDecimal(_docLine.GetConversionRate()) : Util.GetValueOfDecimal(GetConversionRate())));
                 return true;
             }
 

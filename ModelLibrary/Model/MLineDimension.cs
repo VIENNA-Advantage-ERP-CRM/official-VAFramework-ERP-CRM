@@ -38,11 +38,11 @@ namespace VAdvantage.Model
                 }
 
                 string sql = "SELECT SUM(amount) FROM Gl_Linedimension WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID") + " AND Gl_Linedimension_ID NOT IN( " + GetGL_LineDimension_ID() + ")";
-                Decimal count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+                Decimal count = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
                 count += GetAmount();
 
                 sql = "SELECT " + val + " FROM GL_JournalLine WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID");
-                Decimal amtcount = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+                Decimal amtcount = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
 
                 if (count > amtcount)
                 {

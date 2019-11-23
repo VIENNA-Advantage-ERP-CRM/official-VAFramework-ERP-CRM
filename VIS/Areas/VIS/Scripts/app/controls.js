@@ -5233,7 +5233,7 @@
 
             if (this.defaultValue) {
                 self.defaultValue = self.defaultValue.replace(/@/g, "").trim().replace(".value", "");
-                dValue = VIS.Env.getCtx().getContextAsInt(windowNo, self.defaultValue, false);
+                dValue = VIS.Env.getCtx().getWindowContext(windowNo, self.defaultValue, false);
             }
 
             self.oldValue = self.value;
