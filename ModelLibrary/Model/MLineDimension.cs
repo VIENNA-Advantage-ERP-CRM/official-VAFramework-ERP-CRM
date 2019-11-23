@@ -21,7 +21,6 @@ namespace VAdvantage.Model
         { 
         }
 
-        private int count = 0;
         protected override bool BeforeSave(bool newRecord)
         {
             MJournalLine obj = new MJournalLine(GetCtx(), GetGL_JournalLine_ID(), Get_Trx());
@@ -36,12 +35,12 @@ namespace VAdvantage.Model
                 val = " AmtSourceCr ";
             }
 
-            string sql = "SELECT SUM(amount) FROM Gl_Linedimension WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID") + " AND Gl_Linedimension_ID NOT IN( " + GetGL_LineDimension_ID() + ")";
-            int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
-            count += GetAmount();
+                string sql = "SELECT SUM(amount) FROM Gl_Linedimension WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID") + " AND Gl_Linedimension_ID NOT IN( " + GetGL_LineDimension_ID() + ")";
+                Decimal count = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+                count += GetAmount();
 
-            string sqlQry = "SELECT " + val + " FROM GL_JournalLine WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID");
-            int amtcount = Util.GetValueOfInt(DB.ExecuteScalar(sqlQry, null, Get_Trx()));
+                sql = "SELECT " + val + " FROM GL_JournalLine WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID");
+                Decimal amtcount = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
 
             if (count > amtcount)
             {
