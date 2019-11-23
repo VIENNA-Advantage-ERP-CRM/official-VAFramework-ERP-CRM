@@ -201,15 +201,15 @@ namespace VIS.Models
             /********************
              *  GL Journal
              */
-            else if (AD_Table_ID == MJournal.Table_ID || AD_Table_ID == MJournalBatch.Table_ID)
-            {
-                //	Complete                    ..  CO
-                if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
-                {
-                    options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
-                    //options[index++] = DocumentEngine.ACTION_REVERSE_ACCRUAL;
-                }
-            }
+            //else if (AD_Table_ID == MJournal.Table_ID || AD_Table_ID == MJournalBatch.Table_ID)
+            //{
+            //    //	Complete                    ..  CO
+            //    if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
+            //    {
+            //        options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
+            //        options[index++] = DocumentEngine.ACTION_REVERSE_ACCRUAL;
+            //    }
+            //}
             /********************
              *  Allocation
              */
