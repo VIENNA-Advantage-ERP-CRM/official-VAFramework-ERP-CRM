@@ -902,7 +902,6 @@
                                 var date = new Date(parseInt(row[j].substr(6)));
                                 if (data != null)
                                     line[dataObj.Columns[j]] = date.toDateString();
-
                             }
                         }
                         else {
