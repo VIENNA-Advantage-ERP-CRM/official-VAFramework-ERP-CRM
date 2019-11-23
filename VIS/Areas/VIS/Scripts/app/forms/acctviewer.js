@@ -384,7 +384,8 @@
                     for (var i = 0; i < res.length; i++) {
                         var ase = [];
                         ase.push({
-                            'c_acctschema_element_id': res[i].C_AcctSchema_Element_ID, 'name': VIS.Utility.encodeText(res[i].ElementName),                            'elementtype': res[i].ElementType, 'c_elementvalue_id': res[i].C_ElementValue_ID,
+                            'c_acctschema_element_id': res[i].C_AcctSchema_Element_ID, 'name': VIS.Utility.encodeText(res[i].ElementName),
+                            'elementtype': res[i].ElementType, 'c_elementvalue_id': res[i].C_ElementValue_ID,
                             'seqno': res[i].SeqNo, 'detail': res[i].Detail, 'c_element_id': res[i].C_Element_ID
                         });
                         currentThis.push(ase);
@@ -898,9 +899,11 @@
                     }
                     else {
                         if (row[j] != null && dataObj.Columns[j].indexOf("Date") > 0) {
-                            var date = new Date(parseInt(row[j].substr(6)));
-                            if (data != null)
-                                line[dataObj.Columns[j]] = date.toDateString();
+                            if (row[j] != "") {
+                                var date = new Date(parseInt(row[j].substr(6)));
+                                if (data != null)
+                                    line[dataObj.Columns[j]] = date.toDateString();
+                            }
                         }
                         else {
                             line[dataObj.Columns[j]] = row[j];
