@@ -1,5 +1,4 @@
-﻿/* file downloader*/
-$(function () {
+﻿$(function () {
     "use strict";
 
     var Promise = window.Promise;
