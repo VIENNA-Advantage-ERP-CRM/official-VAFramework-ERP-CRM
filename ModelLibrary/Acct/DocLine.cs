@@ -1124,7 +1124,7 @@ namespace VAdvantage.Acct
         public void SetConversionRate(Decimal conversionRate)
         {
             _ConversionRate = conversionRate;
-        }
+        } 
 
         /// <summary>
         /// Get User Element 1
