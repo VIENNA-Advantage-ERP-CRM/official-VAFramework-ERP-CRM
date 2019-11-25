@@ -56,7 +56,7 @@ namespace VAdvantage.Process
                     {
                         if (String.IsNullOrEmpty(apikey))
                         {
-                            return status;
+                            return "Invalid Key";
                         }
 
                         string newUrl = @"https://xecdapi.xe.com/v1/account_info/";
@@ -67,24 +67,21 @@ namespace VAdvantage.Process
                         Stream receiveStream = wr.GetResponseStream();
                         StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
                         string content = reader.ReadToEnd();
-                        Console.WriteLine(content);
                         dynamic data = JsonConvert.DeserializeObject<dynamic>(content);
-                        if (data != null)           
+                        if (data != null)
                         {
                             return status;
                         }
                         else
                         {
-                            status = "Invalid Key";
-                            return status;
+                            return "Invalid Key";
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                status = ex.Message;
-                return status;
+                return ex.Message;
             }
 
             return status;

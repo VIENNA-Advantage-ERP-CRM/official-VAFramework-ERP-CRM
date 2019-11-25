@@ -63,20 +63,18 @@ namespace ViennaAdvantage.Process
             ds.Clear();
             try
             {
-
-                ds = DB.ExecuteDataset(@"SELECT distinct cl.AD_Client_ID,
+                // Get Currency from all Accounting Schemas available in the Tenant.
+                ds = DB.ExecuteDataset(@"SELECT DISTINCT cl.AD_Client_ID,
                                           cl.AD_Org_ID,
                                           cl.CurrencyRateUpdateFrequency,
                                           acct.C_Currency_ID
                                           ,cr.ISO_Code,cl.C_CurrencySource_ID
-                                        FROM ad_client cl
-                                        INNER JOIN AD_CLientinfo ci
-                                        ON ci.ad_client_ID=cl.ad_client_ID
+                                        FROM AD_Client cl
                                         INNER JOIN C_AcctSchema acct
-                                        ON acct.C_AcctSchema_ID             =ci.C_AcctSchema1_ID
-                                        Left Join C_Currency cr on cr.C_Currency_ID=acct.C_Currency_ID
-                                        WHERE cl.ad_client_Id!              =0 AND cl.UpdateCurrencyRate='A' AND cl.IsMultiCurrency='Y'
-                                        AND cl.currencyrateupdatefrequency IS NOT NULL", null, Get_Trx());
+                                        ON acct.AD_Client_ID =cl.AD_Client_ID
+                                        INNER JOIN C_Currency cr on cr.C_Currency_ID=acct.C_Currency_ID
+                                        WHERE cl.IsActive='Y' AND cl.AD_Client_ID!=0 AND cl.UpdateCurrencyRate='A' AND cl.IsMultiCurrency='Y'
+                                        AND acct.IsActive='Y' AND cl.currencyrateupdatefrequency IS NOT NULL", null, Get_Trx());
 
                 //                                                        Where ci.AD_CLient_ID= " + GetAD_Client_ID());
                 //in this DataSet we'll get CLient's Base Currency & the Currency ID
@@ -276,14 +274,13 @@ namespace ViennaAdvantage.Process
 
                 decimal exchangeRate = 0;
                 string newUrl = @"https://xecdapi.xe.com/v1/convert_from.json/?from=" + from.ToString().ToUpper() + "&to=" + to.ToString().ToUpper() + "&amount=1";
-                WebRequest myReq = WebRequest.Create(newUrl);                
+                WebRequest myReq = WebRequest.Create(newUrl);
                 CredentialCache mycache = new CredentialCache();
                 myReq.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(apiKey));
                 WebResponse wr = myReq.GetResponse();
                 Stream receiveStream = wr.GetResponseStream();
                 StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
                 string content = reader.ReadToEnd();
-                Console.WriteLine(content);
                 dynamic rates = JsonConvert.DeserializeObject<dynamic>(content);
                 if (rates != null && rates.to != null && rates.to.Count > 0)
                 {
