@@ -18,7 +18,7 @@ using VAdvantage.Utility;
 using System.ServiceModel;
 using System.Net;
 using System.IO;
-
+using Newtonsoft.Json;
 
 namespace ViennaAdvantage.Process
 {
@@ -30,7 +30,7 @@ namespace ViennaAdvantage.Process
         int C_CurrencySource_ID = 0;
         string myCurrency = "";
         int myCurrencyID = 0;
-        string sql = "";
+        StringBuilder sql = new StringBuilder();
         DataSet ds = new DataSet();
         #endregion
 
@@ -59,7 +59,7 @@ namespace ViennaAdvantage.Process
         protected override string DoIt()
         {
             string status = "OK";
-           // Trx trx = Get_Trx();
+            // Trx trx = Get_Trx();
             ds.Clear();
             try
             {
@@ -76,7 +76,7 @@ namespace ViennaAdvantage.Process
                                         ON acct.C_AcctSchema_ID             =ci.C_AcctSchema1_ID
                                         Left Join C_Currency cr on cr.C_Currency_ID=acct.C_Currency_ID
                                         WHERE cl.ad_client_Id!              =0 AND cl.UpdateCurrencyRate='A' AND cl.IsMultiCurrency='Y'
-                                        AND cl.currencyrateupdatefrequency IS NOT NULL");
+                                        AND cl.currencyrateupdatefrequency IS NOT NULL", null, Get_Trx());
 
                 //                                                        Where ci.AD_CLient_ID= " + GetAD_Client_ID());
                 //in this DataSet we'll get CLient's Base Currency & the Currency ID
@@ -102,135 +102,131 @@ namespace ViennaAdvantage.Process
                     _lstCurr.Add(_curr);
                 }
                 ds.Clear();
-                sql = @"Select Cur.ISO_Code, Cur.C_Currency_ID From C_Currency Cur  Where Cur.IsMyCurrency='Y' And Cur.IsActive='Y' ";
-                ds = DB.ExecuteDataset(sql); // Here we get all currencies in which our Client is in dealing with 
-                //String frequency;// = DB.ExecuteScalar("Select currencyrateupdatefrequency from AD_Client where IsActive='Y' AND currencyrateupdatefrequency is not null").ToString();
-                // getting the frequency(TimePeriod) for the converted rate
+                sql.Append(@"Select Cur.ISO_Code, Cur.C_Currency_ID From C_Currency Cur  Where Cur.IsMyCurrency='Y' And Cur.IsActive='Y' ");
+                ds = DB.ExecuteDataset(sql.ToString(), null, Get_Trx()); // Here we get all currencies in which our Client is in dealing with 
 
                 if (ds != null)
                 {
                     for (Int32 k = 0; k < _lstCurr.Count; k++)
                     {
+                        sql.Clear();        // Get UTRL and Api Key From Currency Source
+                        sql.Append("SELECT URL, ApiKey FROM C_CurrencySource WHERE C_CurrencySource_ID=" + _lstCurr[k].CurrencySource);
+                        DataSet dsSource = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
 
-                        string currencySourceName = DB.ExecuteScalar("Select url from C_CurrencySource Where C_CurrencySource_ID=" + _lstCurr[k].CurrencySource).ToString();
-
-                        //int defaultconversionType = 0;
-                        //try
-                        //{
-                        //    defaultconversionType = Convert.ToInt32(DB.ExecuteScalar(@"SELECT C_ConversionType_id, Surchargepercentage,Surchargevalue FROM c_conversiontype WHERE autocalculate='Y' AND isactive   ='Y'"));
-                        //}
-                        //catch
-                        //{
-
-                        //}
-
-                        DataSet dsConversion = DB.ExecuteDataset(@"SELECT C_ConversionType_id, Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency FROM c_conversiontype WHERE isautocalculate='Y' AND isactive   ='Y'");
-                        if (dsConversion != null && dsConversion.Tables[0].Rows.Count > 0)
+                        if (dsSource != null && dsSource.Tables.Count > 0 && dsSource.Tables[0].Rows.Count > 0)
                         {
-                            for (int x = 0; x < dsConversion.Tables[0].Rows.Count; x++)
+                            string currencySourceName = Util.GetValueOfString(dsSource.Tables[0].Rows[0]["URL"]);
+                            string apiKey = Util.GetValueOfString(dsSource.Tables[0].Rows[0]["ApiKey"]);
+
+                            DataSet dsConversion = DB.ExecuteDataset(@"SELECT C_ConversionType_id, Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency 
+                                                    FROM c_conversiontype WHERE isautocalculate='Y' AND isactive   ='Y'", null, Get_Trx());
+                            if (dsConversion != null && dsConversion.Tables[0].Rows.Count > 0)
                             {
-                                int defaultconversionType = 0;
-                                defaultconversionType = Convert.ToInt32(dsConversion.Tables[0].Rows[x]["C_ConversionType_id"]);
-
-                                MConversionRate conversion = null;
-                                Decimal rate1 = 0;
-                                Decimal rate2 = 0;
-                                Decimal one = new Decimal(1.0);
-
-                                string updateFrequency = _lstCurr[k].frequency;
-
-                                if (dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"] != null && dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"] != DBNull.Value
-                                                   && Convert.ToString(dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"]) != "")
+                                for (int x = 0; x < dsConversion.Tables[0].Rows.Count; x++)
                                 {
-                                    updateFrequency = Convert.ToString(dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"]);
-                                }
+                                    int defaultconversionType = 0;
+                                    defaultconversionType = Convert.ToInt32(dsConversion.Tables[0].Rows[x]["C_ConversionType_id"]);
 
+                                    MConversionRate conversion = null;
+                                    Decimal rate1 = 0;
+                                    Decimal rate2 = 0;
+                                    Decimal one = new Decimal(1.0);
 
-                                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                                {
-                                    myCurrency = ds.Tables[0].Rows[i]["ISO_Code"].ToString();
-                                    myCurrencyID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
-                                    sql = String.Empty;
-                                    sql = @"  Select ValidTo from C_Conversion_Rate  where IsActive='Y' AND C_ConversionType_id=" + defaultconversionType + " AND  C_Currency_ID=" + _lstCurr[k].baseCurrencyID + " AND C_Currency_To_ID=" + myCurrencyID
-                                         + "  AND Created=(SELECT Max(Created) FROM C_Conversion_Rate  WHERE isactive      ='Y' AND C_ConversionType_id=" + defaultconversionType + " AND "
-                                         + "  C_Currency_ID   =" + _lstCurr[k].baseCurrencyID + "  AND C_Currency_To_ID=" + myCurrencyID + ") AND AD_Client_ID = " + _lstCurr[k].AD_Client_ID + "AND AD_Org_ID= " + _lstCurr[k].AD_Org_ID;
-                                    //the Maximum date from Converted rate of every currency
-                                    object validDate = DB.ExecuteScalar(sql.Trim(), null, null);
-                                    //Check if valid date available.. and less than current date..
-                                    //By Karan 22 June
-                                    if (validDate != null && validDate != DBNull.Value && DateTime.Now.Date > Convert.ToDateTime(validDate).Date)
+                                    string updateFrequency = _lstCurr[k].frequency;
+
+                                    if (dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"] != null && dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"] != DBNull.Value
+                                                       && Convert.ToString(dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"]) != "")
                                     {
-                                        if (!String.IsNullOrEmpty(myCurrency) && !String.IsNullOrEmpty(_lstCurr[k].baseCurrency)
-                                              && !String.IsNullOrEmpty(currencySourceName) && (myCurrencyID != _lstCurr[k].baseCurrencyID))
+                                        updateFrequency = Convert.ToString(dsConversion.Tables[0].Rows[x]["CurrencyRateUpdateFrequency"]);
+                                    }
+
+
+                                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                                    {
+                                        myCurrency = ds.Tables[0].Rows[i]["ISO_Code"].ToString();
+                                        myCurrencyID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
+                                        sql.Clear();
+                                        sql.Append(@"Select ValidTo from C_Conversion_Rate  where IsActive='Y' AND C_ConversionType_id=" + defaultconversionType + " AND  C_Currency_ID=" + _lstCurr[k].baseCurrencyID + " AND C_Currency_To_ID=" + myCurrencyID
+                                             + "  AND Created=(SELECT Max(Created) FROM C_Conversion_Rate  WHERE isactive ='Y' AND C_ConversionType_id=" + defaultconversionType + " AND "
+                                             + "  C_Currency_ID   =" + _lstCurr[k].baseCurrencyID + "  AND C_Currency_To_ID=" + myCurrencyID + ") AND AD_Client_ID = " + _lstCurr[k].AD_Client_ID + "AND AD_Org_ID= " + _lstCurr[k].AD_Org_ID);
+                                        //the Maximum date from Converted rate of every currency
+                                        object validDate = DB.ExecuteScalar(sql.ToString(), null, Get_Trx());
+                                        //Check if valid date available.. and less than current date..
+                                        //By Karan 22 June
+                                        if (validDate != null && validDate != DBNull.Value && DateTime.Now.Date > Convert.ToDateTime(validDate).Date)
                                         {
-                                            String result = GetConvertedCurrencyValue(_lstCurr[k].baseCurrency, myCurrency, currencySourceName);
-                                            if (!String.IsNullOrEmpty(result))
+                                            if (!String.IsNullOrEmpty(myCurrency) && !String.IsNullOrEmpty(_lstCurr[k].baseCurrency)
+                                                  && !String.IsNullOrEmpty(currencySourceName) && (myCurrencyID != _lstCurr[k].baseCurrencyID))
                                             {
-                                                conversion = new MConversionRate(GetCtx(), 0, null);
-                                                conversion.SetAD_Org_ID((_lstCurr[k].AD_Org_ID));
-                                                conversion.SetAD_Client_ID(_lstCurr[k].AD_Client_ID);
-                                                //conversion.SetValidFrom(DateTime.Now.AddDays(-1));
-                                                conversion.SetValidFrom(DateTime.Now);
-                                                if (updateFrequency.Equals("D"))
+                                                String result = GetConvertedCurrencyValue(_lstCurr[k].baseCurrency, myCurrency, currencySourceName, apiKey);
+                                                if (!String.IsNullOrEmpty(result))
                                                 {
-                                                    conversion.SetValidTo(DateTime.Now);
-                                                }
-                                                else if (updateFrequency.Equals("W"))
-                                                {
-                                                    conversion.SetValidTo(DateTime.Now.AddDays(7));
-                                                }
-                                                else if (updateFrequency.Equals("M"))
-                                                {
-                                                    conversion.SetValidTo(DateTime.Now.AddMonths(1));
-                                                }
+                                                    conversion = new MConversionRate(GetCtx(), 0, Get_Trx());
+                                                    conversion.SetAD_Org_ID((_lstCurr[k].AD_Org_ID));
+                                                    conversion.SetAD_Client_ID(_lstCurr[k].AD_Client_ID);
+                                                    //conversion.SetValidFrom(DateTime.Now.AddDays(-1));
+                                                    conversion.SetValidFrom(DateTime.Now);
+                                                    if (updateFrequency.Equals("D"))
+                                                    {
+                                                        conversion.SetValidTo(DateTime.Now);
+                                                    }
+                                                    else if (updateFrequency.Equals("W"))
+                                                    {
+                                                        conversion.SetValidTo(DateTime.Now.AddDays(7));
+                                                    }
+                                                    else if (updateFrequency.Equals("M"))
+                                                    {
+                                                        conversion.SetValidTo(DateTime.Now.AddMonths(1));
+                                                    }
 
-                                                conversion.SetC_ConversionType_ID(defaultconversionType);
-                                                conversion.SetC_Currency_ID(_lstCurr[k].baseCurrencyID);
-                                                conversion.SetC_Currency_To_ID(myCurrencyID);
+                                                    conversion.SetC_ConversionType_ID(defaultconversionType);
+                                                    conversion.SetC_Currency_ID(_lstCurr[k].baseCurrencyID);
+                                                    conversion.SetC_Currency_To_ID(myCurrencyID);
 
-                                                rate2 = VAdvantage.Utility.Env.ZERO;
-                                                one = new Decimal(1.0);
+                                                    rate2 = VAdvantage.Utility.Env.ZERO;
+                                                    one = new Decimal(1.0);
 
-                                                //if (dsConversion.Tables[0].Rows[x]["Surchargepercentage"] != null && dsConversion.Tables[0].Rows[x]["Surchargepercentage"] != DBNull.Value
-                                                //    && Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargepercentage"]) != 0)
-                                                //{
-                                                //    rate1 = (Convert.ToDecimal(result) + (Convert.ToDecimal(result) * (Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargepercentage"]) / 100)));
-                                                //    if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
-                                                //    {
-                                                //        rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
-                                                //    }
-                                                //    rate2 = (rate2 + rate2 * (Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargepercentage"]) / 100));
-                                                //}
-                                                //else if (dsConversion.Tables[0].Rows[x]["Surchargevalue"] != null && dsConversion.Tables[0].Rows[x]["Surchargevalue"] != DBNull.Value
-                                                //    && Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargevalue"]) != 0)
-                                                //{
-                                                //    rate1 = (Convert.ToDecimal(result) + Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargevalue"]));
-                                                //    if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
-                                                //    {
-                                                //        rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
-                                                //    }
-                                                //    rate2 = (rate2 + Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargevalue"]));
-                                                //}
-                                                //else 
-                                                //{
-                                                //    rate1 = Convert.ToDecimal(result);
-                                                //    if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
-                                                //    {
-                                                //        rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
-                                                //    }
-                                                //}
+                                                    //if (dsConversion.Tables[0].Rows[x]["Surchargepercentage"] != null && dsConversion.Tables[0].Rows[x]["Surchargepercentage"] != DBNull.Value
+                                                    //    && Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargepercentage"]) != 0)
+                                                    //{
+                                                    //    rate1 = (Convert.ToDecimal(result) + (Convert.ToDecimal(result) * (Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargepercentage"]) / 100)));
+                                                    //    if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
+                                                    //    {
+                                                    //        rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
+                                                    //    }
+                                                    //    rate2 = (rate2 + rate2 * (Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargepercentage"]) / 100));
+                                                    //}
+                                                    //else if (dsConversion.Tables[0].Rows[x]["Surchargevalue"] != null && dsConversion.Tables[0].Rows[x]["Surchargevalue"] != DBNull.Value
+                                                    //    && Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargevalue"]) != 0)
+                                                    //{
+                                                    //    rate1 = (Convert.ToDecimal(result) + Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargevalue"]));
+                                                    //    if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
+                                                    //    {
+                                                    //        rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
+                                                    //    }
+                                                    //    rate2 = (rate2 + Convert.ToDecimal(dsConversion.Tables[0].Rows[x]["Surchargevalue"]));
+                                                    //}
+                                                    //else 
+                                                    //{
+                                                    //    rate1 = Convert.ToDecimal(result);
+                                                    //    if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
+                                                    //    {
+                                                    //        rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
+                                                    //    }
+                                                    //}
 
-                                                rate1 = Convert.ToDecimal(result);
+                                                    rate1 = Convert.ToDecimal(result);
 
-                                                //if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
-                                                //{
-                                                //    rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
-                                                //}
-                                                conversion.SetMultiplyRate(rate1);
-                                                //conversion.SetDivideRate(rate2);
-                                                if (!conversion.Save())
-                                                {
-                                                    //status = "ConversionRateNotsaved";
+                                                    //if (System.Convert.ToDouble(rate1) != 0.0)	//	no divide by zero
+                                                    //{
+                                                    //    rate2 = Decimal.Round(Decimal.Divide(one, Convert.ToDecimal(result)), 12);// MidpointRounding.AwayFromZero);
+                                                    //}
+                                                    conversion.SetMultiplyRate(rate1);
+                                                    //conversion.SetDivideRate(rate2);
+                                                    if (!conversion.Save())
+                                                    {
+                                                        //status = "ConversionRateNotsaved";
+                                                    }
                                                 }
                                             }
                                         }
@@ -255,7 +251,7 @@ namespace ViennaAdvantage.Process
             return status;
         }
         //Added by Arpit To Get Converted Amount from xe.com or google.com Accordingly parameter
-        public static string GetConvertedCurrencyValue(string from, string to, string url)
+        public static string GetConvertedCurrencyValue(string from, string to, string url, string apiKey)
         {
             string response = "";
             if (url.ToUpper().Contains("XE.COM"))
@@ -265,19 +261,35 @@ namespace ViennaAdvantage.Process
                     response = Convert.ToString(1);
                     return response;
                 }
-                string newUrl = @"http://www.xe.com/ucc/convert/?Amount=1&From=" + from.ToString() + "&To=" + to.ToString() + "";
-                HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(newUrl);
-                HttpWebResponse resp = (HttpWebResponse)webReq.GetResponse();//send sms
-                StreamReader responseReader = new StreamReader(resp.GetResponseStream());//read the response 
-                response = responseReader.ReadToEnd();//get result                  
-                response = response.Substring(response.IndexOf("<td width=\"47%\" align=\"left\" class=\"rightCol\">"));
-                response = response.Substring(response.IndexOf("rightCol\">") + 10); // +10 to remove unwanted things before the converted value
+                //string newUrl = @"http://www.xe.com/ucc/convert/?Amount=1&From=" + from.ToString() + "&To=" + to.ToString() + "";
+                //HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(newUrl);
+                //HttpWebResponse resp = (HttpWebResponse)webReq.GetResponse();//send sms
+                //StreamReader responseReader = new StreamReader(resp.GetResponseStream());//read the response 
+                //response = responseReader.ReadToEnd();//get result                  
+                //response = response.Substring(response.IndexOf("<td width=\"47%\" align=\"left\" class=\"rightCol\">"));
+                //response = response.Substring(response.IndexOf("rightCol\">") + 10); // +10 to remove unwanted things before the converted value
 
-                response = response.Substring(0, response.IndexOf('&'));
-                responseReader.Close();
-                resp.Close();
-                return response;
+                //response = response.Substring(0, response.IndexOf('&'));
+                //responseReader.Close();
+                //resp.Close();
+                //return response;
 
+                decimal exchangeRate = 0;
+                string newUrl = @"https://xecdapi.xe.com/v1/convert_from.json/?from=" + from.ToString().ToUpper() + "&to=" + to.ToString().ToUpper() + "&amount=1";
+                WebRequest myReq = WebRequest.Create(newUrl);                
+                CredentialCache mycache = new CredentialCache();
+                myReq.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(apiKey));
+                WebResponse wr = myReq.GetResponse();
+                Stream receiveStream = wr.GetResponseStream();
+                StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
+                string content = reader.ReadToEnd();
+                Console.WriteLine(content);
+                dynamic rates = JsonConvert.DeserializeObject<dynamic>(content);
+                if (rates != null && rates.to != null && rates.to.Count > 0)
+                {
+                    exchangeRate = rates.to[0]["mid"];
+                }
+                return exchangeRate.ToString();
             }
             else if (url.ToUpper().Contains("GOOGLE.COM"))
             {
@@ -297,6 +309,28 @@ namespace ViennaAdvantage.Process
                     response = response.Substring(0, response.IndexOf(" "));
                     return response;
                 }
+            }
+            else
+            {
+                WebClient web = new WebClient();
+                string newUrl = "https://api.exchangerate-api.com/v4/latest/" + from.ToUpper();
+                response = new WebClient().DownloadString(newUrl);
+                decimal exchangeRate = 0;
+                dynamic rate = JsonConvert.DeserializeObject<dynamic>(response);
+                if (rate.rates != null)
+                {
+                    exchangeRate = rate.rates[to.ToUpper()];
+                }
+                return exchangeRate.ToString();
+
+                //string newUrl = string.Format("http://rate-exchange.appspot.com/currency?from={0}&to={1}", from.ToString().ToUpper(), to.ToString().ToUpper());
+                //response = web.DownloadString(url);
+                //Newtonsoft.Json.Linq.JToken token = Newtonsoft.Json.Linq.JObject.Parse(response);
+                //decimal exchangeRate = (decimal)token.SelectToken("rate");
+                ////dynamic rate = JsonConvert.DeserializeObject<dynamic>(response);
+                ////decimal exchangeRate = rate.rate;
+                //return exchangeRate.ToString();               
+
             }
 
             return response;
