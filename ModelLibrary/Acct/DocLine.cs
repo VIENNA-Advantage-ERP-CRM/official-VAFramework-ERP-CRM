@@ -50,6 +50,8 @@ namespace VAdvantage.Acct
         private Decimal _ListAmt = Env.ZERO;
         // Discount Amount         
         private Decimal _DiscountAmt = Env.ZERO;
+        // conversion Rate
+        private Decimal _ConversionRate = Env.ZERO;
 
         // Converted Amounts   	
         private Decimal? _AmtAcctDr = null;
@@ -1105,6 +1107,24 @@ namespace VAdvantage.Acct
             }
             return 0;
         }
+
+        /// <summary>
+        /// Get Conversion Rate
+        /// </summary>
+        /// <returns>Conversion Rate Value</returns>
+        public Decimal GetConversionRate()
+        {
+            return _ConversionRate;
+        }
+
+        /// <summary>
+        /// Set Conversion Rate
+        /// </summary>
+        /// <param name="conversionRate">Conversion Rate Value</param>
+        public void SetConversionRate(Decimal conversionRate)
+        {
+            _ConversionRate = conversionRate;
+        } 
 
         /// <summary>
         /// Get User Element 1
