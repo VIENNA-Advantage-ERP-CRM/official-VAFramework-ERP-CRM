@@ -102,6 +102,9 @@
     <Reference Include="MySql.Data">
       <HintPath>..\..\..\..\hosted\VAdvantgeDll\ModelLibrary\bin\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql, Version=2.2.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>LibDll\Npgsql.dll</HintPath>
@@ -1698,6 +1701,7 @@
     <Compile Include="Process\CreateCurrencySourceEntries.cs" />
     <Compile Include="Process\CreateInviteeList.cs" />
     <Compile Include="Process\CreatePendingTranslations.cs" />
+    <Compile Include="Process\CreateReleaseDocFromBO.cs" />
     <Compile Include="Process\CreateSalesContract.cs" />
     <Compile Include="Process\CreateTargetList.cs" />
     <Compile Include="Process\CreateTaxLines.cs" />
@@ -1815,6 +1819,7 @@
     <Compile Include="Process\TransactionSummary.cs" />
     <Compile Include="Process\TransferOwnerShip.cs" />
     <Compile Include="Process\UpdateVersion.cs" />
+    <Compile Include="Process\ValidateCurrencyApiKey.cs" />
     <Compile Include="Process\ViennaAdvantageProcess\AccoutingReport.cs">
       <SubType>Code</SubType>
     </Compile>

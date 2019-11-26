@@ -658,6 +658,7 @@
     <Content Include="Areas\VIS\Scripts\app\forms\vpayselect.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vtrxmaterial.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\accountform.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\amountdivision.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\appointments.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\archiveviewer.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\attachmentform.js" />
@@ -752,6 +753,7 @@
     <Compile Include="Areas\VIS\Controllers\AccountController.cs" />
     <Compile Include="Areas\VIS\Controllers\AccountFormController.cs" />
     <Compile Include="Areas\VIS\Controllers\AcctViewerDataController.cs" />
+    <Compile Include="Areas\VIS\Controllers\AmountDivisionController.cs" />
     <Compile Include="Areas\VIS\Controllers\ASearchController.cs" />
     <Compile Include="Areas\VIS\Controllers\AttachmentController.cs" />
     <Compile Include="Areas\VIS\Controllers\AttachmentHistoryController.cs" />
@@ -865,6 +867,7 @@
     <Compile Include="Areas\VIS\Models\AccountFormModel.cs" />
     <Compile Include="Areas\VIS\Models\AccountModels.cs" />
     <Compile Include="Areas\VIS\Models\AcctViewerData.cs" />
+    <Compile Include="Areas\VIS\Models\AmountDivisionModel.cs" />
     <Compile Include="Areas\VIS\Models\ASearchModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
