@@ -194,11 +194,13 @@
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
+    <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
     <Content Include="Areas\VIS\Content\Home.css" />
     <Content Include="Areas\VIS\Content\Login.css" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
+    <Content Include="Areas\VIS\Content\ProductContainer.css" />
     <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />
     <Content Include="Areas\VIS\Content\ReportStyle.css" />
     <Content Include="Areas\VIS\Content\Site.css" />
@@ -637,6 +639,9 @@
     <Content Include="Areas\VIS\Scripts\app\forms\acctviewermenu.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\glDimensionValue.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\productcontainer.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\productcontainermove.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\productContainerTree.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vallocation.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vattributegrid.js" />
@@ -798,6 +803,7 @@
     <Compile Include="Areas\VIS\Controllers\FormController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenerateXModelController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenralAttributeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\GlJournalController.cs" />
     <Compile Include="Areas\VIS\Controllers\Group\GmailContactsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Group\GroupController.cs" />
     <Compile Include="Areas\VIS\Controllers\HomeController.cs" />
