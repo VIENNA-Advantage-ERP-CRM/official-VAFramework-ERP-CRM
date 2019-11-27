@@ -79,6 +79,9 @@ namespace VAdvantage.Controller
         /****   Header Total Row   ***/
         public Decimal HeaderWidth = 0;
 
+        /******   Grid Layout ID   *****/
+        public int AD_GridLayout_ID = 0;
+
         /****   Header Items   ***/
         public Dictionary<int, object> HeaderItems = null;
     }

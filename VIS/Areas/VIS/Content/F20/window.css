@@ -53,6 +53,7 @@
     grid-column-start: 1;
     grid-row-start: 2;
     display: flex;
+    position:relative;
 }
 
 
@@ -454,8 +455,9 @@
 
 .vis-ad-w-p-center-inctab {
     grid-row: 3/3;
-    display: flex;
+    display: none;
     padding: 0 10px;
+    height:325px;
 }
 
 /* */
@@ -689,6 +691,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     grid-row: 1/1;
     grid-column: 2/2;
     display: flex;
+    color: rgba(var(--v-c-on-secondary),1);
 }
 
 .vis-ad-w-p-vc-gc {

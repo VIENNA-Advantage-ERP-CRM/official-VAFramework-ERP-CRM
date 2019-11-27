@@ -992,7 +992,7 @@ VIS.GridController.prototype.activate = function (oldGC) {
         this.getRoot().detach();
         tdArea.append(this.getRoot());
         this.displayAsIncludedGC = false;
-        this.aPanel.getIncludedEmptyArea().css({ 'height': '', "padding": '' });
+        this.aPanel.getIncludedEmptyArea().css({ 'display': 'none'});
     }
     else if (this.gTab.getIncluded_Tab_ID() == 0) {
         var olcIncludedTab = oldGC.vIncludedGC;
@@ -1000,7 +1000,7 @@ VIS.GridController.prototype.activate = function (oldGC) {
             var tdArea = olcIncludedTab.aPanel.getLayout();
             olcIncludedTab.setUI(false);
             olcIncludedTab.getRoot().detach();
-            this.aPanel.getIncludedEmptyArea().css({ 'height': '', "padding": '' });
+            this.aPanel.getIncludedEmptyArea().css({ 'display': 'none' });
         }
        
     }
@@ -1639,7 +1639,8 @@ VIS.GridController.prototype.switchIncludedGC = function () {
         tdArea.append(inGc);
 
         
-        tdArea.height(VIS.Application.isMobile ? 250 : 350);
+        //tdArea.height(VIS.Application.isMobile ? 250 : 350);
+        tdArea.css('display','flex');
 
         inGc.show();
         this.vIncludedGC.vTable.activate();
