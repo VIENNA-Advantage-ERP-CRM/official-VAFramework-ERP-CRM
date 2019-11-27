@@ -30,13 +30,14 @@
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(var(--v-c-on-secondary),0.3);
+    /*-webkit-box-shadow: inset 0 0 6px rgba(var(--v-c-on-secondary),0.3);*/
     border-radius: 5px;
+    background: rgba(var(--v-c-primary),.11);
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: rgba(var(--v-c-primary),.8);
-    outline: 1px solid slategrey;
+    outline: none;
     border-radius: 5px;
 }
 
@@ -230,7 +231,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 .ui-dialog .ui-dialog-content {
     position: relative;
     border: 0;
-    padding: 10px 15px 10px 15px;
+    padding: 10px 10px 0;
     background: 0;
     overflow: auto;
 }
@@ -282,7 +283,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         border-bottom-right-radius: 0;
     }
 
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover, .ui-button:hover {
     border: 1px solid rgba(var(--v-c-primary), 1);
     background: rgba(var(--v-c-primary), 1);
 }
@@ -290,6 +291,11 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 .ui-dialog .ui-dialog-buttonpane {
     border-bottom-left-radius: .40rem;
     border-bottom-right-radius: .40rem;
+    margin-top: 0;
+    padding: 10px;
+}
+.ui-dialog .ui-dialog-buttonpane button{
+    margin: 0;
 }
 .ui-widget.ui-widget-content {
     /*border: 1px solid rgba(var(--v-c-on-secondary),.1);*/
@@ -326,24 +332,26 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         -webkit-appearance: none;
         border-radius: 2px;
         position: relative;
+        width: 12px;
+        height: 12px;
     }
 
         .w2ui-grid .w2ui-grid-body table .w2ui-col-select div input[type=checkbox]:checked {
-            background: rgba(var(--v-c-primary));
-            border: 1px solid rgba(var(--v-c-primary));
+            background: rgba(var(--v-c-primary), 1);
+            border: 1px solid rgba(var(--v-c-primary), 1);
         }
 
             .w2ui-grid .w2ui-grid-body table .w2ui-col-select div input[type=checkbox]:checked:before {
                 position: absolute;
                 content: '';
-                width: 4px;
-                height: 6px;
+                width: 5px;
+                height: 9px;
                 top: 0;
-                bottom: 0;
+                bottom: 2px;
                 left: 0;
                 right: 0;
                 margin: auto;
-                border: solid rgba(var(--v-c-on-primary));
+                border: solid rgba(var(--v-c-on-primary), 1);
                 border-width: 0 2px 2px 0;
                 transform: rotate(45deg);
             }

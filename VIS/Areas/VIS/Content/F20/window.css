@@ -73,7 +73,7 @@
     grid-template-columns: auto auto auto 1fr auto auto;
     grid-template-rows: auto auto auto 1fr auto auto;
     height: calc(100vh - 108px);
-    overflow: auto;
+    /*overflow: auto;*/
 }
 
 .vis-ad-w-p-busy {
@@ -182,8 +182,10 @@
     font-size: 1.2rem;
 }
 
-    .vis-ad-w-p-tb-advsrch li {
-        display:flex;
+    .vis-ad-w-p-tb-advsrch li, .vis-ad-w-p-tb-advsrch li > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
 
@@ -226,6 +228,7 @@
     margin: 0 5px;
     font-size: 1.2rem;
     color: rgba(var(--v-c-on-secondary),0.60);
+    cursor: pointer;
 }
 
     .vis-ad-w-p-tb-rc-action .dropdown-toggle:after {
@@ -237,7 +240,7 @@
         background: rgba(var(--v-c-secondary), 1);
         margin-top: 5px;
         border: 1px solid rgba(var(--v-c-primary), .05);
-        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.16862745098039217);
+        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.17);
     }
 
     .vis-ad-w-p-tb-rc-action .dropdown-item {
@@ -266,6 +269,12 @@
     background-color: rgba(var(--v-c-primary),1);
     border-radius: 25px;
     padding: 4px 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
 }
 
 .vis-ad-w-p-tb-rc-a-list {
@@ -478,7 +487,7 @@
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: auto 1fr;
-    color: rgba(var(--v-c-on-secondary));
+    color: rgba(var(--v-c-on-secondary), 1);
     background: rgba(var(--v-c-common), 0.7);
 }
 /*tree css START here*/
@@ -721,7 +730,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     width: 45px;
     display: flex;
     flex-flow: column;
-    color: rgba(var(--v-c-primary));
+    color: rgba(var(--v-c-primary), 1);
     position: relative;
     align-items: center;
     background-color: transparent;
@@ -736,18 +745,18 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
 
 .vis-ad-w-p-a-main {
     flex: 1;
-    flex-shrink: 0;
-    overflow-y: hidden;
+    /*flex-shrink: 0;*/
+    overflow-y: overlay;
     display: flex;
     flex-flow: column;
-    /* position: absolute; */
-    right: 2px;
+    position: absolute;
+    right: 0px;
     top: 14px;
     font-size: 1.2rem;
     padding: inherit;
     bottom: 40px;
     background-color: inherit;
-    z-index:1;
+    z-index: 1;
 }
 
 .vis-ad-w-p-a-main-mob {
@@ -774,6 +783,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
         justify-content: flex-end;
         align-items: center;
         position: relative;
+        min-height: 35px;
     }
 
     .vis-ad-w-p-a-m-lst span {
@@ -782,7 +792,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
         display: none;
         width: calc(97% - 40px);
         text-align: right;
-        background: rgba(var(--v-c-common));
+        background: rgba(var(--v-c-common), 1);
         padding: 7px 5px;
         box-shadow: -1px 0px 3px 0px rgba(var(--v-c-on-common), 0.15);
         border-top-left-radius: 15px;
@@ -800,6 +810,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
         padding: 8px 0;
         cursor: pointer;
         min-width: 41px;
+        color: rgba(var(--v-c-primary), 1);
     }
 
     .vis-ad-w-p-a-m-lst span:after {
@@ -814,11 +825,13 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     }
 
 .vis-ad-w-p-a-oflow {
-    flex: 0;
+    /*flex: 0;*/
     flex-basis: auto;
     margin-top: auto;
     display: flex;
     flex-flow: column;
+    width: 100%;
+    z-index: 2;
 }
 /* action end */
 .vis-ad-w-p-status {
@@ -868,8 +881,8 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
         }
 
 li.vis-page-item-select {
-    background: rgba(var(--v-c-primary)) !important;
-    color: rgba(var(--v-c-on-primary));
+    background: rgba(var(--v-c-primary), 1) !important;
+    color: rgba(var(--v-c-on-primary), 1);
 }
 
 
@@ -1145,7 +1158,18 @@ li.vis-page-item-select {
 
     .vis-ad-w-p-ap-tp-o-b-head span {
         display: inline-flex;
+        cursor: pointer;
     }
+.vis-ad-w-p-a-oflow span {
+    width: 100%;
+    cursor: pointer;
+    padding: 2px 0;
+}
+
+.vis-ad-w-p-a-oflow span i {
+    width: 100%;
+    text-align: center;
+}
 
 .vis-ad-w-p-ap-tp-o-icorbar ul {
     list-style: none;
@@ -1164,6 +1188,7 @@ li.vis-page-item-select {
     align-items: center;
     border-left: 3px solid transparent;
     justify-content: center;
+    cursor: pointer;
 }
 
 .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-outerwrap {
@@ -1227,3 +1252,53 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
         }
 
 /* End Tab Panel*/
+
+
+/*actions popups css*/
+.vis-chat-msgbox {
+    Height: 70px;
+    width: 100%;
+    font-size: 10pt;
+    resize: none;
+    outline: none;
+    border: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border-radius: .4rem;
+    margin-top: 10px;
+}
+.vis-chat-msgbox:focus{
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
+.vis-chatboxwrap {
+    margin-bottom: 10px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .1);
+    min-height: 50px;
+    border-radius: .4rem;
+    overflow-y: auto;
+    color: rgba(var(--v-c-on-secondary),1);
+    display: flex;
+    padding: 5px;
+}
+.vis-chatimgwrap {
+    height: 48px;
+    width: 48px;
+    cursor: pointer;
+}
+.vis-chatimgwrap img{
+    max-width: 100%;
+    max-height: 100%;
+}
+.vis-chatdetailwrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+}
+.vis-chatusername {
+    color: rgba(var(--v-c-primary), 1);
+    cursor: pointer;
+    flex: 1;
+}
+.vis-chatdetailouterwrap {
+    overflow-y: auto;
+    height: 240px;
+}
