@@ -117,7 +117,7 @@ namespace VIS.Models
             {
                 trx.Rollback();
                 trx.Close();
-                return Msg.GetMsg(ctx, "Allocationnotpossible");
+                return Msg.GetMsg(ctx, "CashToCashAllocationnotpossible");
             }
             //end
 
@@ -208,7 +208,7 @@ namespace VIS.Models
             for (int i = 0; i < rowsInvoice.Count; i++)
             {
                 //  Invoice line is selected
-               // bool boolValue = false;
+                // bool boolValue = false;
                 //bool flag = false;
                 isScheduleAllocated = false;
                 // if (boolValue)
@@ -543,9 +543,9 @@ namespace VIS.Models
             #region Set Invoice IsPaid
             for (int i = 0; i < rowsInvoice.Count; i++)
             {
-               // bool boolValue = false;
+                // bool boolValue = false;
                 //  Invoice line is selected
-               // bool flag = false;
+                // bool flag = false;
                 //Dispatcher.BeginInvoke(delegate
                 //{
                 //    boolValue = GetBoolValue(vdgvInvoice, i, 0);
@@ -2167,7 +2167,7 @@ namespace VIS.Models
                 {
                     if (dbAmt > 0)
                     {
-                        amt =  dbAmt;
+                        amt = dbAmt;
                     }
                     if (crAmt > 0)
                     {
@@ -2470,7 +2470,7 @@ namespace VIS.Models
                 {
                     trx.Rollback();
                     trx.Close();
-                    return Msg.GetMsg(ctx, "Allocationnotpossible");
+                    return Msg.GetMsg(ctx, "GLtoGLAllocationnotpossible");
                     //    for (int i = 0; i < rowsGL.Count; i++)
                     //    {
                     //        amtToAllocate = Util.GetValueOfDecimal(rowsGL[i]["AppliedAmt"]);
@@ -2613,6 +2613,58 @@ namespace VIS.Models
                     }
                 #endregion
 
+                //set gl line allocated
+                #region Set glLine Allocated
+                if (rowsGL.Count > 0)
+                    for (int i = 0; i < rowsGL.Count; i++)
+                    {
+                        int _GL_JournalLine_ID = Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]);
+                        MJournalLine jline = new MJournalLine(ctx, _GL_JournalLine_ID, trx);
+                        string sqlGetOpenGlAmt = @"SELECT (ABS(NVL(SUM(ROUND(CURRENCYCONVERT(AL.AMOUNT ,AR.C_CURRENCY_ID ," + C_Currency_ID + @",AR.DATEACCT ,AR.C_CONVERSIONTYPE_ID ,
+                                            AR.AD_CLIENT_ID ,AR.AD_ORG_ID ), 2)),0)) - ABS(SUM(NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ,
+                                            " + C_Currency_ID + @",J.DATEACCT ,J.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), 2),0))) - ABS(SUM(NVL(ROUND(currencyConvert
+                                            (JL.AMTSOURCECR ,jl.C_Currency_ID ," + C_Currency_ID + @",j.DATEACCT ,j.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), 2),0)))) 
+                                            AS balanceamt FROM C_ALLOCATIONLINE AL INNER JOIN C_ALLOCATIONHDR AR ON ar.C_AllocationHdr_ID = al.C_AllocationHdr_ID
+                                            INNER JOIN GL_JOURNALLINE jl ON jl.GL_JOURNALLINE_ID = al.GL_JOURNALLINE_ID INNER JOIN GL_JOURNAL j ON j.GL_JOURNAL_ID 
+                                            = jl.GL_JOURNAL_ID WHERE al.GL_JOURNALLINE_ID = " + _GL_JournalLine_ID + @" AND AR.DOCSTATUS IN('CO', 'CL') ";
+                        decimal result = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlGetOpenGlAmt, null, trx));
+                        if (result.Equals(0))
+                        {
+                            jline.Set_ValueNoCheck("IsAllocated", true);
+                        }
+                        else
+                        {
+                            jline.Set_ValueNoCheck("IsAllocated", false);
+                        }
+                        if (!jline.Save())
+                        {
+                            trx.Rollback();
+                            trx.Close();
+                            _log.SaveError("Error: ", "Journal Line not allocated");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            msg += "Error: " + pp != null ? pp.GetName() : "";
+                            return msg;
+                        }
+                    }
+                #endregion
+
+                //set gl id on invoice schedule and Payment
+                #region set gl journal id on invoice pay schedule
+                if (rowsInvoice.Count > 0 && rowsGL.Count > 0)
+                {
+                    string sql = @"SELECT al.c_invoicepayschedule_id, al.gl_journalline_id FROM c_allocationline al WHERE 
+                                 al.C_AllocationHdr_ID IN (" + alloc.GetC_AllocationHdr_ID() + ") AND al.gl_journalline_id IS NOT NULL ";
+                    DataSet ds = DB.ExecuteDataset(sql, null, trx);
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            DB.ExecuteQuery(@" UPDATE c_invoicepayschedule SET gl_journalline_id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["gl_journalline_id"]) + ""
+                                       + " WHERE c_invoicepayschedule_id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_invoicepayschedule_id"]), null, trx);
+                        }
+                    }
+                }
+                #endregion
             }
             else
             {
