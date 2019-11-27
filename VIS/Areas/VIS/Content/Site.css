@@ -347,6 +347,9 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
         color: rgba(var(--v-c-on-secondary), 1);
         outline: none;
     }
+    #vis_mainMenu .vis-menuSearch input[type=text]:focus {
+        border: 1px solid rgba(var(--v-c-primary), .3);
+    }
     #vis_mainMenu .vis-menuSearch input[type=text]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
         color: rgba(var(--v-c-primary), 0.6);
     }

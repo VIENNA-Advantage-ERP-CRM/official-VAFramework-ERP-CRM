@@ -7,16 +7,17 @@
 .vis-ev-col * {
     padding: 0px;
     font-weight: normal;
-    color: rgba(var(--v-c-on-secondary));
+    color: rgba(var(--v-c-on-secondary), 1);
     margin-bottom: 0;
     margin-top: 0;
 }
 
 .vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
     padding: 5px 10px;
-    border: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border: 1px solid rgba(var(--v-c-on-secondary), .1);
+    /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
-    color: rgba(var(--v-c-on-secondary));
+    color: rgba(var(--v-c-on-secondary), 1);
     background-color: transparent;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -35,8 +36,10 @@
     margin-bottom: 20px;
 }
 
-.vis-input-wrap input, .vis-input-wrap select, .vis-control-wrap > button {
+.vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
     height: 35px;
+    -webkit-appearance: none;
+    appearance: none;
 }
 .vis-control-wrap {
     flex: 1;
@@ -97,7 +100,8 @@
 .vis-input-wrap input:focus, .vis-input-wrap select:focus, .vis-input-wrap textarea:focus, .vis-control-wrap > button:focus {
     outline: none;
     box-shadow: none;
-    border: 1px solid rgba(var(--v-c-primary),1);
+    border: 1px solid rgba(var(--v-c-primary), 1);
+    /*border: 1px solid green;*/
 }
 
     .vis-input-wrap *[data-hasBtn] {
@@ -116,19 +120,19 @@
     border-left: 1px solid rgba(var(--v-c-secondary),1);
 }
 
-    
+
 
 .vis-input-wrap input:focus ~ label, .vis-input-wrap input:not(:placeholder-shown) ~ label, .vis-input-wrap textarea:not(:placeholder-shown) ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap textarea:focus ~ label, .vis-input-wrap select ~ label {
     top: -9px;
     font-size: 12px;
-    background: var(--white);
+    background: rgba(var(--v-c-common), 1);
     padding: 0 0.4rem;
     height: auto;
     left: 5px;
     opacity: 1;
 }
-    
-    .vis-input-wrap input:focus ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap input:focus ~ label sup, .vis-input-wrap select:focus ~ label sup {
+
+    .vis-input-wrap input:focus ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap input:focus ~ label sup, .vis-input-wrap select:focus ~ label sup, .vis-input-wrap textarea:focus ~ label {
         color: rgba(var(--v-c-primary),1);
     }
 
@@ -153,7 +157,7 @@
     opacity: 0;
 }
 
-.vis-input-wrap .input-group-text  {
+.vis-input-wrap .input-group-text {
     padding: .375rem .55rem;
     border: 1px solid rgba(var(--v-c-on-secondary),.1);
     width: 35px;
@@ -161,6 +165,9 @@
     cursor: pointer;
     background-color: rgba(var(--v-c-on-secondary),.1);
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -194,7 +201,7 @@
 }
 .vis-ev-col-fieldgroup i {
     font-size: 1.5rem;
-    color: rgba(var(--v-c-primary));
+    color: rgba(var(--v-c-primary), 1);
     /*padding: 0 10px;*/
 }
 
@@ -209,7 +216,9 @@
     background: rgba(var(--v-c-on-secondary),.04) !important;
     cursor: not-allowed;
 }
-select.vis-ev-col-readonly ~ label {
+select.vis-ev-col-readonly ~ label,
+input.vis-ev-col-readonly ~ label,
+input.vis-ev-col-readonly:not(:placeholder-shown) ~ label{
     background: linear-gradient(0deg, rgba(var(--v-c-secondary),.5), rgba(var(--v-c-common), 1)); /*Dynamic color*/
 }
 
