@@ -912,7 +912,7 @@
         if (isADControl)
             strFor = '';
 
-        var $ctrl = $('<label ' + strFor + '>');
+        var $ctrl = $('<label ' + strFor + '></label>');
 
         IControl.call(this, $ctrl, VIS.DisplayType.Label, true, isADControl ? name : "lbl" + name);
         if (isMandatory) {
@@ -936,6 +936,10 @@
             this.oldValue = newValue;
             this.ctrl.text(newValue);
         }
+    };
+
+    VLabel.prototype.setHtml = function (newValue) {
+            this.ctrl.html(newValue);
     };
 
 

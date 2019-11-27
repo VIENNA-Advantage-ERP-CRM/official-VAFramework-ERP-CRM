@@ -6,9 +6,11 @@
         var $self = this;
         this.gTab = null;
         this.controls = [];
-        var textAlignEnum = { "C": "Center", "R": "Right", "L": "Left" };
+        var textAlignEnum = { "C": "Center", "R": "flex-end", "L": "flex-start" };
         var alignItemEnum = { "C": "Center", "T": "flex-start", "B": "flex-end" };
         this.windowNo = 0;
+        var dynamicStyle = '';
+
 
         /**
          * This function will check if tab is marked as header panel, then start creating header panel
@@ -27,12 +29,22 @@
                     var alignmentHorizontal = $self.gTab.getHeaderHorizontal();
                     // Create Root for header Panel
                     $root = $('<div>');
-                    var rootCustomStyle = headerUISettings(columns, rows, alignmentHorizontal);
+                    var rootClass = "vis-w-p-Header-Root-v";
+
+                    var height = $self.gTab.getHeaderHeight();
+                    var width = $self.gTab.getHeaderWidth();
+
+                    var rootCustomStyle = headerUISettings(columns, rows, alignmentHorizontal, height, width);
                     $root.addClass(rootCustomStyle);
 
                     if (alignmentHorizontal) {
                         $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
+                        rootClass = 'vis-w-p-Header-Root-h';
                     }
+
+                    var headerCustom = headerParentCustomUISettings("", "", "", alignmentHorizontal, j);
+                    $parentRoot.addClass(headerCustom);
+
 
                     for (var j = 0; j < $self.headerItems.length; j++) {
 
@@ -42,19 +54,13 @@
                         var columns = currentItem.HeaderTotalColumn;
                         var backColor = currentItem.HeaderBackColor;
 
-                        //var height = currentItem.getHeaderHeight();
-                        //var width = currentItem.getHeaderWidth();
-
-                        var headerCustom = headerParentCustomUISettings("", backColor, "", alignmentHorizontal, j);
-                        $parentRoot.addClass(headerCustom);
-
-                        var $containerDiv = $('<div style="display:grid;grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', 1fr);background-color:' + backColor + '">');
+                        var $containerDiv = $('<div class=' + rootClass + ' style="grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background-color:' + backColor + '">');
                         $root.append($containerDiv);
 
                         //Load Header Panel Items and add them to UI.
                         $self.setHeaderItems(currentItem, $containerDiv);
                     }
-
+                    addStyleToDom();
                     // Add Header Panel to Parent Control
                     $parentRoot.append($root);
                 }
@@ -84,7 +90,12 @@
                         }
 
                         var colValue = getFieldValue(mField);
-                        iControl.setValue(w2utils.encodeTags(colValue));
+
+                        if (colValue)
+                            iControl.setValue(w2utils.encodeTags(colValue));
+                        else if (iControl.setHtml) {
+                            iControl.setHtml('&nbsp;');
+                        }
                     }
                 }
             }
@@ -125,7 +136,7 @@
                         var iControl = null;
 
                         //Apply HTML Style
-                        var dynamicClassName = applyCustomUISettings(mField, headerSeqNo, startCol, colSpan, startRow, rowSpan);
+                        var dynamicClassName = applyCustomUISettings(mField, headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem);
 
 
                         $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
@@ -141,10 +152,6 @@
                             $divLabel.addClass(dynamicClassForImageJustyfy);
                         }
                         else {
-                            if (justyFy || alignItem) {
-                                var dynamicClassForJustyfy = justifyAlignTextItems(headerSeqNo, justyFy, alignItem);
-                                $divLabel.addClass(dynamicClassForJustyfy)
-                            }
                         }
 
                         // Get Controls to be displayed in Header Panel
@@ -165,8 +172,12 @@
                         }
                         var $lblControl = $label.getControl();
                         var colValue = getFieldValue(mField);
-
-                        iControl.setValue(w2utils.encodeTags(colValue));
+                        if (colValue) {
+                            iControl.setValue(w2utils.encodeTags(colValue));
+                        }
+                        else if (iControl.setHtml) {
+                            iControl.setHtml('&nbsp');
+                        }
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
                         if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
@@ -194,29 +205,33 @@
 
         };
 
+
+        /**
+         * Added dynamic style to DOM
+         * */
+        var addStyleToDom = function () {
+            var style = document.createElement('style');
+            $(style).attr('id', "headerCustomStyle_" + $self.windowNo);
+            style.type = 'text/css';
+            style.innerHTML = dynamicStyle;
+            $($('head')[0]).append(style);
+        };
+
         /**
          * Create class that iclude  settings to create Root grid of header panel.
          * @param {any} columns
          * @param {any} rows
          */
-        var headerUISettings = function (columns, rows, alignmentHorizontal) {
-            var style = document.createElement('style');
+        var headerUISettings = function (alignmentHorizontal, height, width) {
             var dynamicClassName = "vis-ad-w-p-header_root_" + $self.windowNo;
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
-
-            //style.innerHTML = "." + dynamicClassName + " {overflow:auto;display:grid;flex:1;grid-template-columns:" + "repeat(" + columns + ", 1fr)" + ";grid-template-rows:" + "repeat(" + rows + ", 1fr)" + "}";
-            style.innerHTML = "." + dynamicClassName + " {overflow:auto;display:flex;flex:1;";
-
+            dynamicStyle += " ." + dynamicClassName + " {display:flex;flex:1;";
             if (alignmentHorizontal) {
-                style.innerHTML += "flex-direction:row";
+                dynamicStyle += "flex-direction:row;height: " + height + "px; ";
             }
             else {
-                style.innerHTML += "flex-direction:column";
+                dynamicStyle += "flex-direction:column;width: " + width + "px; ";
             }
-
-            style.innerHTML += "}"
-            $($('head')[0]).append(style);
+            dynamicStyle += "} "
             return dynamicClassName;
         };
 
@@ -228,36 +243,36 @@
          * @param {any} alignment
          */
         var headerParentCustomUISettings = function (width, backColor, height, alignmentHorizontal, seqNo) {
-            var style = document.createElement('style');
+            //var style = document.createElement('style');
             var dynamicClassName = "vis-ad-w-p-header_Custom_" + $self.windowNo + "_" + seqNo;
 
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
+            //$(style).attr('id', dynamicClassName);
+            //style.type = 'text/css';
 
-            style.innerHTML = "." + dynamicClassName + " {flex:1;";
+            dynamicStyle += " ." + dynamicClassName + " {flex:1;";
 
             /*Set Alignment and Height/Width of Header Panel
                    * Default Height is 150 px
                    * Default Width is 250px
                    */
-            if (alignmentHorizontal) {
-                style.innerHTML += "height: " + height + ";";
-            }
-            else {
-                style.innerHTML += "width: " + width + ";";
-            }
+            ////////////if (alignmentHorizontal) {
+            ////////////    style.innerHTML += "height: " + height + ";";
+            ////////////}
+            ////////////else {
+            ////////////    style.innerHTML += "width: " + width + ";";
+            ////////////}
 
             //Set background Color of Header Panel. If no color found then get color from Theme
             if (backColor) {
-                style.innerHTML += 'background-color: ' + backColor;
+                dynamicStyle += 'background-color: ' + backColor;
             }
             else {
-                style.innerHTML += 'background-color: ' + 'rgba(var(--v-c-primary))';
+                dynamicStyle += 'background-color: ' + 'rgba(var(--v-c-primary))';
             }
 
-            style.innerHTML += "}";
+            dynamicStyle += "} ";
 
-            $($('head')[0]).append(style);
+            //$($('head')[0]).append(style);
 
             return dynamicClassName;
         };
@@ -272,23 +287,28 @@
          * @param {any} startRow
          * @param {any} rowSpan
          */
-        var applyCustomUISettings = function (mField, headerSeqNo, startCol, colSpan, startRow, rowSpan) {
+        var applyCustomUISettings = function (mField, headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment) {
             var headerStyle = mField.getHeaderStyle();
-            var style = document.createElement('style');
+            //var style = document.createElement('style');
 
-            var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + $self.windowNo;
+            var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + $self.windowNo + "_" + headerSeqNo;
 
 
-            $(style).attr('id', dynamicClassName);
+            //$(style).attr('id', dynamicClassName);
 
-            style.type = 'text/css';
+            //style.type = 'text/css';
             if (headerStyle) {
-                style.innerHTML = "." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + "}";
+                dynamicStyle += " ." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + ";";
             }
             else {
-                style.innerHTML = "." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + "}";
+                dynamicStyle += "." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";";
             }
-            $($('head')[0]).append(style);
+
+            dynamicStyle += "justify-self:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignment] + ";";
+
+            dynamicStyle += "} ";
+
+            //$($('head')[0]).append(style);
 
             return dynamicClassName;
         };
@@ -300,12 +320,12 @@
          * @param {any} alignItem
          */
         var justifyAlignTextItems = function (headerSeqNo, justify, alignItem) {
-            var style = document.createElement('style');
+            //var style = document.createElement('style');
             var dynamicClassName = "vis-w-p-header-label-justify_" + headerSeqNo + "_" + $self.windowNo;
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
-            style.innerHTML = "." + dynamicClassName + " {text-align:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
-            $($('head')[0]).append(style);
+            //$(style).attr('id', dynamicClassName);
+            //style.type = 'text/css';
+            dynamicStyle += " ." + dynamicClassName + " {text-align:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
+            //$($('head')[0]).append(style);
             return dynamicClassName;
         };
 
@@ -316,12 +336,12 @@
         * @param {any} alignItem
         */
         var justifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
-            var style = document.createElement('style');
+            //var style = document.createElement('style');
             var dynamicClassName = "vis-w-p-header-label-center-justify_" + headerSeqNo + "_" + $self.windowNo;
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
-            style.innerHTML = "." + dynamicClassName + " {justify-content:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
-            $($('head')[0]).append(style);
+            //$(style).attr('id', dynamicClassName);
+            //style.type = 'text/css';
+            dynamicStyle += " ." + dynamicClassName + " {justify-content:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
+            //$($('head')[0]).append(style);
             return dynamicClassName;
         };
 
@@ -372,7 +392,7 @@
                 }
             }
             else {
-                colValue = null;
+                colValue = "";
             }
 
             return colValue;
@@ -393,8 +413,7 @@
          * Dispose component
          * */
         this.disposeComponent = function () {
-            var keys = Object.keys(this.headerItems);
-            // Find Dynamically added classes from DOM and remove them.
+
             //for (var i = 1; i <= keys.length; i++) {
             //    var startCol = this.headerItems[i].StartColumn;
             //    var startRow = this.headerItems[i].StartRow;
@@ -404,6 +423,8 @@
 
             //    $("#vis-w-p-header-label-center-justify_" + keys[i] + "_" + this.windowNo).remove();
             //}
+            // Find Dynamically added classes from DOM and remove them.
+            $('#headerCustomStyle_' + this.windowNo).remove();
             this.headerItems = null;
             $self = null;
             this.gTab = null;

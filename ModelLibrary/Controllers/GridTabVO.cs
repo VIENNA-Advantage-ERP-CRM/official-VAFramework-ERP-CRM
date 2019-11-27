@@ -113,8 +113,8 @@ namespace VAdvantage.Controller
         /****   Grid Layout   ***/
         public int AD_HeaderLayout_ID = 0;
 
-        ///****   Header Height   ***/
-        //public decimal HeaderHeight = 0;
+        /****   Header Height   ***/
+        public decimal HeaderHeight = 0;
 
         ///****   Header Back Color   ***/
         //public string HeaderBackColor = "";
@@ -132,8 +132,8 @@ namespace VAdvantage.Controller
         //public int HeaderTotalRow = 0;
 
 
-        ///****   Header Total Row   ***/
-        //public Decimal HeaderWidth = 0;
+        /****   Header Total Row   ***/
+        public Decimal HeaderWidth = 0;
 
         /****   Header Items   ***/
         public List<HeaderPanelGrid> HeaderItems = null;
@@ -478,6 +478,12 @@ namespace VAdvantage.Controller
                 vo.HeaderAlignment = Utility.Util.GetValueOfString(dr["HeaderAlignment"]);
 
                 vo.TabPanelAlignment = Utility.Util.GetValueOfString(dr["TabPanelAlignment"]);
+
+                vo.HeaderHeight = Utility.Util.GetValueOfDecimal(dr["Height"]);
+
+                vo.HeaderWidth = Utility.Util.GetValueOfDecimal(dr["Width"]);
+
+
                 /***************** End Header panel work ***************/
 
             }
@@ -596,10 +602,7 @@ namespace VAdvantage.Controller
                     {
                         HeaderPanelGrid hGrid = new HeaderPanelGrid
                         {
-                            HeaderHeight = Utility.Util.GetValueOfDecimal(dr["Height"]),
-
-                            HeaderWidth = Utility.Util.GetValueOfDecimal(dr["Width"]),
-
+                          
                             HeaderBackColor = Utility.Util.GetValueOfString(dr["BackgroundColor"]),
 
                             HeaderName = Utility.Util.GetValueOfString(dr["Name"]),
@@ -929,6 +932,8 @@ namespace VAdvantage.Controller
             clone.HeaderAlignment = HeaderAlignment;
             clone.TabPanelAlignment = TabPanelAlignment;
             clone.HeaderItems = HeaderItems;
+            clone.HeaderHeight = HeaderHeight;
+            clone.HeaderWidth = HeaderWidth;
            
 
             clone.fields = new List<GridFieldVO>();
