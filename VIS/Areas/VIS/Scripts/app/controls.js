@@ -3177,22 +3177,22 @@
     //7. 
     function VTextArea(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, displayType) {
 
-        var rows = 7;
+        var rows = 6;
         if (displayType != VIS.DisplayType.Memo) {
             if (displayType == VIS.DisplayType.TextLong) {
-                rows = 7;
+                rows = 6;
                 fieldLength = 100000;
             }
             else {
-                rows = fieldLength < 300 ? 3 : (fieldLength < 2000) ? 5 : 7;
+                rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
             }
         }
         else {
             try {
-                rows = fieldLength < 300 ? 3 : (fieldLength < 2000) ? 5 : (fieldLength / 500);
+                rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : (fieldLength / 500);
             }
             catch (e) {
-                rows = fieldLength < 300 ? 3 : (fieldLength < 2000) ? 5 : 7;
+                rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
             }
         }
 
