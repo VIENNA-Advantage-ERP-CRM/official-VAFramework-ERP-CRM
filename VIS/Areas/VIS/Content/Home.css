@@ -935,8 +935,8 @@ html[dir="rtl"] .vis-feedContainer {
 
     .vis-feedDetails .userAvatar-Feeds {
         float: left;
-        /*width: 48px;*/
-        /*height: 40px;*/
+        width: 48px;
+        height: 48px;
         margin-right: 10px;
     }
 

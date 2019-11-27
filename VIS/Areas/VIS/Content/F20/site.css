@@ -52,11 +52,15 @@ a {
 
     .vis-app-hdr li {
         flex-basis: auto;
+        /*height: 100%;*/
     }
+.vis-app-hdr-l li{
+    height: 100%;
+}
 
-    .vis-app-hdr a {
-        /*color: rgba(var(--v-c-primary),1);*/
-    }
+.vis-app-hdr a {
+    /*color: rgba(var(--v-c-primary),1);*/
+}
 
         .vis-app-hdr a:hover {
             text-decoration: none;
@@ -69,6 +73,7 @@ a {
     display: flex;
     list-style: none;
     margin: 0;
+    height: 100%;
 }
 
 .vis-app-hdr-l-menu {
@@ -113,6 +118,7 @@ a {
 
 .vis-app-hdr-r-theme {
     /*color: rgba(var(--v-c-primary),1);*/
+    cursor: pointer;
 }
 
 .vis-app-hdr-r li:first-child {
@@ -128,6 +134,7 @@ a {
 
     .vis-app-hdr-r-user a {
         padding-right: 5px;
+        cursor: pointer;
     }
 
 .vis-app-hdr-r-logout {
@@ -192,8 +199,10 @@ a {
     }
 
         .vis-app-footer li:first-child {
-            background: rgba(var(--v-c-primary));
-            color: rgba(var(--v-c-on-primary));
+            background: rgba(var(--v-c-primary), 1);            
+        }
+        .vis-app-footer li:first-child, .vis-app-footer li:first-child span{
+            color: rgba(var(--v-c-on-primary), 1);
         }
 
         .vis-app-footer li.vis-app-f-selected {
