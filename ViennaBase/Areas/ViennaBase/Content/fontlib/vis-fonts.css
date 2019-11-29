@@ -7,7 +7,6 @@
     font-display: block;
 }
 
-
 .vis {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'vis-fonts' !important;
@@ -20,6 +19,34 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.vis-url:before {
+    content: "\e93e";
+}
+
+.vis-locator:before {
+    content: "\e946";
+}
+
+.vis-updateBP:before {
+    content: "\e947";
+}
+
+.vis-pattribute:before {
+    content: "\e93c";
+}
+
+.vis-payment:before {
+    content: "\e93b";
+}
+
+.vis-account:before {
+    content: "\e93d";
+}
+
+.vis-product:before {
+    content: "\e95a";
 }
 
 .vis-chat:before {
@@ -246,8 +273,28 @@
     content: "\e926";
 }
 
+.vis-copy1:before {
+    content: "\e938";
+}
+
+.vis-paste:before {
+    content: "\e93a";
+}
+
+.vis-ticket:before {
+    content: "\e939";
+}
+
+.vis-location:before {
+    content: "\e948";
+}
+
 .vis-history:before {
     content: "\e94d";
+}
+
+.vis-undo2:before {
+    content: "\e967";
 }
 
 .vis-user:before {
@@ -256,6 +303,18 @@
 
 .vis-users:before {
     content: "\e972";
+}
+
+.vis-addBP:before {
+    content: "\e973";
+}
+
+.vis-user-minus:before {
+    content: "\e974";
+}
+
+.vis-user-check:before {
+    content: "\e975";
 }
 
 .vis-spinner11:before {
@@ -276,6 +335,10 @@
 
 .vis-cog:before {
     content: "\e994";
+}
+
+.vis-stats-dots:before {
+    content: "\e99b";
 }
 
 .vis-bin:before {
@@ -300,6 +363,10 @@
 
 .vis-export:before {
     content: "\e9c6";
+}
+
+.vis-web:before {
+    content: "\e9c9";
 }
 
 .vis-attachment1:before {
@@ -332,6 +399,14 @@
 
 .vis-markx:before {
     content: "\ea10";
+}
+
+.vis-enter:before {
+    content: "\ea13";
+}
+
+.vis-exit:before {
+    content: "\ea14";
 }
 
 .vis-multix1:before {
