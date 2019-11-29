@@ -574,8 +574,53 @@
                 onClick: function (event) {
                     //paymentCellClicked(event);
                     //getMaxDate();
+                    // when we select a record, check conversion type is same or not.
+                    // if not then not to select this record
+                    var getChanges = glLineGrid.getChanges();
+                    if (getChanges == undefined || getChanges.length == 0) {
+                        return;
+                    }
+                    var element = $.grep(getChanges, function (ele, index) {
+                        return parseInt(ele.recid) == parseInt(event.recid);
+                    });
+                    var colIndex = glLineGrid.getColumn('AppliedAmt', true);
+                    if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                        glLineGrid.refreshCell(0, "AppliedAmt");
+                    }
+                    else {
+                        if (element[0].SelectRow == true) {
+                            if (C_ConversionType_ID == 0) {
+                                C_ConversionType_ID = glLineGrid.get(event.recid).C_ConversionType_ID;
+                            }
+                            else if (C_ConversionType_ID != glLineGrid.get(event.recid).C_ConversionType_ID) {
+                                
+                                var $x = document.getElementsByName(event.target);
+                                if ($x.length > 0)
+                                    $x = $x[0];
+
+                                var $z = $($x).find("#grid_openformatgrid_rec_" + event.recid + "");
+
+                                if ($z.length > 0)
+                                    $z = $z[0];
+                                if ($($z).find("input:checked").prop('checked')) {
+                                    $($z).find("input:checked").prop('checked', false);
+                                }
+                                glLineGrid.get(event.recid).changes = false;
+                                glLineGrid.unselect(event.recid);
+                                glLineGrid.columns[colIndex].editable = false;
+                                glLineGrid.get(event.recid).changes.AppliedAmt = "0";
+                                glLineGrid.refreshCell(event.recid, "AppliedAmt");
+                                VIS.ADialog.warn(("VIS_ConversionNotMatched"));
+                            }
+                        }
+                        else {
+                            glLineGrid.unselect(event.recid);
+                            glLineGrid.columns[colIndex].editable = false;
+                            glLineGrid.get(event.recid).changes.AppliedAmt 
+                            glLineGrid.refreshCell(event.recid, "AppliedAmt");
+                        }
+                    }
                     glTableChanged(event.recid, event.column);
-                    //alert("onClick");
                 },
                 onChange: function (event) {
                     // glCellChanged(event);
@@ -1906,13 +1951,17 @@
                     glLineGrid.columns[event.column].editable = false;
                     return;
                 }
-                if (element[0].SelectRow == true) {
-                    glLineGrid.columns[event.column].editable = { type: 'text' };
-                }
-                else {
+
+                /*** after discussion with ashish we finalized that gl journal applied amount will not be editable because we can not split gl 
+                     journal and we can not use gl journal partialy **/
+
+                //if (element[0].SelectRow == true) {
+                //    glLineGrid.columns[event.column].editable = { type: 'text' };
+                //}
+                //else {
                     glLineGrid.columns[event.column].editable = false;
-                    return;
-                }
+                //    return;
+                //}
             }
         };
         //end
