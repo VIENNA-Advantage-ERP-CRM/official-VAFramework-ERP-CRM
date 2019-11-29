@@ -111,6 +111,7 @@ namespace VAdvantage.Controller
         public bool IsAttachmail = true;
         public bool IsRoleCenterView = true;
         public string FontName = "";
+        public string ImageUrl = "";
 
 
         public List<GridTabVO> GetTabs()
@@ -347,6 +348,7 @@ namespace VAdvantage.Controller
                             vo.IsAttachmail = !("N".Equals(dr[32].ToString()));
                             vo.IsRoleCenterView = !("N".Equals(dr[33].ToString()));
                             vo.FontName= dr[34].ToString();
+                            vo.ImageUrl = dr[35].ToString();
                         }
                     }
                 }
@@ -860,6 +862,7 @@ namespace VAdvantage.Controller
                 clone.IsAttachmail = IsAttachmail;
                 clone.IsRoleCenterView = IsRoleCenterView;
                 clone.FontName = FontName;
+                clone.ImageUrl = ImageUrl;
 
                 //
                 clone.hasPanel = hasPanel;
