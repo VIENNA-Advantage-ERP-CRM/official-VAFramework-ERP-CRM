@@ -596,7 +596,7 @@
                         lstLatestFiles = [];
                         dLAContent.hide();
                         ddLABtnsFull.hide();
-                        //dOAContent.css('height', '356px');
+                        dOAContent.css('height', '356px');
                     });
 
 
@@ -613,7 +613,7 @@
                     //var hOld = $("<h4>").append(VIS.Msg.getMsg('Old'));
                     //dOldhdrRight.append(hOld);
 
-                    dOAContent = $("<div class='vis-attach-content-wrap'>");
+                    dOAContent = $("<div class='vis-attach-content-wrap' style='height: 356px;'>");
                     dOldAtt.append(dOAContent);
 
                     //AppendFiles in Old Files Region
@@ -821,19 +821,19 @@
                         }
                     }
                     if (lstLatestFiles.length > 4) {
-                        //dLAContent.css('height', '153px');
-                        //dOAContent.css('height', '153px');
+                        dLAContent.css('height', '153px');
+                        dOAContent.css('height', '153px');
                     }
                     else {
-                        //dLAContent.css('height', '97px');
-                        //dOAContent.css('height', '209px');
+                        dLAContent.css('height', '97px');
+                        dOAContent.css('height', '209px');
 
                     }
                     if (lstLatestFiles.length == 0) {
                         dLAContent.hide();
                         ddLABtnsFull.hide();
-                        //dLAContent.css('height', '0px');
-                        //dOAContent.css('height', '356px');
+                        dLAContent.css('height', '0px');
+                        dOAContent.css('height', '356px');
                     }
                     //dLAContent.remove(divFInfo);
                 });
@@ -870,12 +870,12 @@
                 fileInfo.Size = file.size;
                 lstLatestFiles.push(file);
                 if (lstLatestFiles.length > 4) {
-                    //dLAContent.css('height', '153px');
-                    //dOAContent.css('height', '153px');
+                    dLAContent.css('height', '153px');
+                    dOAContent.css('height', '153px');
                 }
                 else {
-                    //dLAContent.css('height', '97px');
-                    //dOAContent.css('height', '209px');
+                    dLAContent.css('height', '97px');
+                    dOAContent.css('height', '209px');
 
                 }
             }
@@ -962,7 +962,7 @@
 
             });
 
-            var btnDelete = $("<a class='vis-attach-ico' data-id='" + index + "'><i class='fa fa-trash-o' aria-hidden='true'></i></a>");
+            var btnDelete = $("<a class='vis-attach-ico' data-id='" + index + "'><i class='vis vis-delete' aria-hidden='true'></i></a>");
             dbtns.append(btnDelete);
             btnDelete.on('click', function () {
 
@@ -1183,7 +1183,7 @@
                                     dLAContent.hide();
                                     ddLABtnsFull.hide();
                                     dLAContent.css('height', '0px');
-                                    //dOAContent.css('height', '356px');
+                                    dOAContent.css('height', '356px');
                                     divGreen.css('width', 'O%');
                                 }, 500);
 
