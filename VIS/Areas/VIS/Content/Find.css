@@ -199,10 +199,12 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     border-radius: 0;
     padding: 0;
     width: 30px;
-    display: inline;
+    display: inline-flex;
     border: 1px solid rgba(var(--v-c-on-secondary), .1);
     background-color: rgba(var(--v-c-on-secondary), .12);
     color: rgba(var(--v-c-on-secondary), .8);
+    align-items: center;
+    justify-content: center;
 }
 
 .vis-advancedSearch-Icons
