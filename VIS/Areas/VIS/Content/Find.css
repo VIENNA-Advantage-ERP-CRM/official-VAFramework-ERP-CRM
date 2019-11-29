@@ -254,7 +254,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     justify-content: center;
 }
 .vis-advancedSearchActionIcon i {
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 /*.vis-advancedSearch-EditIcon

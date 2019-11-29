@@ -99,6 +99,7 @@
     /*margin-top: -17px;*/
     /*margin-right: 0px;*/
     background: transparent;
+    padding: 0;
 }
 .vis-attach-top-btns > a i {
     transform: rotate(45deg);
@@ -114,25 +115,25 @@
     /*padding-bottom: 20px;*/
     /* max-height: 200px; */
     overflow-y: overlay;
-    display: flex;
+    /*display: flex;*/
     flex-wrap: wrap;
     min-height: 80px;
-    max-height: 153px;
+    /*max-height: 153px;*/
 }
 .vis-attach-file-wrap {
     border: 1px solid rgba(var(--v-c-on-secondary), .1);
     float: left;
     /*margin:20px 10px;*/
-    margin: 6px 0;
-    min-width: 194px;
+    margin: 6px;
+    width: 192px;
     padding: 10px;
 }
 .vis-attach-file-wrapla {
     border: 1px solid rgba(var(--v-c-on-secondary), .1);
-    /*float: left;*/
+    float: left;
     margin: 10px 12px 5px 0px;
     /* margin: 6px; */
-    min-width: 192px;
+    width: 192px;
     position: relative;
     padding: 10px 10px 0;
 }
@@ -175,6 +176,7 @@ html[dir="rtl"] .vis-attach-file-wrapla
 	width: 100%;*/
     /*position:relative;*/
     display: flex;
+    margin-bottom: 7px;
 }
 .vis-pu-uploadsbtnswrap {
     width: 100%;
