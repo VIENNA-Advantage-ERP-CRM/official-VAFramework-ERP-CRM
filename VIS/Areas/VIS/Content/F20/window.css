@@ -1040,6 +1040,11 @@ li.vis-page-item-select {
 
 
 /*Header panel css START*/
+
+.vis-ad-w-p-header_root_common {
+    overflow-x: auto;
+}
+
 .vis-w-p-header-data-f {
     font-size: 0.875rem;
     padding: 10px 10px 0;
@@ -1047,6 +1052,12 @@ li.vis-page-item-select {
     display: flex;
     /*align-items: center;*/
     flex: 1;
+    /*width: 100%;*/
+}
+
+.vis-w-p-header-data-label {
+    font-size: 0.80rem;
+    font-family: 'NoirPro-Regular' !important;
 }
 
 
@@ -1061,12 +1072,13 @@ li.vis-page-item-select {
         margin: 0;
     }
 
-    .vis-w-p-header-data-f label {
-        display: block;
-        font-weight: normal;
-        margin-bottom: 3px;
-        word-break: break-all;
-    }
+.vis-w-p-header-data-f label {
+    display: block;
+    font-weight: normal;
+    margin-bottom: 3px;
+    word-break: break-all;
+    font-family: 'NoirPro-Light';
+}
 
 
 .vis-w-p-header-icon-f {

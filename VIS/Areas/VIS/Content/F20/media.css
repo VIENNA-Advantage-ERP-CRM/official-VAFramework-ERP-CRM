@@ -8,6 +8,16 @@
         width: auto;
     }
 
+    .vis-ad-w-p-header_root_common {
+        flex-direction: row !important;
+        overflow-x: auto;
+    }
+
+    .vis-w-p-header-data-f label {
+        min-width: 130px;
+    }
+
+
     .vis-ad-w-p-actionpanel-r {
         grid-column: 1/1;
         grid-row: 5/5;
