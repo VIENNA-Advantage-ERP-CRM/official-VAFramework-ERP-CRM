@@ -124,7 +124,9 @@
 
 
                     if (data.subChat[chat].AD_Image_ID == 0) {
-                        str += "<img  data-uID='" + data.subChat[chat].AD_User_ID + "'  src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
+                        //str += "<img  data-uID='" + data.subChat[chat].AD_User_ID + "'  src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
+                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].AD_User_ID + "'></i>";                        
+
                         ispic = true;
                     }
                     else {
@@ -141,7 +143,7 @@
 
 
                     if (ispic == false) {
-                        str += "<img   data-uID='" + data.subChat[chat].AD_User_ID + "' src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
+                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].AD_User_ID + "'></i>";
                     }
 
 

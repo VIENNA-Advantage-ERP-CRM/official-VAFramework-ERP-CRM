@@ -208,7 +208,8 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     font-size: 14px;
     font-family: helvetica;
     font-weight: 400;
-    color: white;
+    color: rgba(var(--v-c-on-primary), 1);
+    width: 100%;
 }
 .ui-button .ui-icon, .ui-button:hover .ui-icon {
     background-image: url(../migration/themes/base/images/ui-icons_ffffff_256x240.png);
@@ -321,6 +322,9 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         color: rgba(var(--v-c-on-secondary), 0.65);
         border-right: 1px solid transparent;
     }
+.w2ui-grid .w2ui-grid-body table td.w2ui-grid-data:first-child > div {
+    padding: 10px 0;
+}
 
     .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even:hover, .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd:hover {
         color: inherit;
@@ -348,7 +352,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
                 height: 9px;
                 top: 0;
                 bottom: 2px;
-                left: 0;
+                left: 1px;
                 right: 0;
                 margin: auto;
                 border: solid rgba(var(--v-c-on-primary), 1);

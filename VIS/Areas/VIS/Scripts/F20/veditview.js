@@ -472,14 +472,16 @@
             var count = editor.getBtnCount();
         if (count > 0) {
             editor.getControl().attr("data-hasBtn", " ");
-            while (count > 0) {
-                var btn = editor.getBtn(count - 1);
+            var i = 0;
+            while (i < count) {
+                var btn = editor.getBtn(i);
                 if (btn != null) {
                     ctrl.append($('<div class="input-group-append">').append(btn));
                 }
-                --count;
+                ++i;
             }
             count = -1;
+            i = 0;
         }
         parent.append(ctrl);
     }
