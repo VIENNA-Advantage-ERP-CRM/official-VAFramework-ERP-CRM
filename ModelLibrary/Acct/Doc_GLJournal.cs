@@ -284,7 +284,7 @@ namespace VAdvantage.Acct
                     // need to Post GL Journal for Multiple Accounting Schema that's why commented this condition
                     //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
                     //{
-                    // set conversion rate on line, so that amount to be converted based on that multiply rate
+                    // set conversion rate on line, so that amount to be converted based on that multiply rate 
                     _lines[i].SetConversionRate(conversionRate);
                     fact.CreateLine(_lines[i],
                                     _lines[i].GetAccount(),
