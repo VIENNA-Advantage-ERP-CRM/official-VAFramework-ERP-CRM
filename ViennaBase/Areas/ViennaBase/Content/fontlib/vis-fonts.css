@@ -6,8 +6,6 @@
     font-style: normal;
     font-display: block;
 }
-
-
 .vis {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'vis-fonts' !important;
@@ -22,139 +20,99 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.vis-chat:before {
-    content: "\e90f";
-}
-
-.vis-sms:before {
-    content: "\e936";
-}
-
-.vis-smsx:before {
-    content: "\e937";
-}
-
-.vis-subscribe:before {
-    content: "\e928";
-}
-
-.vis-tl-4:before {
-    content: "\e935";
-}
-
-.vis-tl-3:before {
-    content: "\e932";
-}
-
-.vis-tl-2:before {
-    content: "\e933";
-}
-
-.vis-tl-1:before {
-    content: "\e934";
-}
-
-.vis-attachdocumentfrom:before {
-    content: "\e92f";
-}
-
-.vis-attachdocumentfromx:before {
-    content: "\e930";
-}
-
-.vis-zoomacross:before {
-    content: "\e931";
-}
-
-.vis-arrow-down:before {
+.vis-account:before {
     content: "\e900";
 }
 
-.vis-arrow-right:before {
+.vis-amtdimension:before {
     content: "\e901";
 }
 
-.vis-arrow-left:before {
+.vis-appointment:before {
     content: "\e902";
 }
 
-.vis-arrow-up:before {
+.vis-arrow-down:before {
     content: "\e903";
 }
 
-.vis-viewdocumentx:before {
+.vis-arrow-left:before {
     content: "\e904";
 }
 
-.vis-createdocumentx:before {
+.vis-arrow-right:before {
     content: "\e905";
 }
 
-.vis-viewdocument:before {
+.vis-arrow-up:before {
     content: "\e906";
 }
 
-.vis-uploaddocumentx:before {
+.vis-attachment:before {
     content: "\e907";
 }
 
-.vis-uploaddocument:before {
+.vis-attachmentx:before {
     content: "\e908";
 }
 
-.vis-createdocument:before {
+.vis-chat:before {
     content: "\e909";
 }
 
-.vis-attachmentx:before {
+.vis-chatx:before {
     content: "\e90a";
 }
 
-.vis-attachment:before {
+.vis-createdocument:before {
     content: "\e90b";
 }
 
-.vis-email:before {
+.vis-createdocumentx:before {
     content: "\e90c";
 }
 
-.vis-edit:before {
+.vis-delete:before {
     content: "\e90d";
 }
 
-.vis-multi:before {
+.vis-edit:before {
     content: "\e90e";
 }
 
-.vis-chatx:before {
+.vis-email:before {
+    content: "\e90f";
+}
+
+.vis-find:before {
     content: "\e910";
 }
 
-.vis-mark:before {
+.vis-ignore:before {
     content: "\e911";
 }
 
-.vis-refresh:before {
+.vis-letter:before {
     content: "\e912";
 }
 
-.vis-ignore:before {
+.vis-locator:before {
     content: "\e913";
 }
 
-.vis-search:before {
+.vis-mark:before {
     content: "\e914";
 }
 
-.vis-appointment:before {
+.vis-multi:before {
     content: "\e915";
 }
 
-.vis-next:before {
+.vis-new:before {
     content: "\e916";
 }
 
-.vis-previous:before {
+.vis-next:before {
     content: "\e917";
 }
 
@@ -166,39 +124,43 @@
     content: "\e919";
 }
 
-.vis-find:before {
+.vis-pattribute:before {
     content: "\e91a";
 }
 
-.vis-print:before {
+.vis-payment:before {
     content: "\e920";
 }
 
-.vis-save:before {
+.vis-pcontainer:before {
     content: "\e921";
 }
 
-.vis-new:before {
+.vis-plus:before {
     content: "\e922";
 }
 
-.vis-plus:before {
+.vis-previous:before {
     content: "\e923";
 }
 
-.vis-delete:before {
+.vis-print:before {
     content: "\e927";
 }
 
-.vis-subscribex:before {
+.vis-product:before {
+    content: "\e928";
+}
+
+.vis-recordaccess:before {
     content: "\e929";
 }
 
-.vis-task:before {
+.vis-recordaccessx:before {
     content: "\e92a";
 }
 
-.vis-letter:before {
+.vis-refresh:before {
     content: "\e92b";
 }
 
@@ -206,12 +168,72 @@
     content: "\e92c";
 }
 
-.vis-recordaccess:before {
+.vis-save:before {
     content: "\e92d";
 }
 
-.vis-recordaccessx:before {
+.vis-search:before {
     content: "\e92e";
+}
+
+.vis-sms:before {
+    content: "\e92f";
+}
+
+.vis-smsx:before {
+    content: "\e930";
+}
+
+.vis-subscribe:before {
+    content: "\e931";
+}
+
+.vis-subscribex:before {
+    content: "\e932";
+}
+
+.vis-task:before {
+    content: "\e933";
+}
+
+.vis-tl-1:before {
+    content: "\e934";
+}
+
+.vis-tl-2:before {
+    content: "\e935";
+}
+
+.vis-tl-3:before {
+    content: "\e936";
+}
+
+.vis-tl-4:before {
+    content: "\e937";
+}
+
+.vis-updateBP:before {
+    content: "\e93b";
+}
+
+.vis-uploaddocument:before {
+    content: "\e93c";
+}
+
+.vis-uploaddocumentx:before {
+    content: "\e93d";
+}
+
+.vis-url:before {
+    content: "\e93e";
+}
+
+.vis-viewdocument:before {
+    content: "\e93f";
+}
+
+.vis-viewdocumentx:before {
+    content: "\e940";
 }
 
 .vis-home:before {
@@ -246,8 +268,28 @@
     content: "\e926";
 }
 
+.vis-copy1:before {
+    content: "\e938";
+}
+
+.vis-paste:before {
+    content: "\e93a";
+}
+
+.vis-ticket:before {
+    content: "\e939";
+}
+
+.vis-location:before {
+    content: "\e948";
+}
+
 .vis-history:before {
     content: "\e94d";
+}
+
+.vis-undo2:before {
+    content: "\e967";
 }
 
 .vis-user:before {
@@ -256,6 +298,18 @@
 
 .vis-users:before {
     content: "\e972";
+}
+
+.vis-addBP:before {
+    content: "\e973";
+}
+
+.vis-user-minus:before {
+    content: "\e974";
+}
+
+.vis-user-check:before {
+    content: "\e975";
 }
 
 .vis-spinner11:before {
@@ -276,6 +330,10 @@
 
 .vis-cog:before {
     content: "\e994";
+}
+
+.vis-stats-dots:before {
+    content: "\e99b";
 }
 
 .vis-bin:before {
@@ -300,6 +358,10 @@
 
 .vis-export:before {
     content: "\e9c6";
+}
+
+.vis-web:before {
+    content: "\e9c9";
 }
 
 .vis-attachment1:before {
@@ -332,6 +394,14 @@
 
 .vis-markx:before {
     content: "\ea10";
+}
+
+.vis-enter:before {
+    content: "\ea13";
+}
+
+.vis-exit:before {
+    content: "\ea14";
 }
 
 .vis-multix1:before {

@@ -28,7 +28,7 @@ namespace VIS.Models
             }
             else
             {
-                UsrImage = "data:image/jpg;base64," + UsrImage;
+                UsrImage = "data:image/jpg;base64," + value;
                 return new ImagePathInfo() { Bytes = value, IsUrl = false };
             }
         }

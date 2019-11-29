@@ -6,9 +6,12 @@
         var $self = this;
         this.gTab = null;
         this.controls = [];
-        var textAlignEnum = { "C": "Center", "R": "Right", "L": "Left" };
-        var alignItemEnum = { "C": "Center", "T": "flex-start", "B": "flex-end" };
+        this.textAlignEnum = { "C": "Center", "R": "flex-end", "L": "flex-start" };
+        this.alignItemEnum = { "C": "Center", "T": "flex-start", "B": "flex-end" };
         this.windowNo = 0;
+        this.dynamicStyle = [];
+        this.styleTag = document.createElement('style');
+
 
         /**
          * This function will check if tab is marked as header panel, then start creating header panel
@@ -16,7 +19,7 @@
          * @param {any} _gTab
          * @param {any} $parentRoot
          */
-        var setHeaderLayout = function (_gTab, $parentRoot) {
+        this.setHeaderLayout = function (_gTab, $parentRoot) {
             //if Tab is market as Header Panel, only then execute further code.
             if (_gTab.getIsHeaderPanel()) {
                 $self.headerItems = _gTab.getHeaderPanelItems();
@@ -24,37 +27,10 @@
                 $self.windowNo = $self.gTab.getWindowNo();
 
                 if ($self.headerItems) {
-                    var alignmentHorizontal = $self.gTab.getHeaderHorizontal();
                     // Create Root for header Panel
-                    $root = $('<div>');
-                    var rootCustomStyle = headerUISettings(columns, rows, alignmentHorizontal);
-                    $root.addClass(rootCustomStyle);
-
-                    if (alignmentHorizontal) {
-                        $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
-                    }
-
-                    for (var j = 0; j < $self.headerItems.length; j++) {
-
-                        var currentItem = $self.headerItems[j];
-
-                        var rows = currentItem.HeaderTotalRow;
-                        var columns = currentItem.HeaderTotalColumn;
-                        var backColor = currentItem.HeaderBackColor;
-
-                        //var height = currentItem.getHeaderHeight();
-                        //var width = currentItem.getHeaderWidth();
-
-                        var headerCustom = headerParentCustomUISettings("", backColor, "", alignmentHorizontal, j);
-                        $parentRoot.addClass(headerCustom);
-
-                        var $containerDiv = $('<div style="display:grid;grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', 1fr);background-color:' + backColor + '">');
-                        $root.append($containerDiv);
-
-                        //Load Header Panel Items and add them to UI.
-                        $self.setHeaderItems(currentItem, $containerDiv);
-                    }
-
+                    $root = $('<div class="vis-ad-w-p-header_root_common">');
+                    var headerCustom = this.headerParentCustomUISettings("");
+                    $parentRoot.addClass(headerCustom);
                     // Add Header Panel to Parent Control
                     $parentRoot.append($root);
                 }
@@ -84,7 +60,13 @@
                         }
 
                         var colValue = getFieldValue(mField);
-                        iControl.setValue(w2utils.encodeTags(colValue));
+
+                        if (colValue || mField.getDisplayType() == VIS.DisplayType.Image)
+                            iControl.setValue(w2utils.encodeTags(colValue));
+                        else {
+                            iControl.setValue("&nbsp;", true);
+                        }
+
                     }
                 }
             }
@@ -125,8 +107,7 @@
                         var iControl = null;
 
                         //Apply HTML Style
-                        var dynamicClassName = applyCustomUISettings(mField, headerSeqNo, startCol, colSpan, startRow, rowSpan);
-
+                        var dynamicClassName = this.applyCustomUISettings(mField, headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem);
 
                         $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
 
@@ -137,14 +118,10 @@
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-header-Label-center-f');
-                            var dynamicClassForImageJustyfy = justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                            var dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
                             $divLabel.addClass(dynamicClassForImageJustyfy);
                         }
                         else {
-                            if (justyFy || alignItem) {
-                                var dynamicClassForJustyfy = justifyAlignTextItems(headerSeqNo, justyFy, alignItem);
-                                $divLabel.addClass(dynamicClassForJustyfy)
-                            }
                         }
 
                         // Get Controls to be displayed in Header Panel
@@ -163,10 +140,14 @@
                         if (iControl == null) {
                             continue;
                         }
-                        var $lblControl = $label.getControl();
+                        var $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                         var colValue = getFieldValue(mField);
-
-                        iControl.setValue(w2utils.encodeTags(colValue));
+                        if (colValue || mField.getDisplayType() == VIS.DisplayType.Image) {
+                            iControl.setValue(w2utils.encodeTags(colValue));
+                        }
+                        else {
+                            iControl.setValue("&nbsp;", true);
+                        }
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
                         if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
@@ -192,137 +173,6 @@
                 }
             }
 
-        };
-
-        /**
-         * Create class that iclude  settings to create Root grid of header panel.
-         * @param {any} columns
-         * @param {any} rows
-         */
-        var headerUISettings = function (columns, rows, alignmentHorizontal) {
-            var style = document.createElement('style');
-            var dynamicClassName = "vis-ad-w-p-header_root_" + $self.windowNo;
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
-
-            //style.innerHTML = "." + dynamicClassName + " {overflow:auto;display:grid;flex:1;grid-template-columns:" + "repeat(" + columns + ", 1fr)" + ";grid-template-rows:" + "repeat(" + rows + ", 1fr)" + "}";
-            style.innerHTML = "." + dynamicClassName + " {overflow:auto;display:flex;flex:1;";
-
-            if (alignmentHorizontal) {
-                style.innerHTML += "flex-direction:row";
-            }
-            else {
-                style.innerHTML += "flex-direction:column";
-            }
-
-            style.innerHTML += "}"
-            $($('head')[0]).append(style);
-            return dynamicClassName;
-        };
-
-        /**
-         * Create Class that include settings that would be applied on parent of root classs.
-         * @param {any} width
-         * @param {any} backColor
-         * @param {any} height
-         * @param {any} alignment
-         */
-        var headerParentCustomUISettings = function (width, backColor, height, alignmentHorizontal, seqNo) {
-            var style = document.createElement('style');
-            var dynamicClassName = "vis-ad-w-p-header_Custom_" + $self.windowNo + "_" + seqNo;
-
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
-
-            style.innerHTML = "." + dynamicClassName + " {flex:1;";
-
-            /*Set Alignment and Height/Width of Header Panel
-                   * Default Height is 150 px
-                   * Default Width is 250px
-                   */
-            if (alignmentHorizontal) {
-                style.innerHTML += "height: " + height + ";";
-            }
-            else {
-                style.innerHTML += "width: " + width + ";";
-            }
-
-            //Set background Color of Header Panel. If no color found then get color from Theme
-            if (backColor) {
-                style.innerHTML += 'background-color: ' + backColor;
-            }
-            else {
-                style.innerHTML += 'background-color: ' + 'rgba(var(--v-c-primary))';
-            }
-
-            style.innerHTML += "}";
-
-            $($('head')[0]).append(style);
-
-            return dynamicClassName;
-        };
-
-        /**
-         * Created CSS Class that will be applied to Field group( Parent div of ICON, label and value)
-         * Create row, rowspan , column, column span, and custom header style defined at field level.
-         * @param {any} mField
-         * @param {any} headerSeqNo
-         * @param {any} startCol
-         * @param {any} colSpan
-         * @param {any} startRow
-         * @param {any} rowSpan
-         */
-        var applyCustomUISettings = function (mField, headerSeqNo, startCol, colSpan, startRow, rowSpan) {
-            var headerStyle = mField.getHeaderStyle();
-            var style = document.createElement('style');
-
-            var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + $self.windowNo;
-
-
-            $(style).attr('id', dynamicClassName);
-
-            style.type = 'text/css';
-            if (headerStyle) {
-                style.innerHTML = "." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + "}";
-            }
-            else {
-                style.innerHTML = "." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + "}";
-            }
-            $($('head')[0]).append(style);
-
-            return dynamicClassName;
-        };
-
-        /**
-         * This method set justfy and alignment of text fields
-         * @param {any} headerSeqNo
-         * @param {any} justify
-         * @param {any} alignItem
-         */
-        var justifyAlignTextItems = function (headerSeqNo, justify, alignItem) {
-            var style = document.createElement('style');
-            var dynamicClassName = "vis-w-p-header-label-justify_" + headerSeqNo + "_" + $self.windowNo;
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
-            style.innerHTML = "." + dynamicClassName + " {text-align:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
-            $($('head')[0]).append(style);
-            return dynamicClassName;
-        };
-
-        /**
-        * This method set justfy and alignment of Image Field
-        * @param {any} headerSeqNo
-        * @param {any} justify
-        * @param {any} alignItem
-        */
-        var justifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
-            var style = document.createElement('style');
-            var dynamicClassName = "vis-w-p-header-label-center-justify_" + headerSeqNo + "_" + $self.windowNo;
-            $(style).attr('id', dynamicClassName);
-            style.type = 'text/css';
-            style.innerHTML = "." + dynamicClassName + " {justify-content:" + textAlignEnum[justify] + ";align-items:" + alignItemEnum[alignItem] + "}";
-            $($('head')[0]).append(style);
-            return dynamicClassName;
         };
 
         /**
@@ -378,9 +228,7 @@
             return colValue;
         }
 
-        this.init = function (gTab, $parentRoot) {
-            setHeaderLayout(gTab, $parentRoot);
-        };
+
 
         /**
          * 
@@ -393,17 +241,8 @@
          * Dispose component
          * */
         this.disposeComponent = function () {
-            var keys = Object.keys(this.headerItems);
-            // Find Dynamically added classes from DOM and remove them.
-            //for (var i = 1; i <= keys.length; i++) {
-            //    var startCol = this.headerItems[i].StartColumn;
-            //    var startRow = this.headerItems[i].StartRow;
-            //    $('#vis-hp-FieldGroup_' + startRow + "_" + startCol + "_" + this.windowNo).remove();
-
-            //    $("#vis-w-p-header-label-justify_" + keys[i] + "_" + this.windowNo).remove();
-
-            //    $("#vis-w-p-header-label-center-justify_" + keys[i] + "_" + this.windowNo).remove();
-            //}
+            this.styleTag.remove();
+            this.styleTag = null;
             this.headerItems = null;
             $self = null;
             this.gTab = null;
@@ -414,6 +253,133 @@
         };
 
     };
+
+    HeaderPanel.prototype.init = function (gTab, $parentRoot) {
+        this.setHeaderLayout(gTab, $parentRoot);
+        var root = this.getRoot();
+        var rootClass = "vis-w-p-Header-Root-v";
+        var alignmentHorizontal = this.gTab.getHeaderHorizontal();
+        var height = this.gTab.getHeaderHeight();
+        var width = this.gTab.getHeaderWidth();
+
+        var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width);
+        root.addClass(rootCustomStyle);
+
+        if (alignmentHorizontal) {
+            $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
+            rootClass = 'vis-w-p-Header-Root-h';
+        }
+
+        for (var j = 0; j < this.headerItems.length; j++) {
+
+            var currentItem = this.headerItems[j];
+
+            var rows = currentItem.HeaderTotalRow;
+            var columns = currentItem.HeaderTotalColumn;
+            var backColor = currentItem.HeaderBackColor;
+
+            var $containerDiv = $('<div class=' + rootClass + ' style="grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background-color:' + backColor + '">');
+            root.append($containerDiv);
+
+            //Load Header Panel Items and add them to UI.
+            this.setHeaderItems(currentItem, $containerDiv);
+        }
+        this.addStyleToDom();
+
+    };
+
+
+
+
+
+
+    /**
+         * Added dynamic style to DOM
+         * */
+    HeaderPanel.prototype.addStyleToDom = function () {
+        this.styleTag.type = 'text/css';
+        this.styleTag.innerHTML = this.dynamicStyle.join(" ");
+        $($('head')[0]).append(this.styleTag);
+    };
+
+
+    /**
+         * Create class that iclude  settings to create Root grid of header panel.
+         * @param {any} columns
+         * @param {any} rows
+         */
+    HeaderPanel.prototype.headerUISettings = function (alignmentHorizontal, height, width) {
+        var dynamicClassName = "vis-ad-w-p-header_root_" + this.windowNo;
+        this.dynamicStyle.push(" ." + dynamicClassName + " {display:flex;flex:1;");
+        if (alignmentHorizontal) {
+            this.dynamicStyle.push("flex-direction:row;height: " + height + "; ");
+        }
+        else {
+            this.dynamicStyle.push("flex-direction:column;width: " + width + "; ");
+        }
+        this.dynamicStyle.push("} ");
+        return dynamicClassName;
+    };
+
+    /**
+        * Create Class that include settings that would be applied on parent of root classs.
+        * @param {any} width
+        * @param {any} backColor
+        * @param {any} height
+        * @param {any} alignment
+        */
+    HeaderPanel.prototype.headerParentCustomUISettings = function (backColor) {
+        var dynamicClassName = "vis-ad-w-p-header_Custom_" + this.windowNo;
+        this.dynamicStyle.push(" ." + dynamicClassName + " {flex:1;");
+        //Set background Color of Header Panel. If no color found then get color from Theme
+        if (backColor) {
+            this.dynamicStyle.push('background-color: ' + backColor);
+        }
+        else {
+            this.dynamicStyle.push('background-color: ' + 'rgba(var(--v-c-primary))');
+        }
+
+        this.dynamicStyle.push("} ");
+        return dynamicClassName;
+    };
+
+    /**
+    * Created CSS Class that will be applied to Field group( Parent div of ICON, label and value)
+    * Create row, rowspan , column, column span, and custom header style defined at field level.
+    * @param {any} mField
+    * @param {any} headerSeqNo
+    * @param {any} startCol
+    * @param {any} colSpan
+    * @param {any} startRow
+    * @param {any} rowSpan
+    */
+    HeaderPanel.prototype.applyCustomUISettings = function (mField, headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment) {
+        var headerStyle = mField.getHeaderStyle();
+        var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
+        if (headerStyle) {
+            this.dynamicStyle.push(" ." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + ";");
+        }
+        else {
+            this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
+        }
+
+        this.dynamicStyle.push("justify-self:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment] + ";text-align:" + this.textAlignEnum[justify] + ";" );
+        this.dynamicStyle.push("} ");
+        return dynamicClassName;
+    };
+
+    /**
+     * This method set justfy and alignment of Image Field
+     * @param {any} headerSeqNo
+     * @param {any} justify
+     * @param {any} alignItem
+     */
+    HeaderPanel.prototype.justifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
+        var dynamicClassName = "vis-w-p-header-label-center-justify_" + headerSeqNo + "_" + this.windowNo;
+        this.dynamicStyle.push(" ." + dynamicClassName + " {justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignItem] + "}");
+        return dynamicClassName;
+    };
+
     /**
      * This method will be invoked on record change in window.
      * */

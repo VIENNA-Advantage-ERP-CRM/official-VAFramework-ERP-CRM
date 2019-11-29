@@ -1216,15 +1216,15 @@
         }
     };
 
-    //GridTab.prototype.getHeaderWidth = function () {
-    //    if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
-    //        return this.vo.HeaderWidth;
-    //    }
-    //    else {
-    //        return '250px';
-    //    }
+    GridTab.prototype.getHeaderWidth = function () {
+        if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
+            return this.vo.HeaderWidth + 'px';
+        }
+        else {
+            return '250px';
+        }
         
-    //};
+    };
 
     //GridTab.prototype.getHeaderBackColor = function () {
     //    return this.vo.HeaderBackColor;

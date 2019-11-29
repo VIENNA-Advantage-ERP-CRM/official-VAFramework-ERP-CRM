@@ -17,13 +17,13 @@ namespace VAdvantage.Controller
         /// Align Header Items to Top, Bottom or center.
         /// By Default is center
         /// </summary>
-        public string AlignItems = "C";
+        public string AlignItems = "T";
 
         /// <summary>
         /// Justify Header Items to left, right or center.
         /// By Default is center
         /// </summary>
-        public string JustifyItems = "C";
+        public string JustifyItems = "L";
 
         /// <summary>
         /// Item start from this Column
@@ -61,9 +61,6 @@ namespace VAdvantage.Controller
 
     public class HeaderPanelGrid
     {
-        /****   Header Height   ***/
-        public decimal HeaderHeight = 0;
-
         /****   Header Back Color   ***/
         public string HeaderBackColor = "";
 
@@ -75,9 +72,6 @@ namespace VAdvantage.Controller
 
         /****   Header Total Row   ***/
         public int HeaderTotalRow = 0;
-
-        /****   Header Total Row   ***/
-        public Decimal HeaderWidth = 0;
 
         /******   Grid Layout ID   *****/
         public int AD_GridLayout_ID = 0;

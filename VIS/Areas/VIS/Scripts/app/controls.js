@@ -912,7 +912,7 @@
         if (isADControl)
             strFor = '';
 
-        var $ctrl = $('<label ' + strFor + '>');
+        var $ctrl = $('<label ' + strFor + '></label>');
 
         IControl.call(this, $ctrl, VIS.DisplayType.Label, true, isADControl ? name : "lbl" + name);
         if (isMandatory) {
@@ -931,10 +931,13 @@
 
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
-    VLabel.prototype.setValue = function (newValue) {
-        if (this.oldValue != newValue) {
+    VLabel.prototype.setValue = function (newValue, isHTML) {
+        if (this.oldValue != newValue ) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
+            if (isHTML) {
+                this.ctrl.html(newValue);
+            }
         }
     };
 
@@ -2021,31 +2024,31 @@
         // Tab for Info                */
         var TAB_INFO = 1113;
 
-        var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/";
+        var src = "";// VIS.Application.contextUrl + "Areas/VIS/Images/base/";
 
         if (displayType == VIS.DisplayType.Location || displayType == VIS.DisplayType.MultiKey) {
             if (!this.isMultiKeyTextBox) {
-                src += "Location10.png";
+                src += "vis vis-card";
             }
             else {
-                src += "PickOpen20.png";//delete10.png";
+                src += "fa fa-caret-down";//delete10.png";
             }
             //txtText.IsReadOnly = true;
         }
         else if (displayType == VIS.DisplayType.Locator) {
-            src += "Locator10.png";
+            src += "vis vis-locator";
         }
         else if (displayType == VIS.DisplayType.Search) {
             if (columnName.equals("C_BPartner_ID")
                 || (columnName.equals("C_BPartner_To_ID") && lookup.getColumnName().equals("C_BPartner.C_BPartner_ID"))) {
-                src += "BPartner20.png";
+                src += "fa fa-handshake-o";
             }
             else if (columnName.equals("M_Product_ID")
                 || (columnName.equals("M_Product_To_ID") && lookup.getColumnName().equals("M_Product.M_Product_ID"))) {
-                src += "Product20.png";
+                src += "vis vis-product";
             }
             else {
-                src += "PickOpen20.png";
+                src += "fa fa-caret-down";
             }
         }
 
@@ -2053,7 +2056,7 @@
         //create ui
         var $ctrl = $('<input >', { type: 'text', name: columnName });
 
-        var $btnSearch = $('<button  tabindex="-1" class="input-group-text"><img  tabindex="-1" src="' + src + '" /></button>');
+        var $btnSearch = $('<button  tabindex="-1" class="input-group-text"><i  tabindex="-1" class="' + src + '"></i></button>');
         btnCount += 1;
 
         //Set Buttons and [pop up]
@@ -2104,7 +2107,7 @@
         }
 
         if (this.isMultiKeyTextBox) {
-            $btnPop = $('<button  tabindex="-1" class="input-group-text"><img  tabindex="-1" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/clear16.png' + '" /></button>');
+            $btnPop = $('<button  tabindex="-1" class="input-group-text"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>');
             btnCount += 1;
         }
 
@@ -3177,22 +3180,22 @@
     //7. 
     function VTextArea(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, displayType) {
 
-        var rows = 7;
+        var rows = 6;
         if (displayType != VIS.DisplayType.Memo) {
             if (displayType == VIS.DisplayType.TextLong) {
-                rows = 7;
+                rows = 6;
                 fieldLength = 100000;
             }
             else {
-                rows = fieldLength < 300 ? 3 : (fieldLength < 2000) ? 5 : 7;
+                rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
             }
         }
         else {
             try {
-                rows = fieldLength < 300 ? 3 : (fieldLength < 2000) ? 5 : (fieldLength / 500);
+                rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : (fieldLength / 500);
             }
             catch (e) {
-                rows = fieldLength < 300 ? 3 : (fieldLength < 2000) ? 5 : 7;
+                rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
             }
         }
 
@@ -3595,8 +3598,8 @@
 
         //create ui
         var $ctrl = $('<input readonly>', { type: 'text', name: columnName });
-        var $btnMap = $('<button class="input-group-text"><img src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/ToLink20.png" + '" /></button>');
-        var $btnLocation = $('<button class="input-group-text"><img src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Location20.png" + '" /></button>');
+        var $btnMap = $('<button class="input-group-text"><i class="vis vis-location" aria-hidden="true"></i></button>');
+        var $btnLocation = $('<button class="input-group-text"><i class="vis vis-card" aria-hidden="true"></i></button>');
         var btnCount = 2;
         //$ctrl.append($btnMap).append($btnLocation);
         var self = this;
@@ -3770,7 +3773,7 @@
         this.columnName = columnName;
         this.lookup = lookup;
 
-        var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Locator20.png";
+        var src = "vis vis-locator";//VIS.Application.contextUrl + "Areas/VIS/Images/base/Locator20.png";
         this.value = null;
 
         if (!displayType)
@@ -3779,8 +3782,8 @@
 
         //create ui
         var $ctrl = $('<input readonly>', { type: 'text', name: columnName });
-        var $btn = $('<button class="input-group-text"><img src="' + src + '" /></button>');
-        var $btnZoom = $('<button class="input-group-text"><img src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Zoom20.png" + '" /></button>');
+        var $btn = $('<button class="input-group-text"><i class="' + src + '" aria-hidden="true"></i></button>');
+        var $btnZoom = $('<button class="input-group-text"><i class="vis vis-find" aria-hidden="true"></i></button>');
         var btnCount = 2;
 
         var self = this;
@@ -4071,7 +4074,7 @@
         /**	Logger			*/
         this.log = VIS.Logging.VLogger.getVLogger("VPAttribute");
 
-        var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/PAttribute20.png";
+        var src = "vis vis-pattribute";// VIS.Application.contextUrl + "Areas/VIS/Images/base/PAttribute20.png";
         if (!displayType) {
             displayType = VIS.DisplayType.PAttribute;
         }
@@ -4087,7 +4090,7 @@
 
         //create ui
         var $ctrl = $('<input >', { type: 'text', name: columnName });
-        var $btn = $('<button class="input-group-text"><img src="' + src + '" /></button>');
+        var $btn = $('<button class="input-group-text"><i class="' + src + '"></i></button>');
         var btnCount = 1;
 
         var self = this;
@@ -4349,14 +4352,14 @@
         this.lookup = lookup;
         this.title = title;
         var colName = columnName;
-        var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Account20.png";
+        var src = "vis vis-account";// VIS.Application.contextUrl + "Areas/VIS/Images/base/Account20.png";
         if (!displayType)
             displayType = VIS.DisplayType.PAttribute;
 
 
         //create ui
         var $ctrl = $('<input readonly>', { type: 'text', name: columnName });
-        var $btn = $('<button class="input-group-text"><img src="' + src + '" /></button>');
+        var $btn = $('<button class="input-group-text"><i class="' + src + '" ></i></button>');
         var btnCount = 1;
 
         var self = this;
@@ -4852,11 +4855,11 @@
     //VURL
     function VURL(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength) {
         this.value = null;
-        var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Url20.png";
+        var src = "vis vis-url";// VIS.Application.contextUrl + "Areas/VIS/Images/base/Url20.png";
         var btnCount = 0;
         //create ui
         var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: fieldLength });
-        var $btnSearch = $('<button class="input-group-text"><img src="' + src + '" /></button>');
+        var $btnSearch = $('<button class="input-group-text"><i class="' + src + '" ></i></button>');
         btnCount += 1;
 
         //Set Buttons and [pop up]
@@ -5004,10 +5007,10 @@
 
         var displayType = VIS.DisplayType.FileName;
 
-        var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Folder20.png";
+        var src = "fa fa-folder-open-o";//VIS.Application.contextUrl + "Areas/VIS/Images/base/Folder20.png";
         if (files) {
             selectionMode = SelectionType.FilesOnly;
-            src = VIS.Application.contextUrl + "Areas/VIS/Images/base/File20.png";
+            src = "fa fa-file-text-o";// VIS.Application.contextUrl + "Areas/VIS/Images/base/File20.png";
         }
         var col = colName.toUpperCase();
 
@@ -5026,7 +5029,7 @@
         var btnCount = 0;
 
         var $ctrl = $('<input>', { type: 'text', name: columnName });
-        var $btnSearch = $('<button class="input-group-text"><img src="' + src + '" /></button>');
+        var $btnSearch = $('<button class="input-group-text"><i class="' + src + '" /></button>');
         btnCount += 1;
 
         var inputCtrl = $("<input type='file' class='file' name='file'/>");
@@ -5179,8 +5182,7 @@
         this.defaultValue = "";
         //create ui
         var $ctrl = $('<input readonly>', { type: 'text', name: columnName });
-        var $btnAmtDiv = $('<button class="input-group-text"><img src="' + VIS.Application.contextUrl
-            + "Areas/VIS/Images/base/AmtDimension20.png" + '" /></button>');
+        var $btnAmtDiv = $('<button class="input-group-text"><i class="vis vis-amtdimension" /></button>');
         var btnCount = 1;
         var self = this;
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory); //call base function
@@ -5437,8 +5439,7 @@
 
         //create ui
         var $ctrl = $('<input>', { type: 'text', name: columnName });
-        var $btnpContainer = $('<button class="input-group-text"><img src="' + VIS.Application.contextUrl
-            + "Areas/VIS/Images/base/pContainer.png" + '" /></button>');
+        var $btnpContainer = $('<button class="input-group-text"><i class="vis vis-pcontainer" /></button>');
         //var $btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
         var $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
         var btnCount = 1;

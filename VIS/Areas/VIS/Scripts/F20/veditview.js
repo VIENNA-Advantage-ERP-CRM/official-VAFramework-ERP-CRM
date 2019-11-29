@@ -433,7 +433,7 @@
     };
 
     function insertCWrapper(label, editor, parent, mField) {
-        
+        var customStyle = mField.getHtmlStyle();
 
         var ctrl = $('<div class="input-group vis-input-wrap">');
         if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
@@ -444,6 +444,11 @@
                 btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
             btns.push('</span></div>');
             ctrl.append(btns.join(' '));
+            
+        }
+
+        if (editor != null && customStyle != "") {
+            editor.getControl().attr('style', customStyle);
         }
 
         var ctrlP = $("<div class='vis-control-wrap'>");
@@ -467,14 +472,16 @@
             var count = editor.getBtnCount();
         if (count > 0) {
             editor.getControl().attr("data-hasBtn", " ");
-            while (count > 0) {
-                var btn = editor.getBtn(count - 1);
+            var i = 0;
+            while (i < count) {
+                var btn = editor.getBtn(i);
                 if (btn != null) {
                     ctrl.append($('<div class="input-group-append">').append(btn));
                 }
-                --count;
+                ++i;
             }
             count = -1;
+            i = 0;
         }
         parent.append(ctrl);
     }
