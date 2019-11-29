@@ -29,6 +29,7 @@
         });
         return dr;
     };
+    };
 
     //executeDataSet
     var executeDataSet = function (sql, param, callback) {

@@ -23,7 +23,7 @@
     align-items: center;
     display: flex;
     /*margin: 0 5px;*/
-    color: rgb(var(--v-c-primary));
+    color: rgb(var(--v-c-primary), 1);
 }
 
     .vis-ad-w-name h5 {
@@ -45,6 +45,7 @@
     align-items: center;
     font-size: 1.4rem;
     cursor: pointer;
+    color: rgb(var(--v-c-on-secondary), 1);
 }
 
 
@@ -1321,6 +1322,15 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     height: 48px;
     width: 48px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--v-c-primary),.3);
+    border-radius: .25rem;
+}
+.vis-chatimgwrap i {
+    font-size: 1.75rem;
+    color: rgba(var(--v-c-primary), 1);
 }
 .vis-chatimgwrap img{
     max-width: 100%;

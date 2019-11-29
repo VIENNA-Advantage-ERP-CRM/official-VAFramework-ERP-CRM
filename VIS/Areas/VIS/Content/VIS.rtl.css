@@ -96,7 +96,10 @@ html[dir="rtl"] .vis-input-wrap label {
 }
 
 html[dir="rtl"] .vis-input-wrap select {
-    background-position: calc(9% - 25px) calc(1em + 2px), calc(9% - 20px) calc(1em + 2px), calc(9% - 2.5em) 0.5em;
+    background-position: calc(7% - 25px), calc(7% - 20px);
+}
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory{
+    background-position: calc(10% - 25px), calc(10% - 20px);
 }
 
 html[dir="rtl"] .input-group > .input-group-append > .btn,
@@ -212,5 +215,23 @@ html[dir="rtl"] .vis-ad-w-p-a-m-lst span {
     text-align: left;
     box-shadow: 3px 0px 3px 0px rgba(var(--v-c-on-common), 0.15);
 }
-
+html[dir="rtl"] .vis-chatdetailwrap {
+    padding-right: 10px;
+}
+html[dir="rtl"] .vis-attach-file-location select.vis-custom-select {
+    background-position: calc(18% - 25px), calc(18% - 20px);
+    padding: 0 10px 0 0;
+}
+html[dir="rtl"] .vis-attach-file-location > label {
+    padding-right: 0;
+    padding-left: 10px;
+}
+html[dir="rtl"] .vis-attach-btns > a {
+    margin-left: 0;
+    margin-right: 10px;
+}
+html[dir="rtl"] .vis-attach-file-text{
+    padding-left: 0;
+    padding-right: 10px;
+}
 /*rtl css End here*/

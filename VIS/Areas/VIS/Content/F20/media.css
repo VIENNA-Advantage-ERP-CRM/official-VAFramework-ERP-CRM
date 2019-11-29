@@ -1,5 +1,10 @@
 ﻿/*  */
-@media screen and (max-width:650px) {
+@media (max-width: 999px){
+    .ui-dialog{
+        max-width: 80% !important;
+    }
+}
+@media (max-width:600px) {
 
     .vis-ad-w-p-header-l {
         grid-column: 3 / 6;

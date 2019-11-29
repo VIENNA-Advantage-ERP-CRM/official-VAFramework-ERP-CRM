@@ -117,7 +117,7 @@
 
 .vis-awindow-header {
     /*background-color: #58B1E2;*/
-    background-color: #1aa0ed;
+    background-color: rgba(var(--v-c-primary), 1);
     vertical-align: middle;
     display: block;
     height: 42px;
@@ -129,7 +129,7 @@
         font-size: 14px;
         font-weight: bold;
         display: inline-block;
-        color: white;
+        color: rgba(var(--v-c-on-primary), 1);
         white-space: nowrap;
     }
 
@@ -139,7 +139,7 @@
         font-size: 14px;
         font-weight: bold;
         display: inline-block;
-        color: white;
+        color: rgba(var(--v-c-on-primary), 1);
         white-space: nowrap;
         line-height: 41px;
     }
@@ -2118,12 +2118,11 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     padding-bottom: 15px !important;
     display: inline-block;
 }
-
-    .vis-attachhistory-apanel-tabcontrol-ul > li.vis-attachhistory-apanel-tab-selected {
-        color: #1b95d7;
-        font-size: 27px;
-        font-weight: 600;
-    }
+.vis-attachhistory-apanel-tabcontrol-ul > li.vis-attachhistory-apanel-tab-selected {
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 27px;
+    font-weight: 600;
+}
 
 
     .vis-attachhistory-apanel-tabcontrol-ul > li {
