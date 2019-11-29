@@ -184,6 +184,7 @@
         this.name;
         this.windowNo;
         this.id;
+        this.img = null;
         this.cPanel; // common pointer , contain Window Panel OR Form Panel OR Process Panel
         this.isHeaderVisible = true;
         this.onClosed; // event
@@ -422,7 +423,7 @@
                 img = wObj.getFontName();
             else if (wObj.getImageUrl()!='')
                 img = VIS.Application.contextUrl + "Images/Thumb16x16/"+ wObj.getImageUrl(); //fixed
-
+            self.img = img;
             if (callback) {
                 callback(self.id, img, self.name, self.hid); //add shortcut
             }

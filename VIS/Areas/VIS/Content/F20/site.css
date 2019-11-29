@@ -24,7 +24,9 @@ a {
 
 
 
-    .vis-app-body {
+
+
+.vis-app-body {
     height: 100%;
     width: 100%;
     /*display: flex;
@@ -157,6 +159,26 @@ a {
     grid-row-start: 2;
     display: flex;
 }
+
+.vis-app-action-nav {
+    height: 100%;
+    z-index: 9;
+    position: absolute;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.29);
+    display: none;
+    flex:1;
+    align-items:center;
+    justify-items:center;
+}
+
+.vis-app-action-nav-inner {
+    position: relative;
+    max-width: calc(100% - 195px);
+    max-height: calc(100% - 300px);
+     overflow-y: auto;
+}
+
 
 .vis-app-section-main {
     display: flex;
