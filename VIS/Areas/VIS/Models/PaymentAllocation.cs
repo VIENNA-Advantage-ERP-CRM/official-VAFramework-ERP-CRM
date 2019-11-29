@@ -279,6 +279,11 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
+                                }
+
                                 return msg;
                             }
 
@@ -303,6 +308,10 @@ namespace VIS.Models
                                     if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                     {
                                         msg = "Error: " + pp.GetName();
+                                    }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
                                     }
                                     return msg;
                                 }
@@ -333,6 +342,10 @@ namespace VIS.Models
                                     if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                     {
                                         msg = "Error: " + pp.GetName();
+                                    }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave");
                                     }
                                     return msg;
                                 }
@@ -372,6 +385,10 @@ namespace VIS.Models
                                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                 {
                                     msg = "Error: " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                 }
                                 return msg;
                             }
@@ -419,6 +436,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
+                                }
                                 return msg;
                             }
                             //	Allocation Line
@@ -445,6 +466,10 @@ namespace VIS.Models
                                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                 {
                                     msg = "Error: " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                 }
                                 return msg;
                             }
@@ -481,6 +506,10 @@ namespace VIS.Models
                                     {
                                         msg = "Error: " + pp.GetName();
                                     }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave");
+                                    }
                                     return msg;
                                 }
                             }
@@ -495,6 +524,10 @@ namespace VIS.Models
                                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                 {
                                     msg = "Error: " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
                                 }
                                 return msg;
                             }
@@ -536,6 +569,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
+                                }
                                 return msg;
                             }
                             #endregion
@@ -563,6 +600,10 @@ namespace VIS.Models
                     if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                     {
                         msg = "Error: " + pp.GetName();
+                    }
+                    else
+                    {
+                        msg = Msg.GetMsg(ctx, "VIS_AllocNotCompleted");
                     }
                     return msg;
                 }
@@ -666,6 +707,10 @@ namespace VIS.Models
                         if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                         {
                             msg = "Error: " + pp.GetName();
+                        }
+                        else
+                        {
+                            msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate");
                         }
                         return msg;
                     }
@@ -919,6 +964,10 @@ namespace VIS.Models
                                         {
                                             msg = "Error: " + pp.GetName();
                                         }
+                                        else
+                                        {
+                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
+                                        }
                                         return msg;
                                     }
                                 }
@@ -948,6 +997,10 @@ namespace VIS.Models
                                         {
                                             msg = "Error: " + pp.GetName();
                                         }
+                                        else
+                                        {
+                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
+                                        }
                                         return msg;
                                     }
 
@@ -964,6 +1017,10 @@ namespace VIS.Models
                                     if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                     {
                                         msg = "Error: " + pp.GetName();
+                                    }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
                                     }
                                     return msg;
                                 }
@@ -1007,6 +1064,10 @@ namespace VIS.Models
                                     {
                                         msg = "Error: " + pp.GetName();
                                     }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
+                                    }
                                     return msg;
                                 }
                                 //  Apply Discounts and WriteOff only first time
@@ -1043,6 +1104,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
+                                }
                                 return msg;
                             }
                             //	Allocation Line
@@ -1075,6 +1140,10 @@ namespace VIS.Models
                                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                 {
                                     msg = "Error: " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                 }
                                 return msg;
                             }
@@ -1109,6 +1178,10 @@ namespace VIS.Models
                                     {
                                         msg = "Error: " + pp.GetName();
                                     }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave");
+                                    }
                                     return msg;
                                 }
                             }
@@ -1123,6 +1196,10 @@ namespace VIS.Models
                                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                                 {
                                     msg = "Error: " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
                                 }
                                 return msg;
                             }
@@ -1166,6 +1243,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
+                                }
                                 return msg;
                             }
                             #endregion
@@ -1199,6 +1280,10 @@ namespace VIS.Models
                             {
                                 msg = "Error: " + pp.GetName();
                             }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
+                            }
                             return msg;
                         }
                         //	Allocation Line
@@ -1217,6 +1302,10 @@ namespace VIS.Models
                             if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                             {
                                 msg = "Error: " + pp.GetName();
+                            }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                             }
                             return msg;
                         }
@@ -1242,6 +1331,10 @@ namespace VIS.Models
                         if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                         {
                             msg = "Error: " + pp.GetName();
+                        }
+                        else
+                        {
+                            msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                         }
                         return msg;
                     }
@@ -1293,6 +1386,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "PaymentNotCreated");
+                                }
                                 return msg;
                             }
                         }
@@ -1326,6 +1423,10 @@ namespace VIS.Models
                             if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                             {
                                 msg = "Error: " + pp.GetName();
+                            }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "PaymentNotCreated");
                             }
                             return msg;
                         }
@@ -2394,6 +2495,10 @@ namespace VIS.Models
                             {
                                 msg = "Error: " + pp.GetName();
                             }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
+                            }
                             return msg;
                         }
                         else
@@ -2455,6 +2560,10 @@ namespace VIS.Models
                             if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                             {
                                 msg = "Error: " + pp.GetName();
+                            }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                             }
                             return msg;
                         }
@@ -2528,6 +2637,10 @@ namespace VIS.Models
                             {
                                 msg = "Error: " + pp.GetName();
                             }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
+                            }
                             return msg;
                         }
                         else
@@ -2588,6 +2701,10 @@ namespace VIS.Models
                         {
                             msg = "Error: " + pp.GetName();
                         }
+                        else
+                        {
+                            msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
+                        }
                         return msg;
                     }
                 }
@@ -2631,6 +2748,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "PaymentNotCreated");
+                                }
                                 return msg;
                             }
 
@@ -2665,6 +2786,10 @@ namespace VIS.Models
                             if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                             {
                                 msg = "Error: " + pp.GetName();
+                            }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "PaymentNotCreated");
                             }
                             return msg;
                         }
@@ -2711,6 +2836,10 @@ namespace VIS.Models
                             {
                                 msg = "Error: " + pp.GetName();
                             }
+                            else
+                            {
+                                msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate");
+                            }
                             return msg;
                         }
                     }
@@ -2746,6 +2875,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated");
+                                }
                                 return msg;
                             }
                         }
@@ -2777,6 +2910,10 @@ namespace VIS.Models
                                 {
                                     msg = "Error: " + pp.GetName();
                                 }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_ScheduleNotAllocated");
+                                }
                                 return msg;
                             }
                         }
@@ -2792,6 +2929,10 @@ namespace VIS.Models
                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
                 {
                     msg = "Error: " + pp.GetName();
+                }
+                else
+                {
+                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
                 }
                 return msg;
             }
