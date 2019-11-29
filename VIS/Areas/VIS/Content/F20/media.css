@@ -5,9 +5,19 @@
         grid-column: 3 /6;
         grid-row: 2 /2;
         background-color: red;
-        height: 0px;
+        height: 200px;
         width: auto;
     }
+
+    .vis-ad-w-p-header_root_common {
+        flex-direction: row !important;
+        overflow-x: auto;
+    }
+
+    .vis-w-p-header-data-f label {
+        min-width: 130px;
+    }
+
 
     .vis-ad-w-p-actionpanel-r {
         grid-column: 1/1;

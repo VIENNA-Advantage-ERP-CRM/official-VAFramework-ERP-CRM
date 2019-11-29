@@ -931,15 +931,14 @@
 
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
-    VLabel.prototype.setValue = function (newValue) {
-        if (this.oldValue != newValue) {
+    VLabel.prototype.setValue = function (newValue, isHTML) {
+        if (this.oldValue != newValue ) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
+            if (isHTML) {
+                this.ctrl.html(newValue);
+            }
         }
-    };
-
-    VLabel.prototype.setHtml = function (newValue) {
-            this.ctrl.html(newValue);
     };
 
 

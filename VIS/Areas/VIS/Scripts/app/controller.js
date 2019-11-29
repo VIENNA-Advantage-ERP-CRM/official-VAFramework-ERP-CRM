@@ -1218,7 +1218,7 @@
 
     GridTab.prototype.getHeaderWidth = function () {
         if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
-            return this.vo.HeaderWidth;
+            return this.vo.HeaderWidth + 'px';
         }
         else {
             return '250px';
