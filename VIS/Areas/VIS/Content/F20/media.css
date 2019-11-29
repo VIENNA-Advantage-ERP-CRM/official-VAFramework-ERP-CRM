@@ -2,24 +2,22 @@
 @media (max-width:600px) {
 
     .vis-ad-w-p-header-l {
-        grid-column: 3 /6;
-        grid-row: 2 /2;
-        background-color: red;
+        grid-column: 3 / 6;
+        grid-row: 3 /3;
         height: 0px;
         width: auto;
     }
 
     .vis-ad-w-p-actionpanel-r {
         grid-column: 1/1;
-        grid-row: 4/4;
-        background-color: lightpink;
+        grid-row: 5/5;
         height: auto;
         width: auto;
     }
 
     .vis-ad-w-p-tabs-l {
         grid-column: 4/4;
-        grid-row: 3 / 3;
+        grid-row: 5 / 5;
         /*height: 22px;*/
         width: auto;
         flex-flow: row;
