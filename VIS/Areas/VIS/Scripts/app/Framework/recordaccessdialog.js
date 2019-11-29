@@ -96,7 +96,7 @@
             //divRecord = $("<div class='vis-rad-recordData' style='float:" + VIS.Application.isRTL?'right':'left' + "'>");
             divRole = $("<div class='vis-rad-roleCombo'>");
             lblRole = $("<lable>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'AD_Role_ID'));
-            cmbRole = $("<select>");
+            cmbRole = $("<select class='vis-custom-select'>");
             divRole.append(lblRole);
             divRole.append(cmbRole);
             divAccOp = $("<div class='vis-rad-recordOp'>");

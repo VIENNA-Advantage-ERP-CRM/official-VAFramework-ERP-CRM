@@ -1,4 +1,9 @@
 ﻿/*  */
+@media (max-width: 999px){
+    .ui-dialog{
+        max-width: 80% !important;
+    }
+}
 @media (max-width:600px) {
 
     .vis-ad-w-p-header-l {
