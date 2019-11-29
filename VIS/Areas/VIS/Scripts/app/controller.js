@@ -347,6 +347,10 @@
         return this.vo.AD_Image_ID;
     }
 
+    GridWindow.prototype.getImageUrl = function () {
+        return this.vo.ImageUrl;
+    }
+
     GridWindow.prototype.dispose = function () {
 
         originalLength = this.tabs.length;

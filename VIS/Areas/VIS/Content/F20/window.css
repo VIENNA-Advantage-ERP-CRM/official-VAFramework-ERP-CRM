@@ -1054,7 +1054,7 @@ li.vis-page-item-select {
     display: flex;
     /*align-items: center;*/
     flex: 1;
-    /*width: 100%;*/
+    width: 100%;
 }
 
 .vis-w-p-header-data-label {
