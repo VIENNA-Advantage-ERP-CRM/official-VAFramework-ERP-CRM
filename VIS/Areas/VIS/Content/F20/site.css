@@ -169,7 +169,7 @@ a {
     display: none;
     flex:1;
     align-items:center;
-    justify-items:center;
+    justify-content:center;
 }
 
 .vis-app-action-nav-inner {
