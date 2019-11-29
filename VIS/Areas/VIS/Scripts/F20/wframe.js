@@ -399,6 +399,8 @@
 
             var jsonData = $.parseJSON(json.result); // widow json
 
+
+
             VIS.context.setContextOfWindow($.parseJSON(json.wCtx), windowNo);// set window context
             //console.log(jsonData);
 
@@ -413,8 +415,16 @@
             self.cPanel.selectFirstTab(query != null);
             VIS.MLookupCache.initWindowLookup(windowNo);
 
+            //Image 
+            var wObj = self.cPanel.gridWindow;
+            var img = null;
+            if (wObj.getFontName() != '')
+                img = wObj.getFontName();
+            else if (wObj.getImageUrl()!='')
+                img = VIS.Application.contextUrl + "Images/Thumb16x16/"+ wObj.getImageUrl(); //fixed
+
             if (callback) {
-                callback(self.id, null, self.name, self.hid); //add shortcut
+                callback(self.id, img, self.name, self.hid); //add shortcut
             }
 
             if (self.onLoad)

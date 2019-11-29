@@ -21,7 +21,7 @@
         var historyActions = []; // conatins history string array
         var windowObjects = {}; // store all window(javascrpt)  references
         var s_hiddenWindows = []; /** list of hidden Windows				*/
-        var navigatingInWindows = false; // set its value true when navigating through windows , otherwise false
+        var navigatingInWindows = false; // set its value true when navigaing through windows , otherwise false
         var $mainNavigationDiv = null; //Navigation Div Container
         var $innerDiv = null;
         var $menu = null;

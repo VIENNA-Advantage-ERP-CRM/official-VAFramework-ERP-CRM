@@ -529,7 +529,16 @@
         *a@param name name to diplay
         */
         function addTaskBarItem(id, imgPath, name) {
-            var $li = $('<li id=' + id + '><img src= "' + imgPath + '" /> <a>' + name + '</a><span style="padding:0 7px;"><i class="fa fa-times-circle-o" /></span></li>');
+            var img = ['<li id=' + id + '>'];
+            if (imgPath) {
+                if (imgPath.indexOf(".") > -1)
+                    img.push('<img src= "' + imgPath + '" />');
+                else
+                    img.push('<i class= "' + imgPath + '" />');
+            }
+
+            img.push('<a>' + name + '</a><span style="padding:0 7px;"><i class="fa fa-times-circle-o" /></span></li>');
+            var $li = $(img.join(' '));
             $shortcutUL.append($li);
             activateTaskBarItem($li);
             $li = null;
