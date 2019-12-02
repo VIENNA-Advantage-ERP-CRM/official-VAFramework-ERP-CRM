@@ -29,14 +29,18 @@ namespace VIS.Helpers
 
             bool trl = !Env.IsBaseLanguage(ctx, "AD_Process");
             String sql = "SELECT p.Name, p.Description, p.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
+                + " ,    SUBSTR(img.ImageURl, INSTR(img.ImageURl,'/',-1,1)+1)                                                    AS ImageUrl"
                     + "FROM AD_Process p "
                     + "LEFT OUTER JOIN AD_CtxArea ca ON (p.AD_CtxArea_ID=ca.AD_CtxArea_ID) "
+                    + " Left Outer Join Ad_Image Img On  p.AD_Image_ID=img.AD_Image_ID "
                     + "WHERE AD_Process_ID=" + AD_Process_ID;
             if (trl)
                 sql = "SELECT t.Name, t.Description, t.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
+                    + " ,    SUBSTR(img.ImageURl, INSTR(img.ImageURl,'/',-1,1)+1)                                                    AS ImageUrl"
                     + "FROM AD_Process p "
                     + "LEFT OUTER JOIN AD_CtxArea ca ON (p.AD_CtxArea_ID=ca.AD_CtxArea_ID) "
                     + " INNER JOIN AD_Process_Trl t ON (p.AD_Process_ID=t.AD_Process_ID) "
+                    + " Left Outer Join Ad_Image Img On  p.AD_Image_ID=img.AD_Image_ID "
                     + "WHERE p.AD_Process_ID=" + AD_Process_ID + " AND t.AD_Language='" + Env.GetAD_Language(ctx) + "'";
 
             IDataReader dr = null;
@@ -74,6 +78,7 @@ namespace VIS.Helpers
                     outt.AskUser = dr["AskUserBGProcess"].Equals("Y");
                     outt.IsCrystal = dr["iSCrystalReport"].Equals("Y");
                     var paraCount = Util.GetValueOfInt(dr["para"]);
+                    outt.ImageUrl = dr["ImageUrl"].ToString();
                     if (paraCount > 0)
                     {
                         outt.HasPara = true;
