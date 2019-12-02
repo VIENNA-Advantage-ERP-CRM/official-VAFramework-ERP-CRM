@@ -610,11 +610,11 @@
 
 
         function navigationInit() {
-            $mainNavigationDiv = $('<div class="vis-nav-windowContainer"></div>');
-            $section.prepend($mainNavigationDiv);
         };
 
         function getNavigationSection() {
+            if (!$mainNavigationDiv)
+                $mainNavigationDiv = $(".vis-app-action-nav");
             return $mainNavigationDiv;
         };
 
@@ -636,7 +636,7 @@
             activateTaskBarItemUsingID: activateTaskBarItemUsingID,
             openMenu: openMenu,
             closeMenu: closeMenu,
-            getNavigationSection: getNavigationSection,
+            getNavSection: getNavigationSection,
             getMenuDiv: getMenuDiv
         };
         return desktopMgr;

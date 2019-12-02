@@ -22,7 +22,9 @@
         var windowObjects = {}; // store all window(javascrpt)  references
         var s_hiddenWindows = []; /** list of hidden Windows				*/
         var navigatingInWindows = false; // set its value true when navigaing through windows , otherwise false
-        var $mainNavigationDiv = null; //Navigation Div Container
+       // var $mainNavigationDiv = null; //Navigation Div Container
+
+        var $navRoot = null;
         var $innerDiv = null;
         var $menu = null;
         var restoreAction = false;
@@ -354,8 +356,12 @@
 
         function init() {
             $menu = dm.getMenuDiv();
-            $(document).on('keydown', keydownDoc);
-            $(document).on('keyup', keydownup);
+            $(document).on('keydown', keydownDoc).on('keyup', keydownup);
+
+            $navRoot = dm.getNavSection();
+            $innerDiv = $navRoot.find(".vis-app-action-nav-inner");
+
+            $innerDiv.on("click", navClick);
         }
         
         /* Handle Keydown event to add shortcuts to window
@@ -391,12 +397,6 @@
             if (!windowObjects || Object.keys(windowObjects).length <= 0)
             {
                 return;
-            }
-
-            // Create Navigation Container in which all open windows will be displayed for navigation
-            if (!$mainNavigationDiv) {
-                $mainNavigationDiv = dm.getNavigationSection();
-
             }
 
             // Curser move backword if shift and ctrl key pressed
@@ -435,7 +435,7 @@
     */
     function navigationShortcuts(show, forward) {
         if (show) {
-            $mainNavigationDiv.css('display', 'inherit');
+            $navRoot.css('display', 'flex');
         }
         else {
             if (navigatingInWindows) {
@@ -448,41 +448,45 @@
         // navigatingInWindows false means , not navigating through open objects, So create navigation shortcuts
         if (!navigatingInWindows) {
 
-            $innerDiv = $('<div class="vis-nav-innerContainer">');
-            $mainNavigationDiv.append($innerDiv);
-            $innerDiv.on("click", navClick);
-
-
+            var htm = [];
             //Parse each opened object(window, form, report OR process) and create navigation Shortcut
             $.each(windowObjects, function (i, obj) {
-
                 var imgSrc = '';
                 if (obj.hid) {
                     if (obj.hid.startsWith("W")) {         //if (obj.cPanel.constructor.name == 'APanel') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/winPic.png";
+                        imgSrc = "fa fa-window-maximize";
+                        if (obj.img) {
+                            imgSrc = obj.img;
+                        }
                     }
                     else if (obj.hid.startsWith("P")) {    //(obj.cPanel.constructor.name == 'AProcess') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/processPic.png";
+                        imgSrc = "fa fa-cog";
                     }
                     else if (obj.hid.startsWith("X")) {   //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/FormPic.png";
+                        imgSrc = "fa fa-list-alt";
                     }
                     else if (obj.hid.startsWith("R")) {    //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/report-pic.png";
+                        imgSrc = "vis vis-report";
                     }
                 }
                 else {
-                    imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/FormPic.png";
+                    imgSrc = "fa fa-list-alt";
                 }
+
+                htm.push('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="');
 
                 if (currentFrame.id == obj.id) {
-                    $innerDiv.append('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="vis-current-nav-window vis-nav-window"><span>' + obj.name + '</span><img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '"> </img></div>');
+                    htm.push('vis-current-nav-window '); 
                 }
-                else {
-                    $innerDiv.append('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="vis-nav-window"><span>' + obj.name + '</span><img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '"> </img></div>');
-                }
-
+                htm.push('vis-nav-window">');
+                htm.push('<span>' + obj.name + '</span><div class="vis-nav-content-wrap">');
+                if (imgSrc.indexOf('.') > -1)
+                    htm.push('<img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '"> </img>');
+                else
+                    htm.push('<i data-wid="' + obj.id + '" class="'+imgSrc+'"></i>');
+                htm.push('</div></div>');
             });
+            $innerDiv.append(htm.join(' '));
             navigatingInWindows = true;
         }
 
@@ -509,8 +513,8 @@
             dm.toggleContainer(item.data('wid'));
             dm.activateTaskBarItemUsingID(item);// Open selected Shortcut item
         }
-        $mainNavigationDiv.css('display', 'none');
-        $mainNavigationDiv.empty();
+        $navRoot.css('display', 'none');
+        $innerDiv.empty();
         navigatingInWindows = false;
     };
 
