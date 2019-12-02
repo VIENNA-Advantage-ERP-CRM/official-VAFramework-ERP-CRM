@@ -563,8 +563,15 @@
                 return;
             }
 
+            var img = null;
+            if (jsonData.FontName != '')
+                img = jsonData.FontName;
+            else if (jsonData.ImageUrl != '')
+                img = VIS.Application.contextUrl + "Images/Thumb16x16/" + jsonData.ImageUrl; //fixed
+            self.img = img;
+
             if (callback) {
-                callback(self.id, null, self.name, self.hid); //add shortcut
+                callback(self.id, img, self.name, self.hid); //add shortcut
             }
 
             jsonData = null;
