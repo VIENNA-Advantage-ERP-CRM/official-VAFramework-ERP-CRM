@@ -152,7 +152,7 @@
             
             $divIncludeTab = $root.find(".vis-ad-w-p-center-inctab");
 
-            $ulRightBar2 = $root.find(".vis-ad-w-p-tb-rc-a-list");
+            $ulRightBar2 = $root.find(".vis-ad-w-p-tb-rc-a-list").empty();
             
             $divContentArea = $root.find(".vis-ad-w-p-center-view");
 

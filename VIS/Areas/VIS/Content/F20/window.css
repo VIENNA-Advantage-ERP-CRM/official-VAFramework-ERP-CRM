@@ -196,7 +196,7 @@
 
 .vis-ad-w-p-status {
     background-color: rgba(var(--v-c-secondary), 0.5);
-    grid-column: 4/7;
+    grid-column: 4/6;
     grid-row: 7/7;
     display: flex;
     font-size: 0.75rem;
