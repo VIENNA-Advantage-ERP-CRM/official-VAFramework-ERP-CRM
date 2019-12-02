@@ -136,32 +136,32 @@
         <!-- App Main Menu START -->
         @if (ViewBag.Menu != null)
         {
-        <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
-            <div class="vis-menuTitle">
-                <p>@ViewBag.Menu.GetRootNode().Text</p>
-                <a href="javascript:void(0)" id="vis_closeMenu"><i class="fa fa-times" aria-hidden="true"></i></a>
-            </div>
-            <!-- Menu Search  -->
-            <div class="vis-menuSearch" dir="ltr">
-                <input type="text" name="vis_menuSearch" dir="@ViewBag.direction" id="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes" />
-                <!-- Leaf Nodes -->
-                <datalist id="vis_leafNodes">
-                    @foreach (var item in ViewBag.Menu.GetLeafNodes())
-                    {
-                        <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
-                    }
-                </datalist>
+            <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
+                <div class="vis-menuTitle">
+                    <p>@ViewBag.Menu.GetRootNode().Text</p>
+                    <a href="javascript:void(0)" id="vis_closeMenu"><i class="fa fa-times" aria-hidden="true"></i></a>
+                </div>
+                <!-- Menu Search  -->
+                <div class="vis-menuSearch" dir="ltr">
+                    <input type="text" name="vis_menuSearch" dir="@ViewBag.direction" id="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes" />
+                    <!-- Leaf Nodes -->
+                    <datalist id="vis_leafNodes">
+                        @foreach (var item in ViewBag.Menu.GetLeafNodes())
+                        {
+                            <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
+                        }
+                    </datalist>
 
-                <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="fa fa-filter"></a>
-                <a href="javascript:void(0)" class="fa fa-search"></a>
-            </div>
-            <!-- App Tree  -->
-            <div class="vis-sidebarMenuWrapper">
-                <div id="vis_divTree" class="vis-css-treeview vis-css-menu">
-                    @Html.Raw(@ViewBag.TreeHtml)
+                    <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="fa fa-filter"></a>
+                    <a href="javascript:void(0)" class="fa fa-search"></a>
+                </div>
+                <!-- App Tree  -->
+                <div class="vis-sidebarMenuWrapper">
+                    <div id="vis_divTree" class="vis-css-treeview vis-css-menu">
+                        @Html.Raw(@ViewBag.TreeHtml)
+                    </div>
                 </div>
             </div>
-        </div>
         }
 
         <div id="vis_menuOverlay" class="vis-app-overlay">
@@ -201,13 +201,16 @@
                             <span class="vis vis-home"></span>
                             <a>@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Home")</a>
                         </li>
-                        
+
                     </ul>
                 </div>
-                <div class="vis-footer-c-r">
+                <div class="vis-app-footer-c-r">
                 </div>
             </div>
         </footer>
+        <audio id="vis_buzzer" style="display: none">
+            <source src="~/Areas/VIS/Content/notify.wav" type="audio/wav" />
+        </audio>
     </div>
         @section scripts {
 

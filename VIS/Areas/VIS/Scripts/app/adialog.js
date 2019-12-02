@@ -4,12 +4,14 @@
      *  Info Dialog Management
      *  
      */
+    var $body = $('body');
+    var $prodBuzzer = $('#vis_buzzer');
 
     function AD() {
 
         var _overLay = $('<div id="overlayMsgDialog" class="web_dialog_overlay"></div>');
 
-        var $mainDivParent = $('<div class="" style="z-index: 999999;width: 100%;top: 0;height: 100%;display:none;" tabIndex=1>');
+        var $mainDivParent = $('<div class="vis-PopupWrap-alertmain" tabIndex=1>');
         //<div class="vis-confirm-popup-check"><input type="checkbox"><label>Background</label></div>
         var $mainDiv = $('<div id="VAPOS_ErrorInfo" class="vis-PopupWrap-alert">' +
               '<input class="vis-Dialog-buttons-text" type="number"  tabindex="-30" style="z-index:-44;position:absolute"  autofocus="autofocus"  > ' +
@@ -35,7 +37,7 @@
 
         $mainDivParent.append($mainDiv);
 
-        $('body').append(_overLay).append($mainDivParent);
+        $body.append(_overLay).append($mainDivParent);
 
         var _hideOverlay = true;
         var _header = $mainDiv.find(".vis-PopupHeader-alert");
@@ -211,7 +213,7 @@
             }
             catch (ex) {
             }
-            $mainDivParent.css({ "position": "absolute", "display": "inherit" });
+            $mainDivParent.css({ "position": "absolute", "display": "flex" });
             $mainDiv.show();
             //_btnCloseInfo.removeClass();
             //_btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
@@ -348,7 +350,7 @@
         function warn(msg, header, callback) {
             _callback = callback;
             try {
-                $('#prodError')[0].play();
+                $prodBuzzer[0].play();
             }
             catch (ex) {
             }
@@ -399,7 +401,7 @@
         function error(msg, header, callback) {
             _callback = callback;
             try {
-                $('#prodError')[0].play();
+                $prodBuzzer[0].play();
             }
             catch (ex) {
             }

@@ -997,7 +997,8 @@
 
         this.values = null;
 
-        var $img = $("<i>");
+        var $img = $("<i title='"+text+"'>");
+
         var $txt = $("<span>").text(text);
         var rootPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/";
 
@@ -1035,6 +1036,9 @@
             this.readReference(234);
             $ctrl.css("color", "magenta"); //
             setIcon("fa fa-line-chart");    //  16*16
+        }
+        else if (isLink) {
+            setIcon("vis vis-action");
         }
 
         function setIcon(img) {

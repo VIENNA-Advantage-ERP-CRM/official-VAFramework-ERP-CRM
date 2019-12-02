@@ -6,6 +6,7 @@
     font-style: normal;
     font-display: block;
 }
+
 .vis {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'vis-fonts' !important;
@@ -18,6 +19,22 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.vis-action:before {
+    content: "\e942";
+}
+
+.vis-faxemail:before {
+    content: "\e941";
+}
+
+.vis-attachdocumentfrom:before {
+    content: "\e946";
+}
+
+.vis-zoomacross:before {
+    content: "\e947";
 }
 
 .vis-account:before {

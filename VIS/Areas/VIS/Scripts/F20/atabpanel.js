@@ -125,15 +125,15 @@
                     iconPath = panels[i].getIconPath();
                 }
                 else {
-                    iconPath = 'VIS/Images/base/defPanel.ico';
+                    iconPath = 'fa fa-object-group';// 'VIS/Images/base/defPanel.ico';// "fa fa-window-maximize";//'VIS/Images/base/defPanel.ico';
                 }
                 str.push('<li default="' + panels[i].getIsDefault() + '" data-panelid="' + panels[i].getAD_TabPanel_ID() +
                     '" data-cname="' + panels[i].getClassName() + '" data-name="' + panels[i].getName() + '">');
-                if (iconPath.indexOf('.'))
+                if (iconPath.indexOf('.')>-1)
                     str.push('<img alt = "' + panels[i].getName() + '" title = "' + panels[i].getName() +
-                        '"  src = "' + VIS.Application.contextUrl + 'Areas/' + iconPath + '" ></img >');
+                        '"  src = "' + VIS.Application.contextUrl + 'Areas/' + iconPath + '" onerror=this.src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/defpanel.ico"></img >');
                 else
-                    str.push('<span> <i  class="' + iconPath + '" ></i></span>');
+                    str.push('<span> <i title = "' + panels[i].getName() +'" class="' + iconPath + '" ></i></span>');
 
                 str.push('</li>');
 

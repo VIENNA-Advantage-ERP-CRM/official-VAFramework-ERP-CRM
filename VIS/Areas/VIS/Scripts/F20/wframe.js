@@ -421,8 +421,11 @@
             var img = null;
             if (wObj.getFontName() != '')
                 img = wObj.getFontName();
-            else if (wObj.getImageUrl()!='')
-                img = VIS.Application.contextUrl + "Images/Thumb16x16/"+ wObj.getImageUrl(); //fixed
+            else if (wObj.getImageUrl() != '')
+                img = VIS.Application.contextUrl + "Images/Thumb16x16/" + wObj.getImageUrl(); //fixed
+            else
+                img = "fa fa-window-maximize";
+
             self.img = img;
             if (callback) {
                 callback(self.id, img, self.name, self.hid); //add shortcut
@@ -499,9 +502,10 @@
                 self = null;
                 return;
             }
-
+            var img = "fa fa-list-alt";
+            self.img = img;
             if (callback) {
-                callback(self.id, null, self.name, self.hid); //add shortcut
+                callback(self.id, img, self.name, self.hid); //add shortcut
             }
 
             jsonData = null;
@@ -568,6 +572,11 @@
                 img = jsonData.FontName;
             else if (jsonData.ImageUrl != '')
                 img = VIS.Application.contextUrl + "Images/Thumb16x16/" + jsonData.ImageUrl; //fixed
+            else if (action == "P")
+                img = "fa fa-cog";
+            else
+                img = "vis vis-report";
+            
             self.img = img;
 
             if (callback) {

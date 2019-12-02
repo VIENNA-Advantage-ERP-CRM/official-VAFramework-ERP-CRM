@@ -201,8 +201,11 @@
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
     <Content Include="Areas\VIS\Content\Home.css" />
+    <Content Include="Areas\VIS\Content\Images\logo.png" />
     <Content Include="Areas\VIS\Content\Login.css" />
     <Content Include="Areas\VIS\Content\F20\Window.css" />
+    <Content Include="Areas\VIS\Content\notify.mp3" />
+    <Content Include="Areas\VIS\Content\notify.wav" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
     <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />
@@ -279,6 +282,7 @@
     <Content Include="Areas\VIS\Images\base\Copy24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocument24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocumentX24.png" />
+    <Content Include="Areas\VIS\Images\base\defpanel.ico" />
     <Content Include="Areas\VIS\Images\base\Delete-W24.png" />
     <Content Include="Areas\VIS\Images\base\delete10.png" />
     <Content Include="Areas\VIS\Images\base\Delete24.PNG" />
