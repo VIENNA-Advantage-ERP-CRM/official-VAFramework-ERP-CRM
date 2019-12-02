@@ -245,16 +245,19 @@ a {
 
 .vis-app-footer-c {
     display: flex;
-    height: 100%;
 }
 
 .vis-app-footer-c-l {
     flex: 1;
+    overflow-y:auto;
 }
 
 .vis-app-footer-c-r {
     flex: 0;
     flex-basis: 23px;
+    background-image: url(../Images/logo.png);
+    background-position-y: center;
+    background-size: contain;
 }
 
 /*end footer*/
@@ -301,6 +304,46 @@ a {
         }
 
     .vis-app-user-img-wrap i {
-        color: rgba(var(--v-c-primary));
+        color: rgba(var(--v-c-primary), 1);
     }
 /****** Style Profile image END*****/
+
+/* Nav shortcuts css*/
+.vis-nav-window {
+    height: 147px;
+    z-index: 9;
+    width: 270px;
+    opacity: 1;
+    float: left;
+    color: rgba(var(--v-c-on-secondary), 1);
+    margin: 5px;
+    text-align: center;
+    border: 3px solid rgba(var(--v-c-primary), 1);
+    background-color: rgba(var(--v-c-secondary), 1);
+    display: flex;
+    flex-direction: column;
+    border-radius: .25rem;
+}
+    .vis-nav-window span {
+        text-align: center;
+        font-weight: bold;
+        float: left;
+        width: 100%;
+        background: rgba(var(--v-c-primary), 1);
+        padding: 1px 0;
+        color: rgba(var(--v-c-on-primary), 1);
+        border-top-left-radius: .05rem;
+        border-top-right-radius: .05rem;
+    }
+.vis-nav-content-wrap {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-size: 4rem;
+    color: rgba(var(--v-c-primary), 1);
+}
+.vis-nav-window.vis-current-nav-window {
+    border: 3px solid rgba(var(--v-c-on-secondary), .8);
+    /*background-color: rgba(var(--v-c-secondary), 1);*/
+}

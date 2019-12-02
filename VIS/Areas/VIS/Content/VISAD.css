@@ -3987,39 +3987,13 @@ html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2 {
     /*padding: 100px;*/
 }
 
-.vis-nav-window.vis-current-nav-window {
-    border: 3px solid #f4ad0f;
-    background-color: white;
-}
 
-.vis-nav-window {
-    height: 147px;
-    z-index: 9;
-    width: 270px;
-    opacity: 1;
-    float: left;
-    color: white;
-    margin: 5px;
-    text-align: center;
-    border: 3px solid #005787;
-    background-color: white;
-}
-
-
-    .vis-nav-window span {
-        text-align: center;
-        font-weight: bold;
-        float: left;
-        width: 100%;
-        background: #005787;
-        padding: 1px 0;
-    }
 
 .vis-nav-window-img {
     /*height: 119px;
     width: 100%;
     float: left;*/
-    transform: translateY(50%);
+    /*transform: translateY(50%);*/
 }
 
 .vis-nav-innerContainer {

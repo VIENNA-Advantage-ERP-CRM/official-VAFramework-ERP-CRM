@@ -454,23 +454,23 @@
                 var imgSrc = '';
                 if (obj.hid) {
                     if (obj.hid.startsWith("W")) {         //if (obj.cPanel.constructor.name == 'APanel') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/winPic.png";
+                        imgSrc = "fa fa-window-maximize";
                         if (obj.img) {
                             imgSrc = obj.img;
                         }
                     }
                     else if (obj.hid.startsWith("P")) {    //(obj.cPanel.constructor.name == 'AProcess') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/processPic.png";
+                        imgSrc = "fa fa-cog";
                     }
                     else if (obj.hid.startsWith("X")) {   //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/FormPic.png";
+                        imgSrc = "fa fa-list-alt";
                     }
                     else if (obj.hid.startsWith("R")) {    //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/report-pic.png";
+                        imgSrc = "vis vis-report";
                     }
                 }
                 else {
-                    imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/FormPic.png";
+                    imgSrc = "fa fa-list-alt";
                 }
 
                 htm.push('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="');
@@ -479,12 +479,12 @@
                     htm.push('vis-current-nav-window '); 
                 }
                 htm.push('vis-nav-window">');
-                htm.push('<span>' + obj.name + '</span>');
+                htm.push('<span>' + obj.name + '</span><div class="vis-nav-content-wrap">');
                 if (imgSrc.indexOf('.') > -1)
                     htm.push('<img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '"> </img>');
                 else
                     htm.push('<i data-wid="' + obj.id + '" class="'+imgSrc+'"></i>');
-                htm.push('</div>');
+                htm.push('</div></div>');
             });
             $innerDiv.append(htm.join(' '));
             navigatingInWindows = true;
