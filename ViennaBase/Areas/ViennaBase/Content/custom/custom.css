@@ -244,9 +244,12 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 
     .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
         font-family: verdana, Arial,Helvetica,sans-serif;
+        outline: none;
     }
 
-
+input:not([type=button]):focus,  select:focus, textarea:focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
 /*JqueryUI properties override*/
 .ui-button {
     background: rgba(var(--v-c-primary), 1) !important;

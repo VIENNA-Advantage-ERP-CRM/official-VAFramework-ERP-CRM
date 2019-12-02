@@ -374,6 +374,10 @@
             font-size: 0.8rem;
             padding-left: 2px;
         }
+
+.vis-ad-w-p-tb-rc .dropdown-menu {
+    transform: translate3d(-105px, 27px, 0px);
+}
 /*End toolbar */
 /* tab controls*/
 
