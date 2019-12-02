@@ -3461,6 +3461,17 @@ html[dir="rtl"] .vis-cvd-editbtn {
 
 /*Alert*/
 
+
+.vis-PopupWrap-alertmain {
+    z-index: 999999;
+    width: 100%;
+    top:0;
+    height: 100%;
+    display: none;
+}
+
+
+
 .vis-alert-close {
     width: 42px;
     height: 43px;

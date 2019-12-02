@@ -204,6 +204,8 @@
     <Content Include="Areas\VIS\Content\Images\logo.png" />
     <Content Include="Areas\VIS\Content\Login.css" />
     <Content Include="Areas\VIS\Content\F20\Window.css" />
+    <Content Include="Areas\VIS\Content\notify.mp3" />
+    <Content Include="Areas\VIS\Content\notify.wav" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
     <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />

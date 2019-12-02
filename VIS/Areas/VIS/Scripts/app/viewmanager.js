@@ -85,7 +85,7 @@
                 addRestoredShortcut();
             }
             else {
-                var imgPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/window-default.png";
+                var imgPath = "fa fa-window-maximize";
                 if (imgName) {
                     imgPath = imgName;
                 }
@@ -206,7 +206,7 @@
         function startCFrame(windw) {
             windw.onClosed = removeShortcut;
             windw.show($mainConatiner);
-            addShortcut(windw.getId(), null, windw.getName(), null);
+            addShortcut(windw.getId(), "fa fa-list-alt", windw.getName(), null);
             registerView(windw);
         };
 
@@ -451,27 +451,29 @@
             var htm = [];
             //Parse each opened object(window, form, report OR process) and create navigation Shortcut
             $.each(windowObjects, function (i, obj) {
-                var imgSrc = '';
-                if (obj.hid) {
-                    if (obj.hid.startsWith("W")) {         //if (obj.cPanel.constructor.name == 'APanel') {
-                        imgSrc = "fa fa-window-maximize";
-                        if (obj.img) {
-                            imgSrc = obj.img;
-                        }
-                    }
-                    else if (obj.hid.startsWith("P")) {    //(obj.cPanel.constructor.name == 'AProcess') {
-                        imgSrc = "fa fa-cog";
-                    }
-                    else if (obj.hid.startsWith("X")) {   //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = "fa fa-list-alt";
-                    }
-                    else if (obj.hid.startsWith("R")) {    //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = "vis vis-report";
-                    }
+               
+                //if (obj.hid) {
+                //    if (obj.hid.startsWith("W")) {         //if (obj.cPanel.constructor.name == 'APanel') {
+                //        imgSrc = "fa fa-window-maximize";
+                //        if (obj.img) {
+                //            imgSrc = obj.img;
+                //        }
+                //    }
+                //    else if (obj.hid.startsWith("P")) {    //(obj.cPanel.constructor.name == 'AProcess') {
+                //        imgSrc = "fa fa-cog";
+                //    }
+                //    else if (obj.hid.startsWith("X")) {   //if (obj.cPanel.constructor.name == 'AForm') {
+                //        imgSrc = "fa fa-list-alt";
+                //    }
+                //    else if (obj.hid.startsWith("R")) {    //if (obj.cPanel.constructor.name == 'AForm') {
+                //        imgSrc = "vis vis-report";
+                //    }
+                //}
+                if (!obj.img || obj.img == '') {
+                    obj.img  = "fa fa-list-alt";
                 }
-                else {
-                    imgSrc = "fa fa-list-alt";
-                }
+
+                var imgSrc = obj.img;
 
                 htm.push('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="');
 
@@ -480,8 +482,10 @@
                 }
                 htm.push('vis-nav-window">');
                 htm.push('<span>' + obj.name + '</span><div class="vis-nav-content-wrap">');
-                if (imgSrc.indexOf('.') > -1)
-                    htm.push('<img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '"> </img>');
+                if (imgSrc.indexOf('.') > -1) {
+                    imgSrc = imgSrc.replace("Thumb16x16", "Thumb140x120");
+                    htm.push('<img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '" alt="' + obj.name +'"> </img>');
+                }
                 else
                     htm.push('<i data-wid="' + obj.id + '" class="'+imgSrc+'"></i>');
                 htm.push('</div></div>');
