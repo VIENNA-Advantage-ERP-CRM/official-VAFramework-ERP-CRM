@@ -282,6 +282,7 @@
     <Content Include="Areas\VIS\Images\base\Copy24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocument24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocumentX24.png" />
+    <Content Include="Areas\VIS\Images\base\defpanel.ico" />
     <Content Include="Areas\VIS\Images\base\Delete-W24.png" />
     <Content Include="Areas\VIS\Images\base\delete10.png" />
     <Content Include="Areas\VIS\Images\base\Delete24.PNG" />

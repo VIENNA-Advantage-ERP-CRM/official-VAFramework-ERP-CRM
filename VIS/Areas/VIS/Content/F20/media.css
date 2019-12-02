@@ -67,7 +67,7 @@
 
     .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-o-icorbar {
         order: 1;
-        height: 40px;
+        height: 35px;
         width: auto;
         align-items: flex-start;
         flex-basis: auto;
@@ -84,7 +84,7 @@
     .vis-ad-w-p-actionpanel-r li {
         border-bottom: 3px solid transparent;
         border-left: none;
-        padding: 7px 9px;
+        padding: 4px 9px;
     }
 
         li.vis-ad-w-p-ap-tp-o-li-selected {

@@ -497,17 +497,17 @@
             /////5 Right bar
             if (VIS.MRole.getDefault().getIsShowPreference()) {
 
-              //  $ulRightBar2.append(this.aPreference.getListItmIT());
+                $ulRightBar2.append(this.aPreference.getListItmIT());
             }
 
             this.aHelp = this.addActions("Help", null, true, false, true, onAction);
-           // $ulRightBar2.append(this.aHelp.getListItmIT());
+            $ulRightBar2.append(this.aHelp.getListItmIT());
 
             this.aCardDialog = this.addActions("CardDialog", null, true, false, true, onAction);
-            //$ulRightBar2.append(this.aCardDialog.getListItmIT());
+            $ulRightBar2.append(this.aCardDialog.getListItmIT());
 
             this.aShowSummaryLevel = this.addActions("ShowSummaryNodes", null, true, false, true, onAction, true);
-           // $ulRightBar2.append(this.aShowSummaryLevel.getListItmIT());
+            $ulRightBar2.append(this.aShowSummaryLevel.getListItmIT());
 
             mWindow = null;
 
