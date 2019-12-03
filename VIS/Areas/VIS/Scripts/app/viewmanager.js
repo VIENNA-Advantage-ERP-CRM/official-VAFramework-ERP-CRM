@@ -290,9 +290,9 @@
 
         /* resize all open windows when screen size is changed
         */
-        function sizeChanged() {
+        function sizeChanged(h,w) {
             for (var id in windowObjects) {
-                windowObjects[id].sizeChanged();
+                windowObjects[id].sizeChanged(h,w);
             }
             //alert("resize");
         };
