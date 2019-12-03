@@ -1365,7 +1365,7 @@ html[dir="rtl"] .vis-viewMoreComments {
     margin-right: 10px;
 }
 
-ul.vis-userLinks-ListMenu {
+ul.vis-userLinks-ListMenu, ul.vis-userFavourites-ListMenu {
     list-style: none;
     margin: 0px 0px 0px 0px;
     padding: 0px;
@@ -1374,19 +1374,24 @@ ul.vis-userLinks-ListMenu {
     grid-template-columns: repeat(3, 1fr);
 }
 
-    ul.vis-userLinks-ListMenu li {
+    ul.vis-userLinks-ListMenu li, ul.vis-userFavourites-ListMenu li {
         /*float: left;
         width: 30%;*/
         border: 1px solid rgba(var(--v-c-primary), 1);
-        text-align: center;
+        /*text-align: center;*/
         /*margin: 0px 10px 10px 0px;*/
         padding: 10px;
         display: flex;
-        height: 140px;
         align-items: center;
         justify-content: center;
         cursor: pointer;
     }
+ ul.vis-userLinks-ListMenu li{
+     height: 140px;
+ }
+ ul.vis-userFavourites-ListMenu li{
+     height: 110px;
+ }
 
 html[dir="rtl"] ul.vis-userLinks-ListMenu li {
     float: right;
@@ -1418,21 +1423,21 @@ ul.vis-userLinks-ListMenu li:last-child {
 }
 
     .favouritesIcons.icon-favourite {
-        background-position: 0px 0px;
+        /*background-position: 0px 0px;
         width: 19px;
         height: 18px;
         float: left;
         margin-top: -2px;
-        margin-right: 5px;
+        margin-right: 5px;*/
     }
 
 .userFavs_activeTab .favouritesIcons.icon-favourite {
-    background-position: -29px 0px;
+    /*background-position: -29px 0px;
     width: 19px;
     height: 18px;
     float: left;
     margin-top: -2px;
-    margin-right: 5px;
+    margin-right: 5px;*/
 }
 
 .favouritesIcons.icon-favourite-large {
@@ -1452,20 +1457,20 @@ ul.vis-userLinks-ListMenu li:last-child {
 }
 
 ul.vis-userFavourites-ListMenu {
-    list-style: none;
+    /*list-style: none;
     margin: 0px 0px 0px 0px;
-    padding: 0px;
+    padding: 0px;*/
 }
 
     ul.vis-userFavourites-ListMenu li {
-        float: left;
+        /*float: left;
         width: 30%;
         border: 1px solid #e3e3e3;
         margin: 0px 10px 10px 0px;
         padding: 5px 10px 20px 10px;
         overflow: hidden;
         display: inline-block;
-        height: 110px;
+        height: 110px;*/
     }
 
 html[dir="rtl"] ul.vis-userFavourites-ListMenu li {
@@ -1477,17 +1482,22 @@ ul.vis-userFavourites-ListMenu li:last-child {
     margin-bottom: 0px;
 }
 
-ul.vis-userFavourites-ListMenu li a {
-    display: block;
+ul.vis-userFavourites-ListMenu li > a {
+    display: flex;
+    /* cursor: pointer; */
+    flex: 1;
+    align-items: center;
+    justify-content: center;
 }
 
-    ul.vis-userFavourites-ListMenu li a i {
-        padding-top: 20px;
-        display: block;
-        clear: both;
-        font-style: normal;
-        width: 80px;
-    }
+ul.vis-userFavourites-ListMenu li a i {
+    padding-top: 20px;
+    /*display: inline;*/
+    clear: both;
+    font-style: normal;
+    /* width: 80px; */
+    font-size: 1.2rem;
+}
 
 /* Links And favourites Css Definations END */
 
@@ -3193,4 +3203,15 @@ p.vis-maintain-customer-p span {
 ul.vis-userLinks-ListMenu li a i {
     font-size: 3rem;
     display: flex;
+}
+.vis-favboxtopico {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: -5px;
+}
+
+.vis-favboxtopico a {
+    margin-left: 10px;
+    cursor: pointer;
+    color: rgba(var(--v-c-on-secondary), .7);
 }
