@@ -182,8 +182,8 @@
         var getFieldValue = function (mField) {
             var colValue = mField.getValue();
 
-            if (!mField.getIsDisplayed())
-                return "";
+            //if (!mField.getIsDisplayed())
+            //    return "";
             if (colValue) {
                 var displayType = mField.getDisplayType();
 
@@ -363,7 +363,7 @@
             this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
         }
 
-        this.dynamicStyle.push("justify-self:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment] + ";text-align:" + this.textAlignEnum[justify] + ";" );
+        this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]  );
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };
