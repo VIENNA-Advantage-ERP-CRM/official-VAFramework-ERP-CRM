@@ -15,7 +15,6 @@
         var ret = null;
         var dataIn = { sql: sqls.join("/"), param: params };
 
-        // dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
         $.ajax({
             url: nonQueryUrl + 'yWithCode',
             type: "POST",
@@ -29,7 +28,6 @@
                 callback(json);
             }
         });
-
         return ret;
     };
 
@@ -74,30 +72,14 @@
             this.parameterFixedArea = $('<div class="vis-process-parm-top">');
             this.parameterContainer.append($('<div class="vis-apanel-lb-toggle"></div>').append($imgToggle)).append(this.parameterFixedArea);
             $divOuterMain = $('<div class="vis-process-outer-main-wrap">');
-
             this.$divDesc = $('<div class="vis-process-description">');
-            // <h5></h5>
-            //<p></p>
-            //</div>
             this.reportContainer = $('<div class="vis-process-result">');
             this.reportAreaContainer.append(this.$divDesc).append(this.reportContainer);
-
             $divOuterMain.append(this.parameterContainer).append(this.reportAreaContainer);
             this.partitionContainer.append(this.reportToolbar).append($divOuterMain);
-            //this.partitionContainer.append(this.parameterContainer).append(this.reportContainer);
             this.showParameterClose = false;
-
-            //this.reportContainer.height(this.reportAreaContainer.height() - (this.$divDesc.height()+25));
         }
-
-        //InitComponenet
-
         self = this; //self pointer
-
-        //if (IsPosReport == "IsPosReport") {
-        //    this.IsPosReport = "IsPosReport";
-        //    self.PosAD_Process_ID = PosAD_Process_ID;
-        //}
 
         var $root, $busyDiv, $contentGrid, $table;
         var $btnOK, $btnClose, $text, $cmbType, $lblRptTypeHeader, $chkIsBG, $lblIsBG;
@@ -108,67 +90,29 @@
             $table = $("<table  class='vis-process-table'>");
             $btnOK = $("<button class='vis-button-ok'>").text(VIS.Msg.getMsg("OK"));
             $btnClose = $("<button class='vis-button-close'>").text(VIS.Msg.getMsg("Close"));
-            if (splitUI) {
-                $busyDiv.css('top', '0px');
-                $btnOK.hide();
-                $btnClose.hide();
-            }
+            $busyDiv.css('top', '0px');
+            $btnOK.hide();
+            $btnClose.hide();
             $table.height(height);
             $busyDiv.height(height);
 
             $contentGrid = $("<div>");
-            // $table.append($("<tr>").append($contentGrid));
             $root.append($table).append($busyDiv); // append to root
 
             $divOuterMain.append($busyDiv);
-
             $cmbType = $('<select style="display:none;width:100%">');
-            //$cmbType.append("<option value='S'>" + VIS.Msg.getMsg("Select") + "</option>");
-            //$cmbType.append("<option value='P'>" + VIS.Msg.getMsg("OpenPDF") + "</option>");
-            //$cmbType.append("<option value='C'>" + VIS.Msg.getMsg("OpenCSV") + "</option>");
-            //loadFileTypes();
-
             $chkIsBG = $('<input type="checkbox" class="vis-process-background">');
             $lblIsBG = $('<label  class="vis-process-background-label">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
-
             $text = $("<span class='vis-process-description-Span' style='height: 40px;'>").val("asassasasasasaasa");
             //ProcessDialog
             $contentGrid.append($text);
             $lblRptTypeHeader = $('<label style="float: left;margin: 0px 10px 0px 0px;display:none;color:white">' + VIS.Msg.getMsg("ChooseReportType") + '</label>');
             var divrptType = $('<div style="display:inherit"></div>');
-            //divrptType.append($lblRptTypeHeader).append($cmbType);
             self.parameterFixedArea.append($lblRptTypeHeader).append($cmbType).append($chkIsBG).append($lblIsBG);
 
             $contentGrid.append(divrptType);
-
-            var $divBG = $('<div>');
-            //$divBG.append($chkIsBG).append($lblIsBG);
-            //$contentGrid.append($divBG);
-
             $contentGrid.append($btnOK).append($btnClose);
-
-
             self.$divDesc.append($contentGrid);
-
-            //if (IsPosReport == "IsPosReport") {
-            //    $btnOK.css("display", "none");
-            //    $btnClose.css("display", "none");
-            //}
-
-            //if (self.splitUI) {
-            //    self.parent.getContentGrid().append(self.partitionContainer);
-            //    //this.reportContainer.append(panel.getRoot());
-            //    // this.parameterContainer.append(pctl.parameters.getRoot());
-
-            //}
-            ////else {
-            //    self.parent.getContentGrid().append(panel.getRoot());
-            //}
-            //$chkIsBG.on('click', function () {
-            //    pi.setIsBackground($chkIsBG.is(':checked'));
-            //});
-
-
         }
 
         this.loadFileTypes = function () {
@@ -189,33 +133,23 @@
                         sel.showReportTypes(false);
                         return;
                     }
-
                     $cmbType.append("<option value='S'>" + VIS.Msg.getMsg("Select") + "</option>");
                     for (var i = 0; i < d.length; i++) {
                         var opt = $("<option value=" + d[i].Key + ">" + d[i].Name + "</li>");
                         $cmbType.append(opt);
                         opt = null;
                     }
-
-
                 }
-
             });
-
         };
         initilizedComponent();
 
 
         this.setSize = function (height, width) {
-            if ($root) {
-                $root.height(height); //height 
-                $busyDiv.height(height);
-                //$contentGrid.height(height);
-                if (this.setMsg) {
-                    this.setMsg("");
-                }
+            $busyDiv.height(height);
+            if (this.setMsg) {
+                this.setMsg("");
             }
-
         }
         this.setSize(height);
 
@@ -224,22 +158,17 @@
         };
 
         //privilized function
-        this.getRoot = function () { return $root; };
+        this.getRoot = function () { return this.$root; };
         this.getContentGrid = function () { return $contentGrid; };
         this.setBusy = function (busy, focus) {
             isLocked = busy;
             if (busy) {
-                //		setStatusLine(processing);
                 $busyDiv[0].style.visibility = 'visible';// .show();
                 $busyDiv.css('display', '');
             }
             else {
-                //$busyDiv.hide();
                 $busyDiv[0].style.visibility = 'hidden';
                 $busyDiv.css('display', 'none');
-                if (focus) {
-                    //curGC.requestFocusInWindow();
-                }
             }
         };
         this.setMsg = function (msg, width) {
@@ -251,7 +180,6 @@
                 this.reportContainer.removeClass('vis-process-result');
                 this.reportContainer.addClass('vis-process-detail-result');
                 this.reportContainer.append($resultSpan);
-                //return;
             }
             else {
                 $text.append(msg);
@@ -265,9 +193,6 @@
 
             var $paraG = $($text.find('p')[0]);
             $bMore = $text.find('.vis-process-papapa');
-            //if ($paraG && $bMore) {
-            //    $paraG.css({ 'width': ($text.width() - $bMore.width() - 10 + 'px'), 'float': 'left' });
-            //}
             $paraG.css({ 'float': 'left' });
             if (this.isReport) {
                 var paraWidth = $paraG.width();
@@ -297,22 +222,6 @@
             };
 
             this.setMsgHeight(this.isReport);
-
-
-
-
-
-
-
-            //var resultTable = $contentGrid.find('.vis-process-result-table');
-            //var trheight = resultTable.parent().closest('div').height();
-            //var spanHeight = resultTable.closest('span').height();
-
-            //resultTable.css('max-height', (trheight - (spanHeight + 26 + 20 + 33)) + 'px');;
-            //  resultTable.height(trheight - (spanHeight + 26 + 20 + 33));
-
-
-            ////}
         };
 
         this.setMsgHeight = function (isReport) {
@@ -327,10 +236,6 @@
                 }
             }
             this.reportContainer.height(this.reportAreaContainer.height() - (this.$divDesc.height() + 20));
-            //if (this.calculateWidth) {
-            //this.reportAreaContainer.width(this.partitionContainer.width() - (this.parameterContainer.width()));
-            //this.calculateWidth = false;
-            //}
         };
 
         this.setParameterHeights = function (height, width) {
@@ -344,8 +249,6 @@
             var wrapperHeight = $divOuterWrap.height();
             var paraRoot = $(selff.partitionContainer.find('.vis-pro-para-root')[0]);// $root.closest('.vis-process-outer-main-wrap').height();
             paraRoot.height((wrapperHeight - 114) + 'px');
-            //this.reportAreaContainer.width(width - this.parameterContainer.width());
-
         };
 
         this.getParametersContainer = function () {
@@ -388,7 +291,6 @@
             else
                 $btnOK.hide();
         };
-
 
         this.showParameterCloseIcon = function (show) {
             if (show) {
@@ -437,14 +339,10 @@
         this.reportBytes = null;
         this.reportPath = null;
 
-
-
         this.showReportTypes = function (value) {
             if (value) {
-                //if (IsPosReport != "IsPosReport") {
                 $cmbType.css('display', 'block');
                 $lblRptTypeHeader.css('display', 'block');
-                //}
             }
             else {
                 $cmbType.css('display', 'none');
@@ -510,14 +408,7 @@
                 return;
             }
             var pi = null;
-            //if (self.IsPosReport == "IsPosReport") {//1000553
-            //    pi = new VIS.ProcessInfo(self.IsPosReport, self.PosAD_Process_ID, 0, 0);
-            //}
-            //else {
             pi = new VIS.ProcessInfo(self.jpObj.Name, self.jpObj.AD_Process_ID, 0, 0);
-            // }
-
-            // var pi = new VIS.ProcessInfo(self.jpObj.Name, self.jpObj.AD_Process_ID, 0, 0);
             pi.setAD_User_ID(self.ctx.getAD_User_ID());
             pi.setAD_Client_ID(self.ctx.getAD_Client_ID());
             pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
@@ -525,23 +416,7 @@
             pi.setIsReport(self.isReport);
 
             var ctl = new VIS.ProcessCtl(self, pi, null);
-
-            //if (self.jpObj.defaultFileType) {
-            //    pi.setFileType(self.jpObj.defaultFileType);
-            //}
-            //else {
             pi.setFileType($cmbType.val());
-            // }
-            //if ($cmbType.val() == "C") {
-            //    ctl.setIsPdf(false);
-            //    ctl.setIsCsv(true);
-            //}
-            //else if ($cmbType.val() == pctl.REPORT_TYPE_PDF) {
-            //    ctl.setIsPdf(true);
-            //    ctl.setIsCsv(false);
-            //}
-
-            //           ctl.process(self.windowNo, self.IsPosReport); //call dispose intenally
 
             if (self.windowNo) {
                 ctl.process(self.windowNo); //call dispose intenally
@@ -549,7 +424,6 @@
             else {
                 ctl.process(VIS.Env.getWindowNo()); //call dispose intenally
             }
-
 
             ctl = null;
         };
@@ -575,23 +449,14 @@
             }
         });
 
-        //this.setReportBytes = function (bytes) {
-        //    reportBytes = bytes;
-        //};
-
-
         this.disposeComponent = function () {
             if ($btnOK)
                 $btnOK.off("click");
             if ($btnClose)
                 $btnClose.off("click");
-            if ($root)
-                $root.remove();
-            $root = null;
             if ($contentGrid)
                 $contentGrid.remove();
             $contentGrid = null;
-            //this.partitionContainer.append(this.reportToolbar).append(this.parameterContainer).append(this.reportContainer);
             if (this.reportContainer) {
                 this.reportContainer.remove();
             }
@@ -611,9 +476,7 @@
             $busyDiv = null;
             $btnOK = $btnClose = $text = null;
             this.$parentWindow = null;
-            //this.ctx = null;
             this.isComplete = false;
-            //this.setSize = null;
             this.jpObj = null;
             self = null;
         }
@@ -623,10 +486,6 @@
 
     AProcess.prototype.init = function (json, $parent, windowNo) {
 
-        //if (json.IsReport) {
-        //    VIS.ADialog.info("Process Reoprt is not supported yet");
-        //    return fasle;
-        //}
         if (json.Name == null || json.Name == "") {
             VIS.ADialog.info("Process Name is empty");
             return fasle;
@@ -654,9 +513,6 @@
 
         }
         this.setMsgHeight(json.IsReport);
-
-
-
 
         if (!json.HasPara) {
             this.showOkIcon(true);
@@ -691,8 +547,6 @@
     AProcess.prototype.lockUI = function (pi) {
         this.isLocked = true;
         this.setBusy(true);
-        //this.isLocked = true;
-        //this.setBusy(true);
     };
 
     /**
@@ -713,15 +567,13 @@
         }
         else if (!this.jpObj.IsReport) {
             msg = "<p style='float: left;width: 100%;'><font color=\"" + (pi.getIsError() ? "#FF0000" : "#0000FF") + "\">** " +
-             "</font></p>";
+                "</font></p>";
         }
 
 
         msg += pi.getLogInfo(true);
 
         this.setMsg(msg);
-        //btnOK.IsEnabled = true;
-        // this.isComplete = true;
         this.setBusy(false);
         pi.setSummary("");
         this.isLocked = false;
@@ -847,11 +699,6 @@
         return result;
     };
 
-    //var REPORT_TYPE_CSV = "C";
-    //var REPORT_TYPE_PDF = pctl.REPORT_TYPE_PDF;
-    //var REPORT_TYPE_RTF = "R";
-    /* END Private */
-
     AProcess.prototype.createUI = function (panel, pctl, repObj) {
 
         var btnClose = null;
@@ -880,10 +727,6 @@
 
         function createControls(panel, repObj) {
             var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
-
-            //var partitionContainer = null;
-            //var parameterContainer = null;
-            //var reportContainer = null;
 
             canExport = VIS.MRole.getDefault().getIsCanExport(AD_Table_ID);
             var checkName = [];
@@ -920,13 +763,6 @@
             });
 
             applyIconCss();
-            //if (!self.cssForAll || self.cssForAll.length == 0)
-            //{
-            //    self.cssForAll = ' vis-report-icon ';
-            //}
-
-
-
             //Create Custom Report ToolBar
             overlay = $('<div>');
             $cmbPages = $('<select class="vis-selectcsview-page">');
@@ -954,32 +790,13 @@
 
             $menu.append($('<li data-id="-1">').append(VIS.Msg.getMsg('NewReport')));
             overlay.append($menu);
-            // panel.getRoot().height(self.parent.getContentGrid().height() - 10);
-            //panel.getRoot().height();
             ulAction.append(btnRF);
 
             if (canExport) {
                 btnSaveCsv = $("<li><a title='" + VIS.Msg.getMsg("SaveCSVPage") + "' style='cursor:pointer;margin-top:1px' class='" + self.visSaveCsvIcons + "'></a></li>");
                 ulAction.append(btnSaveCsv);
             }
-            //if ((isReportFormat) && totalRecords > 0 && canExport) {
-            //    ulAction.append(btnSaveCsvAll);
-
-            //    totalPages = parseInt(totalRecords / PAGE_SIZE) + parseFloat((totalRecords % PAGE_SIZE) > 0 ? 1 : 0);
-            //    for (var d = 1; d < totalPages + 1; d++) {
-            //        $cmbPages.append($('<option value=' + d + '>' + d + '</option>'));
-            //    }
-            //    actionContainer.append($cmbPages);
-            //}
-            //else if ((AD_ReportView_ID || IsJasperReport) && totalRecords > 0 && canExport) {
-            //    ulAction.append(btnSaveCsvAll);
-            //    // ulAction.append(btnSaveCsvAll);
-            //    totalPages = totalRecords;
-            //    for (var d = 1; d < totalPages + 1; d++) {
-            //        $cmbPages.append($('<option value=' + d + '>' + d + '</option>'));
-            //    }
-            //    actionContainer.append($cmbPages);
-            //}
+           
             if (pctl.pi.getSupportPaging() && canExport) {
                 ulAction.append(btnSaveCsvAll);
                 for (var d = 1; d < pctl.pi.getTotalPages() + 1; d++) {
@@ -1000,17 +817,6 @@
                 btnSaveCsv.find('a').attr("title", VIS.Msg.getMsg("SaveCSV"));
                 btnSavePdf.find('a').attr("title", VIS.Msg.getMsg("SavePdf"));
             }
-            //if ((isReportFormat) && totalRecords > 0 && canExport) {
-            //    ulAction.append(btnsavepdfall);
-            //}
-            //else if ((AD_ReportView_ID) && totalRecords > 0 && canExport) {
-            //    ulAction.append(btnSaveCsvAll);
-            //    //ulAction.append(btnsavepdfall);
-            //}
-            //else {
-            //    btnSaveCsv.find('a').attr("title", VIS.Msg.getMsg("SaveCSV"));
-            //    btnSavePdf.find('a').attr("title", VIS.Msg.getMsg("SavePdf"));
-            //}
 
             if (VIS.context.ctx["#BULK_REPORT_DOWNLOAD"] == 'Y') {
                 btnSaveCsvAll.css('display', 'block');
@@ -1031,7 +837,6 @@
             btnPrint = $("<li><a style='cursor:pointer;' class='" + self.visPrintIcons + "'></a></li>");
             ulAction.append(btnPrint);
 
-            //if (  isPdf) {
             if (!repObj.HTML) {
                 btnPrint.css('display', 'none');
                 btnCustomize.css('display', 'none');
@@ -1046,71 +851,15 @@
             if (self.splitUI) {
                 self.reportToolbar.css('display', 'flex');
                 self.reportToolbar.empty().append(toolbar);
-                // self.parent.getContentGrid().append(toolbar).append(this.partitionContainer);
-                //self.parent.getContentGrid().prepend(self.reportToolbar)
                 self.reportContainer.empty().append(panel.getRoot());
                 if (self.extrnalForm) {
                     self.getContentTable().empty().append(self.reportContainer);
                 }
-                //panel.getRoot().css({ 'width': "100%", 'height': self.getContentTable().height() });
-                //self.reportContainer.height(self.reportAreaContainer.height() - (self.$divDesc.height()+25));
-                //self.parameterContainer.append(pctl.parameters.getRoot());
             }
             else {
                 self.parent.getContentGrid().append(toolbar).append(panel.getRoot());
                 panel.getRoot().css('width', $(window).width());
             }
-
-            ////this.parent.getContentGrid().append(toolbar).append(panel.getRoot());
-            ////if (selfee.IsPosReport !== "IsPosReport") {
-
-            ////}
-            ////else {
-            ////    $(toolbar.children()[1]).hide();
-            ////    VAPOS.ReportIframe.empty();
-            ////    VAPOS.ReportIframe.find("table").remove();
-            ////    VAPOS.ReportIframe.append(toolbar.children()).append(panel.getRoot().find("iframe")[0]);
-            ////    var tst = VAPOS.ReportIframe.find("h3");
-            ////    tst.remove();
-
-            ////    var $lblReportNameRep = $('<h4 class="vis-report-tittle" style="float:left;">' + tst.text() + '</h4>');
-            ////    VAPOS.ReportIframe.append($('<div class="VAPOS-ReportHeadRap">').append($lblReportNameRep).append($('<div style="float:right">').append(VAPOS.ReportIframe.find(".vis-report-top-icons"))));
-            ////    VAPOS.ReportIframe.append($('<div style="height:100%">').append(VAPOS.ReportIframe.find("iframe")));
-
-
-
-            ////    VAPOS.ReportIframe.find(".vis-repformat-ico").removeClass("vis-repformat-ico").addClass("vis-repformat-ico-pos VAPOS-callfromPOS");
-            ////    VAPOS.ReportIframe.find(".vis-savecsv-ico").removeClass("vis-savecsv-ico").addClass("vis-savecsv-ico-pos VAPOS-callfromPOS");
-            ////    VAPOS.ReportIframe.find(".vis-savepdf-ico").removeClass("vis-savepdf-ico").addClass("vis-savepdf-ico-pos VAPOS-callfromPOS");
-            ////    VAPOS.ReportIframe.find(".vis-archive-ico").removeClass("vis-archive-ico").addClass("vis-archive-ico-pos VAPOS-callfromPOS");
-            ////    VAPOS.ReportIframe.find(".vis-requery-ico").removeClass("vis-requery-ico").addClass("vis-requery-ico-pos VAPOS-callfromPOS");
-            ////    VAPOS.ReportIframe.find(".vis-customize-ico").removeClass("vis-customize-ico").addClass("vis-customize-ico-pos VAPOS-callfromPOS");
-            ////    VAPOS.ReportIframe.find(".vis-print-ico").removeClass("vis-print-ico").addClass("vis-print-ico-pos VAPOS-callfromPOS");
-            ////}
-            ////try {
-            ////    var tables = document.getElementsByClassName('vis-reptabledetect');
-            ////    if (tables.length > 0) {
-            ////        var tableWidth = 0;
-            ////        var tmp = 0;
-            ////        for (var i = 0, j = tables.length; i < j; i++) {
-            ////            tmp = $(tables[i]).width();
-            ////            if (tmp > tableWidth) tableWidth = tmp;
-            ////        }
-            ////        panel.getRightDiv().width($(window).width() - 10);
-            ////        panel.getRightInnerDiv().width(tableWidth + 50);
-            ////    }
-            ////}
-            ////catch (e) { }
-
-            //function callBusyIndicatorPOS(demand, selfContent) {
-            //    if (selfContent.find(".VAPOS-callfromPOS").length > 0) {
-            //        panel.setBusy(demand, "IsPosReport");
-            //    }
-            //    else {
-            //        panel.setBusy(demand);
-            //    }
-            //};
-
         }
 
         function handleEvents(panel, repObj) {
@@ -1136,8 +885,6 @@
                     pctl.pi.dispose();
                 pctl.pi = null;
                 ulAction.empty();
-                //toolbar.empty();
-                //toolbar.remove();
 
                 btnClose.off("click");
                 btnRequery.off("click");
@@ -1145,7 +892,6 @@
                 btnPrint.off('click');
                 btnRF.off('click');
                 $menu.off('click');
-                //toolbar = null;
                 btnClose = null;
                 actionContainer = null;
                 ulAction = null;
@@ -1327,7 +1073,6 @@
                     data: data,
                     success: function (result) {
                         result = JSON.parse(result);
-                        // reportUrl = "TempDownload/" + reportUrl;
                         bulkDownloadUI(totalPages, result, bulkdownload, d);
 
                         panel.setBusy(false);
@@ -1340,59 +1085,13 @@
                 panel.setBusy(true);
                 panel.getRightInnerDiv().html("");
                 panel.getRightInnerDiv().width(0);
-                //VIS.dataContext.executeProcess(getExeProcessParameter(pctl, true), function (jsonStr) {
-                //    if (jsonStr.error != null) {
-                //        pCtl.pi.setSummary(jsonStr.error, true);
-                //        pCtl.unlock();
-                //        pCtl = null;
-                //        return;
-                //    }
-                //    var json = JSON.parse(jsonStr.result);
-                //    if (json.IsError) {
-                //        pCtl.pi.setSummary(json.Message, true);
-                //        pCtl.unlock();
-                //        pCtl = null;
-                //        return;
-                //    }
-
+               
                 if (pctl.pi.dynamicAction && pctl.pi.dynamicAction.length > 0) {
                     loadDynamicReport(pctl.REPORT_TYPE_PDF, $cmbPages.val());
                 }
                 else {
-
-                    //$.when(executeProcess(getExeProcessParameter(pctl.REPORT_TYPE_PDF))).done(function (json) { manageRepTable(json, panel); });
-                    //executeProcess(getExeProcessParameter(pctl.REPORT_TYPE_PDF), function (json) {
-                    //    manageRepTable(json, panel);
-                    //});
-
                     loadReportData();
-
-
-                    //////executeProcess(getExeProcessParameter(pctl, true), pCtl, function (json) {
-                    //////    //try {
-                    //////    //    panel.getRightInnerDiv().html(json.HTML);
-
-                    //////    //    var tables = document.getElementsByClassName('vis-reptabledetect');
-                    //////    //    if (tables.length > 0) {
-                    //////    //        var tableWidth = 0;
-                    //////    //        var tmp = 0;
-                    //////    //        for (var i = 0, j = tables.length; i < j; i++) {
-                    //////    //            tmp = $(tables[i]).width();
-                    //////    //            if (tmp > tableWidth) tableWidth = tmp;
-                    //////    //        }
-                    //////    //        panel.getRightDiv().width($(window).width() - 10);
-                    //////    //        panel.getRightDiv().css('min-width', $(window).width() + 'px');
-                    //////    //        panel.getRightInnerDiv().width(tableWidth + 50);
-                    //////    //    }
-                    //////    //    panel.getRightInnerDiv().width(tableWidth);
-                    //////    //}
-                    //////    //catch (e) { }
-                    //////    //panel.setBusy(false);
-                    //////    manageRepTable(json, panel);
-                    //////});
                 }
-                //});
-
             });
             btnCustomize.on('click', function () {
                 var zoomQuery = new VIS.Query();
@@ -1439,20 +1138,6 @@
                                 else {
                                     pageNo = $cmbPages.val();
                                     var data = getExecuteReportforCsvPara(pageNo, pctl.pi.getPageSize());
-                                    //    {
-                                    //    AD_Process_ID: pCtl.pi.getAD_Process_ID(),
-                                    //    Name: pCtl.pi.getTitle(),
-                                    //    AD_PInstance_ID: pCtl.pi.getAD_PInstance_ID(),
-                                    //    AD_Table_ID: pCtl.pi.getTable_ID(),
-                                    //    Record_ID: pCtl.pi.getRecord_ID(),
-                                    //    pageNumber: pageNo,
-                                    //    page_Size: repObj.PAGE_SIZE,
-                                    //    saveAll: false
-                                    //    //ParameterList: paraList,
-                                    //    //csv: false,
-                                    //    //pdf: true,
-                                    //}
-
                                     $.ajax({
                                         url: VIS.Application.contextUrl + "ReportCom/ExecuteReportforCsv",
                                         type: "Post",
@@ -1476,73 +1161,11 @@
                     if (pctl.pi.getPageNo() == 1) {
                         panel.setBusy(true);
 
-                        ////////executeProcess(getExeProcessParameter(pctl, true), pCtl, function (json) {
-
-                        ////////    if (ismobile) {
-                        ////////        window.open(VIS.Application.contextUrl + json.ReportFilePath);
-                        ////////    }
-                        ////////    else {
-                        ////////        var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
-                        ////////        $object.attr("src", VIS.Application.contextUrl + json.ReportFilePath);
-                        ////////        //// getCurrentThis.reportPath = VIS.Application.contextUrl + json.ReportFilePath;
-                        ////////        cPanel.getRightDiv().empty().append($object);
-                        ////////        self.reportPath = json.ReportFilePath;
-                        ////////    }
-
-                        ////////    panel.setBusy(false);
-                        ////////});
-
-
                         executeProcess(getExeProcessParameter(pctl.REPORT_TYPE_PDF), function (json) {
                             manageRepTable(json, panel);
                         });
-
-                        //});
                     }
                     else {
-                        //panel.setBusy(true);
-
-                        //window.setTimeout(function () {
-
-
-                        //    if (pctl.pi.dynamicAction && pctl.pi.dynamicAction.length > 0) {
-                        //        loadDynamicReport(pctl.REPORT_TYPE_PDF, pctl.pi.getPageNo());
-                        //    }
-                        //    else {
-                        //        if (repObj.AD_ReportView_ID > 0) {
-                        //            getPdf($cmbPages.val(), 0, null);
-                        //        }
-                        //        else if (repObj.IsJasperReport) {
-                        //            getJasperReport("PDF", pctl.pi.getPageNo());
-                        //        }
-                        //        else {
-                        //            pageNo = $cmbPages.val();
-
-                        //            var data = getExecuteReportComposerData(pctl.pi.getAD_Process_ID(), pctl.pi.getTitle(), pctl.pi.getAD_PInstance_ID(), pctl.pi.getTable_ID(), pctl.pi.getRecord_ID(), pageNo, pctl.pi.getPageSize(), false);
-
-
-                        //            $.ajax({
-                        //                url: VIS.Application.contextUrl + "ReportCom/ExecuteReport",
-                        //                type: "Post",
-                        //                data: data,
-                        //                success: function (result) {
-                        //                    var data = JSON.parse(result);
-                        //                    if (ismobile) {
-                        //                        window.open(VIS.Application.contextUrl + data);
-                        //                    }
-                        //                    else {
-                        //                        var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
-                        //                        $object.attr("src", VIS.Application.contextUrl + data);
-                        //                        panel.getRightDiv().empty().append($object);
-                        //                    }
-                        //                    self.reportPath = data;
-                        //                    //  window.open(VIS.Application.contextUrl + data);
-                        //                    panel.setBusy(false);
-                        //                }
-                        //            });
-                        //        }
-                        //    }
-                        //}, 200);
                         loadReportData();
 
                     }
@@ -1606,16 +1229,12 @@
                         var queryInfo = [];
                         pctl.pi.setPageNo(pageNo);
 
-                        //if (selfee.paralist_ && selfee.paralist_.length > 0) {
-
                         var rquery = new VIS.Query(pctl.pi.getPrintFormatTableName());
 
                         if (pctl.pi.getPrintFormatTableName()) {
-                            // var query = new VIS.Query(tableName);
                             queryInfo.push(rquery.getTableName());
                             queryInfo.push(rquery.getWhereClause(true));
                         }
-                        //}
 
                         var paramData = getGenerateReportPara(queryInfo, "", false, 0, 0, false);
 
@@ -1634,30 +1253,6 @@
                                     return;
                                 }
 
-
-                                //if (json.HTML && json.HTML.length > 0) { //report
-                                //    showReport(json.HTML);
-                                //}
-                                //try {
-                                //    panel.getRightInnerDiv().html(json.repInfo.HTML);
-
-                                //    var tables = document.getElementsByClassName('vis-reptabledetect');
-                                //    if (tables.length > 0) {
-                                //        var tableWidth = 0;
-                                //        var tmp = 0;
-                                //        for (var i = 0, j = tables.length; i < j; i++) {
-                                //            tmp = $(tables[i]).width();
-                                //            if (tmp > tableWidth) tableWidth = tmp;
-                                //        }
-                                //        panel.getRightDiv().width($(window).width() - 10);
-                                //        panel.getRightInnerDiv().width(tableWidth + 50);
-                                //    }
-                                //    panel.getRightInnerDiv().width(tableWidth);
-
-                                //   
-                                //}
-                                //catch (e) { }
-                                //panel.setBusy(false);
                                 manageRepTable(json.repInfo, panel);
                                 self.reportPath = json.repInfo.ReportFilePath;
                             }
@@ -1666,18 +1261,7 @@
                     else {
                         pctl.pi.setPageNo(pageNo);
                     }
-                    //else if (repObj.IsJasperReport) {
-                    //    panel.setBusy(true);
-
-                    //    window.setTimeout(function () {
-
-                    //        pageNo = $cmbPages.val();
-
-                    //        panel.setBusy(false);
-
-                    //    }, 200);
-                    //}
-
+                    
                 });
                 function getJasperReport(rptExportType, rptPageNo) {
                     pctl.pi.setFileType(rptExportType);
@@ -1704,7 +1288,6 @@
                                 }
                                 self.reportPath = data;
                             }
-                            //  window.open(VIS.Application.contextUrl + data);
                             panel.setBusy(false);
                         }
                     });
@@ -1721,7 +1304,6 @@
                         data: data,
                         success: function (result) {
                             result = JSON.parse(result);
-                            // reportUrl = "TempDownload/" + reportUrl;
                             bulkDownloadUI(totalPages, result, bulkdownload, d);
 
                             panel.setBusy(false);
@@ -1744,23 +1326,23 @@
                         bulkdownload.onClose = function () { };
                         bulkdownload.show();
                         if (pctl.pi.dynamicAction && pctl.pi.dynamicAction.length > 0) {
-                            for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                            for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                 loadDynamicReportAll(d, bulkdownload, pctl.pi.getTotalPages());
                             }
                         }
                         else {
                             if (pctl.pi.GetAD_ReportView_ID() > 0) {
-                                for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                                for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     getCsv(d, pctl.pi.getTotalPages(), bulkdownload);
                                 }
                             }
                             else if (pctl.pi.getIsJasperReport()) {
-                                for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                                for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     getJasperReportAll(d, pctl.pi.getTotalPages(), bulkdownload);
                                 }
                             }
                             else {
-                                for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                                for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     getAllCSV(d, bulkdownload, pctl.pi.getTotalPages());
                                 }
                             }
@@ -1776,45 +1358,17 @@
                     }
                     else {
                         var data = getExecuteReportforCsvPara(d, pctl.pi.getPageSize());
-                        //{
-                        //    AD_Process_ID: pCtl.pi.getAD_Process_ID(),
-                        //    Name: pCtl.pi.getTitle(),
-                        //    AD_PInstance_ID: pCtl.pi.getAD_PInstance_ID(),
-                        //    AD_Table_ID: pCtl.pi.getTable_ID(),
-                        //    Record_ID: pCtl.pi.getRecord_ID(),
-                        //    pageNumber: d,
-                        //    page_Size: repObj.PAGE_SIZE,
-                        //    saveAll: false
-                        //}
                         $.ajax({
                             url: VIS.Application.contextUrl + "ReportCom/ExecuteReportforCsv",
                             type: "Post",
                             data: data,
                             success: function (result) {
                                 var reportUrl = JSON.parse(result);
-                                //bulkdownload.setBulkBusy(false);
-                                //$("#forreportdownload").addClass('hide');
-                                //formlinks += '<input type="checkbox" data-num="' + d + '" data-url="' + VIS.Application.contextUrl + "TempDownload/" + data + '" checked />';
-                                //pNoI += 1;
-                                //updateCreateBar(((pNoI / totalPages) * 100));
-                                //if (pNoI == totalPages) {
-                                //    setTimeout(function () {
-                                //        updateCreateBar(100);
-                                //        showCreateMessage(VIS.Msg.getMsg("Generated"));
-                                //        $('<form>', {
-                                //            'id': 'download_form',
-                                //            'html': formlinks,
-                                //            'action': '#',
-                                //            'Class': 'hide'
-                                //        }).appendTo(document.body).submit();
-                                //    }, 1000);
-                                //}
+                               
                                 reportUrl = "TempDownload/" + reportUrl;
                                 bulkDownloadUI(totalPages, reportUrl, bulkdownload, d);
 
                                 panel.setBusy(false);
-
-                                //selfee.reportPath = "TempDownload/" + data;
                             }
                         });
                     }
@@ -1822,10 +1376,7 @@
                 };
 
                 var getReportData = function (pNoI, tP, bulkdownload) {
-                    //setBusy(true);
-                    //var id = null;
-                    //if (processInfo != null) id = processInfo.Key;
-                    //else id = Ad_Table_ID;
+                  
                     var queryInfo = [];
                     var query = new VIS.Query(pctl.pi.getPrintFormatTableName());
                     queryInfo.push(query.getTableName());
@@ -1849,35 +1400,6 @@
                                 panel.setBusy(true);
                                 return;
                             }
-
-                            //if (d.HTML && d.HTML.length > 0) { //report
-                            //    showReport(d.HTML);
-                            //}
-                            //else {
-                            //    if (tP == 0) {
-                            //        window.open(VIS.Application.contextUrl + d.ReportFilePath);
-                            //        panel.setBusy(false);
-                            //    }
-                            //    else {
-                            //        bulkdownload.setBulkBusy(false);
-                            //        $("#forreportdownload").addClass('hide');
-                            //        formlinks += '<input type="checkbox" data-num="' + pNoI + '"  data-url="' + VIS.Application.contextUrl + d.ReportFilePath + '" checked />';
-                            //        pNoI += 1;
-                            //        updateCreateBar(((pNoI / tP) * 100));
-                            //        if (pNoI == tP) {
-                            //            setTimeout(function () {
-                            //                updateCreateBar(100);
-                            //                showCreateMessage(VIS.Msg.getMsg("Generated"));
-                            //                $('<form>', {
-                            //                    'id': 'download_form',
-                            //                    'html': formlinks,
-                            //                    'action': '#',
-                            //                    'Class': 'hide'
-                            //                }).appendTo(document.body).submit();
-                            //            }, 1000);
-                            //        }
-                            //    }
-                            //}
 
                             loadedReportRendering(d, panel, pNoI, tP, bulkdownload);
 
@@ -1913,34 +1435,6 @@
                                 return;
                             }
 
-                            //if (d.HTML && d.HTML.length > 0) { //report
-                            //    showReport(d.HTML);
-                            //}
-                            //else {
-                            //    if (tP == 0) {
-                            //        window.open(VIS.Application.contextUrl + d.ReportFilePath);
-                            //        panel.setBusy(false);
-                            //    }
-                            //    else {
-                            //        bulkdownload.setBulkBusy(false);
-                            //        $("#forreportdownload").addClass('hide');
-                            //        formlinks += '<input type="checkbox" data-num="' + pNoI + '"  data-url="' + VIS.Application.contextUrl + d.ReportFilePath + '" checked />';
-                            //        pNoI += 1;
-                            //        updateCreateBar(((pNoI / tP) * 100));
-                            //        if (pNoI == tP) {
-                            //            setTimeout(function () {
-                            //                updateCreateBar(100);
-                            //                showCreateMessage(VIS.Msg.getMsg("Generated"));
-                            //                $('<form>', {
-                            //                    'id': 'download_form',
-                            //                    'html': formlinks,
-                            //                    'action': '#',
-                            //                    'Class': 'hide'
-                            //                }).appendTo(document.body).submit();
-                            //            }, 1000);
-                            //        }
-                            //    }
-                            //}
                             loadedReportRendering(d, panel, pNoI, tP, bulkdownload);
                             self.reportPath = d.ReportFilePath;
                             panel.setBusy(false);
@@ -1960,25 +1454,25 @@
                         bulkdownload.show();
 
                         if (pctl.pi.dynamicAction && pctl.pi.dynamicAction.length > 0) {
-                            for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                            for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                 loadDynamicReportAll(d, bulkdownload, pctl.pi.getTotalPages());
                             }
                         }
                         else {
                             if (pctl.pi.GetAD_ReportView_ID() > 0) {
 
-                                for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                                for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     getReportData(d, pctl.pi.getTotalPages(), bulkdownload);
                                 }
 
                             }
                             else if (pctl.pi.getIsJasperReport()) {
-                                for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                                for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     getJasperReportAll(d, pctl.pi.getTotalPages(), bulkdownload);
                                 }
                             }
                             else {
-                                for (var d = 1; d <= pctl.pi.getTotalPages() ; d++) {
+                                for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     savePDFAll(d, bulkdownload, pctl.pi.getTotalPages());
                                 }
                             }
@@ -2002,23 +1496,6 @@
                             data: data,
                             success: function (result) {
                                 var reportUrl = JSON.parse(result);
-                                //bulkdownload.setBulkBusy(false);
-                                //$("#forreportdownload").addClass('hide');
-                                //formlinks += '<input type="checkbox" data-num="' + d + '"  data-url="' + VIS.Application.contextUrl + data + '" checked />';
-                                //pNoI += 1;
-                                //updateCreateBar(((pNoI / totalPages) * 100));
-                                //if (pNoI == totalPages) {
-                                //    setTimeout(function () {
-                                //        updateCreateBar(100);
-                                //        showCreateMessage(VIS.Msg.getMsg("Generated"));
-                                //        $('<form>', {
-                                //            'id': 'download_form',
-                                //            'html': formlinks,
-                                //            'action': '#',
-                                //            'Class': 'hide'
-                                //        }).appendTo(document.body).submit();
-                                //    }, 1000);
-                                //}
                                 bulkDownloadUI(totalPages, reportUrl, bulkdownload, d);
                                 self.reportPath = reportUrl;
                                 panel.setBusy(false);
@@ -2049,30 +1526,30 @@
                     if (isNaN(currpercent)) currpercent = 0;
                     if (currpercent <= percent) {
                         $("#reportcreate").removeClass("hide")
-                        .find(".progress-bar")
-                        .attr("aria-valuenow", percent)
-                        .css({
-                            width: percent + "%"
-                        }).text(percent.toFixed(0) + "%");;
+                            .find(".progress-bar")
+                            .attr("aria-valuenow", percent)
+                            .css({
+                                width: percent + "%"
+                            }).text(percent.toFixed(0) + "%");;
                     }
                 }
                 function resetCreateMessage() {
                     $("#reportcreateresult")
-                    .removeClass()
-                    .text("");
+                        .removeClass()
+                        .text("");
                 }
                 function showCreateMessage(text) {
                     resetCreateMessage();
                     $("#reportcreateresult")
-                    .addClass("alert alert-success")
-                    .text(text);
+                        .addClass("alert alert-success")
+                        .text(text);
                     $("#forreportdownload").removeClass('hide');
                 }
                 function showCreateError(text) {
                     resetCreateMessage();
                     $("#reportcreateresult")
-                    .addClass("alert alert-danger")
-                    .text(text);
+                        .addClass("alert alert-danger")
+                        .text(text);
                 }
             }
             btnRF.on('click', function () {
@@ -2092,8 +1569,6 @@
                 var btn = $(e.target);
                 var id = btn.data("id");
                 if (btn.data("isdefbtn") == "yes") {
-
-                    //var sql = "UPDATE AD_PrintFormat SET IsDefault='N' WHERE IsDefault='Y' AND AD_Table_ID=" + Ad_Table_ID + " AND AD_Tab_ID=" + curTab.getAD_Tab_ID();
 
                     var sqlQry = "VIS_76";
                     var param = [];
@@ -2145,25 +1620,6 @@
                             pctl = null;
                             return;
                         }
-                        //try {
-                        //    panel.getRightInnerDiv().html(json.repInfo.HTML);
-
-                        //    var tables = document.getElementsByClassName('vis-reptabledetect');
-                        //    if (tables.length > 0) {
-                        //        var tableWidth = 0;
-                        //        var tmp = 0;
-                        //        for (var i = 0, j = tables.length; i < j; i++) {
-                        //            tmp = $(tables[i]).width();
-                        //            if (tmp > tableWidth) tableWidth = tmp;
-                        //        }
-                        //        panel.getRightDiv().width($(window).width() - 10);
-                        //        panel.getRightInnerDiv().width(tableWidth + 50);
-                        //    }
-                        //    panel.getRightInnerDiv().width(tableWidth);
-                        //}
-                        //catch (e) { }
-                        //panel.setBusy(false);
-
                         manageRepTable(json.repInfo, panel);
 
                         self.reportPath = json.repInfo.ReportFilePath;
@@ -2173,39 +1629,12 @@
             });
             btnArchive.on('click', function () {
                 self.archiveDocument(panel, pctl);
-                //panel.setBusy(true);
-                //$.ajax({
-                //    url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
-                //    dataType: "json",
-                //    type: "post",
-                //    data: {
-                //        AD_Process_ID: pctl.pi.getAD_Process_ID(),
-                //        Name: pctl.pi.getTitle(),
-                //        AD_Table_ID: pctl.pi.getTable_ID(),
-                //        Record_ID: pctl.pi.getRecord_ID(),
-                //        C_BPartner_ID: 0,
-                //        isReport: true,
-                //        binaryData: self.reportBytes,
-                //        reportPath: self.reportPath
-                //    },
-                //    success: function (data) {
-                //        VIS.ADialog.info('Archived', true, "", "");
-                //        panel.setBusy(false);
-                //    }
-                //});
+                
             });
 
         };
 
         function applyIconCss() {
-
-            //this.visRepformatIcons = null;
-            //this.visSaveCsvIcons = null;
-            //this.visSavePdfIcons = null;
-            //this.visArchiveIcons = null;
-            //this.visRequeryIcons = null;
-            //this.visCustomizeIcons = null;
-            //this.visPrintIcons = null;
 
             if (!self.visRepformatIcons || self.visRepformatIcons.length == 0) {
                 if (self.cssForAll) {
@@ -2219,12 +1648,7 @@
 
 
             if (!self.visSaveCsvIcons || self.visSaveCsvIcons.length == 0) {
-                //if (self.cssForAll) {
-                //    self.visSaveCsvIcons = self.cssForAll + ' vis-savecsv-ico ';
-                //}
-                //else {
                 self.visSaveCsvIcons = ' vis-savecsv-ico vis-report-icon ';
-                //}
 
             }
             else {
@@ -2232,61 +1656,35 @@
             }
 
             if (!self.visSavePdfIcons || self.visSavePdfIcons.length == 0) {
-                //if (self.cssForAll) {
-                //    self.visSavePdfIcons = self.cssForAll + ' vis-savepdf-ico ';
-                //}
-                //else {
                 self.visSavePdfIcons = ' vis-savepdf-ico vis-report-icon ';
-                //}
-
             }
             else {
                 self.visSavePdfIcons = self.visSavePdfIcons + ' vis-report-icon ';
             }
 
             if (!self.visArchiveIcons || self.visArchiveIcons.length == 0) {
-                //if (self.cssForAll) {
-                //    self.visArchiveIcons = self.cssForAll + ' vis-archive-ico ';
-                //}
-                //else {
                 self.visArchiveIcons = ' vis-archive-ico vis-report-icon ';
-                //}
             }
             else {
                 self.visArchiveIcons = self.visArchiveIcons + ' vis-report-icon ';
             }
 
             if (!self.visRequeryIcons || self.visRequeryIcons.length == 0) {
-                //if (self.cssForAll) {
-                //    self.visRequeryIcons = self.cssForAll + ' vis-requery-ico ';
-                //}
-                //else {
                 self.visRequeryIcons = ' vis-requery-ico vis-report-icon ';
-                //}
             }
             else {
                 self.visRequeryIcons = self.visRequeryIcons + ' vis-report-icon ';
             }
 
             if (!self.visCustomizeIcons || self.visCustomizeIcons.length == 0) {
-                //if (self.cssForAll) {
-                //    self.visCustomizeIcons = self.cssForAll + ' vis-customize-ico ';
-                //}
-                //else {
                 self.visCustomizeIcons = ' vis-customize-ico vis-report-icon ';
-                //}
             }
             else {
                 self.visCustomizeIcons = self.visCustomizeIcons + ' vis-report-icon ';
             }
 
             if (!self.visPrintIcons || self.visPrintIcons.length == 0) {
-                //if (self.cssForAll) {
-                //    self.visPrintIcons = self.cssForAll + ' vis-print-ico ';
-                //}
-                //else {
                 self.visPrintIcons = ' vis-print-ico vis-report-icon ';
-                //}
 
             }
             else {
@@ -2310,18 +1708,10 @@
         }
         this.mPanel = panel;
         this.pCtl = pCtl;
-        //if (pCtl.pi.getUseCrystalReportViewer() && isCrystalReport) {
-        //    var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
-        //    $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + pCtl.pi.getAD_PInstance_ID() + '&pid=' + pCtl.pi.getAD_Process_ID() + '&tid=' + pCtl.pi.getTable_ID() + '&rid=' + pCtl.pi.getRecord_ID());
-        //    //self.reportContainer.empty().append(panel.getRoot());
-        //    this.parent.getContentGrid().append(panel.getRoot());
-        //    panel.getRightDiv().empty().append($object);
-        //}
-        //else {
+       
         this.createUI(panel, pCtl, repObj);
 
         this.parent.hideHeader(true);
-        //}
         panel.setBusy(false);
 
         // Archive Document automatically, if selected on Tenant
