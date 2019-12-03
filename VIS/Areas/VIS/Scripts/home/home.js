@@ -957,7 +957,7 @@
                                         dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                     }
                                     if (data.lstFollowups[cnt].AD_Image_ID == 0) {
-                                        uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("userImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png '/>";
+                                        uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
                                     }
                                     else {
                                         for (var a in data.lstUserImg) {
@@ -966,7 +966,7 @@
                                                     uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/>";
                                                 }
                                                 else {
-                                                    uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png '/>";
+                                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
                                                 }
                                                 break;
                                             }
@@ -1051,7 +1051,7 @@
                                     dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                 }
                                 if (data.lstFollowups[cnt].AD_Image_ID == 0) {
-                                    uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>"
                                 }
                                 else {
                                     for (var b in data.lstUserImg) {
@@ -1060,7 +1060,9 @@
                                                 uimg = "<img style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/>"
                                             }
                                             else {
-                                                uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+                                                //uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+
+                                                uimg = "<i  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'    class='fa fa-user'></i>"
 
                                             }
                                             break;
@@ -1118,11 +1120,11 @@
                                     uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' />"
                                 }
                                 else {
-                                    uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' alt='" + VIS.Msg.getMsg("UserImage") + "'   class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.PNG '/>"
+                                    uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
                                 }
                             }
                             else {
-                                uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' alt='" + VIS.Msg.getMsg("UserImage") + "'   class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.PNG '/>"
+                                uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
                             }
                             var str = "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
                                  + uimg

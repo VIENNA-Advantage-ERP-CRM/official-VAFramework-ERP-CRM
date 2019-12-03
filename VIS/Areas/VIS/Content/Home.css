@@ -57,7 +57,7 @@
     z-index: 1;
     top: 55px;
     bottom: 0px;
-    width: 97.6%;
+    width: 97%;
     overflow: hidden;
 }
 
@@ -112,9 +112,9 @@
 }
 
 .vis-welcomeScreenContainer {
-    background: #ffffff;
-    border: 1px solid #cccccc;
-    color: #333333;
+    background: rgba(var(--v-c-common), 1);
+    border: 1px solid rgba(var(--v-c-on-secondary), .1);
+    color: rgba(var(--v-c-on-secondary), 1);
     height: 100%;
     position: relative;
 }
@@ -146,7 +146,7 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
     }
 
 .vis-userAvatar-Container {
-    background: #eeeeee;
+    background: rgba(var(--v-c-on-secondary), .07);
     margin: 20px auto 8px;
     padding: 10px;
     width: 164px;
@@ -235,20 +235,22 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
                 }
 
         .vis-welcomeScreenTabMenu li.vis-activeTab a {
-            background-color: #1aa0ed;
+            background-color: rgba(var(--v-c-primary), 1);
         }
 
             .vis-welcomeScreenTabMenu li.vis-activeTab a:before {
                 content: '';
-                width: 16px;
-                height: 8px;
-                background: url('../Images/home/icons-welcomeScreenTabs.png') 0px 0px no-repeat;
                 position: absolute;
                 display: block;
-                margin: -8px auto 0 auto;
+                margin: auto;
                 left: 0;
                 right: 0;
-                top: 0;
+                top: -8px;
+                width: 0;
+                height: 0;
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-bottom: 8px solid rgba(var(--v-c-primary), 1);
             }
 
             .vis-welcomeScreenTabMenu li.vis-activeTab a:hover {
@@ -622,7 +624,7 @@ html[dir="rtl"] .vis-workflowActivityIcons.vis-icon-doneButton {
         font-size: 18px;
         font-weight: 200px;
         float: left;
-        color: #1b95d7;
+        color: rgba(var(--v-c-primary), 1);
     }
 
 html[dir="rtl"] .vis-workflowActivityDetails h3 {
@@ -803,7 +805,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
     /* Feeds Header */
     #fllupsScreen h2 {
         font-size: 18px;
-        color: #1b95d7;
+        color: rgba(var(--v-c-primary), 1);
         margin-top: 15px;
         /*float: left;*/
         flex: 1;
@@ -834,7 +836,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
 
     .vis-welcomeScreenFeeds > .row h2 {
         font-size: 18px;
-        color: #1b95d7;
+        color: rgba(var(--v-c-primary), 1);
         margin-top: 18px;
         float: left;
     }
@@ -853,7 +855,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
     }
 
         .vis-activityContainer .vis-feedDetails:hover p {
-            color: #1b95d7;
+            color: rgba(var(--v-c-primary), 1);
         }
 
     .vis-activityContainer:hover {
@@ -866,7 +868,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
 
 /* Feeds content title */
 .vis-feedContainer {
-    border: 1px solid #e0e0e0;
+    border: 1px solid rgba(var(--v-c-on-secondary), .1);
     margin: 0px 10px 10px 0px;
 }
 
@@ -880,47 +882,51 @@ html[dir="rtl"] .vis-feedContainer {
 
 
 .vis-feedTitleBar {
-    border-bottom: 1px solid #e0e0e0;
-    padding: 0px 10px 0px 10px;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .1);
+    padding: 0px 0px 0px 10px;
     display: inline-block;
-    width: 100%;
-     display: flex;
+    /* width: 100%; */
+    display: flex;
     align-items: center;
 }
 
     .vis-feedTitleBar h3 {
         font-size: 14px;
-        color: #999999;
-        /*margin: 15px 0px 10px 0px;*/
-        /*float: left;
-        width: calc(100% - 77px);*/
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        flex: 1;
-        margin: 0;
-    }
+    color: rgba(var(--v-c-on-secondary), 1);
+    /* margin: 15px 0px 10px 0px; */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 1;
+    margin: 0;
+}
 
 
 
 .vis-feedTitleBar-buttons {
-    float: right;
-    margin-right: -10px;
+    /*float: right;
+    margin-right: -10px;*/
 }
 
     .vis-feedTitleBar-buttons ul {
         list-style: none;
         margin: 0px;
         padding: 0px;
+        display: flex;
     }
 
         .vis-feedTitleBar-buttons ul li {
-            float: left;
-            border-left: 1px solid #e0e0e0;
-            margin-left: 1px;
-            padding-left: 10px;
-            padding-right: 10px;
-            height: 40px;
+            /*float: left;*/ 
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .1);
+    /* margin-left: 1px; */
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 40px;
+    display: flex;
+    background: rgba(var(--v-c-on-secondary), .07);
+    cursor: pointer;
+    width: 40px;
+    justify-content: center;
         }
 
 /* Feeds details */
@@ -947,19 +953,19 @@ html[dir="rtl"] .userAvatar-Feeds {
 
 .vis-feedDetails p {
     font-size: 12px;
-    color: #666666;
+    color: rgba(var(--v-c-on-secondary), 1);
     display: inline;
     width: 100%;
 }
 
     .vis-feedDetails p strong {
-        color: #1b95d7;
+        color: rgba(var(--v-c-primary), 1);
         font-weight: normal;
         cursor: pointer;
     }
 
 .vis-feedDetails .vis-feedDateTime {
-    color: #999999;
+    color: rgba(var(--v-c-on-secondary), .7);
     font-size: 10px;
     text-align: right;
     float: right;
@@ -975,14 +981,14 @@ html[dir="rtl"] .vis-feedDateTime {
 .vis-viewMoreComments {
     /*background-image: url('../Images/home/comments.png');*/
     background-repeat: no-repeat;
-    color: #60af45;
+    color: rgba(var(--v-c-primary), 1);
     padding-left: 22px;
     text-decoration: none !important;
     -webkit-transition: all 0.5s; /*For Safari 3.1 to 6.0*/
     transition: all 0.5s;
     font-size: 12px;
     float: right;
-    margin-right: 2px;
+    margin-right: 10px;
 }
 
     .vis-viewMoreComments:hover {
@@ -1001,21 +1007,19 @@ html[dir="rtl"] .vis-viewMoreComments {
 
 /* Send Feed Message */
 .vis-feedMessage {
-    border: 1px solid #eeeeee;
+    border: 1px solid rgba(var(--v-c-on-secondary), .1);
     margin: 0px 10px 10px 10px;
     display: flex;
 }
 
     .vis-feedMessage input[type=text] {
         height: 30px;
-        width: 100%;
-        border: 1px solid #eeeeee;
         padding: 5px;
-        /*float: left;*/
         display: inline-block;
-        color: #666666;
-        /*padding-right: 35px;*/
-        flex; 1;
+        color: rgba(var(--v-c-on-secondary), 1);
+        flex: 1;
+        border: none;
+        outline: none;
     }
 
     .vis-feedMessage input[type=button] {
@@ -1032,9 +1036,14 @@ html[dir="rtl"] .vis-viewMoreComments {
         width: 30px;
         height: 30px;
         border: none;
-        background-color: #eeeeee;
-        /*margin-left: -30px;*/
+        background-color: rgba(var(--v-c-on-secondary), .07);
         outline: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1rem !important;
+        color: rgba(var(--v-c-on-secondary), 1);
     }
 
 
@@ -1051,22 +1060,21 @@ html[dir="rtl"] .vis-viewMoreComments {
 }
 
     .vis-feedIcons.vis-icon-feed {
-        background-position: 0px 0px;
+        /*background-position: 0px 0px;
         width: 18px;
         height: 18px;
-        /*float: left;*/
         margin-top: -2px;
         margin-right: 5px;
-        display: inline-flex;
+        display: inline-flex;*/
     }
 
     .vis-feedIcons.vis-icon-refresh {
-        background-position: 0px -48px;
+        /*background-position: 0px -48px;
         width: 24px;
         height: 24px;
         float: right;
         text-indent: -999999px;
-        margin-top: 14px;
+        margin-top: 14px;*/
     }
 
     .vis-feedIcons.vis-icon-folder {
@@ -1087,31 +1095,29 @@ html[dir="rtl"] .vis-viewMoreComments {
     }
 
     .vis-feedIcons.vis-icon-viewFeed {
-        background-position: 0px -102px;
+        /*background-position: 0px -102px;
         width: 17px;
         height: 16px;
         float: left;
         text-indent: -999999px;
         margin-top: 11px;
-        cursor: pointer;
+        cursor: pointer;*/
     }
 
     .vis-feedIcons.vis-icon-unsubscribeFeed {
-        background-position: 0px -148px;
+        /*background-position: 0px -148px;
         width: 16px;
         height: 16px;
         float: left;
         text-indent: -999999px;
-        margin-top: 11px;
+        margin-top: 11px;*/
     }
 
     .vis-feedIcons.vis-icon-message {
-        background-position: 7px -237px;
-        /*width: 17px;
-        height: 16px;*/
+        /*background-position: 7px -237px;
         float: right;
         text-indent: -999999px;
-        display: inline-block;
+        display: inline-block;*/
     }
 
     .vis-feedIcons.vis-icon-viewMoreComments {
@@ -1176,37 +1182,39 @@ html[dir="rtl"] .vis-viewMoreComments {
 }
 
     #favLinks h2 {
-        font-size: 18px;
-        color: #1b95d7;
+        font-size: 18px;        
         margin-top: 15px;
         float: left;
     }
+#favLinks h2 a, #favLinks h2 a:hover, ul.vis-userLinks-ListMenu li a:hover{
+    color: rgba(var(--v-c-primary), 1);
+}
 
         #favLinks h2 strong {
             font-weight: bold;
         }
 
     #favLinks .row.userLinks_activeTab {
-        border-right: 1px solid #1b95d7;
-        border-bottom: 1px solid #1b95d7;
+        border-right: 1px solid rgba(var(--v-c-primary), 1);
+        border-bottom: 1px solid rgba(var(--v-c-primary), 1);
     }
 
     #favLinks .row.userFavs_inactiveTab {
-        border-bottom: 1px solid #cccccc;
+        border-bottom: 1px solid rgba(var(--v-c-on-secondary), .1);
     }
 
     #favLinks .row.favLinks_inactiveTab h2 {
         margin-left: 10px;
-        color: #999999;
+        color: rgba(var(--v-c-primary), 1);
     }
 
     #favLinks .row.userFavs_inactiveTab a {
-        color: #999999;
+        color: rgba(var(--v-c-on-secondary), .7);
     }
 
     #favLinks .row.userFavs_activeTab {
-        border-left: 1px solid #1b95d7;
-        border-bottom: 1px solid #1b95d7;
+        border-left: 1px solid rgba(var(--v-c-primary), 1);
+        border-bottom: 1px solid rgba(var(--v-c-primary), 1);
     }
 
     #favLinks .row.userLinks_inactiveTab {
@@ -1214,11 +1222,11 @@ html[dir="rtl"] .vis-viewMoreComments {
     }
 
         #favLinks .row.userLinks_inactiveTab h2 {
-            color: #999999;
+            color: rgba(var(--v-c-on-secondary), .7);
         }
 
         #favLinks .row.userLinks_inactiveTab a {
-            color: #999999;
+            color: rgba(var(--v-c-on-secondary), .7);
         }
 
 /* User Links */
@@ -1361,17 +1369,23 @@ ul.vis-userLinks-ListMenu {
     list-style: none;
     margin: 0px 0px 0px 0px;
     padding: 0px;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
 }
 
     ul.vis-userLinks-ListMenu li {
-        float: left;
-        width: 30%;
-        border: 1px solid #1b95d7;
+        /*float: left;
+        width: 30%;*/
+        border: 1px solid rgba(var(--v-c-primary), 1);
         text-align: center;
-        margin: 0px 10px 10px 0px;
-        padding: 20px 10px 20px 10px;
-        display: inline-block;
+        /*margin: 0px 10px 10px 0px;*/
+        padding: 10px;
+        display: flex;
         height: 140px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
     }
 
 html[dir="rtl"] ul.vis-userLinks-ListMenu li {
@@ -1487,7 +1501,7 @@ ul.vis-userFavourites-ListMenu li a {
 }
 
     .vis-activityContainer .vis-schedule-feed-detail:hover p {
-        color: #1b95d7;
+        color: rgba(var(--v-c-primary), 1);
     }
 
 .vis-schedule-feed-detail {
@@ -1511,7 +1525,7 @@ ul.vis-userFavourites-ListMenu li a {
     }
 
         .vis-schedule-feed-detail p strong {
-            color: #1b95d7;
+            color: rgba(var(--v-c-primary), 1);
             font-weight: normal;
         }
 
@@ -1536,7 +1550,7 @@ ul.vis-userFavourites-ListMenu li a {
 
 /*schedule css start*/
 .vis-schedule-feedTittleBar > h3 {
-    color: #1b95d7;
+    color: rgba(var(--v-c-primary), 1);
     font-size: 14px;
     margin: 12px 0px 10px 0;
     float: left;
@@ -1580,13 +1594,13 @@ ul.vis-userFavourites-ListMenu li a {
 }
 
 .vis-client-name {
-    color: #1b95d7;
+    color: rgba(var(--v-c-primary), 1);
     font-size: 10px;
     text-align: left;
 }
 
 .vis-activityContainer:hover .vis-scheduleDateTime {
-    background: #1b95d7;
+    background: rgba(var(--v-c-primary), 1);
 }
 
     .vis-activityContainer:hover .vis-scheduleDateTime > h4, .vis-activityContainer:hover .vis-scheduleDateTime > p > span {
@@ -1636,7 +1650,7 @@ html[dir="rtl"] #favLinks > [class^="col"] {
     float: right;
 }
 html[dir="rtl"] #favLinks .row.userLinks_activeTab {
-    border-left: 1px solid #1b95d7;
+    border-left: 1px solid rgba(var(--v-c-primary), 1);
     border-right: none;
 }
 html[dir="rtl"] #userFavs h2 {
@@ -2775,9 +2789,9 @@ li.datum-ul {
 .vis-feedDetails-cmnt {
     width: 100%;
     overflow: auto;
-    margin-top: 5px;
+    /*margin-top: 5px;*/
     display: inline-block;
-    margin-bottom: -5px;
+    /*margin-bottom: -5px;*/
 }
 
 div.requestScreen-20 .vis-feedTitleBar h3 a {
@@ -2870,9 +2884,8 @@ p.vis-maintain-customer-p span {
 /*Profile Pic start*/
 
 .vis-file-label {
-    color: #fff;
     cursor: pointer;
-    color: #616364;
+    color: rgba(var(--v-c-on-secondary), .8);
     font-weight: normal;
 }
 
@@ -2881,12 +2894,12 @@ p.vis-maintain-customer-p span {
 }
 
 .vis-change-picture-ico {
-    background: url('../Images/home/upload-ico.png');
+    /*background: url('../Images/home/upload-ico.png');
     background-repeat: no-repeat;
     width: 13px;
     height: 14px;
     float: left;
-    margin-top: 3px;
+    margin-top: 3px;*/
     margin-right: 3px;
 }
 /*Profile pic end*/
@@ -3136,3 +3149,48 @@ p.vis-maintain-customer-p span {
     width: 100%;
 }
 /* new Changes */
+
+.vis-feedDetails-cmnt i {
+    color: rgba(var(--v-c-primary), 1);
+    background: rgba(var(--v-c-primary),.3);
+    padding: 10px;
+    font-size: 1.75rem;
+    border-radius: .25rem;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+#fllupsScreen h2 span, #favLinks h2 span {
+    padding-right: 10px;
+}
+#fllupsScreen h2 span {
+    font-size: 1.4rem;
+}
+#fllupsScreen a {
+    display: flex;
+    align-items: center;
+}
+#fllupsScreen a i {
+    font-size: 1.4rem;
+}
+#fllupsScreen a:hover, #fllupsScreen .vis-feedTitleBar-buttons a:hover{
+    color: rgba(var(--v-c-primary), 1);
+}
+#fllupsScreen .vis-feedTitleBar-buttons i {
+    font-size: 1rem;
+}
+.vis-feedMessage input::-webkit-input-placeholder {
+    color: rgba(var(--v-c-on-secondary), .7);
+}
+.vis-feedMessage input:-ms-input-placeholder {
+    color: rgba(var(--v-c-on-secondary), .7);
+}
+.vis-feedTitleBar-buttons ul li a {
+    color: rgba(var(--v-c-on-secondary), .7);
+}
+ul.vis-userLinks-ListMenu li a i {
+    font-size: 3rem;
+    display: flex;
+}

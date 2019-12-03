@@ -58,7 +58,7 @@
                     </div>
                      <div class="text-center vis-change-picture-wrap">
                         <label for="vis-file-input"  class="vis-file-label">
-                            <span class="vis-change-picture-ico"></span>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ChangePicture")
+                            <span class="vis-change-picture-ico vis vis-pencil"></span>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ChangePicture")
                         </label>
                         <input id="vis-file-input" title=" " class="vis-change-pic-input" type="file" accept="image/*" />
                     </div>
@@ -172,8 +172,8 @@
         <div id="fllupsScreen">
             <!-- App Follups Heading START -->
             <div class="row">
-                <h2><span class="vis-feedIcons vis-icon-feed"></span>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "FollowUps") - <strong id="follupsCount">@Model.FollowUpCnt</strong></h2>
-                <a id="hlnkFllupsRef" href="javascript:void(0)" class="vis-feedIcons vis-icon-refresh" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh"))">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh")</a>
+                <h2><span><i class="fa fa-rss" aria-hidden="true"></i></span>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "FollowUps") - <strong id="follupsCount">@Model.FollowUpCnt</strong></h2>
+                <a id="hlnkFllupsRef" href="javascript:void(0)" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh"))"><i class="vis vis-refresh"></i></a>
             </div>
             <!-- App Follups Heading END -->
 
@@ -199,10 +199,10 @@
                             <div class="vis-feedTitleBar-buttons">
                                 <ul>
                                     <li>
-                                        <a href="javascript:void(0)"  data-fll='azoomfllups' title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ViewFollowups")" class="vis-feedIcons vis-icon-viewFeed">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ViewFollowups")</a>
+                                        <a href="javascript:void(0)"  data-fll='azoomfllups' title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ViewFollowups")"><i class="vis vis-find" aria-hidden="true"></i></a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)" data-fll='asubscribefllups'  title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UnsubscribeFollowups")" class="vis-feedIcons vis-icon-unsubscribeFeed">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UnsubscribeFollowups")</a>
+                                        <a href="javascript:void(0)" data-fll='asubscribefllups'  title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UnsubscribeFollowups")" ><i class="fa fa-rss" aria-hidden="true"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -225,7 +225,7 @@
                                             }
                                             else
                                             {
-                                    <img  data-fll="UID" data-UID="@item.AD_User_ID"  style="cursor:pointer;"  class="userAvatar-Feeds" src="~/Areas/VIS/Images/home/defaultUser46X46.png" alt="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UserImage")" title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UserImage")" />
+                                    <i data-fll="UID" data-UID="@item.AD_User_ID" class="fa fa-user"></i>
                                             }
                                         }
                                     }
@@ -252,7 +252,7 @@
                         <div id="@item.ChatID" class="vis-feedMessage">
                             <input id="@txtFllCmntID"  placeholder="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "TypeMessage") ...." data-fll="txtcmntfll" type="text" value="" />
                             @*   <input id="@btnFllCmntID" data-fll="btncmntfll" type="button" class="vis-feedIcons vis-icon-message" value="" />*@
-                            <span id="@btnFllCmntID" data-fll="btncmntfll" title=" @VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "PostMessage")"  class="vis-feedIcons vis-icon-message" ></span>
+                            <span id="@btnFllCmntID" data-fll="btncmntfll" title=" @VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "PostMessage")"><i class="vis vis-sms" aria-hidden="true"></i></span>
 
                             <div class="clearfix"></div>
                         </div>
@@ -285,7 +285,7 @@
             <!-- App Links Heading START -->
             <div class="col-md-6 col-sm-6" id="userLinks">
                 <div class="row userLinks_activeTab">
-                    <h2><a href="javascript:void(0)" id="userLinks-Tab"><span class="vis-linksIcons vis-icon-link"></span>Links<strong></strong></a></h2>
+                    <h2><a href="javascript:void(0)" id="userLinks-Tab"><span><i class="fa fa-link" aria-hidden="true"></i></span>Links<strong></strong></a></h2>
                     @*<a href="javascript:void(0)" class="vis-linksIcons icon-add" title="Add Link">Add Link</a>*@
                 </div>
             </div>
