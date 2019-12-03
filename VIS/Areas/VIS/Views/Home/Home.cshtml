@@ -95,8 +95,8 @@
                             @*<a id="hlnkTabDataRef" href="javascript:void(0)" style="float: right; margin-top: 0px; cursor: pointer; margin-right: 17px;" class="vis-feedIcons vis-icon-refresh" title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh")">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh")</a>*@
                              <!-- Refresh,New message from message window showing & symbol. Now we used CleanMnemonics to remove &.-->
 
-                            <a id="hlnkTabDataRef" href="javascript:void(0)" style="float: right; margin-top: 0px; cursor: pointer; margin-right: 17px;" class="vis-feedIcons vis-icon-refresh" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh"))">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh")</a>
-                            <span id="sNewNts" style="display: none; float: right; margin-top: 0px; cursor: pointer; margin-right: 6px;" class="vis-linksIcons icon-add" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "New"))">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "New")></span>
+                            <a id="hlnkTabDataRef" href="javascript:void(0)" style="float: right; margin-top: 0px; cursor: pointer; margin-right: 17px;" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh"))" class="vis-feedicon"><i class="vis vis-refresh"></i></a>
+                            <span id="sNewNts" style="display: none; float: right; margin-top: 0px; cursor: pointer; margin-right: 6px;" class="vis-feedicon" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "New"))"><i class="vis vis-plus"></i></span>
                             <span id="WFSearchshow" style="display: none; float: right; margin-top: 0px; cursor: pointer; margin-right: 6px;" class="vis-wfSearchIcon icon-add" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ShowSearch"))"></span>
 
                         </h2>
@@ -171,9 +171,9 @@
         <!-- App Follups START -->
         <div id="fllupsScreen">
             <!-- App Follups Heading START -->
-            <div class="row">
+            <div class="row align-items-center">
                 <h2><span><i class="fa fa-rss" aria-hidden="true"></i></span>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "FollowUps") - <strong id="follupsCount">@Model.FollowUpCnt</strong></h2>
-                <a id="hlnkFllupsRef" href="javascript:void(0)" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh"))"><i class="vis vis-refresh"></i></a>
+                <a id="hlnkFllupsRef" href="javascript:void(0)" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Refresh"))" class="vis-feedicon"><i class="vis vis-refresh"></i></a>
             </div>
             <!-- App Follups Heading END -->
 

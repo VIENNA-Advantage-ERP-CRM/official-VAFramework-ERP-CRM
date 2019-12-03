@@ -82,7 +82,7 @@
             else if (barNode.Action == "R") {
                 id = barNode.ProcessID;
             }
-            var aNode = $('<a href="#" data-id="' + id + '" data-action="' + barNode.Action + '" data-nodeid="' + barNode.NodeID + '" data-btn="action" style="overflow: auto;width: 100%;height: 100%;padding-top: 17px;" >');
+            var aNode = $('<a href="#" data-id="' + id + '" data-action="' + barNode.Action + '" data-nodeid="' + barNode.NodeID + '" data-btn="action" style="overflow: auto;" >');
             //aNode.on('click', function () {
             //    var id = $(this).data("id");
             //    var action = $(this).data("action");
@@ -90,10 +90,10 @@
             //});
             var favboxtopicowrap = $('<div class="vis-favboxtopico">');
 
-            var btnRemove = $("<a data-id='" + barNode.NodeID + "'  data-btn='remove'>").append($("<i data-id='" + barNode.NodeID + "'  data-btn='remove' class='vis vis-removefav'></i>"));
+            var btnRemove = $("<a href='javascript:void(0)' data-id='" + barNode.NodeID + "'  data-btn='remove'>").append($("<i data-id='" + barNode.NodeID + "'  data-btn='remove' class='vis vis-removefav'></i>"));
             favboxtopicowrap.append(btnRemove);
 
-            var btnZoom = $("<a data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom'>").append($("<i data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom' class='vis vis-new-tab'></i>"));
+            var btnZoom = $("<a href='javascript:void(0)' data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom'>").append($("<i data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom' class='vis vis-new-tab'></i>"));
             //btnZoom.on('click', function (e) {
 
             //});
@@ -156,7 +156,7 @@
 
         function setCount(count) {
             atab.empty();
-            atab.html("<span class='favouritesIcons' /><i class='vis vis-favourite'></i><span class='favouriteTabLabel-Large'>" + VIS.Msg.getMsg('Favourites') + " - " + "</span><strong>" + count + "</strong>");
+            atab.html("<span><i class='vis vis-favourite'></i></span><span class='favouriteTabLabel-Large'>" + VIS.Msg.getMsg('Favourites') + " - " + "</span><strong>" + count + "</strong>");
         };
     };
 
