@@ -300,23 +300,20 @@
 
         /*set height of section (main container) to window size */
         function adjustHeight() {
-               
-                ////var height = 0;
-                ////if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement)
-                ////{
-                ////    height = document.documentElement.clientHeight;
-                ////}
-                ////else {
-                ////    height = window.innerHeight;
-                ////}
-
+                var height = 0;
+                if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement)
+                {
+                    height = document.documentElement.clientHeight;
+                }
+                else {
+                    height = window.innerHeight;
+                }
                 ////$section.css('height', height - 22);
-                ////VIS.Env.setScreenHeight(height - 42 - 22);
-
-
-                ////if (VIS.viewManager)
-                ////    VIS.viewManager.sizeChanged();
-
+            height = height - 23;
+                 VIS.Env.setScreenHeight(height);
+                 document.documentElement.style.setProperty('--vis-screen-height', (height.innerHeight * 0.01) +'px');
+                if (VIS.viewManager)
+                    VIS.viewManager.sizeChanged(height, window.innerwidth);
             // Resize event for calling interface
             //if (window.VA048 && VA048.Apps.GetCallingInstance(false))
             //    VA048.Apps.GetCallingInstance(false).resize();
@@ -353,12 +350,10 @@
             }
         }; 
 
-
         function activateTaskBarItemUsingID(item) {
             var nId = item.data('wid');
             activateTaskBarItem($shortcutUL.find("LI#" + nId));
         };
-
 
     /*
        close active view

@@ -7,6 +7,7 @@
     font-display: block;
 }
 
+
 .vis {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'vis-fonts' !important;
@@ -21,11 +22,27 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-card:before {
+    content: "\e91c";
+}
+
+.vis-removefav:before {
+    content: "\e920";
+}
+
+.vis-favourite:before {
+    content: "\e943";
+}
+
+.vis-payment:before {
+    content: "\e945";
+}
+
 .vis-action:before {
     content: "\e942";
 }
 
-.vis-faxemail:before {
+.vis-fax-email:before {
     content: "\e941";
 }
 
@@ -145,10 +162,6 @@
     content: "\e91a";
 }
 
-.vis-payment:before {
-    content: "\e920";
-}
-
 .vis-pcontainer:before {
     content: "\e921";
 }
@@ -255,10 +268,6 @@
 
 .vis-home:before {
     content: "\e91b";
-}
-
-.vis-card:before {
-    content: "\e91c";
 }
 
 .vis-pencil:before {
@@ -427,4 +436,8 @@
 
 .vis-multix:before {
     content: "\ea71";
+}
+
+.vis-new-tab:before {
+    content: "\ea7e";
 }

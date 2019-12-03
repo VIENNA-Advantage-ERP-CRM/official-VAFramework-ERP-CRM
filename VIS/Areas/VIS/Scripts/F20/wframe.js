@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
 
-    var AWINDOW_HEADER_HEIGHT = 43;
+    var AWINDOW_HEADER_HEIGHT = 0;// 43;
     var APANEL_HEADER_HEIGHT = 50; //margin adjust of first tr
     var APANEL_FOOTER_HEIGHT = 40
     var GC_HEADER_HEIGHT = 0;
@@ -236,7 +236,6 @@
             $table.height(height);
         };
 
-
         this.hideHeader = function (hide) {
 
             this.isHeaderVisible = !hide;
@@ -323,16 +322,13 @@
     };
 
     AWindow.prototype.sizeChanged = function (height, width) {
-        return;
+       
         if (!height)
             height = VIS.Env.getScreenHeight();
         if (!width)
             width = window.innerWidth;
-        //if (height == VIS.Env.getScreenHeight())
-        //    return;
-        // console.log("resize");
-        this.setSize(height);
-        var hHeight = this.isHeaderVisible ? AWINDOW_HEADER_HEIGHT : 0;
+       // this.setSize(height);
+        var hHeight = this.isHeaderVisible ? 85 : 43;
         this.cPanel.sizeChanged(height - hHeight, width);
     };
 
@@ -341,7 +337,6 @@
         this.cPanel.refresh();
         return this;
     };
-
 
     AWindow.prototype.keyDown = function (evt) {
         //console.log("refresh");
@@ -368,7 +363,6 @@
         return this;
     };
 
-
     /**
 	 *	Dynamic Initialization Single Window
 	 *  @param AD_Window_ID window
@@ -379,16 +373,14 @@
     AWindow.prototype.initWindow = function (AD_Window_ID, query, callback, action, sel) {
 
         this.cPanel = new VIS.APanel(); //initlize Apanel
+        this.getContentGrid().css('display', 'flex'); // to support older design
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();
         this.id = windowNo + "_" + AD_Window_ID;
         this.hid = action + "=" + AD_Window_ID;
 
-        // $(this.getRootLayout()).attr('tabindex', windowNo);
-
         var self = this;
-
 
         VIS.AEnv.getGridWindow(windowNo, AD_Window_ID, function (json) {
             if (json.error != null) {
@@ -495,6 +487,7 @@
 
             self.setTitle(jsonData.DisplayName);
             self.setName(jsonData.DisplayName);
+           
 
 
             if (!self.cPanel.openForm(jsonData, self, windowNo)) {
@@ -502,6 +495,9 @@
                 self = null;
                 return;
             }
+
+            self.sizeChanged();// set size and window
+
             var img = "fa fa-list-alt";
             self.img = img;
             if (callback) {
@@ -566,6 +562,9 @@
                 self = null;
                 return;
             }
+
+
+            self.sizeChanged();// set size and window
 
             var img = null;
             if (jsonData.FontName != '')

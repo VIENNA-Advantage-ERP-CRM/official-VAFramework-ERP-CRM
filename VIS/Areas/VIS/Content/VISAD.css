@@ -4044,6 +4044,8 @@ tr.vis-processpara-table-SplitUI {
 .vis-process-background-label {
     Display: none;
     color: white;
+    line-height: 12px;
+    margin-left: 5px;
 }
 
 .vis-confirm-popup-check {
@@ -4359,11 +4361,15 @@ li.vis-selected-list {
     float: right;
     width: 30px;
     padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
 td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     display: flex;
+    padding: 0;
 }
 
 .vis-processpara-table-SplitUI select, .vis-processpara-table-SplitUI input:not([type="checkbox"]) {
