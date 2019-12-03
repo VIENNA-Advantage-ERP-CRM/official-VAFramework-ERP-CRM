@@ -1192,7 +1192,6 @@
 
     APanel.prototype.sizeChanged = function (height, width) {
         return;
-        
     };
 
     APanel.prototype.refresh = function () {

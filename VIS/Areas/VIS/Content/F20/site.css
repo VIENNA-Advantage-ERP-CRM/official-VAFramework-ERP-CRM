@@ -347,3 +347,14 @@ a {
     border: 3px solid rgba(var(--v-c-on-secondary), .8);
     /*background-color: rgba(var(--v-c-secondary), 1);*/
 }
+
+
+
+
+/* AForm */
+.vis-app-aform-root {
+    position:relative;
+    overflow:auto;
+}
+
+/*End */
