@@ -118,6 +118,8 @@
         var $hdrPanel = "", $divIncludeTab,  $divHeaderNav;
         var  $tabpanel;
         var $spnAdvSearch = null;
+        var $btnClose = null;
+        var $spnTitle = null;
         /***END Tab panel**/
 
         var tabItems = [], tabLIObj = {};
@@ -173,6 +175,10 @@
             $imgSearch = $root.find(".vis-ad-w-p-tb-s-btn");
             //Advance Search 
             $spnAdvSearch = $root.find(".vis-ad-w-p-tb-advsrch");
+
+            //close 
+            $btnClose = $root.find(".vis-ad-w-p-t-close");
+            $spnTitle = $root.find('.vis-ad-w-p-t-name h5');
         };
 
         this.createSearchAutoComplete = function (text) {
@@ -893,7 +899,15 @@
             }
         };
 
+        this.setTitle = function (title) {
+            $spnTitle.text(title);
+        };
+
         //End
+
+        $btnClose.on('click', function (e) {
+            self.$parentWindow.dispose(); //dispose
+        });
 
         /* left bar toggle */
         $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
@@ -1428,6 +1442,7 @@
 
         this.ctx.setWindowContext(curWindowNo, "WindowName", jsonData._vo.DisplayName);
         $parent.setTitle(VIS.Env.getHeader(this.ctx, curWindowNo));
+        this.setTitle(VIS.Env.getHeader(this.ctx, curWindowNo));
         $parent.setName(jsonData._vo.DisplayName);
         this.curWindowNo = curWindowNo;
         jsonData = null;

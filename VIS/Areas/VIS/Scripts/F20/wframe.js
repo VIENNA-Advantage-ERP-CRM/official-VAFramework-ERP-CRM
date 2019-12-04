@@ -382,6 +382,9 @@
 
         var self = this;
 
+        this.hideHeader(true); 
+
+
         VIS.AEnv.getGridWindow(windowNo, AD_Window_ID, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error
@@ -391,8 +394,6 @@
             }
 
             var jsonData = $.parseJSON(json.result); // widow json
-
-
 
             VIS.context.setContextOfWindow($.parseJSON(json.wCtx), windowNo);// set window context
             //console.log(jsonData);
