@@ -952,6 +952,7 @@
     <Compile Include="Model\MProjectTypeTask.cs" />
     <Compile Include="Model\MRecurring.cs" />
     <Compile Include="Model\MRecurringRun.cs" />
+    <Compile Include="Model\MReDistribution.cs" />
     <Compile Include="Model\MRegistration.cs" />
     <Compile Include="Model\MRegistrationAttribute.cs" />
     <Compile Include="Model\MRegistrationValue.cs" />
@@ -1290,6 +1291,7 @@
     <Compile Include="Model\X_GL_JournalBatch.cs" />
     <Compile Include="Model\X_GL_JournalLine.cs" />
     <Compile Include="Model\X_GL_LineDimension.cs" />
+    <Compile Include="Model\X_GL_ReDistribution.cs" />
     <Compile Include="Model\X_GmailContactSettings.cs" />
     <Compile Include="Model\X_IP_Requirement.cs" />
     <Compile Include="Model\X_I_BankStatement.cs" />
