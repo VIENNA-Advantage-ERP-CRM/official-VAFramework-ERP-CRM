@@ -28,6 +28,12 @@
         height: auto;
         width: auto;
     }
+    .vis-ad-w-p-ap-tp-o-body {
+        border-top-right-radius: .60rem;
+    }
+    .vis-ad-w-p-ap-tp-o-b-head {
+        border-top-right-radius: .50rem;
+    }
 
     .vis-ad-w-p-tabs-l {
         grid-column: 4/4;
