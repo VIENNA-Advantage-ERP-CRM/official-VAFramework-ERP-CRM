@@ -1105,7 +1105,13 @@ namespace VIS.Controllers
                 po = tbl.GetPO(ctx, 0, null);
                 po.Set_ValueNoCheck("M_InOut_ID", M_InOut_ID);
                 po.SetClientOrg(inout);
-                po.Set_Value("M_Product_ID", M_Product_ID);
+
+                // set value if the value is non zero
+                if (M_Product_ID > 0)
+                {
+                    po.Set_Value("M_Product_ID", M_Product_ID);
+                }
+
                 po.Set_ValueNoCheck("C_UOM_ID", C_UOM_ID);
                 po.Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
                 po.Set_Value("QtyEntered", (Decimal?)QtyEntered);
@@ -2536,6 +2542,20 @@ namespace VIS.Controllers
         private String _ref1 = null;
         //UserElement2 Reference	
         private String _ref2 = null;
+        //UserElement2 Reference	
+        private String _ref3 = null;
+        //UserElement2 Reference	
+        private String _ref4 = null;
+        //UserElement2 Reference	
+        private String _ref5 = null;
+        //UserElement2 Reference	
+        private String _ref6 = null;
+        //UserElement2 Reference	
+        private String _ref7 = null;
+        //UserElement2 Reference	
+        private String _ref8 = null;
+        //UserElement2 Reference	
+        private String _ref9 = null;
         public String PostingType = "";
         public MAcctSchema[] ASchemas = null;
         public MAcctSchema ASchema = null;
@@ -2671,9 +2691,37 @@ namespace VIS.Controllers
                     {
                         rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref1));
                     }
-                    else
+                    else if (column.IndexOf("2") != -1)
                     {
                         rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref2));
+                    }
+                    else if (column.IndexOf("3") != -1)
+                    {
+                        rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref3));
+                    }
+                    else if (column.IndexOf("4") != -1)
+                    {
+                        rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref4));
+                    }
+                    else if (column.IndexOf("5") != -1)
+                    {
+                        rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref5));
+                    }
+                    else if (column.IndexOf("6") != -1)
+                    {
+                        rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref6));
+                    }
+                    else if (column.IndexOf("7") != -1)
+                    {
+                        rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref7));
+                    }
+                    else if (column.IndexOf("8") != -1)
+                    {
+                        rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref8));
+                    }
+                    else
+                    {
+                        rm.AddColumn(new RColumn(ctx, column, DisplayType.TableDir, null, 0, _ref9));
                     }
                 }
                 else if (column != null && column.EndsWith("_ID"))
@@ -2750,9 +2798,37 @@ namespace VIS.Controllers
                     {
                         _ref1 = ase.GetDisplayColumnName();
                     }
-                    else
+                    else if (columnName.IndexOf("2") != -1)
                     {
                         _ref2 = ase.GetDisplayColumnName();
+                    }
+                    else if (columnName.IndexOf("3") != -1)
+                    {
+                        _ref3 = ase.GetDisplayColumnName();
+                    }
+                    else if (columnName.IndexOf("4") != -1)
+                    {
+                        _ref4 = ase.GetDisplayColumnName();
+                    }
+                    else if (columnName.IndexOf("5") != -1)
+                    {
+                        _ref5 = ase.GetDisplayColumnName();
+                    }
+                    else if (columnName.IndexOf("6") != -1)
+                    {
+                        _ref6 = ase.GetDisplayColumnName();
+                    }
+                    else if (columnName.IndexOf("7") != -1)
+                    {
+                        _ref7 = ase.GetDisplayColumnName();
+                    }
+                    else if (columnName.IndexOf("8") != -1)
+                    {
+                        _ref8 = ase.GetDisplayColumnName();
+                    }
+                    else
+                    {
+                        _ref9 = ase.GetDisplayColumnName();
                     }
                 }
                 if (!columns.Contains(columnName))

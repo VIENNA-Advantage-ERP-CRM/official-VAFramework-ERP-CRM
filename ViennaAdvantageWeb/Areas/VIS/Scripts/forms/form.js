@@ -1,6 +1,6 @@
 ﻿
 ; (function (VIS, $) {
-    VIS.Apps = VIS.Apps ||{};
+    VIS.Apps = VIS.Apps || {};
 
     /*	Form Interface.
     	for communicating between AFrame and user Form
@@ -19,6 +19,11 @@
         this.windowNo;
 
         var $root, $text, $okBtn, $cancelBtn;
+        var parameterdiv, reportDiv, toolBar, busyIndicator;
+        var cmbReports;
+        var wind;
+        var cPanel = null;
+        var self = this;
 
         function initializeComponent() {
             $root = $("<div class='vis-height-full'>");
@@ -30,10 +35,54 @@
             //var $h1 = $("<h3>").text("enter text in box and click ok button");
             //Add to root
             //append($h2).append($h1) .
-            $root.append($('<div class="vis-awindow-header vis-menuTitle"><a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose"></a><p>Workspace  SuperUser@HQ.IdeasInc.</p><div class="vis-awindow-toolbar"></div></div>')).append( $text).append($okBtn).append($cancelBtn);
-        }
-        initializeComponent();
+            //$root.append($('<div class="vis-awindow-header vis-menuTitle"><a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose"></a><p>Workspace  SuperUser@HQ.IdeasInc.</p><div class="vis-awindow-toolbar"></div></div>')).append( $text).append($okBtn).append($cancelBtn);
+            cmbReports = $('<select style="width:300px;height:30px">');
+            parameterdiv = $('<div style="width:300px;height:100%;float:left;background-color:gray">');
+            reportDiv = $('<div style="width:calc(100% - 400px);height:calc(100% - 35px);float:right;background-color:yellow">');
+            toolBar = $('<div style="width:calc(100% - 300px);height:35px;float:right;background-color:brown">');
+            busyIndicator = $('<div style="width:calc(100% - 400px);height:calc(100%);position:absolute">');
 
+
+
+            $root.append(cmbReports).append(toolBar).append(parameterdiv).append(reportDiv);
+
+
+
+            $.ajax({
+                url: VIS.Application.contextUrl + "home/GetReports",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            cmbReports.append('<option value="' + data[i].Key + '">' + data[i].Name + '</option>');
+                        }
+                    }
+                }
+            });
+
+            cmbReports.on("change", function () {
+
+                if (!wind) {
+                    wind = new VIS.AWindow();
+                }
+                cPanel = wind.refreshProcess(cmbReports.val(), null, "P", true, self);
+                cPanel.showCloseIcon(false);
+                cPanel.setSaveCsvIcons('vis-savecsv-ico-pos');
+                cPanel.setReportFormatIcons('vis-repformat-ico-pos');
+                cPanel.setSavePdfIcons('vis-savepdf-ico-pos');
+                cPanel.setArchiveIcons('vis-archive-ico-pos');
+                cPanel.setRequeryIcons('vis-requery-ico-pos');
+                cPanel.setCustomizeIcons('vis-customize-ico-pos');
+                cPanel.setPrintIcons('vis-print-ico-pos');
+                cPanel.setToolbarColor('white');
+                cPanel.showParameterCloseIcon(false);
+            });
+
+
+
+        }
+
+        initializeComponent();
 
         var self = this; //scoped self pointer
 
@@ -53,6 +102,23 @@
             return $root;
         };
 
+        this.getParameterContainer = function () {
+            return parameterdiv;
+        }
+
+        this.getContentContainer = function () {
+            return reportDiv;
+        }
+
+        this.getToolbarContainer = function () {
+            return toolBar;
+        };
+
+
+        this.getBusyIndicatorContainer = function ()
+        {
+            return busyIndicator;
+        };
 
         this.disposeComponent = function () {
 
@@ -65,7 +131,7 @@
                 $okBtn.off(VIS.Events.onTouchStartOrClick);
             if ($cancelBtn)
                 $cancelBtn.off(VIS.Events.onTouchStartOrClick);
-             
+
             $text = $okBtn = $cancelBtn = null;
 
             this.getRoot = null;
@@ -79,13 +145,13 @@
     VIS.Apps.TestForm.prototype.init = function (windowNo, frame) {
         //Assign to this Varable
         this.frame = frame;
-       // frame.hideHeader(true);
-        
-       this.frame.getContentGrid().append(this.getRoot());
+        // frame.hideHeader(true);
+
+        this.frame.getContentGrid().append(this.getRoot());
     };
 
     VIS.Apps.TestForm.prototype.sizeChanged = function (height, width) {
-        
+
     };
 
     //Must implement dispose

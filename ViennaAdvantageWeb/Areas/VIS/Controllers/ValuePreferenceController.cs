@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using VAdvantage.Classes;
+using VAdvantage.Utility;
+using VIS.Classes;
 
 namespace VIS.Controllers
 {
@@ -49,5 +52,13 @@ namespace VIS.Controllers
             return Json(new { result = returnValue }, JsonRequestBehavior.AllowGet);
         }
 
+        // Added by Bharat on 12 June 2017
+        public JsonResult GetPrefrenceID(string PrefQry)
+        {
+            Ctx ct = Session["ctx"] as Ctx;
+            ValuePreferenceModel model = new ValuePreferenceModel();
+            PrefQry = SecureEngineBridge.DecryptByClientKey(PrefQry, ct.GetSecureKey());
+            return Json(JsonConvert.SerializeObject(model.GetPrefrenceID(PrefQry)), JsonRequestBehavior.AllowGet);
+        }
     }
 }

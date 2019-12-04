@@ -72,6 +72,10 @@ namespace ViennaAdvantage.Process
         ValueNamePair pp = null;
         // container applicable
         private bool isContainerApplicable = false;
+
+        // Allow Non Item type Product also
+        private bool isAllowNonItem = false;
+
         #endregion
 
         /// <summary>
@@ -139,6 +143,9 @@ namespace ViennaAdvantage.Process
             // check container functionality applicable into system or not
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
+            // check Allow Non Item type Product setting on Tenant
+            isAllowNonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
+
             log.Info("Selection=" + _selection
                 + ", M_Warehouse_ID=" + _M_Warehouse_ID
                 + ", C_BPartner_ID=" + _C_BPartner_ID
@@ -155,7 +162,7 @@ namespace ViennaAdvantage.Process
             {
                 _sql.Append("SELECT * FROM C_Order "
                     + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND AD_Client_ID=" + GetCtx().GetAD_Client_ID()
-                    //JID_0444_1 : If there are orders with Advance payment and not paid, system will not create the shipments for that orders but will create the shipment for other orders.
+                   //JID_0444_1 : If there are orders with Advance payment and not paid, system will not create the shipments for that orders but will create the shipment for other orders.
                    + @" AND C_order_ID NOT IN
                       (SELECT C_order_ID FROM VA009_OrderPaySchedule WHERE va009_orderpayschedule.C_Order_ID =C_Order.c_order_id
                       AND va009_orderpayschedule.va009_ispaid = 'N' AND va009_orderpayschedule.isactive = 'Y')");
@@ -170,15 +177,22 @@ namespace ViennaAdvantage.Process
                     + "	AND o.IsDropShip='N'"
                     //	No Manual
                     + " AND o.DeliveryRule<>'M'"
-                    //JID_0444_1 : If there are orders with Advance payment and not paid, system will not create the shipments for that orders but will create the shipment for other orders.
+                   //JID_0444_1 : If there are orders with Advance payment and not paid, system will not create the shipments for that orders but will create the shipment for other orders.
                    + @" AND o.C_order_ID NOT IN
                       (SELECT C_order_ID FROM VA009_OrderPaySchedule WHERE va009_orderpayschedule.C_Order_ID =o.c_order_id
                       AND va009_orderpayschedule.va009_ispaid = 'N' AND va009_orderpayschedule.isactive = 'Y' ) "
                     //	Open Order Lines with Warehouse
                     // JID_0685: If there is sales order with Charge and product that are other than items type that order should not be available at Gemerate Shipment process.
+                    + " AND EXISTS (SELECT C_OrderLine_ID FROM C_OrderLine ol ");
 
-                    + " AND EXISTS (SELECT C_OrderLine_ID FROM C_OrderLine ol INNER JOIN M_Product prd ON (ol.M_Product_ID = prd.M_Product_ID AND prd.ProductType = 'I')"
-                        + "WHERE ol.M_Warehouse_ID=" + _M_Warehouse_ID);					//	#1
+                // Get the lines of Order based on the setting taken on Tenant to allow non item Product
+                if (!isAllowNonItem)
+                {
+                    _sql.Append("INNER JOIN M_Product prd ON (ol.M_Product_ID = prd.M_Product_ID AND prd.ProductType = 'I')");
+                }
+
+                _sql.Append("WHERE ol.M_Warehouse_ID=" + _M_Warehouse_ID);					//	#1
+
                 if (_datePromised != null)
                 {
                     _sql.Append(" AND TRUNC(ol.DatePromised,'DD')<='" + String.Format("{0:dd-MMM-yy}", _datePromised) + "'");		//	#2
@@ -326,9 +340,13 @@ namespace ViennaAdvantage.Process
                                 + "WHERE iol.C_OrderLine_ID=C_OrderLine.C_OrderLine_ID AND io.DocStatus IN ('IP','WC'))");
                 }
 
-                // JID_1307: Shipment is not generating against the Sales Order which includes combination of ItemType & Service/Expense/Resource type of Products at SO lines
-                where.Append(" AND C_OrderLine_ID IN (SELECT ol.C_OrderLine_ID FROM C_OrderLine ol INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID WHERE ol.C_Order_ID = "
+                // Get the lines of Order based on the setting taken on Tenant to allow non item Product
+                if (!isAllowNonItem)
+                {
+                    // JID_1307: Shipment is not generating against the Sales Order which includes combination of ItemType & Service/Expense/Resource type of Products at SO lines
+                    where.Append(" AND C_OrderLine_ID IN (SELECT ol.C_OrderLine_ID FROM C_OrderLine ol INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID WHERE ol.C_Order_ID = "
                     + order.GetC_Order_ID() + " AND p.ProductType = 'I')");
+                }
 
                 //	Deadlock Prevention - Order by M_Product_ID
                 MOrderLine[] lines = order.GetLines(where.ToString(), "ORDER BY C_BPartner_Location_ID, M_Product_ID");
@@ -356,8 +374,8 @@ namespace ViennaAdvantage.Process
                             continue;
                         }
 
-                        // Added by Bharat on 07 April 2017 as code already on Admpiere but deleted here.
-                        if (line.GetC_Charge_ID() != 0)
+                        // Get the lines of Order based on the setting taken on Tenant to allow non item Product                        
+                        if (line.GetC_Charge_ID() != 0 && (!isAllowNonItem || Env.Signum(toDeliver) == 0))        // Nothing to Deliver
                         {
                             continue;
                         }

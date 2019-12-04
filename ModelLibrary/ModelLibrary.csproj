@@ -426,6 +426,7 @@
     <Compile Include="ModelAD\X_AD_CardView_Column.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Condition.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Role.cs" />
+    <Compile Include="ModelAD\X_AD_DefaultCardView.cs" />
     <Compile Include="ModelAD\X_AD_DefaultUserQuery.cs" />
     <Compile Include="ModelAD\X_AD_GmailConfiguration.cs" />
     <Compile Include="ModelAD\X_AD_Group_Form.cs" />
@@ -446,6 +447,7 @@
     <Compile Include="ModelAD\X_AD_WindowAction.cs" />
     <Compile Include="ModelAD\X_CM_Subscribe.cs" />
     <Compile Include="Model\MAccountGroupBatch.cs" />
+    <Compile Include="Model\MAssignAcctSchema.cs" />
     <Compile Include="Model\MBankAccountLine.cs" />
     <Compile Include="Model\MCostDetail.cs" />
     <Compile Include="Model\MCostElement.cs" />
@@ -1273,6 +1275,7 @@
     <Compile Include="Model\X_Fact_Acct.cs" />
     <Compile Include="Model\X_Fact_Acct_Balance.cs" />
     <Compile Include="Model\X_Fact_Accumulation.cs" />
+    <Compile Include="Model\X_GL_AssignAcctSchema.cs" />
     <Compile Include="Model\X_GL_Budget.cs" />
     <Compile Include="Model\X_GL_BudgetControl.cs" />
     <Compile Include="Model\X_GL_Category.cs" />
@@ -1658,6 +1661,7 @@
     <Compile Include="ProcessEngine\SvrProcess.cs" />
     <Compile Include="Process\AcctSchemaCopyAcct.cs" />
     <Compile Include="Process\AcctSchemaDefaultCopy.cs" />
+    <Compile Include="Process\ActivateProductContainer.cs" />
     <Compile Include="Process\Aging.cs" />
     <Compile Include="Process\AllocationAuto.cs" />
     <Compile Include="Process\AllocationReset.cs" />
@@ -1694,6 +1698,7 @@
     <Compile Include="Process\CreateCurrencySourceEntries.cs" />
     <Compile Include="Process\CreateInviteeList.cs" />
     <Compile Include="Process\CreatePendingTranslations.cs" />
+    <Compile Include="Process\CreateReleaseDocFromBO.cs" />
     <Compile Include="Process\CreateSalesContract.cs" />
     <Compile Include="Process\CreateTargetList.cs" />
     <Compile Include="Process\CreateTaxLines.cs" />
@@ -1702,6 +1707,7 @@
     <Compile Include="Process\DistributionVerify.cs" />
     <Compile Include="Process\DocTypeCounterValidate.cs" />
     <Compile Include="Process\DocumentTypeVerify.cs" />
+    <Compile Include="Process\DropFullMoveContainerLines.cs" />
     <Compile Include="Process\DunningPrint.cs" />
     <Compile Include="Process\DunningRunCreate.cs" />
     <Compile Include="Process\EMailTest.cs" />

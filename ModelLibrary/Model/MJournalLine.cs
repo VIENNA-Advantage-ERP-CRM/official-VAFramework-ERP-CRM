@@ -460,6 +460,10 @@ namespace VAdvantage.Model
             //	Acct Amts
             Decimal? rate = GetCurrencyRate();
 
+            // set precision value based on cuurenncy define on GL Journal
+            m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM c_currency WHERE c_currency_id = 
+                            ( SELECT c_currency_id FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
+
             Decimal valuesRate = 0;
             Decimal valuesRateCredit = 0;
             if (rate == 0)
@@ -605,11 +609,11 @@ namespace VAdvantage.Model
                 MJournal gl = new MJournal(GetCtx(), GetGL_Journal_ID(), Get_TrxName());
 
                 // Validate all mandatory combinations are set
-                MAcctSchema asc = MAcctSchema.Get(GetCtx(), gl.GetC_AcctSchema_ID());                
+                MAcctSchema asc = MAcctSchema.Get(GetCtx(), gl.GetC_AcctSchema_ID());
                 MAcctSchemaElement[] elements = MAcctSchemaElement.GetAcctSchemaElements(asc);
                 for (int i = 0; i < elements.Length; i++)
                 {
-                    MAcctSchemaElement elem = elements[i];                    
+                    MAcctSchemaElement elem = elements[i];
                     String et = elem.GetElementType();
                     if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("Account_ID") > 0)
                         Account_ID = Util.GetValueOfInt(Get_Value("Account_ID"));
@@ -719,19 +723,15 @@ namespace VAdvantage.Model
                 log.Warning("afterSave - Update Journal #" + no);
             }
 
-
-
             // Manish 18/7/2016 .. chk is gl_journalbatch_id there or not.
-
             string sqlquery = @"SELECT gl_journalbatch_id FROM gl_journal WHERE gl_journal_id IN
                                 ( SELECT gl_journal_id FROM GL_JournalLine WHERE GL_JournalLine_ID=" + GetGL_JournalLine_ID() + " )";
 
             int nooo = Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sqlquery, null, null));
-            if (nooo == null || nooo <= 0)
+            if (nooo <= 0)
             {
                 return no == 1;
             }
-            // end 18/7/2016
 
             //	Update Batch Total
             sql = "UPDATE GL_JournalBatch jb"
@@ -746,12 +746,18 @@ namespace VAdvantage.Model
                 log.Warning("Update Batch #" + no);
             }
             return no == 1;
-        }	//	updateJournalTotal
+        }   //	updateJournalTotal
 
 
 
-        // Manish 18/7/2016 creat this function for getting the line dimension 
-        public int CopyLinesFrom(MJournalLine fromJournal, int newlineID)
+        /// <summary>
+        /// This functionis used to create Line Dimension Line
+        /// </summary>
+        /// <param name="fromJournal">object of old GL Journal Line from where we need to pick lines</param>
+        /// <param name="newlineID">GL Journal Line ID - new record agsint which we copy lines</param>
+        /// <param name="typeCR">Optional Parameter - When 'C' - its means Reverse record - amount to be negate in this case</param>
+        /// <returns>count of line - which is created</returns>
+        public int CopyLinesFrom(MJournalLine fromJournal, int newlineID, char typeCR = 'X')
         {
             if (IsProcessed() || fromJournal == null)
             {
@@ -778,8 +784,14 @@ namespace VAdvantage.Model
                 toLine.SetLineType(fromLines[i].GetLineType());
                 toLine.SetGL_JournalLine_ID(newlineID);
 
-
-                toLine.SetAmount(fromLines[i].GetAmount());
+                if (typeCR == 'C')
+                {
+                    toLine.SetAmount(Decimal.Negate(fromLines[i].GetAmount()));
+                }
+                else
+                {
+                    toLine.SetAmount(fromLines[i].GetAmount());
+                }
                 toLine.SetLine(fromLines[i].GetLine());
 
                 if (toLine.Save(fromJournal.Get_TrxName()))

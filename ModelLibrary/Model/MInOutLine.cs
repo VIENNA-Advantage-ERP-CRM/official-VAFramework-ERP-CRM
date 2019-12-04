@@ -1018,8 +1018,11 @@ namespace VAdvantage.Model
             QtyEntered = GetQtyEntered();
             movementQty = GetMovementQty();
             log.Fine("");
+
+            // JID_0899: If user do not select Product or Charge on Ship/Receipt Line, it will displayed the message "Please select the Product or charge
             if (GetC_Charge_ID() == 0 && GetM_Product_ID() == 0)
             {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NOProductOrCharge"));
                 return false;
             }
             //	Get Line No
@@ -1065,8 +1068,15 @@ namespace VAdvantage.Model
             //Checking for conversion of UOM 
             MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
             MDocType dt = new MDocType(GetCtx(), inO.GetC_DocType_ID(), Get_TrxName());
-            MProduct _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
-            if (GetC_UOM_ID() != _Product.GetC_UOM_ID())
+            MProduct _Product = null;
+
+            // Check if Product_ID is non zero then only create the object
+            if (GetM_Product_ID() > 0)
+            {
+                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+            }
+
+            if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
                 decimal? differenceQty = Util.GetValueOfDecimal(GetCtx().GetContext("DifferenceQty_"));
                 if (differenceQty > 0 && !newRecord && !dt.IsSplitWhenDifference())
@@ -1095,25 +1105,19 @@ namespace VAdvantage.Model
                 SetMovementQty(movementQty);
             }
 
-            //MInOut inO = new MInOut(Env.GetCtx(), GetM_InOut_ID(), Get_Trx());
-            String qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
-            int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1));
-            Tuple<String, String, String> iInfo = null;
-            if (Env.HasModulePrefix("BTR002_", out iInfo))
+            String qry1 = "";
+
+            // for Service Type Product set value in Locator field
+            if (_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item && GetM_Locator_ID() == 0)
             {
-                if (!inO.IsSOTrx())
+                qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
+                int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));
+                if (il == 0)
                 {
-                    MProduct MProduct = new Model.MProduct(GetCtx(), GetM_Product_ID(), null);
-                    MLocator loc = new MLocator(GetCtx(), MProduct.GetM_Locator_ID(), null);
-                    if (inO.GetM_Warehouse_ID() == loc.GetM_Warehouse_ID())
-                    {
-                        SetM_Locator_ID(MProduct.GetM_Locator_ID());
-                    }
-                    else
-                    {
-                        SetM_Locator_ID(il);
-                    }
+                    qry1 = "SELECT MAX(M_Locator_ID) FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsActive = 'Y'";
+                    il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));
                 }
+                SetM_Locator_ID(il);
             }
 
             // check record is reversed or not
@@ -1131,7 +1135,8 @@ namespace VAdvantage.Model
             //}
 
             // dont verify qty during completion
-            if ((!inO.IsProcessing() || newRecord) && _Product.IsStocked())
+            // on Ship/Receipt, do not check qty in warehouse for Lines of Charge.
+            if ((!inO.IsProcessing() || newRecord) && _Product != null && _Product.IsStocked())
             {
                 int M_Warehouse_ID = 0; MWarehouse wh = null;
                 StringBuilder qry = new StringBuilder();

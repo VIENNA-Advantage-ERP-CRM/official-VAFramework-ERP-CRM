@@ -1998,12 +1998,12 @@ namespace VIS.Helpers
                 {
                     if (OldValue != null)
                     {
-                        bool yes = OldValue.Equals("true") || OldValue.Equals("Y");
+                        bool yes = OldValue.Equals("True") || OldValue.Equals("Y");
                         showOldValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                     if (NewValue != null)
                     {
-                        bool yes = NewValue.Equals("true") || NewValue.Equals("Y");
+                        bool yes = NewValue.Equals("True") || NewValue.Equals("Y");
                         showNewValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                 }
@@ -2330,6 +2330,21 @@ namespace VIS.Helpers
 
 
 
+        }
+        /// <summary>
+        /// Method to get parent tab records ID.
+        /// </summary>
+        /// <param name="SelectColumn">Column  to be selected</param>
+        /// <param name="SelectTable">From table</param>
+        /// <param name="WhereColumn">Where column</param>
+        /// <param name="WhereValue">ID of child column</param>
+        /// <returns></returns>
+        public int GetZoomParentRecord(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
+        {
+            int recordID = 0;
+            string sql = "SELECT " + SelectColumn + " FROM " + SelectTable + " WHERE " + WhereColumn + "=" + Util.GetValueOfInt(WhereValue);
+            recordID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            return recordID;
         }
     }
 }

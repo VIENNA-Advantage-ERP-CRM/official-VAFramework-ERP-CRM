@@ -46,7 +46,8 @@
                 baseObj.cmbContainer.getControl().css('display', 'block');
 
             //  Set Default
-            var DocumentNos = VIS.Env.getCtx().getContextAsInt(baseObj.windowNo, "DocumentNo");
+            // JID_1430 : On create line from form system is not loading the Document no. field showing NAN in field only.
+            var DocumentNos = VIS.Env.getCtx().getContext(baseObj.windowNo, "DocumentNo");
             baseObj.DocumentNoRef.setValue(DocumentNos);
 
             var C_BPartner_ID = baseObj.initBPartner(false);

@@ -50,6 +50,8 @@ namespace VAdvantage.Acct
         private Decimal _ListAmt = Env.ZERO;
         // Discount Amount         
         private Decimal _DiscountAmt = Env.ZERO;
+        // conversion Rate
+        private Decimal _ConversionRate = Env.ZERO;
 
         // Converted Amounts   	
         private Decimal? _AmtAcctDr = null;
@@ -84,6 +86,28 @@ namespace VAdvantage.Acct
         private int _C_ConversionType_ID = -1;
         // Period						
         private int _C_Period_ID = -1;
+        // User Element 1
+        private int _UserElement1 = -1;
+        // User Element 2
+        private int _UserElement2 = -1;
+        // User Element 3
+        private int _UserElement3 = -1;
+        // User Element 4
+        private int _UserElement4 = -1;
+        // User Element 5
+        private int _UserElement5 = -1;
+        // User Element 6
+        private int _UserElement6 = -1;
+        // User Element 7
+        private int _UserElement7 = -1;
+        // User Element 8
+        private int _UserElement8 = -1;
+        // User Element 9
+        private int _UserElement9 = -1;
+        // Transaction Organization
+        private int _AD_OrgTrx_ID = -1;
+        // Organization
+        private int _AD_Org_ID = -1;
 
         #endregion
 
@@ -519,7 +543,23 @@ namespace VAdvantage.Acct
         /// <returns>org</returns>
         public int GetAD_Org_ID()
         {
-            return _po.GetAD_Org_ID();
+            if (_AD_Org_ID <= 0)
+            {
+                return _po.GetAD_Org_ID();
+            }
+            else
+            {
+                return _AD_Org_ID;
+            }
+        }
+
+        /// <summary>
+        /// This Function is used to set Organization Value
+        /// </summary>
+        /// <param name="AD_Org_ID"></param>
+        public void SetAD_Org_ID(int AD_Org_ID)
+        {
+            _AD_Org_ID = AD_Org_ID;
         }
 
         /// <summary>
@@ -956,6 +996,10 @@ namespace VAdvantage.Acct
         /// <returns>AD_OrgTrx_ID</returns>
         public int GetAD_OrgTrx_ID()
         {
+            if (_AD_OrgTrx_ID > 0)
+            {
+                return _AD_OrgTrx_ID;
+            }
             int index = _po.Get_ColumnIndex("AD_OrgTrx_ID");
             if (index != -1)
             {
@@ -966,6 +1010,15 @@ namespace VAdvantage.Acct
                 }
             }
             return 0;
+        }
+
+        /// <summary>
+        /// This Function is used to set Transaction Organization
+        /// </summary>
+        /// <param name="AD_OrgTrx_ID"></param>
+        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        {
+            _AD_OrgTrx_ID = AD_OrgTrx_ID;
         }
 
         /// <summary>
@@ -1056,6 +1109,178 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
+        /// Get Conversion Rate
+        /// </summary>
+        /// <returns>Conversion Rate Value</returns>
+        public Decimal GetConversionRate()
+        {
+            return _ConversionRate;
+        }
+
+        /// <summary>
+        /// Set Conversion Rate
+        /// </summary>
+        /// <param name="conversionRate">Conversion Rate Value</param>
+        public void SetConversionRate(Decimal conversionRate)
+        {
+            _ConversionRate = conversionRate;
+        } 
+
+        /// <summary>
+        /// Get User Element 1
+        /// </summary>
+        /// <returns>_UserElement1</returns>
+        public int GetUserElement1()
+        {
+            return _UserElement1;
+        }
+
+        /// <summary>
+        /// Set UserElement 1
+        /// </summary>
+        public void SetUserElement1(int UserElement1)
+        {
+            _UserElement1 = UserElement1;
+        }
+
+        /// <summary>
+        /// Get User Element 2
+        /// </summary>
+        /// <returns>_UserElement2</returns>
+        public int GetUserElement2()
+        {
+            return _UserElement2;
+        }
+
+        /// <summary>
+        /// Set UserElement 2
+        /// </summary>
+        public void SetUserElement2(int UserElement2)
+        {
+            _UserElement2 = UserElement2;
+        }
+
+        /// <summary>
+        /// Get User Element 3
+        /// </summary>
+        /// <returns>_UserElement3</returns>
+        public int GetUserElement3()
+        {
+            return _UserElement3;
+        }
+
+        /// <summary>
+        /// Set UserElement 3
+        /// </summary>
+        public void SetUserElement3(int UserElement3)
+        {
+            _UserElement3 = UserElement3;
+        }
+
+        /// <summary>
+        /// Get User Element 4
+        /// </summary>
+        /// <returns>_UserElement4</returns>
+        public int GetUserElement4()
+        {
+            return _UserElement4;
+        }
+
+        /// <summary>
+        /// Set UserElement 4
+        /// </summary>
+        public void SetUserElement4(int UserElement4)
+        {
+            _UserElement4 = UserElement4;
+        }
+
+        /// <summary>
+        /// Get User Element 5
+        /// </summary>
+        /// <returns>_UserElement5</returns>
+        public int GetUserElement5()
+        {
+            return _UserElement5;
+        }
+
+        /// <summary>
+        /// Set UserElement 5
+        /// </summary>
+        public void SetUserElement5(int UserElement5)
+        {
+            _UserElement5 = UserElement5;
+        }
+
+        /// <summary>
+        /// Get User Element 6
+        /// </summary>
+        /// <returns>_UserElement6</returns>
+        public int GetUserElement6()
+        {
+            return _UserElement6;
+        }
+
+        /// <summary>
+        /// Set UserElement 6
+        /// </summary>
+        public void SetUserElement6(int UserElement6)
+        {
+            _UserElement6 = UserElement6;
+        }
+
+        /// <summary>
+        /// Get User Element 7
+        /// </summary>
+        /// <returns>_UserElement7</returns>
+        public int GetUserElement7()
+        {
+            return _UserElement7;
+        }
+
+        /// <summary>
+        /// Set UserElement 7
+        /// </summary>
+        public void SetUserElement7(int UserElement7)
+        {
+            _UserElement7 = UserElement7;
+        }
+
+        /// <summary>
+        /// Get User Element 8
+        /// </summary>
+        /// <returns>_UserElement8</returns>
+        public int GetUserElement8()
+        {
+            return _UserElement8;
+        }
+
+        /// <summary>
+        /// Set UserElement 8
+        /// </summary>
+        public void SetUserElement8(int UserElement8)
+        {
+            _UserElement8 = UserElement8;
+        }
+
+        /// <summary>
+        /// Get User Element 9
+        /// </summary>
+        /// <returns>_UserElement9</returns>
+        public int GetUserElement9()
+        {
+            return _UserElement9;
+        }
+
+        /// <summary>
+        /// Set UserElement 9
+        /// </summary>
+        public void SetUserElement9(int UserElement9)
+        {
+            _UserElement9 = UserElement9;
+        }
+
+
+        /// <summary>
         /// Get User 1
         /// </summary>
         /// <returns>user defined 1</returns>
@@ -1138,9 +1363,9 @@ namespace VAdvantage.Acct
             if (index != -1)
             {
                 int ii = Util.GetValueOfInt(_po.Get_Value(index));
-                
-                    return ii;
-                
+
+                return ii;
+
             }
             return 0;
         }

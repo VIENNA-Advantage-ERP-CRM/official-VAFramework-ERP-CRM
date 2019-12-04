@@ -587,6 +587,26 @@ public void SetIsCostMandatory(Boolean IsCostMandatory) { Set_Value("IsCostManda
 /// </summary>
 /// <returns></returns>
 public Boolean IsCostMandatory() { Object oo = Get_Value("IsCostMandatory"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-}
+
+        /** Set Allow Non Item on Ship/Receipt.
+@param IsAllowNonItem Allow Non Item on Ship/Receipt */
+        public void SetIsAllowNonItem(Boolean IsAllowNonItem)
+        {
+            Set_Value("IsAllowNonItem", IsAllowNonItem);
+        }
+
+        /** Get Allow Non Item on Ship/Receipt.
+@return Allow Non Item on Ship/Receipt */
+        public Boolean IsAllowNonItem()
+        {
+            Object oo = Get_Value("IsAllowNonItem");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo);
+                return "Y".Equals(oo); }
+            return false;
+        }
+    }
 
 }

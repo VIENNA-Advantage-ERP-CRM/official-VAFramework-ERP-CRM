@@ -98,6 +98,8 @@
 
         var uomArray = [];
 
+        var infoMultipleLineSave = [];
+
         function initializeComponent() {
             SubGridCol = [];
             SubGridCol.push({ field: 'WareHouse', caption: VIS.Msg.getMsg('Warehouse'), size: '150px' },
@@ -420,7 +422,7 @@
                 divbtnsec = $("<div style='float:left;'>");
                 btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(canceltxt);
                 btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(Oktxt);
-                btnAddCart = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/addToCart.png'>"));
+                btnAddCart = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px;display:block;'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/addToCart.png'>"));
                 btnShowSaved = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/list.png'>"));
                 btnScanFile = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/scan.png'>"));
                 btnShowCart = $("<button class='VIS_Pref_btn-2'style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/opencart.png'>"));
@@ -429,7 +431,7 @@
                 divbtnsec = $("<div style='float:right;'>");
                 btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(canceltxt);
                 btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(Oktxt);
-                btnAddCart = $("<button class='VIS_Pref_btn-2' style='margin-right:5px;margin-top: 5px;margin-bottom: -10px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/addToCart.png'>"));
+                btnAddCart = $("<button class='VIS_Pref_btn-2' style='margin-right:5px;margin-top: 5px;margin-bottom: -10px;display:block;'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/addToCart.png'>"));
                 btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled style='margin-right:5px;margin-top: 5px;margin-bottom: -10px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/list.png'>"));
                 btnScanFile = $("<button class='VIS_Pref_btn-2' style='margin-right:5px;margin-top: 5px;margin-bottom: -10px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/scan.png'>"));
                 btnShowCart = $("<button class='VIS_Pref_btn-2' style='margin-right:5px;margin-top: 5px;margin-bottom: -10px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/opencart.png'>"));
@@ -1335,10 +1337,11 @@
 
         var btnOKClick = function () {
             //debugger;
+
             bsyDiv[0].style.visibility = "visible";
-            if (multiSelection && infoLines.length > 0) {
+            if (multiSelection && infoLines.length > 0 && btnAddCart.css("display") == "none") {
                 multiValues = [];
-                refreshUI = true;
+                // refreshUI = true;
 
                 // Change by Lokesh Chauhan if records selected from cart and 
                 // any specific rows selected in that case insert only selected lines
@@ -1357,32 +1360,108 @@
                 SaveProducts(infoLines);
             }
             else {
-                multiValues = [];
-                var selection = w2ui[grdname].getSelection();
-                for (item in selection) {
-                    if (multiValues.indexOf(w2ui[grdname].get(selection[item])[keyCol]) == -1) {
-                        multiValues.push(w2ui[grdname].get(selection[item])[keyCol]);
+                // grid is multiselection, and selected rows count greater than 1 and insert from main grid.
+                if (multiSelection && w2ui[grdname].getSelection().length > 1 && btnAddCart.css("display") == "block") {
+                    infoMultipleLineSave = GetMultipleSelectionSave();
+                    //refreshUI = true;
+                    SaveProducts(infoMultipleLineSave);
+                }
+                else {
+                    multiValues = [];
+                    var selection = w2ui[grdname].getSelection();
+                    for (item in selection) {
+                        if (multiValues.indexOf(w2ui[grdname].get(selection[item])[keyCol]) == -1) {
+                            multiValues.push(w2ui[grdname].get(selection[item])[keyCol]);
+                        }
+                    }
+                    bsyDiv[0].style.visibility = "hidden";
+                    if (self.onClose != null) {
+                        self.onClose();
+                    }
+                    disposeComponent();
+                }
+
+            }
+        };
+        // Method to get array of rows selected from main grid in case of multiple selection and insertion.
+        var GetMultipleSelectionSave = function () {
+            var selection = w2ui[grdname].getSelection();
+            var selectedItems;
+            if (selection.length > 0) {
+                selectedItems = [];
+                for (var i = 0; i < selection.length; i++) {
+                    if (w2ui[grdname].records[selection[i] - 1].QTYENTERED > 0) {
+                        var product_ID = w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID;
+                        var attribute_ID = w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID;
+                        //selectedItems.push($.grep(infoLines, function (e) { return e._prdID == prodID && e._Attribute == attrID; })[0]);
+                        if (selectedItems.length > 0) {
+                            var removeIndex = selectedItems.map(function (i) { return i._prdID == product_ID && i._Attribute == attribute_ID; }).indexOf(true);
+                            if (removeIndex > -1) {
+                                selectedItems[removeIndex]._prodQty += qty;
+                            }
+                            else {
+                                selectedItems.push(
+                                        {
+                                            _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
+                                            _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                            _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
+                                            _value: w2ui[grdname].records[selection[i] - 1].NAME,
+                                            _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                            _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
+                                            _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                            _windowNo: WindowNo,
+                                            _RefNo: "",
+                                            _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                            _AttributeName: "",
+                                            _Locator_ID: 0,
+                                            _IsLotSerial: "N",
+                                            _countID: 0
+                                        }
+                                    )
+                            }
+                        }
+                        else {
+                            selectedItems.push(
+                                        {
+                                            _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
+                                            _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                            _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
+                                            _value: w2ui[grdname].records[selection[i] - 1].NAME,
+                                            _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                            _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
+                                            _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                            _windowNo: WindowNo,
+                                            _RefNo: "",
+                                            _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                            _AttributeName: "",
+                                            _Locator_ID: 0,
+                                            _IsLotSerial: "N",
+                                            _countID: 0
+                                        }
+                                    )
+                        }
                     }
                 }
-                bsyDiv[0].style.visibility = "hidden";
-                if (self.onClose != null) {
-                    self.onClose();
-                }
-                disposeComponent();
             }
+            return selectedItems;
         };
 
         // change function to display message after completion of save
         function saveComplete(success, extraMsg, count) {
 
             bsyDiv[0].style.visibility = "hidden";
-
+            // if success, then refresh grid.
+            if (success) {
+                refreshUI = true;
+            }
             if (self.onClose != null) {
                 self.onClose();
             }
             disposeComponent();
 
-            var msg = VIS.Msg.getMsg("RecordsSavedPlzRequery");
+           // var msg = VIS.Msg.getMsg("RecordsSavedPlzRequery");
+            var msg = VIS.Msg.getMsg("RecSaved");
+            
             if (!success) {
                 if (count > 0) {
                     msg = count + " " + VIS.Msg.getMsg("RecordsNotSaved");
@@ -1396,6 +1475,8 @@
 
             VIS.ADialog.info("", true, msg);
         };
+
+
 
         function SaveProducts(pqtyAll) {
             var recordID = 0;
@@ -1448,29 +1529,54 @@
             var Count_ID = [];
 
             //var _referNo = "";
-
-            for (var item in infoLines) {
-                //if (item == 0) {
-                //    _referNo = infoLines[item]._RefNo;
-                //}
-                prodID.push(infoLines[item]._prdID);
-                qty.push(infoLines[item]._prodQty);
-                RefNo.push(infoLines[item]._RefNo);
-                listAst.push(infoLines[item]._Attribute);
-                uoms.push(infoLines[item]._uom);
-                Count_ID.push(infoLines[item]._countID);
-                // Commented by Lokesh Chauhan as No Locator ID selected from infoLines in any case
-                //if (infoLines[item]._Locator_ID > 0) {
-                //ListLoc.push(infoLines[item]._Locator_ID);
-                //}
-                //else {
-                //ListLoc.push(M_Locator_ID);
-                //}
-                if (lineid != 0) {
-                    break;
+            if (infoLines.length > 0 && btnAddCart.css("display") == "none") {
+                for (var item in infoLines) {
+                    //if (item == 0) {
+                    //    _referNo = infoLines[item]._RefNo;
+                    //}
+                    prodID.push(infoLines[item]._prdID);
+                    qty.push(infoLines[item]._prodQty);
+                    RefNo.push(infoLines[item]._RefNo);
+                    listAst.push(infoLines[item]._Attribute);
+                    uoms.push(infoLines[item]._uom);
+                    Count_ID.push(infoLines[item]._countID);
+                    // Commented by Lokesh Chauhan as No Locator ID selected from infoLines in any case
+                    //if (infoLines[item]._Locator_ID > 0) {
+                    //ListLoc.push(infoLines[item]._Locator_ID);
+                    //}
+                    //else {
+                    //ListLoc.push(M_Locator_ID);
+                    //}
+                    if (lineid != 0) {
+                        break;
+                    }
                 }
+                alength = infoLines.length;
             }
-            alength = infoLines.length;
+            else {
+                for (var item in infoMultipleLineSave) {
+                    //if (item == 0) {
+                    //    _referNo = infoLines[item]._RefNo;
+                    //}
+                    prodID.push(infoMultipleLineSave[item]._prdID);
+                    qty.push(infoMultipleLineSave[item]._prodQty);
+                    RefNo.push(infoMultipleLineSave[item]._RefNo);
+                    listAst.push(infoMultipleLineSave[item]._Attribute);
+                    uoms.push(infoMultipleLineSave[item]._uom);
+                    Count_ID.push(infoMultipleLineSave[item]._countID);
+                    // Commented by Lokesh Chauhan as No Locator ID selected from infoLines in any case
+                    //if (infoLines[item]._Locator_ID > 0) {
+                    //ListLoc.push(infoLines[item]._Locator_ID);
+                    //}
+                    //else {
+                    //ListLoc.push(M_Locator_ID);
+                    //}
+                    if (lineid != 0) {
+                        break;
+                    }
+                }
+                alength = infoMultipleLineSave.length;
+            }
             TotalPages = alength % saveCount == 0 ? alength / saveCount : Math.ceil(alength / saveCount);
             if (TotalPages == 1) {
                 if (keycolName == "SAP001_StockTransfer_ID") {

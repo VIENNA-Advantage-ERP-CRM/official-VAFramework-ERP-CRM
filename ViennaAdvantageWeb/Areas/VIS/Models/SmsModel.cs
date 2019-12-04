@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
+using VAdvantage.DataBase;
 using VAdvantage.Utility;
 
 namespace VIS.Models
@@ -142,6 +143,28 @@ namespace VIS.Models
             replaceSpecilChar.Replace("`", "%60");
 
             return replaceSpecilChar.ToString();
+        }
+
+        // Added by Bharat on 09 June 2017
+        public List<Dictionary<string, object>> GetUser(int bpartner)
+        {
+            List<Dictionary<string, object>> retDic = null;
+            string sql = "Select AD_User_ID, IsSms, Mobile FROM AD_User WHERE IsEmail='Y' AND C_BPartner_ID=" + bpartner;
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+
+                retDic = new List<Dictionary<string, object>>();
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    Dictionary<string, object> obj = new Dictionary<string, object>();
+                    obj["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]);
+                    obj["ISSMS"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["IsSms"]);
+                    obj["MOBILE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Mobile"]);
+                    retDic.Add(obj);
+                }
+            }
+            return retDic;
         }
     }
 

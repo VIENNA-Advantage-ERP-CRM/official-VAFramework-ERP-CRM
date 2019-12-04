@@ -13,7 +13,7 @@ namespace VIS.Controllers
     public class AmountDivisionController : Controller
     {
         AmountDivisionModel model = new AmountDivisionModel();
-        //
+        
         // GET: /VIS/AmountDivision/
         public ActionResult Index()
         {

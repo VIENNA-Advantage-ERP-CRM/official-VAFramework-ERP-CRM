@@ -74,7 +74,7 @@ namespace VIS.Models
             //	Product has no Instance Attributes
             if (!_productWindow && !aset.IsInstanceAttribute())
             {
-                obj.Error = "NPAttributeNoInstanceAttribute=";
+                obj.Error = "PAttributeNoInstanceAttribute";            // JID_0647: System is giving error [NPAttributeNoInstanceAttribute=] if no instance attribute
                 return obj;
             }
 
@@ -354,6 +354,17 @@ namespace VIS.Models
             return obj;
         }
 
+        /// <summary>
+        /// Get Attributes from Instance Atrributes
+        /// </summary>
+        /// <param name="_M_AttributeSetInstance_ID">Attribute Set Instance</param>
+        /// <param name="_M_Product_ID"></param>
+        /// <param name="_productWindow"></param>
+        /// <param name="windowNo"></param>
+        /// <param name="ctx"></param>
+        /// <param name="AD_Column_ID"></param>
+        /// <param name="attrcode"></param>
+        /// <returns></returns>
         public Dictionary<String, String> GetAttribute(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int AD_Column_ID, string attrcode)
         {
             Dictionary<String, String> attrValues = new Dictionary<String, String>();
@@ -375,15 +386,17 @@ namespace VIS.Models
             string attrCodeQry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID = 559 AND ColumnName = 'Value'";
             int codeCount = Util.GetValueOfInt(DB.ExecuteScalar(attrCodeQry));
             bool hasValue = codeCount > 0 ? true : false;
+
+            // JID_1388: On ASI Control if we select attribute form existing instance same is not showing on control.
             if (hasValue)
             {
-                attrsetQry = @"SELECT M_AttributeSet_ID FROM M_AttributeSetInstance WHERE Value='" + attrcode + "'";
+                attrsetQry = @"SELECT M_AttributeSet_ID FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value='" + attrcode + "'";
 
             }
             else
             {
                 attrsetQry = @"SELECT ats.M_AttributeSet_ID FROM M_ProductAttributes patr LEFT JOIN  M_AttributeSetInstance ats 
-                        ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) where patr.UPC='" + attrcode + "'";
+                        ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) where patr.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND patr.UPC='" + attrcode + "'";
             }
             attributeSet = Util.GetValueOfInt(DB.ExecuteScalar(attrsetQry));
             if (attributeSet != aset.Get_ID())
@@ -414,16 +427,16 @@ namespace VIS.Models
                 string attrQry = "";
                 if (hasValue)
                 {
-                    attrQry = @"SELECT ats.M_Attribute_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_AttributeSetInstance ast LEFT JOIN  M_AttributeInstance ats 
-                    ON (ast.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) LEFT JOIN M_Attribute att ON ats.M_Attribute_ID=att.M_Attribute_ID
-                    where ast.Value='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.M_Attribute_ID";
+                    attrQry = @"SELECT ats.M_Attribute_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_AttributeSetInstance ast INNER JOIN M_AttributeInstance ats 
+                    ON (ast.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) INNER JOIN M_Attribute att ON ats.M_Attribute_ID=att.M_Attribute_ID
+                    WHERE ast.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND ast.Value='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.M_Attribute_ID";
                 }
                 else
                 {
-                    attrQry = @"SELECT ats.M_Attribute_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_ProductAttributes patr LEFT JOIN  M_AttributeInstance ats 
-                    ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) inner join M_attributesetinstance ast ON (patr.M_AttributeSetInstance_ID=ast.M_AttributeSetInstance_ID)
-                    LEFT JOIN M_Attribute att ON ats.M_Attribute_ID=att.M_Attribute_ID
-                    where patr.UPC='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.M_Attribute_ID";
+                    attrQry = @"SELECT ats.M_Attribute_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_ProductAttributes patr INNER JOIN M_AttributeInstance ats 
+                    ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) INNER JOIN M_attributesetinstance ast ON (patr.M_AttributeSetInstance_ID=ast.M_AttributeSetInstance_ID)
+                    INNER JOIN M_Attribute att ON ats.M_Attribute_ID=att.M_Attribute_ID
+                    WHERE patr.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND patr.UPC='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.M_Attribute_ID";
                 }
                 DataSet ds = null;
                 try
@@ -471,6 +484,18 @@ namespace VIS.Models
             //}
             return attrValues;
         }
+
+        /// <summary>
+        /// Get Attribute Set Instance Data
+        /// </summary>
+        /// <param name="_M_AttributeSetInstance_ID">Attribute Set Instance</param>
+        /// <param name="_M_Product_ID">Product</param>
+        /// <param name="_productWindow">IS Opened from Product Window</param>
+        /// <param name="windowNo">Window No</param>
+        /// <param name="ctx">Context</param>
+        /// <param name="AD_Column_ID">Column ID</param>
+        /// <param name="attrcode">Attribute Code</param>
+        /// <returns>List of String Data</returns>
         public List<String> GetAttributeInstance(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int AD_Column_ID, string attrcode)
         {
             List<String> attrValues = new List<String>();
@@ -506,7 +531,9 @@ namespace VIS.Models
             {
                 return null;
             }
-            if (!_productWindow && aset.IsLot())
+
+            // JID_1201: Sytem is not picking the serial no. , lot no. when record is selected from Select Exiting record button ASI control.
+            if (!_productWindow && (aset.IsLot() || aset.IsSerNo() || aset.IsGuaranteeDate()))
             {
                 if (hasValue)
                 {
@@ -793,7 +820,7 @@ namespace VIS.Models
             String strLotString = "", strSerNo = "", strAttrCode = "", attrValue = "";
             int attributeID = 0, prdAttributes = 0, pAttribute_ID = 0, product_id = 0, attrCount = 0, m_attributeSetInstance_ID = 0;
             StringBuilder sql = new StringBuilder();
-            string qry = "";
+            StringBuilder qry = new StringBuilder();
             StringBuilder qryAttr = null;
             DataSet ds = null;
             DateTime? dtGuaranteeDate = null;
@@ -860,25 +887,25 @@ namespace VIS.Models
                     qryAttr = new StringBuilder();
                     if (hasValue)
                     {
-                        qryAttr.Append(@"SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeSetInstance WHERE Value = '" + strAttrCode + "'");
+                        qryAttr.Append(@"SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() +  " AND Value = '" + strAttrCode + "'");
                         prdAttributes = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         if (prdAttributes != 0)
                         {
                             qryAttr.Clear();
-                            qryAttr.Append("SELECT M_AttributeSetInstance_ID FROM M_AttributeSetInstance WHERE Value = '" + strAttrCode + "'");
+                            qryAttr.Append("SELECT M_AttributeSetInstance_ID FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value = '" + strAttrCode + "'");
                             attributeID = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         }
                     }
                     else
                     {
                         qryAttr.Append(@"SELECT Count(M_Product_ID) FROM M_Product prd LEFT JOIN M_ProductAttributes patr on (prd.M_Product_ID=patr.M_Product_ID) " +
-                        " LEFT JOIN M_Manufacturer muf on (prd.M_Product_ID=muf.M_Product_ID) WHERE (patr.UPC = '" + strAttrCode + "' OR prd.UPC = '" + strAttrCode
-                        + "' OR muf.UPC = '" + strAttrCode + "')");
+                        " LEFT JOIN M_Manufacturer muf on (prd.M_Product_ID=muf.M_Product_ID) WHERE prd.AD_Client_ID = " + ctx.GetAD_Client_ID() 
+                        + " AND (patr.UPC = '" + strAttrCode + "' OR prd.UPC = '" + strAttrCode + "' OR muf.UPC = '" + strAttrCode + "')");
                         prdAttributes = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         if (prdAttributes != 0)
                         {
                             qryAttr.Clear();
-                            qryAttr.Append("SELECT M_ProductAttributes_ID FROM M_ProductAttributes WHERE UPC = '" + strAttrCode + "'");
+                            qryAttr.Append("SELECT M_ProductAttributes_ID FROM M_ProductAttributes WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND UPC = '" + strAttrCode + "'");
                             pAttribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                             if (pAttribute_ID != 0)
                             {
@@ -957,19 +984,19 @@ namespace VIS.Models
 
                 attributes = aset.GetMAttributes(!productWindow);
 
-                if (sql.Length > 0)
-                {
-                    if (attributes.Length > 0)
-                    {
-                        sql.Insert(0, " AND ");
-                    }
-                    else
-                    {
-                        sql.Insert(0, " WHERE ");
-                    }
-                    qry += sql;
-                }
-                sql.Append(" ORDER BY ats.M_AttributeSetInstance_ID");
+                //if (sql.Length > 0)
+                //{
+                //    if (attributes.Length > 0)
+                //    {
+                //        sql.Insert(0, " AND ");
+                //    }
+                //    else
+                //    {
+                //        sql.Insert(0, " WHERE ");
+                //    }
+                //    //qry += sql;
+                //}
+                //sql.Append(" ORDER BY ats.M_AttributeSetInstance_ID");
 
                 Dictionary<MAttribute, object> lst = new Dictionary<MAttribute, object>();
                 for (int i = 0; i < attributes.Length; i++)
@@ -1023,42 +1050,67 @@ namespace VIS.Models
                 //{
                 if (attributes.Length > 0)
                 {
-                    qry = @"SELECT M_AttributeSetInstance_ID FROM (SELECT ats.M_AttributeSetInstance_ID, av.M_AttributeValue_ID,ats.M_AttributeSet_ID,au.Value,att.AttributeValueType FROM 
+                    qry.Append(@"SELECT M_AttributeSetInstance_ID FROM (SELECT ats.M_AttributeSetInstance_ID, av.M_AttributeValue_ID,ats.M_AttributeSet_ID,au.Value,att.AttributeValueType FROM 
                         M_AttributeSetInstance ats INNER JOIN M_AttributeInstance au ON ats.M_AttributeSetInstance_ID=au.M_AttributeSetInstance_ID LEFT JOIN M_Attribute att 
                         ON au.M_Attribute_ID=att.M_Attribute_ID LEFT JOIN M_AttributeValue av ON au.M_AttributeValue_ID=av.M_AttributeValue_ID WHERE ats.M_AttributeSet_ID = "
-                        + aset.GetM_AttributeSet_ID() + " AND ";
+                        + aset.GetM_AttributeSet_ID());     // + " AND ");
                     // Change done by mohit to consider M_Attribute_ID also with value in querry to restrict the duplicacy and updation of existing attribute set instance ids- asked by Mukesh sir.- 8 April 2019.
                     bool hasAttr = false;
                     for (int i = 0; i < attributes.Length; i++)
                     {
                         if (!String.IsNullOrEmpty(Util.GetValueOfString(lst[attributes[i]])))
                         {
+                            if (attrCount == 0)
+                            {
+                                qry.Append(" AND");
+                            }
+
                             if (hasAttr && i < attributes.Length)
                             {
-                                qry += " OR";
+                                qry.Append(" OR");
                             }
                             attrCount++;
-                            qry += "( au.Value = '" + Util.GetValueOfString(lst[attributes[i]]) + "' AND au.M_Attribute_ID=" + attributes[i].GetM_Attribute_ID() + " )";
+                            qry.Append("( au.Value = '" + Util.GetValueOfString(lst[attributes[i]]) + "' AND au.M_Attribute_ID=" + attributes[i].GetM_Attribute_ID() + " )");
                             hasAttr = true;
                         }
                     }
-                    qry += "";
+
+                    // JID_0929: On Create line form, Product having attribute with (Color + Garentee Date) IF we insert only with Garentee Date System do not add any value
+                    if (attrCount == 0)
+                    {
+                        qry.Clear();
+                        qry.Append(@"SELECT ats.M_AttributeSetInstance_ID FROM M_AttributeSetInstance ats WHERE ats.M_AttributeSet_ID = " + aset.GetM_AttributeSet_ID());
+                    }
                 }
                 else
                 {
-                    qry = @"SELECT ats.M_AttributeSetInstance_ID FROM M_AttributeSetInstance ats ";
+                    qry.Append(@"SELECT ats.M_AttributeSetInstance_ID FROM M_AttributeSetInstance ats WHERE ats.M_AttributeSet_ID = " + aset.GetM_AttributeSet_ID());
                 }
 
+                // if Lot, Serial or Guarantee Date id selected
                 if (sql.Length > 0)
                 {
-                    qry += sql;
-                }
-                if (attributes.Length > 0)
-                {
-                    qry += ",au.M_Attribute_ID) GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount;
+                    //if (attributes.Length > 0 && attrCount > 0)
+                    //{
+                    //    sql.Insert(0, " AND ");
+                    //}
+                    //else
+                    //{
+                    //    sql.Insert(0, " WHERE ");
+                    //}
+
+                    sql.Insert(0, " AND ");                    
                 }
 
-                ds = DB.ExecuteDataset(qry, null, trx);
+                sql.Append(" ORDER BY ats.M_AttributeSetInstance_ID");
+                qry.Append(sql.ToString());
+
+                if (attributes.Length > 0 && attrCount > 0)
+                {
+                    qry.Append(",au.M_Attribute_ID) GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount);
+                }
+
+                ds = DB.ExecuteDataset(qry.ToString(), null, trx);
                 //}
 
                 if (_changed)
@@ -1088,9 +1140,10 @@ namespace VIS.Models
                                 int attCount = 0;
                                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                                 {
-                                    qry = "SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeInstance WHERE M_AttributeSetInstance_ID = "
-                                        + Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
-                                    attCount = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
+                                    qry.Clear();
+                                    qry.Append("SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeInstance WHERE M_AttributeSetInstance_ID = "
+                                        + Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                                    attCount = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString(), null, trx));
                                     if (attCount == attrCount)
                                     {
                                         mAttributeSetInstanceId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
