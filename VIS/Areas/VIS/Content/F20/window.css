@@ -1087,21 +1087,22 @@ li.vis-page-item-select {
 
 .vis-ad-w-p-header_root_common {
     overflow-x: auto;
+    font-family: 'NoirPro-Regular' !important;
 }
 
 .vis-w-p-header-data-f {
     font-size: 0.875rem;
-    padding: 10px 10px 0;
+    padding: 5px 10px 5px 0px;
     color: #fff;
     display: flex;
     /*align-items: center;*/
     flex: 1;
     width: 100%;
+
 }
 
 .vis-w-p-header-data-label {
     font-size: 0.80rem;
-    font-family: 'NoirPro-Regular' !important;
 }
 
 
@@ -1119,9 +1120,8 @@ li.vis-page-item-select {
 .vis-w-p-header-data-f label {
     display: block;
     font-weight: normal;
-    margin-bottom: 3px;
+    margin-bottom: unset;
     word-break: break-all;
-    font-family: 'NoirPro-Light';
 }
 
 

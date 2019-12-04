@@ -274,19 +274,19 @@
     HeaderPanel.prototype.init = function (gTab, $parentRoot) {
         this.setHeaderLayout(gTab, $parentRoot);
         var root = this.getRoot();
-        var rootClass = "vis-w-p-Header-Root-v";
+        var rootClass = "vis-w-p-Header-Root-v";//Fixed Class for vertical Alignment
         var alignmentHorizontal = this.gTab.getHeaderHorizontal();
         var height = this.gTab.getHeaderHeight();
         var width = this.gTab.getHeaderWidth();
         var backColor = this.gTab.getHeaderBackColor();
         var padding = this.gTab.getHeaderPadding();
 
-        var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, backColor,padding);
+        var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, backColor, padding);
         root.addClass(rootCustomStyle);
 
         if (alignmentHorizontal) {
             $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
-            rootClass = 'vis-w-p-Header-Root-h';
+            rootClass = 'vis-w-p-Header-Root-h';//Fixed Class for Horizontal Alignment
         }
 
         for (var j = 0; j < this.headerItems.length; j++) {
@@ -301,11 +301,13 @@
             if (!backColor) {
                 backColor = '';
             }
-            if (padding) {
+            if (!padding) {
                 padding = '';
             }
 
-            var $containerDiv = $('<div class=' + rootClass + ' style="grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background-color:' + backColor + ';padding:' + padding + '">');
+            var dymcClass = this.fieldGroupContainerUISettings(columns, rows, backColor, padding, j);
+
+            var $containerDiv = $('<div class="' + rootClass + ' ' + dymcClass + '">');
             root.append($containerDiv);
 
             //Load Header Panel Items and add them to UI.
@@ -317,6 +319,18 @@
 
 
 
+    /**
+         * Create class that iclude  settings to create Root grid of header panel.
+         * @param {any} columns
+         * @param {any} rows
+         */
+    HeaderPanel.prototype.fieldGroupContainerUISettings = function (columns, rows, backcolor, padding, itemNo) {
+        var dynamicClassName = "vis-ad-w-p-fg_container_" + rows + "_" + columns + "_" + this.windowNo + "_" + itemNo;
+        this.dynamicStyle.push(" ." + dynamicClassName + " {");
+        this.dynamicStyle.push('grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background-color:' + backcolor + ';padding:' + padding);
+        this.dynamicStyle.push("} ");
+        return dynamicClassName;
+    };
 
 
 
@@ -398,7 +412,7 @@
         return dynamicClassName;
     };
 
-    HeaderPanel.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol,  startRow,  mField) {
+    HeaderPanel.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol, startRow, mField) {
         //var headerStyle = mField.getHeaderStyle();
         var dynamicClassName = "vis-hp-FieldValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
         //if (headerStyle) {
