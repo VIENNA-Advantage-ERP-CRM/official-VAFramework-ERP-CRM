@@ -57,6 +57,12 @@ namespace VAdvantage.Controller
         /// </summary>
         public float SeqNo = 0;
 
+        public string BackgroundColor = "";
+
+        public string FontColor = "";
+
+        public string FontSize = "";
+
     }
 
     public class HeaderPanelGrid
@@ -72,6 +78,9 @@ namespace VAdvantage.Controller
 
         /****   Header Total Row   ***/
         public int HeaderTotalRow = 0;
+
+        /*** Header Padding  *******/
+        public string HeaderPadding = "";
 
         /******   Grid Layout ID   *****/
         public int AD_GridLayout_ID = 0;

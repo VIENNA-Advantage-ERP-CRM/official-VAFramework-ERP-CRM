@@ -362,3 +362,16 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
                 border-width: 0 2px 2px 0;
                 transform: rotate(45deg);
             }
+
+    .w2ui-grid .w2ui-editable {
+    }
+        .w2ui-grid .w2ui-editable input {
+            padding: 1px;
+            min-height: 35px;
+        }
+
+            .w2ui-grid .w2ui-editable input.w2ui-select {
+                height:35px;
+            }
+
+            /**************************************/

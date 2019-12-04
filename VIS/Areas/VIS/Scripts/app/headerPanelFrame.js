@@ -98,6 +98,18 @@
                         var rowSpan = headerItem.RowSpan;
                         var justyFy = headerItem.JustifyItems;
                         var alignItem = headerItem.AlignItems;
+                        var backgroundColor = headerItem.BackgroundColor;
+                        if (!backgroundColor) {
+                            backgroundColor = '';
+                        }
+                        var FontColor = headerItem.FontColor;
+                        if (!FontColor) {
+                            FontColor = '';
+                        }
+                        var fontSize = headerItem.FontSize;
+                        if (!fontSize) {
+                            fontSize = '';
+                        }
 
 
                         var $div = null;
@@ -107,7 +119,8 @@
                         var iControl = null;
 
                         //Apply HTML Style
-                        var dynamicClassName = this.applyCustomUISettings(mField, headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem);
+                        var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
+                            backgroundColor, FontColor, fontSize);
 
                         $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
 
@@ -128,6 +141,10 @@
                         $label = VIS.VControlFactory.getLabel(mField, true);
 
                         iControl = VIS.VControlFactory.getReadOnlyControl($self.gTab, mField, false, false, false);
+
+                        var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
+
+                        iControl.getControl().addClass(dynamicFieldValue);
 
                         // Create object of controls and push object and Field in Array
                         // THis array is used when user navigate from one record to another.
@@ -261,8 +278,10 @@
         var alignmentHorizontal = this.gTab.getHeaderHorizontal();
         var height = this.gTab.getHeaderHeight();
         var width = this.gTab.getHeaderWidth();
+        var backColor = this.gTab.getHeaderBackColor();
+        var padding = this.gTab.getHeaderPadding();
 
-        var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width);
+        var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, backColor,padding);
         root.addClass(rootCustomStyle);
 
         if (alignmentHorizontal) {
@@ -277,8 +296,16 @@
             var rows = currentItem.HeaderTotalRow;
             var columns = currentItem.HeaderTotalColumn;
             var backColor = currentItem.HeaderBackColor;
+            var padding = currentItem.HeaderPadding;
 
-            var $containerDiv = $('<div class=' + rootClass + ' style="grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background-color:' + backColor + '">');
+            if (!backColor) {
+                backColor = '';
+            }
+            if (padding) {
+                padding = '';
+            }
+
+            var $containerDiv = $('<div class=' + rootClass + ' style="grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background-color:' + backColor + ';padding:' + padding + '">');
             root.append($containerDiv);
 
             //Load Header Panel Items and add them to UI.
@@ -308,7 +335,7 @@
          * @param {any} columns
          * @param {any} rows
          */
-    HeaderPanel.prototype.headerUISettings = function (alignmentHorizontal, height, width) {
+    HeaderPanel.prototype.headerUISettings = function (alignmentHorizontal, height, width, backcolor, padding) {
         var dynamicClassName = "vis-ad-w-p-header_root_" + this.windowNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {display:flex;flex:1;");
         if (alignmentHorizontal) {
@@ -317,6 +344,8 @@
         else {
             this.dynamicStyle.push("flex-direction:column;width: " + width + "; ");
         }
+        this.dynamicStyle.push("background-color:" + backcolor + ";padding:" + padding);
+
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };
@@ -353,17 +382,32 @@
     * @param {any} startRow
     * @param {any} rowSpan
     */
-    HeaderPanel.prototype.applyCustomUISettings = function (mField, headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment) {
-        var headerStyle = mField.getHeaderStyle();
+    HeaderPanel.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize) {
+        //var headerStyle = mField.getHeaderStyle();
         var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
-        if (headerStyle) {
-            this.dynamicStyle.push(" ." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + ";");
-        }
-        else {
-            this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
-        }
+        //if (headerStyle) {
+        //    this.dynamicStyle.push(" ." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + ";");
+        //}
+        //else {
+        this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
+        //}
 
-        this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]  );
+        this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]);
+        this.dynamicStyle.push(";background-color:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor);
+        this.dynamicStyle.push("} ");
+        return dynamicClassName;
+    };
+
+    HeaderPanel.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol,  startRow,  mField) {
+        //var headerStyle = mField.getHeaderStyle();
+        var dynamicClassName = "vis-hp-FieldValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
+        //if (headerStyle) {
+        //    this.dynamicStyle.push(" ." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + ";");
+        //}
+        //else {
+        this.dynamicStyle.push("." + dynamicClassName + "  {" + mField.getHeaderStyle());
+        //}
+
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };

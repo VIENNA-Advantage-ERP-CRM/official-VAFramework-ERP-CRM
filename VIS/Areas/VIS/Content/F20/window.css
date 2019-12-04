@@ -76,8 +76,8 @@
     display: grid;
     grid-template-columns: auto auto auto 1fr auto auto;
     grid-template-rows: auto auto auto auto auto 1fr auto;
-    height: calc(100vh - 108px);
-    height: calc((var(--vis-screen-height,1vh) *100) - 108)
+    height: calc(100vh -  66px);
+    height: calc((var(--vis-screen-height,1vh) *100) - 66)
     /*overflow: auto;*/
 }
 
@@ -1158,7 +1158,7 @@ li.vis-page-item-select {
 }
 
     .vis-w-p-header-Label-f button {
-        /*border-radius: 50%;
+        /*border-radius: 50%; 
         border: 2px solid #fff;
         overflow: hidden;*/
         /*margin: auto;*/
