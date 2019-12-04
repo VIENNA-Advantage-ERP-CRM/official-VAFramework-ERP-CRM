@@ -116,7 +116,7 @@
         var   $ulRightBar2; //right bar
         var  $btnlbToggle, $ulactionbar, $uldynactionbar, $divlbMain, $divlbNav; //right bar
         var $hdrPanel = "", $divIncludeTab,  $divHeaderNav;
-        var  $tabpanel;
+        var $tabPanel = null;
         var $spnAdvSearch = null;
         var $btnClose = null;
         var $spnTitle = null;
@@ -162,7 +162,7 @@
             //$divStatus = $("<div class='vis-apanel-statusbar'>").hide();
             $divStatus = $root.find(".vis-ad-w-p-status");
 
-            $tabpanel = $root.find('.vis-ad-w-p-actionpanel-r');
+            $tabPanel = $root.find('.vis-ad-w-p-actionpanel-r');
             /********* END Tab Panels **************/
 
             //Search 
@@ -574,12 +574,25 @@
         this.showTabPanel = function (show) {
             if (show) {
                 //$tabpanel.empty();
-                $tabpanel.append(this.curGC.getTabPanel());
-                $tabpanel.css({ "display": "grid" });
+                var clsName = 'vis-ad-w-p-actionpanel-r';
+                if (this.curTab.getIsTPBottomAligned()) {
+                    clsName = 'vis-ad-w-p-actionpanel-b';
+                }
+                if (!$tabPanel.hasClass(clsName)) {
+                    $tabPanel.removeClass();
+                    $tabPanel.addClass(clsName);
+                }
+
+                $tabPanel.append(this.curGC.getTabPanel());
+                $tabPanel.css({ "display": "grid" });
             }
             else {
-                $tabpanel.css({ "display": "none" });
+                $tabPanel.css({ "display": "none" });
             }
+        };
+
+        this.setTabPanelclass = function (clss) {
+
         };
 
         /* END Set Tab Panel Icons */
@@ -1357,10 +1370,11 @@
                 if (i === 0) {
                     this.curGC = gc;
                     this.firstTabId = id;
-                    if (gTab.getIsTPBottomAligned()) {
-                        $tabPanel.removeClass();
-                        $tabPanel.addClass("vis-ad-w-p-actionpanel-b");
-                    }
+                    //if (gTab.getIsTPBottomAligned()) {
+                    //    this.setTabPanelClass(gTab.getIsTPBottomAligned());
+                    //    $tabPanel.removeClass("vis-ad-w-p-actionpanel-b");
+                    //    $tabPanel.addClass("vis-ad-w-p-actionpanel-b");
+                    //}
                 }
 
 
