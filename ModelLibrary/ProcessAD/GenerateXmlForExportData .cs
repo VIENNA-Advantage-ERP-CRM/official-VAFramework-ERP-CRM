@@ -49,6 +49,9 @@ namespace VAdvantage.Process
 
         String[] _ExceptionTables = new String[] { "AD_Role", "AD_User" };   //Stores tables which are not be included
 
+        // lock for simultaneous process
+        private object _lock = new object();
+
         /// <summary>
         /// Prepare any parameter to be passed
         /// </summary>
@@ -87,6 +90,16 @@ namespace VAdvantage.Process
         /// <returns></returns>
         protected override string DoIt()
         {
+            // lock object
+            lock (_lock)
+            {
+                // check if process is already running for any module, then return with message
+                if (PrepareModuleSchema.running)
+                    return "Module process already running, Please wait for some time....";
+
+                PrepareModuleSchema.running = true;
+            }
+            
             File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", "DoIT");
 
             _ExportRecordList = GetExportData();    //fetch all the records to be exported / marked by a user
@@ -119,6 +132,7 @@ namespace VAdvantage.Process
 
                 if (msg.Length > 0)
                 {
+                    PrepareModuleSchema.running = false;
                     return msg;
                 }
 
@@ -171,12 +185,15 @@ namespace VAdvantage.Process
 
                 catch (Exception ex)
                 {
+                    PrepareModuleSchema.running = false;
                     return ex.Message;
                 }
             }
 
             // Delete Marking of records which were not found. 
             DeleteRecordsMarked();
+
+            PrepareModuleSchema.running = false;
 
             return ds.ToXml(_FilePath);
         }

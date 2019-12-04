@@ -35,7 +35,10 @@ namespace VAdvantage.Process
         private List<String> prefixList = new List<string>();
         List<String> usedPrefixesList = new List<string>();
 
-
+        // check for process execution
+        public static bool running = false;
+        // lock for simultaneous process
+        private object  _lock = new object();
 
         protected override void Prepare()
         {
@@ -63,17 +66,24 @@ namespace VAdvantage.Process
 
         protected override string DoIt()
         {
-            if (string.IsNullOrEmpty(currentPrefix))
+            // lock object
+            lock (_lock)
             {
-                return "Could not find valid prefix";
-            }
+                // check if process is already running for any module, then return with message
+                if (running)
+                    return "Module process already running, Please wait for some time....";
+                if (string.IsNullOrEmpty(currentPrefix))
+                    return "Could not find valid prefix";
 
-            if (!DeleteOldSchema(AD_ModuleInfo_ID))
-            {
-                return "could not delete old schema";
+                if (!DeleteOldSchema(AD_ModuleInfo_ID))
+                    return "could not delete old schema";
+
+                running = true;
             }
 
             GenerateSchema(AD_ModuleInfo_ID);
+
+            running = false;
 
             return "Schema Generated";
             //throw new NotImplementedException();
