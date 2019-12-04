@@ -117,7 +117,7 @@ namespace VAdvantage.Controller
         public decimal HeaderHeight = 0;
 
         ///****   Header Back Color   ***/
-        //public string HeaderBackColor = "";
+        public string HeaderBackColor = "";
 
         /****   Header Alignment   ***/
         public string HeaderAlignment = "";
@@ -134,6 +134,9 @@ namespace VAdvantage.Controller
 
         /****   Header Total Row   ***/
         public Decimal HeaderWidth = 0;
+
+        /*** Header Padding  *******/
+        public string HeaderPadding = "";
 
         /****   Header Items   ***/
         public List<HeaderPanelGrid> HeaderItems = null;
@@ -483,6 +486,9 @@ namespace VAdvantage.Controller
 
                 vo.HeaderWidth = Utility.Util.GetValueOfDecimal(dr["Width"]);
 
+                vo.HeaderPadding = Utility.Util.GetValueOfString(dr["Padding"]);
+
+                vo.HeaderBackColor = Utility.Util.GetValueOfString(dr["HeaderBackgroundColor"]);
 
                 /***************** End Header panel work ***************/
 
@@ -611,11 +617,13 @@ namespace VAdvantage.Controller
 
                             HeaderTotalRow = Utility.Util.GetValueOfInt(dr["TotalRows"]),
 
+                            HeaderPadding = Utility.Util.GetValueOfString(dr["Padding"]),
+
                             AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
                         };
 
                         DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Flow,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                            " AD_GridLayoutItems_ID FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
+                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             hGrid.HeaderItems = new Dictionary<int, object>();
@@ -632,11 +640,13 @@ namespace VAdvantage.Controller
                                     SeqNo = Convert.ToInt32(row["SeqNo"]),
                                     StartColumn = Convert.ToInt32(row["StartColumn"]),
                                     StartRow = Convert.ToInt32(row["StartRow"]),
+                                    BackgroundColor= Convert.ToString(row["BackgroundColor"]),
+                                    FontColor = Convert.ToString(row["FontColor"]),
+                                    FontSize = Convert.ToString(row["FontSize"]),
                                 };
                             }
                         }
                         mTabVO.HeaderItems.Add(hGrid);
-
                     }
                 }
             }
