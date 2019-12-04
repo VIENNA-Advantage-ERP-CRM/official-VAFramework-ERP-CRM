@@ -93,7 +93,7 @@ namespace VAdvantage.Process
             // lock object
             lock (_lock)
             {
-                // check if process is already running for any module, then return with message
+                // check if process is already running for any module, then return with message.
                 if (PrepareModuleSchema.running)
                     return "Module process already running, Please wait for some time....";
 

@@ -82,7 +82,7 @@ namespace VAdvantage.Process
             }
 
             try
-            {
+            { 
                 GenerateSchema(AD_ModuleInfo_ID);
             }
             finally
