@@ -81,9 +81,14 @@ namespace VAdvantage.Process
                 running = true;
             }
 
-            GenerateSchema(AD_ModuleInfo_ID);
-
-            running = false;
+            try
+            {
+                GenerateSchema(AD_ModuleInfo_ID);
+            }
+            finally
+            {
+                running = false;
+            }
 
             return "Schema Generated";
             //throw new NotImplementedException();
