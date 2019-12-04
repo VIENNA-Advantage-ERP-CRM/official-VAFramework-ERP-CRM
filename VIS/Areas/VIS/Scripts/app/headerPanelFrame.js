@@ -246,7 +246,6 @@
         }
 
 
-
         /**
          * 
          * Return root div of header panel*/
@@ -271,7 +270,7 @@
 
     };
 
-    HeaderPanel.prototype.init = function (gTab, $parentRoot) {
+    HeaderPanel.prototype.init = function (gTab, $parentRoot, callBack) {
         this.setHeaderLayout(gTab, $parentRoot);
         var root = this.getRoot();
         var rootClass = "vis-w-p-Header-Root-v";//Fixed Class for vertical Alignment
@@ -280,13 +279,16 @@
         var width = this.gTab.getHeaderWidth();
         var backColor = this.gTab.getHeaderBackColor();
         var padding = this.gTab.getHeaderPadding();
+        var $slider = $parentRoot.find('.fa-angle-double-left');
 
         var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, backColor, padding);
         root.addClass(rootCustomStyle);
-
+        $parentRoot.css("flex-direction", "column");
         if (alignmentHorizontal) {
             $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
             rootClass = 'vis-w-p-Header-Root-h';//Fixed Class for Horizontal Alignment
+            $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-up');
+            $parentRoot.css('flex-direction', 'row');
         }
 
         for (var j = 0; j < this.headerItems.length; j++) {
@@ -301,6 +303,7 @@
             if (!backColor) {
                 backColor = '';
             }
+
             if (!padding) {
                 padding = '';
             }
@@ -315,14 +318,52 @@
         }
         this.addStyleToDom();
 
+        function eventHandling() {
+            $slider.on("click", function () {
+                if (alignmentHorizontal) {
+                    if ($parentRoot.height() == 0) {
+                        $parentRoot.height(height);
+                        root.show();
+                        $slider.removeClass('fa-angle-double-down').addClass('fa-angle-double-up').removeClass('vis-ad-w-p-header-h');
+                        //callBack({ 'margin-left': '' });
+                    }
+                    else {
+                        $parentRoot.height(0);
+                        root.hide();
+                        $slider.removeClass('fa-angle-double-up').addClass('fa-angle-double-down').addClass('vis-ad-w-p-header-h');
+                        // callBack({ 'margin-left': '15px' });
+                    }
+                }
+                else {
+                    if ($parentRoot.width() == 0) {
+                        $parentRoot.width(width);
+                        root.show();
+                        $slider.removeClass('fa-angle-double-right').addClass('fa-angle-double-left').removeClass('vis-ad-w-p-header-h');
+                        //callBack({ 'margin-left': '' });
+                    }
+                    else {
+                        $parentRoot.width(0);
+                        root.hide();
+                        $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-right').addClass('vis-ad-w-p-header-h');
+                        //callBack({ 'margin-left': '15px' });
+                    }
+                }
+            });
+        };
+
+        eventHandling();
+
     };
 
 
 
     /**
-         * Create class that iclude  settings to create Root grid of header panel.
+         * Create class that include  settings to be applied on Field Group Container
          * @param {any} columns
          * @param {any} rows
+         * @param {any} backcolor
+         * @param {any} padding
+         * @param {any} itemNo
          */
     HeaderPanel.prototype.fieldGroupContainerUISettings = function (columns, rows, backcolor, padding, itemNo) {
         var dynamicClassName = "vis-ad-w-p-fg_container_" + rows + "_" + columns + "_" + this.windowNo + "_" + itemNo;

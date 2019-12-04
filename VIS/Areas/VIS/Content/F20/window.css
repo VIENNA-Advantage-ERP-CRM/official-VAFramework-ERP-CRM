@@ -198,6 +198,16 @@
     color: rgb(var(--v-c-on-secondary), 1);
 }
 
+.vis-ad-w-p-header-arrow-l {
+    display: flex;
+    background: rgba(var(--v-c-on-secondary), 0.3);
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    color: white;
+    height: 28px;
+}
+
+
 /* end */
 
 
@@ -1085,6 +1095,15 @@ li.vis-page-item-select {
 
 /*Header panel css START*/
 
+
+
+.vis-ad-w-p-header-h {
+    margin-top: 23px;
+    position: absolute;
+    color: rgba(var(--v-c-primary),1);
+}
+
+
 .vis-ad-w-p-header_root_common {
     overflow-x: auto;
     font-family: 'NoirPro-Regular' !important;
@@ -1152,7 +1171,7 @@ li.vis-page-item-select {
         border: none;
         max-height: 150px;
         background: rgba(var(--v-c-secondary), .30);
-        /*overflow: hidden;*/
+        overflow: hidden;
     }
 
     .vis-w-p-header-Label-f img {
