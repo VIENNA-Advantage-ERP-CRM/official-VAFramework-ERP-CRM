@@ -1230,10 +1230,13 @@
         
     };
 
-    //GridTab.prototype.getHeaderBackColor = function () {
-    //    return this.vo.HeaderBackColor;
-    //};
+    GridTab.prototype.getHeaderBackColor = function () {
+        return this.vo.HeaderBackColor;
+    };
 
+    GridTab.prototype.getHeaderPadding = function () {
+        return this.vo.HeaderPadding;
+    };
 
     GridTab.prototype.getHeaderHorizontal = function () {
         if (this.vo.HeaderAlignment.equals("H")) {
