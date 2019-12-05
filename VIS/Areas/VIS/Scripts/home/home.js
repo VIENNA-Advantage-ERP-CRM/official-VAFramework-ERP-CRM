@@ -978,7 +978,7 @@
                                             + "<h3> " + data.lstFollowups[cnt].WinName + ' : ' + data.lstFollowups[cnt].Identifier + " </h3>"
                                             + "<div class='vis-feedTitleBar-buttons'>"
                                              + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "'><i class='vis vis-find'></i></a></li>"
-                                            + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='vis-feedIcons vis-icon-unsubscribeFeed'>" + VIS.Msg.getMsg("UnsubscribeFollowups") + " </a></li></ul>"
+                                            + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='fa fa-rss'></a></li></ul>"
                                             + " </div></div>"
 
                                             + "<div id='divfllcmntdata" + data.lstFollowups[cnt].ChatID + "' data-fll='fll-cmnt' class='vis-feedDetails'>"
@@ -1004,7 +1004,7 @@
 
                                     + "<div id=" + data.lstFollowups[cnt].ChatID + " class='vis-feedMessage'>"
                                     + " <input id='txtFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='txtcmntfll' placeholder='" + VIS.Msg.getMsg('TypeMessage') + "' type='text' value='' />"
-                                    + " <span  id='btnFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='btncmntfll' title='" + VIS.Msg.getMsg('PostMessage') + "'  class='vis-feedIcons vis-icon-message' ></span>"
+                                    + " <span  id='btnFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='btncmntfll' title='" + VIS.Msg.getMsg('PostMessage') + "'  class='vis vis-sms' ></span>"
                                     + " <div class='clearfix'></div> "
                                     + "</div></div> ";
                                     cnt++;

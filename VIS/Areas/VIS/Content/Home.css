@@ -254,7 +254,7 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
             }
 
             .vis-welcomeScreenTabMenu li.vis-activeTab a:hover {
-                /*background-color: #1aa0ed;*/
+                /*background-color: rgba(var(--v-c-primary), 1);*/
             }
 
                 .vis-welcomeScreenTabMenu li.vis-activeTab a:hover:before {
@@ -484,7 +484,7 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
 .vis-workflowActivityContainer {
     background: #f7f4f4;
     border: 1px solid #eeeeee;
-    color: #333333;
+    color: rgba(var(--v-c-on-secondary), 1);
     height: 100%;
     position: relative;
 }
@@ -493,12 +493,12 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
     padding: 0px 10px 0px 10px;
     display: inline-block;
     width: 100%;
-    background: #1aa0ed;
+    background: rgba(var(--v-c-primary), 1);
 }
 
     .vis-workflowActivityTitleBar h3 {
         font-size: 14px;
-        color: #ffffff;
+        color: rgba(var(--v-c-on-primary), 1);
         margin: 15px 0px 10px 0px;
         float: left;
     }
@@ -610,6 +610,7 @@ html[dir="rtl"] .vis-workflowActivityIcons.vis-icon-doneButton {
     padding: 0px 10px 5px 10px;
     background: #ffffff;
     margin: 0px 5px 5px 5px;
+    width: 100%;
     /*overflow: auto;
     height: 99%;*/
 }
@@ -619,13 +620,19 @@ html[dir="rtl"] .vis-workflowActivityIcons.vis-icon-doneButton {
         padding: 5px;
         margin-bottom: 10px;
     }
-
-    .vis-workflowActivityDetails h3 {
-        font-size: 18px;
-        font-weight: 200px;
-        float: left;
-        color: rgba(var(--v-c-primary), 1);
-    }
+.vis-workflowActivityDetails-Heading {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+.vis-workflowActivityDetails h3 {
+    font-size: 18px;
+    /*font-weight: 200px;*/
+    /* float: left; */
+    color: rgba(var(--v-c-primary), 1);
+    flex: 1;
+    margin: 0;
+}
 
 html[dir="rtl"] .vis-workflowActivityDetails h3 {
     float: right;
@@ -655,17 +662,28 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
 }
 
 .vis-sendMessage {
-    border: 1px solid #eeeeee;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    display: flex;
+    margin-bottom: 10px;
 }
 
     .vis-sendMessage input[type=text] {
         height: 30px;
-        width: 93%;
-        border: 1px solid #eeeeee;
+        /* width: 93%; */
+        border: none;
         padding: 5px;
-        float: left;
+        /* float: left; */
         display: inline-block;
-        /*color: #cccccc;*/
+        /* color: #cccccc; */
+        flex: 1;
+        outline: none;
+    }
+    .vis-sendMessage button {
+        border: none;
+        width: 30px;
+        color: rgba(var(--v-c-on-secondary), 1);
+        outline: none;
+        font-size: 1rem;
     }
 
     .vis-sendMessage input[type=button] {
@@ -859,11 +877,11 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
         }
 
     .vis-activityContainer:hover {
-        border-color: #1aa0ed;
+        border-color: rgba(var(--v-c-primary), 1);
     }
 
 .vis-activeFeed {
-    border-color: #1aa0ed;
+    border-color: rgba(var(--v-c-primary), 1);
 }
 
 /* Feeds content title */
@@ -957,6 +975,8 @@ html[dir="rtl"] .userAvatar-Feeds {
     font-size: 12px;
     color: rgba(var(--v-c-on-secondary), 1);
     display: inline;
+    /*padding-left: 10px;*/
+    margin: 0;
     width: 100%;
 }
 
@@ -964,6 +984,7 @@ html[dir="rtl"] .userAvatar-Feeds {
         color: rgba(var(--v-c-primary), 1);
         font-weight: normal;
         cursor: pointer;
+        padding-bottom: 2px;
     }
 
 .vis-feedDetails .vis-feedDateTime {
@@ -1046,6 +1067,7 @@ html[dir="rtl"] .vis-viewMoreComments {
         cursor: pointer;
         font-size: 1rem !important;
         color: rgba(var(--v-c-on-secondary), 1);
+        cursor: pointer;
     }
 
 
@@ -1166,7 +1188,7 @@ html[dir="rtl"] .vis-viewMoreComments {
     height: 16px;
     float: left;
     text-indent: -999999px;
-    margin-top: 12px;
+    /*margin-top: 12px;*/
     cursor: pointer;
 }
 
@@ -1251,19 +1273,19 @@ html[dir="rtl"] .vis-viewMoreComments {
     }
 
 .vis-wfSearchIcon {
-    background: url(../Images/WF-Search-show-icon.png) no-repeat center;
+    /*background: url(../Images/WF-Search-show-icon.png) no-repeat center;
     display: block;
     width: 24px;
     height: 24px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc;*/
 }
 
 .vis-wfSearchIconMinus {
-    background: url('../Images/wfSearch-icon-minus.png') no-repeat center;
+    /*background: url('../Images/wfSearch-icon-minus.png') no-repeat center;
     display: block;
     width: 24px;
     height: 24px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc;*/
 }
 
 .vis-wfSearch-btn {
@@ -1273,12 +1295,12 @@ html[dir="rtl"] .vis-viewMoreComments {
 }
 
 .userLinks_inactiveTab .vis-linksIcons.vis-icon-link {
-    background-position: -45px 0px;
+    /*background-position: -45px 0px;
     width: 19px;
     height: 18px;
     float: left;
     margin-top: -2px;
-    margin-right: 5px;
+    margin-right: 5px;*/
 }
 
 .vis-linksIcons.vis-icon-docs {
@@ -2826,7 +2848,7 @@ div.consectetur {
 }
 
 div.requestScreen-20 div.vis-activityContainer:hover {
-    border: 1px solid #1aa0ed;
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
 
 div.requestScreen-20 h2 {
@@ -2863,7 +2885,7 @@ div.requestScreen-20 h2 span {
 }
 
 div.requestScreen-20 div.vis-activityContainer:hover {
-    border: 1px solid #1aa0ed;
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
 
 .vis-table-request ul li span {
@@ -2980,7 +3002,7 @@ p.vis-maintain-customer-p span {
 }
 
 .vis-btn-zoom-bg {
-    background: url(../Images/home/zoom-ico2.png) no-repeat;
+    /*background: url(../Images/home/zoom-ico2.png) no-repeat;*/
 }
 
 .vis-btn-done-bg {
@@ -2999,8 +3021,11 @@ p.vis-maintain-customer-p span {
     width: 24px;
     height: 24px;
     float: left;
-    padding-right: 20px;
+    /* padding-right: 20px; */
     margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .vis-status {
@@ -3130,8 +3155,10 @@ p.vis-maintain-customer-p span {
 .frm-select-all-check label {
     font-weight: normal;
     margin: 0;
-    color:#666666;
-    font-size:12px;
+    color: #666666;
+    font-size: 12px;
+    order: 2;
+    padding-left: 5px;
 }
 
 .frm-select-all-check {
@@ -3140,6 +3167,8 @@ p.vis-maintain-customer-p span {
     width: 100%;
     padding-top: 5px;
     padding-left: 8px;
+    display: flex;
+    align-items: center;
 }
 
 /** New changes Migration*/
@@ -3179,6 +3208,9 @@ p.vis-maintain-customer-p span {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    float: left;
+    margin-right: 10px;
 }
 #fllupsScreen h2 span, #favLinks h2 span {
     padding-right: 10px;
@@ -3241,4 +3273,19 @@ ul.vis-userLinks-ListMenu li a i {
 }
 .frm-data-search-wrap:focus-within {
     border: 1px solid rgba(var(--v-c-primary), 1);
+}
+.vis-wforwardwrap {
+    display: flex;
+    margin-bottom: 10px;
+}
+.vis-wforwardwrap input {
+    flex: 1;
+    border-radius: 0;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    outline: none;
+}
+.vis-wforwardwrap button {
+    border-radius: 0;
+    margin-left: -1px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
 }

@@ -402,6 +402,22 @@
     content: "\e9cd";
 }
 
+.vis-eye:before {
+    content: "\e9ce";
+}
+
+.vis-eye-plus:before {
+    content: "\e9cf";
+}
+
+.vis-eye-minus:before {
+    content: "\e9d0";
+}
+
+.vis-eye-blocked:before {
+    content: "\e9d1";
+}
+
 .vis-star-empty:before {
     content: "\e9d7";
 }
