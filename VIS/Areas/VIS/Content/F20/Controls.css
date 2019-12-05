@@ -25,7 +25,11 @@
     height: auto;
 }
 
-
+.vis-input-wrap-button-image-add {
+    background: none !important;
+    text-align: start;
+    padding-left: 0px !important;
+}
 
 .vis-form-wrap {
     padding: 15px;

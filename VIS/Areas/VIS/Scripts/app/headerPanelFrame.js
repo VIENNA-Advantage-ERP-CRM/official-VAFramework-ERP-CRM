@@ -31,8 +31,8 @@
                     $root = $('<div class="vis-ad-w-p-header_root_common">');
                     var headerCustom = this.headerParentCustomUISettings("");
                     $parentRoot.addClass(headerCustom);
-                    // Add Header Panel to Parent Control
-                    $parentRoot.append($root);
+                  
+                   
                 }
             }
         };
@@ -284,10 +284,12 @@
         var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, backColor, padding);
         root.addClass(rootCustomStyle);
         $parentRoot.css("flex-direction", "column");
+        $slider.parent().css('display', 'flex');
         if (alignmentHorizontal) {
             $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
             rootClass = 'vis-w-p-Header-Root-h';//Fixed Class for Horizontal Alignment
             $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-up');
+            $slider.parent().css('background-color', 'transparent');
             $parentRoot.css('flex-direction', 'row');
         }
 
@@ -318,20 +320,21 @@
         }
         this.addStyleToDom();
 
+        // Add Header Panel to Parent Control
+        $parentRoot.append(root);
+
         function eventHandling() {
             $slider.on("click", function () {
                 if (alignmentHorizontal) {
                     if ($parentRoot.height() == 0) {
                         $parentRoot.height(height);
                         root.show();
-                        $slider.removeClass('fa-angle-double-down').addClass('fa-angle-double-up').removeClass('vis-ad-w-p-header-h');
-                        //callBack({ 'margin-left': '' });
+                        $slider.removeClass('fa-angle-double-down').addClass('fa-angle-double-up').removeClass('vis-ad-w-p-header-v');
                     }
                     else {
                         $parentRoot.height(0);
                         root.hide();
-                        $slider.removeClass('fa-angle-double-up').addClass('fa-angle-double-down').addClass('vis-ad-w-p-header-h');
-                        // callBack({ 'margin-left': '15px' });
+                        $slider.removeClass('fa-angle-double-up').addClass('fa-angle-double-down').addClass('vis-ad-w-p-header-v');
                     }
                 }
                 else {
@@ -339,13 +342,11 @@
                         $parentRoot.width(width);
                         root.show();
                         $slider.removeClass('fa-angle-double-right').addClass('fa-angle-double-left').removeClass('vis-ad-w-p-header-h');
-                        //callBack({ 'margin-left': '' });
                     }
                     else {
                         $parentRoot.width(0);
                         root.hide();
                         $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-right').addClass('vis-ad-w-p-header-h');
-                        //callBack({ 'margin-left': '15px' });
                     }
                 }
             });

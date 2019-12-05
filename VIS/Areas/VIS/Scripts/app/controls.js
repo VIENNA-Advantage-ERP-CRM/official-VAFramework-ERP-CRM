@@ -932,7 +932,7 @@
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
     VLabel.prototype.setValue = function (newValue, isHTML) {
-        if (this.oldValue != newValue ) {
+        if (this.oldValue != newValue) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
             if (isHTML) {
@@ -997,7 +997,7 @@
 
         this.values = null;
 
-        var $img = $("<i title='"+text+"'>");
+        var $img = $("<i title='" + text + "'>");
 
         var $txt = $("<span>").text(text);
         var rootPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/";
@@ -4567,21 +4567,24 @@
             //$img.attr('src', rootPath + img);
 
             if (imgPath) {
-                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb320x240/" + imgPath);
+                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath);
                 $img.show();
                 $icon.hide();
                 $txt.text("");
+                this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else if (resImg != null) {
                 $img.attr('src', "data:image/jpg;base64," + resImg);
                 $img.show();
                 $icon.hide();
                 $txt.text("");
+                this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else {
                 $img.attr('src', "data:image/jpg;base64," + resImg);
                 $img.hide();
                 $txt.text("-");
+                this.ctrl.removeClass('vis-input-wrap-button-image-add');
             }
         };
 
