@@ -932,6 +932,7 @@ namespace VAdvantage.Model
                 dt = new DataTable();
                 dt.Load(drTree);
                 drTree.Close();
+               
             }
             catch
             {
@@ -940,12 +941,23 @@ namespace VAdvantage.Model
             }
         }
 
+        /// <summary>
+        /// Method to load nodes in case order by some value is required.
+        /// </summary>
+        /// <param name="ctx">current Context</param>
+        /// <param name="orderClause">Order By clause</param>
+        public void GetTreeNodes(Ctx ctx, string orderClause)
+        {
+            LoadNodes(ctx.GetAD_User_ID(), orderClause);
+        }
+
+
 
         /// <summary>
         /// Load Nodes and Bar
         /// </summary>
         /// <param name="AD_User_ID">user for tree bar</param>
-        private void LoadNodes(int AD_User_ID)
+        private void LoadNodes(int AD_User_ID,string orderClause="")
         {
             ////  SQL for TreeNodes
             StringBuilder sql = new StringBuilder("SELECT "
@@ -1016,8 +1028,15 @@ namespace VAdvantage.Model
             }
 
             //sql.Append(" ORDER BY COALESCE(tn.Parent_ID, -1), tn.SeqNo");
+            if (orderClause == "")
+            {
 
-            sqls += " ORDER BY COALESCE(tn.Parent_ID, -1), tn.SeqNo, Upper(" + tblName + ".Name)";
+                sqls += " ORDER BY COALESCE(tn.Parent_ID, -1), tn.SeqNo, Upper(" + tblName + ".Name)";
+            }
+            else
+            {
+                sqls += " ORDER BY " + orderClause;
+            }
 
             //sqls += " ORDER BY COALESCE(tn.Parent_ID, -1), tn.SeqNo";
 
