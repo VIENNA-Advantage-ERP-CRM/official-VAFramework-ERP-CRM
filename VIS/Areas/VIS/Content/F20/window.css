@@ -312,7 +312,7 @@ cursor:pointer;
     justify-content: center;
     color: rgba(var(--v-c-on-primary),1);
     cursor: pointer;
-    font-size: 1rem;
+    font-size: .875rem;
 }
 
     .vis-ad-w-p-tb-advsrch li, .vis-ad-w-p-tb-advsrch li > div {

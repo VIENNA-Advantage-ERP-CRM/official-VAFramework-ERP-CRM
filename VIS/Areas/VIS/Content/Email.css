@@ -110,10 +110,10 @@ html[dir="rtl"] .vis-email-leftDiv
     white-space: nowrap;
 }
 
-.vis-chcklist-label
-{
+label.vis-chcklist-label {
     font-size: 12px;
     font-weight: normal;
+    margin-bottom: 0;
 }
 
 
@@ -224,10 +224,10 @@ html[dir="rtl"] .vis-Email-ContentWrap
     margin-right: 20px;*/
 }
 
-.vis-Email-ContentArea
-{
+.vis-Email-ContentArea {
     float: left;
     height: 100%;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
 .vis-Email-leftWrap
@@ -290,28 +290,27 @@ html[dir="rtl"] .vis-Email-leftWrap
         color: #535353;
     }
 
-.vis-form-data > input, .vis-form-data-extra > input, .vis-form-data-sub > input
-{
+.vis-form-data > input, .vis-form-data-extra > input, .vis-form-data-sub > input {
     width: 100%;
     float: left;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*padding-bottom: 10px;*/
     font-size: 20px;
     font-weight: lighter;
 }
 
-    .vis-form-data > input:focus, .vis-form-data-extra > input:focus
-    {
+    .vis-form-data > input:focus, .vis-form-data-extra > input:focus {
         border: none;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid rgba(var(--v-c-primary), 1);
     }
 
-.vis-Email-leftFooter
-{
+.vis-Email-leftFooter {
     width: auto;
     float: left;
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
 html[dir="rtl"] .vis-Email-leftFooter
@@ -329,13 +328,13 @@ html[dir="rtl"] .vis-Email-leftFooter > input
     float: right;
 }
 
-.vis-Email-leftFooter > label
-{
+.vis-Email-leftFooter > label {
     font-weight: normal;
-    font-size: 12px;
-    float: left;
-    margin-top: 2px;
-    margin-left: 10px;
+    font-size: .75rem;
+    /* float: left; */
+    /* margin-top: 2px; */
+    margin-left: 5px;
+    margin-bottom: 0;
 }
 
 html[dir="rtl"] .vis-Email-leftFooter > label
@@ -376,7 +375,7 @@ html[dir="rtl"] .vis-Email-rytWrap
 {
     width: 100%;
     float: left;
-    overflow: auto;
+    /*overflow: auto;*/
     height: 100%;
 }
 
@@ -387,20 +386,19 @@ html[dir="rtl"] .vis-Email-rytWrap
     margin-bottom: 10px;
 }
 
-    .vis-form-rytData > label
-    {
+    .vis-form-rytData > label {
         width: 100%;
         float: left;
         font-size: 12px;
-        color: #535353;
+        /*color: #535353;*/
         font-weight: normal;
+        margin-bottom: 0;
     }
 
-    .vis-form-rytData > input
-    {
+    .vis-form-rytData > input {
         float: left;
         width: 100%;
-        border: 1px solid #ccc;
+        border: 1px solid rgba(var(--v-c-on-secondary), .2);
     }
 
         .vis-form-rytData > input:focus
@@ -440,11 +438,12 @@ html[dir="rtl"] .vis-Email-rytWrap
         padding: 0;
     }
 
-        .vis-Email-BccList > ul > li
-        {
-            color: #535353;
+        .vis-Email-BccList > ul > li {
+            /*color: #535353;*/
             font-size: 12px;
             line-height: 30px;
+            display: flex;
+            align-items: center;
         }
 
             .vis-Email-BccList > ul > li input
@@ -508,6 +507,37 @@ html[dir="rtl"] .vis-Email-rytWrap
     margin-right: 0px;
     cursor: pointer;
     float: right;
+}
+.vis-emailattchico {
+    width: 31px;
+    height: 31px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    transform: rotate(-43deg);
+}
+
+.vis-email-leftDiv li {
+    font-size: .875rem;
+    border-bottom: 1px solid rgba(var(--v-c-secondary), .1);
+    padding: 10px 0;
+}
+
+.vis-email-rytBcc-header {
+    display: flex;
+    align-items: center;
+}
+
+.vis-email-rytBcc-header h4 {
+    flex: 1;
+}
+
+.vis-email-rytBcc-header i {
+    cursor: pointer;
+    font-size: 1.2rem;
 }
 
 html[dir="rtl"] .vis-email-sendbtn

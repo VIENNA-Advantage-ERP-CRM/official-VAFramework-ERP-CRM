@@ -108,8 +108,9 @@ select.vis-ev-col-mandatory {
 .vis-input-wrap input:focus, .vis-input-wrap select:focus, .vis-input-wrap textarea:focus, .vis-control-wrap > button:focus {
     outline: none;
     box-shadow: none;
+}
+.vis-input-wrap input:focus, .vis-input-wrap select:focus, .vis-input-wrap textarea:focus {
     border: 1px solid rgba(var(--v-c-primary), 1);
-    /*border: 1px solid green;*/
 }
 
     .vis-input-wrap *[data-hasBtn] {

@@ -417,13 +417,18 @@ html[dir="rtl"] .vis-menufavitm
     display: block;
     text-indent: -999999px;
 }
+.vis-mainMenuIcons.vis-icon-menuclose{
+    width: 40px;
+     height: 42px; 
+     float: right; 
+}
 
-    .vis-mainMenuIcons.vis-icon-menuclose
-    {
-        width: 40px;
-        height: 42px;
-        float: right;
-    }
+.vis-icon-menuclose, .vis-icon-menuclose:hover {
+    /*width: 40px;*/
+    /* height: 42px; */
+    /* float: right; */
+    color: rgba(var(--v-c-on-primary), 1);
+}
 
 html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
 {

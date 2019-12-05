@@ -490,17 +490,19 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
 }
 
 .vis-workflowActivityTitleBar {
-    padding: 0px 10px 0px 10px;
-    display: inline-block;
+    padding: 10px;
+    display: flex;
     width: 100%;
     background: rgba(var(--v-c-primary), 1);
+    align-items: center;
 }
 
     .vis-workflowActivityTitleBar h3 {
-        font-size: 14px;
+        font-size: .875rem;
         color: rgba(var(--v-c-on-primary), 1);
-        margin: 15px 0px 10px 0px;
-        float: left;
+        margin: 0;
+        /* float: left; */
+        flex: 1;
     }
 
 html[dir="rtl"] .vis-workflowActivityTitleBar h3 {
@@ -508,8 +510,9 @@ html[dir="rtl"] .vis-workflowActivityTitleBar h3 {
 }
 
 .vis-workflowActivityTitleBar-buttons {
-    float: right;
-    margin-right: -10px;
+    /* float: right; */
+    /* margin-right: -10px; */
+    display: inline-flex;
 }
 
     .vis-workflowActivityTitleBar-buttons ul {
@@ -568,12 +571,12 @@ html[dir="rtl"] .vis-workflowActivityTitleBar-buttons {
         border-radius: 4px;
         margin-top: 11px;
         float: right;*/
-        background-position: 0px -91px;
-        height: 26px;
-        text-indent: -999999px;
-        margin-top: 11px;
-        float: right;
-    }
+    background-position: 0px -91px;
+    height: 26px;
+    text-indent: -999999px;
+    margin-top: 11px;
+    float: right;
+}
 
     .vis-workflowActivityIcons.vis-icon-doneButton {
         /*background-position: 0px -186px;
@@ -690,8 +693,8 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
         width: 30px;
         height: 30px;
         border: none;
-        background-color: #eeeeee;
-        margin-left: -30px;
+        background-color: rgba(var(--v-c-secondary), 1);
+        /*margin-left: -30px;*/
         outline: none;
     }
 
@@ -717,7 +720,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
     text-align: right;
     padding-right: 20px;
     font-size: 12px;
-    color: hsl(0, 0%, 25%);
+    /*color: hsl(0, 0%, 25%);*/
 }
 
 .vis-right-part {
@@ -726,7 +729,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
     text-align: left;
     padding-left: 20px;
     font-size: 12px;
-    color: hsl(0, 0%, 25%);
+    /*color: hsl(0, 0%, 25%);*/
 }
 
 .vis-vertical-img {
