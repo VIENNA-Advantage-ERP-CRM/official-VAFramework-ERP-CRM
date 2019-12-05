@@ -79,7 +79,7 @@
     .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd {
         color: inherit;
         background-color: #ffffff;
-        border-bottom: 1px solid rgba(var(--v-c-on-secondary), 0.09);
+        border-bottom: 1px solid rgba(var(--v-c-on-secondary), 0.2);
     }
 
     /*.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd:hover
@@ -96,7 +96,7 @@
     .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even {
         color: inherit;
         background-color: #ffffff;
-        border-bottom: 1px solid rgba(var(--v-c-on-secondary), 0.09);
+        border-bottom: 1px solid rgba(var(--v-c-on-secondary), 0.2);
     }
 
     /*.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even:hover
@@ -113,7 +113,7 @@
     .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-selected,
     .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr td.w2ui-selected {
         color: #000000 !important;
-        background-color: rgba(var(--v-c-secondary), 1) !important;
+        background-color: rgba(var(--v-c-primary), .07) !important;
     }
 
 
@@ -123,8 +123,8 @@
         margin: 0px;
         padding: 0px;
         border-right: 0;
-        border-top: 2px solid rgba(var(--v-c-on-secondary), 0.09);
-        border-bottom: 2px solid rgba(var(--v-c-on-secondary), 0.09);
+        border-top: 2px solid rgba(var(--v-c-on-secondary), 0.2);
+        border-bottom: 2px solid rgba(var(--v-c-on-secondary), 0.2);
         color: rgba(0, 0, 0, 0.70);
         background: transparent;
         font-weight: 600;
@@ -141,7 +141,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            color: rgba(var(--v-c-on-secondary), 0.8);
+            color: rgba(var(--v-c-on-secondary), 1);
         }
 
 .w2ui-col-header {
@@ -247,9 +247,9 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         outline: none;
     }
 
-input:not([type=button]):focus,  select:focus, textarea:focus {
+/*input:not([type=button]):focus,  select:focus, textarea:focus {
     border: 1px solid rgba(var(--v-c-primary), 1);
-}
+}*/
 /*JqueryUI properties override*/
 .ui-button {
     background: rgba(var(--v-c-primary), 1) !important;
@@ -322,7 +322,7 @@ input:not([type=button]):focus,  select:focus, textarea:focus {
 
     .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data > div {
         padding: 10px 7px;
-        color: rgba(var(--v-c-on-secondary), 0.65);
+        color: rgba(var(--v-c-on-secondary), 1);
         border-right: 1px solid transparent;
     }
 .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data:first-child > div {
@@ -331,7 +331,7 @@ input:not([type=button]):focus,  select:focus, textarea:focus {
 
     .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even:hover, .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd:hover {
         color: inherit;
-        background-color: rgba(var(--v-c-secondary), 1);
+        background-color: rgba(var(--v-c-primary), .03);
     }
 
     .w2ui-grid .w2ui-grid-body table .w2ui-col-select div input[type=checkbox] {
@@ -367,11 +367,11 @@ input:not([type=button]):focus,  select:focus, textarea:focus {
     }
         .w2ui-grid .w2ui-editable input {
             padding: 1px;
-            min-height: 35px;
+            min-height: 36px;
         }
 
             .w2ui-grid .w2ui-editable input.w2ui-select {
-                height:35px;
+                height:36px;
             }
 
             /**************************************/

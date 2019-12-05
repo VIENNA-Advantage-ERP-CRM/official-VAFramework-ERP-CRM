@@ -598,7 +598,7 @@
     };
 
     GridTab.prototype.getIsTPBottomAligned = function (){
-        return this.vo.TabPanelAlignment == "V";
+        return this.vo.TabPanelAlignment == "H";
     };
 
 

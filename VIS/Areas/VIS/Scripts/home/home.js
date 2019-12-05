@@ -957,7 +957,7 @@
                                         dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                     }
                                     if (data.lstFollowups[cnt].AD_Image_ID == 0) {
-                                        uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("userImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png '/>";
+                                        uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
                                     }
                                     else {
                                         for (var a in data.lstUserImg) {
@@ -966,7 +966,7 @@
                                                     uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/>";
                                                 }
                                                 else {
-                                                    uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png '/>";
+                                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
                                                 }
                                                 break;
                                             }
@@ -977,7 +977,7 @@
                                             + "<div class='vis-feedTitleBar'>"
                                             + "<h3> " + data.lstFollowups[cnt].WinName + ' : ' + data.lstFollowups[cnt].Identifier + " </h3>"
                                             + "<div class='vis-feedTitleBar-buttons'>"
-                                             + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "' class='vis-feedIcons vis-icon-viewFeed'>" + VIS.Msg.getMsg("ViewFollowups") + "</a></li>"
+                                             + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "'><i class='vis vis-find'></i></a></li>"
                                             + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='vis-feedIcons vis-icon-unsubscribeFeed'>" + VIS.Msg.getMsg("UnsubscribeFollowups") + " </a></li></ul>"
                                             + " </div></div>"
 
@@ -1051,7 +1051,7 @@
                                     dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                 }
                                 if (data.lstFollowups[cnt].AD_Image_ID == 0) {
-                                    uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>"
                                 }
                                 else {
                                     for (var b in data.lstUserImg) {
@@ -1060,7 +1060,9 @@
                                                 uimg = "<img style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/>"
                                             }
                                             else {
-                                                uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+                                                //uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+
+                                                uimg = "<i  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'    class='fa fa-user'></i>"
 
                                             }
                                             break;
@@ -1118,11 +1120,11 @@
                                     uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' />"
                                 }
                                 else {
-                                    uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' alt='" + VIS.Msg.getMsg("UserImage") + "'   class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.PNG '/>"
+                                    uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
                                 }
                             }
                             else {
-                                uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' alt='" + VIS.Msg.getMsg("UserImage") + "'   class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.PNG '/>"
+                                uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
                             }
                             var str = "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
                                  + uimg
@@ -1228,7 +1230,7 @@
                                    + "<div class='vis-feedTitleBar-buttons'>"
                                    + "<ul>"
                                    + "<li style='color:#999999; padding-top:10px; font-size:14px;'>" + data[s].Name + "</li>"
-                                   + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "' class='vis-feedIcons vis-icon-viewFeed'> title='" + VIS.Msg.getMsg("View") + "'</a></li>"
+                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'><i class='vis vis-find'></i></a></li>"
                                    + "</ul>"
                                    + "</div>"
                                    + "</div>"
@@ -1330,10 +1332,10 @@
                                        + " <div class='vis-feedTitleBar'>";
 
                             if (data[s].SpecialTable) {
-                                str += "<h3 style='color:#1b95d7;width:calc(100% - 105px)'>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
+                                str += "<h3>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
                             }
                             else {
-                                str += "<h3 style='color:#1b95d7;'>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
+                                str += "<h3>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
                             }
 
 
@@ -1343,8 +1345,8 @@
                             //{
                             //    str += "<li data-vishomercrd='lispecial'><a data-vishomercrd='lispecial1' href='javascript:void(0)' id='" + data[s].Record_ID + "|" + data[s].ProcessTableName + "|" + data[s].ProcessWindowID + "' data-vishomercrd='SpecialTable' title='" + VIS.Msg.getMsg("ShowNotice") + "' class='vis-processZoomIcon vis-icon-check'> title='" + VIS.Msg.getMsg("ShowNotice") + "'</a></li>"
                             //}
-                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "' class='vis-feedIcons vis-icon-check'> title='" + VIS.Msg.getMsg("Approve") + "'</a></li>"
-                            + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "'  class='vis-feedIcons vis-icon-viewFeed'>title='" + VIS.Msg.getMsg("View") + "'</a></li>"
+                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "'><i class='vis vis-markx'></i></a></li>"
+                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "'><i class='vis vis-find'></i></a></li>"
                            + "</ul>"
                          + "  </div>"
                         + "</div>"

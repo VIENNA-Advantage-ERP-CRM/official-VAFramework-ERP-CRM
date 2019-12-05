@@ -82,21 +82,23 @@
             else if (barNode.Action == "R") {
                 id = barNode.ProcessID;
             }
-            var aNode = $('<a href="#" data-id="' + id + '" data-action="' + barNode.Action + '" data-nodeid="' + barNode.NodeID + '" data-btn="action" style="overflow: auto;width: 100%;height: 100%;padding-top: 17px;" >');
+            var aNode = $('<a href="#" data-id="' + id + '" data-action="' + barNode.Action + '" data-nodeid="' + barNode.NodeID + '" data-btn="action" style="overflow: auto;" >');
             //aNode.on('click', function () {
             //    var id = $(this).data("id");
             //    var action = $(this).data("action");
             //    VIS.viewManager.startAction(action, id);
             //});
+            var favboxtopicowrap = $('<div class="vis-favboxtopico">');
 
-            var btnZoom = $("<a data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom' style='height: 25px;width: 25px;float: right;margin-right: -10px;'>").append($("<img data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/zoomfav.png' >"));
+            var btnRemove = $("<a href='javascript:void(0)' data-id='" + barNode.NodeID + "'  data-btn='remove'>").append($("<i data-id='" + barNode.NodeID + "'  data-btn='remove' class='vis vis-removefav'></i>"));
+            favboxtopicowrap.append(btnRemove);
+
+            var btnZoom = $("<a href='javascript:void(0)' data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom'>").append($("<i data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom' class='vis vis-new-tab'></i>"));
             //btnZoom.on('click', function (e) {
 
             //});
-            li.append(btnZoom);
-
-            var btnRemove = $("<a data-id='" + barNode.NodeID + "'  data-btn='remove' style='height: 25px;width: 25px;float: right;'>").append($("<img data-id='" + barNode.NodeID + "'  data-btn='remove' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/removefav.png' >"));
-            li.append(btnRemove);
+            favboxtopicowrap.append(btnZoom);            
+            li.append(favboxtopicowrap);
 
             li.append(aNode);
             //var btnRemove = $("<span data-id='" + barNode.NodeID + "' class='favouritesIcons icon-favourite-large vis-span-bottom'>");
@@ -154,7 +156,7 @@
 
         function setCount(count) {
             atab.empty();
-            atab.html("<span class='favouritesIcons icon-favourite' /><span class='favouriteTabLabel-Large'>" + VIS.Msg.getMsg('Favourites') + " - " + "</span><strong>" + count + "</strong>");
+            atab.html("<span><i class='vis vis-favourite'></i></span><span class='favouriteTabLabel-Large'>" + VIS.Msg.getMsg('Favourites') + " - " + "</span><strong>" + count + "</strong>");
         };
     };
 
