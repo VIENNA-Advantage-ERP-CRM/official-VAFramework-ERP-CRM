@@ -22,6 +22,14 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-cross:before {
+    content: "\e944";
+}
+
+.vis-gear:before {
+    content: "\e949";
+}
+
 .vis-card:before {
     content: "\e91c";
 }
