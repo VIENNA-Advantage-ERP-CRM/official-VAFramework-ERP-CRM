@@ -240,9 +240,13 @@ a {
     font-size: 0.75rem;
     word-wrap: break-word;
     text-decoration: none;
-    padding-left: 5px;
+    padding-left: 5px;    
 }
-
+.vis-app-f-taskbar li * {
+    display: inline-flex;
+    align-items: center;
+    /*min-height: 23px;*/
+}
 .vis-app-footer-c {
     display: flex;
 }
