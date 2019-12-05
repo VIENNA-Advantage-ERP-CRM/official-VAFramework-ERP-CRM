@@ -159,7 +159,7 @@ function VTable() {
         var rec = this.grid.records[index];
         if (!checkRowEditable(index, 0)) {
 
-            rec.style = "background-color:rgba(var(--v-c-on-secondary), .08)";
+            rec.style = "background-color:rgba(var(--v-c-secondary), .5)";
 
             return;
         }
@@ -757,7 +757,7 @@ VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name,
         //    //    console.log(data);
         //    //}
         //},
-        recordHeight: 36,
+        recordHeight: 41,
         onSelect: this.onSelectLocal,
         onUnselect: this.onUnSelect,
         onSort: this.onSort,

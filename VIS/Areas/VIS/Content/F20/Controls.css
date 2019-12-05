@@ -14,7 +14,7 @@
 
 .vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
     padding: 5px 10px;
-    border: 1px solid rgba(var(--v-c-on-secondary), .1);
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary), 1);
@@ -72,7 +72,7 @@ select.vis-ev-col-mandatory {
 }
 
 .vis-control-wrap > button {
-    background: rgba(var(--v-c-on-secondary),.1);
+    background: rgba(var(--v-c-secondary), 1);
     width: 100%;
 }
 
@@ -81,7 +81,7 @@ select.vis-ev-col-mandatory {
 }
 
 .vis-input-wrap label {
-    color: rgba(var(--v-c-on-secondary),1);
+    color: rgba(var(--v-c-on-secondary), 1);
     font-size: 14px;
     font-weight: normal;
     position: absolute;
@@ -142,15 +142,15 @@ select.vis-ev-col-mandatory {
 
 .input-group:focus-within .input-group-append .input-group-text {
     border: 1px solid rgba(var(--v-c-primary),1);
-    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 
 .input-group:focus-within .input-group-prepend .input-group-text {
     border: 1px solid rgba(var(--v-c-primary),1);
-    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 .input-group:focus-within .input-group-append:not(:last-child) .input-group-text {
-    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 
 .vis-input-wrap input:not([data-placeholder=""])::-webkit-input-placeholder {
@@ -163,11 +163,11 @@ select.vis-ev-col-mandatory {
 
 .vis-input-wrap .input-group-text {
     padding: .375rem .55rem;
-    border: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
     width: 35px;
     justify-content: center;
     cursor: pointer;
-    background-color: rgba(var(--v-c-on-secondary),.1);
+    background-color: rgba(var(--v-c-secondary), 1);
     z-index: 1;
     display: flex;
     align-items: center;
@@ -176,7 +176,10 @@ select.vis-ev-col-mandatory {
 
 
 .input-group-text i {
-    color: rgba(var(--v-c-on-secondary),0.8);
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+.input-group-prepend .input-group-text i {
+    color: rgba(var(--v-c-primary), 1);
 }
 
 .input-group-text img {
@@ -192,12 +195,12 @@ select.vis-ev-col-mandatory {
 .vis-ev-col-fg-hdr {
     color: rgba(var(--v-c-primary), 1);
     font-size: 1rem;
-    font-family: 'NoirPro-Medium';
+    /*font-family: 'NoirPro-Medium';*/
     flex: 1;
 }
 
 .vis-ev-col-fieldgroup {
-    background: rgba(var(--v-c-primary), 0.05);
+    background: rgba(var(--v-c-on-secondary), 0.07);
     margin-bottom: 10px;
     padding: 5px 10px;
     display: flex;
