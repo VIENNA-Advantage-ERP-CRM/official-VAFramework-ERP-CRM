@@ -7,7 +7,7 @@
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr;
-    background-color: rgba(var(--v-c-primary),.02);
+    background-color: rgba(var(--v-c-common), 1);
 }
 
 .vis-ad-w-header {
@@ -114,6 +114,7 @@
     grid-row: 1/8;
     display: flex;
     overflow: auto;
+    box-shadow: 1px 0px 6px 0px rgba(var(--v-c-on-secondary), 0.66);
 }
 
 .vis-ad-w-p-title {
@@ -151,7 +152,7 @@
     grid-row: 5 / 5;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-secondary), 0.5);
+    background: rgba(var(--v-c-secondary), 0.3);
     padding-top: 10px;
     padding-left: 8px;
 }
@@ -161,8 +162,9 @@
     grid-row: 5/5;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-secondary), 0.5);
+    background: rgba(var(--v-c-secondary), 0.3);
     padding-right: 5px;
+    padding-top: 5px;
 }
 
 
@@ -224,7 +226,7 @@
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto auto auto auto;
     /*overflow: auto;*/
-    background: rgba(var(--v-c-secondary), 0.5);
+    background: rgba(var(--v-c-secondary), 0.3);
 }
 
 
@@ -248,7 +250,7 @@
     grid-row: 7/7;
     display: flex;
     font-size: 0.75rem;
-    color: rgba(var(--v-c-on-secondary), 0.6);
+    color: rgba(var(--v-c-on-secondary), 1);
     padding: 5px 10px;
 }
 
@@ -267,7 +269,7 @@
     .vis-ad-w-p-tb-lc li {
         padding: 0 7px;
         display: inline-flex;
-        color: rgba(var(--v-c-on-secondary), 0.6);
+        color: rgba(var(--v-c-on-secondary), 1);
         align-items: center;
         cursor: pointer;
     }
@@ -286,8 +288,8 @@
     position: relative;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-secondary),1);
-    color: rgba(var(--v-c-on-secondary), 0.45);
+    background: rgba(var(--v-c-secondary), .5);
+    color: rgba(var(--v-c-on-secondary), 0.7);
     border-radius: 50px;
     padding-right: 10px;
     height: 32px;
@@ -319,6 +321,7 @@
     border: none;
     background: transparent;
     height: 100%;
+    padding-left: 8px;
 }
 
     .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input:focus {
@@ -351,7 +354,7 @@
 .vis-ad-w-p-tb-rc-action {
     margin: 0 5px;
     font-size: 1.2rem;
-    color: rgba(var(--v-c-on-secondary),0.60);
+    color: rgba(var(--v-c-on-secondary), 1);
     cursor: pointer;
 }
 
@@ -471,8 +474,8 @@
 
 .vis-ad-w-p-t-c li {
     /*margin: 1px 5px;*/
-    color: rgba(var(--v-c-on-secondary),0.60);
-    padding: 0 10px 3px;
+    color: rgba(var(--v-c-on-secondary), 1);
+    padding: 0 10px 10px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -507,6 +510,11 @@
     flex-basis: auto;
     display: flex;
     flex-flow: wrap;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.vis-ad-w-p-tabs-t .vis-ad-w-p-tabs-oflow:first-child {
+    padding-left: 0;
 }
 
     .vis-ad-w-p-tabs-oflow a {
@@ -530,7 +538,7 @@
         padding: 0 5px;
         cursor: pointer;
         font-size: 1rem;
-        color: rgba(var(--v-c-on-secondary), 0.6);
+        color: rgba(var(--v-c-on-secondary), 1);
     }
 
         .vis-ad-w-p-nav-btns li:hover, .vis-ad-w-p-tb-lc li:hover {
@@ -572,6 +580,13 @@
 .vis-ad-w-p-actionpanel-b {
     grid-column: 1/1;
     grid-row: 5/5;
+}
+.vis-ad-w-p-actionpanel-b .vis-ad-w-p-ap-tp-o-body {
+    border-top-right-radius: .60rem;
+}
+
+.vis-ad-w-p-actionpanel-b .vis-ad-w-p-ap-tp-o-b-head {
+    border-top-right-radius: .50rem;
 }
 
 /* end center */
@@ -868,6 +883,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
         align-items: center;
         position: relative;
         min-height: 35px;
+        cursor: pointer;
     }
 
     .vis-ad-w-p-a-m-lst span {
@@ -892,7 +908,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
         align-items: center;
         justify-content: center;
         padding: 8px 0;
-        cursor: pointer;
+        /*cursor: pointer;*/
         min-width: 41px;
         color: rgba(var(--v-c-primary), 1);
         font-size: 1rem;
@@ -923,7 +939,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
 
 .vis-ad-w-p-s-plst li:not(:first-child) {
     padding: 3px 5px;
-    background: rgba(var(--v-c-secondary));
+    background: rgba(var(--v-c-common), 1);
     border: 1px solid rgba(0, 0, 0, 0.18);
     cursor: pointer;
     font-size: 0.8rem;
@@ -932,7 +948,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
 .vis-ad-w-p-s-plst li {
     display: inline-flex;
     align-items: center;
-    color: rgba(var(--v-c-on-secondary), 0.6);
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
     .vis-ad-w-p-s-plst li:nth-child(2) {

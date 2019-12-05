@@ -509,12 +509,15 @@
 
 
 .vis-apanel-lb-toggle {
-    background: #444343;
-    border-bottom: 1px solid white;
-    padding-top: 15px;
+    background: rgba(var(--v-c-on-secondary), 0.2);
+    /* border-bottom: 1px solid white; */
+    padding-top: 7px;
     padding-bottom: 7px;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    /* filter: brightness(0.9); */
+    color: rgba(var(--v-c-on-primary), 1);
+    font-size: 1.3rem;
 }
 
 .vis-apanel-lb-img {
@@ -4243,7 +4246,7 @@ li.vis-selected-list {
     flex-basis: 280px;
     /*height: 100%;*/
     flex-direction: column;
-    background: #616364;
+    background: rgba(var(--v-c-primary), 1);
 }
 
 .vis-process-outer-wrap {
@@ -4274,8 +4277,9 @@ li.vis-selected-list {
 }
 
 .vis-process-description {
-    background: #eee;
+    background: rgba(var(--v-c-secondary), 1);
     padding: 10px 15px;
+    color: rgba(var(--v-c-on-secondary), 1)
 }
 
     .vis-process-description h5 {
@@ -4288,7 +4292,7 @@ li.vis-selected-list {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border-bottom: 1px solid #fff;
+    /*border-bottom: 1px solid #fff;*/
 }
 
     .vis-process-parm-top label {
@@ -4314,7 +4318,7 @@ li.vis-selected-list {
 
 
 .vis-process-left-sidebar .VIS_Pref_btn-2.vis-process-ok-btn {
-    background-color: #333232;
+    background-color: rgba(var(--v-c-on-secondary), .7);
     margin-bottom: 0px;
     margin-top: 7px;
     width: 100%;

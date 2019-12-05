@@ -113,7 +113,7 @@
         function setCount(count) {
             var atab = $('#userLinks-Tab');
             atab.empty();
-            atab.append($("<span class='vis-linksIcons vis-icon-link'>"));
+            atab.append($("<span><i class='fa fa-link' aria-hidden='true' style='transform: rotate(90deg);'></i></span>"));
             atab.append(VIS.Msg.getMsg('Links') + " - ");
             atab.append($("<strong>").append(count));
             atab = null;

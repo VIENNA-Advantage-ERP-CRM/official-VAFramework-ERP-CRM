@@ -49,11 +49,11 @@
                 divSearch = $('<div class="wfactivity-homepage-parentdiv"></div>');
 
                 var divSearchText = $(' <div class="frm-data-col-wrap frm-data-col-2" style="padding-right: 10px;"> <div class="frm-data-search-wrap"><input class="frm-data-col-searchinput" id="homeSearchWorkflow" type="text" placeholder="' + VIS.Msg.getMsg("Search") + '">'
-                    + '<input type="button" id="btnWorkflowSearch" class="vis-wfSearch-btn"></div></div>');
+                    + '<button id="btnWorkflowSearch" class="vis-wfSearch-btn"><i class="fa fa-search" aria-hidden="true"></i></button></div></div>');
                 $txtSearch = divSearchText.find('#homeSearchWorkflow');
                 $btnSearch = divSearchText.find('#btnWorkflowSearch');
 
-                var divWindow = $(' <div class="frm-data-col-wrap frm-data-col-2" style="padding-left: 7px"> <div class="frm-data-search-wrap"><select></select></div></div>');
+                var divWindow = $(' <div class="frm-data-col-wrap frm-data-col-2" style="padding-left: 7px"> <div class="frm-data-search-wrap"><select class="vis-custom-select"></select></div></div>');
                 $cmbWindows = divWindow.find('select');
 
                 var divDateFrom = $('<div style="display:none;padding-left: 7px" class="frm-data-col-wrap frm-data-col-2"> <label>' + VIS.Msg.getMsg("FromDate") + '</label><input type="date" placeholder="date"></div>');
@@ -569,7 +569,7 @@
 
                 var header = $("<h3>");
                 header.css('font-weight', 'normal');
-                header.css('color', '#1b95d7');
+                //header.css('color', '#1b95d7');
                 header.append(VIS.Utility.encodeText(data[item].NodeName));
                 // Add Only if any window is selected in search criteria
                 if ($cmbWindows && $cmbWindows.val() != "0_0") {
@@ -580,8 +580,8 @@
                 var divBtns = $("<div class='vis-feedTitleBar-buttons'>");
                 var ul = $("<ul>");
                 var liZoom = $("<li>");
-                var aZoom = $("<a href='javascript:void(0)' class='vis-feedIcons vis-icon-viewFeed' data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >");
-                aZoom.append("View Feed");
+                var aZoom = $("<a href='javascript:void(0)'  data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >").append('<i class="vis vis-find"></i>');
+                //aZoom.append("View Feed");
 
                 liZoom.append(aZoom);
                 ul.append(liZoom);

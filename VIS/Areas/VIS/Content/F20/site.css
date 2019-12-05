@@ -79,8 +79,8 @@ a {
 }
 
 .vis-app-hdr-l-menu {
-    background-color: rgba(var(--v-c-secondary),0.5);
-    color: rgba(var(--v-c-on-secondary),0.5);
+    background-color: rgba(var(--v-c-secondary), 0.5);
+    color: rgba(var(--v-c-on-secondary), 0.6);
     height: 100%;
     font-size: 1.3rem;
     display: flex;
@@ -124,7 +124,7 @@ a {
 }
 
 .vis-app-hdr-r li:first-child {
-    color: rgba(var(--v-c-on-secondary),0.60);
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
 .vis-app-hdr-r-user {
@@ -146,7 +146,7 @@ a {
     /*padding: 6px;*/
     border-radius: 10px;
     /*background-color: rgba(var(--v-c-primary),1);*/
-    color: rgba(var(--v-c-on-secondary),0.40);
+    color: rgba(var(--v-c-on-secondary), 0.5);
 }
 
 .vis-app-overlay {
@@ -215,7 +215,7 @@ a {
         /*margin-right: 10px;
         margin-left: 10px;*/
         padding: 0px 10px 0px 10px;
-        color: rgba(var(--v-c-on-secondary), 0.8);
+        color: rgba(var(--v-c-on-secondary), 1);
         align-items: center;
         min-height: 23px;
     }
