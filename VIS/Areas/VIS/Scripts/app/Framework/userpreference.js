@@ -1581,7 +1581,7 @@
                 + " INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID OR o.AD_Org_ID=0) "
                 + "WHERE r.AD_Role_ID='" + AD_Role_ID + "'" 	//	#1
                 + " AND c.AD_Client_ID='" + AD_Client_ID + "'"	//	#2
-                + " AND o.IsActive='Y' AND o.IsSummary='N'"
+                + " AND o.IsActive='Y' AND o.IsSummary='N'  AND o.IsCostCenter='N' AND o.IsProfitCenter='N' "
                 + " AND (r.IsAccessAllOrgs='Y' "
                     + "OR (r.IsUseUserOrgAccess='N' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
                         + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
