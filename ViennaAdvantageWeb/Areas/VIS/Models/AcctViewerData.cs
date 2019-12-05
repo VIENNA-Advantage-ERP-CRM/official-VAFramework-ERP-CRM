@@ -142,7 +142,7 @@ namespace VIS.Models
         public List<AcctViewerDataOrg> AcctViewerGetOrgData(Ctx ctx, int ad_client_id)
         {
             List<AcctViewerDataOrg> obj = new List<AcctViewerDataOrg>();
-            
+
             var sql = "SELECT AD_Org_ID, Name FROM AD_Org WHERE AD_Client_ID=" + ad_client_id;
             MOrg Org = new MOrg(ctx, ctx.GetAD_Org_ID(), null);
             if (Org.Get_ColumnIndex("IsOrgUnit") > -1)

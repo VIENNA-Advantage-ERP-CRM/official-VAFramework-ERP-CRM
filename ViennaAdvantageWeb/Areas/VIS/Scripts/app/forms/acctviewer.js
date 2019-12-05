@@ -216,7 +216,14 @@
                     for (var i = 0; i < res.length; i++) {
                         var id = res[i].AD_Table_ID;
                         var tableName = VIS.Utility.encodeText(res[i].TableName);
-                        var name = VIS.Msg.translate(VIS.Env.getCtx(), tableName + "_ID");
+                        var name = "";
+                        // Change done to show order instead of purchase order in selection 
+                        if (tableName == "C_Order") {
+                            name = VIS.Msg.getMsg("Order");
+                        }
+                        else {
+                            name = VIS.Msg.translate(VIS.Env.getCtx(), tableName + "_ID");
+                        }
 
                         options.push({ "Key": tableName, "Name": name });
 
@@ -891,9 +898,11 @@
                     }
                     else {
                         if (row[j] != null && dataObj.Columns[j].indexOf("Date") > 0) {
-                            var date = new Date(parseInt(row[j].substr(6)));
-                            if (data != null)
-                                line[dataObj.Columns[j]] = date.toDateString();
+                            if (row[j] != "") {
+                                var date = new Date(parseInt(row[j].substr(6)));
+                                if (data != null)
+                                    line[dataObj.Columns[j]] = date.toDateString();
+                            }
                         }
                         else {
                             line[dataObj.Columns[j]] = row[j];
@@ -1071,6 +1080,7 @@
 
             if (btnOrgUnit != null) {
                 btnOrgUnit.on("click", function () {
+                    /** Open the info window according to the button clicked. **/
                     actionButton(btnOrgUnit);
                 });
             }
@@ -1112,6 +1122,7 @@
             }
             if (btnOrgUnitClear != null) {
                 btnOrgUnitClear.on("click", function () {
+                    /** Clear data from info button and the from the array maintained at backend. **/
                     cleardata(btnOrgUnit);
                 });
             }
