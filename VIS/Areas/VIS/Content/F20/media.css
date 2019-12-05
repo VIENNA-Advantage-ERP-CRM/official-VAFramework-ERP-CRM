@@ -22,9 +22,13 @@
         min-width: 130px;
     }
 
+    .vis-ad-w-p-center-flow-r {
+        flex-direction: column;
+    }
+
     .vis-ad-w-p-actionpanel-r {
-        grid-column: 1/1;
-        grid-row: 5/5;
+        /*grid-column: 1/1;
+        grid-row: 5/5;*/
         height: auto;
         width: auto;
     }
