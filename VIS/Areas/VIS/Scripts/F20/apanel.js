@@ -535,6 +535,7 @@
         this.setDynamicActions = function () {
             if (this.curGC == null)
                 return;
+            $uldynactionbar.css('display','none');
             var index = 0;
             var actions = [];
             if (this.curGC.leftPaneLinkItems.length > 0) {
@@ -550,6 +551,10 @@
                     $uldynactionbar.append(actions[index].getControl());
                 }
             }
+            if (this.curGC.leftPaneLinkItems.length > 0 || this.curGC.rightPaneLinkItems.length > 0) {
+                $uldynactionbar.css('display', 'flex');
+            }
+
             actions = null;
         };
 
