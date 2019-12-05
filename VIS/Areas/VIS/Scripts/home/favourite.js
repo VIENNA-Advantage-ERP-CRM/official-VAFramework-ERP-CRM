@@ -90,10 +90,10 @@
             //});
             var favboxtopicowrap = $('<div class="vis-favboxtopico">');
 
-            var btnRemove = $("<a href='javascript:void(0)' data-id='" + barNode.NodeID + "'  data-btn='remove'>").append($("<i data-id='" + barNode.NodeID + "'  data-btn='remove' class='vis vis-removefav'></i>"));
+            var btnRemove = $("<a href='javascript:void(0)' data-id='" + barNode.NodeID + "'  data-btn='remove' class='vis vis-removefav'>");
             favboxtopicowrap.append(btnRemove);
 
-            var btnZoom = $("<a href='javascript:void(0)' data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom'>").append($("<i data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom' class='vis vis-new-tab'></i>"));
+            var btnZoom = $("<a href='javascript:void(0)' data-id='" + id + "' data-action='" + barNode.Action + "' data-btn='zoom' class='vis vis-new-tab'>");
             //btnZoom.on('click', function (e) {
 
             //});
