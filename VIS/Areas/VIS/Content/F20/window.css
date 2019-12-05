@@ -201,12 +201,17 @@
 }
 
 .vis-ad-w-p-header-arrow-l {
-    display: flex;
+    display: none;
     background: rgba(var(--v-c-on-secondary), 0.3);
     font-size: 1.2rem;
     padding: 5px 10px;
     color: white;
     height: 28px;
+}
+
+.vis-ad-w-p-header-arrow-l-po {
+position:absolute;
+cursor:pointer;
 }
 
 
@@ -1119,11 +1124,18 @@ li.vis-page-item-select {
 
 
 
+.vis-ad-w-p-header-v {
+    margin-top: -19px;
+    position: absolute;
+    color: rgba(var(--v-c-primary),1);
+}
+
 .vis-ad-w-p-header-h {
     margin-top: 23px;
     position: absolute;
     color: rgba(var(--v-c-primary),1);
 }
+
 
 
 .vis-ad-w-p-header_root_common {
@@ -1192,9 +1204,15 @@ li.vis-page-item-select {
         width: 100%;
         border: none;
         max-height: 150px;
-        background: rgba(var(--v-c-secondary), .30);
+        background: transparent;
         overflow: hidden;
     }
+
+
+    .vis-w-p-header-Label-f button span {
+        display: none;
+    }
+
 
     .vis-w-p-header-Label-f img {
         max-width: 100%;
