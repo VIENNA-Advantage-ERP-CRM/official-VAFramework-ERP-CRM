@@ -1432,6 +1432,20 @@ ul.vis-userLinks-ListMenu, ul.vis-userFavourites-ListMenu {
      flex-direction: column;
  }
 
+
+.vis-userLinks-ListMenu li img {
+    width: 54px;
+    height: 63px;
+    margin-bottom: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
+.vis-userLinks-ListMenu li i {
+    width: 54px;
+    height: 63px;
+}
+
 html[dir="rtl"] ul.vis-userLinks-ListMenu li {
     float: right;
 }

@@ -9,6 +9,7 @@
 
         var log = VIS.Logging.VLogger.getVLogger("ShortCut");
 
+        var atab = $('#userLinks-Tab');
         var mgr = {
             init: init
         };
@@ -30,27 +31,39 @@
             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Home/GetShortcutItems", null, function (data) {
                 Items = data;
                 var itm = null;
-                var html = '<ul class="vis-userLinks-ListMenu">';
+                var html = ['<ul class="vis-userLinks-ListMenu">'];
                 if (data) {
                     for (var i = 0; i < data.length; i++) {
                         itm = data[i];
-                        html += '<li data-index="' + i + '" ><a data-index="' + i + '" href="javascript:void(0)"><img data-index="' + i + '" style="width: 54px;height: 63px;margin-bottom: 10px;margin-right: auto;margin-left: auto;display:block;" src="';
+
+                        html.push('<li data-index="' + i + '" ><a data-index="' + i + '" href="javascript:void(0)">');
+                         
 
                         if (itm.HasImage) {
-                            if (itm.IsImageByteArray) {
-                                html += 'data:image/*;base64,' + itm.IconBytes;
+                            if (!itm.IsImageByteArray && itm.IconUrl.indexOf('.') < 0) {
+                                html.push('<i data-index="' + i + '" class="' + itm.IconUrl + '"');
                             }
                             else {
-                                html += VIS.Application.contextUrl + itm.IconUrl;
+                                html.push('<img data-index="' + i + '"  src="');
+                                if (itm.IsImageByteArray) {
+                                    html.push('data:image/*;base64,' + itm.IconBytes);
+                                }
+                                else {
+                                    html.push(VIS.Application.contextUrl + itm.IconUrl);
+                                }
                             }
                         }
-                        html += '" />';
-                        html += itm.ShortcutName + '</a></li>';
+                        else {
+                            html.push('<i data-index="' + i + '" class="vis vis-shortcut"');
+                        }
+                        html.push('" />');
+                        html.push(itm.ShortcutName + '</a></li>');
                     }
                 }
-                html += '</ul>';
+                html.push('</ul>');
                 linkConatiner.empty();
-                linkConatiner.html(html);
+                linkConatiner.html(html.join(' '));
+                html = [];
                 setCount(data.length);
             });
         };
@@ -111,12 +124,12 @@
         }
 
         function setCount(count) {
-            var atab = $('#userLinks-Tab');
+           
             atab.empty();
             atab.append($("<span><i class='fa fa-link' aria-hidden='true' style='transform: rotate(90deg);'></i></span>"));
             atab.append(VIS.Msg.getMsg('Links') + " - ");
             atab.append($("<strong>").append(count));
-            atab = null;
+           // atab = null;
         }
     };
 
@@ -143,27 +156,37 @@
             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Home/GetSettingItems", { "AD_Shortcut_ID": id }, function (data) {
                 Items = data;
                 var itm = null;
-                var html = '<ul class="vis-userLinks-ListMenu">';
+                var html = ['<ul class="vis-userLinks-ListMenu">'];
                 if (data) {
                     for (var i = 0; i < data.length; i++) {
                         itm = data[i];
-                        html += '<li data-index="' + i + '" ><a data-index="' + i + '" href="javascript:void(0)"><img data-index="' + i + '" style="width: 54px;margin-bottom: 10px;height: 63px;display:block;margin-right: auto;margin-left: auto" src="';
+                        html.push('<li data-index="' + i + '" ><a data-index="' + i + '" href="javascript:void(0)">');
+
 
                         if (itm.HasImage) {
-                            if (itm.IsImageByteArray) {
-                                html += 'data:image/*;base64,' + itm.IconBytes;
+                            if (!itm.IsImageByteArray && itm.IconUrl.indexOf('.') < 0) {
+                                html.push('<i data-index="' + i + '" class="' + itm.IconUrl + '"');
                             }
                             else {
-                                html += VIS.Application.contextUrl + itm.IconUrl;
+                                html.push('<img data-index="' + i + '"  src="');
+                                if (itm.IsImageByteArray) {
+                                    html.push('data:image/*;base64,' + itm.IconBytes);
+                                }
+                                else {
+                                    html.push(VIS.Application.contextUrl + itm.IconUrl);
+                                }
                             }
                         }
-                        html += '" />';
-                        html += itm.ShortcutName + '</a></li>';
+                        else {
+                            html.push('<i data-index="' + i + '" class="vis vis-shortcut"');
+                        }
+                        html.push('" />');
+                        html.push(itm.ShortcutName + '</a></li>');
                     }
                 }
-                html += '</ul>';
+                html.push('</ul>');
                 $divScroll.empty();
-                $divScroll.html(html);
+                $divScroll.html(html.join(' '));
                 bindEvents();
             });
         };
