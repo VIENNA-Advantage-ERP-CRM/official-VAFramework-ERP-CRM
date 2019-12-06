@@ -1423,7 +1423,7 @@
                 var datatab = $(evnt.target).data("vishome");
                 if (datatab === "userprofile") {
                     $spanWelcomeTabtopHdr.show();
-                    $spanWelcomeTabtopHdr.css("background-position", "0px 0px");
+                    //$spanWelcomeTabtopHdr.css("background-position", "0px 0px");
                     activeTabType = ProfileType;
                     isTabscroll = false;
                     isTabDataRef = true;
