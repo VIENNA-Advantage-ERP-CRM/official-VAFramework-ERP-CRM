@@ -122,7 +122,7 @@
 .vis-ad-w-p-title {
     grid-column: 4/7;
     grid-row: 1/1;
-    padding:10px;
+    padding: 5px 14px 5px;
     display:flex;
 }
 
@@ -625,7 +625,7 @@ cursor:pointer;
     grid-template-rows: auto 1fr;
     grid-template-columns: auto 1fr;
     color: rgba(var(--v-c-on-secondary), 1);
-    background: rgba(var(--v-c-common), 0.7);
+    background: rgba(var(--v-c-common), 1);
     
 }
 /*tree css START here*/

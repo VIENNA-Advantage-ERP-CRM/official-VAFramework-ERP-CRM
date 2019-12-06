@@ -298,6 +298,7 @@ html[dir="rtl"] .vis-Email-leftWrap
     /*padding-bottom: 10px;*/
     font-size: 20px;
     font-weight: lighter;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
     .vis-form-data > input:focus, .vis-form-data-extra > input:focus {

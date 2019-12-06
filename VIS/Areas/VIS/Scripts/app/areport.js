@@ -1252,7 +1252,7 @@
             }
         }
 
-        var contentPane = $("<div Style='height:" + height + "px;width:" + width + "px;overflow:auto;background:#63BFE9;float:left;'>");
+        var contentPane = $("<div Style='height:" + height + "px;width:" + width + "px;' class='vis-report-a-r-container'>");
         var subContentPane = $("<div Style='height:" + height + "px;width:" + width + "px;'>");
         contentPane.append(subContentPane);
         var bsyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
