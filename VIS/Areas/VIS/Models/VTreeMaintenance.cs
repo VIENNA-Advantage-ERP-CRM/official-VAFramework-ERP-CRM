@@ -161,7 +161,7 @@ namespace VAdvantage.Classes
             {
                 sqlCmd.Append(" and Node_Id not in " +
                     "(select AD_Menu_Id from AD_Menu where AD_Form_Id in " +
-                    "(select AD_Form_Id from AD_Form where ClassName='org.compiere.Apps.form.VTreeMaintenance'))");
+                    "(select AD_Form_Id from AD_Form where ClassName='VAdvantage.Apps.Form.VTreeMaintenance'))");
             }
             //if request is to delete a particular row
             if (!IsDeleteAll)
@@ -180,7 +180,7 @@ namespace VAdvantage.Classes
         public int CheckMaintenenceNode(int Node_Id)
         {
             string sqlCmd="select count(AD_Menu_Id) from AD_Menu where AD_Form_Id in " +
-                    "(select AD_Form_Id from AD_Form where ClassName='org.compiere.Apps.form.VTreeMaintenance') and AD_Menu_id="+Node_Id;
+                    "(select AD_Form_Id from AD_Form where ClassName='VAdvantage.Apps.Form.VTreeMaintenance') and AD_Menu_id="+Node_Id;
             return int.Parse(ExecuteQuery.ExecuteScalar(sqlCmd));
 
         }

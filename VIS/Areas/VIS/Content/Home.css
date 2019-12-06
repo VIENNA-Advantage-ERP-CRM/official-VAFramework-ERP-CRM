@@ -1441,10 +1441,6 @@ ul.vis-userLinks-ListMenu, ul.vis-userFavourites-ListMenu {
     margin-left: auto;
     display: block;
 }
-.vis-userLinks-ListMenu li i {
-    width: 54px;
-    height: 63px;
-}
 
 html[dir="rtl"] ul.vis-userLinks-ListMenu li {
     float: right;
@@ -3271,6 +3267,10 @@ p.vis-maintain-customer-p span {
 ul.vis-userLinks-ListMenu li a i {
     font-size: 3rem;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 63px;
 }
 .vis-favboxtopico {
     display: flex;

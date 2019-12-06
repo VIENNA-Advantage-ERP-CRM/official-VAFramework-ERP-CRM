@@ -19169,7 +19169,6 @@
                         newDocNo = true;
                     if (newDocNo)
                         try {
-                        //if (/*Ini.IsPropertyBool(Ini._COMPIERESYS) &&*/ GetCtx().GetAD_Client_ID() < 1000000)
                         //{
                         //    mTab.setValue("DocumentNo", "<" + dr[5].toString() + ">");
                         //}

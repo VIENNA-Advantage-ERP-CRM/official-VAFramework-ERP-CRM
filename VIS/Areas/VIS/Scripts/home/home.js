@@ -1452,7 +1452,7 @@
                     $sAlrtTxtType.html("");
                     $spanWelcomeTabtopHdr.show();
                     $sAlrtTxtType.html(VIS.Msg.getMsg("KPI"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -537px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-kpi");// .css("background-position", "0px -537px");
 
                     if (window.VADB && window.VADB != null && VADB.Apps.KpiHomeScreen != undefined) {
 
@@ -1505,7 +1505,7 @@
                     isTabDataRef = true;
 
                     $hlnkRefTabData.css("margin-right", "17px");
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -76px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-userfeed");//  .css("background-position", "0px -76px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1541,7 +1541,7 @@
                     $hlnkRefTabData.css("margin-right", "17px");
                     WelcomeTabDatacontainers.css("overflow-y", "auto");
                     WelcomeTabDatacontainers.css({ "text-align": "auto" });
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -143px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-notice");//$spanWelcomeTabtopHdr.css("background-position", "0px -143px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1573,7 +1573,7 @@
                     });
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyTask"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -406px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-mytasks");//$spanWelcomeTabtopHdr.css("background-position", "0px -406px");
 
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
@@ -1626,7 +1626,7 @@
 
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("TaskAssignByMe"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -340px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-taskassigned");//$spanWelcomeTabtopHdr.css("background-position", "0px -340px");
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $spanWelcomeTabtopHdr.show();
@@ -1680,7 +1680,7 @@
                     tabdataLastPage = 0;
                     $hAlrtTxtTypeCount.html(tabdataLastPage);
 
-                    $spanWelcomeTabtopHdr.css("background-position-y", "-603px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-document");//$spanWelcomeTabtopHdr.css("background-position-y", "-603px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1702,7 +1702,7 @@
                     isTabDataRef = true;
                     WelcomeTabDatacontainers.css("overflow-y", "auto");
                     WelcomeTabDatacontainers.css({ "text-align": "auto" });
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -209px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon fa fa-bell-o");//$spanWelcomeTabtopHdr.css("background-position", "0px -209px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1747,7 +1747,7 @@
                     });
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("Appointment"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -275px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-appointment");//$spanWelcomeTabtopHdr.css("background-position", "0px -275px");
 
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
@@ -1795,7 +1795,7 @@
                     });
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyNotes"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -473px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-contacts");//  .css("background-position", "0px -473px");
 
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
