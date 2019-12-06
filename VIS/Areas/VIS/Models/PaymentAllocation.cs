@@ -1717,7 +1717,8 @@ namespace VIS.Models
         public List<NameValue> GetOrganization(Ctx ctx)
         {
             List<NameValue> retValue = new List<NameValue>();
-            string _sql = " SELECT AD_Org.AD_Org_ID, AD_Org.Name FROM AD_Org AD_Org WHERE AD_Org.AD_Org_ID NOT IN (0) AND AD_Org.IsSummary='N' AND AD_Org.IsActive='Y' ";
+            //added IsCostCenter and IsProfitCenter check  suggested by mukesh sir and Ashish
+            string _sql = " SELECT AD_Org.AD_Org_ID, AD_Org.Name FROM AD_Org AD_Org WHERE AD_Org.AD_Org_ID NOT IN (0) AND AD_Org.IsSummary='N' AND AD_Org.IsActive='Y' AND AD_Org.IsCostCenter='N' AND AD_Org.IsProfitCenter='N' ";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "AD_Org", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             _sql += " ORDER BY AD_Org.Name ";
             DataSet _ds = DB.ExecuteDataset(_sql);
