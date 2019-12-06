@@ -22,6 +22,38 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-contacts:before {
+    content: "\e952";
+}
+
+.vis-document:before {
+    content: "\e953";
+}
+
+.vis-kpi:before {
+    content: "\e954";
+}
+
+.vis-mytasks:before {
+    content: "\e955";
+}
+
+.vis-taskassigned:before {
+    content: "\e956";
+}
+
+.vis-userfeed:before {
+    content: "\e94a";
+}
+
+.vis-userprofile:before {
+    content: "\e94b";
+}
+
+.vis-carddialog:before {
+    content: "\e94c";
+}
+
 .vis-cross:before {
     content: "\e944";
 }
@@ -310,8 +342,20 @@
     content: "\e93a";
 }
 
+.vis-stack:before {
+    content: "\e94e";
+}
+
 .vis-ticket:before {
     content: "\e939";
+}
+
+.vis-calculator:before {
+    content: "\e94f";
+}
+
+.vis-address-book:before {
+    content: "\e951";
 }
 
 .vis-location:before {
@@ -320,6 +364,10 @@
 
 .vis-history:before {
     content: "\e94d";
+}
+
+.vis-clock:before {
+    content: "\e950";
 }
 
 .vis-undo2:before {
@@ -346,7 +394,7 @@
     content: "\e975";
 }
 
-.vis-spinner11:before {
+.vis-spinner:before {
     content: "\e984";
 }
 
@@ -366,8 +414,16 @@
     content: "\e994";
 }
 
+.vis-preference:before {
+    content: "\e995";
+}
+
 .vis-stats-dots:before {
     content: "\e99b";
+}
+
+.vis-stats-bars:before {
+    content: "\e99c";
 }
 
 .vis-bin:before {
@@ -378,7 +434,7 @@
     content: "\e9b6";
 }
 
-.vis-clipboard:before {
+.vis-notice:before {
     content: "\e9b8";
 }
 
@@ -396,6 +452,10 @@
 
 .vis-web:before {
     content: "\e9c9";
+}
+
+.vis-link:before {
+    content: "\e9cb";
 }
 
 .vis-attachment1:before {
@@ -430,6 +490,10 @@
     content: "\e9d9";
 }
 
+.vis-warning:before {
+    content: "\ea07";
+}
+
 .vis-help:before {
     content: "\ea09";
 }
@@ -454,12 +518,24 @@
     content: "\ea14";
 }
 
+.vis-loop:before {
+    content: "\ea2d";
+}
+
+.vis-shuffle:before {
+    content: "\ea30";
+}
+
 .vis-multix1:before {
     content: "\ea70";
 }
 
 .vis-multix:before {
     content: "\ea71";
+}
+
+.vis-share:before {
+    content: "\ea7d";
 }
 
 .vis-new-tab:before {

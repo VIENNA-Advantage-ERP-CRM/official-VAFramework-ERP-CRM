@@ -5,17 +5,23 @@
     font-size: 22px;
     font-family: helvetica;
     font-weight: 400;
-    color: white;
+    color: rgba(var(--v-c-on-primary), 1);
 }
-.vis-report-header{
-	width: 100%;
-    background: #1aa0ed;
+.vis-report-header {
+    width: 100%;
+    background: rgba(var(--v-c-primary), 1);
     /*padding: 10px 0px 10px 0px;*/
     float: left;
     padding-left: 10px;
 }
 .vis-report-tittle {
     width: 40%;
+    float: left;
+}
+
+.vis-report-a-r-container {
+    overflow: auto;
+    background: rgba(var(--v-c-primary), 0.5);
     float: left;
 }
 .vis-btn-close {
@@ -103,14 +109,14 @@
 	width:100%;	
 }
 .vis-report-content{ padding:15px;}
-.vis-report-content > h4{
-	color:#1aa0ed;
-	font-size:16px;
-	width:100%;
-	text-align:center;
-	margin:0;
-	padding:0;
-}
+    .vis-report-content > h4 {
+        color: rgba(var(--v-c-primary), 1);
+        font-size: 16px;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
 .vis-report-content-head > div{
 	float:left;
 	width:150px;	

@@ -172,15 +172,17 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
 
 
 .vis-welcomeScreenContentTittle-icon {
-    width: 40px;
-    height: 30px;
-    text-indent: -999999px;
-    display: block;
-    margin: 0px;
-    margin-left: -10px;
-    background: url('../Images/home/top-iconswelcomeScreenTab.png') 0px -28px no-repeat;
-    background-position: 0;
-    background-position-x: 0;
+     /*width: 40px; 
+     height: 30px; 
+     text-indent: -999999px; 
+     display: inline-flex; 
+     margin: 0px; 
+     margin-left: -10px; 
+     background: url(../Images/home/top-iconswelcomeScreenTab.png) 0px -28px no-repeat; 
+     background-position: 0; 
+     background-position-x: 0;*/ 
+    float: left;
+    margin-right: 10px;
 }
 
 
@@ -211,14 +213,18 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
             width: auto;
             min-height: 48px;
             padding: 5px;
-            text-indent: -999999px;
-            display: block;
+            /*text-indent: -999999px;*/
+            display: flex;
             margin: 0px;
-            background: #eeeeee url('../Images/home/icons-welcomeScreenTabs.png') 2000px 200px no-repeat;
+            background: rgba(var(--v-c-secondary), 1);
+            align-items: center;
+            justify-content: center;
+            color: rgba(var(--v-c-on-secondary), 1);
+            font-size: 1.2rem;
         }
 
             .vis-welcomeScreenTabMenu li a:hover {
-                background-color: #eeeeee;
+                /*background-color: #eeeeee;*/
             }
 
                 .vis-welcomeScreenTabMenu li a:hover:before {
@@ -236,7 +242,11 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
 
         .vis-welcomeScreenTabMenu li.vis-activeTab a {
             background-color: rgba(var(--v-c-primary), 1);
+            color: rgba(var(--v-c-on-primary), 1);
         }
+.vis-welcomeScreenTabMenu li a i {
+    pointer-events: none;
+}
 
             .vis-welcomeScreenTabMenu li.vis-activeTab a:before {
                 content: '';
@@ -338,79 +348,79 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userprofile {
-    background-position: 5px -127px;
+    /*background-position: 5px -127px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userfeeds {
-    background-position: 5px -193px;
+    /*background-position: 5px -193px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userfeeds {
-    background-position: 5px -259px;
+    /*background-position: 5px -259px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-useralerts {
-    background-position: 5px -325px;
+    /*background-position: 5px -325px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-useralerts {
-    background-position: 5px -391px;
+    /*background-position: 5px -391px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usercalendar {
-    background-position: 5px -457px;
+    /*background-position: 5px -457px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usercalendar {
-    background-position: 5px -523px;
+    /*background-position: 5px -523px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usertodo {
-    background-position: 5px -589px;
+    /*background-position: 5px -589px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usertodo {
-    background-position: 5px -655px;
+    /*background-position: 5px -655px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userfavourites {
-    background-position: 5px -853px;
+    /*background-position: 5px -853px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userfavourites {
-    background-position: 5px -787px;
+    /*background-position: 5px -787px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userlinks {
-    background-position: 5px -722px;
+    /*background-position: 5px -722px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userlinks {
-    background-position: 5px -919px;
+    /*background-position: 5px -919px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usercontacts {
-    background-position: 5px -985px;
+    /*background-position: 5px -985px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usercontacts {
-    background-position: 5px -1051px;
+    /*background-position: 5px -1051px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usernotes {
-    background-position: 5px -1117px;
+    /*background-position: 5px -1117px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usernotes {
-    background-position: 5px -1183px;
+    /*background-position: 5px -1183px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userdashboard {
-    background-position: 5px -1249px;
+    /*background-position: 5px -1249px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userdashboard {
-    background-position: 5px -1315px;
+    /*background-position: 5px -1315px;*/
 }
 
 /* App Welcome Screen Css Definations END */
@@ -869,6 +879,8 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
 .vis-activityContainer {
     border: 1px solid #e0e0e0;
     margin: 0px 10px 10px 0px;
+    display: flex;
+    flex-direction: column;
 }
 
     .vis-activityContainer .vis-feedDetails {
@@ -1186,13 +1198,12 @@ html[dir="rtl"] .vis-viewMoreComments {
 }
 
 .vis-feedIcons.vis-icon-delete {
-    background-position: 0px -430px;
+    /*background-position: 0px -430px;
     width: 16px;
     height: 16px;
     float: left;
     text-indent: -999999px;
-    /*margin-top: 12px;*/
-    cursor: pointer;
+    cursor: pointer;*/
 }
 
 .activeFeed .vis-feedIcons.vis-icon-delete {
@@ -1621,7 +1632,7 @@ ul.vis-userFavourites-ListMenu li a i {
 
     .vis-scheduleDateTime > h4 {
         font-size: 14px;
-        color: #000;
+        /*color: #000;*/
     }
 
     .vis-scheduleDateTime > p > span {
@@ -1640,7 +1651,7 @@ ul.vis-userFavourites-ListMenu li a i {
 .vis-schedule-feed-text > p {
     font-size: 12px;
     line-height: 20px;
-    color: #666666;
+    /*color: #666666;*/
     display: block;
     word-wrap: break-word;
 }
@@ -3248,12 +3259,12 @@ p.vis-maintain-customer-p span {
 #fllupsScreen .vis-feedTitleBar-buttons i {
     /*font-size: 1rem;*/
 }
-.vis-feedMessage input::-webkit-input-placeholder, .frm-data-col-wrap input::-webkit-input-placeholder {
+/*.vis-feedMessage input::-webkit-input-placeholder, .frm-data-col-wrap input::-webkit-input-placeholder {
     color: rgba(var(--v-c-on-secondary), .7);
 }
 .vis-feedMessage input:-ms-input-placeholder, .frm-data-col-wrap input:-ms-input-placeholder {
     color: rgba(var(--v-c-on-secondary), .7);
-}
+}*/
 .vis-feedTitleBar-buttons ul li a, #fllupsScreen a:hover, .vis-feedicon:hover {
     color: rgba(var(--v-c-on-secondary), .7);
 }
