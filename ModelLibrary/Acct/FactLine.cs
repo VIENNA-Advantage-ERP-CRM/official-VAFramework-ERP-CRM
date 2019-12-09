@@ -1086,8 +1086,8 @@ namespace VAdvantage.Acct
             }
             else if (_doc is Doc_GLJournal)
             {
-                SetAmtAcctDr(Decimal.Multiply(GetAmtSourceDr(), _docLine != null ? Util.GetValueOfDecimal(_docLine.GetConversionRate()) : Util.GetValueOfDecimal(GetConversionRate())));
-                SetAmtAcctCr(Decimal.Multiply(GetAmtSourceCr(), _docLine != null ? Util.GetValueOfDecimal(_docLine.GetConversionRate()) : Util.GetValueOfDecimal(GetConversionRate())));
+                SetAmtAcctDr(Decimal.Round(Decimal.Multiply(GetAmtSourceDr(), _docLine != null ? Util.GetValueOfDecimal(_docLine.GetConversionRate()) : Util.GetValueOfDecimal(GetConversionRate())), _acctSchema.GetStdPrecision()));
+                SetAmtAcctCr(Decimal.Round(Decimal.Multiply(GetAmtSourceCr(), _docLine != null ? Util.GetValueOfDecimal(_docLine.GetConversionRate()) : Util.GetValueOfDecimal(GetConversionRate())), _acctSchema.GetStdPrecision()));
                 return true;
             }
 
