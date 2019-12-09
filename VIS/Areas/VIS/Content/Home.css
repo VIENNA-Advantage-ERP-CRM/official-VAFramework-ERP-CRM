@@ -1589,7 +1589,7 @@ ul.vis-userFavourites-ListMenu li a i {
         }
 
     .vis-schedule-feed-detail .vis-feedDateTime {
-        color: #999999;
+        color: rgba(var(--v-c-on-secondary), .7);
         font-size: 10px;
         text-align: right;
         float: right;
@@ -1597,7 +1597,7 @@ ul.vis-userFavourites-ListMenu li a i {
     }
 
 .vis-schedule-feedDateTime {
-    color: #999999;
+    color: rgba(var(--v-c-on-secondary), .7);
     font-size: 10px;
     text-align: right;
     float: right;
@@ -1619,11 +1619,11 @@ ul.vis-userFavourites-ListMenu li a i {
 
 
 .vis-scheduleDateTime {
-    background: #e8e8e8;
+    background: rgba(var(--v-c-secondary), .7);
     /*margin: -15px 10px -10px -10px;*/
     padding: 5px;
-    min-width: 82px;
-    /*max-width: 82px;*/
+    min-width: 85px;
+    max-width: 85px;
 }
 
     .vis-scheduleDateTime > h4 {
@@ -1639,9 +1639,10 @@ ul.vis-userFavourites-ListMenu li a i {
     }
 
 .vis-schedule-feed-bottom {
-    width: 75%;
-    padding-right: -5px;
+    width: 100%;
+    /*padding-right: -5px;*/
     margin-top: 5px;
+    display: flex;
 }
 
 .vis-schedule-feed-text > p {
@@ -1656,6 +1657,7 @@ ul.vis-userFavourites-ListMenu li a i {
     color: rgba(var(--v-c-primary), 1);
     font-size: 10px;
     text-align: left;
+    flex: 1;
 }
 
 .vis-activityContainer:hover .vis-scheduleDateTime {
@@ -3210,9 +3212,10 @@ p.vis-maintain-customer-p span {
 }
 
 .vis-schedule-feed-text {
-    flex: 1;
+    /*flex: 1;*/
     padding: 5px 10px;
     margin-top: 0px !important; /*added this property temprary to overwrite the inline property because that is in ws module*/
+    width: calc(100% - 85px);
 }
 
 .vis-change-picture-wrap {

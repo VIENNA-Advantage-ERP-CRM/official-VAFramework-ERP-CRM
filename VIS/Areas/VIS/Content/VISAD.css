@@ -4278,7 +4278,7 @@ li.vis-selected-list {
 
 .vis-process-toolbar {
     flex: 1;
-    display: none;
+    /*display: none;*/
 }
 
 .vis-process-outer-main-wrap {

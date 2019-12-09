@@ -22,6 +22,78 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-customize:before {
+    content: "\e958";
+}
+
+.vis-pdf-all .path1:before {
+    content: "\e959";
+    color: rgb(1, 1, 1);
+}
+
+.vis-pdf-all .path2:before {
+    content: "\e95a";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+.vis-pdf-all .path3:before {
+    content: "\e95b";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+.vis-pdf-all .path4:before {
+    content: "\e95c";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+.vis-pdf-all .path5:before {
+    content: "\e95d";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+.vis-archive:before {
+    content: "\e95e";
+}
+
+.vis-format:before {
+    content: "\e95f";
+}
+
+.vis-save-csv:before {
+    content: "\e960";
+}
+
+.vis-save-pdf .path1:before {
+    content: "\e961";
+    color: rgb(1, 1, 1);
+}
+
+.vis-save-pdf .path2:before {
+    content: "\e962";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+.vis-save-pdf .path3:before {
+    content: "\e963";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+.vis-save-pdf .path4:before {
+    content: "\e964";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+
+.vis-csv-all:before {
+    content: "\e965";
+}
+
 .vis-shortcut:before {
     content: "\e957";
 }
@@ -422,6 +494,10 @@
     content: "\e995";
 }
 
+.vis-hammer:before {
+    content: "\e996";
+}
+
 .vis-stats-dots:before {
     content: "\e99b";
 }
@@ -544,4 +620,8 @@
 
 .vis-new-tab:before {
     content: "\ea7e";
+}
+
+.vis-file-pdf:before {
+    content: "\eadf";
 }
