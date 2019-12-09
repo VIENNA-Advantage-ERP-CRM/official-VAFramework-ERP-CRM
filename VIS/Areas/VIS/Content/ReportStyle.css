@@ -5,14 +5,21 @@
     font-size: 22px;
     font-family: helvetica;
     font-weight: 400;
-    color: white;
+    color: rgb(var(--v-c-primary), 1);
+    flex:1;
 }
 .vis-report-header{
 	width: 100%;
-    background: #1aa0ed;
+    /*background: #1aa0ed;*/
     /*padding: 10px 0px 10px 0px;*/
     float: left;
     padding-left: 10px;
+    display:flex;
+}
+
+.vis-report-header-close {
+    order: 3;
+    padding: 0 10px;
 }
 .vis-report-tittle {
     width: 40%;

@@ -74,9 +74,9 @@
             $divOuterMain = $('<div class="vis-process-outer-main-wrap">');
             this.$divDesc = $('<div class="vis-process-description">');
             this.reportContainer = $('<div class="vis-process-result">');
-            this.reportAreaContainer.append(this.$divDesc).append(this.reportContainer);
+            this.reportAreaContainer.append(this.reportToolbar).append(this.$divDesc).append(this.reportContainer);
             $divOuterMain.append(this.parameterContainer).append(this.reportAreaContainer);
-            this.partitionContainer.append(this.reportToolbar).append($divOuterMain);
+            this.partitionContainer.append($divOuterMain);
             this.showParameterClose = false;
         }
         self = this; //self pointer
@@ -113,6 +113,8 @@
             $contentGrid.append(divrptType);
             $contentGrid.append($btnOK).append($btnClose);
             self.$divDesc.append($contentGrid);
+
+            
         }
 
         this.loadFileTypes = function () {
@@ -143,7 +145,7 @@
             });
         };
         initilizedComponent();
-
+        
 
         this.setSize = function (height, width) {
             $busyDiv.height(height);
@@ -158,7 +160,7 @@
         };
 
         //privilized function
-        this.getRoot = function () { return this.$root; };
+        this.getRoot = function () { return $root; };
         this.getContentGrid = function () { return $contentGrid; };
         this.setBusy = function (busy, focus) {
             isLocked = busy;
@@ -271,6 +273,16 @@
         this.getToolbar = function () {
             return this.reportToolbar;
         };
+
+        var additemtoToolbar = function () {
+            var toolbar = $('<div class="vis-ad-w-p-t-close"><i class="fa fa-times"></i></div>');
+            self.reportToolbar.append(toolbar);
+            toolbar.on("click", function () {
+                self.parent.dispose();
+            });
+        };
+
+        additemtoToolbar();
 
         this.showCloseIcon = function (show) {
             if (show) {
@@ -775,7 +787,7 @@
                 btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
                 btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdfALL-ico'></a></li>");
             }
-            toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(VIS.Msg.getMsg("Report")));
+            toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
 
             if (self.toolbarColor) {
                 toolbar.css('background-color', self.toolbarColor);
@@ -783,7 +795,8 @@
 
 
 
-            btnClose = $('<a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose" style="float:right">');
+            // btnClose = $('<a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose" style="float:right">');
+            btnClose = $('<div class="vis-ad-w-p-t-close vis-report-header-close"><i class="fa fa-times"></i></div >');
             actionContainer = $('<div class="vis-report-top-icons" style="float:right;">');
             ulAction = $('<ul style="margin-top: 10px;float:left">');
             btnRF = $("<li><a style='cursor:pointer;margin-top:2px' class='" + self.visRepformatIcons + "'></a></li>");
@@ -796,7 +809,7 @@
                 btnSaveCsv = $("<li><a title='" + VIS.Msg.getMsg("SaveCSVPage") + "' style='cursor:pointer;margin-top:1px' class='" + self.visSaveCsvIcons + "'></a></li>");
                 ulAction.append(btnSaveCsv);
             }
-           
+
             if (pctl.pi.getSupportPaging() && canExport) {
                 ulAction.append(btnSaveCsvAll);
                 for (var d = 1; d < pctl.pi.getTotalPages() + 1; d++) {
@@ -849,7 +862,6 @@
             toolbar.append(actionContainer);
 
             if (self.splitUI) {
-                self.reportToolbar.css('display', 'flex');
                 self.reportToolbar.empty().append(toolbar);
                 self.reportContainer.empty().append(panel.getRoot());
                 if (self.extrnalForm) {
@@ -1085,7 +1097,7 @@
                 panel.setBusy(true);
                 panel.getRightInnerDiv().html("");
                 panel.getRightInnerDiv().width(0);
-               
+
                 if (pctl.pi.dynamicAction && pctl.pi.dynamicAction.length > 0) {
                     loadDynamicReport(pctl.REPORT_TYPE_PDF, $cmbPages.val());
                 }
@@ -1261,7 +1273,7 @@
                     else {
                         pctl.pi.setPageNo(pageNo);
                     }
-                    
+
                 });
                 function getJasperReport(rptExportType, rptPageNo) {
                     pctl.pi.setFileType(rptExportType);
@@ -1364,7 +1376,7 @@
                             data: data,
                             success: function (result) {
                                 var reportUrl = JSON.parse(result);
-                               
+
                                 reportUrl = "TempDownload/" + reportUrl;
                                 bulkDownloadUI(totalPages, reportUrl, bulkdownload, d);
 
@@ -1376,7 +1388,7 @@
                 };
 
                 var getReportData = function (pNoI, tP, bulkdownload) {
-                  
+
                     var queryInfo = [];
                     var query = new VIS.Query(pctl.pi.getPrintFormatTableName());
                     queryInfo.push(query.getTableName());
@@ -1629,7 +1641,7 @@
             });
             btnArchive.on('click', function () {
                 self.archiveDocument(panel, pctl);
-                
+
             });
 
         };
@@ -1708,7 +1720,7 @@
         }
         this.mPanel = panel;
         this.pCtl = pCtl;
-       
+
         this.createUI(panel, pCtl, repObj);
 
         this.parent.hideHeader(true);
