@@ -172,15 +172,17 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
 
 
 .vis-welcomeScreenContentTittle-icon {
-    width: 40px;
-    height: 30px;
-    text-indent: -999999px;
-    display: block;
-    margin: 0px;
-    margin-left: -10px;
-    background: url('../Images/home/top-iconswelcomeScreenTab.png') 0px -28px no-repeat;
-    background-position: 0;
-    background-position-x: 0;
+     /*width: 40px; 
+     height: 30px; 
+     text-indent: -999999px; 
+     display: inline-flex; 
+     margin: 0px; 
+     margin-left: -10px; 
+     background: url(../Images/home/top-iconswelcomeScreenTab.png) 0px -28px no-repeat; 
+     background-position: 0; 
+     background-position-x: 0;*/ 
+    float: left;
+    margin-right: 10px;
 }
 
 
@@ -211,14 +213,18 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
             width: auto;
             min-height: 48px;
             padding: 5px;
-            text-indent: -999999px;
-            display: block;
+            /*text-indent: -999999px;*/
+            display: flex;
             margin: 0px;
-            background: #eeeeee url('../Images/home/icons-welcomeScreenTabs.png') 2000px 200px no-repeat;
+            background: rgba(var(--v-c-secondary), 1);
+            align-items: center;
+            justify-content: center;
+            color: rgba(var(--v-c-on-secondary), 1);
+            font-size: 1.2rem;
         }
 
             .vis-welcomeScreenTabMenu li a:hover {
-                background-color: #eeeeee;
+                /*background-color: #eeeeee;*/
             }
 
                 .vis-welcomeScreenTabMenu li a:hover:before {
@@ -236,7 +242,11 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
 
         .vis-welcomeScreenTabMenu li.vis-activeTab a {
             background-color: rgba(var(--v-c-primary), 1);
+            color: rgba(var(--v-c-on-primary), 1);
         }
+.vis-welcomeScreenTabMenu li a i {
+    pointer-events: none;
+}
 
             .vis-welcomeScreenTabMenu li.vis-activeTab a:before {
                 content: '';
@@ -254,7 +264,7 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
             }
 
             .vis-welcomeScreenTabMenu li.vis-activeTab a:hover {
-                /*background-color: #1aa0ed;*/
+                /*background-color: rgba(var(--v-c-primary), 1);*/
             }
 
                 .vis-welcomeScreenTabMenu li.vis-activeTab a:hover:before {
@@ -338,79 +348,79 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userprofile {
-    background-position: 5px -127px;
+    /*background-position: 5px -127px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userfeeds {
-    background-position: 5px -193px;
+    /*background-position: 5px -193px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userfeeds {
-    background-position: 5px -259px;
+    /*background-position: 5px -259px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-useralerts {
-    background-position: 5px -325px;
+    /*background-position: 5px -325px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-useralerts {
-    background-position: 5px -391px;
+    /*background-position: 5px -391px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usercalendar {
-    background-position: 5px -457px;
+    /*background-position: 5px -457px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usercalendar {
-    background-position: 5px -523px;
+    /*background-position: 5px -523px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usertodo {
-    background-position: 5px -589px;
+    /*background-position: 5px -589px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usertodo {
-    background-position: 5px -655px;
+    /*background-position: 5px -655px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userfavourites {
-    background-position: 5px -853px;
+    /*background-position: 5px -853px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userfavourites {
-    background-position: 5px -787px;
+    /*background-position: 5px -787px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userlinks {
-    background-position: 5px -722px;
+    /*background-position: 5px -722px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userlinks {
-    background-position: 5px -919px;
+    /*background-position: 5px -919px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usercontacts {
-    background-position: 5px -985px;
+    /*background-position: 5px -985px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usercontacts {
-    background-position: 5px -1051px;
+    /*background-position: 5px -1051px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-usernotes {
-    background-position: 5px -1117px;
+    /*background-position: 5px -1117px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-usernotes {
-    background-position: 5px -1183px;
+    /*background-position: 5px -1183px;*/
 }
 
 .vis-welcomeScreenTabMenu .vis-icon-userdashboard {
-    background-position: 5px -1249px;
+    /*background-position: 5px -1249px;*/
 }
 
 .vis-welcomeScreenTabMenu li.vis-activeTab .vis-icon-userdashboard {
-    background-position: 5px -1315px;
+    /*background-position: 5px -1315px;*/
 }
 
 /* App Welcome Screen Css Definations END */
@@ -484,23 +494,25 @@ html[dir="rtl"] .vis-welcomeScreenTabMenu li {
 .vis-workflowActivityContainer {
     background: #f7f4f4;
     border: 1px solid #eeeeee;
-    color: #333333;
+    color: rgba(var(--v-c-on-secondary), 1);
     height: 100%;
     position: relative;
 }
 
 .vis-workflowActivityTitleBar {
-    padding: 0px 10px 0px 10px;
-    display: inline-block;
+    padding: 10px;
+    display: flex;
     width: 100%;
-    background: #1aa0ed;
+    background: rgba(var(--v-c-primary), 1);
+    align-items: center;
 }
 
     .vis-workflowActivityTitleBar h3 {
-        font-size: 14px;
-        color: #ffffff;
-        margin: 15px 0px 10px 0px;
-        float: left;
+        font-size: .875rem;
+        color: rgba(var(--v-c-on-primary), 1);
+        margin: 0;
+        /* float: left; */
+        flex: 1;
     }
 
 html[dir="rtl"] .vis-workflowActivityTitleBar h3 {
@@ -508,8 +520,9 @@ html[dir="rtl"] .vis-workflowActivityTitleBar h3 {
 }
 
 .vis-workflowActivityTitleBar-buttons {
-    float: right;
-    margin-right: -10px;
+    /* float: right; */
+    /* margin-right: -10px; */
+    display: inline-flex;
 }
 
     .vis-workflowActivityTitleBar-buttons ul {
@@ -568,12 +581,12 @@ html[dir="rtl"] .vis-workflowActivityTitleBar-buttons {
         border-radius: 4px;
         margin-top: 11px;
         float: right;*/
-        background-position: 0px -91px;
-        height: 26px;
-        text-indent: -999999px;
-        margin-top: 11px;
-        float: right;
-    }
+    background-position: 0px -91px;
+    height: 26px;
+    text-indent: -999999px;
+    margin-top: 11px;
+    float: right;
+}
 
     .vis-workflowActivityIcons.vis-icon-doneButton {
         /*background-position: 0px -186px;
@@ -610,6 +623,7 @@ html[dir="rtl"] .vis-workflowActivityIcons.vis-icon-doneButton {
     padding: 0px 10px 5px 10px;
     background: #ffffff;
     margin: 0px 5px 5px 5px;
+    width: 100%;
     /*overflow: auto;
     height: 99%;*/
 }
@@ -619,13 +633,19 @@ html[dir="rtl"] .vis-workflowActivityIcons.vis-icon-doneButton {
         padding: 5px;
         margin-bottom: 10px;
     }
-
-    .vis-workflowActivityDetails h3 {
-        font-size: 18px;
-        font-weight: 200px;
-        float: left;
-        color: rgba(var(--v-c-primary), 1);
-    }
+.vis-workflowActivityDetails-Heading {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+.vis-workflowActivityDetails h3 {
+    font-size: 18px;
+    /*font-weight: 200px;*/
+    /* float: left; */
+    color: rgba(var(--v-c-primary), 1);
+    flex: 1;
+    margin: 0;
+}
 
 html[dir="rtl"] .vis-workflowActivityDetails h3 {
     float: right;
@@ -655,25 +675,36 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
 }
 
 .vis-sendMessage {
-    border: 1px solid #eeeeee;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    display: flex;
+    margin-bottom: 10px;
 }
 
     .vis-sendMessage input[type=text] {
         height: 30px;
-        width: 93%;
-        border: 1px solid #eeeeee;
+        /* width: 93%; */
+        border: none;
         padding: 5px;
-        float: left;
+        /* float: left; */
         display: inline-block;
-        /*color: #cccccc;*/
+        /* color: #cccccc; */
+        flex: 1;
+        outline: none;
+    }
+    .vis-sendMessage button {
+        border: none;
+        width: 30px;
+        color: rgba(var(--v-c-on-secondary), 1);
+        outline: none;
+        font-size: 1rem;
     }
 
     .vis-sendMessage input[type=button] {
         width: 30px;
         height: 30px;
         border: none;
-        background-color: #eeeeee;
-        margin-left: -30px;
+        background-color: rgba(var(--v-c-secondary), 1);
+        /*margin-left: -30px;*/
         outline: none;
     }
 
@@ -699,7 +730,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
     text-align: right;
     padding-right: 20px;
     font-size: 12px;
-    color: hsl(0, 0%, 25%);
+    /*color: hsl(0, 0%, 25%);*/
 }
 
 .vis-right-part {
@@ -708,7 +739,7 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
     text-align: left;
     padding-left: 20px;
     font-size: 12px;
-    color: hsl(0, 0%, 25%);
+    /*color: hsl(0, 0%, 25%);*/
 }
 
 .vis-vertical-img {
@@ -848,6 +879,8 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
 .vis-activityContainer {
     border: 1px solid #e0e0e0;
     margin: 0px 10px 10px 0px;
+    display: flex;
+    flex-direction: column;
 }
 
     .vis-activityContainer .vis-feedDetails {
@@ -859,11 +892,11 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
         }
 
     .vis-activityContainer:hover {
-        border-color: #1aa0ed;
+        border-color: rgba(var(--v-c-primary), 1);
     }
 
 .vis-activeFeed {
-    border-color: #1aa0ed;
+    border-color: rgba(var(--v-c-primary), 1);
 }
 
 /* Feeds content title */
@@ -957,6 +990,8 @@ html[dir="rtl"] .userAvatar-Feeds {
     font-size: 12px;
     color: rgba(var(--v-c-on-secondary), 1);
     display: inline;
+    /*padding-left: 10px;*/
+    margin: 0;
     width: 100%;
 }
 
@@ -964,6 +999,7 @@ html[dir="rtl"] .userAvatar-Feeds {
         color: rgba(var(--v-c-primary), 1);
         font-weight: normal;
         cursor: pointer;
+        padding-bottom: 2px;
     }
 
 .vis-feedDetails .vis-feedDateTime {
@@ -1046,6 +1082,7 @@ html[dir="rtl"] .vis-viewMoreComments {
         cursor: pointer;
         font-size: 1rem !important;
         color: rgba(var(--v-c-on-secondary), 1);
+        cursor: pointer;
     }
 
 
@@ -1161,13 +1198,12 @@ html[dir="rtl"] .vis-viewMoreComments {
 }
 
 .vis-feedIcons.vis-icon-delete {
-    background-position: 0px -430px;
+    /*background-position: 0px -430px;
     width: 16px;
     height: 16px;
     float: left;
     text-indent: -999999px;
-    margin-top: 12px;
-    cursor: pointer;
+    cursor: pointer;*/
 }
 
 .activeFeed .vis-feedIcons.vis-icon-delete {
@@ -1251,19 +1287,19 @@ html[dir="rtl"] .vis-viewMoreComments {
     }
 
 .vis-wfSearchIcon {
-    background: url(../Images/WF-Search-show-icon.png) no-repeat center;
+    /*background: url(../Images/WF-Search-show-icon.png) no-repeat center;
     display: block;
     width: 24px;
     height: 24px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc;*/
 }
 
 .vis-wfSearchIconMinus {
-    background: url('../Images/wfSearch-icon-minus.png') no-repeat center;
+    /*background: url('../Images/wfSearch-icon-minus.png') no-repeat center;
     display: block;
     width: 24px;
     height: 24px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc;*/
 }
 
 .vis-wfSearch-btn {
@@ -1273,12 +1309,12 @@ html[dir="rtl"] .vis-viewMoreComments {
 }
 
 .userLinks_inactiveTab .vis-linksIcons.vis-icon-link {
-    background-position: -45px 0px;
+    /*background-position: -45px 0px;
     width: 19px;
     height: 18px;
     float: left;
     margin-top: -2px;
-    margin-right: 5px;
+    margin-right: 5px;*/
 }
 
 .vis-linksIcons.vis-icon-docs {
@@ -1395,6 +1431,16 @@ ul.vis-userLinks-ListMenu, ul.vis-userFavourites-ListMenu {
      height: 110px;
      flex-direction: column;
  }
+
+
+.vis-userLinks-ListMenu li img {
+    width: 54px;
+    height: 63px;
+    margin-bottom: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
 
 html[dir="rtl"] ul.vis-userLinks-ListMenu li {
     float: right;
@@ -1543,7 +1589,7 @@ ul.vis-userFavourites-ListMenu li a i {
         }
 
     .vis-schedule-feed-detail .vis-feedDateTime {
-        color: #999999;
+        color: rgba(var(--v-c-on-secondary), .7);
         font-size: 10px;
         text-align: right;
         float: right;
@@ -1551,7 +1597,7 @@ ul.vis-userFavourites-ListMenu li a i {
     }
 
 .vis-schedule-feedDateTime {
-    color: #999999;
+    color: rgba(var(--v-c-on-secondary), .7);
     font-size: 10px;
     text-align: right;
     float: right;
@@ -1573,16 +1619,16 @@ ul.vis-userFavourites-ListMenu li a i {
 
 
 .vis-scheduleDateTime {
-    background: #e8e8e8;
+    background: rgba(var(--v-c-secondary), .7);
     /*margin: -15px 10px -10px -10px;*/
     padding: 5px;
-    min-width: 82px;
-    /*max-width: 82px;*/
+    min-width: 85px;
+    max-width: 85px;
 }
 
     .vis-scheduleDateTime > h4 {
         font-size: 14px;
-        color: #000;
+        /*color: #000;*/
     }
 
     .vis-scheduleDateTime > p > span {
@@ -1593,15 +1639,16 @@ ul.vis-userFavourites-ListMenu li a i {
     }
 
 .vis-schedule-feed-bottom {
-    width: 75%;
-    padding-right: -5px;
+    width: 100%;
+    /*padding-right: -5px;*/
     margin-top: 5px;
+    display: flex;
 }
 
 .vis-schedule-feed-text > p {
     font-size: 12px;
     line-height: 20px;
-    color: #666666;
+    /*color: #666666;*/
     display: block;
     word-wrap: break-word;
 }
@@ -1610,6 +1657,7 @@ ul.vis-userFavourites-ListMenu li a i {
     color: rgba(var(--v-c-primary), 1);
     font-size: 10px;
     text-align: left;
+    flex: 1;
 }
 
 .vis-activityContainer:hover .vis-scheduleDateTime {
@@ -2826,7 +2874,7 @@ div.consectetur {
 }
 
 div.requestScreen-20 div.vis-activityContainer:hover {
-    border: 1px solid #1aa0ed;
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
 
 div.requestScreen-20 h2 {
@@ -2863,7 +2911,7 @@ div.requestScreen-20 h2 span {
 }
 
 div.requestScreen-20 div.vis-activityContainer:hover {
-    border: 1px solid #1aa0ed;
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
 
 .vis-table-request ul li span {
@@ -2980,7 +3028,7 @@ p.vis-maintain-customer-p span {
 }
 
 .vis-btn-zoom-bg {
-    background: url(../Images/home/zoom-ico2.png) no-repeat;
+    /*background: url(../Images/home/zoom-ico2.png) no-repeat;*/
 }
 
 .vis-btn-done-bg {
@@ -2999,8 +3047,11 @@ p.vis-maintain-customer-p span {
     width: 24px;
     height: 24px;
     float: left;
-    padding-right: 20px;
+    /* padding-right: 20px; */
     margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .vis-status {
@@ -3130,8 +3181,10 @@ p.vis-maintain-customer-p span {
 .frm-select-all-check label {
     font-weight: normal;
     margin: 0;
-    color:#666666;
-    font-size:12px;
+    color: #666666;
+    font-size: 12px;
+    order: 2;
+    padding-left: 5px;
 }
 
 .frm-select-all-check {
@@ -3140,6 +3193,8 @@ p.vis-maintain-customer-p span {
     width: 100%;
     padding-top: 5px;
     padding-left: 8px;
+    display: flex;
+    align-items: center;
 }
 
 /** New changes Migration*/
@@ -3157,9 +3212,10 @@ p.vis-maintain-customer-p span {
 }
 
 .vis-schedule-feed-text {
-    flex: 1;
+    /*flex: 1;*/
     padding: 5px 10px;
     margin-top: 0px !important; /*added this property temprary to overwrite the inline property because that is in ws module*/
+    width: calc(100% - 85px);
 }
 
 .vis-change-picture-wrap {
@@ -3179,6 +3235,9 @@ p.vis-maintain-customer-p span {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    float: left;
+    margin-right: 10px;
 }
 #fllupsScreen h2 span, #favLinks h2 span {
     padding-right: 10px;
@@ -3199,18 +3258,22 @@ p.vis-maintain-customer-p span {
 #fllupsScreen .vis-feedTitleBar-buttons i {
     /*font-size: 1rem;*/
 }
-.vis-feedMessage input::-webkit-input-placeholder, .frm-data-col-wrap input::-webkit-input-placeholder {
+/*.vis-feedMessage input::-webkit-input-placeholder, .frm-data-col-wrap input::-webkit-input-placeholder {
     color: rgba(var(--v-c-on-secondary), .7);
 }
 .vis-feedMessage input:-ms-input-placeholder, .frm-data-col-wrap input:-ms-input-placeholder {
     color: rgba(var(--v-c-on-secondary), .7);
-}
+}*/
 .vis-feedTitleBar-buttons ul li a, #fllupsScreen a:hover, .vis-feedicon:hover {
     color: rgba(var(--v-c-on-secondary), .7);
 }
 ul.vis-userLinks-ListMenu li a i {
     font-size: 3rem;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 63px;
 }
 .vis-favboxtopico {
     display: flex;
@@ -3241,4 +3304,19 @@ ul.vis-userLinks-ListMenu li a i {
 }
 .frm-data-search-wrap:focus-within {
     border: 1px solid rgba(var(--v-c-primary), 1);
+}
+.vis-wforwardwrap {
+    display: flex;
+    margin-bottom: 10px;
+}
+.vis-wforwardwrap input {
+    flex: 1;
+    border-radius: 0;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    outline: none;
+}
+.vis-wforwardwrap button {
+    border-radius: 0;
+    margin-left: -1px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
 }

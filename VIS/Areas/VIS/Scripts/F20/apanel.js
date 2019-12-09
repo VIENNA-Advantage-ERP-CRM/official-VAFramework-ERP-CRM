@@ -155,6 +155,7 @@
             $divIncludeTab = $root.find(".vis-ad-w-p-center-inctab");
 
             $ulRightBar2 = $root.find(".vis-ad-w-p-tb-rc-a-list");
+
             
             $divContentArea = $root.find(".vis-ad-w-p-center-view");
 
@@ -579,13 +580,24 @@
         this.showTabPanel = function (show) {
             if (show) {
                 //$tabpanel.empty();
-                var clsName = 'vis-ad-w-p-actionpanel-r';
-                if (this.curTab.getIsTPBottomAligned()) {
-                    clsName = 'vis-ad-w-p-actionpanel-b';
-                }
-                if (!$tabPanel.hasClass(clsName)) {
+                var clsName = 'vis-ad-w-p-center-flow-';
+                var cls2 = "vis-ad-w-p-actionpanel-";
+                
+                //if (this.curTab.getIsTPBottomAligned()) {
+                //    clsName = "vis-ad-w-p-center-flow-b";
+                //    cls2 = "vis-ad-w-p-actionpanel-b";
+                //}
+
+                var clsSuffix = this.curTab.getIsTPBottomAligned() ? 'b' : 'r';
+                var clsSuffixOld = this.curTab.getIsTPBottomAligned() ? 'r' : 'b';
+               
+                if (!$tabPanel.hasClass(cls2 + clsSuffix)) {
+                    $tabPanel.parent().removeClass(clsName + clsSuffixOld).addClass(
+                        clsName + clsSuffix);
+
                     $tabPanel.removeClass();
-                    $tabPanel.addClass(clsName);
+                    $tabPanel.addClass(cls2 + clsSuffix);
+                    
                 }
 
                 $tabPanel.append(this.curGC.getTabPanel());

@@ -1296,6 +1296,11 @@ html[dir="rtl"] .vis-statusbar-ul > li img {
     display: inline;
     overflow: auto;
 }
+.vis-sms-leftDiv li {
+    font-size: .875rem;
+    border-bottom: 1px solid rgba(var(--v-c-secondary), .1);
+    padding: 10px 0;
+}
 
 html[dir="rtl"] .vis-sms-leftDiv {
     float: right;
@@ -1447,6 +1452,7 @@ html[dir="rtl"] .vis-sms-leftDiv {
 .vis-sms-ContentArea {
     float: left;
     height: 100%;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
 .vis-sms-leftWrap {
@@ -1505,6 +1511,7 @@ html[dir="rtl"] .vis-sms-leftWrap {
     padding-bottom: 10px;
     font-size: 20px;
     font-weight: lighter;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
     .vis-sms-form-data > input:focus, .vis-sms-form-data-extra > input:focus {
@@ -1516,6 +1523,8 @@ html[dir="rtl"] .vis-sms-leftWrap {
     width: 100%;
     float: left;
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
     .vis-sms-leftFooter > input {
@@ -1530,8 +1539,11 @@ html[dir="rtl"] .vis-sms-leftFooter > input {
     font-weight: normal;
     font-size: 12px;
     float: left;
-    margin-top: 2px;
-    margin-left: 10px;
+    margin-bottom: 0;
+    margin-left: 5px;
+}
+.vis-sms-leftFooter > div p {
+    margin-bottom: 0;
 }
 
 html[dir="rtl"] .vis-sms-leftFooter > label {

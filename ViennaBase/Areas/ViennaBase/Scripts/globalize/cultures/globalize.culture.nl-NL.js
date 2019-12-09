@@ -104,7 +104,7 @@ Globalize.addCultureInfo( "nl-NL", "default", {
     "Cancel": "Annuleren",
     "VersionConflict": "Versie Conflict:",
     "VersionInfo": "Server <> Client",
-    "PleaseUpgrade": "Uw Compiere installatie dient te worden bijgewerkt.",
+    "PleaseUpgrade": "Uw Vienna installatie dient te worden bijgewerkt.",
 
     //New Resource
 
