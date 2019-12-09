@@ -144,7 +144,7 @@
                 var divFlewrap = $("<div class='VIS-file-wrap'>");
                 var p = $("<p>" + fileInfo.Name + "</p>");
                 var index = (lstLatestFiles.length) - 1;
-                var closeico = $("<span class='VIS-close-ico mychoice_" + index + "'  data-index='" + index + "'>");
+                var closeico = $("<span class='vis vis-mark VIS-close-ico mychoice_" + index + "'  data-index='" + index + "'>");
 
                 closeico.on('click', function () {
                     var parentValue = $(this).parent();
