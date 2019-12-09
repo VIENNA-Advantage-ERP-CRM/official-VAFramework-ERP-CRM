@@ -22,6 +22,10 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-shortcut:before {
+    content: "\e957";
+}
+
 .vis-contacts:before {
     content: "\e952";
 }
