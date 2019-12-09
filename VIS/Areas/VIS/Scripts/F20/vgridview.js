@@ -158,9 +158,7 @@ function VTable() {
 
         var rec = this.grid.records[index];
         if (!checkRowEditable(index, 0)) {
-
-            rec.style = "background-color:rgba(var(--v-c-secondary), .5)";
-
+            rec.style = "background-color:rgba(var(--v-c-secondary), .7)";
             return;
         }
 
