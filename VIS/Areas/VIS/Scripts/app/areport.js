@@ -6,7 +6,7 @@
   ******************************************************/
 ; (function (VIS, $) {
 
-    var $root = $('<div style="width:100%;height:100%">');//, {
+    var $root = $('<div class="vis-reportrootdiv">');//, {
 
     var $menu = $("<ul class='vis-apanel-rb-ul'  style='width:100%;height:100%'>");
     $root.append($menu);
@@ -253,7 +253,7 @@
     // isPrint,showPaging,totalRecords , PAGE_SIZE
     //these variable will contains value only if grid report bound with printformat insteasd of a reasonable print format
     function ReportViewer(windowNo, curTab, isPrint, showPaging, totalRecords, PAGE_SIZE) {
-        var $root = $("<div style='height:100%;width:100%;'>");
+        var $root = $("<div class='vis-reportrootdiv'>");
         var toolbar = null;
         var btnClose = null;
         var actionContainer = null;
@@ -1171,7 +1171,7 @@
 
             liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-arrow-left" aria-hidden="true" title="Page Up"></i></div></li>');
 
-            cmbPage = $("<select style='height:20px'>");
+            cmbPage = $("<select>");
 
             liCurrPage = $('<li>').append(cmbPage);
 
@@ -1254,8 +1254,8 @@
             }
         }
 
-        var contentPane = $("<div Style='height:" + height + "px;width:" + width + "px;' class='vis-report-a-r-container'>");
-        var subContentPane = $("<div Style='height:" + height + "px;width:" + width + "px;'>");
+        var contentPane = $("<div Style='width:" + width + "px;' class='vis-report-a-r-container'>");
+        var subContentPane = $("<div Style='width:" + width + "px;'>");
         contentPane.append(subContentPane);
         var bsyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
         setBusy(true);
@@ -1560,7 +1560,7 @@
     };
 
     function ReportViewerContainer(reportInfo) {
-        var $root = $('<div style="width:100%;height:100%"> ');
+        var $root = $('<div class="vis-reportrootdiv"> ');
         var bsyDiv = $("<div class='vis-apanel-busy bsyCrsyVwr' style='width:98%;height:98%;position:absolute'>");
         this.getRoot = function () {
             return $root;

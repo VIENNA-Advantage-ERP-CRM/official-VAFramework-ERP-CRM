@@ -1,4 +1,9 @@
-
+.vis-reportrootdiv {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
 
 .vis-report-header h3 {
     margin: 0;
@@ -26,7 +31,8 @@
 .vis-report-a-r-container {
     overflow: auto;
     background: rgba(var(--v-c-primary), 0.5);
-    float: left;
+    /*float: left;*/
+    flex: 1;
 }
 .vis-btn-close {
     width: 3%;
@@ -98,6 +104,7 @@ ul.vis-toppaging li select {
     background-size: 5px 4px, 5px 4px, 1px 1.5em;
     background-repeat: no-repeat;
     color: rgba(var(--v-c-on-secondary),1);
+    outline: none;
 }
 
 ul.vis-toppaging li:nth-child(3) {
@@ -152,7 +159,7 @@ ul.vis-toppaging li:nth-child(3) {
 	float:left;
 	width:100%;	
 }
-.vis-report-content{ padding:15px;}
+/*.vis-report-content{ padding:15px;}*/
     .vis-report-content > h4 {
         color: rgba(var(--v-c-primary), 1);
         font-size: 16px;
