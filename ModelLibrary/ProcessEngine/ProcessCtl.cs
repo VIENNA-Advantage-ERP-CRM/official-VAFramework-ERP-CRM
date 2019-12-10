@@ -747,14 +747,8 @@ namespace VAdvantage.ProcessEngine
                 else if (IsJasperReport)
                 {
                     _pi.SetIsJasperReport(true);
+
                     re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
-                    try
-                    {
-                        int pageSize = Util.GetValueOfInt(ctx.GetContext("#REPORT_PAGE_SIZE")); //500;
-                        _pi.SetTotalPage(_pi.GetTotalPage());
-                        _pi.SetIsSupportPaging(true);
-                    }
-                    catch { }
                 }
                 else if (!IsCrystalReport)
                 {

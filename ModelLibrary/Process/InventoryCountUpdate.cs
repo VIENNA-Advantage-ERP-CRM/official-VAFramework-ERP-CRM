@@ -34,6 +34,8 @@ namespace VAdvantage.Process
         private Boolean _SkipBL = false;
         /** Physical Inventory					*/
         private MInventory inventory = null;
+
+        private bool isContainerApplicable = false;
         /// <summary>
         /// Prepare - e.g., Get Parameters.
         /// </summary>
@@ -62,6 +64,8 @@ namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
+            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+
             log.Info("M_Inventory_ID=" + _m_Inventory_ID);
             inventory = new MInventory(GetCtx(), _m_Inventory_ID, Get_TrxName());
             if (inventory.Get_ID() == 0)
@@ -115,7 +119,7 @@ namespace VAdvantage.Process
             log.Info("Update with ASI =" + no);
 
             //	No ASI
-            int noMA = UpdateWithMA();
+            //int noMA = UpdateWithMA();
 
             //	Set Count to Zero
             if (_inventoryCountSetZero)
@@ -186,14 +190,27 @@ namespace VAdvantage.Process
                 //                }
 
                 // Work done by Bharat on 26/12/2016 for optimization
-
-                sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
+                if (isContainerApplicable)
+                {
+                    sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
+                nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID,
+                SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM M_Transaction t
+                INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
+                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @" GROUP BY t.M_Locator_ID, t.M_Product_ID,
+                t.M_AttributeSetInstance_ID , M_ProductContainer_ID) mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
+                AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) 
+                WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
+                }
+                else
+                {
+                    sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, 
                 SUM(t.CurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + " AND l.AD_Org_ID = " + inventory.GetAD_Org_ID() + @" GROUP BY t.M_Locator_ID, t.M_Product_ID,
+                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @" GROUP BY t.M_Locator_ID, t.M_Product_ID,
                 t.M_AttributeSetInstance_ID) mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
                 AND m.M_Locator_ID = mt.M_Locator_ID WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
+                }
 
                 int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InventoryLine_ID) FROM ( " + sql + " )", null, null));
                 int pageSize = 500;
@@ -293,7 +310,7 @@ namespace VAdvantage.Process
 
             }
             if (multiple > 0)
-                return "@M_InventoryLine_ID@ - #" + (no + noMA) + " --> @InventoryProductMultiple@";
+                return "@M_InventoryLine_ID@ - #" + no + " --> @InventoryProductMultiple@";
 
             //return "@M_InventoryLine_ID@ - #" + (no + noMA);
             return "Physical Inventory Updated";

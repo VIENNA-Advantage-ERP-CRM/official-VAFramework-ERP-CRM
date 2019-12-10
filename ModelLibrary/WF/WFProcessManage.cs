@@ -75,7 +75,19 @@ namespace VAdvantage.WF
                 process.SetTextMsg(msg);
                 process.SetAD_User_ID(GetAD_User_ID());
                 process.SetWFState(StateEngine.STATE_ABORTED);
+
+                //JID_0278 : To mark processing checkbox false.
+                // Mohit 
+                // Date : 22 May 2019
+                MTable table = new MTable(GetCtx(), process.GetAD_Table_ID(), null);
+                PO po = MTable.GetPO(GetCtx(), table.GetTableName(), process.GetRecord_ID(), Get_Trx());
+                if (po != null && po.Get_ColumnIndex("Processing") >= 0)
+                {
+                    po.Set_Value("Processing", false);
+                    po.Save();
+                }
                 return msg;
+
             }
 
             //	Change User

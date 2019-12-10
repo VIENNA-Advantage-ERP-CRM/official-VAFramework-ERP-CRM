@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MProductCategoryController:Controller
+    public class MProductCategoryController : Controller
     {
         public ActionResult Index()
         {
@@ -19,14 +19,27 @@ namespace VIS.Controllers
 
         public JsonResult GetProductCategory(string fields)
         {
-            
+
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MProductCategoryModel objProductCategory = new MProductCategoryModel();
-                retJSON = JsonConvert.SerializeObject(objProductCategory.GetProductCategory(ctx,fields));
-            }         
+                retJSON = JsonConvert.SerializeObject(objProductCategory.GetProductCategory(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+        // Added by Bharat on 11/May/2017
+        public JsonResult GetCategoryData(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MProductCategoryModel objProductCategory = new MProductCategoryModel();
+                retJSON = JsonConvert.SerializeObject(objProductCategory.GetCategoryData(ctx, fields));
+            }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
     }

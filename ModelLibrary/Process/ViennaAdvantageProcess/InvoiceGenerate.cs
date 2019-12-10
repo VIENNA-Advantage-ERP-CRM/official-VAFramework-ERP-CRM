@@ -231,36 +231,37 @@ namespace ViennaAdvantage.Process
                         }
                     }
                 }
-                else
+                // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
+                else if (bp.GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
                     MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetC_BPartner_Location_ID(), null);
                     //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
-                    if (bpl.GetCreditStatusSettingOn() == "CL")
+                    //if (bpl.GetCreditStatusSettingOn() == "CL")
+                    //{
+                    decimal creditLimit = bpl.GetSO_CreditLimit();
+                    string creditVal = bpl.GetCreditValidation();
+                    if (creditLimit != 0)
                     {
-                        decimal creditLimit = bpl.GetSO_CreditLimit();
-                        string creditVal = bpl.GetCreditValidation();
-                        if (creditLimit != 0)
+                        decimal creditAvlb = creditLimit - bpl.GetSO_CreditUsed();
+                        if (creditAvlb <= 0)
                         {
-                            decimal creditAvlb = creditLimit - bpl.GetSO_CreditUsed();
-                            if (creditAvlb <= 0)
+                            if (creditVal == "C" || creditVal == "D" || creditVal == "F")
                             {
-                                if (creditVal == "C" || creditVal == "D" || creditVal == "F")
+                                AddLog(Msg.GetMsg(GetCtx(), "StopInvoice") + bp.GetName() + " " + bpl.GetName());
+                                continue;
+                            }
+                            else if (creditVal == "I" || creditVal == "J" || creditVal == "L")
+                            {
+                                if (_msg != null)
                                 {
-                                    AddLog(Msg.GetMsg(GetCtx(), "StopInvoice") + bp.GetName() + " " + bpl.GetName());
-                                    continue;
+                                    _msg.Clear();
                                 }
-                                else if (creditVal == "I" || creditVal == "J" || creditVal == "L")
-                                {
-                                    if (_msg != null)
-                                    {
-                                        _msg.Clear();
-                                    }
-                                    _msg.Append(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
-                                    //AddLog(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
-                                }
+                                _msg.Append(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
+                                //AddLog(Msg.GetMsg(GetCtx(), "WarningInvoice") + bp.GetName() + " " + bpl.GetName());
                             }
                         }
                     }
+                    //}
                 }
                 // Credit Limit End
 

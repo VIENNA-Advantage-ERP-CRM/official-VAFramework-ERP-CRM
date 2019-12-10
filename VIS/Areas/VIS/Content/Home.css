@@ -1448,6 +1448,7 @@ html[dir="rtl"] ul.vis-userLinks-ListMenu li {
 
 ul.vis-userLinks-ListMenu li a {
     display: block;
+    text-align: center;
 }
 
 ul.vis-userLinks-ListMenu li:last-child {

@@ -72,6 +72,7 @@ namespace VAdvantage.Process
                                        C_UOM_ID , PLANNEDQTY , M_WAREHOUSE_ID FROM M_ProductionLine 
                                        WHERE IsActive = 'Y' AND M_PRODUCTION_ID = " + M_Production_ID, null, Get_Trx());
 
+
                 // Create New record of Production Header with Reverse Entry
                 X_M_Production productionTo = new X_M_Production(production.GetCtx(), 0, production.Get_Trx());
                 try
@@ -144,7 +145,7 @@ namespace VAdvantage.Process
                                                         toProdline.SetM_ProductionPlan_ID(toProdPlan.GetM_ProductionPlan_ID());
                                                         toProdline.SetReversalDoc_ID(fromProdline.GetM_ProductionLine_ID()); //maintain refernce of Orignal record on reversed record
                                                         toProdline.SetProcessed(false);
-                                                        if (!CheckQtyAvailablity(GetCtx(), toProdline.GetM_Warehouse_ID(), toProdline.GetM_Locator_ID(), toProdline.GetM_Product_ID(), toProdline.GetM_AttributeSetInstance_ID(), toProdline.GetMovementQty(), Get_Trx()))
+                                                        if (!CheckQtyAvailablity(GetCtx(), toProdline.GetM_Warehouse_ID(), toProdline.GetM_Locator_ID(), toProdline.GetM_ProductContainer_ID(), toProdline.GetM_Product_ID(), toProdline.GetM_AttributeSetInstance_ID(), toProdline.GetMovementQty(), Get_Trx()))
                                                         {
                                                             production.Get_Trx().Rollback();
                                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -159,6 +160,20 @@ namespace VAdvantage.Process
                                                             ValueNamePair pp = VLogger.RetrieveError();
                                                             _log.Log(Level.SEVERE, "Could Not create Production Line reverse entry. ERRor Value : " + pp.GetValue() + "ERROR NAME : " + pp.GetName());
                                                             throw new Exception("Could not create Production line reverse entry");
+                                                        }
+                                                        else
+                                                        {
+                                                            // Create New record of Production line Policy (Material Policy) with Reverse Entry
+                                                            sql.Clear();
+                                                            sql.Append(@"INSERT INTO M_ProductionLineMA 
+                                                                  (  AD_CLIENT_ID, AD_ORG_ID , CREATED , CREATEDBY , ISACTIVE , UPDATED , UPDATEDBY ,
+                                                                    M_PRODUCTIONLINE_ID , M_ATTRIBUTESETINSTANCE_ID , MMPOLICYDATE , M_PRODUCTCONTAINER_ID, MOVEMENTQTY )
+                                                                  (SELECT AD_CLIENT_ID, AD_ORG_ID , sysdate , CREATEDBY , ISACTIVE , sysdate , UPDATEDBY ,
+                                                                      " + toProdline.GetM_ProductionLine_ID() + @" , M_ATTRIBUTESETINSTANCE_ID , MMPOLICYDATE , M_PRODUCTCONTAINER_ID,  -1 * MOVEMENTQTY
+                                                                    FROM M_ProductionLineMA  WHERE M_ProductionLine_ID = " + fromProdline.GetM_ProductionLine_ID() + @" ) ");
+                                                            int no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx());
+                                                            _log.Info("No of records saved on Meterial Policy against Production line ID : " + toProdline.GetM_ProductionLine_ID() + " are : " + no);
+
                                                         }
                                                     }
                                                     catch (Exception ex)
@@ -237,7 +252,7 @@ namespace VAdvantage.Process
         /// <param name="MovementQty">qty to be impacted</param>
         /// <param name="trxName">system transaction</param>
         /// <returns>TRUE/False</returns>
-        private bool CheckQtyAvailablity(Ctx ctx, int M_Warehouse_ID, int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID, Decimal? MovementQty, Trx trxName)
+        private bool CheckQtyAvailablity(Ctx ctx, int M_Warehouse_ID, int M_Locator_ID, int M_ProductContainer_ID, int M_Product_ID, int M_AttributeSetInstance_ID, Decimal? MovementQty, Trx trxName)
         {
             MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
             MProduct product = null;
@@ -246,6 +261,10 @@ namespace VAdvantage.Process
                 product = MProduct.Get(ctx, M_Product_ID);
                 string qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + M_Locator_ID + @" and m_product_id=" + M_Product_ID;
                 qry += " AND NVL(M_AttributeSetInstance_ID, 0) =" + M_AttributeSetInstance_ID;
+                if (M_ProductContainer_ID > 0)
+                {
+                    qry += " AND M_ProductContainer_ID = " + M_ProductContainer_ID;
+                }
                 Decimal? OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry, null, trxName));
                 if (OnHandQty + MovementQty < 0)
                 {

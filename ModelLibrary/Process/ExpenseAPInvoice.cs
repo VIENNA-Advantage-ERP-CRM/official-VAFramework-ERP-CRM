@@ -186,8 +186,8 @@ namespace VAdvantage.Process
                         invoice.SetDescription(descr);
                         if (!invoice.Save())
                         {
-                            //return GetReterivedError(invoice, "Cannot save Invoice");
-                            new Exception("Cannot save Invoice");
+                            return GetRetrievedError(invoice, "Cannot save Invoice");
+                            // new Exception("Cannot save Invoice"); 
                         }
                         //added by arpit asked by Surya Sir on 29/12/2015*******
                         else
@@ -232,8 +232,8 @@ namespace VAdvantage.Process
                         }
                         if (!invoice.Save())
                         {
-                            //return GetReterivedError(invoice, "Cannot save Invoice");
-                            new Exception("Cannot save Invoice");
+                            return GetRetrievedError(invoice, "Cannot save Invoice");
+                            //new Exception("Cannot save Invoice");
                         }
 
                         //	Create OrderLine
@@ -267,8 +267,8 @@ namespace VAdvantage.Process
                         il.SetTax();
                         if (!il.Save())
                         {
-                            //return GetReterivedError(il, "Cannot save Invoice");
-                            new Exception("Cannot save Invoice Line");
+                            return GetRetrievedError(il, "Cannot save Invoice");
+                            //new Exception("Cannot save Invoice Line");
                         }
                         //	Update TEL
                         line.SetC_InvoiceLine_ID(il.GetC_InvoiceLine_ID());

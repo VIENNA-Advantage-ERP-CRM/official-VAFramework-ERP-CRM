@@ -3,6 +3,47 @@
 
     var isoDateRegx = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})/;
     var Level = VIS.Logging.Level;
+    var baseUrl = VIS.Application.contextUrl;
+    var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
+    var executeReader = function (sql, param, callback, isEncrypt) {
+        var async = callback ? true : false;
+
+        var dataIn = { sql: sql, page: 1, pageSize: 0 };
+        if (param) {
+            dataIn.param = param;
+        }
+        var dr = null;
+        getDataSetJString(dataIn, async, function (jString) {
+            dr = new VIS.DB.DataReader().toJson(jString);
+            if (callback) {
+                callback(dr);
+            }
+        }, isEncrypt);
+        return dr;
+    };
+
+    //DataSet String
+    function getDataSetJString(data, async, callback, isEncrypt) {
+        var result = null;
+        //if (isEncrypt) {
+        //    data.sql = VIS.secureEngine.encrypt(data.sql);
+        //}
+        $.ajax({
+            url: dataSetUrl,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            async: async,
+            data: JSON.stringify(data)
+        }).done(function (json) {
+            result = json;
+            if (callback) {
+                callback(json);
+            }
+            //return result;
+        });
+        return result;
+    };
 
     /**
      *	Expression Evaluator
@@ -127,7 +168,7 @@
             //	Second Part
             var second = st.nextToken();							//	get value
             var secondEval = second.trim();
-            if (second.indexOf('@') != -1 && second[0] == '@' && second[second.length-1] == '@') {
+            if (second.indexOf('@') != -1 && second[0] == '@' && second[second.length - 1] == '@') {
                 second = second.replaceAll('@', ' ').trim();			// strip tag
                 //secondEval = source.get_ValueAsString(second);		//	replace with it's value
                 secondEval = source.getValueAsString(second);		//	replace with it's value
@@ -452,6 +493,20 @@
         /// <returns></returns>
         return this.list.length;
     };
+
+    VIS.Query.prototype.getRestrictions = function () {
+        /// <summary>
+        ///Get VIS.Query Restriction Count
+        /// </summary>
+        /// <returns></returns>
+        return this.list;
+    };
+
+    VIS.Query.prototype.copyRestrictions = function (arrRes) {
+       // for (var i = 0, j = arrRes; i < j; i++)
+            this.list =this.list.concat(arrRes);
+    };
+
 
     VIS.Query.prototype.addRangeRestriction = function () {
 
@@ -1317,15 +1372,16 @@
             // END hard code for Zooming into Production resource.
 
             // Find windows where the first tab is based on the table
-            var sql = "SELECT DISTINCT AD_Window_ID, PO_Window_ID "
-                + "FROM AD_Table t "
-                + "WHERE TableName = '" + targetTableName + "'";
+            var sql = "VIS_78";
+
+            var param = [];
+            param[0] = new VIS.DB.SqlParam("@targetTableName", targetTableName);
 
             var dr = null;
             try {
                 var index = 1;
 
-                dr = VIS.DB.executeDataReader(sql);
+                dr = executeReader(sql, param);
 
                 if (dr.read()) {
                     zoomWindow_ID = dr.getInt(0);
@@ -1350,12 +1406,18 @@
                 if (ind != -1)
                     ParentTable = targetTableName.substring(0, ind);
                 if (ParentTable != null) {
-                    var sql3 = " SELECT p.IsSOTrx FROM " +
-                                 ParentTable + " p, " + targetTableName + " c " +
-                                 " WHERE " + targetWhereClause +
-                                 " AND p." + ParentTable + "_ID = c." + ParentTable + "_ID";
+                    var sql3 = "VIS_79";
+
+                    var param = [];
+                    param[0] = new VIS.DB.SqlParam("@ParentTable", ParentTable);
+                    param[1] = new VIS.DB.SqlParam("@targetTableName", targetTableName);
+                    param[2] = new VIS.DB.SqlParam("@targetWhereClause", targetWhereClause);
+                    param[3] = new VIS.DB.SqlParam("@ParentTable1", ParentTable);
+                    param[4] = new VIS.DB.SqlParam("@ParentTable2", ParentTable);
+
+
                     try {
-                        dr = VIS.DB.executeDataReader(sql3);
+                        dr = executeReader(sql3, param);
 
                         if (dr.read())
                             isSOTrx = dr.getString(0).equals("Y");
@@ -1525,12 +1587,11 @@
             var WorkCenterCostWindowID = 0;
             var ProductionResourceWindowID = 0;
 
-            var sql11 = " SELECT AD_Window_ID, Name FROM AD_Window WHERE Name LIKE 'Work Center%' "
-                         + " OR NAME LIKE 'Production Resource'";
+            var sql11 = "VIS_80";
 
             var dr = null;
             try {
-                dr = VIS.DB.executeDataReader(sql11);
+                dr = executeReader(sql11);
                 while (dr.read()) {
                     var windowID = dr.getInt(0);
                     var windowName = dr.getString(1);
@@ -1563,41 +1624,52 @@
             /** End Hard Code for product and work center window */
 
             // Find windows where the first tab is based on the table
-            var sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-                    "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
-                + "FROM AD_Table t "
-                + "INNER JOIN AD_Tab tt ON (tt.AD_Table_ID = t.AD_Table_ID) ";
-            var baseLanguage = VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "AD_Window");
-            if (baseLanguage) {
-                sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-                sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-                    + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
-            }
-            else {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language=@para1)";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language=@para2)"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language=@para3)";
-            }
-            sql += "WHERE t.TableName = @para4"
-                + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
-                + " AND tt.SeqNo=10"
-                + " AND (wp.AD_Window_ID IS NOT NULL "
-                        + "OR EXISTS (SELECT 1 FROM AD_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.AD_Table_ID=t.AD_Table_ID AND tt2.SeqNo=10))"
-                + " ORDER BY 2";
+            //var sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
+            //        "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
+            //    + "FROM AD_Table t "
+            //    + "INNER JOIN AD_Tab tt ON (tt.AD_Table_ID = t.AD_Table_ID) ";
+            //var baseLanguage = VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "AD_Window");
+            //if (baseLanguage) {
+            //    sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
+            //    sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
+            //        + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+            //}
+            //else {
+            //    sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language=@para1)";
+            //    sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language=@para2)"
+            //        + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language=@para3)";
+            //}
+            //sql += "WHERE t.TableName = @para4"
+            //    + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
+            //    + " AND tt.SeqNo=10"
+            //    + " AND (wp.AD_Window_ID IS NOT NULL "
+            //            + "OR EXISTS (SELECT 1 FROM AD_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.AD_Table_ID=t.AD_Table_ID AND tt2.SeqNo=10))"
+            //    + " ORDER BY 2";
 
             try {
-                var params = [];
-                index = 1;
-                if (!baseLanguage) {
-                    params.push(new VIS.SqlParam("@para1", VIS.Env.getAD_Language(VIS.Env.getCtx())));
-                    params.push(new VIS.SqlParam("@para2", VIS.Env.getAD_Language(VIS.Env.getCtx())));
-                    params.push(new VIS.SqlParam("@para3", VIS.Env.getAD_Language(VIS.Env.getCtx())));
-                }
+                //var params = [];
+                //index = 1;
+                //if (!baseLanguage) {
+                //    params.push(new VIS.SqlParam("@para1", VIS.Env.getAD_Language(VIS.Env.getCtx())));
+                //    params.push(new VIS.SqlParam("@para2", VIS.Env.getAD_Language(VIS.Env.getCtx())));
+                //    params.push(new VIS.SqlParam("@para3", VIS.Env.getAD_Language(VIS.Env.getCtx())));
+                //}
 
-                params.push(new VIS.DB.SqlParam("@para4", targetTableName));
-                params.push(new VIS.DB.SqlParam("@para5", curWindow_ID));
+                //params.push(new VIS.DB.SqlParam("@para4", targetTableName));
+                //params.push(new VIS.DB.SqlParam("@para5", curWindow_ID));
 
-                dr = VIS.DB.executeDataReader(sql, params);
+                //dr = executeReader(sql, params);
+
+                var dr = null;
+                $.ajax({
+                    type: 'Get',
+                    async: false,
+                    url: VIS.Application.contextUrl + "Form/GetZoomTargetClass",
+                    data: { targetTableName: targetTableName, curWindow_ID: curWindow_ID },
+                    success: function (data) {
+                        dr = new VIS.DB.DataReader().toJson(data)
+                    },
+                });
 
                 while (dr.read()) {
                     windowFound = true;
@@ -1659,8 +1731,24 @@
 
             var columnValues = [];
             try {
-                //pstmt = VIS.DB.prepareStatement(sql1, (Trx) null);
-                dr = VIS.DB.executeDataReader(sql1);
+               
+
+                var dr = null;
+                $.ajax({
+                    type: 'Get',
+                    async: false,
+                    url: VIS.Application.contextUrl + "Form/GetZoomWhereClause",
+                    data: { sql: VIS.secureEngine.encrypt(sql1) },
+                    success: function (data) {
+                        dr = new VIS.DB.DataReader().toJson(data)
+                    },
+                });
+
+
+              //  dr = executeReader(sql1, null, null, true);
+
+
+
                 while (dr.read()) {
                     if (columns.length > 0) {
                         columnValues.length = 0;

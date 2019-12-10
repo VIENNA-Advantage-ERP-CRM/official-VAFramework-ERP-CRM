@@ -52,7 +52,7 @@ public static String BALANCEACCUMULATION_PeriodOfAViennaCalendar = "P";/** Calen
 public static String BALANCEACCUMULATION_CalendarWeek = "W";/** Is test a valid value.
 @param test testvalue
 @returns true if valid **/
-public bool IsBALANCEACCUMULATIONValid (String test){return test == null || test.Equals("D") || test.Equals("M") || test.Equals("P") || test.Equals("W");}/** Set BALANCEACCUMULATION.
+        public bool IsBALANCEACCUMULATIONValid (String test){return test == null || test.Equals("D") || test.Equals("M") || test.Equals("P") || test.Equals("W");}/** Set BALANCEACCUMULATION.
 @param BALANCEACCUMULATION BALANCEACCUMULATION */
 public void SetBALANCEACCUMULATION (String BALANCEACCUMULATION){if (!IsBALANCEACCUMULATIONValid(BALANCEACCUMULATION))
 throw new ArgumentException ("BALANCEACCUMULATION Invalid value - " + BALANCEACCUMULATION + " - Reference_ID=1000073 - D - M - P - W");if (BALANCEACCUMULATION != null && BALANCEACCUMULATION.Length > 1){log.Warning("Length > 1 - truncated");BALANCEACCUMULATION = BALANCEACCUMULATION.Substring(0,1);}Set_Value ("BALANCEACCUMULATION", BALANCEACCUMULATION);}/** Get BALANCEACCUMULATION.

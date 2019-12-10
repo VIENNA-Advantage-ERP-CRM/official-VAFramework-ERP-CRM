@@ -201,15 +201,15 @@ namespace VIS.Models
             /********************
              *  GL Journal
              */
-            //else if (AD_Table_ID == MJournal.Table_ID || AD_Table_ID == MJournalBatch.Table_ID)
-            //{
-            //    //	Complete                    ..  CO
-            //    if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
-            //    {
-            //        options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
-            //        options[index++] = DocumentEngine.ACTION_REVERSE_ACCRUAL;
-            //    }
-            //}
+            else if (AD_Table_ID == MJournal.Table_ID || AD_Table_ID == MJournalBatch.Table_ID)
+            {
+                //	Complete                    ..  CO
+                if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
+                {
+                    options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
+                    //options[index++] = DocumentEngine.ACTION_REVERSE_ACCRUAL;
+                }
+            }
             /********************
              *  Allocation
              */
@@ -368,24 +368,30 @@ namespace VIS.Models
             if (docAction.Equals("--"))		//	If None, suggest closing
                 docAction = DocumentEngine.ACTION_CLOSE;
 
-
-
-
-            //if (C_DocType_ID == 0)
+            // check applied to display Document Actions on Transactions based on the document type
+            // and the setting "Check Document Action Access" on Role window
+            //int C_DocType_ID = 0;
+            //int C_DocTypeTarget_ID = 0;
+            //MTable table = MTable.Get(ctx, AD_Table_ID);
+            //PO po = table.GetPO(ctx, Record_ID, null);
+            //if (Util.GetValueOfInt(po.Get_Value("C_DocType_ID")) > 0)
             //{
+            //    C_DocType_ID = Util.GetValueOfInt(po.Get_Value("C_DocType_ID"));
+            //}
+            //if (Util.GetValueOfInt(po.Get_Value("C_DocTypeTarget_ID")) > 0)
+            //{
+            //    C_DocTypeTarget_ID = Util.GetValueOfInt(po.Get_Value("C_DocTypeTarget_ID"));
             //    C_DocType_ID = C_DocTypeTarget_ID;
             //}
 
             //if (C_DocType_ID != null && C_DocType_ID > 0)
             //{
             //    String[] docActionHolder = new String[] { docAction };
-            //    MTable table = MTable.Get(ctx, AD_Table_ID);
-            //    PO po = table.GetPO(ctx, Record_ID, null);
             //    if (po is DocOptions)
             //        index = ((DocOptions)po).customizeValidActions(docStatus, processing, orderType, isSOTrx ? "Y" : "N",
             //                AD_Table_ID, docActionHolder, options, index);
 
-            //    //   options = DocumentEngine.checkActionAccess(ctx, ctx.GetAD_Client_ID(), ctx.GetAD_Role_ID(), C_DocType_ID, options, ref index);
+            //    options = DocumentEngine.checkActionAccess(ctx, ctx.GetAD_Client_ID(), ctx.GetAD_Role_ID(), C_DocType_ID, options, ref index);
             //}
 
             for (int i = 0; i < _values.Count() && defaultV.Equals(""); i++)

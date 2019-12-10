@@ -1619,6 +1619,10 @@
                 AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
             }
 
+            // No target record to be zoomed - then zoom querry set null to show all records.
+            if (value == null || value == -1) {
+                zoomQuery = null;
+            }
 
 
             //
@@ -2873,7 +2877,10 @@
 
 
                     $ctrl.closest('td').nextAll().children('input,select,textarea,button').focus();
-
+                    // change by mohit to refresh the grid if resfresh ui status sent true from info window.
+                    if (InfoWindow.constructor.name == "infoProduct" && InfoWindow.getRefreshStatus()) {
+                        self.fireRefreshUI();
+                    }
                     return;
                 }
 
@@ -4231,6 +4238,9 @@
                 changed = true;
                 M_AttributeSetInstance_ID = 0;
                 setValueInControl(M_AttributeSetInstance_ID);
+
+                // JID_0898: Need to show the Info message when no attribute set is defined on product or having exclude entry for this table.
+                VIS.ADialog.info("VIS_PAttributeNotFound", null, null, null);
             }
             else {
                 var obj = new VIS.PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, self.C_BPartner_ID, productWindow, self.AD_Column_ID, windowNop);
@@ -5319,7 +5329,7 @@
 
             if (this.defaultValue) {
                 self.defaultValue = self.defaultValue.replace(/@/g, "").trim().replace(".value", "");
-                dValue = VIS.Env.getCtx().getContextAsInt(windowNo, self.defaultValue, false);
+                dValue = VIS.Env.getCtx().getWindowContext(windowNo, self.defaultValue, false);
             }
 
             self.oldValue = self.value;

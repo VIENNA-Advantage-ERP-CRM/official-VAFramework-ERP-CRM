@@ -180,7 +180,7 @@
 
         function getEntity() {
             try {
-                var strQuery = "select ad_entitytype_id, entitytype, name from ad_entitytype";
+                var strQuery = "VIS_130";
                 var dr = executeReader(strQuery, null, null);
                 while (dr.read()) {
 

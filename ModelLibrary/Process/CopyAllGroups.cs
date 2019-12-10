@@ -55,7 +55,8 @@ namespace VAdvantage.Process
                                 AcctSubGroup.SetLine(Util.GetValueOfString(dr1["LINE"]));
                                 if (!AcctSubGroup.Save())
                                 {
-                                    return Msg.GetMsg(GetCtx(), "Lines not generated");
+                                    return GetRetrievedError(AcctSubGroup, "Lines not generated");
+                                   /// return Msg.GetMsg(GetCtx(), "Lines not generated");
                                 }
                             }
                         }

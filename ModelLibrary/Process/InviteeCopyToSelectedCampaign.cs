@@ -99,7 +99,8 @@ namespace VAdvantage.Process
                         //invi.setIsPurchased(Util.GetValueOfBool(ds.Tables[0].Rows[0]["IsPurchased"]));
                         if (!invi.Save())
                         {
-                            return Msg.GetMsg(GetCtx(), "DatanotSaved");
+                            return GetRetrievedError(invi, "DatanotSaved");
+                            //return Msg.GetMsg(GetCtx(), "DatanotSaved");
                             //return " DatanotSaved ";
 
                         }

@@ -104,6 +104,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>LibDll\IKVM.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp, Version=4.1.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>LibDll\itextsharp.dll</HintPath>
@@ -644,6 +648,7 @@
     <Content Include="Areas\VIS\Scripts\app\favouritehelper.js" />
     <Content Include="Areas\VIS\Scripts\app\formframe.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\acctviewer.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\acctviewermenu.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\productContainerTree.js" />
@@ -808,6 +813,7 @@
     <Compile Include="Areas\VIS\Controllers\FormController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenerateXModelController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenralAttributeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\GlJournalController.cs" />
     <Compile Include="Areas\VIS\Controllers\Group\GmailContactsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Group\GroupController.cs" />
     <Compile Include="Areas\VIS\Controllers\HomeController.cs" />
@@ -824,6 +830,7 @@
     <Compile Include="Areas\VIS\Controllers\OrderController.cs" />
     <Compile Include="Areas\VIS\Controllers\PAttributesController.cs" />
     <Compile Include="Areas\VIS\Controllers\PaymentAllocationController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PaymentController.cs" />
     <Compile Include="Areas\VIS\Controllers\PaymentRuleController.cs" />
     <Compile Include="Areas\VIS\Controllers\PostingController.cs" />
     <Compile Include="Areas\VIS\Controllers\ProductContainerController.cs" />
@@ -873,6 +880,7 @@
     <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
     <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
+    <Compile Include="Areas\VIS\Models\CalloutPaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MAcctSchemaModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MBankStatementModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MBPartnerModel.cs" />
@@ -959,18 +967,10 @@
     <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.designer.cs">
       <DependentUpon>CreateUser.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.cs">
-      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.designer.cs">
-      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
-    <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
     <Content Include="LibDll\DotNetOpenAuth.dll" />
     <Content Include="LibDll\Google.Apis.Authentication.OAuth2.dll" />
     <Content Include="LibDll\Google.Apis.Calendar.v3.dll" />

@@ -49,6 +49,9 @@ namespace VAdvantage.Model
         private int I_Order_ID = 0;
 
         private bool _fromProcess = false;
+
+        /** is Closed Document*/
+        private bool isClosed = false;
         #endregion
 
         /// <summary>
@@ -353,7 +356,7 @@ namespace VAdvantage.Model
             string sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + inv.GetAD_Org_ID() + " AND IsActive ='Y' AND AD_Client_ID =" + GetCtx().GetAD_Client_ID();
             if (_CountED002 > 0)
             {
-                taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+                taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
             }
             // if (taxRule == "T" && _IsSOTrx)
             // if (taxRule == "T" && ((_IsSOTrx && !_IsReturnTrx) || (!_IsSOTrx && !_IsReturnTrx)))
@@ -364,7 +367,7 @@ namespace VAdvantage.Model
                 {
                     int c_tax_ID = 0;
                     int taxCategory = 0;
-                    MBPartner bp = new MBPartner(GetCtx(), inv.GetC_BPartner_ID(), null);
+                    MBPartner bp = new MBPartner(GetCtx(), inv.GetC_BPartner_ID(), Get_TrxName());
                     if (bp.IsTaxExempt())
                     {
                         c_tax_ID = GetExemptTax(GetCtx(), GetAD_Org_ID());
@@ -373,17 +376,17 @@ namespace VAdvantage.Model
                     }
                     if (GetM_Product_ID() > 0)
                     {
-                        MProduct prod = new MProduct(Env.GetCtx(), GetM_Product_ID(), null);
+                        MProduct prod = new MProduct(Env.GetCtx(), GetM_Product_ID(), Get_TrxName());
                         taxCategory = Util.GetValueOfInt(prod.GetC_TaxCategory_ID());
                     }
                     if (GetC_Charge_ID() > 0)
                     {
-                        MCharge chrg = new MCharge(Env.GetCtx(), GetC_Charge_ID(), null);
+                        MCharge chrg = new MCharge(Env.GetCtx(), GetC_Charge_ID(), Get_TrxName());
                         taxCategory = Util.GetValueOfInt(chrg.GetC_TaxCategory_ID());
                     }
                     if (taxCategory > 0)
                     {
-                        MTaxCategory taxCat = new MTaxCategory(GetCtx(), taxCategory, null);
+                        MTaxCategory taxCat = new MTaxCategory(GetCtx(), taxCategory, Get_TrxName());
                         int Country_ID = 0, Region_ID = 0, orgCountry = 0, orgRegion = 0, taxRegion = 0;
                         string Postal = "", orgPostal = "";
 
@@ -397,7 +400,7 @@ namespace VAdvantage.Model
                             sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc INNER JOIN C_BPartner_Location bpl ON loc.C_Location_ID = bpl.C_Location_ID WHERE bpl.C_BPartner_Location_ID ="
                                 + inv.GetC_BPartner_Location_ID() + " AND bpl.IsActive = 'Y'";
                         }
-                        dsLoc = DB.ExecuteDataset(sql, null, null);
+                        dsLoc = DB.ExecuteDataset(sql, null, Get_TrxName());
                         if (dsLoc != null)
                         {
                             if (dsLoc.Tables[0].Rows.Count > 0)
@@ -413,7 +416,7 @@ namespace VAdvantage.Model
                         dsLoc = null;
                         sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN AD_OrgInfo org ON loc.C_Location_ID = org.C_Location_ID WHERE org.AD_Org_ID ="
                                 + inv.GetAD_Org_ID() + " AND org.IsActive = 'Y'";
-                        dsLoc = DB.ExecuteDataset(sql, null, null);
+                        dsLoc = DB.ExecuteDataset(sql, null, Get_TrxName());
                         if (dsLoc != null)
                         {
                             if (dsLoc.Tables[0].Rows.Count > 0)
@@ -444,17 +447,17 @@ namespace VAdvantage.Model
                             {
                                 sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() +
                                                " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + inv.GetC_BPartner_Location_ID();
-                                int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                                 if (taxType == 0)
                                 {
                                     sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() + " AND IsActive = 'Y'";
-                                    taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                    taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                                 }
                                 if (taxType > 0)
                                 {
                                     sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID  WHERE tcr.C_TaxCategory_ID = " + taxCategory +
                                         " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxBase = 'T' AND tcr.VATAX_TaxType_ID =" + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                                    c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                    c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                                     if (c_tax_ID > 0)
                                     {
                                         SetC_Tax_ID(c_tax_ID);
@@ -480,7 +483,7 @@ namespace VAdvantage.Model
                                     dsLoc = null;
                                     sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE C_TaxCategory_ID = " + taxCategory +
                                         " AND VATAX_TaxBase = 'R' AND VATAX_DiffCountry = 'Y' AND IsActive = 'Y' AND C_Country_ID = " + Country_ID;
-                                    dsLoc = DB.ExecuteDataset(sql, null, null);
+                                    dsLoc = DB.ExecuteDataset(sql, null, Get_TrxName());
                                     if (dsLoc != null)
                                     {
                                         if (dsLoc.Tables[0].Rows.Count > 0)
@@ -522,13 +525,13 @@ namespace VAdvantage.Model
                             else if (pref == "D")
                             {
                                 sql = @"SELECT VATAX_TaxType_ID FROM C_DocType WHERE C_DocType_ID = " + inv.GetC_DocTypeTarget_ID();
-                                int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
 
                                 if (taxType > 0)
                                 {
                                     sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID  WHERE tcr.C_TaxCategory_ID = " + taxCategory +
                                         " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxBase = 'T' AND tcr.VATAX_TaxType_ID = " + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                                    c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                    c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                                     if (c_tax_ID > 0)
                                     {
                                         SetC_Tax_ID(c_tax_ID);
@@ -541,7 +544,7 @@ namespace VAdvantage.Model
                         {
                             sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxRegion tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.IsDefault = 'Y' AND tcr.IsActive = 'Y' 
                                 AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "') ORDER BY tcr.Updated";
-                            c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                            c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                             if (c_tax_ID > 0)
                             {
                                 SetC_Tax_ID(c_tax_ID);
@@ -549,7 +552,7 @@ namespace VAdvantage.Model
                             }
                         }
                         sql = @"SELECT tcr.C_Tax_ID FROM C_TaxCategory tcr WHERE tcr.C_TaxCategory_ID =" + taxCategory + " AND tcr.IsActive = 'Y'";
-                        c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        c_tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         SetC_Tax_ID(c_tax_ID);
                         return true;
                     }
@@ -559,11 +562,11 @@ namespace VAdvantage.Model
                 {
                     sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() +
                                    " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + inv.GetC_BPartner_Location_ID();
-                    int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                    int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     if (taxType == 0)
                     {
                         sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() + " AND IsActive = 'Y'";
-                        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         #region If Business Partner Is Proposed then it'll select default Tax.   Done By Manjot
                         if (taxType == 0)
                         {
@@ -582,9 +585,9 @@ namespace VAdvantage.Model
                         }
                         #endregion
                     }
-                    MProduct prod = new MProduct(Env.GetCtx(), System.Convert.ToInt32(GetM_Product_ID()), null);
+                    MProduct prod = new MProduct(Env.GetCtx(), System.Convert.ToInt32(GetM_Product_ID()), Get_TrxName());
                     sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prod.GetC_TaxCategory_ID() + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
-                    int taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                    int taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     if (taxId > 0)
                     {
                         SetC_Tax_ID(taxId);
@@ -658,7 +661,7 @@ namespace VAdvantage.Model
                     " AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= " + Postal + " AND tcr.postal_to >= " + Postal + " THEN 1 ELSE 2" +
                     " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
-            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (C_Tax_ID > 0)
             {
                 return C_Tax_ID;
@@ -678,7 +681,7 @@ namespace VAdvantage.Model
                         " AND tcr.postal_to >= " + Postal + " THEN 1 ELSE 2" + " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (C_Tax_ID > 0)
                 {
                     return C_Tax_ID;
@@ -691,7 +694,7 @@ namespace VAdvantage.Model
                             " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID IS NULL " + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= "
                             + Postal + " AND tcr.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                             + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
-                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     }
                     if (C_Tax_ID > 0)
                     {
@@ -719,7 +722,7 @@ namespace VAdvantage.Model
                 " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= " + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '"
                 + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
-            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (C_Tax_ID > 0)
             {
                 return C_Tax_ID;
@@ -739,7 +742,7 @@ namespace VAdvantage.Model
                     + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                     + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (C_Tax_ID > 0)
                 {
                     return C_Tax_ID;
@@ -752,7 +755,7 @@ namespace VAdvantage.Model
                         + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= "
                         + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
-                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
 
                         if (C_Tax_ID > 0)
                         {
@@ -781,7 +784,7 @@ namespace VAdvantage.Model
                 " AND NVL(trl.C_Region_ID,0) = " + Region_ID + " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= " + Postal + " AND trl.postal_to >= " + Postal +
                 " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
-            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (C_Tax_ID > 0)
             {
                 return C_Tax_ID;
@@ -800,7 +803,7 @@ namespace VAdvantage.Model
                     + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= "
                     + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (C_Tax_ID > 0)
                 {
                     return C_Tax_ID;
@@ -812,7 +815,7 @@ namespace VAdvantage.Model
                         sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
                         + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= "
                         + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
-                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         if (C_Tax_ID > 0)
                         {
                             return C_Tax_ID;
@@ -900,13 +903,31 @@ namespace VAdvantage.Model
                 MTax tax = MTax.Get(GetCtx(), GetC_Tax_ID());
                 if (tax.IsDocumentLevel() && _IsSOTrx)		//	AR Inv Tax
                     return;
-                //
-                TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
-                if (IsTaxIncluded())
-                    SetLineTotalAmt(GetLineNetAmt());
+
+                // if Surcharge Tax is selected on Tax, then calculate Tax accordingly
+                if (Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    Decimal surchargeAmt = Env.ZERO;
+
+                    // Calculate Surcharge Amount
+                    TaxAmt = tax.CalculateSurcharge(GetLineNetAmt(), IsTaxIncluded(), GetPrecision(), out surchargeAmt);
+
+                    if (IsTaxIncluded())
+                        SetLineTotalAmt(GetLineNetAmt());
+                    else
+                        SetLineTotalAmt(Decimal.Add(Decimal.Add(GetLineNetAmt(), TaxAmt), surchargeAmt));
+                    base.SetTaxAmt(TaxAmt);
+                    SetSurchargeAmt(surchargeAmt);
+                }
                 else
-                    SetLineTotalAmt(Decimal.Add(GetLineNetAmt(), TaxAmt));
-                base.SetTaxAmt(TaxAmt);
+                {
+                    TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
+                    if (IsTaxIncluded())
+                        SetLineTotalAmt(GetLineNetAmt());
+                    else
+                        SetLineTotalAmt(Decimal.Add(GetLineNetAmt(), TaxAmt));
+                    base.SetTaxAmt(TaxAmt);
+                }
             }
             catch (Exception ex)
             {
@@ -2640,6 +2661,51 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// This function is used for costing calculation
+        /// It gives consolidated product cost (taxable amt + tax amount + surcharge amt) based on setting
+        /// </summary>
+        /// <param name="orderline">order Line reference</param>
+        /// <returns>LineNetAmount of Product</returns>
+        public Decimal GetProductLineCost(MOrderLine orderline)
+        {
+            if (orderline == null || orderline.Get_ID() <= 0)
+            {
+                return 0;
+            }
+
+            // Get Taxable amount from orderline
+            Decimal amt = orderline.GetTaxAbleAmt();
+
+            // create object of tax - for checking tax to be include in cost or not
+            MTax tax = MTax.Get(orderline.GetCtx(), orderline.GetC_Tax_ID());
+            if (tax.Get_ColumnIndex("IsIncludeInCost") >= 0)
+            {
+                // add Tax amount in product cost
+                if (tax.IsIncludeInCost())
+                {
+                    amt += orderline.GetTaxAmt();
+                }
+
+                // add Surcharge amount in product cost
+                if (tax.Get_ColumnIndex("Surcharge_Tax_ID") >= 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    if (MTax.Get(orderline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
+                    {
+                        amt += orderline.GetSurchargeAmt();
+                    }
+                }
+            }
+
+            // if amount is ZERO, then calculate as usual with Line net amount
+            if (amt == 0)
+            {
+                amt = orderline.GetLineNetAmt();
+            }
+
+            return amt;
+        }
+
+        /// <summary>
         /// Set M_AttributeSetInstance_ID
         /// </summary>
         /// <param name="M_AttributeSetInstance_ID">id</param>
@@ -3716,17 +3782,20 @@ namespace VAdvantage.Model
                 }
             }
 
+            MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), Get_Trx());
+            MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID());
+
             //SI_0643: If we reactive the Sales order, System will not allow to save Ordered Qty less than delivered qty.
             // when we void a record, then not to check this record, because first we set qtyOrdered/qtyenetered as 0 after that we update qtydelivered on line
             // JID_1362: when qty delivered / invoicedcant be less than qtyordered
-            if (!newRecord && (GetQtyOrdered() < GetQtyDelivered() || GetQtyOrdered() < GetQtyInvoiced()) &&
-                (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided"))))
+            // JID_1403 : System do not allow to create order with -ve qty, On Completion system give error "Can't Server Qty" (for comparison - make absolute)
+            if (!newRecord && (Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyDelivered()) || Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyInvoiced())) &&
+                (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided")))
+                && docType.GetDocBaseType() != "BOO")       // Skip for Blanket Order
             {
                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_QtydeliveredNotLess"));
                 return false;
             }
-
-            MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), Get_Trx());
 
             // Added by Vivek on 22/09/2017 assigned by Mukesh sir
             // if PO is drop ship type then new line should not allow 
@@ -3996,7 +4065,6 @@ namespace VAdvantage.Model
                     }
                     //}
 
-                    MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID());
                     if (docType.GetDocBaseType() == "BOO")    ///docType.GetValue() == "BSO" || docType.GetValue() == "BPO")
                     {
                         QtyEstimation = GetQtyEstimation();
@@ -4007,10 +4075,14 @@ namespace VAdvantage.Model
                         }
                     }
 
-                    if (docType.IsReleaseDocument() && (docType.GetDocBaseType() == "SOO" || docType.GetDocBaseType() == "POO")) // if (docType.GetValue() == "RSO" || docType.GetValue() == "RPO")  ///if (docType.IsSOTrx() && docType.GetDocBaseType() == "SOO" && docType.GetDocSubTypeSO() == "BO")  ///if (docType.GetValue() == "RSO")
+                    // JID_0969: System should not allow to set Qty Order more than blanket order qty.
+                    if (docType.IsReleaseDocument() && (docType.GetDocBaseType() == "SOO" || docType.GetDocBaseType() == "POO"))
                     {
                         QtyBlanketPending = GetQtyBlanket();
-                        if (Decimal.Subtract(Convert.ToDecimal(QtyOrdered), Convert.ToDecimal(QtyReserved)) > QtyBlanketPending)
+                        QtyOrdered = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(QtyOrdered) FROM C_Order o INNER JOIN C_OrderLine ol ON ol.C_Order_ID = o.C_Order_ID
+                            WHERE ol.C_OrderLine_Blanket_ID = " + GetC_OrderLine_Blanket_ID() + @" AND ol.IsActive = 'Y' AND o.DocStatus NOT IN ('RE' , 'VO' , 'CL' , 'CO') AND ol.C_OrderLine_ID <> "
+                                                                + Get_ID(), null, Get_Trx()));
+                        if (Decimal.Add(Convert.ToDecimal(QtyOrdered), GetQtyOrdered()) > QtyBlanketPending)
                         {
                             log.SaveError("VIS_OrderQtyMoreThnBlanketPending", "");
                             return false;
@@ -4063,6 +4135,15 @@ namespace VAdvantage.Model
                     SetPriceActual(GetPriceEntered());
                 }
 
+                //JID_1474 : if document is closed then we need to set Delivered qty as Ordered qty Suggested by Gagandeep kaur and Puneet that we do not
+                // need to add return trx check and it will work for all orders
+                if (isClosed)
+                {
+                    if (GetQtyDelivered() > 0)
+                        SetQtyOrdered(GetQtyDelivered());
+                }
+                //end
+
             }
             /////////////
 
@@ -4086,16 +4167,15 @@ namespace VAdvantage.Model
             SetLineNetAmt();	//	extended Amount with or without tax
             SetDiscount();
 
-            // JID_1073: 
-            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0)
+            // if change the Quantity then recalculate tax and surcharge amount.
+            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
                 SetTaxAmt();
 
             // set Tax Amount in base currency
-            if (Get_ColumnIndex("TaxBaseAmt") >= 0)
+            if (Get_ColumnIndex("TaxBaseAmt") > 0)
             {
                 decimal taxAmt = 0;
-                primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_TrxName()));
+                primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                 if (Ord.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                 {
                     taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, Ord.GetC_Currency_ID(),
@@ -4111,8 +4191,16 @@ namespace VAdvantage.Model
             // set Taxable Amount -- (Line Total-Tax Amount)
             if (Get_ColumnIndex("TaxAbleAmt") >= 0)
             {
-                SetTaxAbleAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                if (Get_ColumnIndex("SurchargeAmt") > 0)
+                {
+                    SetTaxAbleAmt(Decimal.Subtract(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()), GetSurchargeAmt()));
+                }
+                else
+                {
+                    SetTaxAbleAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                }
             }
+
             if (Get_ColumnIndex("BasePrice") >= 0)
             {
                 if (newRecord)
@@ -4266,6 +4354,25 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Set property to check wheater order's close event is called or any other event is called
+        /// </summary>
+        /// <param name="closed"> True/False</param>
+        public void SetIsClosedDocument(bool closed)
+        {
+            isClosed = closed;
+        }
+
+        /// <summary>
+        /// Get property to check wheater order's close event is called or any other event is called
+        /// </summary>
+        /// <returns>True if document is closing</returns>
+        public bool GetIsClosedDocument()
+        {
+            return isClosed;
+        }
+        //end
+
+        /// <summary>
         /// Before Delete
         /// </summary>
         /// <returns>true if it can be deleted</returns>
@@ -4343,6 +4450,19 @@ namespace VAdvantage.Model
                             return false;
                         if (!tax.Save(Get_TrxName()))
                             return false;
+                    }
+
+                    // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                    if (Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        tax = MOrderTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
+                        if (tax != null)
+                        {
+                            if (!tax.CalculateSurchargeFromLines())
+                                return false;
+                            if (!tax.Save(Get_TrxName()))
+                                return false;
+                        }
                     }
                 }
                 if (!UpdateHeaderTax())
@@ -4427,6 +4547,16 @@ namespace VAdvantage.Model
                 {
                     return false;
                 }
+            }
+
+            // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+            else if (Get_ColumnIndex("SurchargeAmt") > 0 && taxRate.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && taxRate.GetSurcharge_Tax_ID() > 0)
+            {
+                tax = MOrderTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
+                if (!tax.CalculateSurchargeFromLines())
+                    return false;
+                if (!tax.Save(Get_TrxName()))
+                    return false;
             }
 
             //	Update Order Header

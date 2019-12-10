@@ -1046,7 +1046,6 @@
                     //String error = MPaymentValidate.ValidateCreditCardNumber(txtKNumber.Text, CCType);
                     //if (error.Length != 0)
                     //{
-                    
                     //    txtKNumber.BackColor = GlobalVariable.MANDATORY_TEXT_BACK_COLOR;
                     //    //MessageBox.Show("getFieldBackground_Error()");
                     //    if (error.IndexOf("?") == -1)
@@ -1080,7 +1079,6 @@
                     || PaymentRule.equals(PAYMENTRULE_DirectDebit)) {
                     var bpba = cmbTAccount.val();
                     if (bpba == null) {
-                        
                         //ADialog.error(_WindowNo, this, "PaymentBPBankNotFound");
                         // cmbTAccount.ccs('background-color', 'Red');
                         VIS.ADialog.error("", true, VIS.Msg.getMsg("PaymentBPBankNotFound"));
@@ -1105,7 +1103,6 @@
                     }
                     //String error = MPaymentValidate.ValidateRoutingNo(txtSRouting.Text);
                     if (txtSRouting.val() == null || txtSRouting.val() == "" || txtSRouting.val() == undefined) {
-                        
                         //txtSRouting.BackColor = GlobalVariable.MANDATORY_TEXT_BACK_COLOR;
                         //ADialog.error(_WindowNo, this, error);
                         VIS.ADialog.error("", true, VIS.Msg.getMsg("PaymentBankRoutingNotValid"));
@@ -1114,7 +1111,6 @@
                     }
                     //error = MPaymentValidate.ValidateAccountNo(txtSNumber.Text);
                     if (txtSNumber.val() == null || txtSNumber.val() == "" || txtSNumber.val() == undefined) {
-                        
                         // txtSNumber.BackColor = GlobalVariable.MANDATORY_TEXT_BACK_COLOR;
                         //ADialog.error(_WindowNo, this, error);
                         VIS.ADialog.error("", true, VIS.Msg.getMsg("PaymentBankAccountNotValid"));

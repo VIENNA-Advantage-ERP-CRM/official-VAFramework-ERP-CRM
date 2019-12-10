@@ -22,6 +22,7 @@ namespace VAdvantage.Model
     {
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MLandedCost).FullName);
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -135,6 +136,69 @@ namespace VAdvantage.Model
             {
                 if (GetM_InOutLine_ID() != 0 && GetM_Product_ID() != 0)
                     SetM_Product_ID(0);
+            }
+
+            //JID_0032 : Unique Constraint handling
+            StringBuilder sql = new StringBuilder();
+            if (GetM_InOut_ID() > 0)
+            {
+                // Saved unique data basd on CostElement / Shipment / ShipmentLine
+                // not to consider Reversed or voided InvoiceLine record
+                sql.Clear();
+                sql.Append("SELECT COUNT(C_LandedCost_ID) FROM C_LandedCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
+                    " AND M_InOut_ID = " + GetM_InOut_ID() + " AND (M_InOutLine_ID = " + GetM_InOutLine_ID() + " OR NVL(M_InOutLine_ID,0) = 0) " +
+                    @" AND NOT EXISTS (SELECT C_InvoiceLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice i ON i.C_Invoice_ID = il.C_Invoice_ID 
+                   AND C_LandedCost.C_Invoiceline_ID = il.C_Invoiceline_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
+                if (Get_ColumnIndex("ReversalDoc_ID") > 0)
+                {
+                    // during reversal, exclude orignal record
+                    sql.Append(" AND C_Invoiceline_ID    <> " + GetReversalDoc_ID());
+                }
+                if (!newRecord)
+                {
+                    // during updation, not consider current record
+                    sql.Append(" AND C_LandedCost_ID <> " + GetC_LandedCost_ID());
+                }
+            }
+            else if (GetM_Movement_ID() > 0)
+            {
+                // Saved unique data basd on CostElement / Movement / MovementLine
+                sql.Clear();
+                sql.Append("SELECT COUNT(C_LandedCost_ID) FROM C_LandedCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
+                       " AND M_Movement_ID = " + GetM_Movement_ID() + " AND (M_MovementLine_ID = " + GetM_MovementLine_ID() + " OR NVL(M_MovementLine_ID,0) = 0) " +
+                       @" AND NOT EXISTS (SELECT C_InvoiceLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice i ON i.C_Invoice_ID = il.C_Invoice_ID 
+                   AND C_LandedCost.C_Invoiceline_ID = il.C_Invoiceline_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
+                if (Get_ColumnIndex("ReversalDoc_ID") > 0)
+                {
+                    sql.Append(" AND C_Invoiceline_ID    <> " + GetReversalDoc_ID());
+                }
+                if (!newRecord)
+                {
+                    sql.Append(" AND C_LandedCost_ID <> " + GetC_LandedCost_ID());
+                }
+            }
+            else if (GetRef_Invoice_ID() > 0)
+            {
+                // Saved unique data basd on CostElement / Invoice / InvoiceLine
+                sql.Clear();
+                sql.Append("SELECT COUNT(C_LandedCost_ID) FROM C_LandedCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
+                       " AND Ref_Invoice_ID = " + GetRef_Invoice_ID() + " AND (Ref_InvoiceLine_ID = " + GetRef_InvoiceLine_ID() + " OR NVL(Ref_InvoiceLine_ID,0) = 0) " +
+                       @" AND NOT EXISTS (SELECT C_InvoiceLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice i ON i.C_Invoice_ID = il.C_Invoice_ID 
+                   AND C_LandedCost.C_Invoiceline_ID = il.C_Invoiceline_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
+                if (Get_ColumnIndex("ReversalDoc_ID") > 0)
+                {
+                    sql.Append(" AND C_Invoiceline_ID    <> " + GetReversalDoc_ID());
+                }
+                if (!newRecord)
+                {
+                    sql.Append(" AND C_LandedCost_ID <> " + GetC_LandedCost_ID());
+                }
+            }
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+            if (count > 0)
+            {
+                log.SaveError("VIS_DuplicateRecord", "");
+                return false;
             }
 
             return true;

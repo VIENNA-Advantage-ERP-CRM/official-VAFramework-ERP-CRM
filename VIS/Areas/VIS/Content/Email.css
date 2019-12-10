@@ -586,6 +586,19 @@ html[dir="rtl"] .vis-email-btns
 }*/
 
 
+.vis-Email-textarea-div{
+    position: relative;
+}
+.vis-Email-textarea-div table{
+    position: absolute;
 
+}
+.vis-Email-textarea-div table tr:nth-child(2){
+    height: 100%;
+}
+ .vis-Email-textarea-div table tr:nth-child(2) td {
+        height: 100%;
+        display: block;
+    }
 
 /*----------------------------end by designer--------------------------------*/

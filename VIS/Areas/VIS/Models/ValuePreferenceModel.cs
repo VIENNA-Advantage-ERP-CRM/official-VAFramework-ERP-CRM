@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using VAdvantage.Classes;
+using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 
@@ -96,6 +97,13 @@ namespace VIS.Controllers
             // save the record
             success = pref.Save();
             return success;
+        }
+
+        // Added by Bharat on 12 June 2017
+        public int GetPrefrenceID(string sql)
+        {            
+            int prefID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+            return prefID;
         }
     }
 }

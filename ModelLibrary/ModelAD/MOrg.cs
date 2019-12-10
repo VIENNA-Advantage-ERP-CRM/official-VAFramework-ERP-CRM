@@ -225,7 +225,28 @@ namespace VAdvantage.Model
             return true;
         }
 
-
+        /// <summary>
+        /// Before Save
+        /// </summary>
+        /// <param name="newRecord">new Record</param>
+        /// <param name="success">save success</param>
+        /// <returns>success</returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            // Check applied to restrict the records insertion from organization unit window if Cost center and profit center is not selected.
+            if (Get_ColumnIndex("IsOrgUnit") > -1)
+            {
+                if (IsOrgUnit())
+                {
+                    if (!IsProfitCenter() && !IsCostCenter())
+                    {
+                        log.SaveError("CheckProfitCostCenter", "");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         /// <summary>
         /// This is Done Bcoz in Organization Structure Form , new organization is being inserted by query. So to implementafter save , this function createad.
         /// 

@@ -464,6 +464,20 @@ namespace VAdvantage.DataBase
             }
         }
 
+
+        public static DataSet ExecuteDatasetDoc(string sql, SqlParameter[] param, Trx trx)
+        {
+            //Trx trx = trxName == null ? null : Trx.Get(trxName, true);
+            if (trx != null)
+            {
+                return trx.ExecuteDataset(sql, param, trx);
+            }
+            else
+            {
+                return SqlExec.ExecuteQuery.ExecuteDataset(sql, param);
+            }
+        }
+
         public static DataSet ExecuteDataset(string sql, SqlParameter[] param, Trx trx, int pageSize, int pageNumber)
         {
             //Trx trx = trxName == null ? null : Trx.Get(trxName, true);

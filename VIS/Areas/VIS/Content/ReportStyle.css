@@ -251,3 +251,19 @@ ul.vis-toppaging li:nth-child(3) {
 	padding:0 5px;
 	outline:none;
 }
+.VAPOS-ReportHeadRap {
+    float: left;
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.VAPOS-ReportHeadRap h4 {
+    margin: 0;
+    line-height: 26px;
+}
+    .VAPOS-ReportHeadRap ul {
+        margin-top: 0 !important;
+    }
+.VAPOS-ReportHeadRap ul li a {width: 22px;height: 25px;}

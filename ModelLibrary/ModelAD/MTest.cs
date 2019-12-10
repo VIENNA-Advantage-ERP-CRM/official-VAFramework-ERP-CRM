@@ -33,5 +33,10 @@ namespace VAdvantage.Model
            //VAdvantage.Classes.//ShowMessage.Info("From Dll ",null,null,"");
            return base.BeforeSave(newRecord);
        }
+
+       protected override bool AfterSave(bool newRecord, bool success)
+       {
+           return base.AfterSave(newRecord, success);
+       }
     }
 }

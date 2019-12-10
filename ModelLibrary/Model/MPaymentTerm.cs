@@ -568,6 +568,9 @@ namespace VAdvantage.Model
                 {
                     foreach (int currency in CurrencyAmounts.Keys)
                     {
+                        /*will create Schedule with 0 amount [-ve case] if intetionally pay more amt that totala amt in cash [ cash amt equeal return Amt]  */
+                        if (Util.GetValueOfDecimal(CurrencyAmounts[currency]) == 0)
+                            continue;
                         //*****create schdeular for cash
                         if (!InsertSchedulePOS(invoice, baseTypeIds[X_C_Order.PAYMENTRULE_Cash], CurrencyAmounts[currency], currency))
                         {

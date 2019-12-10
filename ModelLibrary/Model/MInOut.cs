@@ -24,8 +24,8 @@ using VAdvantage.Utility;
 using System.Data;
 using System.IO;
 using VAdvantage.Logging;
+using Oracle.ManagedDataAccess.Client;
 using System.Data.SqlClient;
-
 
 namespace VAdvantage.Model
 {
@@ -1599,7 +1599,7 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             if (!success)
-            //if (!success || newRecord)
+                //if (!success || newRecord)
                 return success;
 
             if (!newRecord)
@@ -1891,6 +1891,14 @@ namespace VAdvantage.Model
             //Dictionary<int, MInOutLineMA[]> lineAttributes = null;
             //if (IsSOTrx())
             //{
+
+            // To check weather future date records are available in Transaction window
+            _processMsg = CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx());
+            if (!string.IsNullOrEmpty(_processMsg))
+            {
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             String MovementTyp = GetMovementType();
 
             int VAPOS_POSTerminal_ID = 0;
@@ -1912,7 +1920,7 @@ namespace VAdvantage.Model
                     if (disallow.ToUpper() == "Y")
                     {
                         // is used to handle Non Stocked Item which are not in Storage
-                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @"AND M_Product_ID NOT IN 
+                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @" AND C_Charge_ID IS NULL AND M_Product_ID NOT IN 
                             (SELECT M_InoutLine.M_Product_ID FROM M_InoutLine INNER JOIN M_Product ON M_InoutLine.M_Product_ID = M_Product.M_Product_ID 
                             WHERE M_Product.IsStocked = 'N' AND M_InoutLine.M_Inout_ID  = " + GetM_InOut_ID() + " ) ";
                         int[] ioLine = MInOutLine.GetAllIDs("M_InoutLine", whereClause, Get_TrxName());
@@ -2295,7 +2303,8 @@ namespace VAdvantage.Model
                 }
 
                 #region done by Amit on behalf of surya 30-9-2015 vawms
-                if (sLine.GetC_OrderLine_ID() != 0 && IsSOTrx() && !IsReturnTrx())
+                // on Warehouse, Set Qty Allocated only for Item type Product
+                if (sLine.GetC_OrderLine_ID() != 0 && product != null && product.GetProductType() == MProduct.PRODUCTTYPE_Item && IsSOTrx() && !IsReturnTrx())
                 {
                     if (Env.IsModuleInstalled("VAWMS_"))
                     {
@@ -2546,7 +2555,7 @@ namespace VAdvantage.Model
                                         sLine.GetM_Locator_ID(), ord.GetM_Warehouse_ID(),
                                         sLine.GetM_Product_ID(),
                                         sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
-                                            //Qty, QtySO, QtyPO, Get_TrxName()))
+                                             //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -2563,7 +2572,7 @@ namespace VAdvantage.Model
                                         sLine.GetM_Locator_ID(), GetM_Warehouse_ID(),
                                         sLine.GetM_Product_ID(),
                                         sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
-                                            //Qty, QtySO, QtyPO, Get_TrxName()))
+                                             //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -2940,6 +2949,7 @@ namespace VAdvantage.Model
                         MOrderLine origOrderLine = new MOrderLine(GetCtx(), oLine.GetOrig_OrderLine_ID(), Get_TrxName());
                         MOrderLine lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
 
+
                         if ((lineBlanket != null && lineBlanket.Get_ID() > 0) || (lineBlanket1 != null && lineBlanket1.Get_ID() > 0))
                         {
                             if (IsSOTrx())
@@ -2961,7 +2971,7 @@ namespace VAdvantage.Model
                             lineBlanket.Save();
                             lineBlanket1.Save();
                             //MOrderLine oLine1 = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                           
+
                         }
                     }
 
@@ -3203,25 +3213,27 @@ namespace VAdvantage.Model
                                         continue;
                                 }
 
+                                Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+                                Decimal ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
                                 amt = 0;
                                 if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
                                     if (sLine.GetMovementQty() > 0)
-                                        amt = orderLine.GetLineNetAmt();
+                                        amt = ProductOrderLineCost;
                                     else
-                                        amt = Decimal.Negate(orderLine.GetLineNetAmt());
+                                        amt = Decimal.Negate(ProductOrderLineCost);
                                 }
                                 else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), sLine.GetMovementQty());
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty());
                                 }
                                 else if (order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), sLine.GetMovementQty());
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty());
                                 }
                                 else if (order.GetDocStatus() == "VO")
                                 {
-                                    amt = Decimal.Multiply(orderLine.GetPriceActual(), sLine.GetQtyEntered());
+                                    amt = Decimal.Multiply(ProductOrderPriceActual, sLine.GetQtyEntered());
                                 }
 
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
@@ -3273,9 +3285,12 @@ namespace VAdvantage.Model
 
                                             // calculate invoice line costing after calculating costing of linked MR line 
                                             MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), matchedInvoice[mi].GetC_InvoiceLine_ID(), Get_Trx());
+
+                                            Decimal ProductLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, matchedInvoice[mi].GetM_AttributeSetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, invoiceLine, null,
-                                                  count > 0 && isCostAdjustableOnLost && (matchedInvoice[mi].GetQty() < invoiceLine.GetQtyInvoiced()) ? invoiceLine.GetLineNetAmt() : Decimal.Multiply(Decimal.Divide(invoiceLine.GetLineNetAmt(), invoiceLine.GetQtyInvoiced()), matchedInvoice[mi].GetQty()),
+                                                  count > 0 && isCostAdjustableOnLost && (matchedInvoice[mi].GetQty() < invoiceLine.GetQtyInvoiced()) ? ProductLineCost : Decimal.Multiply(Decimal.Divide(ProductLineCost, invoiceLine.GetQtyInvoiced()), matchedInvoice[mi].GetQty()),
                                                 matchedInvoice[mi].GetQty(), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                             {
                                                 _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
@@ -3323,8 +3338,10 @@ namespace VAdvantage.Model
                             if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
                                 break;
 
+                            Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+
                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
-                                  "Customer Return", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), sLine.GetMovementQty()),
+                                  "Customer Return", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty()),
                                   sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
                                 if (!conversionNotFoundInOut1.Contains(conversionNotFoundInOut))
@@ -3358,8 +3375,10 @@ namespace VAdvantage.Model
 
                             if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0) { break; }
 
+                            Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+
                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
-                                 "Shipment", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty())),
+                                 "Shipment", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty())),
                                  Decimal.Negate(sLine.GetMovementQty()), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
                                 if (!conversionNotFoundInOut1.Contains(conversionNotFoundInOut))
@@ -3434,26 +3453,28 @@ namespace VAdvantage.Model
                                     isCostAdjustableOnLost = productCQ.IsCostAdjustmentOnLost();
                                 }
 
+                                Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+                                Decimal ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
                                 amt = 0;
                                 if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
                                     // Cost Adjustment case
                                     if (sLine.GetMovementQty() < 0)
-                                        amt = orderLine.GetLineNetAmt();
+                                        amt = ProductOrderLineCost;
                                     else
-                                        amt = Decimal.Negate(orderLine.GetLineNetAmt());
+                                        amt = Decimal.Negate(ProductOrderLineCost);
                                 }
                                 else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
                                 }
                                 else if (order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
                                 }
                                 else if (order.GetDocStatus() == "VO")
                                 {
-                                    amt = Decimal.Multiply(orderLine.GetPriceActual(), Decimal.Negate(sLine.GetQtyEntered()));
+                                    amt = Decimal.Multiply(ProductOrderPriceActual, Decimal.Negate(sLine.GetQtyEntered()));
                                 }
 
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
@@ -5535,6 +5556,53 @@ namespace VAdvantage.Model
                 log.Severe("Error in generating shipment  - " + e.Message);
             }
             //Arpit
+        }
+
+        /// <summary>
+        /// To check weather future date records are available in Transaction window 
+        /// </summary>
+        /// <param name="MovementDate">Movement Date</param>
+        /// <param name="TableName">Name Of Table (M_INOUT,M_INVENTORY,M_MOVEMENT)</param>
+        /// <param name="Record_ID">ID of Current Record</param>
+        /// <param name="Trx">Current Transaction Object</param>
+        /// <returns>true if any record found on transaction window or false if not found</returns>
+        public static string CheckFutureDateRecord(DateTime? MovementDate, string TableName, int Record_ID, Trx trx)
+        {
+            int retval = 0;
+            IDbConnection dbConnection = trx.GetConnection();
+            if (dbConnection != null)
+            {
+                // execute procedure for updating cost of components
+                OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = (OracleConnection)dbConnection;
+                cmd.CommandText = "CheckFutureDateRecord";
+                cmd.Parameters.Add("p_movementdate", OracleDbType.Date, MovementDate, ParameterDirection.Input);
+                cmd.Parameters.Add("p_TableName", OracleDbType.Varchar2, TableName.ToUpper(), ParameterDirection.Input);
+                cmd.Parameters.Add("p_Record_ID", OracleDbType.Int32, Record_ID, ParameterDirection.Input);
+                cmd.Parameters.Add("results", OracleDbType.Int32, 4, ParameterDirection.Output);
+                cmd.BindByName = true;
+                try
+                {
+                    retval = cmd.ExecuteNonQuery();
+                    retval = Util.GetValueOfInt(cmd.Parameters[3].Value.ToString());
+                    if (retval > 0) // If Record Found
+                    {
+                        return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
+                    }
+                    else
+                    {// if no future date record found on MTransaction
+                        return string.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {// If any exception comes then we will not complete the record
+                    _log.Severe("Exception: {0} " +  ex.Message);
+                    return ex.Message;
+                }
+            }
+            _log.Severe("Connection Closed");
+            return Msg.GetMsg(Env.GetCtx(), "NoDBConnection");
         }
 
     }
