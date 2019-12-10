@@ -139,33 +139,44 @@ namespace VAdvantage.Login
         //            ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR-SA)", AD_Language_ar_SA, new System.Globalization.CultureInfo("ar-SA") ,   null, "dd.MM.yyyy", MediaSize.ISO.A4),
         //};
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+       // [MethodImpl(MethodImplOptions.Synchronized)]
+        static object _lock = new object();
         public static void  FillLanguage()
         {
             if (_languages.Count > 0)
             {
                 return;
             }
-            DataTable dt = MLanguage.GetSystemLanguage();
-            _languages.Add(0, new Language("English", AD_Language_en_US, new System.Globalization.CultureInfo("en-US"), null, "", MediaSize.NA.LETTER));
-            langList.Add(new ValueNamePair("en_US", "English"));
-            _loginLanguage = _languages[0];
-            if (dt != null)
-            {
-                foreach(DataRow row in dt.Rows)
-                {
-                    try
-                    {
-                        var cul = new System.Globalization.CultureInfo(row["AD_Language"].ToString().Replace("_", "-"));
-                        _languages.Add(_languages.Count, new Language
-                        (row["Name"].ToString(), row["AD_Language"].ToString(), 
-                        cul, cul.NumberFormat.NumberDecimalSeparator == ".", cul.DateTimeFormat.ShortDatePattern, MediaSize.ISO.A4));
 
-                        langList.Add(new ValueNamePair(row["AD_Language"].ToString(), row["DisplayName"].ToString()));
-                    }
-                    catch
+            lock (_lock)
+            {
+                if (_languages.Count > 0)
+                {
+                    return;
+                }
+
+                langList.Clear();
+                DataTable dt = MLanguage.GetSystemLanguage();
+                _languages.Add(0, new Language("English", AD_Language_en_US, new System.Globalization.CultureInfo("en-US"), null, "", MediaSize.NA.LETTER));
+                langList.Add(new ValueNamePair("en_US", "English"));
+                _loginLanguage = _languages[0];
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt.Rows)
                     {
-                        continue;
+                        try
+                        {
+                            var cul = new System.Globalization.CultureInfo(row["AD_Language"].ToString().Replace("_", "-"));
+                            _languages.Add(_languages.Count, new Language
+                            (row["Name"].ToString(), row["AD_Language"].ToString(),
+                            cul, cul.NumberFormat.NumberDecimalSeparator == ".", cul.DateTimeFormat.ShortDatePattern, MediaSize.ISO.A4));
+
+                            langList.Add(new ValueNamePair(row["AD_Language"].ToString(), row["DisplayName"].ToString()));
+                        }
+                        catch
+                        {
+                            continue;
+                        }
                     }
                 }
             }
