@@ -1411,7 +1411,7 @@
             $ulHomeTabMenu.on("click", function (evnt) {
                 $hlnkRefTabData.show();
                 WelcomeTabDatacontainers.css({ "margin-left": "auto", "margin-top": "auto" });
-
+                WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
 
                 $(".vis-welcomeScreenTabMenu li").removeClass('vis-activeTab');
                 if (evnt.target.nodeName == "LI") {
@@ -1453,7 +1453,7 @@
                     $spanWelcomeTabtopHdr.show();
                     $sAlrtTxtType.html(VIS.Msg.getMsg("KPI"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-kpi");// .css("background-position", "0px -537px");
-
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (window.VADB && window.VADB != null && VADB.Apps.KpiHomeScreen != undefined) {
 
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
@@ -1574,7 +1574,7 @@
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyTask"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-mytasks");//$spanWelcomeTabtopHdr.css("background-position", "0px -406px");
-
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1627,6 +1627,7 @@
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("TaskAssignByMe"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-taskassigned");//$spanWelcomeTabtopHdr.css("background-position", "0px -340px");
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $spanWelcomeTabtopHdr.show();
@@ -1748,7 +1749,7 @@
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("Appointment"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-appointment");//$spanWelcomeTabtopHdr.css("background-position", "0px -275px");
-
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1796,7 +1797,7 @@
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyNotes"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-contacts");//  .css("background-position", "0px -473px");
-
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
