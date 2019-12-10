@@ -22,6 +22,46 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-shiftleft:before {
+    content: "\e95b";
+}
+
+.vis-shiftright:before {
+    content: "\e95c";
+}
+
+.vis-pdf-all:before {
+    content: "\e959";
+}
+
+.vis-save-pdf:before {
+    content: "\e95a";
+}
+
+.vis-customize:before {
+    content: "\e958";
+}
+
+.vis-archive:before {
+    content: "\e95e";
+}
+
+.vis-format:before {
+    content: "\e95f";
+}
+
+.vis-save-csv:before {
+    content: "\e960";
+}
+
+.vis-csv-all:before {
+    content: "\e965";
+}
+
+.vis-shortcut:before {
+    content: "\e957";
+}
+
 .vis-contacts:before {
     content: "\e952";
 }
@@ -418,6 +458,10 @@
     content: "\e995";
 }
 
+.vis-hammer:before {
+    content: "\e996";
+}
+
 .vis-stats-dots:before {
     content: "\e99b";
 }
@@ -540,4 +584,8 @@
 
 .vis-new-tab:before {
     content: "\ea7e";
+}
+
+.vis-file-pdf:before {
+    content: "\eadf";
 }

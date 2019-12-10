@@ -533,6 +533,7 @@
         this.hid = action + "=" + AD_Process_ID;
 
         var self = this;
+        this.hideHeader(true);
         VIS.dataContext.getProcessDataString({ AD_Process_ID: AD_Process_ID }, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error

@@ -2133,11 +2133,12 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     padding-bottom: 15px !important;
     display: inline-block;
 }
-.vis-attachhistory-apanel-tabcontrol-ul > li.vis-attachhistory-apanel-tab-selected {
-    color: rgba(var(--v-c-primary), 1);
-    font-size: 27px;
-    font-weight: 600;
-}
+
+    .vis-attachhistory-apanel-tabcontrol-ul > li.vis-attachhistory-apanel-tab-selected {
+        color: rgba(var(--v-c-primary), 1);
+        font-size: 27px;
+        font-weight: 600;
+    }
 
 
     .vis-attachhistory-apanel-tabcontrol-ul > li {
@@ -2468,6 +2469,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     background-color: #fdfdfd;
     border: none;
 }
+
 .vis-allocation-leftControls .panel-title {
     margin-top: 0;
     margin-bottom: 0;
@@ -3480,7 +3482,7 @@ html[dir="rtl"] .vis-cvd-editbtn {
 .vis-PopupWrap-alertmain {
     z-index: 999999;
     width: 100%;
-    top:0;
+    top: 0;
     height: 100%;
     display: none;
 }
@@ -3648,7 +3650,7 @@ html[dir="rtl"] .vis-cvd-editbtn {
 
     .vis-Dialog-buttons input {
         margin-left: 10px;
-        background:  rgba(var(--v-c-primary), 1);
+        background: rgba(var(--v-c-primary), 1);
         border: none;
         color: rgba(var(--v-c-on-primary), 1);
         padding: 0.5rem 1.5rem;
@@ -4265,7 +4267,7 @@ li.vis-selected-list {
     display: flex;
     height: 100%;
     flex-direction: column;
-    width:100%;
+    width: 100%;
 }
 
 .vis-process-main-wrap {
@@ -4273,12 +4275,13 @@ li.vis-selected-list {
     flex: 1;
     height: 100%;
     flex-direction: column;
-    width:100%;
+    width: 100%;
 }
 
 .vis-process-toolbar {
     flex: 1;
-    display: none;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .vis-process-outer-main-wrap {
@@ -4373,7 +4376,7 @@ li.vis-selected-list {
 }
 
 .vis-processpara-table-SplitUI button {
-    border: 1px solid #b3b3b3;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
     float: right;
     width: 30px;
     padding: 0;

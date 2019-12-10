@@ -13,6 +13,14 @@ html[dir="rtl"] .vis-feedIcons.vis-icon-feed {
 html[dir="rtl"] #favLinks > [class^="col"] {
     float: right;
 }
+html[dir="rtl"] #fllupsScreen h2 span, html[dir="rtl"] #favLinks h2 span {
+    padding-right: 0;
+    padding-left: 10px;
+}
+html[dir="rtl"] .vis-feedTitleBar {
+    padding-left: 0;
+    padding-right: 10px;
+}
 
 html[dir="rtl"] #favLinks .row.userLinks_activeTab {
     border-left: 1px solid #1b95d7;
