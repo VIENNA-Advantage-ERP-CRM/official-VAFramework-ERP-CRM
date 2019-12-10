@@ -428,7 +428,8 @@ html[dir="rtl"] .vis-menufavitm
     /* height: 42px; */
     /* float: right; */
     color: rgba(var(--v-c-on-primary), 1);
-    padding: 7px 10px;
+    padding: 0px 10px;
+    display: flex;
 }
 
 html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose

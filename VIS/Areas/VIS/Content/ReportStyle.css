@@ -19,13 +19,17 @@
     /*padding: 10px 0px 10px 0px;*/
     /*float: left;*/
     /*padding-left: 10px;*/
-    padding: 5px 0 5px 10px;
+    padding: 5px 0 5px 0;
     display: flex;
     align-items: center;
 }
 .vis-report-tittle {
     width: 40%;
     float: left;
+    padding-left: 10px;
+}
+.vis-processtoolpadd {
+    padding: 8px 0;
 }
 
 .vis-report-a-r-container {
@@ -50,8 +54,9 @@
 .vis-clear-both{
 	clear: both;
 }
-.vis-report-top-icons{
-	float:right;	
+.vis-report-top-icons {
+    display: flex;
+    align-items: center;
 }
 .vis-report-top-icons > ul{
 	margin:0;
@@ -60,7 +65,7 @@
 }
 .vis-report-top-icons > ul > li{
 	    float: left;
-    display: inline-block;
+    display: inline-flex;
     padding: 0 7px;
     color: rgba(var(--v-c-on-secondary), 1);
     font-size: 1.2rem;
@@ -74,9 +79,10 @@
 	background-repeat:no-repeat;	
 }
 
-ul.vis-reporticonsul {
+ul.vis-reporticonsul, ul.vis-reporticonsulprint {
     display: flex;
     padding-right: 5px;
+    align-items: center;
 }
 
 ul.vis-reporticonsul li {
@@ -124,6 +130,9 @@ ul.vis-toppaging li:nth-child(3) {
 	/*background-image:url(../Images/multiplepdf.png);*/	
     height:23px;	    
 }
+.vis-icon-menuclose .vis-cross {
+    color: rgba(var(--v-c-on-secondary), 1);
+}
 
 .vis-savecsv-ico{
 	/*background-image:url(../Images/savecsv.png);*/	
@@ -135,13 +144,18 @@ ul.vis-toppaging li:nth-child(3) {
 }
 .vis-selectcsview-page {
     float: left;
-    margin-top: 9px;
+    /* margin-top: 9px; */
     width: 60px;
-    background-color: #1577B0;
     border: none;
-    color: #fff;
+    color: rgba(var(--v-c-on-secondary), 1);
     height: 24px;
     margin-right: 9px;
+    padding: 0 5px;
+    background: rgba(var(--v-c-secondary), 1);
+    background-image: linear-gradient(45deg, transparent 50%, rgba(var(--v-c-on-secondary),1) 50%), linear-gradient(135deg, rgba(var(--v-c-on-secondary),1) 50%, transparent 50%);
+    background-position: calc(100% - 12px), calc(100% - 7px);
+    background-size: 5px 4px, 5px 4px, 1px 1.5em;
+    background-repeat: no-repeat;
 }
 .vis-requery-ico{
 	/*background-image:url(../Images/requery.png);*/	

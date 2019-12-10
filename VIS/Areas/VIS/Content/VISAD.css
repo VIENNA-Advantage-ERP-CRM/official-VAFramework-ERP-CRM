@@ -4376,7 +4376,7 @@ li.vis-selected-list {
 }
 
 .vis-processpara-table-SplitUI button {
-    border: 1px solid #b3b3b3;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
     float: right;
     width: 30px;
     padding: 0;
