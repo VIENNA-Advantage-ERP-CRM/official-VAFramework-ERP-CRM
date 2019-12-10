@@ -256,7 +256,7 @@ namespace VIS.Controllers
                 StringBuilder sbTextCopy = new StringBuilder();
                 string fileName = string.Empty;
 
-                var msg = VAdvantage.Tool.GenerateModel.StartProcess("ViennaAdvantage.Model", directory, chkStatus, tableId, classType, out  sbTextCopy, out  fileName);
+                var msg = VAdvantage.Tool.GenerateModel.StartProcess("ViennaAdvantage.Model", directory, chkStatus, tableId, classType, out sbTextCopy, out fileName);
                 string contant = sbTextCopy.ToString();
                 return Json(new { contant, fileName, msg }, JsonRequestBehavior.AllowGet);
             }
@@ -360,7 +360,93 @@ namespace VIS.Controllers
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
-        //
+        
+        /// <summary>
+        /// Function to get data based on the query generated for table
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public JsonResult GetIDTextData(string fields)
+        {
+            if (Session["Ctx"] != null)
+            {
+                string retJSON = "";
+                Ctx ctx = Session["ctx"] as Ctx;
+
+                // get parameters and split with comma
+                string[] paramValue = !string.IsNullOrEmpty(fields) ? fields.Split(',') : null;
+                // get table name from first index
+                string TableName = Util.GetValueOfString(paramValue[0]);
+
+                // check if second parameter is true for Version Table
+                if (Util.GetValueOfBool(paramValue[1]))
+                    TableName = TableName + "_Ver";
+
+                int AD_Table_ID = MTable.Get_Table_ID(TableName);               
+
+                POInfo inf = POInfo.GetPOInfo(ctx, AD_Table_ID);
+                // Get SQL Query from PO Info for selected table
+                string sqlCol = inf.GetSQLQuery();
+
+                // Append where Clause, passed in the parameter
+                string whClause = Util.GetValueOfString(paramValue[2]);
+                if (whClause != "")
+                    sqlCol += " WHERE " + whClause;
+
+                // Apply Role check
+                if (sqlCol.Trim() != "")
+                    sqlCol = MRole.GetDefault(ctx).AddAccessSQL(sqlCol, TableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+
+                // if SQL is being generated for Version table
+                if (Util.GetValueOfBool(paramValue[1]))
+                {
+                    if (sqlCol.Contains("WHERE"))
+                    {
+                        sqlCol += " AND " + TableName + ".ProcessedVersion = 'N' ";
+                    }
+                    sqlCol += " ORDER BY " + TableName + ".VERSIONVALIDFROM DESC";
+                }
+                CommonModel objCommonModel = new CommonModel();
+                retJSON = JsonConvert.SerializeObject(objCommonModel.GetIDTextData(ctx, sqlCol));
+                return Json(retJSON, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CheckTableDeletable(string fields)
+        {
+            string retJSON = "";
+            if (Session["Ctx"] != null)
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+
+                string[] paramValue = !string.IsNullOrEmpty(fields) ? fields.Split(',') : null;
+                string TableName = Util.GetValueOfString(paramValue[0]);
+
+                CommonModel objCommonModel = new CommonModel();
+                retJSON = JsonConvert.SerializeObject(objCommonModel.CheckTableDeletable(ctx, TableName));
+                return Json(retJSON, JsonRequestBehavior.AllowGet);
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteRecord(string fields)
+        {
+            if (Session["Ctx"] != null)
+            {
+                string retJSON = "";
+                Ctx ctx = Session["ctx"] as Ctx;
+
+                string[] paramValue = !string.IsNullOrEmpty(fields) ? fields.Split(',') : null;
+                string TableName = Util.GetValueOfString(paramValue[0]);
+                int Record_ID = Util.GetValueOfInt(paramValue[1]);
+
+                CommonModel objCommonModel = new CommonModel();
+                retJSON = JsonConvert.SerializeObject(objCommonModel.DeleteRecord(ctx, TableName, Record_ID));
+                return Json(retJSON, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
+        }
     }
 
     public class AttributeGrid
@@ -601,7 +687,7 @@ namespace VIS.Controllers
                 {
                     DataSet ds = DB.ExecuteDataset(@"SELECT c_paymentterm.c_paymentterm_ID,
                                     SUM(  CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS IsAdvance
-                                    FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID    = C_PaySchedule.c_paymentterm_ID
+                                    FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' )
                                     WHERE c_paymentterm.c_paymentterm_ID = (SELECT c_paymentterm_ID FROM C_Invoice WHERE C_Invoice_ID = " + recordID + @" )
                                     GROUP BY c_paymentterm.c_paymentterm_ID ");
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -3043,6 +3129,64 @@ namespace VIS.Controllers
 
             }
             return retDic;
+        }
+
+        /// <summary>
+        /// Get Dataset for the query passed in the parameter
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="sql"></param>
+        /// <returns>Dataset for query passed in parameter</returns>
+        public DataSet GetIDTextData(Ctx ctx, string sql)
+        {
+            DataSet dsIDText = DB.ExecuteDataset(sql, null, null);
+            if (dsIDText != null && dsIDText.Tables[0].Rows.Count > 0)
+                return dsIDText;
+
+            return dsIDText;
+        }
+
+        /// <summary>
+        /// Check whether table is deletable on AD_Table window
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="TableName"></param>
+        /// <returns>returns Y or N </returns>
+        public string CheckTableDeletable(Ctx ctx, string TableName)
+        {
+            return Util.GetValueOfString(DB.ExecuteScalar("Select IsDeleteable from AD_Table WHERE TableName = '" + TableName + "'"));
+        }
+
+        /// <summary>
+        /// function to delete record from table for ID passed in the parameter
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="TableName"></param>
+        /// <param name="Record_ID"></param>
+        /// <returns></returns>
+        public Dictionary<string, string> DeleteRecord(Ctx ctx, string TableName, int Record_ID)
+        {
+            Dictionary<string, string> retRes = new Dictionary<string, string>();
+            retRes["Success"] = "Y";
+            retRes["Msg"] = "";
+            PO _po = MTable.GetPO(ctx, TableName, Record_ID, null);
+            // PO delete function
+            if (!_po.Delete(true))
+            {
+                retRes["Success"] = "N";
+                ValueNamePair vnp = VLogger.RetrieveError();
+                if (vnp != null)
+                {
+                    if (vnp.GetName() != null)
+                        retRes["Msg"] = vnp.GetName();
+                    else if (vnp.GetValue() != null)
+                        retRes["Msg"] = vnp.GetName();
+                }
+                else
+                    retRes["Msg"] = Msg.GetMsg(ctx, "ErrorDeletingVersion");
+                return retRes;
+            }
+            return retRes;
         }
     }
 

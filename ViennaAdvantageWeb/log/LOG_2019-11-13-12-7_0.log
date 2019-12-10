@@ -1,0 +1,91 @@
+*** 11/13/2019 12:07:58 PM VAdvantage Log  ***
+12:07:58.758    (INFO)     Trx.Start: **** ConnSH637092436787176680System.Random
+12:07:58.758    (INFO)     Trx.Commit: **C** ConnSH637092436787176680System.Random
+12:07:58.758    (INFO)     MChangeLog.FillChangeLog: #9
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TAXCATEGORY_VERSION_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TAX_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - COMMODITYCODE
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - DESCRIPTION
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - ISACTIVE
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - ISDEFAULT
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - NAME
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_GENERATELINES
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_LOCATION
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE1
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE2
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE3
+12:09:39.939    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:11:10.111    (INFO)     Trx.Start: **** ConnSH637092438704844143System.Random
+12:11:10.111    (INFO)     Trx.Commit: **C** ConnSH637092438704844143System.Random
+12:11:11.111    (INFO)     Trx.Start: **** ConnSH637092438710594372System.Random
+12:11:11.111    (INFO)     Trx.Commit: **C** ConnSH637092438710594372System.Random
+12:11:14.111    (INFO)     Trx.Start: **** ConnSH637092438749391423System.Random
+12:11:15.111    (INFO)     Trx.Commit: **C** ConnSH637092438749391423System.Random
+12:11:30.113    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+12:11:30.113    (INFO)     Trx.Start: **** ConnSH637092438907849120System.Random
+12:11:30.113    (INFO)     Trx.Commit: **C** ConnSH637092438907849120System.Random
+12:11:30.113    (INFO)     Trx.Start: **** ConnSH637092438909057596System.Random
+12:11:30.113    (INFO)     Trx.Commit: **C** ConnSH637092438909057596System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+12:11:32.113    (INFO)     Trx.Start: **** ConnSH637092438927972171System.Random
+12:11:32.113    (INFO)     Trx.Commit: **C** ConnSH637092438927972171System.Random
+12:12:08.128    (INFO)     Trx.Start: **** ConnSH637092439287214075System.Random
+12:12:08.128    (INFO)     Trx.Commit: **C** ConnSH637092439287214075System.Random
+12:12:14.121    (INFO)     Trx.Start: **** ConnSH637092439340209055System.Random
+12:12:14.121    (INFO)     Trx.Commit: **C** ConnSH637092439340209055System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TAXCATEGORY_VERSION_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TAX_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - COMMODITYCODE
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - DESCRIPTION
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - ISACTIVE
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - ISDEFAULT
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - NAME
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_GENERATELINES
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_LOCATION
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE1
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE2
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE3
+12:12:22.122    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:12:29.122    (INFO)     Trx.Start: **** ConnSH637092439491209059System.Random
+12:12:29.122    (INFO)     Trx.Commit: **C** ConnSH637092439491209059System.Random
+12:12:31.123    (INFO)     Trx.Start: **** ConnSH637092439512344376System.Random
+12:12:31.123    (INFO)     Trx.Commit: **C** ConnSH637092439512344376System.Random
+12:12:33.123    (INFO)     Trx.Start: **** ConnSH637092439532436808System.Random
+12:12:33.123    (INFO)     Trx.Commit: **C** ConnSH637092439532436808System.Random
+12:12:34.123    (INFO)     Trx.Start: **** ConnSH637092439549715559System.Random
+12:12:35.123    (INFO)     Trx.Commit: **C** ConnSH637092439549715559System.Random
+12:12:37.123    (INFO)     Trx.Start: **** ConnSH637092439577937011System.Random
+12:12:37.123    (INFO)     Trx.Commit: **C** ConnSH637092439577937011System.Random
+12:13:50.135    (INFO)     Trx.Start: **** ConnSH637092440306094354System.Random
+12:13:50.135    (INFO)     Trx.Commit: **C** ConnSH637092440306094354System.Random
+12:13:57.135    (INFO)     Trx.Start: **** ConnSH637092440375244583System.Random
+12:13:57.135    (INFO)     Trx.Commit: **C** ConnSH637092440375244583System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TAXCATEGORY_VERSION_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TAX_ID
+----------->     (WARNING)  MTaxCategory.UpdateRecords: Column not found - C_TAX_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TAX_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - COMMODITYCODE
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - DESCRIPTION
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - ISACTIVE
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - ISDEFAULT
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - NAME
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_GENERATELINES
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_LOCATION
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE1
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE2
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - VATAX_PREFERENCE3
+12:21:56.215    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:23:17.231    (INFO)     MSession.Logout: 06:46:43.982

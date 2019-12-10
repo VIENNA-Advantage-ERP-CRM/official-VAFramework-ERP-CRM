@@ -1,0 +1,61 @@
+*** 10/16/2019 1:09:28 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:09:28.928    (INFO)     Trx.Start: **** ConnSH637068281687460245System.Random
+01:09:28.928    (INFO)     Trx.Commit: **C** ConnSH637068281687460245System.Random
+01:09:30.930    (INFO)     Trx.Start: **** ConnSH637068281704690612System.Random
+01:09:30.930    (INFO)     Trx.Commit: **C** ConnSH637068281704690612System.Random
+01:09:33.933    (INFO)     Trx.Start: **** ConnSH637068281736224454System.Random
+01:09:33.933    (INFO)     Trx.Commit: **C** ConnSH637068281736224454System.Random
+01:09:37.937    (INFO)     Trx.Start: **** ConnSH637068281778818879System.Random
+01:09:37.937    (INFO)     Trx.Commit: **C** ConnSH637068281778818879System.Random
+01:09:52.952    (INFO)     Trx.Start: **** ConnSH637068281928677964System.Random
+01:09:52.952    (INFO)     Trx.Commit: **C** ConnSH637068281928677964System.Random
+01:10:05.105    (INFO)     Trx.Start: **** ConnSH637068282055963800System.Random
+01:10:05.105    (INFO)     Trx.Commit: **C** ConnSH637068282055963800System.Random
+01:10:34.103    (INFO)     Trx.Start: **** ConnSH637068282343923123System.Random
+01:10:34.103    (INFO)     Trx.Commit: **C** ConnSH637068282343923123System.Random
+01:10:34.103    (INFO)     MChangeLog.FillChangeLog: #9
+01:10:34.103    (INFO)     Trx.Start: **** ConnSH637068282344942895System.Random
+01:10:34.103    (INFO)     Trx.Commit: **C** ConnSH637068282344942895System.Random
+01:10:38.103    (INFO)     Trx.Start: **** ConnSH637068282385844734System.Random
+01:10:38.103    (INFO)     Trx.Commit: **C** ConnSH637068282385844734System.Random
+01:10:44.104    (INFO)     ColumnSync.DoIt: C_Column_ID=1027364
+01:10:44.104    (INFO)     Trx.Start: **** SvrProcess
+01:10:53.105    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test ADD VersionNo NUMBER(10)
+01:11:16.111    (INFO)     Trx.Start: **** ConnSH637068282761135194System.Random
+01:11:16.111    (INFO)     Trx.Commit: **C** ConnSH637068282761135194System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=135 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName

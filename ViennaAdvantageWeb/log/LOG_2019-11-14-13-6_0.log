@@ -1,0 +1,10 @@
+*** 11/14/2019 1:06:05 PM VAdvantage Log  ***
+01:06:05.650    (INFO)     Trx.Start: **** ConnSH637093335658240981System.Random
+01:06:05.650    (INFO)     Trx.Commit: **C** ConnSH637093335658240981System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+01:06:06.660    (INFO)     Trx.Start: **** ConnSH637093335660675983System.Random
+01:06:06.660    (INFO)     Trx.Commit: **C** ConnSH637093335660675983System.Random
+01:06:06.660    (INFO)     CacheMgt.Reset: AD_Process: #1 (2)
+01:06:09.690    (INFO)     Trx.Start: **** ConnSH637093335695900450System.Random
+01:06:09.690    (INFO)     Trx.Commit: **C** ConnSH637093335695900450System.Random
+*** 11/14/2019 3:24:57 PM VAdvantage Log ***

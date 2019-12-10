@@ -394,30 +394,32 @@
     </div>
     <!-- end of context -->
 
-    <div class="VIS_Pref_content-right-4" style="display: none" id="@("content4_" + ViewBag.WindowNumber)">
+    <div class="VIS_Pref_content-right-4" style="display: none; height:100%;" id="@("content4_" + ViewBag.WindowNumber)">
         <h3 class="VIS_Pref_change-pass">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Error")</h3>
         <p id= "@("pError_" + ViewBag.WindowNumber)">Nam vulputate vitae libero sed gravida. Integer ornare vulputate justo, at vehicula leo lobortis consequat. Vivamus purus.</p>
-        <div id="@("divError_" + ViewBag.WindowNumber)">
+        <div id="@("divError_" + ViewBag.WindowNumber)" style="overflow-y:auto; height: calc(100% - 110px);">
             <table id="@("prefErrortbl_" + ViewBag.WindowNumber)" border="0" width="100%" bordercolor="#ffffff" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td class="VIS_Pref_table-row VIS_Pref_oblik1">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Time")</td>
-                    <td class="VIS_Pref_table-row">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Level")</td>
-                    <td class="VIS_Pref_table-row">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_ClassMethod") </td>
-                    <td class="VIS_Pref_table-row VIS_Pref_oblik2">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_MessageTo") </td>
-                </tr>
-                <tr>
-                    <td style="border-left: 1px solid #ECECEC; border-bottom: 1px solid #ECECEC; border-bottom-left-radius: 5px;"></td>
-                    <td style="border-bottom: 1px solid #ECECEC;"></td>
-                    <td style="border-bottom: 1px solid #ECECEC;">
-                        <input id="@("vchkErrorOnly_" + ViewBag.WindowNumber)" type="checkbox" class="VIS_Pref_automatic"><span>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Errorsonly")</span>
-                        <button id="@("vbtnReset_" + ViewBag.WindowNumber)"  class="VIS_Pref_pass-btn" style="margin-left: 5px;">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Reset") </button>
-                    </td>
-                    <td style="border-left: 0px; border-bottom: 1px solid #ECECEC; border-bottom-right-radius: 5px;" class="VIS_Pref_table-row1">
-                        @*<button id="@("vbtnSaveToFile_" + ViewBag.WindowNumber)" class="VIS_Pref_pass-btn">Export data into Excel</button>*@
-                        <a href="javascript:void(0)" class="VIS_Pref_pass-btn" style="display: inline-block;"  id="@("vbtnSaveToFile_" + ViewBag.WindowNumber)" >@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_ExpdataintoExl") </a>
-                    </td>
-                </tr>
+                    <td class="VIS_Pref_table-row vis-pref-table-head VIS_Pref_oblik1">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Time")</td>
+                    <td class="VIS_Pref_table-row vis-pref-table-head">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Level")</td>
+                    <td class="VIS_Pref_table-row vis-pref-table-head">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_ClassMethod") </td>
+                    <td class="VIS_Pref_table-row vis-pref-table-head VIS_Pref_oblik2">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_MessageTo") </td>
+                </tr>               
             </table>
+        </div>
+
+        <div class="VIS_Pref_err_mgntop">
+            <div class="VIS_Pref_err_btnLeft">
+                <input id="@("vbtnLogDate_" + ViewBag.WindowNumber)" type="date" style="width:40%;">
+                <button id="@("vbtnDownLog_" + ViewBag.WindowNumber)"  class="VIS_Pref_pass-btn VIS_Pref_err_btnDwnload">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_DownloadServerLog") </button>
+            </div>
+            <div class="VIS_Pref_err_btnRight">
+                 @*<button id="@("vbtnSaveToFile_" + ViewBag.WindowNumber)" class="VIS_Pref_pass-btn">Export data into Excel</button>*@
+                <a href="javascript:void(0)" class="VIS_Pref_pass-btn" style="display: inline-block; margin:0px; float:right;"  id="@("vbtnSaveToFile_" + ViewBag.WindowNumber)" >@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_ExpdataintoExl") </a>
+                <button id="@("vbtnReset_" + ViewBag.WindowNumber)"  class="VIS_Pref_pass-btn" style="margin: 0px 10px; height: 40px; float:right;">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Reset") </button>
+                <span style="margin-right: 10px; margin-top:10px; float:right;">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Errorsonly")</span>
+                <input style="margin-top:13px; float:right;" id="@("vchkErrorOnly_" + ViewBag.WindowNumber)" type="checkbox" class="VIS_Pref_automatic">
+            </div>
         </div>
     </div>
     <!-- end of Error -->

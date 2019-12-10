@@ -1,0 +1,12 @@
+*** 12/2/2019 4:42:11 PM VAdvantage Log  ***
+04:42:11.421    (INFO)     MSession.Logout: 06:41:35.96
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1028797]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+04:42:32.423    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+04:42:32.423    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+04:42:32.423    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+04:42:33.423    (INFO)     Trx.Start: **** ConnSH637109017533129114System.Random
+04:42:33.423    (INFO)     Trx.Commit: **C** ConnSH637109017533129114System.Random
+04:43:01.431    (INFO)     MSession.Logout: 06:30:28.506

@@ -37,3 +37,25 @@ G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csproj.CoreComp
 G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csproj.CopyComplete
 G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.dll
 G:\Karan\GIT\ViennaAdvantage\ModelLibrary\obj\Debug\ModelLibrary.pdb
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\ModelLibrary.dll.config
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\ModelLibrary.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\ModelLibrary.pdb
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\Microsoft.QualityTools.Testing.Fakes.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Net.Http.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Net.Http.Formatting.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Spatial.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Web.Optimization.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\Microsoft.Web.Infrastructure.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\stdole.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\SecureEngineUtility.pdb
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\SecureEngineUtility.xml
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Net.Http.xml
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Net.Http.Formatting.xml
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Spatial.xml
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\bin\Debug\System.Web.Optimization.xml
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csprojAssemblyReference.cache
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\obj\Debug\ModelLibrary.Properties.Resources.resources
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csproj.GenerateResource.cache
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\obj\Debug\ModelLibrary.csproj.CopyComplete
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\obj\Debug\ModelLibrary.dll
+D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\obj\Debug\ModelLibrary.pdb

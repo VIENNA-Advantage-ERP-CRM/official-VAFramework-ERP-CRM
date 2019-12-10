@@ -361,9 +361,9 @@ namespace VIS.Helpers
                             // Common.ErrorLog.FillErrorLog("SaveWithutPO","DocumnetNo.",message,VAdvantage.Framework.Message.MessageType.ERROR);
                             //log.Fine(message);
                         }
-                    }	//	New DocumentNo
+                    }   //	New DocumentNo
 
-                  //    New Value(key)
+                    //    New Value(key)
                     else if (columnName.Equals("Value") && inserting)
                     {
                         String value = (String)dataRow[columnName.ToLower()];// .ToString();
@@ -433,7 +433,7 @@ namespace VIS.Helpers
                         }
                     } //	UpdatedBy
 
-            //	Created
+                    //	Created
                     else if (inserting && columnName.Equals("Created"))
                     {
                         if (manualUpdate)
@@ -848,18 +848,42 @@ namespace VIS.Helpers
             bool inserting = inn.Inserting;
             bool compareDB = inn.CompareDB;
 
-            int size = m_fields.Count;
+            // Table ID of the table where record need to be Inserted/Updated
+            int InsAD_Table_ID = AD_Table_ID;
+            // Record ID from table where record need to be Inserted/Updated
+            int InsRecord_ID = Record_ID;
 
-            MTable table = MTable.Get(ctx, AD_Table_ID);
-            PO po = null;
-            if (table.IsSingleKey() || Record_ID == 0)
+            dynamic versionInfo = new System.Dynamic.ExpandoObject();
+            Trx trx = null;
+            bool hasDocValWF = false;
+
+            // check if Maintain versions property is true / else skip
+            if (inn.MaintainVersions)
             {
-                po = table.GetPO(ctx, Record_ID, null);
+                // trx = Trx.Get("VISHistory"+System.DateTime.Now.Ticks);
+                // Get Version table ID from AD_Table
+                InsAD_Table_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName = '" + inn.TableName + "_Ver'"));
+                if (InsAD_Table_ID <= 0)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = "Version Table Not Found", Info = inn.TableName + "_Ver", IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+                }
+
+                InsRecord_ID = Util.GetValueOfInt(inn.VerRecID);
+                versionInfo.AD_Table_ID = AD_Table_ID;
+                versionInfo.Record_ID = Record_ID;
+                versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
+                versionInfo.ImmediateSave = inn.ImmediateSave;
+                // check whether any Document Value type workflow is attached with Version table
+                hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
+                versionInfo.HasDocValWF = hasDocValWF;
             }
-            else	//	Multi - Key
-            {
-                po = table.GetPO(ctx, whereClause, null);
-            }
+
+            int Ver_Window_ID = 0;
+            PO po = GetPO(ctx, InsAD_Table_ID, InsRecord_ID, whereClause, trx, out Ver_Window_ID);
             //	No Persistent Object
             if (po == null)
             {
@@ -868,30 +892,231 @@ namespace VIS.Helpers
 
             // vinay bhatt window id
             po.SetAD_Window_ID(inn.AD_WIndow_ID);
-            //
+            //      
+            // check and set field values based on Master Versions 
+            // else execute normally
+            if (inn.MaintainVersions)
+            {
+                po.SetMasterDetails(versionInfo);
+                po.SetAD_Window_ID(Ver_Window_ID);
+                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true);
+            }
+            else
+                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false);
+
+            if (!po.Save())
+            {
+                String msg = "SaveError";
+                String info = "";
+                ValueNamePair ppE = VAdvantage.Logging.VLogger.RetrieveError();
+                if (ppE == null)
+                    ppE = VAdvantage.Logging.VLogger.RetrieveWarning();
+                if (ppE != null)
+                {
+                    msg = ppE.GetValue();
+                    info = ppE.GetName();
+                    //	Unique Constraint
+                    Exception ex = VAdvantage.Logging.VLogger.RetrieveException();
+                    if (ex != null)
+                        msg = "SaveErrorNotUnique";
+                }
+
+                //Added By amit 14-07-2015 Advance Documnet Control
+                ValueNamePair ppE1 = VAdvantage.Logging.VLogger.RetrieveAdvDocNoError();
+                if (ppE1 != null)
+                {
+                    //msg = ppE1.GetValue();
+                    info = ppE1.GetName();
+                    //	Unique Constraint
+                    Exception ex = VAdvantage.Logging.VLogger.RetrieveException();
+                    if (ex != null)
+                        msg = "SaveErrorNotUnique";
+                }
+                //End
+
+                outt.IsError = true;
+                outt.FireEEvent = true;
+                outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
+                outt.Status = GridTable.SAVE_ERROR;
+                return;
+            }
+            //	Refresh - update buffer
+            String whereC = po.Get_WhereClause(true);
+
+            // if Maintain version is true then create PO object of original table
+            if (inn.MaintainVersions)
+            {
+                var masDet = po.GetMasterDetails();
+                po = GetPO(ctx, AD_Table_ID, masDet.Record_ID, whereClause, trx, out Ver_Window_ID);
+                //	No Persistent Object
+                if (po == null)
+                {
+                    throw new NullReferenceException("No Persistent Obj");
+                }
+                whereC = po.Get_WhereClause(true);
+            }
+
+            if (inn.ParentNodeID > 0 && po.Get_ID() != inn.ParentNodeID)
+            {
+                MTree tre = new MTree(ctx, inn.TreeID, null);
+
+                string sql = "Update " + tre.GetNodeTableName() + " SET SeqNo=Seqno+1, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Parent_ID=" + inn.ParentNodeID;
+                DB.ExecuteQuery(sql, null, trx);
+
+                DB.ExecuteQuery("UPDATE " + tre.GetNodeTableName() + " SET Parent_ID=" + inn.ParentNodeID + ", seqNo=0, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Node_ID=" + po.Get_ID(), null, trx);
+            }
+
+            //ErrorLog.FillErrorLog("Table Object", whereClause, "information", VAdvantage.Framework.Message.MessageType.INFORMATION);
+
+            String refreshSQL = SQL_Select + " WHERE " + whereC;
+
+            IDataReader dr = null;
+            outt.RowData = rowData;
+            try
+            {
+                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF))
+                {
+                    outt.RowData = inn.OldRowData;
+                    // if table has Workflow then return status as has WF (W)
+                    if (hasDocValWF)
+                        outt.Status = GridTable.SAVE_WFAPPROVAL;
+                    // if record is not Immediate Save then return Save in Future (F)
+                    if (!inn.ImmediateSave)
+                        outt.Status = GridTable.SAVE_FUTURE;
+                }
+                else
+                {
+                    dr = DB.ExecuteReader(refreshSQL, null, trx);
+                    while (dr.Read())
+                    {
+                        outt.RowData = ReadData(dr, m_fields);
+                        break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                outt.ErrorMsg = refreshSQL + e.Message;
+
+
+                String msg = "SaveError";
+                outt.IsError = true;
+                outt.FireEEvent = true;
+                outt.EventParam = new EventParamOut() { Msg = msg, Info = e.Message, IsError = true };
+                outt.Status = GridTable.SAVE_ERROR;
+                return;
+            }
+
+            finally
+            {
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
+            }
+
+            ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveWarning();
+            if (pp != null)
+            {
+                String msg = pp.GetValue();
+                String info = pp.GetName();
+                //fireDataStatusEEvent(msg, info, false);
+                outt.FireEEvent = true;
+                outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
+
+            }
+            else
+            {
+                pp = VAdvantage.Logging.VLogger.RetrieveInfo();
+                String msg = "Saved";
+                String info = "";
+                if (pp != null)
+                {
+                    msg = pp.GetValue();
+                    info = pp.GetName();
+                }
+                outt.FireIEvent = true;
+                outt.EventParam = new EventParamOut() { Msg = msg, Info = info };
+            }
+            if (!inn.MaintainVersions)
+                outt.Status = GridTable.SAVE_OK;
+        }
+
+        /// <summary>
+        /// function to check whether there is any Document Value 
+        /// type workflow linked with table
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="AD_Client_ID"></param>
+        /// <param name="AD_Table_ID"></param>
+        /// <param name="_trx"></param>
+        /// <returns>true/false</returns>
+        public bool GetDocValueWF(Ctx ctx, int AD_Client_ID, int AD_Table_ID, Trx _trx)
+        {
+            String sql = "SELECT COUNT(AD_Workflow_ID) FROM AD_Workflow "
+                + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID
+                + " ORDER BY AD_Client_ID, AD_Table_ID";
+
+            return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
+        }
+
+        private PO GetPO(Ctx ctx, int AD_Table_ID, int Record_ID, string whereClause, Trx trx, out int AD_Window_ID)
+        {
+            MTable table = MTable.Get(ctx, AD_Table_ID);
+            PO po = null;
+            if (table.IsSingleKey() || Record_ID == 0)
+            {
+                po = table.GetPO(ctx, Record_ID, trx);
+            }
+            else	//	Multi - Key
+            {
+                po = table.GetPO(ctx, whereClause, trx);
+            }
+            AD_Window_ID = table.GetAD_Window_ID();
+            return po;
+        }
+
+        /// <summary>
+        /// function to set fields  in PO based on Version Reocrd or Simple Cases
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="po"></param>
+        /// <param name="m_fields"></param>
+        /// <param name="inn"></param>
+        /// <param name="outt"></param>
+        /// <param name="Record_ID"></param>
+        /// <param name="HasDocValWF"></param>
+        /// <param name="VersionRecord"></param>
+        private void SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord)
+        {
+            var rowData = inn.RowData; // new 
+            var _rowData = inn.OldRowData;
+            bool inserting = inn.Inserting;
+            bool compareDB = inn.CompareDB;
+
+            int size = m_fields.Count;
 
             bool isEmpty = _rowData == null || _rowData.Count == 0;
-
+            List<string> parentLinkCols = new List<string>();
+            List<Object> parentLinkColValue = new List<Object>();
             for (int col = 0; col < size; col++)
             {
                 WindowField field = m_fields[col];
                 if (field.IsVirtualColumn)
                     continue;
                 String columnName = field.ColumnName;
+
                 //bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
 
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                 Object oldValue = isEmpty ? null : _rowData[columnName.ToLower()];// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
-
-
-
 
                 if (field.IsEncryptedColumn)
                 {
                     value = SecureEngineBridge.DecryptByClientKey((string)rowData[columnName.ToLower()], key);// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                     oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
                 }
-
 
                 //	RowID
                 if (DisplayType.IsDate(field.DisplayType))
@@ -915,6 +1140,30 @@ namespace VIS.Helpers
                     {
                         oldValue = Convert.FromBase64String(oldValue.ToString());
                     }
+                }
+
+                // In case of Version record
+                if (VersionRecord)
+                {
+                    if (columnName.ToLower() == "created" || columnName.ToLower() == "updated")
+                        value = System.DateTime.Now;
+                    if (columnName.ToLower() == "createdby" || columnName.ToLower() == "updatedby")
+                        value = ctx.GetAD_User_ID();
+                    if (!po.Set_ValueNoCheck(columnName, value))
+                    {
+                        outt.IsError = true;
+                        outt.FireEEvent = true;
+                        outt.EventParam = new EventParamOut() { Msg = "ValidationError", Info = columnName, IsError = true };
+                        outt.Status = GridTable.SAVE_ERROR;
+                        return;
+                    }
+                    // check in case of version record, if there are multiple Parent Link Columns
+                    if (VersionRecord && field.IsParentColumn && !parentLinkCols.Contains(columnName))
+                    {
+                        parentLinkCols.Add(columnName);
+                        parentLinkColValue.Add(value);
+                    }
+                    continue;
                 }
 
                 if (field.DisplayType == DisplayType.RowID)
@@ -978,6 +1227,7 @@ namespace VIS.Helpers
                     }
                 }
             }
+
             if (inn.SelectedTreeNodeID > 0)
             {
                 po.SetNodeParentID(inn.SelectedTreeNodeID);
@@ -987,117 +1237,66 @@ namespace VIS.Helpers
                 po.SetNodeParentID(inn.ParentNodeID);
             }
 
-
-            if (!po.Save())
+            // Lokesh Chauhan // Master Data Versioning
+            // set fields for Master Data Versions
+            if (VersionRecord)
             {
-                String msg = "SaveError";
-                String info = "";
-                ValueNamePair ppE = VAdvantage.Logging.VLogger.RetrieveError();
-                if (ppE == null)
-                    ppE = VAdvantage.Logging.VLogger.RetrieveWarning();
-                if (ppE != null)
+                if (inn.ValidFrom != null)
+                    po.Set_Value("VersionValidFrom", inn.ValidFrom.Value);
+                else
+                    po.Set_Value("VersionValidFrom", System.DateTime.Now);
+                po.Set_Value("IsVersionApproved", true);
+                if (inn.ImmediateSave)
+                    po.Set_Value("ProcessedVersion", true);
+
+                // Only increase record version if Version do not exist for same date
+                if (po.Get_ID() <= 0)
                 {
-                    msg = ppE.GetValue();
-                    info = ppE.GetName();
-                    //	Unique Constraint
-                    Exception ex = VAdvantage.Logging.VLogger.RetrieveException();
-                    if (ex != null)
-                        msg = "SaveErrorNotUnique";
+                    int VerRec = 1;
+                    int curMaxVer = 0;
+                    // Get Max Record version saved in Version Record field of Version table
+                    if (parentLinkCols.Count <= 0)
+                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + inn.TableName + "_ID = " + Record_ID));
+                    else
+                    {
+                        StringBuilder whClause = new StringBuilder("");
+                        for (int i = 0; i < parentLinkCols.Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                if (parentLinkColValue[i] != null)
+                                    whClause.Append(parentLinkCols[i] + " = " + parentLinkColValue[i]);
+                                else
+                                    whClause.Append(" NVL(" + parentLinkCols[i] + ",0) = 0");
+                            }
+                            else
+                            {
+                                if (parentLinkColValue[i] != null)
+                                    whClause.Append(" AND " + parentLinkCols[i] + " = " + parentLinkColValue[i]);
+                                else
+                                    whClause.Append(" AND NVL(" + parentLinkCols[i] + ",0) = 0");
+                            }
+                        }
+                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + whClause));
+                    }
+                    if (curMaxVer > 0)
+                        VerRec = curMaxVer;
+                    po.Set_Value("RecordVersion", VerRec);
                 }
-
-                //Added By amit 14-07-2015 Advance Documnet Control
-                ValueNamePair ppE1 = VAdvantage.Logging.VLogger.RetrieveAdvDocNoError();
-                if (ppE1 != null)
+                if (!inn.ImmediateSave)
                 {
-                    //msg = ppE1.GetValue();
-                    info = ppE1.GetName();
-                    //	Unique Constraint
-                    Exception ex = VAdvantage.Logging.VLogger.RetrieveException();
-                    if (ex != null)
-                        msg = "SaveErrorNotUnique";
+                    if (inn.ValidFrom == null)
+                        inn.ImmediateSave = true;
                 }
-                //End
-
-                outt.IsError = true;
-                outt.FireEEvent = true;
-                outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
-                outt.Status = GridTable.SAVE_ERROR;
-                return;
-            }
-            //	Refresh - update buffer
-            String whereC = po.Get_WhereClause(true);
-
-            if (inn.ParentNodeID > 0 && po.Get_ID() != inn.ParentNodeID)
-            {
-                MTree tre = new MTree(ctx, inn.TreeID, null);
-
-                string sql = "Update " + tre.GetNodeTableName() + " SET SeqNo=Seqno+1, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Parent_ID=" + inn.ParentNodeID;
-                DB.ExecuteQuery(sql);
-
-                DB.ExecuteQuery("UPDATE " + tre.GetNodeTableName() + " SET Parent_ID=" + inn.ParentNodeID + ", seqNo=0, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Node_ID=" + po.Get_ID());
-            }
-
-            //ErrorLog.FillErrorLog("Table Object", whereClause, "information", VAdvantage.Framework.Message.MessageType.INFORMATION);
-
-            String refreshSQL = SQL_Select + " WHERE " + whereC;
-
-            IDataReader dr = null;
-            outt.RowData = rowData;
-            try
-            {
-                dr = DB.ExecuteReader(refreshSQL);
-                while (dr.Read())
+                // if Document value type Workflow is attached with the table,
+                // then set "ProcessedVersion" & "IsVersionApproved" as false for Version
+                if (HasDocValWF)
                 {
-                    outt.RowData = ReadData(dr, m_fields);
-                    break;
+                    po.Set_Value("ProcessedVersion", false);
+                    po.Set_Value("IsVersionApproved", false);
                 }
             }
-            catch (Exception e)
-            {
-                outt.ErrorMsg = refreshSQL + e.Message;
-
-
-                String msg = "SaveError";
-                outt.IsError = true;
-                outt.FireEEvent = true;
-                outt.EventParam = new EventParamOut() { Msg = msg, Info = e.Message, IsError = true };
-                outt.Status = GridTable.SAVE_ERROR;
-                return;
-            }
-
-            finally
-            {
-                if (dr != null)
-                {
-                    dr.Close();
-                    dr = null;
-                }
-            }
-
-            ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveWarning();
-            if (pp != null)
-            {
-                String msg = pp.GetValue();
-                String info = pp.GetName();
-                //fireDataStatusEEvent(msg, info, false);
-                outt.FireEEvent = true;
-                outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
-
-            }
-            else
-            {
-                pp = VAdvantage.Logging.VLogger.RetrieveInfo();
-                String msg = "Saved";
-                String info = "";
-                if (pp != null)
-                {
-                    msg = pp.GetValue();
-                    info = pp.GetName();
-                }
-                outt.FireIEvent = true;
-                outt.EventParam = new EventParamOut() { Msg = msg, Info = info };
-            }
-            outt.Status = GridTable.SAVE_OK;
+            // Lokesh Chauhan // Master Data Versioning
         }
 
         /// <summary>
@@ -1998,12 +2197,12 @@ namespace VIS.Helpers
                 {
                     if (OldValue != null)
                     {
-                        bool yes = OldValue.Equals("true") || OldValue.Equals("Y");
+                        bool yes = OldValue.Equals("True") || OldValue.Equals("Y");
                         showOldValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                     if (NewValue != null)
                     {
-                        bool yes = NewValue.Equals("true") || NewValue.Equals("Y");
+                        bool yes = NewValue.Equals("True") || NewValue.Equals("Y");
                         showNewValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                 }
@@ -2330,6 +2529,21 @@ namespace VIS.Helpers
 
 
 
+        }
+        /// <summary>
+        /// Method to get parent tab records ID.
+        /// </summary>
+        /// <param name="SelectColumn">Column  to be selected</param>
+        /// <param name="SelectTable">From table</param>
+        /// <param name="WhereColumn">Where column</param>
+        /// <param name="WhereValue">ID of child column</param>
+        /// <returns></returns>
+        public int GetZoomParentRecord(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
+        {
+            int recordID = 0;
+            string sql = "SELECT " + SelectColumn + " FROM " + SelectTable + " WHERE " + WhereColumn + "=" + Util.GetValueOfInt(WhereValue);
+            recordID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            return recordID;
         }
     }
 }

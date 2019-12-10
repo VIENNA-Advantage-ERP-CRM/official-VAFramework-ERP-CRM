@@ -1,0 +1,43 @@
+*** 11/13/2019 3:39:34 PM VAdvantage Log  ***
+03:39:34.393    (INFO)     MSession.Logout: 06:30:25.802
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+03:40:22.402    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+03:40:23.402    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+03:40:23.402    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+03:40:23.402    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+03:40:23.402    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+03:40:23.402    (INFO)     Trx.Start: **** ConnSH637092564239241943System.Random
+03:40:24.402    (INFO)     Trx.Commit: **C** ConnSH637092564239241943System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/12/19','mm/dd/yy') and to_date('11/20/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/13/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+03:40:37.403    (INFO)     Trx.Start: **** ConnSH637092564370232483System.Random
+03:40:37.403    (INFO)     Trx.Commit: **C** ConnSH637092564370232483System.Random
+03:40:37.403    (INFO)     Trx.Start: **** ConnSH637092564379797300System.Random
+03:40:38.403    (INFO)     Trx.Commit: **C** ConnSH637092564379797300System.Random
+03:40:42.404    (INFO)     Trx.Start: **** ConnSH637092564421502400System.Random
+03:40:42.404    (INFO)     Trx.Commit: **C** ConnSH637092564421502400System.Random
+03:40:44.404    (INFO)     Trx.Start: **** ConnSH637092564443649112System.Random
+03:40:44.404    (INFO)     Trx.Commit: **C** ConnSH637092564443649112System.Random
+03:41:08.418    (INFO)     Trx.Start: **** ConnSH637092564689092863System.Random
+03:41:09.419    (INFO)     Trx.Commit: **C** ConnSH637092564689092863System.Random
+03:41:09.419    (INFO)     MChangeLog.FillChangeLog: #9
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:41:09.419    (INFO)     Trx.Start: **** ConnSH637092564691656797System.Random
+03:41:09.419    (INFO)     Trx.Commit: **C** ConnSH637092564691656797System.Random
+03:41:09.419    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)

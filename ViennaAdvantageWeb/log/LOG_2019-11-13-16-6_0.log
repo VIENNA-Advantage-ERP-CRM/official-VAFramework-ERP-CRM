@@ -1,0 +1,98 @@
+*** 11/13/2019 4:06:45 PM VAdvantage Log  ***
+04:06:45.645    (INFO)     Trx.Start: **** ConnSH637092580056298676System.Random
+04:06:45.645    (INFO)     Trx.Commit: **C** ConnSH637092580056298676System.Random
+04:06:45.645    (INFO)     MChangeLog.FillChangeLog: #9
+04:06:45.645    (INFO)     CacheReset.DoIt: 
+04:06:45.645    (INFO)     Env.Reset: finalCall=False
+04:06:45.645    (INFO)     CacheMgt.Reset: #16 (7876)
+04:06:45.645    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+04:06:45.645    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+04:06:46.646    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+04:06:46.646    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+04:06:46.646    (INFO)     MChangeLog.FillChangeLog: #9
+04:06:46.646    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:06:46.646    (INFO)     Trx.Start: **** ConnSH637092580062194003System.Random
+04:06:46.646    (INFO)     Trx.Commit: **C** ConnSH637092580062194003System.Random
+04:06:46.646    (INFO)     Trx.Start: **** ConnSH637092580063368980System.Random
+04:06:46.646    (INFO)     Trx.Commit: **C** ConnSH637092580063368980System.Random
+04:06:47.647    (INFO)     Msg.InitMsg: Records=5823 - en_US
+04:06:47.647    (INFO)     Trx.Start: **** ConnSH637092580070103753System.Random
+04:06:47.647    (INFO)     Trx.Commit: **C** ConnSH637092580070103753System.Random
+04:06:47.647    (INFO)     Trx.Start: **** ConnSH637092580070978670System.Random
+04:06:47.647    (INFO)     Trx.Commit: **C** ConnSH637092580070978670System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:06:49.649    (INFO)     Trx.Start: **** ConnSH637092580094143971System.Random
+04:06:49.649    (INFO)     Trx.Commit: **C** ConnSH637092580094143971System.Random
+04:06:49.649    (INFO)     Trx.Start: **** ConnSH637092580094954027System.Random
+04:06:49.649    (INFO)     Trx.Commit: **C** ConnSH637092580094954027System.Random
+04:06:50.650    (INFO)     Trx.Start: **** ConnSH637092580100360562System.Random
+04:06:50.650    (INFO)     Trx.Commit: **C** ConnSH637092580100360562System.Random
+04:06:50.650    (INFO)     Trx.Start: **** ConnSH637092580101180430System.Random
+04:06:50.650    (INFO)     Trx.Commit: **C** ConnSH637092580101180430System.Random
+04:06:52.652    (INFO)     Trx.Start: **** ConnSH637092580128316294System.Random
+04:06:52.652    (INFO)     Trx.Commit: **C** ConnSH637092580128316294System.Random
+04:06:59.659    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+04:06:59.659    (INFO)     Trx.Start: **** ConnSH637092580190765239System.Random
+04:06:59.659    (INFO)     Trx.Commit: **C** ConnSH637092580190765239System.Random
+04:06:59.659    (INFO)     Trx.Start: **** ConnSH637092580191881615System.Random
+04:06:59.659    (INFO)     Trx.Commit: **C** ConnSH637092580191881615System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+04:06:59.659    (INFO)     Trx.Start: **** ConnSH637092580195641229System.Random
+04:06:59.659    (INFO)     Trx.Commit: **C** ConnSH637092580195641229System.Random
+04:07:02.720    (INFO)     Trx.Start: **** ConnSH637092580221242831System.Random
+04:07:02.720    (INFO)     Trx.Commit: **C** ConnSH637092580221242831System.Random
+04:07:22.722    (INFO)     Trx.Start: **** ConnSH637092580428754893System.Random
+04:07:22.722    (INFO)     Trx.Commit: **C** ConnSH637092580428754893System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+04:07:23.723    (INFO)     Trx.Start: **** ConnSH637092580430024785System.Random
+04:07:23.723    (INFO)     Trx.Commit: **C** ConnSH637092580430024785System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+04:07:23.723    (INFO)     Trx.Start: **** ConnSH637092580431380470System.Random
+04:07:23.723    (INFO)     Trx.Commit: **C** ConnSH637092580431380470System.Random
+04:07:23.723    (INFO)     CacheMgt.Reset: AD_Process: #1 (2)
+04:07:26.726    (INFO)     Trx.Start: **** ConnSH637092580463565552System.Random
+04:07:26.726    (INFO)     Trx.Commit: **C** ConnSH637092580463565552System.Random
+04:07:27.727    (INFO)     Trx.Start: **** ConnSH637092580478443825System.Random
+04:07:27.727    (INFO)     Trx.Commit: **C** ConnSH637092580478443825System.Random
+04:07:28.728    (INFO)     Trx.Start: **** ConnSH637092580483590901System.Random
+04:07:28.728    (INFO)     Trx.Commit: **C** ConnSH637092580483590901System.Random
+04:07:28.728    (INFO)     Trx.Start: **** ConnSH637092580488424820System.Random
+04:07:28.728    (INFO)     Trx.Commit: **C** ConnSH637092580488424820System.Random
+04:07:40.740    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+04:07:40.740    (INFO)     Trx.Start: **** ConnSH637092580600233018System.Random
+04:07:40.740    (INFO)     Trx.Commit: **C** ConnSH637092580600233018System.Random
+04:07:40.740    (INFO)     Trx.Start: **** ConnSH637092580600985417System.Random
+04:07:40.740    (INFO)     Trx.Commit: **C** ConnSH637092580600985417System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+04:07:40.740    (INFO)     Trx.Start: **** ConnSH637092580603797064System.Random
+04:07:40.740    (INFO)     Trx.Commit: **C** ConnSH637092580603797064System.Random
+04:07:40.740    (INFO)     Trx.Start: **** ConnSH637092580606650549System.Random
+04:07:40.740    (INFO)     Trx.Commit: **C** ConnSH637092580606650549System.Random
+04:07:59.759    (INFO)     Trx.Start: **** ConnSH637092580792035772System.Random
+04:07:59.759    (INFO)     Trx.Commit: **C** ConnSH637092580792035772System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+04:07:59.759    (INFO)     Trx.Start: **** ConnSH637092580793617589System.Random
+04:07:59.759    (INFO)     Trx.Commit: **C** ConnSH637092580793617589System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+04:07:59.759    (INFO)     Trx.Start: **** ConnSH637092580794936363System.Random
+04:07:59.759    (INFO)     Trx.Commit: **C** ConnSH637092580794936363System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+04:07:59.759    (INFO)     Trx.Start: **** ConnSH637092580796205549System.Random
+04:07:59.759    (INFO)     Trx.Commit: **C** ConnSH637092580796205549System.Random
+04:07:59.759    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:08:04.840    (INFO)     Trx.Start: **** ConnSH637092580843346769System.Random
+04:08:04.840    (INFO)     Trx.Commit: **C** ConnSH637092580843346769System.Random
+*** 11/13/2019 6:18:12 PM VAdvantage Log ***

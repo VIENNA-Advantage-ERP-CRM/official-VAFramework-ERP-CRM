@@ -1,0 +1,131 @@
+*** 10/11/2019 12:24:47 PM VAdvantage Log  ***
+12:24:47.244    (INFO)     MSession.Logout: 06:31:12.832
+12:24:52.245    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:24:52.245    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:24:52.245    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:24:52.245    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:24:52.245    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:24:53.245    (INFO)     Trx.Start: **** ConnSH637063934934985869System.Random
+12:24:53.245    (INFO)     Trx.Commit: **C** ConnSH637063934934985869System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/10/19','mm/dd/yy') and to_date('10/18/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/11/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:24:59.245    (INFO)     Trx.Start: **** ConnSH637063934994693753System.Random
+12:24:59.245    (INFO)     Trx.Commit: **C** ConnSH637063934994693753System.Random
+12:25:00.250    (INFO)     Trx.Start: **** ConnSH637063935009427144System.Random
+12:25:00.250    (INFO)     Trx.Commit: **C** ConnSH637063935009427144System.Random
+12:27:12.271    (INFO)     MChangeLog.FillChangeLog: #9
+12:27:12.271    (INFO)     Trx.Start: **** ConnSH637063936327557838System.Random
+12:27:12.271    (INFO)     Trx.Commit: **C** ConnSH637063936327557838System.Random
+12:27:13.271    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:27:13.271    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:27:13.271    (INFO)     Trx.Start: **** ConnSH637063936339263496System.Random
+12:27:13.271    (INFO)     Trx.Commit: **C** ConnSH637063936339263496System.Random
+12:27:13.271    (INFO)     Trx.Start: **** ConnSH637063936339723503System.Random
+12:27:13.271    (INFO)     Trx.Commit: **C** ConnSH637063936339723503System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:27:14.271    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:27:15.271    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:27:15.271    (INFO)     Trx.Start: **** ConnSH637063936352443453System.Random
+12:27:15.271    (INFO)     Trx.Commit: **C** ConnSH637063936352443453System.Random
+12:27:15.271    (INFO)     Trx.Start: **** ConnSH637063936352753384System.Random
+12:27:15.271    (INFO)     Trx.Commit: **C** ConnSH637063936352753384System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:27:15.271    (INFO)     CacheMgt.Reset: C_Tax: #2 (0)
+12:27:38.273    (INFO)     Trx.Start: **** ConnSH637063936589050935System.Random
+12:27:38.273    (INFO)     Trx.Commit: **C** ConnSH637063936589050935System.Random
+12:27:39.273    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:27:39.273    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:27:39.273    (INFO)     Trx.Start: **** ConnSH637063936597575958System.Random
+12:27:39.273    (INFO)     Trx.Commit: **C** ConnSH637063936597575958System.Random
+12:27:39.273    (INFO)     Trx.Start: **** ConnSH637063936597886006System.Random
+12:27:39.273    (INFO)     Trx.Commit: **C** ConnSH637063936597886006System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:27:40.274    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:27:40.274    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:27:40.274    (INFO)     Trx.Start: **** ConnSH637063936609863672System.Random
+12:27:41.274    (INFO)     Trx.Commit: **C** ConnSH637063936609863672System.Random
+12:27:41.274    (INFO)     Trx.Start: **** ConnSH637063936610153674System.Random
+12:27:41.274    (INFO)     Trx.Commit: **C** ConnSH637063936610153674System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:27:41.274    (INFO)     CacheMgt.Reset: C_Tax: #2 (0)
+12:28:38.283    (INFO)     Trx.Start: **** ConnSH637063937187517795System.Random
+12:28:38.283    (INFO)     Trx.Commit: **C** ConnSH637063937187517795System.Random
+12:28:38.283    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:28:39.283    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:28:39.283    (INFO)     Trx.Start: **** ConnSH637063937191837735System.Random
+12:28:39.283    (INFO)     Trx.Commit: **C** ConnSH637063937191837735System.Random
+12:28:39.283    (INFO)     Trx.Start: **** ConnSH637063937192107797System.Random
+12:28:39.283    (INFO)     Trx.Commit: **C** ConnSH637063937192107797System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:28:39.283    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:28:39.283    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:28:39.283    (INFO)     Trx.Start: **** ConnSH637063937198021266System.Random
+12:28:39.283    (INFO)     Trx.Commit: **C** ConnSH637063937198021266System.Random
+12:28:39.283    (INFO)     Trx.Start: **** ConnSH637063937198231925System.Random
+12:28:39.283    (INFO)     Trx.Commit: **C** ConnSH637063937198231925System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:28:40.284    (INFO)     CacheMgt.Reset: C_Tax: #2 (0)
+12:33:14.331    (INFO)     Trx.Start: **** ConnSH637063939941592934System.Random
+12:33:14.331    (INFO)     Trx.Commit: **C** ConnSH637063939941592934System.Random
+12:33:14.331    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:33:15.331    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:33:15.331    (INFO)     Trx.Start: **** ConnSH637063939951335860System.Random
+12:33:15.331    (INFO)     Trx.Commit: **C** ConnSH637063939951335860System.Random
+12:33:15.331    (INFO)     Trx.Start: **** ConnSH637063939952076757System.Random
+12:33:15.331    (INFO)     Trx.Commit: **C** ConnSH637063939952076757System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:33:16.331    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+12:33:17.331    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+12:33:17.331    (INFO)     Trx.Start: **** ConnSH637063939972362873System.Random
+12:33:17.331    (INFO)     Trx.Commit: **C** ConnSH637063939972362873System.Random
+12:33:17.331    (INFO)     Trx.Start: **** ConnSH637063939972592829System.Random
+12:33:17.331    (INFO)     Trx.Commit: **C** ConnSH637063939972592829System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+12:33:17.331    (INFO)     CacheMgt.Reset: C_Tax: #2 (0)
+01:04:00.400    (INFO)     Trx.Start: **** ConnSH637063958402229119System.Random
+01:04:00.400    (INFO)     Trx.Commit: **C** ConnSH637063958402229119System.Random
+01:04:00.400    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+01:04:01.410    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+01:04:01.410    (INFO)     Trx.Start: **** ConnSH637063958412218417System.Random
+01:04:01.410    (INFO)     Trx.Commit: **C** ConnSH637063958412218417System.Random
+01:04:01.410    (INFO)     Trx.Start: **** ConnSH637063958412578463System.Random
+01:04:01.410    (INFO)     Trx.Commit: **C** ConnSH637063958412578463System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+01:04:01.410    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+01:04:02.420    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+01:04:02.420    (INFO)     Trx.Start: **** ConnSH637063958423724388System.Random
+01:04:02.420    (INFO)     Trx.Commit: **C** ConnSH637063958423724388System.Random
+01:04:02.420    (INFO)     Trx.Start: **** ConnSH637063958423994306System.Random
+01:04:02.420    (INFO)     Trx.Commit: **C** ConnSH637063958423994306System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+01:04:02.420    (INFO)     CacheMgt.Reset: C_Tax: #2 (0)
+*** 10/11/2019 1:39:47 PM VAdvantage Log ***

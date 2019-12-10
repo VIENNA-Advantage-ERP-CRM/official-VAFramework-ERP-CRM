@@ -1,0 +1,181 @@
+*** 10/16/2019 10:55:51 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:55:51.555    (INFO)     Trx.Start: **** ConnSH637068201517804818System.Random
+10:55:51.555    (INFO)     Trx.Commit: **C** ConnSH637068201517804818System.Random
+10:55:53.555    (INFO)     Trx.Start: **** ConnSH637068201535935425System.Random
+10:55:53.555    (INFO)     Trx.Commit: **C** ConnSH637068201535935425System.Random
+10:55:57.555    (INFO)     Trx.Start: **** ConnSH637068201575420869System.Random
+10:55:57.555    (INFO)     Trx.Commit: **C** ConnSH637068201575420869System.Random
+10:55:59.555    (INFO)     Trx.Start: **** ConnSH637068201597993294System.Random
+10:55:59.555    (INFO)     Trx.Commit: **C** ConnSH637068201597993294System.Random
+10:56:06.566    (INFO)     Trx.Start: **** ConnSH637068201666849497System.Random
+10:56:06.566    (INFO)     Trx.Commit: **C** ConnSH637068201666849497System.Random
+10:56:06.566    (INFO)     MChangeLog.FillChangeLog: #9
+10:56:06.566    (INFO)     ColumnSync.DoIt: C_Column_ID=2241
+10:56:06.566    (INFO)     Trx.Start: **** SvrProcess
+10:59:22.592    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE C_Tax MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE C_Tax SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+10:59:25.592    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE C_Tax SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+10:59:58.595    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE C_Tax DROP CONSTRAINT FK261_2241
+10:59:58.595    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE C_Tax ADD CONSTRAINT FK261_2241 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+11:00:03.030    (INFO)     Trx.Commit: **C** SvrProcess
+11:00:03.030    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:01:00.100    (INFO)     Trx.Start: **** ConnSH637068204607557735System.Random
+11:01:00.100    (INFO)     Trx.Commit: **C** ConnSH637068204607557735System.Random
+11:01:00.100    (INFO)     Trx.Start: **** ConnSH637068204609763746System.Random
+11:01:01.110    (INFO)     Trx.Commit: **C** ConnSH637068204609763746System.Random
+11:01:01.110    (INFO)     Trx.Start: **** ConnSH637068204615300743System.Random
+11:01:01.110    (INFO)     Trx.Commit: **C** ConnSH637068204615300743System.Random
+11:01:05.150    (INFO)     Trx.Start: **** ConnSH637068204654223107System.Random
+11:01:05.150    (INFO)     Trx.Commit: **C** ConnSH637068204654223107System.Random
+11:01:06.160    (INFO)     TableCreateColumns.DoIt: EntityType=U, AllTables=False, AD_Table_ID=1001146
+11:01:06.160    (INFO)     Trx.Start: **** SvrProcess
+11:01:06.160    (INFO)     TableCreateColumns.DoIt: CVBN_RainHarvest, EntityType=U
+11:01:08.180    (INFO)     Trx.Start: **** ConnSH637068204681310955System.Random
+11:01:08.180    (INFO)     Trx.Commit: **C** ConnSH637068204681310955System.Random
+11:01:08.180    (INFO)     Trx.Start: **** ConnSH637068204682293146System.Random
+11:01:08.180    (INFO)     Trx.Commit: **C** ConnSH637068204682293146System.Random
+11:01:08.180    (INFO)     SubTableUtil.CreateColumn: Created Element: CVBN_RainHarvest_ID
+11:01:08.180    (INFO)     Trx.Start: **** ConnSH637068204686853225System.Random
+11:01:08.180    (INFO)     Trx.Commit: **C** ConnSH637068204686853225System.Random
+11:01:08.180    (INFO)     Trx.Start: **** ConnSH637068204688003115System.Random
+11:01:08.180    (INFO)     Trx.Commit: **C** ConnSH637068204688003115System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD CVBN_RainHarvest_ID NUMBER(10) NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.CVBN_RainHarvest_ID
+----------->     (WARNING)  M_Element.Get: Not unique: AD_Client_ID -> M_Element[102-AD_Client_ID] - AD_Client_ID
+11:01:09.190    (INFO)     Trx.Start: **** ConnSH637068204693688578System.Random
+11:01:09.190    (INFO)     Trx.Commit: **C** ConnSH637068204693688578System.Random
+11:01:09.190    (INFO)     Trx.Start: **** ConnSH637068204694383851System.Random
+11:01:09.190    (INFO)     Trx.Commit: **C** ConnSH637068204694383851System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD AD_Client_ID NUMBER(10) NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.AD_Client_ID
+----------->     (WARNING)  M_Element.Get: Not unique: AD_Org_ID -> M_Element[113-AD_Org_ID] - AD_Org_ID
+11:01:09.190    (INFO)     Trx.Start: **** ConnSH637068204699249908System.Random
+11:01:09.190    (INFO)     Trx.Commit: **C** ConnSH637068204699249908System.Random
+11:01:09.190    (INFO)     Trx.Start: **** ConnSH637068204699961246System.Random
+11:01:10.110    (INFO)     Trx.Commit: **C** ConnSH637068204699961246System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD AD_Org_ID NUMBER(10) NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.AD_Org_ID
+----------->     (WARNING)  M_Element.Get: Not unique: Created -> M_Element[245-Created] - Created
+11:01:10.110    (INFO)     Trx.Start: **** ConnSH637068204705137146System.Random
+11:01:10.110    (INFO)     Trx.Commit: **C** ConnSH637068204705137146System.Random
+11:01:10.110    (INFO)     Trx.Start: **** ConnSH637068204705857077System.Random
+11:01:10.110    (INFO)     Trx.Commit: **C** ConnSH637068204705857077System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD Created DATE DEFAULT SYSDATE NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.Created
+----------->     (WARNING)  M_Element.Get: Not unique: Updated -> M_Element[607-Updated] - Updated
+11:01:11.111    (INFO)     Trx.Start: **** ConnSH637068204710627930System.Random
+11:01:11.111    (INFO)     Trx.Commit: **C** ConnSH637068204710627930System.Random
+11:01:11.111    (INFO)     Trx.Start: **** ConnSH637068204711357793System.Random
+11:01:11.111    (INFO)     Trx.Commit: **C** ConnSH637068204711357793System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD Updated DATE DEFAULT SYSDATE NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.Updated
+----------->     (WARNING)  M_Element.Get: Not unique: CreatedBy -> M_Element[246-CreatedBy] - CreatedBy
+11:01:11.111    (INFO)     Trx.Start: **** ConnSH637068204716422097System.Random
+11:01:11.111    (INFO)     Trx.Commit: **C** ConnSH637068204716422097System.Random
+11:01:11.111    (INFO)     Trx.Start: **** ConnSH637068204717162051System.Random
+11:01:11.111    (INFO)     Trx.Commit: **C** ConnSH637068204717162051System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD CreatedBy NUMBER(10) DEFAULT 0 NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.CreatedBy
+----------->     (WARNING)  M_Element.Get: Not unique: UpdatedBy -> M_Element[608-UpdatedBy] - UpdatedBy
+11:01:12.112    (INFO)     Trx.Start: **** ConnSH637068204721607271System.Random
+11:01:12.112    (INFO)     Trx.Commit: **C** ConnSH637068204721607271System.Random
+11:01:12.112    (INFO)     Trx.Start: **** ConnSH637068204722448326System.Random
+11:01:12.112    (INFO)     Trx.Commit: **C** ConnSH637068204722448326System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD UpdatedBy NUMBER(10) DEFAULT 0 NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.UpdatedBy
+----------->     (WARNING)  M_Element.Get: Not unique: IsActive -> M_Element[348-IsActive] - IsActive
+11:01:12.112    (INFO)     Trx.Start: **** ConnSH637068204727328301System.Random
+11:01:12.112    (INFO)     Trx.Commit: **C** ConnSH637068204727328301System.Random
+11:01:12.112    (INFO)     Trx.Start: **** ConnSH637068204727988247System.Random
+11:01:12.112    (INFO)     Trx.Commit: **C** ConnSH637068204727988247System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD IsActive CHAR(1) DEFAULT 'Y' CHECK (IsActive IN ('Y','N')) NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.IsActive
+----------->     (WARNING)  M_Element.Get: Not unique: Export_ID -> M_Element[1001381-Export_ID] - Export_ID
+11:01:13.113    (INFO)     Trx.Start: **** ConnSH637068204732870942System.Random
+11:01:13.113    (INFO)     Trx.Commit: **C** ConnSH637068204732870942System.Random
+11:01:13.113    (INFO)     Trx.Start: **** ConnSH637068204733590839System.Random
+11:01:13.113    (INFO)     Trx.Commit: **C** ConnSH637068204733590839System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]ALTER TABLE CVBN_RainHarvest ADD Export_ID NVARCHAR2(50)
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+----------->     (WARNING)  SubTableUtil.CreateColumn: NOT Created: CVBN_RainHarvest.Export_ID
+11:01:13.113    (INFO)     Trx.Commit: **C** SvrProcess
+11:01:13.113    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:01:16.116    (INFO)     Trx.Start: **** ConnSH637068204766636271System.Random
+11:01:16.116    (INFO)     Trx.Commit: **C** ConnSH637068204766636271System.Random
+11:01:20.120    (INFO)     Trx.Start: **** ConnSH637068204805801618System.Random
+11:01:20.120    (INFO)     Trx.Commit: **C** ConnSH637068204805801618System.Random
+11:01:23.123    (INFO)     ColumnSync.DoIt: C_Column_ID=1027278
+11:01:24.124    (INFO)     Trx.Start: **** SvrProcess
+11:02:10.210    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - CREATE TABLE CVBN_RainHarvest (AD_Client_ID NUMBER(10) NOT NULL, AD_Org_ID NUMBER(10) NOT NULL, CVBN_RainHarvest_ID NUMBER(10) NOT NULL, Created DATE DEFAULT SYSDATE NOT NULL, CreatedBy NUMBER(10) DEFAULT 0 NOT NULL, Export_ID NVARCHAR2(50), IsActive CHAR(1) DEFAULT 'Y' CHECK (IsActive IN ('Y','N')) NOT NULL, Updated DATE DEFAULT SYSDATE NOT NULL, UpdatedBy NUMBER(10) DEFAULT 0 NOT NULL, CONSTRAINT PK1001146 PRIMARY KEY (CVBN_RainHarvest_ID))
+11:02:21.221    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE CVBN_RainHarvest ADD CONSTRAINT FK1001146_1027278 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+11:02:36.236    (INFO)     Trx.Commit: **C** SvrProcess
+11:02:36.236    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:02:48.248    (INFO)     Trx.Start: **** ConnSH637068205688546900System.Random
+11:02:48.248    (INFO)     Trx.Commit: **C** ConnSH637068205688546900System.Random
+11:02:50.250    (INFO)     Trx.Start: **** ConnSH637068205709573401System.Random
+11:02:51.251    (INFO)     Trx.Commit: **C** ConnSH637068205709573401System.Random
+11:02:52.252    (INFO)     ColumnSync.DoIt: C_Column_ID=1027278
+11:02:52.252    (INFO)     Trx.Start: **** SvrProcess
+11:02:59.259    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE CVBN_RainHarvest MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE CVBN_RainHarvest SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+11:02:59.259    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE CVBN_RainHarvest SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+11:02:59.259    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE CVBN_RainHarvest DROP CONSTRAINT FK1001146_1027278
+11:02:59.259    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE CVBN_RainHarvest ADD CONSTRAINT FK1001146_1027278 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+11:03:01.310    (INFO)     Trx.Commit: **C** SvrProcess
+11:03:01.310    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:03:18.318    (INFO)     Trx.Start: **** GridDel637068205986073259
+11:03:24.324    (INFO)     Trx.Start: **** ConnSH637068206044824846System.Random
+11:03:24.324    (INFO)     Trx.Commit: **C** ConnSH637068206044824846System.Random

@@ -1,0 +1,80 @@
+*** 11/18/2019 6:16:18 PM VAdvantage Log  ***
+06:16:18.161    (INFO)     Trx.Start: **** ConnSH637096977789012419System.Random
+06:16:18.161    (INFO)     Trx.Commit: **C** ConnSH637096977789012419System.Random
+06:16:19.161    (INFO)     MChangeLog.FillChangeLog: #9
+06:16:19.161    (INFO)     CacheReset.DoIt: 
+06:16:19.161    (INFO)     Env.Reset: finalCall=False
+06:16:19.161    (INFO)     CacheMgt.Reset: #16 (7881)
+06:16:19.161    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+06:16:19.161    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+06:16:19.161    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+06:16:19.161    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+06:16:19.161    (INFO)     MChangeLog.FillChangeLog: #9
+06:16:19.161    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:16:19.161    (INFO)     Trx.Start: **** ConnSH637096977795250351System.Random
+06:16:19.161    (INFO)     Trx.Commit: **C** ConnSH637096977795250351System.Random
+06:16:19.161    (INFO)     Trx.Start: **** ConnSH637096977796605627System.Random
+06:16:19.161    (INFO)     Trx.Commit: **C** ConnSH637096977796605627System.Random
+06:16:20.162    (INFO)     Msg.InitMsg: Records=5823 - en_US
+06:16:20.162    (INFO)     Trx.Start: **** ConnSH637096977803198781System.Random
+06:16:20.162    (INFO)     Trx.Commit: **C** ConnSH637096977803198781System.Random
+06:16:20.162    (INFO)     Trx.Start: **** ConnSH637096977803887587System.Random
+06:16:20.162    (INFO)     Trx.Commit: **C** ConnSH637096977803887587System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:16:26.162    (INFO)     Trx.Start: **** ConnSH637096977869143412System.Random
+06:16:27.162    (INFO)     Trx.Commit: **C** ConnSH637096977869143412System.Random
+06:16:27.162    (INFO)     Trx.Start: **** ConnSH637096977870938188System.Random
+06:16:27.162    (INFO)     Trx.Commit: **C** ConnSH637096977870938188System.Random
+06:16:27.162    (INFO)     Trx.Start: **** ConnSH637096977875886796System.Random
+06:16:27.162    (INFO)     Trx.Commit: **C** ConnSH637096977875886796System.Random
+06:16:27.162    (INFO)     Trx.Start: **** ConnSH637096977876789466System.Random
+06:16:27.162    (INFO)     Trx.Commit: **C** ConnSH637096977876789466System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00972: identifier is too long [Query D] =>SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_JOURNALTYPE_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,IsVersionApproved,M_AttributeSetInstance_ID,M_Locator_ID,M_Product_ID,Name,Processed,ProcessedVersion,Processing,RecordVersion,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,T_Time,Test_ID,Test_Version_ID,Updated,UpdatedBy,VersionNo,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=Test_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=Test_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_BPartner.Name,'') FROM C_BPartner WHERE C_BPartner.C_BPartner_ID=Test_Version.C_BPartner_ID) AS C_BPartner_ID_Text,  (SELECT NVL(C_Currency.ISO_Code,'') FROM C_Currency WHERE C_Currency.C_Currency_ID=Test_Version.C_Currency_ID) AS C_Currency_ID_Text,  (SELECT NVL(C_GenAttributeSet.Name,'') FROM C_GenAttributeSet WHERE C_GenAttributeSet.C_GenAttributeSet_ID=Test_Version.C_GenAttributeSet_ID) AS C_GenAttributeSet_ID_Text, C_Location_ID AS C_Location_ID_Location,  (SELECT NVL(C_Payment.DocumentNo,'') ||'_'|| NVL(TRIM(TO_CHAR(C_Payment.DateTrx,'yyyy-MM-dd')),'') ||'_'|| NVL(TRIM(TO_CHAR(C_Payment.PayAmt,'TM9')),'') ||'_'|| NVL(C_Payment.A_Name,'') FROM C_Payment WHERE C_Payment.C_Payment_ID=Test_Version.C_Payment_ID) AS C_Payment_ID_Text,  (SELECT NVL(C_UOM.Name,'') FROM C_UOM WHERE C_UOM.C_UOM_ID=Test_Version.C_UOM_ID) AS C_UOM_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=Test_Version.CreatedBy) AS CreatedBy_Text, M_AttributeSetInstance_ID AS M_AttributeSetInstance_ID_ASInstance, M_Locator_ID AS M_Locator_ID_Locator,  (SELECT NVL(M_Product.Name,'') FROM M_Product WHERE M_Product.M_Product_ID=Test_Version.M_Product_ID) AS M_Product_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=Test_Version.UpdatedBy) AS UpdatedBy_Text FROM Test_Version WHERE AD_Client_ID IN (0,11) AND Test_Version_ID NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE AD_Table_ID = 1001182 AND AD_User_ID <> 101 AND IsActive = 'Y' ) AND Test_Version.ProcessedVersion = 'N'  ORDER BY Test_Version.VERSIONVALIDFROM DESC
+06:16:57.165    (INFO)     MSession.Logout: 06:31:31.868
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1027494]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+06:17:19.171    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+06:17:19.171    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+06:17:19.171    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+06:17:19.171    (INFO)     Trx.Start: **** ConnSH637096978398448830System.Random
+06:17:19.171    (INFO)     Trx.Commit: **C** ConnSH637096978398448830System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/17/19','mm/dd/yy') and to_date('11/25/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/18/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+06:17:27.172    (INFO)     Trx.Start: **** ConnSH637096978474493860System.Random
+06:17:27.172    (INFO)     Trx.Commit: **C** ConnSH637096978474493860System.Random
+06:17:27.172    (INFO)     CacheReset.DoIt: 
+06:17:27.172    (INFO)     Env.Reset: finalCall=False
+06:17:27.172    (INFO)     CacheMgt.Reset: #20 (9487)
+06:17:27.172    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+06:17:27.172    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+06:17:27.172    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+06:17:27.172    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+06:17:27.172    (INFO)     MChangeLog.FillChangeLog: #9
+06:17:27.172    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:17:27.172    (INFO)     Trx.Start: **** ConnSH637096978478673943System.Random
+06:17:27.172    (INFO)     Trx.Commit: **C** ConnSH637096978478673943System.Random
+06:17:27.172    (INFO)     Trx.Start: **** ConnSH637096978479258166System.Random
+06:17:27.172    (INFO)     Trx.Commit: **C** ConnSH637096978479258166System.Random
+06:17:28.172    (INFO)     Msg.InitMsg: Records=5823 - en_US
+06:17:28.172    (INFO)     Trx.Start: **** ConnSH637096978486112636System.Random
+06:17:28.172    (INFO)     Trx.Commit: **C** ConnSH637096978486112636System.Random
+06:17:28.172    (INFO)     Trx.Start: **** ConnSH637096978486741501System.Random
+06:17:28.172    (INFO)     Trx.Commit: **C** ConnSH637096978486741501System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:17:31.173    (INFO)     Trx.Start: **** ConnSH637096978512761123System.Random
+06:17:31.173    (INFO)     Trx.Commit: **C** ConnSH637096978512761123System.Random
+06:17:31.173    (INFO)     Trx.Start: **** ConnSH637096978513452454System.Random
+06:17:31.173    (INFO)     Trx.Commit: **C** ConnSH637096978513452454System.Random
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637096978538175805System.Random
+06:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637096978538175805System.Random
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637096978538839072System.Random
+06:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637096978538839072System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00972: identifier is too long [Query D] =>SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_JOURNALTYPE_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,IsVersionApproved,M_AttributeSetInstance_ID,M_Locator_ID,M_Product_ID,Name,Processed,ProcessedVersion,Processing,RecordVersion,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,T_Time,Test_ID,Test_Version_ID,Updated,UpdatedBy,VersionNo,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=Test_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=Test_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_BPartner.Name,'') FROM C_BPartner WHERE C_BPartner.C_BPartner_ID=Test_Version.C_BPartner_ID) AS C_BPartner_ID_Text,  (SELECT NVL(C_Currency.ISO_Code,'') FROM C_Currency WHERE C_Currency.C_Currency_ID=Test_Version.C_Currency_ID) AS C_Currency_ID_Text,  (SELECT NVL(C_GenAttributeSet.Name,'') FROM C_GenAttributeSet WHERE C_GenAttributeSet.C_GenAttributeSet_ID=Test_Version.C_GenAttributeSet_ID) AS C_GenAttributeSet_ID_Text, C_Location_ID AS C_Location_ID_Location,  (SELECT NVL(C_Payment.DocumentNo,'') ||'_'|| NVL(TRIM(TO_CHAR(C_Payment.DateTrx,'yyyy-MM-dd')),'') ||'_'|| NVL(TRIM(TO_CHAR(C_Payment.PayAmt,'TM9')),'') ||'_'|| NVL(C_Payment.A_Name,'') FROM C_Payment WHERE C_Payment.C_Payment_ID=Test_Version.C_Payment_ID) AS C_Payment_ID_Text,  (SELECT NVL(C_UOM.Name,'') FROM C_UOM WHERE C_UOM.C_UOM_ID=Test_Version.C_UOM_ID) AS C_UOM_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=Test_Version.CreatedBy) AS CreatedBy_Text, M_AttributeSetInstance_ID AS M_AttributeSetInstance_ID_ASInstance, M_Locator_ID AS M_Locator_ID_Locator,  (SELECT NVL(M_Product.Name,'') FROM M_Product WHERE M_Product.M_Product_ID=Test_Version.M_Product_ID) AS M_Product_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=Test_Version.UpdatedBy) AS UpdatedBy_Text FROM Test_Version WHERE AD_Client_ID IN (0,11) AND Test_Version_ID NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE AD_Table_ID = 1001182 AND AD_User_ID <> 101 AND IsActive = 'Y' ) AND Test_Version.ProcessedVersion = 'N'  ORDER BY Test_Version.VERSIONVALIDFROM DESC

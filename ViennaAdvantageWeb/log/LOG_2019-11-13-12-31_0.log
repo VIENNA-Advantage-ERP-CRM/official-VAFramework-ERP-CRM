@@ -1,0 +1,22 @@
+*** 11/13/2019 12:31:50 PM VAdvantage Log  ***
+12:31:50.315    (INFO)     Trx.Start: **** ConnSH637092451104646420System.Random
+12:31:50.315    (INFO)     Trx.Commit: **C** ConnSH637092451104646420System.Random
+12:31:50.315    (INFO)     MChangeLog.FillChangeLog: #9
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Column 'COLUMNNAME' does not belong to table Table.
+12:31:51.315    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:32:02.322    (INFO)     MSession.Logout: 06:31:40.437
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1027293]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+12:32:23.322    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:32:24.322    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:32:24.322    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:32:24.322    (INFO)     Trx.Start: **** ConnSH637092451448635296System.Random
+12:32:24.322    (INFO)     Trx.Commit: **C** ConnSH637092451448635296System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/12/19','mm/dd/yy') and to_date('11/20/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/13/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:32:44.324    (INFO)     Trx.Start: **** ConnSH637092451649915165System.Random
+12:32:45.324    (INFO)     Trx.Commit: **C** ConnSH637092451649915165System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Column 'COLUMNNAME' does not belong to table Table.
+12:33:20.332    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)

@@ -1,0 +1,36 @@
+*** 10/24/2019 5:36:20 PM VAdvantage Log  ***
+05:36:20.362    (INFO)     Trx.Start: **** ConnSH637075353802090918System.Random
+05:36:20.362    (INFO)     Trx.Commit: **C** ConnSH637075353802090918System.Random
+05:36:20.362    (INFO)     CacheReset.DoIt: 
+05:36:20.362    (INFO)     Env.Reset: finalCall=False
+05:36:20.362    (INFO)     CacheMgt.Reset: #16 (7885)
+05:36:20.362    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+05:36:20.362    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+05:36:20.362    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+05:36:20.362    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+05:36:20.362    (INFO)     MChangeLog.FillChangeLog: #9
+05:36:20.362    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:36:20.362    (INFO)     Trx.Start: **** ConnSH637075353807690659System.Random
+05:36:20.362    (INFO)     Trx.Commit: **C** ConnSH637075353807690659System.Random
+05:36:20.362    (INFO)     Trx.Start: **** ConnSH637075353808870628System.Random
+05:36:20.362    (INFO)     Trx.Commit: **C** ConnSH637075353808870628System.Random
+05:36:21.362    (INFO)     Msg.InitMsg: Records=5818 - en_US
+05:36:21.362    (INFO)     Trx.Start: **** ConnSH637075353816659921System.Random
+05:36:21.362    (INFO)     Trx.Commit: **C** ConnSH637075353816659921System.Random
+05:36:21.362    (INFO)     Trx.Start: **** ConnSH637075353817519842System.Random
+05:36:21.362    (INFO)     Trx.Commit: **C** ConnSH637075353817519842System.Random
+05:36:40.364    (INFO)     MSession.Logout: 07:45:33.856
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+05:37:02.372    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+05:37:02.372    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+05:37:02.372    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+05:37:02.372    (INFO)     Trx.Start: **** ConnSH637075354227517469System.Random
+05:37:02.372    (INFO)     Trx.Commit: **C** ConnSH637075354227517469System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/23/19','mm/dd/yy') and to_date('10/31/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/24/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'

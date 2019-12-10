@@ -1,0 +1,194 @@
+*** 11/6/2019 10:57:45 AM VAdvantage Log  ***
+10:57:45.574    (INFO)     Trx.Start: **** ConnSH637086346658041647System.Random
+10:57:45.574    (INFO)     Trx.Commit: **C** ConnSH637086346658041647System.Random
+10:57:45.574    (INFO)     MChangeLog.FillChangeLog: #9
+10:57:46.574    (INFO)     CacheReset.DoIt: 
+10:57:46.574    (INFO)     Env.Reset: finalCall=False
+10:57:46.574    (INFO)     CacheMgt.Reset: #15 (6164)
+10:57:46.574    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+10:57:46.574    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+10:57:46.574    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+10:57:46.574    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+10:57:46.574    (INFO)     MChangeLog.FillChangeLog: #9
+10:57:46.574    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+10:57:46.574    (INFO)     Trx.Start: **** ConnSH637086346666002307System.Random
+10:57:46.574    (INFO)     Trx.Commit: **C** ConnSH637086346666002307System.Random
+10:57:47.574    (INFO)     Msg.InitMsg: Records=5818 - en_US
+10:57:47.574    (INFO)     Trx.Start: **** ConnSH637086346674983325System.Random
+10:57:47.574    (INFO)     Trx.Commit: **C** ConnSH637086346674983325System.Random
+11:04:14.414    (INFO)     MSession.Logout: 06:37:27.573
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:18:28.182    (INFO)     Trx.Start: **** ConnSH637086359081197747System.Random
+11:18:28.182    (INFO)     Trx.Commit: **C** ConnSH637086359081197747System.Random
+11:18:28.182    (INFO)     Trx.Start: **** ConnSH637086359083377446System.Random
+11:18:28.182    (INFO)     Trx.Commit: **C** ConnSH637086359083377446System.Random
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+11:18:51.185    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+11:18:51.185    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+11:18:51.185    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+11:18:51.185    (INFO)     Trx.Start: **** ConnSH637086359317534396System.Random
+11:18:51.185    (INFO)     Trx.Commit: **C** ConnSH637086359317534396System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/05/19','mm/dd/yy') and to_date('11/13/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/06/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+11:19:03.193    (INFO)     MSession.Logout: 06:30:13.530
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+11:19:53.195    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:19:53.195    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:19:54.195    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:19:54.195    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:19:54.195    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+11:19:54.195    (INFO)     Trx.Start: **** ConnSH637086359947983348System.Random
+11:19:54.195    (INFO)     Trx.Commit: **C** ConnSH637086359947983348System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/05/19','mm/dd/yy') and to_date('11/13/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/06/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:29:07.297    (INFO)     Trx.Start: **** ConnSH637086365475514101System.Random
+11:29:07.297    (INFO)     Trx.Commit: **C** ConnSH637086365475514101System.Random
+11:30:44.304    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VATAXSvc' or one of its dependencies. The system cannot find the file specified.
+11:30:45.304    (INFO)     MTable.GetPO: Using GenericPO for VATAX_TaxType
+11:30:45.304    (INFO)     Trx.Start: **** ConnSH637086366452096958System.Random
+11:30:45.304    (INFO)     Trx.Commit: **C** ConnSH637086366452096958System.Random
+11:30:45.304    (INFO)     Trx.Start: **** ConnSH637086366453146949System.Random
+11:30:45.304    (INFO)     Trx.Commit: **C** ConnSH637086366453146949System.Random
+11:30:53.305    (INFO)     Trx.Start: **** ConnSH637086366538911063System.Random
+11:30:53.305    (INFO)     Trx.Commit: **C** ConnSH637086366538911063System.Random
+11:30:53.305    (INFO)     CacheReset.DoIt: 
+11:30:53.305    (INFO)     Env.Reset: finalCall=False
+11:30:53.305    (INFO)     CacheMgt.Reset: #18 (7887)
+11:30:53.305    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+11:30:54.305    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+11:30:54.305    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:30:54.305    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:30:54.305    (INFO)     MChangeLog.FillChangeLog: #9
+11:30:54.305    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:30:54.305    (INFO)     Trx.Start: **** ConnSH637086366542843713System.Random
+11:30:54.305    (INFO)     Trx.Commit: **C** ConnSH637086366542843713System.Random
+11:30:54.305    (INFO)     Trx.Start: **** ConnSH637086366543563815System.Random
+11:30:54.305    (INFO)     Trx.Commit: **C** ConnSH637086366543563815System.Random
+11:30:55.305    (INFO)     Msg.InitMsg: Records=5818 - en_US
+11:30:55.305    (INFO)     Trx.Start: **** ConnSH637086366550739514System.Random
+11:30:55.305    (INFO)     Trx.Commit: **C** ConnSH637086366550739514System.Random
+11:30:55.305    (INFO)     Trx.Start: **** ConnSH637086366551329530System.Random
+11:30:55.305    (INFO)     Trx.Commit: **C** ConnSH637086366551329530System.Random
+11:31:02.312    (INFO)     Trx.Start: **** ConnSH637086366626951251System.Random
+11:31:02.312    (INFO)     Trx.Commit: **C** ConnSH637086366626951251System.Random
+11:31:02.312    (INFO)     Trx.Start: **** ConnSH637086366627651295System.Random
+11:31:02.312    (INFO)     Trx.Commit: **C** ConnSH637086366627651295System.Random
+11:31:02.312    (INFO)     CacheReset.DoIt: 
+11:31:02.312    (INFO)     Env.Reset: finalCall=False
+11:31:02.312    (INFO)     CacheMgt.Reset: #11 (5917)
+11:31:02.312    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+11:31:02.312    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+11:31:02.312    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:31:03.313    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:31:03.313    (INFO)     MChangeLog.FillChangeLog: #9
+11:31:03.313    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:31:03.313    (INFO)     Trx.Start: **** ConnSH637086366631883132System.Random
+11:31:03.313    (INFO)     Trx.Commit: **C** ConnSH637086366631883132System.Random
+11:31:03.313    (INFO)     Trx.Start: **** ConnSH637086366632584470System.Random
+11:31:03.313    (INFO)     Trx.Commit: **C** ConnSH637086366632584470System.Random
+11:31:03.313    (INFO)     Msg.InitMsg: Records=5818 - en_US
+11:31:03.313    (INFO)     Trx.Start: **** ConnSH637086366639401843System.Random
+11:31:03.313    (INFO)     Trx.Commit: **C** ConnSH637086366639401843System.Random
+11:31:04.314    (INFO)     Trx.Start: **** ConnSH637086366640023913System.Random
+11:31:04.314    (INFO)     Trx.Commit: **C** ConnSH637086366640023913System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:31:14.311    (INFO)     Trx.Start: **** ConnSH637086366744341452System.Random
+11:31:14.311    (INFO)     Trx.Commit: **C** ConnSH637086366744341452System.Random
+11:31:14.311    (INFO)     Trx.Start: **** ConnSH637086366745081468System.Random
+11:31:14.311    (INFO)     Trx.Commit: **C** ConnSH637086366745081468System.Random
+11:32:43.324    (INFO)     Trx.Start: **** ConnSH637086367633927628System.Random
+11:32:43.324    (INFO)     Trx.Commit: **C** ConnSH637086367633927628System.Random
+11:32:43.324    (INFO)     Trx.Start: **** ConnSH637086367635077663System.Random
+11:32:43.324    (INFO)     Trx.Commit: **C** ConnSH637086367635077663System.Random
+11:33:03.333    (INFO)     Trx.Start: **** ConnSH637086367838668991System.Random
+11:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637086367838668991System.Random
+11:33:03.333    (INFO)     CacheReset.DoIt: 
+11:33:03.333    (INFO)     Env.Reset: finalCall=False
+11:33:03.333    (INFO)     CacheMgt.Reset: #14 (7583)
+11:33:03.333    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+11:33:04.334    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+11:33:04.334    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:33:04.334    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:33:04.334    (INFO)     MChangeLog.FillChangeLog: #9
+11:33:04.334    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:33:04.334    (INFO)     Trx.Start: **** ConnSH637086367842717940System.Random
+11:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637086367842717940System.Random
+11:33:04.334    (INFO)     Trx.Start: **** ConnSH637086367843328550System.Random
+11:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637086367843328550System.Random
+11:33:05.335    (INFO)     Msg.InitMsg: Records=5818 - en_US
+11:33:05.335    (INFO)     Trx.Start: **** ConnSH637086367850182966System.Random
+11:33:05.335    (INFO)     Trx.Commit: **C** ConnSH637086367850182966System.Random
+11:33:05.335    (INFO)     Trx.Start: **** ConnSH637086367850778853System.Random
+11:33:05.335    (INFO)     Trx.Commit: **C** ConnSH637086367850778853System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:33:14.331    (INFO)     Trx.Start: **** ConnSH637086367947341101System.Random
+11:33:14.331    (INFO)     Trx.Commit: **C** ConnSH637086367947341101System.Random
+11:33:14.331    (INFO)     Trx.Start: **** ConnSH637086367948311067System.Random
+11:33:14.331    (INFO)     Trx.Commit: **C** ConnSH637086367948311067System.Random
+11:39:58.395    (INFO)     Trx.Start: **** ConnSH637086371985901090System.Random
+11:39:58.395    (INFO)     Trx.Commit: **C** ConnSH637086371985901090System.Random
+11:39:58.395    (INFO)     Trx.Start: **** ConnSH637086371987261021System.Random
+11:39:58.395    (INFO)     Trx.Commit: **C** ConnSH637086371987261021System.Random
+11:43:07.437    (INFO)     Trx.Start: **** ConnSH637086373870010068System.Random
+11:43:07.437    (INFO)     Trx.Commit: **C** ConnSH637086373870010068System.Random
+11:43:07.437    (INFO)     CacheReset.DoIt: 
+11:43:07.437    (INFO)     Env.Reset: finalCall=False
+11:43:07.437    (INFO)     CacheMgt.Reset: #14 (7583)
+11:43:07.437    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+11:43:07.437    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+11:43:07.437    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:43:07.437    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:43:07.437    (INFO)     MChangeLog.FillChangeLog: #9
+11:43:07.437    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:43:07.437    (INFO)     Trx.Start: **** ConnSH637086373875640240System.Random
+11:43:07.437    (INFO)     Trx.Commit: **C** ConnSH637086373875640240System.Random
+11:43:07.437    (INFO)     Trx.Start: **** ConnSH637086373876380213System.Random
+11:43:07.437    (INFO)     Trx.Commit: **C** ConnSH637086373876380213System.Random
+11:43:08.438    (INFO)     Msg.InitMsg: Records=5818 - en_US
+11:43:08.438    (INFO)     Trx.Start: **** ConnSH637086373884213343System.Random
+11:43:08.438    (INFO)     Trx.Commit: **C** ConnSH637086373884213343System.Random
+11:43:08.438    (INFO)     Trx.Start: **** ConnSH637086373884893394System.Random
+11:43:08.438    (INFO)     Trx.Commit: **C** ConnSH637086373884893394System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'

@@ -1,0 +1,52 @@
+*** 12/9/2019 4:15:57 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:15:57.155    (INFO)     Trx.Start: **** ConnSH637115049572217395System.Random
+04:15:57.155    (INFO)     Trx.Commit: **C** ConnSH637115049572217395System.Random
+04:15:58.155    (INFO)     Trx.Start: **** ConnSH637115049589486862System.Random
+04:15:59.155    (INFO)     Trx.Commit: **C** ConnSH637115049589486862System.Random
+04:16:01.161    (INFO)     Trx.Start: **** ConnSH637115049617505000System.Random
+04:16:01.161    (INFO)     Trx.Commit: **C** ConnSH637115049617505000System.Random
+04:16:04.164    (INFO)     Trx.Start: **** ConnSH637115049643894573System.Random
+04:16:04.164    (INFO)     Trx.Commit: **C** ConnSH637115049643894573System.Random
+04:16:21.162    (INFO)     Trx.Start: **** GridDel637115049776657451
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00903: invalid table name[Query SLRTrx]SELECT TableName FROM 135
+----------->     (WARNING)  MColumn.DeleteRecord: beforeDeleteORA-00903: invalid table name
+04:16:24.162    (INFO)     Trx.Rollback: **R** GridDel637115049776657451
+04:16:39.163    (INFO)     Trx.Start: **** GridDel637115049989040371
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00903: invalid table name[Query SLRTrx]SELECT TableName FROM 135
+----------->     (WARNING)  MColumn.DeleteRecord: beforeDeleteORA-00903: invalid table name
+04:16:45.164    (INFO)     Trx.Rollback: **R** GridDel637115049989040371
+04:16:53.165    (INFO)     Trx.Start: **** GridDel637115050135225022
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00903: invalid table name[Query SLRTrx]SELECT TableName FROM 135
+----------->     (WARNING)  MColumn.DeleteRecord: beforeDeleteORA-00903: invalid table name

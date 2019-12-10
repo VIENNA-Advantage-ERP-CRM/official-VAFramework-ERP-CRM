@@ -1,0 +1,54 @@
+*** 10/23/2019 9:58:36 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+09:58:36.583    (INFO)     Trx.Start: **** ConnSH637074215169306748System.Random
+09:58:37.583    (INFO)     Trx.Commit: **C** ConnSH637074215169306748System.Random
+09:59:25.592    (INFO)     Trx.Start: **** ConnSH637074215650307535System.Random
+09:59:25.592    (INFO)     Trx.Commit: **C** ConnSH637074215650307535System.Random
+09:59:25.592    (INFO)     MChangeLog.FillChangeLog: #9
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST"."C_CURRENCY_ID")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST"."C_CURRENCY_ID")
+----------->     (WARNING)  MTest.DataSavePO: Not insertedTest
+09:59:36.593    (INFO)     Trx.Start: **** ConnSH637074215767763564System.Random
+09:59:36.593    (INFO)     Trx.Commit: **C** ConnSH637074215767763564System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST"."C_CURRENCY_ID")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST"."C_CURRENCY_ID")
+----------->     (WARNING)  MTest.DataSavePO: Not insertedTest
+09:59:58.595    (INFO)     Trx.Start: **** ConnSH637074215989449055System.Random
+09:59:59.595    (INFO)     Trx.Commit: **C** ConnSH637074215989449055System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST"."C_PAYMENT_ID")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST"."C_PAYMENT_ID")
+----------->     (WARNING)  MTest.DataSavePO: Not insertedTest
+10:10:42.104    (INFO)     MSession.Logout: 06:58:18.29
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+10:17:42.174    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+10:17:42.174    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+10:17:42.174    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+10:17:42.174    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+10:17:42.174    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+10:17:43.174    (INFO)     Trx.Start: **** ConnSH637074226635555400System.Random
+10:17:43.174    (INFO)     Trx.Commit: **C** ConnSH637074226635555400System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/22/19','mm/dd/yy') and to_date('10/30/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/23/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:18:51.185    (INFO)     Trx.Start: **** ConnSH637074227319852390System.Random
+10:18:52.185    (INFO)     Trx.Commit: **C** ConnSH637074227319852390System.Random
+10:18:53.185    (INFO)     Trx.Start: **** ConnSH637074227330278884System.Random
+10:18:53.185    (INFO)     Trx.Commit: **C** ConnSH637074227330278884System.Random
+10:19:10.191    (INFO)     Trx.Start: **** ConnSH637074227500809860System.Random
+10:19:10.191    (INFO)     Trx.Commit: **C** ConnSH637074227500809860System.Random
+10:19:10.191    (INFO)     Trx.Start: **** ConnSH637074227501979844System.Random
+10:19:10.191    (INFO)     Trx.Commit: **C** ConnSH637074227501979844System.Random
+10:19:18.191    (INFO)     Trx.Start: **** ConnSH637074227585129685System.Random
+10:19:18.191    (INFO)     Trx.Commit: **C** ConnSH637074227585129685System.Random

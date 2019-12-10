@@ -173,6 +173,9 @@ namespace VIS.DataContracts
         }
 
         public string Result { get; set; }
+
+        // Change Lokesh Chauhan
+        public string CustomHTML { get; set; }
     }
 
     public class GridReportInfo

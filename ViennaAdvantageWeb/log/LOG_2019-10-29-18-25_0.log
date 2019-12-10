@@ -1,0 +1,61 @@
+*** 10/29/2019 6:26:30 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:26:30.263    (INFO)     Trx.Start: **** ConnSH637079703908671833System.Random
+06:26:31.263    (INFO)     Trx.Commit: **C** ConnSH637079703908671833System.Random
+06:26:33.263    (INFO)     Trx.Start: **** ConnSH637079703939557091System.Random
+06:26:34.263    (INFO)     Trx.Commit: **C** ConnSH637079703939557091System.Random
+06:26:44.264    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:26:50.265    (INFO)     Trx.Start: **** ConnSH637079704107341036System.Random
+06:26:50.265    (INFO)     Trx.Commit: **C** ConnSH637079704107341036System.Random
+06:26:50.265    (INFO)     MChangeLog.FillChangeLog: #9
+06:26:50.265    (INFO)     Trx.Start: **** ConnSH637079704109345901System.Random
+06:26:51.265    (INFO)     Trx.Commit: **C** ConnSH637079704109345901System.Random
+06:27:15.271    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:27:16.271    (INFO)     Trx.Start: **** ConnSH637079704363100703System.Random
+06:27:16.271    (INFO)     Trx.Commit: **C** ConnSH637079704363100703System.Random
+06:27:16.271    (INFO)     Trx.Start: **** ConnSH637079704364380365System.Random
+06:27:16.271    (INFO)     Trx.Commit: **C** ConnSH637079704364380365System.Random
+06:27:28.272    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:27:33.273    (INFO)     Trx.Start: **** ConnSH637079704532631326System.Random
+06:27:33.273    (INFO)     Trx.Commit: **C** ConnSH637079704532631326System.Random
+06:27:33.273    (INFO)     Trx.Start: **** ConnSH637079704533441116System.Random
+06:27:33.273    (INFO)     Trx.Commit: **C** ConnSH637079704533441116System.Random
+06:28:05.285    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:28:13.281    (INFO)     Trx.Start: **** ConnSH637079704937512857System.Random
+06:28:13.281    (INFO)     Trx.Commit: **C** ConnSH637079704937512857System.Random
+06:28:13.281    (INFO)     Trx.Start: **** ConnSH637079704938382547System.Random
+06:28:13.281    (INFO)     Trx.Commit: **C** ConnSH637079704938382547System.Random
+06:29:34.293    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:29:34.293    (INFO)     Trx.Start: **** ConnSH637079705749274853System.Random
+06:29:35.293    (INFO)     Trx.Commit: **C** ConnSH637079705749274853System.Random
+06:29:35.293    (INFO)     Trx.Start: **** ConnSH637079705750275523System.Random
+06:29:35.293    (INFO)     Trx.Commit: **C** ConnSH637079705750275523System.Random
+06:30:21.302    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:30:21.302    (INFO)     Trx.Start: **** ConnSH637079706212212219System.Random
+06:30:21.302    (INFO)     Trx.Commit: **C** ConnSH637079706212212219System.Random
+06:30:21.302    (INFO)     Trx.Start: **** ConnSH637079706212922034System.Random
+06:30:21.302    (INFO)     Trx.Commit: **C** ConnSH637079706212922034System.Random
+06:30:58.305    (INFO)     Trx.Start: **** ConnSH637079706581648370System.Random
+06:30:58.305    (INFO)     Trx.Commit: **C** ConnSH637079706581648370System.Random
+06:31:07.317    (INFO)     Trx.Start: **** ConnSH637079706673250069System.Random
+06:31:07.317    (INFO)     Trx.Commit: **C** ConnSH637079706673250069System.Random
+06:31:30.313    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:31:30.313    (INFO)     Trx.Start: **** ConnSH637079706906197545System.Random
+06:31:30.313    (INFO)     Trx.Commit: **C** ConnSH637079706906197545System.Random
+06:31:30.313    (INFO)     Trx.Start: **** ConnSH637079706907027267System.Random
+06:31:30.313    (INFO)     Trx.Commit: **C** ConnSH637079706907027267System.Random
+06:31:55.315    (INFO)     Trx.Start: **** ConnSH637079707157555361System.Random
+06:31:55.315    (INFO)     Trx.Commit: **C** ConnSH637079707157555361System.Random
+06:32:09.329    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:32:09.329    (INFO)     Trx.Start: **** ConnSH637079707294222858System.Random
+06:32:09.329    (INFO)     Trx.Commit: **C** ConnSH637079707294222858System.Random
+06:32:09.329    (INFO)     Trx.Start: **** ConnSH637079707294932678System.Random
+06:32:09.329    (INFO)     Trx.Commit: **C** ConnSH637079707294932678System.Random
+06:32:32.323    (INFO)     Trx.Start: **** ConnSH637079707525154279System.Random
+06:32:32.323    (INFO)     Trx.Commit: **C** ConnSH637079707525154279System.Random
+06:33:03.333    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:33:03.333    (INFO)     Trx.Start: **** ConnSH637079707834296935System.Random
+06:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637079707834296935System.Random

@@ -1,0 +1,32 @@
+*** 12/9/2019 6:37:23 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:37:24.372    (INFO)     Trx.Start: **** ConnSH637115134440524103System.Random
+06:37:24.372    (INFO)     Trx.Commit: **C** ConnSH637115134440524103System.Random
+06:37:24.372    (INFO)     Trx.Start: **** ConnSH637115134445470639System.Random
+06:37:24.372    (INFO)     Trx.Commit: **C** ConnSH637115134445470639System.Random
+06:37:27.372    (INFO)     Trx.Start: **** ConnSH637115134471387786System.Random
+06:37:27.372    (INFO)     Trx.Commit: **C** ConnSH637115134471387786System.Random
+06:37:28.372    (INFO)     Trx.Start: **** ConnSH637115134484261842System.Random
+06:37:28.372    (INFO)     Trx.Commit: **C** ConnSH637115134484261842System.Random
+06:37:36.373    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+06:37:36.373    (INFO)     Trx.Start: **** ConnSH637115134569342456System.Random
+06:37:37.373    (INFO)     Trx.Commit: **C** ConnSH637115134569342456System.Random
+06:37:37.373    (INFO)     Trx.Start: **** ConnSH637115134570622469System.Random
+06:37:37.373    (INFO)     Trx.Commit: **C** ConnSH637115134570622469System.Random
+06:37:37.373    (INFO)     Trx.Start: **** ConnSH637115134575112467System.Random
+06:37:37.373    (INFO)     Trx.Commit: **C** ConnSH637115134575112467System.Random
+06:37:45.374    (INFO)     Trx.Start: **** ConnSH637115134657924401System.Random
+06:37:45.374    (INFO)     Trx.Commit: **C** ConnSH637115134657924401System.Random
+06:38:06.386    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00936: missing expression[Query SLR]SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM M_ProductPrice_Ver WHERE M_PriceList_Version_ID = 1000503 AND M_AttributeSetInstance_ID =  AND M_Product_ID = 1004154 AND C_UOM_ID = 100

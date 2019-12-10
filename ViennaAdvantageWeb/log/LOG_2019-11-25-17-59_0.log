@@ -1,0 +1,21 @@
+*** 11/25/2019 6:00:02 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:00:02.020    (INFO)     Trx.Start: **** ConnSH637103016026417404System.Random
+06:00:02.020    (INFO)     Trx.Commit: **C** ConnSH637103016026417404System.Random
+06:00:04.040    (INFO)     Trx.Start: **** ConnSH637103016040386744System.Random
+06:00:04.040    (INFO)     Trx.Commit: **C** ConnSH637103016040386744System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'

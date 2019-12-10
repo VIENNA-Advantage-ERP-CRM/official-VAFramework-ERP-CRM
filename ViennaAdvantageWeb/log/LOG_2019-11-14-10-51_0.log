@@ -1,0 +1,93 @@
+*** 11/14/2019 10:51:09 AM VAdvantage Log  ***
+10:51:09.519    (INFO)     MSession.Logout: 07:35:28.424
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+10:51:56.515    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+10:51:57.515    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+10:51:57.515    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+10:51:57.515    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+10:51:57.515    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+10:51:57.515    (INFO)     Trx.Start: **** ConnSH637093255175727727System.Random
+10:51:57.515    (INFO)     Trx.Commit: **C** ConnSH637093255175727727System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/13/19','mm/dd/yy') and to_date('11/21/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/14/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:52:04.524    (INFO)     Trx.Start: **** ConnSH637093255239579359System.Random
+10:52:04.524    (INFO)     Trx.Commit: **C** ConnSH637093255239579359System.Random
+10:52:06.526    (INFO)     Trx.Start: **** ConnSH637093255260623318System.Random
+10:52:06.526    (INFO)     Trx.Commit: **C** ConnSH637093255260623318System.Random
+10:52:08.528    (INFO)     Trx.Start: **** ConnSH637093255287577123System.Random
+10:52:08.528    (INFO)     Trx.Commit: **C** ConnSH637093255287577123System.Random
+10:52:19.521    (INFO)     Trx.Start: **** ConnSH637093255399221601System.Random
+10:52:20.522    (INFO)     Trx.Commit: **C** ConnSH637093255399221601System.Random
+10:52:24.522    (INFO)     Trx.Start: **** ConnSH637093255446140701System.Random
+10:52:24.522    (INFO)     Trx.Commit: **C** ConnSH637093255446140701System.Random
+10:52:26.522    (INFO)     Trx.Start: **** ConnSH637093255464733787System.Random
+10:52:26.522    (INFO)     Trx.Commit: **C** ConnSH637093255464733787System.Random
+===========>     (SEVERE)   VLookUpInfo.GetLookup_DisplayColumn: No Identifier records found: AD_BView
+===========>     (SEVERE)   GridFieldVO.InitFinish: No LookupInfo for AD_BView_ID => Object reference not set to an instance of an object.
+===========>     (SEVERE)   VLookUpInfo.GetLookup_DisplayColumn: No Identifier records found: AD_ReportTemplate
+===========>     (SEVERE)   GridFieldVO.InitFinish: No LookupInfo for AD_ReportTemplate_ID => Object reference not set to an instance of an object.
+===========>     (SEVERE)   VLookUpInfo.GetLookup_DisplayColumn: No Identifier records found: AD_BView_Field
+===========>     (SEVERE)   GridFieldVO.InitFinish: No LookupInfo for AD_BView_Field_ID => Object reference not set to an instance of an object.
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:56:06.566    (INFO)     Trx.Start: **** ConnSH637093257669308971System.Random
+10:56:06.566    (INFO)     Trx.Commit: **C** ConnSH637093257669308971System.Random
+10:56:08.568    (INFO)     Trx.Start: **** ConnSH637093257681088222System.Random
+10:56:08.568    (INFO)     Trx.Commit: **C** ConnSH637093257681088222System.Random
+10:56:13.561    (INFO)     Trx.Start: **** ConnSH637093257739156366System.Random
+10:56:13.561    (INFO)     Trx.Commit: **C** ConnSH637093257739156366System.Random
+*** 11/14/2019 12:04:35 PM VAdvantage Log ***

@@ -1,0 +1,23 @@
+*** 10/11/2019 1:39:47 PM VAdvantage Log  ***
+01:39:47.394    (INFO)     Trx.Start: **** ConnSH637063979876849198System.Random
+01:39:47.394    (INFO)     Trx.Commit: **C** ConnSH637063979876849198System.Random
+01:39:48.394    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+01:39:48.394    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+01:39:48.394    (INFO)     Trx.Start: **** ConnSH637063979887206940System.Random
+01:39:48.394    (INFO)     Trx.Commit: **C** ConnSH637063979887206940System.Random
+01:39:48.394    (INFO)     Trx.Start: **** ConnSH637063979887616983System.Random
+01:39:48.394    (INFO)     Trx.Commit: **C** ConnSH637063979887616983System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+01:39:49.394    (INFO)     MTable.GetAssembly: Could not load file or assembly 'FRPTSvc' or one of its dependencies. The system cannot find the file specified.
+01:39:49.394    (INFO)     MTable.GetPO: Using GenericPO for FRPT_TaxRate_Acct
+01:39:49.394    (INFO)     Trx.Start: **** ConnSH637063979899240576System.Random
+01:39:49.394    (INFO)     Trx.Commit: **C** ConnSH637063979899240576System.Random
+01:39:49.394    (INFO)     Trx.Start: **** ConnSH637063979899510522System.Random
+01:39:49.394    (INFO)     Trx.Commit: **C** ConnSH637063979899510522System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (PUNEETBETA.FRPT_TAXRATE_ACCT_UK1) violated
+----------->     (WARNING)  GenericPO.AfterSave: Not insertedFRPT_TaxRate_Acct
+01:39:50.395    (INFO)     CacheMgt.Reset: C_Tax: #2 (0)
+*** 10/11/2019 3:37:57 PM VAdvantage Log ***

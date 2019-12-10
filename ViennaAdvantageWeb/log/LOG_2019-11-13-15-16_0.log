@@ -1,0 +1,73 @@
+*** 11/13/2019 3:16:20 PM VAdvantage Log  ***
+03:16:20.162    (INFO)     MSession.Logout: 07:03:07.340
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1027299]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+03:16:41.164    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+03:16:41.164    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+03:16:41.164    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+03:16:42.164    (INFO)     Trx.Start: **** ConnSH637092550025010238System.Random
+03:16:42.164    (INFO)     Trx.Commit: **C** ConnSH637092550025010238System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/12/19','mm/dd/yy') and to_date('11/20/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/13/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+03:16:57.165    (INFO)     Trx.Start: **** ConnSH637092550172936035System.Random
+03:16:57.165    (INFO)     Trx.Commit: **C** ConnSH637092550172936035System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:16:57.165    (INFO)     Trx.Start: **** ConnSH637092550175004497System.Random
+03:16:57.165    (INFO)     Trx.Commit: **C** ConnSH637092550175004497System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.
+03:16:57.165    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:17:03.173    (INFO)     MSession.Logout: 06:30:21.31
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1027300]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+03:17:24.172    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+03:17:24.172    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+03:17:24.172    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+03:17:25.172    (INFO)     Trx.Start: **** ConnSH637092550450105222System.Random
+03:17:25.172    (INFO)     Trx.Commit: **C** ConnSH637092550450105222System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/12/19','mm/dd/yy') and to_date('11/20/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/13/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+03:17:33.173    (INFO)     Trx.Start: **** ConnSH637092550536430493System.Random
+03:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637092550536430493System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:18:12.181    (INFO)     Trx.Start: **** ConnSH637092550928216917System.Random
+03:18:12.181    (INFO)     Trx.Commit: **C** ConnSH637092550928216917System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.
+03:18:20.182    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:18:28.182    (INFO)     Trx.Start: **** ConnSH637092551081837500System.Random
+03:18:28.182    (INFO)     Trx.Commit: **C** ConnSH637092551081837500System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:19:05.195    (INFO)     Trx.Start: **** ConnSH637092551454365124System.Random
+03:19:05.195    (INFO)     Trx.Commit: **C** ConnSH637092551454365124System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.
+03:20:32.203    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:20:34.203    (INFO)     Trx.Start: **** ConnSH637092552346402417System.Random
+03:20:34.203    (INFO)     Trx.Commit: **C** ConnSH637092552346402417System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:20:42.204    (INFO)     Trx.Start: **** ConnSH637092552421352079System.Random
+03:20:42.204    (INFO)     Trx.Commit: **C** ConnSH637092552421352079System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.
+03:20:58.205    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:21:00.210    (INFO)     Trx.Start: **** ConnSH637092552602233168System.Random
+03:21:00.210    (INFO)     Trx.Commit: **C** ConnSH637092552602233168System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:21:10.211    (INFO)     Trx.Start: **** ConnSH637092552701254229System.Random
+03:21:10.211    (INFO)     Trx.Commit: **C** ConnSH637092552701254229System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.
+03:21:45.214    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:21:47.214    (INFO)     Trx.Start: **** ConnSH637092553079396672System.Random
+03:21:48.214    (INFO)     Trx.Commit: **C** ConnSH637092553079396672System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:21:54.215    (INFO)     Trx.Start: **** ConnSH637092553145327670System.Random
+03:21:54.215    (INFO)     Trx.Commit: **C** ConnSH637092553145327670System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.
+03:22:30.223    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:22:44.224    (INFO)     Trx.Start: **** ConnSH637092553640952781System.Random
+03:22:44.224    (INFO)     Trx.Commit: **C** ConnSH637092553640952781System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:22:51.225    (INFO)     Trx.Start: **** ConnSH637092553716929400System.Random
+03:22:51.225    (INFO)     Trx.Commit: **C** ConnSH637092553716929400System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.

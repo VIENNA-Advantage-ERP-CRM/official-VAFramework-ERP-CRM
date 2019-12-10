@@ -1,0 +1,65 @@
+*** 11/15/2019 1:41:32 PM VAdvantage Log  ***
+01:41:32.413    (INFO)     Trx.Start: **** ConnSH637094220922445889System.Random
+01:41:32.413    (INFO)     Trx.Commit: **C** ConnSH637094220922445889System.Random
+01:41:32.413    (INFO)     MChangeLog.FillChangeLog: #9
+01:41:32.413    (INFO)     CacheReset.DoIt: 
+01:41:32.413    (INFO)     Env.Reset: finalCall=False
+01:41:32.413    (INFO)     CacheMgt.Reset: #16 (7878)
+01:41:32.413    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:41:32.413    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:41:32.413    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:41:32.413    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:41:32.413    (INFO)     MChangeLog.FillChangeLog: #9
+01:41:32.413    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:41:32.413    (INFO)     Trx.Start: **** ConnSH637094220928958904System.Random
+01:41:33.413    (INFO)     Trx.Commit: **C** ConnSH637094220928958904System.Random
+01:41:33.413    (INFO)     Trx.Start: **** ConnSH637094220930136777System.Random
+01:41:33.413    (INFO)     Trx.Commit: **C** ConnSH637094220930136777System.Random
+01:41:33.413    (INFO)     Msg.InitMsg: Records=5823 - en_US
+01:41:33.413    (INFO)     Trx.Start: **** ConnSH637094220938331423System.Random
+01:41:33.413    (INFO)     Trx.Commit: **C** ConnSH637094220938331423System.Random
+01:41:33.413    (INFO)     Trx.Start: **** ConnSH637094220939225322System.Random
+01:41:33.413    (INFO)     Trx.Commit: **C** ConnSH637094220939225322System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:41:37.413    (INFO)     Trx.Start: **** ConnSH637094220977782937System.Random
+01:41:37.413    (INFO)     Trx.Commit: **C** ConnSH637094220977782937System.Random
+01:41:37.413    (INFO)     Trx.Start: **** ConnSH637094220978639846System.Random
+01:41:37.413    (INFO)     Trx.Commit: **C** ConnSH637094220978639846System.Random
+01:41:38.413    (INFO)     Trx.Start: **** ConnSH637094220984670135System.Random
+01:41:38.413    (INFO)     Trx.Commit: **C** ConnSH637094220984670135System.Random
+01:41:38.413    (INFO)     Trx.Start: **** ConnSH637094220985713897System.Random
+01:41:38.413    (INFO)     Trx.Commit: **C** ConnSH637094220985713897System.Random
+01:41:40.414    (INFO)     Trx.Start: **** ConnSH637094221005060922System.Random
+01:41:40.414    (INFO)     Trx.Commit: **C** ConnSH637094221005060922System.Random
+01:41:41.414    (INFO)     Trx.Start: **** ConnSH637094221015037200System.Random
+01:41:41.414    (INFO)     Trx.Commit: **C** ConnSH637094221015037200System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "M_PRODUCTPRICE_VERSION"."C_CURRENCY_ID": invalid identifier [Query D] =>SELECT AD_Client_ID,AD_Org_ID,(SELECT pl.C_Currency_ID  FROM M_PriceList_Version plv INNER JOIN M_PriceList pl  ON (plv.M_PriceList_ID=pl.M_PriceList_ID)  WHERE plv.M_PriceList_Version_ID=M_ProductPrice_Version.M_PriceList_Version_ID) AS C_Currency_ID,C_UOM_ID,Created,CreatedBy,Export_ID,IsActive,(SELECT pl.IsTaxIncluded FROM M_PriceList_Version plv INNER JOIN M_PriceList pl  ON (plv.M_PriceList_ID=pl.M_PriceList_ID)  WHERE plv.M_PriceList_Version_ID=M_ProductPrice_Version.M_PriceList_Version_ID) AS IsTaxIncluded,IsVersionApproved,Lot,M_AttributeSetInstance_ID,M_PriceList_Version_ID,M_ProductPrice_Version_ID,M_Product_ID,PriceLimit,PriceList,PriceStd,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=M_ProductPrice_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=M_ProductPrice_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_Currency.ISO_Code,'') FROM C_Currency WHERE C_Currency.C_Currency_ID=M_ProductPrice_Version.C_Currency_ID) AS C_Currency_ID_Text,  (SELECT NVL(C_UOM.Name,'') FROM C_UOM WHERE C_UOM.C_UOM_ID=M_ProductPrice_Version.C_UOM_ID) AS C_UOM_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=M_ProductPrice_Version.CreatedBy) AS CreatedBy_Text,  (SELECT NVL(M_PriceList_Version.Name,'') FROM M_PriceList_Version WHERE M_PriceList_Version.M_PriceList_Version_ID=M_ProductPrice_Version.M_PriceList_Version_ID) AS M_PriceList_Version_ID_Text,  (SELECT NVL(M_Product.Name,'') FROM M_Product WHERE M_Product.M_Product_ID=M_ProductPrice_Version.M_Product_ID) AS M_Product_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=M_ProductPrice_Version.UpdatedBy) AS UpdatedBy_Text FROM M_ProductPrice_Version WHERE AD_Client_ID IN (0,11) AND M_ProductPrice_Version_ID NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE AD_Table_ID = 1001183 AND AD_User_ID <> 101 AND IsActive = 'Y' ) AND M_ProductPrice_Version.ProcessedVersion = 'N'  ORDER BY M_ProductPrice_Version.VERSIONVALIDFROM DESC
+01:41:53.415    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Version
+01:41:56.415    (INFO)     Trx.Start: **** ConnSH637094221164820861System.Random
+01:41:56.415    (INFO)     Trx.Commit: **C** ConnSH637094221164820861System.Random
+01:41:56.415    (INFO)     Trx.Start: **** ConnSH637094221165527024System.Random
+01:41:56.415    (INFO)     Trx.Commit: **C** ConnSH637094221165527024System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00936: missing expression [Query DR] SELECT AD_Client_ID,AD_Org_ID,(SELECT pl.C_Currency_ID  FROM M_PriceList_Version plv INNER JOIN M_PriceList pl  ON (plv.M_PriceList_ID=pl.M_PriceList_ID)  WHERE plv.M_PriceList_Version_ID=M_ProductPrice.M_PriceList_Version_ID) AS C_Currency_ID,C_UOM_ID,Created,CreatedBy,Export_ID,IsActive,(SELECT pl.IsTaxIncluded FROM M_PriceList_Version plv INNER JOIN M_PriceList pl  ON (plv.M_PriceList_ID=pl.M_PriceList_ID)  WHERE plv.M_PriceList_Version_ID=M_ProductPrice.M_PriceList_Version_ID) AS IsTaxIncluded,Lot,M_AttributeSetInstance_ID,M_PriceList_Version_ID,M_Product_ID,PriceLimit,PriceList,PriceStd,Updated,UpdatedBy FROM M_ProductPrice WHERE  AND M_Product_ID = 1004148
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00936: missing expression [Query DR] SELECT AD_Client_ID,AD_Org_ID,(SELECT pl.C_Currency_ID  FROM M_PriceList_Version plv INNER JOIN M_PriceList pl  ON (plv.M_PriceList_ID=pl.M_PriceList_ID)  WHERE plv.M_PriceList_Version_ID=M_ProductPrice.M_PriceList_Version_ID) AS C_Currency_ID,C_UOM_ID,Created,CreatedBy,Export_ID,IsActive,(SELECT pl.IsTaxIncluded FROM M_PriceList_Version plv INNER JOIN M_PriceList pl  ON (plv.M_PriceList_ID=pl.M_PriceList_ID)  WHERE plv.M_PriceList_Version_ID=M_ProductPrice.M_PriceList_Version_ID) AS IsTaxIncluded,Lot,M_AttributeSetInstance_ID,M_PriceList_Version_ID,M_Product_ID,PriceLimit,PriceList,PriceStd,Updated,UpdatedBy FROM M_ProductPrice WHERE  AND M_Product_ID = 1004148
+===========>     (SEVERE)   MTable.GetPO: Oracle.ManagedDataAccess.Client.OracleException (0x000003A8): ORA-00936: missing expression
+   at VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteReader(String connectionString, CommandType commandType, String commandText, OracleParameter[] commandParameters) in D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\SqlExec\OracleHelper.cs:line 873
+   at VAdvantage.SqlExec.ExecuteQuery.ExecuteReader(String sql, SqlParameter[] arrParam) in D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\SqlExec\ExecuteQuery.cs:line 190
+   at VAdvantage.DataBase.DB.ExecuteReader(String sql, SqlParameter[] param, Trx trx) in D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\DataBase\DB.cs:line 371
+   at VAdvantage.Model.MTable.GetPO(Ctx ctx, String whereClause, Trx trxName) in D:\GitHub\HTML5 Product Collection\VAdvantage\ModelLibrary\ModelAD\MTable.cs:line 425
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (LIBMIGRATION.UOMPRICE_PK) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (LIBMIGRATION.UOMPRICE_PK) violated
+----------->     (WARNING)  MProductPrice.DataSavePO: Not insertedM_ProductPrice
+01:42:22.422    (INFO)     Trx.Start: **** ConnSH637094221428737511System.Random
+01:42:22.422    (INFO)     Trx.Commit: **C** ConnSH637094221428737511System.Random
+01:42:45.424    (INFO)     MSession.Logout: 06:31:08.694

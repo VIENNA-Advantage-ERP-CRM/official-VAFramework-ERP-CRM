@@ -1473,7 +1473,10 @@ namespace VIS.Models
                               + " INNER JOIN AD_Org o ON o.AD_Org_ID = cn.AD_Org_ID "
                              + " INNER join c_currency c ON (cn.C_Currency_ID=c.C_Currency_ID) WHERE cn.IsAllocated   ='N' AND cn.Processed ='Y'"
                 //+ " and cn.cashtype IN ('I' , 'B') and cn.docstatus in ('CO','CL') "
-                             + " and cn.cashtype IN ('B') and cn.docstatus in ('CO','CL') "// AND cn.Processing = 'N' "
+
+                //Enhancement ID- JID_0593,  Cash line  is created with refrence of Invoice. Void View allocation. Cash line do not show on payment allocation. 
+                             + " and cn.cashtype IN ('B', 'I') and cn.docstatus in ('CO','CL') "// AND cn.Processing = 'N' "
+
                 // Commented because Against Business Partner there is no charge
                 // + " AND cn.C_Charge_ID  IS Not NULL"
                              + " AND cn.C_BPartner_ID=" + _C_BPartner_ID;

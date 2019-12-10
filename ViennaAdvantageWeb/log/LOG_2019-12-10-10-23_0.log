@@ -1,0 +1,54 @@
+*** 12/10/2019 10:23:34 AM VAdvantage Log  ***
+10:23:34.233    (INFO)     Trx.Start: **** ConnSH637115702143587323System.Random
+10:23:34.233    (INFO)     Trx.Commit: **C** ConnSH637115702143587323System.Random
+10:23:34.233    (INFO)     MChangeLog.FillChangeLog: #9
+10:23:34.233    (INFO)     CacheReset.DoIt: 
+10:23:34.233    (INFO)     Env.Reset: finalCall=False
+10:23:34.233    (INFO)     CacheMgt.Reset: #16 (7938)
+10:23:34.233    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+10:23:34.233    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+10:23:35.233    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+10:23:35.233    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+10:23:35.233    (INFO)     MChangeLog.FillChangeLog: #9
+10:23:35.233    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+10:23:35.233    (INFO)     Trx.Start: **** ConnSH637115702154177125System.Random
+10:23:35.233    (INFO)     Trx.Commit: **C** ConnSH637115702154177125System.Random
+10:23:35.233    (INFO)     Trx.Start: **** ConnSH637115702155427122System.Random
+10:23:35.233    (INFO)     Trx.Commit: **C** ConnSH637115702155427122System.Random
+10:23:36.233    (INFO)     Msg.InitMsg: Records=5823 - en_US
+10:23:36.233    (INFO)     Trx.Start: **** ConnSH637115702164456930System.Random
+10:23:36.233    (INFO)     Trx.Commit: **C** ConnSH637115702164456930System.Random
+10:23:36.233    (INFO)     Trx.Start: **** ConnSH637115702165456897System.Random
+10:23:36.233    (INFO)     Trx.Commit: **C** ConnSH637115702165456897System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:23:40.234    (INFO)     Trx.Start: **** ConnSH637115702200498476System.Random
+10:23:40.234    (INFO)     Trx.Commit: **C** ConnSH637115702200498476System.Random
+10:23:40.234    (INFO)     Trx.Start: **** ConnSH637115702201688419System.Random
+10:23:40.234    (INFO)     Trx.Commit: **C** ConnSH637115702201688419System.Random
+10:23:40.234    (INFO)     Trx.Start: **** ConnSH637115702208627583System.Random
+10:23:40.234    (INFO)     Trx.Commit: **C** ConnSH637115702208627583System.Random
+10:23:40.234    (INFO)     Trx.Start: **** ConnSH637115702209763131System.Random
+10:23:41.234    (INFO)     Trx.Commit: **C** ConnSH637115702209763131System.Random
+10:23:43.234    (INFO)     Trx.Start: **** ConnSH637115702236055610System.Random
+10:23:43.234    (INFO)     Trx.Commit: **C** ConnSH637115702236055610System.Random
+10:23:58.235    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00936: missing expression[Query SLR]SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM M_ProductPrice_Ver WHERE M_PriceList_Version_ID = 1000503 AND M_AttributeSetInstance_ID =  AND M_Product_ID = 1004154 AND C_UOM_ID = 100
+10:24:29.242    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00936: missing expression[Query SLR]SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM M_ProductPrice_Ver WHERE M_PriceList_Version_ID = 1000503 AND M_AttributeSetInstance_ID =  AND M_Product_ID = 1004154 AND C_UOM_ID = 100
+10:28:14.281    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00936: missing expression[Query SLR]SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM M_ProductPrice_Ver WHERE M_PriceList_Version_ID = 1000503 AND M_AttributeSetInstance_ID =  AND M_Product_ID = 1004154 AND C_UOM_ID = 100
+10:42:02.422    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00936: missing expression[Query SLR]SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM M_ProductPrice_Ver WHERE M_PriceList_Version_ID = 1000503 AND M_AttributeSetInstance_ID =  AND M_Product_ID = 1004154 AND C_UOM_ID = 100
+10:43:11.431    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+===========>     (SEVERE)   OracleHelper.ExecuteScalar: ORA-00936: missing expression[Query SLR]SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM M_ProductPrice_Ver WHERE M_PriceList_Version_ID = 1000503 AND M_AttributeSetInstance_ID =  AND M_Product_ID = 1004154 AND C_UOM_ID = 100

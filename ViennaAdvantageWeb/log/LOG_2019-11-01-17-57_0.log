@@ -1,0 +1,194 @@
+*** 11/1/2019 5:57:18 PM VAdvantage Log  ***
+05:57:18.571    (INFO)     Trx.Start: **** ConnSH637082278386805606System.Random
+05:57:18.571    (INFO)     Trx.Commit: **C** ConnSH637082278386805606System.Random
+05:57:18.571    (INFO)     MChangeLog.FillChangeLog: #9
+05:57:19.571    (INFO)     CacheReset.DoIt: 
+05:57:19.571    (INFO)     Env.Reset: finalCall=False
+05:57:19.571    (INFO)     CacheMgt.Reset: #16 (7874)
+05:57:19.571    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+05:57:19.571    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+05:57:19.571    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+05:57:19.571    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+05:57:19.571    (INFO)     MChangeLog.FillChangeLog: #9
+05:57:19.571    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:57:19.571    (INFO)     Trx.Start: **** ConnSH637082278394038118System.Random
+05:57:19.571    (INFO)     Trx.Commit: **C** ConnSH637082278394038118System.Random
+05:57:19.571    (INFO)     Trx.Start: **** ConnSH637082278394838235System.Random
+05:57:19.571    (INFO)     Trx.Commit: **C** ConnSH637082278394838235System.Random
+05:57:20.572    (INFO)     Msg.InitMsg: Records=5818 - en_US
+05:57:20.572    (INFO)     Trx.Start: **** ConnSH637082278403075023System.Random
+05:57:20.572    (INFO)     Trx.Commit: **C** ConnSH637082278403075023System.Random
+05:57:20.572    (INFO)     Trx.Start: **** ConnSH637082278403845321System.Random
+05:57:20.572    (INFO)     Trx.Commit: **C** ConnSH637082278403845321System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+05:57:24.572    (INFO)     Trx.Start: **** ConnSH637082278444377922System.Random
+05:57:24.572    (INFO)     Trx.Commit: **C** ConnSH637082278444377922System.Random
+05:57:24.572    (INFO)     Trx.Start: **** ConnSH637082278445381922System.Random
+05:57:24.572    (INFO)     Trx.Commit: **C** ConnSH637082278445381922System.Random
+05:57:27.572    (INFO)     Trx.Start: **** ConnSH637082278476118118System.Random
+05:57:27.572    (INFO)     Trx.Commit: **C** ConnSH637082278476118118System.Random
+05:57:27.572    (INFO)     Trx.Start: **** ConnSH637082278477568109System.Random
+05:57:27.572    (INFO)     Trx.Commit: **C** ConnSH637082278477568109System.Random
+05:57:34.573    (INFO)     Trx.Start: **** ConnSH637082278546078776System.Random
+05:57:34.573    (INFO)     Trx.Commit: **C** ConnSH637082278546078776System.Random
+05:57:54.575    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+05:57:54.575    (INFO)     Trx.Start: **** ConnSH637082278746030451System.Random
+05:57:54.575    (INFO)     Trx.Commit: **C** ConnSH637082278746030451System.Random
+05:57:54.575    (INFO)     Trx.Start: **** ConnSH637082278747056713System.Random
+05:57:54.575    (INFO)     Trx.Commit: **C** ConnSH637082278747056713System.Random
+05:57:54.575    (INFO)     Trx.Start: **** VISHistory637082278745240977
+05:57:55.575    (INFO)     Trx.Start: **** ConnSH637082278750881920System.Random
+05:57:55.575    (INFO)     Trx.Commit: **C** ConnSH637082278750881920System.Random
+===========>     (SEVERE)   DocWorkflowManager.Process: Not started: MWorkflow[1000040-Test Version WF]
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AD_WF_Activity AD_WF_Activity
+                            JOIN AD_Window AD_Window ON AD_WF_Activity.Ad_Window_Id = AD_Window.Ad_Window_Id
+                            JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
+                           
+===========>     (SEVERE)   WFActivityModel.GetActivities:  SELECT a.*
+                            FROM AD_WF_Activity a
+                            WHERE a.Processed  ='N'
+                            AND a.WFState      ='OS'
+                            AND a.AD_Client_ID =11 
+                            AND ( (a.AD_User_ID=101 
+                            OR a.AD_User_ID   IN
+                              (SELECT AD_User_ID
+                              FROM AD_User_Substitute
+                              WHERE IsActive   ='Y'
+                              AND Substitute_ID=101 
+                              AND (validfrom  <=sysdate)
+                              AND (sysdate    <=validto )
+                              ))
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND COALESCE(r.AD_User_ID,0)=0
+                              AND (a.AD_User_ID           =101 
+                              OR a.AD_User_ID            IS NULL
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              )
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND (r.AD_User_ID           =101 
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              )
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              INNER JOIN AD_User_Roles ur
+                              ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND (ur.AD_User_ID          =101 
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              AND r.responsibletype !='H'
+                              ) )   ORDER BY Priority DESC, Created DESC
+05:58:02.582    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+05:58:02.582    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+05:58:02.582    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+05:58:02.582    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+05:58:02.582    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+05:58:02.582    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+05:58:02.582    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+05:58:02.582    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+05:58:45.584    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+05:58:45.584    (INFO)     Trx.Start: **** ConnSH637082279256797887System.Random
+05:58:45.584    (INFO)     Trx.Commit: **C** ConnSH637082279256797887System.Random
+05:58:45.584    (INFO)     Trx.Start: **** ConnSH637082279257619824System.Random
+05:58:45.584    (INFO)     Trx.Commit: **C** ConnSH637082279257619824System.Random
+05:58:45.584    (INFO)     Trx.Start: **** VISHistory637082279256725847
+05:58:46.584    (INFO)     Trx.Start: **** ConnSH637082279260695950System.Random
+05:58:46.584    (INFO)     Trx.Commit: **C** ConnSH637082279260695950System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00028: your session has been killed
+ORA-00028: your session has been killed [Query NQTrx]UPDATE Test SET AD_Client_ID=11, AD_FilePath=NULL, AD_Org_ID=11, Account_Acct=NULL, C_BPartner_ID=1006961, C_Currency_ID=100, C_GenAttributeSetInstance_ID=NULL, C_GenAttributeSet_ID=NULL, C_Location_ID=NULL, C_Payment_ID=1004991, C_UOM_ID=100, Description='sdf ', Export_ID=NULL, FileName=NULL, FormGroup=NULL, Help=NULL, IsActive='Y', M_Locator_ID=101, M_Product_ID=NULL, Name='test 6234444', Processed='N', Processing='N', T_Amount=0, T_Date=NULL, T_DateTime=NULL, T_Integer=0, T_Number=0, T_Qty=0, Test_ID=1000028, Updated=TO_DATE('2019-11-01 06:58:45','YYYY-MM-DD HH24:MI:SS'), UpdatedBy=101, VersionNo=NULL WHERE Test_ID=1000028
+===========>     (SEVERE)   DB.ExecuteQuery: VISHistory637082279256725847 => ORA-00028: your session has been killed
+ORA-00028: your session has been killed
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00028: your session has been killed
+ORA-00028: your session has been killed
+----------->     (WARNING)  MTest.DataSavePO: #Records--1 - [VISHistory637082279256725847] - Test.Test_ID=1000028
+===========>     (SEVERE)   Trx.Rollback: VISHistory637082279256725847 => ORA-12537: Network Session: End of file
+06:07:54.754    (INFO)     MSession.Logout: 06:40:27.79
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026917]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+06:08:15.815    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+06:08:15.815    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+06:08:15.815    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+06:08:16.816    (INFO)     Trx.Start: **** ConnSH637082284963138878System.Random
+06:08:16.816    (INFO)     Trx.Commit: **C** ConnSH637082284963138878System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/31/19','mm/dd/yy') and to_date('11/08/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/01/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+06:08:26.826    (INFO)     Trx.Start: **** ConnSH637082285069341809System.Random
+06:08:27.827    (INFO)     Trx.Commit: **C** ConnSH637082285069341809System.Random
+06:08:27.827    (INFO)     CacheReset.DoIt: 
+06:08:27.827    (INFO)     Env.Reset: finalCall=False
+06:08:27.827    (INFO)     CacheMgt.Reset: #21 (9493)
+06:08:27.827    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+06:08:27.827    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+06:08:27.827    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+06:08:27.827    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+06:08:27.827    (INFO)     MChangeLog.FillChangeLog: #9
+06:08:27.827    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:08:27.827    (INFO)     Trx.Start: **** ConnSH637082285079157850System.Random
+06:08:27.827    (INFO)     Trx.Commit: **C** ConnSH637082285079157850System.Random
+06:08:27.827    (INFO)     Trx.Start: **** ConnSH637082285079994469System.Random
+06:08:28.828    (INFO)     Trx.Commit: **C** ConnSH637082285079994469System.Random
+06:08:28.828    (INFO)     Msg.InitMsg: Records=5818 - en_US
+06:08:28.828    (INFO)     Trx.Start: **** ConnSH637082285087003719System.Random
+06:08:28.828    (INFO)     Trx.Commit: **C** ConnSH637082285087003719System.Random
+06:08:28.828    (INFO)     Trx.Start: **** ConnSH637082285087703703System.Random
+06:08:28.828    (INFO)     Trx.Commit: **C** ConnSH637082285087703703System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:08:36.836    (INFO)     Trx.Start: **** ConnSH637082285169376305System.Random
+06:08:37.837    (INFO)     Trx.Commit: **C** ConnSH637082285169376305System.Random
+06:08:37.837    (INFO)     Trx.Start: **** ConnSH637082285170376305System.Random
+06:08:37.837    (INFO)     Trx.Commit: **C** ConnSH637082285170376305System.Random
+06:08:37.837    (INFO)     Trx.Start: **** ConnSH637082285174236227System.Random
+06:08:37.837    (INFO)     Trx.Commit: **C** ConnSH637082285174236227System.Random
+06:08:37.837    (INFO)     Trx.Start: **** ConnSH637082285175076274System.Random
+06:08:37.837    (INFO)     Trx.Commit: **C** ConnSH637082285175076274System.Random
+06:08:49.849    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+06:08:50.850    (INFO)     Trx.Start: **** ConnSH637082285300288639System.Random
+06:08:50.850    (INFO)     Trx.Commit: **C** ConnSH637082285300288639System.Random
+06:08:50.850    (INFO)     Trx.Start: **** ConnSH637082285301038627System.Random
+06:08:50.850    (INFO)     Trx.Commit: **C** ConnSH637082285301038627System.Random
+06:08:50.850    (INFO)     Trx.Start: **** VISHistory637082285266062503
+06:09:03.930    (INFO)     Trx.Start: **** ConnSH637082285434109770System.Random
+06:09:03.930    (INFO)     Trx.Commit: **C** ConnSH637082285434109770System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00028: your session has been killed
+ORA-00028: your session has been killed [Query NQTrx]UPDATE Test SET AD_Client_ID=11, AD_FilePath=NULL, AD_Org_ID=11, Account_Acct=NULL, C_BPartner_ID=1006961, C_Currency_ID=100, C_GenAttributeSetInstance_ID=NULL, C_GenAttributeSet_ID=NULL, C_Location_ID=NULL, C_Payment_ID=1004991, C_UOM_ID=100, Description='sdf ', Export_ID=NULL, FileName=NULL, FormGroup=NULL, Help=NULL, IsActive='Y', M_Locator_ID=101, M_Product_ID=NULL, Name='test 62344', Processed='N', Processing='N', T_Amount=0, T_Date=NULL, T_DateTime=NULL, T_Integer=0, T_Number=0, T_Qty=0, Test_ID=1000028, Updated=TO_DATE('2019-11-01 07:08:50','YYYY-MM-DD HH24:MI:SS'), UpdatedBy=101, VersionNo=NULL WHERE Test_ID=1000028
+===========>     (SEVERE)   DB.ExecuteQuery: VISHistory637082285266062503 => ORA-00028: your session has been killed
+ORA-00028: your session has been killed
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00028: your session has been killed
+ORA-00028: your session has been killed
+----------->     (WARNING)  MTest.DataSavePO: #Records--1 - [VISHistory637082285266062503] - Test.Test_ID=1000028
+===========>     (SEVERE)   Trx.Rollback: VISHistory637082285266062503 => ORA-12537: Network Session: End of file

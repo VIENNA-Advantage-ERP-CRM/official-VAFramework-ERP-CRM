@@ -1,0 +1,172 @@
+*** 10/29/2019 3:16:12 PM VAdvantage Log  ***
+03:16:12.161    (INFO)     Trx.Start: **** ConnSH637079589727384562System.Random
+03:16:12.161    (INFO)     Trx.Commit: **C** ConnSH637079589727384562System.Random
+03:16:20.162    (INFO)     Trx.Start: **** ConnSH637079589806003305System.Random
+03:16:20.162    (INFO)     Trx.Commit: **C** ConnSH637079589806003305System.Random
+03:16:28.162    (INFO)     Trx.Start: **** ConnSH637079589883958298System.Random
+03:16:28.162    (INFO)     Trx.Commit: **C** ConnSH637079589883958298System.Random
+03:16:28.162    (INFO)     ColumnSync.DoIt: C_Column_ID=1027673
+03:16:28.162    (INFO)     Trx.Start: **** SvrProcess
+03:16:28.162    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  Test_ID  NUMBER(10) DEFAULT  NULL 
+03:16:28.162    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY Test_ID  NOT NULL
+03:16:35.163    (INFO)     Trx.Commit: **C** SvrProcess
+03:16:35.163    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:16:45.164    (INFO)     Trx.Start: **** ConnSH637079590053921731System.Random
+03:16:45.164    (INFO)     Trx.Commit: **C** ConnSH637079590053921731System.Random
+03:16:45.164    (INFO)     ColumnSync.DoIt: C_Column_ID=1027635
+03:16:45.164    (INFO)     Trx.Start: **** SvrProcess
+03:16:45.164    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  VersionValidFrom  DATE DEFAULT  NULL 
+03:16:45.164    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY VersionValidFrom  NOT NULL
+03:16:51.165    (INFO)     Trx.Commit: **C** SvrProcess
+03:16:51.165    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:17:49.174    (INFO)     Trx.Start: **** ConnSH637079590694121635System.Random
+03:17:49.174    (INFO)     Trx.Commit: **C** ConnSH637079590694121635System.Random
+03:17:49.174    (INFO)     CacheReset.DoIt: 
+03:17:49.174    (INFO)     Env.Reset: finalCall=False
+03:17:49.174    (INFO)     CacheMgt.Reset: #16 (8245)
+03:17:49.174    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+03:17:49.174    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+03:17:49.174    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+03:17:49.174    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+03:17:49.174    (INFO)     MChangeLog.FillChangeLog: #9
+03:17:50.175    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:17:50.175    (INFO)     Trx.Start: **** ConnSH637079590701140293System.Random
+03:17:50.175    (INFO)     Trx.Commit: **C** ConnSH637079590701140293System.Random
+03:17:50.175    (INFO)     Msg.InitMsg: Records=5818 - en_US
+03:17:50.175    (INFO)     Trx.Start: **** ConnSH637079590708084952System.Random
+03:17:50.175    (INFO)     Trx.Commit: **C** ConnSH637079590708084952System.Random
+03:17:55.175    (INFO)     MSession.Logout: 07:11:55.439
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+03:18:16.181    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+03:18:16.181    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+03:18:16.181    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+03:18:17.181    (INFO)     Trx.Start: **** ConnSH637079590973357830System.Random
+03:18:17.181    (INFO)     Trx.Commit: **C** ConnSH637079590973357830System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/28/19','mm/dd/yy') and to_date('11/05/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/29/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+03:18:30.183    (INFO)     Trx.Start: **** ConnSH637079591100638027System.Random
+03:18:30.183    (INFO)     Trx.Commit: **C** ConnSH637079591100638027System.Random
+03:18:30.183    (INFO)     CacheReset.DoIt: 
+03:18:30.183    (INFO)     Env.Reset: finalCall=False
+03:18:30.183    (INFO)     CacheMgt.Reset: #16 (6168)
+03:18:30.183    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+03:18:30.183    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+03:18:30.183    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+03:18:30.183    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+03:18:30.183    (INFO)     MChangeLog.FillChangeLog: #9
+03:18:30.183    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:18:30.183    (INFO)     Trx.Start: **** ConnSH637079591105458922System.Random
+03:18:30.183    (INFO)     Trx.Commit: **C** ConnSH637079591105458922System.Random
+03:18:31.183    (INFO)     Msg.InitMsg: Records=5818 - en_US
+03:18:31.183    (INFO)     Trx.Start: **** ConnSH637079591112159445System.Random
+03:18:31.183    (INFO)     Trx.Commit: **C** ConnSH637079591112159445System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+03:18:58.185    (INFO)     Trx.Start: **** ConnSH637079591387974816System.Random
+03:18:58.185    (INFO)     Trx.Commit: **C** ConnSH637079591387974816System.Random
+03:18:58.185    (INFO)     Trx.Start: **** ConnSH637079591388860809System.Random
+03:18:58.185    (INFO)     Trx.Commit: **C** ConnSH637079591388860809System.Random
+03:19:00.190    (INFO)     Trx.Start: **** ConnSH637079591407239266System.Random
+03:19:00.190    (INFO)     Trx.Commit: **C** ConnSH637079591407239266System.Random
+03:19:00.190    (INFO)     Trx.Start: **** ConnSH637079591408209195System.Random
+03:19:00.190    (INFO)     Trx.Commit: **C** ConnSH637079591408209195System.Random
+03:19:03.193    (INFO)     Trx.Start: **** ConnSH637079591439322349System.Random
+03:19:04.194    (INFO)     Trx.Commit: **C** ConnSH637079591439322349System.Random
+03:19:08.198    (INFO)     Trx.Start: **** ConnSH637079591488485472System.Random
+03:19:08.198    (INFO)     Trx.Commit: **C** ConnSH637079591488485472System.Random
+03:19:10.191    (INFO)     Trx.Start: **** ConnSH637079591508344800System.Random
+03:19:10.191    (INFO)     Trx.Commit: **C** ConnSH637079591508344800System.Random
+03:19:16.191    (INFO)     Trx.Start: **** ConnSH637079591562842525System.Random
+03:19:16.191    (INFO)     Trx.Commit: **C** ConnSH637079591562842525System.Random
+03:19:16.191    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+03:19:16.191    (INFO)     Trx.Start: **** SvrProcess
+03:19:16.191    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+03:19:16.191    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+03:19:16.191    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+03:19:16.191    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+03:19:16.191    (INFO)     Trx.Start: **** ConnSH637079591567322773System.Random
+03:19:16.191    (INFO)     Trx.Commit: **C** ConnSH637079591567322773System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired [Query NQTrx]ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+03:19:17.191    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   MasterVersions.CreateVersionInfo: Column not sync :: @Error@  - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+03:19:17.191    (INFO)     Trx.Rollback: **R** SvrProcess
+03:19:17.191    (INFO)     CacheMgt.Reset: AD_Process: #1 (2)
+03:19:17.191    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:19:38.193    (INFO)     Trx.Start: **** ConnSH637079591780986141System.Random
+03:19:38.193    (INFO)     Trx.Commit: **C** ConnSH637079591780986141System.Random
+03:19:38.193    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+03:19:38.193    (INFO)     Trx.Start: **** SvrProcess
+03:19:38.193    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+03:19:38.193    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+03:19:46.194    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+03:19:46.194    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+03:19:46.194    (INFO)     Trx.Start: **** ConnSH637079591863043468System.Random
+03:19:46.194    (INFO)     Trx.Commit: **C** ConnSH637079591863043468System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired [Query NQTrx]ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+03:19:46.194    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   MasterVersions.CreateVersionInfo: Column not sync :: @Error@  - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+03:19:46.194    (INFO)     Trx.Rollback: **R** SvrProcess
+03:19:46.194    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:19:46.194    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:19:53.195    (INFO)     Trx.Start: **** ConnSH637079591937050194System.Random
+03:19:53.195    (INFO)     Trx.Commit: **C** ConnSH637079591937050194System.Random
+03:19:53.195    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+03:19:53.195    (INFO)     Trx.Start: **** SvrProcess
+03:19:53.195    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+03:19:53.195    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+03:20:01.201    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+03:20:01.201    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+03:20:01.201    (INFO)     Trx.Start: **** ConnSH637079592016474711System.Random
+03:20:01.201    (INFO)     Trx.Commit: **C** ConnSH637079592016474711System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired [Query NQTrx]ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+03:20:02.202    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   MasterVersions.CreateVersionInfo: Column not sync :: @Error@  - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+03:20:02.202    (INFO)     Trx.Rollback: **R** SvrProcess
+03:20:02.202    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)

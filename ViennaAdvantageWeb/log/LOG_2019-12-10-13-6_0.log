@@ -1,0 +1,21 @@
+*** 12/10/2019 1:06:30 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:06:30.630    (INFO)     Trx.Start: **** ConnSH637115799905051480System.Random
+01:06:30.630    (INFO)     Trx.Commit: **C** ConnSH637115799905051480System.Random
+01:06:30.630    (INFO)     Trx.Start: **** ConnSH637115799906059815System.Random
+01:06:30.630    (INFO)     Trx.Commit: **C** ConnSH637115799906059815System.Random
+01:06:31.631    (INFO)     Trx.Start: **** ConnSH637115799910389758System.Random
+01:06:31.631    (INFO)     Trx.Commit: **C** ConnSH637115799910389758System.Random
+01:06:31.631    (INFO)     Trx.Start: **** ConnSH637115799911569756System.Random
+01:06:31.631    (INFO)     Trx.Commit: **C** ConnSH637115799911569756System.Random
+01:06:35.635    (INFO)     Trx.Start: **** ConnSH637115799957109217System.Random
+01:06:35.635    (INFO)     Trx.Commit: **C** ConnSH637115799957109217System.Random
+01:07:02.720    (INFO)     Trx.Start: **** ConnSH637115800224831115System.Random
+01:07:02.720    (INFO)     Trx.Commit: **C** ConnSH637115800224831115System.Random

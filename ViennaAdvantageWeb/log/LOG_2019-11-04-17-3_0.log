@@ -1,0 +1,83 @@
+*** 11/4/2019 5:05:50 PM VAdvantage Log  ***
+05:05:50.550    (INFO)     Trx.Start: **** ConnSH637084839508668140System.Random
+05:05:50.550    (INFO)     Trx.Commit: **C** ConnSH637084839508668140System.Random
+05:05:50.550    (INFO)     MChangeLog.FillChangeLog: #9
+05:05:51.551    (INFO)     CacheReset.DoIt: 
+05:05:51.551    (INFO)     Env.Reset: finalCall=False
+05:05:51.551    (INFO)     CacheMgt.Reset: #15 (6164)
+05:05:51.551    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+05:05:51.551    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+05:05:51.551    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+05:05:51.551    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+05:05:51.551    (INFO)     MChangeLog.FillChangeLog: #9
+05:05:51.551    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:05:51.551    (INFO)     Trx.Start: **** ConnSH637084839513867810System.Random
+05:05:51.551    (INFO)     Trx.Commit: **C** ConnSH637084839513867810System.Random
+05:05:52.552    (INFO)     Msg.InitMsg: Records=5818 - en_US
+05:05:52.552    (INFO)     Trx.Start: **** ConnSH637084839521377355System.Random
+05:05:52.552    (INFO)     Trx.Commit: **C** ConnSH637084839521377355System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+05:05:58.558    (INFO)     Trx.Start: **** ConnSH637084839587653382System.Random
+05:05:58.558    (INFO)     Trx.Commit: **C** ConnSH637084839587653382System.Random
+05:05:58.558    (INFO)     Trx.Start: **** ConnSH637084839588753301System.Random
+05:05:58.558    (INFO)     Trx.Commit: **C** ConnSH637084839588753301System.Random
+05:06:10.610    (INFO)     MSession.Logout: 06:33:52.371
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+05:07:00.700    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+05:07:00.700    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+05:07:00.700    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+05:07:01.710    (INFO)     Trx.Start: **** ConnSH637084840214005601System.Random
+05:07:01.710    (INFO)     Trx.Commit: **C** ConnSH637084840214005601System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/03/19','mm/dd/yy') and to_date('11/11/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/04/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+05:07:11.711    (INFO)     Trx.Start: **** ConnSH637084840317959340System.Random
+05:07:11.711    (INFO)     Trx.Commit: **C** ConnSH637084840317959340System.Random
+05:07:13.713    (INFO)     Trx.Start: **** ConnSH637084840335758264System.Random
+05:07:13.713    (INFO)     Trx.Commit: **C** ConnSH637084840335758264System.Random
+05:07:16.716    (INFO)     Trx.Start: **** ConnSH637084840364446538System.Random
+05:07:16.716    (INFO)     Trx.Commit: **C** ConnSH637084840364446538System.Random
+05:07:19.719    (INFO)     Trx.Start: **** ConnSH637084840393874762System.Random
+05:07:19.719    (INFO)     Trx.Commit: **C** ConnSH637084840393874762System.Random
+05:07:24.724    (INFO)     Trx.Start: **** ConnSH637084840442121846System.Random
+05:07:24.724    (INFO)     Trx.Commit: **C** ConnSH637084840442121846System.Random
+05:07:28.728    (INFO)     Trx.Start: **** ConnSH637084840482199423System.Random
+05:07:28.728    (INFO)     Trx.Commit: **C** ConnSH637084840482199423System.Random

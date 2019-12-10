@@ -66,12 +66,12 @@ namespace VIS.Controllers
                         + " COALESCE(l.M_Product_ID,0) as M_PRODUCT_ID ,COALESCE(p.Name,c.Name) as PRODUCT,"
                         + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                         + " ins.description , "
-                //+ " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW "//Arpit on  20th Sept,2017
-                  + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW ,l.IsDropShip AS IsDropShip " //Arpit
-                  + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
-                  + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
-                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID ) AS IsAdvance "
+                        + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW ,l.IsDropShip AS IsDropShip "
+                        + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
+                        + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
+                            FROM c_paymentterm LEFT JOIN C_PaySchedule ON (c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' ) " +
+                        // JID_1414 - not to consider or pick In-Active Record
+                        "  WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y') AS IsAdvance "
                         + " FROM C_OrderLine l"
                         + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND "
                         + (forInvoicees ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID")
@@ -101,7 +101,7 @@ namespace VIS.Controllers
                 + " GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                 + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
                 + "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description, l.IsDropShip  " //Arpit on  20th Sept,2017
-                //+ "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description  "
+                                                                                                                                                  //+ "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description  "
                 + "ORDER BY l.Line";
 
             string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
@@ -151,11 +151,12 @@ namespace VIS.Controllers
                + " COALESCE(l.M_Product_ID,0) as M_PRODUCT_ID ,p.Name as PRODUCT,"
                + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                + " ins.description , "
-               + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, uom.stdprecision AS StdPrecision  , l.IsDropShip AS  IsDropShip" //Arpit on  20th Sept,2017
+               + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, uom.stdprecision AS StdPrecision  , l.IsDropShip AS  IsDropShip"
                + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
+               // JID_1414 - not to consider or pick In-Active Record
                + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
-                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID ) AS IsAdvance "
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON (c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' )
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance "
                + " FROM C_OrderLine l"
                + " LEFT OUTER JOIN C_Order o ON (o.C_Order_ID = l.C_Order_ID)"
                + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
@@ -168,7 +169,7 @@ namespace VIS.Controllers
             {
                 sql.Append(isBaseLangess);
             }
-            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs 
+            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs
                 + " AND l.M_Product_ID>0");
 
             if (!forInvoicees)
@@ -201,9 +202,10 @@ namespace VIS.Controllers
                   + " ins.description , "
                   + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, uom.stdprecision AS StdPrecision   , l.IsDropShip AS  IsDropShip"			//	7..8 //              
                   + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
+                  // JID_1414 - not to consider or pick In-Active Record
                   + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
-                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID ) AS IsAdvance "
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' ) 
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance "
                   + " FROM C_OrderLine l"
                   + " LEFT OUTER JOIN C_Order o ON (o.C_Order_ID = l.C_Order_ID)"
                   + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
@@ -223,12 +225,13 @@ namespace VIS.Controllers
                 {
                     sql.Append(DelivDates);
                 }
-                sql.Append(" GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
-                        + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                               + "l.M_Product_ID,c.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, l.IsDropShip , o.C_PaymentTerm_ID , t.Name  ");
-            }
 
-            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0";
+                sql.Append(" GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
+                      + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
+                      + "l.M_Product_ID,c.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
+            }
+            // JID_1287: Line number sequence to be maintained when we create lines from the reference of other documents.
+            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0 ORDER BY LINE";
 
             return sqlNew;
         }
@@ -275,8 +278,8 @@ namespace VIS.Controllers
                 + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW ,l.IsDropShip AS IsDropShip "								//	7..8 //Arpit on  20th Sept,2017
               + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
               + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
-                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID ) AS IsAdvance "
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' ) 
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID  AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance "
                 + " FROM C_OrderLine l"
                + " LEFT OUTER JOIN C_Order o ON (o.C_Order_ID = l.C_Order_ID)"
                + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
@@ -296,7 +299,7 @@ namespace VIS.Controllers
                 + " GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                 + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
                     + "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description ,l.IsDropShip , o.C_PaymentTerm_ID , t.Name  " //Arpit on  20th Sept,2017
-                //+ "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description   "
+                                                                                                                                                                                    //+ "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description   "
                 + "ORDER BY l.Line";
 
             string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
@@ -341,11 +344,11 @@ namespace VIS.Controllers
                + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                + " ins.description , "
                + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW ,l.IsDropShip AS IsDropShip "//Arpit on  20th Sept,2017
-                //+ " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW  "
+                                                                                                                        //+ " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW  "
                + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
                + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
-                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID ) AS IsAdvance "
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' ) 
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance "
                 + " FROM C_OrderLine l"
                 + " LEFT OUTER JOIN C_Order o ON (o.C_Order_ID = l.C_Order_ID)"
                + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
@@ -365,7 +368,7 @@ namespace VIS.Controllers
                 + " GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                 + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
                 + "l.M_Product_ID,COALESCE(p.Name,c.Name), l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description ,l.IsDropShip , o.C_PaymentTerm_ID , t.Name " //Arpit on  20th Sept,2017
-                //+ "l.M_Product_ID,COALESCE(p.Name,c.Name), l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description "
+                                                                                                                                                                               //+ "l.M_Product_ID,COALESCE(p.Name,c.Name), l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description "
                 + "ORDER BY l.Line";
 
             string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
@@ -433,11 +436,11 @@ namespace VIS.Controllers
                 precision = " uom.stdprecision ";
             }
             string sql = "SELECT "
-                //+ "round((l.MovementQty-SUM(COALESCE(mi.Qty,0))) * "					//	1               
-                // Changes done by Bharat on 07 July 2017 restrict to create invoice if Invoice already created against that for same quantity
+             //+ "round((l.MovementQty-SUM(COALESCE(mi.Qty,0))) * "					//	1               
+             // Changes done by Bharat on 07 July 2017 restrict to create invoice if Invoice already created against that for same quantity
              + "ROUND((l.MovementQty-SUM(COALESCE(mi.QtyInvoiced,0))) * "					//	1  
-             + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END )," + precision + ") as QUANTITY,"	//	2
-                //+ "round((l.MovementQty-SUM(COALESCE(mi.Qty,0))) * "					//	1               
+             + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END )," + precision + ") as QUANTITY,"    //	2
+                                                                                                                            //+ "round((l.MovementQty-SUM(COALESCE(mi.Qty,0))) * "					//	1               
              + "ROUND((l.MovementQty-SUM(COALESCE(mi.QtyInvoiced,0))) * "					//	1  
              + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END )," + precision + ") as QTYENTER,"	//	2
              + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM," // 3..4
@@ -446,8 +449,8 @@ namespace VIS.Controllers
              + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
              + " ins.description , o.C_PaymentTerm_ID , pt.Name AS PaymentTermName "
              + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
-                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID ) AS IsAdvance ";
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' ) 
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID  AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance ";
             if (isBaseLanguages != "")
             {
                 sql += isBaseLanguages + " ";
@@ -604,15 +607,15 @@ namespace VIS.Controllers
                         + " Sum(Coalesce(Mi.Qty,0)) As Miqty, "
                         + " NVL(l.QtyInvoiced,0) as qtyInv , o.C_PaymentTerm_ID , pt.Name AS PaymentTermName "
                         + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
-                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID
-                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID ) AS IsAdvance ";
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' )
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance ";
 
             if (isBaseLangss != "")
             {
                 sql += " " + isBaseLangss + " ";
             }
 
-            sql += " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
+            sql += " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID AND p.ProductType='I') "  // JID_0350: In Grid of Material Receipt need to show the items type products only
                   + " LEFT JOIN C_Invoice o ON o.C_Invoice_ID = l.C_Invoice_ID LEFT JOIN C_PaymentTerm pt ON pt.C_PaymentTerm_ID = o.C_PaymentTerm_ID "
                 + " LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
                 + " "

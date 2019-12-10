@@ -162,7 +162,7 @@
         var whereExtended = curTab.getWhereClause();
         var findFields = curTab.getFields();
 
-        var $root = $("<div class='vis-forms-container' style='height:100%'>");
+        var $root = $("<div style='height:100%'>");
         var $busy = null;
 
         var $self = this;

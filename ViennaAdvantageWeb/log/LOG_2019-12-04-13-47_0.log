@@ -1,0 +1,67 @@
+*** 12/4/2019 1:47:51 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:47:51.475    (INFO)     Trx.Start: **** ConnSH637110640711701966System.Random
+01:47:51.475    (INFO)     Trx.Commit: **C** ConnSH637110640711701966System.Random
+01:47:53.475    (INFO)     Trx.Start: **** ConnSH637110640735205433System.Random
+01:47:53.475    (INFO)     Trx.Commit: **C** ConnSH637110640735205433System.Random
+01:48:05.485    (INFO)     Trx.Start: **** ConnSH637110640853089570System.Random
+01:48:05.485    (INFO)     Trx.Commit: **C** ConnSH637110640853089570System.Random
+01:48:07.487    (INFO)     Trx.Start: **** ConnSH637110640878520758System.Random
+01:48:07.487    (INFO)     Trx.Commit: **C** ConnSH637110640878520758System.Random
+01:48:14.481    (INFO)     Trx.Start: **** ConnSH637110640942618938System.Random
+01:48:14.481    (INFO)     Trx.Commit: **C** ConnSH637110640942618938System.Random
+01:48:14.481    (INFO)     MChangeLog.FillChangeLog: #9
+01:48:14.481    (INFO)     ColumnSync.DoIt: C_Column_ID=1030141
+01:48:14.481    (INFO)     Trx.Start: **** SvrProcess
+01:48:14.481    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE ABC01_Testing MODIFY  AD_Org_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE ABC01_Testing SET AD_Org_ID=@#AD_Org_ID@ WHERE AD_Org_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+01:48:14.481    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE ABC01_Testing SET AD_Org_ID=@#AD_Org_ID@ WHERE AD_Org_ID IS NULL
+===========>     (SEVERE)   ColumnSync.StartProcess: Object reference not set to an instance of an object.
+01:48:14.481    (INFO)     Trx.Rollback: **R** SvrProcess
+01:48:14.481    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:50:40.504    (INFO)     Trx.Start: **** ConnSH637110642406793820System.Random
+01:50:40.504    (INFO)     Trx.Commit: **C** ConnSH637110642406793820System.Random
+01:50:40.504    (INFO)     ColumnSync.DoIt: C_Column_ID=1030141
+01:50:40.504    (INFO)     Trx.Start: **** SvrProcess
+01:50:40.504    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE ABC01_Testing MODIFY  AD_Org_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE ABC01_Testing SET AD_Org_ID=@#AD_Org_ID@ WHERE AD_Org_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+01:50:40.504    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE ABC01_Testing SET AD_Org_ID=@#AD_Org_ID@ WHERE AD_Org_ID IS NULL
+===========>     (SEVERE)   ColumnSync.StartProcess: Object reference not set to an instance of an object.
+01:50:40.504    (INFO)     Trx.Rollback: **R** SvrProcess
+01:50:40.504    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+*** 12/4/2019 4:25:22 PM VAdvantage Log ***

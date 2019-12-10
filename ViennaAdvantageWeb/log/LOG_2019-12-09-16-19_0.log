@@ -1,0 +1,48 @@
+*** 12/9/2019 4:19:53 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:19:53.195    (INFO)     Trx.Start: **** ConnSH637115051935696119System.Random
+04:19:53.195    (INFO)     Trx.Commit: **C** ConnSH637115051935696119System.Random
+04:19:55.195    (INFO)     Trx.Start: **** ConnSH637115051954575802System.Random
+04:19:55.195    (INFO)     Trx.Commit: **C** ConnSH637115051954575802System.Random
+04:20:12.201    (INFO)     Trx.Start: **** ConnSH637115052127101939System.Random
+04:20:12.201    (INFO)     Trx.Commit: **C** ConnSH637115052127101939System.Random
+04:20:16.201    (INFO)     Trx.Start: **** ConnSH637115052164826295System.Random
+04:20:16.201    (INFO)     Trx.Commit: **C** ConnSH637115052164826295System.Random
+04:25:14.251    (INFO)     Trx.Start: **** GridDel637115055108727672
+----------->     (WARNING)  MColumn.CheckVersions: VDE - 
+----------->     (WARNING)  MColumn.DeleteRecord: beforeDelete failed
+04:25:50.255    (INFO)     Trx.Rollback: **R** GridDel637115055108727672
+04:26:04.264    (INFO)     Trx.Start: **** GridDel637115055643103703
+----------->     (WARNING)  MColumn.CheckVersions: VDE - 
+----------->     (WARNING)  MColumn.DeleteRecord: beforeDelete failed

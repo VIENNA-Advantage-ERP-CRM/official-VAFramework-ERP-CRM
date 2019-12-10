@@ -1,0 +1,32 @@
+*** 11/13/2019 1:43:07 PM VAdvantage Log  ***
+01:43:07.437    (INFO)     Trx.Start: **** ConnSH637092493876980273System.Random
+01:43:07.437    (INFO)     Trx.Commit: **C** ConnSH637092493876980273System.Random
+01:43:07.437    (INFO)     MChangeLog.FillChangeLog: #9
+01:43:07.437    (INFO)     CacheReset.DoIt: 
+01:43:07.437    (INFO)     Env.Reset: finalCall=False
+01:43:07.437    (INFO)     CacheMgt.Reset: #16 (7876)
+01:43:07.437    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:43:08.438    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:43:08.438    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:43:08.438    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:43:08.438    (INFO)     MChangeLog.FillChangeLog: #9
+01:43:08.438    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:43:08.438    (INFO)     Trx.Start: **** ConnSH637092493882695107System.Random
+01:43:08.438    (INFO)     Trx.Commit: **C** ConnSH637092493882695107System.Random
+01:43:08.438    (INFO)     Trx.Start: **** ConnSH637092493883847384System.Random
+01:43:08.438    (INFO)     Trx.Commit: **C** ConnSH637092493883847384System.Random
+01:43:09.439    (INFO)     Msg.InitMsg: Records=5823 - en_US
+01:43:09.439    (INFO)     Trx.Start: **** ConnSH637092493891274409System.Random
+01:43:09.439    (INFO)     Trx.Commit: **C** ConnSH637092493891274409System.Random
+01:43:09.439    (INFO)     Trx.Start: **** ConnSH637092493892175772System.Random
+01:43:09.439    (INFO)     Trx.Commit: **C** ConnSH637092493892175772System.Random
+01:43:13.431    (INFO)     Trx.Start: **** ConnSH637092493938203912System.Random
+01:43:13.431    (INFO)     Trx.Commit: **C** ConnSH637092493938203912System.Random
+01:43:13.431    (INFO)     Trx.Start: **** ConnSH637092493939230937System.Random
+01:43:13.431    (INFO)     Trx.Commit: **C** ConnSH637092493939230937System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+01:43:14.431    (INFO)     Trx.Start: **** ConnSH637092493941596052System.Random
+01:43:14.431    (INFO)     Trx.Commit: **C** ConnSH637092493941596052System.Random
+===========>     (SEVERE)   MasterVersionSchedules.StartProcess: Specified cast is not valid.
+01:43:14.431    (INFO)     CacheMgt.Reset: AD_Process: #1 (2)
+*** 11/13/2019 3:16:20 PM VAdvantage Log ***

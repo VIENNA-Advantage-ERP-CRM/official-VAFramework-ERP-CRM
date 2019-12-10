@@ -250,6 +250,10 @@
                 var $resultSpan = $('<span>' + msg + '</span>');
                 this.reportContainer.removeClass('vis-process-result');
                 this.reportContainer.addClass('vis-process-detail-result');
+
+                // Change Lokesh Chauhan
+                this.reportContainer.empty();
+
                 this.reportContainer.append($resultSpan);
                 //return;
             }
@@ -259,7 +263,7 @@
             var $bMore = '';
 
             if (this.isReport && (!$bExist || $bExist.length <= 0)) {
-                $bMore = $('<strong class="vis-process-papapa vis-procss-more"    style="position: fixed;right: 29px;top:96px;cursor:pointer"><i class="glyphicon glyphicon-chevron-down"></i></strong>');
+                $bMore = $('<strong class="vis-process-papapa vis-procss-more"    style="position: fixed;right: 29px;top:96px"><i class="glyphicon glyphicon-chevron-down"></i></strong>');
                 $text.append($bMore);
             }
 

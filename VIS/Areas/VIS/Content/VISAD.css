@@ -2600,6 +2600,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     background-color: #fdfdfd;
     border: none;
 }
+
 .vis-allocation-leftControls .panel-title {
     margin-top: 0;
     margin-bottom: 0;
@@ -4528,3 +4529,163 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-archive-left-sidebar * {
     line-height: 1.428571429;
 }
+
+/********************** MASTER DATA VERSIONS **********************/
+.vis-mas-ver-outerwrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.vis-mas-ver-checkwrap {
+    display: flex;
+    padding-top: 10px;
+}
+
+    .vis-mas-ver-checkwrap input {
+        margin-left: 0;
+    }
+
+    .vis-mas-ver-checkwrap label {
+        margin-bottom: 0;
+        font-weight: normal;
+    }
+
+
+        .vis-mas-ver-checkwrap label ~ input[type="text"] {
+            flex: 1;
+        }
+
+.vis-mas-ver-fieldwrap.vis-mas-ver-checkwrap label {
+    flex-basis: 30%;
+}
+
+.vis-mas-ver-gridSection {
+    /*display: flex;
+    flex-direction: column;
+    height: 200px;*/
+    overflow: auto;
+    width: 100%;
+    position: relative;
+    min-height: 125px;
+}
+.vis-mas-ver-gridSection table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.vis-mas-ver-gridData {
+    /*height: calc(100% - 30px);
+    overflow: auto;*/
+    display: block;
+}
+.vis-mas-ver-gridSection td, .vis-mas-ver-gridSection th {
+    min-width: 120px;
+    max-width: 120px;
+    text-align: left;
+    padding: 10px;
+}
+.vis-mas-ver-gridSection th {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.vis-mas-ver-gridSection tbody {
+    max-height: 200px;
+    overflow-y: auto;
+    display: block;
+    min-height: 125px;
+}
+.vis-mas-ver-norecord {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vis-mas-ver-fieldwrap.vis-mas-ver-checkwrap {
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+}
+.vis-mas-ver-gridData tr, .vis-mas-ver-gridSection tbody tr {
+    display: block;
+}
+
+/*.vis-mas-ver-Hdrs div {
+    flex: 1;
+    font-weight: 600;
+}*/
+
+/*.vis-mas-ver-Hdrs {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid lightgrey;
+}*/
+
+/*.vis-mas-ver-recRow {
+    display: flex;
+}*/
+
+    /*.vis-mas-ver-recRow div {
+        flex: 1;
+        padding: 5px 0;
+    }*/
+    .vis-mas-ver-recRow button {
+        background: transparent;
+        border: none;
+    }
+
+/********************** MASTER DATA VERSIONS **********************/
+
+
+/********************** Validate Table Columns **********************/
+.vis-val-tc-mainwrap {
+    max-height: 450px;
+    width: 100%;
+    overflow: auto;
+    min-height: 300px;
+}
+.vis-val-tc-col-red-r {
+    width: 50%;
+    float: right;
+    min-width: 300px;
+    color: red;
+    font-style: italic;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.vis-val-tc-col-red-l {
+    width: 50%;
+    float: left;
+    min-width: 300px;
+    color: red;
+    font-style: italic;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.vis-val-tc-col-l {
+    width: 50%;
+    float: left;
+    min-width: 300px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.vis-val-tc-col-r {
+    width: 50%;
+    float: right;
+    min-width: 300px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+/********************** Validate Table Columns **********************/

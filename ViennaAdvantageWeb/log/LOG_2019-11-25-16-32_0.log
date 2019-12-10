@@ -1,0 +1,60 @@
+*** 11/25/2019 4:32:37 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:32:37.323    (INFO)     Trx.Start: **** ConnSH637102963577546476System.Random
+04:32:37.323    (INFO)     Trx.Commit: **C** ConnSH637102963577546476System.Random
+04:32:39.323    (INFO)     Trx.Start: **** ConnSH637102963591175278System.Random
+04:32:39.323    (INFO)     Trx.Commit: **C** ConnSH637102963591175278System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:33:16.331    (INFO)     Trx.Start: **** ConnSH637102963960026698System.Random
+04:33:16.331    (INFO)     Trx.Commit: **C** ConnSH637102963960026698System.Random
+04:33:29.332    (INFO)     Trx.Start: **** ConnSH637102964095086466System.Random
+04:33:29.332    (INFO)     Trx.Commit: **C** ConnSH637102964095086466System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'
+04:37:15.371    (INFO)     MSession.Logout: 06:35:02.245
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+04:38:15.381    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+04:38:15.381    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+04:38:15.381    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+04:38:16.381    (INFO)     Trx.Start: **** ConnSH637102966965212920System.Random
+04:38:16.381    (INFO)     Trx.Commit: **C** ConnSH637102966965212920System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/24/19','mm/dd/yy') and to_date('12/02/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/25/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+04:38:56.385    (INFO)     AEnv.GetMWindowVO: Cached=VAdvantage.Controller.GridWindowVO
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:38:56.385    (INFO)     Trx.Start: **** ConnSH637102967369969641System.Random
+04:38:57.385    (INFO)     Trx.Commit: **C** ConnSH637102967369969641System.Random
+04:39:01.391    (INFO)     Trx.Start: **** ConnSH637102967417223001System.Random
+04:39:01.391    (INFO)     Trx.Commit: **C** ConnSH637102967417223001System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00904: "C_TAX"."ISINCOMETAX": invalid identifier [Query D] =>SELECT count(*) FROM C_Tax_Version WHERE  ( C_Tax_ID=108 )  AND C_Tax.IsIncomeTax='N'

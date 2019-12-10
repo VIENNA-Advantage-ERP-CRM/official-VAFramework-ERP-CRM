@@ -1,0 +1,61 @@
+*** 10/11/2019 6:27:24 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:27:24.272    (INFO)     Trx.Start: **** ConnSH637064152441689237System.Random
+06:27:24.272    (INFO)     Trx.Commit: **C** ConnSH637064152441689237System.Random
+06:27:25.272    (INFO)     Trx.Start: **** ConnSH637064152459533527System.Random
+06:27:26.272    (INFO)     Trx.Commit: **C** ConnSH637064152459533527System.Random
+06:27:29.272    (INFO)     Trx.Start: **** ConnSH637064152493261085System.Random
+06:27:29.272    (INFO)     Trx.Commit: **C** ConnSH637064152493261085System.Random
+06:27:32.273    (INFO)     Trx.Start: **** ConnSH637064152528997735System.Random
+06:27:33.273    (INFO)     Trx.Commit: **C** ConnSH637064152528997735System.Random
+06:27:45.274    (INFO)     MChangeLog.FillChangeLog: #9
+06:27:45.274    (INFO)     Trx.Start: **** ConnSH637064152651239461System.Random
+06:27:45.274    (INFO)     Trx.Commit: **C** ConnSH637064152651239461System.Random
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Virtual Column - ConstraintName
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - LoadSeq - NewValue=145 - OldValue=
+06:28:29.282    (INFO)     Trx.Start: **** ConnSH637064153095513416System.Random
+06:28:29.282    (INFO)     Trx.Commit: **C** ConnSH637064153095513416System.Random
+06:28:29.282    (INFO)     Trx.Start: **** ConnSH637064153096810540System.Random
+06:28:29.282    (INFO)     Trx.Commit: **C** ConnSH637064153096810540System.Random
+06:28:30.283    (INFO)     Trx.Start: **** ConnSH637064153100010739System.Random
+06:28:30.283    (INFO)     Trx.Commit: **C** ConnSH637064153100010739System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00001: unique constraint (LIBMIGRATION.AD_SEQUENCE_NAME) violated
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00001: unique constraint (LIBMIGRATION.AD_SEQUENCE_NAME) violated
+----------->     (WARNING)  MSequence.CreateTableSequence: Not insertedAD_Sequence
+06:30:07.307    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+06:30:16.301    (INFO)     Trx.Start: **** ConnSH637064154163210705System.Random
+06:30:16.301    (INFO)     Trx.Commit: **C** ConnSH637064154163210705System.Random
+06:32:03.323    (INFO)     MSession.Logout: 06:35:10.596
