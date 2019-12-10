@@ -301,11 +301,17 @@
                     }
                 }
             }
+            else {
+                langCode = 'en_US';
+            }
         }
-        if (langCode != null && langCode != '') {
+       // if (langCode != null && langCode != '') {
             $cmbLang.val(langCode);
+            if ($cmbLang[0].selectedIndex <0 ) {
+                $cmbLang.val('en_US');
+            }
             $cmbLang.trigger("change");
-        }
+       // }
     };
 
     setLanguage();
