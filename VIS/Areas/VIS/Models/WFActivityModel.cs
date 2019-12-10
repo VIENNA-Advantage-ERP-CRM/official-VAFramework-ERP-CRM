@@ -214,6 +214,8 @@ WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VA
                     itm.DynPriorityStart = Util.GetValueOfInt(dr["DynPriorityStart"]);
                     itm.Record_ID = Util.GetValueOfInt(dr["Record_ID"]);
 
+                    itm.DocumentNameValue = "";
+
                     if (Env.IsModuleInstalled("VADMS_"))
                     {
                         itm.DocumentNameValue = Util.GetValueOfString(dr["DocumentNameValue"]);
