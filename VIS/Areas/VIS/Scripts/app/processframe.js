@@ -114,7 +114,7 @@
             $contentGrid.append($btnOK).append($btnClose);
             self.$divDesc.append($contentGrid);
 
-            
+
         }
 
         this.loadFileTypes = function () {
@@ -145,7 +145,7 @@
             });
         };
         initilizedComponent();
-        
+
 
         this.setSize = function (height, width) {
             $busyDiv.height(height);
@@ -274,15 +274,15 @@
             return this.reportToolbar;
         };
 
-        var additemtoToolbar = function () {
-            var toolbar = $('<div class="vis-ad-w-p-t-close"><i class="fa fa-times"></i></div>');
-            self.reportToolbar.append(toolbar);
+        this.additemtoToolbar = function () {
+            var toolbar = $('<div class="vis-ad-w-p-t-close vis-ad-process-close"><i class="fa fa-times"></i></div>');
+            self.reportToolbar.append(toolbar).append($('<div class="vis-ad-w-p-t-name vis-ad-process-header"><h5>' + self.parent.getName() + '</h5></div >'));
             toolbar.on("click", function () {
                 self.parent.dispose();
             });
         };
 
-        additemtoToolbar();
+       
 
         this.showCloseIcon = function (show) {
             if (show) {
@@ -512,6 +512,7 @@
 
         this.parent = $parent; // this parameter
         this.jpObj = json;
+        this.additemtoToolbar();
         if (json.IsReport) {
             this.showReportTypes(true);
             this.loadFileTypes();
@@ -787,11 +788,14 @@
                 btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
                 btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdfALL-ico'></a></li>");
             }
-            toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
+           // toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
+            toolbar = $("<div class='vis-report-header vis-ad-print-process'>");
 
-            if (self.toolbarColor) {
-                toolbar.css('background-color', self.toolbarColor);
-            }
+            toolbar.append($('<div class="vis-ad-w-p-t-name vis-ad-process-header"><h5>' + self.parent.getName() + '</h5></div >'));
+
+            //if (self.toolbarColor) {
+            //    toolbar.css('background-color', self.toolbarColor);
+            //}
 
 
 
