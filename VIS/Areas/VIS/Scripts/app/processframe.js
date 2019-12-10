@@ -250,6 +250,10 @@
                 var $resultSpan = $('<span>' + msg + '</span>');
                 this.reportContainer.removeClass('vis-process-result');
                 this.reportContainer.addClass('vis-process-detail-result');
+
+                // Change Lokesh Chauhan
+                this.reportContainer.empty();
+
                 this.reportContainer.append($resultSpan);
                 //return;
             }

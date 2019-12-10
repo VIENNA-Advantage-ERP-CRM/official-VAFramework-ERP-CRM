@@ -277,7 +277,11 @@ namespace VAdvantage.Controller
                     {
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
-
+                    // new column added for maintain versions
+                    else if (columnName.Equals("ISMAINTAINVERSIONS"))
+                    {
+                        vo.IsMaintainVersions = "Y".Equals(dr[i].ToString());
+                    }
                 }
                 if (vo.Header == null)
                     vo.Header = vo.ColumnName;

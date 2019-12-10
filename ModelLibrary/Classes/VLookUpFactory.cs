@@ -302,20 +302,27 @@ namespace VAdvantage.Classes
         public static VLookUpInfo GetLookUp_List(Language language, int AD_Reference_Value_ID)
         {
             StringBuilder realSQL = new StringBuilder("SELECT NULL, AD_Ref_List.Value,");
+            String displayCol = "AD_Ref_List.Name";
             if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
             {
-                realSQL.Append("AD_Ref_List.Name,AD_Ref_List.IsActive FROM AD_Ref_List");
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive FROM AD_Ref_List");
             }
             else
-                realSQL.Append("trl.Name, AD_Ref_List.IsActive "
+            {
+                displayCol = "trl.Name";
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive "
                     + "FROM AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
                     + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
                         .Append(language.GetAD_Language()).Append("')");
+            }
             realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID);
             realSQL.Append(" ORDER BY 2");
             //
-            return new VLookUpInfo(realSQL.ToString(), "AD_Ref_List", "AD_Ref_List.Value",
+            VLookUpInfo lookupInfo = new VLookUpInfo(realSQL.ToString(), "AD_Ref_List", "AD_Ref_List.Value",
                 101, 101, Query.GetEqualQuery("AD_Reference_ID", AD_Reference_Value_ID));	//	Zoom Window+Query
+            // add extra property for display Column value
+            lookupInfo.displayColSubQ = displayCol;
+            return lookupInfo;
         }
 
         /// <summary>
@@ -436,6 +443,13 @@ namespace VAdvantage.Classes
                 s_log.Fine("ColumnName=" + columnName + " - " + realSQL);
             VLookUpInfo lInfo = new VLookUpInfo(realSQL.ToString(), tableName,
                 tableName + "." + keyColumn, ZoomWindow, ZoomWindowPO, zoomQuery);
+
+            // display column for Table Direct columns
+            if (displayColumn != null)
+                lInfo.displayColSubQ = displayColumn.ToString();
+            else
+                lInfo.displayColSubQ = "";
+
             return lInfo;
         }
 
@@ -562,7 +576,7 @@ namespace VAdvantage.Classes
                 //  date, number
                 if (DisplayType.IsDate(ldc.DisplayType) || DisplayType.IsNumeric(ldc.DisplayType))
                 {
-                    embedSQL.Append("NVL("+DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language())+",'')");
+                    embedSQL.Append("NVL(" + DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()) + ",'')");
                 }
                 //  TableDir
                 else if ((ldc.DisplayType == DisplayType.TableDir || ldc.DisplayType == DisplayType.Search)
@@ -578,7 +592,7 @@ namespace VAdvantage.Classes
                     //if (DatabaseType.IsPostgre)
                     //    embedSQL.Append("COALESCE(TO_CHAR(").Append(tableName).Append(".").Append(ldc.ColumnName).Append("),'')");
                     //else
-                        embedSQL.Append("NVL(").Append(tableName).Append(".").Append(ldc.ColumnName).Append(",'')");
+                    embedSQL.Append("NVL(").Append(tableName).Append(".").Append(ldc.ColumnName).Append(",'')");
                 }
             }
 
@@ -710,7 +724,7 @@ namespace VAdvantage.Classes
                 {
                     displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
                 }
-                    //Search with ref key
+                //Search with ref key
                 else if (ldc.DisplayType == DisplayType.Search && ldc.AD_Ref_Val_ID > 0)
                 {
                     string embeddedSQL = GetLookup_TableEmbed(language, ldc.ColumnName, tableName, ldc.AD_Ref_Val_ID);
@@ -726,7 +740,7 @@ namespace VAdvantage.Classes
                     if (embeddedSQL != null)
                         displayColumn.Append("(").Append(embeddedSQL).Append(")");
                 }
-                
+
                 //	Table
                 else if (ldc.DisplayType == DisplayType.Table && ldc.AD_Ref_Val_ID != 0)
                 {
@@ -753,12 +767,12 @@ namespace VAdvantage.Classes
 
                 //jz EDB || problem
                 //if (DatabaseType.IsPostgre || DatabaseType.IsMSSql)
-                    displayColumn.Append(",'')");
+                displayColumn.Append(",'')");
             }
             return displayColumn;
         }
 
-        
+
 
         /// <summary>
         /// Get Lookup SQL for Table Lookup
@@ -891,9 +905,9 @@ namespace VAdvantage.Classes
                 //if (DatabaseType.IsPostgre)
                 //    sb.Append("COALESCE(TO_CHAR(").Append(displayColumn).Append("),'')");
                 //else if (DatabaseType.IsMSSql)
-                 //   sb.Append("COALESCE(CONVERT(VARCHAR,").Append(displayColumn).Append("),'')");
+                //   sb.Append("COALESCE(CONVERT(VARCHAR,").Append(displayColumn).Append("),'')");
                 //else
-                    sb.Append("NVL(").Append(displayColumn).Append(",'-1')");
+                sb.Append("NVL(").Append(displayColumn).Append(",'-1')");
                 sb.Append(",").Append(tableName).Append(".IsActive");
                 sb.Append(" FROM ").Append(tableName);
             }
@@ -953,6 +967,10 @@ namespace VAdvantage.Classes
             // {
             //  _sCacheRefTable[key] = retValue.Clone();
             // }
+            
+            // display column  for Table type of references
+            retValue.displayColSubQ = displayColumn;
+
             return retValue;
         }
 
@@ -1057,13 +1075,16 @@ namespace VAdvantage.Classes
             //    s_log.Finest("Cache: " + retValue);
             //    return retValue.Clone();
             //}
-            string sql = "SELECT C_ValidCombination_ID, NULL, Combination, IsActive FROM C_ValidCombination";
+            string displayColumn = "Combination";
+            string sql = "SELECT C_ValidCombination_ID, NULL, " + displayColumn + ", IsActive FROM C_ValidCombination";
             int zoomWindow = 153;
             Query zoomQuery = new Query("C_ValidCombination");
             //
             retValue = new VLookUpInfo(sql, "C_ValidCombination",
                 "C_ValidCombination.C_ValidCombination_ID",
                 zoomWindow, zoomWindow, zoomQuery);
+            // Display column for Account Control
+            retValue.displayColSubQ = displayColumn;
             //_sCacheRefTable.Add(key, retValue.Clone());
             return retValue;
         }
@@ -1085,7 +1106,8 @@ namespace VAdvantage.Classes
             //    s_log.Finest("Cache: " + retValue);
             //    return retValue.Clone();
             //}
-            string sql = "SELECT M_ProductContainer_ID, NULL, Name, IsActive FROM M_ProductContainer";
+            string displayColumn = "Name";
+            string sql = "SELECT M_ProductContainer_ID, NULL, " + displayColumn + ", IsActive FROM M_ProductContainer";
             int zoomWindow = 0;
             Query zoomQuery = new Query("M_ProductContainer");
             //
@@ -1093,6 +1115,10 @@ namespace VAdvantage.Classes
                 "M_ProductContainer.M_ProductContainer_ID",
                 zoomWindow, zoomWindow, zoomQuery);
             //_sCacheRefTable.Add(key, retValue.Clone());
+
+            // display column name for Product Container control
+            retValue.displayColSubQ = displayColumn;
+
             return retValue;
         }
 
@@ -1142,6 +1168,9 @@ namespace VAdvantage.Classes
         public int AD_Reference_Value_ID;
         /** CreadedBy?updatedBy					*/
         public bool isCreadedUpdatedBy = false;
+
+        /* Display Column SQL Query*/
+        public string displayColSubQ = null;
 
         #endregion
 

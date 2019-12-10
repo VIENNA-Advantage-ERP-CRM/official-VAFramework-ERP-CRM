@@ -245,7 +245,8 @@ namespace VAdvantage.Controller
         // If administrator wants to ask the end user about wheather to run process in background or not
         public bool AskUserBGProcess = false;
 
-
+        // for checking whether Maintain Versions is marked on Column
+        public bool IsMaintainVersions = false;
 
 
 

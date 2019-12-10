@@ -410,6 +410,14 @@
         //	return Util.cleanMnemonic(m_Summary);
     };
 
+    // Change Lokesh Chauhan
+    ProcessInfo.prototype.setCustomHTML = function (HTML) {
+        this.customHTML = HTML;
+    }
+    ProcessInfo.prototype.getCustomHTML = function () {
+        return this.customHTML;
+    }
+
     /**************************************************************************
 	 * 	Add to Log
 	 *	@param Log_ID Log ID
@@ -554,6 +562,9 @@
         this.isCrystal = null;
         this.totalrecords = null;
         this.isJasperReport = null;
+
+        // Change Lokesh Chauhan
+        this.customHTML = null;
     };
 
     var baseUrl = VIS.Application.contextUrl;

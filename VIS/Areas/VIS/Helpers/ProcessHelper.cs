@@ -395,6 +395,9 @@ namespace VIS.Helpers
 
                 ctl.ReportString = null;
                 rep.HTML = ctl.GetRptHtml();
+
+                // Change Lokesh Chauhan
+                rep.CustomHTML = pi.GetCustomHTML();
                 //rep.AD_Table_ID = ctl.GetReprortTableID();
 
 
