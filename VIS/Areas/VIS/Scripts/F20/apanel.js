@@ -1392,6 +1392,14 @@
                     //    $tabPanel.removeClass("vis-ad-w-p-actionpanel-b");
                     //    $tabPanel.addClass("vis-ad-w-p-actionpanel-b");
                     //}
+
+                    if (gTab.getIsHeaderPanel()) {
+                        //gc.vHeaderPanel = new VIS.HeaderPanel();
+                        //var parentDetailPane = this.getParentDetailPane();
+                        gc.initHeaderPanel(this.getParentDetailPane());
+                            //vHeaderPanel.init(gTab, parentDetailPane);
+                        //this.getLayout().append(parentDetailPane);
+                    }
                 }
 
 
@@ -1426,12 +1434,7 @@
                     //if (i == 0)
                     //    this.aParentDetail = new VIS.AParentDetail(gc, this.getParentDetailPane());
                 }
-                if (gTab.getIsHeaderPanel()) {
-                    gc.vHeaderPanel = new VIS.HeaderPanel();
-                    var parentDetailPane = this.getParentDetailPane();
-                    gc.vHeaderPanel.init(gTab, parentDetailPane);
-                    //this.getLayout().append(parentDetailPane);
-                }
+               
 
                 if (gTab.getHasPanel()) {
                     gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);
@@ -2959,9 +2962,7 @@
             this.curWinTab.evaluate(null);
         }
 
-        /*****Header Panel******/
-        if (this.curGC.vHeaderPanel)
-            this.curGC.vHeaderPanel.navigate();
+       
 
     /******End Header Panel******/
 
@@ -3898,10 +3899,7 @@
             VIS.MLookupCache.cacheReset(this.$parentWindow.getWindowNo());
         }
 
-        if (this.curGC && this.curGC.vHeaderPanel) {
-            this.curGC.vHeaderPanel.dispose();
-            this.curGC.vHeaderPanel = null;
-        }
+        
 
         this.ctx = null;
         this.$parentWindow = null;

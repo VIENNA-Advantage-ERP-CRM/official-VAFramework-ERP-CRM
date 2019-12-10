@@ -732,6 +732,7 @@
     <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
     <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\aheaderpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\wframe.js" />
     <Content Include="Areas\VIS\Scripts\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\home\changeuserimage.js" />

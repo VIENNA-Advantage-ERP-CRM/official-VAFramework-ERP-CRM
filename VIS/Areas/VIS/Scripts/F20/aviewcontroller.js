@@ -438,11 +438,24 @@
     VIS.GridController.prototype.initTabPanel = function (wWidth,windowNo) {
         this.vTabPanel = new VIS.VTabPanel(windowNo, wWidth);
         this.vTabPanel.init(this.getMTab());
+        this.vTabPanel.addSizeChangeListner(this);
     };
+
+    VIS.GridController.prototype.initHeaderPanel = function (parent) {
+        this.vHeaderPanel = new VIS.HeaderPanel(parent);
+        this.vHeaderPanel.init(this.getMTab());
+        this.vHeaderPanel.addSizeChangeListner(this);
+    };
+
 
     VIS.GridController.prototype.getTabPanel = function () {
         return this.vTabPanel.getRoot();
     };
+
+    VIS.GridController.prototype.onSizeChanged = function (isOpened) {
+        this.multiRowResize();
+    };
+
 
 VIS.GridController.prototype.refreshTabPanelData = function (record_ID) {
     if (this.vTabPanel) {//&& $(this.vTabPanel.getRoot()).is(':visible')) 
@@ -1702,6 +1715,9 @@ VIS.GridController.prototype.dispose = function () {
         this.vTabPanel.dispose();
         this.vTabPanel = null;
     }
+    /*****Header Panel******/
+    if (this.vHeaderPanel)
+        this.vHeaderPanel.dispose();
     this.m_tree = null;
 };
 

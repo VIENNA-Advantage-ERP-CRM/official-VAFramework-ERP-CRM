@@ -146,7 +146,7 @@ namespace VIS
                  "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
-                 "~/Areas/VIS/Scripts/app/headerPanelFrame.js",
+                 //"~/Areas/VIS/Scripts/app/headerPanelFrame.js",
 
 
                   "~/Areas/VIS/Scripts/TestPanel.js",
@@ -180,6 +180,7 @@ namespace VIS
 
             modScript.Include(
                  //a Part 
+                 "~/Areas/VIS/Scripts/F20/aheaderpanel.js",
                  "~/Areas/VIS/Scripts/F20/atabpanel.js",
                  "~/Areas/VIS/Scripts/F20/wframe.js",
                 "~/Areas/VIS/Scripts/F20/atabbedpane.js",

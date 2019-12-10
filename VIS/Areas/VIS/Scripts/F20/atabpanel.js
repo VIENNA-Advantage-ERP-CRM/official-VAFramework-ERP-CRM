@@ -100,6 +100,8 @@
                 this.isClosed = true;
                 $divHead.hide();
             }
+            if (this.sizeChangedListner && this.sizeChangedListner.onSizeChanged)
+                this.sizeChangedListner.onSizeChanged((size && size > 40));
         }
 
         this.disposeComponent = function () {
@@ -144,6 +146,10 @@
         this.setPanelList(str.join(' '),defPnlId);
     };
 
+    VTabPanel.prototype.addSizeChangeListner = function (lsner) {
+        this.sizeChangedListner = lsner;
+    };
+
     VTabPanel.prototype.setCurrentPanel = function (className, windowNo) {
         if (this.curTabPanel) {
             if (this.curTabPanel.dispose) {
@@ -162,7 +168,7 @@
                 this.curTabPanel = panel;
             }
         }
-    }
+    };
 
     VTabPanel.prototype.refreshPanelData = function (rec_Id,dataRow) {
         if (this.curTabPanel) {
@@ -172,6 +178,7 @@
 
     VTabPanel.prototype.dispose = function () {
         this.disposeComponent();
+        this.sizeChnagedListner = null;
         this.gTab = null;
         if (this.curTabPanel) {
             this.curTabPanel.dispose();

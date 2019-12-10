@@ -5811,7 +5811,7 @@
 
         this.id = id;
         this.vGridPanel = new VIS.VGridPanel();
-        this.vTable = new VIS.VTable();
+        this.vTabPanel = new VIS.VTable();
         this.vCardView = new VIS.VCardView();
         this.vMapView = new VIS.VMapView();
         this.windowNo = 0;
