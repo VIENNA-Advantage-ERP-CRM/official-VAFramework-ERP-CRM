@@ -68,7 +68,7 @@
             this.partitionContainer = $('<div class="vis-process-outer-wrap">');
             this.parameterContainer = $('<div class="vis-process-left-sidebar">');
             this.reportAreaContainer = $('<div class="vis-process-main-wrap">');
-            this.reportToolbar = $('<div class="vis-process-toolbar">');
+            this.reportToolbar = $('<div class="vis-process-toolbar vis-processtoolpadd">');
             this.parameterFixedArea = $('<div class="vis-process-parm-top">');
             this.parameterContainer.append($('<div class="vis-apanel-lb-toggle"></div>').append($imgToggle)).append(this.parameterFixedArea);
             $divOuterMain = $('<div class="vis-process-outer-main-wrap">');
@@ -275,7 +275,7 @@
         };
 
         this.additemtoToolbar = function () {
-            var toolbar = $('<div class="vis-ad-w-p-t-close vis-ad-process-close"><i class="fa fa-times"></i></div>');
+            var toolbar = $('<div class="vis-ad-w-p-t-close vis-ad-process-close"><i class="vis vis-cross"></i></div>');
             self.reportToolbar.append(toolbar).append($('<div class="vis-ad-w-p-t-name vis-ad-process-header"><h5>' + self.parent.getName() + '</h5></div >'));
             toolbar.on("click", function () {
                 self.parent.dispose();
@@ -781,12 +781,12 @@
             $cmbPages = $('<select class="vis-selectcsview-page">');
             $menu = $("<ul class='vis-apanel-rb-ul'>");
             if (self.cssForAll) {
-                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='" + self.cssForAll + "vis-report-icon vis-savecsvAll-ico'></a></li>");
-                btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='" + self.cssForAll + "vis-report-icon vis-savepdfALL-ico'></a></li>");
+                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "' class='vis vis-csv-all'></a></li>");
+                btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' class='vis vis-pdf-all'></a></li>");
             }
             else {
-                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
-                btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdfALL-ico'></a></li>");
+                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "' class='vis vis-csv-all'></a></li>");
+                btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' class='vis vis-pdf-all'></a></li>");
             }
            // toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
             toolbar = $("<div class='vis-report-header vis-ad-print-process'>");
@@ -800,17 +800,17 @@
 
 
             // btnClose = $('<a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose" style="float:right">');
-            btnClose = $('<div class="vis-ad-w-p-t-close vis-report-header-close"><i class="fa fa-times"></i></div >');
-            actionContainer = $('<div class="vis-report-top-icons" style="float:right;">');
-            ulAction = $('<ul style="margin-top: 10px;float:left">');
-            btnRF = $("<li><a style='cursor:pointer;margin-top:2px' class='" + self.visRepformatIcons + "'></a></li>");
+            btnClose = $('<div class="vis-icon-menuclose"><i class="vis vis-cross"></i></div >');
+            actionContainer = $('<div class="vis-report-top-icons">');
+            ulAction = $('<ul  class="vis-reporticonsulprint">');
+            btnRF = $("<li><a class='" + self.visRepformatIcons + "'></a></li>");
 
             $menu.append($('<li data-id="-1">').append(VIS.Msg.getMsg('NewReport')));
             overlay.append($menu);
             ulAction.append(btnRF);
 
             if (canExport) {
-                btnSaveCsv = $("<li><a title='" + VIS.Msg.getMsg("SaveCSVPage") + "' style='cursor:pointer;margin-top:1px' class='" + self.visSaveCsvIcons + "'></a></li>");
+                btnSaveCsv = $("<li><a title='" + VIS.Msg.getMsg("SaveCSVPage") + "' class='vis vis-save-csv'></a></li>");
                 ulAction.append(btnSaveCsv);
             }
 
@@ -823,7 +823,7 @@
             }
 
             if (canExport) {
-                btnSavePdf = $("<li><a title='" + VIS.Msg.getMsg("SavePDFDocumentPage") + "' style='cursor:pointer;margin-top:1px' class='" + self.visSavePdfIcons + "'></a></li>");
+                btnSavePdf = $("<li><a title='" + VIS.Msg.getMsg("SavePDFDocumentPage") + "' class='vis vis-save-pdf'></a></li>");
                 ulAction.append(btnSavePdf);
             }
 
@@ -836,22 +836,22 @@
             }
 
             if (VIS.context.ctx["#BULK_REPORT_DOWNLOAD"] == 'Y') {
-                btnSaveCsvAll.css('display', 'block');
-                btnsavepdfall.css('display', 'block');
+                btnSaveCsvAll.css('display', '');
+                btnsavepdfall.css('display', '');
             }
             else {
                 btnSaveCsvAll.css('display', 'none');
                 btnsavepdfall.css('display', 'none');
             }
 
-            btnArchive = $("<li><a title='" + VIS.Msg.getMsg("Archive") + "' style='cursor:pointer;' class='" + self.visArchiveIcons + "'></a></li>");
+            btnArchive = $("<li><a title='" + VIS.Msg.getMsg("Archive") + "'  class='vis vis-archive'></a></li>");
             ulAction.append(btnArchive);
-            btnRequery = $("<li><a title='" + VIS.Msg.getMsg("Requery") + "' style='cursor:pointer;' class='" + self.visRequeryIcons + "'></a></li>");
+            btnRequery = $("<li><a title='" + VIS.Msg.getMsg("Requery") + "'  class='vis vis-refresh'></a></li>");
             ulAction.append(btnRequery);
 
-            btnCustomize = $("<li><a style='cursor:pointer;' class='" + self.visCustomizeIcons + "'></a></li>");
+            btnCustomize = $("<li><a style='cursor:pointer;' class='vis vis-customize'></a></li>");
             ulAction.append(btnCustomize);
-            btnPrint = $("<li><a style='cursor:pointer;' class='" + self.visPrintIcons + "'></a></li>");
+            btnPrint = $("<li><a style='cursor:pointer;' class='vis vis-print'></a></li>");
             ulAction.append(btnPrint);
 
             if (!repObj.HTML) {
@@ -860,12 +860,14 @@
                 btnRF.css('display', 'none');
             }
             actionContainer.append(ulAction);
+            toolbar.append(actionContainer);
             if (!self.hideclose) {
                 toolbar.append(btnClose);
             }
-            toolbar.append(actionContainer);
+            
 
             if (self.splitUI) {
+                self.reportToolbar.removeClass('vis-processtoolpadd');
                 self.reportToolbar.empty().append(toolbar);
                 self.reportContainer.empty().append(panel.getRoot());
                 if (self.extrnalForm) {
