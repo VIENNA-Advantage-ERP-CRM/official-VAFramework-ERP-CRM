@@ -427,9 +427,7 @@ html[dir="rtl"] .vis-menufavitm
     /*width: 40px;*/
     /* height: 42px; */
     /* float: right; */
-    color: rgba(var(--v-c-on-primary), 1);
-    padding: 0px 10px;
-    display: flex;
+    color: rgba(var(--v-c-on-primary), 1);    
 }
 
 html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
