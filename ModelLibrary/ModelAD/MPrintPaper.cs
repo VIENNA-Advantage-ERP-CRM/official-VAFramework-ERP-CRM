@@ -161,7 +161,7 @@ namespace VAdvantage.Model
 
         public MediaSize GetMediaSizeDefault()
         {
-            m_mediaSize = VAdvantage.Login.Language.GetLoginLanguage().GetMediaSize();
+            m_mediaSize = VAdvantage.Login.Language.GetLoginLanguage(GetCtx()).GetMediaSize();
             if (m_mediaSize == null)
                 m_mediaSize = MediaSize.ISO.A4;
             log.Fine("Size=" + m_mediaSize);

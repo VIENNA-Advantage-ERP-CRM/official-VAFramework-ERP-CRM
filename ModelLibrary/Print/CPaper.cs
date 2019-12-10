@@ -41,11 +41,11 @@ namespace VAdvantage.Print
         /// Get Media Size from Default Language
         /// </summary>
         /// <param name="landscape">true if landscape, false if portrait</param>
-        public CPaper(bool landscape)
-            : this(Language.GetLoginLanguage(), landscape)
-        {
+        //public CPaper(bool landscape)
+        //    : this(Language.GetLoginLanguage(), landscape)
+        //{
             
-        }	//	CPaper
+        //}	//	CPaper
 
         /// <summary>
         /// Detail Constructor 1/2 inch on all sides

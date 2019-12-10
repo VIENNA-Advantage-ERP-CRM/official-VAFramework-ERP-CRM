@@ -278,6 +278,9 @@ namespace VIS.Controllers
                 ViewBag.OrgList = new List<KeyNamePair>();
                 ViewBag.WarehouseList = new List<KeyNamePair>();
                 ViewBag.ClientList = new List<KeyNamePair>();
+
+                ViewBag.Languages = Language.GetLanguages();
+
                 Session["ctx"] = null;
                 ViewBag.direction = "ltr";
 

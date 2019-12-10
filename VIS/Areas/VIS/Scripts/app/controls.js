@@ -3330,7 +3330,8 @@
                 this.value = this.value * -1;
                 return false;
             }
-            if (event.keyCode == 190 || event.keyCode == 110) {// decimal (.)
+            //188
+            if (event.keyCode == 190 || event.keyCode == 110 || event.keyCode == 188) {// decimal (.)
                 if (this.value.indexOf('.') > -1) {
                     this.value = this.value.replace('.', '');
                 }
@@ -3340,12 +3341,12 @@
                 return true;
             }
             /* Check Only for . and , */
-            if (event.keyCode == 188) {
+            //if (event.keyCode == 188) {
+            //    return false;
+            //}
+            //else {
                 return false;
-            }
-            else {
-                return false;
-            }
+            //}
         });
 
 

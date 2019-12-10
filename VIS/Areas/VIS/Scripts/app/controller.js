@@ -842,16 +842,16 @@
                     var lines = dr.getInt(0);
                     arguments[0] = lines;
                     //	{1} - Line toral
-                    var lineTotal = dr.getDecimal(2);//.toFixed(2);
+                    var lineTotal = dr.getDecimal(2).toLocaleString() ;//.toFixed(2);
                     arguments[1] = lineTotal;
                     //	{2} - Grand total (including tax, etc.)
-                    var grandTotal = dr.getDecimal(3);//.toFixed(2);
+                    var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
                     arguments[2] = grandTotal;
                     //	{3} - Currency
                     var currency = dr.getString(1);
                     arguments[3] = currency;
                     //	(4) - Grand total converted to Base
-                    var grandBase = dr.getDecimal(4);//.toFixed(2);
+                    var grandBase = dr.getDecimal(4).toLocaleString();//.toFixed(2);
                     arguments[4] = grandBase;
                     arguments[5] = ctx.getContext("$CurrencyISO");
                     filled = true;

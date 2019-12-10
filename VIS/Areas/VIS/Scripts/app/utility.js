@@ -77,6 +77,8 @@
     //**********************  NumberFormating and Min,Max and fraction Length Setting **********************//    
     function Format(maxIntDigit, maxFractionDigit, minFractionDigit) {
 
+
+
         var SetIntDigit = function (val) {
 
             if (isNaN(val) || val === null) {
@@ -142,6 +144,14 @@
             //Also remove extra zero before return
             return o;
         };
+
+        this.getMinFractionDigit = function () {
+            return minFractionDigit;
+        }
+
+        this.getMaxFractionDigit = function () {
+            return maxFractionDigit;
+        }
 
         /* privilized function */
         this.dispose = function () {

@@ -372,7 +372,10 @@ VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name,
                 var f = oColumns[colIndex].field;
                 var val = record[f];
                 //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
-                return parseFloat(oColumns[colIndex].customFormat.GetFormatedValue(val)).toLocaleString();
+                return parseFloat(val).toLocaleString(undefined, {
+                    'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
+                    'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
+                });
             };
         }
         else if (VIS.DisplayType.IsNumeric(displayType)) {
@@ -382,7 +385,11 @@ VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name,
                 var f = oColumns[colIndex].field;
                 var val = record[f];
                 //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
-                return oColumns[colIndex].customFormat.GetFormatedValue(val);
+               // return  Globalize.format(Number(oColumns[colIndex].customFormat.GetFormatedValue(val)));
+                return parseFloat(val).toLocaleString(undefined, {
+                    'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
+                    'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
+                });
             };
         }
         //	YesNo
@@ -491,12 +498,15 @@ VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name,
                     if (col.displayType == VIS.DisplayType.Date) {
                         var d = new Date(val);
                         d.setMinutes(d.getTimezoneOffset() + d.getMinutes());
-                        val = Globalize.format(d, 'd');
+                        //val = Globalize.format(d, 'd');
+                        val = d.toLocaleDateString();
                     }
                     else if (col.displayType == VIS.DisplayType.DateTime)
-                        val = Globalize.format(new Date(val), 'f');
+                        val = new Date(val).toLocaleString();
+                    //val = Globalize.format(new Date(val), 'f');
                     else
-                        val = Globalize.format(new Date(val), 't');
+                        val = new Date(val).toTimeString();
+                        //val = Globalize.format(new Date(val), 't');
                 else val = "";
                 return val;
             }
