@@ -11,7 +11,7 @@
 
         var $mainDivParent = $('<div class="" style="z-index: 999999;width: 100%;top: 0;height: 100%;display:none;" tabIndex=1>');
         //<div class="vis-confirm-popup-check"><input type="checkbox"><label>Background</label></div>
-        var $mainDiv = $('<div id="VAPOS_ErrorInfo" class="vis-PopupWrap-alert" style="width:300px; margin: 20% auto;">' +
+        var $mainDiv = $('<div id="VAPOS_ErrorInfo" class="vis-PopupWrap-alert" style="width:350px; margin: 20% auto;">' +
               '<input class="vis-Dialog-buttons-text" type="number"  tabindex="-30" style="z-index:-44;position:absolute"  autofocus="autofocus"  > ' +
             '       <div class="vis-popup-headerContainer">                                           ' +
             '       <div class="vis-PopupHeader-alert">' +
@@ -20,7 +20,7 @@
             '       </div>  </div>                                                                                   ' +
             '       <div class="vis-PopupContent-alert">                                                     ' +
 
-            '               <div class="form-group vis-PopupInput-alert" style="width: 100%">                 ' +
+            '               <div class="form-group vis-PopupInput-alert" style="width: 100%;max-height:200px;overflow:auto">                 ' +
             '               <img class="vis-alert-img" style="float:left"  />                                                   ' +
             '                   <label style="width: 90%;padding-left: 10px;word-break: break-word" id="VAPOS_lblErrorInfo"></label>                  ' +
             '                 <div class="vis-confirm-customUI" style="display:none"> </div>         ' +
