@@ -24,7 +24,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Configuration;
 using System.Data;
-
+using VAdvantage.Utility;
+using VAdvantage.Model;
 
 namespace VAdvantage.Classes
 {
@@ -656,6 +657,101 @@ namespace VAdvantage.Classes
                 return DateTime.Now.AddYears(Utility.Util.GetValueOfInt(time.ToString()));
             }
             return DateTime.Now;
+        }
+
+        /// <summary>
+        /// Sync column or table passed in the parameter
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="column"></param>
+        /// <param name="noColumns">OUT parameter, returns 0 if table is being synched for the first time</param>
+        /// <returns>string message</returns>
+        public static string SyncColumn(MTable table, MColumn column, out int noColumns)
+        {
+            DatabaseMetaData md = new DatabaseMetaData();
+            String catalog = "";
+            String schema = DataBase.DB.GetSchema();
+
+            //get table name
+            string tableName = table.GetTableName();
+
+            noColumns = 0;
+            string sql = null;
+            //get columns of a table
+            DataSet dt = md.GetColumns(catalog, schema, tableName);
+            md.Dispose();
+            //for each column
+            for (noColumns = 0; noColumns < dt.Tables[0].Rows.Count; noColumns++)
+            {
+                string columnName = dt.Tables[0].Rows[noColumns]["COLUMN_NAME"].ToString().ToLower();
+                if (!columnName.Equals(column.GetColumnName().ToLower()))
+                    continue;
+
+                //check if column is null or not
+                string dtColumnName = "is_nullable";
+                string value = "YES";
+                //if database is oracle
+                if (DatabaseType.IsOracle)
+                {
+                    dtColumnName = "NULLABLE";
+                    value = "Y";
+                }
+                bool notNull = false;
+                //check if column is null
+                if (dt.Tables[0].Rows[noColumns][dtColumnName].ToString() == value)
+                    notNull = false;
+                else
+                    notNull = true;
+                //............................
+
+                //if column is virtual column then alter table and drop this column
+                if (column.IsVirtualColumn())
+                {
+                    sql = "ALTER TABLE " + table.GetTableName()
+                   + " DROP COLUMN " + columnName;
+                }
+                else
+                {
+                    sql = column.GetSQLModify(table, column.IsMandatory() != notNull);
+                    noColumns++;
+                    break;
+                }
+            }
+            dt = null;
+            //while (rs.next())
+            //{
+            //    noColumns++;
+            //    String columnName = rs.getString ("COLUMN_NAME");
+            //    if (!columnName.equalsIgnoreCase(column.getColumnName()))
+            //        continue;
+
+            //    //	update existing column
+            //    boolean notNull = DatabaseMetaData.columnNoNulls == rs.getInt("NULLABLE");
+            //    if (column.isVirtualColumn())
+            //        sql = "ALTER TABLE " + table.getTableName() 
+            //            + " DROP COLUMN " + columnName;
+            //    else
+            //        sql = column.getSQLModify(table, column.isMandatory() != notNull);
+            //    break;
+            //}
+            //rs.close();
+            //rs = null;
+
+            //	No Table
+            if (noColumns == 0)
+            {
+                sql = table.GetSQLCreate();
+            }
+            //	No existing column
+            else if (sql == null)
+            {
+                if (column.IsVirtualColumn())
+                {
+                    return "@IsVirtualColumn@";
+                }
+                sql = column.GetSQLAdd(table);
+            }
+            return sql;
         }
     }
 }

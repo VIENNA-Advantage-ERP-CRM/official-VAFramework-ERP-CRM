@@ -119,6 +119,9 @@ namespace VAdvantage.ProcessEngine
 
         private Dictionary<string, string> ctxLocal = new Dictionary<string, string>();
 
+        // Change Lokesh Chauhan
+        private string _CustomHTML = "";
+
         public Dictionary<String, Object> ToList()
         {
             Dictionary<String, Object> lst = new Dictionary<string, object>();
@@ -940,6 +943,16 @@ namespace VAdvantage.ProcessEngine
         public int GetAD_ReportMaster_ID()
         {
             return _AD_ReportMaster_ID;
+        }
+
+        // Change Lokesh Chauhan
+        public string GetCustomHTML()
+        {
+            return _CustomHTML;
+        }
+        public void SetCustomHTML(string HTML)
+        {
+            _CustomHTML = HTML;
         }
     }
 }

@@ -715,6 +715,7 @@
     <Content Include="Areas\VIS\Scripts\app\initialize.js" />
     <Content Include="Areas\VIS\Scripts\app\logger.js" />
     <Content Include="Areas\VIS\Scripts\app\lookup.js" />
+    <Content Include="Areas\VIS\Scripts\app\masterdataversion.js" />
     <Content Include="Areas\VIS\Scripts\app\native-extension.js" />
     <Content Include="Areas\VIS\Scripts\app\processframe.js" />
     <Content Include="Areas\VIS\Scripts\app\processwrapper.js" />

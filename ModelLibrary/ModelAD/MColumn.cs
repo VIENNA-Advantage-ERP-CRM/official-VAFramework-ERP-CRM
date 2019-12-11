@@ -278,7 +278,7 @@ namespace VAdvantage.Model
             StringBuilder sqlDefault = new StringBuilder(sqlBase.ToString())
                 .Append(" ").Append(getSQLDataType());
 
-            
+
             //    .Append(" DEFAULT ");
             //string defaultValue = GetSQLDefaultValue();
             //if (defaultValue.Length > 0)
@@ -577,6 +577,9 @@ namespace VAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            if (!CheckVersions(false))
+                return false;
+
             int displayType = GetAD_Reference_ID();
             //	Length
             if (DisplayType.IsLOB(displayType))	//	LOBs are 0
@@ -825,6 +828,56 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override bool BeforeDelete()
+        {
+            if (!CheckVersions(true))
+                return false;
+            return true;
+        }
 
+        /// <summary>
+        /// function to check if user try to either delete or remove 
+        /// last column which is marked as Maintain Version to false
+        /// then return false, if there is data in respective Version Table
+        /// </summary>
+        /// <param name="delete"></param>
+        /// <returns>bool (true/false)</returns>
+        public bool CheckVersions(bool delete)
+        {
+            bool check = true;
+            StringBuilder sb = new StringBuilder("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = " + GetAD_Table_ID() + " AND IsMaintainVersions = 'Y' AND AD_Column_ID != " + GetAD_Column_ID());
+            if (!delete)
+            {
+                if (!(Is_ValueChanged("IsMaintainVersions") && (Util.GetValueOfBool(Get_ValueOld("IsMaintainVersions")) && !Util.GetValueOfBool(Get_Value("IsMaintainVersions")))))
+                    check = false;
+            }
+            else
+            {
+                if (!(Util.GetValueOfBool(Get_ValueOld("IsMaintainVersions"))))
+                    check = false;
+            }
+            if (check)
+            {
+                int countVerCols = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
+                if (countVerCols == 0)
+                {
+                    sb.Clear();
+                    sb.Append("SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + GetAD_Table_ID());
+                    string tableName = Util.GetValueOfString(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
+                    sb.Clear();
+                    sb.Append("SELECT COUNT(AD_Client_ID) FROM " + tableName + "_Ver");
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx())) > 0)
+                    {
+                        log.SaveError("VDE", Utility.Msg.GetElement(GetCtx(), "VersionDataExists"));
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 }

@@ -80,93 +80,98 @@ namespace VAdvantage.Process
             }
             //	Find Column in Database
 
-            DatabaseMetaData md = new DatabaseMetaData();
-            String catalog = "";
-            String schema = DataBase.DB.GetSchema();
+            if (column.IsVirtualColumn())
+                return "@IsVirtualColumn@";
+            int noColumns = 0;
+            string sql = CommonFunctions.SyncColumn(table, column, out noColumns);
 
-            //get table name
-            string tableName = table.GetTableName();
+            //DatabaseMetaData md = new DatabaseMetaData();
+            //String catalog = "";
+            //String schema = DataBase.DB.GetSchema();
+
+            ////get table name
+            //string tableName = table.GetTableName();
 
 
-            int noColumns;
-            string sql = null;
-            //get columns of a table
-            DataSet dt = md.GetColumns(catalog, schema, tableName);
-            md.Dispose();
-            //for each column
-            for (noColumns = 0; noColumns < dt.Tables[0].Rows.Count; noColumns++)
-            {
-                string columnName = dt.Tables[0].Rows[noColumns]["COLUMN_NAME"].ToString().ToLower();
-                if (!columnName.Equals(column.GetColumnName().ToLower()))
-                    continue;
-
-                //check if column is null or not
-
-                string dtColumnName = "is_nullable";
-                string value = "YES";
-                //if database is oracle
-                if (DatabaseType.IsOracle)
-                {
-                    dtColumnName = "NULLABLE";
-                    value = "Y";
-                }
-                bool notNull = false;
-                //check if column is null
-                if (dt.Tables[0].Rows[noColumns][dtColumnName].ToString() == value)
-                    notNull = false;
-                else
-                    notNull = true;
-                //............................
-
-                //if column is virtual column then alter table and drop this column
-                if (column.IsVirtualColumn())
-                {
-                    sql = "ALTER TABLE " + table.GetTableName()
-                   + " DROP COLUMN " + columnName;
-                }
-                else
-                {
-                    sql = column.GetSQLModify(table, column.IsMandatory() != notNull);
-                    noColumns++;
-                    break;
-                }
-
-            }
-            dt = null;
-
-            //while (rs.next())
+            //int noColumns;
+            //string sql = null;
+            ////get columns of a table
+            //DataSet dt = md.GetColumns(catalog, schema, tableName);
+            //md.Dispose();
+            ////for each column
+            //for (noColumns = 0; noColumns < dt.Tables[0].Rows.Count; noColumns++)
             //{
-            //    noColumns++;
-            //    String columnName = rs.getString ("COLUMN_NAME");
-            //    if (!columnName.equalsIgnoreCase(column.getColumnName()))
+            //    string columnName = dt.Tables[0].Rows[noColumns]["COLUMN_NAME"].ToString().ToLower();
+            //    if (!columnName.Equals(column.GetColumnName().ToLower()))
             //        continue;
 
-            //    //	update existing column
-            //    boolean notNull = DatabaseMetaData.columnNoNulls == rs.getInt("NULLABLE");
-            //    if (column.isVirtualColumn())
-            //        sql = "ALTER TABLE " + table.getTableName() 
-            //            + " DROP COLUMN " + columnName;
-            //    else
-            //        sql = column.getSQLModify(table, column.isMandatory() != notNull);
-            //    break;
-            //}
-            //rs.close();
-            //rs = null;
+            //    //check if column is null or not
 
-            //	No Table
-            if (noColumns == 0)
-            {
-                sql = table.GetSQLCreate();
-            }
-            //	No existing column
-            else if (sql == null)
-            {
-                if (column.IsVirtualColumn())
-                {
-                    return "@IsVirtualColumn@";
-                }
-                sql = column.GetSQLAdd(table);
-            }
+            //    string dtColumnName = "is_nullable";
+            //    string value = "YES";
+            //    //if database is oracle
+            //    if (DatabaseType.IsOracle)
+            //    {
+            //        dtColumnName = "NULLABLE";
+            //        value = "Y";
+            //    }
+            //    bool notNull = false;
+            //    //check if column is null
+            //    if (dt.Tables[0].Rows[noColumns][dtColumnName].ToString() == value)
+            //        notNull = false;
+            //    else
+            //        notNull = true;
+            //    //............................
+
+            //    //if column is virtual column then alter table and drop this column
+            //    if (column.IsVirtualColumn())
+            //    {
+            //        sql = "ALTER TABLE " + table.GetTableName()
+            //       + " DROP COLUMN " + columnName;
+            //    }
+            //    else
+            //    {
+            //        sql = column.GetSQLModify(table, column.IsMandatory() != notNull);
+            //        noColumns++;
+            //        break;
+            //    }
+
+            //}
+            //dt = null;
+
+            ////while (rs.next())
+            ////{
+            ////    noColumns++;
+            ////    String columnName = rs.getString ("COLUMN_NAME");
+            ////    if (!columnName.equalsIgnoreCase(column.getColumnName()))
+            ////        continue;
+
+            ////    //	update existing column
+            ////    boolean notNull = DatabaseMetaData.columnNoNulls == rs.getInt("NULLABLE");
+            ////    if (column.isVirtualColumn())
+            ////        sql = "ALTER TABLE " + table.getTableName() 
+            ////            + " DROP COLUMN " + columnName;
+            ////    else
+            ////        sql = column.getSQLModify(table, column.isMandatory() != notNull);
+            ////    break;
+            ////}
+            ////rs.close();
+            ////rs = null;
+
+            ////	No Table
+            //if (noColumns == 0)
+            //{
+            //    sql = table.GetSQLCreate();
+            //}
+            ////	No existing column
+            //else if (sql == null)
+            //{
+            //    if (column.IsVirtualColumn())
+            //    {
+            //        return "@IsVirtualColumn@";
+            //    }
+            //    sql = column.GetSQLAdd(table);
+            //}
 
             int no = 0;
             if (sql.IndexOf(";") == -1)
@@ -208,8 +213,22 @@ namespace VAdvantage.Process
                 msg += sql;
                 throw new Exception(msg);
             }
-            string r = createFK();
-            return sql + "; " + r;
+            string r = createFK(noColumns);
+
+            // Change here for Master Data Versioning
+            bool hasMainVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + column.GetAD_Table_ID() + " AND IsActive ='Y' AND IsMaintainVersions = 'Y'", null, Get_Trx())) > 0;
+            // check whether there are any columns in the table
+            // marked as "Maintain Versions", then proceed else return
+            string versionMsg = "";
+            if (hasMainVerCol)
+            {
+                // call CreateVersionInfo function of MasterVersions class
+                // to create version table and all columns
+                MasterVersions mv = new MasterVersions();
+                versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
+            }
+
+            return sql + "; " + r + "; " + versionMsg;
         }	//	doIt
 
         public void SetAD_Column_ID(int AD_Column_ID)
@@ -218,11 +237,12 @@ namespace VAdvantage.Process
         }
 
         DataSet dsMetaData = null;
-        public String createFK()
+        public String createFK(int noColumns)
         {
-            String returnMessage = "";
+            StringBuilder returnMessage = new StringBuilder("");
             if (p_AD_Column_ID == 0)
                 throw new Exception("@No@ @AD_Column_ID@");
+
             MColumn column = new MColumn(GetCtx(), p_AD_Column_ID, Get_Trx());
             if (column.Get_ID() == 0)
                 throw new Exception("@NotFound@ @AD_Column_ID@ " + p_AD_Column_ID);
@@ -231,253 +251,293 @@ namespace VAdvantage.Process
             if (table.Get_ID() == 0)
                 throw new Exception("@NotFound@ @AD_Table_ID@ " + column.GetAD_Table_ID());
 
-            String fk;
-            if ((column.GetAD_Reference_ID() == DisplayType.Account)
-                && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
+            // List of columns to be synched
+            List<int> cols = new List<int>();
+            // Add current column on which user pressed Synchronize
+            cols.Add(p_AD_Column_ID);
+            // if new table is being created and column synch is being done for the first time
+            // then get all columns of table and add to list
+            if (noColumns == 0)
             {
-                fk = "SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                    + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                    + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                    + "FROM AD_Table t"
-                    + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
-                    + " INNER JOIN AD_Column cPK ON (cPK.AD_Column_ID=1014)"
-                    + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
-                    + "WHERE c.IsKey='N' AND c.AD_Reference_ID=25 AND C.AD_Column_ID= @param"	//	Acct
-                    + " AND c.ColumnName<>'C_ValidCombination_ID'"
-                    + " AND t.IsView='N' "
-                    + " ORDER BY t.TableName, c.ColumnName";
-            }
-            else if ((column.GetAD_Reference_ID() == DisplayType.PAttribute)
-                && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
-            {
-                fk = "SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                    + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                    + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                    + "FROM AD_Table t"
-                    + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
-                    + " INNER JOIN AD_Column cPK ON (cPK.AD_Column_ID=8472)"
-                    + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
-                    + "WHERE c.IsKey='N' AND c.AD_Reference_ID=35 AND C.AD_Column_ID=@param"	//	Product Attribute
-                    + " AND c.ColumnName<>'C_ValidCombination_ID'"
-                    + " AND t.IsView='N' "
-                    + " ORDER BY t.TableName, c.ColumnName";
-            }
-            else if (((column.GetAD_Reference_ID() == DisplayType.TableDir) || (column.GetAD_Reference_ID() == DisplayType.Search))
-                && (column.GetAD_Reference_Value_ID() == 0))
-            {
-                fk = "SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                    + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                    + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                    + "FROM AD_Table t"
-                    + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
-                    + " INNER JOIN AD_Column cPK ON (c.AD_Element_ID=cPK.AD_Element_ID AND cPK.IsKey='Y')"
-                    + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID AND tPK.IsView='N') "
-                    + "WHERE c.IsKey='N' AND c.AD_Reference_Value_ID IS NULL AND C.AD_Column_ID=@param"
-                    + " AND t.IsView='N' AND c.ColumnSQL IS NULL "
-                    + " ORDER BY t.TableName, c.ColumnName";
-            }
-            else //	Table
-            {
-                fk = "SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                    + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                    + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                    + "FROM AD_Table t"
-                    + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID AND c.AD_Reference_Value_ID IS NOT NULL)"
-                    + " INNER JOIN AD_Ref_Table rt ON (c.AD_Reference_Value_ID=rt.AD_Reference_ID)"
-                    + " INNER JOIN AD_Column cPK ON (rt.Column_Key_ID=cPK.AD_Column_ID)"
-                    + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
-                    + "WHERE c.IsKey='N'"
-                    + " AND t.IsView='N' AND c.ColumnSQL IS NULL AND C.AD_Column_ID=@param"
-                    + " ORDER BY t.TableName, c.ColumnName";
+                int[] AllCols = MColumn.GetAllIDs("AD_Column", "AD_Table_ID = " + column.GetAD_Table_ID(), Get_Trx());
+                cols = AllCols.ToList();
             }
 
-            SqlParameter[] pstmt = null;
+            #region variables
+            StringBuilder fk = new StringBuilder("");
+            StringBuilder dropsql = new StringBuilder("");
+            String constraintNameDB = "";
+            StringBuilder PKTableNameDB = new StringBuilder("");
+            StringBuilder PKColumnNameDB = new StringBuilder("");
+
+            StringBuilder TableName = new StringBuilder("");
+            StringBuilder ColumnName = new StringBuilder("");
+            StringBuilder PKTableName = new StringBuilder("");
+            StringBuilder PKColumnName = new StringBuilder("");
+            StringBuilder ConstraintType = new StringBuilder("");
+            StringBuilder ConstraintName = new StringBuilder("");
+            #endregion variables
+
+            String schema = DB.GetSchema();
+            String tableName = table.GetTableName();
 
             try
             {
-                /*Find foreign key relation in Database
-                 * */
-                //Trx trx = Trx.Get("getDatabaseMetaData");
+                // Loop through all columns
+
                 DatabaseMetaData md = new DatabaseMetaData();
-                String catalog = "";// DB.getCatalog();
-                String schema = DB.GetSchema();
-                String tableName = table.GetTableName();
 
-
-
-
-                String dropsql = null;
-                int no = 0;
-
-                String constraintNameDB = null;
-                String PKTableNameDB = null;
-                String PKColumnNameDB = null;
-                int constraintTypeDB = 0;
-
-                /* Get foreign key information from DatabaseMetadata
-                 * */
                 if (dsMetaData == null)
                 {
-                    dsMetaData = md.GetForeignKeys(catalog, schema, tableName);
-                }
-                if (dsMetaData != null && dsMetaData.Tables[0].Rows.Count > 0)
-                {
-                    for (int i = 0; i < dsMetaData.Tables[0].Rows.Count; i++)
-                    {
-
-                        Dictionary<String, String> fkcolumnDetail = md.GetForeignColumnDetail(dsMetaData.Tables[0].Rows[i]);
-                        // string sql = "SELECT column_name FROM user_cons_columns WHERE constraint_name='" + ds.Tables[0].Rows[i]["FOREIGN_KEY_CONSTRAINT_NAME"].ToString() + "'";
-                        //string fkcolumnName = Util.GetValueOfString(DB.ExecuteScalar(sql));
-
-                        if (fkcolumnDetail["FK_Column_Name"].Equals(column.GetColumnName(), StringComparison.OrdinalIgnoreCase))
-                        {
-                            constraintNameDB = fkcolumnDetail["ConstraintNameDB"];
-                            PKTableNameDB = fkcolumnDetail["PK_Table_Name"]; //rs.GetString("PKTABLE_NAME");
-                            PKColumnNameDB = fkcolumnDetail["PK_Column_Name"]; //rs.GetString("PKCOLUMN_NAME");
-                            constraintTypeDB = md.GetConstraintTypeDB(fkcolumnDetail["Delete_Rule"]); //rs.getShort("DELETE_RULE");
-                            break;
-                        }
-                    }
+                    dsMetaData = md.GetForeignKeys("", schema, tableName);
                 }
 
+                SqlParameter[] pstmt = null;
 
-                pstmt = new SqlParameter[1];
-                pstmt[0] = new SqlParameter("@param", column.Get_ID());
+                int no = 0;
 
-                DataSet ds = DB.ExecuteDataset(fk, pstmt, Get_Trx());
+                int constraintTypeDB = 0;
 
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                foreach (int col in cols)
                 {
-                    String TableName = ds.Tables[0].Rows[0]["TableName"].ToString();
-                    String ColumnName = ds.Tables[0].Rows[0]["ColumnName"].ToString();
-                    //	int AD_Column_ID = rs.getInt (3);
-                    //	int PK_Column_ID = rs.getInt (4);
-                    String PKTableName = ds.Tables[0].Rows[0]["TableName1"].ToString();
-                    String PKColumnName = ds.Tables[0].Rows[0]["ColumnName1"].ToString();
-                    String ConstraintType = ds.Tables[0].Rows[0]["ConstraintType"].ToString();
-                    String ConstraintName = ds.Tables[0].Rows[0]["ConstraintName"].ToString();
+                    column = new MColumn(GetCtx(), col, Get_Trx());
 
-                    /* verify if the constraint in DB is different than the one to be created */
-                    Boolean modified = true;
-                    if (constraintNameDB != null)
+                    dropsql.Clear();
+                    fk.Clear();
+                    PKTableNameDB.Clear();
+                    PKColumnNameDB.Clear();
+
+                    TableName.Clear();
+                    ColumnName.Clear();
+                    PKTableName.Clear();
+                    PKColumnName.Clear();
+                    ConstraintType.Clear();
+                    ConstraintName.Clear();
+
+                    if ((column.GetAD_Reference_ID() == DisplayType.Account)
+                        && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
                     {
-                        if (((constraintNameDB.Equals(ConstraintName, StringComparison.OrdinalIgnoreCase))
-                                && (PKTableNameDB != null) && (PKTableNameDB.Equals(PKTableName, StringComparison.OrdinalIgnoreCase))
-                                && (PKColumnNameDB != null) && (PKColumnNameDB.Equals(PKColumnName, StringComparison.OrdinalIgnoreCase))
-                                && ((constraintTypeDB == DatabaseMetaData.importedKeyRestrict) &&
-                                        (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType)
-                                                || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType))))
-                                                ||
-                                                ((constraintTypeDB == DatabaseMetaData.importedKeyCascade) &&
-                                                        (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType)
-                                                                || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType)))
-                                                                ||
-                                                                ((constraintTypeDB == DatabaseMetaData.importedKeySetNull) &&
-                                                                        (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType)))
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
+                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
+                            + "FROM AD_Table t"
+                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
+                            + " INNER JOIN AD_Column cPK ON (cPK.AD_Column_ID=1014)"
+                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
+                            + "WHERE c.IsKey='N' AND c.AD_Reference_ID=25 AND C.AD_Column_ID= @param"   //	Acct
+                            + " AND c.ColumnName<>'C_ValidCombination_ID'"
+                            + " AND t.IsView='N' "
+                            + " ORDER BY t.TableName, c.ColumnName");
+                    }
+                    else if ((column.GetAD_Reference_ID() == DisplayType.PAttribute)
+                        && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
+                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
+                            + "FROM AD_Table t"
+                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
+                            + " INNER JOIN AD_Column cPK ON (cPK.AD_Column_ID=8472)"
+                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
+                            + "WHERE c.IsKey='N' AND c.AD_Reference_ID=35 AND C.AD_Column_ID=@param"    //	Product Attribute
+                            + " AND c.ColumnName<>'C_ValidCombination_ID'"
+                            + " AND t.IsView='N' "
+                            + " ORDER BY t.TableName, c.ColumnName");
+                    }
+                    else if (((column.GetAD_Reference_ID() == DisplayType.TableDir) || (column.GetAD_Reference_ID() == DisplayType.Search))
+                        && (column.GetAD_Reference_Value_ID() == 0))
+                    {
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
+                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
+                            + "FROM AD_Table t"
+                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
+                            + " INNER JOIN AD_Column cPK ON (c.AD_Element_ID=cPK.AD_Element_ID AND cPK.IsKey='Y')"
+                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID AND tPK.IsView='N') "
+                            + "WHERE c.IsKey='N' AND c.AD_Reference_Value_ID IS NULL AND C.AD_Column_ID=@param"
+                            + " AND t.IsView='N' AND c.ColumnSQL IS NULL "
+                            + " ORDER BY t.TableName, c.ColumnName");
+                    }
+                    else //	Table
+                    {
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
+                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
+                            + "FROM AD_Table t"
+                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID AND c.AD_Reference_Value_ID IS NOT NULL)"
+                            + " INNER JOIN AD_Ref_Table rt ON (c.AD_Reference_Value_ID=rt.AD_Reference_ID)"
+                            + " INNER JOIN AD_Column cPK ON (rt.Column_Key_ID=cPK.AD_Column_ID)"
+                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
+                            + "WHERE c.IsKey='N'"
+                            + " AND t.IsView='N' AND c.ColumnSQL IS NULL AND C.AD_Column_ID=@param"
+                            + " ORDER BY t.TableName, c.ColumnName");
+                    }
 
-                        )
-                        {
-                            modified = false;
-                        }
+                    /*Find foreign key relation in Database
+                     * */
+                    //Trx trx = Trx.Get("getDatabaseMetaData");
+                    
+                    //String catalog = "";// DB.getCatalog();
 
-                        else
+                    no = 0;
+                    constraintTypeDB = 0;
+
+                    /* Get foreign key information from DatabaseMetadata
+                     * */
+                   
+                    if (dsMetaData != null && dsMetaData.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dsMetaData.Tables[0].Rows.Count; i++)
                         {
-                            dropsql = "ALTER TABLE " + table.GetTableName()
-                            + " DROP CONSTRAINT " + constraintNameDB;
+                            Dictionary<String, String> fkcolumnDetail = md.GetForeignColumnDetail(dsMetaData.Tables[0].Rows[i]);
+                            // string sql = "SELECT column_name FROM user_cons_columns WHERE constraint_name='" + ds.Tables[0].Rows[i]["FOREIGN_KEY_CONSTRAINT_NAME"].ToString() + "'";
+                            //string fkcolumnName = Util.GetValueOfString(DB.ExecuteScalar(sql));
+
+                            if (fkcolumnDetail["FK_Column_Name"].Equals(column.GetColumnName(), StringComparison.OrdinalIgnoreCase))
+                            {
+                                constraintNameDB = fkcolumnDetail["ConstraintNameDB"];
+                                PKTableNameDB.Append(fkcolumnDetail["PK_Table_Name"]); //rs.GetString("PKTABLE_NAME");
+                                PKColumnNameDB.Append(fkcolumnDetail["PK_Column_Name"]); //rs.GetString("PKCOLUMN_NAME");
+                                constraintTypeDB = md.GetConstraintTypeDB(fkcolumnDetail["Delete_Rule"]); //rs.getShort("DELETE_RULE");
+                                break;
+                            }
                         }
                     }
-                    if (modified)
-                    {
-                        StringBuilder sql = null;
-                        try
-                        {
-                            if (dropsql != null)
-                            {
-                                /* Drop the existing constraint */
-                                //no = DB.executeUpdate(Get_Trx(), dropsql);
 
-                                no = DB.ExecuteQuery(dropsql, null, Get_Trx());
-                                AddLog(0, null, Decimal.Parse(no.ToString()), dropsql);
-                            }
-                            /* Now create the sql foreign key constraint */
-                            sql = new StringBuilder("ALTER TABLE ")
-                                .Append(TableName)
-                                .Append(" ADD CONSTRAINT ").Append(ConstraintName)
-                                .Append(" FOREIGN KEY (").Append(ColumnName)
-                                .Append(") REFERENCES ").Append(PKTableName)
-                                .Append(" (").Append(PKColumnName).Append(")");
-                            Boolean createfk = true;
-                            if (!String.IsNullOrEmpty(ConstraintType))
+                    pstmt = new SqlParameter[1];
+                    pstmt[0] = new SqlParameter("@param", column.Get_ID());
+
+                    DataSet ds = DB.ExecuteDataset(fk.ToString(), pstmt, Get_Trx());
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        TableName.Append(ds.Tables[0].Rows[0]["TableName"].ToString());
+                        ColumnName.Append(ds.Tables[0].Rows[0]["ColumnName"].ToString());
+                        //	int AD_Column_ID = rs.getInt (3);
+                        //	int PK_Column_ID = rs.getInt (4);
+                        PKTableName.Append(ds.Tables[0].Rows[0]["TableName1"].ToString());
+                        PKColumnName.Append(ds.Tables[0].Rows[0]["ColumnName1"].ToString());
+                        ConstraintType.Append(ds.Tables[0].Rows[0]["ConstraintType"].ToString());
+                        ConstraintName.Append(ds.Tables[0].Rows[0]["ConstraintName"].ToString());
+
+                        /* verify if the constraint in DB is different than the one to be created */
+                        Boolean modified = true;
+                        if (constraintNameDB != null)
+                        {
+                            if (((constraintNameDB.ToString().Equals(ConstraintName.ToString(), StringComparison.OrdinalIgnoreCase))
+                                    && (PKTableNameDB != null) && (PKTableNameDB.ToString().Equals(PKTableName.ToString(), StringComparison.OrdinalIgnoreCase))
+                                    && (PKColumnNameDB != null) && (PKColumnNameDB.ToString().Equals(PKColumnName.ToString(), StringComparison.OrdinalIgnoreCase))
+                                    && ((constraintTypeDB == DatabaseMetaData.importedKeyRestrict) &&
+                                            (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType)
+                                                    || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType))))
+                                                    ||
+                                                    ((constraintTypeDB == DatabaseMetaData.importedKeyCascade) &&
+                                                            (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType)
+                                                                    || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType)))
+                                                                    ||
+                                                                    ((constraintTypeDB == DatabaseMetaData.importedKeySetNull) &&
+                                                                            (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType)))
+
+                            )
                             {
-                                if (X_AD_Column.CONSTRAINTTYPE_DoNOTCreate.Equals(ConstraintType))
-                                    createfk = false;
-                                else if (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType)
-                                    || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType))
-                                {
-                                    ;
-                                }
-                                else if (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType)
-                                    || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType))
-                                    sql.Append(" ON DELETE CASCADE");
-                                else if (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType)
-                                    || X_AD_Column.CONSTRAINTTYPE_NullTrigger.Equals(ConstraintType))
-                                    sql.Append(" ON DELETE SET NULL");
+                                modified = false;
                             }
+
                             else
                             {
-                                createfk = false;
+                                dropsql.Append("ALTER TABLE " + table.GetTableName()
+                                + " DROP CONSTRAINT " + constraintNameDB.ToString());
                             }
-                            /* Create the constraint */
-                            if (createfk)
+                        }
+                        if (modified)
+                        {
+                            StringBuilder sql = null;
+                            try
                             {
-                                // no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx());
-                                no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx(), false, true);
-                                AddLog(0, null, Decimal.Parse(no.ToString()), sql.ToString());
-                                if (no != -1)
+                                if (dropsql != null && dropsql.ToString().Trim() != "")
                                 {
-                                    log.Finer(ConstraintName + " - " + TableName + "." + ColumnName);
-                                    returnMessage = sql.ToString();
+                                    /* Drop the existing constraint */
+                                    //no = DB.executeUpdate(Get_Trx(), dropsql);
+
+                                    no = DB.ExecuteQuery(dropsql.ToString(), null, Get_Trx());
+                                    AddLog(0, null, Decimal.Parse(no.ToString()), dropsql.ToString());
+                                }
+                                /* Now create the sql foreign key constraint */
+                                sql = new StringBuilder("ALTER TABLE ")
+                                    .Append(TableName)
+                                    .Append(" ADD CONSTRAINT ").Append(ConstraintName)
+                                    .Append(" FOREIGN KEY (").Append(ColumnName)
+                                    .Append(") REFERENCES ").Append(PKTableName)
+                                    .Append(" (").Append(PKColumnName).Append(")");
+                                Boolean createfk = true;
+                                if (!String.IsNullOrEmpty(ConstraintType.ToString()))
+                                {
+                                    if (X_AD_Column.CONSTRAINTTYPE_DoNOTCreate.Equals(ConstraintType))
+                                        createfk = false;
+                                    else if (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType)
+                                        || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType))
+                                    {
+                                        ;
+                                    }
+                                    else if (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType)
+                                        || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType))
+                                        sql.Append(" ON DELETE CASCADE");
+                                    else if (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType)
+                                        || X_AD_Column.CONSTRAINTTYPE_NullTrigger.Equals(ConstraintType))
+                                        sql.Append(" ON DELETE SET NULL");
                                 }
                                 else
                                 {
-                                    log.Info(ConstraintName + " - " + TableName + "." + ColumnName
-                                        + " - ReturnCode=" + no);
-                                    returnMessage = "FAILED:" + sql.ToString();
+                                    createfk = false;
                                 }
-                            } //if createfk
-
-                        }
-                        catch (Exception e)
-                        {
-                            if (returnMessage.Length > 0)
-                            {
-                                returnMessage = returnMessage + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message;
-                                AddLog(0, null, Decimal.Parse(no.ToString()), ". " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
-
+                                /* Create the constraint */
+                                if (createfk)
+                                {
+                                    // no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx());
+                                    no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx(), false, true);
+                                    AddLog(0, null, Decimal.Parse(no.ToString()), sql.ToString());
+                                    if (no != -1)
+                                    {
+                                        log.Finer(ConstraintName + " - " + TableName + "." + ColumnName);
+                                        returnMessage.Append(", " + sql.ToString());
+                                    }
+                                    else
+                                    {
+                                        log.Info(ConstraintName + " - " + TableName + "." + ColumnName
+                                            + " - ReturnCode=" + no);
+                                        returnMessage.Append(", FAILED:" + sql.ToString());
+                                    }
+                                } //if createfk
                             }
-                            else
+                            catch (Exception e)
                             {
-                                returnMessage = Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message;
-                                AddLog(0, null, Decimal.Parse(no.ToString()), Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
+                                if (returnMessage.Length > 0)
+                                {
+                                    returnMessage.Append(", " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
+                                    AddLog(0, null, Decimal.Parse(no.ToString()), ". " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
+                                }
+                                else
+                                {
+                                    returnMessage.Append(", " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
+                                    AddLog(0, null, Decimal.Parse(no.ToString()), Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
+                                }
+
+                                log.Log(Level.SEVERE, sql.ToString() + " - " + e.ToString());
                             }
-
-
-                            log.Log(Level.SEVERE, sql.ToString() + " - " + e.ToString());
-
-                        }
-                    } // modified
-                }	//	rs.next
-                else
-                {
-                    if (constraintNameDB != null && constraintNameDB.Equals("FK" + column.GetAD_Table_ID() + "_" + p_AD_Column_ID, StringComparison.OrdinalIgnoreCase))
+                        } // modified
+                    }   //	rs.next
+                    else
                     {
-                        dropsql = "ALTER TABLE " + table.GetTableName()
-                        + " DROP CONSTRAINT " + constraintNameDB;
+                        if (constraintNameDB != null && constraintNameDB.ToString().Equals("FK" + column.GetAD_Table_ID() + "_" + p_AD_Column_ID, StringComparison.OrdinalIgnoreCase))
+                        {
+                            dropsql.Append("ALTER TABLE " + table.GetTableName()
+                            + " DROP CONSTRAINT " + constraintNameDB);
 
-                        /* Drop the existing constraint */
-                        no = DB.ExecuteQuery(dropsql, null, Get_Trx());
-                        AddLog(0, null, Decimal.Parse(no.ToString()), dropsql);
-                        returnMessage = dropsql.ToString();
+                            /* Drop the existing constraint */
+                            no = DB.ExecuteQuery(dropsql.ToString(), null, Get_Trx());
+                            AddLog(0, null, Decimal.Parse(no.ToString()), dropsql.ToString());
+                            returnMessage.Append(", " + dropsql.ToString());
+                        }
                     }
                 }
             }
@@ -485,23 +545,17 @@ namespace VAdvantage.Process
             {
                 if (returnMessage.Length > 0)
                 {
-                    returnMessage = returnMessage + ". " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message;
+                    returnMessage.Append(", " + ". " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
                     AddLog(0, null, Decimal.Parse("0"), ". " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
                 }
                 else
                 {
-                    returnMessage = Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message;
+                    returnMessage.Append(", " + Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
                     AddLog(0, null, Decimal.Parse("0"), Msg.GetMsg(GetCtx(), "VIS_ConstraintsError") + e.Message);
                 }
-                log.Log(Level.SEVERE, fk, e);
+                log.Log(Level.SEVERE, fk.ToString(), e);
             }
-            return returnMessage;
-
-
-
+            return returnMessage.ToString();
         }
-
-   
-
     }
 }

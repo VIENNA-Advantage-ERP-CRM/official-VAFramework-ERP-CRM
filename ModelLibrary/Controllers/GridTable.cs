@@ -131,6 +131,12 @@ namespace VAdvantage.Model
         /** Save Abort Error - U	*/
         public const char SAVE_ABORT = 'U';
 
+        /** Save Abort Error - F	*/
+        public const char SAVE_FUTURE = 'F';
+
+        /** Save Abort Error - W	*/
+        public const char SAVE_WFAPPROVAL = 'W';
+
         /* Paging */
         int _currentPage = 1;
 
