@@ -72,7 +72,7 @@
 	 *	@param windowNo window number 
 	 *	@return true if started
 	 */
-    AForm.prototype.openForm = function (json, $parent, windowNo) {
+    AForm.prototype.openForm = function (json, $parent, windowNo, additionalInfo) {
 
         if (json.IsReport) {
             VIS.ADialog.info("Form Report is not supported");
@@ -109,7 +109,7 @@
             //className = "VIS.Apps.TestForm";
             var type = VIS.Utility.getFunctionByName(className, window);
             var o = new type(windowNo);
-            o.init(windowNo, this);
+            o.init(windowNo, this, additionalInfo);
             this.mPanel = o;
             o = null;
         }

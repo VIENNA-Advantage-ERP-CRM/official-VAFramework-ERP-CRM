@@ -408,13 +408,13 @@
         this.gridTable.addDataStatusListener(this);
         this.gridTable.setAD_Tab_ID(this.vo.AD_Tab_ID);
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTab");
-
+      
         this.loadData(windowVo);
         windowVo = null;
 
     };
 
-
+    
 
     GridTab.prototype.getAD_Tab_ID = function () {
         return this.vo.AD_Tab_ID;
@@ -1383,7 +1383,7 @@
         return this.isZoomAction;
 
     };
-
+   
 
     GridTab.prototype.prepareQuery = function (onlyCurrentDays, maxRows, created, isVisualEdtr) {
 
@@ -1428,7 +1428,7 @@
         }
 
         //    _vo.WhereClause);
-
+        
         if (this.getOnlyCurrentDays() > 0) {
             if (where.length > 0)
                 where += " AND ";
@@ -1459,7 +1459,7 @@
                     success = false;
                 }
                 else {
-
+                    
                     var value = VIS.context.getWindowContext(this.vo.windowNo, lc);
                     //	Same link value?
                     if (refresh) {
@@ -1498,15 +1498,15 @@
         this.extendedWhere = where.toString();
 
         //	Final Query
-        if (this.query.getIsActive()) {
-
+        if (this.query.getIsActive()) {          
+            
             var q = this.validateQuery(this.query);
             if (q != null && !queryDetailAll) {
                 if (where.length > 0)
                     where += " AND ";
                 where += q;
             }
-
+           
         }
 
         /* Query */

@@ -238,7 +238,7 @@
     };
     Lookup.prototype.setSelectedItem = function (anObject) {
         if (((this.selectedObject != null) && this.selectedObject !== anObject)
-    || ((this.selectedObject == null) && (anObject != null))) {
+            || ((this.selectedObject == null) && (anObject != null))) {
             this.setSelectedItemAlways(anObject);
         }
     };
@@ -318,8 +318,8 @@
         for (var i = 0; i < q._list.length; i++) {
             var l = q._list[i];
             qr = new VIS.QueryRestriction(l.ColumnName, l.Code, l.Code_to,
-           l.InfoName, q.InfoDisplay, l.InfoDisplay_to,
-           l.Operator, l.DirectWhereClause, l.AndCondition)
+                l.InfoName, q.InfoDisplay, l.InfoDisplay_to,
+                l.Operator, l.DirectWhereClause, l.AndCondition)
             this.zomQuery.addRestriction(qr);
         }
     };
@@ -480,8 +480,8 @@
             this.getDirect(key, false, true); // cache locally 
         }
         if (!this.allLoaded && ($.isEmptyObject(this.lookup))
-                 && !this.info.isCreadedUpdatedBy && !this.info.isParent
-                 && (this.getDisplayType() != VIS.DisplayType.Search)) {
+            && !this.info.isCreadedUpdatedBy && !this.info.isParent
+            && (this.getDisplayType() != VIS.DisplayType.Search)) {
             //m_result = s_exec.submit(m_loader);
             this.load();
             //loadComplete();
@@ -551,7 +551,7 @@
     MLookup.prototype.getDirect = function (key, saveInCache, cacheLocal) {
         // Nothing to query
         if ((key == null) || (this.info.queryDirect == null)
-				|| (this.info.queryDirect.length == 0))
+            || (this.info.queryDirect.length == 0))
             return null;
         if (key === this.directNullKey)
             return null;
@@ -600,8 +600,8 @@
                 }
                 if (dr.read()) {
                     this.log.log(VIS.Logging.Level.SEVERE, this.info.keyColumn
-                    				+ ": Not unique (first returned) for " + key
-                    				+ " SQL=" + query);
+                        + ": Not unique (first returned) for " + key
+                        + " SQL=" + query);
                 }
 
             } else {
@@ -615,7 +615,7 @@
         }
         catch (e) {
             this.log.log(VIS.Logging.Level.SEVERE, this.info.keyColumn + ": SQL="
-            	+ this.info.queryDirect + "; Key=" + key, e);
+                + this.info.queryDirect + "; Key=" + key, e);
             directValue = null;
         }
         finally {
@@ -848,7 +848,7 @@
         while (dr.read()) {
             if (rows++ > this.MAX_ROWS) {
                 this.log.fine(this.info.keyColumn
-                        + ": Loader - Too many records");
+                    + ": Loader - Too many records");
                 this.allLoaded = false;
                 break;
             }
@@ -881,7 +881,7 @@
     MLookup.prototype.refresh = function () {
         // Don't load Search or CreatedBy/UpdatedBy
         if ((this.getDisplayType() == VIS.DisplayType.Search)
-                || this.info.IsCreadedUpdatedBy) {
+            || this.info.IsCreadedUpdatedBy) {
             return 0;
         }
         if (this.loading)
@@ -928,7 +928,7 @@
     */
 
         var AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID(this.info.tableName,
-                this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
+            this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
         return AD_Window_ID;
     }; // getZoomWindow
     /**
@@ -1200,7 +1200,7 @@
         try {
             // Commented by Bharat on 24 Jan 2019
             // JID_1024: "Show locator name in dropdown with Warehouse Name_LocatorSearchkey(locatorName)
-            
+
             //var sql = "VIS_93";
             //var ds = executeDataSet(sql, sqlParaCount > 0 ? param : null);
             //var dt = ds.getTable(0);
@@ -1907,13 +1907,13 @@
                     if (VIS.DisplayType.IsDate(ldc.DisplayType) || VIS.DisplayType.IsNumeric(ldc.DisplayType)) {
                         embedSQL = embedSQL.concat(VIS.DB.to_char(tableName + "." + ldc.ColumnName, ldc.DisplayType, VIS.Env.getAD_Language(VIS.Env.getCtx())));
                     }
-                        //  TableDir
+                    //  TableDir
                     else if ((ldc.DisplayType == VIS.DisplayType.TableDir || ldc.DisplayType == VIS.DisplayType.Search) && ldc.ColumnName.endsWith("_ID")) {
                         alert("TableDir");
                         //var embeddedSQL = GetLookup_TableDirEmbed(language, ldc.ColumnName, tableName);
                         //embedSQL = embedSQL.concat("(").concat(embeddedSQL).concat(")");
                     }
-                        //  String
+                    //  String
                     else {
                         //jz EDB || problem
                         //if (DatabaseType.IsPostgre)
@@ -1956,8 +1956,8 @@
             var sb = info.windowNo + ":";
             //sb += info.column_ID;
             sb += ":" + info.keyColumn +
-                    info.AD_Reference_Value_ID + info.query +
-                    info.validationCode;
+                info.AD_Reference_Value_ID + info.query +
+                info.validationCode;
             // does not include ctx
             return sb;
         }, // getKey
@@ -2095,7 +2095,7 @@
         initWindowLookup: function (windowNo) {
             if (this.s_windowLookup[windowNo]) {
                 var arr = this.s_windowLookup[windowNo];
-                for (var i = 0, j = arr.length ; i < j; i++) {
+                for (var i = 0, j = arr.length; i < j; i++) {
                     arr[i].initialize();
                 }
                 arr.length = 0;
@@ -2176,7 +2176,8 @@
         }
         if (description == null)
             return null;
-        return { "Key": C_DimAmt_ID, "Name": description };
+        //return { "Key": C_DimAmt_ID, "Name": description };
+        return description;
     };	//	get
     MAmtDivLookup.prototype.getColumnName = function () {
         return "C_DimAmt_ID";

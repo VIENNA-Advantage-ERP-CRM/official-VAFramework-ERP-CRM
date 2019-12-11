@@ -131,6 +131,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < invoiceLines.Length; i++)
             {
                 MInvoiceLine invoiceLine = invoiceLines[i];
+
+                MProduct product = invoiceLine.GetProduct();
+                //	Nothing to Deliver
+
+                // Get the lines of Invoice based on the setting taken on Tenant to allow non item Product         
+                if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N") 
+                    && ((product != null && product.GetProductType() != MProduct.PRODUCTTYPE_Item) || invoiceLine.GetC_Charge_ID() != 0))
+                {
+                    continue;
+                }                
+
                 MInOutLine sLine = new MInOutLine(ship);
                 sLine.SetInvoiceLine(invoiceLine, 0,	//	Locator 
                     invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);

@@ -1259,6 +1259,19 @@ namespace VAdvantage.Model
                 string docBaseType = docType.GetDocBaseType();
                 for (int i = 0; i < fromLines.Length; i++)
                 {
+
+                    //issue JID_1474 If full quantity of any line is released from blanket order then system will not create that line in Release order
+                    if (docType.IsReleaseDocument())
+                    {
+                        if (docBaseType == MDocBaseType.DOCBASETYPE_BLANKETSALESORDER || docBaseType == MDocBaseType.DOCBASETYPE_SALESORDER)
+                        {
+                            if (fromLines[i].GetQtyEntered() == 0)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+
                     MOrderLine line = new MOrderLine(this);
                     PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
 
@@ -1288,6 +1301,15 @@ namespace VAdvantage.Model
                             line.Set_ValueNoCheck("QtyEstimation", fromLines[i].GetQtyEstimation());
                     }
 
+                    // Set Reference of Blanket Order Line on Release Order Line.
+                    if (docType.IsReleaseDocument())
+                    {
+                        line.SetC_OrderLine_Blanket_ID(fromLines[i].GetC_OrderLine_ID());
+
+                        // Blanket order qty not updated correctly by Release order process
+                        line.SetQtyBlanket(fromLines[i].GetQtyOrdered());
+                    }
+
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
                     if (line.Get_ColumnIndex("C_Quotation_Line_ID") > 0)
                         line.Set_Value("C_Quotation_Line_ID", fromLines[i].GetC_OrderLine_ID());
@@ -1298,6 +1320,7 @@ namespace VAdvantage.Model
                     line.SetQtyDelivered(Env.ZERO);
                     line.SetQtyInvoiced(Env.ZERO);
                     line.SetQtyReserved(Env.ZERO);
+                    line.SetQtyReleased(Env.ZERO);      // set Qty Released to Zero.
                     line.SetDateDelivered(null);
                     line.SetDateInvoiced(null);
                     //	Tax
@@ -1309,7 +1332,12 @@ namespace VAdvantage.Model
                     // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.
                     if (GetM_PriceList_ID() != otherOrder.GetM_PriceList_ID())
                         line.SetTaxAmt();		//	recalculate Tax Amount
-                    //
+
+                    // ReCalculate Surcharge Amount
+                    if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                    {
+                        line.SetSurchargeAmt(Env.ZERO);
+                    }
 
                     //
                     line.SetProcessed(false);
@@ -2994,7 +3022,7 @@ namespace VAdvantage.Model
                 bool binding = !dt.IsProposal();
                 //	Not binding - i.e. Target=0
                 if (DOCACTION_Void.Equals(GetDocAction())
-                    //Closing Binding Quotation
+                //Closing Binding Quotation
                 || (MDocType.DOCSUBTYPESO_Quotation.Equals(dt.GetDocSubTypeSO())
                     && DOCACTION_Close.Equals(GetDocAction())))
                     //Commented this check for get binding by Vivek on 27/09/2017
@@ -3168,7 +3196,7 @@ namespace VAdvantage.Model
 
                         if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))  //if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO") // if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")
                         {
-                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), null);
+                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetC_OrderLine_Blanket_ID(), Get_TrxName());
 
                             if (qtyRel != null)
                             {
@@ -3228,12 +3256,25 @@ namespace VAdvantage.Model
                     {
                         MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
-                        oTax.SetIsTaxIncluded(IsTaxIncluded());
+                        //oTax.SetIsTaxIncluded(IsTaxIncluded());
                         if (!oTax.CalculateTaxFromLines())
                             return false;
                         if (!oTax.Save(Get_TrxName()))
                             return false;
                         taxList.Add(taxID);
+
+                        // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                        if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                        {
+                            oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
+                            if (oTax != null)
+                            {
+                                if (!oTax.CalculateSurchargeFromLines())
+                                    return false;
+                                if (!oTax.Save(Get_TrxName()))
+                                    return false;
+                            }
+                        }
                     }
                     totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
                 }
@@ -3622,7 +3663,8 @@ namespace VAdvantage.Model
 
                 ////	Create SO Shipment - Force Shipment
                 MInOut shipment = null;
-                // Shipment not created in case of Resturant
+                // Shipment not created in case of Resturant               
+
                 if (Util.GetValueOfString(dt.GetVAPOS_POSMode()) != "RS")
                 {
                     if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)		//	(W)illCall(I)nvoice
@@ -4270,7 +4312,10 @@ namespace VAdvantage.Model
                     {
                         // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
                         MProduct oproduct = oLine.GetProduct();
-                        if (oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
+
+                        //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
+                        if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
+                            && (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")))
                             continue;
 
                         //
@@ -4744,24 +4789,28 @@ namespace VAdvantage.Model
                     }
 
 
-                    // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
-                    MOrderLine[] oLines = GetLinesOtherthanProduct();
-                    for (int i = 0; i < oLines.Length; i++)
+                    // Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
+                    if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
                     {
-                        MOrderLine oLine = oLines[i];
-                        //
-                        MInvoiceLine iLine = new MInvoiceLine(invoice);
-                        iLine.SetOrderLine(oLine);
-                        //	Qty = Ordered - Invoiced	
-                        iLine.SetQtyInvoiced(Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced()));
-                        if (oLine.GetQtyOrdered().CompareTo(oLine.GetQtyEntered()) == 0)
-                            iLine.SetQtyEntered(iLine.GetQtyInvoiced());
-                        else
-                            iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
-                        if (!iLine.Save(Get_TrxName()))
+                        // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
+                        MOrderLine[] oLines = GetLinesOtherthanProduct();
+                        for (int i = 0; i < oLines.Length; i++)
                         {
-                            _processMsg = "Could not create Invoice Line from Order Line";
-                            return null;
+                            MOrderLine oLine = oLines[i];
+                            //
+                            MInvoiceLine iLine = new MInvoiceLine(invoice);
+                            iLine.SetOrderLine(oLine);
+                            //	Qty = Ordered - Invoiced	
+                            iLine.SetQtyInvoiced(Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced()));
+                            if (oLine.GetQtyOrdered().CompareTo(oLine.GetQtyEntered()) == 0)
+                                iLine.SetQtyEntered(iLine.GetQtyInvoiced());
+                            else
+                                iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
+                            if (!iLine.Save(Get_TrxName()))
+                            {
+                                _processMsg = "Could not create Invoice Line from Order Line";
+                                return null;
+                            }
                         }
                     }
                 }
@@ -4901,6 +4950,16 @@ namespace VAdvantage.Model
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
             String DocSubTypeSO = dt.GetDocSubTypeSO();
+
+            //JID_1474 If quantity released is greater than 0, then system will not allow to void blanket order record and give message: 'Please Void/Reverse its dependent transactions first'
+            if (dt.GetDocBaseType() == MDocBaseType.DOCBASETYPE_BLANKETSALESORDER)
+            {
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyreleased) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID(), null, Get_Trx())) > 0)
+                {
+                    _processMsg = "Please Void/Reverse its dependent transactions first";
+                    return false;
+                }
+            }
 
             // Added by Vivek on 08/11/2017 assigned by Mukesh sir
             // return false if linked document is in completed or closed stage
@@ -5150,7 +5209,6 @@ namespace VAdvantage.Model
         public bool CloseIt()
         {
             log.Info(ToString());
-
             //	Close Not delivered Qty - SO/PO
             MOrderLine[] lines = GetLines(true, "M_Product_ID");
             for (int i = 0; i < lines.Length; i++)
@@ -5161,6 +5219,8 @@ namespace VAdvantage.Model
                 {
                     line.SetQtyLostSales(Decimal.Subtract(line.GetQtyOrdered(), line.GetQtyDelivered()));
                     line.SetQtyOrdered(line.GetQtyDelivered());
+                    //Set property to true because close event is called
+                    line.SetIsClosedDocument(true);
                     //	QtyEntered unchanged
                     line.AddDescription("Close (" + old + ")");
                     line.Save(Get_TrxName());

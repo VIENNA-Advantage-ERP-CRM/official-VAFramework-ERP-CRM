@@ -40,7 +40,12 @@ namespace VIS.Models
             }
         }
 
-        // Added by Bharat on 13/May/2017
+        /// <summary>
+        /// Get Price List Data
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Parameters</param>
+        /// <returns>List of Data</returns>
         public Dictionary<String, Object> GetPriceListData(Ctx ctx, string fields)
         {            
                 int M_PriceList_ID;                

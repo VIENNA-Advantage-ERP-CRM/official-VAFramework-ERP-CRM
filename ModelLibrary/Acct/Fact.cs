@@ -110,7 +110,7 @@ namespace VAdvantage.Acct
             }
 
             //Added By Bharat to Handle -ve entry
-            
+
             if (debitAmt < 0)
             {
                 creditAmt = Decimal.Negate(debitAmt.Value);
@@ -126,11 +126,12 @@ namespace VAdvantage.Acct
             FactLine line = new FactLine(_doc.GetCtx(), _doc.Get_Table_ID(),
                 _doc.Get_ID(),
                 docLine == null ? 0 : docLine.Get_ID(), _trx);
+            // set accounting schema reference 
+            line.SetC_AcctSchema_ID(_acctSchema.GetC_AcctSchema_ID());
             //  Set Info & Account
             line.SetDocumentInfo(_doc, docLine);
             line.SetPostingType(_postingType);
             line.SetAccount(_acctSchema, account);
-
             //  Amounts - one needs to not zero
             if (!line.SetAmtSource(C_Currency_ID, debitAmt, creditAmt))
             {
@@ -166,7 +167,7 @@ namespace VAdvantage.Acct
         /// <param name="debitAmt">debit amount, can be null</param>
         /// <param name="creditAmt">credit amount, can be null</param>
         /// <returns>Fact Line</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? debitAmt, Decimal? creditAmt,int AD_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? debitAmt, Decimal? creditAmt, int AD_Org_ID)
         {
             //  Data Check
             if (account == null)
@@ -273,11 +274,11 @@ namespace VAdvantage.Acct
         /// <param name="Amt">if negative Cr else Dr</param>
         /// <param name ="AD_Org_ID">Set Line Org</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? Amt,int AD_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? Amt, int AD_Org_ID)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
-                return CreateLine(docLine, account, C_Currency_ID, null, Math.Abs(Amt.Value),AD_Org_ID);
+                return CreateLine(docLine, account, C_Currency_ID, null, Math.Abs(Amt.Value), AD_Org_ID);
             }
             else
             {
@@ -385,6 +386,12 @@ namespace VAdvantage.Acct
 
             //	Account
             line.SetAccount(_acctSchema, _acctSchema.GetSuspenseBalancing_Acct());
+
+            // Conversion rate
+            if (_lines != null && _lines.Count > 0 && _lines[0].GetConversionRate() > 0)
+            {
+                line.SetConversionRate(_lines[0].GetConversionRate());
+            }
 
             //  Convert
             line.Convert();

@@ -30,9 +30,10 @@ namespace VIS.Models
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             var dis = display;
-
+            MClient tenant = MClient.Get(ctx);
+            //Added O.ISSALESQUOTATION='N' in where condition(Sales quotation will not display in Order dropdown)
             StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
-                + "' AND O.IsBlanketTrx = 'N' AND o.DocStatus IN ('CL','CO') ");
+                + "' AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION='N' AND o.DocStatus IN ('CL','CO') ");
 
             if (OrgId > 0)
             {
@@ -47,7 +48,8 @@ namespace VIS.Models
             (SELECT SUM(IL.QtyInvoiced)  FROM C_INVOICELINE IL INNER JOIN C_Invoice I ON I.C_INVOICE_ID = IL.C_INVOICE_ID
             WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN ('VO','RE') AND OL.C_ORDERLINE_ID  =IL.C_ORDERLINE_ID) AS QtyInvoiced FROM C_OrderLine ol ");
 
-            if (!forInvoices)
+            // Get Orders based on the setting taken on Tenant to allow non item Product
+            if (!forInvoices && tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
             {
                 sql.Append("INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID AND p.ProductType = 'I'");
             }
@@ -83,7 +85,7 @@ namespace VIS.Models
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             string sql = "SELECT s.M_InOut_ID," + displays + " AS dis FROM M_InOut s "
                 + "WHERE s.C_BPartner_ID=" + CBPartnerIDs + " AND s.IsSOTrx='" + (IsSOTrx ? "Y" : "N") + "' AND s.DocStatus IN ('CL','CO')"
-                // New column added to fill invoice which drop ship is true
+               // New column added to fill invoice which drop ship is true
                + " AND s.IsDropShip='" + (IsDrop ? "Y" : "N") + "' AND s.M_InOut_ID IN "
 
                // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
@@ -175,23 +177,34 @@ namespace VIS.Models
         public List<VCreateFromGetCOrder> GetInvoicesVCreate(Ctx ctx, string displays, int cBPartnerId, bool isReturnTrxs, bool IsDrop)
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
+            MClient tenant = MClient.Get(ctx);
 
-            string sql = "SELECT i.C_Invoice_ID," + displays + " AS displays FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
-                // New column added to fill invoice which drop ship is true
+            StringBuilder sql = new StringBuilder("SELECT i.C_Invoice_ID," + displays + " AS displays FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
+                        // New column added to fill invoice which drop ship is true
                         + "WHERE i.C_BPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' AND i.IsDropShip='" + (IsDrop ? "Y" : "N") + "' "
                         + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') "
-                //Invoice vendor record created with Document Type having checkbox 'Treat As Discount' is true will not show on 'Create line From' on window : Return to Vendor.
+                        //Invoice vendor record created with Document Type having checkbox 'Treat As Discount' is true will not show on 'Create line From' on window : Return to Vendor.
                         + " AND i.TreatAsDiscount = 'N' "
                         + " AND i.C_Invoice_ID IN "
                      + "(SELECT C_Invoice_ID FROM (SELECT il.C_Invoice_ID,il.C_InvoiceLine_ID,il.QtyInvoiced,mi.Qty FROM C_InvoiceLine il "
-                     + " LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
-                     + " INNER JOIN M_Product Mp On Mp.M_Product_Id = Il.M_Product_Id  "
-                     + " WHERE Mp.ProductType = 'I' AND (il.QtyInvoiced <> nvl(mi.Qty,0) AND mi.C_InvoiceLine_ID IS NOT NULL And Mp.Iscostadjustmentonlost = 'N') "
+                     + " LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ");
+
+            // Get Invoices based on the setting taken on Tenant to allow non item Product
+            if (tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
+            {
+                sql.Append(" INNER JOIN M_Product Mp On Mp.M_Product_ID = il.M_Product_ID WHERE Mp.ProductType = 'I' AND");
+            }
+            else
+            {
+                sql.Append(" LEFT JOIN M_Product Mp On Mp.M_Product_ID = il.M_Product_ID WHERE");
+            }
+
+            sql.Append(" (il.QtyInvoiced <> nvl(mi.Qty,0) AND mi.C_InvoiceLine_ID IS NOT NULL And Mp.Iscostadjustmentonlost = 'N') "
                      + " OR (NVL(Mi.Qty,0) = 0 AND Mi.C_Invoiceline_Id IS NOT NULL AND Mp.Iscostadjustmentonlost = 'Y') "
                      + " OR mi.C_InvoiceLine_ID IS NULL ) GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
-                     + " HAVING QtyInvoiced > SUM(nvl(Qty,0))) ORDER BY i.DateInvoiced, i.DocumentNo";
+                     + " HAVING QtyInvoiced > SUM(nvl(Qty,0))) ORDER BY i.DateInvoiced, i.DocumentNo");
 
-            DataSet ds = DB.ExecuteDataset(sql);
+            DataSet ds = DB.ExecuteDataset(sql.ToString());
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

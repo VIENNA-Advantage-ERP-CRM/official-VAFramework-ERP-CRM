@@ -26,6 +26,12 @@ namespace VIS.Models
         public String lineAmountID { get; set; }
         public int TotalRecord { get; set; }
         public decimal TotalLineAmount { get; set; }
+
+        /// <summary>
+        /// Get Dimension Type
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <returns>List of Dimension Type</returns>
         public List<InfoRefList> GetDimensionType(Ctx ctx)
         {
             List<InfoRefList> list = new List<InfoRefList>();

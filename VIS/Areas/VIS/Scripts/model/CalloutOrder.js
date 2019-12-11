@@ -396,8 +396,9 @@
                     mTab.setValue("C_UOM_ID", C_UOM_ID);
                 }
 
-                if (Qty != 0 && Qty != null && QtyReleased != null) {
-                    mTab.setValue("QtyBlanket", ((Qty + QtyReleased) - QtyReleased));
+                // JID_1368: Blanket Order Quantity on order line should be in base UOM. Right now system is setting value in transaction UOM that is leading error: Order Quantity More Than Pending Blanket Quanity
+                if (QtyOrdered != 0 && QtyOrdered != null && QtyReleased != null) {
+                    mTab.setValue("QtyBlanket", ((QtyOrdered + QtyReleased) - QtyReleased));
                 }
 
                 if (M_AttributeSetInstance_ID != 0 && M_AttributeSetInstance_ID != null) {
