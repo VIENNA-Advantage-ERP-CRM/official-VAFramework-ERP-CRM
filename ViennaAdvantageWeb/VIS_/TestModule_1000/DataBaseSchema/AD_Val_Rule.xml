@@ -1,0 +1,77 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Val_Rule">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_VAL_RULE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CODE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="TYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Val_Rule>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_VAL_RULE_ID>116</AD_VAL_RULE_ID>
+    <CODE>AD_Client.AD_Client_ID=@#AD_Client_ID@</CODE>
+    <CREATED>2019-09-03T05:07:41+05:30</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Restrict to login client</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>AD_Client Login</NAME>
+    <TYPE>S</TYPE>
+    <UPDATED>2019-09-03T05:07:41+05:30</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_116</EXPORT_ID>
+  </AD_Val_Rule>
+  <AD_Val_Rule>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_VAL_RULE_ID>104</AD_VAL_RULE_ID>
+    <CODE>(AD_Org.IsSummary='N' OR AD_Org.AD_Org_ID=0)</CODE>
+    <CREATED>2019-09-03T05:07:41+05:30</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Not Summary - 0 - Organizations of the Client with user acces rights</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>AD_Org Security validation</NAME>
+    <TYPE>S</TYPE>
+    <UPDATED>2019-09-03T05:07:41+05:30</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_104</EXPORT_ID>
+  </AD_Val_Rule>
+  <AD_Val_Rule>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_VAL_RULE_ID>230</AD_VAL_RULE_ID>
+    <CODE>C_BPartner.IsActive ='Y' And C_Bpartner.Issummary ='N' </CODE>
+    <CREATED>2005-07-25T02:17:14+05:30</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>C_BPartner (Trx)</NAME>
+    <TYPE>S</TYPE>
+    <UPDATED>2019-04-22T00:00:00+05:30</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_230</EXPORT_ID>
+  </AD_Val_Rule>
+</NewDataSet>

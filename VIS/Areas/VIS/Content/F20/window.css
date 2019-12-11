@@ -169,8 +169,8 @@
     grid-row: 5 / 5;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-secondary), 0.3);
-    padding-top: 10px;
+    background: rgba(var(--v-c-secondary), 0.5);
+    padding-top: 7px;
     padding-left: 8px;
 }
 
@@ -179,7 +179,7 @@
     grid-row: 5/5;
     display: flex;
     align-items: center;
-    background: rgba(var(--v-c-secondary), 0.3);
+    background: rgba(var(--v-c-secondary), 0.5);
     padding-right: 5px;
     padding-top: 5px;
 }

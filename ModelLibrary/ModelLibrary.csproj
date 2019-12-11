@@ -426,6 +426,7 @@
     <Compile Include="ModelAD\MGroupWindow.cs" />
     <Compile Include="ModelAD\MGroupWorkflow.cs" />
     <Compile Include="ModelAD\MModuleTable.cs" />
+    <Compile Include="ModelAD\MTabPanel.cs" />
     <Compile Include="ModelAD\X_AD_AlertRuleCondition.cs" />
     <Compile Include="ModelAD\X_AD_CardView.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Column.cs" />
@@ -434,10 +435,13 @@
     <Compile Include="ModelAD\X_AD_DefaultCardView.cs" />
     <Compile Include="ModelAD\X_AD_DefaultUserQuery.cs" />
     <Compile Include="ModelAD\X_AD_GmailConfiguration.cs" />
+    <Compile Include="ModelAD\X_AD_GridLayout.cs" />
+    <Compile Include="ModelAD\X_AD_GridLayoutItems.cs" />
     <Compile Include="ModelAD\X_AD_Group_Form.cs" />
     <Compile Include="ModelAD\X_AD_Group_Process.cs" />
     <Compile Include="ModelAD\X_AD_Group_Window.cs" />
     <Compile Include="ModelAD\X_AD_Group_Workflow.cs" />
+    <Compile Include="ModelAD\X_AD_HeaderLayout.cs" />
     <Compile Include="ModelAD\X_AD_InviteUser.cs" />
     <Compile Include="ModelAD\X_AD_InviteUser_Role.cs" />
     <Compile Include="ModelAD\X_AD_MailQueue.cs" />
@@ -447,6 +451,7 @@
     <Compile Include="ModelAD\X_AD_ReportItem.cs" />
     <Compile Include="ModelAD\X_AD_ReportTable.cs" />
     <Compile Include="ModelAD\X_AD_Role_Group.cs" />
+    <Compile Include="ModelAD\X_AD_TabPanel.cs" />
     <Compile Include="ModelAD\X_AD_UserHomePageSetting.cs" />
     <Compile Include="ModelAD\X_AD_WF_Recipient.cs" />
     <Compile Include="ModelAD\X_AD_WindowAction.cs" />
@@ -1631,6 +1636,7 @@
     <Compile Include="ProcessAD\DocumentEngine.cs" />
     <Compile Include="ProcessAD\LanguageMaintenance.cs" />
     <Compile Include="ProcessAD\MailConfigration.cs" />
+    <Compile Include="ProcessAD\NativeSequence.cs" />
     <Compile Include="ProcessAD\PO_LOB.cs" />
     <Compile Include="ProcessAD\RoleAccessUpdate.cs" />
     <Compile Include="ProcessAD\SchedulerRun.cs" />
