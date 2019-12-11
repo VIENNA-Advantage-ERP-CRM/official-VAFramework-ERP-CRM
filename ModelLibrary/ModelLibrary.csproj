@@ -43,11 +43,11 @@
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>LibDll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+      <HintPath>bin\Debug\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.Shared, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>LibDll\CrystalDecisions.Shared.dll</HintPath>
+      <HintPath>bin\Debug\CrystalDecisions.Shared.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth">
       <HintPath>LibDll\DotNetOpenAuth.dll</HintPath>
