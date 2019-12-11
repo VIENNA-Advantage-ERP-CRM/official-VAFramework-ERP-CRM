@@ -17,7 +17,7 @@
 
         //InitComponenet
         function initComponent() {
-            $root = $("<div class='vis-height-full'>");
+            $root = $("<div class='vis-height-full vis-app-aform-root' >");
             $busyDiv = $("<div class='vis-apanel-busy'>");
             $contentGrid = $("<div class='vis-height-full'>");
             $root.append($contentGrid).append($busyDiv);  
@@ -72,7 +72,7 @@
 	 *	@param windowNo window number 
 	 *	@return true if started
 	 */
-    AForm.prototype.openForm = function (json, $parent, windowNo, additionalInfo) {
+    AForm.prototype.openForm = function (json, $parent, windowNo) {
 
         if (json.IsReport) {
             VIS.ADialog.info("Form Report is not supported");
@@ -109,7 +109,7 @@
             //className = "VIS.Apps.TestForm";
             var type = VIS.Utility.getFunctionByName(className, window);
             var o = new type(windowNo);
-            o.init(windowNo, this, additionalInfo);
+            o.init(windowNo, this);
             this.mPanel = o;
             o = null;
         }

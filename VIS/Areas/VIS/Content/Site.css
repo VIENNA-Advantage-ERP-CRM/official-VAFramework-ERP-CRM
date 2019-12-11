@@ -44,10 +44,10 @@ html[dir="rtl"] select
     display: none;
 }
 
-html[dir="rtl"] input[type=radio], input[type=checkbox]
+/*html[dir="rtl"] input[type=radio], input[type=checkbox]
 {
     margin: 4px 4px 0;
-}
+}*/
 
 
 /* Common*/
@@ -258,11 +258,11 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
     padding-right: 20px;
 }
 
-#vis_userDisplayName
+/*#vis_userDisplayName
 {
     font-size: 14pt;
     color: #1aa0ed;
-}
+}*/
 
 .vis-div-userAvatar
 {
@@ -286,22 +286,31 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
 /*------------------------------------------*/
 /* App Side Main Menu Css Definations START */
 /*------------------------------------------*/
-#vis_mainMenu
-{
-    background: url('../images/home/mainMenu-BG.png') 0px 0px repeat;
+#vis_mainMenu {
+    /*background: url('../images/home/mainMenu-BG.png') 0px 0px repeat;*/
+    background: #fff;
     position: fixed;
     z-index: 999;
     top: 42px;
     left: 0px;
     bottom: 0px;
     min-width: 320px;
+    box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.15);
 }
 
-    #vis_mainMenu .vis-menuTitle
-    {
-        background: #1aa0ed;
-        line-height: 42px;
+    #vis_mainMenu .vis-menuTitle {
+        background: rgba(var(--v-c-primary), 1);
+        line-height: 30px;
+        display: flex;
+        border-top-right-radius: 5px;
     }
+.vis-menuTitle i {
+    color: #fff;
+}
+
+.vis-menuTitle a {
+    padding: 0 10px;
+}
 
         #vis_mainMenu .vis-menuTitle p
         {
@@ -311,23 +320,51 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
             font-size: 14px;
             font-weight: bold;
             display: inline-block;
+            flex: 1;
         }
 
     #vis_mainMenu .vis-menuSearch
     {
-        display: block;
+        display: flex;
         padding: 10px;
         border-bottom: 1px solid #d8d7d7;
+        align-items: center;
+    }
+.vis-menuSearch a{
+    font-size: 1.3rem;
+    margin-left: 10px;
+}
+    .vis-menuSearch a:hover {
+        color: rgba(var(--v-c-primary),1);
     }
 
-        #vis_mainMenu .vis-menuSearch input[type=text]
-        {
-            padding: 5px 40px 5px 10px;
-            background: #e2d0d0;
-            border: 1px solid #d1d1d1;
-            border-radius: 3px;
-            width: 88%;
-        }
+    #vis_mainMenu .vis-menuSearch input[type=text] {
+        padding: 5px 1s0px 5px 10px;
+        background-color: rgba(var(--v-c-secondary), 0.7);
+        border: 1px solid rgba(var(--v-c-primary), 0.09);
+        border-radius: 3px;
+        flex: 1;
+        color: rgba(var(--v-c-on-secondary), 1);
+        outline: none;
+    }
+    #vis_mainMenu .vis-menuSearch input[type=text]:focus {
+        border: 1px solid rgba(var(--v-c-primary), .3);
+    }
+    #vis_mainMenu .vis-menuSearch input[type=text]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        color: rgba(var(--v-c-primary), 0.6);
+    }
+
+    #vis_mainMenu .vis-menuSearch input[type=text]::-moz-placeholder { /* Firefox 19+ */
+        color: rgba(var(--v-c-primary), 0.6);
+    }
+
+    #vis_mainMenu .vis-menuSearch input[type=text]:-ms-input-placeholder { /* IE 10+ */
+        color: rgba(var(--v-c-primary), 0.6);
+    }
+
+    #vis_mainMenu .vis-menuSearch input[type=text]:-moz-placeholder { /* Firefox 18- */
+        color: rgba(var(--v-c-primary), 0.6);
+    }
 
 /* rtl menu*/
 html[dir="rtl"] #vis_mainMenu
@@ -380,13 +417,18 @@ html[dir="rtl"] .vis-menufavitm
     display: block;
     text-indent: -999999px;
 }
+.vis-mainMenuIcons.vis-icon-menuclose{
+    width: 40px;
+     height: 42px; 
+     float: right; 
+}
 
-    .vis-mainMenuIcons.vis-icon-menuclose
-    {
-        width: 40px;
-        height: 42px;
-        float: right;
-    }
+.vis-icon-menuclose, .vis-icon-menuclose:hover {
+    /*width: 40px;*/
+    /* height: 42px; */
+    /* float: right; */
+    color: rgba(var(--v-c-on-primary), 1);    
+}
 
 html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
 {
@@ -528,7 +570,7 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
 
 .vis-sidebarMenuWrapper
 {
-    top: 102px;
+    top: 90px;
     width: 99%;
     position: absolute;
     z-index: 22;
@@ -559,7 +601,7 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
         content: ' ';
         width: 6px;
         height: 11px;
-        background: url('../images/home/mainMenu.png') 0px -210px no-repeat;
+        /*background: url('../images/home/mainMenu.png') 0px -210px no-repeat;*/
         margin: 0px;
         position: absolute;
         top: 14px;
@@ -638,25 +680,22 @@ html[dir="rtl"] .vis-hasSubMenu:after
         padding: 0px;
     }
 
-        .vis-css-treeview ul li
-        {
+        .vis-css-treeview ul li {
             margin-bottom: 2px;
-            background-color: #ffffff;
+            background-color: rgba(var(--v-c-secondary), 0.5);
             position: relative;
         }
 
-            .vis-css-treeview ul li a
-            {
+            .vis-css-treeview ul li a {
                 padding: 10px;
                 display: block;
                 outline: none;
-                Color: #428bca;
+                Color: rgba(var(--v-c-primary),1);
                 /*margin-right: 20px;*/
             }
 
-            .vis-css-treeview ul li ul
-            {
-                background-color: #dfdddd;
+            .vis-css-treeview ul li ul {
+                background-color: rgba(var(--v-c-primary), 0.07);
                 padding: 4px 4px 4px 4px;
                 margin: 0px;
             }
@@ -764,7 +803,7 @@ html[dir="rtl"] .vis-css-treeview label::before
     display: block;
     /*margin-right: 20px;*/
     font-weight: normal;
-    color: #428bca;
+    color: rgba(var(--v-c-primary),1);
 }
 
     /*.vis-css-treeview label::before
@@ -774,10 +813,9 @@ html[dir="rtl"] .vis-css-treeview label::before
             margin: 0 4px 0 0;
         }*/
 
-    .vis-css-treeview label::before
-    {
+    .vis-css-treeview label i, .vis-css-treeview ul li a span {
         /*background: url("../Images/login/folder.png") no-repeat;*/
-        background: url('../images/home/mainMenu.png') 0px 0px no-repeat;
+        /*background: url('../images/home/mainMenu.png') 0px 0px no-repeat;
         display: block;
         text-indent: -999999px;
         content: "";
@@ -785,20 +823,24 @@ html[dir="rtl"] .vis-css-treeview label::before
         width: 22px;
         height: 20px;
         float: left;
-        margin: 0px 10px 0px 0px;
+        margin: 0px 10px 0px 0px;*/
+        font-size: 1.1rem;
+        padding-right: 10px;
+        /*color: rgba(var(--v-c-primary),1);*/
     }
 
-.vis-css-treeview input:checked + label::before
-{
+.vis-css-treeview input:checked + label i.vis-folder-open-ico::before {
     /*background: url('../images/home/mainMenu.png') 0px 0px no-repeat;*/
     /*display: block;
         text-indent: -999999px;*/
-    background-position: -57px -497px;
+    /*background-position: -57px -497px;*/
     /*
+        
         height: 18px;
         float: left;
         margin: 2px 10px 0px 0px;*/
     /*background: url("../Images/login/folder-open.png") no-repeat;*/
+    content: '\f115';
 }
 
 .vis-css-treeview input:checked
@@ -1035,12 +1077,11 @@ html[dir="rtl"] .vis-taskbar-right
 }
 
 
-.vis-dialog
-{
+.vis-dialog {
     z-index: 99999;
     display: block;
     position: absolute;
-    background: #494D50;
+    background: rgba(var(--v-c-secondary), 1);
     border-radius: 10px;
     padding: 10px;
 }
@@ -1054,14 +1095,15 @@ html[dir="rtl"] .vis-taskbar-right
     }
 
 
-.vis-auth-dialog
-{
+.vis-auth-dialog {
     top: 50px;
     right: 20px;
     width: 310px;
     padding-top: 20px;
     display: none;
-    color: white;
+    color: rgba(var(--v-c-on-secondary), 1);
+    box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
+    border: 1px solid rgba(var(--v-c-primary), .15);
 }
 
 html[dir="rtl"] .vis-auth-dialog
@@ -1071,49 +1113,64 @@ html[dir="rtl"] .vis-auth-dialog
 }
 
 
-    .vis-auth-dialog::before
-    {
-        border: 10px solid transparent;
-        border-bottom-color: #494D50;
-        bottom: 100%;
-        left: 70%;
-    }
-
-    .vis-auth-dialog select
-    {
-        width: 98%;
-        margin: 5px 0px 5px 0px;
-    }
-
-    .vis-auth-dialog input[type=submit]
-    {
-        background-color: #616364;
-        color: white;
-    }
-
-    .vis-auth-dialog input[disabled]
-    {
-        text-decoration: line-through;
-    }
-
-
-
-.vis-filter-dialog
-{
-    top: 145px;
-    left: 200px;
-    padding: 20px;
-    display: none;
-    color: white;
+.vis-auth-dialog::before {
+    border: 10px solid transparent;
+    border-bottom-color: rgba(var(--v-c-secondary), 1);
+    bottom: 100%;
+    left: 70%;
 }
 
-    .vis-filter-dialog::before
-    {
-        border: 10px solid transparent;
-        border-bottom-color: #494D50;
-        bottom: 100%;
-        left: 47%;
-    }
+.vis-auth-dialog label {
+    font-weight: normal;
+    margin: 0;
+}
+
+.vis-auth-dialog select {
+    background-color: rgba(var(--v-c-primary), .07);
+    border: 1px solid rgba(var(--v-c-primary), .07);
+    border-radius: .25rem;
+    width: 100%;
+    height: 30px;
+    color: rgba(var(--v-c-on-secondary), 1);
+    margin: 5px 0px 5px 0px;
+    background-image: linear-gradient(45deg, transparent 50%, rgba(var(--v-c-primary),1) 50%), linear-gradient(135deg, rgba(var(--v-c-primary),1) 50%, transparent 50%);
+    background-position: calc(100% - 15px) calc(1em + 0px), calc(100% - 10px) calc(1em + 0px), calc(100% - 2.5em) 0.5em;
+    background-size: 5px 4px, 5px 4px, 1px 1.5em;
+    background-repeat: no-repeat;
+}
+
+.vis-auth-dialog input[type=submit], .vis-filter-dialog input[type="button"] {
+    background-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
+
+.vis-auth-dialog input[disabled] {
+    text-decoration: line-through;
+}
+
+
+
+.vis-filter-dialog {
+    top: 132px;
+    left: 200px;
+    padding: 15px;
+    display: none;
+    color: rgba(var(--v-c-on-secondary), 1);
+    box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
+    border: 1px solid rgba(var(--v-c-primary), .15);
+}
+.vis-filter-dialog label {
+    font-weight: normal;
+    padding-left: 5px;
+}
+
+.vis-filter-dialog::before {
+    border: 10px solid transparent;
+    border-bottom-color: rgba(var(--v-c-secondary), 1);
+    bottom: 100%;
+    right: 25%;
+}
 
 html[dir="rtl"] .vis-filter-dialog
 {

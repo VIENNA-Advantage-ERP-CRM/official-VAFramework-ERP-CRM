@@ -161,13 +161,13 @@ html[dir="rtl"] .vis-initial-form-checkbox > label {
     padding-left:15px;
     
 }
-.vis-initial-btn, .vis-initial-btn:hover{
-	color:#fff !important;
-	background:#626365;	
-	padding:10px 20px;
-	cursor:pointer;
-	text-decoration:none;
+.vis-initial-btn, .vis-initial-btn:hover {
+    color: rgba(var(--v-c-on-primary), 1) !important;
+    background: #626365;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
 }
-.vis-initial-btn-blue, .vis-initial-btn-blue:hover{	
-	background:#1aa0ed;	
+.vis-initial-btn-blue, .vis-initial-btn-blue:hover {
+    background: rgba(var(--v-c-primary), 1);
 }

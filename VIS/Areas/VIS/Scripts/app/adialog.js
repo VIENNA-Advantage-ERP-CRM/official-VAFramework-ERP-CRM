@@ -4,19 +4,21 @@
      *  Info Dialog Management
      *  
      */
+    var $body = $('body');
+    var $prodBuzzer = $('#vis_buzzer');
 
     function AD() {
 
         var _overLay = $('<div id="overlayMsgDialog" class="web_dialog_overlay"></div>');
 
-        var $mainDivParent = $('<div class="" style="z-index: 999999;width: 100%;top: 0;height: 100%;display:none;" tabIndex=1>');
+        var $mainDivParent = $('<div class="vis-PopupWrap-alertmain" tabIndex=1>');
         //<div class="vis-confirm-popup-check"><input type="checkbox"><label>Background</label></div>
-        var $mainDiv = $('<div id="VAPOS_ErrorInfo" class="vis-PopupWrap-alert" style="width:300px; margin: 20% auto;">' +
+        var $mainDiv = $('<div id="VAPOS_ErrorInfo" class="vis-PopupWrap-alert">' +
               '<input class="vis-Dialog-buttons-text" type="number"  tabindex="-30" style="z-index:-44;position:absolute"  autofocus="autofocus"  > ' +
             '       <div class="vis-popup-headerContainer">                                           ' +
             '       <div class="vis-PopupHeader-alert">' +
-            '           <h4 id="VAPOS_CLInformation" style="padding-left: 10px; color: #fff">Information</h4>' +
-            '           <span id="btnCloseInfo" class="vis-PopuptopCloseIconTop"></span>                     ' +
+            '           <h4 id="VAPOS_CLInformation">Information</h4>' +
+            '           <span id="btnCloseInfo" class="fa fa-times"></span>                     ' +
             '       </div>  </div>                                                                                   ' +
             '       <div class="vis-PopupContent-alert">                                                     ' +
 
@@ -35,7 +37,7 @@
 
         $mainDivParent.append($mainDiv);
 
-        $('body').append(_overLay).append($mainDivParent);
+        $body.append(_overLay).append($mainDivParent);
 
         var _hideOverlay = true;
         var _header = $mainDiv.find(".vis-PopupHeader-alert");
@@ -157,10 +159,10 @@
             catch (ex) {
             }
             //$mainDiv.find('.vis-Dialog-buttons').css("display", "none");
-            $mainDivParent.css({ "position": "absolute", "display": "inherit" });
+            $mainDivParent.css({ "position": "absolute", "display": "flex" });
             $mainDiv.show();
-            _btnCloseInfo.removeClass();
-            _btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
+            //_btnCloseInfo.removeClass();
+            //_btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
             _header.removeClass();
             _header.addClass("vis-PopupHeader-alert vis-PopupHeader-alert-info");
             _content.removeClass();
@@ -211,10 +213,10 @@
             }
             catch (ex) {
             }
-            $mainDivParent.css({ "position": "absolute", "display": "inherit" });
+            $mainDivParent.css({ "position": "absolute", "display": "flex" });
             $mainDiv.show();
-            _btnCloseInfo.removeClass();
-            _btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
+            //_btnCloseInfo.removeClass();
+            //_btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
             _header.removeClass();
             _header.addClass("vis-PopupHeader-alert vis-PopupHeader-alert-info");
             _content.removeClass();
@@ -278,10 +280,10 @@
             }
             catch (ex) {
             }
-            $mainDivParent.css({ "position": "absolute", "display": "inherit" });
+            $mainDivParent.css({ "position": "absolute", "display": "flex" });
             $mainDiv.show();
-            _btnCloseInfo.removeClass();
-            _btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
+            //_btnCloseInfo.removeClass();
+            //_btnCloseInfo.addClass("vis-alert-close vis-alert-close-info");
             _header.removeClass();
             _header.addClass("vis-PopupHeader-alert vis-PopupHeader-alert-info");
             _content.removeClass();
@@ -348,16 +350,16 @@
         function warn(msg, header, callback) {
             _callback = callback;
             try {
-                $('#prodError')[0].play();
+                $prodBuzzer[0].play();
             }
             catch (ex) {
             }
             //$mainDiv.find('.vis-Dialog-buttons').css("display", "none");
             _prodFound = true;
-            $mainDivParent.css({ "position": "absolute", "display": "inherit" });
+            $mainDivParent.css({ "position": "absolute", "display": "flex" });
             $mainDiv.show();
-            _btnCloseInfo.removeClass();
-            _btnCloseInfo.addClass("vis-alert-close vis-alert-close-warn");
+            //_btnCloseInfo.removeClass();
+            //_btnCloseInfo.addClass("vis-alert-close vis-alert-close-warn");
             _header.removeClass();
             _header.addClass("vis-PopupHeader-alert vis-PopupHeader-alert-warn");
             _content.removeClass();
@@ -399,16 +401,16 @@
         function error(msg, header, callback) {
             _callback = callback;
             try {
-                $('#prodError')[0].play();
+                $prodBuzzer[0].play();
             }
             catch (ex) {
             }
             //$btnsDiv.css("display", "none");
             _prodFound = true;
-            $mainDivParent.css({ "position": "absolute", "display": "inherit" });
+            $mainDivParent.css({ "position": "absolute", "display": "flex" });
             $mainDiv.show();
-            _btnCloseInfo.removeClass();
-            _btnCloseInfo.addClass("vis-alert-close vis-alert-close-error");
+            //_btnCloseInfo.removeClass();
+            //_btnCloseInfo.addClass("vis-alert-close vis-alert-close-error");
             _header.removeClass();
             _header.addClass("vis-PopupHeader-alert vis-PopupHeader-alert-error");
             _content.removeClass();

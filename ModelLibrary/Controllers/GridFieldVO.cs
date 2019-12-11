@@ -277,10 +277,54 @@ namespace VAdvantage.Controller
                     {
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
-                    // new column added for maintain versions
-                    else if (columnName.Equals("ISMAINTAINVERSIONS"))
+                    /******************************/
+                    else if (columnName.Equals("Isheaderpanelitem",StringComparison.OrdinalIgnoreCase))
                     {
-                        vo.IsMaintainVersions = "Y".Equals(dr[i].ToString());
+                        vo.IsHeaderPanelitem = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("Headeroverridereference", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.HeaderOverrideReference = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("HeaderStyle", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.HeaderStyle = dr[i].ToString();
+                    }
+                    else if (columnName.Equals("HeaderHeadingOnly", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.HeaderHeadingOnly = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("HeaderSeqno", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.HeaderSeqno = Utility.Util.GetValueOfDecimal(dr[i]);
+                    }
+                    else if (columnName.Equals("HeaderIconOnly", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.HeaderIconOnly = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("HtmlStyle", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.HtmlStyle = dr[i].ToString();
+                    }
+                    else if (columnName.Equals("ShowIcon", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.ShowIcon = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("AD_Image_ID", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.AD_Image_ID = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("PlaceHolder", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.PlaceHolder = Utility.Util.GetValueOfString(dr[i]);
+                    }
+                    else if (columnName.Equals("FontName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.FontClass = Utility.Util.GetValueOfString(dr[i]);
+                    }
+                    else if (columnName.Equals("ImageUrl", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.ImageName = Utility.Util.GetValueOfString(dr[i]);
                     }
                 }
                 if (vo.Header == null)
@@ -757,6 +801,26 @@ namespace VAdvantage.Controller
             clone.AD_Form_ID = AD_Form_ID;
             clone.IsBackgroundProcess = IsBackgroundProcess;
             clone.AskUserBGProcess = AskUserBGProcess;
+            clone.IsHeaderPanelitem = IsHeaderPanelitem;
+            clone.HeaderOverrideReference = HeaderOverrideReference;
+            clone.HeaderStyle = HeaderStyle;
+            clone.HeaderHeadingOnly = HeaderHeadingOnly;
+            clone.HeaderSeqno = HeaderSeqno;
+            clone.HeaderIconOnly = HeaderIconOnly;
+            clone.HtmlStyle = HtmlStyle;
+            clone.ShowIcon = ShowIcon;
+            clone.AD_Image_ID = AD_Image_ID;
+            clone.FontClass = FontClass;
+
+            //         public bool IsHeaderPanelitem = false;
+            //public int HeaderOverrideReference = 0;
+            //public string HeaderStyle = null;
+            //public bool HeaderHeadingOnly = false;
+            //public decimal HeaderSeqno = 0;
+            //public bool HeaderIconOnly = false;
+            //public string HtmlStyle = null;
+            //public bool ShowIcon = false;
+            //public int AD_Image_ID = 0;
 
             return clone;
         }

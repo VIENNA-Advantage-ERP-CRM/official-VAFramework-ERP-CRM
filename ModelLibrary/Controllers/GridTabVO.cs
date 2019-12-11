@@ -107,6 +107,42 @@ namespace VAdvantage.Controller
         /****   Has tab Panels   ***/
         public bool HasPanels = false;
 
+        /****   Is Header Panel   ***/
+        public bool IsHeaderPanel = false;
+
+        /****   Grid Layout   ***/
+        public int AD_HeaderLayout_ID = 0;
+
+        /****   Header Height   ***/
+        public decimal HeaderHeight = 0;
+
+        ///****   Header Back Color   ***/
+        public string HeaderBackColor = "";
+
+        /****   Header Alignment   ***/
+        public string HeaderAlignment = "";
+
+        ///****   Header Name   ***/
+        //public string HeaderName = "";
+
+        ///****   Header Total Column   ***/
+        //public int HeaderTotalColumn = 0;
+
+        ///****   Header Total Row   ***/
+        //public int HeaderTotalRow = 0;
+
+
+        /****   Header Total Row   ***/
+        public Decimal HeaderWidth = 0;
+
+        /*** Header Padding  *******/
+        public string HeaderPadding = "";
+
+        /****   Header Items   ***/
+        public List<HeaderPanelGrid> HeaderItems = null;
+
+        public string TabPanelAlignment = "V";
+
         public List<GridFieldVO> GetFields()
         {
             return fields;
@@ -164,6 +200,11 @@ namespace VAdvantage.Controller
                 {
                     VLogger.Get().Log(Level.SEVERE, vo.Name + ": No Fields");
                     return null;
+                }
+
+                if (vo.IsHeaderPanel)
+                {
+                    CreateHeaderPanel(vo);
                 }
 
                 CreateTabPanels(vo);
@@ -431,6 +472,26 @@ namespace VAdvantage.Controller
                 catch
                 {
                 }
+
+                /***************Worked For Header Panel By Karan*****************/
+                vo.IsHeaderPanel = dr["Isheaderpanel"].Equals("Y");
+
+                vo.AD_HeaderLayout_ID = Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
+
+                vo.HeaderAlignment = Utility.Util.GetValueOfString(dr["HeaderAlignment"]);
+
+                vo.TabPanelAlignment = Utility.Util.GetValueOfString(dr["TabPanelAlignment"]);
+
+                vo.HeaderHeight = Utility.Util.GetValueOfDecimal(dr["Height"]);
+
+                vo.HeaderWidth = Utility.Util.GetValueOfDecimal(dr["Width"]);
+
+                vo.HeaderPadding = Utility.Util.GetValueOfString(dr["Padding"]);
+
+                vo.HeaderBackColor = Utility.Util.GetValueOfString(dr["HeaderBackgroundColor"]);
+
+                /***************** End Header panel work ***************/
+
             }
             catch (System.Exception ex)
             {
@@ -529,6 +590,66 @@ namespace VAdvantage.Controller
                 return false;
             }
             return mTabVO.panels.Count != 0;
+        }
+        /// <summary>
+        /// Create list of header panel items.
+        /// </summary>
+        /// <param name="mTabVO"></param>
+        private static void CreateHeaderPanel(GridTabVO mTabVO)
+        {
+            if (mTabVO.AD_HeaderLayout_ID > 0)
+            {
+                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID +" ORDER BY SeqNo Asc");
+                if (dsGridLayout != null && dsGridLayout.Tables[0].Rows.Count > 0)
+                {
+                    mTabVO.HeaderItems = new List<HeaderPanelGrid>();
+                    
+                    foreach (DataRow dr in dsGridLayout.Tables[0].Rows)
+                    {
+                        HeaderPanelGrid hGrid = new HeaderPanelGrid
+                        {
+                          
+                            HeaderBackColor = Utility.Util.GetValueOfString(dr["BackgroundColor"]),
+
+                            HeaderName = Utility.Util.GetValueOfString(dr["Name"]),
+
+                            HeaderTotalColumn = Utility.Util.GetValueOfInt(dr["TotalColumns"]),
+
+                            HeaderTotalRow = Utility.Util.GetValueOfInt(dr["TotalRows"]),
+
+                            HeaderPadding = Utility.Util.GetValueOfString(dr["Padding"]),
+
+                            AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
+                        };
+
+                        DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Flow,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
+                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
+                        if (ds != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                            hGrid.HeaderItems = new Dictionary<int, object>();
+                            foreach (DataRow row in ds.Tables[0].Rows)
+                            {
+                                hGrid.HeaderItems[Convert.ToInt32(row["SeqNo"])] = new HeaderPanelItemsVO
+                                {
+                                    AD_GridLayoutItems_ID = Convert.ToInt32(row["AD_GridLayoutItems_ID"]),
+                                    ColumnSpan = Convert.ToInt32(row["ColumnSpan"]),
+                                    AlignItems = Convert.ToString(row["AlignItems"]),
+                                    Flow = Convert.ToString(row["Flow"]),
+                                    JustifyItems = Convert.ToString(row["JustifyItems"]),
+                                    RowSpan = Convert.ToInt32(row["RowSpan"]),
+                                    SeqNo = Convert.ToInt32(row["SeqNo"]),
+                                    StartColumn = Convert.ToInt32(row["StartColumn"]),
+                                    StartRow = Convert.ToInt32(row["StartRow"]),
+                                    BackgroundColor= Convert.ToString(row["BackgroundColor"]),
+                                    FontColor = Convert.ToString(row["FontColor"]),
+                                    FontSize = Convert.ToString(row["FontSize"]),
+                                };
+                            }
+                        }
+                        mTabVO.HeaderItems.Add(hGrid);
+                    }
+                }
+            }
         }
 
 
@@ -742,7 +863,7 @@ namespace VAdvantage.Controller
         /// <returns></returns>
         public String Get_ValueAsString(String variableName)
         {
-            return ctx.GetContext(windowNo, variableName, false);	// not just window
+            return ctx.GetContext(windowNo, variableName, false);   // not just window
         }
 
         /// <summary>
@@ -756,7 +877,7 @@ namespace VAdvantage.Controller
             GridTabVO clone = new GridTabVO(myCtx, windowNo);
             clone.AD_Window_ID = AD_Window_ID;
             clone.tabNo = tabNo;
-           
+
             //
             clone.AD_Tab_ID = AD_Tab_ID;
             myCtx.SetContext(windowNo, clone.tabNo, "AD_Tab_ID", clone.AD_Tab_ID.ToString());
@@ -815,6 +936,15 @@ namespace VAdvantage.Controller
             }
 
             clone.locationCols = locationCols;
+
+            clone.IsHeaderPanel = IsHeaderPanel;
+            clone.AD_HeaderLayout_ID = AD_HeaderLayout_ID;
+            clone.HeaderAlignment = HeaderAlignment;
+            clone.TabPanelAlignment = TabPanelAlignment;
+            clone.HeaderItems = HeaderItems;
+            clone.HeaderHeight = HeaderHeight;
+            clone.HeaderWidth = HeaderWidth;
+           
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)

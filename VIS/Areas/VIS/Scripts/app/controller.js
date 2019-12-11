@@ -339,6 +339,18 @@
         return this.vo.hasPanel;
     }
 
+    GridWindow.prototype.getFontName = function () {
+        return this.vo.FontName;
+    }
+
+    GridWindow.prototype.getAD_Image_ID = function () {
+        return this.vo.AD_Image_ID;
+    }
+
+    GridWindow.prototype.getImageUrl = function () {
+        return this.vo.ImageUrl;
+    }
+
     GridWindow.prototype.dispose = function () {
 
         originalLength = this.tabs.length;
@@ -382,7 +394,6 @@
         this.gTab = gTab;
         this.vo = gTab._vo;
         this.gridTable = new VIS.GridTable(gTab._gridTable);
-        this.gridTable.onlyCurrentDays = this.vo.onlyCurrentDays;
         this.parents = [];
         this.orderBys = [];
         this.depOnFieldColumn = [];
@@ -399,12 +410,15 @@
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
+        this.isHeaderPanel = false;
+        this.headerPanel = null;
 
         this.mDataStatusEvent;
         this.mDataListenerList = [];
 
         this.loadFields();
         this.loadTabPanels();
+        this.loadHeaderPanelItems();
         this.gridTable.addDataStatusListener(this);
         this.gridTable.setAD_Tab_ID(this.vo.AD_Tab_ID);
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTab");
@@ -583,6 +597,9 @@
         return this.vo.ShowSummaryLevel;
     };
 
+    GridTab.prototype.getIsTPBottomAligned = function (){
+        return this.vo.TabPanelAlignment == "H";
+    };
 
 
     /* <summary>
@@ -825,16 +842,16 @@
                     var lines = dr.getInt(0);
                     arguments[0] = lines;
                     //	{1} - Line toral
-                    var lineTotal = dr.getDecimal(2);//.toFixed(2);
+                    var lineTotal = dr.getDecimal(2).toLocaleString() ;//.toFixed(2);
                     arguments[1] = lineTotal;
                     //	{2} - Grand total (including tax, etc.)
-                    var grandTotal = dr.getDecimal(3);//.toFixed(2);
+                    var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
                     arguments[2] = grandTotal;
                     //	{3} - Currency
                     var currency = dr.getString(1);
                     arguments[3] = currency;
                     //	(4) - Grand total converted to Base
-                    var grandBase = dr.getDecimal(4);//.toFixed(2);
+                    var grandBase = dr.getDecimal(4).toLocaleString();//.toFixed(2);
                     arguments[4] = grandBase;
                     arguments[5] = ctx.getContext("$CurrencyISO");
                     filled = true;
@@ -1178,6 +1195,76 @@
         }
     };
 
+    GridTab.prototype.loadHeaderPanelItems = function () {
+        if (this.vo.HeaderItems) {
+            this.isHeaderPanel = true;
+            headerPanel = this.vo.HeaderItems;
+        }
+    };
+
+    GridTab.prototype.getIsHeaderPanel = function () {
+        return this.isHeaderPanel;
+    };
+
+    GridTab.prototype.getHeaderPanelItems = function () {
+        return headerPanel;
+    }
+
+    GridTab.prototype.getHeaderHeight = function () {
+        if (this.vo.HeaderHeight && this.vo.HeaderHeight > 0) {
+
+            return this.vo.HeaderHeight + 'px';
+        }
+        else {
+            return '200px';
+        }
+    };
+
+    GridTab.prototype.getHeaderWidth = function () {
+        if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
+            return this.vo.HeaderWidth + 'px';
+        }
+        else {
+            return '250px';
+        }
+        
+    };
+
+    GridTab.prototype.getHeaderBackColor = function () {
+        return this.vo.HeaderBackColor;
+    };
+
+    GridTab.prototype.getHeaderPadding = function () {
+        return this.vo.HeaderPadding;
+    };
+
+    GridTab.prototype.getHeaderHorizontal = function () {
+        if (this.vo.HeaderAlignment.equals("H")) {
+            return true
+        }
+        else {
+            return false;
+        }
+    };
+
+
+    //GridTab.prototype.getHeaderName = function () {
+    //    return this.vo.HeaderName;
+    //};
+
+
+    //GridTab.prototype.getHeaderTotalColumn = function () {
+    //    return this.vo.HeaderTotalColumn;
+    //};
+
+    //GridTab.prototype.getHeaderTotalRow = function () {
+    //    return this.vo.HeaderTotalRow;
+    //};
+
+    //GridTab.prototype.getAD_GridLayout_ID = function () {
+    //    return this.vo.AD_GridLayout_ID;
+    //};
+
     GridTab.prototype.getHasPanel = function () {
         return this.hasPanel;
     }
@@ -1429,7 +1516,7 @@
 
         //    _vo.WhereClause);
 
-        if (this.getOnlyCurrentDays() > 0) {
+        if (this.vo.onlyCurrentDays > 0) {
             if (where.length > 0)
                 where += " AND ";
 
@@ -3865,15 +3952,13 @@
             AD_Client_ID: AD_Client_ID,
             AD_Org_ID: AD_Org_ID,
             SelectSQL: VIS.secureEngine.encrypt(this.SQL_Select),
-            AD_WIndow_ID: m_fields[0].getAD_Window_ID(), // vinay bhatt window id
-            MaintainVersions: false
-            //ImmediateSave: true,
-            //ValidFrom: new Date().toISOString(),
+            AD_WIndow_ID: m_fields[0].getAD_Window_ID() // vinay bhatt window id
         };
 
         if (this.selectedTreeNode > 0) {
             gridTableIn['SelectedTreeNodeID'] = this.selectedTreeNode;
         }
+
 
         if (this.treeNode_ID > 0) {
             gridTableIn['ParentNodeID'] = this.treeNode_ID;
@@ -3881,65 +3966,6 @@
             gridTableIn['TreeTableID'] = this.treeTable_ID;
         }
 
-        // check if this is master window and if there is change in maintain version field
-        if (this.onlyCurrentDays == 0 && this.maintainVersionFieldChanged(RowData, OldRowData)) {
-            var self = this;
-            // in case of new record in Master Version window
-            if (!OldRowData["updatedby"]) {
-                gridTableIn.MaintainVersions = true;
-                gridTableIn.ImmediateSave = true;
-                gridTableIn.ValidFrom = new Date().toISOString();
-                var out = self.dataSaveDB(gridTableIn, rowDataNew);
-                // check if there is workflow linked on version table
-                // then do not save in Master window and reset 
-                // and display message to user
-                if (out.Status == "E") {
-                    VIS.ADialog.info(out.ErrorMsg);
-                }
-                else if (out.Status == "W") {
-                    VIS.ADialog.info("SentForApproval");
-                    self.dataRefreshAll();
-                }
-                return out.Status;
-            }
-            else {
-                // in case of update display UI to user, 
-                // whether user want to save immediately or for future
-                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, function (immediate, valFrom, verRecID) {
-                    gridTableIn.MaintainVersions = true;
-                    gridTableIn.ImmediateSave = immediate;
-                    gridTableIn.ValidFrom = new Date(valFrom).toISOString();
-                    gridTableIn.VerRecID = verRecID;
-                    var out = self.dataSaveDB(gridTableIn, rowDataNew);
-                    // if Stauts is not OK
-                    if (out.Status != "O") {
-                        // if there is any error then display error message
-                        if (out.Status == "E") {
-                            VIS.ADialog.info(out.ErrorMsg);
-                        }
-                        else {
-                            // in case of sucess refresh UI
-                            self.dataRefreshAll();
-                            // if sent for WF Approval then display Message
-                            if (out.Status == "W")
-                                VIS.ADialog.info("SentForApproval");
-                            // if saved for future then display Message and refresh UI
-                            else if (out.Status == "F")
-                                VIS.ADialog.info("SavedForFuture");
-                        }
-                    }
-                    return out.Status;
-                });
-                msVer.show();
-            }
-        }
-        else {
-            var out = this.dataSaveDB(gridTableIn, rowDataNew);
-            return out.Status;
-        }
-    };
-
-    GridTable.prototype.dataSaveDB = function (gridTableIn, rowDataNew) {
         var out = VIS.dataContext.insertOrUpdateWRecord(gridTableIn);
 
         out = JSON.parse(out);
@@ -3948,9 +3974,8 @@
             //
         }
         else {
-            if (out.RowData) {
-                $.extend(true, rowDataNew, this.readDataOfObject(out.RowData));
-            }
+
+            $.extend(true, rowDataNew, this.readDataOfObject(out.RowData));
 
             this.fireTableModelChanged(VIS.VTable.prototype.ROW_REFRESH, rowDataNew, this.rowChanged);
 
@@ -3976,8 +4001,9 @@
             this.fireDataStatusIEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
         }
 
-        return out;
+        return out.Status;
     };
+
 
     GridTable.prototype.createGridFieldArr = function (m_fields, lessdata) {
 
@@ -4663,23 +4689,6 @@
         this.gFieldData = null;
     };
 
-    GridTable.prototype.maintainVersionFieldChanged = function (rowData, oldRowData) {
-        // return false if new Record is inserted
-        // do not ask for date if new Record
-        // if (oldRowData["updatedby"]) {
-            if (this.gridFields && this.gridFields.length > 0) {
-                for (var i = 0; i < this.gridFields.length; i++) {
-                    if (this.gridFields[i].vo.IsMaintainVersions) {
-                        var colName = this.gridFields[i].vo.ColumnName.toLowerCase();
-                        if (rowData[colName] != oldRowData[colName])
-                            return true;
-                    }
-                }
-            }
-        // }
-        return false;
-    };
-
     //********************* END *****************//
 
 
@@ -5091,6 +5100,13 @@
     GridField.prototype.getIsFieldOnly = function () {
         return this.vo.IsFieldOnly;
     };
+    GridField.prototype.getShowLabel = function () {
+        return true;
+    };
+
+    //GridField.prototype.getShowIcon = function () {
+    //    return true;
+    //};
 
     GridField.prototype.getIsKey = function () {
         return this.vo.IsKey;
@@ -5983,6 +5999,56 @@
 
     GridField.prototype.getAskUserBGProcess = function () {
         return this.vo.AskUserBGProcess;
+    };
+
+    /****************************************/
+
+    GridField.prototype.getIsHeaderPanelitem = function () {
+        return this.vo.IsHeaderPanelitem;
+    };
+
+    GridField.prototype.getHeaderOverrideReference = function () {
+        return this.vo.HeaderOverrideReference;
+    };
+
+    GridField.prototype.getHeaderStyle = function () {
+        return this.vo.HeaderStyle;
+    };
+
+    GridField.prototype.getHeaderHeadingOnly = function () {
+        return this.vo.HeaderHeadingOnly;
+    };
+
+    GridField.prototype.getHeaderSeqno = function () {
+        return this.vo.HeaderSeqno;
+    };
+
+    GridField.prototype.getHeaderIconOnly = function () {
+        return this.vo.HeaderIconOnly;
+    };
+
+    GridField.prototype.getHtmlStyle = function () {
+        return this.vo.HtmlStyle;
+    };
+
+    GridField.prototype.getShowIcon = function () {
+        return this.vo.ShowIcon;
+    };
+
+    GridField.prototype.getAD_Image_ID = function () {
+        return this.vo.AD_Image_ID;
+    };
+
+    GridField.prototype.getFontClass = function () {
+        return this.vo.FontClass;
+    };
+
+    GridField.prototype.getPlaceHolder = function () {
+        return this.vo.PlaceHolder;
+    };
+
+    GridField.prototype.getImageName = function () {
+        return this.vo.ImageName;
     };
 
 

@@ -62,10 +62,10 @@
         var root = null;
 
         if (VIS.Application.isRTL) {
-            root = $("<div style='margin-right: -14px;margin-left: -3px;margin-top: -5px;overflow:hidden;width:100%;height:100%;'>");
+            root = $("<div style='overflow:hidden;width:100%;height:100%;'>");
         }
         else {
-            root = $("<div style='margin-right: -3px;margin-left: -14px;margin-top: -5px;overflow:hidden;width:100%;height:100%;'>");
+            root = $("<div style='overflow:hidden;width:100%;height:100%;'>");
         }
         //root.css("width", "100%");
         //root.css("height", "100%");
@@ -192,19 +192,19 @@
 
         root.append(tabs);
 
-        var divContainer = $("<div>");
-        divContainer.css("width", "98%");
-        divContainer.css("height", "98%");
-        divContainer.css("position", "absolute");
+        var divContainer = $("<div class='vis-pu-outerwrap'>");
+        //divContainer.css("width", "100%");
+        //divContainer.css("height", "100%");
+        //divContainer.css("position", "absolute");
         //divContainer.css("border", "1px solid #ddc");        
-        divContainer.css("border", "0px");
-        divContainer.css("margin-top", "2px");
+        //divContainer.css("border", "0px");
+        //divContainer.css("margin-top", "2px");
 
-        var divFA = $("<div>");
+        var divFA = $("<div class='vis-pu-innerwrap'>");
         //divFA.append("File Att");
-        divFA.css("width", "100%");
-        divFA.css("height", "100%");
-        divFA.css("position", "absolute");
+        //divFA.css("width", "100%");
+        //divFA.css("height", "100%");
+        //divFA.css("position", "absolute");
         divContainer.append(divFA);
 
         var divIMA = $("<div>");
@@ -427,7 +427,7 @@
 
 
 
-        var ddLABtnsFull = $("<div style='width:100%;overflow: auto;margin-top: 5px;border-bottom: 2px solid #eee;display:none;float: left;'>");;
+        var ddLABtnsFull = $("<div class='vis-pu-uploadsbtnswrap'>");;
         var lstLatestFiles = [];
         //var progresBar = null;
         var btnInsert = null;
@@ -468,13 +468,13 @@
 
                     //var dlbl = $("<div class='attach-heading pull-left'>").append($("<h4>").append(VIS.Msg.getMsg('New')));
                     // dlaHeader.append(dlbl);
-                    var dfRight = $("<div class='vis-attach-file-location pull-left' style='margin-top: -12px;'>");
+                    var dfRight = $("<div class='vis-attach-file-location'>");
                     dlaHeader.append(dfRight);
 
                     var lblF = $("<label>").append(VIS.Msg.getMsg('FileLocation'));
                     dfRight.append(lblF);
 
-                    cmbFileLocation = $('<select>');
+                    cmbFileLocation = $('<select class="vis-custom-select">');
                     cmbFileLocation.attr("disabled", true);
                     //add options to combo
                     for (var itm in locations.values) {
@@ -494,7 +494,7 @@
 
 
 
-                    var dHeaderRight = $("<div class='vis-attach-top-btns pull-right'>");
+                    var dHeaderRight = $("<div class='vis-attach-top-btns'>");
                     dlaHeader.append(dHeaderRight);
 
 
@@ -519,7 +519,7 @@
                     });
 
                    
-                    var btnUpload = $("<a title='" + VIS.Msg.getMsg('SelectFile') + "' class='vis-attach-ico vis-browse-ico' style='margin-top:-12px'>");
+                    var btnUpload = $("<a title='" + VIS.Msg.getMsg('SelectFile') + "' class='vis-attach-ico'><i class='fa fa-paperclip' aria-hidden='true'></i></a>");
                     // btnUpload.append($("<span class='plus-ico'>"));
                     // btnUpload.append(VIS.Msg.getMsg('Upload'));
 
@@ -573,22 +573,22 @@
                     ulArrange.append(liName);
 
 
-                    dLAContent = $("<div class='vis-attach-content-wrap' style='display:none;border-bottom: 0px;padding-bottom:0px'>");
+                    dLAContent = $("<div class='vis-attach-content-wrap' style='display:none;'>");
                     dlatestAtt.append(dLAContent);
 
 
                     //btns in Latest file Region
                     // ddLABtnsFull = $("<div style='width:100%;overflow: auto;margin-top: 5px;border-bottom: 2px solid #eee'>");
                     dlatestAtt.append(ddLABtnsFull);
-                    var dLABtns = $("<div class='pull-right' style='height:40px;overflow:auto;margin-top: 5px;'>");
+                    var dLABtns = $("<div class='vis-pull-right'>");
                     ddLABtnsFull.append(dLABtns);
-                    var btnuploadFiles = $("<a title='" + VIS.Msg.getMsg('Upload') + "' href='javascript:void(0)'  class='vis-attach-ico vis-uploadall-ico' style='height:30px;width:30px;margin-right: 7px;' >");
+                    var btnuploadFiles = $("<a title='" + VIS.Msg.getMsg('Upload') + "' href='javascript:void(0)'  class='vis-attach-ico'><i class='fa fa-upload' aria-hidden='true'></i></a>");
                     dLABtns.append(btnuploadFiles);
                     btnuploadFiles.on('click', function () {
                         UploadFiles();
                     });
 
-                    var btnCancelAll = $("<a title='" + VIS.Msg.getMsg('Cancel') + "' href='javascript:void(0)'  class='vis-attach-ico vis-cancelall-ico' style='margin-right: 10px;height:30px;width:30px;'>");
+                    var btnCancelAll = $("<a title='" + VIS.Msg.getMsg('Cancel') + "' href='javascript:void(0)'  class='vis-attach-ico'><i class='fa fa-times-circle-o' aria-hidden='true'></i></a>");
                     dLABtns.append(btnCancelAll);
                     btnCancelAll.on('click', function () {
                         dLAContent.empty();
@@ -613,7 +613,7 @@
                     //var hOld = $("<h4>").append(VIS.Msg.getMsg('Old'));
                     //dOldhdrRight.append(hOld);
 
-                    dOAContent = $("<div class='vis-attach-content-wrap' style='height:356px;'>");
+                    dOAContent = $("<div class='vis-attach-content-wrap' style='height: 356px;'>");
                     dOldAtt.append(dOAContent);
 
                     //AppendFiles in Old Files Region
@@ -664,7 +664,7 @@
                     //});
                     //dfLeft.append(btnInsert);
 
-                    var btnDeleteAll = $('<a title="' + VIS.Msg.getMsg('DeleteAll') + '" class="vis-btn" style="margin-left: 5px;cursor: pointer;">').append(VIS.Msg.getMsg('DeleteAll'));
+                    var btnDeleteAll = $('<a href="" title="' + VIS.Msg.getMsg('DeleteAll') + '" class="vis-btn">').append(VIS.Msg.getMsg('DeleteAll'));
                     dfLeft.append(btnDeleteAll);
                     btnDeleteAll.on('click', function () {
 
@@ -710,7 +710,7 @@
                     });
 
 
-                    var btnCancel = $('<a title="' + VIS.Msg.getMsg('Cancel') + '" class="vis-btn"  style="margin-left: 5px;cursor: pointer;">').append(VIS.Msg.getMsg('Cancel'));
+                    var btnCancel = $('<a href="" title="' + VIS.Msg.getMsg('Cancel') + '" class="vis-btn">').append(VIS.Msg.getMsg('Cancel'));
                     btnCancel.on('click', function () {
                         if (selfi.onClose) {
                             selfi.onClose();
@@ -800,7 +800,7 @@
                 dLAContent.append(dAWrap);
 
                 var dTop = $("<div class='vis-attach-file-top'>");
-                var btnRemove = $("<a class='vis-file-close-ico'>");
+                var btnRemove = $("<a class='vis-file-close-ico'><i class='fa fa-times' aria-hidden='true'></i></a>");
                 dTop.append(btnRemove);
                 dAWrap.append(dTop);
                 dLAContent.show();
@@ -907,7 +907,7 @@
 
 
             var oldFile = {};
-            var dAContent = $("<div class='vis-attach-file-content'  style='padding-top:5px;padding-bottom:5px;'>");
+            var dAContent = $("<div class='vis-attach-file-content'>");
             dAWrap.append(dAContent);
 
             var dIcon = $("<div class='vis-attach-file-icon'>");
@@ -943,7 +943,7 @@
             //var iframe = $("<iframe style='display:none;'>");
             //dbtns.append(iframe);
 
-            var btnDownload = $("<a href='javascript:void(0)'  class='vis-attach-ico vis-download-ico' data-id='" + index + "'>");
+            var btnDownload = $("<a href='javascript:void(0)'  class='vis-attach-ico' data-id='" + index + "'><i class='fa fa-long-arrow-down' aria-hidden='true'></i></a>");
             dbtns.append(btnDownload);
             btnDownload.on('click', function (event) {
                 // debugger;
@@ -962,7 +962,7 @@
 
             });
 
-            var btnDelete = $("<a class='vis-attach-ico vis-delete-ico' data-id='" + index + "'>");
+            var btnDelete = $("<a class='vis-attach-ico' data-id='" + index + "'><i class='vis vis-delete' aria-hidden='true'></i></a>");
             dbtns.append(btnDelete);
             btnDelete.on('click', function () {
 
@@ -1007,7 +1007,7 @@
                 });
             });
 
-            dAContent.append(dbtns);
+            dAWrap.append(dbtns);
 
             oldFile.Name = file.FileName;
             oldFile.Size = file.Size;
