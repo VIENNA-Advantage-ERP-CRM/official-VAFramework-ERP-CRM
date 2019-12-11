@@ -1939,7 +1939,7 @@ namespace VAdvantage.Model
 
         protected static int I_ZERO = 0;
 
-        
+
 
         /// <summary>
         /// Is new record
@@ -3390,6 +3390,19 @@ namespace VAdvantage.Model
             sb.Append(" AND NOT EXISTS (SELECT * FROM ").Append(treeTableName).Append(" e ")
                 .Append("WHERE e.AD_Tree_ID=t.AD_Tree_ID AND Node_ID=").Append(id).Append(")");
             //
+            // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
+            if (AD_Table_ID == X_AD_Org.Table_ID)
+            {
+                MOrg Org = new MOrg(GetCtx(), id, null);
+                if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
+                {
+                    if (Org.IsOrgUnit())
+                    {
+                        int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(GetAD_Client_ID(), AD_Table_ID);
+                        sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
+                    }
+                }
+            }
             int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
             if (no > 0)
             {

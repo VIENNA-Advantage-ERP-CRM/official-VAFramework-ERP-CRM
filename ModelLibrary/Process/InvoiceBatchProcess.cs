@@ -109,7 +109,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _invoice = new MInvoice(batch, line);
                     if (!_invoice.Save())
-                        throw new Exception("Cannot save Invoice");
+                        return GetRetrievedError(_invoice, "Cannot save Invoice");
+                        //throw new Exception("Cannot save Invoice");
                     //
                     _oldDocumentNo = line.GetDocumentNo();
                     _oldC_BPartner_ID = line.GetC_BPartner_ID();
@@ -118,8 +119,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 if (line.IsTaxIncluded() != _invoice.IsTaxIncluded())
                 {
+                    return GetRetrievedError(line, "Line " + line.GetLine() + " TaxIncluded inconsistent");
                     //	rollback
-                    throw new Exception("Line " + line.GetLine() + " TaxIncluded inconsistent");
+                   // throw new Exception("Line " + line.GetLine() + " TaxIncluded inconsistent");
                 }
 
                 //	Add Line
@@ -134,8 +136,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 invoiceLine.SetLineTotalAmt(line.GetLineTotalAmt());
                 if (!invoiceLine.Save())
                 {
+                    return GetRetrievedError(invoiceLine, "Cannot save Invoice Line");
                     //	rollback
-                    throw new Exception("Cannot save Invoice Line");
+                   // throw new Exception("Cannot save Invoice Line");
                 }
 
                 //	Update Batch Line

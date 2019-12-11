@@ -150,7 +150,7 @@ namespace VAdvantage.WF
         /// <returns>true if invoker</returns>
         public bool IsInvoker()
         {
-            return GetAD_User_ID() == 0 && GetAD_Role_ID() == 0 && !(RESPONSIBLETYPE_Organization.Equals(GetResponsibleType()));
+            return GetAD_User_ID() == 0 && GetAD_Role_ID() == 0;
         }
 
         /// <summary>

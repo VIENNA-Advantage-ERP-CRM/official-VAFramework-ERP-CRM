@@ -69,8 +69,9 @@ namespace ViennaAdvantage.Process
 
             if (!Project.Save(Get_TrxName()))
             {
-                log.SaveError("CampaignNotSaved", "");
-                return Msg.GetMsg(GetCtx(), "CampaignNotSaved");
+                return GetRetrievedError(Project, "CampaignNotSaved");
+                //log.SaveError("CampaignNotSaved", "");
+                //return Msg.GetMsg(GetCtx(), "CampaignNotSaved");
             }
             int[] allids = VAdvantage.Model.X_C_CampaignPhase.GetAllIDs("C_CampaignPhase", "C_CampaignType_ID=" + C_CampaignType_ID + " and AD_Client_ID = " + GetAD_Client_ID() + " Order By SEQNO ", Get_TrxName());
             //int[] allids = X_C_Phase.GetAllIDs("C_Phase", "C_ProjectType_ID=" + C_ProjectType_ID, Get_TrxName());
@@ -99,8 +100,9 @@ namespace ViennaAdvantage.Process
                     ProjectPhase.SetC_Project_ID(Project.GetC_Project_ID());
                     if (!ProjectPhase.Save(Get_TrxName()))
                     {
-                        log.SaveError("CampaignPhasetNotSaved", "");
-                        return Msg.GetMsg(GetCtx(), "CampaignPhasetNotSaved");
+                        return GetRetrievedError(ProjectPhase, "CampaignPhasetNotSaved");
+                        //log.SaveError("CampaignPhasetNotSaved", "");
+                        //return Msg.GetMsg(GetCtx(), "CampaignPhasetNotSaved");
                     }
                     int[] allids1 = VAdvantage.Model.X_C_CampaignTask.GetAllIDs("C_CampaignTask", "C_CampaignPhase_ID=" + C_CampaignPhase_ID + " and AD_Client_ID = " + GetAD_Client_ID() + " Order By SEQNO ", Get_TrxName());
                     //int[] allids1 = X_C_Task.GetAllIDs("C_Task", "C_Phase_ID=" + C_Phase_ID, Get_TrxName());
@@ -133,8 +135,10 @@ namespace ViennaAdvantage.Process
                             ProjectTask.SetSeqNo(Util.GetValueOfInt(SeqNo));
                             if (!ProjectTask.Save(Get_TrxName()))
                             {
-                                log.SaveError("CampaignTasktNotSaved", "");
-                                return Msg.GetMsg(GetCtx(), "CampaignTasktNotSaved");
+                                return GetRetrievedError(ProjectTask, "CampaignTasktNotSaved");
+
+                                //log.SaveError("CampaignTasktNotSaved", "");
+                                //return Msg.GetMsg(GetCtx(), "CampaignTasktNotSaved");
                             }
 
                         }
@@ -146,8 +150,9 @@ namespace ViennaAdvantage.Process
             Campaign.SetGenerateProject("Y");
             if (!Campaign.Save(Get_TrxName()))
             {
-                log.SaveError("CampaignNotSaved", "");
-                return Msg.GetMsg(GetCtx(), "CampaignNotSaved");
+                return GetRetrievedError(Campaign, "CampaignNotSaved");
+                //log.SaveError("CampaignNotSaved", "");
+                //return Msg.GetMsg(GetCtx(), "CampaignNotSaved");
             }
 
             return Msg.GetMsg(GetCtx(), "PlanningGenerationDone");

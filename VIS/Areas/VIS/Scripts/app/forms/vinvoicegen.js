@@ -210,7 +210,10 @@
         }
 
         function fillPicks() {
-            var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2163, VIS.DisplayType.TableDir);
+            //var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2163, VIS.DisplayType.TableDir);
+
+            // JID_0783: InActive Organizations should not be available to select at Generate Invoice Manual form
+            var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2163, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org.AD_Org_ID <> 0  AND AD_Org.IsSummary='N' AND AD_Org.IsActive='Y'");
             $self.cmbOrg = new VIS.Controls.VComboBox("AD_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
             var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search);

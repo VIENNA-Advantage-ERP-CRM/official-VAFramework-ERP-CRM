@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Ionic.Zip;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -478,6 +480,40 @@ namespace VIS.Models
             string sql = "SELECT AD_Window_ID FROM AD_Window WHERE IsActive='Y' AND Name = '" + windowName + "'";
             int windowID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             return windowID;
+        }
+
+        /// <summary>
+        /// function to filter log files for selected date passed in parameter
+        /// and zip those files in one folder, if found log for date passed in the parameter
+        /// </summary>
+        /// <param name="logDate"></param>
+        /// <returns></returns>
+        public string DownloadServerLog(DateTime? logDate)
+        {
+            // Log files path
+            string logpath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "log";
+            // Temp download folder path
+            string tempDownPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+            // filter files based on the date passed in the parameter
+            var todayFiles = Directory.GetFiles(logpath).Where(x => new FileInfo(x).LastWriteTime.Date.ToShortDateString() == logDate.Value.ToShortDateString());
+
+            var zipfileName = "SLog_" + System.DateTime.Now.Ticks + ".zip";
+
+            using (ZipFile zip = new ZipFile())
+            {
+                var logsFound = false;
+                foreach (string fl in todayFiles)
+                {
+                    zip.AddFile(fl, "LOGS");
+                    logsFound = true;
+                }
+                if (!logsFound)
+                    zipfileName = "";
+                else
+                    zip.Save(tempDownPath + "\\" + zipfileName);
+            }
+
+            return zipfileName;
         }
     }
 }

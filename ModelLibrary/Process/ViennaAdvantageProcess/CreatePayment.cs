@@ -16,7 +16,7 @@ namespace ViennaAdvantage.Process
         protected override void Prepare()
         {
 
-           
+
             ProcessInfoParameter[] para = GetParameter();
             for (int i = 0; i < para.Length; i++)
             {
@@ -30,7 +30,7 @@ namespace ViennaAdvantage.Process
                 {
                     C_Order_ID = para[i].GetParameterAsInt();
                 }
-               
+
                 else
                 {
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
@@ -49,20 +49,19 @@ namespace ViennaAdvantage.Process
                     return "Failed";
                 }
                 //int c_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Order_ID From C_Order WHERE DocumentNo=" + salesOrderNo));
-                MOrder order = new MOrder(GetCtx(), C_Order_ID, null);
+                MOrder order = new MOrder(GetCtx(), C_Order_ID, Get_TrxName());
                 int C_DocType_ID = order.GetC_DocTypeTarget_ID();
                 string baseType = DB.ExecuteScalar("SELECT DocSubTypeSO From C_DocType WHERE isactive='Y' AND C_DocType_ID=" + C_DocType_ID).ToString();
 
                 if (!(baseType.Equals("PR") || baseType.Equals("WI")))
                 {
-                    return "Failed";
+                    return "Order Type must be Prepay Order or Credit Order.";
                 }
-                MPayment payment = new MPayment(GetCtx(), 0, null);
+                MPayment payment = new MPayment(GetCtx(), 0, Get_TrxName());
                 payment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
                 payment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
                 //payment.SetDocumentNo(MS
-                payment.SetC_BankAccount_ID(Util.GetValueOfInt(
-                    DB.ExecuteScalar("Select c_bankAccount_ID from c_bankaccount where isdefault='Y' and isactive='Y'")));
+                payment.SetC_BankAccount_ID(Util.GetValueOfInt(DB.ExecuteScalar("Select c_bankAccount_ID from c_bankaccount where isdefault='Y' and isactive='Y'")));
                 payment.SetDateTrx(DateTime.Now);
                 payment.SetDateAcct(DateTime.Now);
                 payment.SetC_BPartner_ID(order.GetC_BPartner_ID());
@@ -70,8 +69,8 @@ namespace ViennaAdvantage.Process
                 payment.SetC_Currency_ID(order.GetC_Currency_ID());
                 payment.SetTenderType("K");
                 payment.SetDocStatus("IP");
-
-
+                C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID From C_DocType WHERE isactive='Y' AND DocBaseType = 'ARR' AND AD_Client_ID = " + order.GetAD_Client_ID() + " ORDER BY IsDefault DESC"));
+                payment.SetC_DocType_ID(C_DocType_ID);
                 if (baseType.Equals("PR")) //prepay Order
                 {
                     payment.SetC_Order_ID(order.GetC_Order_ID());
@@ -86,7 +85,7 @@ namespace ViennaAdvantage.Process
 
                 return payment.GetDocumentNo().ToString();
             }
-            catch 
+            catch
             {
                 return "Failed";
             }

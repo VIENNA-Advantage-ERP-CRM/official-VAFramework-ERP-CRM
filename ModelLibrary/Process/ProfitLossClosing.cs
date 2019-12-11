@@ -181,8 +181,7 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        // added method math.abs told by amit to set positive amount
-                        profitLossLines.SetAccountDebit(Math.Abs(profitAmt));
+                        profitLossLines.SetAccountDebit(profitAmt);
                     }
                     if (!profitLossLines.Save(Get_Trx()))
                     {

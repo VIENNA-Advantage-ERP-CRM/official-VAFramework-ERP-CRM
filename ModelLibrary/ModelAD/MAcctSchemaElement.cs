@@ -116,6 +116,20 @@ namespace VAdvantage.Model
                 return "UserElement1_ID";
             else if (elementType.Equals(ELEMENTTYPE_UserElement2))
                 return "UserElement2_ID";
+            else if (elementType.Equals(ELEMENTTYPE_UserElement3))
+                return "UserElement3_ID";
+            else if (elementType.Equals(ELEMENTTYPE_UserElement4))
+                return "UserElement4_ID";
+            else if (elementType.Equals(ELEMENTTYPE_UserElement5))
+                return "UserElement5_ID";
+            else if (elementType.Equals(ELEMENTTYPE_UserElement6))
+                return "UserElement6_ID";
+            else if (elementType.Equals(ELEMENTTYPE_UserElement7))
+                return "UserElement7_ID";
+            else if (elementType.Equals(ELEMENTTYPE_UserElement8))
+                return "UserElement8_ID";
+            else if (elementType.Equals(ELEMENTTYPE_UserElement9))
+                return "UserElement9_ID";
             //
             return "";
         }
@@ -155,10 +169,11 @@ namespace VAdvantage.Model
                 return "SELECT Value,Name FROM C_ElementValue WHERE C_ElementValue_ID=";
             else if (elementType.Equals(ELEMENTTYPE_UserList2))
                 return "SELECT Value,Name FROM C_ElementValue WHERE C_ElementValue_ID=";
-            //
-            else if (elementType.Equals(ELEMENTTYPE_UserElement1))
-                return null;
-            else if (elementType.Equals(ELEMENTTYPE_UserElement2))
+            //User Element
+            else if (elementType.Equals(ELEMENTTYPE_UserElement1) || elementType.Equals(ELEMENTTYPE_UserElement2) || elementType.Equals(ELEMENTTYPE_UserElement3)
+                || elementType.Equals(ELEMENTTYPE_UserElement4) || elementType.Equals(ELEMENTTYPE_UserElement5)
+                || elementType.Equals(ELEMENTTYPE_UserElement6) || elementType.Equals(ELEMENTTYPE_UserElement7)
+                || elementType.Equals(ELEMENTTYPE_UserElement8) || elementType.Equals(ELEMENTTYPE_UserElement9))
                 return null;
             //
             return "";

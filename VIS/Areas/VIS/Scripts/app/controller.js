@@ -1515,8 +1515,8 @@
         }
 
         //    _vo.WhereClause);
-
-        if (this.vo.onlyCurrentDays > 0) {
+        
+        if (this.getOnlyCurrentDays() > 0) {
             if (where.length > 0)
                 where += " AND ";
 
@@ -1546,7 +1546,7 @@
                     success = false;
                 }
                 else {
-
+                    
                     var value = VIS.context.getWindowContext(this.vo.windowNo, lc);
                     //	Same link value?
                     if (refresh) {
@@ -1585,15 +1585,15 @@
         this.extendedWhere = where.toString();
 
         //	Final Query
-        if (this.query.getIsActive()) {
-
+        if (this.query.getIsActive()) {          
+            
             var q = this.validateQuery(this.query);
             if (q != null && !queryDetailAll) {
                 if (where.length > 0)
                     where += " AND ";
                 where += q;
             }
-
+           
         }
 
         /* Query */

@@ -87,7 +87,8 @@ namespace ViennaAdvantage.Process
             project.SetProjectType(type);
             if (!project.Save())
             {
-                throw new Exception("@Error@");
+               return GetRetrievedError(project, "@Error@");
+               // throw new Exception("@Error@");
             }
             //
             return "@OK@";

@@ -143,5 +143,28 @@ namespace VAdvantage.Model
         {
 
         }
+
+        /// <summary>
+        ///  Before Save
+        /// </summary>
+        /// <param name="newRecord">new</param>
+        /// <returns>true, on Save</returns>
+        protected override Boolean BeforeSave(Boolean newRecord)
+        {
+            // JID_0527: System is allowing to select 2 vendors as current vendor
+            if (IsCurrentVendor())
+            {
+                String sql = "SELECT COUNT(M_Product_ID) FROM M_Product_PO "
+                    + "WHERE C_BPartner_ID != " + GetC_BPartner_ID() + " AND M_Product_ID = " + GetM_Product_ID() + " AND IsActive = 'Y' "
+                    + " AND IsCurrentVendor = 'Y'";
+                int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                if (no > 0)
+                {
+                    log.SaveError("CurrentVendorIsDefined", "");
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

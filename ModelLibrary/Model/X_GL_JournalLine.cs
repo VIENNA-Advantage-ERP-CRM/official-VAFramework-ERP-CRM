@@ -348,23 +348,24 @@ namespace VAdvantage.Model
         public void SetElementType(String ElementType)
         {
             if (!IsElementTypeValid(ElementType))
-                throw new ArgumentException("ElementType Invalid value - " + ElementType + " - Reference_ID=181 - OO - AC - PR - BP - OT - LF - LT - SR - PJ - MC - U1 - U2 - AY - SA - X1 - X2 - X3 - X4 - X5 - X6 - X7 - X8 - X9"); if (ElementType != null && ElementType.Length > 2) { log.Warning("Length > 2 - truncated"); ElementType = ElementType.Substring(0, 2); } Set_Value("ElementType", ElementType);
+                throw new ArgumentException("ElementType Invalid value - " + ElementType + " - Reference_ID=181 - OO - AC - PR - BP - OT - LF - LT - SR - PJ - MC - U1 - U2 - AY - SA - X1 - X2 - X3 - X4 - X5 - X6 - X7 - X8 - X9"); if (ElementType != null && ElementType.Length > 2) { log.Warning("Length > 2 - truncated"); ElementType = ElementType.Substring(0, 2); }
+            Set_Value("ElementType", ElementType);
         }/** Get Type.
 @return Element Type (account or user defined) FRPT_PeriodType */
         public String GetElementType() { return (String)Get_Value("ElementType"); }
-    
-    
-   
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
         /** Set Export.
 
                                                                                     * 
@@ -397,7 +398,7 @@ namespace VAdvantage.Model
         @param GL_JournalLine_ID General Ledger Journal Line */
         public void SetGL_JournalLine_ID(int GL_JournalLine_ID)
         {
-            if (GL_JournalLine_ID < 1) throw new ArgumentException("GL_JournalLine_ID is mandatory."); 
+            if (GL_JournalLine_ID < 1) throw new ArgumentException("GL_JournalLine_ID is mandatory.");
             Set_ValueNoCheck("GL_JournalLine_ID", GL_JournalLine_ID);
         }
         /** Get Journal Line.
@@ -509,6 +510,27 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
+
+        /// <summary>
+        /// AD_OrgTrx_ID AD_Reference_ID=130 
+        /// </summary>
+        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        /// <summary>
+        ///  Set Trx Organization.
+        /// </summary>
+        /// <param name="AD_OrgTrx_ID">Performing or initiating organization</param>
+        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        {
+            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            else
+                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+        }
+        /// <summary>
+        /// Get Trx Organization.
+        /// </summary>
+        /// <returns>Performing or initiating organization</returns>
+        public int GetAD_OrgTrx_ID() { Object ii = Get_Value("AD_OrgTrx_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
     }
 
 }

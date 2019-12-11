@@ -36,101 +36,108 @@ namespace VIS.Controllers
 
             Ctx ctx = Session["ctx"] as Ctx;
 
-            if (ctx.GetSecureKey() == "")
-                ctx.SetSecureKey(SecureEngineBridge.GetRandomKey());
-
-          //  ctx.SetApplicationUrl(@Url.Content("~/"));
-            ctx.SetIsSSL(Request.Url.Scheme == Uri.UriSchemeHttps); 
-
-            //lakhwinder
-            string fullUrl = Request.Url.AbsoluteUri.Remove(Request.Url.AbsoluteUri.LastIndexOf('/'));
-            //fullUrl = fullUrl.Remove(fullUrl.LastIndexOf('/'));
-            //fullUrl = fullUrl.Remove(fullUrl.LastIndexOf('/'));
-            fullUrl = fullUrl.Remove(fullUrl.IndexOf("VIS/Resource"));
-            ctx.SetApplicationUrl(fullUrl);
-
-            SecureEngine.Encrypt("a");
-
-            CCache<string, string> msgs = Msg.Get().GetMsgMap(ctx.GetAD_Language());
-
-            sb.Append("; var VIS = {");
-            sb.Append("Application: {contextUrl:'").Append(@Url.Content("~/")).Append("',").Append(" contextFullUrl:'").Append(fullUrl).Append("',")
-                     .Append("isMobile:").Append(Request.Browser.IsMobileDevice ? "1" : "0")
-                     .Append(", isRTL:").Append(ctx.GetIsRightToLeft() ? "1" : "0")
-                     .Append(", isBasicDB:").Append(ctx.GetIsBasicDB() ? "1" : "0")
-                     .Append(", isSSL:").Append((Request.Url.Scheme  != Uri.UriSchemeHttps ? "0" :"1")) //TODO
-                     .Append("},");
-
-            sb.Append("I18N: { }, context: { }");
-            sb.Append("};");
-
-            sb.Append("VIS.Consts={");
-            /* Table */
-            sb.Append("'ACCESSLEVEL_Organization' : '1','ACCESSLEVEL_ClientOnly' : '2','ACCESSLEVEL_ClientPlusOrganization' : '3' ,'ACCESSLEVEL_SystemOnly' : '4'");
-            sb.Append(", 'ACCESSLEVEL_SystemPlusClient' : '6','ACCESSLEVEL_All' : '7'");
-            sb.Append(", 'ACCESSTYPERULE_Accessing' : 'A', 'ACCESSTYPERULE_Exporting' : 'E' , 'ACCESSTYPERULE_Reporting' : 'R'");
-            sb.Append("};");
-
-            /* USER */
-            sb.Append(" VIS.MUser = {");
-            sb.Append("'isAdministrator':'" + MUser.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MUser.GetIsEmployee(ctx,ctx.GetAD_User_ID()) + "' }; ");
-
-            /* ROLE */
-            sb.Append(" VIS.MRole =  {");
-            sb.Append(" 'vo' : " + Newtonsoft.Json.JsonConvert.SerializeObject(VIS.Helpers.RoleHelper.GetRole(VAdvantage.Model.MRole.GetDefault(ctx, false))) + " , ");
-            sb.Append(" 'SQL_RW' : true, 'SQL_RO' : false, 'SQL_FULLYQUALIFIED' : true, 'SQL_NOTQUALIFIED' : false,'SUPERUSER_USER_ID' : 100, 'SYSTEM_USER_ID' : 0 ");
-            sb.Append(", 'PREFERENCETYPE_Client':'C', 'PREFERENCETYPE_None':'N', 'PREFERENCETYPE_Organization':'O', 'PREFERENCETYPE_User':'U','isAdministrator':"+ (VAdvantage.Model.MRole.GetDefault(ctx, false).IsAdministrator()? "1":"0").ToString()+ "");
-
-            sb.Append(", columnSynonym : { 'AD_User_ID': 'SalesRep_ID','C_ElementValue_ID':'Account_ID'}");
-            sb.Append("};");
-
-            /* CTX */
-            SetLoginContext(ctx);
-            sb.Append(" VIS.context.ctx = ").Append(Newtonsoft.Json.JsonConvert.SerializeObject(ctx.GetMap())).Append("; ");
-
-            /* Message */
-            sb.Append(" VIS.I18N.labels = { ");
-            if (msgs != null)
+            if (ctx == null) // handle null value , sometime session is expired
             {
-                int total = msgs.Keys.Count;
-                foreach (var key in msgs.Keys)
-                {
-                    --total;
-                    //if (key.Contains('\n') || key.Contains('\'')
-                    //   || key.Contains('\"') || key.StartsWith("SC_") || key.Contains('\r'))
-                    //{
-                    //    continue;
-                    //}
-                    //if (msgs.Get(key).ToString().Contains('\n') || msgs.Get(key).ToString().Contains('\'')
-                    //    || msgs.Get(key).ToString().Contains('\"') || msgs.Get(key).ToString().Contains('\r'))
-                    //{
-                    //    continue;
-                    //}
-                    string msg = (string)msgs.Get(key) ?? "";
-                    msg = msg.Replace("\n", " ").Replace("\r", " ").Replace("\"", "'");
+                sb.Append("; window.location.reload();");
+            }
+            else
+            {
+                if (ctx.GetSecureKey() == "")
+                    ctx.SetSecureKey(SecureEngineBridge.GetRandomKey());
 
-                    if (total == 0)
+                //  ctx.SetApplicationUrl(@Url.Content("~/"));
+                ctx.SetIsSSL(Request.Url.Scheme == Uri.UriSchemeHttps);
+
+                //lakhwinder
+                string fullUrl = Request.Url.AbsoluteUri.Remove(Request.Url.AbsoluteUri.LastIndexOf('/'));
+                //fullUrl = fullUrl.Remove(fullUrl.LastIndexOf('/'));
+                //fullUrl = fullUrl.Remove(fullUrl.LastIndexOf('/'));
+                fullUrl = fullUrl.Remove(fullUrl.IndexOf("VIS/Resource"));
+                ctx.SetApplicationUrl(fullUrl);
+
+                SecureEngine.Encrypt("a");
+
+                CCache<string, string> msgs = Msg.Get().GetMsgMap(ctx.GetAD_Language());
+
+                sb.Append("; var VIS = {");
+                sb.Append("Application: {contextUrl:'").Append(@Url.Content("~/")).Append("',").Append(" contextFullUrl:'").Append(fullUrl).Append("',")
+                         .Append("isMobile:").Append(Request.Browser.IsMobileDevice ? "1" : "0")
+                         .Append(", isRTL:").Append(ctx.GetIsRightToLeft() ? "1" : "0")
+                         .Append(", isBasicDB:").Append(ctx.GetIsBasicDB() ? "1" : "0")
+                         .Append(", isSSL:").Append((Request.Url.Scheme != Uri.UriSchemeHttps ? "0" : "1")) //TODO
+                         .Append("},");
+
+                sb.Append("I18N: { }, context: { }");
+                sb.Append("};");
+
+                sb.Append("VIS.Consts={");
+                /* Table */
+                sb.Append("'ACCESSLEVEL_Organization' : '1','ACCESSLEVEL_ClientOnly' : '2','ACCESSLEVEL_ClientPlusOrganization' : '3' ,'ACCESSLEVEL_SystemOnly' : '4'");
+                sb.Append(", 'ACCESSLEVEL_SystemPlusClient' : '6','ACCESSLEVEL_All' : '7'");
+                sb.Append(", 'ACCESSTYPERULE_Accessing' : 'A', 'ACCESSTYPERULE_Exporting' : 'E' , 'ACCESSTYPERULE_Reporting' : 'R'");
+                sb.Append("};");
+
+                /* USER */
+                sb.Append(" VIS.MUser = {");
+                sb.Append("'isAdministrator':'" + MUser.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MUser.GetIsEmployee(ctx, ctx.GetAD_User_ID()) + "' }; ");
+
+                /* ROLE */
+                sb.Append(" VIS.MRole =  {");
+                sb.Append(" 'vo' : " + Newtonsoft.Json.JsonConvert.SerializeObject(VIS.Helpers.RoleHelper.GetRole(VAdvantage.Model.MRole.GetDefault(ctx, false))) + " , ");
+                sb.Append(" 'SQL_RW' : true, 'SQL_RO' : false, 'SQL_FULLYQUALIFIED' : true, 'SQL_NOTQUALIFIED' : false,'SUPERUSER_USER_ID' : 100, 'SYSTEM_USER_ID' : 0 ");
+                sb.Append(", 'PREFERENCETYPE_Client':'C', 'PREFERENCETYPE_None':'N', 'PREFERENCETYPE_Organization':'O', 'PREFERENCETYPE_User':'U','isAdministrator':" + (VAdvantage.Model.MRole.GetDefault(ctx, false).IsAdministrator() ? "1" : "0").ToString() + "");
+
+                sb.Append(", columnSynonym : { 'AD_User_ID': 'SalesRep_ID','C_ElementValue_ID':'Account_ID'}");
+                sb.Append("};");
+
+                /* CTX */
+                SetLoginContext(ctx);
+                sb.Append(" VIS.context.ctx = ").Append(Newtonsoft.Json.JsonConvert.SerializeObject(ctx.GetMap())).Append("; ");
+
+                /* Message */
+                sb.Append(" VIS.I18N.labels = { ");
+                if (msgs != null)
+                {
+                    int total = msgs.Keys.Count;
+                    foreach (var key in msgs.Keys)
                     {
-                        sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
-                    }
-                    else
-                    {
-                        sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\", ");
+                        --total;
+                        //if (key.Contains('\n') || key.Contains('\'')
+                        //   || key.Contains('\"') || key.StartsWith("SC_") || key.Contains('\r'))
+                        //{
+                        //    continue;
+                        //}
+                        //if (msgs.Get(key).ToString().Contains('\n') || msgs.Get(key).ToString().Contains('\'')
+                        //    || msgs.Get(key).ToString().Contains('\"') || msgs.Get(key).ToString().Contains('\r'))
+                        //{
+                        //    continue;
+                        //}
+                        string msg = (string)msgs.Get(key) ?? "";
+                        msg = msg.Replace("\n", " ").Replace("\r", " ").Replace("\"", "'");
+
+                        if (total == 0)
+                        {
+                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
+                        }
+                        else
+                        {
+                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\", ");
+                        }
                     }
                 }
+                sb.Append("};");
+                // sb.Append(" console.log(VIS.I18N.labels)");
+                //return View();
+                //System.Web.Optimization.JsMinify d = new System.Web.Optimization.JsMinify();
+                //d.Process(
+
+
+                //Update Login Time
+
+                var r = new ResourceManager(fullUrl, ctx.GetAD_Client_ID());
+                r.RunAsync();
+                r = null;
             }
-            sb.Append("};");
-            // sb.Append(" console.log(VIS.I18N.labels)");
-            //return View();
-            //System.Web.Optimization.JsMinify d = new System.Web.Optimization.JsMinify();
-            //d.Process(
-
-
-            //Update Login Time
-
-            var r = new ResourceManager(fullUrl, ctx.GetAD_Client_ID());
-            r.RunAsync();
-            r = null;
 
             return JavaScript(sb.ToString());
         }

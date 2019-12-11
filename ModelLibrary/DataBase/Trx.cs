@@ -29,6 +29,9 @@ namespace VAdvantage.DataBase
         IDbTransaction _trx = null;
         IDbConnection _conn = null;
 
+        private static readonly object _trxLock = new object();
+        private static readonly object _trxCloseLock = new object();
+        
         /** Logger					*/
         private VLogger log = null;
         bool useSameTrxForDocNo = true;
@@ -427,13 +430,16 @@ namespace VAdvantage.DataBase
         ///// <returns>unique name</returns>
         ///// 
         //[Obsolete("Method is deprecated, please use GetTrx Object instead.")]
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        //[MethodImpl(MethodImplOptions.Synchronized)]
         public static String CreateTrxName(String prefix)
         {
-            if (prefix == null || prefix.Length == 0)
-                prefix = "Trx";
-            prefix += "_" + CommonFunctions.CurrentTimeMillis();
-            return prefix;
+            lock (_trxLock)
+            {
+                if (prefix == null || prefix.Length == 0)
+                    prefix = "Trx";
+                prefix += "_" + CommonFunctions.CurrentTimeMillis();
+                return prefix;
+            }
         }	//	CreateTrxName
 
         ///// <summary>
@@ -472,42 +478,51 @@ namespace VAdvantage.DataBase
         /// <returns>Transaction or null</returns>
         /// 
         [Obsolete("Get is deprecated, please use GetTrx instead.")]
-        [MethodImpl(MethodImplOptions.Synchronized)]
+       // [MethodImpl(MethodImplOptions.Synchronized)]
         public static Trx Get(String trxName, bool createNew)
         {
-            if (trxName == null || trxName.Length == 0)
-                throw new ArgumentException("No Transaction Name");
-
-            if (_cache == null)
+            lock (_trxLock)
             {
-                _cache = new Dictionary<String, Trx>(10);	//	no expiration
-            }
+                if (trxName == null || trxName.Length == 0)
+                    throw new ArgumentException("No Transaction Name");
 
-            Trx retValue = null;
-            if (_cache.ContainsKey(trxName))
-            {
-                retValue = _cache[trxName];
-            }
+                if (_cache == null)
+                {
+                    _cache = new Dictionary<String, Trx>(10);	//	no expiration
+                }
 
-            if (retValue == null && createNew)
-            {
-                retValue = new Trx(trxName);
-                _cache.Add(trxName, retValue);
+                Trx retValue = null;
+                if (_cache.ContainsKey(trxName))
+                {
+                    retValue = _cache[trxName];
+                }
 
+                if (retValue == null && createNew)
+                {
+                    retValue = new Trx(trxName);
+                    _cache.Add(trxName, retValue);
+
+                }
+                return retValue;
             }
-            return retValue;
         }	//	Get
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        //[MethodImpl(MethodImplOptions.Synchronized)]
         public static Trx GetTrx(String trxName)
         {
-            return new Trx(trxName, null);
+            lock (_trxLock)
+            {
+                return new Trx(trxName, null);
+            }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+      //  [MethodImpl(MethodImplOptions.Synchronized)]
         public static Trx Get(String trxName)
         {
-            return new Trx(trxName, null);
+            lock (_trxLock)
+            {
+                return new Trx(trxName, null);
+            }
         }
 
 
@@ -637,27 +652,30 @@ namespace VAdvantage.DataBase
         /// <summary>
         /// Close the connection
         /// </summary>
-        [MethodImpl(MethodImplOptions.Synchronized)]
+      //  [MethodImpl(MethodImplOptions.Synchronized)]
         public void Close()
         {
-            if (_cache != null)
-                _cache.Remove(GetTrxName());
+            lock (_trxCloseLock)
+            {
+                if (_cache != null)
+                    _cache.Remove(GetTrxName());
 
-            try
-            {
-                if (_conn != null)
-                    _conn.Close();
-                if (_trx != null)
-                    _trx.Dispose();
+                try
+                {
+                    if (_conn != null)
+                        _conn.Close();
+                    if (_trx != null)
+                        _trx.Dispose();
+                }
+                catch (Exception sqlex)
+                {
+                    log.Log(Level.SEVERE, _trxName, sqlex);
+                }
+                _conn = null;
+                _trx = null;
+                _active = false;
+                log.Config(_trxName);
             }
-            catch (Exception sqlex)
-            {
-                log.Log(Level.SEVERE, _trxName, sqlex);
-            }
-            _conn = null;
-            _trx = null;
-            _active = false;
-            log.Config(_trxName);
         }
 
         /// <summary>

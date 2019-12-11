@@ -50,7 +50,7 @@ namespace VIS.Controllers
             int bankAccountID = Util.GetValueOfInt(param[0]);
             int currencyID = Util.GetValueOfInt(param[1]);
             int BPartnerID=Util.GetValueOfInt(param[2]);
-            DateTime? paymentDate= Util.GetValueOfDateTime(param[3]);
+            DateTime? paymentDate= Convert.ToDateTime(param[3]);
             string paymentMethod= Util.GetValueOfString(param[4]);
             string paymentAmount= Util.GetValueOfString(param[5]);
             bool onlyDueInvoice= Util.GetValueOfBool(param[6]);
@@ -67,7 +67,7 @@ namespace VIS.Controllers
             int bankAccountID = Util.GetValueOfInt(param[0]);
             int currencyID = Util.GetValueOfInt(param[1]);
             int BPartnerID = Util.GetValueOfInt(param[2]);
-            DateTime? paymentDate = Util.GetValueOfDateTime(param[3]);
+            DateTime? paymentDate = Convert.ToDateTime(param[3]);
             string paymentMethod = Util.GetValueOfString(param[4]);
             Decimal? paymentAmount = Util.GetValueOfDecimal(param[5]);
             bool onlyDueInvoice= Util.GetValueOfBool(param[6]);

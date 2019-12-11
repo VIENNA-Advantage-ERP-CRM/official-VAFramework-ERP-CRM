@@ -40,7 +40,7 @@ namespace ViennaAdvantage.Process
         private List<VAdvantage.Model.MProduct> _products = null;
 
         // Manufacturing Module exist or not
-        int count = 0;
+        //int count = 0;
 
         /// <summary>
         /// Prepare
@@ -147,8 +147,8 @@ namespace ViennaAdvantage.Process
         /// <returns>Info</returns>
         private String ValidateProduct(VAdvantage.Model.MProduct product)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
-
+            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            // JID_0690: If manufaturing Module is not downloaded validate BOM Process was not working.
             if (!product.IsBOM())
             {
                 return product.GetName() + " @NotValid@ @M_BOM_ID@";
@@ -157,33 +157,49 @@ namespace ViennaAdvantage.Process
             //	Check Old Product BOM Structure
             log.Config(_product.GetName());
             _products = new List<VAdvantage.Model.MProduct>();
-            if (!ValidateOldProduct(_product))
-            {
-                _product.SetIsVerified(false);
-                _product.Save();
-                return _product.GetName() + " @NotValid@";
-            }
 
-            //	New Structure
-            VAdvantage.Model.MBOM[] boms = VAdvantage.Model.MBOM.GetOfProduct(GetCtx(), _M_Product_ID, Get_Trx(), null);
-            // if manufacturing module  exist and  BOM not contain any record against this product then not to verify Product
-            if (count > 0 && boms.Length == 0)
+            // Check applied if the product is of item type recipee, then bom should validate from second tab of product i.e Bill Of Material else from BOM and BM Components.
+            // Change by mohit to validate the BOM if created from recipee manaement form.- 28 June 2019.
+            if (Env.IsModuleInstalled("VA019_") && product.GetVA019_ItemType().Equals(VAdvantage.Model.X_M_Product.VA019_ITEMTYPE_Recipe))
             {
-                _product.SetIsVerified(false);
-                _product.Save();
-                return _product.GetName() + " @NotValid@";
-            }
-            for (int i = 0; i < boms.Length; i++)
-            {
-                _products = new List<VAdvantage.Model.MProduct>();
-                if (!ValidateBOM(boms[i]))
+                if (!ValidateOldProduct(_product))
                 {
                     _product.SetIsVerified(false);
                     _product.Save();
-                    return _product.GetName() + " " + boms[i].GetName() + " @NotValid@";
+                    return _product.GetName() + " @NotValid@";
                 }
             }
+            //	New Structure
+            else
+            {
+                if (!ValidateOldProduct(_product))
+                {
+                    _product.SetIsVerified(false);
+                    _product.Save();
+                    return _product.GetName() + " @NotValid@";
+                }
 
+                VAdvantage.Model.MBOM[] boms = VAdvantage.Model.MBOM.GetOfProduct(GetCtx(), _M_Product_ID, Get_Trx(), null);
+                // if manufacturing module  exist and  BOM not contain any record against this product then not to verify Product
+                // JID_0690: If manufaturing Module is not downloaded validate BOM Process was not working.
+                //if (count > 0 && boms.Length == 0)
+                //{
+                //    _product.SetIsVerified(false);
+                //    _product.Save();
+                //    return _product.GetName() + " @NotValid@";
+                //}                
+
+                for (int i = 0; i < boms.Length; i++)
+                {
+                    _products = new List<VAdvantage.Model.MProduct>();
+                    if (!ValidateBOM(boms[i]))
+                    {
+                        _product.SetIsVerified(false);
+                        _product.Save();
+                        return _product.GetName() + " " + boms[i].GetName() + " @NotValid@";
+                    }
+                }
+            }
             //	OK
             _product.SetIsVerified(true);
             _product.Save();
@@ -198,7 +214,7 @@ namespace ViennaAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateOldProduct(VAdvantage.Model.MProduct product)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             if (!product.IsBOM())
             {
                 return true;
@@ -214,10 +230,11 @@ namespace ViennaAdvantage.Process
             //
             VAdvantage.Model.MProductBOM[] productsBOMs = VAdvantage.Model.MProductBOM.GetBOMLines(product);
             // if manufacturing module not exist and Product BOM not containany record against this product thennot to verify BOM
-            if (count <= 0 && productsBOMs.Length == 0)
-            {
-                return false;
-            }
+            // JID_0690: If manufaturing Module is not downloaded validate BOM Process was not working.
+            //if (count <= 0 && productsBOMs.Length == 0)
+            //{
+            //    return false;
+            //}
             for (int i = 0; i < productsBOMs.Length; i++)
             {
                 VAdvantage.Model.MProductBOM productsBOM = productsBOMs[i];
@@ -241,20 +258,36 @@ namespace ViennaAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateBOM(VAdvantage.Model.MBOM bom)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             VAdvantage.Model.MBOMProduct[] BOMproducts = VAdvantage.Model.MBOMProduct.GetOfBOM(bom);
             // if manufacturing module  exist and  BOM Componet not contain any record against this BOM then not to verify Product
-            if (count > 0 && BOMproducts.Length == 0)
+            //if (count > 0 && BOMproducts.Length == 0)
+            // JID_0690: If manufaturing Module is not downloaded validate BOM Process was not working.
+            if (BOMproducts.Length == 0)
             {
                 return false;
             }
+
             for (int i = 0; i < BOMproducts.Length; i++)
             {
                 VAdvantage.Model.MBOMProduct BOMproduct = BOMproducts[i];
-                VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetM_BOMProduct_ID(), Get_Trx());
-                if (pp.IsBOM())
+                //VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetM_BOMProduct_ID(), Get_Trx());
+                VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetM_ProductBOM_ID(), Get_Trx());
+
+                if (pp.IsBOM() && BOMproduct.GetM_ProductBOMVersion_ID() > 0)
                 {
-                    return ValidateProduct(pp, bom.GetBOMType(), bom.GetBOMUse());
+                    //return ValidateProduct(pp, bom.GetBOMType(), bom.GetBOMUse());
+                    if (_products.Contains(pp))
+                    {
+                        log.Warning(_product.GetName() + " recursively includes " + pp.GetName());
+                        return false;
+                    }
+                    _products.Add(pp);
+
+                    if (!pp.IsVerified())
+                    {
+                        return false;
+                    }
                 }
             }
             return true;
@@ -277,6 +310,7 @@ namespace ViennaAdvantage.Process
             String restriction = "BOMType='" + BOMType + "' AND BOMUse='" + BOMUse + "'";
             VAdvantage.Model.MBOM[] boms = VAdvantage.Model.MBOM.GetOfProduct(GetCtx(), _M_Product_ID, Get_Trx(),
                 restriction);
+            //VAdvantage.Model.MBOM[] boms = VAdvantage.Model.MBOM.GetOfProduct(GetCtx(), product.GetM_Product_ID(), Get_Trx(), restriction);
             if (boms.Length != 1)
             {
                 log.Warning(restriction + " - Length=" + boms.Length);
@@ -296,6 +330,7 @@ namespace ViennaAdvantage.Process
             {
                 VAdvantage.Model.MBOMProduct BOMproduct = BOMproducts[i];
                 VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetM_BOMProduct_ID(), Get_Trx());
+                //VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetM_ProductBOM_ID(), Get_Trx());
                 if (pp.IsBOM())
                 {
                     return ValidateProduct(pp, bom.GetBOMType(), bom.GetBOMUse());
