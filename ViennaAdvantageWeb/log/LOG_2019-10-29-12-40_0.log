@@ -1,0 +1,598 @@
+*** 10/29/2019 12:41:46 PM VAdvantage Log  ***
+12:41:46.414    (INFO)     Trx.Start: **** ConnSH637079497060718367System.Random
+12:41:46.414    (INFO)     Trx.Commit: **C** ConnSH637079497060718367System.Random
+12:41:46.414    (INFO)     MChangeLog.FillChangeLog: #9
+12:41:46.414    (INFO)     CacheReset.DoIt: 
+12:41:46.414    (INFO)     Env.Reset: finalCall=False
+12:41:46.414    (INFO)     CacheMgt.Reset: #16 (7870)
+12:41:46.414    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+12:41:46.414    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:41:46.414    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:41:46.414    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:41:46.414    (INFO)     MChangeLog.FillChangeLog: #9
+12:41:46.414    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:41:46.414    (INFO)     Trx.Start: **** ConnSH637079497067839170System.Random
+12:41:46.414    (INFO)     Trx.Commit: **C** ConnSH637079497067839170System.Random
+12:41:46.414    (INFO)     Trx.Start: **** ConnSH637079497068668417System.Random
+12:41:46.414    (INFO)     Trx.Commit: **C** ConnSH637079497068668417System.Random
+12:41:47.414    (INFO)     Msg.InitMsg: Records=5818 - en_US
+12:41:47.414    (INFO)     Trx.Start: **** ConnSH637079497077279099System.Random
+12:41:47.414    (INFO)     Trx.Commit: **C** ConnSH637079497077279099System.Random
+12:41:47.414    (INFO)     Trx.Start: **** ConnSH637079497077966884System.Random
+12:41:47.414    (INFO)     Trx.Commit: **C** ConnSH637079497077966884System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:41:52.415    (INFO)     Trx.Start: **** ConnSH637079497125044255System.Random
+12:41:52.415    (INFO)     Trx.Commit: **C** ConnSH637079497125044255System.Random
+12:41:52.415    (INFO)     Trx.Start: **** ConnSH637079497125907872System.Random
+12:41:52.415    (INFO)     Trx.Commit: **C** ConnSH637079497125907872System.Random
+12:41:55.415    (INFO)     Trx.Start: **** ConnSH637079497152647452System.Random
+12:41:55.415    (INFO)     Trx.Commit: **C** ConnSH637079497152647452System.Random
+12:41:55.415    (INFO)     Trx.Start: **** ConnSH637079497153727334System.Random
+12:41:55.415    (INFO)     Trx.Commit: **C** ConnSH637079497153727334System.Random
+12:42:11.421    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+12:42:39.423    (INFO)     Trx.Start: **** ConnSH637079497592958762System.Random
+12:42:39.423    (INFO)     Trx.Commit: **C** ConnSH637079497592958762System.Random
+12:42:39.423    (INFO)     Trx.Start: **** ConnSH637079497594518941System.Random
+12:42:39.423    (INFO)     Trx.Commit: **C** ConnSH637079497594518941System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000000
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000000
+12:44:52.445    (INFO)     Trx.Start: **** ConnSH637079498921744745System.Random
+12:44:52.445    (INFO)     Trx.Commit: **C** ConnSH637079498921744745System.Random
+12:44:58.445    (INFO)     Trx.Start: **** ConnSH637079498980555324System.Random
+12:44:58.445    (INFO)     Trx.Commit: **C** ConnSH637079498980555324System.Random
+12:45:03.453    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+12:45:03.453    (INFO)     Trx.Start: **** ConnSH637079499034121060System.Random
+12:45:03.453    (INFO)     Trx.Commit: **C** ConnSH637079499034121060System.Random
+12:45:03.453    (INFO)     Trx.Start: **** ConnSH637079499035011039System.Random
+12:45:03.453    (INFO)     Trx.Commit: **C** ConnSH637079499035011039System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000001
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000001
+12:45:08.458    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+12:45:08.458    (INFO)     Trx.Start: **** ConnSH637079499089606320System.Random
+12:45:09.459    (INFO)     Trx.Commit: **C** ConnSH637079499089606320System.Random
+12:45:09.459    (INFO)     Trx.Start: **** ConnSH637079499090347449System.Random
+12:45:09.459    (INFO)     Trx.Commit: **C** ConnSH637079499090347449System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000002
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000002
+12:45:22.452    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+12:45:26.452    (INFO)     Trx.Start: **** ConnSH637079499262837084System.Random
+12:45:26.452    (INFO)     Trx.Commit: **C** ConnSH637079499262837084System.Random
+12:45:26.452    (INFO)     Trx.Start: **** ConnSH637079499263547037System.Random
+12:45:26.452    (INFO)     Trx.Commit: **C** ConnSH637079499263547037System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000003
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00904: "TEST_VERSION_ID": invalid identifier [Query DR] SELECT AD_Client_ID, AD_Org_ID, Name, Description, Help, IsActive, T_Integer, T_Number, C_Currency_ID, T_Amount, T_Qty, C_UOM_ID, T_Date, T_DateTime, C_Payment_ID, Account_Acct, C_BPartner_ID, M_Locator_ID, C_Location_ID, BinaryData, M_Product_ID, CharacterData, C_GenAttributeSet_ID, Processing, Processed, FileName, AD_FilePath, FormGroup, VersionNo, Test_ID, Export_ID, C_GenAttributeSetInstance_ID, Created, CreatedBy, Updated, UpdatedBy FROM Test WHERE Test_Version_ID=1000003
+12:48:33.483    (INFO)     MSession.Logout: 06:37:39.647
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+12:49:23.492    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+12:49:23.492    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:49:23.492    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+12:49:23.492    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:49:23.492    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:49:23.492    (INFO)     Trx.Start: **** ConnSH637079501639421782System.Random
+12:49:24.492    (INFO)     Trx.Commit: **C** ConnSH637079501639421782System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/28/19','mm/dd/yy') and to_date('11/05/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/29/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:49:40.494    (INFO)     Trx.Start: **** ConnSH637079501801086584System.Random
+12:49:40.494    (INFO)     Trx.Commit: **C** ConnSH637079501801086584System.Random
+12:49:41.494    (INFO)     Trx.Start: **** ConnSH637079501813850749System.Random
+12:49:41.494    (INFO)     Trx.Commit: **C** ConnSH637079501813850749System.Random
+12:49:45.494    (INFO)     Trx.Start: **** ConnSH637079501854482242System.Random
+12:49:45.494    (INFO)     Trx.Commit: **C** ConnSH637079501854482242System.Random
+12:49:47.494    (INFO)     Trx.Start: **** ConnSH637079501873426430System.Random
+12:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637079501873426430System.Random
+12:49:53.495    (INFO)     Trx.Start: **** ConnSH637079501937428110System.Random
+12:49:53.495    (INFO)     Trx.Commit: **C** ConnSH637079501937428110System.Random
+12:49:53.495    (INFO)     ColumnSync.DoIt: C_Column_ID=1027640
+12:49:53.495    (INFO)     Trx.Start: **** SvrProcess
+12:49:57.495    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+12:50:04.504    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test_Version ADD CONSTRAINT FK1001158_1027640 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+12:50:04.504    (INFO)     Trx.Commit: **C** SvrProcess
+12:50:04.504    (INFO)     CacheMgt.Reset: AD_Process: #1 (2)
+12:50:23.502    (INFO)     Trx.Start: **** ConnSH637079502239294981System.Random
+12:50:23.502    (INFO)     Trx.Commit: **C** ConnSH637079502239294981System.Random
+12:50:26.502    (INFO)     Trx.Start: **** ConnSH637079502261474955System.Random
+12:50:26.502    (INFO)     Trx.Commit: **C** ConnSH637079502261474955System.Random
+12:50:31.503    (INFO)     Trx.Start: **** ConnSH637079502319555963System.Random
+12:50:32.503    (INFO)     Trx.Commit: **C** ConnSH637079502319555963System.Random
+12:50:32.503    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+12:50:32.503    (INFO)     Trx.Start: **** SvrProcess
+12:50:32.503    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+12:50:32.503    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+12:50:35.503    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+12:50:35.503    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+12:50:40.504    (INFO)     Trx.Start: **** ConnSH637079502400235737System.Random
+12:50:40.504    (INFO)     Trx.Commit: **C** ConnSH637079502400235737System.Random
+12:50:49.504    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST_VERSION"."TEST_VERSION_ID") [Query NQTrx]INSERT INTO Test_Version(AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,VersionValidFrom,IsVersionApproved,ProcessedVersion,ProcessingVersion,RecordVersion) SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,Created,'Y','Y','N',1 FROM Test WHERE Test_ID NOT IN (SELECT Test_ID FROM Test_Version)
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST_VERSION"."TEST_VERSION_ID")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."TEST_VERSION"."TEST_VERSION_ID")
+12:56:40.564    (INFO)     MasterVersions.InsertVersionData: Master Version Insertion QueryINSERT INTO Test_Version(AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,VersionValidFrom,IsVersionApproved,ProcessedVersion,ProcessingVersion,RecordVersion) SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,Created,'Y','Y','N',1 FROM Test WHERE Test_ID NOT IN (SELECT Test_ID FROM Test_Version) :: Records Inserted ==>> -1
+12:56:40.564    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:56:40.564    (INFO)     Trx.Commit: **C** SvrProcess
+12:56:42.564    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:05:53.553    (INFO)     Trx.Start: **** ConnSH637079511530057786System.Random
+01:05:53.553    (INFO)     Trx.Commit: **C** ConnSH637079511530057786System.Random
+01:05:56.556    (INFO)     Trx.Start: **** ConnSH637079511569275533System.Random
+01:05:57.557    (INFO)     Trx.Commit: **C** ConnSH637079511569275533System.Random
+01:06:53.653    (INFO)     Trx.Start: **** ConnSH637079512130339361System.Random
+01:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637079512130339361System.Random
+01:06:55.655    (INFO)     Trx.Start: **** ConnSH637079512152195175System.Random
+01:06:55.655    (INFO)     Trx.Commit: **C** ConnSH637079512152195175System.Random
+01:07:25.725    (INFO)     Trx.Start: **** ConnSH637079512450640530System.Random
+01:07:25.725    (INFO)     Trx.Commit: **C** ConnSH637079512450640530System.Random
+01:07:27.727    (INFO)     Trx.Start: **** ConnSH637079512471342433System.Random
+01:07:27.727    (INFO)     Trx.Commit: **C** ConnSH637079512471342433System.Random
+01:07:47.747    (INFO)     Trx.Start: **** ConnSH637079512672459930System.Random
+01:07:47.747    (INFO)     Trx.Commit: **C** ConnSH637079512672459930System.Random
+01:30:08.308    (INFO)     Trx.Start: **** ConnSH637079526084410709System.Random
+01:30:08.308    (INFO)     Trx.Commit: **C** ConnSH637079526084410709System.Random
+01:30:09.309    (INFO)     Trx.Start: **** ConnSH637079526099436776System.Random
+01:30:10.301    (INFO)     Trx.Commit: **C** ConnSH637079526099436776System.Random
+01:30:33.303    (INFO)     Trx.Start: **** ConnSH637079526335982136System.Random
+01:30:33.303    (INFO)     Trx.Commit: **C** ConnSH637079526335982136System.Random
+01:30:33.303    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+01:31:00.310    (INFO)     Trx.Start: **** ConnSH637079526607737402System.Random
+01:31:00.310    (INFO)     Trx.Commit: **C** ConnSH637079526607737402System.Random
+01:31:00.310    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+01:31:03.313    (INFO)     Trx.Start: **** ConnSH637079526634233658System.Random
+01:31:03.313    (INFO)     Trx.Commit: **C** ConnSH637079526634233658System.Random
+01:31:03.313    (INFO)     ColumnSync.DoIt: C_Column_ID=1027673
+01:31:03.313    (INFO)     Trx.Start: **** SvrProcess
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired [Query NQTrx]ALTER TABLE Test_Version MODIFY  Test_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+01:31:03.313    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - ALTER TABLE Test_Version MODIFY  Test_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired [Query NQTrx]ALTER TABLE Test_Version MODIFY Test_ID  NOT NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00054: resource busy and acquire with NOWAIT specified or timeout expired
+01:31:03.313    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - ALTER TABLE Test_Version MODIFY Test_ID  NOT NULL
+01:31:10.311    (INFO)     Trx.Commit: **C** SvrProcess
+01:31:10.311    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:31:45.314    (INFO)     Trx.Start: **** ConnSH637079527052246986System.Random
+01:31:45.314    (INFO)     Trx.Commit: **C** ConnSH637079527052246986System.Random
+01:31:47.314    (INFO)     Trx.Start: **** ConnSH637079527070884951System.Random
+01:31:47.314    (INFO)     Trx.Commit: **C** ConnSH637079527070884951System.Random
+01:31:49.314    (INFO)     Trx.Start: **** ConnSH637079527095715799System.Random
+01:31:49.314    (INFO)     Trx.Commit: **C** ConnSH637079527095715799System.Random
+01:32:03.323    (INFO)     Trx.Start: **** ConnSH637079527234128845System.Random
+01:32:03.323    (INFO)     Trx.Commit: **C** ConnSH637079527234128845System.Random
+01:32:03.323    (INFO)     Trx.Start: **** ConnSH637079527235776125System.Random
+01:32:03.323    (INFO)     Trx.Commit: **C** ConnSH637079527235776125System.Random
+01:32:49.324    (INFO)     Trx.Start: **** ConnSH637079527690845053System.Random
+01:32:49.324    (INFO)     Trx.Commit: **C** ConnSH637079527690845053System.Random
+01:32:49.324    (INFO)     Trx.Start: **** ConnSH637079527692191951System.Random
+01:32:49.324    (INFO)     Trx.Commit: **C** ConnSH637079527692191951System.Random
+01:32:52.325    (INFO)     Trx.Start: **** ConnSH637079527727800097System.Random
+01:32:52.325    (INFO)     Trx.Commit: **C** ConnSH637079527727800097System.Random
+01:32:52.325    (INFO)     Trx.Start: **** SvrProcess
+01:32:53.325    (INFO)     Trx.Start: **** ConnSH637079527731480766System.Random
+01:32:53.325    (INFO)     Trx.Commit: **C** ConnSH637079527731480766System.Random
+01:32:53.325    (INFO)     Trx.Start: **** ConnSH637079527732701468System.Random
+01:32:53.325    (INFO)     Trx.Commit: **C** ConnSH637079527732701468System.Random
+01:32:53.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 0 - Version Valid From
+01:32:53.325    (INFO)     Trx.Start: **** ConnSH637079527736614170System.Random
+01:32:53.325    (INFO)     Trx.Commit: **C** ConnSH637079527736614170System.Random
+01:32:53.325    (INFO)     Trx.Start: **** ConnSH637079527737349795System.Random
+01:32:53.325    (INFO)     Trx.Commit: **C** ConnSH637079527737349795System.Random
+01:32:53.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - Version No
+01:32:53.325    (INFO)     Trx.Start: **** ConnSH637079527739870233System.Random
+01:32:54.325    (INFO)     Trx.Commit: **C** ConnSH637079527739870233System.Random
+01:32:54.325    (INFO)     Trx.Start: **** ConnSH637079527740578546System.Random
+01:32:54.325    (INFO)     Trx.Commit: **C** ConnSH637079527740578546System.Random
+01:32:54.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 2 - UOM
+01:32:54.325    (INFO)     Trx.Start: **** ConnSH637079527743414910System.Random
+01:32:54.325    (INFO)     Trx.Commit: **C** ConnSH637079527743414910System.Random
+01:32:54.325    (INFO)     Trx.Start: **** ConnSH637079527744154900System.Random
+01:32:54.325    (INFO)     Trx.Commit: **C** ConnSH637079527744154900System.Random
+01:32:54.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 3 - Test ID
+01:32:54.325    (INFO)     Trx.Start: **** ConnSH637079527746635070System.Random
+01:32:54.325    (INFO)     Trx.Commit: **C** ConnSH637079527746635070System.Random
+01:32:54.325    (INFO)     Trx.Start: **** ConnSH637079527747330438System.Random
+01:32:54.325    (INFO)     Trx.Commit: **C** ConnSH637079527747330438System.Random
+01:32:54.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 4 - Tenant
+01:32:55.325    (INFO)     Trx.Start: **** ConnSH637079527750208559System.Random
+01:32:55.325    (INFO)     Trx.Commit: **C** ConnSH637079527750208559System.Random
+01:32:55.325    (INFO)     Trx.Start: **** ConnSH637079527750888567System.Random
+01:32:55.325    (INFO)     Trx.Commit: **C** ConnSH637079527750888567System.Random
+01:32:55.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 5 - Record Version
+01:32:55.325    (INFO)     Trx.Start: **** ConnSH637079527753405194System.Random
+01:32:55.325    (INFO)     Trx.Commit: **C** ConnSH637079527753405194System.Random
+01:32:55.325    (INFO)     Trx.Start: **** ConnSH637079527754076377System.Random
+01:32:55.325    (INFO)     Trx.Commit: **C** ConnSH637079527754076377System.Random
+01:32:55.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 6 - Qty
+01:32:55.325    (INFO)     Trx.Start: **** ConnSH637079527757046040System.Random
+01:32:55.325    (INFO)     Trx.Commit: **C** ConnSH637079527757046040System.Random
+01:32:55.325    (INFO)     Trx.Start: **** ConnSH637079527757805980System.Random
+01:32:55.325    (INFO)     Trx.Commit: **C** ConnSH637079527757805980System.Random
+01:32:55.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 7 - Product
+01:32:56.325    (INFO)     Trx.Start: **** ConnSH637079527760496699System.Random
+01:32:56.325    (INFO)     Trx.Commit: **C** ConnSH637079527760496699System.Random
+01:32:56.325    (INFO)     Trx.Start: **** ConnSH637079527761226653System.Random
+01:32:56.325    (INFO)     Trx.Commit: **C** ConnSH637079527761226653System.Random
+01:32:56.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 8 - Processing Version
+01:32:56.325    (INFO)     Trx.Start: **** ConnSH637079527763956657System.Random
+01:32:56.325    (INFO)     Trx.Commit: **C** ConnSH637079527763956657System.Random
+01:32:56.325    (INFO)     Trx.Start: **** ConnSH637079527764628069System.Random
+01:32:56.325    (INFO)     Trx.Commit: **C** ConnSH637079527764628069System.Random
+01:32:56.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 9 - Processed Version
+01:32:56.325    (INFO)     Trx.Start: **** ConnSH637079527767856836System.Random
+01:32:56.325    (INFO)     Trx.Commit: **C** ConnSH637079527767856836System.Random
+01:32:56.325    (INFO)     Trx.Start: **** ConnSH637079527768556791System.Random
+01:32:56.325    (INFO)     Trx.Commit: **C** ConnSH637079527768556791System.Random
+01:32:57.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 10 - Processed
+01:32:57.325    (INFO)     Trx.Start: **** ConnSH637079527771332404System.Random
+01:32:57.325    (INFO)     Trx.Commit: **C** ConnSH637079527771332404System.Random
+01:32:57.325    (INFO)     Trx.Start: **** ConnSH637079527772032378System.Random
+01:32:57.325    (INFO)     Trx.Commit: **C** ConnSH637079527772032378System.Random
+01:32:57.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 11 - Process Now
+01:32:57.325    (INFO)     Trx.Start: **** ConnSH637079527774851812System.Random
+01:32:57.325    (INFO)     Trx.Commit: **C** ConnSH637079527774851812System.Random
+01:32:57.325    (INFO)     Trx.Start: **** ConnSH637079527775661745System.Random
+01:32:57.325    (INFO)     Trx.Commit: **C** ConnSH637079527775661745System.Random
+01:32:57.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 12 - Payment
+01:32:57.325    (INFO)     Trx.Start: **** ConnSH637079527778446610System.Random
+01:32:57.325    (INFO)     Trx.Commit: **C** ConnSH637079527778446610System.Random
+01:32:57.325    (INFO)     Trx.Start: **** ConnSH637079527779146956System.Random
+01:32:57.325    (INFO)     Trx.Commit: **C** ConnSH637079527779146956System.Random
+01:32:58.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 13 - Organization
+01:32:58.325    (INFO)     Trx.Start: **** ConnSH637079527782114033System.Random
+01:32:58.325    (INFO)     Trx.Commit: **C** ConnSH637079527782114033System.Random
+01:32:58.325    (INFO)     Trx.Start: **** ConnSH637079527782783971System.Random
+01:32:58.325    (INFO)     Trx.Commit: **C** ConnSH637079527782783971System.Random
+01:32:58.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 14 - Number
+01:32:58.325    (INFO)     Trx.Start: **** ConnSH637079527785309140System.Random
+01:32:58.325    (INFO)     Trx.Commit: **C** ConnSH637079527785309140System.Random
+01:32:58.325    (INFO)     Trx.Start: **** ConnSH637079527786039145System.Random
+01:32:58.325    (INFO)     Trx.Commit: **C** ConnSH637079527786039145System.Random
+01:32:58.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 15 - Name
+01:32:58.325    (INFO)     Trx.Start: **** ConnSH637079527788909632System.Random
+01:32:58.325    (INFO)     Trx.Commit: **C** ConnSH637079527788909632System.Random
+01:32:58.325    (INFO)     Trx.Start: **** ConnSH637079527789619512System.Random
+01:32:59.325    (INFO)     Trx.Commit: **C** ConnSH637079527789619512System.Random
+01:32:59.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 16 - Locator
+01:32:59.325    (INFO)     Trx.Start: **** ConnSH637079527792323966System.Random
+01:32:59.325    (INFO)     Trx.Commit: **C** ConnSH637079527792323966System.Random
+01:32:59.325    (INFO)     Trx.Start: **** ConnSH637079527793024315System.Random
+01:32:59.325    (INFO)     Trx.Commit: **C** ConnSH637079527793024315System.Random
+01:32:59.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 17 - Integer
+01:32:59.325    (INFO)     Trx.Start: **** ConnSH637079527795736099System.Random
+01:32:59.325    (INFO)     Trx.Commit: **C** ConnSH637079527795736099System.Random
+01:32:59.325    (INFO)     Trx.Start: **** ConnSH637079527796436035System.Random
+01:32:59.325    (INFO)     Trx.Commit: **C** ConnSH637079527796436035System.Random
+01:32:59.325    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 18 - General Attribute Set Instance
+01:32:59.325    (INFO)     Trx.Start: **** ConnSH637079527799031255System.Random
+01:32:59.325    (INFO)     Trx.Commit: **C** ConnSH637079527799031255System.Random
+01:32:59.325    (INFO)     Trx.Start: **** ConnSH637079527799772322System.Random
+01:33:00.330    (INFO)     Trx.Commit: **C** ConnSH637079527799772322System.Random
+01:33:00.330    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 19 - General Attribute Set
+01:33:00.330    (INFO)     Trx.Start: **** ConnSH637079527802491134System.Random
+01:33:00.330    (INFO)     Trx.Commit: **C** ConnSH637079527802491134System.Random
+01:33:00.330    (INFO)     Trx.Start: **** ConnSH637079527803161134System.Random
+01:33:00.330    (INFO)     Trx.Commit: **C** ConnSH637079527803161134System.Random
+01:33:00.330    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 20 - Form Group
+01:33:00.330    (INFO)     Trx.Start: **** ConnSH637079527805820905System.Random
+01:33:00.330    (INFO)     Trx.Commit: **C** ConnSH637079527805820905System.Random
+01:33:00.330    (INFO)     Trx.Start: **** ConnSH637079527806496700System.Random
+01:33:00.330    (INFO)     Trx.Commit: **C** ConnSH637079527806496700System.Random
+01:33:00.330    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 21 - File Path
+01:33:00.330    (INFO)     Trx.Start: **** ConnSH637079527809176404System.Random
+01:33:00.330    (INFO)     Trx.Commit: **C** ConnSH637079527809176404System.Random
+01:33:00.330    (INFO)     Trx.Start: **** ConnSH637079527809886328System.Random
+01:33:01.331    (INFO)     Trx.Commit: **C** ConnSH637079527809886328System.Random
+01:33:01.331    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 22 - File Name
+01:33:01.331    (INFO)     Trx.Start: **** ConnSH637079527812544131System.Random
+01:33:01.331    (INFO)     Trx.Commit: **C** ConnSH637079527812544131System.Random
+01:33:01.331    (INFO)     Trx.Start: **** ConnSH637079527813214092System.Random
+01:33:01.331    (INFO)     Trx.Commit: **C** ConnSH637079527813214092System.Random
+01:33:01.331    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 23 - Export
+01:33:01.331    (INFO)     Trx.Start: **** ConnSH637079527815994135System.Random
+01:33:01.331    (INFO)     Trx.Commit: **C** ConnSH637079527815994135System.Random
+01:33:01.331    (INFO)     Trx.Start: **** ConnSH637079527816664083System.Random
+01:33:01.331    (INFO)     Trx.Commit: **C** ConnSH637079527816664083System.Random
+01:33:01.331    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 24 - Description
+01:33:01.331    (INFO)     Trx.Start: **** ConnSH637079527819354485System.Random
+01:33:02.332    (INFO)     Trx.Commit: **C** ConnSH637079527819354485System.Random
+01:33:02.332    (INFO)     Trx.Start: **** ConnSH637079527820099928System.Random
+01:33:02.332    (INFO)     Trx.Commit: **C** ConnSH637079527820099928System.Random
+01:33:02.332    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 25 - Date Time
+01:33:02.332    (INFO)     Trx.Start: **** ConnSH637079527822927996System.Random
+01:33:02.332    (INFO)     Trx.Commit: **C** ConnSH637079527822927996System.Random
+01:33:02.332    (INFO)     Trx.Start: **** ConnSH637079527823627933System.Random
+01:33:02.332    (INFO)     Trx.Commit: **C** ConnSH637079527823627933System.Random
+01:33:02.332    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 26 - Date
+01:33:02.332    (INFO)     Trx.Start: **** ConnSH637079527826210194System.Random
+01:33:02.332    (INFO)     Trx.Commit: **C** ConnSH637079527826210194System.Random
+01:33:02.332    (INFO)     Trx.Start: **** ConnSH637079527826890347System.Random
+01:33:02.332    (INFO)     Trx.Commit: **C** ConnSH637079527826890347System.Random
+01:33:02.332    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 27 - Currency
+01:33:03.333    (INFO)     Trx.Start: **** ConnSH637079527830077635System.Random
+01:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637079527830077635System.Random
+01:33:03.333    (INFO)     Trx.Start: **** ConnSH637079527830797588System.Random
+01:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637079527830797588System.Random
+01:33:03.333    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 28 - Comment
+01:33:03.333    (INFO)     Trx.Start: **** ConnSH637079527833640443System.Random
+01:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637079527833640443System.Random
+01:33:03.333    (INFO)     Trx.Start: **** ConnSH637079527834337674System.Random
+01:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637079527834337674System.Random
+01:33:03.333    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 29 - Character Data
+01:33:03.333    (INFO)     Trx.Start: **** ConnSH637079527836914497System.Random
+01:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637079527836914497System.Random
+01:33:03.333    (INFO)     Trx.Start: **** ConnSH637079527837604496System.Random
+01:33:03.333    (INFO)     Trx.Commit: **C** ConnSH637079527837604496System.Random
+01:33:03.333    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 30 - Business Partner
+01:33:04.334    (INFO)     Trx.Start: **** ConnSH637079527840491616System.Random
+01:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637079527840491616System.Random
+01:33:04.334    (INFO)     Trx.Start: **** ConnSH637079527841300541System.Random
+01:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637079527841300541System.Random
+01:33:04.334    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 31 - BinaryData
+01:33:04.334    (INFO)     Trx.Start: **** ConnSH637079527844362335System.Random
+01:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637079527844362335System.Random
+01:33:04.334    (INFO)     Trx.Start: **** ConnSH637079527845092322System.Random
+01:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637079527845092322System.Random
+01:33:04.334    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 32 - Approved Version
+01:33:04.334    (INFO)     Trx.Start: **** ConnSH637079527847782370System.Random
+01:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637079527847782370System.Random
+01:33:04.334    (INFO)     Trx.Start: **** ConnSH637079527848652291System.Random
+01:33:04.334    (INFO)     Trx.Commit: **C** ConnSH637079527848652291System.Random
+01:33:05.335    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 33 - Amount
+01:33:05.335    (INFO)     Trx.Start: **** ConnSH637079527851419979System.Random
+01:33:05.335    (INFO)     Trx.Commit: **C** ConnSH637079527851419979System.Random
+01:33:05.335    (INFO)     Trx.Start: **** ConnSH637079527852139990System.Random
+01:33:05.335    (INFO)     Trx.Commit: **C** ConnSH637079527852139990System.Random
+01:33:05.335    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 34 - Address
+01:33:05.335    (INFO)     Trx.Start: **** ConnSH637079527855068907System.Random
+01:33:05.335    (INFO)     Trx.Commit: **C** ConnSH637079527855068907System.Random
+01:33:05.335    (INFO)     Trx.Start: **** ConnSH637079527855748863System.Random
+01:33:05.335    (INFO)     Trx.Commit: **C** ConnSH637079527855748863System.Random
+01:33:05.335    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 35 - Active
+01:33:05.335    (INFO)     Trx.Start: **** ConnSH637079527858624498System.Random
+01:33:05.335    (INFO)     Trx.Commit: **C** ConnSH637079527858624498System.Random
+01:33:05.335    (INFO)     Trx.Start: **** ConnSH637079527859484534System.Random
+01:33:06.336    (INFO)     Trx.Commit: **C** ConnSH637079527859484534System.Random
+01:33:06.336    (INFO)     TabCreateFields.AddLog: 0 - 1/1/0001 12:00:00 AM - 36 - Account_Acct
+01:33:06.336    (INFO)     Trx.Commit: **C** SvrProcess
+01:33:06.336    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:33:12.331    (INFO)     Trx.Start: **** ConnSH637079527923089189System.Random
+01:33:12.331    (INFO)     Trx.Commit: **C** ConnSH637079527923089189System.Random
+01:33:12.331    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=100, Editable=True, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:33:12.331    (INFO)     Trx.Start: **** ConnSH637079527928598765System.Random
+01:33:12.331    (INFO)     Trx.Commit: **C** ConnSH637079527928598765System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  MQueryLog.QueryLog: Not insertedAD_QueryLog
+01:33:13.331    (INFO)     Trx.Start: **** ConnSH637079527931568512System.Random
+01:33:13.331    (INFO)     Trx.Commit: **C** ConnSH637079527931568512System.Random
+01:33:16.331    (INFO)     Trx.Start: **** ConnSH637079527968022952System.Random
+01:33:16.331    (INFO)     Trx.Commit: **C** ConnSH637079527968022952System.Random
+01:33:19.331    (INFO)     Trx.Start: **** ConnSH637079527993667398System.Random
+01:33:19.331    (INFO)     Trx.Commit: **C** ConnSH637079527993667398System.Random
+01:33:41.334    (INFO)     Trx.Start: **** ConnSH637079528218531661System.Random
+01:33:41.334    (INFO)     Trx.Commit: **C** ConnSH637079528218531661System.Random
+01:33:45.334    (INFO)     Trx.Start: **** ConnSH637079528252285169System.Random
+01:33:45.334    (INFO)     Trx.Commit: **C** ConnSH637079528252285169System.Random
+01:33:45.334    (INFO)     CacheReset.DoIt: 
+01:33:45.334    (INFO)     Env.Reset: finalCall=False
+01:33:45.334    (INFO)     CacheMgt.Reset: #19 (8216)
+01:33:45.334    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:33:45.334    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:33:45.334    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+01:33:45.334    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:33:45.334    (INFO)     MChangeLog.FillChangeLog: #9
+01:33:45.334    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:33:45.334    (INFO)     Trx.Start: **** ConnSH637079528258816403System.Random
+01:33:45.334    (INFO)     Trx.Commit: **C** ConnSH637079528258816403System.Random
+01:33:46.334    (INFO)     Msg.InitMsg: Records=5818 - en_US
+01:33:46.334    (INFO)     Trx.Start: **** ConnSH637079528265216648System.Random
+01:33:46.334    (INFO)     Trx.Commit: **C** ConnSH637079528265216648System.Random
+01:33:51.335    (INFO)     MSession.Logout: 06:14:29.982
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+01:34:13.341    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+01:34:13.341    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:34:13.341    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:34:13.341    (INFO)     Trx.Start: **** ConnSH637079528538808665System.Random
+01:34:13.341    (INFO)     Trx.Commit: **C** ConnSH637079528538808665System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/28/19','mm/dd/yy') and to_date('11/05/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/29/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:34:21.342    (INFO)     Trx.Start: **** ConnSH637079528619088189System.Random
+01:34:21.342    (INFO)     Trx.Commit: **C** ConnSH637079528619088189System.Random
+01:34:35.343    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+===========>     (SEVERE)   GenericPO.DataSavePO: Test_ID=0 AND VersionValidFrom='', SQL=SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,IsVersionApproved,M_Locator_ID,M_Product_ID,Name,Processed,ProcessedVersion,Processing,ProcessingVersion,RecordVersion,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,VersionValidFrom FROM Test_Version WHERE Test_ID=@param0 AND VersionValidFrom=@param1==Object reference not set to an instance of an object.
+===========>     (SEVERE)   GenericPO.DataSavePO: reloading
+01:34:46.344    (INFO)     MSession.Logout: 06:31:34.873
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+01:35:40.354    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:35:40.354    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:35:40.354    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:35:40.354    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:35:40.354    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:35:41.354    (INFO)     Trx.Start: **** ConnSH637079529414075408System.Random
+01:35:41.354    (INFO)     Trx.Commit: **C** ConnSH637079529414075408System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/28/19','mm/dd/yy') and to_date('11/05/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/29/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:35:47.354    (INFO)     Trx.Start: **** ConnSH637079529472290515System.Random
+01:35:47.354    (INFO)     Trx.Commit: **C** ConnSH637079529472290515System.Random
+01:36:12.361    (INFO)     MSession.Logout: 06:31:31.487
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+01:36:59.365    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+01:36:59.365    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:36:59.365    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:37:00.370    (INFO)     Trx.Start: **** ConnSH637079530203270370System.Random
+01:37:00.370    (INFO)     Trx.Commit: **C** ConnSH637079530203270370System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/28/19','mm/dd/yy') and to_date('11/05/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/29/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:37:37.373    (INFO)     Trx.Start: **** ConnSH637079530571445003System.Random
+01:37:37.373    (INFO)     Trx.Commit: **C** ConnSH637079530571445003System.Random
+01:37:39.373    (INFO)     Trx.Start: **** ConnSH637079530593656386System.Random
+01:37:39.373    (INFO)     Trx.Commit: **C** ConnSH637079530593656386System.Random
+01:37:42.374    (INFO)     Trx.Start: **** ConnSH637079530624994889System.Random
+01:37:42.374    (INFO)     Trx.Commit: **C** ConnSH637079530624994889System.Random
+01:37:44.374    (INFO)     Trx.Start: **** ConnSH637079530648018640System.Random
+01:37:44.374    (INFO)     Trx.Commit: **C** ConnSH637079530648018640System.Random
+01:37:51.375    (INFO)     Trx.Start: **** ConnSH637079530713300309System.Random
+01:37:51.375    (INFO)     Trx.Commit: **C** ConnSH637079530713300309System.Random
+01:37:51.375    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+01:37:51.375    (INFO)     Trx.Start: **** SvrProcess
+01:37:51.375    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+01:37:51.375    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+01:37:59.375    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+01:37:59.375    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+01:37:59.375    (INFO)     Trx.Start: **** ConnSH637079530791140567System.Random
+01:37:59.375    (INFO)     Trx.Commit: **C** ConnSH637079530791140567System.Random
+01:37:59.375    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+01:37:59.375    (INFO)     MasterVersions.InsertVersionData: Master Version Insertion QueryINSERT INTO Test_Version(AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,VersionValidFrom,IsVersionApproved,ProcessedVersion,ProcessingVersion,RecordVersion) SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,Created,'Y','Y','N',1 FROM Test WHERE Test_ID NOT IN (SELECT Test_ID FROM Test_Version) :: Records Inserted ==>> 0
+01:37:59.375    (INFO)     CacheMgt.Reset: AD_Process: #1 (2)
+01:37:59.375    (INFO)     Trx.Commit: **C** SvrProcess
+01:37:59.375    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+*** 10/29/2019 3:16:12 PM VAdvantage Log ***

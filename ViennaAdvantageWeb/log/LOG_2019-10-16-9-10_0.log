@@ -1,0 +1,16 @@
+*** 10/16/2019 9:10:26 AM VAdvantage Log  ***
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-03135: Connection lost contact [Query NQTrx]DELETE FROM AD_Table_Trl WHERE AD_Table_ID=1001143
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637067624485751182 => ORA-03135: Connection lost contact
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-03135: Connection lost contact
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: Oracle error ORA-12571 encountered [Query NQTrx]DELETE FROM AD_Attachment WHERE AD_Table_ID=100 AND Record_ID=1001143
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637067624485751182 => Oracle error ORA-12571 encountered
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - Oracle error ORA-12571 encountered
+===========>     (SEVERE)   PORecord.DeleteCascade: AD_Attachment (100/1001143) #-1
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: Oracle error ORA-12571 encountered [Query NQTrx]DELETE FROM AD_Table WHERE AD_Table_ID=1001143
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637067624485751182 => Oracle error ORA-12571 encountered
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - Oracle error ORA-12571 encountered
+----------->     (WARNING)  MTable.DeleteRecord: Not deleted
+09:10:27.102    (INFO)     MTable.DeleteRecord: False
+===========>     (SEVERE)   Trx.Rollback: GridDel637067624485751182 => Oracle error ORA-12571 encountered
+===========>     (SEVERE)   OracleHelper.ExecuteReader: Network Transport: TCP transport address connect failure [Query DR] SELECT t.TableName, c.ColumnName,c.AD_Reference_ID,c.IsMandatory,c.IsUpdateable,c.DefaultValue,e.Name,e.Description, c.AD_Column_ID, c.IsKey,c.IsParent, c.AD_Reference_Value_ID, vr.Code, c.FieldLength, c.ValueMin, c.ValueMax, c.IsTranslated, t.AccessLevel, c.ColumnSQL, c.IsEncrypted FROM AD_Table t INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) LEFT OUTER JOIN AD_Val_Rule vr ON (c.AD_Val_Rule_ID=vr.AD_Val_Rule_ID) INNER JOIN AD_Element e  ON (c.AD_Element_ID=e.AD_Element_ID) WHERE t.AD_Table_ID=566  AND c.IsActive='Y'
+===========>     (SEVERE)   POInfo.LoadInfo: SELECT t.TableName, c.ColumnName,c.AD_Reference_ID,c.IsMandatory,c.IsUpdateable,c.DefaultValue,e.Name,e.Description, c.AD_Column_ID, c.IsKey,c.IsParent, c.AD_Reference_Value_ID, vr.Code, c.FieldLength, c.ValueMin, c.ValueMax, c.IsTranslated, t.AccessLevel, c.ColumnSQL, c.IsEncrypted FROM AD_Table t INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) LEFT OUTER JOIN AD_Val_Rule vr ON (c.AD_Val_Rule_ID=vr.AD_Val_Rule_ID) INNER JOIN AD_Element e  ON (c.AD_Element_ID=e.AD_Element_ID) WHERE t.AD_Table_ID=566  AND c.IsActive='Y' => Network Transport: TCP transport address connect failure

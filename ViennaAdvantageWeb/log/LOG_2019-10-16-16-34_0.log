@@ -1,0 +1,61 @@
+*** 10/16/2019 4:34:48 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:34:48.344    (INFO)     Trx.Start: **** ConnSH637068404885452251System.Random
+04:34:48.344    (INFO)     Trx.Commit: **C** ConnSH637068404885452251System.Random
+04:34:50.345    (INFO)     Trx.Start: **** ConnSH637068404903071182System.Random
+04:34:50.345    (INFO)     Trx.Commit: **C** ConnSH637068404903071182System.Random
+04:34:53.345    (INFO)     Trx.Start: **** ConnSH637068404932693315System.Random
+04:34:53.345    (INFO)     Trx.Commit: **C** ConnSH637068404932693315System.Random
+04:34:55.345    (INFO)     Trx.Start: **** ConnSH637068404951424776System.Random
+04:34:55.345    (INFO)     Trx.Commit: **C** ConnSH637068404951424776System.Random
+04:35:00.350    (INFO)     Trx.Start: **** ConnSH637068405003535467System.Random
+04:35:00.350    (INFO)     Trx.Commit: **C** ConnSH637068405003535467System.Random
+04:35:00.350    (INFO)     MChangeLog.FillChangeLog: #9
+04:35:00.350    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+04:35:00.350    (INFO)     Trx.Start: **** SvrProcess
+04:35:02.352    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+04:35:02.352    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+04:35:10.351    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+04:35:10.351    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+04:35:15.351    (INFO)     Trx.Start: **** ConnSH637068405151541398System.Random
+04:35:15.351    (INFO)     Trx.Commit: **C** ConnSH637068405151541398System.Random
+04:35:26.352    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+04:43:56.435    (INFO)     MasterVersions.InsertVersionData: Master Version Insertion QueryINSERT INTO Test_Version(AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_JOURNALTYPE_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,,ValidFrom,ValidTo,IsApproved) SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_JOURNALTYPE_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,SysDate,31-Dec-9999,'N' FROM Test
+04:43:57.435    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:43:57.435    (INFO)     Trx.Commit: **C** SvrProcess
+04:43:57.435    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:45:04.454    (INFO)     MSession.Logout: 06:41:50.358

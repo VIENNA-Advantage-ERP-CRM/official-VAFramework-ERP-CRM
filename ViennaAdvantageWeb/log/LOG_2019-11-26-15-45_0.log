@@ -1,0 +1,95 @@
+*** 11/26/2019 3:46:01 PM VAdvantage Log  ***
+03:46:01.461    (INFO)     Trx.Start: **** ConnSH637103799619807153System.Random
+03:46:02.462    (INFO)     Trx.Commit: **C** ConnSH637103799619807153System.Random
+03:46:02.462    (INFO)     MChangeLog.FillChangeLog: #9
+03:46:02.462    (INFO)     CacheReset.DoIt: 
+03:46:02.462    (INFO)     Env.Reset: finalCall=False
+03:46:02.462    (INFO)     CacheMgt.Reset: #16 (7884)
+03:46:02.462    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+03:46:02.462    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+03:46:02.462    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+03:46:02.462    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+03:46:02.462    (INFO)     MChangeLog.FillChangeLog: #9
+03:46:02.462    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:46:02.462    (INFO)     Trx.Start: **** ConnSH637103799626643310System.Random
+03:46:02.462    (INFO)     Trx.Commit: **C** ConnSH637103799626643310System.Random
+03:46:02.462    (INFO)     Trx.Start: **** ConnSH637103799627403678System.Random
+03:46:02.462    (INFO)     Trx.Commit: **C** ConnSH637103799627403678System.Random
+03:46:03.463    (INFO)     Msg.InitMsg: Records=5823 - en_US
+03:46:03.463    (INFO)     Trx.Start: **** ConnSH637103799635027364System.Random
+03:46:03.463    (INFO)     Trx.Commit: **C** ConnSH637103799635027364System.Random
+03:46:03.463    (INFO)     Trx.Start: **** ConnSH637103799635742415System.Random
+03:46:03.463    (INFO)     Trx.Commit: **C** ConnSH637103799635742415System.Random
+===========>     (SEVERE)   VLookUpInfo.GetLookup_DisplayColumn: No Identifier records found: C_CONSOLIDATIONREFERENCE
+===========>     (SEVERE)   VLookUpInfo.GetLookup_DisplayColumn: No Identifier records found: VA204_RewardCardM
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT VA204_RewardCardM.VA204_RewardCardM_ID,NULL,NULL,VA204_RewardCardM.IsActive FROM VA204_RewardCardM WHERE VA204_RewardCardM.VA204_RewardCardM_ID NOT IN( SELECT VA204_RewardCardM_ID 
+  FROM C_BPartner
+  WHERE VA204_RewardCardM_ID IS NOT NULL)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT VA204_RewardCardM.VA204_RewardCardM_ID,NULL,NULL,VA204_RewardCardM.IsActive FROM VA204_RewardCardM WHERE VA204_RewardCardM.VA204_RewardCardM_ID NOT IN( SELECT VA204_RewardCardM_ID 
+  FROM C_BPartner
+  WHERE VA204_RewardCardM_ID IS NOT NULL)
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+03:46:09.469    (INFO)     Trx.Start: **** ConnSH637103799696179993System.Random
+03:46:09.469    (INFO)     Trx.Commit: **C** ConnSH637103799696179993System.Random
+03:46:09.469    (INFO)     Trx.Start: **** ConnSH637103799697009998System.Random
+03:46:09.469    (INFO)     Trx.Commit: **C** ConnSH637103799697009998System.Random
+===========>     (SEVERE)   DB_Oracle.ExecuteDatasetPaging: ORA-00918: column ambiguously defined [Query NQTrx]select * FROM (SELECT t.*, rownum AS row_num FROM (SELECT C_CONSOLIDATIONREFERENCE.C_CONSOLIDATIONREFERENCE_ID,NULL,NULL,C_CONSOLIDATIONREFERENCE.IsActive FROM C_CONSOLIDATIONREFERENCE WHERE C_CONSOLIDATIONREFERENCE.AD_Client_ID IN (0,11) ORDER BY 3) t ) WHERE row_num BETWEEN (((1 - 1) * 1000) + 1) AND ((1 * 1000))
+===========>     (SEVERE)   DB_Oracle.ExecuteDatasetPaging: ORA-00942: table or view does not exist [Query NQTrx]select * FROM (SELECT t.*, rownum AS row_num FROM (SELECT VA204_RewardCardM.VA204_RewardCardM_ID,NULL,NULL,VA204_RewardCardM.IsActive FROM VA204_RewardCardM WHERE VA204_RewardCardM.VA204_RewardCardM_ID NOT IN( SELECT VA204_RewardCardM_ID 
+  FROM C_BPartner
+  WHERE VA204_RewardCardM_ID IS NOT NULL) AND VA204_RewardCardM.AD_Client_ID IN (0,11) ORDER BY 3) t ) WHERE row_num BETWEEN (((1 - 1) * 1000) + 1) AND ((1 * 1000))
+03:46:14.461    (INFO)     Trx.Start: **** ConnSH637103799741656173System.Random
+03:46:14.461    (INFO)     Trx.Commit: **C** ConnSH637103799741656173System.Random
+03:46:14.461    (INFO)     Trx.Start: **** ConnSH637103799742526147System.Random
+03:46:14.461    (INFO)     Trx.Commit: **C** ConnSH637103799742526147System.Random
+*** 11/26/2019 5:28:11 PM VAdvantage Log ***

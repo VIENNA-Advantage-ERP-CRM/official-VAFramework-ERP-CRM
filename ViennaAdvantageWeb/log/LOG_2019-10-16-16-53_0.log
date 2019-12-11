@@ -1,0 +1,55 @@
+*** 10/16/2019 4:54:30 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:54:30.543    (INFO)     Trx.Start: **** ConnSH637068416708066549System.Random
+04:54:30.543    (INFO)     Trx.Commit: **C** ConnSH637068416708066549System.Random
+04:54:32.543    (INFO)     Trx.Start: **** ConnSH637068416726179521System.Random
+04:54:32.543    (INFO)     Trx.Commit: **C** ConnSH637068416726179521System.Random
+04:54:38.543    (INFO)     Trx.Start: **** ConnSH637068416780347907System.Random
+04:54:38.543    (INFO)     Trx.Commit: **C** ConnSH637068416780347907System.Random
+04:54:41.544    (INFO)     Trx.Start: **** ConnSH637068416812278303System.Random
+04:54:41.544    (INFO)     Trx.Commit: **C** ConnSH637068416812278303System.Random
+04:54:47.544    (INFO)     Trx.Start: **** ConnSH637068416879884281System.Random
+04:54:48.544    (INFO)     Trx.Commit: **C** ConnSH637068416879884281System.Random
+04:55:06.556    (INFO)     Trx.Start: **** ConnSH637068417062217417System.Random
+04:55:06.556    (INFO)     Trx.Commit: **C** ConnSH637068417062217417System.Random
+04:55:13.551    (INFO)     Trx.Start: **** ConnSH637068417131805897System.Random
+04:55:13.551    (INFO)     Trx.Commit: **C** ConnSH637068417131805897System.Random
+04:55:13.551    (INFO)     MChangeLog.FillChangeLog: #9
+04:55:13.551    (INFO)     ColumnSync.DoIt: C_Column_ID=1027370
+04:55:13.551    (INFO)     Trx.Start: **** SvrProcess
+04:55:16.551    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  VersionNo  NUMBER(10) DEFAULT  NULL 
+04:55:26.552    (INFO)     Trx.Start: **** ConnSH637068417265470818System.Random
+04:55:26.552    (INFO)     Trx.Commit: **C** ConnSH637068417265470818System.Random
+04:55:36.553    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+04:56:43.564    (INFO)     MasterVersions.InsertVersionData: Master Version Insertion QueryINSERT INTO Test_Version(AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet_ID,C_JOURNALTYPE_ID,C_Location_ID,C_Payment_ID,C_UOM_ID,CharacterData,Created,CreatedBy,Description,Export_ID,FileName,FormGroup,Help,IsActive,M_Locator_ID,M_Product_ID,Name,Processed,Processing,T_Amount,T_Date,T_DateTime,T_Integer,T_Number,T_Qty,Test_ID,Updated,UpdatedBy,VersionNo,ValidFrom,ValidTo,IsApproved) SELECT AD_Client_ID,AD_FilePath,AD_Org_ID,Account_Acct,BinaryData,C_BPartner_ID,C_Currency_ID,C_GenAttributeSetInstance_ID,C_GenAttributeSet

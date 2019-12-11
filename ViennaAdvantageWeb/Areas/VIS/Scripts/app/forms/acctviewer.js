@@ -804,7 +804,7 @@
         var selectDivHeight = $(window).height() - 200;
         var _data = null;
         //var _data = _data = new AcctViewerData(windowNo, AD_Client_ID, AD_Table_ID);;
-
+    
 
         function jbInit() {
             //Selection

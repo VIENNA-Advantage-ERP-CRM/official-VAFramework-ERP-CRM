@@ -1,0 +1,21 @@
+*** 10/14/2019 2:59:15 PM VAdvantage Log  ***
+02:59:15.591    (INFO)     Trx.Start: **** ConnSH637066619549766486System.Random
+02:59:15.591    (INFO)     Trx.Commit: **C** ConnSH637066619549766486System.Random
+03:01:45.145    (INFO)     Trx.Start: **** ConnSH637066621058999342System.Random
+03:01:45.145    (INFO)     Trx.Commit: **C** ConnSH637066621058999342System.Random
+03:02:10.210    (INFO)     Trx.Start: **** ConnSH637066621302040308System.Random
+03:02:10.210    (INFO)     Trx.Commit: **C** ConnSH637066621302040308System.Random
+03:02:10.210    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+03:02:12.212    (INFO)     Trx.Start: **** ConnSH637066621321375251System.Random
+03:02:12.212    (INFO)     Trx.Commit: **C** ConnSH637066621321375251System.Random
+03:02:12.212    (INFO)     ColumnSync.DoIt: C_Column_ID=331
+03:02:12.212    (INFO)     Trx.Start: **** SvrProcess
+03:02:12.212    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  T_Date  DATE DEFAULT  NULL 
+03:02:32.232    (INFO)     Trx.Start: **** ConnSH637066621522835053System.Random
+03:02:32.232    (INFO)     Trx.Commit: **C** ConnSH637066621522835053System.Random
+03:03:19.319    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:03:19.319    (INFO)     Trx.Commit: **C** SvrProcess
+03:03:21.321    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+03:03:28.328    (INFO)     Trx.Start: **** ConnSH637066622084986302System.Random
+03:03:28.328    (INFO)     Trx.Commit: **C** ConnSH637066622084986302System.Random
+03:03:28.328    (INFO)     ColumnSync.DoIt: C_Column_ID=331

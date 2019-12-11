@@ -1,0 +1,25 @@
+*** 11/13/2019 3:59:59 PM VAdvantage Log  ***
+03:59:59.595    (INFO)     Trx.Start: **** ConnSH637092575995756170System.Random
+03:59:59.595    (INFO)     Trx.Commit: **C** ConnSH637092575995756170System.Random
+03:59:59.595    (INFO)     MChangeLog.FillChangeLog: #9
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+----------->     (WARNING)  MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+03:59:59.595    (INFO)     Trx.Start: **** ConnSH637092575998511394System.Random
+03:59:59.595    (INFO)     Trx.Commit: **C** ConnSH637092575998511394System.Random
+04:00:00.000    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:00:26.026    (INFO)     MSession.Logout: 06:31:45.38
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1027307]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+04:00:47.047    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+04:00:47.047    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+04:00:47.047    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+04:00:47.047    (INFO)     Trx.Start: **** ConnSH637092576479410608System.Random
+04:00:48.048    (INFO)     Trx.Commit: **C** ConnSH637092576479410608System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/12/19','mm/dd/yy') and to_date('11/20/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/13/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+04:00:56.056    (INFO)     Trx.Start: **** ConnSH637092576567531451System.Random
+04:00:56.056    (INFO)     Trx.Commit: **C** ConnSH637092576567531451System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+----------->     (WARNING)  MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID

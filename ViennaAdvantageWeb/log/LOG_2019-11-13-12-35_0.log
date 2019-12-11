@@ -1,0 +1,54 @@
+*** 11/13/2019 12:37:29 PM VAdvantage Log  ***
+12:37:29.372    (INFO)     Trx.Start: **** ConnSH637092454495835975System.Random
+12:37:29.372    (INFO)     Trx.Commit: **C** ConnSH637092454495835975System.Random
+12:37:29.372    (INFO)     MChangeLog.FillChangeLog: #9
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+12:37:30.373    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:37:47.374    (INFO)     MSession.Logout: 06:32:10.222
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1027295]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+12:38:08.388    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:38:08.388    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:38:08.388    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:38:09.389    (INFO)     Trx.Start: **** ConnSH637092454891449595System.Random
+12:38:09.389    (INFO)     Trx.Commit: **C** ConnSH637092454891449595System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/12/19','mm/dd/yy') and to_date('11/20/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/13/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:38:14.381    (INFO)     Trx.Start: **** ConnSH637092454946551037System.Random
+12:38:14.381    (INFO)     Trx.Commit: **C** ConnSH637092454946551037System.Random
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+12:38:41.384    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+12:39:44.394    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:39:44.394    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:39:44.394    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:39:45.394    (INFO)     Trx.Start: **** ConnSH637092455854368583System.Random
+12:39:45.394    (INFO)     Trx.Commit: **C** ConnSH637092455854368583System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/12/19','mm/dd/yy') and to_date('11/20/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/13/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:39:57.395    (INFO)     Trx.Start: **** ConnSH637092455975916672System.Random
+12:39:57.395    (INFO)     Trx.Commit: **C** ConnSH637092455975916672System.Random
+12:40:07.407    (INFO)     MSession.Logout: 06:32:56.422
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+===========>     (SEVERE)   DB.ExecuteQuery:  => Connection request timed out
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - Connection request timed out
+----------->     (WARNING)  MSession.Logout: #Records--1 - AD_Session.AD_Session_ID=1027297
+01:05:15.515    (INFO)     MSession.Logout: 06:55:35.864
+----------->     (WARNING)  MTaxCategory.UpdateRecords: beforeSave - X_C_TaxCategory[1000005]
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+*** 11/13/2019 1:39:27 PM VAdvantage Log ***

@@ -1,0 +1,61 @@
+*** 11/27/2019 4:06:10 PM VAdvantage Log  ***
+04:06:10.610    (INFO)     Trx.Start: **** ConnSH637104675700754425System.Random
+04:06:10.610    (INFO)     Trx.Commit: **C** ConnSH637104675700754425System.Random
+04:06:10.610    (INFO)     MChangeLog.FillChangeLog: #9
+04:06:10.610    (INFO)     CacheReset.DoIt: 
+04:06:10.610    (INFO)     Env.Reset: finalCall=False
+04:06:10.610    (INFO)     CacheMgt.Reset: #16 (7891)
+04:06:10.610    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+04:06:10.610    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+04:06:10.610    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+04:06:10.610    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+04:06:10.610    (INFO)     MChangeLog.FillChangeLog: #9
+04:06:10.610    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+04:06:10.610    (INFO)     Trx.Start: **** ConnSH637104675706680645System.Random
+04:06:10.610    (INFO)     Trx.Commit: **C** ConnSH637104675706680645System.Random
+04:06:10.610    (INFO)     Trx.Start: **** ConnSH637104675707520739System.Random
+04:06:10.610    (INFO)     Trx.Commit: **C** ConnSH637104675707520739System.Random
+04:06:11.611    (INFO)     Msg.InitMsg: Records=5823 - en_US
+04:06:11.611    (INFO)     Trx.Start: **** ConnSH637104675714003273System.Random
+04:06:11.611    (INFO)     Trx.Commit: **C** ConnSH637104675714003273System.Random
+04:06:11.611    (INFO)     Trx.Start: **** ConnSH637104675714802359System.Random
+04:06:11.611    (INFO)     Trx.Commit: **C** ConnSH637104675714802359System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+04:06:14.614    (INFO)     Trx.Start: **** ConnSH637104675747240391System.Random
+04:06:14.614    (INFO)     Trx.Commit: **C** ConnSH637104675747240391System.Random
+04:06:14.614    (INFO)     Trx.Start: **** ConnSH637104675748150904System.Random
+04:06:14.614    (INFO)     Trx.Commit: **C** ConnSH637104675748150904System.Random
+04:06:15.615    (INFO)     Trx.Start: **** ConnSH637104675753136496System.Random
+04:06:15.615    (INFO)     Trx.Commit: **C** ConnSH637104675753136496System.Random
+04:06:15.615    (INFO)     Trx.Start: **** ConnSH637104675754414796System.Random
+04:06:15.615    (INFO)     Trx.Commit: **C** ConnSH637104675754414796System.Random
+04:06:17.617    (INFO)     Trx.Start: **** ConnSH637104675773469997System.Random
+04:06:17.617    (INFO)     Trx.Commit: **C** ConnSH637104675773469997System.Random
+04:06:20.620    (INFO)     Trx.Start: **** GridDel637104675800596673
+04:06:20.620    (INFO)     MTaxCategory.DeleteRecord: True
+04:06:20.620    (INFO)     Trx.Commit: **C** GridDel637104675800596673
+04:06:27.627    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Ver
+04:06:27.627    (INFO)     Trx.Start: **** ConnSH637104675877233169System.Random
+04:06:27.627    (INFO)     Trx.Commit: **C** ConnSH637104675877233169System.Random
+04:06:27.627    (INFO)     Trx.Start: **** ConnSH637104675878005885System.Random
+04:06:27.627    (INFO)     Trx.Commit: **C** ConnSH637104675878005885System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+04:06:28.628    (INFO)     Trx.Start: **** ConnSH637104675881179422System.Random
+04:06:28.628    (INFO)     Trx.Commit: **C** ConnSH637104675881179422System.Random
+04:06:28.628    (INFO)     Trx.Start: **** ConnSH637104675881936224System.Random
+04:06:28.628    (INFO)     Trx.Commit: **C** ConnSH637104675881936224System.Random
+04:06:31.631    (INFO)     Trx.Start: **** ConnSH637104675916282667System.Random
+04:06:31.631    (INFO)     Trx.Commit: **C** ConnSH637104675916282667System.Random
+04:07:08.780    (INFO)     MSession.Logout: 06:31:53.210

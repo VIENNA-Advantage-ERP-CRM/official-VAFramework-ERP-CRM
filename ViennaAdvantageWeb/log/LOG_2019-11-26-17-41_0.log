@@ -1,0 +1,99 @@
+*** 11/26/2019 5:41:43 PM VAdvantage Log  ***
+05:41:43.414    (INFO)     Trx.Start: **** ConnSH637103869033091496System.Random
+05:41:43.414    (INFO)     Trx.Commit: **C** ConnSH637103869033091496System.Random
+05:41:43.414    (INFO)     MChangeLog.FillChangeLog: #9
+05:41:43.414    (INFO)     CacheReset.DoIt: 
+05:41:43.414    (INFO)     Env.Reset: finalCall=False
+05:41:43.414    (INFO)     CacheMgt.Reset: #16 (7884)
+05:41:43.414    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+05:41:43.414    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+05:41:43.414    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+05:41:43.414    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+05:41:43.414    (INFO)     MChangeLog.FillChangeLog: #9
+05:41:43.414    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:41:43.414    (INFO)     Trx.Start: **** ConnSH637103869039670955System.Random
+05:41:44.414    (INFO)     Trx.Commit: **C** ConnSH637103869039670955System.Random
+05:41:44.414    (INFO)     Trx.Start: **** ConnSH637103869040510894System.Random
+05:41:44.414    (INFO)     Trx.Commit: **C** ConnSH637103869040510894System.Random
+05:41:44.414    (INFO)     Msg.InitMsg: Records=5823 - en_US
+05:41:44.414    (INFO)     Trx.Start: **** ConnSH637103869047810378System.Random
+05:41:44.414    (INFO)     Trx.Commit: **C** ConnSH637103869047810378System.Random
+05:41:44.414    (INFO)     Trx.Start: **** ConnSH637103869048510340System.Random
+05:41:44.414    (INFO)     Trx.Commit: **C** ConnSH637103869048510340System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+05:41:47.414    (INFO)     Trx.Start: **** ConnSH637103869078498144System.Random
+05:41:47.414    (INFO)     Trx.Commit: **C** ConnSH637103869078498144System.Random
+05:41:47.414    (INFO)     Trx.Start: **** ConnSH637103869079448101System.Random
+05:41:48.414    (INFO)     Trx.Commit: **C** ConnSH637103869079448101System.Random
+05:41:48.414    (INFO)     Trx.Start: **** ConnSH637103869084907737System.Random
+05:41:48.414    (INFO)     Trx.Commit: **C** ConnSH637103869084907737System.Random
+05:41:48.414    (INFO)     Trx.Start: **** ConnSH637103869086257595System.Random
+05:41:48.414    (INFO)     Trx.Commit: **C** ConnSH637103869086257595System.Random
+===========>     (SEVERE)   AccessSqlParser.GetSelectStatements: SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Ver_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT MAX(NVL(AD_Client.Name,'')  FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Ver.AD_Client_ID) AS AD_Client_ID_TXT,  (SELECT MAX(NVL(AD_Org.Name,'')  FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Ver.AD_Org_ID) AS AD_Org_ID_TXT,  (SELECT MAX(NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'')  FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Ver.C_Tax_ID) AS C_Tax_ID_TXT,  (SELECT MAX(AD_User.Name  FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Ver.CreatedBy) AS CreatedBy_TXT,  (SELECT MAX(AD_User.Name  FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Ver.UpdatedBy) AS UpdatedBy_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Location) AS VATAX_Location_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Preference1) AS VATAX_Preference1_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Preference2) AS VATAX_Preference2_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Preference3) AS VATAX_Preference3_TXT FROM C_TaxCategory_Ver => Index and length must refer to a location within the string.
+Parameter name: length
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+05:43:06.436    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+05:43:07.437    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+05:43:07.437    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+05:43:07.437    (INFO)     Trx.Start: **** ConnSH637103869876509948System.Random
+05:43:07.437    (INFO)     Trx.Commit: **C** ConnSH637103869876509948System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/25/19','mm/dd/yy') and to_date('12/03/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/26/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+05:43:15.431    (INFO)     Trx.Start: **** ConnSH637103869956551314System.Random
+05:43:15.431    (INFO)     Trx.Commit: **C** ConnSH637103869956551314System.Random
+05:43:15.431    (INFO)     CacheReset.DoIt: 
+05:43:15.431    (INFO)     Env.Reset: finalCall=False
+05:43:15.431    (INFO)     CacheMgt.Reset: #18 (7904)
+05:43:15.431    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+05:43:15.431    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+05:43:15.431    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+05:43:15.431    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+05:43:15.431    (INFO)     MChangeLog.FillChangeLog: #9
+05:43:16.431    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+05:43:16.431    (INFO)     Trx.Start: **** ConnSH637103869960874808System.Random
+05:43:16.431    (INFO)     Trx.Commit: **C** ConnSH637103869960874808System.Random
+05:43:16.431    (INFO)     Trx.Start: **** ConnSH637103869961644755System.Random
+05:43:16.431    (INFO)     Trx.Commit: **C** ConnSH637103869961644755System.Random
+05:43:16.431    (INFO)     Msg.InitMsg: Records=5823 - en_US
+05:43:16.431    (INFO)     Trx.Start: **** ConnSH637103869968751478System.Random
+05:43:16.431    (INFO)     Trx.Commit: **C** ConnSH637103869968751478System.Random
+05:43:16.431    (INFO)     Trx.Start: **** ConnSH637103869969688979System.Random
+05:43:17.431    (INFO)     Trx.Commit: **C** ConnSH637103869969688979System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+05:43:21.432    (INFO)     Trx.Start: **** ConnSH637103870016370879System.Random
+05:43:21.432    (INFO)     Trx.Commit: **C** ConnSH637103870016370879System.Random
+05:43:21.432    (INFO)     Trx.Start: **** ConnSH637103870017180832System.Random
+05:43:21.432    (INFO)     Trx.Commit: **C** ConnSH637103870017180832System.Random
+05:43:22.432    (INFO)     Trx.Start: **** ConnSH637103870022700472System.Random
+05:43:22.432    (INFO)     Trx.Commit: **C** ConnSH637103870022700472System.Random
+05:43:22.432    (INFO)     Trx.Start: **** ConnSH637103870023690415System.Random
+05:43:22.432    (INFO)     Trx.Commit: **C** ConnSH637103870023690415System.Random
+05:43:49.434    (INFO)     MSession.Logout: 06:32:01.230
+===========>     (SEVERE)   AccessSqlParser.GetSelectStatements: SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Ver_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT MAX(NVL(AD_Client.Name,'')  FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Ver.AD_Client_ID) AS AD_Client_ID_TXT,  (SELECT MAX(NVL(AD_Org.Name,'')  FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Ver.AD_Org_ID) AS AD_Org_ID_TXT,  (SELECT MAX(NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'')  FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Ver.C_Tax_ID) AS C_Tax_ID_TXT,  (SELECT MAX(AD_User.Name  FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Ver.CreatedBy) AS CreatedBy_TXT,  (SELECT MAX(AD_User.Name  FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Ver.UpdatedBy) AS UpdatedBy_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Location) AS VATAX_Location_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Preference1) AS VATAX_Preference1_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Preference2) AS VATAX_Preference2_TXT,  (SELECT MAX(AD_Ref_List.Name  FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Ver.VATAX_Preference3) AS VATAX_Preference3_TXT FROM C_TaxCategory_Ver => Index and length must refer to a location within the string.
+Parameter name: length

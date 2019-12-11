@@ -1,0 +1,71 @@
+*** 11/4/2019 11:47:41 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:47:41.474    (INFO)     Trx.Start: **** ConnSH637084648618763497System.Random
+11:47:41.474    (INFO)     Trx.Commit: **C** ConnSH637084648618763497System.Random
+11:47:45.474    (INFO)     Trx.Start: **** ConnSH637084648655756597System.Random
+11:47:45.474    (INFO)     Trx.Commit: **C** ConnSH637084648655756597System.Random
+11:48:07.487    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:48:07.487    (INFO)     Trx.Start: **** ConnSH637084648877238468System.Random
+11:48:07.487    (INFO)     Trx.Commit: **C** ConnSH637084648877238468System.Random
+11:48:07.487    (INFO)     MChangeLog.FillChangeLog: #9
+11:48:07.487    (INFO)     Trx.Start: **** ConnSH637084648879478374System.Random
+11:48:08.488    (INFO)     Trx.Commit: **C** ConnSH637084648879478374System.Random
+11:49:46.494    (INFO)     Trx.Start: **** ConnSH637084649860999391System.Random
+11:49:46.494    (INFO)     Trx.Commit: **C** ConnSH637084649860999391System.Random
+11:49:46.494    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:49:46.494    (INFO)     Trx.Start: **** ConnSH637084649865289148System.Random
+11:49:46.494    (INFO)     Trx.Commit: **C** ConnSH637084649865289148System.Random
+11:49:46.494    (INFO)     Trx.Start: **** ConnSH637084649865999194System.Random
+11:49:46.494    (INFO)     Trx.Commit: **C** ConnSH637084649865999194System.Random
+11:49:46.494    (INFO)     Trx.Start: **** ConnSH637084649868139022System.Random
+11:49:46.494    (INFO)     Trx.Commit: **C** ConnSH637084649868139022System.Random
+11:49:46.494    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:49:46.494    (INFO)     Trx.Start: **** ConnSH637084649869498966System.Random
+11:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637084649869498966System.Random
+11:49:47.494    (INFO)     Trx.Start: **** ConnSH637084649870198936System.Random
+11:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637084649870198936System.Random
+11:49:47.494    (INFO)     Trx.Start: **** ConnSH637084649873335205System.Random
+11:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637084649873335205System.Random
+11:49:47.494    (INFO)     Trx.Start: **** ConnSH637084649874025674System.Random
+11:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637084649874025674System.Random
+11:49:47.494    (INFO)     MWFActivity.Run: MWFActivity[1292460,Node=Start,State=ON,AD_User_ID=101,11/4/2019 6:19:46 AM]
+11:49:47.494    (INFO)     Trx.Start: **** ConnSH637084649876564964System.Random
+11:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637084649876564964System.Random
+11:49:47.494    (INFO)     Trx.Start: **** ConnSH637084649877724236System.Random
+11:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637084649877724236System.Random
+11:49:47.494    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098021, AD_Workflow_ID=1000040, WFState=OR]
+11:49:47.494    (INFO)     MWFActivity.PerformWork: MWFNode[1000166-Start,Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+11:49:47.494    (INFO)     Trx.Start: **** ConnSH637084649879195714System.Random
+11:49:47.494    (INFO)     Trx.Commit: **C** ConnSH637084649879195714System.Random
+11:49:48.494    (INFO)     Trx.Start: **** ConnSH637084649880354707System.Random
+11:49:48.494    (INFO)     Trx.Commit: **C** ConnSH637084649880354707System.Random
+11:49:48.494    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098021, AD_Workflow_ID=1000040, WFState=OR]
+11:49:48.494    (INFO)     Trx.Start: **** ConnSH637084649881579020System.Random
+11:49:48.494    (INFO)     Trx.Commit: **C** ConnSH637084649881579020System.Random
+11:49:48.494    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:49:48.494    (INFO)     Trx.Start: **** ConnSH637084649882738196System.Random
+11:49:48.494    (INFO)     Trx.Commit: **C** ConnSH637084649882738196System.Random
+11:49:48.494    (INFO)     Trx.Start: **** ConnSH637084649883519467System.Random
+11:49:48.494    (INFO)     Trx.Commit: **C** ConnSH637084649883519467System.Random
+11:49:48.494    (INFO)     Trx.Start: **** ConnSH637084649887218126System.Random
+11:49:48.494    (INFO)     Trx.Commit: **C** ConnSH637084649887218126System.Random
+11:49:48.494    (INFO)     Trx.Start: **** ConnSH637084649887908279System.Random
+11:49:48.494    (INFO)     Trx.Commit: **C** ConnSH637084649887908279System.Random
+11:49:49.494    (INFO)     MWFActivity.Run: MWFActivity[1292461,Node=Approval,State=ON,AD_User_ID=101,11/4/2019 6:19:48 AM]
+11:49:49.494    (INFO)     Trx.Start: **** ConnSH637084649890603855System.Random
+11:49:49.494    (INFO)     Trx.Commit: **C** ConnSH637084649890603855System.Random
+11:49:49.494    (INFO)     Trx.Start: **** ConnSH637084649891606665System.Random
+11:49:49.494    (INFO)     Trx.Commit: **C** ConnSH637084649891606665System.Random
+11:49:49.494    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098021, AD_Workflow_ID=1000040, WFState=OR]
+11:49:49.494    (INFO)     MWFActivity.PerformWork: MWFNode[1000167-Approval,Action=UserChoice:AD_Column_ID=1027736] [VAdvantage.DataBase.Trx]
+11:49:49.494    (INFO)     Trx.Start: **** ConnSH637084649893390840System.Random
+11:49:49.494    (INFO)     Trx.Commit: **C** ConnSH637084649893390840System.Random
+11:49:49.494    (INFO)     Trx.Start: **** ConnSH637084649894393779System.Random
+11:49:49.494    (INFO)     Trx.Commit: **C** ConnSH637084649894393779System.Random
+11:49:49.494    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098021, AD_Workflow_ID=1000040, WFState=OR]
+11:49:49.494    (INFO)     Trx.Start: **** ConnSH637084649895396458System.Random
+11:49:49.494    (INFO)     Trx.Commit: **C** ConnSH637084649895396458System.Random
+11:51:09.519    (INFO)     MSession.Logout: 06:34:54.274

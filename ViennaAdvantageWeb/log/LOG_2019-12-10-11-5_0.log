@@ -1,0 +1,367 @@
+*** 12/10/2019 11:06:16 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:06:16.616    (INFO)     Trx.Start: **** ConnSH637115727762821429System.Random
+11:06:16.616    (INFO)     Trx.Commit: **C** ConnSH637115727762821429System.Random
+11:06:17.617    (INFO)     Trx.Start: **** ConnSH637115727776487025System.Random
+11:06:17.617    (INFO)     Trx.Commit: **C** ConnSH637115727776487025System.Random
+11:06:19.619    (INFO)     Trx.Start: **** ConnSH637115727793521975System.Random
+11:06:19.619    (INFO)     Trx.Commit: **C** ConnSH637115727793521975System.Random
+11:06:33.633    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:33.633    (INFO)     Trx.Start: **** ConnSH637115727933623378System.Random
+11:06:33.633    (INFO)     Trx.Commit: **C** ConnSH637115727933623378System.Random
+11:06:33.633    (INFO)     MChangeLog.FillChangeLog: #9
+11:06:33.633    (INFO)     Trx.Start: **** ConnSH637115727935106471System.Random
+11:06:33.633    (INFO)     Trx.Commit: **C** ConnSH637115727935106471System.Random
+11:06:33.633    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:33.633    (INFO)     Trx.Start: **** ConnSH637115727939415766System.Random
+11:06:34.634    (INFO)     Trx.Commit: **C** ConnSH637115727939415766System.Random
+11:06:34.634    (INFO)     Trx.Start: **** ConnSH637115727940726782System.Random
+11:06:34.634    (INFO)     Trx.Commit: **C** ConnSH637115727940726782System.Random
+11:06:34.634    (INFO)     Trx.Start: **** ConnSH637115727943803123System.Random
+11:06:34.634    (INFO)     Trx.Commit: **C** ConnSH637115727943803123System.Random
+11:06:34.634    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:34.634    (INFO)     Trx.Start: **** ConnSH637115727945690081System.Random
+11:06:34.634    (INFO)     Trx.Commit: **C** ConnSH637115727945690081System.Random
+11:06:34.634    (INFO)     Trx.Start: **** ConnSH637115727946599890System.Random
+11:06:34.634    (INFO)     Trx.Commit: **C** ConnSH637115727946599890System.Random
+11:06:35.635    (INFO)     Trx.Start: **** ConnSH637115727950634349System.Random
+11:06:35.635    (INFO)     Trx.Commit: **C** ConnSH637115727950634349System.Random
+11:06:35.635    (INFO)     Trx.Start: **** ConnSH637115727951550961System.Random
+11:06:35.635    (INFO)     Trx.Commit: **C** ConnSH637115727951550961System.Random
+11:06:35.635    (INFO)     MWFActivity.Run: MWFActivity[1293863,Node=Start,State=ON,AD_User_ID=101,12/10/2019 5:36:34 AM]
+11:06:35.635    (INFO)     Trx.Start: **** ConnSH637115727954130984System.Random
+11:06:35.635    (INFO)     Trx.Commit: **C** ConnSH637115727954130984System.Random
+11:06:35.635    (INFO)     Trx.Start: **** ConnSH637115727955256572System.Random
+11:06:35.635    (INFO)     Trx.Commit: **C** ConnSH637115727955256572System.Random
+11:06:35.635    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OR]
+11:06:35.635    (INFO)     MWFActivity.PerformWork: MWFNode[1000236-Start,Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+11:06:35.635    (INFO)     Trx.Start: **** ConnSH637115727957339432System.Random
+11:06:35.635    (INFO)     Trx.Commit: **C** ConnSH637115727957339432System.Random
+11:06:35.635    (INFO)     Trx.Start: **** ConnSH637115727958429778System.Random
+11:06:35.635    (INFO)     Trx.Commit: **C** ConnSH637115727958429778System.Random
+11:06:35.635    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OR]
+11:06:35.635    (INFO)     Trx.Start: **** ConnSH637115727959761910System.Random
+11:06:36.636    (INFO)     Trx.Commit: **C** ConnSH637115727959761910System.Random
+11:06:36.636    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:36.636    (INFO)     Trx.Start: **** ConnSH637115727961075071System.Random
+11:06:36.636    (INFO)     Trx.Commit: **C** ConnSH637115727961075071System.Random
+11:06:36.636    (INFO)     Trx.Start: **** ConnSH637115727961957265System.Random
+11:06:36.636    (INFO)     Trx.Commit: **C** ConnSH637115727961957265System.Random
+11:06:36.636    (INFO)     Trx.Start: **** ConnSH637115727964878967System.Random
+11:06:36.636    (INFO)     Trx.Commit: **C** ConnSH637115727964878967System.Random
+11:06:36.636    (INFO)     Trx.Start: **** ConnSH637115727965761869System.Random
+11:06:36.636    (INFO)     Trx.Commit: **C** ConnSH637115727965761869System.Random
+11:06:36.636    (INFO)     MWFActivity.Run: MWFActivity[1293864,Node=Approve ,State=ON,AD_User_ID=101,12/10/2019 5:36:36 AM]
+11:06:36.636    (INFO)     Trx.Start: **** ConnSH637115727968532461System.Random
+11:06:36.636    (INFO)     Trx.Commit: **C** ConnSH637115727968532461System.Random
+11:06:36.636    (INFO)     Trx.Start: **** ConnSH637115727969630545System.Random
+11:06:37.637    (INFO)     Trx.Commit: **C** ConnSH637115727969630545System.Random
+11:06:37.637    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OR]
+11:06:37.637    (INFO)     MWFActivity.PerformWork: MWFNode[1000237-Approve ,Action=UserChoice:AD_Column_ID=1030851] [VAdvantage.DataBase.Trx]
+11:06:37.637    (INFO)     Trx.Start: **** WF_1575956197104
+11:06:37.637    (INFO)     Trx.Start: **** ConnSH637115727971491642System.Random
+11:06:37.637    (INFO)     Trx.Commit: **C** ConnSH637115727971491642System.Random
+11:06:37.637    (INFO)     Trx.Commit: **C** WF_1575956197104
+11:06:37.637    (INFO)     Trx.Start: **** ConnSH637115727972620769System.Random
+11:06:37.637    (INFO)     Trx.Commit: **C** ConnSH637115727972620769System.Random
+11:06:37.637    (INFO)     Trx.Start: **** ConnSH637115727973932026System.Random
+11:06:37.637    (INFO)     Trx.Commit: **C** ConnSH637115727973932026System.Random
+11:06:37.637    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OR]
+11:06:37.637    (INFO)     Trx.Start: **** ConnSH637115727975048265System.Random
+11:06:37.637    (INFO)     Trx.Commit: **C** ConnSH637115727975048265System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AD_WF_Activity AD_WF_Activity
+                            JOIN AD_Window AD_Window ON AD_WF_Activity.Ad_Window_Id = AD_Window.Ad_Window_Id
+                            JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
+                           
+===========>     (SEVERE)   WFActivityModel.GetActivities:  SELECT a.*
+                            FROM AD_WF_Activity a
+                            WHERE a.Processed  ='N'
+                            AND a.WFState      ='OS'
+                            AND a.AD_Client_ID =11 
+                            AND ( (a.AD_User_ID=101 
+                            OR a.AD_User_ID   IN
+                              (SELECT AD_User_ID
+                              FROM AD_User_Substitute
+                              WHERE IsActive   ='Y'
+                              AND Substitute_ID=101 
+                              AND (validfrom  <=sysdate)
+                              AND (sysdate    <=validto )
+                              ))
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND COALESCE(r.AD_User_ID,0)=0
+                              AND (a.AD_User_ID           =101 
+                              OR a.AD_User_ID            IS NULL
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              )
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND (r.AD_User_ID           =101 
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              )
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              INNER JOIN AD_User_Roles ur
+                              ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND (ur.AD_User_ID          =101 
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              AND r.responsibletype !='H'
+                              ) )   ORDER BY Priority DESC, Created DESC
+11:06:45.645    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:45.645    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:46.646    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:46.646    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:06:46.646    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:46.646    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:06:46.646    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:46.646    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:06:46.646    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:46.646    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:06:53.653    (INFO)     Trx.Start: **** ConnSH637115728132040010System.Random
+11:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637115728132040010System.Random
+11:06:53.653    (INFO)     Trx.Start: **** ConnSH637115728133200831System.Random
+11:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637115728133200831System.Random
+11:06:53.653    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OS]
+11:06:53.653    (INFO)     Trx.Start: **** ConnSH637115728134341519System.Random
+11:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637115728134341519System.Random
+11:06:53.653    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:53.653    (INFO)     Trx.Start: **** ConnSH637115728135632539System.Random
+11:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637115728135632539System.Random
+11:06:53.653    (INFO)     Trx.Start: **** ConnSH637115728136739882System.Random
+11:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637115728136739882System.Random
+11:06:53.653    (INFO)     Trx.Start: **** ConnSH637115728138057672System.Random
+11:06:53.653    (INFO)     Trx.Commit: **C** ConnSH637115728138057672System.Random
+11:06:53.653    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OR]
+11:06:53.653    (INFO)     Trx.Start: **** ConnSH637115728139417086System.Random
+11:06:54.654    (INFO)     Trx.Commit: **C** ConnSH637115728139417086System.Random
+11:06:54.654    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:54.654    (INFO)     Trx.Start: **** ConnSH637115728140667871System.Random
+11:06:54.654    (INFO)     Trx.Commit: **C** ConnSH637115728140667871System.Random
+11:06:54.654    (INFO)     Trx.Start: **** ConnSH637115728141631325System.Random
+11:06:54.654    (INFO)     Trx.Commit: **C** ConnSH637115728141631325System.Random
+11:06:54.654    (INFO)     Trx.Start: **** ConnSH637115728144657687System.Random
+11:06:54.654    (INFO)     Trx.Commit: **C** ConnSH637115728144657687System.Random
+11:06:54.654    (INFO)     Trx.Start: **** ConnSH637115728145528570System.Random
+11:06:54.654    (INFO)     Trx.Commit: **C** ConnSH637115728145528570System.Random
+11:06:54.654    (INFO)     MWFActivity.Run: MWFActivity[1293865,Node=Stop,State=ON,AD_User_ID=101,12/10/2019 5:36:54 AM]
+11:06:54.654    (INFO)     Trx.Start: **** ConnSH637115728147993669System.Random
+11:06:54.654    (INFO)     Trx.Commit: **C** ConnSH637115728147993669System.Random
+11:06:54.654    (INFO)     Trx.Start: **** ConnSH637115728149105641System.Random
+11:06:54.654    (INFO)     Trx.Commit: **C** ConnSH637115728149105641System.Random
+11:06:55.655    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OR]
+11:06:55.655    (INFO)     MWFActivity.PerformWork: MWFNode[1000238-Stop,Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+11:06:55.655    (INFO)     Trx.Start: **** ConnSH637115728150405534System.Random
+11:06:55.655    (INFO)     Trx.Commit: **C** ConnSH637115728150405534System.Random
+11:06:55.655    (INFO)     Trx.Start: **** ConnSH637115728151591801System.Random
+11:06:55.655    (INFO)     Trx.Commit: **C** ConnSH637115728151591801System.Random
+11:06:55.655    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098502, AD_Workflow_ID=1000064, WFState=OR]
+11:06:55.655    (INFO)     Trx.Start: **** ConnSH637115728152996097System.Random
+11:06:55.655    (INFO)     Trx.Commit: **C** ConnSH637115728152996097System.Random
+11:06:55.655    (INFO)     Trx.Start: **** ConnSH637115728154096229System.Random
+11:06:55.655    (INFO)     Trx.Commit: **C** ConnSH637115728154096229System.Random
+11:06:55.655    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AD_WF_Activity AD_WF_Activity
+                            JOIN AD_Window AD_Window ON AD_WF_Activity.Ad_Window_Id = AD_Window.Ad_Window_Id
+                            JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
+                           
+===========>     (SEVERE)   WFActivityModel.GetActivities:  SELECT a.*
+                            FROM AD_WF_Activity a
+                            WHERE a.Processed  ='N'
+                            AND a.WFState      ='OS'
+                            AND a.AD_Client_ID =11 
+                            AND ( (a.AD_User_ID=101 
+                            OR a.AD_User_ID   IN
+                              (SELECT AD_User_ID
+                              FROM AD_User_Substitute
+                              WHERE IsActive   ='Y'
+                              AND Substitute_ID=101 
+                              AND (validfrom  <=sysdate)
+                              AND (sysdate    <=validto )
+                              ))
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND COALESCE(r.AD_User_ID,0)=0
+                              AND (a.AD_User_ID           =101 
+                              OR a.AD_User_ID            IS NULL
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              )
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND (r.AD_User_ID           =101 
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              )
+                            OR EXISTS
+                              (SELECT *
+                              FROM AD_WF_Responsible r
+                              INNER JOIN AD_User_Roles ur
+                              ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND (ur.AD_User_ID          =101 
+                              OR a.AD_User_ID            IN
+                                (SELECT AD_User_ID
+                                FROM AD_User_Substitute
+                                WHERE IsActive   ='Y'
+                                AND Substitute_ID=101 
+                                AND (validfrom  <=sysdate)
+                                AND (sysdate    <=validto )
+                                ))
+                              AND r.responsibletype !='H'
+                              ) )   ORDER BY Priority DESC, Created DESC
+11:06:55.655    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+11:06:55.655    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:55.655    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:06:55.655    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:55.655    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:06:55.655    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:55.655    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:06:55.655    (INFO)     MTable.GetAssembly: Could not load file or assembly 'VADMSSvc' or one of its dependencies. The system cannot find the file specified.
+11:06:55.655    (INFO)     MTable.GetPO: Using GenericPO for VADMS_MetaData
+11:07:02.720    (INFO)     Trx.Start: **** ConnSH637115728220709468System.Random
+11:07:02.720    (INFO)     Trx.Commit: **C** ConnSH637115728220709468System.Random
+11:07:13.713    (INFO)     Trx.Start: **** ConnSH637115728331020458System.Random
+11:07:13.713    (INFO)     Trx.Commit: **C** ConnSH637115728331020458System.Random
+11:07:13.713    (INFO)     MasterVersionSchedules.DoIt: Processing for C_TaxCategory_Ver
+11:07:13.713    (INFO)     MasterVersionSchedules.DoIt: Processing for C_BPartner_Ver
+11:07:13.713    (INFO)     MasterVersionSchedules.DoIt: Processing for C_BPartner_Ver ==>> Found unprocessed records 2
+11:07:13.713    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for C_BPartner_Ver :: 
+11:07:13.713    (INFO)     MTable.GetPO: Using GenericPO for C_BPartner_Ver
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - VAHRUAE_LegalAgeToWork
+===========>     (SEVERE)   MBPartner.UpdateRecords: Column not found - VAHRUAE_LegalAgeToWork
+11:07:13.713    (INFO)     Trx.Start: **** ConnSH637115728338843710System.Random
+11:07:13.713    (INFO)     Trx.Commit: **C** ConnSH637115728338843710System.Random
+----------->     (WARNING)  MBPartner.UpdateRecords: DocumentNo updated: 1000197 -> 1000200
+11:07:15.715    (INFO)     MTable.GetPO: Using GenericPO for C_BPartner_Ver
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - VAHRUAE_LegalAgeToWork
+===========>     (SEVERE)   MBPartner.UpdateRecords: Column not found - VAHRUAE_LegalAgeToWork
+11:07:15.715    (INFO)     Trx.Start: **** ConnSH637115728354300131System.Random
+11:07:15.715    (INFO)     Trx.Commit: **C** ConnSH637115728354300131System.Random
+----------->     (WARNING)  MBPartner.UpdateRecords: DocumentNo updated: 1000170 -> 1000175
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for C_PaymentTerm_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for M_Brand_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for M_Brand_Ver ==>> Found unprocessed records 1
+11:07:16.716    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for M_Brand_Ver :: 
+11:07:16.716    (INFO)     MTable.GetPO: Using GenericPO for M_Brand_Ver
+11:07:16.716    (INFO)     MTable.GetPO: Using GenericPO for M_Brand
+11:07:16.716    (INFO)     Trx.Start: **** ConnSH637115728367024484System.Random
+11:07:16.716    (INFO)     Trx.Commit: **C** ConnSH637115728367024484System.Random
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for M_AttributeSet_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for Test_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for M_Storage_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for C_Tax_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for C_Period_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for AD_User_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for C_Bank_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for M_DiscountSchema_Ver
+11:07:16.716    (INFO)     MasterVersionSchedules.DoIt: Processing for M_DiscountSchema_Ver ==>> Found unprocessed records 1
+11:07:16.716    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for M_DiscountSchema_Ver :: 
+11:07:16.716    (INFO)     MTable.GetPO: Using GenericPO for M_DiscountSchema_Ver
+11:07:17.717    (INFO)     Trx.Start: **** ConnSH637115728370934123System.Random
+11:07:17.717    (INFO)     Trx.Commit: **C** ConnSH637115728370934123System.Random
+11:07:17.717    (INFO)     CacheMgt.Reset: M_DiscountSchema: #1 (0)
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for M_DiscountSchemaBreak_Ver
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for M_RMACategory_Ver
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for M_RMACategory_Ver ==>> Found unprocessed records 1
+11:07:17.717    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for M_RMACategory_Ver :: 
+11:07:17.717    (INFO)     MTable.GetPO: Using GenericPO for M_RMACategory_Ver
+11:07:17.717    (INFO)     MTable.GetPO: Using GenericPO for M_RMACategory
+11:07:17.717    (INFO)     Trx.Start: **** ConnSH637115728373378530System.Random
+11:07:17.717    (INFO)     Trx.Commit: **C** ConnSH637115728373378530System.Random
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for M_ProductPrice_Ver
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for M_ProductPrice_Ver ==>> Found unprocessed records 1
+11:07:17.717    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for M_ProductPrice_Ver :: 
+11:07:17.717    (INFO)     MTable.GetPO: Using GenericPO for M_ProductPrice_Ver
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - C_Currency_ID
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - IsTaxIncluded
+----------->     (WARNING)  MProductPrice.UpdateRecords: Virtual Column - IsTaxIncluded
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for C_BPartner_Location_Ver
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for M_Product_Ver
+11:07:17.717    (INFO)     MasterVersionSchedules.DoIt: Processing for M_Product_Ver ==>> Found unprocessed records 1
+11:07:17.717    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for M_Product_Ver :: 
+11:07:17.717    (INFO)     MTable.GetPO: Using GenericPO for M_Product_Ver
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - C_UOMGroup_ID
+===========>     (SEVERE)   MProduct.UpdateRecords: Column not found - C_UOMGroup_ID
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - DownloadURL
+===========>     (SEVERE)   MProduct.UpdateRecords: Column not found - DownloadURL
+----------->     (WARNING)  MProduct.UpdateRecords: Column not updateable - IsVerified - NewValue=False - OldValue=False
+11:07:18.718    (INFO)     Trx.Start: **** ConnSH637115728381050149System.Random
+11:07:18.718    (INFO)     Trx.Commit: **C** ConnSH637115728381050149System.Random
+11:07:18.718    (INFO)     CacheMgt.Reset: M_Product: #1 (0)
+11:07:18.718    (INFO)     MasterVersionSchedules.DoIt: Processing for C_Payment_Ver
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00942: table or view does not exist [Query D] =>SELECT * FROM C_Payment_Ver WHERE IsVersionApproved = 'Y' AND ProcessedVersion = 'N' AND VersionValidFrom <= SYSDATE ORDER BY VersionValidFrom
+11:07:18.718    (INFO)     MasterVersionSchedules.DoIt: Processing for GL_Category_Ver
+11:07:18.718    (INFO)     MasterVersionSchedules.DoIt: Processing for GL_Category_Ver ==>> Found unprocessed records 2
+11:07:18.718    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for GL_Category_Ver :: 
+11:07:18.718    (INFO)     MTable.GetPO: Using GenericPO for GL_Category_Ver
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - DocBaseType
+===========>     (SEVERE)   MGLCategory.UpdateRecords: Column not found - DocBaseType
+11:07:19.719    (INFO)     Trx.Start: **** ConnSH637115728390679981System.Random
+11:07:19.719    (INFO)     Trx.Commit: **C** ConnSH637115728390679981System.Random
+11:07:19.719    (INFO)     CacheMgt.Reset: GL_Category: #1 (0)
+11:07:19.719    (INFO)     MTable.GetPO: Using GenericPO for GL_Category_Ver
+----------->     (WARNING)  GenericPO.UpdateRecords: Column not found - DocBaseType
+===========>     (SEVERE)   MGLCategory.UpdateRecords: Column not found - DocBaseType
+11:07:19.719    (INFO)     Trx.Start: **** ConnSH637115728392353642System.Random
+11:07:19.719    (INFO)     Trx.Commit: **C** ConnSH637115728392353642System.Random
+11:07:19.719    (INFO)     CacheMgt.Reset: GL_Category: #1 (0)
+11:07:19.719    (INFO)     MasterVersionSchedules.DoIt: Processing for M_Attribute_Ver
+11:07:19.719    (INFO)     MasterVersionSchedules.DoIt: Processing for M_PriceList_Ver
+11:07:19.719    (INFO)     MasterVersionSchedules.DoIt: Processing for M_PriceList_Ver ==>> Found unprocessed records 1
+11:07:19.719    (INFO)     MasterVersionSchedules.UpdateRecords: Processing for M_PriceList_Ver :: 
+11:07:19.719    (INFO)     MTable.GetPO: Using GenericPO for M_PriceList_Ver
+11:07:19.719    (INFO)     CacheMgt.Reset: M_PriceList: #1 (0)

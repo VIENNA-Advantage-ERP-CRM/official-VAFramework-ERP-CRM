@@ -1,0 +1,77 @@
+*** 10/30/2019 10:00:13 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:00:13.013    (INFO)     Trx.Start: **** ConnSH637080264131611637System.Random
+10:00:13.013    (INFO)     Trx.Commit: **C** ConnSH637080264131611637System.Random
+10:00:16.016    (INFO)     Trx.Start: **** ConnSH637080264160447528System.Random
+10:00:16.016    (INFO)     Trx.Commit: **C** ConnSH637080264160447528System.Random
+10:00:23.023    (INFO)     Trx.Start: **** ConnSH637080264237933656System.Random
+10:00:23.023    (INFO)     Trx.Commit: **C** ConnSH637080264237933656System.Random
+10:00:26.026    (INFO)     Trx.Start: **** ConnSH637080264261351446System.Random
+10:00:26.026    (INFO)     Trx.Commit: **C** ConnSH637080264261351446System.Random
+10:00:30.030    (INFO)     Trx.Start: **** ConnSH637080264304505399System.Random
+10:00:30.030    (INFO)     Trx.Commit: **C** ConnSH637080264304505399System.Random
+10:00:30.030    (INFO)     MChangeLog.FillChangeLog: #9
+10:00:31.031    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+10:00:31.031    (INFO)     Trx.Start: **** SvrProcess
+10:00:31.031    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+10:00:31.031    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+10:00:39.039    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+10:00:39.039    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+10:00:39.039    (INFO)     Trx.Start: **** ConnSH637080264397255768System.Random
+10:00:39.039    (INFO)     Trx.Commit: **C** ConnSH637080264397255768System.Random
+10:00:40.040    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   MasterVersions.StartProcess: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+10:03:19.319    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+10:03:19.319    (INFO)     Trx.Commit: **C** SvrProcess
+10:03:19.319    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+10:03:31.331    (INFO)     Trx.Start: **** ConnSH637080266119837927System.Random
+10:03:32.332    (INFO)     Trx.Commit: **C** ConnSH637080266119837927System.Random
+10:03:32.332    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+10:03:32.332    (INFO)     Trx.Start: **** SvrProcess
+10:03:32.332    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+10:03:32.332    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+10:03:39.339    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+10:03:39.339    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+10:03:39.339    (INFO)     Trx.Start: **** ConnSH637080266198517947System.Random
+10:03:39.339    (INFO)     Trx.Commit: **C** ConnSH637080266198517947System.Random
+10:03:40.340    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   MasterVersions.StartProcess: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index

@@ -1,0 +1,63 @@
+*** 10/11/2019 5:59:16 PM VAdvantage Log  ***
+05:59:16.591    (INFO)     MSession.Logout: 06:31:33.508
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+06:00:06.060    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+06:00:06.060    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+06:00:06.060    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+06:00:06.060    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+06:00:06.060    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+06:00:07.070    (INFO)     Trx.Start: **** ConnSH637064136071679802System.Random
+06:00:07.070    (INFO)     Trx.Commit: **C** ConnSH637064136071679802System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/10/19','mm/dd/yy') and to_date('10/18/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/11/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:00:15.015    (INFO)     Trx.Start: **** ConnSH637064136155230860System.Random
+06:00:15.015    (INFO)     Trx.Commit: **C** ConnSH637064136155230860System.Random
+06:00:17.017    (INFO)     Trx.Start: **** ConnSH637064136175090115System.Random
+06:00:17.017    (INFO)     Trx.Commit: **C** ConnSH637064136175090115System.Random
+06:00:22.022    (INFO)     Trx.Start: **** ConnSH637064136225722564System.Random
+06:00:22.022    (INFO)     Trx.Commit: **C** ConnSH637064136225722564System.Random
+06:00:28.028    (INFO)     Trx.Start: **** ConnSH637064136280370743System.Random
+06:00:28.028    (INFO)     Trx.Commit: **C** ConnSH637064136280370743System.Random
+06:00:41.041    (INFO)     MChangeLog.FillChangeLog: #9
+06:00:41.041    (INFO)     Trx.Start: **** ConnSH637064136417122587System.Random
+06:00:41.041    (INFO)     Trx.Commit: **C** ConnSH637064136417122587System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT AD_Column_ID_ID FROM AD_Column_ID WHERE AD_Table_ID = 135
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT AD_Column_ID_ID FROM AD_Column_ID WHERE AD_Table_ID = 135
+===========>     (SEVERE)   PO.CreateVersionInfo: SELECT AD_Column_ID_ID FROM AD_Column_ID WHERE AD_Table_ID = 135 => ORA-00942: table or view does not exist
+06:01:59.159    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)

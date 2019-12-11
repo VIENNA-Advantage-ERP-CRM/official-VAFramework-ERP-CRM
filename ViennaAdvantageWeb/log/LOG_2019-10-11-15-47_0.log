@@ -1,0 +1,36 @@
+*** 10/11/2019 3:47:34 PM VAdvantage Log  ***
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=:tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   GridTabVO.CreateFields: SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo => ORA-00942: table or view does not exist
+===========>     (SEVERE)   GridTabVO.Create: User Contact: No Fields
+===========>     (SEVERE)   GridWindowVO.CreateTabs: No Tabs - AD_Window_ID=108 - SELECT * FROM AD_Tab_v WHERE AD_Window_ID=@windowID ORDER BY SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=:tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   GridTabVO.CreateFields: SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo => ORA-00942: table or view does not exist
+===========>     (SEVERE)   GridTabVO.Create: Order: No Fields
+===========>     (SEVERE)   GridWindowVO.CreateTabs: No Tabs - AD_Window_ID=143 - SELECT * FROM AD_Tab_v WHERE AD_Window_ID=@windowID ORDER BY SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=:tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   GridTabVO.CreateFields: SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo => ORA-00942: table or view does not exist
+===========>     (SEVERE)   GridTabVO.Create: Order: No Fields
+===========>     (SEVERE)   GridWindowVO.CreateTabs: No Tabs - AD_Window_ID=143 - SELECT * FROM AD_Tab_v WHERE AD_Window_ID=@windowID ORDER BY SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=:tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   GridTabVO.CreateFields: SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo => ORA-00942: table or view does not exist
+===========>     (SEVERE)   GridTabVO.Create: Order: No Fields
+===========>     (SEVERE)   GridWindowVO.CreateTabs: No Tabs - AD_Window_ID=143 - SELECT * FROM AD_Tab_v WHERE AD_Window_ID=@windowID ORDER BY SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=:tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   GridTabVO.CreateFields: SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo => ORA-00942: table or view does not exist
+===========>     (SEVERE)   GridTabVO.Create: Order: No Fields
+===========>     (SEVERE)   GridWindowVO.CreateTabs: No Tabs - AD_Window_ID=143 - SELECT * FROM AD_Tab_v WHERE AD_Window_ID=@windowID ORDER BY SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=:tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo
+===========>     (SEVERE)   GridTabVO.CreateFields: SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID ORDER BY IsDisplayed DESC, SeqNo => ORA-00942: table or view does not exist
+===========>     (SEVERE)   GridTabVO.Create: Order: No Fields
+===========>     (SEVERE)   GridWindowVO.CreateTabs: No Tabs - AD_Window_ID=143 - SELECT * FROM AD_Tab_v WHERE AD_Window_ID=@windowID ORDER BY SeqNo
+03:52:12.521    (INFO)     MSession.Logout: 06:35:12.381
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR]  SELECT l.AD_Role_ID, (SELECT r.Name FROM AD_ROLE r WHERE r.AD_Role_ID=l.AD_ROLE_ID) as RoleName, l.AD_Org_ID, (SELECT o.Name FROM AD_Org o WHERE o.AD_Org_ID=l.AD_Org_ID) as OrgName, l.AD_Client_ID, (SELECT c.Name FROM AD_Client c WHERE c.AD_Client_ID=l.AD_Client_ID) as ClientName, l.M_Warehouse_ID, (SELECT m.Name FROM M_Warehouse m WHERE m.M_Warehouse_Id = l.M_Warehouse_ID) as WarehouseName FROM AD_LoginSetting l WHERE l.IsActive = 'Y' AND l.AD_User_ID=100
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR]  SELECT l.AD_Role_ID, (SELECT r.Name FROM AD_ROLE r WHERE r.AD_Role_ID=l.AD_ROLE_ID) as RoleName, l.AD_Org_ID, (SELECT o.Name FROM AD_Org o WHERE o.AD_Org_ID=l.AD_Org_ID) as OrgName, l.AD_Client_ID, (SELECT c.Name FROM AD_Client c WHERE c.AD_Client_ID=l.AD_Client_ID) as ClientName, l.M_Warehouse_ID, (SELECT m.Name FROM M_Warehouse m WHERE m.M_Warehouse_Id = l.M_Warehouse_ID) as WarehouseName FROM AD_LoginSetting l WHERE l.IsActive = 'Y' AND l.AD_User_ID=100

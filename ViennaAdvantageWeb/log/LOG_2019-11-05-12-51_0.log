@@ -1,0 +1,300 @@
+*** 11/5/2019 12:51:53 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:51:53.515    (INFO)     Trx.Start: **** ConnSH637085551139913110System.Random
+12:51:54.515    (INFO)     Trx.Commit: **C** ConnSH637085551139913110System.Random
+12:51:55.515    (INFO)     Trx.Start: **** ConnSH637085551157504898System.Random
+12:51:55.515    (INFO)     Trx.Commit: **C** ConnSH637085551157504898System.Random
+12:52:07.527    (INFO)     Trx.Start: **** ConnSH637085551271721834System.Random
+12:52:07.527    (INFO)     Trx.Commit: **C** ConnSH637085551271721834System.Random
+12:52:11.521    (INFO)     Trx.Start: **** ConnSH637085551315453949System.Random
+12:52:11.521    (INFO)     Trx.Commit: **C** ConnSH637085551315453949System.Random
+12:52:17.521    (INFO)     Trx.Start: **** ConnSH637085551372339805System.Random
+12:52:17.521    (INFO)     Trx.Commit: **C** ConnSH637085551372339805System.Random
+12:52:17.521    (INFO)     MChangeLog.FillChangeLog: #9
+12:52:17.521    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+12:52:17.521    (INFO)     Trx.Start: **** SvrProcess
+12:52:19.521    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+12:52:19.521    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+12:52:26.522    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+12:52:26.522    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+12:52:26.522    (INFO)     Trx.Start: **** ConnSH637085551461916230System.Random
+12:52:26.522    (INFO)     Trx.Commit: **C** ConnSH637085551461916230System.Random
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Virtual Column - ConstraintName
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - LoadSeq - NewValue=145 - OldValue=
+12:52:26.522    (INFO)     Trx.Start: **** ConnSH637085551465486020System.Random
+12:52:26.522    (INFO)     Trx.Commit: **C** ConnSH637085551465486020System.Random
+12:52:26.522    (INFO)     Trx.Start: **** ConnSH637085551466895991System.Random
+12:52:26.522    (INFO)     Trx.Commit: **C** ConnSH637085551466895991System.Random
+12:52:27.522    (INFO)     Trx.Start: **** ConnSH637085551470355747System.Random
+12:52:27.522    (INFO)     Trx.Commit: **C** ConnSH637085551470355747System.Random
+12:52:27.522    (INFO)     Trx.Start: **** ConnSH637085551472865591System.Random
+12:52:27.522    (INFO)     Trx.Commit: **C** ConnSH637085551472865591System.Random
+12:52:27.522    (INFO)     Trx.Start: **** ConnSH637085551474305518System.Random
+12:52:27.522    (INFO)     Trx.Commit: **C** ConnSH637085551474305518System.Random
+12:52:27.522    (INFO)     Trx.Start: **** ConnSH637085551477465329System.Random
+12:52:27.522    (INFO)     Trx.Commit: **C** ConnSH637085551477465329System.Random
+12:52:27.522    (INFO)     Trx.Start: **** ConnSH637085551478165290System.Random
+12:52:27.522    (INFO)     Trx.Commit: **C** ConnSH637085551478165290System.Random
+12:52:28.522    (INFO)     Trx.Start: **** ConnSH637085551481105137System.Random
+12:52:28.522    (INFO)     Trx.Commit: **C** ConnSH637085551481105137System.Random
+12:52:28.522    (INFO)     Trx.Start: **** ConnSH637085551481835091System.Random
+12:52:28.522    (INFO)     Trx.Commit: **C** ConnSH637085551481835091System.Random
+12:52:28.522    (INFO)     Trx.Start: **** ConnSH637085551484664913System.Random
+12:52:28.522    (INFO)     Trx.Commit: **C** ConnSH637085551484664913System.Random
+12:52:28.522    (INFO)     Trx.Start: **** ConnSH637085551485334886System.Random
+12:52:28.522    (INFO)     Trx.Commit: **C** ConnSH637085551485334886System.Random
+12:52:28.522    (INFO)     Trx.Start: **** ConnSH637085551487964791System.Random
+12:52:28.522    (INFO)     Trx.Commit: **C** ConnSH637085551487964791System.Random
+12:52:28.522    (INFO)     Trx.Start: **** ConnSH637085551488684686System.Random
+12:52:28.522    (INFO)     Trx.Commit: **C** ConnSH637085551488684686System.Random
+12:52:29.522    (INFO)     Trx.Start: **** ConnSH637085551491364536System.Random
+12:52:29.522    (INFO)     Trx.Commit: **C** ConnSH637085551491364536System.Random
+12:52:29.522    (INFO)     Trx.Start: **** ConnSH637085551492064542System.Random
+12:52:29.522    (INFO)     Trx.Commit: **C** ConnSH637085551492064542System.Random
+===========>     (SEVERE)   MasterVersions.StartProcess: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+12:52:29.522    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:52:29.522    (INFO)     Trx.Commit: **C** SvrProcess
+12:52:29.522    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:52:50.525    (INFO)     Trx.Start: **** ConnSH637085551706932172System.Random
+12:52:50.525    (INFO)     Trx.Commit: **C** ConnSH637085551706932172System.Random
+12:52:54.525    (INFO)     Trx.Start: **** ConnSH637085551744000045System.Random
+12:52:54.525    (INFO)     Trx.Commit: **C** ConnSH637085551744000045System.Random
+12:53:11.531    (INFO)     Trx.Start: **** GridDel637085551887081824
+12:53:14.531    (INFO)     Trx.Start: **** ConnSH637085551947138367System.Random
+12:53:14.531    (INFO)     Trx.Commit: **C** ConnSH637085551947138367System.Random
+12:53:15.531    (INFO)     MSequence.DeleteTableSequence: True
+12:53:15.531    (INFO)     CacheMgt.Reset: AD_Table: #2 (3)
+12:53:15.531    (INFO)     MTable.DeleteRecord: True
+12:53:15.531    (INFO)     Trx.Commit: **C** GridDel637085551887081824
+12:53:30.533    (INFO)     Trx.Start: **** ConnSH637085552100369573System.Random
+12:53:30.533    (INFO)     Trx.Commit: **C** ConnSH637085552100369573System.Random
+12:53:36.533    (INFO)     Trx.Start: **** ConnSH637085552164375908System.Random
+12:53:36.533    (INFO)     Trx.Commit: **C** ConnSH637085552164375908System.Random
+12:53:36.533    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+12:53:36.533    (INFO)     Trx.Start: **** SvrProcess
+12:53:36.533    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+12:53:36.533    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+12:53:47.534    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+12:53:47.534    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+12:53:47.534    (INFO)     Trx.Start: **** ConnSH637085552275139541System.Random
+12:53:47.534    (INFO)     Trx.Commit: **C** ConnSH637085552275139541System.Random
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Virtual Column - ConstraintName
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - LoadSeq - NewValue=145 - OldValue=
+12:53:47.534    (INFO)     Trx.Start: **** ConnSH637085552277009434System.Random
+12:53:47.534    (INFO)     Trx.Commit: **C** ConnSH637085552277009434System.Random
+12:53:47.534    (INFO)     Trx.Start: **** ConnSH637085552277699407System.Random
+12:53:47.534    (INFO)     Trx.Commit: **C** ConnSH637085552277699407System.Random
+12:53:48.534    (INFO)     Trx.Start: **** ConnSH637085552280369248System.Random
+12:53:48.534    (INFO)     Trx.Commit: **C** ConnSH637085552280369248System.Random
+12:54:56.545    (INFO)     Trx.Start: **** ConnSH637085552961045018System.Random
+12:54:56.545    (INFO)     Trx.Commit: **C** ConnSH637085552961045018System.Random
+12:54:56.545    (INFO)     Trx.Start: **** ConnSH637085552961814955System.Random
+12:54:56.545    (INFO)     Trx.Commit: **C** ConnSH637085552961814955System.Random
+12:54:56.545    (INFO)     Trx.Start: **** ConnSH637085552964976216System.Random
+12:54:56.545    (INFO)     Trx.Commit: **C** ConnSH637085552964976216System.Random
+12:54:56.545    (INFO)     Trx.Start: **** ConnSH637085552965636188System.Random
+12:54:56.545    (INFO)     Trx.Commit: **C** ConnSH637085552965636188System.Random
+12:54:56.545    (INFO)     Trx.Start: **** ConnSH637085552968688481System.Random
+12:54:56.545    (INFO)     Trx.Commit: **C** ConnSH637085552968688481System.Random
+12:54:56.545    (INFO)     Trx.Start: **** ConnSH637085552969378454System.Random
+12:54:57.545    (INFO)     Trx.Commit: **C** ConnSH637085552969378454System.Random
+12:54:57.545    (INFO)     Trx.Start: **** ConnSH637085552972029315System.Random
+12:54:57.545    (INFO)     Trx.Commit: **C** ConnSH637085552972029315System.Random
+12:54:57.545    (INFO)     Trx.Start: **** ConnSH637085552972709477System.Random
+12:54:57.545    (INFO)     Trx.Commit: **C** ConnSH637085552972709477System.Random
+12:54:57.545    (INFO)     Trx.Start: **** ConnSH637085552975537238System.Random
+12:54:57.545    (INFO)     Trx.Commit: **C** ConnSH637085552975537238System.Random
+12:54:57.545    (INFO)     Trx.Start: **** ConnSH637085552976525236System.Random
+12:54:57.545    (INFO)     Trx.Commit: **C** ConnSH637085552976525236System.Random
+12:54:57.545    (INFO)     Trx.Start: **** ConnSH637085552979328305System.Random
+12:54:58.545    (INFO)     Trx.Commit: **C** ConnSH637085552979328305System.Random
+12:54:58.545    (INFO)     Trx.Start: **** ConnSH637085552980056340System.Random
+12:54:58.545    (INFO)     Trx.Commit: **C** ConnSH637085552980056340System.Random
+===========>     (SEVERE)   MasterVersions.StartProcess: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+12:54:58.545    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:54:58.545    (INFO)     Trx.Commit: **C** SvrProcess
+12:54:58.545    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:55:03.553    (INFO)     Trx.Start: **** ConnSH637085553039410995System.Random
+12:55:04.554    (INFO)     Trx.Commit: **C** ConnSH637085553039410995System.Random
+12:55:09.559    (INFO)     Trx.Start: **** GridDel637085553068658125
+12:55:12.551    (INFO)     Trx.Start: **** ConnSH637085553125655213System.Random
+12:55:12.551    (INFO)     Trx.Commit: **C** ConnSH637085553125655213System.Random
+12:55:12.551    (INFO)     MSequence.DeleteTableSequence: True
+12:55:12.551    (INFO)     CacheMgt.Reset: AD_Table: #2 (2)
+12:55:12.551    (INFO)     MTable.DeleteRecord: True
+12:55:12.551    (INFO)     Trx.Commit: **C** GridDel637085553068658125
+12:55:17.551    (INFO)     Trx.Start: **** ConnSH637085553170346605System.Random
+12:55:17.551    (INFO)     Trx.Commit: **C** ConnSH637085553170346605System.Random
+12:55:22.552    (INFO)     Trx.Start: **** ConnSH637085553223024765System.Random
+12:55:22.552    (INFO)     Trx.Commit: **C** ConnSH637085553223024765System.Random
+12:55:22.552    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+12:55:22.552    (INFO)     Trx.Start: **** SvrProcess
+12:55:22.552    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+12:55:22.552    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+12:55:29.552    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+12:55:29.552    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+12:55:29.552    (INFO)     Trx.Start: **** ConnSH637085553294437595System.Random
+12:55:29.552    (INFO)     Trx.Commit: **C** ConnSH637085553294437595System.Random
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Virtual Column - ConstraintName
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - LoadSeq - NewValue=145 - OldValue=
+12:55:29.552    (INFO)     Trx.Start: **** ConnSH637085553295692856System.Random
+12:55:29.552    (INFO)     Trx.Commit: **C** ConnSH637085553295692856System.Random
+12:55:29.552    (INFO)     Trx.Start: **** ConnSH637085553296348439System.Random
+12:55:29.552    (INFO)     Trx.Commit: **C** ConnSH637085553296348439System.Random
+12:55:29.552    (INFO)     Trx.Start: **** ConnSH637085553299131392System.Random
+12:55:29.552    (INFO)     Trx.Commit: **C** ConnSH637085553299131392System.Random
+12:55:32.553    (INFO)     Trx.Start: **** ConnSH637085553322748420System.Random
+12:55:32.553    (INFO)     Trx.Commit: **C** ConnSH637085553322748420System.Random
+12:55:32.553    (INFO)     Trx.Start: **** ConnSH637085553323538361System.Random
+12:55:32.553    (INFO)     Trx.Commit: **C** ConnSH637085553323538361System.Random
+12:55:32.553    (INFO)     Trx.Start: **** ConnSH637085553326190495System.Random
+12:55:32.553    (INFO)     Trx.Commit: **C** ConnSH637085553326190495System.Random
+12:55:32.553    (INFO)     Trx.Start: **** ConnSH637085553326920571System.Random
+12:55:32.553    (INFO)     Trx.Commit: **C** ConnSH637085553326920571System.Random
+12:55:32.553    (INFO)     Trx.Start: **** ConnSH637085553329844253System.Random
+12:55:33.553    (INFO)     Trx.Commit: **C** ConnSH637085553329844253System.Random
+12:55:33.553    (INFO)     Trx.Start: **** ConnSH637085553330596186System.Random
+12:55:33.553    (INFO)     Trx.Commit: **C** ConnSH637085553330596186System.Random
+12:55:33.553    (INFO)     Trx.Start: **** ConnSH637085553333515267System.Random
+12:55:33.553    (INFO)     Trx.Commit: **C** ConnSH637085553333515267System.Random
+12:55:33.553    (INFO)     Trx.Start: **** ConnSH637085553334205224System.Random
+12:55:33.553    (INFO)     Trx.Commit: **C** ConnSH637085553334205224System.Random
+12:55:33.553    (INFO)     Trx.Start: **** ConnSH637085553337164323System.Random
+12:55:33.553    (INFO)     Trx.Commit: **C** ConnSH637085553337164323System.Random
+12:55:33.553    (INFO)     Trx.Start: **** ConnSH637085553337884215System.Random
+12:55:33.553    (INFO)     Trx.Commit: **C** ConnSH637085553337884215System.Random
+12:55:34.553    (INFO)     Trx.Start: **** ConnSH637085553340529815System.Random
+12:55:34.553    (INFO)     Trx.Commit: **C** ConnSH637085553340529815System.Random
+12:55:34.553    (INFO)     Trx.Start: **** ConnSH637085553341226204System.Random
+12:55:34.553    (INFO)     Trx.Commit: **C** ConnSH637085553341226204System.Random
+===========>     (SEVERE)   MasterVersions.StartProcess: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+12:55:34.553    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:55:34.553    (INFO)     Trx.Commit: **C** SvrProcess
+12:55:34.553    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:55:42.554    (INFO)     Trx.Start: **** ConnSH637085553422211629System.Random
+12:55:42.554    (INFO)     Trx.Commit: **C** ConnSH637085553422211629System.Random
+12:55:47.554    (INFO)     Trx.Start: **** GridDel637085553453409996
+12:55:51.555    (INFO)     Trx.Start: **** ConnSH637085553511255113System.Random
+12:55:51.555    (INFO)     Trx.Commit: **C** ConnSH637085553511255113System.Random
+12:55:51.555    (INFO)     MSequence.DeleteTableSequence: True
+12:55:51.555    (INFO)     CacheMgt.Reset: AD_Table: #2 (2)
+12:55:51.555    (INFO)     MTable.DeleteRecord: True
+12:55:51.555    (INFO)     Trx.Commit: **C** GridDel637085553453409996
+12:56:05.565    (INFO)     Trx.Start: **** ConnSH637085553658151974System.Random
+12:56:05.565    (INFO)     Trx.Commit: **C** ConnSH637085553658151974System.Random
+12:56:05.565    (INFO)     CacheReset.DoIt: 
+12:56:05.565    (INFO)     Env.Reset: finalCall=False
+12:56:05.565    (INFO)     CacheMgt.Reset: #15 (6172)
+12:56:05.565    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+12:56:06.566    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:56:06.566    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+12:56:06.566    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:56:06.566    (INFO)     MChangeLog.FillChangeLog: #9
+12:56:06.566    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:56:06.566    (INFO)     Trx.Start: **** ConnSH637085553663971830System.Random
+12:56:06.566    (INFO)     Trx.Commit: **C** ConnSH637085553663971830System.Random
+12:56:07.567    (INFO)     Msg.InitMsg: Records=5818 - en_US
+12:56:07.567    (INFO)     Trx.Start: **** ConnSH637085553671408138System.Random
+12:56:07.567    (INFO)     Trx.Commit: **C** ConnSH637085553671408138System.Random
+12:56:09.569    (INFO)     Trx.Start: **** ConnSH637085553694494167System.Random
+12:56:09.569    (INFO)     Trx.Commit: **C** ConnSH637085553694494167System.Random
+12:56:09.569    (INFO)     Trx.Start: **** ConnSH637085553695834087System.Random
+12:56:09.569    (INFO)     Trx.Commit: **C** ConnSH637085553695834087System.Random
+12:56:14.561    (INFO)     Trx.Start: **** ConnSH637085553740733729System.Random
+12:56:14.561    (INFO)     Trx.Commit: **C** ConnSH637085553740733729System.Random
+12:56:14.561    (INFO)     ColumnSync.DoIt: C_Column_ID=763
+12:56:14.561    (INFO)     Trx.Start: **** SvrProcess
+12:56:14.561    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE Test MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00936: missing expression [Query NQTrx]UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00936: missing expression
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00936: missing expression
+12:56:14.561    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE Test SET AD_Client_ID=@#AD_Client_ID@ WHERE AD_Client_ID IS NULL
+12:56:14.561    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test DROP CONSTRAINT FK135_763
+12:56:14.561    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE Test ADD CONSTRAINT FK135_763 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+12:56:14.561    (INFO)     Trx.Start: **** ConnSH637085553745699634System.Random
+12:56:14.561    (INFO)     Trx.Commit: **C** ConnSH637085553745699634System.Random
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Virtual Column - ConstraintName
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - LoadSeq - NewValue=145 - OldValue=
+12:57:26.572    (INFO)     Trx.Start: **** ConnSH637085554461624299System.Random
+12:57:26.572    (INFO)     Trx.Commit: **C** ConnSH637085554461624299System.Random
+12:57:26.572    (INFO)     Trx.Start: **** ConnSH637085554462559715System.Random
+12:57:26.572    (INFO)     Trx.Commit: **C** ConnSH637085554462559715System.Random
+12:57:26.572    (INFO)     Trx.Start: **** ConnSH637085554465448537System.Random
+12:57:26.572    (INFO)     Trx.Commit: **C** ConnSH637085554465448537System.Random
+12:58:51.585    (INFO)     Trx.Start: **** ConnSH637085555313738252System.Random
+12:58:51.585    (INFO)     Trx.Commit: **C** ConnSH637085555313738252System.Random
+12:58:51.585    (INFO)     Trx.Start: **** ConnSH637085555314418214System.Random
+12:58:51.585    (INFO)     Trx.Commit: **C** ConnSH637085555314418214System.Random
+12:58:51.585    (INFO)     Trx.Start: **** ConnSH637085555317368073System.Random
+12:58:51.585    (INFO)     Trx.Commit: **C** ConnSH637085555317368073System.Random
+12:58:51.585    (INFO)     Trx.Start: **** ConnSH637085555318048035System.Random
+12:58:51.585    (INFO)     Trx.Commit: **C** ConnSH637085555318048035System.Random
+12:58:52.585    (INFO)     Trx.Start: **** ConnSH637085555320777909System.Random
+12:58:52.585    (INFO)     Trx.Commit: **C** ConnSH637085555320777909System.Random
+12:58:52.585    (INFO)     Trx.Start: **** ConnSH637085555321547860System.Random
+12:58:52.585    (INFO)     Trx.Commit: **C** ConnSH637085555321547860System.Random
+12:58:52.585    (INFO)     Trx.Start: **** ConnSH637085555324167730System.Random
+12:58:52.585    (INFO)     Trx.Commit: **C** ConnSH637085555324167730System.Random
+12:58:52.585    (INFO)     Trx.Start: **** ConnSH637085555324827699System.Random
+12:58:52.585    (INFO)     Trx.Commit: **C** ConnSH637085555324827699System.Random
+12:58:52.585    (INFO)     Trx.Start: **** ConnSH637085555327457556System.Random
+12:58:52.585    (INFO)     Trx.Commit: **C** ConnSH637085555327457556System.Random
+12:58:52.585    (INFO)     Trx.Start: **** ConnSH637085555328137523System.Random
+12:58:52.585    (INFO)     Trx.Commit: **C** ConnSH637085555328137523System.Random
+12:58:53.585    (INFO)     Trx.Start: **** ConnSH637085555331087377System.Random
+12:58:53.585    (INFO)     Trx.Commit: **C** ConnSH637085555331087377System.Random
+12:58:53.585    (INFO)     Trx.Start: **** ConnSH637085555331747349System.Random
+12:58:53.585    (INFO)     Trx.Commit: **C** ConnSH637085555331747349System.Random
+===========>     (SEVERE)   MasterVersions.StartProcess: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index

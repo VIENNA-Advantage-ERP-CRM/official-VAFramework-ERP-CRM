@@ -1,0 +1,182 @@
+*** 11/25/2019 7:18:16 PM VAdvantage Log  ***
+07:18:16.181    (INFO)     Trx.Start: **** ConnSH637103062961621403System.Random
+07:18:16.181    (INFO)     Trx.Commit: **C** ConnSH637103062961621403System.Random
+07:18:16.181    (INFO)     MChangeLog.FillChangeLog: #9
+07:18:16.181    (INFO)     CacheReset.DoIt: 
+07:18:16.181    (INFO)     Env.Reset: finalCall=False
+07:18:16.181    (INFO)     CacheMgt.Reset: #15 (6177)
+07:18:16.181    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+07:18:16.181    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+07:18:16.181    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+07:18:16.181    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+07:18:16.181    (INFO)     MChangeLog.FillChangeLog: #9
+07:18:16.181    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+07:18:16.181    (INFO)     Trx.Start: **** ConnSH637103062967497755System.Random
+07:18:16.181    (INFO)     Trx.Commit: **C** ConnSH637103062967497755System.Random
+07:18:17.181    (INFO)     Msg.InitMsg: Records=5823 - en_US
+07:18:17.181    (INFO)     Trx.Start: **** ConnSH637103062973824601System.Random
+07:18:17.181    (INFO)     Trx.Commit: **C** ConnSH637103062973824601System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+07:18:23.182    (INFO)     Trx.Start: **** ConnSH637103063030208545System.Random
+07:18:23.182    (INFO)     Trx.Commit: **C** ConnSH637103063030208545System.Random
+07:18:23.182    (INFO)     Trx.Start: **** ConnSH637103063031068517System.Random
+07:18:23.182    (INFO)     Trx.Commit: **C** ConnSH637103063031068517System.Random
+07:18:24.182    (INFO)     Trx.Start: **** ConnSH637103063047317067System.Random
+07:18:24.182    (INFO)     Trx.Commit: **C** ConnSH637103063047317067System.Random
+07:18:24.182    (INFO)     Trx.Start: **** ConnSH637103063048249736System.Random
+07:18:24.182    (INFO)     Trx.Commit: **C** ConnSH637103063048249736System.Random
+07:18:27.182    (INFO)     Trx.Start: **** ConnSH637103063077107383System.Random
+07:18:27.182    (INFO)     Trx.Commit: **C** ConnSH637103063077107383System.Random
+07:18:36.183    (INFO)     Trx.Start: **** GridDel637103063142232419
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found [Query NQTrx]DELETE FROM AD_Window WHERE AD_Window_ID=1000326
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637103063142232419 => ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  MWindow.DeleteRecord: Not deleted
+07:18:37.183    (INFO)     MWindow.DeleteRecord: False
+07:18:37.183    (INFO)     Trx.Rollback: **R** GridDel637103063142232419
+07:19:07.197    (INFO)     Trx.Start: **** GridDel637103063475086117
+07:19:08.198    (INFO)     Trx.Start: **** ConnSH637103063482760101System.Random
+07:19:08.198    (INFO)     Trx.Commit: **C** ConnSH637103063482760101System.Random
+07:19:08.198    (INFO)     CacheMgt.Reset: AD_Window: #2 (1)
+07:19:08.198    (INFO)     MWindow.DeleteRecord: True
+07:19:08.198    (INFO)     Trx.Commit: **C** GridDel637103063475086117
+07:19:18.191    (INFO)     Trx.Start: **** GridDel637103063577627319
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found [Query NQTrx]DELETE FROM AD_Window WHERE AD_Window_ID=1000318
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637103063577627319 => ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  MWindow.DeleteRecord: Not deleted
+07:19:18.191    (INFO)     MWindow.DeleteRecord: False
+07:19:18.191    (INFO)     Trx.Rollback: **R** GridDel637103063577627319
+07:19:30.193    (INFO)     Trx.Start: **** GridDel637103063705463679
+07:19:31.193    (INFO)     Trx.Start: **** ConnSH637103063710863502System.Random
+07:19:31.193    (INFO)     Trx.Commit: **C** ConnSH637103063710863502System.Random
+07:19:31.193    (INFO)     CacheMgt.Reset: AD_Window: #2 (0)
+07:19:31.193    (INFO)     MWindow.DeleteRecord: True
+07:19:31.193    (INFO)     Trx.Commit: **C** GridDel637103063705463679
+07:19:37.193    (INFO)     Trx.Start: **** ConnSH637103063775271037System.Random
+07:19:37.193    (INFO)     Trx.Commit: **C** ConnSH637103063775271037System.Random
+07:19:48.194    (INFO)     Trx.Start: **** ConnSH637103063881700084System.Random
+07:19:48.194    (INFO)     Trx.Commit: **C** ConnSH637103063881700084System.Random
+07:20:05.205    (INFO)     Trx.Start: **** GridDel637103064049204666
+07:20:05.205    (INFO)     Trx.Start: **** ConnSH637103064055601640System.Random
+07:20:05.205    (INFO)     Trx.Commit: **C** ConnSH637103064055601640System.Random
+07:20:05.205    (INFO)     CacheMgt.Reset: AD_Window: #2 (0)
+07:20:05.205    (INFO)     MWindow.DeleteRecord: True
+07:20:05.205    (INFO)     Trx.Commit: **C** GridDel637103064049204666
+07:20:13.201    (INFO)     Trx.Start: **** ConnSH637103064131901163System.Random
+07:20:13.201    (INFO)     Trx.Commit: **C** ConnSH637103064131901163System.Random
+07:20:25.202    (INFO)     Trx.Start: **** GridDel637103064255274699
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found [Query NQTrx]DELETE FROM AD_Window WHERE AD_Window_ID=1000325
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637103064255274699 => ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  MWindow.DeleteRecord: Not deleted
+07:20:26.202    (INFO)     MWindow.DeleteRecord: False
+07:20:26.202    (INFO)     Trx.Rollback: **R** GridDel637103064255274699
+07:20:37.203    (INFO)     Trx.Start: **** GridDel637103064368372536
+07:20:37.203    (INFO)     Trx.Start: **** ConnSH637103064375134861System.Random
+07:20:37.203    (INFO)     Trx.Commit: **C** ConnSH637103064375134861System.Random
+07:20:37.203    (INFO)     CacheMgt.Reset: AD_Window: #2 (0)
+07:20:37.203    (INFO)     MWindow.DeleteRecord: True
+07:20:37.203    (INFO)     Trx.Commit: **C** GridDel637103064368372536
+07:20:41.204    (INFO)     Trx.Start: **** ConnSH637103064415722977System.Random
+07:20:41.204    (INFO)     Trx.Commit: **C** ConnSH637103064415722977System.Random
+07:20:59.205    (INFO)     Trx.Start: **** GridDel637103064592257706
+07:20:59.205    (INFO)     Trx.Start: **** ConnSH637103064597263934System.Random
+07:20:59.205    (INFO)     Trx.Commit: **C** ConnSH637103064597263934System.Random
+07:20:59.205    (INFO)     CacheMgt.Reset: AD_Window: #2 (0)
+07:20:59.205    (INFO)     MWindow.DeleteRecord: True
+07:20:59.205    (INFO)     Trx.Commit: **C** GridDel637103064592257706
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+07:21:12.211    (INFO)     Trx.Start: **** ConnSH637103064721136126System.Random
+07:21:12.211    (INFO)     Trx.Commit: **C** ConnSH637103064721136126System.Random
+07:21:13.211    (INFO)     Trx.Start: **** ConnSH637103064734526974System.Random
+07:21:13.211    (INFO)     Trx.Commit: **C** ConnSH637103064734526974System.Random
+07:21:16.211    (INFO)     Trx.Start: **** ConnSH637103064766501794System.Random
+07:21:16.211    (INFO)     Trx.Commit: **C** ConnSH637103064766501794System.Random
+07:21:34.213    (INFO)     Trx.Start: **** GridDel637103064922514403
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02292: integrity constraint (LIBMIGRATION.FK942_16864) violated - child record found [Query NQTrx]DELETE FROM AD_Table WHERE AD_Table_ID=1001197
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637103064922514403 => ORA-02292: integrity constraint (LIBMIGRATION.FK942_16864) violated - child record found
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02292: integrity constraint (LIBMIGRATION.FK942_16864) violated - child record found
+----------->     (WARNING)  MTable.DeleteRecord: Not deleted
+07:21:38.213    (INFO)     MTable.DeleteRecord: False
+07:21:38.213    (INFO)     Trx.Rollback: **R** GridDel637103064922514403
+07:22:11.221    (INFO)     Trx.Start: **** GridDel637103065316507428
+*** 11/26/2019 9:33:57 AM VAdvantage Log ***

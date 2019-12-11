@@ -1,0 +1,18 @@
+*** 11/7/2019 11:24:47 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:24:47.244    (INFO)     Trx.Start: **** ConnSH637087226872135130System.Random
+11:24:47.244    (INFO)     Trx.Commit: **C** ConnSH637087226872135130System.Random
+11:24:56.245    (INFO)     Trx.Start: **** ConnSH637087226968782077System.Random
+11:24:57.245    (INFO)     Trx.Commit: **C** ConnSH637087226968782077System.Random
+*** 11/7/2019 12:38:43 PM VAdvantage Log ***

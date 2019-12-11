@@ -1,0 +1,52 @@
+*** 10/30/2019 7:02:29 PM VAdvantage Log  ***
+07:02:29.229    (INFO)     Trx.Start: **** ConnSH637080589493877130System.Random
+07:02:29.229    (INFO)     Trx.Commit: **C** ConnSH637080589493877130System.Random
+07:02:29.229    (INFO)     MChangeLog.FillChangeLog: #9
+07:02:29.229    (INFO)     CacheReset.DoIt: 
+07:02:29.229    (INFO)     Env.Reset: finalCall=False
+07:02:29.229    (INFO)     CacheMgt.Reset: #16 (7870)
+07:02:29.229    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+07:02:29.229    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+07:02:29.229    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+07:02:29.229    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+07:02:29.229    (INFO)     MChangeLog.FillChangeLog: #9
+07:02:29.229    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+07:02:29.229    (INFO)     Trx.Start: **** ConnSH637080589499882153System.Random
+07:02:30.230    (INFO)     Trx.Commit: **C** ConnSH637080589499882153System.Random
+07:02:30.230    (INFO)     Trx.Start: **** ConnSH637080589500698098System.Random
+07:02:30.230    (INFO)     Trx.Commit: **C** ConnSH637080589500698098System.Random
+07:02:30.230    (INFO)     Msg.InitMsg: Records=5818 - en_US
+07:02:30.230    (INFO)     Trx.Start: **** ConnSH637080589508418810System.Random
+07:02:30.230    (INFO)     Trx.Commit: **C** ConnSH637080589508418810System.Random
+07:02:30.230    (INFO)     Trx.Start: **** ConnSH637080589509108998System.Random
+07:02:30.230    (INFO)     Trx.Commit: **C** ConnSH637080589509108998System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+07:02:33.233    (INFO)     Trx.Start: **** ConnSH637080589539616835System.Random
+07:02:34.234    (INFO)     Trx.Commit: **C** ConnSH637080589539616835System.Random
+07:02:34.234    (INFO)     Trx.Start: **** ConnSH637080589540776736System.Random
+07:02:34.234    (INFO)     Trx.Commit: **C** ConnSH637080589540776736System.Random
+07:02:37.237    (INFO)     Trx.Start: **** ConnSH637080589571102911System.Random
+07:02:37.237    (INFO)     Trx.Commit: **C** ConnSH637080589571102911System.Random
+07:02:37.237    (INFO)     Trx.Start: **** ConnSH637080589572022837System.Random
+07:02:37.237    (INFO)     Trx.Commit: **C** ConnSH637080589572022837System.Random
+07:03:09.390    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+07:03:09.390    (INFO)     Trx.Start: **** ConnSH637080589894787049System.Random
+07:03:09.390    (INFO)     Trx.Commit: **C** ConnSH637080589894787049System.Random
+07:03:09.390    (INFO)     Trx.Start: **** ConnSH637080589895526999System.Random
+07:03:09.390    (INFO)     Trx.Commit: **C** ConnSH637080589895526999System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00932: inconsistent datatypes: expected DATE got NUMBER
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00932: inconsistent datatypes: expected DATE got NUMBER
+----------->     (WARNING)  GenericPO.DataSavePO: Not insertedTest_Version
+07:03:10.310    (INFO)     Trx.Start: **** ConnSH637080589899997568System.Random
+07:03:10.310    (INFO)     Trx.Commit: **C** ConnSH637080589899997568System.Random
+07:03:24.324    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+07:03:24.324    (INFO)     Trx.Start: **** ConnSH637080590045555996System.Random
+07:03:24.324    (INFO)     Trx.Commit: **C** ConnSH637080590045555996System.Random
+07:03:24.324    (INFO)     Trx.Start: **** ConnSH637080590046346426System.Random
+07:03:24.324    (INFO)     Trx.Commit: **C** ConnSH637080590046346426System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00932: inconsistent datatypes: expected DATE got NUMBER
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00932: inconsistent datatypes: expected DATE got NUMBER
+----------->     (WARNING)  GenericPO.DataSavePO: Not insertedTest_Version

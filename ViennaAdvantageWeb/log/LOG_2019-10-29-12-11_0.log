@@ -1,0 +1,66 @@
+*** 10/29/2019 12:11:54 PM VAdvantage Log  ***
+12:11:54.115    (INFO)     MSession.Logout: 06:30:18.355
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026789]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+12:12:15.121    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:12:15.121    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:12:15.121    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:12:16.121    (INFO)     Trx.Start: **** ConnSH637079479363141036System.Random
+12:12:16.121    (INFO)     Trx.Commit: **C** ConnSH637079479363141036System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/28/19','mm/dd/yy') and to_date('11/05/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/29/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+12:12:26.122    (INFO)     Trx.Start: **** ConnSH637079479469218552System.Random
+12:12:27.122    (INFO)     Trx.Commit: **C** ConnSH637079479469218552System.Random
+12:12:27.122    (INFO)     MChangeLog.FillChangeLog: #9
+12:12:27.122    (INFO)     CacheReset.DoIt: 
+12:12:27.122    (INFO)     Env.Reset: finalCall=False
+12:12:27.122    (INFO)     CacheMgt.Reset: #16 (7870)
+12:12:27.122    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+12:12:27.122    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:12:27.122    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:12:27.122    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:12:27.122    (INFO)     MChangeLog.FillChangeLog: #9
+12:12:27.122    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:12:27.122    (INFO)     Trx.Start: **** ConnSH637079479476367354System.Random
+12:12:27.122    (INFO)     Trx.Commit: **C** ConnSH637079479476367354System.Random
+12:12:27.122    (INFO)     Trx.Start: **** ConnSH637079479477575287System.Random
+12:12:27.122    (INFO)     Trx.Commit: **C** ConnSH637079479477575287System.Random
+12:12:28.122    (INFO)     Msg.InitMsg: Records=5818 - en_US
+12:12:28.122    (INFO)     Trx.Start: **** ConnSH637079479488884875System.Random
+12:12:28.122    (INFO)     Trx.Commit: **C** ConnSH637079479488884875System.Random
+12:12:28.122    (INFO)     Trx.Start: **** ConnSH637079479489744758System.Random
+12:12:29.122    (INFO)     Trx.Commit: **C** ConnSH637079479489744758System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:12:33.123    (INFO)     Trx.Start: **** ConnSH637079479531191640System.Random
+12:12:33.123    (INFO)     Trx.Commit: **C** ConnSH637079479531191640System.Random
+12:12:33.123    (INFO)     Trx.Start: **** ConnSH637079479533441448System.Random
+12:12:33.123    (INFO)     Trx.Commit: **C** ConnSH637079479533441448System.Random
+12:12:36.123    (INFO)     Trx.Start: **** ConnSH637079479563926808System.Random
+12:12:36.123    (INFO)     Trx.Commit: **C** ConnSH637079479563926808System.Random
+12:12:36.123    (INFO)     Trx.Start: **** ConnSH637079479564906676System.Random
+12:12:36.123    (INFO)     Trx.Commit: **C** ConnSH637079479564906676System.Random
+12:13:04.134    (INFO)     Trx.Start: **** ConnSH637079479841583285System.Random
+12:13:04.134    (INFO)     Trx.Commit: **C** ConnSH637079479841583285System.Random
+12:13:11.131    (INFO)     Trx.Start: **** ConnSH637079479917157154System.Random
+12:13:11.131    (INFO)     Trx.Commit: **C** ConnSH637079479917157154System.Random
+12:13:35.133    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+12:14:11.141    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+12:14:31.143    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+12:25:06.256    (INFO)     MSession.Logout: 06:43:30.56
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+12:36:51.365    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:36:51.365    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:36:51.365    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+12:36:51.365    (INFO)     Trx.Start: **** ConnSH637079494116953121System.Random
+12:36:51.365    (INFO)     Trx.Commit: **C** ConnSH637079494116953121System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('10/28/19','mm/dd/yy') and to_date('11/05/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('10/29/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy

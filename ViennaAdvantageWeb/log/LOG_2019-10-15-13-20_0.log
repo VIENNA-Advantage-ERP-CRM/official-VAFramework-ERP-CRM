@@ -1,0 +1,161 @@
+*** 10/15/2019 1:20:18 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:20:18.201    (INFO)     Trx.Start: **** ConnSH637067424189102041System.Random
+01:20:18.201    (INFO)     Trx.Commit: **C** ConnSH637067424189102041System.Random
+01:20:20.202    (INFO)     Trx.Start: **** ConnSH637067424209143473System.Random
+01:20:20.202    (INFO)     Trx.Commit: **C** ConnSH637067424209143473System.Random
+01:20:23.202    (INFO)     Trx.Start: **** ConnSH637067424239359474System.Random
+01:20:23.202    (INFO)     Trx.Commit: **C** ConnSH637067424239359474System.Random
+01:20:26.202    (INFO)     Trx.Start: **** ConnSH637067424261113012System.Random
+01:20:26.202    (INFO)     Trx.Commit: **C** ConnSH637067424261113012System.Random
+01:20:30.203    (INFO)     Trx.Start: **** ConnSH637067424307593753System.Random
+01:20:30.203    (INFO)     Trx.Commit: **C** ConnSH637067424307593753System.Random
+01:20:30.203    (INFO)     MChangeLog.FillChangeLog: #9
+01:20:37.203    (INFO)     Trx.Start: **** SvrProcess
+01:22:08.228    (INFO)     Trx.Commit: **C** SvrProcess
+01:22:08.228    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:22:15.221    (INFO)     Trx.Start: **** ConnSH637067425351801535System.Random
+01:22:15.221    (INFO)     Trx.Commit: **C** ConnSH637067425351801535System.Random
+01:22:26.222    (INFO)     Trx.Start: **** GridDel637067425432813590
+01:22:27.222    (INFO)     Trx.Start: **** ConnSH637067425475283037System.Random
+01:22:27.222    (INFO)     Trx.Commit: **C** ConnSH637067425475283037System.Random
+01:22:27.222    (INFO)     CacheMgt.Reset: AD_Tab: #3 (2)
+01:22:27.222    (INFO)     MTab.DeleteRecord: True
+01:22:27.222    (INFO)     Trx.Commit: **C** GridDel637067425432813590
+01:22:34.223    (INFO)     Trx.Start: **** GridDel637067425528683439
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found [Query NQTrx]DELETE FROM AD_Window WHERE AD_Window_ID=1000287
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637067425528683439 => ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  MWindow.DeleteRecord: Not deleted
+01:22:36.223    (INFO)     MWindow.DeleteRecord: False
+01:22:36.223    (INFO)     Trx.Rollback: **R** GridDel637067425528683439
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:22:44.224    (INFO)     Trx.Start: **** ConnSH637067425642238352System.Random
+01:22:44.224    (INFO)     Trx.Commit: **C** ConnSH637067425642238352System.Random
+01:22:44.224    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=100, Editable=True, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:22:44.224    (INFO)     Trx.Start: **** ConnSH637067425647307406System.Random
+01:22:44.224    (INFO)     Trx.Commit: **C** ConnSH637067425647307406System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  MQueryLog.QueryLog: Not insertedAD_QueryLog
+01:22:45.224    (INFO)     Trx.Start: **** ConnSH637067425650267625System.Random
+01:22:45.224    (INFO)     Trx.Commit: **C** ConnSH637067425650267625System.Random
+01:22:47.224    (INFO)     Trx.Start: **** ConnSH637067425679653099System.Random
+01:22:48.224    (INFO)     Trx.Commit: **C** ConnSH637067425679653099System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  MQueryLog.QueryLog: Not insertedAD_QueryLog
+01:22:48.224    (INFO)     Trx.Start: **** ConnSH637067425682751189System.Random
+01:22:48.224    (INFO)     Trx.Commit: **C** ConnSH637067425682751189System.Random
+01:22:55.225    (INFO)     Trx.Start: **** ConnSH637067425755771154System.Random
+01:22:55.225    (INFO)     Trx.Commit: **C** ConnSH637067425755771154System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  MQueryLog.QueryLog: Not insertedAD_QueryLog
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:23:07.237    (INFO)     Trx.Start: **** ConnSH637067425876533544System.Random
+01:23:07.237    (INFO)     Trx.Commit: **C** ConnSH637067425876533544System.Random
+01:23:09.239    (INFO)     Trx.Start: **** ConnSH637067425892912861System.Random
+01:23:09.239    (INFO)     Trx.Commit: **C** ConnSH637067425892912861System.Random
+01:23:12.231    (INFO)     Trx.Start: **** ConnSH637067425921250291System.Random
+01:23:12.231    (INFO)     Trx.Commit: **C** ConnSH637067425921250291System.Random
+01:23:16.231    (INFO)     Trx.Start: **** ConnSH637067425966168834System.Random
+01:23:16.231    (INFO)     Trx.Commit: **C** ConnSH637067425966168834System.Random
+01:23:23.232    (INFO)     Trx.Start: **** GridDel637067426012925529
+01:23:58.235    (INFO)     Trx.Start: **** ConnSH637067426382377970System.Random
+01:23:58.235    (INFO)     Trx.Commit: **C** ConnSH637067426382377970System.Random
+01:23:58.235    (INFO)     MSequence.DeleteTableSequence: True
+01:23:58.235    (INFO)     CacheMgt.Reset: AD_Table: #2 (3)
+01:23:58.235    (INFO)     MTable.DeleteRecord: True
+01:23:58.235    (INFO)     Trx.Commit: **C** GridDel637067426012925529
+01:24:04.244    (INFO)     Trx.Start: **** ConnSH637067426447009576System.Random
+01:24:04.244    (INFO)     Trx.Commit: **C** ConnSH637067426447009576System.Random
+01:24:09.249    (INFO)     Trx.Start: **** ConnSH637067426496751941System.Random
+01:24:09.249    (INFO)     Trx.Commit: **C** ConnSH637067426496751941System.Random
+01:24:13.241    (INFO)     Trx.Start: **** ConnSH637067426536221340System.Random

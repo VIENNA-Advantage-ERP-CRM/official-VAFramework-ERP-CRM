@@ -1,0 +1,271 @@
+*** 11/20/2019 6:16:01 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:16:01.161    (INFO)     Trx.Start: **** ConnSH637098705616165728System.Random
+06:16:01.161    (INFO)     Trx.Commit: **C** ConnSH637098705616165728System.Random
+06:16:03.163    (INFO)     Trx.Start: **** ConnSH637098705631408519System.Random
+06:16:03.163    (INFO)     Trx.Commit: **C** ConnSH637098705631408519System.Random
+06:16:05.165    (INFO)     Trx.Start: **** ConnSH637098705654841503System.Random
+06:16:05.165    (INFO)     Trx.Commit: **C** ConnSH637098705654841503System.Random
+06:16:12.161    (INFO)     Trx.Start: **** ConnSH637098705724136664System.Random
+06:16:12.161    (INFO)     Trx.Commit: **C** ConnSH637098705724136664System.Random
+06:16:18.161    (INFO)     Trx.Start: **** GridDel637098705780571388
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found [Query NQTrx]DELETE FROM AD_Window WHERE AD_Window_ID=1000320
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637098705780571388 => ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  MWindow.DeleteRecord: Not deleted
+06:16:18.161    (INFO)     MWindow.DeleteRecord: False
+06:16:18.161    (INFO)     Trx.Rollback: **R** GridDel637098705780571388
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637098705963829939System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637098705963829939System.Random
+06:16:36.163    (INFO)     MTree.Load: AD_Tree_ID=10, AD_User_ID=100, Editable=True, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637098705967742118System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637098705967742118System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  MQueryLog.QueryLog: Not insertedAD_QueryLog
+06:16:36.163    (INFO)     Trx.Start: **** ConnSH637098705968955068System.Random
+06:16:36.163    (INFO)     Trx.Commit: **C** ConnSH637098705968955068System.Random
+06:16:41.164    (INFO)     Trx.Start: **** ConnSH637098706013700908System.Random
+06:16:41.164    (INFO)     Trx.Commit: **C** ConnSH637098706013700908System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01400: cannot insert NULL into ("LIBMIGRATION"."AD_QUERYLOG"."WHERECLAUSE")
+----------->     (WARNING)  MQueryLog.QueryLog: Not insertedAD_QueryLog
+06:16:41.164    (INFO)     Trx.Start: **** ConnSH637098706015032452System.Random
+06:16:41.164    (INFO)     Trx.Commit: **C** ConnSH637098706015032452System.Random
+06:16:45.164    (INFO)     Trx.Start: **** GridDel637098706052534034
+06:16:45.164    (INFO)     MChangeLog.FillChangeLog: #9
+06:16:45.164    (INFO)     MMenu.DeleteRecord: True
+06:16:45.164    (INFO)     Trx.Commit: **C** GridDel637098706052534034
+06:16:50.165    (INFO)     Trx.Start: **** GridDel637098706101718862
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found [Query NQTrx]DELETE FROM AD_Window WHERE AD_Window_ID=1000320
+===========>     (SEVERE)   DB.ExecuteQuery: GridDel637098706101718862 => ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02292: integrity constraint (LIBMIGRATION.FK941_16853) violated - child record found
+----------->     (WARNING)  MWindow.DeleteRecord: Not deleted
+06:16:50.165    (INFO)     MWindow.DeleteRecord: False
+06:16:50.165    (INFO)     Trx.Rollback: **R** GridDel637098706101718862
+06:17:12.171    (INFO)     Trx.Start: **** GridDel637098706324254880
+06:17:12.171    (INFO)     Trx.Start: **** ConnSH637098706327279945System.Random
+06:17:12.171    (INFO)     Trx.Commit: **C** ConnSH637098706327279945System.Random
+06:17:12.171    (INFO)     CacheMgt.Reset: AD_Window: #2 (2)
+06:17:12.171    (INFO)     MWindow.DeleteRecord: True
+06:17:12.171    (INFO)     Trx.Commit: **C** GridDel637098706324254880
+06:17:17.171    (INFO)     Trx.Start: **** ConnSH637098706372790081System.Random
+06:17:17.171    (INFO)     Trx.Commit: **C** ConnSH637098706372790081System.Random
+06:17:20.172    (INFO)     Trx.Start: **** ConnSH637098706408627441System.Random
+06:17:20.172    (INFO)     Trx.Commit: **C** ConnSH637098706408627441System.Random
+06:17:20.172    (INFO)     Trx.Start: **** SvrProcess
+06:17:21.172    (INFO)     Trx.Start: **** ConnSH637098706410066005System.Random
+06:17:21.172    (INFO)     Trx.Commit: **C** ConnSH637098706410066005System.Random
+06:17:21.172    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE C_TaxCategory_Version MODIFY  AD_Client_ID  NUMBER(10) DEFAULT  NULL 
+06:17:21.172    (INFO)     MasterVersions.InsertVersionData: Master Version Insertion QueryINSERT INTO C_TaxCategory_Version(AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,Name,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,IsVersionApproved,ProcessedVersion,RecordVersion,Processed,Processing,C_TaxCategory_Version_ID) SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,Name,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,Created,'Y','Y',1,'Y','N',C_TaxCategory_ID FROM C_TaxCategory WHERE C_TaxCategory_ID NOT IN (SELECT C_TaxCategory_ID FROM C_TaxCategory_Version) :: Records Inserted ==>> 0
+06:17:21.172    (INFO)     MasterVersions.InsertVersionData: Master Version Sequence Updated 1
+06:17:21.172    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:17:21.172    (INFO)     Trx.Commit: **C** SvrProcess
+06:17:21.172    (INFO)     Trx.Start: **** SvrProcess
+06:17:21.172    (INFO)     Trx.Start: **** ConnSH637098706416195856System.Random
+06:17:21.172    (INFO)     Trx.Commit: **C** ConnSH637098706416195856System.Random
+06:17:21.172    (INFO)     Trx.Start: **** ConnSH637098706416838459System.Random
+06:17:21.172    (INFO)     Trx.Commit: **C** ConnSH637098706416838459System.Random
+----------->     (WARNING)  MTab.CreateVerTab: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTab.CreateVerTab: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTab.CreateVerTab: Column not updateable - AD_Window_ID - NewValue=138 - OldValue=
+06:17:27.172    (INFO)     Trx.Start: **** ConnSH637098706476480801System.Random
+06:17:27.172    (INFO)     Trx.Commit: **C** ConnSH637098706476480801System.Random
+06:17:27.172    (INFO)     Trx.Start: **** ConnSH637098706477183784System.Random
+06:17:27.172    (INFO)     Trx.Commit: **C** ConnSH637098706477183784System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:28.172    (INFO)     Trx.Start: **** ConnSH637098706481576696System.Random
+06:17:28.172    (INFO)     Trx.Commit: **C** ConnSH637098706481576696System.Random
+06:17:28.172    (INFO)     Trx.Start: **** ConnSH637098706482406211System.Random
+06:17:28.172    (INFO)     Trx.Commit: **C** ConnSH637098706482406211System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:28.172    (INFO)     Trx.Start: **** ConnSH637098706485569100System.Random
+06:17:28.172    (INFO)     Trx.Commit: **C** ConnSH637098706485569100System.Random
+06:17:28.172    (INFO)     Trx.Start: **** ConnSH637098706486382481System.Random
+06:17:28.172    (INFO)     Trx.Commit: **C** ConnSH637098706486382481System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:28.172    (INFO)     Trx.Start: **** ConnSH637098706489481142System.Random
+06:17:29.172    (INFO)     Trx.Commit: **C** ConnSH637098706489481142System.Random
+06:17:29.172    (INFO)     Trx.Start: **** ConnSH637098706490177767System.Random
+06:17:29.172    (INFO)     Trx.Commit: **C** ConnSH637098706490177767System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:29.172    (INFO)     Trx.Start: **** ConnSH637098706493179091System.Random
+06:17:29.172    (INFO)     Trx.Commit: **C** ConnSH637098706493179091System.Random
+06:17:29.172    (INFO)     Trx.Start: **** ConnSH637098706493907682System.Random
+06:17:29.172    (INFO)     Trx.Commit: **C** ConnSH637098706493907682System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:29.172    (INFO)     Trx.Start: **** ConnSH637098706496724496System.Random
+06:17:29.172    (INFO)     Trx.Commit: **C** ConnSH637098706496724496System.Random
+06:17:29.172    (INFO)     Trx.Start: **** ConnSH637098706497465917System.Random
+06:17:29.172    (INFO)     Trx.Commit: **C** ConnSH637098706497465917System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:30.173    (INFO)     Trx.Start: **** ConnSH637098706500804191System.Random
+06:17:30.173    (INFO)     Trx.Commit: **C** ConnSH637098706500804191System.Random
+06:17:30.173    (INFO)     Trx.Start: **** ConnSH637098706501569125System.Random
+06:17:30.173    (INFO)     Trx.Commit: **C** ConnSH637098706501569125System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:30.173    (INFO)     Trx.Start: **** ConnSH637098706504325609System.Random
+06:17:30.173    (INFO)     Trx.Commit: **C** ConnSH637098706504325609System.Random
+06:17:30.173    (INFO)     Trx.Start: **** ConnSH637098706504921028System.Random
+06:17:30.173    (INFO)     Trx.Commit: **C** ConnSH637098706504921028System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:30.173    (INFO)     Trx.Start: **** ConnSH637098706508884639System.Random
+06:17:30.173    (INFO)     Trx.Commit: **C** ConnSH637098706508884639System.Random
+06:17:30.173    (INFO)     Trx.Start: **** ConnSH637098706509563047System.Random
+06:17:31.173    (INFO)     Trx.Commit: **C** ConnSH637098706509563047System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:31.173    (INFO)     Trx.Start: **** ConnSH637098706512560478System.Random
+06:17:31.173    (INFO)     Trx.Commit: **C** ConnSH637098706512560478System.Random
+06:17:31.173    (INFO)     Trx.Start: **** ConnSH637098706513357886System.Random
+06:17:31.173    (INFO)     Trx.Commit: **C** ConnSH637098706513357886System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:31.173    (INFO)     Trx.Start: **** ConnSH637098706516262736System.Random
+06:17:31.173    (INFO)     Trx.Commit: **C** ConnSH637098706516262736System.Random
+06:17:31.173    (INFO)     Trx.Start: **** ConnSH637098706516935924System.Random
+06:17:31.173    (INFO)     Trx.Commit: **C** ConnSH637098706516935924System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:31.173    (INFO)     Trx.Start: **** ConnSH637098706519940615System.Random
+06:17:32.173    (INFO)     Trx.Commit: **C** ConnSH637098706519940615System.Random
+06:17:32.173    (INFO)     Trx.Start: **** ConnSH637098706520714529System.Random
+06:17:32.173    (INFO)     Trx.Commit: **C** ConnSH637098706520714529System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:32.173    (INFO)     Trx.Start: **** ConnSH637098706523529302System.Random
+06:17:32.173    (INFO)     Trx.Commit: **C** ConnSH637098706523529302System.Random
+06:17:32.173    (INFO)     Trx.Start: **** ConnSH637098706524283930System.Random
+06:17:32.173    (INFO)     Trx.Commit: **C** ConnSH637098706524283930System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:32.173    (INFO)     Trx.Start: **** ConnSH637098706527561148System.Random
+06:17:32.173    (INFO)     Trx.Commit: **C** ConnSH637098706527561148System.Random
+06:17:32.173    (INFO)     Trx.Start: **** ConnSH637098706528271266System.Random
+06:17:32.173    (INFO)     Trx.Commit: **C** ConnSH637098706528271266System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637098706531328082System.Random
+06:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637098706531328082System.Random
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637098706531956567System.Random
+06:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637098706531956567System.Random
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MField.CreateVerFields: Column not updateable - AD_Tab_ID - NewValue=176 - OldValue=
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637098706535166539System.Random
+06:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637098706535166539System.Random
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637098706535864761System.Random
+06:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637098706535864761System.Random
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637098706538693573System.Random
+06:17:33.173    (INFO)     Trx.Commit: **C** ConnSH637098706538693573System.Random
+06:17:33.173    (INFO)     Trx.Start: **** ConnSH637098706539478302System.Random
+06:17:34.173    (INFO)     Trx.Commit: **C** ConnSH637098706539478302System.Random
+06:17:34.173    (INFO)     Trx.Start: **** ConnSH637098706542168706System.Random
+06:17:34.173    (INFO)     Trx.Commit: **C** ConnSH637098706542168706System.Random
+06:17:34.173    (INFO)     Trx.Start: **** ConnSH637098706542867560System.Random
+06:17:34.173    (INFO)     Trx.Commit: **C** ConnSH637098706542867560System.Random
+06:17:34.173    (INFO)     Trx.Start: **** ConnSH637098706545381098System.Random
+06:17:34.173    (INFO)     Trx.Commit: **C** ConnSH637098706545381098System.Random
+06:17:34.173    (INFO)     Trx.Start: **** ConnSH637098706546332352System.Random
+06:17:34.173    (INFO)     Trx.Commit: **C** ConnSH637098706546332352System.Random
+06:17:34.173    (INFO)     Trx.Start: **** ConnSH637098706548972960System.Random
+06:17:34.173    (INFO)     Trx.Commit: **C** ConnSH637098706548972960System.Random
+06:17:34.173    (INFO)     Trx.Start: **** ConnSH637098706549632956System.Random
+06:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637098706549632956System.Random
+06:17:35.173    (INFO)     Trx.Start: **** ConnSH637098706552242455System.Random
+06:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637098706552242455System.Random
+06:17:35.173    (INFO)     Trx.Start: **** ConnSH637098706553046104System.Random
+06:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637098706553046104System.Random
+06:17:35.173    (INFO)     Trx.Start: **** ConnSH637098706555861915System.Random
+06:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637098706555861915System.Random
+06:17:35.173    (INFO)     Trx.Start: **** ConnSH637098706556552271System.Random
+06:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637098706556552271System.Random
+06:17:35.173    (INFO)     Trx.Start: **** ConnSH637098706559232578System.Random
+06:17:35.173    (INFO)     Trx.Commit: **C** ConnSH637098706559232578System.Random
+06:17:35.173    (INFO)     Trx.Start: **** ConnSH637098706559865603System.Random
+06:17:36.173    (INFO)     Trx.Commit: **C** ConnSH637098706559865603System.Random
+06:17:36.173    (INFO)     Trx.Commit: **C** SvrProcess
+06:17:36.173    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:17:37.173    (INFO)     Trx.Start: **** ConnSH637098706571804429System.Random
+06:17:37.173    (INFO)     Trx.Commit: **C** ConnSH637098706571804429System.Random
+06:17:39.173    (INFO)     Trx.Start: **** ConnSH637098706599840539System.Random
+06:17:40.174    (INFO)     Trx.Commit: **C** ConnSH637098706599840539System.Random
+06:17:41.174    (INFO)     Trx.Start: **** ConnSH637098706619583787System.Random

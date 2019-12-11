@@ -1,0 +1,111 @@
+*** 11/4/2019 12:33:07 PM VAdvantage Log  ***
+12:33:07.337    (INFO)     Trx.Start: **** ConnSH637084675872884257System.Random
+12:33:07.337    (INFO)     Trx.Commit: **C** ConnSH637084675872884257System.Random
+12:33:07.337    (INFO)     MChangeLog.FillChangeLog: #9
+12:33:07.337    (INFO)     CacheReset.DoIt: 
+12:33:07.337    (INFO)     Env.Reset: finalCall=False
+12:33:07.337    (INFO)     CacheMgt.Reset: #16 (7874)
+12:33:07.337    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+12:33:07.337    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:33:07.337    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:33:07.337    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:33:07.337    (INFO)     MChangeLog.FillChangeLog: #9
+12:33:07.337    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:33:07.337    (INFO)     Trx.Start: **** ConnSH637084675879143970System.Random
+12:33:08.338    (INFO)     Trx.Commit: **C** ConnSH637084675879143970System.Random
+12:33:08.338    (INFO)     Trx.Start: **** ConnSH637084675880353904System.Random
+12:33:08.338    (INFO)     Trx.Commit: **C** ConnSH637084675880353904System.Random
+12:33:08.338    (INFO)     Msg.InitMsg: Records=5818 - en_US
+12:33:08.338    (INFO)     Trx.Start: **** ConnSH637084675888403514System.Random
+12:33:08.338    (INFO)     Trx.Commit: **C** ConnSH637084675888403514System.Random
+12:33:08.338    (INFO)     Trx.Start: **** ConnSH637084675889353466System.Random
+12:33:09.339    (INFO)     Trx.Commit: **C** ConnSH637084675889353466System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:33:15.331    (INFO)     Trx.Start: **** ConnSH637084675951550487System.Random
+12:33:15.331    (INFO)     Trx.Commit: **C** ConnSH637084675951550487System.Random
+12:33:15.331    (INFO)     Trx.Start: **** ConnSH637084675952510417System.Random
+12:33:15.331    (INFO)     Trx.Commit: **C** ConnSH637084675952510417System.Random
+12:33:17.331    (INFO)     Trx.Start: **** ConnSH637084675973979402System.Random
+12:33:17.331    (INFO)     Trx.Commit: **C** ConnSH637084675973979402System.Random
+12:33:17.331    (INFO)     Trx.Start: **** ConnSH637084675974859354System.Random
+12:33:17.331    (INFO)     Trx.Commit: **C** ConnSH637084675974859354System.Random
+12:33:37.333    (INFO)     Trx.Start: **** ConnSH637084676171619894System.Random
+12:33:37.333    (INFO)     Trx.Commit: **C** ConnSH637084676171619894System.Random
+12:33:37.333    (INFO)     Trx.Start: **** ConnSH637084676173139803System.Random
+12:33:37.333    (INFO)     Trx.Commit: **C** ConnSH637084676173139803System.Random
+12:33:37.333    (INFO)     CacheMgt.Reset: AD_WF_Node: #1 (15)
+12:33:37.333    (INFO)     Trx.Start: **** ConnSH637084676174159771System.Random
+12:33:37.333    (INFO)     Trx.Commit: **C** ConnSH637084676174159771System.Random
+12:33:37.333    (INFO)     CacheMgt.Reset: AD_WF_Node: #1 (0)
+12:33:37.333    (INFO)     Trx.Start: **** ConnSH637084676175099726System.Random
+12:33:37.333    (INFO)     Trx.Commit: **C** ConnSH637084676175099726System.Random
+12:33:37.333    (INFO)     CacheMgt.Reset: AD_WF_Node: #1 (0)
+12:33:37.333    (INFO)     CacheMgt.Reset: AD_Workflow: #2 (6)
+12:33:48.334    (INFO)     Trx.Start: **** ConnSH637084676286694361System.Random
+12:33:48.334    (INFO)     Trx.Commit: **C** ConnSH637084676286694361System.Random
+12:33:48.334    (INFO)     CacheReset.DoIt: 
+12:33:48.334    (INFO)     Env.Reset: finalCall=False
+12:33:48.334    (INFO)     CacheMgt.Reset: #14 (7605)
+12:33:48.334    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+12:33:48.334    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+12:33:48.334    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+12:33:49.334    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+12:33:49.334    (INFO)     MChangeLog.FillChangeLog: #9
+12:33:49.334    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+12:33:49.334    (INFO)     Trx.Start: **** ConnSH637084676291414135System.Random
+12:33:49.334    (INFO)     Trx.Commit: **C** ConnSH637084676291414135System.Random
+12:33:49.334    (INFO)     Trx.Start: **** ConnSH637084676292204100System.Random
+12:33:49.334    (INFO)     Trx.Commit: **C** ConnSH637084676292204100System.Random
+12:33:50.335    (INFO)     Msg.InitMsg: Records=5818 - en_US
+12:33:50.335    (INFO)     Trx.Start: **** ConnSH637084676300593686System.Random
+12:33:50.335    (INFO)     Trx.Commit: **C** ConnSH637084676300593686System.Random
+12:33:50.335    (INFO)     Trx.Start: **** ConnSH637084676301403705System.Random
+12:33:50.335    (INFO)     Trx.Commit: **C** ConnSH637084676301403705System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+12:33:55.335    (INFO)     Trx.Start: **** ConnSH637084676358821104System.Random
+12:33:55.335    (INFO)     Trx.Commit: **C** ConnSH637084676358821104System.Random
+12:33:55.335    (INFO)     Trx.Start: **** ConnSH637084676359640850System.Random
+12:33:56.335    (INFO)     Trx.Commit: **C** ConnSH637084676359640850System.Random
+12:33:56.335    (INFO)     Trx.Start: **** ConnSH637084676363530665System.Random
+12:33:56.335    (INFO)     Trx.Commit: **C** ConnSH637084676363530665System.Random
+12:33:56.335    (INFO)     Trx.Start: **** ConnSH637084676364740597System.Random
+12:33:56.335    (INFO)     Trx.Commit: **C** ConnSH637084676364740597System.Random
+12:34:04.344    (INFO)     Trx.Start: **** ConnSH637084676445496712System.Random

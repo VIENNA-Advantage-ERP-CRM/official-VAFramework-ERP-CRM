@@ -1,0 +1,121 @@
+*** 12/4/2019 6:43:07 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+06:43:07.437    (INFO)     Trx.Start: **** ConnSH637110817878386466System.Random
+06:43:07.437    (INFO)     Trx.Commit: **C** ConnSH637110817878386466System.Random
+06:43:10.431    (INFO)     Trx.Start: **** ConnSH637110817908215379System.Random
+06:43:10.431    (INFO)     Trx.Commit: **C** ConnSH637110817908215379System.Random
+06:43:24.432    (INFO)     Trx.Start: **** ConnSH637110818042553461System.Random
+06:43:24.432    (INFO)     Trx.Commit: **C** ConnSH637110818042553461System.Random
+06:43:24.432    (INFO)     MChangeLog.FillChangeLog: #9
+06:43:36.433    (INFO)     Trx.Start: **** ConnSH637110818164928393System.Random
+06:43:36.433    (INFO)     Trx.Commit: **C** ConnSH637110818164928393System.Random
+06:43:45.434    (INFO)     Trx.Start: **** ConnSH637110818255100739System.Random
+06:43:45.434    (INFO)     Trx.Commit: **C** ConnSH637110818255100739System.Random
+06:43:51.435    (INFO)     ColumnSync.DoIt: C_Column_ID=1030191
+06:43:52.435    (INFO)     Trx.Start: **** SvrProcess
+06:44:02.442    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - CREATE TABLE ABC01_Testing2 (ABC01_Testing2_ID NUMBER(10) NOT NULL, AD_Client_ID NUMBER(10) NOT NULL, AD_Org_ID NUMBER(10) NOT NULL, Created DATE DEFAULT SYSDATE NOT NULL, CreatedBy NUMBER(10) DEFAULT 0 NOT NULL, Export_ID NVARCHAR2(50), IsActive CHAR(1) DEFAULT 'Y' CHECK (IsActive IN ('Y','N')) NOT NULL, Updated DATE DEFAULT SYSDATE NOT NULL, UpdatedBy NUMBER(10) DEFAULT 0 NOT NULL, CONSTRAINT PK1001225 PRIMARY KEY (ABC01_Testing2_ID))
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02250: missing or invalid constraint name [Query NQTrx]ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-02250: missing or invalid constraint name
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02250: missing or invalid constraint name
+06:45:40.454    (INFO)     ColumnSync.AddLog: 0 -  - -1 - ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+06:45:51.455    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE ABC01_Testing2 ADD CONSTRAINT FK1001225_1030185 FOREIGN KEY (AD_Client_ID) REFERENCES AD_Client (AD_Client_ID)
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02250: missing or invalid constraint name [Query NQTrx]ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-02250: missing or invalid constraint name
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02250: missing or invalid constraint name
+06:45:52.455    (INFO)     ColumnSync.AddLog: 0 -  - -1 - ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+06:45:52.455    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE ABC01_Testing2 ADD CONSTRAINT FK1001225_1030186 FOREIGN KEY (AD_Org_ID) REFERENCES AD_Org (AD_Org_ID)
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02250: missing or invalid constraint name [Query NQTrx]ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-02250: missing or invalid constraint name
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02250: missing or invalid constraint name
+06:45:52.455    (INFO)     ColumnSync.AddLog: 0 -  - -1 - ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+06:45:52.455    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE ABC01_Testing2 ADD CONSTRAINT FK1001225_1030189 FOREIGN KEY (CreatedBy) REFERENCES AD_User (AD_User_ID)
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-02250: missing or invalid constraint name [Query NQTrx]ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-02250: missing or invalid constraint name
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-02250: missing or invalid constraint name
+06:45:52.455    (INFO)     ColumnSync.AddLog: 0 -  - -1 - ALTER TABLE ABC01_Testing2 DROP CONSTRAINT 
+06:45:52.455    (INFO)     ColumnSync.AddLog: 0 -  - 1 - ALTER TABLE ABC01_Testing2 ADD CONSTRAINT FK1001225_1030190 FOREIGN KEY (UpdatedBy) REFERENCES AD_User (AD_User_ID)
+06:45:52.455    (INFO)     Trx.Commit: **C** SvrProcess
+06:45:52.455    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:47:59.475    (INFO)     Trx.Start: **** ConnSH637110820792520315System.Random
+06:47:59.475    (INFO)     Trx.Commit: **C** ConnSH637110820792520315System.Random
+06:48:02.482    (INFO)     ColumnSync.DoIt: C_Column_ID=1030191
+06:48:02.482    (INFO)     Trx.Start: **** SvrProcess
+06:48:05.485    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE ABC01_Testing2 MODIFY  IsActive  CHAR(1) DEFAULT 'Y'
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00904: "Y": invalid identifier [Query NQTrx]UPDATE ABC01_Testing2 SET IsActive=Y WHERE IsActive IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00904: "Y": invalid identifier
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00904: "Y": invalid identifier
+06:48:07.487    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE ABC01_Testing2 SET IsActive=Y WHERE IsActive IS NULL
+06:48:20.482    (INFO)     Trx.Commit: **C** SvrProcess
+06:48:20.482    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:49:33.493    (INFO)     Trx.Start: **** ConnSH637110821738890902System.Random
+06:49:33.493    (INFO)     Trx.Commit: **C** ConnSH637110821738890902System.Random
+06:49:35.493    (INFO)     ColumnSync.DoIt: C_Column_ID=1030191
+06:49:35.493    (INFO)     Trx.Start: **** SvrProcess
+06:49:56.495    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE ABC01_Testing2 MODIFY  IsActive  CHAR(1) DEFAULT 'Y'
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00904: "Y": invalid identifier [Query NQTrx]UPDATE ABC01_Testing2 SET IsActive=Y WHERE IsActive IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00904: "Y": invalid identifier
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00904: "Y": invalid identifier
+06:49:56.495    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE ABC01_Testing2 SET IsActive=Y WHERE IsActive IS NULL
+06:50:05.505    (INFO)     Trx.Commit: **C** SvrProcess
+06:50:05.505    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:50:09.509    (INFO)     Trx.Start: **** ConnSH637110822091104947System.Random
+06:50:09.509    (INFO)     Trx.Commit: **C** ConnSH637110822091104947System.Random
+06:50:10.501    (INFO)     ColumnSync.DoIt: C_Column_ID=1030191
+06:50:10.501    (INFO)     Trx.Start: **** SvrProcess
+06:52:24.522    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE ABC01_Testing2 MODIFY  IsActive  CHAR(1) DEFAULT 'Y'
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00904: "Y": invalid identifier [Query NQTrx]UPDATE ABC01_Testing2 SET IsActive=Y WHERE IsActive IS NULL
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-00904: "Y": invalid identifier
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00904: "Y": invalid identifier
+06:52:24.522    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - UPDATE ABC01_Testing2 SET IsActive=Y WHERE IsActive IS NULL
+06:52:34.523    (INFO)     Trx.Commit: **C** SvrProcess
+06:52:35.523    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:52:46.524    (INFO)     Trx.Start: **** ConnSH637110823668958129System.Random
+06:52:46.524    (INFO)     Trx.Commit: **C** ConnSH637110823668958129System.Random
+06:52:47.524    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+06:52:49.524    (INFO)     Trx.Start: **** ConnSH637110823698708801System.Random
+06:52:49.524    (INFO)     Trx.Commit: **C** ConnSH637110823698708801System.Random
+06:52:52.525    (INFO)     ColumnSync.DoIt: C_Column_ID=1030191
+06:52:52.525    (INFO)     Trx.Start: **** SvrProcess
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-01401: inserted value too large for column [Query NQTrx]ALTER TABLE ABC01_Testing2 MODIFY  IsActive  CHAR(1) DEFAULT '''Y'''
+===========>     (SEVERE)   DB.ExecuteQuery: SvrProcess => ORA-01401: inserted value too large for column
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-01401: inserted value too large for column
+06:53:02.532    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - -1 - ALTER TABLE ABC01_Testing2 MODIFY  IsActive  CHAR(1) DEFAULT '''Y'''
+06:53:02.532    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 0 - UPDATE ABC01_Testing2 SET IsActive='Y' WHERE IsActive IS NULL
+===========>     (SEVERE)   ColumnSync.StartProcess: @Error@  - ALTER TABLE ABC01_Testing2 MODIFY  IsActive  CHAR(1) DEFAULT '''Y''';UPDATE ABC01_Testing2 SET IsActive='Y' WHERE IsActive IS NULL
+06:53:02.532    (INFO)     Trx.Rollback: **R** SvrProcess
+06:53:02.532    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+06:53:20.532    (INFO)     Trx.Start: **** ConnSH637110824002700519System.Random
+06:53:20.532    (INFO)     Trx.Commit: **C** ConnSH637110824002700519System.Random
+06:53:20.532    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+07:13:36.133    (INFO)     MSession.Logout: 06:01:51.291

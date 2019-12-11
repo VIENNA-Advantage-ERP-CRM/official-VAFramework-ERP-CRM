@@ -1,0 +1,465 @@
+*** 11/12/2019 1:35:32 PM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:35:32.353    (INFO)     Trx.Start: **** ConnSH637091625324128578System.Random
+01:35:32.353    (INFO)     Trx.Commit: **C** ConnSH637091625324128578System.Random
+01:35:33.353    (INFO)     Trx.Start: **** ConnSH637091625333368285System.Random
+01:35:33.353    (INFO)     Trx.Commit: **C** ConnSH637091625333368285System.Random
+01:35:36.353    (INFO)     Trx.Start: **** ConnSH637091625367755569System.Random
+01:35:36.353    (INFO)     Trx.Commit: **C** ConnSH637091625367755569System.Random
+01:35:36.353    (INFO)     MChangeLog.FillChangeLog: #9
+01:35:36.353    (INFO)     CacheReset.DoIt: 
+01:35:36.353    (INFO)     Env.Reset: finalCall=False
+01:35:36.353    (INFO)     CacheMgt.Reset: #17 (7885)
+01:35:37.353    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:35:37.353    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:35:37.353    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:35:37.353    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:35:37.353    (INFO)     MChangeLog.FillChangeLog: #9
+01:35:37.353    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:35:37.353    (INFO)     Trx.Start: **** ConnSH637091625373505664System.Random
+01:35:37.353    (INFO)     Trx.Commit: **C** ConnSH637091625373505664System.Random
+01:35:37.353    (INFO)     Trx.Start: **** ConnSH637091625374500715System.Random
+01:35:37.353    (INFO)     Trx.Commit: **C** ConnSH637091625374500715System.Random
+01:35:38.353    (INFO)     Msg.InitMsg: Records=5823 - en_US
+01:35:38.353    (INFO)     Trx.Start: **** ConnSH637091625381261142System.Random
+01:35:38.353    (INFO)     Trx.Commit: **C** ConnSH637091625381261142System.Random
+01:35:38.353    (INFO)     Trx.Start: **** ConnSH637091625381961062System.Random
+01:35:38.353    (INFO)     Trx.Commit: **C** ConnSH637091625381961062System.Random
+01:35:40.354    (INFO)     Trx.Start: **** ConnSH637091625407149248System.Random
+01:35:40.354    (INFO)     Trx.Commit: **C** ConnSH637091625407149248System.Random
+01:35:40.354    (INFO)     Trx.Start: **** ConnSH637091625407909393System.Random
+01:35:40.354    (INFO)     Trx.Commit: **C** ConnSH637091625407909393System.Random
+01:35:40.354    (INFO)     CacheReset.DoIt: 
+01:35:40.354    (INFO)     Env.Reset: finalCall=False
+01:35:40.354    (INFO)     CacheMgt.Reset: #11 (5922)
+01:35:40.354    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:35:40.354    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:35:40.354    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:35:41.354    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:35:41.354    (INFO)     MChangeLog.FillChangeLog: #9
+01:35:41.354    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:35:41.354    (INFO)     Trx.Start: **** ConnSH637091625411562834System.Random
+01:35:41.354    (INFO)     Trx.Commit: **C** ConnSH637091625411562834System.Random
+01:35:41.354    (INFO)     Trx.Start: **** ConnSH637091625412316685System.Random
+01:35:41.354    (INFO)     Trx.Commit: **C** ConnSH637091625412316685System.Random
+01:35:42.354    (INFO)     Msg.InitMsg: Records=5823 - en_US
+01:35:42.354    (INFO)     Trx.Start: **** ConnSH637091625420341698System.Random
+01:35:42.354    (INFO)     Trx.Commit: **C** ConnSH637091625420341698System.Random
+01:35:42.354    (INFO)     Trx.Start: **** ConnSH637091625421068422System.Random
+01:35:42.354    (INFO)     Trx.Commit: **C** ConnSH637091625421068422System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:35:46.354    (INFO)     Trx.Start: **** ConnSH637091625460429743System.Random
+01:35:46.354    (INFO)     Trx.Commit: **C** ConnSH637091625460429743System.Random
+01:35:46.354    (INFO)     Trx.Start: **** ConnSH637091625461209419System.Random
+01:35:46.354    (INFO)     Trx.Commit: **C** ConnSH637091625461209419System.Random
+01:35:46.354    (INFO)     Trx.Start: **** ConnSH637091625465197036System.Random
+01:35:46.354    (INFO)     Trx.Commit: **C** ConnSH637091625465197036System.Random
+01:35:46.354    (INFO)     Trx.Start: **** ConnSH637091625466077168System.Random
+01:35:46.354    (INFO)     Trx.Commit: **C** ConnSH637091625466077168System.Random
+01:35:58.355    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+01:35:58.355    (INFO)     Trx.Start: **** ConnSH637091625586577907System.Random
+01:35:58.355    (INFO)     Trx.Commit: **C** ConnSH637091625586577907System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+01:35:58.355    (INFO)     Trx.Start: **** ConnSH637091625588994866System.Random
+01:35:58.355    (INFO)     Trx.Commit: **C** ConnSH637091625588994866System.Random
+01:36:17.361    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+01:36:17.361    (INFO)     Trx.Start: **** ConnSH637091625779542094System.Random
+01:36:18.361    (INFO)     Trx.Commit: **C** ConnSH637091625779542094System.Random
+01:36:18.361    (INFO)     Trx.Start: **** ConnSH637091625780723094System.Random
+01:36:18.361    (INFO)     Trx.Commit: **C** ConnSH637091625780723094System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+01:36:18.361    (INFO)     Trx.Start: **** ConnSH637091625783361354System.Random
+01:36:18.361    (INFO)     Trx.Commit: **C** ConnSH637091625783361354System.Random
+01:36:37.363    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+01:36:37.363    (INFO)     Trx.Start: **** ConnSH637091625972823179System.Random
+01:36:37.363    (INFO)     Trx.Commit: **C** ConnSH637091625972823179System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+01:36:37.363    (INFO)     Trx.Start: **** ConnSH637091625974662958System.Random
+01:36:37.363    (INFO)     Trx.Commit: **C** ConnSH637091625974662958System.Random
+01:38:58.385    (INFO)     MSession.Logout: 06:33:13.685
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user SuperUser : The server is not operational.
+
+01:39:46.394    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+01:39:47.394    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:39:47.394    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+01:39:47.394    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:39:47.394    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=100, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:39:47.394    (INFO)     Trx.Start: **** ConnSH637091627875387496System.Random
+01:39:47.394    (INFO)     Trx.Commit: **C** ConnSH637091627875387496System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT C_TaxCategory_Version_ID FROM C_TaxCategory_Version WHERE IsDefault='Y' AND IsActive='Y' AND AD_Client_ID=0 AND (COALESCE(AD_Org_ID,0) IN(0,0)) ORDER BY AD_Client_ID DESC, AD_Org_ID DESC
+===========>     (SEVERE)   OracleHelper.ExecuteReader: ORA-00942: table or view does not exist [Query DR] SELECT C_TaxCategory_Version_ID FROM C_TaxCategory_Version WHERE IsDefault='Y' AND IsActive='Y' AND AD_Client_ID=0 AND (COALESCE(AD_Org_ID,0) IN(0,0)) ORDER BY AD_Client_ID DESC, AD_Org_ID DESC
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 100  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 100 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/11/19','mm/dd/yy') and to_date('11/19/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/12/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=100 AND AppointmentsInfo.AD_User_ID  = 100)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:39:52.395    (INFO)     Trx.Start: **** ConnSH637091627929257191System.Random
+01:39:53.395    (INFO)     Trx.Commit: **C** ConnSH637091627929257191System.Random
+01:39:54.395    (INFO)     Trx.Start: **** ConnSH637091627946040413System.Random
+01:39:54.395    (INFO)     Trx.Commit: **C** ConnSH637091627946040413System.Random
+01:40:05.405    (INFO)     Trx.Start: **** ConnSH637091628055574047System.Random
+01:40:05.405    (INFO)     Trx.Commit: **C** ConnSH637091628055574047System.Random
+01:40:15.401    (INFO)     Trx.Start: **** GridDel637091628152731811
+01:41:26.412    (INFO)     Trx.Start: **** ConnSH637091628860901194System.Random
+01:41:26.412    (INFO)     Trx.Commit: **C** ConnSH637091628860901194System.Random
+01:41:27.412    (INFO)     MSequence.DeleteTableSequence: True
+01:41:27.412    (INFO)     CacheMgt.Reset: AD_Table: #2 (1673)
+01:41:27.412    (INFO)     MTable.DeleteRecord: True
+01:41:27.412    (INFO)     Trx.Commit: **C** GridDel637091628152731811
+01:41:31.413    (INFO)     Trx.Start: **** ConnSH637091628919736277System.Random
+01:41:32.413    (INFO)     Trx.Commit: **C** ConnSH637091628919736277System.Random
+01:41:40.414    (INFO)     Trx.Start: **** ConnSH637091629000478449System.Random
+01:41:40.414    (INFO)     Trx.Commit: **C** ConnSH637091629000478449System.Random
+01:41:44.414    (INFO)     Trx.Start: **** ConnSH637091629047458482System.Random
+01:41:44.414    (INFO)     Trx.Commit: **C** ConnSH637091629047458482System.Random
+01:41:46.414    (INFO)     Trx.Start: **** ConnSH637091629068188666System.Random
+01:41:46.414    (INFO)     Trx.Commit: **C** ConnSH637091629068188666System.Random
+01:41:57.415    (INFO)     Trx.Start: **** ConnSH637091629173644900System.Random
+01:41:57.415    (INFO)     Trx.Commit: **C** ConnSH637091629173644900System.Random
+01:41:57.415    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+01:42:07.427    (INFO)     Trx.Start: **** ConnSH637091629278028211System.Random
+01:42:07.427    (INFO)     Trx.Commit: **C** ConnSH637091629278028211System.Random
+01:42:07.427    (INFO)     CacheMgt.Reset: AD_Column: #1 (0)
+01:42:11.421    (INFO)     Trx.Start: **** ConnSH637091629314120211System.Random
+01:42:11.421    (INFO)     Trx.Commit: **C** ConnSH637091629314120211System.Random
+01:42:11.421    (INFO)     ColumnSync.DoIt: C_Column_ID=1014438
+01:42:11.421    (INFO)     Trx.Start: **** SvrProcess
+01:42:13.421    (INFO)     ColumnSync.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - ALTER TABLE C_TaxCategory MODIFY  C_Tax_ID  NUMBER(10) DEFAULT  NULL 
+01:42:24.422    (INFO)     Trx.Start: **** ConnSH637091629445433562System.Random
+01:42:24.422    (INFO)     Trx.Commit: **C** ConnSH637091629445433562System.Random
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MTable.CreateVersionInfo: Virtual Column - ConstraintName
+----------->     (WARNING)  MTable.CreateVersionInfo: Column not updateable - LoadSeq - NewValue=60 - OldValue=
+01:42:24.422    (INFO)     Trx.Start: **** ConnSH637091629448952896System.Random
+01:42:25.422    (INFO)     Trx.Commit: **C** ConnSH637091629448952896System.Random
+01:42:25.422    (INFO)     Trx.Start: **** ConnSH637091629450205948System.Random
+01:42:25.422    (INFO)     Trx.Commit: **C** ConnSH637091629450205948System.Random
+01:42:25.422    (INFO)     Trx.Start: **** ConnSH637091629453139329System.Random
+01:42:25.422    (INFO)     Trx.Commit: **C** ConnSH637091629453139329System.Random
+01:42:25.422    (INFO)     Trx.Start: **** ConnSH637091629455199513System.Random
+01:42:25.422    (INFO)     Trx.Commit: **C** ConnSH637091629455199513System.Random
+01:42:25.422    (INFO)     Trx.Start: **** ConnSH637091629456414901System.Random
+01:42:25.422    (INFO)     Trx.Commit: **C** ConnSH637091629456414901System.Random
+01:42:25.422    (INFO)     Trx.Start: **** ConnSH637091629459687509System.Random
+01:42:26.422    (INFO)     Trx.Commit: **C** ConnSH637091629459687509System.Random
+01:42:26.422    (INFO)     Trx.Start: **** ConnSH637091629460370166System.Random
+01:42:26.422    (INFO)     Trx.Commit: **C** ConnSH637091629460370166System.Random
+01:42:26.422    (INFO)     Trx.Start: **** ConnSH637091629463357720System.Random
+01:42:26.422    (INFO)     Trx.Commit: **C** ConnSH637091629463357720System.Random
+01:42:26.422    (INFO)     Trx.Start: **** ConnSH637091629464055695System.Random
+01:42:26.422    (INFO)     Trx.Commit: **C** ConnSH637091629464055695System.Random
+01:42:26.422    (INFO)     Trx.Start: **** ConnSH637091629466836680System.Random
+01:42:26.422    (INFO)     Trx.Commit: **C** ConnSH637091629466836680System.Random
+01:42:26.422    (INFO)     Trx.Start: **** ConnSH637091629467554994System.Random
+01:42:26.422    (INFO)     Trx.Commit: **C** ConnSH637091629467554994System.Random
+01:42:27.422    (INFO)     Trx.Start: **** ConnSH637091629470314002System.Random
+01:42:27.422    (INFO)     Trx.Commit: **C** ConnSH637091629470314002System.Random
+01:42:27.422    (INFO)     Trx.Start: **** ConnSH637091629471007055System.Random
+01:42:27.422    (INFO)     Trx.Commit: **C** ConnSH637091629471007055System.Random
+01:42:27.422    (INFO)     Trx.Start: **** ConnSH637091629474181139System.Random
+01:42:27.422    (INFO)     Trx.Commit: **C** ConnSH637091629474181139System.Random
+01:42:27.422    (INFO)     Trx.Start: **** ConnSH637091629474908208System.Random
+01:42:27.422    (INFO)     Trx.Commit: **C** ConnSH637091629474908208System.Random
+01:42:27.422    (INFO)     Trx.Start: **** ConnSH637091629477816970System.Random
+01:42:27.422    (INFO)     Trx.Commit: **C** ConnSH637091629477816970System.Random
+01:42:27.422    (INFO)     Trx.Start: **** ConnSH637091629478495662System.Random
+01:42:27.422    (INFO)     Trx.Commit: **C** ConnSH637091629478495662System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:28.422    (INFO)     Trx.Start: **** ConnSH637091629481653047System.Random
+01:42:28.422    (INFO)     Trx.Commit: **C** ConnSH637091629481653047System.Random
+01:42:28.422    (INFO)     Trx.Start: **** ConnSH637091629482368021System.Random
+01:42:28.422    (INFO)     Trx.Commit: **C** ConnSH637091629482368021System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:28.422    (INFO)     Trx.Start: **** ConnSH637091629486134212System.Random
+01:42:28.422    (INFO)     Trx.Commit: **C** ConnSH637091629486134212System.Random
+01:42:28.422    (INFO)     Trx.Start: **** ConnSH637091629486834686System.Random
+01:42:28.422    (INFO)     Trx.Commit: **C** ConnSH637091629486834686System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:29.422    (INFO)     Trx.Start: **** ConnSH637091629490928645System.Random
+01:42:29.422    (INFO)     Trx.Commit: **C** ConnSH637091629490928645System.Random
+01:42:29.422    (INFO)     Trx.Start: **** ConnSH637091629491617551System.Random
+01:42:29.422    (INFO)     Trx.Commit: **C** ConnSH637091629491617551System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:29.422    (INFO)     Trx.Start: **** ConnSH637091629495114405System.Random
+01:42:29.422    (INFO)     Trx.Commit: **C** ConnSH637091629495114405System.Random
+01:42:29.422    (INFO)     Trx.Start: **** ConnSH637091629495869787System.Random
+01:42:29.422    (INFO)     Trx.Commit: **C** ConnSH637091629495869787System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:29.422    (INFO)     Trx.Start: **** ConnSH637091629499809029System.Random
+01:42:30.423    (INFO)     Trx.Commit: **C** ConnSH637091629499809029System.Random
+01:42:30.423    (INFO)     Trx.Start: **** ConnSH637091629500493263System.Random
+01:42:30.423    (INFO)     Trx.Commit: **C** ConnSH637091629500493263System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:30.423    (INFO)     Trx.Start: **** ConnSH637091629504158427System.Random
+01:42:30.423    (INFO)     Trx.Commit: **C** ConnSH637091629504158427System.Random
+01:42:30.423    (INFO)     Trx.Start: **** ConnSH637091629504834848System.Random
+01:42:30.423    (INFO)     Trx.Commit: **C** ConnSH637091629504834848System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:30.423    (INFO)     Trx.Start: **** ConnSH637091629508716403System.Random
+01:42:30.423    (INFO)     Trx.Commit: **C** ConnSH637091629508716403System.Random
+01:42:30.423    (INFO)     Trx.Start: **** ConnSH637091629509498162System.Random
+01:42:31.423    (INFO)     Trx.Commit: **C** ConnSH637091629509498162System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:31.423    (INFO)     Trx.Start: **** ConnSH637091629513354848System.Random
+01:42:31.423    (INFO)     Trx.Commit: **C** ConnSH637091629513354848System.Random
+01:42:31.423    (INFO)     Trx.Start: **** ConnSH637091629514066459System.Random
+01:42:31.423    (INFO)     Trx.Commit: **C** ConnSH637091629514066459System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:31.423    (INFO)     Trx.Start: **** ConnSH637091629517778664System.Random
+01:42:31.423    (INFO)     Trx.Commit: **C** ConnSH637091629517778664System.Random
+01:42:31.423    (INFO)     Trx.Start: **** ConnSH637091629518479445System.Random
+01:42:31.423    (INFO)     Trx.Commit: **C** ConnSH637091629518479445System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:32.423    (INFO)     Trx.Start: **** ConnSH637091629522209857System.Random
+01:42:32.423    (INFO)     Trx.Commit: **C** ConnSH637091629522209857System.Random
+01:42:32.423    (INFO)     Trx.Start: **** ConnSH637091629523000485System.Random
+01:42:32.423    (INFO)     Trx.Commit: **C** ConnSH637091629523000485System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:32.423    (INFO)     Trx.Start: **** ConnSH637091629526973866System.Random
+01:42:32.423    (INFO)     Trx.Commit: **C** ConnSH637091629526973866System.Random
+01:42:32.423    (INFO)     Trx.Start: **** ConnSH637091629527798321System.Random
+01:42:32.423    (INFO)     Trx.Commit: **C** ConnSH637091629527798321System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:33.423    (INFO)     Trx.Start: **** ConnSH637091629531663555System.Random
+01:42:33.423    (INFO)     Trx.Commit: **C** ConnSH637091629531663555System.Random
+01:42:33.423    (INFO)     Trx.Start: **** ConnSH637091629532351760System.Random
+01:42:33.423    (INFO)     Trx.Commit: **C** ConnSH637091629532351760System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:33.423    (INFO)     Trx.Start: **** ConnSH637091629535987523System.Random
+01:42:33.423    (INFO)     Trx.Commit: **C** ConnSH637091629535987523System.Random
+01:42:33.423    (INFO)     Trx.Start: **** ConnSH637091629536691267System.Random
+01:42:33.423    (INFO)     Trx.Commit: **C** ConnSH637091629536691267System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:34.423    (INFO)     Trx.Start: **** ConnSH637091629540426142System.Random
+01:42:34.423    (INFO)     Trx.Commit: **C** ConnSH637091629540426142System.Random
+01:42:34.423    (INFO)     Trx.Start: **** ConnSH637091629541114533System.Random
+01:42:34.423    (INFO)     Trx.Commit: **C** ConnSH637091629541114533System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:34.423    (INFO)     Trx.Start: **** ConnSH637091629544912124System.Random
+01:42:34.423    (INFO)     Trx.Commit: **C** ConnSH637091629544912124System.Random
+01:42:34.423    (INFO)     Trx.Start: **** ConnSH637091629545622065System.Random
+01:42:34.423    (INFO)     Trx.Commit: **C** ConnSH637091629545622065System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:34.423    (INFO)     Trx.Start: **** ConnSH637091629549426214System.Random
+01:42:35.423    (INFO)     Trx.Commit: **C** ConnSH637091629549426214System.Random
+01:42:35.423    (INFO)     Trx.Start: **** ConnSH637091629550324439System.Random
+01:42:35.423    (INFO)     Trx.Commit: **C** ConnSH637091629550324439System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:35.423    (INFO)     Trx.Start: **** ConnSH637091629554035797System.Random
+01:42:35.423    (INFO)     Trx.Commit: **C** ConnSH637091629554035797System.Random
+01:42:35.423    (INFO)     Trx.Start: **** ConnSH637091629554714250System.Random
+01:42:35.423    (INFO)     Trx.Commit: **C** ConnSH637091629554714250System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:35.423    (INFO)     Trx.Start: **** ConnSH637091629558416787System.Random
+01:42:35.423    (INFO)     Trx.Commit: **C** ConnSH637091629558416787System.Random
+01:42:35.423    (INFO)     Trx.Start: **** ConnSH637091629559112596System.Random
+01:42:35.423    (INFO)     Trx.Commit: **C** ConnSH637091629559112596System.Random
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Client_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Org_ID - NewValue=0 - OldValue=0
+----------->     (WARNING)  MColumn.CreateVersionInfo: Column not updateable - AD_Table_ID - NewValue=252 - OldValue=
+----------->     (WARNING)  MColumn.CreateVersionInfo: Virtual Column - ConstraintName
+01:42:36.423    (INFO)     Trx.Start: **** ConnSH637091629563503001System.Random
+01:42:36.423    (INFO)     Trx.Commit: **C** ConnSH637091629563503001System.Random
+01:42:36.423    (INFO)     Trx.Start: **** ConnSH637091629564307476System.Random
+01:42:36.423    (INFO)     Trx.Commit: **C** ConnSH637091629564307476System.Random
+01:42:37.423    (INFO)     MasterVersions.AddLog: 0 - 1/1/0001 12:00:00 AM - 1 - CREATE TABLE C_TaxCategory_Version (AD_Client_ID NUMBER(10), AD_Org_ID NUMBER(10), C_TaxCategory_ID NUMBER(10), C_TaxCategory_Version_ID NUMBER(10) NOT NULL, C_Tax_ID NUMBER(10), CommodityCode NVARCHAR2(20), Created DATE DEFAULT SYSDATE, CreatedBy NUMBER(10) DEFAULT 0, Description NVARCHAR2(255), Export_ID NVARCHAR2(50), IsActive CHAR(1) DEFAULT 'Y' CHECK (IsActive IN ('Y','N')), IsDefault CHAR(1) DEFAULT 'N' CHECK (IsDefault IN ('Y','N')), IsVersionApproved CHAR(1) DEFAULT 'N' CHECK (IsVersionApproved IN ('Y','N')), Name NVARCHAR2(60), Processed CHAR(1) DEFAULT 'N' CHECK (Processed IN ('Y','N')), ProcessedVersion CHAR(1) DEFAULT 'N' CHECK (ProcessedVersion IN ('Y','N')), Processing CHAR(1) DEFAULT 'N' CHECK (Processing IN ('Y','N')), RecordVersion NUMBER(10), Updated DATE DEFAULT SYSDATE, UpdatedBy NUMBER(10) DEFAULT 0, VATAX_GenerateLines CHAR(1), VATAX_Location CHAR(1), VATAX_Preference1 CHAR(1), VATAX_Preference2 CHAR(1), VATAX_Preference3 CHAR(1), VersionValidFrom DATE, CONSTRAINT PK1001173 PRIMARY KEY (C_TaxCategory_Version_ID))
+01:42:37.423    (INFO)     MasterVersions.InsertVersionData: Master Version Insertion QueryINSERT INTO C_TaxCategory_Version(AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,Name,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,IsVersionApproved,ProcessedVersion,RecordVersion,Processed,Processing,C_TaxCategory_Version_ID) SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,Name,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,Created,'Y','Y',1,'Y','N',C_TaxCategory_ID FROM C_TaxCategory WHERE C_TaxCategory_ID NOT IN (SELECT C_TaxCategory_ID FROM C_TaxCategory_Version) :: Records Inserted ==>> 284
+01:42:37.423    (INFO)     MasterVersions.InsertVersionData: Master Version Sequence Updated 1
+01:42:37.423    (INFO)     CacheMgt.Reset: AD_Process: #1 (2)
+01:42:37.423    (INFO)     Trx.Commit: **C** SvrProcess
+01:42:37.423    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:42:56.425    (INFO)     Trx.Start: **** ConnSH637091629768058777System.Random
+01:42:56.425    (INFO)     Trx.Commit: **C** ConnSH637091629768058777System.Random
+01:42:56.425    (INFO)     CacheReset.DoIt: 
+01:42:56.425    (INFO)     Env.Reset: finalCall=False
+01:42:56.425    (INFO)     CacheMgt.Reset: #17 (6188)
+01:42:56.425    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:42:56.425    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:42:57.425    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=100, reload=True
+01:42:57.425    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:42:57.425    (INFO)     MChangeLog.FillChangeLog: #9
+01:42:57.425    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:42:57.425    (INFO)     Trx.Start: **** ConnSH637091629771565450System.Random
+01:42:57.425    (INFO)     Trx.Commit: **C** ConnSH637091629771565450System.Random
+01:42:57.425    (INFO)     Msg.InitMsg: Records=5823 - en_US
+01:42:57.425    (INFO)     Trx.Start: **** ConnSH637091629777851416System.Random
+01:42:57.425    (INFO)     Trx.Commit: **C** ConnSH637091629777851416System.Random
+01:42:58.425    (INFO)     MSession.Logout: 06:33:11.358
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+01:43:45.434    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:43:45.434    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:43:45.434    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:43:46.434    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:43:46.434    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+01:43:46.434    (INFO)     Trx.Start: **** ConnSH637091630267311456System.Random
+01:43:46.434    (INFO)     Trx.Commit: **C** ConnSH637091630267311456System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/11/19','mm/dd/yy') and to_date('11/19/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/12/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+01:43:51.435    (INFO)     Trx.Start: **** ConnSH637091630311311335System.Random
+01:43:51.435    (INFO)     Trx.Commit: **C** ConnSH637091630311311335System.Random
+01:43:51.435    (INFO)     CacheReset.DoIt: 
+01:43:51.435    (INFO)     Env.Reset: finalCall=False
+01:43:51.435    (INFO)     CacheMgt.Reset: #17 (7881)
+01:43:51.435    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+01:43:51.435    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+01:43:51.435    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+01:43:51.435    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+01:43:51.435    (INFO)     MChangeLog.FillChangeLog: #9
+01:43:51.435    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+01:43:51.435    (INFO)     Trx.Start: **** ConnSH637091630315913972System.Random
+01:43:51.435    (INFO)     Trx.Commit: **C** ConnSH637091630315913972System.Random
+01:43:51.435    (INFO)     Trx.Start: **** ConnSH637091630316959594System.Random
+01:43:51.435    (INFO)     Trx.Commit: **C** ConnSH637091630316959594System.Random
+01:43:52.435    (INFO)     Msg.InitMsg: Records=5823 - en_US
+01:43:52.435    (INFO)     Trx.Start: **** ConnSH637091630323183357System.Random
+01:43:52.435    (INFO)     Trx.Commit: **C** ConnSH637091630323183357System.Random
+01:43:52.435    (INFO)     Trx.Start: **** ConnSH637091630323915857System.Random
+01:43:52.435    (INFO)     Trx.Commit: **C** ConnSH637091630323915857System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+01:43:55.435    (INFO)     Trx.Start: **** ConnSH637091630352538344System.Random
+01:43:55.435    (INFO)     Trx.Commit: **C** ConnSH637091630352538344System.Random
+01:43:55.435    (INFO)     Trx.Start: **** ConnSH637091630353304475System.Random
+01:43:55.435    (INFO)     Trx.Commit: **C** ConnSH637091630353304475System.Random
+01:43:55.435    (INFO)     Trx.Start: **** ConnSH637091630357101243System.Random
+01:43:55.435    (INFO)     Trx.Commit: **C** ConnSH637091630357101243System.Random
+01:43:55.435    (INFO)     Trx.Start: **** ConnSH637091630357961102System.Random
+01:43:55.435    (INFO)     Trx.Commit: **C** ConnSH637091630357961102System.Random
+01:43:59.435    (INFO)     Trx.Start: **** ConnSH637091630394440168System.Random
+01:43:59.435    (INFO)     Trx.Commit: **C** ConnSH637091630394440168System.Random
+01:44:09.449    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+01:44:09.449    (INFO)     Trx.Start: **** ConnSH637091630494024741System.Random
+01:44:09.449    (INFO)     Trx.Commit: **C** ConnSH637091630494024741System.Random
+01:44:09.449    (INFO)     Trx.Start: **** ConnSH637091630494759320System.Random
+01:44:09.449    (INFO)     Trx.Commit: **C** ConnSH637091630494759320System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+01:44:09.449    (INFO)     Trx.Start: **** ConnSH637091630497560201System.Random
+01:44:09.449    (INFO)     Trx.Commit: **C** ConnSH637091630497560201System.Random
+*** 11/12/2019 3:23:16 PM VAdvantage Log ***

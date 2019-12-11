@@ -1,0 +1,56 @@
+*** 11/13/2019 10:27:22 AM VAdvantage Log  ***
+10:27:22.272    (INFO)     Trx.Start: **** ConnSH637092376428963939System.Random
+10:27:23.272    (INFO)     Trx.Commit: **C** ConnSH637092376428963939System.Random
+10:27:23.272    (INFO)     MChangeLog.FillChangeLog: #9
+10:27:23.272    (INFO)     CacheReset.DoIt: 
+10:27:23.272    (INFO)     Env.Reset: finalCall=False
+10:27:23.272    (INFO)     CacheMgt.Reset: #16 (7876)
+10:27:23.272    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+10:27:23.272    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+10:27:23.272    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+10:27:23.272    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+10:27:23.272    (INFO)     MChangeLog.FillChangeLog: #9
+10:27:23.272    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+10:27:23.272    (INFO)     Trx.Start: **** ConnSH637092376434783402System.Random
+10:27:23.272    (INFO)     Trx.Commit: **C** ConnSH637092376434783402System.Random
+10:27:23.272    (INFO)     Trx.Start: **** ConnSH637092376435535074System.Random
+10:27:23.272    (INFO)     Trx.Commit: **C** ConnSH637092376435535074System.Random
+10:27:24.272    (INFO)     Msg.InitMsg: Records=5823 - en_US
+10:27:24.272    (INFO)     Trx.Start: **** ConnSH637092376441979081System.Random
+10:27:24.272    (INFO)     Trx.Commit: **C** ConnSH637092376441979081System.Random
+10:27:24.272    (INFO)     Trx.Start: **** ConnSH637092376442647016System.Random
+10:27:24.272    (INFO)     Trx.Commit: **C** ConnSH637092376442647016System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+10:27:27.272    (INFO)     Trx.Start: **** ConnSH637092376475321548System.Random
+10:27:27.272    (INFO)     Trx.Commit: **C** ConnSH637092376475321548System.Random
+10:27:27.272    (INFO)     Trx.Start: **** ConnSH637092376476242022System.Random
+10:27:27.272    (INFO)     Trx.Commit: **C** ConnSH637092376476242022System.Random
+10:27:28.272    (INFO)     Trx.Start: **** ConnSH637092376481149470System.Random
+10:27:28.272    (INFO)     Trx.Commit: **C** ConnSH637092376481149470System.Random
+10:27:28.272    (INFO)     Trx.Start: **** ConnSH637092376482069674System.Random
+10:27:28.272    (INFO)     Trx.Commit: **C** ConnSH637092376482069674System.Random
+10:27:36.273    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+10:27:36.273    (INFO)     Trx.Start: **** ConnSH637092376569310946System.Random
+10:27:37.273    (INFO)     Trx.Commit: **C** ConnSH637092376569310946System.Random
+10:27:37.273    (INFO)     Trx.Start: **** ConnSH637092376570041448System.Random
+10:27:37.273    (INFO)     Trx.Commit: **C** ConnSH637092376570041448System.Random
+===========>     (SEVERE)   DB.ExecuteQuery:  => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist
+10:27:37.273    (INFO)     Trx.Start: **** ConnSH637092376573848293System.Random
+10:27:37.273    (INFO)     Trx.Commit: **C** ConnSH637092376573848293System.Random
+10:27:44.274    (INFO)     MTable.GetPO: Using GenericPO for C_TaxCategory_Version
+10:27:44.274    (INFO)     Trx.Start: **** POdel
+===========>     (SEVERE)   OracleHelper.ExecuteNonQuery: ORA-00942: table or view does not exist [Query NQTrx]DELETE FROM C_TaxCategory_Version_Trl WHERE C_TaxCategory_Version_ID=1000306
+===========>     (SEVERE)   DB.ExecuteQuery: POdel => ORA-00942: table or view does not exist
+----------->     (WARNING)  DB.ExecuteQuery: DBExecuteError - ORA-00942: table or view does not exist

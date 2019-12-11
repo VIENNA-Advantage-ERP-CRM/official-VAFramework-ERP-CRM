@@ -1,0 +1,234 @@
+*** 11/4/2019 11:13:04 AM VAdvantage Log  ***
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:13:04.134    (INFO)     Trx.Start: **** ConnSH637084627845500429System.Random
+11:13:04.134    (INFO)     Trx.Commit: **C** ConnSH637084627845500429System.Random
+11:13:09.139    (INFO)     Trx.Start: **** ConnSH637084627892770014System.Random
+11:13:09.139    (INFO)     Trx.Commit: **C** ConnSH637084627892770014System.Random
+11:13:26.132    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:13:26.132    (INFO)     Trx.Start: **** ConnSH637084628065656139System.Random
+11:13:26.132    (INFO)     Trx.Commit: **C** ConnSH637084628065656139System.Random
+11:13:26.132    (INFO)     MChangeLog.FillChangeLog: #9
+11:13:26.132    (INFO)     Trx.Start: **** ConnSH637084628067016080System.Random
+11:13:26.132    (INFO)     Trx.Commit: **C** ConnSH637084628067016080System.Random
+11:13:31.133    (INFO)     Trx.Start: **** ConnSH637084628119259059System.Random
+11:13:31.133    (INFO)     Trx.Commit: **C** ConnSH637084628119259059System.Random
+11:18:51.185    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:18:51.185    (INFO)     Trx.Start: **** ConnSH637084631318424725System.Random
+11:18:51.185    (INFO)     Trx.Commit: **C** ConnSH637084631318424725System.Random
+11:18:51.185    (INFO)     Trx.Start: **** ConnSH637084631319744683System.Random
+11:18:52.185    (INFO)     Trx.Commit: **C** ConnSH637084631319744683System.Random
+11:18:52.185    (INFO)     Trx.Start: **** ConnSH637084631323584544System.Random
+11:18:52.185    (INFO)     Trx.Commit: **C** ConnSH637084631323584544System.Random
+11:18:53.185    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:18:53.185    (INFO)     Trx.Start: **** ConnSH637084631334034135System.Random
+11:18:53.185    (INFO)     Trx.Commit: **C** ConnSH637084631334034135System.Random
+11:18:53.185    (INFO)     Trx.Start: **** ConnSH637084631335274092System.Random
+11:18:53.185    (INFO)     Trx.Commit: **C** ConnSH637084631335274092System.Random
+11:18:53.185    (INFO)     Trx.Start: **** ConnSH637084631339003960System.Random
+11:18:54.185    (INFO)     Trx.Commit: **C** ConnSH637084631339003960System.Random
+11:18:54.185    (INFO)     Trx.Start: **** ConnSH637084631340163907System.Random
+11:18:54.185    (INFO)     Trx.Commit: **C** ConnSH637084631340163907System.Random
+11:18:54.185    (INFO)     MWFActivity.Run: MWFActivity[1292454,Node=Start,State=ON,AD_User_ID=101,11/4/2019 5:48:52 AM]
+11:18:54.185    (INFO)     Trx.Start: **** ConnSH637084631343063807System.Random
+11:18:54.185    (INFO)     Trx.Commit: **C** ConnSH637084631343063807System.Random
+11:18:54.185    (INFO)     Trx.Start: **** ConnSH637084631344033773System.Random
+11:18:54.185    (INFO)     Trx.Commit: **C** ConnSH637084631344033773System.Random
+11:18:54.185    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098018, AD_Workflow_ID=1000040, WFState=OR]
+11:18:54.185    (INFO)     MWFActivity.PerformWork: MWFNode[1000166-Start,Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+11:18:54.185    (INFO)     Trx.Start: **** ConnSH637084631346053704System.Random
+11:18:54.185    (INFO)     Trx.Commit: **C** ConnSH637084631346053704System.Random
+11:18:54.185    (INFO)     Trx.Start: **** ConnSH637084631346973656System.Random
+11:18:54.185    (INFO)     Trx.Commit: **C** ConnSH637084631346973656System.Random
+11:18:54.185    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098018, AD_Workflow_ID=1000040, WFState=OR]
+11:18:54.185    (INFO)     Trx.Start: **** ConnSH637084631348203633System.Random
+11:18:54.185    (INFO)     Trx.Commit: **C** ConnSH637084631348203633System.Random
+11:18:55.185    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:18:55.185    (INFO)     Trx.Start: **** ConnSH637084631359193195System.Random
+11:18:55.185    (INFO)     Trx.Commit: **C** ConnSH637084631359193195System.Random
+11:18:55.185    (INFO)     Trx.Start: **** ConnSH637084631359913167System.Random
+11:18:56.185    (INFO)     Trx.Commit: **C** ConnSH637084631359913167System.Random
+11:18:56.185    (INFO)     Trx.Start: **** ConnSH637084631363283038System.Random
+11:18:56.185    (INFO)     Trx.Commit: **C** ConnSH637084631363283038System.Random
+11:18:56.185    (INFO)     Trx.Start: **** ConnSH637084631363983016System.Random
+11:18:56.185    (INFO)     Trx.Commit: **C** ConnSH637084631363983016System.Random
+11:18:56.185    (INFO)     MWFActivity.Run: MWFActivity[1292455,Node=Approval,State=ON,AD_User_ID=101,11/4/2019 5:48:54 AM]
+11:18:56.185    (INFO)     Trx.Start: **** ConnSH637084631366292924System.Random
+11:18:56.185    (INFO)     Trx.Commit: **C** ConnSH637084631366292924System.Random
+11:18:56.185    (INFO)     Trx.Start: **** ConnSH637084631367292895System.Random
+11:18:56.185    (INFO)     Trx.Commit: **C** ConnSH637084631367292895System.Random
+11:18:56.185    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098018, AD_Workflow_ID=1000040, WFState=OR]
+11:18:56.185    (INFO)     MWFActivity.PerformWork: MWFNode[1000167-Approval,Action=UserChoice:AD_Column_ID=1027736] [VAdvantage.DataBase.Trx]
+11:18:56.185    (INFO)     Trx.Start: **** ConnSH637084631368802821System.Random
+11:18:56.185    (INFO)     Trx.Commit: **C** ConnSH637084631368802821System.Random
+11:18:56.185    (INFO)     Trx.Start: **** ConnSH637084631369782794System.Random
+11:18:57.185    (INFO)     Trx.Commit: **C** ConnSH637084631369782794System.Random
+11:18:57.185    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098018, AD_Workflow_ID=1000040, WFState=OR]
+11:18:57.185    (INFO)     Trx.Start: **** ConnSH637084631370752757System.Random
+11:18:57.185    (INFO)     Trx.Commit: **C** ConnSH637084631370752757System.Random
+11:19:06.196    (INFO)     Trx.Start: **** ConnSH637084631461289579System.Random
+11:19:06.196    (INFO)     Trx.Commit: **C** ConnSH637084631461289579System.Random
+11:19:43.194    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:19:43.194    (INFO)     Trx.Start: **** ConnSH637084631837720917System.Random
+11:19:43.194    (INFO)     Trx.Commit: **C** ConnSH637084631837720917System.Random
+11:19:43.194    (INFO)     Trx.Start: **** ConnSH637084631838490853System.Random
+11:19:43.194    (INFO)     Trx.Commit: **C** ConnSH637084631838490853System.Random
+11:19:49.194    (INFO)     Trx.Start: **** ConnSH637084631895538466System.Random
+11:19:49.194    (INFO)     Trx.Commit: **C** ConnSH637084631895538466System.Random
+11:22:36.223    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:22:37.223    (INFO)     Trx.Start: **** ConnSH637084633570904097System.Random
+11:22:37.223    (INFO)     Trx.Commit: **C** ConnSH637084633570904097System.Random
+11:22:37.223    (INFO)     Trx.Start: **** ConnSH637084633571684011System.Random
+11:22:37.223    (INFO)     Trx.Commit: **C** ConnSH637084633571684011System.Random
+11:22:37.223    (INFO)     Trx.Start: **** ConnSH637084633574513966System.Random
+11:22:37.223    (INFO)     Trx.Commit: **C** ConnSH637084633574513966System.Random
+11:22:38.223    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:22:38.223    (INFO)     Trx.Start: **** ConnSH637084633583643541System.Random
+11:22:38.223    (INFO)     Trx.Commit: **C** ConnSH637084633583643541System.Random
+11:22:38.223    (INFO)     Trx.Start: **** ConnSH637084633584343521System.Random
+11:22:38.223    (INFO)     Trx.Commit: **C** ConnSH637084633584343521System.Random
+11:22:38.223    (INFO)     Trx.Start: **** ConnSH637084633587199572System.Random
+11:22:38.223    (INFO)     Trx.Commit: **C** ConnSH637084633587199572System.Random
+11:22:38.223    (INFO)     Trx.Start: **** ConnSH637084633587925867System.Random
+11:22:38.223    (INFO)     Trx.Commit: **C** ConnSH637084633587925867System.Random
+11:22:38.223    (INFO)     MWFActivity.Run: MWFActivity[1292456,Node=Start,State=ON,AD_User_ID=101,11/4/2019 5:52:37 AM]
+11:22:38.223    (INFO)     Trx.Start: **** ConnSH637084633589977038System.Random
+11:22:39.223    (INFO)     Trx.Commit: **C** ConnSH637084633589977038System.Random
+11:22:39.223    (INFO)     Trx.Start: **** ConnSH637084633590846766System.Random
+11:22:39.223    (INFO)     Trx.Commit: **C** ConnSH637084633590846766System.Random
+11:22:39.223    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098019, AD_Workflow_ID=1000040, WFState=OR]
+11:22:39.223    (INFO)     MWFActivity.PerformWork: MWFNode[1000166-Start,Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+11:22:39.223    (INFO)     Trx.Start: **** ConnSH637084633591909128System.Random
+11:22:39.223    (INFO)     Trx.Commit: **C** ConnSH637084633591909128System.Random
+11:22:39.223    (INFO)     Trx.Start: **** ConnSH637084633592819059System.Random
+11:22:39.223    (INFO)     Trx.Commit: **C** ConnSH637084633592819059System.Random
+11:22:39.223    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098019, AD_Workflow_ID=1000040, WFState=OR]
+11:22:39.223    (INFO)     Trx.Start: **** ConnSH637084633593989390System.Random
+11:22:39.223    (INFO)     Trx.Commit: **C** ConnSH637084633593989390System.Random
+11:22:40.224    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:22:40.224    (INFO)     Trx.Start: **** ConnSH637084633603675100System.Random
+11:22:40.224    (INFO)     Trx.Commit: **C** ConnSH637084633603675100System.Random
+11:22:40.224    (INFO)     Trx.Start: **** ConnSH637084633604489264System.Random
+11:22:40.224    (INFO)     Trx.Commit: **C** ConnSH637084633604489264System.Random
+11:22:40.224    (INFO)     Trx.Start: **** ConnSH637084633606998463System.Random
+11:22:40.224    (INFO)     Trx.Commit: **C** ConnSH637084633606998463System.Random
+11:22:40.224    (INFO)     Trx.Start: **** ConnSH637084633607688448System.Random
+11:22:40.224    (INFO)     Trx.Commit: **C** ConnSH637084633607688448System.Random
+11:22:41.224    (INFO)     MWFActivity.Run: MWFActivity[1292457,Node=Approval,State=ON,AD_User_ID=101,11/4/2019 5:52:39 AM]
+11:22:41.224    (INFO)     Trx.Start: **** ConnSH637084633610380712System.Random
+11:22:41.224    (INFO)     Trx.Commit: **C** ConnSH637084633610380712System.Random
+11:22:41.224    (INFO)     Trx.Start: **** ConnSH637084633611260751System.Random
+11:22:41.224    (INFO)     Trx.Commit: **C** ConnSH637084633611260751System.Random
+11:22:41.224    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098019, AD_Workflow_ID=1000040, WFState=OR]
+11:22:41.224    (INFO)     MWFActivity.PerformWork: MWFNode[1000167-Approval,Action=UserChoice:AD_Column_ID=1027736] [VAdvantage.DataBase.Trx]
+11:22:41.224    (INFO)     Trx.Start: **** ConnSH637084633612382701System.Random
+11:22:41.224    (INFO)     Trx.Commit: **C** ConnSH637084633612382701System.Random
+11:22:41.224    (INFO)     Trx.Start: **** ConnSH637084633613232739System.Random
+11:22:41.224    (INFO)     Trx.Commit: **C** ConnSH637084633613232739System.Random
+11:22:41.224    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098019, AD_Workflow_ID=1000040, WFState=OR]
+11:22:41.224    (INFO)     Trx.Start: **** ConnSH637084633614129458System.Random
+11:22:41.224    (INFO)     Trx.Commit: **C** ConnSH637084633614129458System.Random
+11:22:51.225    (INFO)     Trx.Start: **** ConnSH637084633711713471System.Random
+11:22:51.225    (INFO)     Trx.Commit: **C** ConnSH637084633711713471System.Random
+11:22:51.225    (INFO)     CacheReset.DoIt: 
+11:22:51.225    (INFO)     Env.Reset: finalCall=False
+11:22:51.225    (INFO)     CacheMgt.Reset: #23 (9482)
+11:22:51.225    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+11:22:51.225    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+11:22:51.225    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:22:51.225    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:22:51.225    (INFO)     MChangeLog.FillChangeLog: #9
+11:22:52.225    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+11:22:52.225    (INFO)     Trx.Start: **** ConnSH637084633723834319System.Random
+11:22:52.225    (INFO)     Trx.Commit: **C** ConnSH637084633723834319System.Random
+11:22:52.225    (INFO)     Trx.Start: **** ConnSH637084633724993355System.Random
+11:22:52.225    (INFO)     Trx.Commit: **C** ConnSH637084633724993355System.Random
+11:22:53.225    (INFO)     Msg.InitMsg: Records=5818 - en_US
+11:22:53.225    (INFO)     Trx.Start: **** ConnSH637084633733677310System.Random
+11:22:53.225    (INFO)     Trx.Commit: **C** ConnSH637084633733677310System.Random
+11:22:53.225    (INFO)     Trx.Start: **** ConnSH637084633734608973System.Random
+11:22:53.225    (INFO)     Trx.Commit: **C** ConnSH637084633734608973System.Random
+11:22:56.225    (INFO)     MSession.Logout: 06:41:18.965
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+11:23:18.231    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:23:18.231    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:23:18.231    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+11:23:19.231    (INFO)     Trx.Start: **** ConnSH637084633993014675System.Random
+11:23:19.231    (INFO)     Trx.Commit: **C** ConnSH637084633993014675System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/03/19','mm/dd/yy') and to_date('11/11/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/04/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+11:23:49.234    (INFO)     Trx.Start: **** ConnSH637084634293235537System.Random
+11:23:49.234    (INFO)     Trx.Commit: **C** ConnSH637084634293235537System.Random
+11:23:49.234    (INFO)     Trx.Start: **** ConnSH637084634297715278System.Random
+11:23:49.234    (INFO)     Trx.Commit: **C** ConnSH637084634297715278System.Random
+11:24:03.243    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:24:03.243    (INFO)     Trx.Start: **** ConnSH637084634439791044System.Random
+11:24:04.244    (INFO)     Trx.Commit: **C** ConnSH637084634439791044System.Random
+11:24:04.244    (INFO)     Trx.Start: **** ConnSH637084634440661013System.Random
+11:24:04.244    (INFO)     Trx.Commit: **C** ConnSH637084634440661013System.Random
+11:24:38.243    (INFO)     Trx.Start: **** ConnSH637084634787630379System.Random
+11:24:38.243    (INFO)     Trx.Commit: **C** ConnSH637084634787630379System.Random
+11:24:45.244    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:24:45.244    (INFO)     Trx.Start: **** ConnSH637084634857181780System.Random
+11:24:45.244    (INFO)     Trx.Commit: **C** ConnSH637084634857181780System.Random
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:46.244    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:24:46.244    (INFO)     Trx.Start: **** ConnSH637084634867931341System.Random
+11:24:46.244    (INFO)     Trx.Commit: **C** ConnSH637084634867931341System.Random
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:47.244    (INFO)     Trx.Start: **** ConnSH637084634871091277System.Random
+11:24:47.244    (INFO)     Trx.Commit: **C** ConnSH637084634871091277System.Random
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:47.244    (INFO)     MWFActivity.Run: MWFActivity[1292458,Node=Start,State=ON,AD_User_ID=101,11/4/2019 5:54:45 AM]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:47.244    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098020, AD_Workflow_ID=1000040, WFState=OR]
+11:24:47.244    (INFO)     MWFActivity.PerformWork: MWFNode[1000166-Start,Action=Sleep:WaitTime=0] [VAdvantage.DataBase.Trx]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:47.244    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098020, AD_Workflow_ID=1000040, WFState=OR]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:48.244    (INFO)     MTable.GetPO: Using GenericPO for Test_Version
+11:24:48.244    (INFO)     Trx.Start: **** ConnSH637084634886640621System.Random
+11:24:48.244    (INFO)     Trx.Commit: **C** ConnSH637084634886640621System.Random
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:48.244    (INFO)     Trx.Start: **** ConnSH637084634888710544System.Random
+11:24:48.244    (INFO)     Trx.Commit: **C** ConnSH637084634888710544System.Random
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:49.244    (INFO)     MWFActivity.Run: MWFActivity[1292459,Node=Approval,State=ON,AD_User_ID=101,11/4/2019 5:54:47 AM]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:49.244    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098020, AD_Workflow_ID=1000040, WFState=OR]
+11:24:49.244    (INFO)     MWFActivity.PerformWork: MWFNode[1000167-Approval,Action=UserChoice:AD_Column_ID=1027736] [VAdvantage.DataBase.Trx]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+11:24:49.244    (INFO)     MWFProcess.CheckActivities: MWFProcess[1098020, AD_Workflow_ID=1000040, WFState=OR]
+----------->     (WARNING)  MSession.Get: Session Processed=X_AD_Session[1026929]
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+11:32:32.323    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+11:32:32.323    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+11:32:32.323    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+11:32:33.323    (INFO)     Trx.Start: **** ConnSH637084639531876411System.Random
+11:32:33.323    (INFO)     Trx.Commit: **C** ConnSH637084639531876411System.Random
+11:33:30.333    (INFO)     MSession.Logout: 06:40:48.809
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/03/19','mm/dd/yy') and to_date('11/11/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/04/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+11:33:37.333    (INFO)     AEnv.GetMWindowVO: Cached=VAdvantage.Controller.GridWindowVO
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'

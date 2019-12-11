@@ -439,7 +439,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3971</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/VAdvantageHtml55</IISUrl>
+          <IISUrl>http://localhost/VAdvantageHtml55Git</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost/VAdvantageHtml55</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

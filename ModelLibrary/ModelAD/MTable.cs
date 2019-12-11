@@ -229,7 +229,8 @@ namespace VAdvantage.Model
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@AD_Table_Id", GetAD_Table_ID());
-                DataSet ds = ExecuteQuery.ExecuteDataset(sql, param);
+                //DataSet ds = ExecuteQuery.ExecuteDataset(sql, param);
+                DataSet ds = DB.ExecuteDataset(sql, param, Get_Trx());
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];

@@ -1,0 +1,6 @@
+*** 11/13/2019 3:53:56 PM VAdvantage Log  ***
+03:53:56.535    (INFO)     Trx.Start: **** ConnSH637092572362338412System.Random
+03:53:56.535    (INFO)     Trx.Commit: **C** ConnSH637092572362338412System.Random
+03:53:56.535    (INFO)     MChangeLog.FillChangeLog: #9
+===========>     (SEVERE)   MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID
+----------->     (WARNING)  MTaxCategory.UpdateRecords: Column not found - C_TaxCategory_Version_ID

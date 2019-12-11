@@ -1,0 +1,98 @@
+*** 11/7/2019 7:07:17 PM VAdvantage Log  ***
+07:07:17.717    (INFO)     Trx.Start: **** ConnSH637087504375977222System.Random
+07:07:17.717    (INFO)     Trx.Commit: **C** ConnSH637087504375977222System.Random
+07:07:17.717    (INFO)     MChangeLog.FillChangeLog: #9
+07:07:18.718    (INFO)     CacheReset.DoIt: 
+07:07:18.718    (INFO)     Env.Reset: finalCall=False
+07:07:18.718    (INFO)     CacheMgt.Reset: #16 (7872)
+07:07:18.718    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+07:07:18.718    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+07:07:18.718    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+07:07:18.718    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+07:07:18.718    (INFO)     MChangeLog.FillChangeLog: #9
+07:07:18.718    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+07:07:18.718    (INFO)     Trx.Start: **** ConnSH637087504388054297System.Random
+07:07:18.718    (INFO)     Trx.Commit: **C** ConnSH637087504388054297System.Random
+07:07:18.718    (INFO)     Trx.Start: **** ConnSH637087504388817377System.Random
+07:07:18.718    (INFO)     Trx.Commit: **C** ConnSH637087504388817377System.Random
+07:07:19.719    (INFO)     Msg.InitMsg: Records=5818 - en_US
+07:07:19.719    (INFO)     Trx.Start: **** ConnSH637087504396467094System.Random
+07:07:19.719    (INFO)     Trx.Commit: **C** ConnSH637087504396467094System.Random
+07:07:19.719    (INFO)     Trx.Start: **** ConnSH637087504397221197System.Random
+07:07:19.719    (INFO)     Trx.Commit: **C** ConnSH637087504397221197System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+07:07:22.722    (INFO)     Trx.Start: **** ConnSH637087504427182174System.Random
+07:07:22.722    (INFO)     Trx.Commit: **C** ConnSH637087504427182174System.Random
+07:07:22.722    (INFO)     Trx.Start: **** ConnSH637087504428387913System.Random
+07:07:22.722    (INFO)     Trx.Commit: **C** ConnSH637087504428387913System.Random
+07:07:23.723    (INFO)     Trx.Start: **** ConnSH637087504434208646System.Random
+07:07:23.723    (INFO)     Trx.Commit: **C** ConnSH637087504434208646System.Random
+07:07:23.723    (INFO)     Trx.Start: **** ConnSH637087504435218721System.Random
+07:07:23.723    (INFO)     Trx.Commit: **C** ConnSH637087504435218721System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00933: SQL command not properly ended [Query D] =>SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Version_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'') FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Version.C_Tax_ID) AS C_Tax_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.CreatedBy) AS CreatedBy_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.UpdatedBy) AS UpdatedBy_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Location) AS VATAX_Location_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference1) AS VATAX_Preference1_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference2) AS VATAX_Preference2_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference3) AS VATAX_Preference3_Text FROM C_TaxCategory_Version WHERE AD_Client_ID = 11SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Version_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'') FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Version.C_Tax_ID) AS C_Tax_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.CreatedBy) AS CreatedBy_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.UpdatedBy) AS UpdatedBy_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Location) AS VATAX_Location_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference1) AS VATAX_Preference1_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference2) AS VATAX_Preference2_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference3) AS VATAX_Preference3_Text FROM C_TaxCategory_Version WHERE AD_Client_ID = 11 ORDER BY VERSIONVALIDFROM DESC
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00933: SQL command not properly ended [Query D] =>SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Version_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'') FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Version.C_Tax_ID) AS C_Tax_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.CreatedBy) AS CreatedBy_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.UpdatedBy) AS UpdatedBy_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Location) AS VATAX_Location_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference1) AS VATAX_Preference1_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference2) AS VATAX_Preference2_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference3) AS VATAX_Preference3_Text FROM C_TaxCategory_Version WHERE AD_Client_ID = 11SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Version_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'') FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Version.C_Tax_ID) AS C_Tax_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.CreatedBy) AS CreatedBy_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.UpdatedBy) AS UpdatedBy_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Location) AS VATAX_Location_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference1) AS VATAX_Preference1_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference2) AS VATAX_Preference2_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference3) AS VATAX_Preference3_Text FROM C_TaxCategory_Version WHERE AD_Client_ID = 11 ORDER BY VERSIONVALIDFROM DESC
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+07:09:03.930    (INFO)     MSession.Logout: 06:32:41.541
+===========>     (SEVERE)   LDAP.Validate: Error in LDAP for user IdeasIncAdmin : The server is not operational.
+
+07:09:06.960    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+07:09:06.960    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+07:09:06.960    (INFO)     MTree.Load: AD_Tree_ID=121, AD_User_ID=101, Editable=False, OnClient=True
+===========>     (SEVERE)   MTree.LoadNodes: Nodes w/o parent - adding to root - System.Collections.Generic.List`1[VAdvantage.Classes.VTreeNode]
+07:09:07.970    (INFO)     Trx.Start: **** ConnSH637087505474429123System.Random
+07:09:07.970    (INFO)     Trx.Commit: **C** ConnSH637087505474429123System.Random
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: More than one FROM clause - SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = 101  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = 101 )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('11/06/19','mm/dd/yy') and to_date('11/14/19 23.59','mm/dd/yy HH24:MI')   OR  to_date('11/07/19','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=101 AND AppointmentsInfo.AD_User_ID  = 101)
+----------->     (WARNING)  AccessSqlParser.GetTableInfo: Could not remove ON AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy
+07:09:42.942    (INFO)     Trx.Start: **** ConnSH637087505826588867System.Random
+07:09:42.942    (INFO)     Trx.Commit: **C** ConnSH637087505826588867System.Random
+07:09:42.942    (INFO)     CacheReset.DoIt: 
+07:09:42.942    (INFO)     Env.Reset: finalCall=False
+07:09:42.942    (INFO)     CacheMgt.Reset: #18 (7891)
+07:09:42.942    (INFO)     MRole.Get: AD_Role_ID=0, AD_User_ID=0, reload=True
+07:09:42.942    (INFO)     MRole.Get: MRole[0,System Administrator,UserLevel=S  ,AD_Client_ID=0,AD_Org_ID=0]
+07:09:42.942    (INFO)     MRole.Get: AD_Role_ID=102, AD_User_ID=101, reload=True
+07:09:43.943    (INFO)     MRole.Get: MRole[102,IdeasInc Admin,UserLevel= CO,AD_Client_ID IN (0,11),]
+07:09:43.943    (INFO)     MChangeLog.FillChangeLog: #9
+07:09:43.943    (INFO)     CacheMgt.Reset: AD_Process: #1 (1)
+07:09:43.943    (INFO)     Trx.Start: **** ConnSH637087505831656135System.Random
+07:09:43.943    (INFO)     Trx.Commit: **C** ConnSH637087505831656135System.Random
+07:09:43.943    (INFO)     Trx.Start: **** ConnSH637087505832516301System.Random
+07:09:43.943    (INFO)     Trx.Commit: **C** ConnSH637087505832516301System.Random
+07:09:44.944    (INFO)     Msg.InitMsg: Records=5818 - en_US
+07:09:44.944    (INFO)     Trx.Start: **** ConnSH637087505843436318System.Random
+07:09:44.944    (INFO)     Trx.Commit: **C** ConnSH637087505843436318System.Random
+07:09:44.944    (INFO)     Trx.Start: **** ConnSH637087505844236320System.Random
+07:09:44.944    (INFO)     Trx.Commit: **C** ConnSH637087505844236320System.Random
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Created'
+----------->     (WARNING)  GridTable.GetField: Not found: 'CreatedBy'
+----------->     (WARNING)  GridTable.GetField: Not found: 'Updated'
+----------->     (WARNING)  GridTable.GetField: Not found: 'UpdatedBy'
+07:09:47.947    (INFO)     Trx.Start: **** ConnSH637087505875436956System.Random
+07:09:47.947    (INFO)     Trx.Commit: **C** ConnSH637087505875436956System.Random
+07:09:47.947    (INFO)     Trx.Start: **** ConnSH637087505876646767System.Random
+07:09:47.947    (INFO)     Trx.Commit: **C** ConnSH637087505876646767System.Random
+07:09:48.948    (INFO)     Trx.Start: **** ConnSH637087505881916841System.Random
+07:09:48.948    (INFO)     Trx.Commit: **C** ConnSH637087505881916841System.Random
+07:09:48.948    (INFO)     Trx.Start: **** ConnSH637087505882776865System.Random
+07:09:48.948    (INFO)     Trx.Commit: **C** ConnSH637087505882776865System.Random
+===========>     (SEVERE)   OracleHelper.ExecuteDataset: ORA-00933: SQL command not properly ended [Query D] =>SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Version_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'') FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Version.C_Tax_ID) AS C_Tax_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.CreatedBy) AS CreatedBy_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.UpdatedBy) AS UpdatedBy_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Location) AS VATAX_Location_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference1) AS VATAX_Preference1_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference2) AS VATAX_Preference2_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference3) AS VATAX_Preference3_Text FROM C_TaxCategory_Version WHERE AD_Client_ID = 11SELECT AD_Client_ID,AD_Org_ID,C_TaxCategory_ID,C_TaxCategory_Version_ID,C_Tax_ID,CommodityCode,Created,CreatedBy,Description,Export_ID,IsActive,IsDefault,IsVersionApproved,Name,Processed,ProcessedVersion,Processing,RecordVersion,Updated,UpdatedBy,VATAX_GenerateLines,VATAX_Location,VATAX_Preference1,VATAX_Preference2,VATAX_Preference3,VersionValidFrom,  (SELECT NVL(AD_Client.Name,'') FROM AD_Client WHERE AD_Client.AD_Client_ID=C_TaxCategory_Version.AD_Client_ID) AS AD_Client_ID_Text,  (SELECT NVL(AD_Org.Name,'') FROM AD_Org WHERE AD_Org.AD_Org_ID=C_TaxCategory_Version.AD_Org_ID) AS AD_Org_ID_Text,  (SELECT NVL(C_Tax.Name,'') ||'_'|| NVL(C_Tax.Description,'') FROM C_Tax WHERE C_Tax.C_Tax_ID=C_TaxCategory_Version.C_Tax_ID) AS C_Tax_ID_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.CreatedBy) AS CreatedBy_Text,  (SELECT AD_User.Name FROM AD_User WHERE AD_User.Name IS NOT NULL  AND AD_User.AD_User_ID=C_TaxCategory_Version.UpdatedBy) AS UpdatedBy_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000194 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Location) AS VATAX_Location_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference1) AS VATAX_Preference1_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference2) AS VATAX_Preference2_Text,  (SELECT AD_Ref_List.Name FROM AD_Ref_List WHERE AD_Ref_List.AD_Reference_ID=1000195 AND AD_Ref_List.Value=C_TaxCategory_Version.VATAX_Preference3) AS VATAX_Preference3_Text FROM C_TaxCategory_Version WHERE AD_Client_ID = 11 ORDER BY VERSIONVALIDFROM DESC

@@ -40,6 +40,14 @@ namespace VIS.DataContracts
         public int ParentNodeID { get; set; }
         public int TreeTableID { get; set; }
         public int SelectedTreeNodeID { get; set; }
+
+        public bool MaintainVersions { get; set; }
+
+        public bool ImmediateSave { get; set; }
+
+        public DateTime? ValidFrom { get; set; }
+
+        public int VerRecID { get; set; }
     }
 
     public class WindowField
