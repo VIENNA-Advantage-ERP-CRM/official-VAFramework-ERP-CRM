@@ -51,25 +51,25 @@
     };
 
     VIS.EnvConstants =
-    {
-        /** WindowNo for Find           */
-        WINDOW_FIND: 1110,
-        /** WinowNo for MLookup         */
-        WINDOW_MLOOKUP: 1111,
-        /** WindowNo for PrintCustomize */
-        WINDOW_CUSTOMIZE: 1112,
+        {
+            /** WindowNo for Find           */
+            WINDOW_FIND: 1110,
+            /** WinowNo for MLookup         */
+            WINDOW_MLOOKUP: 1111,
+            /** WindowNo for PrintCustomize */
+            WINDOW_CUSTOMIZE: 1112,
 
-        /** WindowNo for PrintCustomize */
-        WINDOW_INFO: 1113,
-        /** Tab for Info                */
-        TAB_INFO: 1113,
-        /** WindowNo for AccountEditor */
-        WINDOW_ACCOUNT: 1114,
-        /** Temp WindowNo for GridField */
-        WINDOW_TEMP: 11100000,
-        /** Maximum int value --code by raghu*/
-        INT32MAXVALUE: 2147483647
-    }
+            /** WindowNo for PrintCustomize */
+            WINDOW_INFO: 1113,
+            /** Tab for Info                */
+            TAB_INFO: 1113,
+            /** WindowNo for AccountEditor */
+            WINDOW_ACCOUNT: 1114,
+            /** Temp WindowNo for GridField */
+            WINDOW_TEMP: 11100000,
+            /** Maximum int value --code by raghu*/
+            INT32MAXVALUE: 2147483647
+        }
 
 
 
@@ -275,13 +275,13 @@
             }
             if (value) {
                 var now = new Date(value)
-                  , year
-                  , month
-                  , date
-                  , hours
-                  , minutes
-                  , seconds
-                  , formattedDateTime;
+                    , year
+                    , month
+                    , date
+                    , hours
+                    , minutes
+                    , seconds
+                    , formattedDateTime;
 
                 year = now.getFullYear();
                 month = now.getMonth().toString().length === 1 ? '0' + (now.getMonth() + 1).toString() : now.getMonth() + 1;
@@ -1136,7 +1136,7 @@
                 }
                 catch (e) {
                     throw new ArgumentException(
-                                             "Choice Pattern incorrect");
+                        "Choice Pattern incorrect");
                 }
                 break;
             default:
@@ -1883,6 +1883,98 @@
     };
 
 
+    function CultureSeparator() {
+        this.List = {
+            'sq': { 'decimalSeparator': false },      // Albanian (Albania)
+            'ar': { 'decimalSeparator': true },      // Arabic            
+            'bg': { 'decimalSeparator': false },      // Bulgarian(Bulgaria)
+            'be': { 'decimalSeparator': false },      // Byelorussian (Belarus)           
+            'ca': { 'decimalSeparator': false },      // Catalan (Spain)
+            'zh': { 'decimalSeparator': true },       // Chinese (China)
+            'zh-HK': { 'decimalSeparator': true },    // Chinese (Hong Kong)
+            'zh-CN': { 'decimalSeparator': true },    // chineese simple
+            'zh-TW': { 'decimalSeparator': true },    // Chinese (Taiwan)
+            'hr': { 'decimalSeparator': true },       // Croatian (Croatia)
+            'cs': { 'decimalSeparator': false },      // Czech (Czech Republic)
+            'da': { 'decimalSeparator': false },      // Danish (Denmark)
+            'nl': { 'decimalSeparator': false },      // Dutch (Netherlands)            
+            'en': { 'decimalSeparator': true },       // English
+            'en-AU': { 'decimalSeparator': true },    // English (Australia)
+            'en-CA': { 'decimalSeparator': true },    // English (Canada)
+            'en-IN': { 'decimalSeparator': true },    // English (India)
+            'en-NZ': { 'decimalSeparator': true },    // English (New Zealand)
+            'en-ZA': { 'decimalSeparator': true },    // English (South Africa)
+            'en-US': { 'decimalSeparator': true },    // English (USA)
+            'en-GB': { 'decimalSeparator': true },    // English (United Kingdom)
+            'et': { 'decimalSeparator': false },      // Estonian (Estonia)
+            'fi': { 'decimalSeparator': false },      // Finnish (Finland)
+            'fr': { 'decimalSeparator': false },      // French 
+            'fr-CA': { 'decimalSeparator': false },   // French (Canada)
+            'fr-FR': { 'decimalSeparator': false },   // French (France)
+            'fr-CH': { 'decimalSeparator': false },   // French (Switzerland)
+            'de': { 'decimalSeparator': false },      // German
+            'de-AT': { 'decimalSeparator': false },   // German (Austria)
+            'de-DE': { 'decimalSeparator': false },   // German (Germany)
+            'de-LI': { 'decimalSeparator': false },   // German (Luxembourg)
+            'de-CH': { 'decimalSeparator': false },   // German (Switzerland)
+            'el': { 'decimalSeparator': false },      // Greek (Greece)
+            'he': { 'decimalSeparator': true },       // Hebrew (Israel)
+            'hi': { 'decimalSeparator': true },       // Hindi (India)
+            'hu': { 'decimalSeparator': false },      // Hungarian (Hungary)
+            'is': { 'decimalSeparator': false },      // Icelandic (Iceland)
+            'it': { 'decimalSeparator': false },      // Italian
+            'it-IT': { 'decimalSeparator': false },   // Italian (Italy)
+            'it-CH': { 'decimalSeparator': false },   // Italian (Switzerland)
+            'ja': { 'decimalSeparator': true },       // Japanese (Japan)
+            'ko': { 'decimalSeparator': true },       // Korean (South Korea)
+            'lv': { 'decimalSeparator': false },      // Latvian (Lettish) (Latvia)
+            'lt': { 'decimalSeparator': false },      // Lithuanian (Lithuania)
+            'mk': { 'decimalSeparator': false },      // Macedonian (Macedonia)
+            'nb': { 'decimalSeparator': false },      // Norwegian (Norway)
+            'nn': { 'decimalSeparator': false },      // Norwegian
+            'pl': { 'decimalSeparator': false },      // Polish (Poland)
+            'pt': { 'decimalSeparator': false },      // Portuguese
+            'pt-BR': { 'decimalSeparator': false },   // Portuguese (Brazil)
+            'pt-PT': { 'decimalSeparator': false },   // Portuguese (Portugal)
+            'ro': { 'decimalSeparator': false },      // Romanian (Romania)
+            'ru': { 'decimalSeparator': false },      // Russian (Russia)
+            'sr': { 'decimalSeparator': false },      // Serbian (Yugoslavia)
+            'sh': { 'decimalSeparator': false },      // Serbo-Croatian (Yugoslavia)
+            'sk': { 'decimalSeparator': false },      // Slovak (Slovakia)
+            'sl': { 'decimalSeparator': false },      // Slovenian (Slovenia)
+            'es': { 'decimalSeparator': false },      // Spanish
+            'es-AR': { 'decimalSeparator': false },   // Spanish (Argentina)
+            'es-CL': { 'decimalSeparator': false },   // Spanish (Chile)
+            'es-CO': { 'decimalSeparator': false },   // Spanish (Colombia)
+            'es-CR': { 'decimalSeparator': false },   // Spanish (Costa Rica)
+            'es-HN': { 'decimalSeparator': false },   // Spanish (Honduras)
+            'es-MX': { 'decimalSeparator': false },   // Spanish (Mexico)
+            'es-PE': { 'decimalSeparator': false },   // Spanish (Peru)
+            'es-ES': { 'decimalSeparator': false },   // Spanish (Spain)
+            'es-US': { 'decimalSeparator': false },   // Spanish (United States)
+            'es-UY': { 'decimalSeparator': false },   // Spanish (Uruguay)
+            'es-VE': { 'decimalSeparator': false },   // Spanish (Venezuela)
+            'sv': { 'decimalSeparator': false },      // Swedish (Sweden)
+            'th': { 'decimalSeparator': true },       // Thai (Thailand)
+            'tr': { 'decimalSeparator': false },      // Turkish (Turkey)
+            'uk': { 'decimalSeparator': false },      // Ukrainian (Ukraine)
+            'vi': { 'decimalSeparator': false },      // Vietnamese
+
+
+        };
+    };
+
+    CultureSeparator.prototype.isDecimalSeparatorDot = function (value) {
+        if (value) {
+            if (this.List[value] != undefined) {
+                return this.List[value].decimalSeparator;
+            }
+        }
+        return null;
+    };
+
+
+
 
 
     VIS.DB.DataSet = DataSet;
@@ -1892,6 +1984,7 @@
     VIS.DB.DataReader = DataReader;
     VIS.MessageFormat = MessageFormat;
     VIS.TimeUtil = TimeUtil;
+    VIS.CultureSeparator = CultureSeparator;
 
 }(VIS, jQuery));
 
