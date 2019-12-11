@@ -1,4 +1,0 @@
-﻿[*.cs]
-
-# IDE0047: Remove unnecessary parentheses
-dotnet_diagnostic.IDE0047.severity = none
