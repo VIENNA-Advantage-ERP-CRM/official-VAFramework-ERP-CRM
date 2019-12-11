@@ -9087,7 +9087,8 @@
                     var f = oColumns[colIndex].field;
                     var val = record[f];
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
-                    return oColumns[colIndex].customFormat.GetFormatedValue(val);
+                    //return oColumns[colIndex].customFormat.GetFormatedValue(val);
+                    return Globalize.format(Number(oColumns[colIndex].customFormat.GetFormatedValue(val)));
                 };
             }
             //	YesNo

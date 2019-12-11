@@ -136,15 +136,15 @@
         },
         IsText: function (displayType) {
             if (displayType == VIS.DisplayType.String || displayType == VIS.DisplayType.Text
-               || displayType == VIS.DisplayType.TextLong || displayType == VIS.DisplayType.Memo
-               || displayType == VIS.DisplayType.FilePath || displayType == VIS.DisplayType.FileName
-               || displayType == VIS.DisplayType.URL || displayType == VIS.DisplayType.PrinterName)
+                || displayType == VIS.DisplayType.TextLong || displayType == VIS.DisplayType.Memo
+                || displayType == VIS.DisplayType.FilePath || displayType == VIS.DisplayType.FileName
+                || displayType == VIS.DisplayType.URL || displayType == VIS.DisplayType.PrinterName)
                 return true;
             return false;
         },
         IsLookup: function (displayType) {
             if (VIS.DisplayType.List == displayType || displayType == VIS.DisplayType.TableDir || displayType == VIS.DisplayType.Table
-                   || displayType == VIS.DisplayType.Search || displayType == VIS.DisplayType.MultiKey || displayType == VIS.DisplayType.ProductContainer) {
+                || displayType == VIS.DisplayType.Search || displayType == VIS.DisplayType.MultiKey || displayType == VIS.DisplayType.ProductContainer) {
                 return true;
             }
             return false;
@@ -266,7 +266,7 @@
                 //}
                 //else {
                 var txt = new VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(),
-                                        mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
+                    mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
                 txt.setField(mField);
                 ctrl = txt;
                 //}
@@ -282,7 +282,7 @@
                 if (displayType == VIS.DisplayType.DateTime)
                     readOnly = true;
                 var vd = new VDate(columnName, isMandatory, isReadOnly, isUpdateable,
-                     displayType, mField.getHeader());
+                    displayType, mField.getHeader());
                 vd.setName(columnName);
                 vd.setField(mField);
                 ctrl = vd;
@@ -431,7 +431,7 @@
 
             if (ctrl == null) {
                 var txt = new VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(),
-                                        mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
+                    mField.getVFormat(), mField.getObscureType(), mField.getIsEncryptedField());
                 txt.setField(mField);
                 ctrl = txt;
                 //ctrl = new VTextBox(columnName, mandatory, isReadOnly, isUpdateable, 40, 20, null, "");
@@ -456,9 +456,9 @@
 
             //	No Label for FieldOnly, CheckBox, Button
             if (mField.getIsFieldOnly()
-                    || displayType == VIS.DisplayType.YesNo
-                    || displayType == VIS.DisplayType.Button
-                    || displayType == VIS.DisplayType.Label)
+                || displayType == VIS.DisplayType.YesNo
+                || displayType == VIS.DisplayType.Button
+                || displayType == VIS.DisplayType.Label)
                 return null;
             return new VIS.Controls.VLabel(mField.getHeader(), mField.getColumnName(), mField.getIsMandatory());
         }
@@ -1361,8 +1361,8 @@
 
             if ((this.lookup &&
                 (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                 || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                 || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
+                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -1710,7 +1710,7 @@
                     if (this.inserting)
                         this.ctrl.trigger("change");
                 }
-                    //  we have lookup
+                //  we have lookup
                 else if (this.ctrl.val() == null) {
                     //  do-not add item in combobox if look up validated and loaded 
                     if (this.inserting && !this.lookup.info.isParent && this.lookup.getIsValidated() && this.lookup.allLoaded) {
@@ -1896,7 +1896,7 @@
             d = new Date(0);
             var parts = val.match(/(\d+)\:(\d+)/);
             var hours = parseInt(parts[1], 10),
-            minutes = parseInt(parts[2], 10);
+                minutes = parseInt(parts[2], 10);
             d.setHours(hours);
             d.setMinutes(minutes);
         }
@@ -1969,11 +1969,11 @@
         }
         else if (displayType == VIS.DisplayType.Search) {
             if (columnName.equals("C_BPartner_ID")
-            || (columnName.equals("C_BPartner_To_ID") && lookup.getColumnName().equals("C_BPartner.C_BPartner_ID"))) {
+                || (columnName.equals("C_BPartner_To_ID") && lookup.getColumnName().equals("C_BPartner.C_BPartner_ID"))) {
                 src += "BPartner20.png";
             }
             else if (columnName.equals("M_Product_ID")
-            || (columnName.equals("M_Product_To_ID") && lookup.getColumnName().equals("M_Product.M_Product_ID"))) {
+                || (columnName.equals("M_Product_To_ID") && lookup.getColumnName().equals("M_Product.M_Product_ID"))) {
                 src += "Product20.png";
             }
             else {
@@ -2019,8 +2019,8 @@
 
             if ((this.lookup &&
                 (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                 || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                 || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
+                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -2638,7 +2638,7 @@
                 });
 
             }
-                // Get info window from field if exist.
+            // Get info window from field if exist.
             else if (self.getField() != null & infoWinID == 0) {
                 infoWinID = self.getField().getAD_InfoWindow_ID();
             }
@@ -2708,17 +2708,17 @@
                     var multipleSelection = false;
                     if (self.lookup.windowNo > 0) {
                         multipleSelection = (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_OrderLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_InvoiceLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InOutLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_PackageLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_MovementLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InventoryLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_ProductPrice_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_ProjectLine_ID") ||
-                                     (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_RequisitionLine_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 0, "KeyColumnName") == "M_PriceList_ID") ||
-                                  (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "SAP001_StockTransferLine_ID") //;
-                        ;
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_InvoiceLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InOutLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_PackageLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_MovementLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InventoryLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_ProductPrice_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_ProjectLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_RequisitionLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 0, "KeyColumnName") == "M_PriceList_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "SAP001_StockTransferLine_ID") //;
+                            ;
                     }
                     InfoWindow = new VIS.infoProduct(true, self.lookup.windowNo, M_Warehouse_ID, M_PriceList_ID,
                         text, tableName, _keyColumnName, multipleSelection, wc);
@@ -3233,13 +3233,13 @@
             //}
 
             if ((event.keyCode >= 37 && event.keyCode <= 40) || // Left, Up, Right and Down        
-        event.keyCode == 8 || // backspaceASKII
-        event.keyCode == 9 || // tabASKII
-        event.keyCode == 16 || // shift
-        event.keyCode == 17 || // control
-        event.keyCode == 35 || // End
-        event.keyCode == 36 || // Home
-        event.keyCode == 46) // deleteASKII
+                event.keyCode == 8 || // backspaceASKII
+                event.keyCode == 9 || // tabASKII
+                event.keyCode == 16 || // shift
+                event.keyCode == 17 || // control
+                event.keyCode == 35 || // End
+                event.keyCode == 36 || // Home
+                event.keyCode == 46) // deleteASKII
             {
                 return true;
             }
@@ -3254,22 +3254,45 @@
                 this.value = this.value * -1;
                 return false;
             }
-            if (event.keyCode == 190 || event.keyCode == 110) {// decimal (.)
+
+            // Get culture decimal separator
+            if (window.navigator.language != undefined) {
+                var culture = new VIS.CultureSeparator();
+                var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
+                // Not . decimal separator
+                if (isDotSeparator != null) {
+                    if (!isDotSeparator) {
+                        if (event.keyCode == 190 || event.keyCode == 110) {
+                            return false;
+                        }
+                    }
+                    // . separator
+                    else {
+                        if (event.keyCode == 188) {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            if (event.keyCode == 190 || event.keyCode == 110 || event.keyCode == 188) {// decimal (.)
                 if (this.value.indexOf('.') > -1) {
                     this.value = this.value.replace('.', '');
                 }
+
+
                 if (this.value.length >= length) {
                     return false;
                 }
                 return true;
             }
             /* Check Only for . and , */
-            if (event.keyCode == 188) {
-                return false;
-            }
-            else {
-                return false;
-            }
+            //if (event.keyCode == 188) {
+            //   return false;
+            //}
+            //else {
+            return false;
+            //}
         });
 
 
@@ -3398,13 +3421,13 @@
             //}
 
             if ((event.keyCode >= 37 && event.keyCode <= 40) || // Left, Up, Right and Down        
-        event.keyCode == 8 || // backspaceASKII
-        event.keyCode == 9 || // tabASKII
-        event.keyCode == 16 || // shift
-        event.keyCode == 17 || // control
-        event.keyCode == 35 || // End
-        event.keyCode == 36 || // Home
-        event.keyCode == 46) // deleteASKII
+                event.keyCode == 8 || // backspaceASKII
+                event.keyCode == 9 || // tabASKII
+                event.keyCode == 16 || // shift
+                event.keyCode == 17 || // control
+                event.keyCode == 35 || // End
+                event.keyCode == 36 || // Home
+                event.keyCode == 46) // deleteASKII
             {
                 return true;
             }
