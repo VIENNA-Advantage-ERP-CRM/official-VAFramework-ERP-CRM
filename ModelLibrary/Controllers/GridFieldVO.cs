@@ -757,7 +757,7 @@ namespace VAdvantage.Controller
             clone.AD_Form_ID = AD_Form_ID;
             clone.IsBackgroundProcess = IsBackgroundProcess;
             clone.AskUserBGProcess = AskUserBGProcess;
-
+            clone.IsMaintainVersions = IsMaintainVersions;
             return clone;
         }
 
