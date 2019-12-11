@@ -328,9 +328,10 @@
             dStyle = isRTL ? "float:right" : "float:left";
 
             html += '<button id="btnRefresh_' + windowNo + '" class="ui-button ui-corner-all ui-widget">' + VIS.Msg.getMsg("Refresh") + '</button>'
-           + '<div class="vis-pull-right">'
-             + '  <button id="btnCancel_' + windowNo + '" class="ui-button ui-corner-all ui-widget">' + VIS.Msg.getMsg("Cancel") + '</button>'
-                + '<button id="btnOk_' + windowNo + '" class="ui-button ui-corner-all ui-widget"  style="margin: 0 10px;">' + VIS.Msg.getMsg("Ok") + '</button>'
+                + '<div class="vis-pull-right">'
+                + '<button id="btnOk_' + windowNo + '" class="ui-button ui-corner-all ui-widget" >' + VIS.Msg.getMsg("Ok") + '</button>'
+                + '  <button id="btnCancel_' + windowNo + '" class="ui-button ui-corner-all ui-widget"  style="margin: 0 10px;">' + VIS.Msg.getMsg("Cancel") + '</button>'
+               
            + '</div>'
        + '</div>'
        + '</div>'

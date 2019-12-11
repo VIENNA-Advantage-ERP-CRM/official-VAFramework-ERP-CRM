@@ -506,14 +506,14 @@
 .vis-ad-w-p-t-c li {
     /*margin: 1px 5px;*/
     color: rgba(var(--v-c-on-secondary), 1);
-    padding: 0 10px 10px;
+    padding: 0 10px 5px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
 }
 
 .vis-ad-w-p-t-c-tc i {
-    font-size: 1rem;
+    font-size: .875rem;
     display: inline-flex;
     padding-right: 3px;
 }
@@ -1165,15 +1165,19 @@ li.vis-page-item-select {
 
 
 .vis-ad-w-p-header-v {
-    margin-top: -19px;
+    /*margin-top: -19px;*/
     position: absolute;
     color: rgba(var(--v-c-primary),1);
+    top:18px;
+    left:0;
 }
 
 .vis-ad-w-p-header-h {
-    margin-top: 23px;
+    /*margin-top: 15px;*/
     position: absolute;
     color: rgba(var(--v-c-primary),1);
+    top: 18px;
+    left: 0;
 }
 
 
@@ -1378,6 +1382,11 @@ li.vis-page-item-select {
 
 .vis-ad-w-p-ap-tp-o-icorbar i {
     font-size: 1.1rem;
+}
+
+.vis-ad-w-p-ap-tp-o-icorbar img{
+    max-width:21px;
+    max-height:20px;
 }
 
 .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-outerwrap {
