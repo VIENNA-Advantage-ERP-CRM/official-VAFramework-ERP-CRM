@@ -13,7 +13,7 @@
 }
 
 .vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
-    padding: 5px 10px;
+    padding: 5px 10px 5px 30px;
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
@@ -90,7 +90,7 @@ select.vis-ev-col-mandatory {
     font-weight: normal;
     position: absolute;
     pointer-events: none;
-    left: 15px;
+    left: 30px;
     top: 0;
     transition: 0.2s ease all;
     -moz-transition: 0.2s ease all;
@@ -103,6 +103,7 @@ select.vis-ev-col-mandatory {
 }
 .vis-input-wrap textarea ~ label {
     align-items: flex-start;
+    top: 6px;
 }
 
 .vis-input-wrap input:focus, .vis-input-wrap select:focus, .vis-input-wrap textarea:focus, .vis-control-wrap > button:focus {
@@ -284,6 +285,7 @@ label.vis-ec-col-lblchkbox {
     position: relative;
     pointer-events: auto;
     left: 0;
+    display: inline-flex;
 }
 
     .vis-ec-col-lblchkbox input[type=checkbox] {
@@ -297,11 +299,52 @@ label.vis-ec-col-lblchkbox {
     -webkit-box-shadow: inset 0 0 0px 9999px rgba(var(--v-c-common), 0.7);
 }
 
+
+
+
+
     /*.vis-ev-col-mandatory .input-group-text {
     border: 1px solid #ec3f3f;
     border-left: 1px solid var(--input-border);
 }*/
     /*END mendatory*/
+
+
+/* control info icon*/
+.vis-ev-ctrlinfowrap {
+    position: absolute;
+    left: 10px;
+    top: 9px;
+    cursor: pointer;
+    outline: none;
+}
+
+label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
+    position: relative;
+    top: 0;
+    left: 5px;
+}
+
+.vis-input-wrap button + .vis-ev-ctrlinfowrap {
+    display: none;
+}
+
+/*bootstrap popover*/
+.popover {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+}
+
+.popover-header {
+    background-color: rgba(var(--v-c-secondary), 1);
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+}
+
+.popover, .popover-body {
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+
+
+
     /***************************** Control Prop End ****************************************/
 
 

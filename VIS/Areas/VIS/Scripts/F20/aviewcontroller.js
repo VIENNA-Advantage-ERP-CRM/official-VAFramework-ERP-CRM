@@ -542,6 +542,8 @@ VIS.GridController.prototype.initGrid = function (onlyMultiRow, curWindowNo, aPa
                 iControl = null;
             }
         }
+
+    
     }
 
 
@@ -635,7 +637,9 @@ VIS.GridController.prototype.initGrid = function (onlyMultiRow, curWindowNo, aPa
     }
     else
         this.switchSingleRow(true);
-};
+    };
+
+   
 
     VIS.GridController.prototype.getIsHeaderPanel = function () {
         return this.gTab.getIsHeaderPanel();

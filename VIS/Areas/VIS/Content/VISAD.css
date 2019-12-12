@@ -678,8 +678,8 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    margin-left: 5px;
-    margin-top: 9px;
+    /*margin-left: 5px;
+    margin-top: 9px;*/
 }
 
 .vis-apanel-rb-ul-card {
@@ -712,32 +712,35 @@
     }
 
 
-
 .vis-apanel-rb-ul li {
-    border-bottom: 1px solid #CCDADE;
-    margin-bottom: 9px;
-    margin-right: 4px;
-    color: #535353;
-    font-size: 12px;
-    font-family: helvetica;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+    color: rgba(var(--v-c-on-secondary), 1);
+    font-size: .75rem;
     cursor: pointer;
-    padding: 5px 0px 1px 0px;
+    padding: 7px 10px;
+    position: relative;
+    z-index: 2;
 }
 
+    .vis-apanel-rb-ul li:last-child {
+        border-bottom: 0;
+    }
+
     .vis-apanel-rb-ul li:hover {
-        background-color: lightgray;
+        background-color: rgba(var(--v-c-primary), 1);
+        color: rgba(var(--v-c-on-primary), 1);
     }
 
 .vis-apanel-rb-ul span {
     margin-left: 5px;
-    margin-right: 5px;
+    /*margin-right: 5px;*/
 }
 
 .vis-apnel-rb-header {
     margin-left: 5px;
     margin-right: 5px;
-    font-size: 14px;
-    border-bottom: 3px solid #00A8EF;
+    font-size: .875rem;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     font-weight: bold;
     margin-bottom: 0;
 }

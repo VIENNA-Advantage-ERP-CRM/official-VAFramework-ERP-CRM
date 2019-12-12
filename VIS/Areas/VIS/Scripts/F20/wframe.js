@@ -426,6 +426,12 @@
 
             if (self.onLoad)
                 self.onLoad();
+
+            // register popoverlay event for control's description
+            self.cPanel.getRoot().find('.vis-ev-ctrlinfowrap').popover({
+                trigger: 'focus'
+            });
+
             jsonData = null;
             self = null;
         });
@@ -670,7 +676,8 @@
         //if (VIS.context.getContext("#DisableMenu") == 'Y') {
         //    return;
         //}
-
+        //dispose all popover
+        this.cPanel.getRoot().find('.vis-ev-ctrlinfowrap').popover('dispose');
         if (this.onClosed) {
             if (!this.onClosed(this.id, this.$layout, this.hid, this.AD_Window_ID))
                 return;

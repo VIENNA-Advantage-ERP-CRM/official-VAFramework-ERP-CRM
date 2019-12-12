@@ -385,3 +385,18 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
             }
 
             /**************************************/
+
+
+
+/*w2ui popover*/
+.w2ui-overlay {
+    border: 1px solid rgba(var(--v-c-on-secondary), .4);
+    box-shadow: 0 2px 10px rgba(var(--v-c-on-secondary), .4);
+}
+
+    .w2ui-overlay:after, .w2ui-overlay:before {
+        border-right: 1px solid rgba(var(--v-c-on-secondary), .4);
+        border-top: 1px solid rgba(var(--v-c-on-secondary), .4);
+        margin: -6px 0 0 0px;
+    }
+   

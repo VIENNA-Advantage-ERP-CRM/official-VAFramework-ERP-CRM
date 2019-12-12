@@ -816,6 +816,7 @@ namespace VAdvantage.Controller
             clone.ShowIcon = ShowIcon;
             clone.AD_Image_ID = AD_Image_ID;
             clone.FontClass = FontClass;
+            clone.IsMaintainVersions = IsMaintainVersions;
 
             //         public bool IsHeaderPanelitem = false;
             //public int HeaderOverrideReference = 0;

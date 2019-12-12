@@ -20,15 +20,36 @@
         var groupToCompsMap = {};
 
         var fieldToCompParentMap = {};
+        var colDescHelpList = {};
        
-
+        var lastPopover = null;
         function initComponent() {
             $table = $("<div class='vis-ad-w-p-vc-ev-grid'>"); //   $("<table class='vis-gc-vpanel-table'>");
             //<tr><td class='vis-gc-vpanel-table-td0'><td class='vis-gc-vpanel-table-td1'>" +
             //"<td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'><td class='vis-gc-vpanel-table-td2'>" +
             //"<td  class='vis-gc-vpanel-table-td3'><td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'>" +
             //"<td class='vis-gc-vpanel-table-td4'></tr></table>");
+            $table.on("click", "span.vis-ev-ctrlinfowrap", onInfoClick);
         };
+
+
+
+        function onInfoClick(e) {
+            var curTgt = $(e.currentTarget);
+            var colName = curTgt.data('colname');
+            if (colName != '') {
+
+                if (lastPopover) {
+                    lastPopover.popover('dispose');
+                    lastPopover = null;
+                }
+               
+                curTgt.attr('data-content', colDescHelpList[colName].help).
+                    attr('title', colDescHelpList[colName].desc);
+                    lastPopover =  curTgt.popover('show');
+                
+            }
+        }
 
         initComponent();
 
@@ -237,7 +258,7 @@
                 //}
 
                 if (mField.getDescription().length > 0) {
-                    label.getControl().prop('title', mField.getDescription());
+                    //label.getControl().prop('title', mField.getDescription());
                 }
 
 
@@ -379,6 +400,11 @@
                 }
 
                 fieldToCompParentMap[mField.getColumnName()] = ctnr;
+
+                colDescHelpList[mField.getColumnName()] = {
+                    'desc': mField.getDescription(),
+                    'help': mField.getHelp()
+                };
             }
         };
 
@@ -395,6 +421,13 @@
         }
 
         this.dispose = function () {
+            $table.off("click", "span.vis-ev-ctrlinfowrap", onInfoClick);
+            colDescHelpList = {};
+            if (lastPopover) {
+                lastPopover.popover('dispose');
+            }
+            lastPopover = null;
+
             allLinkControls.length = 0;
             allLinkControls = null;
 
@@ -467,6 +500,12 @@
             if (editor)
                 ctrlP.append(editor.getControl());
         }
+
+        
+
+        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName()+"' title=''  tabindex='0' data-toggle='popover' data-trigger='focus'>"+
+            "<i class='vis vis-info' aria-hidden='true'></i></span'>");
+
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
         ctrl.append(ctrlP);
             var count = editor.getBtnCount();
