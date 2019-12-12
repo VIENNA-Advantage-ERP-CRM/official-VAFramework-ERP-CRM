@@ -145,6 +145,7 @@ namespace VIS
             //     "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
             //     "~/Areas/VIS/Scripts/app/windowformcontainer.js",
             //      "~/Areas/VIS/Scripts/TestPanel.js",
+            //      "~/Areas/VIS/Scripts/app/masterdataversion.js",
             //      "~/Areas/VIS/Scripts/app/initialize.js"//Bottom One
             //       );
 

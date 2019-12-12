@@ -41,13 +41,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+      <HintPath>C:\Windows\assembly\GAC_MSIL\CrystalDecisions.CrystalReports.Engine\13.0.2000.0__692fbea5521e1304\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Shared, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\CrystalDecisions.Shared.dll</HintPath>
+      <HintPath>C:\Windows\assembly\GAC_MSIL\CrystalDecisions.Shared\13.0.2000.0__692fbea5521e1304\CrystalDecisions.Shared.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth">
       <HintPath>LibDll\DotNetOpenAuth.dll</HintPath>
@@ -202,6 +202,7 @@
     <Compile Include="Classes\ServerEndPoint.cs" />
     <Compile Include="Classes\SessionEventHandler.cs" />
     <Compile Include="Classes\StringTokenizer.cs" />
+    <Compile Include="Classes\TableSQL.cs" />
     <Compile Include="Classes\VLookUpFactory.cs" />
     <Compile Include="Classes\VTreeNode.cs" />
     <Compile Include="Classes\WindowCtx.cs" />
@@ -1631,6 +1632,9 @@
     <Compile Include="ProcessAD\DocumentEngine.cs" />
     <Compile Include="ProcessAD\LanguageMaintenance.cs" />
     <Compile Include="ProcessAD\MailConfigration.cs" />
+    <Compile Include="ProcessAD\MasterVersionFields.cs" />
+    <Compile Include="ProcessAD\MasterVersions.cs" />
+    <Compile Include="ProcessAD\MasterVersionSchedules.cs" />
     <Compile Include="ProcessAD\PO_LOB.cs" />
     <Compile Include="ProcessAD\RoleAccessUpdate.cs" />
     <Compile Include="ProcessAD\SchedulerRun.cs" />
@@ -1648,6 +1652,7 @@
     </Compile>
     <Compile Include="ProcessAD\TranslationMgr.cs" />
     <Compile Include="ProcessAD\TreeMaintenance.cs" />
+    <Compile Include="ProcessAD\ValidateTableColumns.cs" />
     <Compile Include="ProcessAD\VerifyQueryForAlert.cs" />
     <Compile Include="ProcessAD\ViewImport.cs" />
     <Compile Include="ProcessAD\YearCreatePeriods.cs" />
@@ -1980,6 +1985,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
     <Fakes Include="Fakes\System.Web.Helpers.fakes" />
     <None Include="packages.config" />

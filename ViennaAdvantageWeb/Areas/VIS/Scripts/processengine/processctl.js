@@ -118,6 +118,10 @@
     ProcessCtl.prototype.complete = function (jObject) {
         this.jObjectFromServer = jObject;
         this.pi.setAD_PInstance_ID(jObject.AD_PInstance_ID);
+
+        // Change Lokesh Chauhan
+        this.pi.setCustomHTML(jObject.CustomHTML);
+
         if (jObject && jObject.ReportProcessInfo) {
             this.pi.setTotalPages(jObject.ReportProcessInfo.TotalPage);
             this.pi.setSupportPaging(jObject.ReportProcessInfo.SupportPaging);
