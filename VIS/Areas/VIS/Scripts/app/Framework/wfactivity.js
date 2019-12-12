@@ -11,7 +11,7 @@
         var dataItemDivs = [];
         var self = this;
 
-       
+
         var divSearch = null;
         var divSelectAll = null;
         var $txtSearch = null;
@@ -39,7 +39,7 @@
         var $alertTxtTypeCount = $("#hAlrtTxtTypeCount");
         var $divActivity = $("#divfActivity");
         // Right Panel
-        var workflowActivity=$('#workflowActivity');
+        var workflowActivity = $('#workflowActivity');
 
         /**
          *  Create Search design
@@ -49,11 +49,11 @@
                 divSearch = $('<div class="wfactivity-homepage-parentdiv"></div>');
 
                 var divSearchText = $(' <div class="frm-data-col-wrap frm-data-col-2" style="padding-right: 10px;"> <div class="frm-data-search-wrap"><input class="frm-data-col-searchinput" id="homeSearchWorkflow" type="text" placeholder="' + VIS.Msg.getMsg("Search") + '">'
-                    + '<input type="button" id="btnWorkflowSearch" class="vis-wfSearch-btn"></div></div>');
+                    + '<button id="btnWorkflowSearch" class="vis-wfSearch-btn"><i class="fa fa-search" aria-hidden="true"></i></button></div></div>');
                 $txtSearch = divSearchText.find('#homeSearchWorkflow');
                 $btnSearch = divSearchText.find('#btnWorkflowSearch');
 
-                var divWindow = $(' <div class="frm-data-col-wrap frm-data-col-2" style="padding-left: 7px"> <div class="frm-data-search-wrap"><select></select></div></div>');
+                var divWindow = $(' <div class="frm-data-col-wrap frm-data-col-2" style="padding-left: 7px"> <div class="frm-data-search-wrap"><select class="vis-custom-select"></select></div></div>');
                 $cmbWindows = divWindow.find('select');
 
                 var divDateFrom = $('<div style="display:none;padding-left: 7px" class="frm-data-col-wrap frm-data-col-2"> <label>' + VIS.Msg.getMsg("FromDate") + '</label><input type="date" placeholder="date"></div>');
@@ -70,8 +70,8 @@
                 chkSelectAll = $('<input type="checkbox">');
                 divSelectAll.append('<label>' + VIS.Msg.getMsg('SelectAll') + '</label>');
                 divSelectAll.append(chkSelectAll);
-                $wfSearchShow.addClass('vis-wfSearchIcon');
-                $wfSearchShow.removeClass('vis-wfSearchIconMinus');
+                $wfSearchShow.addClass('vis-eye-plus');
+                $wfSearchShow.removeClass('vis-eye-minus');
                 $wfSearchShow.attr('title', VIS.Msg.getMsg("ShowSearch"));
 
                 //loadWindows();
@@ -168,8 +168,8 @@
                         $dateFrom.val('');
                         $dateTo.val('');
                         $wfSearchShow.attr('title', VIS.Msg.getMsg("ShowSearch"));
-                        $wfSearchShow.addClass('vis-wfSearchIcon');
-                        $wfSearchShow.removeClass('vis-wfSearchIconMinus');
+                        $wfSearchShow.addClass('vis-eye-plus');
+                        $wfSearchShow.removeClass('vis-eye-minus');
                         if (chkSelectAll.is(':visible')) {
                             divScroll.css('top', '65px');
                         }
@@ -182,8 +182,8 @@
                         $($dateFrom.parent()).css('display', 'block');
                         $($dateTo.parent()).css('display', 'block');
                         $wfSearchShow.attr('title', VIS.Msg.getMsg("HideSearch"));
-                        $wfSearchShow.removeClass('vis-wfSearchIcon');
-                        $wfSearchShow.addClass('vis-wfSearchIconMinus');
+                        $wfSearchShow.removeClass('vis-eye-plus');
+                        $wfSearchShow.addClass('vis-eye-minus');
 
                         if (chkSelectAll.is(':visible')) {
                             divScroll.css('top', '118px');
@@ -565,11 +565,11 @@
                 var divActions = $("<div class='vis-feedTitleBar'>");
 
                 // create checkbox to be added in header on workflow activities
-                var chkSelect = $('<input class="wfActivity-selectchk" type="checkbox" style="float:left;margin-top:15px" data-ids="' + data[item].AD_Window_ID + "_" + data[item].AD_Node_ID + "_" + data[item].AD_WF_Activity_ID + '" ></input>');
+                var chkSelect = $('<input class="wfActivity-selectchk" type="checkbox" style="float:left;margin-right:5px" data-ids="' + data[item].AD_Window_ID + "_" + data[item].AD_Node_ID + "_" + data[item].AD_WF_Activity_ID + '" ></input>');
 
                 var header = $("<h3>");
                 header.css('font-weight', 'normal');
-                header.css('color', '#1b95d7');
+                //header.css('color', '#1b95d7');
                 header.append(VIS.Utility.encodeText(data[item].NodeName));
                 // Add Only if any window is selected in search criteria
                 if ($cmbWindows && $cmbWindows.val() != "0_0") {
@@ -580,8 +580,8 @@
                 var divBtns = $("<div class='vis-feedTitleBar-buttons'>");
                 var ul = $("<ul>");
                 var liZoom = $("<li>");
-                var aZoom = $("<a href='javascript:void(0)' class='vis-feedIcons vis-icon-viewFeed' data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >");
-                aZoom.append("View Feed");
+                var aZoom = $("<a href='javascript:void(0)'  data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >").append('<i class="vis vis-find"></i>');
+                //aZoom.append("View Feed");
 
                 liZoom.append(aZoom);
                 ul.append(liZoom);
@@ -598,7 +598,6 @@
 
 
                 var para = $("<p>");
-
                 if (data[item].DocumentNameValue == undefined || data[item].DocumentNameValue == '') {
                     para.append(VIS.Utility.encodeText(data[item].Summary));
                 }
@@ -845,7 +844,7 @@
                     docnameval = fulldata[index].DocumentNameValue.split('_');
 
                     var docno = {
-                        DocumentNo : parseInt(docnameval[docnameval.length - 1])
+                        DocumentNo: parseInt(docnameval[docnameval.length - 1])
                     };
 
                     var folderofDoc = '';
@@ -880,7 +879,7 @@
 
                     // Dms Zoom
                     var aZoomDMS = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton vis-workflowActivityIcons' style='margin-left:10px;' data-id='" +
-                        docnameval[docnameval.length-1] +
+                        docnameval[docnameval.length - 1] +
                         "'>");
                     aZoomDMS.append($("<span class='vis-btn-ico vis-btn-zoom-bg vis-btn-zoom-border'>"));
                     aZoomDMS.append(VIS.Msg.getMsg('Zoom'));
@@ -902,17 +901,17 @@
                     });
                 }
                 else {
-                    var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton  vis-workflowActivityIcons' data-id='" + index + "'>");
-                    //aZoom.css("data-id", index);
-                    aZoom.append($("<span class='vis-btn-ico vis-btn-zoom-bg vis-btn-zoom-border'>"));
-                    aZoom.append(VIS.Msg.getMsg('Zoom'));
-                    divHeader.append(aZoom);
-                    aZoom.on(VIS.Events.onTouchStartOrClick, function (e) {
-                        var id = $(this).data("id");
-                        zoom(id);
-                    });
-                }
+                var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton  vis-workflowActivityIcons' data-id='" + index + "'>");
+                //aZoom.css("data-id", index);
+                aZoom.append($("<span class='vis-btn-ico vis vis-find vis-btn-zoom-border'>"));
+                aZoom.append(VIS.Msg.getMsg('Zoom'));
+                divHeader.append(aZoom);
+                aZoom.on(VIS.Events.onTouchStartOrClick, function (e) {
+                    var id = $(this).data("id");
+                    zoom(id);
+                });
             }
+        }
 
             divHeader.append($("<div class='clearfix'>"));
 
@@ -967,7 +966,7 @@
 
             var liAInput = $("<li>");
             ulA.append(liAInput);
-            liAInput.append($("<p>").append(VIS.Msg.getMsg('Answer')));
+            liAInput.append($("<p style='margin-bottom: 0'>").append(VIS.Msg.getMsg('Answer')));
             //Get Answer Control
 
             if (info.NodeAction == 'C') {
@@ -977,9 +976,9 @@
 
 
                     if (ctrl.getBtnCount() > 0) {
-                        var divFwd = $("<div>");
-                        divFwd.append(ctrl.getControl().css("width", "86%").css("margin-bottom", "10px"));
-                        divFwd.append(ctrl.getBtn(0).css("width", "14%").css("height", '29px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                        var divFwd = $("<div class='vis-wforwardwrap'>");
+                        divFwd.append(ctrl.getControl());
+                        divFwd.append(ctrl.getBtn(0));
                         liAInput.append(divFwd);
 
                     }
@@ -1000,8 +999,7 @@
                 });
                 detailCtrl.Action = 'W';
             }
-            else if (info.NodeAction == 'X')
-            {
+            else if (info.NodeAction == 'X') {
                 var ansBtn = $('<button style="margin-bottom:10px;margin-top: 0px;width: 100%;" class="VIS_Pref_pass-btn" data-id="' + index + '" data-form="' + info.AD_Form_ID + '" data-col="' + info.KeyCol + '">').append(info.NodeName);
                 detailCtrl.AnswerCtrl = ansBtn;
                 liAInput.append(ansBtn);
@@ -1012,7 +1010,7 @@
             }
 
 
-            liAInput.append($("<p>").append(VIS.Msg.getMsg('Forward')));
+            liAInput.append($("<p style='margin-bottom: 0'>").append(VIS.Msg.getMsg('Forward')));
 
             //Get User Lookup
             var lookup = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "AD_User_ID", 0, false, null);
@@ -1021,9 +1019,9 @@
             txtb.getBtn();
 
             if (txtb.getBtnCount() == 2) {
-                var divFwd = $("<div>");
-                divFwd.append(txtb.getControl().css("width", "86%").css("margin-bottom", "10px"));
-                divFwd.append(txtb.getBtn(0).css("width", "14%").css("height", '29px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                var divFwd = $("<div class='vis-wforwardwrap'>");
+                divFwd.append(txtb.getControl());
+                divFwd.append(txtb.getBtn(0));
                 liAInput.append(divFwd);
 
             }
@@ -1086,14 +1084,14 @@
             divDetail.append(ulA);
             divDetail.append($("<div class='clearfix'>"));
 
-            divDetail.append($("<p>").append(VIS.Msg.getMsg('Message')));
+            divDetail.append($("<p style='margin-bottom: 0'>").append(VIS.Msg.getMsg('Message')));
             divDetail.append($("<div class='clearfix'>"));
 
             var divMsg = $("<div class='vis-sendMessage'>");
             var msg = $("<input type='text' placeholder='" + VIS.Msg.getMsg('TypeMessage') + "....'>");
             detailCtrl.MsgCtrl = msg;
             divMsg.append(msg);
-            divMsg.append($("<input  type='button' class='vis-feedIcons vis-icon-message'>"));
+            divMsg.append($("<button class='vis vis-sms'></button>"));
             divMsg.append($("<div class='clearfix'>"));
 
             divDetail.append(divMsg);
@@ -1164,7 +1162,7 @@
                                         var btnDetail = $("<a href='javascript:void(0)' class='VIS_Pref_tooltip' style='margin-right:5px'>").append($("<img class='VIS_Pref_img-i'>").attr("src", VIS.Application.contextUrl + "Areas/VIS/Images/i.png"));
                                         var span = $("<span >");
                                         span.append($("<img class='VIS_Pref_callout'>").attr('src', VIS.Application.contextUrl + "Areas/VIS/Images/ccc.png").append("ToolTip Text"));
-                                        span.append($("<label class='VIS_Pref_Label_Font'>").append( VIS.Utility.encodeText(info.Node[node].History[hNode].TextMsg)))
+                                        span.append($("<label class='VIS_Pref_Label_Font'>").append(VIS.Utility.encodeText(info.Node[node].History[hNode].TextMsg)))
                                         btnDetail.append(span);
 
                                         divLeft.append(btnDetail);

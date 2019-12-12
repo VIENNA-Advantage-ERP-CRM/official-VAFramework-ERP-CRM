@@ -132,6 +132,7 @@ namespace VIS.Helpers
                             {
                                 prefix = "VIS_";
                             }
+                            
 
                             nSpace = "VAdvantage";
                             if (className.Contains(nSpace))
@@ -242,23 +243,29 @@ namespace VIS.Helpers
                 if (AD_Image_ID > 0)
                 {
                     var img = new VAdvantage.Model.MImage(ctx, AD_Image_ID, null);
-                    if (img.GetBinaryData() != null)
+
+                    if (img.GetFontName() != null && img.GetFontName().Length > 0)
                     {
                         itm.HasImage = true;
-                        itm.IsImageByteArray = true;
-                        itm.IconBytes = img.GetBinaryData();
+                        itm.IsImageByteArray = false;
+                        itm.IconUrl = img.GetFontName();
                     }
-                    if (img.GetImageURL() != null && img.GetImageURL().Length > 0)
+                    else if (img.GetImageURL() != null && img.GetImageURL().Length > 0)
                     {
                         itm.HasImage = true;
                         itm.IsImageByteArray = false;
                         itm.IconUrl = img.GetImageURL();
                     }
+                    else if (img.GetBinaryData() != null)
+                    {
+                        itm.HasImage = true;
+                        itm.IsImageByteArray = true;
+                        itm.IconBytes = img.GetBinaryData();
+                    }
                 }
                 lst.Add(itm);
             }
             dr.Close();
-            dr = null;
         }
 
         public static List<ShortcutItemModel> GetSettingItems(Ctx ctx, int AD_Shortcut_ID)

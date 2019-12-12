@@ -34,7 +34,7 @@
                         </div>
                         @*<a class="vis-EmailIcon vis-EmailAttachment"></a>*@
 
-                        <img style="cursor: pointer;margin:5px" id="@(ViewBag.windowNo + "_vis-email-attacImg")" src="~/Areas/vis/Images/attachment.png" />
+                        <i id="@(ViewBag.windowNo + "_vis-email-attacImg")" class="vis vis-attachment1 vis-emailattchico"></i>
 
                         <div class="vis-email-attachmentContainer"></div>
 
@@ -95,12 +95,12 @@
                     <!-- end of Email-rytForm -->
 
                     <div class="vis-Email-rytBcc">
-                        <div>
+                        <div class="vis-email-rytBcc-header">
                             <h4 style="float: left">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Bcc")</h4>
                             @*<img  id="@(ViewBag.windowNo + "_emailRefresh")"  style="cursor: pointer;float:right;margin-top:8px" title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Refresh")" src="~/Areas/vis/Images/Refresh24.png">*@
                             <!-- Refresh message from message window showing & symbol. Now we used CleanMnemonics to remove &.-->
 
-                            <img  id="@(ViewBag.windowNo + "_emailRefresh")"  style="cursor: pointer;float:right;margin-top:8px" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Refresh"))" src="~/Areas/vis/Images/Refresh24.png">
+                            <i  id="@(ViewBag.windowNo + "_emailRefresh")"  title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Refresh"))" class="vis vis-refresh"></i>
                         </div>
                         <div class="vis-Email-BccList">
                         </div>

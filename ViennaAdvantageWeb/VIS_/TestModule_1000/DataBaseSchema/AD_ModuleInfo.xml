@@ -1,0 +1,94 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_ModuleInfo">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULEINFO_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AUTHOR" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DATABASESCHEMA" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="DEPENDENCYINFO" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="DEVELOPMENTSTATUS" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISFREE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISPAID" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="NAMESPACE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PATH" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PREFIX" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="TERMCONDITION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="URL" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="UPGRADEINFO" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="VERSIONNO" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ASSEMBLYNAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="INSTALLATIONINSTRUCTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="FEATURE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="BINARYDATA" msprop:OraDbType="102" type="xs:base64Binary" minOccurs="0" />
+                <xs:element name="RATING" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="LOGSUMMARY" msprop:OraDbType="105" type="xs:string" minOccurs="0" />
+                <xs:element name="ISRELEASED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISPLANNED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ESTIMATEDDAY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="RECEIVED_FS_COST" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="ESTIMATED_FS_COST" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="ESTIMATED_D_COST" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="RECEIVED_D_COST" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="ISCOMMUNITYFREE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISPROFESSIONALFREE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISPROFESSIONALPAID" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="SUBSCRIPTIONDAY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULECATEGORY_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="INCLUDEDFILE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="VERSIONID" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="ISBETA" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_ModuleInfo>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEINFO_ID>1000106</AD_MODULEINFO_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <CREATED>2019-12-11T13:47:20+05:30</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DATABASESCHEMA>N                                                 </DATABASESCHEMA>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISFREE>N</ISFREE>
+    <ISPAID>N</ISPAID>
+    <NAME>TestModule</NAME>
+    <NAMESPACE>VAdvantage</NAMESPACE>
+    <PREFIX>VIS_</PREFIX>
+    <UPDATED>2019-12-11T14:06:43+05:30</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <VERSIONNO>1000</VERSIONNO>
+    <EXPORT_ID>VIS_1000008</EXPORT_ID>
+    <ASSEMBLYNAME>VIS</ASSEMBLYNAME>
+    <RATING>0</RATING>
+    <ISRELEASED>N</ISRELEASED>
+    <ISPLANNED>N</ISPLANNED>
+    <ESTIMATEDDAY>0</ESTIMATEDDAY>
+    <RECEIVED_FS_COST>0</RECEIVED_FS_COST>
+    <ESTIMATED_FS_COST>0</ESTIMATED_FS_COST>
+    <ESTIMATED_D_COST>0</ESTIMATED_D_COST>
+    <RECEIVED_D_COST>0</RECEIVED_D_COST>
+    <ISCOMMUNITYFREE>N</ISCOMMUNITYFREE>
+    <ISPROFESSIONALFREE>N</ISPROFESSIONALFREE>
+    <ISPROFESSIONALPAID>N</ISPROFESSIONALPAID>
+    <SUBSCRIPTIONDAY>0</SUBSCRIPTIONDAY>
+    <VERSIONID>0</VERSIONID>
+    <ISBETA>Y</ISBETA>
+  </AD_ModuleInfo>
+</NewDataSet>

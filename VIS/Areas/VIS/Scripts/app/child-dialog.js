@@ -42,8 +42,8 @@
         this.setContent = function (content) {
             $a.empty();
 
-            content.css("margin-left", "-6px");
-            content.css("margin-right", "-7px");
+            //content.css("margin-left", "-6px");
+            //content.css("margin-right", "-7px");
             //content.css("margin-top", "3px");
             $a.append(content);
         };
@@ -88,11 +88,11 @@
 
 
         this.show = function () {
-            var styleCancel = "margin-right:-2px;margin-top:-10px;margin-bottom:3px;margin-right:-4px";
-            var styleOK = "margin-top:-10px;margin-bottom:3px;margin-right:12px";
+            var styleCancel = "";
+            var styleOK = "margin-right:12px";
             if (VIS.Application.isRTL) {
-                styleCancel = "margin-right:7px;margin-top:-5px;margin-bottom:3px";
-                styleOK = "margin-top:-5px;margin-bottom:3px;margin-right:-3px";
+                styleCancel = "margin-right:7px;";
+                styleOK = "";
             }
             $a.dialog({
                 height: height,

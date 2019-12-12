@@ -28,6 +28,8 @@ namespace VIS.DataContracts
         public string Message { get; set; }
         public bool IsReport { get; set; }
         public bool HasPara { get; set; }
+        public string ImageUrl { get; set; }
+        public string FontName { get; set; }
     }
 
     /// <summary>

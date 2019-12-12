@@ -408,7 +408,7 @@ namespace VAdvantage.Utility
         /// <returns>Language</returns>
         public static Language GetLoginLanguage(Context ctx)
         {
-            return Language.GetLoginLanguage();
+            return GetLanguage(ctx);
         }	//	getLanguage
 
         /// <summary>
@@ -418,7 +418,7 @@ namespace VAdvantage.Utility
         /// <returns>Language</returns>
         public static Language GetLoginLanguage(Ctx ctx)
         {
-            return Language.GetLoginLanguage();
+            return GetLanguage(ctx);
         }
 
 

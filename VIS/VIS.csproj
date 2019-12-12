@@ -197,10 +197,19 @@
   <ItemGroup>
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
+    <Content Include="Areas\VIS\Content\F20\Color.css" />
+    <Content Include="Areas\VIS\Content\F20\Controls.css" />
+    <Content Include="Areas\VIS\Content\F20\Media.css" />
+    <Content Include="Areas\VIS\Content\F20\Site.css" />
+    <Content Include="Areas\VIS\Content\F20\site-rtl.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
     <Content Include="Areas\VIS\Content\Home.css" />
+    <Content Include="Areas\VIS\Content\Images\logo.png" />
     <Content Include="Areas\VIS\Content\Login.css" />
+    <Content Include="Areas\VIS\Content\F20\Window.css" />
+    <Content Include="Areas\VIS\Content\notify.mp3" />
+    <Content Include="Areas\VIS\Content\notify.wav" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
     <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />
@@ -277,6 +286,8 @@
     <Content Include="Areas\VIS\Images\base\Copy24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocument24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocumentX24.png" />
+    <Content Include="Areas\VIS\Images\base\defpanel.ico" />
+    <Content Include="Areas\VIS\Images\base\defPanel.png" />
     <Content Include="Areas\VIS\Images\base\Delete-W24.png" />
     <Content Include="Areas\VIS\Images\base\delete10.png" />
     <Content Include="Areas\VIS\Images\base\Delete24.PNG" />
@@ -296,6 +307,7 @@
     <Content Include="Areas\VIS\Images\base\First16.PNG" />
     <Content Include="Areas\VIS\Images\base\FirstX16.PNG" />
     <Content Include="Areas\VIS\Images\base\Folder20.png" />
+    <Content Include="Areas\VIS\Images\base\FormPic.PNG" />
     <Content Include="Areas\VIS\Images\base\Help16.png" />
     <Content Include="Areas\VIS\Images\base\Help24.png" />
     <Content Include="Areas\VIS\Images\base\History24.png" />
@@ -308,6 +320,7 @@
     <Content Include="Areas\VIS\Images\base\Info20.png" />
     <Content Include="Areas\VIS\Images\base\Info24.png" />
     <Content Include="Areas\VIS\Images\base\InfoAccount20.png" />
+    <Content Include="Areas\VIS\Images\base\InfoHelp.png" />
     <Content Include="Areas\VIS\Images\base\Last16.PNG" />
     <Content Include="Areas\VIS\Images\base\LastX16.PNG" />
     <Content Include="Areas\VIS\Images\base\Left32.png" />
@@ -345,6 +358,7 @@
     <Content Include="Areas\VIS\Images\base\PageUpX16.PNG" />
     <Content Include="Areas\VIS\Images\base\PAttribute20.png" />
     <Content Include="Areas\VIS\Images\base\Payment20.png" />
+    <Content Include="Areas\VIS\Images\base\pContainer.png" />
     <Content Include="Areas\VIS\Images\base\pencil.png" />
     <Content Include="Areas\VIS\Images\base\PickOpen20.png" />
     <Content Include="Areas\VIS\Images\base\Preference16.PNG" />
@@ -352,11 +366,13 @@
     <Content Include="Areas\VIS\Images\base\PreviousX16.PNG" />
     <Content Include="Areas\VIS\Images\base\Print24.PNG" />
     <Content Include="Areas\VIS\Images\base\Process20.png" />
+    <Content Include="Areas\VIS\Images\base\processPic.PNG" />
     <Content Include="Areas\VIS\Images\base\Product20.png" />
     <Content Include="Areas\VIS\Images\base\RecordAccess24.png" />
     <Content Include="Areas\VIS\Images\base\RecordAccessX24.png" />
     <Content Include="Areas\VIS\Images\base\Refresh24.PNG" />
     <Content Include="Areas\VIS\Images\base\RefreshX24.PNG" />
+    <Content Include="Areas\VIS\Images\base\report-pic.png" />
     <Content Include="Areas\VIS\Images\base\Report24.png" />
     <Content Include="Areas\VIS\Images\base\requery.png" />
     <Content Include="Areas\VIS\Images\base\Request24.png" />
@@ -370,6 +386,8 @@
     <Content Include="Areas\VIS\Images\base\select-att.png" />
     <Content Include="Areas\VIS\Images\base\seprator16.PNG" />
     <Content Include="Areas\VIS\Images\base\seprator24.PNG" />
+    <Content Include="Areas\VIS\Images\base\ShowSummaryNodes16.png" />
+    <Content Include="Areas\VIS\Images\base\ShowSummaryNodesX16.png" />
     <Content Include="Areas\VIS\Images\base\Sms24.png" />
     <Content Include="Areas\VIS\Images\base\Subscribe24.png" />
     <Content Include="Areas\VIS\Images\base\SubscribeX24.png" />
@@ -390,6 +408,7 @@
     <Content Include="Areas\VIS\Images\base\warning-cros.png" />
     <Content Include="Areas\VIS\Images\base\warning-icon.png" />
     <Content Include="Areas\VIS\Images\base\window-default.png" />
+    <Content Include="Areas\VIS\Images\base\winPic.PNG" />
     <Content Include="Areas\VIS\Images\base\Workflow24.png" />
     <Content Include="Areas\VIS\Images\base\zoom.png" />
     <Content Include="Areas\VIS\Images\base\Zoom16.jpg" />
@@ -570,6 +589,7 @@
     <Content Include="Areas\VIS\Images\orderedList0.png" />
     <Content Include="Areas\VIS\Images\orderedList1.png" />
     <Content Include="Areas\VIS\Images\orderedList2.png" />
+    <Content Include="Areas\VIS\Images\pallet-icon.png" />
     <Content Include="Areas\VIS\Images\pdf.png" />
     <Content Include="Areas\VIS\Images\ppt-ico.png" />
     <Content Include="Areas\VIS\Images\ppt.png" />
@@ -710,6 +730,7 @@
     <Content Include="Areas\VIS\Scripts\app\grouprights\groupinfo.js" />
     <Content Include="Areas\VIS\Scripts\app\grouprights\importcontacts.js" />
     <Content Include="Areas\VIS\Scripts\app\grouprights\orgaccess.js" />
+    <Content Include="Areas\VIS\Scripts\app\headerPanelFrame.js" />
     <Content Include="Areas\VIS\Scripts\app\historymgr.js" />
     <Content Include="Areas\VIS\Scripts\app\i18N.js" />
     <Content Include="Areas\VIS\Scripts\app\initialize.js" />
@@ -730,6 +751,9 @@
     <Content Include="Areas\VIS\Scripts\app\viewmanager.js" />
     <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\aheaderpanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\wframe.js" />
     <Content Include="Areas\VIS\Scripts\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\home\changeuserimage.js" />
     <Content Include="Areas\VIS\Scripts\home\favourite.js" />
@@ -986,7 +1010,7 @@
     <Content Include="Areas\VIS\Views\Email\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Email\Init.cshtml" />
     <Content Include="Areas\VIS\Views\Home\Home.cshtml" />
-    <Content Include="Areas\VIS\Views\Home\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\IndexOld.cshtml" />
     <Content Include="Areas\VIS\Views\Home\TimeoutRedirect.cshtml" />
     <Content Include="Areas\VIS\Views\Home\_Login.cshtml" />
     <Content Include="Areas\VIS\Views\Home\_Login2.cshtml" />
@@ -994,7 +1018,7 @@
     <Content Include="Areas\VIS\Views\Locator\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_Menu.cshtml" />
-    <Content Include="Areas\VIS\Views\Shared\_UserSettings.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_UserSettingsOld.cshtml" />
     <Content Include="Areas\VIS\Views\UserPreference\Index.cshtml" />
     <Content Include="Areas\VIS\Views\ValuePreference\Index.cshtml" />
     <Content Include="Areas\VIS\Views\VImageForm\Index.cshtml" />
@@ -1019,22 +1043,26 @@
     <Folder Include="Areas\VIS\Views\VCreateFrom\" />
     <Folder Include="Areas\VIS\Views\VPayPrint\" />
     <Folder Include="Areas\VIS\Views\VTrxMaterial\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\VIS\Views\PaymentAllocation\Index.cshtml" />
     <Content Include="Areas\VIS\Views\TelerikReport\Index.cshtml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Areas\VIS\Scripts\F20\apanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\aviewcontroller.js" />
+    <Content Include="Areas\VIS\Scripts\F20\thememgr.js" />
+    <Content Include="Areas\VIS\Scripts\F20\veditview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vgridview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vmapview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabbedpane.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vcardview.js" />
+    <Content Include="Areas\VIS\Views\Shared\_UserSettings.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\View.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_Template.cshtml" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

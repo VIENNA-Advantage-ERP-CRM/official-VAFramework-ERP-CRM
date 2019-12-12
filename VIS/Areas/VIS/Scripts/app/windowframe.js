@@ -29,6 +29,7 @@
         });
         return dr;
     };
+    };
 
     //executeDataSet
     var executeDataSet = function (sql, param, callback) {
@@ -441,7 +442,7 @@
      *  @param callback to add menu item for form
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initForm = function (AD_Form_ID, callback, action, additionalInfo) {
+    AWindow.prototype.initForm = function (AD_Form_ID, callback, action) {
 
         this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT); //initlize AForm
 
@@ -474,7 +475,7 @@
             self.setName(jsonData.DisplayName);
 
 
-            if (!self.cPanel.openForm(jsonData, self, windowNo, additionalInfo)) {
+            if (!self.cPanel.openForm(jsonData, self, windowNo)) {
                 self.dispose();
                 self = null;
                 return;
@@ -1763,9 +1764,6 @@
             }
         };
 
-        this.navigateToSelectedTab = function () {
-            $ulTabControl.find('.vis-apanel-tab-selected')[0].scrollIntoView();
-        }
         this.setTabNavigation = function () {
             if ($ulTabControl.width() > $divTabControl.width()) {
                 if (!VIS.Application.isMobile)
@@ -2556,75 +2554,45 @@
             }
         }
 
-        var setCurrent = false;
-        var isCheckCurrentTab = true;
-        for (var i = 0; i < tabs.length; i++) { //all tabs
+
+        for (var i = 0; i < tabs.length; i++) {
 
             var id = curWindowNo + "_" + tabs[i].getAD_Tab_ID(); //uniqueID
             tabActions[i] = new VIS.AppsAction({ action: id, text: tabs[i].getName(), toolTipText: tabs[i].getDescription, textOnly: true }); //Create Apps Action
 
-            // check the target tab if action is zoomed to either grid tab or sort tab.
             gTab = tabs[i];
+            if (i === 0) {
+                this.curTab = gTab;
+                if (query != null) {
 
-           
-            
-
-            if (isCheckCurrentTab) {
-                if (i === 0 && (query == null || (query.list != null && query.list.length == 0))) {
-                    this.curTab = gTab;
-                    this.firstTabId = id;
-                    setCurrent = true;
-                    isCheckCurrentTab = false;
-                    if (query != null) {
-
-                        gTab.setQuery(query);
-                    }
+                    gTab.setQuery(query);
                 }
-                else {
-                    if (query != null && query.list != null && query.list.length > 0) {
-                        if (gTab.getKeyColumnName().toUpperCase() == query.list[0].columnName.toUpperCase()) {
-                            this.firstTabId = id;
-                            gTab.setQuery(query);
-                            this.curTab = gTab;
-                            setCurrent = true;
-                            isCheckCurrentTab = false;
-                            if (i > 0) {
-                                this.setParentsContext(tabs, i);
-                            }
-                        }
-                    }
-                }//	query on first tab
-            }
+            }	//	query on first tab
+
             var tabElement = null;
             //        //  GridController
-            if (gTab.getIsSortTab())//     
+            if (gTab.getIsSortTab())//     .IsSortTab())
             {
                 //var st = new VIS.VSortTab(curWindowNo, id);
                 var st = new VIS.VSortTab(curWindowNo, gTab.getAD_Table_ID(),
                    gTab.getAD_ColumnSortOrder_ID(), gTab.getAD_ColumnSortYesNo_ID(), gTab.getIsReadOnly(), id);
                 //st.setTabLevel(gTab.getTabLevel());
                 tabElement = st;
-
+                if (i == 0) {
+                    firstTabId = id;
+                }
             }
             else	//	normal tab
             {
                 var gc = new VIS.GridController(true, true, id);
                 gc.initGrid(false, curWindowNo, this, gTab);
-                //            
+                //            gc.addDataStatusListener(this);
 
-
-                // set current grid  controller
-                if (setCurrent) {
-                    this.curGC = gc;
-                    setCurrent = false;
-                }
-                // Set first tab as current tab in case not marked aby tab as current tab.
-                if (i === 0 && !setCurrent) {
-                    this.curTab = gTab;
+                //Set Title of Tab
+                if (i === 0) {
                     this.curGC = gc;
                     this.firstTabId = id;
                 }
-
 
                 tabElement = gc;
                 //	If we have a zoom query, switch to single row
@@ -2675,13 +2643,7 @@
             //TabChange Action Callback
             tabActions[i].onAction = this.onTabChange; //Perform tab Change
         }
-        // set zoom query on first tab in case first tab is marked as current tab.
-        if (isCheckCurrentTab) {
-            if (query != null) {
 
-                tabs[0].setQuery(query);
-            }
-        }
         // for (var item = 0 ; item < this.vTabbedPane.Items.length ; item++) {
         // this.vTabbedPane.Items[item].setTabControl(tabActions); //Set TabPage 
         // }
@@ -2700,41 +2662,6 @@
         // this.curGC.setVisible(true);
     };
 
-    // if zoomed to any child tab - find all the parents and set the values in context and set the query on parent tab.
-    APanel.prototype.setParentsContext = function (gTabs, index) {
-        var parentDict = [];
-        var parentRecID = gTabs[index].query.list[0].code;
-        for (var i = index - 1; i >= 0; i--) {
-            if (gTabs[i].getTabLevel() != gTabs[index].getTabLevel() && gTabs[i].getTabLevel() < gTabs[index].getTabLevel()) {
-                parentDict.push({ "TabNo": gTabs[i].getTabNo(), "columnName": gTabs[i].getKeyColumnName(), "childTableKeyColumn": gTabs[index].getKeyColumnName(), "index": i });
-                index = i;
-            }
-        }
-        if (parentDict) {
-
-            var windowNo = gTabs[index].getWindowNo();
-            for (var i = 0; i < parentDict.length; i++) {
-                if (parentRecID) {
-                    gTabs[parentDict[i].index].query.addRestriction(parentDict[i].childTableKeyColumn, VIS.Query.prototype.EQUAL, parentRecID);
-                    gTabs[parentDict[i].index].setIsZoomAction(true);
-                }
-
-                var data = {
-                    SelectColumn: parentDict[i].columnName,
-                    SelectTable: parentDict[i].childTableKeyColumn.substr(0, parentDict[i].childTableKeyColumn.length - 3),
-                    WhereColumn: parentDict[i].childTableKeyColumn,
-                    WhereValue: parentRecID
-                };
-
-                parentRecID = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetZoomParentRec", data);
-
-                if (parentRecID) {
-                    VIS.context.setWindowContext(windowNo, parentDict[i].columnName, parentRecID.toString());
-                }
-            }
-        }
-    }
-
     /**
     *  Activate first tab 
     */
@@ -2752,10 +2679,10 @@
     //date:19-01-2016
     //Change/Update for:Zoom from workflow on home page
     APanel.prototype.selectFirstTab = function (isSelect) {
-        //this.curGC.isZoomAction = isSelect;
-        this.curTab.setIsZoomAction(isSelect);
+        that.curGC.isZoomAction = isSelect;
+        that.curTab.setIsZoomAction(isSelect);
         setTimeout(function (that) {
-            //that.curGC.isZoomAction = isSelect;
+            that.curGC.isZoomAction = isSelect;
             that.tabActionPerformed(that.firstTabId);
             that.setTabNavigation();
             that = null;
@@ -3720,7 +3647,6 @@
         }
         if (canExecute) {
             selfPanel.tabActionPerformedCallback(action, back, isAPanelTab, tabEle, curEle, oldGC, gc, st);
-
         }
 
         return true;
@@ -3744,7 +3670,6 @@
         this.curTabIndex = tpIndex;
         if (!isAPanelTab)
             this.curGC = gc;
-
     }
 
     APanel.prototype.tabActionPerformedCallback = function (action, back, isAPanelTab, tabEle, curEle, oldGC, gc, st) {
@@ -3759,14 +3684,12 @@
             gc.activate(oldGC);
             if (oldGC)
                 oldGC.detachDynamicAction();
-
             this.curTab = gc.getMTab();
-
             this.setDynamicActions();
             //PopulateSerachCombo(false);
             /*	Refresh only current row when tab is current(parent)*/
 
-            if (!this.curTab.getIsZoomAction() && this.curTab.getTabLevel() > 0) {
+            if (!gc.isZoomAction && this.curTab.getTabLevel() > 0) {
                 var queryy = new VIS.Query();
                 this.curTab.query = queryy;
             }
@@ -3793,7 +3716,7 @@
             else	//	Requery and bind
             {
                 this.curTab.getTableModel().setCurrentPage(1);
-                if (!this.curGC.onDemandTree || gc.getMTab().getIsZoomAction()) {
+                if (!this.curGC.onDemandTree || gc.isZoomAction) {
 
                     //var query = new VIS.Query(this.curTab.getTableName(), true);
                     //query.addRestriction(" 1 = 1 ");
@@ -3869,7 +3792,7 @@
         this.refresh();
 
         this.setTabNavigation();
-        //this.navigateToSelectedTab();
+
         /*******    END Tab Panels     ******/
 
         if (this.aParentDetail)
@@ -3920,7 +3843,7 @@
 
         if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
             $selfpanel.curTab.hasSavedAdvancedSearch = true;
-            if ($selfpanel.curTab.getTabLevel() == 0 && !gc.getMTab().getIsZoomAction()) {
+            if ($selfpanel.curTab.getTabLevel() == 0 && !gc.isZoomAction) {
                 var hasDefaultSearch = false;
                 for (var i = 0; i < data.tables[0].rows.length; i++) {
                     if (data.tables[0].rows[i].cells["ad_defaultuserquery_id"] > 0) {
@@ -5911,7 +5834,7 @@
 
         this.id = id;
         this.vGridPanel = new VIS.VGridPanel();
-        this.vTable = new VIS.VTable();
+        this.vTabPanel = new VIS.VTable();
         this.vCardView = new VIS.VCardView();
         this.vMapView = new VIS.VMapView();
         this.windowNo = 0;
@@ -6116,8 +6039,6 @@
         this.getTabControl = function () {
             return $tabControl;
         };
-
-
 
         this.setRecord = function (record) {
 
@@ -6438,7 +6359,7 @@
                 mField = fields[i];
 
                 if (mField.getIsDisplayed()) {
-                    var iControl = VIS.VControlFactory.getControl(mTab, mField, false, false, false);
+                    var iControl = VIS.VControlFactoryOverride.getControl(mTab, mField, false, false, false);
                     if (iControl == null && !mField.getIsHeading()) {
                         //log.warning("Editor not created for " + mField.getColumnName());
                         continue;

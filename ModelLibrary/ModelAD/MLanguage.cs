@@ -295,6 +295,48 @@ namespace VAdvantage.Model
         }
 
 
-       
+        public static DataTable GetSystemLanguage()
+        {
+            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y'");
+            if(ds !=null)
+            return ds.Tables[0];
+            return null;
+        }
+
+
+        private void SetAD_Language_ID()
+        {
+            int AD_Language_ID = GetAD_Language_ID();
+            if (AD_Language_ID == 0)
+            {
+                String sql = "SELECT NVL(MAX(AD_Language_ID), 999999) FROM AD_Language WHERE AD_Language_ID > 1000";
+                AD_Language_ID = DB.GetSQLValue(Get_TrxName(), sql);
+                SetAD_Language_ID(AD_Language_ID + 1);
+            }
+        }	
+
+        protected override bool BeforeSave(bool newRecord)
+        {
+            string lang = GetAD_Language();
+
+            if (!lang.Contains("_"))
+            {
+                log.SaveError("Error?", "Language code must contain _ (undescore)");
+                return false;
+            }
+
+            try
+            {
+                new System.Globalization.CultureInfo(lang.Replace("_", "-"));
+            }
+            catch (Exception ex)
+            {
+                log.SaveError("Error?","Language code not supported =>" + ex.Message);
+                return false;
+            }
+            if (newRecord)
+                SetAD_Language_ID();
+            return base.BeforeSave(newRecord);
+        }
     }
 }

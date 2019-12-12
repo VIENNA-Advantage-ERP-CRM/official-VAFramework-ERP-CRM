@@ -38,7 +38,7 @@ namespace VAdvantage.Process
         // check for process execution
         public static bool running = false;
         // lock for simultaneous process
-        private object  _lock = new object();
+        private object _lock = new object();
 
         protected override void Prepare()
         {
@@ -82,7 +82,7 @@ namespace VAdvantage.Process
             }
 
             try
-            { 
+            {
                 GenerateSchema(AD_ModuleInfo_ID);
             }
             finally
@@ -544,110 +544,7 @@ namespace VAdvantage.Process
                 }
             }
         }
-        //    DataTable dt = GetTable("SELECT * FROM AD_CtxArea WHERE AD_CtxArea_ID =" + sAD_CtxArea_ID);
 
-        //    MCtxArea sArea = new MCtxArea(_ctx, dt.Rows[0], null);
-        //    int dAD_CtxArea_ID = 0;
-
-        //    //DB.UseMigratedConnection = true;
-        //    int count = 0;
-
-        //    try
-        //    {
-        //        count = Convert.ToInt32(DB.ExecuteScalar("Select Count (AD_CtxArea_ID) From AD_CtxArea  Where Name = '" + sArea.GetName() + "' ", null, Get_TrxName()));
-        //        if (count == 1)
-        //        {
-        //            dAD_CtxArea_ID = Convert.ToInt32(DB.ExecuteScalar("Select AD_CtxArea_ID From AD_CtxArea  Where Name = '" + sArea.GetName() + "' ", null, Get_TrxName()));
-        //        }
-        //        //DB.UseMigratedConnection = false;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        //DB.UseMigratedConnection = false;
-        //        dAD_CtxArea_ID = 0;
-        //    }
-        //    if (count < 1 && dAD_CtxArea_ID == 0)
-        //    {
-        //        dAD_CtxArea_ID = InsertCtxArea(sArea);
-        //    }
-        //    else if (count > 1)
-        //    {
-        //        DoReportWarn("SkipInsertion", "", "DuplicateRecordFound");
-        //    }
-        //    return dAD_CtxArea_ID;
-        //}
-
-        //private int InsertCtxArea(MCtxArea sArea)
-        //{
-        //    int dAD_CtxArea_ID = 0;
-        //    //DB.UseMigratedConnection = true;
-        //    MCtxArea dCtxArea = new MCtxArea(_ctx, 0, Get_TrxName());
-        //    sArea.CopyTo(dCtxArea);
-        //    if (dCtxArea.Save())
-        //    {
-        //        dAD_CtxArea_ID = dCtxArea.GetAD_CtxArea_ID();
-        //        DoReportOk("ContextAreaInserted", dCtxArea.GetName(), "");
-        //    }
-        //    else
-        //    {
-        //        DoReportError("ContextAreaError", dCtxArea.GetName(), GetError());
-        //    }
-        //    //DB.UseMigratedConnection = false;
-        //    return dAD_CtxArea_ID;
-        //}
-
-        //private int CheckImageId(int sAD_Image_ID)
-        //{
-        //    DataTable dt = GetTable("SELECT * FROM AD_IMAGE WHERE AD_Image_ID = " + sAD_Image_ID);
-
-        //    MImage sImg = new MImage(_ctx, dt.Rows[0], null);
-        //    int dAD_Image_ID = 0;
-
-        //    int count = 0;
-        //    try
-        //    {
-        //        //DB.UseMigratedConnection = true;
-        //        count = Convert.ToInt32(DB.ExecuteScalar("Select Count (AD_Image_ID) From AD_Image  Where Name = '" + sImg.GetName() + "' ", null, Get_TrxName()));
-        //        if (count == 1)
-        //        {
-        //            dAD_Image_ID = Convert.ToInt32(DB.ExecuteScalar("Select AD_Image_ID From AD_Image  Where Name = '" + sImg.GetName() + "' ", null, Get_TrxName()));
-        //        }
-        //        //DB.UseMigratedConnection = false;
-        //    }
-        //    catch
-        //    {
-        //        //DB.UseMigratedConnection = false;
-        //        dAD_Image_ID = 0;
-        //    }
-        //    if (count < 1 && dAD_Image_ID == 0)
-        //    {
-        //        dAD_Image_ID = InsertImage(sImg);
-        //    }
-        //    else if (count > 1)
-        //    {
-        //        DoReportWarn("SkipImageInsertion", sImg.GetName(), "DuplicateRecordFound");
-        //    }
-        //    return dAD_Image_ID;
-        //}
-
-        //private int InsertImage(MImage sImg)
-        //{
-        //    int dAD_Image_ID = 0;
-        //    //DB.UseMigratedConnection = true;
-        //    MImage dImage = new MImage(_ctx, 0, Get_TrxName());
-        //    sImg.CopyTo(dImage);
-        //    if (dImage.Save())
-        //    {
-        //        dAD_Image_ID = dImage.GetAD_Image_ID();
-        //        DoReportOk("ImageInserted", dImage.GetName(), "");
-        //    }
-        //    else
-        //    {
-        //        DoReportError("ImageError", dImage.GetName(), GetError());
-        //    }
-        //    //DB.UseMigratedConnection = false;
-        //    return dAD_Image_ID;
-        //}
 
         #endregion
 
@@ -790,13 +687,20 @@ namespace VAdvantage.Process
 
                 if (sTab.GetAD_Process_ID() != 0)
                 {
-                    //if (HasModulePrefix("Name", "AD_Process", "AD_Process_ID = " + sTab.GetAD_Process_ID(), out name))
-                    //{
-                    //    InsertIntoDBSchema(X_AD_Process.Table_ID, sTab.GetAD_Process_ID(), X_AD_Process.Table_Name, name, " AD_Process_ID = " + sTab.GetAD_Process_ID());
-                    //}
                     GetProcess(sTab.GetAD_Process_ID());
                 }
+
+                //New Table HeaderLayout
+                if (sTab.GetAD_HeaderLayout_ID() > 0)
+                {
+                    GetHeaderLayout(sTab.GetAD_HeaderLayout_ID());
+                }
+
                 InsertIntoDBSchema(MTab.Table_ID, sAD_Tab_ID, MTab.Table_Name, sTab.GetName(), " AD_Tab_ID = " + sAD_Tab_ID);
+
+
+                GetTabPanel(sAD_Tab_ID);
+
 
                 //Insert AD_ModuleTab Info
 
@@ -840,6 +744,52 @@ namespace VAdvantage.Process
                 }
                 fields.Clear();
                 fields = null;
+            }
+        }
+
+        /// <summary>
+        ///  Mark Tab Panel record if any
+        /// </summary>
+        /// <param name="sAD_Tab_ID"> Tab ID</param>
+        private void GetTabPanel(int sAD_Tab_ID)
+        {
+            DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_TabPanel WHERE AD_Tab_ID=" + sAD_Tab_ID);
+            if (ds != null)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    InsertIntoDBSchema(X_AD_TabPanel.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_TabPanel_ID"]),
+                        X_AD_TabPanel.Table_Name, ds.Tables[0].Rows[i]["Name"].ToString(), "AD_TabPanel_ID =" + ds.Tables[0].Rows[i]["AD_TabPanel_ID"]);
+                }
+            }
+        }
+
+        private void GetHeaderLayout(int sAD_HeaderLayout_ID)
+        {
+            string name;
+            if (HasModulePrefix("Name", "AD_HeaderLayout", "AD_HeaderLayout_ID=" + sAD_HeaderLayout_ID, out name))
+            {
+                InsertIntoDBSchema(X_AD_HeaderLayout.Table_ID, sAD_HeaderLayout_ID, X_AD_HeaderLayout.Table_Name, name, "AD_HeaderLayout_ID =" + sAD_HeaderLayout_ID);
+            } //Header
+
+            DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_GridLayout WHERE AD_HeaderLayout_ID=" + sAD_HeaderLayout_ID);
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++) //Grid header
+            {
+                if (HasModulePrefix("Name", "AD_GridLayout", "AD_GridLayout_ID = " + ds.Tables[0].Rows[i]["AD_GridLayout_ID"], out name))
+                {
+                    InsertIntoDBSchema(X_AD_GridLayout.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_GridLayout_ID"]),
+                        X_AD_GridLayout.Table_Name, name, "AD_GridLayout_ID=" + ds.Tables[0].Rows[i]["AD_GridLayout_ID"]);
+
+                    DataSet dsItem = DB.ExecuteDataset("SELECT * FROM AD_GridLayoutItems WHERE AD_GridLayout_ID=" + ds.Tables[0].Rows[i]["AD_GridLayout_ID"]);
+                    for (int j = 0; j < dsItem.Tables[0].Rows.Count; j++) //GridItems
+                    {
+                        //if (HasModulePrefix("Name", "AD_GridLayoutItems", "AD_GridLayoutItems_ID = " + dsItem.Tables[0].Rows[j]["AD_GridLayoutItems_ID"], out name))
+                        // {
+                        InsertIntoDBSchema(X_AD_GridLayoutItems.Table_ID, Util.GetValueOfInt(dsItem.Tables[0].Rows[j]["AD_GridLayoutItems_ID"]),
+                            X_AD_GridLayoutItems.Table_Name, "item" + j, "AD_GridLayoutItems_ID=" + dsItem.Tables[0].Rows[j]["AD_GridLayoutItems_ID"]);
+                        //}
+                    }
+                }
             }
         }
 
@@ -889,9 +839,13 @@ namespace VAdvantage.Process
                             " AD_InfoColumn_ID = " + ds.Tables[0].Rows[i]["AD_InfoColumn_ID"]);
                     }
                 }
-
-
             }
+
+            if (sField.GetAD_Image_ID() > 0)
+            {
+                CheckImage(sField.GetAD_Image_ID());
+            }
+
             InsertIntoDBSchema(X_AD_Field.Table_ID, sAD_Field_ID, X_AD_Field.Table_Name, sField.GetName(), " AD_Field_ID = " + sAD_Field_ID);
             return name;
         }

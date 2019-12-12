@@ -1,81 +1,245 @@
-﻿/*select
-{
-    background-position-x: 3%;
-}
-
-
-.vis-taskbar-right
-{
-    float: left;
-}
-
-
-
-.vis-hasSubMenu:after
-{
-    display: none;
-}
-
-.vis-css-treeview label::before
-{
-    margin: 0px 0px 0px 10px;
-    float: right;
-}*/
-
-/*.vis-menuitm-with-favItm
-{
-    float: right;
-}
-
-.vis-menufavitm
-{
-    float: left;
-}*/
-
-
-
-
-/*window header*/
-/*.vis-awindow-toolbar
-{
-    float: left;
-}*/
-
-
-/*tab Control */
-/*.vis-apanel-tabcontrol
-{
-    float: right;
-}*/
-
-/*.vis-apanel-tab-oflow
-{
-    float: right;
-}*/
-
-/*.vis-apanel-nav
-{
-    float: left;
-}*/
-
-/*.vis-apanel-bar-fixpart a
-{
-    left: 0px;
-    -webkit-transform: rotate(180deg);
-}*/
-
-/*.vis-apanel-bar-varpart
-{
-    float: left;
-}*/
-
-/*.vis-apanel-rb-ul li
-{
+﻿
+/*rtl css Start here*/
+html[dir="rtl"] * {
     text-align: right;
-}*/
+}
 
-/*status bar*/
-/*.vis-statusbar-ul > li img
-{
-    transform: scaleX(-1);
-}*/
+/*css form home*/
+html[dir="rtl"] .vis-feedIcons.vis-icon-feed {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+html[dir="rtl"] #favLinks > [class^="col"] {
+    float: right;
+}
+html[dir="rtl"] #fllupsScreen h2 span, html[dir="rtl"] #favLinks h2 span {
+    padding-right: 0;
+    padding-left: 10px;
+}
+html[dir="rtl"] .vis-feedTitleBar {
+    padding-left: 0;
+    padding-right: 10px;
+}
+
+html[dir="rtl"] #favLinks .row.userLinks_activeTab {
+    border-left: 1px solid #1b95d7;
+    border-right: none;
+}
+
+html[dir="rtl"] #userFavs h2 {
+    margin-right: 10px;
+}
+
+html[dir="rtl"] .vis-css-treeview label i, html[dir="rtl"] .vis-css-treeview ul li a span {
+    padding-right: 0;
+    padding-left: 10px;
+}
+
+html[dir="rtl"] #vis_mainMenu .vis-menuTitle p {
+    padding-right: 10px;
+}
+
+html[dir="rtl"] .vis-app-hdr-r-user a {
+    padding-right: 0;
+    padding-left: 5px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child {
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/*css for window*/
+html[dir="rtl"] .vis-ad-w-p-tb {
+    padding-right: 0;
+    padding-left: 8px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body, html[dir="rtl"] .vis-ad-w-p-ap-tp-o-b-head {
+    border-top-left-radius: 0;
+    border-top-right-radius: .60rem
+}
+
+html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body {
+    box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.10);
+}
+
+html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected:before {
+    border-left: none;
+    border-right: 5px solid rgba(var(--v-c-primary),1);
+    right: 0;
+}
+
+html[dir="rtl"] .vis-ad-w-p-ap-tp-o-icorbar li {
+    border-right: 3px solid transparent;
+    border-left: none;
+}
+
+html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected {
+    border-right: 3px solid rgba(var(--v-c-primary),1);
+    border-left: none;
+}
+
+html[dir="rtl"] .vis-ev-col-msign {
+    left: 10px;
+    right: auto;
+}
+
+html[dir="rtl"] .vis-input-wrap input:focus ~ label,
+html[dir="rtl"] .vis-input-wrap input:not(:placeholder-shown) ~ label,
+html[dir="rtl"] .vis-input-wrap textarea:not(:placeholder-shown) ~ label,
+html[dir="rtl"] .vis-input-wrap select:focus ~ label,
+html[dir="rtl"] .vis-input-wrap textarea:focus ~ label,
+html[dir="rtl"] .vis-input-wrap select ~ label {
+    right: 5px;
+    left: auto;
+}
+
+html[dir="rtl"] .vis-input-wrap label {
+    right: 15px;
+    left: auto;
+}
+
+html[dir="rtl"] .vis-input-wrap select {
+    background-position: calc(7% - 25px), calc(7% - 20px);
+}
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory{
+    background-position: calc(10% - 25px), calc(10% - 20px);
+}
+
+html[dir="rtl"] .input-group > .input-group-append > .btn,
+html[dir="rtl"] .input-group > .input-group-append > .input-group-text,
+html[dir="rtl"] .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+html[dir="rtl"] .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child),
+html[dir="rtl"] .input-group > .input-group-prepend:not(:first-child) > .btn,
+html[dir="rtl"] .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+html[dir="rtl"] .vis-input-wrap *[data-hasBtn],
+html[dir="rtl"] .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+html[dir="rtl"] .input-group > .input-group-append:last-child > .input-group-text:not(:last-child),
+html[dir="rtl"] .input-group > .input-group-append:not(:last-child) > .btn,
+html[dir="rtl"] .input-group > .input-group-prepend > .btn,
+html[dir="rtl"] .input-group > .input-group-prepend > .input-group-text {
+    border-top-right-radius: .25rem !important;
+    border-bottom-right-radius: .25rem !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap * {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: .25rem !important;
+    border-bottom-left-radius: .25rem !important;
+}
+
+html[dir="rtl"] .input-group > .input-group-append:not(:last-child) > .input-group-text {
+    border-radius: 0 !important;
+}
+
+html[dir="rtl"] .vis-input-wrap *[data-hasBtn]:focus {
+    border-left: 1px solid rgba(var(--v-c-secondary),1);
+    border-right: 1px solid rgba(var(--v-c-primary));
+}
+
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap *:focus {
+    border-right: 1px solid rgba(var(--v-c-secondary),1);
+    border-left: 1px solid rgba(var(--v-c-primary));
+}
+
+html[dir="rtl"] .input-group:focus-within .input-group-append .input-group-text {
+    border: 1px solid rgba(var(--v-c-primary),1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+
+html[dir="rtl"] .input-group:focus-within .input-group-prepend .input-group-text {
+    border: 1px solid rgba(var(--v-c-primary),1);
+    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+
+html[dir="rtl"] .input-group:focus-within .input-group-append:not(:last-child) .input-group-text {
+    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+
+html[dir="rtl"] .input-group-append {
+    margin-right: -1px;
+    margin-left: 0;
+}
+
+html[dir="rtl"] .input-group-prepend {
+    margin-right: 0;
+    margin-left: -1px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2) {
+    margin-left: -1px;
+    margin-right: 10px;
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+    margin-right: -1px;
+    margin-left: 0;
+    transform: rotate(-180deg);
+}
+
+html[dir="rtl"] .vis-control-wrap > button {
+    text-align: center;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tb-search {
+    padding-left: 10px;
+    padding-right: 0;
+}
+
+    html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i {
+        transform: rotate(90deg);
+    }
+
+html[dir="rtl"] .vis-app-f-taskbar li a {
+    padding-left: 0;
+    padding-right: 5px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-a-main {
+    right: auto;
+    left: 2px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-a-m-lst span {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    text-align: left;
+    box-shadow: 3px 0px 3px 0px rgba(var(--v-c-on-common), 0.15);
+}
+html[dir="rtl"] .vis-chatdetailwrap {
+    padding-right: 10px;
+}
+html[dir="rtl"] .vis-attach-file-location select.vis-custom-select {
+    background-position: calc(18% - 25px), calc(18% - 20px);
+    padding: 0 10px 0 0;
+}
+html[dir="rtl"] .vis-attach-file-location > label {
+    padding-right: 0;
+    padding-left: 10px;
+}
+html[dir="rtl"] .vis-attach-btns > a {
+    margin-left: 0;
+    margin-right: 10px;
+}
+html[dir="rtl"] .vis-attach-file-text{
+    padding-left: 0;
+    padding-right: 10px;
+}
+/*rtl css End here*/

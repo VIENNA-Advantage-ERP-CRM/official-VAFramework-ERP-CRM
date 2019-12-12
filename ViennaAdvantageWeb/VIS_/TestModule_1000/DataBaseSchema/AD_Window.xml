@@ -1,0 +1,86 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Window">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_COLOR_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_CTXAREA_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_IMAGE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_WINDOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="HELP" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISBETAFUNCTIONALITY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISCUSTOMDEFAULT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISDEFAULT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PROCESSING" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="WINHEIGHT" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="WINWIDTH" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="WINDOWTYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISSOTRX" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="DISPLAYNAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Window>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_IMAGE_ID>100</AD_IMAGE_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_WINDOW_ID>127</AD_WINDOW_ID>
+    <CREATED>2000-01-02T13:30:00+05:30</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Test Screen</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISBETAFUNCTIONALITY>N</ISBETAFUNCTIONALITY>
+    <ISCUSTOMDEFAULT>N</ISCUSTOMDEFAULT>
+    <ISDEFAULT>N</ISDEFAULT>
+    <NAME>Test</NAME>
+    <PROCESSING>N</PROCESSING>
+    <UPDATED>2019-10-17T11:09:01+05:30</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <WINDOWTYPE>T</WINDOWTYPE>
+    <ISSOTRX>N</ISSOTRX>
+    <DISPLAYNAME>Test</DISPLAYNAME>
+    <EXPORT_ID>VIS_127</EXPORT_ID>
+  </AD_Window>
+  <AD_Window>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_IMAGE_ID>1000146</AD_IMAGE_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_WINDOW_ID>108</AD_WINDOW_ID>
+    <CREATED>2012-12-01T00:00:00+05:30</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Maintain Users of the system </DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>The User Window allows you to maintain User of the system.  Users can log into the system and have access to functionality via one or more roles.  A user can also be a business aprtner contact.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISBETAFUNCTIONALITY>N</ISBETAFUNCTIONALITY>
+    <ISCUSTOMDEFAULT>N</ISCUSTOMDEFAULT>
+    <ISDEFAULT>N</ISDEFAULT>
+    <NAME>User</NAME>
+    <PROCESSING>N</PROCESSING>
+    <UPDATED>2019-12-02T06:32:52+05:30</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <WINDOWTYPE>M</WINDOWTYPE>
+    <ISSOTRX>N</ISSOTRX>
+    <DISPLAYNAME>User</DISPLAYNAME>
+    <EXPORT_ID>VIS_108</EXPORT_ID>
+  </AD_Window>
+</NewDataSet>

@@ -78,6 +78,8 @@ namespace VAdvantage.Model
 
         private bool hasPanels = false;
 
+        
+
 
         /**	Logger			*/
         protected VLogger log = VLogger.GetVLogger(typeof(GridTab).FullName);
@@ -417,7 +419,6 @@ namespace VAdvantage.Model
                 _panels.Add(panel);
             }
         }
-
 
         /// <summary>
         /// Get a list of variables, this tab is dependent on.

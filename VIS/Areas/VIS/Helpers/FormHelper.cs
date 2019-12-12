@@ -70,6 +70,7 @@ namespace VIS.Helpers
                                 {
                                     prefix = "VIS_";
                                 }
+                                
 
                                 nSpace = "VAdvantage";
                                 if (className.Contains(nSpace))
@@ -117,6 +118,7 @@ namespace VIS.Helpers
             }
             else
             {
+               
                 // bool success = OpenForm(AD_Form_ID, className, name);
                 //	Log
                 MSession session = MSession.Get(ctx, true);

@@ -21,8 +21,10 @@
         var historyActions = []; // conatins history string array
         var windowObjects = {}; // store all window(javascrpt)  references
         var s_hiddenWindows = []; /** list of hidden Windows				*/
-        var navigatingInWindows = false; // set its value true when navigating through windows , otherwise false
-        var $mainNavigationDiv = null; //Navigation Div Container
+        var navigatingInWindows = false; // set its value true when navigaing through windows , otherwise false
+       // var $mainNavigationDiv = null; //Navigation Div Container
+
+        var $navRoot = null;
         var $innerDiv = null;
         var $menu = null;
         var restoreAction = false;
@@ -43,10 +45,20 @@
             startWindow: startWindow,
             startForm: startForm,
             startCFrame: startCFrame,
-            startActionInNewTab: startActionInNewTab
+            startActionInNewTab: startActionInNewTab,
+            closeFrame:closeFrame
         };
 
         return mainPage; // return mainpage object and public functions
+
+    /*
+     * close the window
+     * @param id id of item
+     */
+ 
+        function closeFrame(id) {
+            return windowObjects[id].dispose(); 
+        }
 
 
         /*
@@ -73,7 +85,7 @@
                 addRestoredShortcut();
             }
             else {
-                var imgPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/window-default.png";
+                var imgPath = "fa fa-window-maximize";
                 if (imgName) {
                     imgPath = imgName;
                 }
@@ -194,7 +206,7 @@
         function startCFrame(windw) {
             windw.onClosed = removeShortcut;
             windw.show($mainConatiner);
-            addShortcut(windw.getId(), null, windw.getName(), null);
+            addShortcut(windw.getId(), "fa fa-list-alt", windw.getName(), null);
             registerView(windw);
         };
 
@@ -278,9 +290,9 @@
 
         /* resize all open windows when screen size is changed
         */
-        function sizeChanged() {
+        function sizeChanged(h,w) {
             for (var id in windowObjects) {
-                windowObjects[id].sizeChanged();
+                windowObjects[id].sizeChanged(h,w);
             }
             //alert("resize");
         };
@@ -344,8 +356,12 @@
 
         function init() {
             $menu = dm.getMenuDiv();
-            $(document).on('keydown', keydownDoc);
-            $(document).on('keyup', keydownup);
+            $(document).on('keydown', keydownDoc).on('keyup', keydownup);
+
+            $navRoot = dm.getNavSection();
+            $innerDiv = $navRoot.find(".vis-app-action-nav-inner");
+
+            $innerDiv.on("click", navClick);
         }
         
         /* Handle Keydown event to add shortcuts to window
@@ -381,12 +397,6 @@
             if (!windowObjects || Object.keys(windowObjects).length <= 0)
             {
                 return;
-            }
-
-            // Create Navigation Container in which all open windows will be displayed for navigation
-            if (!$mainNavigationDiv) {
-                $mainNavigationDiv = dm.getNavigationSection();
-
             }
 
             // Curser move backword if shift and ctrl key pressed
@@ -425,7 +435,7 @@
     */
     function navigationShortcuts(show, forward) {
         if (show) {
-            $mainNavigationDiv.css('display', 'inherit');
+            $navRoot.css('display', 'flex');
         }
         else {
             if (navigatingInWindows) {
@@ -438,41 +448,49 @@
         // navigatingInWindows false means , not navigating through open objects, So create navigation shortcuts
         if (!navigatingInWindows) {
 
-            $innerDiv = $('<div class="vis-nav-innerContainer">');
-            $mainNavigationDiv.append($innerDiv);
-            $innerDiv.on("click", navClick);
-
-
+            var htm = [];
             //Parse each opened object(window, form, report OR process) and create navigation Shortcut
             $.each(windowObjects, function (i, obj) {
+               
+                //if (obj.hid) {
+                //    if (obj.hid.startsWith("W")) {         //if (obj.cPanel.constructor.name == 'APanel') {
+                //        imgSrc = "fa fa-window-maximize";
+                //        if (obj.img) {
+                //            imgSrc = obj.img;
+                //        }
+                //    }
+                //    else if (obj.hid.startsWith("P")) {    //(obj.cPanel.constructor.name == 'AProcess') {
+                //        imgSrc = "fa fa-cog";
+                //    }
+                //    else if (obj.hid.startsWith("X")) {   //if (obj.cPanel.constructor.name == 'AForm') {
+                //        imgSrc = "fa fa-list-alt";
+                //    }
+                //    else if (obj.hid.startsWith("R")) {    //if (obj.cPanel.constructor.name == 'AForm') {
+                //        imgSrc = "vis vis-report";
+                //    }
+                //}
+                if (!obj.img || obj.img == '') {
+                    obj.img  = "fa fa-list-alt";
+                }
 
-                var imgSrc = '';
-                if (obj.hid) {
-                    if (obj.hid.startsWith("W")) {         //if (obj.cPanel.constructor.name == 'APanel') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/winPic.png";
-                    }
-                    else if (obj.hid.startsWith("P")) {    //(obj.cPanel.constructor.name == 'AProcess') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/processPic.png";
-                    }
-                    else if (obj.hid.startsWith("X")) {   //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/FormPic.png";
-                    }
-                    else if (obj.hid.startsWith("R")) {    //if (obj.cPanel.constructor.name == 'AForm') {
-                        imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/report-pic.png";
-                    }
-                }
-                else {
-                    imgSrc = VIS.Application.contextUrl + "Areas/VIS/Images/base/FormPic.png";
-                }
+                var imgSrc = obj.img;
+
+                htm.push('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="');
 
                 if (currentFrame.id == obj.id) {
-                    $innerDiv.append('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="vis-current-nav-window vis-nav-window"><span>' + obj.name + '</span><img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '"> </img></div>');
+                    htm.push('vis-current-nav-window '); 
                 }
-                else {
-                    $innerDiv.append('<div tabindex=' + i + ' data-wid="' + obj.id + '" class="vis-nav-window"><span>' + obj.name + '</span><img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '"> </img></div>');
+                htm.push('vis-nav-window">');
+                htm.push('<span>' + obj.name + '</span><div class="vis-nav-content-wrap">');
+                if (imgSrc.indexOf('.') > -1) {
+                    imgSrc = imgSrc.replace("Thumb16x16", "Thumb140x120");
+                    htm.push('<img data-wid="' + obj.id + '" class="vis-nav-window-img" src="' + imgSrc + '" alt="' + obj.name +'"> </img>');
                 }
-
+                else
+                    htm.push('<i data-wid="' + obj.id + '" class="'+imgSrc+'"></i>');
+                htm.push('</div></div>');
             });
+            $innerDiv.append(htm.join(' '));
             navigatingInWindows = true;
         }
 
@@ -499,8 +517,8 @@
             dm.toggleContainer(item.data('wid'));
             dm.activateTaskBarItemUsingID(item);// Open selected Shortcut item
         }
-        $mainNavigationDiv.css('display', 'none');
-        $mainNavigationDiv.empty();
+        $navRoot.css('display', 'none');
+        $innerDiv.empty();
         navigatingInWindows = false;
     };
 
@@ -512,6 +530,7 @@
         if (target.hasClass('vis-nav-window') || target.hasClass('vis-nav-window-img')) {
             showSelectedFrame(target);
         }
+       
     };
 
 };

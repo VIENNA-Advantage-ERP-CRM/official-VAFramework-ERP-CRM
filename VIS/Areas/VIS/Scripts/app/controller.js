@@ -339,6 +339,18 @@
         return this.vo.hasPanel;
     }
 
+    GridWindow.prototype.getFontName = function () {
+        return this.vo.FontName;
+    }
+
+    GridWindow.prototype.getAD_Image_ID = function () {
+        return this.vo.AD_Image_ID;
+    }
+
+    GridWindow.prototype.getImageUrl = function () {
+        return this.vo.ImageUrl;
+    }
+
     GridWindow.prototype.dispose = function () {
 
         originalLength = this.tabs.length;
@@ -399,12 +411,15 @@
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
+        this.isHeaderPanel = false;
+        this.headerPanel = null;
 
         this.mDataStatusEvent;
         this.mDataListenerList = [];
 
         this.loadFields();
         this.loadTabPanels();
+        this.loadHeaderPanelItems();
         this.gridTable.addDataStatusListener(this);
         this.gridTable.setAD_Tab_ID(this.vo.AD_Tab_ID);
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTab");
@@ -583,6 +598,9 @@
         return this.vo.ShowSummaryLevel;
     };
 
+    GridTab.prototype.getIsTPBottomAligned = function (){
+        return this.vo.TabPanelAlignment == "H";
+    };
 
 
     /* <summary>
@@ -825,16 +843,16 @@
                     var lines = dr.getInt(0);
                     arguments[0] = lines;
                     //	{1} - Line toral
-                    var lineTotal = dr.getDecimal(2);//.toFixed(2);
+                    var lineTotal = dr.getDecimal(2).toLocaleString() ;//.toFixed(2);
                     arguments[1] = lineTotal;
                     //	{2} - Grand total (including tax, etc.)
-                    var grandTotal = dr.getDecimal(3);//.toFixed(2);
+                    var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
                     arguments[2] = grandTotal;
                     //	{3} - Currency
                     var currency = dr.getString(1);
                     arguments[3] = currency;
                     //	(4) - Grand total converted to Base
-                    var grandBase = dr.getDecimal(4);//.toFixed(2);
+                    var grandBase = dr.getDecimal(4).toLocaleString();//.toFixed(2);
                     arguments[4] = grandBase;
                     arguments[5] = ctx.getContext("$CurrencyISO");
                     filled = true;
@@ -1177,6 +1195,76 @@
             this.hasPanel = false;
         }
     };
+
+    GridTab.prototype.loadHeaderPanelItems = function () {
+        if (this.vo.HeaderItems) {
+            this.isHeaderPanel = true;
+            headerPanel = this.vo.HeaderItems;
+        }
+    };
+
+    GridTab.prototype.getIsHeaderPanel = function () {
+        return this.isHeaderPanel;
+    };
+
+    GridTab.prototype.getHeaderPanelItems = function () {
+        return headerPanel;
+    }
+
+    GridTab.prototype.getHeaderHeight = function () {
+        if (this.vo.HeaderHeight && this.vo.HeaderHeight > 0) {
+
+            return this.vo.HeaderHeight + 'px';
+        }
+        else {
+            return '200px';
+        }
+    };
+
+    GridTab.prototype.getHeaderWidth = function () {
+        if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
+            return this.vo.HeaderWidth + 'px';
+        }
+        else {
+            return '250px';
+        }
+        
+    };
+
+    GridTab.prototype.getHeaderBackColor = function () {
+        return this.vo.HeaderBackColor;
+    };
+
+    GridTab.prototype.getHeaderPadding = function () {
+        return this.vo.HeaderPadding;
+    };
+
+    GridTab.prototype.getHeaderHorizontal = function () {
+        if (this.vo.HeaderAlignment.equals("H")) {
+            return true
+        }
+        else {
+            return false;
+        }
+    };
+
+
+    //GridTab.prototype.getHeaderName = function () {
+    //    return this.vo.HeaderName;
+    //};
+
+
+    //GridTab.prototype.getHeaderTotalColumn = function () {
+    //    return this.vo.HeaderTotalColumn;
+    //};
+
+    //GridTab.prototype.getHeaderTotalRow = function () {
+    //    return this.vo.HeaderTotalRow;
+    //};
+
+    //GridTab.prototype.getAD_GridLayout_ID = function () {
+    //    return this.vo.AD_GridLayout_ID;
+    //};
 
     GridTab.prototype.getHasPanel = function () {
         return this.hasPanel;
@@ -5091,6 +5179,13 @@
     GridField.prototype.getIsFieldOnly = function () {
         return this.vo.IsFieldOnly;
     };
+    GridField.prototype.getShowLabel = function () {
+        return true;
+    };
+
+    //GridField.prototype.getShowIcon = function () {
+    //    return true;
+    //};
 
     GridField.prototype.getIsKey = function () {
         return this.vo.IsKey;
@@ -5983,6 +6078,56 @@
 
     GridField.prototype.getAskUserBGProcess = function () {
         return this.vo.AskUserBGProcess;
+    };
+
+    /****************************************/
+
+    GridField.prototype.getIsHeaderPanelitem = function () {
+        return this.vo.IsHeaderPanelitem;
+    };
+
+    GridField.prototype.getHeaderOverrideReference = function () {
+        return this.vo.HeaderOverrideReference;
+    };
+
+    GridField.prototype.getHeaderStyle = function () {
+        return this.vo.HeaderStyle;
+    };
+
+    GridField.prototype.getHeaderHeadingOnly = function () {
+        return this.vo.HeaderHeadingOnly;
+    };
+
+    GridField.prototype.getHeaderSeqno = function () {
+        return this.vo.HeaderSeqno;
+    };
+
+    GridField.prototype.getHeaderIconOnly = function () {
+        return this.vo.HeaderIconOnly;
+    };
+
+    GridField.prototype.getHtmlStyle = function () {
+        return this.vo.HtmlStyle;
+    };
+
+    GridField.prototype.getShowIcon = function () {
+        return this.vo.ShowIcon;
+    };
+
+    GridField.prototype.getAD_Image_ID = function () {
+        return this.vo.AD_Image_ID;
+    };
+
+    GridField.prototype.getFontClass = function () {
+        return this.vo.FontClass;
+    };
+
+    GridField.prototype.getPlaceHolder = function () {
+        return this.vo.PlaceHolder;
+    };
+
+    GridField.prototype.getImageName = function () {
+        return this.vo.ImageName;
     };
 
 

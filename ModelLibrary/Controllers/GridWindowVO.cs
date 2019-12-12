@@ -110,6 +110,8 @@ namespace VAdvantage.Controller
         public bool IsArchive = true;
         public bool IsAttachmail = true;
         public bool IsRoleCenterView = true;
+        public string FontName = "";
+        public string ImageUrl = "";
 
 
         public List<GridTabVO> GetTabs()
@@ -182,7 +184,7 @@ namespace VAdvantage.Controller
              + "AD_Color_ID,AD_Image_ID, IsReadWrite, WinHeight,WinWidth, "
              + "IsSOTrx, AD_UserDef_Win_ID,IsAppointment,IsTask,IsEmail,IsLetter,IsSms,IsFaxEmail,Name2, "
              + "ISCHAT, ISATTACHMENT,ISHISTORY,ISCHECKREQUEST,ISCOPYRECORD,ISSUBSCRIBERECORD,ISZOOMACROSS,ISCREATEDOCUMENT,ISUPLOADDOCUMENT,ISVIEWDOCUMENT,IsAttachDocumentFrom, "
-             + " ISIMPORTMAP,ISMARKTOEXPORT,ISARCHIVE,ISATTACHEMAIL,ISROLECENTERVIEW ");
+             + " ISIMPORTMAP,ISMARKTOEXPORT,ISARCHIVE,ISATTACHEMAIL,ISROLECENTERVIEW , FontName, ImageUrl ");
 
             if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
             {
@@ -345,6 +347,8 @@ namespace VAdvantage.Controller
                             vo.IsArchive = !("N".Equals(dr[31].ToString()));
                             vo.IsAttachmail = !("N".Equals(dr[32].ToString()));
                             vo.IsRoleCenterView = !("N".Equals(dr[33].ToString()));
+                            vo.FontName= dr[34].ToString();
+                            vo.ImageUrl = dr[35].ToString();
                         }
                     }
                 }
@@ -857,6 +861,8 @@ namespace VAdvantage.Controller
                 clone.IsArchive = IsArchive;
                 clone.IsAttachmail = IsAttachmail;
                 clone.IsRoleCenterView = IsRoleCenterView;
+                clone.FontName = FontName;
+                clone.ImageUrl = ImageUrl;
 
                 //
                 clone.hasPanel = hasPanel;

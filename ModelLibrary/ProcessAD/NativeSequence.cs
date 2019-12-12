@@ -53,7 +53,7 @@ namespace VAdvantage.Process
 
 
 
-            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetBooleanValue("SYSTEM_NATIVE_SEQUENCE", false);
+            bool SYSTEM_NATIVE_SEQUENCE =  GetCtx().GetContext("SYSTEM_NATIVE_SEQUENCE")=="Y";
             if (SYSTEM_NATIVE_SEQUENCE)
             {
                 throw new Exception("Native Sequence is Actived");
@@ -138,7 +138,7 @@ namespace VAdvantage.Process
             //new Object[] { value ? "Y" : "N" },
             //null // trxName
             //);
-            MSysConfig.ResetCache();
+           // MSysConfig.ResetCache();
         }
 
 

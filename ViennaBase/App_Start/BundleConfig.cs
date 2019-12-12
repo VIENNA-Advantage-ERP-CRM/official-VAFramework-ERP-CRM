@@ -11,6 +11,18 @@ namespace ViennaBase
         public static void RegisterBundles(BundleCollection bundles)
         {
 
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                      "~/Areas/ViennaBase/Scripts/jquery-2.1.0.min.js",
+                      "~/Areas/ViennaBase/Scripts/handlebars.min.js",
+                      "~/Areas/ViennaBase/Scripts/bootstrap.min.js"
+                    ));
+
+            bundles.Add(new StyleBundle("~/bundles/boot").Include(
+                "~/Areas/ViennaBase/Content/bootstrap-theme.min.css",
+                   "~/Areas/ViennaBase/Content/bootstrap.min.css"
+                ));
+
+
             bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/modernizr").Include(
                       "~/Areas/ViennaBase/Scripts/modernizr-2.6.2.js"));
             
@@ -24,9 +36,10 @@ namespace ViennaBase
             bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/jquery_v3").Include(
                          "~/Areas/ViennaBase/Scripts/migration/jquery-3.4.1.min.js",
                            "~/Areas/ViennaBase/Scripts/migration/jquery-migrate-3.1.0.min.js",
+                        
                          "~/Areas/ViennaBase/Scripts/migration/popper-utils.min.js",
                          "~/Areas/ViennaBase/Scripts/migration/popper.min.js",
-                         "~/Areas/ViennaBase/Scripts/migration/bootstrap.min.js"
+                          "~/Areas/ViennaBase/Scripts/migration/bootstrap.min.js"
                        ));
 
             
@@ -40,7 +53,7 @@ namespace ViennaBase
                // "~/Areas/ViennaBase/Content/migration/bootstrap-theme.min.css",
                    "~/Areas/ViennaBase/Content/migration/bootstrap.min.css",
                     "~/Areas/ViennaBase/Content/migration/bootstrap-migration-4.css",
-                    "~/Areas/ViennaBase/Content/migration/glyphicons.css",
+                    //"~/Areas/ViennaBase/Content/migration/glyphicons.css",
                          "~/Areas/ViennaBase/Content/migration/ad-cust.css"
                 ));
 
@@ -67,7 +80,10 @@ namespace ViennaBase
             bundles.Add(new StyleBundle("~/Areas/ViennaBase/bundles/externalcss").Include(
                 "~/Areas/ViennaBase/Content/w2ui/w2ui-1.4.3.min.css",
                 "~/Areas/ViennaBase/Content/spectrum.css",
-                "~/Areas/ViennaBase/Content/custom/custom.css"
+                "~/Areas/ViennaBase/Content/custom/custom.css",
+                "~/Areas/ViennaBase/Content/fontlib/font-awesome.min.css",
+                "~/Areas/ViennaBase/Content/fontlib/glyphicons.css",
+                "~/Areas/ViennaBase/Content/fontlib/vis-fonts.css"
               ));
 
             bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/externaljs").Include(
@@ -82,17 +98,16 @@ namespace ViennaBase
                 ));
 
             bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/toastrjs").Include(
-                "~/Areas/ViennaBase/Scripts/Toastr/toastr.min.js"
+                "~/Areas/ViennaBase/Scripts/toastr/toastr.min.js"
                 ));
 
             bundles.Add(new StyleBundle("~/Areas/ViennaBase/bundles/toastrcss").Include(
-                "~/Areas/ViennaBase/Content/Toastr/toastr.min.css"
+                "~/Areas/ViennaBase/Content/toastr/toastr.min.css"
                 ));
 
-            // For image select work
-            bundles.Add(new ScriptBundle("~/Areas/ViennaBase/bundles/imgareaselecterjs").Include(
-                "~/Areas/ViennaBase/Scripts/jquery.imgareaselect.js"
-                ));
+
+         
+
 
             //bundles.Add(new ScriptBundle("~/bundles/CRV").Include(
             //         "~/Areas/ViennaBase/Scripts/crystalreportviewers13/js/crviewer/crv.js"
