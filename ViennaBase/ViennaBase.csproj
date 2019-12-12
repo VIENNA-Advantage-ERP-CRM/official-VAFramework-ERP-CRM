@@ -47,93 +47,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.1.2\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.Tracing">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Tracing.5.1.2\lib\net45\System.Web.Http.Tracing.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Telerik.Reporting, Version=10.0.16.204, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Telerik\Reporting Q1 2016\Bin\Telerik.Reporting.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Reporting.Services.WebApi, Version=10.0.16.204, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Telerik\Reporting Q1 2016\Bin\Telerik.Reporting.Services.WebApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Reporting.XpsRendering, Version=10.0.16.204, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Telerik\Reporting Q1 2016\Bin\Telerik.Reporting.XpsRendering.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.ReportViewer.Mvc, Version=10.0.16.204, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Telerik\Reporting Q1 2016\Bin\Telerik.ReportViewer.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="WebGrease">
-      <HintPath>..\..\..\..\Dlls\modeldll\WebGrease.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Web.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.0.0\lib\net45\System.Web.Webpages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Deployment">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.0.0\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.0.0\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Helpers">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\ViennaBase\Content\bootstrap-theme.css" />
     <Content Include="Areas\ViennaBase\Content\bootstrap-theme.min.css" />
     <Content Include="Areas\ViennaBase\Content\bootstrap.css" />
@@ -1241,20 +1154,6 @@
     <Content Include="Areas\ViennaBase\Scripts\w2ui\w2ui-1.4.3.js" />
     <Content Include="Areas\ViennaBase\Content\w2ui\w2ui-1.4.3.min.css" />
     <Content Include="Areas\ViennaBase\Scripts\w2ui\w2ui-1.4.3.min.js" />
-    <Content Include="Dll\Antlr3.Runtime.dll" />
-    <Content Include="Dll\Microsoft.Web.Infrastructure.dll" />
-    <Content Include="Dll\Newtonsoft.Json.dll" />
-    <Content Include="Dll\System.Net.Http.Formatting.dll" />
-    <Content Include="Dll\System.Web.Helpers.dll" />
-    <Content Include="Dll\System.Web.Http.dll" />
-    <Content Include="Dll\System.Web.Http.Tracing.dll" />
-    <Content Include="Dll\System.Web.Http.WebHost.dll" />
-    <Content Include="Dll\System.Web.Mvc.dll" />
-    <Content Include="Dll\System.Web.Optimization.dll" />
-    <Content Include="Dll\System.Web.Razor.dll" />
-    <Content Include="Dll\System.Web.WebPages.Deployment.dll" />
-    <Content Include="Dll\System.Web.WebPages.dll" />
-    <Content Include="Dll\System.Web.WebPages.Razor.dll" />
     <Content Include="Areas\ViennaBase\Content\bootstrap-theme.css.map" />
     <Content Include="Areas\ViennaBase\Content\bootstrap.css.map" />
     <Content Include="Areas\ViennaBase\Scripts\jquery-2.1.0.min.map" />
