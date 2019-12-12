@@ -10,22 +10,19 @@ using VAdvantage.Utility;
 using VIS.Models;
 using Newtonsoft.Json;
 using VIS.Helpers;
-using System.Web.Services;
-using System.Web.UI.WebControls;
+
 using System.IO;
 using System.Net;
-using System.Text;
+
 using System.Web.Helpers;
 using System.Web.Hosting;
-using System.Globalization;
+
 using VIS.Filters;
-using System.Runtime.CompilerServices;
+
 using System.Web.Optimization;
 using VAdvantage.Login;
 using VAdvantage.Logging;
-using System.Web.Configuration;
 using System.Data;
-using VAdvantage.DataBase;
 
 namespace VIS.Controllers
 {
