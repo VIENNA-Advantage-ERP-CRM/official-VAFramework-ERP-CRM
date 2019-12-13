@@ -420,6 +420,10 @@
             return allLinkControls;
         }
 
+        this.setVisible = function (colName, show) {
+            show ? fieldToCompParentMap[colName].show() : fieldToCompParentMap[colName].hide();
+        };
+
         this.dispose = function () {
             $table.off("click", "span.vis-ev-ctrlinfowrap", onInfoClick);
             colDescHelpList = {};
