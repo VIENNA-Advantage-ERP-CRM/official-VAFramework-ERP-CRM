@@ -310,6 +310,9 @@
                 }
                 ////$section.css('height', height - 22);
             height = height - 23;
+            if (VIS.context.ctx["#FRONTEND_LIB_VERSION"] < 3)
+                height = height - 43;
+
                  VIS.Env.setScreenHeight(height);
                  document.documentElement.style.setProperty('--vis-screen-height', (height.innerHeight * 0.01) +'px');
                 if (VIS.viewManager)

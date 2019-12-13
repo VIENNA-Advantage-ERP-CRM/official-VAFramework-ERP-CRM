@@ -47,7 +47,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/adialog.js",
                 "~/Areas/VIS/Scripts/app/lookup.js",
                 "~/Areas/VIS/Scripts/app/treepanel.js",
-               // "~/Areas/VIS/Scripts/app/windowframe.js",
+              
                 "~/Areas/VIS/Scripts/app/controller.js",
                 "~/Areas/VIS/Scripts/app/formframe.js",
                 "~/Areas/VIS/Scripts/app/processframe.js",
@@ -178,21 +178,27 @@ namespace VIS
                   "~/Areas/VIS/Scripts/model/calloutpayment.js"
                    );
 
+            //modScript.Include(
+            //     "~/Areas/VIS/Scripts/app/windowframe.js");
+
             modScript.Include(
-                 //a Part 
-                 "~/Areas/VIS/Scripts/F20/aheaderpanel.js",
-                 "~/Areas/VIS/Scripts/F20/atabpanel.js",
-                 "~/Areas/VIS/Scripts/F20/wframe.js",
-                "~/Areas/VIS/Scripts/F20/atabbedpane.js",
-                "~/Areas/VIS/Scripts/F20/veditview.js",
-                "~/Areas/VIS/Scripts/F20/vcardview.js",
-                "~/Areas/VIS/Scripts/F20/vgridview.js",
-                "~/Areas/VIS/Scripts/F20/vmapview.js",
-                "~/Areas/VIS/Scripts/F20/aviewcontroller.js",
-                "~/Areas/VIS/Scripts/F20/apanel.js",
-                "~/Areas/VIS/Scripts/F20/thememgr.js",
-                 "~/Areas/VIS/Scripts/app/initialize.js" //bottom one (do-not chnage sequence
-                );
+                  "~/Areas/VIS/Scripts/F20/aheaderpanel.js",
+                  "~/Areas/VIS/Scripts/F20/atabpanel.js",
+                  "~/Areas/VIS/Scripts/F20/wframe.js",
+                 "~/Areas/VIS/Scripts/F20/atabbedpane.js",
+                 "~/Areas/VIS/Scripts/F20/veditview.js",
+                 "~/Areas/VIS/Scripts/F20/vcardview.js",
+                 "~/Areas/VIS/Scripts/F20/vgridview.js",
+                 "~/Areas/VIS/Scripts/F20/vmapview.js",
+                 "~/Areas/VIS/Scripts/F20/aviewcontroller.js",
+                 "~/Areas/VIS/Scripts/F20/apanel.js"
+                 );
+
+            modScript.Include(
+                 "~/Areas/VIS/Scripts/F20/thememgr.js",
+                "~/Areas/VIS/Scripts/app/initialize.js" //bottom one (do-not chnage sequence
+            );
+               
 
 
 
@@ -220,7 +226,7 @@ namespace VIS
                         "~/Areas/VIS/Content/F20/Controls.css",
                          "~/Areas/VIS/Content/F20/Media.css"
                 );
-            
+
 
             style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
