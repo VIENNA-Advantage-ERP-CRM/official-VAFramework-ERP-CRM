@@ -970,7 +970,7 @@
     .vis-gc-vpanel-table label {
         font-weight: normal;
         margin: 0;
-        margin-top: 20px;
+        margin-top:10px;
         /*margin-left: 4px;*/
         display: block;
     }
@@ -991,12 +991,15 @@
         min-width: 100%;
         min-height: 26px;
         line-height: inherit !important;
-        /*margin-bottom: 20px;*/
+        margin-bottom: 10px;
         padding: 1px !important;
     }
 
-
-.vis-gc-vpanel-table-btn-blue {
+    .vis-gc-vpanel-table button {
+        /*margin-bottom: 20px;*/*/
+    }
+        
+    .vis-gc-vpanel-table-btn-blue {
     border: 0px;
     background: #BFD8EE;
     padding: 10px 15px;
@@ -4178,6 +4181,7 @@ li.vis-selected-list {
 
 .vis-window-tab-icons ul li img {
     cursor: pointer;
+    max-width:21px;
 }
 
 .vis-window-tabpanel-head {

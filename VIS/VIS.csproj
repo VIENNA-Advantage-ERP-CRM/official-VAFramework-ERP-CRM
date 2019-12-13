@@ -617,6 +617,8 @@
     <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
     <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
+    <Content Include="Areas\VIS\Scripts\VIS1_0.min.js" />
+    <Content Include="Areas\VIS\Scripts\VIS2_0.min.js" />
     <Content Include="Areas\VIS\Templates\VIS_Templates.html" />
   </ItemGroup>
   <ItemGroup>
