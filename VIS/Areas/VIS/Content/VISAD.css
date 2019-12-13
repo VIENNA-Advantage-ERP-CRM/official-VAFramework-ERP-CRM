@@ -1299,11 +1299,12 @@ html[dir="rtl"] .vis-statusbar-ul > li img {
     display: inline;
     overflow: auto;
 }
-.vis-sms-leftDiv li {
-    font-size: .875rem;
-    border-bottom: 1px solid rgba(var(--v-c-secondary), .1);
-    padding: 10px 0;
-}
+
+    .vis-sms-leftDiv li {
+        font-size: .875rem;
+        border-bottom: 1px solid rgba(var(--v-c-secondary), .1);
+        padding: 10px 0;
+    }
 
 html[dir="rtl"] .vis-sms-leftDiv {
     float: right;
@@ -1545,6 +1546,7 @@ html[dir="rtl"] .vis-sms-leftFooter > input {
     margin-bottom: 0;
     margin-left: 5px;
 }
+
 .vis-sms-leftFooter > div p {
     margin-bottom: 0;
 }
@@ -4454,21 +4456,25 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     position: relative;
     min-height: 125px;
 }
-.vis-mas-ver-gridSection table {
-    width: 100%;
-    border-collapse: collapse;
-}
+
+    .vis-mas-ver-gridSection table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
 .vis-mas-ver-gridData {
     /*height: calc(100% - 30px);
     overflow: auto;*/
     display: block;
 }
+
 .vis-mas-ver-gridSection td, .vis-mas-ver-gridSection th {
     min-width: 120px;
     max-width: 120px;
     text-align: left;
     padding: 10px;
 }
+
 .vis-mas-ver-gridSection th {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -4481,6 +4487,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     display: block;
     min-height: 125px;
 }
+
 .vis-mas-ver-norecord {
     position: absolute;
     top: 40px;
@@ -4497,6 +4504,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     justify-content: flex-end;
     align-items: center;
 }
+
 .vis-mas-ver-gridData tr, .vis-mas-ver-gridSection tbody tr {
     display: block;
 }
@@ -4516,14 +4524,14 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     display: flex;
 }*/
 
-    /*.vis-mas-ver-recRow div {
+/*.vis-mas-ver-recRow div {
         flex: 1;
         padding: 5px 0;
     }*/
-    .vis-mas-ver-recRow button {
-        background: transparent;
-        border: none;
-    }
+.vis-mas-ver-recRow button {
+    background: transparent;
+    border: none;
+}
 
 /********************** MASTER DATA VERSIONS **********************/
 
@@ -4534,7 +4542,9 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     width: 100%;
     overflow: auto;
     min-height: 300px;
+    padding-top: 10px;
 }
+
 .vis-val-tc-col-red-r {
     width: 50%;
     float: right;
@@ -4573,5 +4583,39 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.vis-val-tc-hdr {
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: sans-serif;
+    margin-bottom: 10px;
+    color: rgba(var(--v-c-primary), 1);
+}
+
+    .vis-val-tc-hdr label {
+        color: rgba(var(--v-c-on-secondary), 1);
+        padding-right: 10px;
+        margin-bottom: 0;
+    }
+
+.vis-val-tc-colCtr {
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+
+.vis-val-tc-colHdrs {
+    width: 50%;
+    float: left;
+    min-width: 300px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.vis-val-tc-parCtr {
+    margin-bottom  : 40px;
 }
 /********************** Validate Table Columns **********************/

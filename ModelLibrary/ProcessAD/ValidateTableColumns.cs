@@ -85,16 +85,23 @@ namespace VAdvantage.Process
             for (int i = 0; i < tableIDs.Length; i++)
             {
                 int AD_Table_ID = Util.GetValueOfInt(tableIDs[i]);
+
                 MTable table = MTable.Get(GetCtx(), AD_Table_ID);
+
+                // Check on table whether it has single or multiple keys
+                bool hasSingleKey = true;
+                if(!table.IsSingleKey())
+                    hasSingleKey = false;
+
                 if (table == null || table.Get_ID() == 0)
                     return Msg.GetMsg(GetCtx(), "VIS_TableNotFound");
 
                 // create HTML for tables
-                sbHTML.Append("<div> "
-                                + "<div style='width: 100%; width: 100%; font-size: x-large; font-weight: 700; font-family: sans-serif; margin-bottom: 10px;'>" + table.GetTableName() + "</div>"
-                                + "<div style='width: 100%; height: 30px; border-bottom: 2px solid 2px solid #d4d4dc;'>"
-                                    + "<div style='width: 50%; float:left; min-width: 300px; font-weight: bold;font-size: large;'>" + Msg.GetMsg(GetCtx(), "VIS_ADCols") + "</div>"
-                                    + "<div style='width: 50%; float:right; min-width: 300px; font-weight: bold;font-size: large;'>" + Msg.GetMsg(GetCtx(), "VIS_DBCols") + "</div>"
+                sbHTML.Append("<div class='vis-val-tc-parCtr'> "
+                                + "<div class='vis-val-tc-hdr'><label>"+ Msg.Translate(GetCtx(), "AD_Table_ID") + ": </label>" + table.GetTableName() + "</div>"
+                                + "<div class='vis-val-tc-colCtr'>"
+                                    + "<div class='vis-val-tc-colHdrs'>" + Msg.GetMsg(GetCtx(), "VIS_ADCols") + "</div>"
+                                    + "<div class='vis-val-tc-colHdrs'>" + Msg.GetMsg(GetCtx(), "VIS_DBCols") + "</div>"
                                 + "</div>");
 
                 //	Find Column in Database
@@ -144,7 +151,8 @@ namespace VAdvantage.Process
 
                         // add different style for key column
                         string keyCol = "";
-                        if (col.GetAD_Reference_ID() == 13)
+                        // Condition for Multikey columns and Single key to mark as Primary key columns
+                        if ((hasSingleKey && col.GetAD_Reference_ID() == 13) || (!hasSingleKey && col.IsParent()))
                         {
                             keyCol = " * ";
                             style += " font-weight: bold; font-size: initial;";

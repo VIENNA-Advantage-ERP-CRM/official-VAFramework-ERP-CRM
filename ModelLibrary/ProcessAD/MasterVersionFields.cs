@@ -135,6 +135,8 @@ namespace VAdvantage.Process
             verWnd.SetDisplayName(DisplayName);
             // set window as Query Only
             verWnd.SetWindowType("Q");
+            verWnd.SetDescription("Display version data");
+            verWnd.SetHelp("The window allows you to view past data versioning and future updation versions (if any).");
             if (!verWnd.Save())
             {
                 ValueNamePair vnp = VLogger.RetrieveError();
@@ -173,6 +175,8 @@ namespace VAdvantage.Process
             verTab.SetIsSingleRow(true);
             verTab.SetWhereClause(null);
             verTab.SetSeqNo(10);
+            verTab.SetDescription("Version tab for " + tab.GetName());
+            verTab.SetHelp("Version tab for " + tab.GetName() + ", to display versions for current record");
             // set order by on Version Window's tab on "Version Valid From column"
             verTab.SetOrderByClause("VersionValidFrom DESC");
             if (!verTab.Save())
@@ -320,6 +324,10 @@ namespace VAdvantage.Process
             // Get system elements against Version Table's Columns
             string VerTableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + Ver_TableID, null, Get_Trx()));
             GetSystemElements(VerTableName);
+
+            // Get field Group ID for Versioning
+            int AD_FieldGroup_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_FieldGroup_ID FROM AD_FieldGroup WHERE Name = 'Versioning'", null, Get_Trx()));
+
             for (int i = 0; i < listDefVerCols.Count; i++)
             {
                 // check if system element exist 
@@ -345,8 +353,15 @@ namespace VAdvantage.Process
                     if (listDefVerCols[i].ToString() == "Processing" || listDefVerCols[i].ToString() == "Processed" || listDefVerCols[i].ToString() == VerTableName + "_ID")
                         verFld.SetIsDisplayed(false);
 
-                    if (listDefVerCols[i].ToString() == "ProcessedVersion" || listDefVerCols[i].ToString() == "RecordVersion")
-                        verFld.SetIsSameLine(true);
+                    if (listDefVerCols[i].ToString() == "VersionLog")
+                        verFld.SetDisplayLength(100);
+
+                    //if (listDefVerCols[i].ToString() == "ProcessedVersion" || listDefVerCols[i].ToString() == "RecordVersion")
+                    verFld.SetIsSameLine(true);
+
+                    // Set Field Group for Versioning field
+                    if (AD_FieldGroup_ID > 0)
+                        verFld.SetAD_FieldGroup_ID(AD_FieldGroup_ID);
 
                     if (!verFld.Save())
                     {
