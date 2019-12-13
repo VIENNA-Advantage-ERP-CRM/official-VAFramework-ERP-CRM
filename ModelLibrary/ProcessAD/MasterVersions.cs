@@ -124,14 +124,17 @@ namespace VAdvantage.Process
                 MTable tblVer = null;
                 if (Ver_AD_Table_ID <= 0)
                 {
+                    string tableName = tbl.GetTableName();
                     // create new Version table for parent table
                     tblVer = new MTable(GetCtx(), 0, _trx);
-                    tbl.CopyTo(tblVer);
-                    tblVer.SetTableName(tblVer.GetTableName() + "_Ver");
-                    tblVer.SetName(tblVer.GetName() + " Ver");
+                    tbl.CopyTo(tblVer);                    
+                    tblVer.SetTableName(tableName + "_Ver");
+                    tblVer.SetName(tableName + " Ver");
                     tblVer.Set_Value("Export_ID", null);
                     tblVer.Set_Value("AD_Window_ID", null);
                     tblVer.SetIsDeleteable(false);
+                    tblVer.SetDescription("Table for maintaining versions of " + tableName);
+                    tblVer.SetHelp("Table for maintaining versions of " + tableName);
                     //tblVer.SetAD_Window_ID(Ver_AD_Window_ID);
                     if (!tblVer.Save())
                     {

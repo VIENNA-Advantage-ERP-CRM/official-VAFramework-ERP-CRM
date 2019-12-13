@@ -587,8 +587,12 @@
                 "</font></p>";
         }
 
-
-        msg += pi.getLogInfo(true);
+        if (pi.customHTML && pi.customHTML != "") {
+            msg += pi.customHTML;
+        }
+        else {
+            msg += pi.getLogInfo(true);
+        }
 
         this.setMsg(msg);
         this.setBusy(false);

@@ -50,10 +50,8 @@ namespace ViennaBase
                 ));
             //New boot
             bundles.Add(new StyleBundle("~/Areas/ViennaBase/bundles/boot_v3").Include(
-               // "~/Areas/ViennaBase/Content/migration/bootstrap-theme.min.css",
                    "~/Areas/ViennaBase/Content/migration/bootstrap.min.css",
-                    "~/Areas/ViennaBase/Content/migration/bootstrap-migration-4.css",
-                    //"~/Areas/ViennaBase/Content/migration/glyphicons.css",
+                      "~/Areas/ViennaBase/Content/migration/bootstrap-migration-4.css",
                          "~/Areas/ViennaBase/Content/migration/ad-cust.css"
                 ));
 
