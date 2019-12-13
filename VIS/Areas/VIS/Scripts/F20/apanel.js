@@ -1536,18 +1536,41 @@
             this.curGC.dynamicDisplay(-1);
             //	Update Status Line
             this.setStatusLine(pi.getSummary(), pi.getIsError());
-            //	Get Log Info
-            VIS.ProcessInfoUtil.setLogFromDB(pi);
-            var logInfo = pi.getLogInfo();
-            if (logInfo.length > 0) {
-                VIS.ADialog.info(pi.getTitle(), true, logInfo, "");
-                this.setStatusLine(pi.getSummary(), pi.getIsError());
+
+            // 1 Change Lokesh Chauhan
+            if (pi.customHTML && pi.customHTML != "") {
+                this.displayDialog($(pi.customHTML));
+            }
+            else {
+                //	Get Log Info
+                VIS.ProcessInfoUtil.setLogFromDB(pi);
+                var logInfo = pi.getLogInfo();
+                if (logInfo.length > 0) {
+                    VIS.ADialog.info(pi.getTitle(), true, logInfo, "");
+                    this.setStatusLine(pi.getSummary(), pi.getIsError());
+                }
             }
             //ADialog.info(m_curWindowNo, this, Env.getHeader(m_ctx, m_curWindowNo),
             //      pi.getTitle(), logInfo);	//	 clear text
         }
         this.setBusy(false, notPrint);
     };  //  unlockUI
+
+    // 1 Change Lokesh Chauhan
+    APanel.prototype.displayDialog = function (message) {
+        var chDia = new VIS.ChildDialog();
+        chDia.setTitle("");
+        var wdth = window.innerWidth - 150;
+        var hgt = window.innerHeight - 120;
+        var diaCtr = $('<div style="max-height: ' + hgt + 'px; max-width: ' + wdth + 'px; min-width: 150px; min-height: 60px;"></div>');
+        diaCtr.append(message);
+        chDia.setContent(diaCtr);
+        chDia.close = function () {
+            chDia.dispose();
+        }
+        chDia.show();
+        chDia.hidebuttons();
+    };
 
     /**
      *	Action Listener

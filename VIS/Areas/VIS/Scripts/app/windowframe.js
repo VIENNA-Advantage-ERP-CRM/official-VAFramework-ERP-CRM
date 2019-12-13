@@ -29,7 +29,6 @@
         });
         return dr;
     };
-    };
 
     //executeDataSet
     var executeDataSet = function (sql, param, callback) {
@@ -322,6 +321,7 @@
         //if (height == VIS.Env.getScreenHeight())
         //    return;
         // console.log("resize");
+       
         this.setSize(height);
         var hHeight = this.isHeaderVisible ? AWINDOW_HEADER_HEIGHT : 0;
         this.cPanel.sizeChanged(height - hHeight, width);
@@ -442,7 +442,7 @@
      *  @param callback to add menu item for form
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initForm = function (AD_Form_ID, callback, action) {
+    AWindow.prototype.initForm = function (AD_Form_ID, callback, action, additionalInfo) {
 
         this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT); //initlize AForm
 
@@ -475,7 +475,7 @@
             self.setName(jsonData.DisplayName);
 
 
-            if (!self.cPanel.openForm(jsonData, self, windowNo)) {
+            if (!self.cPanel.openForm(jsonData, self, windowNo, additionalInfo)) {
                 self.dispose();
                 self = null;
                 return;
@@ -1015,8 +1015,8 @@
 
 
                         var li = $("<li>")
-                          .append($("<a style='display:block' title='" + item.title + "'>" + item.label + "</a>").append(span))
-                          .appendTo(ul);
+                            .append($("<a style='display:block' title='" + item.title + "'>" + item.label + "</a>").append(span))
+                            .appendTo(ul);
 
 
                         span.on("click", function (e) {
@@ -2575,7 +2575,7 @@
             {
                 //var st = new VIS.VSortTab(curWindowNo, id);
                 var st = new VIS.VSortTab(curWindowNo, gTab.getAD_Table_ID(),
-                   gTab.getAD_ColumnSortOrder_ID(), gTab.getAD_ColumnSortYesNo_ID(), gTab.getIsReadOnly(), id);
+                    gTab.getAD_ColumnSortOrder_ID(), gTab.getAD_ColumnSortYesNo_ID(), gTab.getIsReadOnly(), id);
                 //st.setTabLevel(gTab.getTabLevel());
                 tabElement = st;
                 if (i == 0) {
@@ -2679,8 +2679,8 @@
     //date:19-01-2016
     //Change/Update for:Zoom from workflow on home page
     APanel.prototype.selectFirstTab = function (isSelect) {
-        that.curGC.isZoomAction = isSelect;
-        that.curTab.setIsZoomAction(isSelect);
+        this.curGC.isZoomAction = isSelect;
+        this.curTab.setIsZoomAction(isSelect);
         setTimeout(function (that) {
             that.curGC.isZoomAction = isSelect;
             that.tabActionPerformed(that.firstTabId);
@@ -2715,7 +2715,7 @@
     APanel.prototype.unlockUI = function (pi) {
         //	log.fine("" + pi);
         var notPrint = pi != null
-        && pi.getAD_Process_ID() != this.curTab.getAD_Process_ID();
+            && pi.getAD_Process_ID() != this.curTab.getAD_Process_ID();
         //  Process Result
         if (notPrint)		//	refresh if not print
         {
@@ -2727,41 +2727,18 @@
             this.curGC.dynamicDisplay(-1);
             //	Update Status Line
             this.setStatusLine(pi.getSummary(), pi.getIsError());
-
-            // Change Lokesh Chauhan
-            if (pi.customHTML && pi.customHTML != "") {
-                this.displayDialog($(pi.customHTML));
-            }
-            else {
-                //	Get Log Info
-                VIS.ProcessInfoUtil.setLogFromDB(pi);
-                var logInfo = pi.getLogInfo();
-                if (logInfo.length > 0) {
-                    VIS.ADialog.info(pi.getTitle(), true, logInfo, "");
-                    this.setStatusLine(pi.getSummary(), pi.getIsError());
-                }
+            //	Get Log Info
+            VIS.ProcessInfoUtil.setLogFromDB(pi);
+            var logInfo = pi.getLogInfo();
+            if (logInfo.length > 0) {
+                VIS.ADialog.info(pi.getTitle(), true, logInfo, "");
+                this.setStatusLine(pi.getSummary(), pi.getIsError());
             }
             //ADialog.info(m_curWindowNo, this, Env.getHeader(m_ctx, m_curWindowNo),
             //      pi.getTitle(), logInfo);	//	 clear text
         }
         this.setBusy(false, notPrint);
     };  //  unlockUI
-
-    // Change Lokesh Chauhan
-    APanel.prototype.displayDialog = function (message) {
-        var chDia = new VIS.ChildDialog();
-        chDia.setTitle("");
-        var wdth = window.innerWidth - 150;
-        var hgt = window.innerHeight - 250;
-        var diaCtr = $('<div style="max-height: ' + hgt + 'px; max-width: ' + wdth + 'px; min-width: 150px; min-height: 60px;"></div>');
-        diaCtr.append(message);
-        chDia.setContent(diaCtr);
-        chDia.close = function () {
-            chDia.dispose();
-        }
-        chDia.show();
-        chDia.hidebuttons();
-    };
 
     /**
      *	Action Listener
@@ -2830,7 +2807,7 @@
             tis.isDefaultFocusSet = false;
             tis.curGC.navigatePage('last');
         }
-            /*MainToolBar */
+        /*MainToolBar */
         else if (tis.aRefresh.getAction() === action) {
             tis.cmd_refresh();
         }
@@ -2894,7 +2871,7 @@
         else if (tis.aSms && tis.aSms.getAction() === action) {
             tis.cmd_sms();
         }
-            //lakhwinder
+        //lakhwinder
         else if (tis.aInfo.getAction() === action) {
             tis.cmd_infoWindow();
 
@@ -2916,7 +2893,7 @@
             tis.cmd_recAccess();
         }
 
-            //	Tools
+        //	Tools
         else if (tis.aWorkflow != null && action === (tis.aWorkflow.getAction())) {
 
             if (tis.curTab.getRecord_ID() > 0) {
@@ -3093,7 +3070,7 @@
             record_ID = ctx.getContextAsInt(this.curWindowNo, "AD_Language_ID");
         //	Record_ID - Change Log ID
         if (record_ID == -1
-                && (vButton.getProcess_ID() == 306 || vButton.getProcess_ID() == 307)) {
+            && (vButton.getProcess_ID() == 306 || vButton.getProcess_ID() == 307)) {
             var id = this.curTab.getValue("AD_ChangeLog_ID");
             record_ID = id;
         }
@@ -3139,7 +3116,7 @@
             //}
         }	//	PaymentRule
 
-            //	Pop up Document Action (Workflow)
+        //	Pop up Document Action (Workflow)
         else if (columnName.equals("DocAction")) {
             var vda = new VIS.VDocAction(this.curWindowNo, this.curTab, record_ID);
             vda.show();
@@ -3172,7 +3149,7 @@
 
         }	//	DocAction
 
-            //  Pop up Create From
+        //  Pop up Create From
         else if (columnName.equals("CreateFrom")) {
             //  m_curWindowNo
             // Change by Lokesh Chauhan 18/05/2015
@@ -3225,8 +3202,8 @@
             }
             return;
         }
-            //Lakhwinder
-            //requested by Mohit ,Mukesh Arora
+        //Lakhwinder
+        //requested by Mohit ,Mukesh Arora
         else if (columnName.equals("BGT01_CreateLinePo")) {
             if (window.BGT01) {
                 BGT01.CreateLineMovement(this.curTab.getAD_Window_ID(), this.curTab.getAD_Tab_ID(), this.curTab.getRecord_ID());
@@ -3234,7 +3211,7 @@
             return;
         }
 
-            //  Posting -----
+        //  Posting -----
 
         else if (columnName == "Posted" && VIS.MRole.getDefault().getIsShowAcct()) {
             //  Check Doc Status
@@ -3242,9 +3219,9 @@
             if (processed != "Y") {
                 var docStatus = VIS.context.getWindowContext(this.curWindowNo, "DocStatus");
                 if (DocActionVariables.STATUS_Completed == docStatus
-                        || DocActionVariables.STATUS_Closed == docStatus
-                        || DocActionVariables.STATUS_Reversed == docStatus
-                        || DocActionVariables.STATUS_Voided == docStatus)
+                    || DocActionVariables.STATUS_Closed == docStatus
+                    || DocActionVariables.STATUS_Reversed == docStatus
+                    || DocActionVariables.STATUS_Voided == docStatus)
                     ;
                 else {
                     //ADialog.error(m_curWindowNo, this, "PostDocNotComplete");
@@ -3331,7 +3308,7 @@
             return false;
         }   //  Posted
 
-            //	Send Email -----
+        //	Send Email -----
         else if (columnName.equals("SendNewEMail")) {
             // AD_Process_ID = vButton.getProcess_ID();
             //if (AD_Process_ID != 0)
@@ -3574,17 +3551,17 @@
                                 return false;
                             }
                         }
-                            //    //  explicitly ask when changing tabs
-                            //else if (VIS.ADialog.ask("SaveChanges?", true, this.curTab.getCommitWarning(), '')) {//  yes we want to save
-                            //    if (!this.curTab.dataSave(true)) {   //  there is a problem, so we go back
-                            //        //m_curWinTab.setSelectedIndex(m_curTabIndex);
-                            //        this.vTabbedPane.restoreTabChange();
-                            //        this.setBusy(false, true);
-                            //        return false;
-                            //    }
-                            //}
-                            //else    //  Don't save
-                            //    this.curTab.dataIgnore();
+                        //    //  explicitly ask when changing tabs
+                        //else if (VIS.ADialog.ask("SaveChanges?", true, this.curTab.getCommitWarning(), '')) {//  yes we want to save
+                        //    if (!this.curTab.dataSave(true)) {   //  there is a problem, so we go back
+                        //        //m_curWinTab.setSelectedIndex(m_curTabIndex);
+                        //        this.vTabbedPane.restoreTabChange();
+                        //        this.setBusy(false, true);
+                        //        return false;
+                        //    }
+                        //}
+                        //else    //  Don't save
+                        //    this.curTab.dataIgnore();
 
                         else {
                             canExecute = false;
@@ -3920,7 +3897,7 @@
             e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
             this.errorDisplayed = true;
         }
-            //  Confirm Warning
+        //  Confirm Warning
         else if (e.getIsWarning() && !e.getIsConfirmed()) {
             VIS.ADialog.warn(e.getAD_Message(), true, e.getInfo());
             e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
@@ -4394,7 +4371,7 @@
         //	Find display
         var infoName = null;
         var infoDisplay = null;
-        for (var i = 0; i < this.curTab.getFieldCount() ; i++) {
+        for (var i = 0; i < this.curTab.getFieldCount(); i++) {
             var field = this.curTab.getField(i);
             if (field.getIsKey())
                 infoName = field.getHeader();
@@ -4555,7 +4532,7 @@
             queryColumn = this.curTab.getKeyColumnName();
         var infoName = null;
         var infoDisplay = null;
-        for (var i = 0, j = this.curTab.getFieldCount() ; i < j ; i++) {
+        for (var i = 0, j = this.curTab.getFieldCount(); i < j; i++) {
             var field = this.curTab.getField(i);
             if (field.getIsKey())
                 infoName = field.getHeader();
@@ -4573,12 +4550,12 @@
                 if (queryColumn.endsWith("_ID")) {
                     if (infoName == null && infoDisplay == null) {
                         rquery.addRestriction(queryColumn, VIS.Query.prototype.EQUAL,
-                        VIS.context.getContextAsInt(this.curWindowNo, queryColumn));
+                            VIS.context.getContextAsInt(this.curWindowNo, queryColumn));
                     }
                     else {
                         rquery.addRestriction(queryColumn, VIS.Query.prototype.EQUAL,
-                        VIS.context.getContextAsInt(this.curWindowNo, queryColumn),
-                        infoName, infoDisplay);
+                            VIS.context.getContextAsInt(this.curWindowNo, queryColumn),
+                            infoName, infoDisplay);
                     }
                 }
                 else {
@@ -5007,7 +4984,7 @@
                 };
                 return;
             }
-                //MultiRow 
+            //MultiRow 
             else {
                 var count = rowsource.length;
                 if (count == 1) {
@@ -5834,7 +5811,7 @@
 
         this.id = id;
         this.vGridPanel = new VIS.VGridPanel();
-        this.vTabPanel = new VIS.VTable();
+        this.vTable = new VIS.VTable();
         this.vCardView = new VIS.VCardView();
         this.vMapView = new VIS.VMapView();
         this.windowNo = 0;
@@ -5899,7 +5876,7 @@
             $td0_tr3 = $("<td>").append($divTree).hide();
 
             $tableMain = $("<table class='vis-gc-table'>").append($("<tr>").append(td1_tr1))
-            .append($("<tr>").append(td1_tr2))
+                .append($("<tr>").append(td1_tr2))
                 .append($("<tr  class='vis-height-full'>").append($td0_tr3).append(td1_tr3)).hide();
 
             /* Tab Control */
@@ -6259,7 +6236,7 @@
                     }
 
                     str += '<li ><img alt="' + panels[i].getName() + '" title="' + panels[i].getName() + '" default="' + panels[i].getIsDefault() + '" data-panelID="' + panels[i].getAD_TabPanel_ID() + '" data-cName="' + panels[i].getClassName()
-                     + '" data-Name="' + panels[i].getName() + '" src="' + VIS.Application.contextUrl + 'Areas/' + iconPath + '"></img></li>';
+                        + '" data-Name="' + panels[i].getName() + '" src="' + VIS.Application.contextUrl + 'Areas/' + iconPath + '"></img></li>';
                 }
                 this.ul_tabPanels = str;
             }
@@ -6359,7 +6336,7 @@
                 mField = fields[i];
 
                 if (mField.getIsDisplayed()) {
-                    var iControl = VIS.VControlFactoryOverride.getControl(mTab, mField, false, false, false);
+                    var iControl = VIS.VControlFactory.getControl(mTab, mField, false, false, false);
                     if (iControl == null && !mField.getIsHeading()) {
                         //log.warning("Editor not created for " + mField.getColumnName());
                         continue;
@@ -6488,7 +6465,7 @@
         var i = 0;
         var j = 0;
 
-        for (var i = 0, j = this.leftPaneLinkItems.length; i < j ; i++) {
+        for (var i = 0, j = this.leftPaneLinkItems.length; i < j; i++) {
             this.leftPaneLinkItems[i].getControl().detach();
         }
         for (i = 0, j = this.rightPaneLinkItems.length; i < j; i++) {
@@ -7104,8 +7081,8 @@
         if (this.gTab.getTableModel().getTotalRowCount() == 0) {
             //	Automatically create New Record, if none & tab not RO
             if (!this.gTab.getIsReadOnly() &&
-                     (VIS.context.getIsAutoNew(this.windowNo)
-                             || this.gTab.getIsQueryNewRecord()) && parentValid) {
+                (VIS.context.getIsAutoNew(this.windowNo)
+                    || this.gTab.getIsQueryNewRecord()) && parentValid) {
                 if (this.gTab.getIsInsertRecord() && !this.skipInserting) {
                     this.dataNew(false);
                     return true;
@@ -7210,8 +7187,8 @@
         this.gTab.getTableModel().setCurrentPage(newPage);
         //MRole role = MRole.GetDefault();
         this.query(this.gTab.getOnlyCurrentDays(),
-               //role.GetMaxQueryRecords(), false);	//	updated
-               0, false, this.treeNodeID, this.treeID, this.gTab.getAD_Table_ID());	//	updated
+            //role.GetMaxQueryRecords(), false);	//	updated
+            0, false, this.treeNodeID, this.treeID, this.gTab.getAD_Table_ID());	//	updated
     };
 
     VIS.GridController.prototype.navigatePage = function (newPage) {
@@ -7219,8 +7196,8 @@
         this.gTab.getTableModel().setCurrentPageRelative(newPage);
         //MRole role = MRole.GetDefault();
         this.query(this.gTab.getOnlyCurrentDays(),
-             //role.GetMaxQueryRecords(), false);	//	updated
-             0, false, this.treeNodeID, this.treeID, this.gTab.getAD_Table_ID());	//	updated
+            //role.GetMaxQueryRecords(), false);	//	updated
+            0, false, this.treeNodeID, this.treeID, this.gTab.getAD_Table_ID());	//	updated
     };
 
     VIS.GridController.prototype.navigateRelative = function (rowChange) {
@@ -7314,7 +7291,7 @@
         if ($.isArray(keyID) && !save) {
             for (var i = 0; i < keyID.length; i++)
                 this.m_tree.nodeChanged(save, keyID[i], "", "",
-            "", "");
+                    "", "");
             return;
         }
 
@@ -7741,20 +7718,20 @@
                     colValue = field.lookup.getDisplay(colValue, true);
                 }
 
-                    //	Date
+                //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
                     colValue = new Date(colValue).toLocaleString();
                 }
-                    //	RowID or Key (and Selection)
+                //	RowID or Key (and Selection)
 
-                    //	YesNo
+                //	YesNo
                 else if (displayType == VIS.DisplayType.YesNo) {
                     var str = colValue.toString();
                     if (field.getIsEncryptedColumn())
                         str = VIS.secureEngine.decrypt(str);
                     colValue = str.equals("Y");	//	Boolean
                 }
-                    //	LOB 
+                //	LOB 
 
                 else
                     colValue = colValue.toString();//string
@@ -7893,7 +7870,7 @@
     //**             VSortTab                          **//
     //**************************************************//
     VIS.VSortTab = function (windowNo, AD_Table_ID, AD_ColumnSortOrder_ID, AD_ColumnSortYesNo_ID,
-            isReadOnly, id) {
+        isReadOnly, id) {
 
         this.winNumber = windowNo;
         this.tableName = null;
@@ -7941,10 +7918,10 @@
 
             var $td = $("<td class='vis-apanel-sorttab-td'>");
             $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblNo).append($lstNo)
-                                .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnRight).append($btnLeft)));
+                .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnRight).append($btnLeft)));
 
             $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblYes).append($lstYes)
-                          .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnUp).append($btnDown)));
+                .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnUp).append($btnDown)));
 
             $tblRoot.append($("<tr>").append($td));
         }
@@ -8195,22 +8172,22 @@
                         self.columnSortName = dr.getString(2);
                         lblYesName = dr.getString(3);
                     }
-                        //	Optional YesNo
+                    //	Optional YesNo
                     else if (AD_ColumnSortYesNo_ID == dr.get(1)) {
                         //log.Fine("YesNo=" + dr.GetString(0) + "." + dr.GetString(2));
                         self.columnYesNoName = dr.getString(2);
                     }
-                        //	Parent2
+                    //	Parent2
                     else if (dr.getString(4) == "Y") {
                         //log.Fine("Parent=" + dr.GetString(0) + "." + dr.GetString(2));
                         self.parentColumnName = dr.getString(2);
                     }
-                        //	KeyColumn
+                    //	KeyColumn
                     else if (dr.getString(5) == "Y") {
                         //log.Fine("Key=" + dr.GetString(0) + "." + dr.GetString(2));
                         self.keyColumnName = dr.getString(2);
                     }
-                        //	Identifier
+                    //	Identifier
                     else if (dr.getString(6) == "Y") {
                         //log.Fine("Identifier=" + dr.GetString(0) + "." + dr.GetString(2));
                         self.identifierColumnName = dr.getString(2);
@@ -8253,7 +8230,7 @@
             sql += ",t."
         }
         sql += this.identifierColumnName						//	2
-               + ",t." + this.columnSortName;				//	3
+            + ",t." + this.columnSortName;				//	3
         if (this.columnYesNoName != null)
             sql += ",t." + this.columnYesNoName;			//	4
         //	Tables
@@ -8398,8 +8375,7 @@
                 columnYesNoName: columnYesNoName,
                 oldValues: JSON.stringify(self.getOldValues())
             },
-            success: function (data)
-            { },
+            success: function (data) { },
             error: function (er) {
 
             }
@@ -8957,7 +8933,7 @@
             var Record_ID = co[2];
 
             return VIS.MRole.canUpdate
-                   (AD_Client_ID, AD_Org_ID, self.AD_Table_ID, Record_ID, false);
+                (AD_Client_ID, AD_Org_ID, self.AD_Table_ID, Record_ID, false);
 
         };
 
@@ -9112,11 +9088,10 @@
                     var f = oColumns[colIndex].field;
                     var val = record[f];
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
-                    //return oColumns[colIndex].customFormat.GetFormatedValue(val);
-                    return Globalize.format(Number(oColumns[colIndex].customFormat.GetFormatedValue(val)));
+                    return oColumns[colIndex].customFormat.GetFormatedValue(val);
                 };
             }
-                //	YesNo
+            //	YesNo
             else if (displayType == VIS.DisplayType.YesNo) {
 
                 oColumn.sortable = true;
@@ -9128,7 +9103,7 @@
                 //}
                 oColumn.editable = { type: 'checkbox' };
             }
-                //	String (clear/password)
+            //	String (clear/password)
             else if (displayType == VIS.DisplayType.String
                 || displayType == VIS.DisplayType.Text || displayType == VIS.DisplayType.TextLong
                 || displayType == VIS.DisplayType.Memo) {
@@ -9201,7 +9176,7 @@
                     }
                 }
             }
-                //Date /////////
+            //Date /////////
             else if (VIS.DisplayType.IsDate(displayType)) {
 
                 oColumn.sortable = true;
@@ -10547,7 +10522,7 @@
             window.setTimeout(function () {
                 addMarker(location, msg);
             }
-            , timeout);
+                , timeout);
         };
 
 
@@ -10801,7 +10776,7 @@
                     if (i == 0) {
                         html += '<thead><tr class="vis-advancedSearchTableHead">';
 
-                        for (var k = 0 ; k < data.Headers.length; k++) {
+                        for (var k = 0; k < data.Headers.length; k++) {
 
                             html += '<th>' + data.Headers[k] + '</th>';
                         }
@@ -10810,7 +10785,7 @@
                     htm = '<tr class="vis-advancedSearchTableRow">';
                     obj = data.Rows[i];
                     htm += '<td>' + obj["AD_Column_ID"] + '</td><td>' + obj["NewValue"] + '</td>' +
-                           '<td>' + obj["OldValue"] + '</td><td>' + obj["UpdatedBy"] + '</td><td>' + Globalize.format(new Date(obj["Updated"]), 'f') + '</td>';
+                        '<td>' + obj["OldValue"] + '</td><td>' + obj["UpdatedBy"] + '</td><td>' + Globalize.format(new Date(obj["Updated"]), 'f') + '</td>';
                     htm += '</tr>';
                     html += htm;
                 }
