@@ -44,8 +44,8 @@
                     lastPopover = null;
                 }
                
-                curTgt.attr('data-content', colDescHelpList[colName].help).
-                    attr('title', colDescHelpList[colName].desc);
+                curTgt.attr('data-content', colDescHelpList[colName].help);
+                    //attr('title', colDescHelpList[colName].desc);
                     lastPopover =  curTgt.popover('show');
                 
             }
@@ -402,7 +402,7 @@
                 fieldToCompParentMap[mField.getColumnName()] = ctnr;
 
                 colDescHelpList[mField.getColumnName()] = {
-                    'desc': mField.getDescription(),
+                   // 'desc': mField.getDescription(),
                     'help': mField.getHelp()
                 };
             }
@@ -503,7 +503,7 @@
 
         
 
-        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName()+"' title=''  tabindex='0' data-toggle='popover' data-trigger='focus'>"+
+        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() +"'  tabindex='0' data-toggle='popover' data-trigger='focus'>"+
             "<i class='vis vis-info' aria-hidden='true'></i></span'>");
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");

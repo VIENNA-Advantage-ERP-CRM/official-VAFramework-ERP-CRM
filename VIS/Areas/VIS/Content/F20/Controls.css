@@ -314,15 +314,25 @@ label.vis-ec-col-lblchkbox {
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: 9px;
+    top: 0;
     cursor: pointer;
     outline: none;
+    z-index: 5;
+    bottom: 0;
+    display: flex;
+    align-items: center;
 }
 
 label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     position: relative;
     top: 0;
     left: 5px;
+    display: inline-flex;
+}
+
+.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap {
+    top: 9px;
+    align-items: flex-start;
 }
 
 .vis-input-wrap button + .vis-ev-ctrlinfowrap {

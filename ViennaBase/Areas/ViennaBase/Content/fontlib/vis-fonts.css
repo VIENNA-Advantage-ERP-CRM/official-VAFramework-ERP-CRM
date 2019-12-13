@@ -1,3 +1,41 @@
+/** App default fonts*/
+@font-face {
+    font-family: 'NoirPro-Regular';
+    src: url('../fonts/NoirPro-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'NoirPro-Light';
+    src: url('../fonts/NoirPro-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'NoirPro-SemiBold';
+    src: url('../fonts/NoirPro-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'NoirPro-Medium';
+    src: url('../fonts/NoirPro-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'NoirPro-Bold';
+    src: url('../fonts/NoirPro-Bold.ttf') format('truetype');
+}
+
+/**END*/
+
+
+
+
+
+
+
+
+
+
+
 @font-face {
     font-family: 'vis-fonts';
     src: url('../fonts/vis-fonts.eot?22zgxr');

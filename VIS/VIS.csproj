@@ -425,6 +425,7 @@
     <Content Include="Areas\VIS\Images\login\user-ico.png" />
     <Content Include="Areas\VIS\Images\login\warehouse.png" />
     <Content Include="Areas\VIS\Images\logo.jpg" />
+    <Content Include="Areas\VIS\Images\logo.png" />
     <Content Include="Areas\VIS\Images\main_screen.png" />
     <Content Include="Areas\VIS\Images\mDocAction.png" />
     <Content Include="Areas\VIS\Images\menuTree.PNG" />
