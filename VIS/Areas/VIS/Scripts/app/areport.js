@@ -1286,7 +1286,7 @@
             }
         }
 
-        var contentPane = $("<div Style='width:" + width + "px;' class='vis-report-a-r-container'>");
+        var contentPane = $("<div Style='width:" + width + "px; max-height: " + (height - 50) + "px;' class='vis-report-a-r-container'>");
         var subContentPane = $("<div Style='width:" + width + "px;'>");
         contentPane.append(subContentPane);
         var bsyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
