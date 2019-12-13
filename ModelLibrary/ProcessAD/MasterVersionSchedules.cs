@@ -184,6 +184,11 @@ namespace VAdvantage.Process
                             recordProcessed = true;
                     }
 
+                    // set client and Organization ID from Version table to Master
+                    // as copy PO set these ID's as 0
+                    poDest.SetAD_Client_ID(poSource.GetAD_Client_ID());
+                    poDest.SetAD_Org_ID(poSource.GetAD_Org_ID());
+
                     StringBuilder sbColName = new StringBuilder("");
                     // Loop through all the columns in Master Table
                     for (int j = 0; j < dsDBColNames.Tables[0].Rows.Count; j++)
