@@ -158,14 +158,14 @@ namespace VAdvantage.Process
                             style += " font-weight: bold; font-size: initial;";
                         }
 
-                        sbHTML.Append("<div style='width: 100%;'>"
+                        sbHTML.Append("<div class='vis-val-tc-colWid'>"
                                        + "<div class='vis-val-tc-col-l' style='" + style + "'> " + keyCol + " " + col.GetColumnName() + " (" + drRef[0]["Name"] + " (" + col.GetFieldLength() + ") " + " ) " + "</div>");
                         if (dr != null && dr.Length > 0)
                             sbHTML.Append("<div class='vis-val-tc-col-r' style='" + style + "'>" + Util.GetValueOfString(dr[0]["Column_Name"]) + " (" + Util.GetValueOfString(dr[0]["DATATYPE"]) + " (" + Util.GetValueOfInt(dr[0]["LENGTH"]) + ") " + " ) " + "</div>");
                         else
                         {
                             if (col.IsVirtualColumn())
-                                sbHTML.Append("<div style='width: 50%; float:right; min-width: 300px;font-weight: 600; font-style: italic; text-overflow: ellipsis;  overflow: hidden;  white-space: nowrap;" + style + "'>" + Msg.GetMsg(GetCtx(), "VIS_VirtualCol") + "</div>");
+                                sbHTML.Append("<div class='vis-val-tc-virCol' style='" + style + "'>" + Msg.GetMsg(GetCtx(), "VIS_VirtualCol") + "</div>");
                             else
                                 sbHTML.Append("<div class='vis-val-tc-col-r' style='" + style + "'>" + Msg.GetMsg(GetCtx(), "VIS_DBNotFound") + "</div>");
                         }
@@ -186,7 +186,7 @@ namespace VAdvantage.Process
                             continue;
                         else
                         {
-                            sbHTML.Append("<div style='width: 100%;'>");
+                            sbHTML.Append("<div class='vis-val-tc-colWid'>");
 
                             DataRow dr = null;
                             if (hasDBCols && dt.Tables[0].Rows.Count > 0)

@@ -4618,4 +4618,23 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-val-tc-parCtr {
     margin-bottom  : 40px;
 }
+
+.vis-val-tc-colWid {
+    width: 100%;
+}
+
+.vis-val-tc-colWid {
+    width: 100%;
+}
+
+.vis-val-tc-virCol {
+    width: 50%;
+    float: right;
+    min-width: 300px;
+    font-weight: 600;
+    font-style: italic;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 /********************** Validate Table Columns **********************/
