@@ -35,7 +35,7 @@
             $root = $("<div class='vis-pro-para-root'>");
             $table = $("<table class='vis-processpara-table'>");
             // $root.append($table);
-            $divButtons = $('<div style="overflow:auto;padding:0 10px">');
+            $divButtons = $('<div style="overflow:auto;padding:0 0 10px">');
             // $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
             $divTable = $('<div class="vis-para-maxheight">');
 
@@ -94,7 +94,13 @@
                 $td1.append(control);
             }
             if (c2) {
-                $td3.append(c2.getControl());
+
+                var $inputGroup = $('<div class="input-group">');
+                $td3.append($inputGroup);
+
+                $inputGroup.append(c2.getControl());
+                c2.getControl().addClass('vis-custom-select');
+                //$td3.append(c2.getControl());
                 if (c2.getBtnCount() > 0) {
 
                     if (splitUI) {
@@ -107,17 +113,20 @@
                         //c2.getControl().height("26px");
                     }
                     else {
-                        c2.getControl().width("200px");
-                        //c2.getControl().height("26px");
                     }
 
                     var btn = c2.getBtn(0);
-                    $td3.append(btn);
+                    // $td3.append(btn);
+                    var $divInputGroupAppend = $('<div class="input-group-append">');
+                    $divInputGroupAppend.append(btn);
+                    $inputGroup.append($divInputGroupAppend);
 
                     //if (c2.getDisplayType() == VIS.DisplayType.MultiKey) {
                     var btn2 = c2.getBtn(1);
                     if (btn2) {
-                        $td3.append(btn2);
+                        var $divInputGroupAppend1 = $('<div class="input-group-append">');
+                        $divInputGroupAppend1.append(btn2);
+                        $inputGroup.append($divInputGroupAppend1);
                     }
                     //    if (splitUI) {
                     //        // c2.getControl().css({ 'width': 'calc(100% - 64px)' });

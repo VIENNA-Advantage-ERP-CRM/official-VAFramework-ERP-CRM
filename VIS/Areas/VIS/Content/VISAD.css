@@ -1168,7 +1168,19 @@ html[dir="rtl"] .vis-statusbar-ul > li img {
     }
 
 .vis-processpara-table-td3 {
-    padding: 5px;
+    padding: 5px 0 5px 5px;
+}
+
+    .vis-processpara-table-td3 label.vis-ec-col-lblchkbox {
+        align-items: center;
+    }
+
+        .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input {
+            margin-left: 0;
+        }
+
+.vis-processpara-table label {
+    margin-bottom: 0;
 }
 
 
