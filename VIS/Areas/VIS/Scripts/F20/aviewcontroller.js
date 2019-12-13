@@ -817,8 +817,11 @@ VIS.GridController.prototype.dynamicDisplay = function (col) {
             if (mField != null) {
                 if (mField.getIsDisplayed(true)) {		//  check context
                     var vis = comp.tag;
-                    if (!comp.getIsVisible() && ((vis == null || vis == "undefined") || vis))
+                    if (!comp.getIsVisible() && ((vis == null || vis == "undefined") || vis)) {
                         comp.setVisible(true);		//  visibility
+                        this.vGridPanel.setVisible(columnName,true);
+                        //Hide parent also
+                    }
                     if (comp instanceof VIS.Controls.IControl) {
                         var ve = comp;
                         if (noData)
@@ -845,8 +848,10 @@ VIS.GridController.prototype.dynamicDisplay = function (col) {
                         }
                     }
                 }
-                else if (comp.getIsVisible())
+                else if (comp.getIsVisible()) {
                     comp.setVisible(false);
+                    this.vGridPanel.setVisible(columnName,false);
+                }
 
                 // reset error status for nondisplayed fields if they are not mandatory
                 if (!mField.getIsDisplayed(true) && !mField.getIsMandatory(true)) {
