@@ -214,7 +214,7 @@ namespace VAdvantage.Process
                 pi.SetCustomHTML(sbHTML.ToString());
             }
 
-            return "All OK";
+            return "";
         }
 
     }
