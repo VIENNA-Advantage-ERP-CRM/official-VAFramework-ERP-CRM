@@ -160,7 +160,7 @@ input:not([type=button]):disabled, select:disabled, textarea:disabled, input:not
  */
 .ui-dialog .ui-dialog-titlebar-close {
     width: 40px;
-    background: url('../base/images/close.png');
+    background: url('../migration/themes/base/images/close.png');
     background-color: #616364;
     float: right;
     background-repeat: no-repeat;
