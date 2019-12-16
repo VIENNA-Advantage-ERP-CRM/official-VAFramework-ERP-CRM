@@ -280,11 +280,38 @@
     var setting = false;
 
     function setLanguage() {
-        var index = localStorage.getItem("vis_login_langCode");
-        if (index) {
-            $cmbLang.val(index);
-            $cmbLang.trigger("change");
+        var langCode = localStorage.getItem("vis_login_langCode");
+        if (langCode == null || langCode == '') {
+            var lang = navigator.language || navigator.userLanguage;
+            if (lang) {
+                if (lang.indexOf("-") > -1)
+                    langCode = lang.replace("-", "_");
+                else {
+                    langCode = lang;
+                    var langs = navigator.languages;
+                    if (langs && langs.length > 0) {
+                        for (var l = 0; l < langs.length; l++) {
+                            if (langs[l].length > 2 && lang == langs[l].substring(0, 2)) {
+                                langCode = langs[l].replace("-", "_");
+                                break;
+                            }
+                        }
+                        if (langCode.length < 3)
+                            langCode = langCode + "_" + langCode.toUpperCase();
+                    }
+                }
+            }
+            else {
+                langCode = 'en_US';
+            }
         }
+        // if (langCode != null && langCode != '') {
+        $cmbLang.val(langCode);
+        if ($cmbLang[0].selectedIndex < 0) {
+            $cmbLang.val('en_US');
+        }
+        $cmbLang.trigger("change");
+        // }
     };
 
     setLanguage();
