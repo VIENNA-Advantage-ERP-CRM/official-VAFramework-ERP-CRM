@@ -1838,7 +1838,7 @@
             });
         }
 
-        $('.vis-icon-Info-Home').click(function () {
+        $('#vis_appInfoWindow').click(function () {
             VIS.InfoMenu.show($(this));
         });
 
