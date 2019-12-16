@@ -507,7 +507,7 @@
 
         
 
-        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() +"'  tabindex='0' data-toggle='popover' data-trigger='focus'>"+
+        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() +"'  tabindex='-1' data-toggle='popover' data-trigger='focus'>"+
             "<i class='vis vis-info' aria-hidden='true'></i></span'>");
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
