@@ -1,6 +1,4 @@
-﻿/*** version 1.0.8.1***/
-
-html, body {
+﻿html, body {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -2057,7 +2055,7 @@ html[dir="rtl"] .vis-filter-dialog {
     .vis-gc-vpanel-table label {
         font-weight: normal;
         margin: 0;
-        margin-top: 20px;
+        margin-top: 10px;
         /*margin-left: 4px;*/
         display: block;
     }
@@ -2078,10 +2076,13 @@ html[dir="rtl"] .vis-filter-dialog {
         min-width: 100%;
         min-height: 26px;
         line-height: inherit !important;
-        /*margin-bottom: 20px;*/
+        margin-bottom: 10px;
         padding: 1px !important;
     }
 
+    .vis-gc-vpanel-table button {
+        /*margin-bottom: 20px;*/ */
+    }
 
 .vis-gc-vpanel-table-btn-blue {
     border: 0px;
@@ -2255,7 +2256,19 @@ html[dir="rtl"] .vis-statusbar-ul > li img {
     }
 
 .vis-processpara-table-td3 {
-    padding: 5px;
+    padding: 5px 0 5px 5px;
+}
+
+    .vis-processpara-table-td3 label.vis-ec-col-lblchkbox {
+        align-items: center;
+    }
+
+        .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input {
+            margin-left: 0;
+        }
+
+.vis-processpara-table label {
+    margin-bottom: 0;
 }
 
 
@@ -5265,6 +5278,7 @@ li.vis-selected-list {
 
 .vis-window-tab-icons ul li img {
     cursor: pointer;
+    max-width: 21px;
 }
 
 .vis-window-tabpanel-head {
@@ -5513,16 +5527,18 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 
 .vis-mas-ver-checkwrap {
     display: flex;
-    padding-top: 10px;
+    padding-top: 5px;
+    align-items: center;
 }
 
     .vis-mas-ver-checkwrap input {
-        margin-left: 0;
+        margin: 4px 10px 0px 0px;
     }
 
     .vis-mas-ver-checkwrap label {
         margin-bottom: 0;
         font-weight: normal;
+        padding-left: 5px;
     }
 
 
@@ -5625,10 +5641,11 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 
 /********************** Validate Table Columns **********************/
 .vis-val-tc-mainwrap {
-    max-height: 450px;
+    /*max-height: 450px;*/
     width: 100%;
     overflow: auto;
     min-height: 300px;
+    padding-top: 10px;
 }
 
 .vis-val-tc-col-red-r {
@@ -5670,7 +5687,61 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     overflow: hidden;
     white-space: nowrap;
 }
+
+.vis-val-tc-hdr {
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: sans-serif;
+    margin-bottom: 10px;
+    color: rgba(var(--v-c-primary), 1);
+}
+
+    .vis-val-tc-hdr label {
+        color: rgba(var(--v-c-on-secondary), 1);
+        padding-right: 10px;
+        margin-bottom: 0;
+    }
+
+.vis-val-tc-colCtr {
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+
+.vis-val-tc-colHdrs {
+    width: 50%;
+    float: left;
+    min-width: 300px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.vis-val-tc-parCtr {
+    margin-bottom: 40px;
+}
+
+.vis-val-tc-colWid {
+    width: 100%;
+}
+
+.vis-val-tc-colWid {
+    width: 100%;
+}
+
+.vis-val-tc-virCol {
+    width: 50%;
+    float: right;
+    min-width: 300px;
+    font-weight: 600;
+    font-style: italic;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 /********************** Validate Table Columns **********************/
+
 
 
 /*Menu settings*/
@@ -6827,7 +6898,7 @@ html[dir="rtl"] .input-group-addon {
 }
 
 .VIS_Pref_err_mgntop {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .VIS_Pref_err_btnLeft {
