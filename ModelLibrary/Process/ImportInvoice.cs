@@ -218,7 +218,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Payment Rule
             //  We support Payment Rule being input in the login language 
-            VAdvantage.Login.Language language = VAdvantage.Login.Language.GetLoginLanguage(GetCtx());		//	Base Language
+            VAdvantage.Login.Language language = VAdvantage.Login.Language.GetLoginLanguage();		//	Base Language
             String AD_Language = language.GetAD_Language();
             sql = new StringBuilder("UPDATE I_Invoice O " +
                     "SET PaymentRule= " +
