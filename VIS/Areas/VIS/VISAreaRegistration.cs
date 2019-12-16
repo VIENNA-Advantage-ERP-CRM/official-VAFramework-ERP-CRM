@@ -47,7 +47,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/adialog.js",
                 "~/Areas/VIS/Scripts/app/lookup.js",
                 "~/Areas/VIS/Scripts/app/treepanel.js",
-              
+
                 "~/Areas/VIS/Scripts/app/controller.js",
                 "~/Areas/VIS/Scripts/app/formframe.js",
                 "~/Areas/VIS/Scripts/app/processframe.js",
@@ -146,11 +146,12 @@ namespace VIS
                  "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
-                
+                 "~/Areas/VIS/Scripts/app/masterdataversion.js",
+
 
 
                   "~/Areas/VIS/Scripts/TestPanel.js",
-                 
+
                   "~/Areas/VIS/Scripts/model/CalloutOrder.js",
                   "~/Areas/VIS/Scripts/model/CalloutInventoryMove.js",
                   "~/Areas/VIS/Scripts/model/CalloutAssignment.js",
@@ -198,12 +199,12 @@ namespace VIS
                  "~/Areas/VIS/Scripts/F20/thememgr.js",
                 "~/Areas/VIS/Scripts/app/initialize.js" //bottom one (do-not chnage sequence
             );
-               
+
 
 
 
             style.Include("~/Areas/VIS/Content/Site.css",
-                
+
                 "~/Areas/VIS/Content/VISAD.css",
                 "~/Areas/VIS/Content/PrefStyle.css",
                 "~/Areas/VIS/Content/Home.css",
