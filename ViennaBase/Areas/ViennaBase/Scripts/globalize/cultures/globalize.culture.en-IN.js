@@ -54,7 +54,58 @@ Globalize.addCultureInfo( "en-IN", "default", {
 				M: "dd MMMM"
 			}
 		}
-	}
+    },
+    messages: {
+        "Connection": "Connection",
+        "Defaults": "Defaults",
+        "Login": "Login",
+        "File": "File",
+        "Exit": "Exit",
+        "Help": "Help",
+        "About": "About",
+        "Host": "Server",
+        "Database": "Database",
+        "User": "User ID",
+        "EnterUser": "Enter Application User ID",
+        "Password": "Password",
+        "EnterPassword": "Enter Application Password",
+        "Language": "Language",
+        "SelectLanguage": "Select your language ",
+        "Role": "Role",
+        "Client": "Client",
+        "Organization": "Organization",
+        "Date": "Date",
+        "Warehouse": "Warehouse",
+        "Printer": "Printer",
+        "Connected": "Connected",
+        "NotConnected": "Not Connected",
+        "DatabaseNotFound": "Database not found",
+        "UserPwdError": "User does not match password",
+        "RoleNotFound": "Role not found/complete",
+        "Authorized": "Authorized",
+        "Ok": "Ok",
+        "Cancel": "Cancel",
+        "VersionConflict": "Version Conflict:",
+        "VersionInfo": "Server <> Client",
+        "PleaseUpgrade": "Please download new Version from Server",
+        "GoodMorning": "Good Morning",
+        "GoodAfternoon": "Good Afternoon",
+        "GoodEvening": "Good Evening",
+
+        //New Resource
+
+        "Back": "Back",
+        "SelectRole": "Select Role",
+        "SelectOrg": "Select Organization",
+        "SelectClient": "Select Client",
+        "SelectWarehouse": "Select Warehouse",
+        "VerifyUserLanguage": "Verifying user and language",
+        "LoadingPreference": "Loading Preference",
+        "Completed": "Completed",
+        //new
+        "RememberMe": "Remember Me",
+
+    }
 });
 
 }( this ));
