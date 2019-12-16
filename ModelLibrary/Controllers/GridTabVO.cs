@@ -622,7 +622,7 @@ namespace VAdvantage.Controller
                             AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
                         };
 
-                        DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Flow,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
+                        DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
                             " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -634,7 +634,6 @@ namespace VAdvantage.Controller
                                     AD_GridLayoutItems_ID = Convert.ToInt32(row["AD_GridLayoutItems_ID"]),
                                     ColumnSpan = Convert.ToInt32(row["ColumnSpan"]),
                                     AlignItems = Convert.ToString(row["AlignItems"]),
-                                    Flow = Convert.ToString(row["Flow"]),
                                     JustifyItems = Convert.ToString(row["JustifyItems"]),
                                     RowSpan = Convert.ToInt32(row["RowSpan"]),
                                     SeqNo = Convert.ToInt32(row["SeqNo"]),
