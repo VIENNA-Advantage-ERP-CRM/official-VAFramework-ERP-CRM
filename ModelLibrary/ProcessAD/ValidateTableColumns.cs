@@ -23,6 +23,7 @@ namespace VAdvantage.Process
         private string p_AD_Table_ID = "";
         List<string> standardColumns = new List<string>();
         private StringBuilder sbHTML = new StringBuilder("");
+        bool fromMenu = false;
         #endregion Private Variables
 
         /// <summary>
@@ -46,6 +47,7 @@ namespace VAdvantage.Process
                 {
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
+                fromMenu = true;
             }
 
             if (p_AD_Table_ID.Trim().ToString() == "")
@@ -126,7 +128,13 @@ namespace VAdvantage.Process
 
                 List<string> ADCols = new List<string>();
 
-                sbHTML.Append("<div class='vis-val-tc-mainwrap'> ");
+                // check whether process is running from menu or from table and column Window
+                // if process is executing from window then apply style
+                string mainMenuWrap = "";
+                if(!fromMenu)
+                    mainMenuWrap = "style='max-height: 450px;'";
+
+                sbHTML.Append("<div class='vis-val-tc-mainwrap' "+ mainMenuWrap + "> ");
 
                 if (columnsAD.Length > 0)
                 {
