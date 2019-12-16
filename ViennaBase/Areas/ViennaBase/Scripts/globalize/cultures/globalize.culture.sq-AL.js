@@ -71,7 +71,58 @@ Globalize.addCultureInfo( "sq-AL", "default", {
 				Y: "yyyy-MM"
 			}
 		}
-	}
+    },
+    messages: {
+        "Connection": "Lidhje",
+        "Defaults": "defaults",
+        "Login": "hyrje",
+        "File": "skedar",
+        "Exit": "dalje",
+        "Help": "Ndihmë",
+        "About": "për",
+        "Host": "Mikpritës",
+        "Database": "Baza e të dhënave",
+        "User": "përdorues",
+        "EnterUser": "Vendosni ID e Përdoruesit të Aplikimit",
+        "Password": "fjalëkalim",
+        "EnterPassword": "Vendosni fjalëkalimin e aplikacionit",
+        "Language": "Gjuhe",
+        "SelectLanguage": "Zgjidhni gjuhën tuaj",
+        "Role": "rol",
+        "Client": "klient",
+        "Organization": "organizatë",
+        "Date": "data",
+        "Warehouse": "depo",
+        "Printer": "printer",
+        "Connected": "i lidhur",
+        "NotConnected": "Nuk është e lidhur",
+        "DatabaseNotFound": "Baza e të dhënave nuk u gjet",
+        "UserPwdError": "Përdoruesi nuk përputhet me fjalëkalimin",
+        "RoleNotFound": "Roli nuk u gjet / e plotë",
+        "Authorized": "i autorizuar",
+        "Ok": "Ne rregull",
+        "Cancel": "anuloj",
+        "VersionConflict": "Konflikti i versionit:",
+        "VersionInfo": "Server <> Klient",
+        "PleaseUpgrade": "Ju lutemi shkarkoni versionin e ri nga Serveri",
+        "GoodMorning": "Miremengjes",
+        "GoodAfternoon": "Mirembrema",
+        "GoodEvening": "Mirembrema",
+
+        //New Resource
+
+        "Back": "prapa",
+        "SelectRole": "Zgjidhni Rolin",
+        "SelectOrg": "Zgjidhni Organizatën",
+        "SelectClient": "Zgjidhni Klientin",
+        "SelectWarehouse": "Zgjidhni Magazinë",
+        "VerifyUserLanguage": "Verifikimi i përdoruesit dhe gjuhës",
+        "LoadingPreference": "Preferenca për ngarkim",
+        "Completed": "i përfunduar",
+        //new
+        "RememberMe": "Më kujto",
+
+    }
 });
 
 }( this ));
