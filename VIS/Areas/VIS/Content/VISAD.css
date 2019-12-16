@@ -970,7 +970,7 @@
     .vis-gc-vpanel-table label {
         font-weight: normal;
         margin: 0;
-        margin-top: 20px;
+        margin-top:10px;
         /*margin-left: 4px;*/
         display: block;
     }
@@ -991,12 +991,15 @@
         min-width: 100%;
         min-height: 26px;
         line-height: inherit !important;
-        /*margin-bottom: 20px;*/
+        margin-bottom: 10px;
         padding: 1px !important;
     }
 
-
-.vis-gc-vpanel-table-btn-blue {
+    .vis-gc-vpanel-table button {
+        /*margin-bottom: 20px;*/*/
+    }
+        
+    .vis-gc-vpanel-table-btn-blue {
     border: 0px;
     background: #BFD8EE;
     padding: 10px 15px;
@@ -4190,6 +4193,7 @@ li.vis-selected-list {
 
 .vis-window-tab-icons ul li img {
     cursor: pointer;
+    max-width:21px;
 }
 
 .vis-window-tabpanel-head {
@@ -4438,16 +4442,18 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 
 .vis-mas-ver-checkwrap {
     display: flex;
-    padding-top: 10px;
+    padding-top: 5px;
+    align-items: center;
 }
 
     .vis-mas-ver-checkwrap input {
-        margin-left: 0;
+        margin: 4px 10px 0px 0px;
     }
 
     .vis-mas-ver-checkwrap label {
         margin-bottom: 0;
         font-weight: normal;
+        padding-left: 5px;
     }
 
 
@@ -4550,7 +4556,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 
 /********************** Validate Table Columns **********************/
 .vis-val-tc-mainwrap {
-    max-height: 450px;
+    /*max-height: 450px;*/
     width: 100%;
     overflow: auto;
     min-height: 300px;

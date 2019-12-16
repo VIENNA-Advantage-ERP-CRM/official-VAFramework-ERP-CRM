@@ -29,7 +29,9 @@ namespace VIS
 
             ScriptBundle modScript = new ScriptBundle("~/Areas/VIS/Script/VISjs");
 
+            ScriptBundle modScript1_0 = new ScriptBundle("~/Areas/VIS/Script/VIS_v2");
 
+            ScriptBundle modScript2_0 = new ScriptBundle("~/Areas/VIS/Script/VIS_v3");
 
 
 
@@ -179,10 +181,15 @@ namespace VIS
                   "~/Areas/VIS/Scripts/model/calloutpayment.js"
                    );
 
-            //modScript.Include(
-            //     "~/Areas/VIS/Scripts/app/windowframe.js");
 
             modScript.Include(
+                 "~/Areas/VIS/Scripts/F20/thememgr.js",
+                "~/Areas/VIS/Scripts/app/initialize.js" //bottom one (do-not chnage sequence
+            );
+
+            modScript1_0.Include("~/Areas/VIS/Scripts/app/windowframe.js");
+
+            modScript2_0.Include(
                   "~/Areas/VIS/Scripts/F20/aheaderpanel.js",
                   "~/Areas/VIS/Scripts/F20/atabpanel.js",
                   "~/Areas/VIS/Scripts/F20/wframe.js",
@@ -231,12 +238,18 @@ namespace VIS
 
             style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
-            //style.Include("~/Areas/VIS/Content/vis.all.min.css");
+            //style.Include("~/Areas/VIS/Content/VIS.all.min.css");
+            //style.Include("~/Areas/VIS/Content/VIS1_0.all.min.css");
+            //style.Include("~/Areas/VIS/Content/VIS2_0.all.min.css");
+
             //modScript.Include("~/areas/vis/scripts/VIS.all.min.js");
             //"~/Areas/VIS/Scripts/TestPanel.js"); 
 
 
             VAdvantage.ModuleBundles.RegisterScriptBundle(modScript, "VIS", -1);
+            VAdvantage.ModuleBundles.RegisterScriptBundle(modScript1_0, "VIS1_0", -2);
+            VAdvantage.ModuleBundles.RegisterScriptBundle(modScript2_0, "VIS2_0", -3);
+
             VAdvantage.ModuleBundles.RegisterStyleBundle(style, "VIS", -1);
             ////VAdvantage.ModuleBundles.RegisterRTLStyleBundle(styleRTL, "VIS", -1);
 
