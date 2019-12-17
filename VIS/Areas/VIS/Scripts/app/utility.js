@@ -659,28 +659,27 @@
         };
 
         function getDecimalSeparator(locale) {
-            const numberWithDecimalSeparator = 1.1;
-            if (window.Intl) {
-                return Intl.NumberFormat(locale)
-                    .formatToParts(numberWithDecimalSeparator)
-                    .find(part => part.type === 'decimal')
-                    .value;
-            }
-            else {
-                
-                return numberWithDecimalSeparator
-                    .toLocaleString(locale)
-                    .substring(1, 2);
-            }
-        }
+            var numberWithDecimalSeparator = 1.1;
+            //if (window.Intl) {
+            //    return Intl.NumberFormat(locale)
+            //        .formatToParts(numberWithDecimalSeparator)
+            //        .find(part => part.type === 'decimal')
+            //        .value;
+            //}
+            return numberWithDecimalSeparator
+                .toLocaleString(locale)
+                .substring(1, 2);
+        };
 
-        function isDecimalPoint(lang) {
-            var language = navigator.language;
-            if (lang)
-                language = language;
+        function isDecimalPointss(lang) {
+            var language = window.navigator.language;
+            if (lang && lang != '')
+                language = lang;
 
-            return getDecimalSeparator(language) == '.';
-        }
+            if (getDecimalSeparator(language) != ',')
+                return true;
+            return false;
+        };
 
         return {
             getWindowNo: getWindowNo,
@@ -702,34 +701,17 @@
             currentTimeMillis: currentTimeMillis,
             signum: signum,
             startBrowser: startBrowser,
-
-
-
-
-
-
-
-            //const
-
+            isDecimalPoint: isDecimalPointss,
+            getDecimalSeparator: getDecimalSeparator,
             ZERO: 0,
-            /**	Decimal 1	 */
             ONE: 1,
-            /**	Decimal 100	 */
             ONEHUNDRED: 100.0,
-
-            /**	New Line 		 */
             NL: '\r\n',
             SHOW_CLIENT_ORG: 0,
             SHOW_CLIENT_ONLY: 1,
             SHOW_ORG_ONLY: 2,
             HIDE_CLIENT_ORG: 3,
-            NULLString: NULLString,
-
-
-            //New culture specific function
-            isDecimalPoint: isDecimalPoint,
-            getDecimalSeparator: getDecimalSeparator
-
+            NULLString: NULLString
         }
     }();
     // ******************** END ENV *********************//

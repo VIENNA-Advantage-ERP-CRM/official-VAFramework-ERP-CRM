@@ -1,4 +1,5 @@
 ﻿
+
 /*Scroll bar*/
 ::-webkit-scrollbar {
     width: 0.4rem;
@@ -31,6 +32,7 @@
 ::-webkit-input-placeholder {
     color: rgba(var(--v-c-on-secondary), .6);
 }
+
 :-ms-input-placeholder {
     color: rgba(var(--v-c-on-secondary), .6);
 }
@@ -197,6 +199,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     color: rgba(var(--v-c-on-primary), 1);
     width: 100%;
 }
+
 .ui-button .ui-icon, .ui-button:hover .ui-icon {
     background-image: url(../migration/themes/base/images/ui-icons_ffffff_256x240.png);
 }
@@ -284,9 +287,11 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     margin-top: 0;
     padding: 10px;
 }
-.ui-dialog .ui-dialog-buttonpane button{
-    margin: 0;
-}
+
+    .ui-dialog .ui-dialog-buttonpane button {
+        margin: 0;
+    }
+
 .ui-widget.ui-widget-content {
     /*border: 1px solid rgba(var(--v-c-on-secondary),.1);*/
     /*border-radius: .25rem;*/
@@ -311,6 +316,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         /*color: rgba(var(--v-c-on-secondary), 1);*/
         border-right: 1px solid transparent;
     }
+
     .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-selected td.w2ui-grid-data > div {
         color: rgba(var(--v-c-on-secondary), 1);
     }
@@ -355,16 +361,17 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 
     .w2ui-grid .w2ui-editable {
     }
+
         .w2ui-grid .w2ui-editable input {
             padding: 1px;
             min-height: 36px;
         }
 
             .w2ui-grid .w2ui-editable input.w2ui-select {
-                height:36px;
+                height: 36px;
             }
 
-            /**************************************/
+/**************************************/
 
 
 
@@ -379,4 +386,3 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         border-top: 1px solid rgba(var(--v-c-on-secondary), .4);
         margin: -6px 0 0 0px;
     }
-   
