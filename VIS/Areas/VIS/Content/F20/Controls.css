@@ -58,7 +58,9 @@
     width: 100%;
     font-size: 14px;
 }
-
+.vis-input-wrap textarea {
+    height: 100%;
+}
 
 .vis-input-wrap select, .vis-custom-select {
     -webkit-appearance: none;
