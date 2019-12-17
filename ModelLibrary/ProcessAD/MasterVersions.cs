@@ -127,7 +127,7 @@ namespace VAdvantage.Process
                     string tableName = tbl.GetTableName();
                     // create new Version table for parent table
                     tblVer = new MTable(GetCtx(), 0, _trx);
-                    tbl.CopyTo(tblVer);                    
+                    tbl.CopyTo(tblVer);
                     tblVer.SetTableName(tableName + "_Ver");
                     tblVer.SetName(tableName + " Ver");
                     tblVer.Set_Value("Export_ID", null);
@@ -210,7 +210,8 @@ namespace VAdvantage.Process
                             if (colVer != null)
                             {
                                 sCol.CopyTo(colVer);
-                                colVer.SetAD_Column_ID(AD_Col_ID);
+                                if (AD_Col_ID > 0)
+                                    colVer.SetAD_Column_ID(AD_Col_ID);
                                 colVer.SetExport_ID(null);
                                 colVer.SetAD_Table_ID(Ver_AD_Table_ID);
                                 // set key column to false
@@ -616,7 +617,7 @@ namespace VAdvantage.Process
             }
             return "";
         }
-        
+
         /// <summary>
         /// Get column name string from Version table
         /// </summary>
