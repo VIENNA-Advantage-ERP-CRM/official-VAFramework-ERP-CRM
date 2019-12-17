@@ -194,20 +194,23 @@ namespace VAdvantage.Process
                             }
                             // Version Column object
                             MColumn colVer = null;
+                            int AD_Col_ID = 0;
                             // if column not present in Version table then create new
                             if (createNew)
                             {
-                                colVer = new MColumn(GetCtx(), 0, _trx);
+                                colVer = new MColumn(GetCtx(), AD_Col_ID, _trx);
                             }
                             // if column already present and user pressed sync button on same column of Master table
                             // then create object of existing column (in case of change in any column fields)
                             else if (!createNew && (_AD_Column_ID == columnID))
                             {
+                                AD_Col_ID = Util.GetValueOfInt(dr[0]["AD_Column_ID"]);
                                 colVer = new MColumn(GetCtx(), Util.GetValueOfInt(dr[0]["AD_Column_ID"]), _trx);
                             }
                             if (colVer != null)
                             {
                                 sCol.CopyTo(colVer);
+                                colVer.SetAD_Column_ID(AD_Col_ID);
                                 colVer.SetExport_ID(null);
                                 colVer.SetAD_Table_ID(Ver_AD_Table_ID);
                                 // set key column to false
