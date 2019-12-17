@@ -181,7 +181,10 @@
 
         function setColumns() {
             if ($td0 != null) {
-                if (columnIndex < 2) {
+                if (columnIndex < 1) {
+
+                }
+                if (columnIndex == 1) {
                     $td0.addClass("vis-ev-col-end2");
                     $td1.removeClass("vis-ev-col-start2").addClass("vis-ev-col-start3").addClass("vis-ev-col-end4");
                     $td2.remove();

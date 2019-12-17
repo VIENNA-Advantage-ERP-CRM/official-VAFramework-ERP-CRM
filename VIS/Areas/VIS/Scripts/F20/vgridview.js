@@ -689,6 +689,12 @@ VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name,
                 return "";
             }
         }
+
+
+        if (mField.getHtmlStyle() != "") {
+            oColumn.style = mField.getHtmlStyle();
+        }
+
         if (!oColumn.hidden) {
             visibleFields++;
         }

@@ -845,6 +845,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     grid-column: 2/2;
     display: flex;
     color: rgba(var(--v-c-on-secondary),1);
+    background-color: rgba(var(--v-c-secondary),.5);
 }
 
 .vis-ad-w-p-vc-gc {
