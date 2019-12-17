@@ -1222,7 +1222,7 @@ li.vis-page-item-select {
 
 
 .vis-w-p-header-icon-f {
-    background: rgba(var(--v-c-on-secondary), 0.3);
+    /* background: rgba(var(--v-c-on-secondary), 0.2); */
     border-radius: 50%;
     width: 35px;
     height: 35px;
@@ -1230,6 +1230,22 @@ li.vis-page-item-select {
     align-items: center;
     justify-content: center;
     margin-right: 10px;
+    position: relative;
+    overflow: hidden;
+}
+.vis-w-p-header-icon-f:after {
+    position: absolute;
+    content: '';
+    width: 35px;
+    height: 35px;
+    background: rgba(var(--v-c-primary), 1);
+    filter: brightness(0.8);
+    z-index: 0;
+}
+
+.vis-w-p-header-icon-f span {
+    position: relative;
+    z-index: 1;
 }
 
 .vis-w-p-header-Label-f {
