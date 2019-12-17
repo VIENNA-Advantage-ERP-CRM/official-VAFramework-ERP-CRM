@@ -3339,24 +3339,24 @@
             }
 
             // Get culture decimal separator
-            if (window.navigator.language != undefined) {
-                var culture = new VIS.CultureSeparator();
-                var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
+           // if (window.navigator.language != undefined) {
+            //    var culture = new VIS.CultureSeparator();
+           // var isDotSeparator = VIS.Env.isDecimalPoint();// culture.isDecimalSeparatorDot(window.navigator.language);
                 // Not . decimal separator
-                if (isDotSeparator != null) {
-                    if (!isDotSeparator) {
-                        if (event.keyCode == 190 || event.keyCode == 110) {
-                            return false;
-                        }
-                    }
-                    // . separator
-                    else {
-                        if (event.keyCode == 188) {
-                            return false;
-                        }
-                    }
+                
+            if (!VIS.Env.isDecimalPoint()) {
+                if (event.keyCode == 190 || event.keyCode == 110) {
+                    return false;
                 }
             }
+            // . separator
+            else {
+                if (event.keyCode == 188) {
+                    return false;
+                }
+            }
+               
+           // }
 
             if (event.keyCode == 190 || event.keyCode == 110 || event.keyCode == 188) {// decimal (.)
                 if (this.value.indexOf('.') > -1) {

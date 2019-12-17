@@ -658,6 +658,30 @@
             window.open(url);
         };
 
+        function getDecimalSeparator(locale) {
+            const numberWithDecimalSeparator = 1.1;
+            if (window.Intl) {
+                return Intl.NumberFormat(locale)
+                    .formatToParts(numberWithDecimalSeparator)
+                    .find(part => part.type === 'decimal')
+                    .value;
+            }
+            else {
+                
+                return numberWithDecimalSeparator
+                    .toLocaleString(locale)
+                    .substring(1, 2);
+            }
+        }
+
+        function isDecimalPoint(lang) {
+            var language = navigator.language;
+            if (lang)
+                language = language;
+
+            return getDecimalSeparator(language) == '.';
+        }
+
         return {
             getWindowNo: getWindowNo,
             getCtx: getCtx,
@@ -699,11 +723,12 @@
             SHOW_CLIENT_ONLY: 1,
             SHOW_ORG_ONLY: 2,
             HIDE_CLIENT_ORG: 3,
-            NULLString: NULLString
+            NULLString: NULLString,
 
 
-
-
+            //New culture specific function
+            isDecimalPoint: isDecimalPoint,
+            getDecimalSeparator: getDecimalSeparator
 
         }
     }();
@@ -1983,6 +2008,8 @@
         }
         return null;
     };
+
+
 
 
 
