@@ -224,7 +224,8 @@
                             $selfpanel.isAutoCompleteOpen = false;
 
                         }, 400);
-                    }
+                    },
+                    source:[]
                 });
                 $txtSearch.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
 
@@ -768,10 +769,11 @@
                     self.cmd_find($txtSearch.val());
                     $txtSearch.val("");
                 }
-                else if (code == 8) {
+                else if (code == 8 && $btnClrSearch.css('visibility') == 'visible') {
                         e.preventDefault();
                         self.defaultSearch = true;
-                        $txtSearch.val("");
+                    $txtSearch.val("");
+                    $btnClrSearch.css('visibility', 'hidden');
                         var query = new VIS.Query();
                         query.addRestriction(" 1 = 1 ");
                         self.findRecords(query);
