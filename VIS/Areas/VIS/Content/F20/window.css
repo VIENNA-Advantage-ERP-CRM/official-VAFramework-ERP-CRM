@@ -1112,7 +1112,7 @@ li.vis-page-item-select {
 .vis-ad-w-p-vc-ev-grid {
     display: grid;
     grid-template-columns: repeat(4,1fr);
-    grid-gap: 15px;
+    grid-column-gap: 15px;
 }
 
 .vis-ev-col {
