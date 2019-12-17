@@ -194,7 +194,50 @@
                     $td0.addClass("vis-ev-col-end4");
                 }
             }
-        }
+        };
+
+        function setColumnSpan($ctlr,colSpan) {
+            if (columnIndex == 0) {
+                
+                if (colSpan == 2) {
+                    $ctlr.addClass("vis-ev-col-end2"); 
+                    $td1.remove();
+                }
+                    
+                else if (colSpan == 3) {
+                    $ctlr.addClass("vis-ev-col-end3"); 
+                    $td1.remove();
+                    $td2.remove();
+                }
+                else if (colSpan > 3) {
+                    $ctlr.addClass("vis-ev-col-end4"); 
+                    $td1.remove();
+                    $td2.remove();
+                    $td3.remove();
+                }
+                columnIndex += colSpan-1;
+            }
+           else  if (columnIndex == 1) {
+                if (colSpan == 2) {
+                    $ctlr.addClass("vis-ev-col-end3");
+                    $td2.remove();
+                }
+                else if (colSpan >2 ) {
+                    $ctlr.addClass("vis-ev-col-end4");
+                    $td2.remove();
+                    $td3.remove();
+                }
+                
+                columnIndex += colSpan - 1;
+            }
+            else if (columnIndex == 2) {
+                if (colSpan >= 2) {
+                    $ctlr.addClass("vis-ev-col-end4");
+                    $td3.remove();
+                }
+                columnIndex += colSpan - 1;
+            }
+        };
 
         this.addField = function (editor, mField) {
 
@@ -377,10 +420,12 @@
                         //$td1.append(editor.getControl());
                         insertCWrapper(label, editor, $td1, mField);
                         ctnr = $td1;
+                        
                     }
                     else if (columnIndex == 2) {
                         insertCWrapper(label, editor, $td2, mField);
                         ctnr = $td2;
+                       
                     }
                     else {
                         insertCWrapper(label, editor, $td3, mField);
@@ -391,6 +436,8 @@
                     ctnr = $td0;
                 }
 
+                
+
                 if (!sameLine && mField.getIsLongField()) {
                     $td1.remove();
                     $td2.remove();
@@ -398,6 +445,8 @@
                     $td0.addClass("vis-ev-col-end4");
                     columnIndex = 4;
                 }
+                else
+                    setColumnSpan(ctnr, mField.getFieldColSpan());
 
                 fieldToCompParentMap[mField.getColumnName()] = ctnr;
 
