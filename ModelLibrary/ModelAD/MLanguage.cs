@@ -297,7 +297,7 @@ namespace VAdvantage.Model
 
         public static DataTable GetSystemLanguage()
         {
-            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y'");
+            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
             if (ds != null)
                 return ds.Tables[0];
             return null;
