@@ -339,12 +339,15 @@
     color: rgba(var(--v-c-on-primary),1);
     cursor: pointer;
     font-size: .875rem;
+    overflow: hidden;
 }
 
     .vis-ad-w-p-tb-advsrch li, .vis-ad-w-p-tb-advsrch li > div {
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        height: 100%;
     }
 
 
@@ -845,6 +848,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     grid-column: 2/2;
     display: flex;
     color: rgba(var(--v-c-on-secondary),1);
+    background-color: rgba(var(--v-c-secondary),.5);
 }
 
 .vis-ad-w-p-vc-gc {
@@ -1222,7 +1226,7 @@ li.vis-page-item-select {
 
 
 .vis-w-p-header-icon-f {
-    background: rgba(var(--v-c-on-secondary), 0.3);
+    /* background: rgba(var(--v-c-on-secondary), 0.2); */
     border-radius: 50%;
     width: 35px;
     height: 35px;
@@ -1230,6 +1234,22 @@ li.vis-page-item-select {
     align-items: center;
     justify-content: center;
     margin-right: 10px;
+    position: relative;
+    overflow: hidden;
+}
+.vis-w-p-header-icon-f:after {
+    position: absolute;
+    content: '';
+    width: 35px;
+    height: 35px;
+    background: rgba(var(--v-c-primary), 1);
+    filter: brightness(0.8);
+    z-index: 0;
+}
+
+.vis-w-p-header-icon-f span {
+    position: relative;
+    z-index: 1;
 }
 
 .vis-w-p-header-Label-f {
