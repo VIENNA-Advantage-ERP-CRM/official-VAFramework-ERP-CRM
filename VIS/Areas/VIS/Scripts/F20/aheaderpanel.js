@@ -69,7 +69,7 @@
                         if (colValue || mField.getDisplayType() == VIS.DisplayType.Image)
                             iControl.setValue(w2utils.encodeTags(colValue));
                         else {
-                            iControl.setValue("&nbsp;", true);
+                            iControl.setValue("- -", true);
                         }
 
                     }
@@ -168,7 +168,7 @@
                             iControl.setValue(w2utils.encodeTags(colValue));
                         }
                         else {
-                            iControl.setValue("&nbsp;", true);
+                            iControl.setValue("- -",true);
                         }
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/

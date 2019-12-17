@@ -1530,6 +1530,10 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
         }
     }
     this.dynamicDisplay(col);	//	 -1 = all
+    if (this.vHeaderPanel) {
+        this.vHeaderPanel.navigate();
+    }
+
 }; //  dataStatusChanged
 
 VIS.GridController.prototype.includeTab = function (gc) {
