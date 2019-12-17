@@ -919,7 +919,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
 }
 
 .vis-ad-w-p-a-m-dlist {
-    min-height: 35px;
+    /*min-height: 35px;*/
     display: none;
 }
 
