@@ -454,6 +454,9 @@
 
     VIS.GridController.prototype.onSizeChanged = function (isOpened) {
         this.multiRowResize();
+        if (this.vIncludedGC) {
+            this.vIncludedGC.multiRowResize();
+        }
     };
 
 

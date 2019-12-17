@@ -4972,6 +4972,22 @@
         return (this.vo.DisplayLength >= 30);
     };
 
+    GridField.prototype.getFieldColSpan = function () {
+        //	if (m_vo.displayType == DisplayType.String 
+        //		|| m_vo.displayType == DisplayType.Text 
+        //		|| m_vo.displayType == DisplayType.Memo
+        //		|| m_vo.displayType == DisplayType.TextLong
+        //		|| m_vo.displayType == DisplayType.Image)
+        if (this.vo.DisplayLength <= 9)
+            return 1;
+        if (this.vo.DisplayLength <= 19)
+            return 2;
+        if (this.vo.DisplayLength <= 29)
+            return 3;
+        return 4;
+    };
+
+
     GridField.prototype.getIsMandatory = function (checkContext) {
 
         //  Do we have mandatory logic

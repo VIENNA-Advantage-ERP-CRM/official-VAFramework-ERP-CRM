@@ -55,19 +55,29 @@
 
         var lstScript = VAdvantage.ModuleBundles.GetScriptBundles(); //Get All Script Bundle
 
+        var isNewPath = false;
+
         foreach (var b in lstScript)
         {
             if (!BundleTable.Bundles.Contains(b))
             {
                 BundleTable.Bundles.Add(b); //Add in Mvc Bundlw Table
             }
+
+            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v"))
+            {
+                isNewPath = true;
+            }
         }
+
+
+
 
         List<string> paths = new List<string>();
 
         foreach (Bundle b in BundleTable.Bundles)
         {
-            if (b.Path.EndsWith("bundles/jquery") || b.Path.EndsWith("bundles/boot"))
+            if (isNewPath && (b.Path.EndsWith("bundles/jquery") || b.Path.EndsWith("bundles/boot")))
             {
                 continue;
             }
