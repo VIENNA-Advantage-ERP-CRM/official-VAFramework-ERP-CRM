@@ -339,12 +339,15 @@
     color: rgba(var(--v-c-on-primary),1);
     cursor: pointer;
     font-size: .875rem;
+    overflow: hidden;
 }
 
     .vis-ad-w-p-tb-advsrch li, .vis-ad-w-p-tb-advsrch li > div {
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        height: 100%;
     }
 
 
@@ -845,6 +848,7 @@ label.vis-css-treewindow-selected, label.vis-css-treewindow-selected:before {
     grid-column: 2/2;
     display: flex;
     color: rgba(var(--v-c-on-secondary),1);
+    background-color: rgba(var(--v-c-secondary),.5);
 }
 
 .vis-ad-w-p-vc-gc {
