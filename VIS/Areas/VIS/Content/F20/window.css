@@ -339,12 +339,15 @@
     color: rgba(var(--v-c-on-primary),1);
     cursor: pointer;
     font-size: .875rem;
+    overflow: hidden;
 }
 
     .vis-ad-w-p-tb-advsrch li, .vis-ad-w-p-tb-advsrch li > div {
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        height: 100%;
     }
 
 
