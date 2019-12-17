@@ -116,10 +116,10 @@
 
             setColumns(columnIndex);
             addRow();
-            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="show">' +
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="hide">' +
                             '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
                             '<span class="vis-ev-col-fg-more" style="display:none"><i class="fa fa-ellipsis-h"></i></span>'+
-                                '<i class= "fa fa-angle-up">'+
+                                '<i class= "fa fa-angle-up  vis-ev-col-fg-rotate">'+
                             '</span>' +
                           '</div>');
 
@@ -175,6 +175,7 @@
                     groupToCompsMap[oldFieldGroup] = fieldList;
                 }
                 fieldList.push(mField);
+                fieldToCompParentMap[mField.getColumnName()].hide();
             }
         };
 
@@ -370,7 +371,7 @@
 
             //new design container
             if (label != null || editor != null) {
-                addFieldToGroupList(mField);
+                
                 var ctnr = null;
                 if (sameLine) {
                     if (columnIndex == 1) {
@@ -400,7 +401,7 @@
                 }
 
                 fieldToCompParentMap[mField.getColumnName()] = ctnr;
-
+                addFieldToGroupList(mField);
                 colDescHelpList[mField.getColumnName()] = {
                     'desc': mField.getDescription(),
                     'help': mField.getHelp()
