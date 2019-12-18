@@ -869,11 +869,22 @@ namespace VAdvantage.Model
                     sb.Append("SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + GetAD_Table_ID());
                     string tableName = Util.GetValueOfString(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
                     sb.Clear();
-                    sb.Append("SELECT COUNT(AD_Client_ID) FROM " + tableName + "_Ver");
-                    if (Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx())) > 0)
+
+                    DatabaseMetaData md = new DatabaseMetaData();
+
+                    //get columns of a table
+                    DataSet dt = md.GetColumns("", DataBase.DB.GetSchema(), tableName + "_Ver");
+                    md.Dispose();
+
+                    // check whether version table exists in database
+                    if (dt != null && dt.Tables[0] != null && dt.Tables[0].Rows.Count > 0)
                     {
-                        log.SaveError("VDE", Utility.Msg.GetElement(GetCtx(), "VersionDataExists"));
-                        return false;
+                        sb.Append("SELECT COUNT(AD_Client_ID) FROM " + tableName + "_Ver");
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx())) > 0)
+                        {
+                            log.SaveError("VDE", Utility.Msg.GetElement(GetCtx(), "VersionDataExists"));
+                            return false;
+                        }
                     }
                 }
             }
