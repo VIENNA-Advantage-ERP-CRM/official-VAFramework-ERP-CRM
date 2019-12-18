@@ -213,10 +213,22 @@ namespace VIS.Helpers
             var h = "";
             if (windowNo != "")
             {
-                h += "<li  data-value='" + id + "' data-summary='N'><img src='" + GetImageURI(img, baseUrl) + "' />" +
-                    "<a href='javascript:void(0)' data-value='" + id + "' data-action='" + action + "' data-actionid =" + aid + "> " + text + "</a>";
-                h += "<span class='vis-treewindow-span'><span class='vis-css-treewindow-arrow-up'></span></span>";
+                h += "<li  data-value='" + id + "' data-summary='N'>" +
+                    "<a href='javascript:void(0)' data-value='" + id + "' data-action='" + action + "' data-actionid =" + aid + "> ";
+
+                h += "<span " + GetSpanClass(img);
+
+                if (_ctx.GetIsRightToLeft())
+                {
+                    h += " style='float:right;margin:1px 0px 0px 10px;' ";
+                }
+
+                h += " ></span>" + text + "</a>";
+                h += "<span class='vis-treewindow-span'>";
+                h +=  "<span class='vis-css-treewindow-arrow-up'></span></span>";
                 h += "</li>";
+
+
             }
             else
             {
@@ -225,7 +237,7 @@ namespace VIS.Helpers
                      "<span " + GetSpanClass(img);
                 if (_ctx.GetIsRightToLeft())
                 {
-                    h += " Style='float:right;margin:1px 0px 0px 10px;' ";
+                    h += " style='float:right;margin:1px 0px 0px 10px;' ";
                 }
 
                 h += " ></span>" + text + "</a>";
