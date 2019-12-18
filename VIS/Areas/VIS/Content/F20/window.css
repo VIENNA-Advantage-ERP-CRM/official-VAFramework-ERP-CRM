@@ -386,7 +386,7 @@
 }
 
 .vis-ad-w-p-tb-rc-action {
-    margin: 0 5px;
+    margin: 0 10px;
     font-size: 1.2rem;
     color: rgba(var(--v-c-on-secondary), 1);
     cursor: pointer;

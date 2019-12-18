@@ -963,7 +963,7 @@
                                         for (var a in data.lstUserImg) {
                                             if (data.lstUserImg[a].AD_Image_ID == data.lstFollowups[cnt].AD_Image_ID) {
                                                 if (data.lstUserImg[a].UserImg != "NoRecordFound" && data.lstUserImg[a].UserImg != "FileDoesn'tExist" && data.lstUserImg[a].UserImg != null) {
-                                                    uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/>";
+                                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>";
                                                 }
                                                 else {
                                                     uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
@@ -1057,7 +1057,7 @@
                                     for (var b in data.lstUserImg) {
                                         if (data.lstUserImg[b].AD_Image_ID == data.lstFollowups[cnt].AD_Image_ID) {
                                             if (data.lstUserImg[b].UserImg != "NoRecordFound" && data.lstUserImg[b].UserImg != "FileDoesn'tExist" && data.lstUserImg[b].UserImg != null) {
-                                                uimg = "<img style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/>"
+                                                uimg = "<div class='vis-feedimgwrap' data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>"
                                             }
                                             else {
                                                 //uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
@@ -1117,7 +1117,7 @@
                             if (user_image !== null) {
 
                                 if (user_image != "NoRecordFound" && user_image != "FileDoesn'tExist") {
-                                    uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' />"
+                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' ><img data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' /></div>"
                                 }
                                 else {
                                     uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"

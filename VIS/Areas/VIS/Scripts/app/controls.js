@@ -4601,21 +4601,21 @@
 
             if (imgPath) {
                 $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath);
-                $img.show();
+                $ctrl.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else if (resImg != null) {
                 $img.attr('src', "data:image/jpg;base64," + resImg);
-                $img.show();
+                $ctrl.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else {
                 $img.attr('src', "data:image/jpg;base64," + resImg);
-                $img.hide();
+                $ctrl.hide();
                 $txt.text("-");
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');
             }
