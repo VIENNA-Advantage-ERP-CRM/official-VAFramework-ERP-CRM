@@ -210,8 +210,10 @@
                         <div id="@divfllcmntID" data-fll="divfllupscmntdata" class="vis-feedDetails">
                             <div class="vis-feedDetails-cmnt" data-fll="fll-cmnt">
                                 @if (item.AD_Image_ID == 0)
-                                {                                    
-                                    <img  data-fll="UID" data-UID="@item.AD_User_ID" style="cursor:pointer;" class="userAvatar-Feeds" src="~/Areas/VIS/Images/home/defaultUser.png" />
+                                {
+                                   
+                                        <i class="fa fa-user"  data-fll="UID" data-UID="@item.AD_User_ID"></i>
+                                    
                                 }
                                 else
                                 {
@@ -221,11 +223,11 @@
                                         {
                                             if (uitem.UserImg != "NoRecordFound" && uitem.UserImg != "FileDoesn'tExist")
                                             {
-                                    <img  data-fll="UID" data-UID="@item.AD_User_ID"  style="cursor:pointer;"  class="userAvatar-Feeds" src="@uitem.UserImg" alt="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UserImage")" title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UserImage")" />
+                                                <div class="vis-feedimgwrap" data-fll="UID" data-UID="@item.AD_User_ID" ><img data-fll="UID" data-UID="@item.AD_User_ID" class="userAvatar-Feeds" src="@uitem.UserImg" alt="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UserImage")" title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "UserImage")" /></div>
                                             }
                                             else
                                             {
-                                    <i data-fll="UID" data-UID="@item.AD_User_ID" class="fa fa-user"></i>
+                                                <i data-fll="UID" data-UID="@item.AD_User_ID" class="fa fa-user"></i>
                                             }
                                         }
                                     }
@@ -233,11 +235,11 @@
                                 <p>
                                     @if (ViewBag.User_ID == @item.AD_User_ID)
                                     {
-                                        <strong data-fll="UID" data-UID="@item.AD_User_ID" >@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Me")</strong><br />
+                                        <strong data-fll="UID" data-UID="@item.AD_User_ID">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Me")</strong><br />
                                     }
                                     else
                                     {
-                                        <strong data-fll="UID" data-UID="@item.AD_User_ID" >@item.Name</strong><br />
+                                        <strong data-fll="UID" data-UID="@item.AD_User_ID">@item.Name</strong><br />
                                     }
 
                                     @item.ChatData

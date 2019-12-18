@@ -35,7 +35,7 @@
             $root = $("<div class='vis-pro-para-root'>");
             $table = $("<table class='vis-processpara-table'>");
             // $root.append($table);
-            $divButtons = $('<div style="overflow:auto;padding:0 0 10px">');
+            $divButtons = $('<div style="overflow:auto;padding:0 10px 10px">');
             // $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
             $divTable = $('<div class="vis-para-maxheight">');
 
@@ -97,15 +97,16 @@
 
                 var $inputGroup = $('<div class="input-group">');
                 $td3.append($inputGroup);
-
-                $inputGroup.append(c2.getControl());
-                c2.getControl().addClass('vis-custom-select');
+                var controll = c2.getControl();
+                $inputGroup.append(controll);
+                if (controll.is('select'))
+                    controll.addClass('vis-custom-select');
                 //$td3.append(c2.getControl());
                 if (c2.getBtnCount() > 0) {
 
                     if (splitUI) {
-                        if (c2.getControl().attr('type') == "date") {
-                            c2.getControl().css({ 'width': '100%' });
+                        if (controll.attr('type') == "date") {
+                            controll.css({ 'width': '100%' });
                         }
                         else {
                             //c2.getControl().css({ 'width': 'calc(100% - 36px)' });
@@ -137,8 +138,8 @@
                 }
                 else {
                     if (splitUI) {
-                        if (c2.getControl().attr('type') == "date") {
-                            c2.getControl().css({ 'width': '100%' });
+                        if (controll.attr('type') == "date") {
+                            controll.css({ 'width': '100%' });
                         }
                         //c2.getControl().height("26px");
                     }

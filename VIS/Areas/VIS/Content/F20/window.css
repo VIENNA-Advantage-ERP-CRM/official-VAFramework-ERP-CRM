@@ -386,7 +386,7 @@
 }
 
 .vis-ad-w-p-tb-rc-action {
-    margin: 0 5px;
+    margin: 0 10px;
     font-size: 1.2rem;
     color: rgba(var(--v-c-on-secondary), 1);
     cursor: pointer;
@@ -663,9 +663,10 @@
 }
 
 .vis-css-treewindow li {
-    padding-top: 4px;
+    padding-top: 5px;
     padding-bottom: 5px;
 }
+
 
 .vis-css-treewindow input {
     position: absolute;
@@ -693,11 +694,14 @@
 }
 
     .vis-css-treewindow a {
-        color: black;
+        color: rgba(var(--v-c-on-secondary), 1);
         text-decoration: none;
         /*color: #F8F8F8;*/
         display: inline-block;
     }
+.vis-css-treewindow a span {
+    margin: 0 4px;
+}
 
     .vis-css-treewindow > ul {
         /*-- color: #00f;*/
@@ -748,18 +752,20 @@ html[dir="rtl"] .vis-css-treewindow input + label + span + ul {
 .vis-css-treewindow label,
 /*.css-treeview a,*/
 .vis-css-treewindow label::before {
-    display: inline-block;
+    display: inline-flex;
     height: 16px;
     /* line-height: 30px;*/
     vertical-align: top;
     cursor: pointer;
     color: rgba(var(--v-c-on-secondary), 0.8);
+    align-items: center;
 }
 
 .vis-css-treewindow label {
     /*background-position: 18px 0;*/
     margin-right: 0px;
     font-weight: normal;
+    margin-bottom: 0;
 }
 
 .vis-css-treewindow input:checked + label::before {
