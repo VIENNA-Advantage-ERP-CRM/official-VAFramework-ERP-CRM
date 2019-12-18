@@ -35,7 +35,7 @@
             $root = $("<div class='vis-pro-para-root'>");
             $table = $("<table class='vis-processpara-table'>");
             // $root.append($table);
-            $divButtons = $('<div style="overflow:auto;padding:0 0 10px">');
+            $divButtons = $('<div style="overflow:auto;padding:0 10px 10px">');
             // $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
             $divTable = $('<div class="vis-para-maxheight">');
 
