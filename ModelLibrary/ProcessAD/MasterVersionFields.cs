@@ -178,7 +178,7 @@ namespace VAdvantage.Process
             verTab.SetDescription("Version tab for " + tab.GetName());
             verTab.SetHelp("Version tab for " + tab.GetName() + ", to display versions for current record");
             // set order by on Version Window's tab on "Version Valid From column"
-            verTab.SetOrderByClause("VersionValidFrom DESC");
+            verTab.SetOrderByClause("VersionValidFrom DESC, RecordVersion DESC");
             if (!verTab.Save())
             {
                 ValueNamePair vnp = VLogger.RetrieveError();
@@ -328,6 +328,9 @@ namespace VAdvantage.Process
             // Get field Group ID for Versioning
             int AD_FieldGroup_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_FieldGroup_ID FROM AD_FieldGroup WHERE Name = 'Versioning'", null, Get_Trx()));
 
+            // get max seqno + 500 to set seqnumbers for new fields 
+            int SeqNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(SeqNo) + 500 FROM AD_Field WHERE AD_Tab_ID = " + ver_AD_Tab_ID, null, Get_Trx()));
+
             for (int i = 0; i < listDefVerCols.Count; i++)
             {
                 // check if system element exist 
@@ -362,13 +365,15 @@ namespace VAdvantage.Process
                     // Set Field Group for Versioning field
                     if (AD_FieldGroup_ID > 0)
                         verFld.SetAD_FieldGroup_ID(AD_FieldGroup_ID);
-
+                    verFld.SetSeqNo(SeqNo);
                     if (!verFld.Save())
                     {
                         log.Log(Level.SEVERE, "Version Field not saved :: " + verFld.GetName());
                         Get_TrxName().Rollback();
                         return Msg.GetMsg(GetCtx(), "FieldNotSaved") + " :: " + verFld.GetName();
                     }
+                    else
+                        SeqNo = SeqNo + 10;
                 }
             }
             return "";
