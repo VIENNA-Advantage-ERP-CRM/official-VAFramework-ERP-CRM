@@ -3493,7 +3493,7 @@
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             //console.log(newValue);
-            newValue = Number(this.format.GetFormatedValue(newValue));
+            //newValue = Number(this.format.GetFormatedValue(newValue));
             // newValue = Globalize.format(newValue, "n0");
             this.ctrl.val(newValue);
             //this.setBackground("white");

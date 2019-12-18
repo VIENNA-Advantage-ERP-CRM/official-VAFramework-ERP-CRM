@@ -56,6 +56,8 @@ namespace VAdvantage.Login
         private static String AD_Language_zh_HK = "zh_HK";//y
         private static String AD_Language_es_UY = "es_UY"; //y
         private static String AD_Language_ar_SA = "ar_SA"; //y
+        private static String AD_Language_en_IN = "en_IN"; //y
+        private static String AD_Language_sq_AL = "sq_AL"; //y
 
 
         static private Language[] _languages = 
@@ -132,6 +134,10 @@ namespace VAdvantage.Login
                     ("\u7b80\u4f53\u4e2d\u6587 (Hongkong)", AD_Language_zh_HK, new System.Globalization.CultureInfo("zh-HK") ,   null, "yyyy-MM-dd", MediaSize.ISO.A4),
                     new Language 
                     ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR-SA)", AD_Language_ar_SA, new System.Globalization.CultureInfo("ar-SA") ,   null, "dd.MM.yyyy", MediaSize.ISO.A4),
+                     new Language
+                    ("English (India)", AD_Language_en_IN, new System.Globalization.CultureInfo("en-IN") ,    false, "DD-MM-YYYY", MediaSize.ISO.A4),
+                      new Language
+                    ("Albanian (Albania)", AD_Language_sq_AL, new System.Globalization.CultureInfo("sq-AL") ,    false, "dd/mm/yyyy", MediaSize.ISO.A4),
         };
 
 
