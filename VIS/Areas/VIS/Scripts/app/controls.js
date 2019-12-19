@@ -476,6 +476,7 @@
             if (displayType == VIS.DisplayType.Image) {
                 var image = new VImage(columnName, isMandatory, true, windowNo);
                 //image.setField(mField);
+                image.setIsHeaderPanelRequest(true);
                 ctrl = image;
             }
             else {
@@ -4528,6 +4529,7 @@
     function VImage(colName, mandatoryField, isReadOnly, winNo) {
         this.values = null;
         this.log = VIS.Logging.VLogger.getVLogger("VImage");
+        var isHeaderPanelRequest = false;
         var windowNo = winNo;
         var columnName = colName;// "AD_Image_ID";
         var $img = $("<img >");
@@ -4537,6 +4539,7 @@
 
         $ctrl = $('<button >', { type: 'button', name: columnName });
         $txt.css("color", "blue");
+
 
 
 
@@ -4601,25 +4604,38 @@
 
             if (imgPath) {
                 $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath);
-                $ctrl.show();
+                if (isHeaderPanelRequest)
+                    $ctrl.show();
+                else
+                    $img.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else if (resImg != null) {
                 $img.attr('src', "data:image/jpg;base64," + resImg);
-                $ctrl.show();
+                if (isHeaderPanelRequest)
+                    $ctrl.show();
+                else
+                    $img.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else {
                 $img.attr('src', "data:image/jpg;base64," + resImg);
-                $ctrl.hide();
+                if (isHeaderPanelRequest)
+                    $ctrl.hide();
+                else
+                    $img.hide();
                 $txt.text("-");
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');
             }
         };
+
+        this.setIsHeaderPanelRequest = function (isHeader) {
+            isHeaderPanelRequest = isHeader;
+        }
 
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);

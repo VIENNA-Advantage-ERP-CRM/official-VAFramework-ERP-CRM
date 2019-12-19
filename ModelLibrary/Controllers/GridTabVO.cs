@@ -943,6 +943,8 @@ namespace VAdvantage.Controller
             clone.HeaderItems = HeaderItems;
             clone.HeaderHeight = HeaderHeight;
             clone.HeaderWidth = HeaderWidth;
+            clone.HeaderPadding = HeaderPadding;
+            clone.HeaderBackColor = HeaderBackColor;
            
 
             clone.fields = new List<GridFieldVO>();

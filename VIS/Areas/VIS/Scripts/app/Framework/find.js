@@ -660,7 +660,8 @@
 
             tblGrid.on("click", function (e) {
                 if (isBusy) return;
-                if (e.target.nodeName === "IMG") {
+                // if (e.target.nodeName === "IMG") {
+                if ($(e.target).hasClass('vis-delete')) {
                     var index = $(e.target).data("index");
                     dsAdvanceData.splice(index, 1);//  .Tables[0].Rows.RemoveAt(index);
                     MUserQuery.deleteLines($(e.target).data("userquery"));
