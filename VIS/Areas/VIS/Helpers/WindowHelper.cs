@@ -14,7 +14,7 @@ using VAdvantage.Process;
 using VAdvantage.Logging;
 using VIS.DataContracts;
 using VIS.Classes;
-using System.Data.OracleClient;
+
 using System.Data.SqlClient;
 
 namespace VIS.Helpers

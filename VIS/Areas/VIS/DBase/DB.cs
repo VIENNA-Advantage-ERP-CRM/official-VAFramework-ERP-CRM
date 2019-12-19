@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Data.OracleClient;
+
 using System.Data;
 using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using System.Data.SqlClient;
 using VIS.DataContracts;
-
+using Oracle.ManagedDataAccess.Client;
 
 namespace VIS.DBase
 {
