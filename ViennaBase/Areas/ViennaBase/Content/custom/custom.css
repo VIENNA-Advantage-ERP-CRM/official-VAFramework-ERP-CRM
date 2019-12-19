@@ -42,7 +42,7 @@
 /* align middle row data*/
 .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data {
     margin: 0px;
-    padding: 0px;
+    padding: 0px 5px;
     vertical-align: middle;
 }
 
@@ -360,15 +360,22 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
             }
 
     .w2ui-grid .w2ui-editable {
+        box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, .2);
+        height: 32px;
     }
 
-        .w2ui-grid .w2ui-editable input {
-            padding: 1px;
-            min-height: 36px;
+        .w2ui-grid .w2ui-editable input, .w2ui-grid .w2ui-editable select {
+            padding: 4px;
+            min-height: 32px;
+            font-size: .875rem;
+            height: 32px;
         }
+.w2ui-grid .w2ui-editable select{
+    background-position: 98%;
+}
 
             .w2ui-grid .w2ui-editable input.w2ui-select {
-                height: 36px;
+                height: 30px;
             }
 
 /**************************************/
