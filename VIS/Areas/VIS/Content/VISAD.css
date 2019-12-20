@@ -2927,7 +2927,8 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
         list-style: none;
         width: 100%;
         float: left;
-        display: flex;
+        /*display: flex;*/
+        margin-left: 5px;
         margin-bottom: 2px;
     }
 
@@ -2993,6 +2994,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     margin-top: 10px;
     width: 100%;
     float: left;
+    margin-bottom:10px;
 }
 
 .vis-btnDelete {
