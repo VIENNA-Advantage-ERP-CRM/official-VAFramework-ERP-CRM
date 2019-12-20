@@ -327,17 +327,21 @@ namespace VAdvantage.Controller
                         vo.ImageName = Utility.Util.GetValueOfString(dr[i]);
                     }
                     // new column added for maintain versions
-                    else if (columnName.Equals("ISMAINTAINVERSIONS"))
+                    else if (columnName.Equals("ISMAINTAINVERSIONS", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.IsMaintainVersions = "Y".Equals(dr[i].ToString());
                     }
-                    else if (columnName.Equals("CellSpace"))
+                    else if (columnName.Equals("CellSpace", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.CellSpace = Utility.Util.GetValueOfInt(dr[i]);
                     }
-                    else if (columnName.Equals("FieldBreadth"))
+                    else if (columnName.Equals("FieldBreadth", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.FieldBreadth = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("IsLineBreak", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.LineBreak = "Y".Equals(dr[i].ToString());
                     }
                 }
                 if (vo.Header == null)

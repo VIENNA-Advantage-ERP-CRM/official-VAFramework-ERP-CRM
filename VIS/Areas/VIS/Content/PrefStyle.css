@@ -370,7 +370,7 @@ html[dir="rtl"] .VIS_Pref_notification-check {
 .VIS_Pref_col-50 {
     width: 50%;
     float: left;
-    margin-bottom: -5px;
+    margin-bottom: 5px;
     margin-top: 5px;
 }
 
@@ -514,9 +514,16 @@ html[dir="rtl"] .VIS_Pref_notification-check {
     font-weight: 200;
     font-family: helvetica;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     margin-top: 15px;
     text-align: center;
+}
+.VIS_Pref_col-50 .VIS_Pref_Label_Font {
+    padding-left: 5px;
+}
+
+.VIS_Pref_pass + label {
+    padding-left: 10px;
 }
 .VIS_Pref_Savebtn {
     margin-bottom: 0;
@@ -1042,6 +1049,13 @@ html[dir="rtl"] .right-inner-addon a {
     height: 300px;
     width: 300px;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.VIS-VImage-testContent-wrap img {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .VIS-VImage-testBottom-btn {

@@ -118,7 +118,7 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
 
         el.addClass('w2ui-editable')
            .append(ctrl);
-        ctrl.css({ 'width': '100%' });
+        ctrl.css({ 'width': el.width()+50});
 
         edit.ctrl.gridPos = { index: index, col: column, dialog: false, recid: recid };
 
