@@ -287,6 +287,9 @@
                 addRow();
                 columnIndex = 0;
             }
+            if (allControlCount % 6==0) {
+                ++columnIndex;
+            }
 
             if (label != null) {
                 //if (sameLine) {

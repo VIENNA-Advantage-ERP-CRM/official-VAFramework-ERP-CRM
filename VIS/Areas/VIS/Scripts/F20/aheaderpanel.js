@@ -24,7 +24,7 @@
          * @param {any} _gTab
          * @param {any} $parentRoot
          */
-        this.setHeaderLayout = function (_gTab) {
+        this.setHeaderLayout = function (_gTab, backColor) {
             //if Tab is market as Header Panel, only then execute further code.
             if (_gTab.getIsHeaderPanel()) {
                 $self.headerItems = _gTab.getHeaderPanelItems();
@@ -34,7 +34,7 @@
                 if ($self.headerItems) {
                     // Create Root for header Panel
                     $root = $('<div class="vis-ad-w-p-header_root_common">');
-                    var headerCustom = this.headerParentCustomUISettings("");
+                    var headerCustom = this.headerParentCustomUISettings(backColor);
                     $parentRoot.addClass(headerCustom);
                   
                    
@@ -103,6 +103,7 @@
                         var rowSpan = headerItem.RowSpan;
                         var justyFy = headerItem.JustifyItems;
                         var alignItem = headerItem.AlignItems;
+                        var fieldPadding = headerItem.Padding;
                         var backgroundColor = headerItem.BackgroundColor;
                         if (!backgroundColor) {
                             backgroundColor = '';
@@ -125,7 +126,7 @@
 
                         //Apply HTML Style
                         var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
-                            backgroundColor, FontColor, fontSize);
+                            backgroundColor, FontColor, fontSize, fieldPadding);
 
                         $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
 
@@ -327,18 +328,21 @@
     };
 
     HeaderPanel.prototype.init = function (gTab) {
-        this.setHeaderLayout(gTab);
+
+        var backColor = gTab.getHeaderBackColor();
+        this.setHeaderLayout(gTab, backColor);
         var root = this.getRoot();
+        
         var $parentRoot = this.getParent();
         var rootClass = "vis-w-p-Header-Root-v";//Fixed Class for vertical Alignment
         var alignmentHorizontal = this.gTab.getHeaderHorizontal();
         var height = this.gTab.getHeaderHeight();
         var width = this.gTab.getHeaderWidth();
-        var backColor = this.gTab.getHeaderBackColor();
+        
         var padding = this.gTab.getHeaderPadding();
        
 
-        var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, backColor, padding);
+        var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, "", padding);
         root.addClass(rootCustomStyle);
      
         if (alignmentHorizontal) {
@@ -394,7 +398,7 @@
     HeaderPanel.prototype.fieldGroupContainerUISettings = function (columns, rows, backcolor, padding, itemNo) {
         var dynamicClassName = "vis-ad-w-p-fg_container_" + rows + "_" + columns + "_" + this.windowNo + "_" + itemNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {");
-        this.dynamicStyle.push('grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background-color:' + backcolor + ';padding:' + padding);
+        this.dynamicStyle.push('grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background:' + backcolor + ';padding:' + padding);
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };
@@ -425,7 +429,7 @@
         else {
             this.dynamicStyle.push("flex-direction:column;width: " + width + "; ");
         }
-        this.dynamicStyle.push("background-color:" + backcolor + ";padding:" + padding);
+        this.dynamicStyle.push("background:" + backcolor + ";padding:" + padding);
 
         this.dynamicStyle.push("} ");
         return dynamicClassName;
@@ -443,10 +447,10 @@
         this.dynamicStyle.push(" ." + dynamicClassName + " {flex:1;");
         //Set background Color of Header Panel. If no color found then get color from Theme
         if (backColor) {
-            this.dynamicStyle.push('background-color: ' + backColor);
+            this.dynamicStyle.push('background: ' + backColor);
         }
         else {
-            this.dynamicStyle.push('background-color: ' + 'rgba(var(--v-c-primary))');
+            this.dynamicStyle.push('background: ' + 'rgba(var(--v-c-primary))');
         }
 
         this.dynamicStyle.push("} ");
@@ -463,18 +467,12 @@
     * @param {any} startRow
     * @param {any} rowSpan
     */
-    HeaderPanel.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize) {
-        //var headerStyle = mField.getHeaderStyle();
+    HeaderPanel.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize,padding) {
         var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
-        //if (headerStyle) {
-        //    this.dynamicStyle.push(" ." + dynamicClassName + " {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";" + headerStyle + ";");
-        //}
-        //else {
         this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
-        //}
 
         this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]);
-        this.dynamicStyle.push(";background-color:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor);
+        this.dynamicStyle.push(";background:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding );
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };
