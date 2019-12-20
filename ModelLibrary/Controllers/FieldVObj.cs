@@ -262,6 +262,7 @@ namespace VAdvantage.Controller
         public bool IsMaintainVersions = false;
         public int CellSpace = 0;
         public int FieldBreadth = 0;
+        public bool LineBreak= false;
 
 
 

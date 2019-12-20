@@ -518,6 +518,13 @@ html[dir="rtl"] .VIS_Pref_notification-check {
     margin-top: 15px;
     text-align: center;
 }
+.VIS_Pref_col-50 .VIS_Pref_Label_Font {
+    padding-left: 5px;
+}
+
+.VIS_Pref_pass + label {
+    padding-left: 10px;
+}
 .VIS_Pref_Savebtn {
     margin-bottom: 0;
 }
