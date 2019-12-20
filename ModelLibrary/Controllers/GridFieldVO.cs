@@ -339,6 +339,10 @@ namespace VAdvantage.Controller
                     {
                         vo.FieldBreadth = Utility.Util.GetValueOfInt(dr[i]);
                     }
+                    else if (columnName.Equals("IsLineBreak", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.LineBreak = "Y".Equals(dr[i].ToString());
+                    }
                 }
                 if (vo.Header == null)
                     vo.Header = vo.ColumnName;
