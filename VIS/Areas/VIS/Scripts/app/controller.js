@@ -1248,24 +1248,6 @@
         }
     };
 
-
-    //GridTab.prototype.getHeaderName = function () {
-    //    return this.vo.HeaderName;
-    //};
-
-
-    //GridTab.prototype.getHeaderTotalColumn = function () {
-    //    return this.vo.HeaderTotalColumn;
-    //};
-
-    //GridTab.prototype.getHeaderTotalRow = function () {
-    //    return this.vo.HeaderTotalRow;
-    //};
-
-    //GridTab.prototype.getAD_GridLayout_ID = function () {
-    //    return this.vo.AD_GridLayout_ID;
-    //};
-
     GridTab.prototype.getHasPanel = function () {
         return this.hasPanel;
     }
@@ -6144,6 +6126,14 @@
 
     GridField.prototype.getImageName = function () {
         return this.vo.ImageName;
+    };
+
+    GridField.prototype.getCellSpace = function () {
+        return this.vo.CellSpace;
+    };
+
+    GridField.prototype.getFieldBreadth = function () {
+        return this.vo.FieldBreadth;
     };
 
 

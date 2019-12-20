@@ -623,7 +623,7 @@ namespace VAdvantage.Controller
                         };
 
                         DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
+                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             hGrid.HeaderItems = new Dictionary<int, object>();
@@ -641,7 +641,8 @@ namespace VAdvantage.Controller
                                     StartRow = Convert.ToInt32(row["StartRow"]),
                                     BackgroundColor= Convert.ToString(row["BackgroundColor"]),
                                     FontColor = Convert.ToString(row["FontColor"]),
-                                    FontSize = Convert.ToString(row["FontSize"]),
+                                    Padding = Convert.ToString(row["Padding"]),
+
                                 };
                             }
                         }

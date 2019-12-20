@@ -331,6 +331,14 @@ namespace VAdvantage.Controller
                     {
                         vo.IsMaintainVersions = "Y".Equals(dr[i].ToString());
                     }
+                    else if (columnName.Equals("CellSpace"))
+                    {
+                        vo.CellSpace = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("FieldBreadth"))
+                    {
+                        vo.FieldBreadth = Utility.Util.GetValueOfInt(dr[i]);
+                    }
                 }
                 if (vo.Header == null)
                     vo.Header = vo.ColumnName;
@@ -818,6 +826,8 @@ namespace VAdvantage.Controller
             clone.FontClass = FontClass;
             clone.ImageName = ImageName;
             clone.IsMaintainVersions = IsMaintainVersions;
+            clone.CellSpace = CellSpace;
+            clone.FieldBreadth = FieldBreadth;
 
 
             return clone;

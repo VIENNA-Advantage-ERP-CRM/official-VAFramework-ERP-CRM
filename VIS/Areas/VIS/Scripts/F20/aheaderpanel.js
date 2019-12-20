@@ -103,6 +103,7 @@
                         var rowSpan = headerItem.RowSpan;
                         var justyFy = headerItem.JustifyItems;
                         var alignItem = headerItem.AlignItems;
+                        var fieldPadding = headerItem.Padding;
                         var backgroundColor = headerItem.BackgroundColor;
                         if (!backgroundColor) {
                             backgroundColor = '';
@@ -125,7 +126,7 @@
 
                         //Apply HTML Style
                         var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
-                            backgroundColor, FontColor, fontSize);
+                            backgroundColor, FontColor, fontSize, fieldPadding);
 
                         $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
 
@@ -466,12 +467,12 @@
     * @param {any} startRow
     * @param {any} rowSpan
     */
-    HeaderPanel.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize) {
+    HeaderPanel.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize,padding) {
         var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
         this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
 
         this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]);
-        this.dynamicStyle.push(";background:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor);
+        this.dynamicStyle.push(";background:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding );
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };

@@ -260,6 +260,8 @@ namespace VAdvantage.Controller
         public string ImageName = "";
         // for checking whether Maintain Versions is marked on Column
         public bool IsMaintainVersions = false;
+        public int CellSpace = 0;
+        public int FieldBreadth = 0;
 
 
 
