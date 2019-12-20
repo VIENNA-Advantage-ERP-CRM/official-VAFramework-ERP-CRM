@@ -373,10 +373,9 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 .w2ui-grid .w2ui-editable select{
     background-position: 98%;
 }
-
-            .w2ui-grid .w2ui-editable input.w2ui-select {
-                height: 30px;
-            }
+.w2ui-grid .w2ui-editable input.w2ui-select {
+    height: 30px;
+}
 
 /**************************************/
 
