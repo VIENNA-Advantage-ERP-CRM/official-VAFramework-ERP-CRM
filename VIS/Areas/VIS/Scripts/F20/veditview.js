@@ -11,6 +11,7 @@
         var $table;
         var $row = null;
         var $td0, $td1, $td11, $td12, $td2, $td3, $td31, $td32, $td4;
+        var td1RSpan = 1, td2RSpan = 1, td3RSpan = 1, td4RSpan = 1;
 
         /** Map of group name to list of components in group. */
         //control = field array
@@ -21,6 +22,9 @@
 
         var fieldToCompParentMap = {};
         var colDescHelpList = {};
+
+       
+        
        
         var lastPopover = null;
         function initComponent() {
@@ -150,7 +154,6 @@
             }
         };
 
-
         function addCompToFieldList(name, comp) {
 
             if (compToFieldMap[name])
@@ -178,7 +181,6 @@
                 fieldToCompParentMap[mField.getColumnName()].hide();
             }
         };
-
 
         function setColumns() {
             if ($td0 != null) {
@@ -243,6 +245,41 @@
             }
         };
 
+        function adjustCellSpace(space) {
+
+            if (columnIndex == 0) {
+                if (space == 1) {
+                    $td0.remove();
+                }
+                else if (space == 2) {
+                    $td0.remove();
+                    $td1.remove();
+                }
+                else if (space == 3) {
+                    $td0.remove();
+                    $td1.remove();
+                    $td2.remove();
+                }
+            }
+            else if (columnIndex == 1) {
+                if (space == 1) {
+                    $td1.remove();
+                }
+                else if (space >= 2) {
+                    $td1.remove();
+                    $td2.remove();
+                    space = 2;
+                }
+            }
+            else if (columnIndex == 2) {
+                if (space >= 1) {
+                    $td2.remove();
+                    space = 1;
+                }
+            }
+            columnIndex += space;
+        }
+
         this.addField = function (editor, mField) {
 
             var insertRow = false;
@@ -262,6 +299,8 @@
             if (addGroup(mField.getFieldGroup(), columnIndex)) {
                 sameLine = false;
             }
+
+           
 
             if (sameLine) {
                 ++columnIndex;
@@ -287,9 +326,11 @@
                 addRow();
                 columnIndex = 0;
             }
-            if (allControlCount % 6==0) {
-                ++columnIndex;
-            }
+
+            var cellSpace = mField.getCellSpace();
+            if (cellSpace > 0) {
+                adjustCellSpace(cellSpace);
+            };
 
             if (label != null) {
                 //if (sameLine) {
@@ -439,8 +480,16 @@
                         ctnr = $td3;
                     }
                 } else {
-                    insertCWrapper(label, editor, $td0, mField);
-                    ctnr = $td0;
+                    if (columnIndex == 1) 
+                        ctnr = $td1;
+                    else if (columnIndex == 2) 
+                        ctnr = $td2;
+                    else if (columnIndex == 3) 
+                        ctnr = $td3;
+                    else
+                        ctnr = $td0;
+
+                    insertCWrapper(label, editor, ctnr, mField);
                 }
 
                 

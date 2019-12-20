@@ -6136,6 +6136,10 @@
         return this.vo.FieldBreadth;
     };
 
+    GridField.prototype.getLineBreak = function () {
+        return this.vo.LineBreak;
+    };
+
 
     /**
      *  Refresh Lookup if the lookup is unstable

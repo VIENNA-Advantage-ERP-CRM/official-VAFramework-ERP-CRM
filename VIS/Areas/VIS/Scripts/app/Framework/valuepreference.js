@@ -77,18 +77,18 @@
     '<label class="VIS_Pref_Label_Font" style="width:15% ;text-align: left;" id="vlblValueText_' + $self.windowNum + '">test</label>' +
     '<input class="VIS_Pref_pass vis-gc-vpanel-table-readOnly" style="float:none;width:250px" type="text" readonly="true" id="vtxtSearchKey_' + $self.windowNum + '" />' +
     '<label class="VIS_Pref_Label_Font" style="width:auto" id="vlblValue_' + $self.windowNum + '">test</label>' +
-    '</div><div style="width: 100%; float: left">    <label style="float: none; width:15%;text-align:left" class=" VIS_Pref_Label_Font" id="vlblLevelText_' + $self.windowNum + '">test</label>' +
+    '</div><div style="width: 100%; float: left">    <label style="float: left; width:15%;text-align:left" class=" VIS_Pref_Label_Font" id="vlblLevelText_' + $self.windowNum + '">test</label>' +
     '<div style="width: 83%; display: inline-block"> <div class="VIS_Pref_col-50"><input  type="checkbox" id="vchkTenant_' + $self.windowNum + '" ><label class="VIS_Pref_Label_Font">test</label>' +
         '</div>   <div class="VIS_Pref_col-50"> <input  type="checkbox" id="vchkOrg_' + $self.windowNum + '" /><label class="VIS_Pref_Label_Font">test</label>' +
-        '</div> </div> <div style="width: 100%; float:left;">  <div class="VIS_Pref_col-50">' +
+        '</div> <div class="VIS_Pref_col-50">' +
             '<input  type="checkbox" id="vchkUser_' + $self.windowNum + '" /><label class="VIS_Pref_Label_Font">test</label>' +
         '</div>  <div class="VIS_Pref_col-50"> <input  type="checkbox" id="vchkWindow_' + $self.windowNum + '" /><label class="VIS_Pref_Label_Font">test</label>' +
-        '</div> </div></div><div id="divMsg_' + $self.windowNum + '" style="width: 100%; float: left; margin-bottom: 5px; margin-top: 5px; text-align: left">' +
+        '</div> </div><div id="divMsg_' + $self.windowNum + '" style="width: 100%; float: left; margin-bottom: 5px; margin-top: 5px; text-align: left">' +
     '<label class="VIS_Pref_Label_Font" id="vlblMsg_' + $self.windowNum + '">test</label>' +
-'</div><div style="height: 10%; width: 100%; float: left"> <button type="button" id="btnDelete_' + $self.windowNum + '"  class="VIS_Pref_btn-2"  style="margin-bottom:0px;margin-top:0px;float: left" value="Ok" role="button" aria-disabled="false">' +
+'</div><div style="height: 10%; width: 100%; float: left"> <button type="button" id="btnDelete_' + $self.windowNum + '"  class="VIS_Pref_btn-2"  style="float: left" value="Ok" role="button" aria-disabled="false">' +
         '<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/Delete-W24.PNG" />' +
-    '</button> <input id= "btnCancel_' + $self.windowNum + '" class="VIS_Pref_btn-2" style="margin-bottom:0px;margin-top:0px; float:right" type="button" value="Cancel" />' +
-    '<input id="btnOK_' + $self.windowNum + '"  class="VIS_Pref_btn-2" style="margin-bottom:0px;margin-top:0px ;float:right; margin-right:10px" type="button" value="Ok" />' +
+    '</button> <input id= "btnCancel_' + $self.windowNum + '" class="VIS_Pref_btn-2" style="float:right" type="button" value="Cancel" />' +
+    '<input id="btnOK_' + $self.windowNum + '"  class="VIS_Pref_btn-2" style="float:right; margin-right:10px" type="button" value="Ok" />' +
     '</div>';
 
             $root.append(html);
@@ -130,13 +130,13 @@
                 this.lblLevelText.css("text-align", "right");
                 this.chkOrg.css("margin-right", "0px");
                 this.chkTenant.css("margin-right", "37px");
-                this.chkUser.css("margin-right", "72px");
-                this.chkWindow.css("margin-right", "72px");
+                //this.chkUser.css("margin-right", "72px");
+                //this.chkWindow.css("margin-right", "72px");
                 $root.find("#divMsg_" + this.windowNum).css("text-align", "right");
             }
             else {
-                this.chkUser.css("margin-left", "83px");
-                this.chkWindow.css("margin-left", "45px");
+                //this.chkUser.css("margin-left", "83px");
+                //this.chkWindow.css("margin-left", "45px");
             }
 
             // display values in label and textbox
