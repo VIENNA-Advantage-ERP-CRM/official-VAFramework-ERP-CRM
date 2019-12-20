@@ -1250,15 +1250,16 @@ li.vis-page-item-select {
     content: '';
     width: 35px;
     height: 35px;
-    background: rgba(var(--v-c-primary), 1);
-    filter: brightness(0.8);
+    background: rgba(var(--v-c-on-secondary), 0.1);
+    filter: brightness(0.2);
     z-index: 0;
 }
 
-.vis-w-p-header-icon-f span {
-    position: relative;
-    z-index: 1;
-}
+    .vis-w-p-header-icon-f span {
+        position: relative;
+        z-index: 1;
+        display: flex;
+    }
 
 .vis-w-p-header-Label-f {
     /*padding-left: 10px;*/
