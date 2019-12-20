@@ -331,6 +331,14 @@ namespace VAdvantage.Controller
                     {
                         vo.IsMaintainVersions = "Y".Equals(dr[i].ToString());
                     }
+                    else if (columnName.Equals("CellSpace"))
+                    {
+                        vo.CellSpace = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("FieldBreadth"))
+                    {
+                        vo.FieldBreadth = Utility.Util.GetValueOfInt(dr[i]);
+                    }
                 }
                 if (vo.Header == null)
                     vo.Header = vo.ColumnName;
@@ -816,17 +824,11 @@ namespace VAdvantage.Controller
             clone.ShowIcon = ShowIcon;
             clone.AD_Image_ID = AD_Image_ID;
             clone.FontClass = FontClass;
+            clone.ImageName = ImageName;
             clone.IsMaintainVersions = IsMaintainVersions;
+            clone.CellSpace = CellSpace;
+            clone.FieldBreadth = FieldBreadth;
 
-            //         public bool IsHeaderPanelitem = false;
-            //public int HeaderOverrideReference = 0;
-            //public string HeaderStyle = null;
-            //public bool HeaderHeadingOnly = false;
-            //public decimal HeaderSeqno = 0;
-            //public bool HeaderIconOnly = false;
-            //public string HtmlStyle = null;
-            //public bool ShowIcon = false;
-            //public int AD_Image_ID = 0;
 
             return clone;
         }
