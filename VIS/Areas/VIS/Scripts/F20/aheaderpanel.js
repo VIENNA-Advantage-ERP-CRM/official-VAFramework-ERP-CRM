@@ -67,7 +67,7 @@
                         var colValue = getFieldValue(mField);
 
                         if (colValue) {
-                            if (colValue.startsWith("<") && colValue.endsWith(">")) {
+                            if (colValue.startsWith && colValue.startsWith("<") && colValue.endsWith(">")) {
                                 colValue = colValue.replace("<", "").replace(">", "");
                             }
                             if (mField.getDisplayType() == VIS.DisplayType.Image) {
@@ -178,7 +178,7 @@
                         var $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                         var colValue = getFieldValue(mField);
                         if (colValue) {
-                            if (colValue.startsWith("<") && colValue.endsWith(">")) {
+                            if (colValue.startsWith && colValue.startsWith("<") && colValue.endsWith(">")) {
                                 colValue = colValue.replace("<", "").replace(">", "");
                             }
                             if (mField.getDisplayType() == VIS.DisplayType.Image) {
