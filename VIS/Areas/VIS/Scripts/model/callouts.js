@@ -18970,16 +18970,16 @@
         return "";
     };
 
-    /// <summary>
-    /// Get Bank Account Curremcy
-    /// On change of Business Partner
-    /// <param name="ctx">context</param>
-    /// <param name="WindowNo">current Window No</param>
-    /// <param name="mTab">Grid Tab</param>
-    /// <param name="mField">Grid Field</param>
-    /// <param name="value">New Value</param>
-    /// <param name="oldValue">Old Value</param>
-    /// <returns>null or error message</returns>   
+    /**
+     * Get Bank Account Curremcy
+     * @param ctx context
+     * @param windowNo current Window No
+     * @param mTab Grid Tab
+     * @param mField Grid Field
+     * @param value New Value
+     * @param oldValue Old Value
+     * @return Error message or ""
+     */
     CalloutPayment.prototype.BankAccount = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         if (value == null || value.toString() == "") {
@@ -21365,7 +21365,7 @@
                     else {
                         dr = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", mTab.getValue("C_Tax_ID").toString());
                         var Rate = Util.getValueOfDecimal(dr);
-                        if (Rate > 0) {                            
+                        if (Rate > 0) {
                             //Formula for caluculating Tax amount ==>  Amount - Amount / ((Rate / 100) + 1)
                             var TaxAmt = Util.getValueOfDecimal(Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) - (Util.getValueOfDecimal(mTab.getValue("ChargeAmt")) / ((Rate / 100) + 1)));
 
