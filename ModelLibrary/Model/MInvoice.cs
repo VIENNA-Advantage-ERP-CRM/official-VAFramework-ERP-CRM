@@ -1506,7 +1506,7 @@ namespace VAdvantage.Model
             }
 
             // To display warning on save if credit limit exceeds
-            if (IsSOTrx() && !IsReversal() && !(GetDocStatus() == DOCSTATUS_Completed || GetDocStatus() == DOCSTATUS_Closed))
+            if (!(GetDocStatus() == DOCSTATUS_Completed || GetDocStatus() == DOCSTATUS_Closed))
             {
                 string retMsg = "";
                 Decimal invAmt = GetGrandTotal(true);
@@ -1516,9 +1516,9 @@ namespace VAdvantage.Model
                     invAmt = MConversionRate.ConvertBase(GetCtx(), invAmt,  //	CM adjusted 
                         GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
 
+                    // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
                     if (invAmt == 0)
                     {
-                        // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
                         MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
                         retMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
@@ -1527,19 +1527,22 @@ namespace VAdvantage.Model
                     }
                 }
 
-                if (IsSOTrx())
-                    invAmt = Decimal.Add(0, invAmt);
-                else
-                    invAmt = Decimal.Subtract(0, invAmt);
-
-                MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-
-                bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
-                if (!crdAll)
-                    log.SaveWarning("Warning", retMsg);
-                else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                // To display warning on save if credit limit exceeds
+                if (IsSOTrx() && !IsReversal())
                 {
-                    log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+                    invAmt = Decimal.Add(0, invAmt);
+                    //else
+                    //    invAmt = Decimal.Subtract(0, invAmt);
+
+                    MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+
+                    bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
+                    if (!crdAll)
+                        log.SaveWarning("Warning", retMsg);
+                    else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                    {
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+                    }
                 }
             }
 
@@ -2040,6 +2043,23 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
+            Decimal invAmt = GetGrandTotal(true);
+            // If Amount is ZERO then no need to check currency conversion
+            if (!invAmt.Equals(Env.ZERO))
+            {
+                invAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(true), //	CM adjusted 
+             GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+
+                if (invAmt == 0)
+                {
+                    MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                    _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                        + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
 
             //	Credit Status
             if (IsSOTrx() && !IsReversal())
@@ -2060,28 +2080,10 @@ namespace VAdvantage.Model
 
                 if (checkCreditStatus)
                 {
-                    Decimal invAmt = GetGrandTotal(true);
-                    // If Amount is ZERO then no need to check currency conversion
-                    if (!invAmt.Equals(Env.ZERO))
-                    {
-                        invAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(true), //	CM adjusted 
-                     GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-
-                        if (invAmt == 0)
-                        {
-                            // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
-                            MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
-
-                            return DocActionVariables.STATUS_INVALID;
-                        }
-                    }
-
                     if (IsSOTrx())
                         invAmt = Decimal.Add(0, invAmt);
-                    else
-                        invAmt = Decimal.Subtract(0, invAmt);
+                    //else
+                    //    invAmt = Decimal.Subtract(0, invAmt);
 
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
 
@@ -3978,7 +3980,7 @@ namespace VAdvantage.Model
             return DocActionVariables.STATUS_COMPLETED;
         }
 
-       
+
 
         /// <summary>
         ///  Creation of allocation against invoice whose payment is done against order
@@ -4781,9 +4783,9 @@ namespace VAdvantage.Model
                     rLine.SetTaxAmt(Decimal.Negate((Decimal)rLine.GetTaxAmt()));
 
                 // In Case of Reversal set Surcharge Amount as Negative if available.
-                if (rLine.Get_ColumnIndex("SurchargeAmt") >  0&& (((Decimal)rLine.GetSurchargeAmt()).CompareTo(Env.ZERO) != 0))
+                if (rLine.Get_ColumnIndex("SurchargeAmt") > 0 && (((Decimal)rLine.GetSurchargeAmt()).CompareTo(Env.ZERO) != 0))
                 {
-                        rLine.SetSurchargeAmt(Decimal.Negate((Decimal)rLine.GetSurchargeAmt()));
+                    rLine.SetSurchargeAmt(Decimal.Negate((Decimal)rLine.GetSurchargeAmt()));
                 }
                 if (((Decimal)rLine.GetLineTotalAmt()).CompareTo(Env.ZERO) != 0)
                     rLine.SetLineTotalAmt(Decimal.Negate((Decimal)rLine.GetLineTotalAmt()));

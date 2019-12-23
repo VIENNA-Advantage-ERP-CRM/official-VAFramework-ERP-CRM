@@ -101,8 +101,7 @@ namespace VIS.Controllers
             sql += " AND l.DTD001_Org_ID = " + adOrgIDSs
                 + " GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                 + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                + "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description, l.IsDropShip  " //Arpit on  20th Sept,2017
-                                                                                                                                                  //+ "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description  "
+                + "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description, l.IsDropShip, o.C_PaymentTerm_ID , t.Name "
                 + "ORDER BY l.Line";
 
             string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
