@@ -370,7 +370,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
             font-size: .875rem;
             height: 32px;
             position:absolute;
-            margin-top:-15px;
+            margin-top:-15px !important;
         }
 
 .w2ui-grid .w2ui-editable select{

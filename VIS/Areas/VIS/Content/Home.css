@@ -679,6 +679,9 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
     display: flex;
     margin-bottom: 10px;
 }
+.vis-sendMessage:focus-within{
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
 
     .vis-sendMessage input[type=text] {
         height: 30px;
@@ -2997,28 +3000,21 @@ p.vis-maintain-customer-p span {
 
 
 .vis-btn-zoom {
-    /*background: #eee;
-    text-indent: 0 !important;
+    background: rgba(var(--v-c-secondary), 1);
+    /* text-indent: 0 !important; */
     border-radius: 4px;
-    border: 1px solid #ccc;
-    color: #767676;
-    width: auto;
-    height: auto;
-    padding: 0;
-    padding-right: 15px;*/
-    background: #eee;
-    text-indent: 0 !important;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    color: #767676;
-    width: auto;
-    height: auto;
-    padding: 0;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    color: rgba(var(--v-c-on-secondary), 1);
+    /* width: auto; */
+    /* height: auto; */
+    /* padding: 0; */
     padding-right: 15px;
+    display: flex;
+    align-items: center;
 }
 
     .vis-btn-zoom:hover {
-        color: #767676;
+        color: rgba(var(--v-c-on-secondary), 1);
     }
 
 .vis-btn-done:hover {
@@ -3046,7 +3042,7 @@ p.vis-maintain-customer-p span {
 }
 
 .vis-btn-zoom-border {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 
 .vis-btn-done-border {

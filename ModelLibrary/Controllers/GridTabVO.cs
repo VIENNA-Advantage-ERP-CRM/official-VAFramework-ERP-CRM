@@ -641,8 +641,8 @@ namespace VAdvantage.Controller
                                     StartRow = Convert.ToInt32(row["StartRow"]),
                                     BackgroundColor= Convert.ToString(row["BackgroundColor"]),
                                     FontColor = Convert.ToString(row["FontColor"]),
+                                    FontSize = Convert.ToString(row["FontSize"]),
                                     Padding = Convert.ToString(row["Padding"]),
-
                                 };
                             }
                         }

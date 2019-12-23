@@ -878,7 +878,7 @@
                     });
 
                     // Dms Zoom
-                    var aZoomDMS = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton vis-workflowActivityIcons' style='margin-left:10px;' data-id='" +
+                    var aZoomDMS = $("<a href='javascript:void(0)' class='vis-btn-zoom' style='margin-left:10px;' data-id='" +
                         docnameval[docnameval.length - 1] +
                         "'>");
                     aZoomDMS.append($("<span class='vis-btn-ico vis-btn-zoom-bg vis-btn-zoom-border'>"));
@@ -901,7 +901,7 @@
                     });
                 }
                 else {
-                var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom vis-icon-zoomFeedButton  vis-workflowActivityIcons' data-id='" + index + "'>");
+                var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom' data-id='" + index + "'>");
                 //aZoom.css("data-id", index);
                 aZoom.append($("<span class='vis-btn-ico vis vis-find vis-btn-zoom-border'>"));
                 aZoom.append(VIS.Msg.getMsg('Zoom'));
