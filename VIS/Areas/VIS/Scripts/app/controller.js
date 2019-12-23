@@ -3955,7 +3955,7 @@
         if (this.onlyCurrentDays == 0 && this.maintainVersionFieldChanged(RowData, OldRowData)) {
             var self = this;
             // in case of new record in Master Version window
-            if (!OldRowData["updatedby"]) {
+            if (OldRowData["updatedby"] == null) {
                 gridTableIn.MaintainVersions = true;
                 gridTableIn.ImmediateSave = true;
                 gridTableIn.ValidFrom = new Date().toISOString();
