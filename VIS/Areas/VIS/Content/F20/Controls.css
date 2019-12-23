@@ -360,6 +360,12 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     color: rgba(var(--v-c-on-secondary), 1);
 }
 
+/*for all forms*/
+.input-group-text {
+    display: inline-flex;
+    justify-content: center;
+}
+
 
 
     /***************************** Control Prop End ****************************************/

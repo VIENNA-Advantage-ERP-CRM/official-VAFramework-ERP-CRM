@@ -3355,13 +3355,13 @@ html[dir="rtl"] .vis-cvd-editbtn {
 }
 
 .vis-change-picture-ico {
-    background: url(../Images/Edit-icon.png);
+    /*background: url(../Images/Edit-icon.png);
     background-repeat: no-repeat;
-    width: 17px;
+    width: 17px;*/
     height: 14px;
     float: left;
     margin-top: 3px;
-    margin-right: 8px;
+    /*margin-right: 8px;*/
 }
 /*************************************** END********************************/
 

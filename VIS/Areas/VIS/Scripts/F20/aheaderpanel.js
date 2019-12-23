@@ -36,8 +36,8 @@
                     $root = $('<div class="vis-ad-w-p-header_root_common">');
                     var headerCustom = this.headerParentCustomUISettings(backColor);
                     $parentRoot.addClass(headerCustom);
-                  
-                   
+
+
                 }
             }
         };
@@ -66,10 +66,22 @@
 
                         var colValue = getFieldValue(mField);
 
-                        if (colValue || mField.getDisplayType() == VIS.DisplayType.Image)
+                        if (colValue) {
+                            if (colValue.startsWith && colValue.startsWith("<") && colValue.endsWith(">")) {
+                                colValue = colValue.replace("<", "").replace(">", "");
+                            }
+                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
+                                iControl.getControl().show();
+                            }
                             iControl.setValue(w2utils.encodeTags(colValue));
+                        }
                         else {
-                            iControl.setValue("- -", true);
+                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
+                                iControl.getControl().hide();
+                                iControl.setValue(null);
+                            }
+                            else
+                                iControl.setValue("- -", true);
                         }
 
                     }
@@ -165,11 +177,22 @@
                         }
                         var $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                         var colValue = getFieldValue(mField);
-                        if (colValue || mField.getDisplayType() == VIS.DisplayType.Image) {
+                        if (colValue) {
+                            if (colValue.startsWith && colValue.startsWith("<") && colValue.endsWith(">")) {
+                                colValue = colValue.replace("<", "").replace(">", "");
+                            }
+                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
+                                iControl.getControl().show();
+                            }
                             iControl.setValue(w2utils.encodeTags(colValue));
                         }
                         else {
-                            iControl.setValue("- -",true);
+                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
+                                iControl.getControl().hide();
+                                iControl.setValue(null);
+                            }
+                            else
+                                iControl.setValue("- -", true);
                         }
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
@@ -310,7 +333,7 @@
          * */
         this.disposeComponent = function () {
             $slider.remove();
-            
+
             $slider = null;
             this.styleTag.remove();
             this.styleTag = null;
@@ -332,19 +355,19 @@
         var backColor = gTab.getHeaderBackColor();
         this.setHeaderLayout(gTab, backColor);
         var root = this.getRoot();
-        
+
         var $parentRoot = this.getParent();
         var rootClass = "vis-w-p-Header-Root-v";//Fixed Class for vertical Alignment
         var alignmentHorizontal = this.gTab.getHeaderHorizontal();
         var height = this.gTab.getHeaderHeight();
         var width = this.gTab.getHeaderWidth();
-        
+
         var padding = this.gTab.getHeaderPadding();
-       
+
 
         var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, "", padding);
         root.addClass(rootCustomStyle);
-     
+
         if (alignmentHorizontal) {
             this.alignHorzontal();
             rootClass = 'vis-w-p-Header-Root-h';//Fixed Class for Horizontal Alignment
@@ -467,12 +490,12 @@
     * @param {any} startRow
     * @param {any} rowSpan
     */
-    HeaderPanel.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize,padding) {
+    HeaderPanel.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize, padding) {
         var dynamicClassName = "vis-hp-FieldGroup_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
         this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
 
         this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]);
-        this.dynamicStyle.push(";background:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding );
+        this.dynamicStyle.push(";background:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding);
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };
