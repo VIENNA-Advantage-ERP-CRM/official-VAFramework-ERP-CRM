@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
     //SerNo Parameter Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607 
-    function PAttributeInstance(title, M_Warehouse_ID, M_Locator_ID, M_Product_ID, C_BPartner_ID, SerNo, lotNo, garunteeDate) {
+    function PAttributeInstance(title, M_Warehouse_ID, M_Locator_ID, M_Product_ID, C_BPartner_ID, SerNo, lotNo, garunteeDate, isSOTrx) {
 
         var $self = this;
         this.onClose = null;
@@ -12,6 +12,7 @@
         var mProductID = M_Product_ID;
         var mCBPartnerID = C_BPartner_ID;
         var mtitle = title;
+        var issotrx = isSOTrx;
         this.arrListColumns = [];
         this.dGrid = null;
 
@@ -23,26 +24,26 @@
         //	From Clause						
         var msqlFrom = "M_ProductAttributes patr LEFT JOIN M_Storage s ON (patr.M_AttributeSetInstance_ID = s.M_AttributeSetInstance_ID AND patr.M_Product_ID = s.M_Product_ID)"
             + " LEFT JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID)"
-            //+ " LEFT JOIN M_Warehouse w ON (l.M_Warehouse_ID=w.M_Warehouse_ID)"
+            + " LEFT JOIN M_Warehouse w ON (l.M_Warehouse_ID=w.M_Warehouse_ID)"
             + " INNER JOIN M_Product p ON (patr.M_Product_ID=p.M_Product_ID)"
             + " INNER JOIN M_AttributeSetInstance asi ON (patr.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)";
 
         var msqlWhere = " patr.M_Product_ID=@M_Product_ID AND patr.M_AttributeSetInstance_ID != 0";
-        //msqlNonZero = " AND (s.QtyOnHand<>0 OR s.QtyReserved<>0 OR s.QtyOrdered<>0)";
+        msqlNonZero = " AND (s.QtyOnHand<>0 OR s.QtyReserved<>0 OR s.QtyOrdered<>0)";
         var msqlMinLife = "";
 
         this.log = VIS.Logging.VLogger.getVLogger("PAttributeInstance");
         var windowNo = VIS.Env.getWindowNo();
 
         var chkShowAll = $("<input id='" + "chkShowAll_" + windowNo + "' type='checkbox' >" +
-               "<span><label id='" + "lblShowAll_" + windowNo + "' class='VIS_Pref_Label_Font'>" + VIS.Msg.getMsg("ShowAll") + "</label></span>");
+            "<span><label id='" + "lblShowAll_" + windowNo + "' class='VIS_Pref_Label_Font'>" + VIS.Msg.getMsg("VIS_ShowAll") + "</label></span>");
 
         var btnOk = $("<input id='" + "btnOk_" + windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px; margin-top: 5px; float: right; margin-right: 15px ;' type='button' value='" + VIS.Msg.getMsg("OK") + "'>");
 
         var btnCancel = $("<input id='" + "btnCancel_" + windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px; margin-top: 5px; float: right;margin-right: 0px;' type='button' value='" + VIS.Msg.getMsg("Cancel") + "'>");
 
-        var topdiv = $("<div id='" + "topdiv_" + windowNo + "' style='float: left; width: 100%; height: 10%; text-align: right;'>");
-        var middeldiv = $("<div id='" + "middeldiv_" + windowNo + "' style='float: left; width: 100%; height: 86%;'>");
+        var topdiv = $("<div id='" + "topdiv_" + windowNo + "' style='float: left; width: 100%; height: 7%; text-align: right;'>");
+        var middeldiv = $("<div id='" + "middeldiv_" + windowNo + "' style='float: left; width: 100%; height: 79%;'>");
         var bottomdiv = $("<div id='" + "bottomdiv_" + windowNo + "' style='float: left; width: 100%; height: 14%;'>");
 
 
@@ -107,12 +108,18 @@
                 }
             }	//	BPartner != 0
 
-            msql = prepareTable(msqlFrom, msqlWhere, false, "patr") + " ORDER BY asi.GuaranteeDate, QtyOnHand";	//	oldest, smallest first
+            msql = prepareTable(msqlFrom, msqlWhere, false, "patr") + " ORDER BY asi.GuaranteeDate, QtyOnHand DESC";	//	oldest, smallest first
             refresh();
             topdiv.append(chkShowAll);
             bottomdiv.append(btnCancel).append(btnOk);
             $root.append($busyDiv).append(topdiv).append(middeldiv).append(bottomdiv);
-            topdiv.hide();
+
+            if (issotrx) {
+                chkShowAll.prop("checked", false);
+            } else {
+                chkShowAll.prop("checked", true);
+            }
+            //topdiv.hide();
             events();
         }
 
@@ -129,9 +136,9 @@
             //if (mLocatorID != 0) {
             //    sql = sql.concat(" AND s.M_Locator_ID = " + mLocatorID);
             //}
-            //if (mWarehouseID != 0) {
-            //    sql = sql.concat(" AND NVL(l.M_Warehouse_ID,0) IN (0," + mWarehouseID + ")");
-            //}
+            if (mWarehouseID != 0) {
+                sql = sql.concat(" AND NVL(l.M_Warehouse_ID,0) IN (0," + mWarehouseID + ")");
+            }
 
             if (from.length == 0) {
                 return sql.toString();
@@ -259,10 +266,10 @@
                 //Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607
                 multiSearch: true,
                 searches: [
-                        { field: 'Description', caption: 'Description', type: 'text' },
-                        { field: 'Lot', caption: 'Lot', type: 'text' },
-                        { field: 'SerNo', caption: 'SerNo', type: 'text' },
-                        { field: 'GuaranteeDate', caption: 'GuaranteeDate', type: 'date', options: { format: 'yyyy-mm-dd' } }
+                    { field: 'Description', caption: 'Description', type: 'text' },
+                    { field: 'Lot', caption: 'Lot', type: 'text' },
+                    { field: 'SerNo', caption: 'SerNo', type: 'text' },
+                    { field: 'GuaranteeDate', caption: 'GuaranteeDate', type: 'date', options: { format: 'yyyy-mm-dd' } }
                 ],
                 //end
                 onClick: function (event) {
@@ -339,8 +346,8 @@
             $root.dialog({
                 modal: true,
                 title: mtitle, // VIS.Msg.translate(VIS.Env.getCtx(), mtitle),
-                width: 540,
-                height: 400,
+                width: 600,
+                height: 450,
                 resizable: false,
                 close: function () {
                     $self.dispose();
@@ -375,6 +382,7 @@
             mProductID = null;
             mCBPartnerID = null;
             mtitle = null;
+            issotrx = null;
             this.arrListColumns = null;
             this.dGrid = null;
             msqlFrom = null;

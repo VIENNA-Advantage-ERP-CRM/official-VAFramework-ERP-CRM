@@ -1198,6 +1198,9 @@ namespace VIS.Models
                         {
                             _masi.Set_Value("Value", strAttrCode);
                         }
+
+                        // Create new Attribute Set Instance in * Organization
+                        _masi.SetAD_Org_ID(0);
                         if (!_masi.Save())
                         {
                             obj.Error = Msg.GetMsg(ctx, "NotSaved") + " - " + MAttributeSetInstance.Table_Name;

@@ -1859,8 +1859,54 @@ namespace VAdvantage.Model
         public bool VoidIt()
         {
             log.Info(ToString());
+
+            MCashBook cashbook = new MCashBook(GetCtx(), GetC_CashBook_ID(), Get_TrxName());
+            DataTable dtCashbookLine;
+            int C_CASHBOOKLINE_ID = 0;
+
+            string sql = "SELECT C_CASHBOOKLINE_ID FROM C_CASHBOOKLINE WHERE C_CASHBOOK_ID="
+                            + GetC_CashBook_ID() + " AND DATEACCT="
+                            + DB.TO_DATE(GetDateAcct()) + " AND AD_ORG_ID=" + GetAD_Org_ID();
+
+            dtCashbookLine = DB.ExecuteDataset(sql, null, null).Tables[0];
+
+            if (dtCashbookLine.Rows.Count > 0)
+            {
+                C_CASHBOOKLINE_ID = Util.GetValueOfInt(dtCashbookLine.Rows[0].ItemArray[0]);
+            }
+
+            MCashbookLine cashbookLine = new MCashbookLine(GetCtx(), C_CASHBOOKLINE_ID, Get_TrxName());
+            if (C_CASHBOOKLINE_ID == 0)
+            {
+                cashbookLine.SetC_CashBook_ID(GetC_CashBook_ID());
+                cashbookLine.SetAD_Org_ID(GetAD_Org_ID());
+                cashbookLine.SetAD_Client_ID(GetAD_Client_ID());
+                cashbookLine.SetEndingBalance(Decimal.Subtract(cashbook.GetCompletedBalance(), GetStatementDifference()));
+            }
+            else
+            {
+                cashbookLine.SetEndingBalance(Decimal.Subtract(cashbookLine.GetEndingBalance(), GetStatementDifference()));
+            }
+            cashbookLine.SetDateAcct(GetDateAcct());
+            cashbookLine.SetStatementDifference(Decimal.Subtract(cashbookLine.GetStatementDifference(), GetStatementDifference()));
+
+            if (!cashbookLine.Save())
+            {
+                _processMsg = "Cannot create/update cashbook line.";
+                return false;
+            }
+
+            cashbook.SetRunningBalance(Decimal.Subtract(cashbook.GetRunningBalance(), GetStatementDifference()));
+
+            if (!cashbook.Save())
+            {
+                _processMsg = "Cannot update running balance.";
+                return false;
+            }
+
+            SetProcessed(true);
             SetDocAction(DOCACTION_None);
-            return false;
+            return true;
         }
 
         /**

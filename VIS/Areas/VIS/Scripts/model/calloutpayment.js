@@ -694,6 +694,40 @@
         return "";
     };
 
+    /// <summary>
+    /// Get Bank Account Curremcy
+    /// On change of Business Partner
+    /// <param name="ctx">context</param>
+    /// <param name="WindowNo">current Window No</param>
+    /// <param name="mTab">Grid Tab</param>
+    /// <param name="mField">Grid Field</param>
+    /// <param name="value">New Value</param>
+    /// <param name="oldValue">Old Value</param>
+    /// <returns>null or error message</returns>   
+    CalloutPayment.prototype.BankAccount = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (value == null || value.toString() == "") {
+            return "";
+        }
+
+        var c_bankaccount_ID = value;
+        if (this.isCalloutActive()) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        try {
+            var currency = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPayment/GetBankAcctCurrency", c_bankaccount_ID.toString()));
+            mTab.setValue("C_Currency_ID", currency);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
     VIS.Model.CalloutPayment = CalloutPayment;
     //*********** CalloutPayment End ******
 
