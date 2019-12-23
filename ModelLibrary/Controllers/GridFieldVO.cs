@@ -327,9 +327,21 @@ namespace VAdvantage.Controller
                         vo.ImageName = Utility.Util.GetValueOfString(dr[i]);
                     }
                     // new column added for maintain versions
-                    else if (columnName.Equals("ISMAINTAINVERSIONS"))
+                    else if (columnName.Equals("ISMAINTAINVERSIONS", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.IsMaintainVersions = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("CellSpace", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.CellSpace = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("FieldBreadth", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.FieldBreadth = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("IsLineBreak", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.LineBreak = "Y".Equals(dr[i].ToString());
                     }
                 }
                 if (vo.Header == null)
@@ -816,17 +828,11 @@ namespace VAdvantage.Controller
             clone.ShowIcon = ShowIcon;
             clone.AD_Image_ID = AD_Image_ID;
             clone.FontClass = FontClass;
+            clone.ImageName = ImageName;
             clone.IsMaintainVersions = IsMaintainVersions;
+            clone.CellSpace = CellSpace;
+            clone.FieldBreadth = FieldBreadth;
 
-            //         public bool IsHeaderPanelitem = false;
-            //public int HeaderOverrideReference = 0;
-            //public string HeaderStyle = null;
-            //public bool HeaderHeadingOnly = false;
-            //public decimal HeaderSeqno = 0;
-            //public bool HeaderIconOnly = false;
-            //public string HtmlStyle = null;
-            //public bool ShowIcon = false;
-            //public int AD_Image_ID = 0;
 
             return clone;
         }

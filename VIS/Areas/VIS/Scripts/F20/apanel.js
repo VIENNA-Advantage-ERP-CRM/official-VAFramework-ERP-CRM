@@ -107,15 +107,15 @@
 
         this.isPersonalLock = VIS.MRole.getIsPersonalLock();
         this.log = VIS.Logging.VLogger.getVLogger("APanel");
-       
+
         this.isSummaryVisible = false;
         //private 
-        var   $divContentArea, $ulNav,  $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
-        var $txtSearch, $imgSearch,$btnClrSearch,$imgdownSearch;
+        var $divContentArea, $ulNav, $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
+        var $txtSearch, $imgSearch, $btnClrSearch, $imgdownSearch;
         var $root, $busyDiv;
-        var   $ulRightBar2; //right bar
-        var  $btnlbToggle, $ulactionbar, $uldynactionbar, $divlbMain, $divlbNav; //right bar
-        var $hdrPanel = "", $divIncludeTab,  $divHeaderNav;
+        var $ulRightBar2; //right bar
+        var $btnlbToggle, $ulactionbar, $uldynactionbar, $divlbMain, $divlbNav; //right bar
+        var $hdrPanel = "", $divIncludeTab, $divHeaderNav;
         var $tabPanel = null;
         var $spnAdvSearch = null;
         var $btnClose = null;
@@ -140,8 +140,8 @@
             $divTabControl = $root.find(".vis-ad-w-p-t-c");// $("<div class='vis-apanel-tabcontrol'>").append($ulTabControl);
             $divTabNav = $root.find(".vis-ad-w-p-tabs-oflow");// $("<div class='vis-apanel-tab-oflow'>").hide();
             $divHeaderNav = $root.find(".vis-ad-w-p-tabs-t");
-         
-           // $td0leftbar = $root.find(".vis-ad-w-p-action");
+
+            // $td0leftbar = $root.find(".vis-ad-w-p-action");
             $btnlbToggle = $root.find(".vis-ad-w-p-tb-rc-abar");
 
             $ulactionbar = $root.find('.vis-ad-w-p-a-m-slist');   // $ ("<ul class='vis-apanel-lb-ul'>");
@@ -149,14 +149,14 @@
 
             $divlbMain = $root.find('.vis-ad-w-p-a-main');//  ( '<div class="vis-ad-w-p-a-main">');
             $divlbNav = $root.find('.vis-ad-w-p-a-oflow');// ("<div class='vis-ad-w-p-a-oflow'>").hide();
-            
+
             $hdrPanel = $root.find(".vis-ad-w-p-header-l");
-            
+
             $divIncludeTab = $root.find(".vis-ad-w-p-center-inctab");
 
             $ulRightBar2 = $root.find(".vis-ad-w-p-tb-rc-a-list");
 
-            
+
             $divContentArea = $root.find(".vis-ad-w-p-center-view");
 
             //StatusBar
@@ -171,7 +171,7 @@
             $btnClrSearch = $root.find(".vis-ad-w-p-tb-s-icon");
             $imgdownSearch = $root.find(".vis-ad-w-p-tb-s-icon-down");
 
-            $txtSearch.attr('placeholder', VIS.Msg.getMsg("Search")); 
+            $txtSearch.attr('placeholder', VIS.Msg.getMsg("Search"));
             // Mohit - Shortcut as title.
             $imgSearch = $root.find(".vis-ad-w-p-tb-s-btn");
             //Advance Search 
@@ -225,7 +225,7 @@
 
                         }, 400);
                     },
-                    source:[]
+                    source: []
                 });
                 $txtSearch.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
 
@@ -336,7 +336,7 @@
             //lakhwinder
             //$ulToobar.append(this.aInfo.getListItm());
 
-           // $ulToobar.append(new VIS.AppsAction().getSeprator(false, true));
+            // $ulToobar.append(new VIS.AppsAction().getSeprator(false, true));
             //$ulToobar.append(this.aFind.getListItm());
 
             $spnAdvSearch.append(this.aFind.getListItm());
@@ -351,7 +351,7 @@
             this.aCard = this.addActions("Card", null, false, true, true, onAction, null, "Shct_CardView");
 
             this.aMap = this.addActions("Map", null, false, true, true, onAction);
-            
+
             $ulNav
                 //.append(this.aFirst.getListItm())
                 .append(this.aPrevious.getListItm())
@@ -528,7 +528,7 @@
             this.toolbarCreated = true;
 
             /* Set Tool Bar */
-            
+
             finishLayout();
 
 
@@ -537,7 +537,7 @@
         this.setDynamicActions = function () {
             if (this.curGC == null)
                 return;
-            $uldynactionbar.css('display','none');
+            $uldynactionbar.css('display', 'none');
             var index = 0;
             var actions = [];
             if (this.curGC.leftPaneLinkItems.length > 0) {
@@ -573,7 +573,7 @@
         this.getParentDetailPane = function () {
             return $hdrPanel;
         };
-       
+
         /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
         *   @param {boolean} show - show tab panel if true
@@ -583,7 +583,7 @@
                 //$tabpanel.empty();
                 var clsName = 'vis-ad-w-p-center-flow-';
                 var cls2 = "vis-ad-w-p-actionpanel-";
-                
+
                 //if (this.curTab.getIsTPBottomAligned()) {
                 //    clsName = "vis-ad-w-p-center-flow-b";
                 //    cls2 = "vis-ad-w-p-actionpanel-b";
@@ -591,17 +591,17 @@
 
                 var clsSuffix = this.curTab.getIsTPBottomAligned() ? 'b' : 'r';
                 var clsSuffixOld = this.curTab.getIsTPBottomAligned() ? 'r' : 'b';
-               
+
                 if (!$tabPanel.hasClass(cls2 + clsSuffix)) {
                     $tabPanel.parent().removeClass(clsName + clsSuffixOld).addClass(
                         clsName + clsSuffix);
 
                     $tabPanel.removeClass();
                     $tabPanel.addClass(cls2 + clsSuffix);
-                    
-                }
 
-                $tabPanel.append(this.curGC.getTabPanel());
+                }
+                if (this.curGC)
+                    $tabPanel.append(this.curGC.getTabPanel());
                 $tabPanel.css({ "display": "grid" });
             }
             else {
@@ -672,14 +672,14 @@
         this.setBusy = function (busy, focus) {
             this.isLocked = busy;
             if (busy) {
-               
+
                 $busyDiv[0].style.visibility = 'visible';// .show();
             }
             else {
                 //$busyDiv.hide();
                 $busyDiv[0].style.visibility = 'hidden';
                 if (focus) {
-                    
+
                 }
             }
         };
@@ -741,21 +741,21 @@
                     return;
                 var ms = ulheight - dHeight;
                 s = cPos + offSet;
-                $divlbMain.animate({ scrollTop: s > ms ? ms : s }, 1000, "easeOutBounce");
+                $divlbMain.animate({ scrollTop: s > ms ? ms : s }, 1000);
             }
             else if (dir == 'u') {
                 if (cPos == 0)
                     return;
                 s = (cPos - offSet);
-                $divlbMain.animate({ scrollTop: s < 0 ? 0 : s }, 1000, "easeOutBounce");
+                $divlbMain.animate({ scrollTop: s < 0 ? 0 : s }, 1000);
             }
         });
 
         //Search
         $imgSearch.on(VIS.Events.onTouchStartOrClick, function (e) {
-                self.cmd_find($txtSearch.val());
-                self.curTab.searchText = "";
-                $txtSearch.val("");
+            self.cmd_find($txtSearch.val());
+            self.curTab.searchText = "";
+            $txtSearch.val("");
             e.stopPropagation();
         });
 
@@ -770,13 +770,13 @@
                     $txtSearch.val("");
                 }
                 else if (code == 8 && $btnClrSearch.css('visibility') == 'visible') {
-                        e.preventDefault();
-                        self.defaultSearch = true;
+                    e.preventDefault();
+                    self.defaultSearch = true;
                     $txtSearch.val("");
                     $btnClrSearch.css('visibility', 'hidden');
-                        var query = new VIS.Query();
-                        query.addRestriction(" 1 = 1 ");
-                        self.findRecords(query);
+                    var query = new VIS.Query();
+                    query.addRestriction(" 1 = 1 ");
+                    self.findRecords(query);
                 }
             });
         }
@@ -988,8 +988,8 @@
 
             $root.remove();
             $busyDiv.remove();
-           
-            $root = $busyDiv =  $divContentArea = $ulNav =   $ulToobar = $divStatus = null;
+
+            $root = $busyDiv = $divContentArea = $ulNav = $ulToobar = $divStatus = null;
             self = null;
             onAction = null;
             //
@@ -1081,7 +1081,7 @@
             /* Sort Tab */
             this.firstTabId = null;
 
-          
+
 
             $hdrPanel.remove();
             $hdrPanel = null;
@@ -1340,7 +1340,7 @@
         //    }
         //}
 
-      
+
 
         for (var i = 0; i < tabs.length; i++) {
 
@@ -1399,7 +1399,7 @@
                         //gc.vHeaderPanel = new VIS.HeaderPanel();
                         //var parentDetailPane = this.getParentDetailPane();
                         gc.initHeaderPanel(this.getParentDetailPane());
-                            //vHeaderPanel.init(gTab, parentDetailPane);
+                        //vHeaderPanel.init(gTab, parentDetailPane);
                         //this.getLayout().append(parentDetailPane);
                     }
                 }
@@ -1408,7 +1408,7 @@
 
                 tabElement = gc;
                 //	If we have a zoom query, switch to single row
-                if (i === 0  && goSingleRow)
+                if (i === 0 && goSingleRow)
                     gc.switchSingleRow();
 
                 // For first tab, if panel avilable, then set width for window
@@ -1436,7 +1436,7 @@
                     //if (i == 0)
                     //    this.aParentDetail = new VIS.AParentDetail(gc, this.getParentDetailPane());
                 }
-               
+
 
                 if (gTab.getHasPanel()) {
                     gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);
@@ -2546,7 +2546,7 @@
                 this.aShowSummaryLevel.hide();
             }
 
-           
+
         }
 
         //	Order Tab
@@ -2604,7 +2604,7 @@
         /*******    END Tab Panels     ******/
 
 
-        
+
 
         if (this.aParentDetail)
             this.aParentDetail.evaluate(tabEle);
@@ -2987,9 +2987,9 @@
             this.curWinTab.evaluate(null);
         }
 
-       
 
-    /******End Header Panel******/
+
+        /******End Header Panel******/
 
 
     };   //
@@ -3924,7 +3924,7 @@
             VIS.MLookupCache.cacheReset(this.$parentWindow.getWindowNo());
         }
 
-        
+
 
         this.ctx = null;
         this.$parentWindow = null;
@@ -3936,7 +3936,7 @@
         this.disposeComponent();
 
     };
-     
+
     //****************** APanel END ***********************//
 
     //Assignment Gobal Namespace

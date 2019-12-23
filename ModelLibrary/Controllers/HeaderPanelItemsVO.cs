@@ -63,6 +63,8 @@ namespace VAdvantage.Controller
 
         public string FontSize = "";
 
+        public string Padding = "";
+
     }
 
     public class HeaderPanelGrid
