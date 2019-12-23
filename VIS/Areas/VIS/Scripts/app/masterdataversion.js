@@ -268,7 +268,7 @@
                         var displayText = "---";
                         // check if there is some text in columnname_TXT column then display that column value
                         if (recRow[colName + "_TXT"]) {
-                            this.htmlUI.push('<td>' + recRow[colName + "_TXT"] + '</td>');
+                            this.htmlUI.push('<td>' + VIS.Utility.encodeText(recRow[colName + "_TXT"]) + '</td>');
                         }
                         // display delete button icon for row if RecordsDeleteable is set on Version table in AD_Table
                         else if (colName == "ACTION") {
@@ -281,7 +281,7 @@
                             if (gf) {
                                 displayText = gf.getLookup().getDisplay(gf.value);
                             }
-                            this.htmlUI.push('<td>' + displayText + '</td>');
+                            this.htmlUI.push('<td>' + VIS.Utility.encodeText(displayText) + '</td>');
                         }
                         else if (recRow[colName]) {
                             // if (colName == 'ISVERSIONAPPROVED') {
@@ -313,7 +313,7 @@
                                 this.htmlUI.push('<td dtDate="' + new Date(recRow[colName]) + '">' + dateCol + '</td>');
                             }
                             else
-                                this.htmlUI.push('<td>' + recRow[colName] + '</td>');
+                                this.htmlUI.push('<td>' + VIS.Utility.encodeText(recRow[colName]) + '</td>');
                         }
                         else {
                             this.htmlUI.push('<td> --- </td>');
@@ -345,9 +345,9 @@
                 if (field.vo.IsMaintainVersions) {
                     this.gridCols.push(field.vo.ColumnName.toUpper());
                     if (field.vo.displayType == 20)
-                        hdrUI.push('<th style="text-align: center;">' + field.vo.Header + '</th>');
+                        hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(field.vo.Header) + '</th>');
                     else
-                        hdrUI.push('<th>' + field.vo.Header + '</th>');
+                        hdrUI.push('<th>' + VIS.Utility.encodeText(field.vo.Header) + '</th>');
                 }
             }
             for (var v = 0; v < this.defaultCols.length; v++) {
@@ -356,14 +356,14 @@
                 // column header for Action (delete), based on setting on AD_Table for Version table
                 if (this.defaultColElements[v] == "ACTION") {
                     if (this.deletable) {
-                        hdrUI.push('<th style="text-align: center;">' + this.defaultCols[v] + '</th>');
+                        hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
                     }
                 }
                 else if (this.defaultColElements[v] == "ISVERSIONAPPROVED") {
-                    hdrUI.push('<th style="text-align: center;">' + this.defaultCols[v] + '</th>');
+                    hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
                 }
                 else
-                    hdrUI.push('<th>' + this.defaultCols[v] + '</th>');
+                    hdrUI.push('<th>' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
 
             }
         }
@@ -384,7 +384,7 @@
     };
 
     MasterDataVersion.prototype.getNoRecDiv = function () {
-        return '<div class="vis-mas-ver-norecord">' + VIS.Msg.getMsg("NoRecords") + '</div>';
+        return '<div class="vis-mas-ver-norecord">' + VIS.Utility.encodeText(VIS.Msg.getMsg("NoRecords")) + '</div>';
     };
 
     VIS.MasterDataVersion = MasterDataVersion;
