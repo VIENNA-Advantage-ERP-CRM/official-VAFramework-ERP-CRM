@@ -465,7 +465,7 @@
 	 */
     AWindow.prototype.initForm = function (AD_Form_ID, callback, action) {
 
-        this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT); //initlize AForm
+        this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - 85); //initlize AForm
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();

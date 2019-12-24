@@ -374,7 +374,7 @@ select {
 /* AForm */
 .vis-app-aform-root {
     position:relative;
-    /*overflow:auto;*/
+    overflow:hidden;
 }
 .vis-app-aform-root td {
     margin: 0;
