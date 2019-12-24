@@ -23,9 +23,9 @@
         var fieldToCompParentMap = {};
         var colDescHelpList = {};
 
-       
-        
-       
+
+
+
         var lastPopover = null;
         function initComponent() {
             $table = $("<div class='vis-ad-w-p-vc-ev-grid'>"); //   $("<table class='vis-gc-vpanel-table'>");
@@ -47,11 +47,11 @@
                     lastPopover.popover('dispose');
                     lastPopover = null;
                 }
-               
+
                 curTgt.attr('data-content', colDescHelpList[colName].help);
-                    //attr('title', colDescHelpList[colName].desc);
-                    lastPopover =  curTgt.popover('show');
-                
+                //attr('title', colDescHelpList[colName].desc);
+                lastPopover = curTgt.popover('show');
+
             }
         }
 
@@ -93,7 +93,7 @@
             }
 
             var list = groupToCompsMap[name];
-           
+
             for (var i = 0; i < list.length; i++) {
                 var field = list[i];
                 var ctrls = compToFieldMap[field.getColumnName()];
@@ -104,7 +104,7 @@
                 }
                 if (show && field.getIsDisplayed(true))
                     fieldToCompParentMap[field.getColumnName()].show();
-                else 
+                else
                     fieldToCompParentMap[field.getColumnName()].hide();
             }
         };
@@ -121,11 +121,11 @@
             setColumns(columnIndex);
             addRow();
             var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="hide">' +
-                            '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
-                            '<span class="vis-ev-col-fg-more" style="display:none"><i class="fa fa-ellipsis-h"></i></span>'+
-                                '<i class= "fa fa-angle-up  vis-ev-col-fg-rotate">'+
-                            '</span>' +
-                          '</div>');
+                '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
+                '<span class="vis-ev-col-fg-more" style="display:none"><i class="fa fa-ellipsis-h"></i></span>' +
+                '<i class= "fa fa-angle-up  vis-ev-col-fg-rotate">' +
+                '</span>' +
+                '</div>');
 
 
             $td0.append(gDiv);
@@ -202,38 +202,38 @@
             }
         };
 
-        function setColumnSpan($ctlr,colSpan) {
+        function setColumnSpan($ctlr, colSpan) {
             if (columnIndex == 0) {
-                
+
                 if (colSpan == 2) {
-                    $ctlr.addClass("vis-ev-col-end2"); 
+                    $ctlr.addClass("vis-ev-col-end2");
                     $td1.remove();
                 }
-                    
+
                 else if (colSpan == 3) {
-                    $ctlr.addClass("vis-ev-col-end3"); 
+                    $ctlr.addClass("vis-ev-col-end3");
                     $td1.remove();
                     $td2.remove();
                 }
                 else if (colSpan > 3) {
-                    $ctlr.addClass("vis-ev-col-end4"); 
+                    $ctlr.addClass("vis-ev-col-end4");
                     $td1.remove();
                     $td2.remove();
                     $td3.remove();
                 }
-                columnIndex += colSpan-1;
+                columnIndex += colSpan - 1;
             }
-           else  if (columnIndex == 1) {
+            else if (columnIndex == 1) {
                 if (colSpan == 2) {
                     $ctlr.addClass("vis-ev-col-end3");
                     $td2.remove();
                 }
-                else if (colSpan >2 ) {
+                else if (colSpan > 2) {
                     $ctlr.addClass("vis-ev-col-end4");
                     $td2.remove();
                     $td3.remove();
                 }
-                
+
                 columnIndex += colSpan - 1;
             }
             else if (columnIndex == 2) {
@@ -300,7 +300,7 @@
                 sameLine = false;
             }
 
-           
+
 
             if (sameLine) {
                 ++columnIndex;
@@ -355,7 +355,7 @@
 
                 //addToCompList(label);
                 //compToFieldMap[label.getName()] = mField;
-                addCompToFieldList(mField.getColumnName(),label);
+                addCompToFieldList(mField.getColumnName(), label);
                 allControls[++allControlCount] = label;
             }
 
@@ -452,8 +452,8 @@
                 count = 0;
 
                 //addToCompList(editor);
-               // compToFieldMap[editor.getName()] = mField;
-                addCompToFieldList(mField.getColumnName(),editor);
+                // compToFieldMap[editor.getName()] = mField;
+                addCompToFieldList(mField.getColumnName(), editor);
                 allControls[++allControlCount] = editor;
 
             }
@@ -461,30 +461,30 @@
 
             //new design container
             if (label != null || editor != null) {
-                
+
                 var ctnr = null;
                 if (sameLine) {
                     if (columnIndex == 1) {
                         //$td1.append(editor.getControl());
                         insertCWrapper(label, editor, $td1, mField);
                         ctnr = $td1;
-                        
+
                     }
                     else if (columnIndex == 2) {
                         insertCWrapper(label, editor, $td2, mField);
                         ctnr = $td2;
-                       
+
                     }
                     else {
                         insertCWrapper(label, editor, $td3, mField);
                         ctnr = $td3;
                     }
                 } else {
-                    if (columnIndex == 1) 
+                    if (columnIndex == 1)
                         ctnr = $td1;
-                    else if (columnIndex == 2) 
+                    else if (columnIndex == 2)
                         ctnr = $td2;
-                    else if (columnIndex == 3) 
+                    else if (columnIndex == 3)
                         ctnr = $td3;
                     else
                         ctnr = $td0;
@@ -492,7 +492,7 @@
                     insertCWrapper(label, editor, ctnr, mField);
                 }
 
-                
+
 
                 if (!sameLine && mField.getIsLongField()) {
                     $td1.remove();
@@ -507,7 +507,7 @@
                 fieldToCompParentMap[mField.getColumnName()] = ctnr;
                 addFieldToGroupList(mField);
                 colDescHelpList[mField.getColumnName()] = {
-                   // 'desc': mField.getDescription(),
+                    // 'desc': mField.getDescription(),
                     'help': mField.getHelp()
                 };
             }
@@ -526,7 +526,8 @@
         }
 
         this.setVisible = function (colName, show) {
-            show ? fieldToCompParentMap[colName].show() : fieldToCompParentMap[colName].hide();
+            if (fieldToCompParentMap[colName])
+                show ? fieldToCompParentMap[colName].show() : fieldToCompParentMap[colName].hide();
         };
 
         this.dispose = function () {
@@ -586,7 +587,7 @@
                 btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
             btns.push('</span></div>');
             ctrl.append(btns.join(' '));
-            
+
         }
 
         if (editor != null && customStyle != "") {
@@ -610,14 +611,14 @@
                 ctrlP.append(editor.getControl());
         }
 
-        
 
-        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() +"'  tabindex='-1' data-toggle='popover' data-trigger='focus'>"+
+
+        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
             "<i class='vis vis-info' aria-hidden='true'></i></span'>");
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
         ctrl.append(ctrlP);
-            var count = editor.getBtnCount();
+        var count = editor.getBtnCount();
         if (count > 0) {
             editor.getControl().attr("data-hasBtn", " ");
             var i = 0;
