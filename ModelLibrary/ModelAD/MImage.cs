@@ -228,6 +228,9 @@ namespace VAdvantage.Model
                 //********** Save Original Image ********************
                 CreateThumbnail(0, 0, imageBytes, imageName);
 
+                //*********Create Thumbnail of 500/375 *******************
+                CreateThumbnail(500, 375, imageBytes, imageName);
+
                 //*********Create Thumbnail of 320/240 *******************
                 CreateThumbnail(320, 240, imageBytes, imageName);
 

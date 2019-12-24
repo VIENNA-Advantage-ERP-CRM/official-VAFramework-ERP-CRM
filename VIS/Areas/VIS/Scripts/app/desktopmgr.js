@@ -314,7 +314,7 @@
                 height = height - 43;
 
                  VIS.Env.setScreenHeight(height);
-                 document.documentElement.style.setProperty('--vis-screen-height', (height.innerHeight * 0.01) +'px');
+                 document.documentElement.style.setProperty('--vis-screen-height', (height * 0.01) +'px');
                 if (VIS.viewManager)
                     VIS.viewManager.sizeChanged(height, window.innerwidth);
             // Resize event for calling interface
