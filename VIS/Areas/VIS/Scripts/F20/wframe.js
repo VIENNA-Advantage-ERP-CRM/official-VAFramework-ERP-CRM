@@ -2023,7 +2023,7 @@
         sql += " WHERE t." + this.parentColumnName + "=@ID";
         if (this.identifierTranslated)
             sql += " AND t." + this.keyColumnName + "=tt." + this.keyColumnName
-                + " AND tt.AD_Language='" + VIS.Env.getAD_Language(VAdvantage.Utility.Env.getCtx()) + "'";
+                + " AND tt.AD_Language='" + VIS.context.getAD_Language() + "'";
         //	Order
         sql += " ORDER BY ";
         if (this.columnYesNoName != null)
