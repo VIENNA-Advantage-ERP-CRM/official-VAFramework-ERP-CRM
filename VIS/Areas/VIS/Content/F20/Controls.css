@@ -73,7 +73,7 @@
     background-repeat: no-repeat;
 }*/
 select.vis-ev-col-mandatory {
-    background-position: calc(100% - 25px), calc(100% - 20px);
+    /*background-position: calc(100% - 25px), calc(100% - 20px);*/
 }
 
 .vis-control-wrap > button {
@@ -270,6 +270,9 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label{
     bottom: 0;
     color: rgba(var(--v-c-mandatory),1);
     display: none;
+}
+.vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
+    right: 30px;
 }
 .vis-ev-col-msign i {
     color:inherit;

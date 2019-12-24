@@ -103,11 +103,11 @@ html[dir="rtl"] .vis-input-wrap label {
     left: auto;
 }
 
-html[dir="rtl"] .vis-input-wrap select {
+html[dir="rtl"] select {
     background-position: calc(7% - 25px), calc(7% - 20px);
 }
 html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory{
-    background-position: calc(10% - 25px), calc(10% - 20px);
+    /*background-position: calc(10% - 25px), calc(10% - 20px);*/
 }
 
 html[dir="rtl"] .input-group > .input-group-append > .btn,
