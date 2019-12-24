@@ -806,6 +806,7 @@
     padding: 0;
     vertical-align: middle;
     margin: 0;
+    background-position: calc(100% - 6px), calc(100% - 1px);
 }
 
 
