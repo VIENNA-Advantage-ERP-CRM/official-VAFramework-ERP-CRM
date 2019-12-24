@@ -29,6 +29,7 @@
         var mAttributeSetID = null;
         var winQry = "";
         var window_ID = 0;
+        var windowName = "";
         var IsSOTrx = false;
         var IsInternalUse = false;
         this.log = VIS.Logging.VLogger.getVLogger("PAttributesForm");
@@ -49,6 +50,7 @@
             // Added by Bharat on 01 May 2017 to remove client side queries
             var AD_tab_ID = VIS.context.getWindowTabContext(windowNoParent, 0, "AD_Tab_ID");
             window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", AD_tab_ID.toString());
+            windowName = VIS.context.getContext(windowNoParent, "WindowName");
             IsSOTrx = VIS.context.isSOTrx(windowNoParent);
             IsInternalUse = VIS.context.getWindowTabContext(windowNoParent, 0, "IsInternalUse");
         }
@@ -333,7 +335,7 @@
                 if (window.DTD001 && window_ID == 170) {
                     M_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "DTD001_MWarehouseSource_ID");
                 }
-                else {
+                else if (window_ID == 143 || windowName == "Blanket Sales Order" || window_ID == 169 || window_ID == 168 || window_ID == 341) {
                     M_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "M_Warehouse_ID");
                 }
             }
@@ -364,7 +366,7 @@
             var AttributeSetInstance_ID = -1;
             //open new form
             // Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607
-            var obj = new VIS.PAttributeInstance(title, M_Warehouse_ID, mLocatorId, mProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val());
+            var obj = new VIS.PAttributeInstance(title, M_Warehouse_ID, mLocatorId, mProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val(), IsSOTrx);
             obj.showDialog();
 
             //JID_1140: On OK of select existing record  pop up system should not close the control Of ASI should only close the Select existing record control.
