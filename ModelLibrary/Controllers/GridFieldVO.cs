@@ -832,6 +832,7 @@ namespace VAdvantage.Controller
             clone.IsMaintainVersions = IsMaintainVersions;
             clone.CellSpace = CellSpace;
             clone.FieldBreadth = FieldBreadth;
+            clone.LineBreak = LineBreak;
 
 
             return clone;

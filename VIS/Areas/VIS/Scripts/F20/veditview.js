@@ -66,13 +66,37 @@
                 _curParent =  $td3 = $("<div class='vis-ev-col vis-ev-col-start4'></div>");
         };
 
-        function reset() {
-            
-            col0 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-            col1 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-            col2 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-            col3 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-            
+        function reset(col) {
+            if (!col) {
+                col0 = { rSpan: 1, cSpan: 0, cSpace: 0 };
+                col1 = { rSpan: 1, cSpan: 0, cSpace: 0 };
+                col2 = { rSpan: 1, cSpan: 0, cSpace: 0 };
+                col3 = { rSpan: 1, cSpan: 0, cSpace: 0 };
+            }
+            else if (col.rSpan <= 1) {
+                col = { rSpan: 1, cSpan: 0, cSpace: 0 };
+            } 
+        };
+
+
+        function adjustRowSpan() {
+
+            if (col0.rSpan > 1) { //skip column 
+                --col0.rSpan;
+                reset(col0);
+            }
+            if (col1.rSpan > 1) { //skip column 
+                --col1.rSpan;
+                reset(col1);
+            }
+            if (col2.rSpan > 1) { //skip column 
+                --col2.rSpan;
+                reset(col2);
+            }
+            if (col3.rSpan > 1) { //skip column 
+                --col3.rSpan;
+                reset(col3);
+            }
         };
 
         function adjustLayout(mField, isNewRow) {
@@ -87,6 +111,7 @@
                 isNewRow = true;
             }
             if (isNewRow) {
+                adjustRowSpan();
                 addRow();
                 columnIndex = 0;
             }
@@ -103,7 +128,8 @@
                     // check for row span
                     if (col0.rSpan > 1) { //skip column 
                         columnIndex += col0.cSpan;
-                        --col0.rSpan;
+                        //--col0.rSpan;
+                        //reset(col0);
                     }
                     else if (cellSpace > 0) {
                         if (cellSpace > 3)
@@ -111,7 +137,11 @@
                         columnIndex += cellSpace;
                         cellSpace = 0; //reset
                     }
+                    else if ($td0) {
+                        columnIndex += 1;
+                    }
                     else {
+                       
                         initCols(true);
                         if (colSpan == 2) {
                             if (col1.rSpan <= 1) //if nor row span on on colujn 1
@@ -150,7 +180,8 @@
                 // check for row span
                 if (col1.rSpan > 1) { //skip column 
                     columnIndex += col1.cSpan;
-                    --col1.rSpan;
+                    //--col1.rSpan;
+                    //reset(col1);
                 }
                 else if (cellSpace > 0) {
                     if (cellSpace > 2)
@@ -158,7 +189,11 @@
                     columnIndex += cellSpace;
                     cellSpace = 0;
                 }
+                else if ($td1) {
+                        columnIndex += 1;
+                }
                 else {
+                   
                     initCols(false, true);
                     if (colSpan == 2) {
                         if (col2.rSpan <= 1) //if nor row span on on colujn 1
@@ -188,7 +223,8 @@
                 // check for row span
                 if (col2.rSpan > 1) { //skip column 
                     columnIndex += col2.cSpan;
-                    --col2.rSpan;
+                    //--col2.rSpan;
+                    //reset(col2);
                 }
                 else if (cellSpace > 0) {
                     if (cellSpace > 1)
@@ -196,7 +232,11 @@
                     columnIndex += cellSpace;
                     cellSpace = 0;
                 }
+                else if ($td2) {
+                    columnIndex += 1;
+                }
                 else {
+                    
                     initCols(false, false, true);
                     if (colSpan >= 2) {
                         if (col3.rSpan <= 1) //if nor row span on on colujn 1
@@ -217,7 +257,14 @@
             if (columnIndex == 3) {
                 // check for row span
                 if (col3.rSpan > 1) { //skip column 
-                    --col3.rSpan;
+                    //--col3.rSpan;
+                    //reset(col3);
+                }
+                else if ($td3)
+                {
+                    isNewRow = true;
+                    //addRow();
+                    //columnIndex = 0;
                 }
                 else {
                     initCols(false, false, false, true);
@@ -231,6 +278,12 @@
                         $td3.css("grid-row", "span " + rowSpan);
                     }
                 }
+            }
+
+            //if all col index are skipped
+            if (!$td0 && !$td1 && !$td2 && !$td3) {
+                //columnIndex = 0;
+                adjustLayout(mField, isNewRow);
             }
         };
 
