@@ -1402,7 +1402,7 @@ namespace VAdvantage.Model
             {
                 //	TODO Costs!
                 log.Severe("Not Implemented yet - Cost");
-                return Env.ZERO;
+                return Decimal.Multiply(GetMovementQty(), (GetPostCurrentCostPrice() != 0 ? GetPostCurrentCostPrice() : GetCurrentCostPrice()));
             }
             else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
                 return Env.ONE;

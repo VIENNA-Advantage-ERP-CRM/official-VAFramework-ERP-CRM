@@ -281,6 +281,46 @@ public int GetM_Warehouse_ID()
         return 0; 
     return Convert.ToInt32(ii); 
 }
-}
+
+        /// <summary>
+        /// Set Difference.
+        /// </summary>
+        /// <param name="DifferenceAmt">Difference Amount</param>
+        public void SetDifferenceAmt(Decimal? DifferenceAmt) { Set_Value("DifferenceAmt", (Decimal?)DifferenceAmt); }
+        /// <summary>
+        /// Get Difference.
+        /// </summary>
+        /// <returns>Difference Amount</returns>
+        public Decimal GetDifferenceAmt() { Object bd = Get_Value("DifferenceAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+
+        /// <summary>
+        ///  Set Shipment/Receipt Line.
+        /// </summary>
+        /// <param name="M_InOutLine_ID">Line on Shipment or Receipt document</param>
+        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        {
+            if (M_InOutLine_ID <= 0) Set_Value("M_InOutLine_ID", null);
+            else
+                Set_Value("M_InOutLine_ID", M_InOutLine_ID);
+        }
+        /// <summary>
+        /// Get Shipment/Receipt Line.
+        /// </summary>
+        /// <returns>Line on Shipment or Receipt document</returns>
+        public int GetM_InOutLine_ID() { Object ii = Get_Value("M_InOutLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /// <summary>
+        /// Set Expected Cost Calculated.
+        /// </summary>
+        /// <param name="IsExpectedCostCalculated">Expected Cost Calculated</param>
+        public void SetIsExpectedCostCalculated(Boolean IsExpectedCostCalculated) { Set_Value("IsExpectedCostCalculated", IsExpectedCostCalculated); }
+        /// <summary>
+        ///  Get Expected Cost Calculated.
+        /// </summary>
+        /// <returns>Expected Cost Calculated </returns>
+        public Boolean IsExpectedCostCalculated() { Object oo = Get_Value("IsExpectedCostCalculated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+    }
 
 }
