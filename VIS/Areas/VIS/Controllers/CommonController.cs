@@ -360,7 +360,7 @@ namespace VIS.Controllers
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
-        
+
         /// <summary>
         /// Function to get data based on the query generated for table
         /// </summary>
@@ -382,7 +382,7 @@ namespace VIS.Controllers
                 if (Util.GetValueOfBool(paramValue[1]))
                     TableName = TableName + "_Ver";
 
-                int AD_Table_ID = MTable.Get_Table_ID(TableName);               
+                int AD_Table_ID = MTable.Get_Table_ID(TableName);
 
                 POInfo inf = POInfo.GetPOInfo(ctx, AD_Table_ID);
                 // Get SQL Query from PO Info for selected table
@@ -404,7 +404,7 @@ namespace VIS.Controllers
                     {
                         sqlCol += " AND " + TableName + ".ProcessedVersion = 'N' ";
                     }
-                    sqlCol += " ORDER BY " + TableName + ".VERSIONVALIDFROM DESC";
+                    sqlCol += " ORDER BY " + TableName + ".VERSIONVALIDFROM DESC, " + TableName + ".RecordVersion DESC";
                 }
                 CommonModel objCommonModel = new CommonModel();
                 retJSON = JsonConvert.SerializeObject(objCommonModel.GetIDTextData(ctx, sqlCol));

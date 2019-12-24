@@ -2410,7 +2410,7 @@
                 dateCret = date;
                 DelivDate = " AND l.DatePromised <= " + date;
             }
-            var adOrgIDS = $self.mTab.getValue($self.windowNo, "AD_Org_ID")
+            var adOrgIDS = $self.mTab.getValue("AD_Org_ID")
 
 
             $.ajax({

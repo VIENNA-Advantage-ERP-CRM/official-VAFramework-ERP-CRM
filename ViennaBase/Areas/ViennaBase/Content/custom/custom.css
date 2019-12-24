@@ -200,7 +200,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     width: 100%;
 }
 
-.ui-button .ui-icon, .ui-button:hover .ui-icon {
+.ui-button .ui-icon, .ui-state-hover .ui-icon, .ui-state-focus .ui-icon, .ui-button:hover .ui-icon, .ui-button:focus .ui-icon, .ui-state-default .ui-icon {
     background-image: url(../migration/themes/base/images/ui-icons_ffffff_256x240.png);
 }
 
@@ -221,19 +221,20 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 .ui-dialog .ui-dialog-content {
     position: relative;
     border: 0;
-    padding: 10px 10px 0;
+    padding: 10px;
     background: 0;
     overflow: auto;
 }
 
 .ui-widget {
-    /*font-family: helvetica;*/
+    font-family: 'NoirPro-Regular' !important;
     font-size: 1em;
 }
 
     .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
         /*font-family: verdana, Arial,Helvetica,sans-serif;*/
         outline: none;
+        min-height: 30px;
     }
 
 /*input:not([type=button]):focus,  select:focus, textarea:focus {
@@ -396,3 +397,8 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         border-top: 1px solid rgba(var(--v-c-on-secondary), .4);
         margin: -6px 0 0 0px;
     }
+
+/*process select*/
+.vis-pro-para-root select {
+    min-width: 180px;
+}

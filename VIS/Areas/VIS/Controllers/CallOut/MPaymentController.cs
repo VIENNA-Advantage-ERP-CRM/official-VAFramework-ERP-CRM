@@ -85,5 +85,17 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get Bank Account Currency
+        /// </summary>
+        /// <param name="fields">Parameters</param>
+        /// <returns>Currency</returns>
+        public JsonResult GetBankAcctCurrency(string fields)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            MPaymentModel objCashBookModel = new MPaymentModel();
+            return Json(JsonConvert.SerializeObject(objCashBookModel.GetBankAcctCurrency(fields)), JsonRequestBehavior.AllowGet);
+        }
     }
 }

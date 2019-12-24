@@ -1851,16 +1851,63 @@ namespace VAdvantage.Model
             return true;
         }
 
-        /**
-         * 	Void Document.
-         * 	Same as Close.
-         * 	@return true if success 
-         */
+        /// <summary>
+        /// Void Document.
+        /// </summary>
+        /// <returns>true if success</returns>
         public bool VoidIt()
         {
             log.Info(ToString());
+
+            MCashBook cashbook = new MCashBook(GetCtx(), GetC_CashBook_ID(), Get_TrxName());
+            int C_CASHBOOKLINE_ID = 0;
+
+            string sql = "SELECT C_CASHBOOKLINE_ID FROM C_CASHBOOKLINE WHERE C_CASHBOOK_ID="
+                            + GetC_CashBook_ID() + " AND DATEACCT="
+                            + DB.TO_DATE(GetDateAcct()) + " AND AD_ORG_ID=" + GetAD_Org_ID();
+
+            C_CASHBOOKLINE_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+
+            MCashbookLine cashbookLine = new MCashbookLine(GetCtx(), C_CASHBOOKLINE_ID, Get_TrxName());
+            if (C_CASHBOOKLINE_ID == 0)
+            {
+                cashbookLine.SetC_CashBook_ID(GetC_CashBook_ID());
+                cashbookLine.SetAD_Org_ID(cashbook.GetAD_Org_ID());
+                cashbookLine.SetAD_Client_ID(GetAD_Client_ID());
+                cashbookLine.SetEndingBalance(Decimal.Subtract(cashbook.GetCompletedBalance(), GetStatementDifference()));
+            }
+            else
+            {
+                cashbookLine.SetEndingBalance(Decimal.Subtract(cashbookLine.GetEndingBalance(), GetStatementDifference()));
+            }
+            cashbookLine.SetDateAcct(GetDateAcct());
+            cashbookLine.SetStatementDifference(Decimal.Subtract(cashbookLine.GetStatementDifference(), GetStatementDifference()));
+
+            if (!cashbookLine.Save())
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                    _processMsg = Msg.GetMsg(GetCtx(), "CashbookLineNotSaved") + " - " + pp.GetName();
+                else
+                    _processMsg = Msg.GetMsg(GetCtx(), "CashbookLineNotSaved");
+                return false;
+            }
+
+            cashbook.SetRunningBalance(Decimal.Subtract(cashbook.GetRunningBalance(), GetStatementDifference()));
+
+            if (!cashbook.Save())
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                    _processMsg = Msg.GetMsg(GetCtx(), "CashbookNotSaved") + " - " + pp.GetName();
+                else
+                    _processMsg = Msg.GetMsg(GetCtx(), "CashbookNotSaved");
+                return false;
+            }
+
+            SetProcessed(true);
             SetDocAction(DOCACTION_None);
-            return false;
+            return true;
         }
 
         /**
