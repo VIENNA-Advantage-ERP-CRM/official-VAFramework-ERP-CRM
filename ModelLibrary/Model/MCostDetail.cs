@@ -3820,6 +3820,9 @@ namespace VAdvantage.Model
             if (cl == null)
             {
                 cl = acctSchema.GetCostingLevel();
+            }
+            if (costingMethod == null)
+            {
                 costingMethod = acctSchema.GetCostingMethod();
                 if (costingMethod == "C")
                 {
