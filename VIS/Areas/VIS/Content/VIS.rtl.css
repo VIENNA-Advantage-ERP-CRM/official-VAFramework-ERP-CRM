@@ -103,7 +103,7 @@ html[dir="rtl"] .vis-input-wrap label {
     left: auto;
 }
 
-html[dir="rtl"] .vis-input-wrap select {
+select {
     background-position: calc(7% - 25px), calc(7% - 20px);
 }
 html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory{
