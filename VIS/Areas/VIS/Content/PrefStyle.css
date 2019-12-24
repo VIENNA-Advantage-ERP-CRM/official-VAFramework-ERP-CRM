@@ -920,6 +920,7 @@ input:required:valid {
 
 .form-group.location {
     display: flex;
+    position: relative;
 }
 .location input {
     /*width: 85.87%;
@@ -991,14 +992,22 @@ html[dir="rtl"] .right-inner-addon a {
     }
 
 .address-close-icon {
-    margin-top: -9px;
+    /* margin-top: -9px; */
     position: absolute;
     z-index: 10;
-    margin-left: -9px;
-    background: url(../Images/close-ico.png) no-repeat;
+    /* margin-left: -9px; */
+    background: rgba(var(--v-c-on-secondary), 1);
     width: 17px;
     height: 17px;
-    float: right;
+    /* float: right; */
+    right: -7px;
+    top: -9px;
+    border-radius: 50%;
+    color: rgba(var(--v-c-secondary), 1);
+    font-size: .55rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .form-input, .zip-input {

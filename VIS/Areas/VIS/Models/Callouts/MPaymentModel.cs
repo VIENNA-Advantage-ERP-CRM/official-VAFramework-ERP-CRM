@@ -229,5 +229,16 @@ namespace VIS.Models
             }
             return retDic;
         }
+
+        /// <summary>
+        /// Get Bank Account Currency 
+        /// </summary>
+        /// <param name="fields">Parameters</param>
+        /// <returns>Currency</returns>
+        public int GetBankAcctCurrency(string fields)
+        {
+            int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID = " + Util.GetValueOfInt(fields)));
+            return Currency_ID;
+        }
     }
 }

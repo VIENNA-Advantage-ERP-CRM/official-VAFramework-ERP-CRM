@@ -631,7 +631,7 @@ html[dir="rtl"] .vis-workflowActivityIcons.vis-icon-doneButton {
     .vis-workflowActivityDetails select {
         width: 100%;
         padding: 5px;
-        margin-bottom: 10px;
+        /*margin-bottom: 10px;*/
     }
 .vis-workflowActivityDetails-Heading {
     display: flex;

@@ -6136,7 +6136,7 @@
         return this.vo.FieldBreadth;
     };
 
-    GridField.prototype.getLineBreak = function () {
+    GridField.prototype.getIsLineBreak = function () {
         return this.vo.LineBreak;
     };
 
