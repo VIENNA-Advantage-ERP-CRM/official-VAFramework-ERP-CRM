@@ -375,5 +375,13 @@ select {
     position:relative;
     /*overflow:auto;*/
 }
+.vis-app-aform-root td {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    vertical-align: top;
+}
 
 /*End */
