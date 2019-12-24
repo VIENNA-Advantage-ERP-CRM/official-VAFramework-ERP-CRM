@@ -476,7 +476,6 @@
             if (displayType == VIS.DisplayType.Image) {
                 var image = new VImage(columnName, isMandatory, true, windowNo);
                 //image.setField(mField);
-                image.setIsHeaderPanelRequest(true);
                 ctrl = image;
             }
             else {
@@ -3340,11 +3339,11 @@
             }
 
             // Get culture decimal separator
-           // if (window.navigator.language != undefined) {
+            // if (window.navigator.language != undefined) {
             //    var culture = new VIS.CultureSeparator();
-           // var isDotSeparator = VIS.Env.isDecimalPoint();// culture.isDecimalSeparatorDot(window.navigator.language);
-                // Not . decimal separator
-                
+            // var isDotSeparator = VIS.Env.isDecimalPoint();// culture.isDecimalSeparatorDot(window.navigator.language);
+            // Not . decimal separator
+
             if (!VIS.Env.isDecimalPoint()) {
                 if (event.keyCode == 190 || event.keyCode == 110) {
                     return false;
@@ -3356,8 +3355,8 @@
                     return false;
                 }
             }
-               
-           // }
+
+            // }
 
             if (event.keyCode == 190 || event.keyCode == 110 || event.keyCode == 188) {// decimal (.)
                 if (this.value.indexOf('.') > -1) {
@@ -4529,7 +4528,6 @@
     function VImage(colName, mandatoryField, isReadOnly, winNo) {
         this.values = null;
         this.log = VIS.Logging.VLogger.getVLogger("VImage");
-        var isHeaderPanelRequest = false;
         var windowNo = winNo;
         var columnName = colName;// "AD_Image_ID";
         var $img = $("<img >");
@@ -4575,6 +4573,9 @@
                             self.fireValueChanged(evt, true);
                             evt = null;
                         }
+                        else {
+                            self.refreshImage(ad_image_Id);
+                        }
                     }
                 };
                 obj = null;
@@ -4603,40 +4604,29 @@
             //$img.attr('src', rootPath + img);
 
             if (imgPath) {
-                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath);
-                if (isHeaderPanelRequest)
-                    $ctrl.show();
-                else
-                    $img.show();
+                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath + "? timestamp =" + new Date().getTime());
+
+                $img.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else if (resImg != null) {
-                $img.attr('src', "data:image/jpg;base64," + resImg);
-                if (isHeaderPanelRequest)
-                    $ctrl.show();
-                else
-                    $img.show();
+                $img.attr('src', "data:image/jpg;base64," + resImg + "? timestamp =" + new Date().getTime());
+
+                $img.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else {
-                $img.attr('src', "data:image/jpg;base64," + resImg);
-                if (isHeaderPanelRequest)
-                    $ctrl.hide();
-                else
-                    $img.hide();
+                $img.attr('src', "data:image/jpg;base64," + resImg + "? timestamp =" + new Date().getTime());
+
+                $img.hide();
                 $txt.text("-");
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');
             }
         };
-
-        this.setIsHeaderPanelRequest = function (isHeader) {
-            isHeaderPanelRequest = isHeader;
-        }
-
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
             $ctrl = null;
@@ -4666,7 +4656,7 @@
                 }
                 return;
             }
-            var neValue = newValue;
+            //var neValue = newValue;
             //  Get/Create Image byte array
             //var sql = "select * from AD_Image where AD_Image_ID=" + newValue;
             //var dr = VIS.DB.executeDataReader(sql.toString());
@@ -4676,26 +4666,50 @@
             //}
 
             //By Ajex request
-            var localObj = this;
-            $.ajax({
-                url: VIS.Application.contextUrl + "VImageForm/GetImageAsByte",
-                dataType: "json",
-                data: {
-                    ad_image_id: neValue
-                },
-                success: function (data) {
-                    var data = JSON.parse(data);
-                    if (data) {
-                        localObj.setIcon(data.Bytes, data.Path);
-                    }
-                    else {
-                        localObj.setIcon(null, null);
-                    }
-                    localObj.ctrl.val(neValue);
-                    localObj = null;
-                }
-            });
+            ////var localObj = this;
+            ////$.ajax({
+            ////    url: VIS.Application.contextUrl + "VImageForm/GetImageAsByte",
+            ////    dataType: "json",
+            ////    data: {
+            ////        ad_image_id: neValue
+            ////    },
+            ////    success: function (data) {
+            ////        var data = JSON.parse(data);
+            ////        if (data) {
+            ////            localObj.setIcon(data.Bytes, data.Path);
+            ////        }
+            ////        else {
+            ////            localObj.setIcon(null, null);
+            ////        }
+            ////        localObj.ctrl.val(neValue);
+            ////        localObj = null;
+            ////    }
+            ////});
+
+            this.refreshImage(newValue);
         }
+    };
+
+    VImage.prototype.refreshImage = function (neValue) {
+        var localObj = this;
+        $.ajax({
+            url: VIS.Application.contextUrl + "VImageForm/GetImageAsByte",
+            dataType: "json",
+            data: {
+                ad_image_id: neValue
+            },
+            success: function (data) {
+                var data = JSON.parse(data);
+                if (data) {
+                    localObj.setIcon(data.Bytes, data.Path);
+                }
+                else {
+                    localObj.setIcon(null, null);
+                }
+                localObj.ctrl.val(neValue);
+                localObj = null;
+            }
+        });
     };
 
     VImage.prototype.setReadOnly = function (readOnly) {

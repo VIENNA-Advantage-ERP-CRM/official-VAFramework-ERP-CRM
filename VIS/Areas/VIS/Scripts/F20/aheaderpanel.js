@@ -66,23 +66,9 @@
 
                         var colValue = getFieldValue(mField);
 
-                        if (colValue) {
-                            if (colValue.startsWith && colValue.startsWith("<") && colValue.endsWith(">")) {
-                                colValue = colValue.replace("<", "").replace(">", "");
-                            }
-                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
-                                iControl.getControl().show();
-                            }
-                            iControl.setValue(w2utils.encodeTags(colValue));
-                        }
-                        else {
-                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
-                                iControl.getControl().hide();
-                                iControl.setValue(null);
-                            }
-                            else
-                                iControl.setValue("- -", true);
-                        }
+                        setValue(colValue, iControl, mField);
+
+                        
 
                     }
                 }
@@ -177,23 +163,7 @@
                         }
                         var $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                         var colValue = getFieldValue(mField);
-                        if (colValue) {
-                            if (colValue.startsWith && colValue.startsWith("<") && colValue.endsWith(">")) {
-                                colValue = colValue.replace("<", "").replace(">", "");
-                            }
-                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
-                                iControl.getControl().show();
-                            }
-                            iControl.setValue(w2utils.encodeTags(colValue));
-                        }
-                        else {
-                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
-                                iControl.getControl().hide();
-                                iControl.setValue(null);
-                            }
-                            else
-                                iControl.setValue("- -", true);
-                        }
+                        setValue(colValue, iControl, mField);
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
                         if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
@@ -219,6 +189,31 @@
                 }
             }
 
+        };
+
+        var setValue = function (colValue, iControl, mField) {
+            if (colValue) {
+                if (colValue.startsWith && colValue.startsWith("<") && colValue.endsWith(">")) {
+                    colValue = colValue.replace("<", "").replace(">", "");
+                }
+
+                if (mField.getDisplayType() == VIS.DisplayType.Image) {
+                    var oldValue = iControl.getValue();
+                    iControl.getControl().show();
+                    if (oldValue == colValue) {
+                        iControl.refreshImage(colValue);
+                    }
+                }
+                iControl.setValue(w2utils.encodeTags(colValue));
+            }
+            else {
+                if (mField.getDisplayType() == VIS.DisplayType.Image) {
+                    iControl.getControl().hide();
+                    iControl.setValue(null);
+                }
+                else
+                    iControl.setValue("- -", true);
+            }
         };
 
         /**
