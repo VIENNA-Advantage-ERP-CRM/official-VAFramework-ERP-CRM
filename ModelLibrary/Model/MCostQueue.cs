@@ -2205,6 +2205,120 @@ namespace VAdvantage.Model
                             #endregion
                         }
 
+
+                        // calculate expected landed cost 
+                        if (windowName == "Material Receipt" && orderline != null && orderline.Get_ID() > 0
+                            && order != null && order.Get_ID() > 0 && inoutline != null && inoutline.Get_ID() > 0)
+                        {
+                            decimal expectedAmt = 0;
+                            decimal expectedQty = 0;
+                            query.Clear();
+                            query.Append("SELECT C_ExpectedCost.M_CostElement_ID , C_Expectedcostdistribution.Amt , C_Expectedcostdistribution.Qty, C_Expectedcostdistribution.C_Expectedcostdistribution_ID  " +
+                                          " FROM C_Expectedcostdistribution INNER JOIN C_ExpectedCost ON C_Expectedcostdistribution.C_ExpectedCost_ID = C_ExpectedCost.C_ExpectedCost_ID " +
+                                          " WHERE C_Expectedcostdistribution.Amt != 0 AND C_Expectedcostdistribution.C_OrderLine_ID = " + orderline.GetC_OrderLine_ID());
+                            //if (inoutline.GetReversalDoc_ID() > 0)
+                            //{
+                            //    // during reversal of MR doc, system check expected landed cost is calculated ?
+                            //    // if yes then need to reversed the impact
+                            //    query.Append(" AND C_Expectedcostdistribution.IsCostCalculated = 'Y' ");
+                            //}
+                            //else
+                            //{
+                            //    query.Append(" AND C_Expectedcostdistribution.IsCostCalculated = 'N' ");
+                            //}
+                            DataSet dsExpectedLandedCostAllocation = DB.ExecuteDataset(query.ToString(), null, trxName);
+                            if (dsExpectedLandedCostAllocation != null && dsExpectedLandedCostAllocation.Tables.Count > 0 && dsExpectedLandedCostAllocation.Tables[0].Rows.Count > 0)
+                            {
+                                for (int lca = 0; lca < dsExpectedLandedCostAllocation.Tables[0].Rows.Count; lca++)
+                                {
+                                    // total distributed amount against orderline
+                                    expectedAmt = Util.GetValueOfDecimal(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["Amt"]);
+                                    // Orderline qty
+                                    expectedQty = Util.GetValueOfDecimal(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["Qty"]);
+                                    // distributed amount of each qty
+                                    expectedAmt = Decimal.Divide(expectedAmt, expectedQty);
+
+                                    //total amount of movement qty
+                                    expectedAmt = Decimal.Multiply(expectedAmt, inoutline.GetMovementQty());
+                                    // movement qty
+                                    expectedQty = inoutline.GetMovementQty();
+
+                                    if (order.GetC_Currency_ID() != acctSchema.GetC_Currency_ID())
+                                    {
+                                        expectedAmt = MConversionRate.Convert(ctx, expectedAmt, order.GetC_Currency_ID(), acctSchema.GetC_Currency_ID(),
+                                                                    inout.GetDateAcct(), order.GetC_ConversionType_ID(), AD_Client_ID, AD_Org_ID);
+                                        if (expectedAmt == 0)
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            conversionNotFound = inout.GetDocumentNo();
+                                            return false;
+                                        }
+                                    }
+
+                                    // check cost detail is created on completion or not
+                                    if (optionalstr == "process")
+                                    {
+                                        query.Clear();
+                                        query.Append("SELECT M_CostDetail_ID FROM M_CostDetail WHERE IsActive = 'Y' " +
+                                                     " AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                                     " AND M_CostElement_ID = " + Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]) +
+                                                     " AND C_Orderline_ID = " + inoutline.GetC_OrderLine_ID() +
+                                                     " AND M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                                     " AND M_Product_ID = " + inoutline.GetM_Product_ID() +
+                                                     " AND  M_AttributeSetInstance_ID = " + inoutline.GetM_AttributeSetInstance_ID());
+                                        int cdId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
+                                        cd = new MCostDetail(ctx, cdId, trxName);
+                                    }
+
+                                    // if cost detail not created on completion, need to create cost detail
+                                    if (cd == null || cd.GetM_CostDetail_ID() <= 0)
+                                    {
+                                        // get warehouse org -- freight record to be created in warehouse org
+                                        if (M_Warehouse_Id > 0)
+                                        {
+                                            AD_Org_ID = MWarehouse.Get(ctx, M_Warehouse_Id).GetAD_Org_ID();
+                                        }
+                                        cd = MCostDetail.CreateCostDetail(acctSchema, AD_Org_ID, inoutline.GetM_Product_ID(),
+                                            inoutline.GetM_AttributeSetInstance_ID(), windowName, inventoryLine, inoutline, movementline,
+                                             invoiceline, po, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]), expectedAmt,
+                                             expectedQty, null, trxName, M_Warehouse_Id);
+                                    }
+                                    if (cd != null)
+                                    {
+                                        result = cd.UpdateProductCost(windowName, cd, acctSchema, product, inoutline.GetM_AttributeSetInstance_ID(),
+                                                                      AD_Org_ID, optionalStrCd: optionalstr);
+                                        if (result)
+                                        {
+                                            // will mark IsCostCalculated as TRUE during last accounting schema cycle
+                                            //if (i == ds.Tables[0].Rows.Count - 1)
+                                            //{
+                                            //    DB.ExecuteQuery(@"UPDATE C_Expectedcostdistribution SET 
+                                            //     IsCostCalculated = '" + (inoutline.GetReversalDoc_ID() > 0 ? 'N' : 'Y') + @"' 
+                                            //    WHERE C_Expectedcostdistribution_ID = " + Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_Expectedcostdistribution_ID"]), null, trxName);
+                                            //}
+                                        }
+                                        else
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                            _log.Severe("Error occured during UpdateProductCost for C_Expectedcostdistribution_ID = "
+                                                + Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_Expectedcostdistribution_ID"]));
+                                            return false;
+                                        }
+
+                                        // set cost detail reference as null, so that system will calculate MR costs also
+                                        cd = null;
+                                    }
+                                }
+                            }
+                        }
+
                         // landed cost calculated on completion, not through process
                         // Cost element detail not created against it.
                         if (((windowName == "Invoice(Vendor)" && product == null) || (windowName == "Invoice(Vendor)" && product != null && product.GetProductType() == "E") ||
@@ -2214,6 +2328,7 @@ namespace VAdvantage.Model
                             isLandedCostAllocation = true;
                             decimal amt = 0;
                             decimal qntity = 0;
+                            bool isExpectedCostCalculated = false;
                             query.Clear();
                             query.Append("SELECT * FROM C_LandedCostAllocation WHERE IsCostCalculated = 'N' AND Amt != 0 AND C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
                             if (windowName == "LandedCost")
@@ -2229,6 +2344,8 @@ namespace VAdvantage.Model
                                 for (int lca = 0; lca < dsLandedCostAllocation.Tables[0].Rows.Count; lca++)
                                 {
                                     cd = null;
+                                    isExpectedCostCalculated = Util.GetValueOfString(dsLandedCostAllocation.Tables[0].Rows[lca]["IsExpectedCostCalculated"]).Equals("Y");
+
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                     {
                                         if (Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Qty"]) > 0)
@@ -2239,19 +2356,26 @@ namespace VAdvantage.Model
                                         {
                                             qntity = Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Qty"]);
                                         }
-                                        if (Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Amt"]) > 0)
+                                        if (Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca][isExpectedCostCalculated ? "DifferenceAmt" : "Amt"]) > 0)
                                         {
-                                            amt = Decimal.Negate(Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Amt"]));
+                                            if (isExpectedCostCalculated)
+                                            {
+                                                amt = Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["DifferenceAmt"]);
+                                            }
+                                            else
+                                            {
+                                                amt = Decimal.Negate(Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Amt"]));
+                                            }
                                         }
                                         else
                                         {
-                                            amt = Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Amt"]);
+                                            amt = Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca][isExpectedCostCalculated ? "DifferenceAmt" : "Amt"]);
                                         }
                                     }
                                     else
                                     {
                                         qntity = Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Qty"]);
-                                        amt = Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca]["Amt"]);
+                                        amt = Util.GetValueOfDecimal(dsLandedCostAllocation.Tables[0].Rows[lca][isExpectedCostCalculated ? "DifferenceAmt" : "Amt"]);
                                     }
                                     // conversion required
                                     if (invoice.GetC_Currency_ID() != acctSchema.GetC_Currency_ID())
@@ -2306,6 +2430,8 @@ namespace VAdvantage.Model
                                     {
                                         productLca = new MProduct(ctx, Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["M_Product_ID"]), trxName);
                                         M_ASI_ID = Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["M_AttributeSetInstance_ID"]);
+                                        // set dynamic property as expected landed cost 
+                                        cd.SetExpectedCostCalculated(isExpectedCostCalculated);
                                         //if ((optionalstr == "window" && client.IsCostImmediate()) || (optionalstr == "process" && !client.IsCostImmediate()))
                                         //{
                                         result = cd.UpdateProductCost(windowName, cd, acctSchema, productLca, M_ASI_ID, invoiceline.GetAD_Org_ID(), optionalStrCd: optionalstr);
@@ -2383,7 +2509,7 @@ namespace VAdvantage.Model
                                     {
                                         query.Append(" AND C_Orderline_ID = " + inoutline.GetC_OrderLine_ID());
                                     }
-                                    query.Append(" AND NVL(C_Invoiceline_ID , 0) = 0 ");
+                                    query.Append(" AND NVL(C_Invoiceline_ID , 0) = 0 AND NVL(M_CostElement_ID , 0) = 0 ");
                                 }
                                 else if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
                                 {

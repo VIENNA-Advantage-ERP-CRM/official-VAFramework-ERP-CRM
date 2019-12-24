@@ -2305,6 +2305,13 @@ namespace VAdvantage.Process
                                                  WHERE M_Product_ID IN 
                                                  (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
 
+                // expected landed cost
+                //countRecord = 0;
+                //countRecord = DB.ExecuteQuery(@"UPDATE C_Expectedcostdistribution Set Iscostcalculated  = 'N'
+                //                                    Where C_Orderline_Id In (Select C_Orderline_Id
+                //                                      FROM C_OrderLine WHERE M_Product_Id IN 
+                //                                      ((SELECT M_Product_Id FROM M_Product WHERE M_Product_Category_Id IN (" + productCategoryID + "))))", null, Get_Trx());
+
                 // for M_Inventory / M_InventoryLine
                 countRecord = 0;
                 countRecord = DB.ExecuteQuery(@"UPDATE m_inventoryline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N', CurrentCostPrice = 0 , PostCurrentCostPrice = 0 
@@ -2409,6 +2416,12 @@ namespace VAdvantage.Process
                 countRecord = DB.ExecuteQuery(@"UPDATE C_LANDEDCOSTALLOCATION SET  iscostcalculated = 'N' 
                                                  WHERE M_Product_ID IN (" + productID + " ) ", null, Get_Trx());
 
+                // expected landed cost
+                //countRecord = 0;
+                //countRecord = DB.ExecuteQuery(@"UPDATE C_Expectedcostdistribution Set IsCostCalculated  = 'N'
+                //                                    Where C_Orderline_ID IN (Select C_Orderline_ID
+                //                                      FROM C_OrderLine WHERE M_Product_ID IN (" + productID + "))", null, Get_Trx());
+
                 // for M_Inventory / M_InventoryLine
                 countRecord = 0;
                 countRecord = DB.ExecuteQuery(@"UPDATE m_inventoryline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0 , PostCurrentCostPrice = 0 
@@ -2486,6 +2499,9 @@ namespace VAdvantage.Process
 
                 // For Landed Cost Allocation
                 DB.ExecuteQuery(@"UPDATE C_LANDEDCOSTALLOCATION SET  iscostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+
+                // expected landed cost
+                //DB.ExecuteQuery(@"UPDATE C_Expectedcostdistribution Set IsCostCalculated  = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // for M_Inventory / M_InventoryLine
                 DB.ExecuteQuery(@"UPDATE m_inventoryline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0 , PostCurrentCostPrice = 0  WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());

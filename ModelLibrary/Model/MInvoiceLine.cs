@@ -4083,11 +4083,11 @@ namespace VAdvantage.Model
                     return "";
                 }
 
-                int nos = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_LandedCost WHERE  LandedCostDistribution = 'C' AND C_InvoiceLine_ID = " + GetC_InvoiceLine_ID(), null, Get_Trx()));
-                if (nos > 0)
-                {
-                    return "";
-                }
+                //int nos = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_LandedCost WHERE  LandedCostDistribution = 'C' AND C_InvoiceLine_ID = " + GetC_InvoiceLine_ID(), null, Get_Trx()));
+                //if (nos > 0)
+                //{
+                //    return "";
+                //}
 
                 String sql = "DELETE FROM C_LandedCostAllocation WHERE C_InvoiceLine_ID="
                     + GetC_InvoiceLine_ID();
@@ -4310,7 +4310,7 @@ namespace VAdvantage.Model
                             //lca.SetAmt(GetLineNetAmt());
                             lca.SetAmt(GetProductLineCost(this));
                             lca.SetBase(iol.GetBase(lc.GetLandedCostDistribution()));            // Get Base value based on Landed cost distribution
-                            lca.SetQty(iol.GetQtyEntered());
+                            lca.SetQty(iol.GetMovementQty());
 
                             // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
                             if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
@@ -4320,6 +4320,25 @@ namespace VAdvantage.Model
                             if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                             {
                                 lca.SetM_Warehouse_ID(io.GetM_Warehouse_ID());
+                            }
+                            if (lca.Get_ColumnIndex("M_InOutLine_ID") > 0)
+                            {
+                                lca.SetM_InOutLine_ID(iol.GetM_InOutLine_ID());
+                            }
+                            // get difference of (expected - actual) landed cost allocation amount if have
+                            Decimal diffrenceAmt = 0;
+                            if (iol.GetC_OrderLine_ID() > 0)
+                            {
+                                int C_ExpectedCost_ID = GetExpectedLandedCostId(lc, iol.GetC_OrderLine_ID());
+                                if (C_ExpectedCost_ID > 0)
+                                {
+                                    diffrenceAmt = GetLandedCostDifferenceAmt(lc, iol.GetM_InOutLine_ID(), iol.GetMovementQty(), lca.GetAmt(), C_ExpectedCost_ID, GetPrecision());
+                                    lca.SetIsExpectedCostCalculated(true);
+                                }
+                            }
+                            if (lca.Get_ColumnIndex("DifferenceAmt") > 0)
+                            {
+                                lca.SetDifferenceAmt(Decimal.Round(diffrenceAmt, GetPrecision()));
                             }
                             if (!lca.Save())
                             {
@@ -4397,6 +4416,8 @@ namespace VAdvantage.Model
                             MLandedCostAllocation lca = null;
                             Decimal base1 = 0;
                             double result = 0;
+                            Decimal diffrenceAmt = 0;
+                            int C_ExpectedCost_ID = 0;
 
                             for (int i = 0; i < list.Count; i++)
                             {
@@ -4414,7 +4435,7 @@ namespace VAdvantage.Model
                                     result /= Decimal.ToDouble(total);
                                     lca.SetAmt(result, GetPrecision());
                                 }
-                                lca.SetQty(iol.GetQtyEntered());
+                                lca.SetQty(iol.GetMovementQty());
 
                                 // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
                                 if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
@@ -4425,7 +4446,24 @@ namespace VAdvantage.Model
                                 {
                                     lca.SetM_Warehouse_ID(ship.GetM_Warehouse_ID());
                                 }
-
+                                if (lca.Get_ColumnIndex("M_InOutLine_ID") > 0)
+                                {
+                                    lca.SetM_InOutLine_ID(iol.GetM_InOutLine_ID());
+                                }
+                                // get difference of (expected - actual) landed cost allocation amount if have
+                                if (iol.GetC_OrderLine_ID() > 0)
+                                {
+                                    C_ExpectedCost_ID = GetExpectedLandedCostId(lc, iol.GetC_OrderLine_ID());
+                                    if (C_ExpectedCost_ID > 0)
+                                    {
+                                        diffrenceAmt = GetLandedCostDifferenceAmt(lc, iol.GetM_InOutLine_ID(), iol.GetMovementQty(), lca.GetAmt(), C_ExpectedCost_ID, GetPrecision());
+                                        lca.SetIsExpectedCostCalculated(true);
+                                    }
+                                }
+                                if (lca.Get_ColumnIndex("DifferenceAmt") > 0)
+                                {
+                                    lca.SetDifferenceAmt(Decimal.Round(diffrenceAmt, GetPrecision()));
+                                }
                                 if (!lca.Save())
                                 {
                                     pp = VLogger.RetrieveError();
@@ -4465,7 +4503,7 @@ namespace VAdvantage.Model
                             //lca.SetAmt(GetLineNetAmt());
                             lca.SetAmt(GetProductLineCost(this));
                             lca.SetBase(iol.GetBase(lc.GetLandedCostDistribution()));            // Get Base value based on Landed cost distribution
-                            lca.SetQty(iol.GetQtyEntered());
+                            lca.SetQty(iol.GetMovementQty());
 
                             // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
                             if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
@@ -4572,7 +4610,7 @@ namespace VAdvantage.Model
                                     result /= Decimal.ToDouble(total);
                                     lca.SetAmt(result, GetPrecision());
                                 }
-                                lca.SetQty(iol.GetQtyEntered());
+                                lca.SetQty(iol.GetMovementQty());
 
                                 // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
                                 if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
@@ -4935,7 +4973,7 @@ namespace VAdvantage.Model
                             result /= Decimal.ToDouble(total1);
                             lca.SetAmt(result, GetPrecision());
                         }
-                        lca.SetQty(inl.GetQtyEntered());
+                        lca.SetQty(inl.GetMovementQty());
 
                         // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
                         if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
@@ -4945,6 +4983,26 @@ namespace VAdvantage.Model
                         if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                         {
                             lca.SetM_Warehouse_ID(ino.GetM_Warehouse_ID());
+                        }
+
+                        if (lca.Get_ColumnIndex("M_InOutLine_ID") > 0)
+                        {
+                            lca.SetM_InOutLine_ID(inl.GetM_InOutLine_ID());
+                        }
+                        // get difference of (expected - actual) landed cost allocation amount if have
+                        Decimal diffrenceAmt = 0;
+                        if (inl.GetC_OrderLine_ID() > 0)
+                        {
+                            int C_ExpectedCost_ID = GetExpectedLandedCostId(lcs[0], inl.GetC_OrderLine_ID());
+                            if (C_ExpectedCost_ID > 0)
+                            {
+                                diffrenceAmt = GetLandedCostDifferenceAmt(lcs[0], inl.GetM_InOutLine_ID(), inl.GetMovementQty(), lca.GetAmt(), C_ExpectedCost_ID, GetPrecision());
+                                lca.SetIsExpectedCostCalculated(true);
+                            }
+                        }
+                        if (lca.Get_ColumnIndex("DifferenceAmt") > 0)
+                        {
+                            lca.SetDifferenceAmt(Decimal.Round(diffrenceAmt, GetPrecision()));
                         }
 
                         if (!lca.Save())
@@ -5075,7 +5133,7 @@ namespace VAdvantage.Model
                             result /= Decimal.ToDouble(total1);
                             lca.SetAmt(result, GetPrecision());
                         }
-                        lca.SetQty(iml.GetQtyEntered());
+                        lca.SetQty(iml.GetMovementQty());
                         if (!lca.Save())
                         {
                             pp = VLogger.RetrieveError();
@@ -5100,6 +5158,61 @@ namespace VAdvantage.Model
                 // MessageBox.Show("MinvoiceLine--AllocateLandedCosts");
             }
             return "";
+        }
+
+        /// <summary>
+        /// This function is used to get difference value between expecetd landed cost and actual landed cost invoice
+        /// </summary>
+        /// <param name="lc">landed cost</param>
+        /// <param name="M_Inoutline_ID">receipt line</param>
+        /// <param name="Quantity">receipt movement qty</param>
+        /// <param name="ActualLandeCost">actual landed cost value</param>
+        /// <param name="C_ExpectedCost_ID">expecetde landed cost</param>
+        /// <param name="precision">standard precison</param>
+        /// <returns>diffrence value</returns>
+        private Decimal GetLandedCostDifferenceAmt(MLandedCost lc, int M_Inoutline_ID, Decimal Quantity, Decimal ActualLandeCost, int C_ExpectedCost_ID, int precision)
+        {
+            Decimal differenceAmt = 0.0M;
+            // get expected freight amount of each 
+            String sql = @"Select CASE When C_Expectedcostdistribution.Qty = 0 THEN 0
+                            ELSE  C_Expectedcostdistribution.Amt / C_Expectedcostdistribution.Qty
+                            END AS Amt
+                        From M_Inoutline Inner Join C_Expectedcostdistribution On M_Inoutline.C_Orderline_Id = C_Expectedcostdistribution.C_Orderline_Id
+                        INNER JOIN C_Expectedcost ON C_Expectedcost.C_Expectedcost_Id = C_Expectedcostdistribution.C_Expectedcost_Id
+                        WHERE m_inoutline.M_InoutLine_ID = " + M_Inoutline_ID + @"  AND C_Expectedcost.C_ExpectedCost_ID=" + C_ExpectedCost_ID;
+            differenceAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+
+            // multiply with movement qty of MR
+            differenceAmt = Decimal.Multiply(differenceAmt, Quantity);
+
+            // diffrence between actual landed cost - expected received cost
+            if (ActualLandeCost > 0)  // during invoice completion
+            {
+                differenceAmt = Decimal.Subtract(ActualLandeCost, differenceAmt);
+            }
+            else // during invoice reversal
+            {
+                differenceAmt = Decimal.Add(ActualLandeCost, differenceAmt);
+            }
+            return differenceAmt;
+        }
+
+        /// <summary>
+        /// Get expected landed cost id, when expected landed cost distribution is defined on purchase order
+        /// </summary>
+        /// <param name="lc">landedc cost reference</param>
+        /// <param name="C_OrderLine_ID">order line reference</param>
+        /// <returns>C_ExpectedCost_ID</returns>
+        private int GetExpectedLandedCostId(MLandedCost lc, int C_OrderLine_ID)
+        {
+            int C_ExpectedCost_ID = 0;
+            String sql = @"Select Unique C_Expectedcost.C_ExpectedCost_ID From C_Expectedcost 
+                            INNER JOIN C_Expectedcostdistribution ON C_Expectedcost.C_Expectedcost_Id = C_Expectedcostdistribution.C_Expectedcost_Id
+                            WHERE C_Expectedcost.M_Costelement_Id = " + lc.GetM_CostElement_ID() + @"
+                            And C_Expectedcost.Landedcostdistribution = '" + lc.GetLandedCostDistribution() + @"'
+                            AND C_Expectedcostdistribution.C_OrderLine_ID = " + C_OrderLine_ID;
+            C_ExpectedCost_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+            return C_ExpectedCost_ID;
         }
 
         /// <summary>
