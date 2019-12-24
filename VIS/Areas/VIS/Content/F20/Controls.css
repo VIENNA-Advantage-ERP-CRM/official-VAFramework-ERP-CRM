@@ -68,13 +68,12 @@
     appearance: none;
     background: transparent;
     background-image: linear-gradient(45deg, transparent 50%, rgba(var(--v-c-primary),1) 50%), linear-gradient(135deg, rgba(var(--v-c-primary),1) 50%, transparent 50%);
-    /*background-position: calc(100% - 25px) calc(1em + 2px), calc(100% - 20px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;*/
     background-position: calc(100% - 15px), calc(100% - 10px);
     background-size: 5px 4px, 5px 4px, 1px 1.5em;
     background-repeat: no-repeat;
 }*/
 select.vis-ev-col-mandatory {
-    background-position: calc(100% - 25px), calc(100% - 20px);
+    /*background-position: calc(100% - 25px), calc(100% - 20px);*/
 }
 
 .vis-control-wrap > button {
@@ -271,6 +270,9 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label{
     bottom: 0;
     color: rgba(var(--v-c-mandatory),1);
     display: none;
+}
+.vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
+    right: 30px;
 }
 .vis-ev-col-msign i {
     color:inherit;

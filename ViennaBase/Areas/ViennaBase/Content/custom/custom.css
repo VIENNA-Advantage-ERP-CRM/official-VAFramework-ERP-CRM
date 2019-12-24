@@ -54,7 +54,7 @@
 }
 
 .w2ui-grid .w2ui-grid-body table .w2ui-col-select {
-    width: 26px;
+    width: 40px;
     vertical-align: middle;
 }
 
@@ -194,7 +194,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 .ui-dialog .ui-dialog-title {
     margin: 0;
     font-size: 14px;
-    font-family: helvetica;
+    /*font-family: helvetica;*/
     font-weight: 400;
     color: rgba(var(--v-c-on-primary), 1);
     width: 100%;
@@ -212,7 +212,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     color: white !Important;
     font-size: 14px;
     font-weight: 200;
-    font-family: helvetica;
+    /*font-family: helvetica;*/
     cursor: pointer;
     margin-bottom: 20px;
     margin-top: 15px;
@@ -227,12 +227,12 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 }
 
 .ui-widget {
-    font-family: helvetica;
+    /*font-family: helvetica;*/
     font-size: 1em;
 }
 
     .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
-        font-family: verdana, Arial,Helvetica,sans-serif;
+        /*font-family: verdana, Arial,Helvetica,sans-serif;*/
         outline: none;
     }
 
