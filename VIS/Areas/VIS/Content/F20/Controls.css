@@ -62,7 +62,7 @@
     height: 100%;
 }
 
-.vis-input-wrap select, .vis-custom-select {
+/*.vis-input-wrap select, .vis-custom-select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -72,7 +72,7 @@
     background-position: calc(100% - 15px), calc(100% - 10px);
     background-size: 5px 4px, 5px 4px, 1px 1.5em;
     background-repeat: no-repeat;
-}
+}*/
 select.vis-ev-col-mandatory {
     background-position: calc(100% - 25px), calc(100% - 20px);
 }
