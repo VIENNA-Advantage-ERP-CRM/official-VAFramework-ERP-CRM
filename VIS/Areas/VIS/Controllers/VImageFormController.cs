@@ -23,7 +23,7 @@ namespace VIS.Controllers
                 var ctx = Session["ctx"] as Ctx;
                 if (ad_image_id > 0)
                 {
-                    obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 0, 0, Request.UrlReferrer.AbsoluteUri);
+                    obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 0, 0, ctx.GetApplicationUrl());
                 }
             }
 
@@ -79,7 +79,7 @@ namespace VIS.Controllers
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                img = obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 320, 185, Request.UrlReferrer.AbsoluteUri);
+                img = obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 320, 185, ctx.GetApplicationUrl());
             }
             return Json(JsonConvert.SerializeObject(img), JsonRequestBehavior.AllowGet);
         }
