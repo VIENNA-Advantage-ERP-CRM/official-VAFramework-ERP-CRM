@@ -195,6 +195,8 @@ namespace VAdvantage.Model
                     instance = new MAttributeInstance(GetCtx(), GetM_Attribute_ID(),
                         M_AttributeSetInstance_ID, 0, null, Get_TrxName());
                 }
+                // Create new Attribute Instances in * Organization
+                instance.SetAD_Org_ID(0);
             }
             else
             {
@@ -248,7 +250,7 @@ namespace VAdvantage.Model
             else
             {
                 instance.SetValueNumber(value);
-                
+
             }
             instance.Save();
         }
@@ -257,7 +259,7 @@ namespace VAdvantage.Model
         /// String Representation
         /// </summary>
         /// <returns>info</returns>
-        public override  String ToString()
+        public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MAttribute[");
             sb.Append(Get_ID()).Append("-").Append(GetName())

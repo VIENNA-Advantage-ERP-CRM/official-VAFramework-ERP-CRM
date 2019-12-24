@@ -34,8 +34,8 @@
         }
         var C_Invoice_ID = Util.getValueOfInt(value.toString());//(int)value;
         if (this.isCalloutActive()		//	assuming it is resetting value
-         || C_Invoice_ID == null
-         || C_Invoice_ID == 0) {
+            || C_Invoice_ID == null
+            || C_Invoice_ID == 0) {
             return "";
         }
         this.setCalloutActive(true);
@@ -92,7 +92,7 @@
         // Bharat
 
         if (ctx.getContextAsInt(windowNo, "C_Invoice_ID") == C_Invoice_ID
-        && ctx.getContextAsInt(windowNo, "C_InvoicePaySchedule_ID") != 0) {
+            && ctx.getContextAsInt(windowNo, "C_InvoicePaySchedule_ID") != 0) {
             C_InvoicePaySchedule_ID = ctx.getContextAsInt(windowNo, "C_InvoicePaySchedule_ID");
         }
 
@@ -103,7 +103,7 @@
             //ts = DateTime.Now.Date; //new DateTime(CommonFunctions.CurrentTimeMillis());
             ts = new Date();
         }
-        
+
         // Added by Bharat on 02 June 2017 to remove client side queries
 
         var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
@@ -233,7 +233,7 @@
                     mTab.setValue("VA009_PaymentMethod_ID", PaymentMethod);
                 }
                 mTab.setValue("PayAmt", grandTotal);
-            }            
+            }
         }
         catch (err) {
             //if (dr != null) {
@@ -377,7 +377,7 @@
             if (dr != null) {
                 var amounts = Util.getValueOfString(dr);
                 mTab.setValue("OutStandingAmount", amounts);
-            }            
+            }
         }
         catch (err) {
             //if (idr != null) {
@@ -463,12 +463,12 @@
                     }
                     discountAmt = Util.getValueOfDecimal(dr["invoiceDiscount"]);
                     IsReturnTrx = dr["IsReturnTrx"];
-                }                
+                }
             }	//	get Invoice Info
 
             this.log.fine("Open=" + invoiceOpenAmt + " Discount= " + discountAmt
-              + ", C_Invoice_ID=" + C_Invoice_ID
-              + ", C_Currency_ID=" + C_Currency_Invoice_ID);
+                + ", C_Invoice_ID=" + C_Invoice_ID
+                + ", C_Currency_ID=" + C_Currency_Invoice_ID);
 
             //	Get Info from Tab
             var payAmt = Util.getValueOfDecimal(mTab.getValue("PayAmt") == null ? VIS.Env.ZERO : mTab.getValue("PayAmt"));
@@ -598,7 +598,7 @@
                 mTab.setValue("PayAmt", Util.getValueOfDecimal(payAmt.toFixed(precision)));
             }
 
-                //	No Invoice - Set Discount, Witeoff, Under/Over to 0
+            //	No Invoice - Set Discount, Witeoff, Under/Over to 0
             else if (C_Invoice_ID == 0) {
                 if (VIS.Env.ZERO != discountAmt) {
                     mTab.setValue("DiscountAmt", VIS.Env.ZERO);
@@ -610,7 +610,7 @@
                     mTab.setValue("OverUnderAmt", VIS.Env.ZERO);
                 }
             }
-                //  PayAmt - calculate write off
+            //  PayAmt - calculate write off
             else if (colName == "PayAmt") {
                 if (enteredDiscountAmt != 0)
                     discountAmt = enteredDiscountAmt;
@@ -691,6 +691,40 @@
             this.setCalloutActive(false);
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     * Get Bank Account Curremcy
+     * @param ctx context
+     * @param windowNo current Window No
+     * @param mTab Grid Tab
+     * @param mField Grid Field
+     * @param value New Value
+     * @param oldValue Old Value
+     * @return Error message or ""
+     */
+    CalloutPayment.prototype.BankAccount = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (value == null || value.toString() == "") {
+            return "";
+        }
+
+        var c_bankaccount_ID = value;
+        if (this.isCalloutActive()) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        try {
+            var currency = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPayment/GetBankAcctCurrency", c_bankaccount_ID.toString()));
+            mTab.setValue("C_Currency_ID", currency);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = mTab = mField = value = oldValue = null;
         return "";
     };
 
@@ -788,7 +822,7 @@
             //ts = DateTime.Now.Date; //new DateTime(CommonFunctions.CurrentTimeMillis());
             ts = new Date();
         }
-        
+
         var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
         var dr = null;
         try {
@@ -810,7 +844,7 @@
                 //  reset as dependent fields get reset
                 ctx.setContext(windowNo, "C_Invoice_ID", C_Invoice_ID.toString());
             }
-            
+
             //    idr.close();
         }
         catch (err) {

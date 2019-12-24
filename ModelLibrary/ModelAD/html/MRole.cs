@@ -610,6 +610,12 @@ namespace VAdvantage.Model
                 return false;
             }
             //	}
+
+            // JID_1585: Set "Use User Org Access" check to false in case of "Access All Orgs" check is true.
+            if (IsAccessAllOrgs())
+            {
+                SetIsUseUserOrgAccess(false);
+            }
             return true;
         }
 
