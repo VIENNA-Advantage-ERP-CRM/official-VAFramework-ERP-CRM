@@ -545,7 +545,7 @@ VIS.GridController.prototype.initGrid = function (onlyMultiRow, curWindowNo, aPa
                 iControl = null;
             }
         }
-
+        this.vGridPanel.flushLayout();
     
     }
 

@@ -29,7 +29,7 @@ textarea, select, button
 
 select
 {
-    background: url(../Images/select.png) no-repeat 97% 50%;
+    /*background: url(../Images/select.png) no-repeat 97% 50%;*/
     min-width: 26px;
     background-color: white;
 }

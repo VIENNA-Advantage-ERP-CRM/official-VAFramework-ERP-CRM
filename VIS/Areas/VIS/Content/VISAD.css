@@ -2444,6 +2444,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
 
 .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid {
     height: 72%;
+    width:100%;
 }
 /*Added new classes*/
 .vis-leftpanel-wrapper {
