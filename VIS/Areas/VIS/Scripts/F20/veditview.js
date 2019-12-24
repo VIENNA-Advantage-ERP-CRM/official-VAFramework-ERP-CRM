@@ -109,6 +109,7 @@
                         if (cellSpace > 3)
                             cellSpace = 3;
                         columnIndex += cellSpace;
+                        cellSpace = 0; //reset
                     }
                     else {
                         initCols(true);
@@ -134,7 +135,7 @@
                         columnIndex += colSpan - 1;
 
                         if (rowSpan > 1) {
-                            col0.rSpan = rowSpan;
+                            col0.rSpan = rowSpan + 1;
                             col0.cSpan = colSpan;
                             col0.cSpace = cellSpace;
                             $td0.css("grid-row", "span " + rowSpan);
@@ -155,6 +156,7 @@
                     if (cellSpace > 2)
                         cellSpace = 2;
                     columnIndex += cellSpace;
+                    cellSpace = 0;
                 }
                 else {
                     initCols(false, true);
@@ -172,7 +174,7 @@
 
                     columnIndex += colSpan - 1;
                     if (rowSpan > 1) {
-                        col1.rSpan = rowSpan;
+                        col1.rSpan = rowSpan + 1;
                         col1.cSpan = colSpan;
                         col1.cSpace = cellSpace;
                         $td1.css("grid-row", "span " + rowSpan);
@@ -192,6 +194,7 @@
                     if (cellSpace > 1)
                         cellSpace = 1;
                     columnIndex += cellSpace;
+                    cellSpace = 0;
                 }
                 else {
                     initCols(false, false, true);
@@ -202,7 +205,7 @@
 
                     columnIndex += colSpan - 1;
                     if (rowSpan > 1) {
-                        col2.rSpan = rowSpan;
+                        col2.rSpan = rowSpan+1;
                         col2.cSpan = colSpan;
                         col2.cSpace = cellSpace;
                         $td2.css("grid-row", "span " + rowSpan);
@@ -214,7 +217,7 @@
             if (columnIndex == 3) {
                 // check for row span
                 if (col3.rSpan > 1) { //skip column 
-                    --col1.rSpan;
+                    --col3.rSpan;
                 }
                 else {
                     initCols(false, false, false, true);
@@ -222,7 +225,7 @@
                         $td3.addClass("vis-ev-col-end4");
                     }
                     if (rowSpan > 1) {
-                        col3.rSpan = rowSpan;
+                        col3.rSpan = rowSpan + 1;
                         col3.cSpan = colSpan;
                         col3.cSpace = cellSpace;
                         $td3.css("grid-row", "span " + rowSpan);
