@@ -52,15 +52,15 @@
 }
 
     .VIS_buttons-wrap span {
-        background: #616364;
-        color: #fff;
+        background: rgba(var(--v-c-primary), 1);
+        color: rgba(var(--v-c-on-primary), 1);
         border-radius: 0;
         margin-left: 15px;
         float: left;
     }
 
         .VIS_buttons-wrap span:hover {
-            color: #fff;
+            color: rgba(var(--v-c-on-primary), 1);
         }
 
 .VIS_buttons-ContainerTree {

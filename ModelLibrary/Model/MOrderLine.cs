@@ -2706,6 +2706,46 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Get Base value for Expected Cost Distribution
+        /// </summary>
+        /// <param name="CostDistribution">cost Distribution</param>
+        /// <returns>base number</returns>
+        public Decimal GetBase(String CostDistribution)
+        {
+            if (MLandedCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
+            {
+                return GetProductLineCost(this);
+            }
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
+                return Env.ONE;
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
+                return GetQtyOrdered();
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
+            {
+                MProduct product = GetProduct();
+                if (product == null)
+                {
+                    log.Severe("No Product");
+                    return Env.ZERO;
+                }
+                return Decimal.Multiply(GetQtyOrdered(), (Decimal)product.GetVolume());
+            }
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
+            {
+                MProduct product = GetProduct();
+                if (product == null)
+                {
+                    log.Severe("No Product");
+                    return Env.ZERO;
+                }
+                return Decimal.Multiply(GetQtyOrdered(), product.GetWeight());
+            }
+            log.Severe("Invalid Criteria: " + CostDistribution);
+            return Env.ZERO;
+        }
+
+
+        /// <summary>
         /// Set M_AttributeSetInstance_ID
         /// </summary>
         /// <param name="M_AttributeSetInstance_ID">id</param>

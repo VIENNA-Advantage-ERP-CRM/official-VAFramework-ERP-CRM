@@ -79,6 +79,17 @@ namespace VAdvantage.Model
                 ced.SetM_ProductionLine_ID(cd.GetM_ProductionLine_ID());
                 ced.SetM_WorkOrderResourceTxnLine_ID(cd.GetM_WorkOrderResourceTxnLine_ID());
                 ced.SetM_WorkOrderTransactionLine_ID(cd.GetM_WorkOrderTransactionLine_ID());
+                if (Env.IsModuleInstalled("VAMFG_"))
+                {
+                    if (ced.Get_ColumnIndex("VAMFG_M_WrkOdrRscTxnLine_ID") > -1)
+                    {
+                        ced.Set_Value("VAMFG_M_WrkOdrRscTxnLine_ID", cd.GetVAMFG_M_WrkOdrRscTxnLine_ID());
+                    }
+                    if (ced.Get_ColumnIndex("VAMFG_M_WrkOdrTrnsctionLine_ID") > -1)
+                    {
+                        ced.Set_Value("VAMFG_M_WrkOdrTrnsctionLine_ID", cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID());
+                    }
+                }
                 ced.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
                 if (!ced.Save())
                 {
