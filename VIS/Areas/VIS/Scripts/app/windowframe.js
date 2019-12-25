@@ -9197,12 +9197,15 @@
                         if (col.displayType == VIS.DisplayType.Date) {
                             var d = new Date(val);
                             d.setMinutes(d.getTimezoneOffset() + d.getMinutes());
-                            val = Globalize.format(d, 'd');
+                            //val = Globalize.format(d, 'd');
+                            val = d.toLocaleDateString();
                         }
                         else if (col.displayType == VIS.DisplayType.DateTime)
-                            val = Globalize.format(new Date(val), 'f');
+                            val = new Date(val).toLocaleString();
+                        //val = Globalize.format(new Date(val), 'f');
                         else
-                            val = Globalize.format(new Date(val), 't');
+                            val = new Date(val).toTimeString();
+                    //val = Globalize.format(new Date(val), 't');
                     else val = "";
                     return val;
                 }

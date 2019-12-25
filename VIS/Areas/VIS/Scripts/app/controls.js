@@ -4535,7 +4535,7 @@
         var $txt = $("<span>").text("-");
         var $ctrl = null;
 
-        $ctrl = $('<button >', { type: 'button', name: columnName });
+        $ctrl = $('<button >', { type: 'button', name: columnName, class: 'vis-ev-col-img-ctrl' });
         $txt.css("color", "blue");
 
 

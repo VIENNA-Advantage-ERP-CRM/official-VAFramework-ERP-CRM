@@ -231,7 +231,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     font-size: 1em;
 }
 
-    .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    .ui-widget input:not([type="checkbox"]), .ui-widget select, .ui-widget textarea, .ui-widget button {
         /*font-family: verdana, Arial,Helvetica,sans-serif;*/
         outline: none;
         min-height: 30px;
@@ -375,7 +375,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         }
 
 .w2ui-grid .w2ui-editable select{
-    background-position: 98%;
+    /*background-position: 98%;*/
 }
 
             /*.w2ui-grid .w2ui-editable input.w2ui-select {

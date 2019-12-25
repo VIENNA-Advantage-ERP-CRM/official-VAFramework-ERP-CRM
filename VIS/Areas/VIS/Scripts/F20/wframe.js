@@ -199,10 +199,9 @@
         function initComponent() {
             // $contentGrid = $("<div class='vis-awindow-body'>");
 
-            var clone = $(document.importNode(tmpWindow, true));
-            
+            var clone = document.importNode(tmpWindow, true);
 
-            $table = clone.find(".vis-ad-w");
+            $table =$(clone.querySelector(".vis-ad-w"));
             //var td11 = $("<td style='max-height:42px;'>");
             $contentGrid = $table.find(".vis-ad-w-body");//  ("<td class='vis-height-full'>");
             $lblTitle = $table.find("h5"); //$("<h1>");//.addClass("vis-awindow-title-label");
@@ -1217,9 +1216,9 @@
 
     function StatusBar(withInfo) {
 
-        var clone = $(document.importNode(statusTmp, true));
+        var clone = document.importNode(statusTmp, true);
 
-        var $root = clone.find(".vis-ad-w-p-s-main");
+        var $root = $(clone.querySelector(".vis-ad-w-p-s-main"));
 
         this.$statusLine = $root.find(".vis-ad-w-p-s-msg").find("span");// $("<span>");
         this.$statusDB = $root.find(".vis-ad-w-p-s-statusdb");// $("<span class='vis-statusbar-statusDB'>").text("0/0");

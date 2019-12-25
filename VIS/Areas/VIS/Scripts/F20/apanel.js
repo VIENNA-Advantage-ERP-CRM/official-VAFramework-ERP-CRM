@@ -128,9 +128,9 @@
 
         function initComponenet() {
 
-            var clone = $(document.importNode(tmpAPanel, true));
-            $root = clone.find(".vis-ad-w-p");
-            $busyDiv = clone.find(".vis-ad-w-p-busy"); // busy indicator
+            var clone = document.importNode(tmpAPanel, true);
+            $root = $(clone.querySelector(".vis-ad-w-p"));
+            $busyDiv = $root.find(".vis-ad-w-p-busy"); // busy indicator
 
             //tolbar and search 
             $ulToobar = $root.find(".vis-ad-w-p-tb-lc");// $("<ul class='vis-appsaction-ul'>"); //toolbar item list

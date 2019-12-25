@@ -310,7 +310,7 @@
                 }
                 ////$section.css('height', height - 22);
             height = height - 23;
-            if (VIS.context.ctx["#FRONTEND_LIB_VERSION"] < 3)
+            if (VIS.Utility.Util.getValueOfInt(VIS.context.ctx["#FRAMEWORK_VERSION"]) < 2)
                 height = height - 43;
 
                  VIS.Env.setScreenHeight(height);

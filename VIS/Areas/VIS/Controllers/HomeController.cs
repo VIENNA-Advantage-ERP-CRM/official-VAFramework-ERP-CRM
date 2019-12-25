@@ -245,19 +245,30 @@ namespace VIS.Controllers
                         }
 
                         ViewBag.LibSuffix = "";
-
+                        ViewBag.FrameSuffix = "_v1";
+                        int libFound = 0;
                         foreach (Bundle b in BundleTable.Bundles)
                         {
-                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v"))
+                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v") && ViewBag.LibSuffix=="")
                             {
                                 ViewBag.LibSuffix = Util.GetValueOfInt(ctx.GetContext("#FRONTEND_LIB_VERSION")) > 2
                                                       ? "_v3" : "_v2";
+                                libFound++;
+                            }
+
+                            if (b.Path.Contains("VIS") && b.Path.Contains("_v"))
+                            {
+                                ViewBag.FrameSuffix = Util.GetValueOfInt(ctx.GetContext("#FRAMEWORK_VERSION")) > 1
+                                                      ? "_v2" : "_v1";
+                                libFound++;
+                            }
+                            if (libFound >= 2)
+                            {
                                 break;
                             }
                         }
-                        
                         //check system setting// set to skipped lib
-                       
+
                     }
                 }
             }

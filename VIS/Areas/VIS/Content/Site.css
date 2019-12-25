@@ -34,10 +34,10 @@ select
     background-color: white;
 }
 
-html[dir="rtl"] select
+/*html[dir="rtl"] select
 {
     background-position: 3%;
-}
+}*/
 
 ::-ms-expand
 {

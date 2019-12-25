@@ -124,17 +124,19 @@
 
         function initlizeComponent() {
 
-            var clone = $(document.importNode(tmpvc, true));
-            /* Tree Div */
-            $divTree = clone.find(".vis-ad-w-p-vc-tree").hide();
+            var clone = document.importNode(tmpvc, true);
+            $divMainVC =$(clone.querySelector(".vis-ad-w-p-vc")).hide();
 
-            $divMainVC = clone.find(".vis-ad-w-p-vc").hide();
+            /* Tree Div */
+            $divTree = $divMainVC.find(".vis-ad-w-p-vc-tree").hide();
+
+           // $divMainVC = $divMainVC.find(".vis-ad-w-p-vc").hide();
 
             /* Tab Control */
-            $tabControl = clone.find(".vis-ad-w-p-vc-actions").hide();
+            $tabControl = $divMainVC.find(".vis-ad-w-p-vc-actions").hide();
             /* End */
             /*divHeader*/
-            $divHeader = clone.find(".vis-ad-w-p-vc-header");// $("<div class='vis-gc-header'>").hide();
+            $divHeader = $divMainVC.find(".vis-ad-w-p-vc-header");// $("<div class='vis-gc-header'>").hide();
             /*end*/
             /* Multi,card and single view */
             $divGrid = $("<div class='vis-gc-vtable'>");
@@ -142,7 +144,7 @@
             $divCard = $("<div class='vis-gc-vcard'>");
             $divMap = $("<div class='vis-gc-vmap'>");
             /* End */
-            $divContent = clone.find(".vis-ad-w-p-vc-gc"); // $("<div class='vis-height-full' style='overflow:hidden'>"); //Main Contant
+            $divContent = $divMainVC.find(".vis-ad-w-p-vc-gc"); // $("<div class='vis-height-full' style='overflow:hidden'>"); //Main Contant
             $divContent.append($divGrid).append($divPanel).append($divCard).append($divMap);
         }
 

@@ -227,9 +227,13 @@
 
                 foreach (string b in ViewBag.ScriptsPath)
                 {
-                    if ((b.Contains("ViennaBase")||b.Contains("VIS")) && b.Contains("_v") && ViewBag.LibSuffix != "" && !b.Contains(ViewBag.LibSuffix))
+                    if (b.Contains("ViennaBase") && b.Contains("_v") && ViewBag.LibSuffix != "" && !b.Contains(ViewBag.LibSuffix))
                     {
                         continue;
+                    }
+                    else if (b.Contains("VIS_") && !b.Contains(ViewBag.FrameSuffix))
+                    {
+                         continue;
                     }
                     else
                     {

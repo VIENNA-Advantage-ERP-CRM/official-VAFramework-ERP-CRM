@@ -9,9 +9,9 @@
        // this.panelSize = 50;
         //var panelMaxWidth = $(document).width() / 2;
 
-        var clone = $(document.importNode(tmpTabPnl, true));
+        var clone = document.importNode(tmpTabPnl, true);
 
-        var $outerwrap = clone.find(".vis-ad-w-p-ap-tp-outerwrap");
+        var $outerwrap = $(clone.querySelector(".vis-ad-w-p-ap-tp-outerwrap"));
         var $ulIconList = $outerwrap.find('.vis-ad-w-p-ap-tp-o-icorbar ul');
         var $divHead = $outerwrap.find('.vis-ad-w-p-ap-tp-o-b-head');
         var $spnName = $outerwrap.find(".vis-ad-w-p-ap-tp-o-b-head h6");
