@@ -175,6 +175,8 @@ namespace VAdvantage.Process
             verTab.SetIsSingleRow(true);
             verTab.SetWhereClause(null);
             verTab.SetSeqNo(10);
+            verTab.SetAD_Column_ID(0);
+            verTab.SetTabLevel(0);
             verTab.SetDescription("Version tab for " + tab.GetName());
             verTab.SetHelp("Version tab for " + tab.GetName() + ", to display versions for current record");
             // set order by on Version Window's tab on "Version Valid From column"
