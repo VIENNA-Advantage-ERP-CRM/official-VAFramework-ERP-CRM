@@ -5173,9 +5173,9 @@ namespace VAdvantage.Model
         private Decimal GetLandedCostDifferenceAmt(MLandedCost lc, int M_Inoutline_ID, Decimal Quantity, Decimal ActualLandeCost, int C_ExpectedCost_ID, int precision)
         {
             Decimal differenceAmt = 0.0M;
-            // get expected freight amount of each 
+            // get expected freight amount of each (round upto 15 in query only) 
             String sql = @"Select CASE When C_Expectedcostdistribution.Qty = 0 THEN 0
-                            ELSE  C_Expectedcostdistribution.Amt / C_Expectedcostdistribution.Qty
+                            ELSE  ROUND(C_Expectedcostdistribution.Amt / C_Expectedcostdistribution.Qty , 15)
                             END AS Amt
                         From M_Inoutline Inner Join C_Expectedcostdistribution On M_Inoutline.C_Orderline_Id = C_Expectedcostdistribution.C_Orderline_Id
                         INNER JOIN C_Expectedcost ON C_Expectedcost.C_Expectedcost_Id = C_Expectedcostdistribution.C_Expectedcost_Id
