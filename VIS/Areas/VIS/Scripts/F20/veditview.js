@@ -601,6 +601,13 @@
 
     };
 
+    /**
+     * create wrapeer div and add conrols and label in parent div
+     * @param {any} label label to add
+     * @param {any} editor controls to add
+     * @param {any} parent current row/column div
+     * @param {any} mField model field 
+     */
     function insertCWrapper(label, editor, parent, mField) {
         var customStyle = mField.getHtmlStyle();
 
