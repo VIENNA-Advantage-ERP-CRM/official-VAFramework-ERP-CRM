@@ -27,11 +27,12 @@ textarea, select, button
     -webkit-tap-highlight-color: transparent;
 }
 
-select
-{
+select {
     /*background: url(../Images/select.png) no-repeat 97% 50%;*/
     min-width: 30px;
     background-color: white;
+    padding-right: 25px;
+    padding-left: 10px;
 }
 
 /*html[dir="rtl"] select

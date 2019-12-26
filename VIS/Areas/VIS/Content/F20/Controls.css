@@ -13,13 +13,18 @@
 }
 
 .vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
-    padding: 5px 10px 5px 30px;
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary), 1);
     background-color: transparent;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.vis-ev-col input:not([type=button]), .vis-ev-col textarea {
+    padding: 5px 10px 5px 30px;
+}
+.vis-ev-col select {
+    padding: 5px 30px 5px 30px;
 }
 .vis-input-wrap button.vis-ev-col-img-ctrl {
     min-height: 140px;
@@ -344,6 +349,7 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
 .vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap {
     top: 9px;
     align-items: flex-start;
+    bottom: auto;
 }
 
 .vis-input-wrap button + .vis-ev-ctrlinfowrap {
