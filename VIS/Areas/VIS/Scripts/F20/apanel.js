@@ -1244,6 +1244,7 @@
     };
 
     APanel.prototype.sizeChanged = function (height, width) {
+        this.setTabNavigation();
         return;
     };
 

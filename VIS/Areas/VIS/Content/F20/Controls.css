@@ -59,7 +59,7 @@
 .vis-input-wrap {
     position: relative;
     margin-bottom: 15px;
-    height:100%;
+   
 }
 
 .vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
