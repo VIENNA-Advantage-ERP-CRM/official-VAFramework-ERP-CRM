@@ -350,7 +350,7 @@
         function warn(msg, header, callback) {
             _callback = callback;
             try {
-                $prodBuzzer[0].play();
+                //$prodBuzzer[0].play();
             }
             catch (ex) {
             }
@@ -401,7 +401,7 @@
         function error(msg, header, callback) {
             _callback = callback;
             try {
-                $prodBuzzer[0].play();
+                //$prodBuzzer[0].play();
             }
             catch (ex) {
             }

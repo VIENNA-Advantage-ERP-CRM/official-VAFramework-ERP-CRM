@@ -68,7 +68,7 @@
 
                         setValue(colValue, iControl, mField);
 
-                        
+
 
                     }
                 }
@@ -142,7 +142,7 @@
                         }
 
                         // Get Controls to be displayed in Header Panel
-                        $label = VIS.VControlFactory.getLabel(mField, true);
+                        $label = VIS.VControlFactory.getHeaderLabel(mField, true);
 
                         iControl = VIS.VControlFactory.getReadOnlyControl($self.gTab, mField, false, false, false);
 
@@ -161,7 +161,11 @@
                         if (iControl == null) {
                             continue;
                         }
-                        var $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
+                        var $lblControl = null;
+                        if ($label && $label.length > 0) {
+                            $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
+                        }
+
                         var colValue = getFieldValue(mField);
                         setValue(colValue, iControl, mField);
 
@@ -169,7 +173,8 @@
                         if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
                             $div.append($divIcon);
                             $divIcon.append($spanIcon.append(icon));
-                            $divLabel.append($lblControl);
+                            if ($lblControl && $lblControl.length > 0)
+                                $divLabel.append($lblControl);
                         }
                         else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
                             $div.append($divLabel);
@@ -178,7 +183,7 @@
                             $div.append($divIcon);
                             $divIcon.append($spanIcon.append(icon));
                         }
-                        else if (mField.getHeaderHeadingOnly()) {
+                        else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
                             $divLabel.append($lblControl);
                         }
                         /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/

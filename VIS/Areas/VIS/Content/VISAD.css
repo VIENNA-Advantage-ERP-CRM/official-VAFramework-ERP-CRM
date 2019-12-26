@@ -4020,10 +4020,11 @@ html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2 {
     margin-left: 10px;
     margin-right: 0px;
 }
+.vis-processbtnwrap input[type="button"]{
+    margin-top: 0;
+    margin-left: 10px;
+}
 /*END Amount Division Control*/
-
-
-
 .vis-selected-li-print {
     background-color: #CCDADE;
 }
@@ -4363,6 +4364,7 @@ li.vis-selected-list {
     margin-top: 7px;
     width: 100%;
     border-radius: 0;
+    text-align: center;
 }
 
 /*.vis-process-description-Span p {

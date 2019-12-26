@@ -242,8 +242,35 @@ html[dir="rtl"] .vis-attach-btns > a {
     margin-left: 0;
     margin-right: 10px;
 }
-html[dir="rtl"] .vis-attach-file-text{
+html[dir="rtl"] .vis-attach-file-text, html[dir="rtl"] .vis-ad-process-header {
     padding-left: 0;
     padding-right: 10px;
 }
+
+html[dir="rtl"] .vis-ad-w-p-header-h {
+    right: 0;
+    left:auto;
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable input, html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+    position: relative;
+    margin-top: 10px;
+}
+html[dir="rtl"] .vis-process-background-label {
+    margin-left: 0;
+    margin-right: 5px;
+}
+html[dir="rtl"] .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+html[dir="rtl"] .vis-advancedSearch-calender-Icon {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
 /*rtl css End here*/
+
+

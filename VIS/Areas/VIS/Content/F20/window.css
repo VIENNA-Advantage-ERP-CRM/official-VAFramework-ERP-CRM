@@ -1557,3 +1557,12 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     overflow-y: auto;
     height: 240px;
 }
+
+    .vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+        padding: 4px;
+        min-height: 32px;
+        font-size: .875rem;
+        height: 32px;
+        position: absolute;
+        margin-top: -15px !important;
+    }

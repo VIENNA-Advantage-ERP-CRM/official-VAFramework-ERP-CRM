@@ -449,7 +449,7 @@
          *  @param ignoreCheckbox bool
          *  @return Label
          */
-        getLabel: function (mField, ignoreCheckbox) {
+        getLabel: function (mField) {
             if (mField == null)
                 return null;
 
@@ -457,7 +457,22 @@
 
             //	No Label for FieldOnly, CheckBox, Button
             if (mField.getIsFieldOnly()
-                || (displayType == VIS.DisplayType.YesNo && !ignoreCheckbox)
+                || (displayType == VIS.DisplayType.YesNo)
+                || displayType == VIS.DisplayType.Button
+                || displayType == VIS.DisplayType.Label)
+                return null;
+            return new VIS.Controls.VLabel(mField.getHeader(), mField.getColumnName(), mField.getIsMandatory());
+        },
+
+
+        getHeaderLabel: function (mField) {
+            if (mField == null)
+                return null;
+
+            var displayType = mField.getDisplayType();
+
+            //	No Label for FieldOnly, CheckBox, Button
+            if ((!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) || (mField.getHeaderHeadingOnly())
                 || displayType == VIS.DisplayType.Button
                 || displayType == VIS.DisplayType.Label)
                 return null;
@@ -4605,7 +4620,6 @@
 
             if (imgPath) {
                 $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath + "? timestamp =" + new Date().getTime());
-
                 $img.show();
                 $icon.hide();
                 $txt.text("");
@@ -4613,15 +4627,13 @@
             }
             else if (resImg != null) {
                 $img.attr('src', "data:image/jpg;base64," + resImg + "? timestamp =" + new Date().getTime());
-
                 $img.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else {
-                $img.attr('src', "data:image/jpg;base64," + resImg + "? timestamp =" + new Date().getTime());
-
+                $img.attr('src', "data:image/jpg;base64," + resImg );
                 $img.hide();
                 $txt.text("-");
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');

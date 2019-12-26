@@ -199,7 +199,7 @@
 
             var $paraG = $($text.find('p')[0]);
             $bMore = $text.find('.vis-process-papapa');
-            $paraG.css({ 'float': 'left' });
+            //$paraG.css({ 'float': 'left' });
             if (this.isReport) {
                 var paraWidth = $paraG.width();
                 if (paraWidth + 45 > $text.width()) {
