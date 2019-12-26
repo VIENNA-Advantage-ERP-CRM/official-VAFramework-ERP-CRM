@@ -786,7 +786,7 @@ namespace VAdvantage.Model
             public decimal ValueMin_BD;
             /**	Max Value		*/
             public decimal ValueMax_BD;
-            /** Is Copy Value*/
+            // Is Copy Value
             public bool IsCopy;
 
             #endregion
