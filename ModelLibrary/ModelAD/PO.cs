@@ -619,6 +619,7 @@ namespace VAdvantage.Model
         /// <summary>
         ///Copy old values of From to new values of To.
         ///Does not copy Keys and AD_Client_ID/AD_Org_ID
+        /// do not copy those column values, whose IsCopy is False
         /// </summary>
         /// <param name="from">from old, existing & unchanged PO</param>
         /// <param name="to">to new, not saved PO</param>
@@ -631,7 +632,7 @@ namespace VAdvantage.Model
             {
                 for (int i1 = 0; i1 < from._mOldValues.Length; i1++)
                 {
-                    if (from.p_info.IsVirtualColumn(i1) || from.p_info.IsKey(i1))		//	KeyColumn
+                    if (from.p_info.IsVirtualColumn(i1) || from.p_info.IsKey(i1) || !from.p_info.IsCopy(i1))		//	KeyColumn
                         continue;
                     String colName = from.p_info.GetColumnName(i1);
                     //  Ignore Standard Values
@@ -661,7 +662,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < from._mOldValues.Length; i++)
                 {
                     if (from.p_info.IsVirtualColumn(i)
-                        || from.p_info.IsKey(i))		//	KeyColumn
+                        || from.p_info.IsKey(i) || !from.p_info.IsCopy(i))		//	KeyColumn
                         continue;
                     String colName = from.p_info.GetColumnName(i);
                     //  Ignore Standard Values

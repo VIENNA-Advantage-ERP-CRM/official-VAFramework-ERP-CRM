@@ -89,7 +89,7 @@ namespace VAdvantage.Model
                 + "c.IsKey,c.IsParent, "										//	10..11
                 + "c.AD_Reference_Value_ID, vr.Code, "							//	12..13
                 + "c.FieldLength, c.ValueMin, c.ValueMax, c.IsTranslated, "		//	14..17
-                + "t.AccessLevel, c.ColumnSQL, c.IsEncrypted ");				//	18..20
+                + "t.AccessLevel, c.ColumnSQL, c.IsEncrypted , c.IsCopy ");				//	18..21
             sql.Append("FROM AD_Table t"
                 + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
                 + " LEFT OUTER JOIN AD_Val_Rule vr ON (c.AD_Val_Rule_ID=vr.AD_Val_Rule_ID)"
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
                     m_AccessLevel = Util.GetValueOfString(dr[17]);
                     String ColumnSQL = Util.GetValueOfString(dr[18]);
                     bool IsEncrypted = "Y".Equals(Util.GetValueOfString(dr[19]));
-
+                    bool IsCopy = "Y".Equals(Util.GetValueOfString(dr[20]));
                     POInfoColumn col = new POInfoColumn(
                         AD_Column_ID, ColumnName, ColumnSQL, AD_Reference_ID,
                         IsMandatory, IsUpdateable,
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
                         IsKey, IsParent,
                         AD_Reference_Value_ID, ValidationCode,
                         FieldLength, ValueMin, ValueMax,
-                        IsTranslated, IsEncrypted);
+                        IsTranslated, IsEncrypted, IsCopy);
                     list.Add(col);
                 }
                 dr.Close();
@@ -305,6 +305,18 @@ namespace VAdvantage.Model
                 return false;
             return m_columns[index].IsKey;  //    m_columns[ index].IsKey;
         }   //  isKey
+
+        /// <summary>
+        ///Is Copy Column
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns>return true if Copy column</returns>
+        public bool IsCopy(int index)
+        {
+            if (index < 0 || index >= m_columns.Length)
+                return false;
+            return m_columns[index].IsCopy;
+        }   //  isCopy
 
         public bool IsColumnTranslated(int index)
         {
@@ -774,8 +786,8 @@ namespace VAdvantage.Model
             public decimal ValueMin_BD;
             /**	Max Value		*/
             public decimal ValueMax_BD;
-
-
+            // Is Copy Value
+            public bool IsCopy;
 
             #endregion
 
@@ -789,7 +801,7 @@ namespace VAdvantage.Model
                                  bool isKey, bool isParent,
                                  int ad_Reference_Value_ID, string validationCode,
                                  int fieldLength, string valueMin, string valueMax,
-                                 bool isTranslated, bool isEncrypted)
+                                 bool isTranslated, bool isEncrypted, bool isCopy)
             {
 
                 AD_Column_ID = ad_Column_ID;
@@ -854,6 +866,7 @@ namespace VAdvantage.Model
                 }
                 IsTranslated = isTranslated;
                 IsEncrypted = isEncrypted;
+                IsCopy = isCopy;
             }
         }
     }
