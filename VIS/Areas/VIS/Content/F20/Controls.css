@@ -24,7 +24,7 @@
     padding: 5px 10px 5px 30px;
 }
 .vis-ev-col select {
-    padding: 5px 30px 5px 30px;
+    padding: 5px 30px 5px 30px !important;
 }
 .vis-input-wrap button.vis-ev-col-img-ctrl {
     min-height: 140px;
@@ -346,7 +346,7 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     display: inline-flex;
 }
 
-.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap {
+.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap, .vis-input-wrap button.vis-ev-col-img-ctrl ~ .vis-ev-ctrlinfowrap {
     top: 9px;
     align-items: flex-start;
     bottom: auto;

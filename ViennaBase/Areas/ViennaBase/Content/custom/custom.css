@@ -54,7 +54,7 @@
 }
 
 .w2ui-grid .w2ui-grid-body table .w2ui-col-select {
-    width: 40px;
+    min-width: 26px;
     vertical-align: middle;
 }
 

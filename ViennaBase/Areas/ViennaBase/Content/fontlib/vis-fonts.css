@@ -27,15 +27,6 @@
 /**END*/
 
 
-
-
-
-
-
-
-
-
-
 @font-face {
     font-family: 'vis-fonts';
     src: url('../fonts/vis-fonts.eot?22zgxr');
@@ -44,7 +35,6 @@
     font-style: normal;
     font-display: block;
 }
-
 
 .vis {
     /* use !important to prevent issues with browser extensions that change fonts */
@@ -360,7 +350,7 @@
     content: "\e937";
 }
 
-.vis-updateBP:before {
+.vis-updatebp:before {
     content: "\e93b";
 }
 
@@ -460,7 +450,7 @@
     content: "\e972";
 }
 
-.vis-addBP:before {
+.vis-addbp:before {
     content: "\e973";
 }
 

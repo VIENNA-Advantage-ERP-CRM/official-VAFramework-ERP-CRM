@@ -85,7 +85,11 @@ html[dir="rtl"] .vis-ev-col-msign {
     left: 10px;
     right: auto;
 }
-html[dir="rtl"] .vis-ad-w-p-tabs-t{
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
+    left: 30px;
+    right: auto;
+}
+html[dir="rtl"] .vis-ad-w-p-tabs-t {
     padding-right: 10px;
 }
 html[dir="rtl"] .vis-ad-w-p-tb-lc li span {
@@ -119,6 +123,8 @@ html[dir="rtl"] .vis-ev-ctrlinfowrap {
 }
 html[dir="rtl"] select {
     background-position-x: 10px,15px;
+    padding-right: 10px;
+    padding-left: 25px;
 }
 html[dir="rtl"] .vis-ev-col-fieldgroup :last-child {
     padding-left: 10px;
@@ -268,7 +274,7 @@ html[dir="rtl"] .vis-attach-btns > a {
     margin-left: 0;
     margin-right: 10px;
 }
-html[dir="rtl"] .vis-attach-file-text{
+html[dir="rtl"] .vis-attach-file-text, html[dir="rtl"] .vis-report-tittle {
     padding-left: 0;
     padding-right: 10px;
 }
@@ -280,5 +286,9 @@ html[dir="rtl"] .vis-ad-w-p-header-v {
     border-top-left-radius: .75rem;
     border-bottom-left-radius: .75rem;
     padding: 2px 1px 0px 3px;
+}
+html[dir="rtl"] .vis-ad-w-p-t-c-tc i{
+    padding-right: 0;
+    padding-left: 3px;
 }
 /*rtl css End here*/
