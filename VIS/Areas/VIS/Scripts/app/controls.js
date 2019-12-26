@@ -3192,6 +3192,7 @@
     function VTextArea(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, displayType) {
 
         var rows = 6;
+        var minHeight = 79;
         if (displayType != VIS.DisplayType.Memo) {
             if (displayType == VIS.DisplayType.TextLong) {
                 rows = 6;
@@ -3199,20 +3200,23 @@
             }
             else {
                 rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
+                minHeight = fieldLength < 300 ? 79 : (fieldLength < 2000) ? 129 : 129;
             }
         }
         else {
             try {
                 rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : (fieldLength / 500);
+                minHeight = fieldLength < 300 ? 79 : (fieldLength < 2000) ? 129 : 129;
             }
             catch (e) {
                 rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
+                minHeight = fieldLength < 300 ? 79 : (fieldLength < 2000) ? 129 : 129;
             }
         }
 
 
         //Init Control
-        var $ctrl = $('<textarea>', { name: columnName, maxlength: fieldLength, rows: rows });
+        var $ctrl = $('<textarea>', { name: columnName, maxlength: fieldLength, rows: rows ,'style':'min-height:'+minHeight+'px'});
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 

@@ -319,7 +319,7 @@
 
 
             <div class="VIS_Pref_email-configuration">
-                <h3>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_OtherSettings") </h3>
+                <h3>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "VIS_OtherSettings") </h3>
 
                 <div class="VIS_Pref_col-33" style="float: left; width: 50%">
                     <input id="@("chkNativeDigit_" + ViewBag.WindowNumber)" class="VIS_Pref_automatic" type="checkbox"><span><label id="@("lblNativeDigit_" + ViewBag.WindowNumber)" class="VIS_Pref_Label_Font">Print Native Digits</label></span>
@@ -344,10 +344,80 @@
                         <img class="VIS_Pref_img-i" src="~/Areas/VIS/Images/i.png">
                         <span>
                             <img class="VIS_Pref_callout" src="~/Areas/VIS/Images/ccc.png" /><label id="@("imgDateText_" + ViewBag.WindowNumber)" class="VIS_Pref_Label_Font">
-                                Current system date</label>
+                                Current system date
+                            </label>
                         </span>
                     </a>
                 </div>
+
+                <div class="VIS_Pref_col-33">
+
+                    <div class="VIS-Lavel-float">
+                        <span>
+                            <label class="VIS_Pref_Label_Font" id="@("vlblthemeText_" + ViewBag.WindowNumber)">Theme</label>
+                        </span>
+                    </div>
+
+                    <span id="@("vis_pref_theme" + ViewBag.WindowNumber)" style="float:left">
+                        <div class="dropdown">
+                            <span class="dropdown-toggle " style="color: rgba(var(--v-c-primary),1)" data-toggle="dropdown">
+                                <i class="fa fa-paint-brush">
+                                </i>
+                            </span>
+                            <ul class="dropdown-menu">
+
+                                <li>
+                                    <div class="vis-theme-rec" data-color="0, 152, 247|255,255,255|238,238,238|102,102,102">
+                                        <span class="vis-theme-color" style="background-color:#0098f7"></span>
+                                        <span class="vis-theme-color" style="background-color:white"></span>
+                                        <span class="vis-theme-color" style="background-color:#eee"></span>
+                                        <span class="vis-theme-color" style="background-color:#666"></span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="vis-theme-rec" data-color="209,65,17|255,255,255|240, 236, 235|74, 1, 2">
+                                        <span class="vis-theme-color" style="background-color:#d14111"></span>
+                                        <span class="vis-theme-color" style="background-color:White"></span>
+                                        <span class="vis-theme-color" style="background-color:#f0e1dd"></span>
+                                        <span class="vis-theme-color" style="background-color:#4a0102"></span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="vis-theme-rec" data-color="129, 177, 52|255,255,255|236, 241, 228|34, 44, 10">
+                                        <span class="vis-theme-color" style="background-color:#94c83f"></span>
+                                        <span class="vis-theme-color" style="background-color:White"></span>
+                                        <span class="vis-theme-color" style="background-color:rgba(236, 241, 228, 1)"></span>
+                                        <span class="vis-theme-color" style="background-color:rgba(34,44,10, 1)"></span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="vis-theme-rec" data-color="0, 152, 247|255,255,255|240,249,255|36,61,76">
+                                        <span class="vis-theme-color" style="background-color:#1aa0ed"></span>
+                                        <span class="vis-theme-color" style="background-color:white"></span>
+                                        <span class="vis-theme-color" style="background-color:#f0f9ff"></span>
+                                        <span class="vis-theme-color" style="background-color:#243d4c"></span>
+                                    </div>
+                                </li>
+                                <li></li>
+                            </ul>
+                        </div>
+
+                        @*<select id="vis_cmbtheme"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option> </select>  </li>*@
+                        @*
+            <li id="vis_userTime"><span class="vis-icons-menuBar vis-icon-time"></span>@DateTime.Now.ToShortTimeString()*@
+                    </span>
+
+                    <a href="#" class="VIS_Pref_tooltip">
+                        <img class="VIS_Pref_img-i" src="~/Areas/VIS/Images/i.png">
+                        <span>
+                            <img class="VIS_Pref_callout" src="~/Areas/VIS/Images/ccc.png" /><label id="@("imgThemetext" + ViewBag.WindowNumber)" class="VIS_Pref_Label_Font">
+                                Theme
+                            </label>
+                        </span>
+                    </a>
+                </div>
+
                 @*<br>*@
                 <div class="VIS_Pref_sett-1" style="display: none">
                     <div style="float: left; margin-right: -12px">
@@ -356,7 +426,7 @@
                         </h5>
                     </div>
                     <div class="VIS_Pref_slide-show aaa VIS_Pref_pp">
-                        <select id="@("cmbPageSize_" + ViewBag.WindowNumber)" name="show" >
+                        <select id="@("cmbPageSize_" + ViewBag.WindowNumber)" name="show">
                         </select>
                     </div>
                     <a href="#" class="VIS_Pref_tooltip">
@@ -366,6 +436,8 @@
                     </a>
                     <div class="VIS_Pref_clear-both"></div>
                 </div>
+
+
 
             </div>
         </div>
