@@ -342,11 +342,11 @@ label.vis-ec-col-lblchkbox {
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: 0;
+    top: 10px;
     cursor: pointer;
     outline: none;
     z-index: 5;
-    bottom: 0;
+    /*bottom: 0;*/
     display: flex;
     align-items: center;
 }

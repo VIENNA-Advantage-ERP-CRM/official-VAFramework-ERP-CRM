@@ -1,426 +1,4 @@
-﻿/* Minification failed. Returning unminified contents.
-(302,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(338,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(343,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(344,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(347,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(351,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(354,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(358,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(362,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(366,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(430,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(685,41): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(693,34): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(698,45): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(806,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1084,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(1104,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1105,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1106,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1118,36): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(1129,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1130,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1134,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1136,73): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1136,130): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1143,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1144,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(1145,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1159,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1160,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1161,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1170,36): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(1300,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1312,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(1322,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(1692,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1699,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(1896,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1897,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(1910,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(1911,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(1923,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(2180,34): run-time error CSS1062: Expected semicolon or closing curly-brace, found '/'
-(2501,44): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(2655,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(2714,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(3339,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(4723,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(4730,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(4735,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(4748,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(4769,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(4789,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(4857,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(4859,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(5468,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(5500,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(5502,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(5541,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(5584,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(5798,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(5802,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(5810,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(5811,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6353,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(6354,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(6528,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6532,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6776,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6797,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(6800,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6808,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(6811,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6832,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6844,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(6851,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(6990,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(6991,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7003,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7005,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(7161,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(7162,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7163,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7172,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7195,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7265,35): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(7268,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7290,41): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7291,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(7309,52): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7543,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7552,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7558,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(7691,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7724,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7729,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7746,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7755,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(7888,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7919,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7940,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7944,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7948,29): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(7953,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7967,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(7977,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8002,46): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8008,35): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8031,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8049,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8057,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8064,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8080,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8106,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8115,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8135,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8142,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8286,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8294,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8295,44): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8299,44): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8304,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8308,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8312,42): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8313,44): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8321,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8325,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8476,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8622,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8646,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8651,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8659,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8671,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8681,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(8716,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8723,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8773,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8809,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8817,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8873,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(8874,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8877,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(8878,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8881,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8882,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8886,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(8887,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8890,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8891,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(8936,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-common'
-(9936,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(9973,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(10008,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10049,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(10052,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10053,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10063,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10091,49): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10182,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10199,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10200,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10211,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10280,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(10281,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(10308,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(10320,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10341,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10344,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10350,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10351,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10358,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(10367,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10373,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10464,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10558,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10575,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10583,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10614,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(10621,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(10646,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(10647,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(10726,21): run-time error CSS1047: Expected number or percentage value in rgb function, found 'var('
-(10726,25): run-time error CSS1046: Expect comma, found '-'
-(10726,26): run-time error CSS1047: Expected number or percentage value in rgb function, found '-v-c-primary'
-(10726,38): run-time error CSS1046: Expect comma, found ')'
-(10726,42): run-time error CSS1062: Expected semicolon or closing curly-brace, found ')'
-(10727,16): run-time error CSS1047: Expected number or percentage value in rgb function, found 'var('
-(10727,20): run-time error CSS1046: Expect comma, found '-'
-(10727,21): run-time error CSS1047: Expected number or percentage value in rgb function, found '-v-c-on-primary'
-(10727,36): run-time error CSS1046: Expect comma, found ')'
-(10727,40): run-time error CSS1062: Expected semicolon or closing curly-brace, found ')'
-(11720,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(11727,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(11895,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(11918,73): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(11918,130): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(11931,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(11932,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(11933,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(11978,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(11980,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(11981,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(12418,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(12485,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(12489,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(12494,44): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(12590,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(12714,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(12982,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(12987,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(13006,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13011,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(13044,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13063,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(13073,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(13081,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(13082,73): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13082,135): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13086,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13108,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13124,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13128,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(13129,73): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13129,135): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(13152,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14204,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14205,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(14212,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(14368,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14369,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14371,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14373,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14375,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14376,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14379,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14380,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(14386,21): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14406,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14420,73): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14420,130): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14446,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14448,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14471,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14484,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(14485,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14496,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(14506,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(14529,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14551,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14600,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14601,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14623,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14629,35): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14632,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(14636,35): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14637,47): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14699,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14717,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14728,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14731,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14732,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(14742,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14744,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(14754,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14757,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14791,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(14807,16): run-time error CSS1047: Expected number or percentage value in rgb function, found 'var('
-(14807,20): run-time error CSS1046: Expect comma, found '-'
-(14807,21): run-time error CSS1047: Expected number or percentage value in rgb function, found '-v-c-primary'
-(14807,33): run-time error CSS1046: Expect comma, found ')'
-(14807,37): run-time error CSS1062: Expected semicolon or closing curly-brace, found ')'
-(14829,16): run-time error CSS1047: Expected number or percentage value in rgb function, found 'var('
-(14829,20): run-time error CSS1046: Expect comma, found '-'
-(14829,21): run-time error CSS1047: Expected number or percentage value in rgb function, found '-v-c-on-secondary'
-(14829,38): run-time error CSS1046: Expect comma, found ')'
-(14829,42): run-time error CSS1062: Expected semicolon or closing curly-brace, found ')'
-(14876,24): run-time error CSS1039: Token not allowed after unary operator: '-vis-screen-height'
-(14877,23): run-time error CSS1062: Expected semicolon or closing curly-brace, found ':'
-(14893,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14915,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(14930,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(14953,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(14963,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(14976,16): run-time error CSS1047: Expected number or percentage value in rgb function, found 'var('
-(14976,20): run-time error CSS1046: Expect comma, found '-'
-(14976,21): run-time error CSS1047: Expected number or percentage value in rgb function, found '-v-c-primary'
-(14976,33): run-time error CSS1046: Expect comma, found ')'
-(14976,37): run-time error CSS1062: Expected semicolon or closing curly-brace, found ')'
-(14998,16): run-time error CSS1047: Expected number or percentage value in rgb function, found 'var('
-(14998,20): run-time error CSS1046: Expect comma, found '-'
-(14998,21): run-time error CSS1047: Expected number or percentage value in rgb function, found '-v-c-on-secondary'
-(14998,38): run-time error CSS1046: Expect comma, found ')'
-(14998,42): run-time error CSS1062: Expected semicolon or closing curly-brace, found ')'
-(15003,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15034,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15052,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15060,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15065,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15084,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15103,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15104,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15111,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15120,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15172,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15182,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15184,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15195,35): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15196,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15210,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15211,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15235,41): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15236,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15292,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15310,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15311,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15357,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15361,30): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15429,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15430,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(15438,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15475,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(15480,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15543,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15566,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15581,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15587,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15595,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15599,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15600,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15604,31): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(15614,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15615,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15619,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15624,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15626,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15630,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15639,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15640,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(15735,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(15737,44): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-common'
-(15740,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-common'
-(15753,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15782,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(15791,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(15822,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15823,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15862,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15962,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15965,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(15976,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(15979,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16045,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16154,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16155,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-primary'
-(16201,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16239,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16247,42): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16260,44): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16267,48): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16283,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16289,37): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16294,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16298,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16310,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16316,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16332,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16344,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(16345,5): run-time error CSS1062: Expected semicolon or closing curly-brace, found '-'
-(16351,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16358,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16361,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16426,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(16435,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16461,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16474,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(16477,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(16485,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(16490,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16494,26): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16498,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16499,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16503,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16504,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16507,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16520,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16524,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(16533,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16536,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16550,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16557,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16564,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16576,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16587,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16588,27): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16593,49): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(16593,80): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(16599,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-mandatory'
-(16607,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-mandatory'
-(16617,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-mandatory'
-(16640,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16651,56): run-time error CSS1039: Token not allowed after unary operator: '-v-c-common'
-(16699,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16703,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(16704,40): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16708,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(16823,48): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16830,52): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(16998,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(17008,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(17079,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(17080,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(17084,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-secondary'
-(17085,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(17089,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(17090,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(17094,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(17095,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(17099,38): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(17100,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
-(17154,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-common'
- */
-html, body {
+﻿html, body {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -449,6 +27,8 @@ select {
     /*background: url(../Images/select.png) no-repeat 97% 50%;*/
     min-width: 30px;
     background-color: white;
+    padding-right: 25px;
+    padding-left: 10px;
 }
 
 /*html[dir="rtl"] select
@@ -5528,10 +5108,12 @@ html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2 {
     margin-left: 10px;
     margin-right: 0px;
 }
+
+.vis-processbtnwrap input[type="button"] {
+    margin-top: 0;
+    margin-left: 10px;
+}
 /*END Amount Division Control*/
-
-
-
 .vis-selected-li-print {
     background-color: #CCDADE;
 }
@@ -5871,6 +5453,7 @@ li.vis-selected-list {
     margin-top: 7px;
     width: 100%;
     border-radius: 0;
+    text-align: center;
 }
 
 /*.vis-process-description-Span p {
@@ -9103,219 +8686,7 @@ ul.vis-userFavourites-ListMenu li a i {
 
 /* scheduler END*/
 
-/*rtl css Start here*/
-html[dir="rtl"] * {
-    text-align: right;
-}
 
-html[dir="rtl"] .vis-feedIcons.vis-icon-feed {
-    margin-right: 0;
-    margin-left: 5px;
-}
-
-html[dir="rtl"] #favLinks > [class^="col"] {
-    float: right;
-}
-
-html[dir="rtl"] #favLinks .row.userLinks_activeTab {
-    border-left: 1px solid rgba(var(--v-c-primary), 1);
-    border-right: none;
-}
-
-html[dir="rtl"] #userFavs h2 {
-    margin-right: 10px;
-}
-
-html[dir="rtl"] .vis-css-treeview label i, html[dir="rtl"] .vis-css-treeview ul li a span {
-    padding-right: 0;
-    padding-left: 10px;
-}
-
-html[dir="rtl"] #vis_mainMenu .vis-menuTitle p {
-    padding-right: 10px;
-}
-
-html[dir="rtl"] .vis-app-hdr-r-user a {
-    padding-right: 0;
-    padding-left: 5px;
-}
-
-html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child {
-    border-top-right-radius: inherit;
-    border-bottom-right-radius: inherit;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-html[dir="rtl"] .vis-ad-w-p-tb {
-    padding-right: 0;
-    padding-left: 8px;
-}
-
-html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body, html[dir="rtl"] .vis-ad-w-p-ap-tp-o-b-head {
-    border-top-left-radius: 0;
-    border-top-right-radius: .60rem
-}
-
-html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body {
-    box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.10);
-}
-
-html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected:before {
-    border-left: none;
-    border-right: 5px solid rgba(var(--v-c-primary),1);
-    right: 0;
-}
-
-html[dir="rtl"] .vis-ad-w-p-ap-tp-o-icorbar li {
-    border-right: 3px solid transparent;
-    border-left: none;
-}
-
-html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected {
-    border-right: 3px solid rgba(var(--v-c-primary),1);
-    border-left: none;
-}
-
-html[dir="rtl"] .vis-ev-col-msign {
-    left: 10px;
-    right: auto;
-}
-
-html[dir="rtl"] .vis-input-wrap input:focus ~ label,
-html[dir="rtl"] .vis-input-wrap input:not(:placeholder-shown) ~ label,
-html[dir="rtl"] .vis-input-wrap textarea:not(:placeholder-shown) ~ label,
-html[dir="rtl"] .vis-input-wrap select:focus ~ label,
-html[dir="rtl"] .vis-input-wrap textarea:focus ~ label,
-html[dir="rtl"] .vis-input-wrap select ~ label {
-    right: 5px;
-    left: auto;
-}
-
-html[dir="rtl"] .vis-input-wrap label {
-    right: 15px;
-    left: auto;
-}
-
-html[dir="rtl"] .vis-input-wrap select {
-    background-position: calc(9% - 25px) calc(1em + 2px), calc(9% - 20px) calc(1em + 2px), calc(9% - 2.5em) 0.5em;
-}
-
-html[dir="rtl"] .input-group > .input-group-append > .btn,
-html[dir="rtl"] .input-group > .input-group-append > .input-group-text,
-html[dir="rtl"] .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
-html[dir="rtl"] .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child),
-html[dir="rtl"] .input-group > .input-group-prepend:not(:first-child) > .btn,
-html[dir="rtl"] .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
-    border-top-left-radius: .25rem;
-    border-bottom-left-radius: .25rem;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-html[dir="rtl"] .vis-input-wrap *[data-hasBtn],
-html[dir="rtl"] .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
-html[dir="rtl"] .input-group > .input-group-append:last-child > .input-group-text:not(:last-child),
-html[dir="rtl"] .input-group > .input-group-append:not(:last-child) > .btn,
-html[dir="rtl"] .input-group > .input-group-prepend > .btn,
-html[dir="rtl"] .input-group > .input-group-prepend > .input-group-text {
-    border-top-right-radius: .25rem !important;
-    border-bottom-right-radius: .25rem !important;
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-}
-
-html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap * {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    border-top-left-radius: .25rem !important;
-    border-bottom-left-radius: .25rem !important;
-}
-
-html[dir="rtl"] .input-group > .input-group-append:not(:last-child) > .input-group-text {
-    border-radius: 0 !important;
-}
-
-html[dir="rtl"] .vis-input-wrap *[data-hasBtn]:focus {
-    border-left: 1px solid rgba(var(--v-c-secondary),1);
-    border-right: 1px solid rgba(var(--v-c-primary));
-}
-
-html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap *:focus {
-    border-right: 1px solid rgba(var(--v-c-secondary),1);
-    border-left: 1px solid rgba(var(--v-c-primary));
-}
-
-html[dir="rtl"] .input-group:focus-within .input-group-append .input-group-text {
-    border: 1px solid rgba(var(--v-c-primary),1);
-    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
-}
-
-html[dir="rtl"] .input-group:focus-within .input-group-prepend .input-group-text {
-    border: 1px solid rgba(var(--v-c-primary),1);
-    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
-}
-
-html[dir="rtl"] .input-group:focus-within .input-group-append:not(:last-child) .input-group-text {
-    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
-    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
-}
-
-html[dir="rtl"] .input-group-append {
-    margin-right: -1px;
-    margin-left: 0;
-}
-
-html[dir="rtl"] .input-group-prepend {
-    margin-right: 0;
-    margin-left: -1px;
-}
-
-html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2) {
-    margin-left: -1px;
-    margin-right: 10px;
-    transform: rotate(180deg);
-}
-
-html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
-    margin-right: -1px;
-    margin-left: 0;
-    transform: rotate(-180deg);
-}
-
-html[dir="rtl"] .vis-control-wrap > button {
-    text-align: center;
-}
-
-html[dir="rtl"] .vis-ad-w-p-tb-search {
-    padding-left: 10px;
-    padding-right: 0;
-}
-
-    html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i {
-        transform: rotate(90deg);
-    }
-
-html[dir="rtl"] .vis-app-f-taskbar li a {
-    padding-left: 0;
-    padding-right: 5px;
-}
-
-html[dir="rtl"] .vis-ad-w-p-a-main {
-    right: auto;
-    left: 2px;
-}
-
-html[dir="rtl"] .vis-ad-w-p-a-m-lst span {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    text-align: left;
-    box-shadow: 3px 0px 3px 0px rgba(var(--v-c-on-common), 0.15);
-}
-
-/*rtl css End here*/
 /* Media Queries for different screen resolutions and devices START */
 @media (max-width:1920px) and (min-width:1681px) {
     .vis-welcomeScreenTabMenu .vis-icon-userprofile {
@@ -12420,6 +11791,21 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 .vis-advancedSearchActionIcon {
     width: 30px;
     height: 30px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: 1px solid rgba(var(--v-c-on-secondary), .1);
+    padding: 0;
+    background-color: rgba(var(--v-c-on-secondary), .12);
+    color: rgba(var(--v-c-on-secondary), 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vis-ads-icon {
+    width: 30px;
+    height: 30px;
     /*float: left;*/
     /* background-repeat: no-repeat; */
     /* background-position: center center; */
@@ -12432,7 +11818,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     justify-content: center;
 }
 
-    .vis-advancedSearchActionIcon i {
+    .vis-ads-icon i {
         font-size: 1rem;
     }
 
@@ -12451,8 +11837,8 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 }*/
 
 .vis-advancedSearch-SaveIcon {
-    /*background-image: url('../Images/adv-save-icon.png');*/
-    /*margin-left: 7px;*/
+    background-image: url('../Images/adv-save-icon.png');
+    margin-left: 7px;
 }
 
 .vis-advancedSearchTableWrap {
@@ -15215,7 +14601,7 @@ select {
         vertical-align: top;
     }
 
-    .vis-app-aform-root input[type=checkbox] {
+    .vis-app-aform-root input[type=checkbox], .ui-dialog input[type=checkbox] {
         margin: 4px 4px 0;
     }
 
@@ -15393,7 +14779,7 @@ select {
     align-items: center;
     background: rgba(var(--v-c-secondary), 0.5);
     padding-top: 7px;
-    padding-left: 8px;
+    padding-left: 10px;
 }
 
 .vis-ad-w-p-nav {
@@ -15670,17 +15056,29 @@ select {
         font-size: 12px;
         cursor: pointer;
         padding: 5px;
+        display: flex;
+        align-items: center;
     }
 
-        .vis-ad-w-p-tb-rc-a-list li:hover {
-            background-color: rgba(var(--v-c-primary),1);
-            color: rgba(var(--v-c-on-primary),1);
-        }
+.vis-ad-w-p-tb-rc-action .dropdown-menu li:first-child {
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
 
-        .vis-ad-w-p-tb-rc-a-list li span {
-            font-size: 0.8rem;
-            padding-left: 2px;
-        }
+.vis-ad-w-p-tb-rc-action .dropdown-menu li:last-child {
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.vis-ad-w-p-tb-rc-a-list li:hover {
+    background-color: rgba(var(--v-c-primary),1);
+    color: rgba(var(--v-c-on-primary),1);
+}
+
+.vis-ad-w-p-tb-rc-a-list li span {
+    font-size: 0.8rem;
+    padding-left: 2px;
+}
 
 .vis-ad-w-p-tb-rc .dropdown-menu {
     transform: translate3d(-105px, 27px, 0px);
@@ -16784,6 +16182,15 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     height: 240px;
 }
 
+.vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+    padding: 4px;
+    min-height: 32px;
+    font-size: .875rem;
+    height: 32px;
+    position: absolute;
+    margin-top: -15px !important;
+}
+
 /****** Style Inputs Control STRAT*****/
 :root {
     --button-bg: #eee;
@@ -16798,8 +16205,12 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     margin-top: 0;
 }
 
+.vis-ev-full-h {
+    height: 100%;
+}
+
+
 .vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
-    padding: 5px 10px 5px 30px;
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
@@ -16808,15 +16219,29 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.vis-input-wrap button.vis-ev-col-img-ctrl {
-    min-height: 140px;
-    padding: 0;
+.vis-ev-col input:not([type=button]), .vis-ev-col textarea {
+    padding: 5px 10px 5px 30px;
 }
 
-    .vis-input-wrap button.vis-ev-col-img-ctrl img {
-        max-width: 100%;
-        max-height: 100%;
-    }
+.vis-ev-col select {
+    padding: 5px 30px 5px 30px !important;
+}
+
+.vis-input-wrap button.vis-ev-col-img-ctrl {
+    min-height: 136px;
+    padding: 0;
+    height: 100%;
+}
+
+.vis-input-wrap label + button.vis-ev-col-img-ctrl {
+    min-height: 115px;
+    height: calc(100% - 21px);
+}
+
+.vis-input-wrap button.vis-ev-col-img-ctrl img {
+    max-width: 100%;
+    max-height: 100%;
+}
 
 .vis-input-wrap-button-image-add {
     background: none !important;
@@ -16831,6 +16256,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-input-wrap {
     position: relative;
     margin-bottom: 15px;
+    height: 100%;
 }
 
     .vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
@@ -17063,7 +16489,7 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
 }*/
 
 .vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
-    color: rgba(var(--v-c-mandatory),1);
+    color: rgba(var(--v-c-mandatory),1) !important;
 }
 
 .vis-ev-col-msign {
@@ -17128,11 +16554,11 @@ label.vis-ec-col-lblchkbox {
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: 0;
+    top: 10px;
     cursor: pointer;
     outline: none;
     z-index: 5;
-    bottom: 0;
+    /*bottom: 0;*/
     display: flex;
     align-items: center;
 }
@@ -17144,9 +16570,10 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     display: inline-flex;
 }
 
-.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap {
+.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap, .vis-input-wrap button.vis-ev-col-img-ctrl ~ .vis-ev-ctrlinfowrap {
     top: 9px;
     align-items: flex-start;
+    bottom: auto;
 }
 
 .vis-input-wrap button + .vis-ev-ctrlinfowrap {
@@ -17416,7 +16843,7 @@ html[dir="rtl"] .vis-feedTitleBar {
 }
 
 html[dir="rtl"] #favLinks .row.userLinks_activeTab {
-    border-left: 1px solid #1b95d7;
+    border-left: 1px solid rgba(var(--v-c-primary), 1);
     border-right: none;
 }
 
@@ -17460,7 +16887,7 @@ html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body {
     box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.10);
 }
 
-html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected:before {
+html[dir="rtl"] .vis-ad-w-p-actionpanel-r li.vis-ad-w-p-ap-tp-o-li-selected:before {
     border-left: none;
     border-right: 5px solid rgba(var(--v-c-primary),1);
     right: 0;
@@ -17471,14 +16898,27 @@ html[dir="rtl"] .vis-ad-w-p-ap-tp-o-icorbar li {
     border-left: none;
 }
 
-html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected {
+html[dir="rtl"] .vis-ad-w-p-actionpanel-r li.vis-ad-w-p-ap-tp-o-li-selected {
     border-right: 3px solid rgba(var(--v-c-primary),1);
-    border-left: none;
 }
 
 html[dir="rtl"] .vis-ev-col-msign {
     left: 10px;
     right: auto;
+}
+
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
+    left: 30px;
+    right: auto;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tabs-t {
+    padding-right: 10px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tb-lc li span {
+    padding-left: 0;
+    padding-right: 5px;
 }
 
 html[dir="rtl"] .vis-input-wrap input:focus ~ label,
@@ -17492,12 +16932,37 @@ html[dir="rtl"] .vis-input-wrap select ~ label {
 }
 
 html[dir="rtl"] .vis-input-wrap label {
-    right: 15px;
+    right: 30px;
+    left: auto;
+}
+
+html[dir="rtl"] .vis-ev-col input:not([type=button]), html[dir="rtl"] .vis-ev-col textarea, html[dir="rtl"] .vis-control-wrap > button {
+    padding: 5px 30px 5px 10px;
+}
+
+html[dir="rtl"] label.vis-ec-col-lblchkbox {
+    right: 0;
+}
+
+html[dir="rtl"] .vis-ev-ctrlinfowrap {
+    right: 10px;
     left: auto;
 }
 
 html[dir="rtl"] select {
     background-position-x: 10px,15px;
+    padding-right: 10px;
+    padding-left: 25px;
+}
+
+html[dir="rtl"] .vis-ev-col-fieldgroup :last-child {
+    padding-left: 10px;
+    padding-right: 0;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tb-rc-a-list li span {
+    padding-left: 0;
+    padding-right: 5px;
 }
 
 html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory {
@@ -17505,7 +16970,12 @@ html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory {
 }
 
 html[dir="rtl"] .vis-statusbar-combo {
-    background-position: calc(100% - 20px), calc(100% - 15px);
+    background-position: 4px, 8px
+}
+
+html[dir="rtl"] .vis-app-hdr {
+    padding-right: 0;
+    padding-left: 5px;
 }
 
 html[dir="rtl"] .input-group > .input-group-append > .btn,
@@ -17581,13 +17051,15 @@ html[dir="rtl"] .input-group-prepend {
 html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2) {
     margin-left: -1px;
     margin-right: 10px;
-    transform: rotate(180deg);
 }
 
 html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
     margin-right: -1px;
     margin-left: 0;
-    transform: rotate(-180deg);
+}
+
+html[dir="rtl"] .vis-ad-w-p-tabs-oflow a, .vis-statusbar-ul div, html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2), html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+    transform: rotate(180deg);
 }
 
 html[dir="rtl"] .vis-control-wrap > button {
@@ -17641,9 +17113,38 @@ html[dir="rtl"] .vis-attach-btns > a {
     margin-right: 10px;
 }
 
-html[dir="rtl"] .vis-attach-file-text {
+html[dir="rtl"] .vis-attach-file-text, html[dir="rtl"] .vis-ad-process-header, html[dir="rtl"] .vis-report-tittle {
     padding-left: 0;
     padding-right: 10px;
 }
+
+html[dir="rtl"] .vis-ad-w-p-header-h {
+    right: 0;
+    left: auto;
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable input, html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+    position: relative;
+    margin-top: 10px;
+}
+
+html[dir="rtl"] .vis-process-background-label {
+    margin-left: 0;
+    margin-right: 5px;
+}
+
+html[dir="rtl"] .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+html[dir="rtl"] .vis-advancedSearch-calender-Icon {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
 /*rtl css End here*/
+
+
 

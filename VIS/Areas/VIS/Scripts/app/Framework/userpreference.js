@@ -111,6 +111,7 @@
         var $cmdWareHouse = null;
         var defaultLogin = null;
         //*********************************
+        var drpTheme = null;
         var $root = $("<div class='vis-forms-container'>");
         var $busyDiv = $("<div class='vis-apanel-busy'>")
         var windowNo = VIS.Env.getWindowNo();
@@ -366,7 +367,7 @@
             var imgThemetext = root.find("#imgThemetext" + windowNo);
             imgThemetext.text(VIS.Msg.getMsg("SelectTheme"));
 
-            var drpTheme = root.find("#vis_pref_theme" + windowNo);
+            drpTheme = root.find("#vis_pref_theme" + windowNo);
 
 
             var vlblPageSize = root.find("#vlblPageSize_" + windowNo);
