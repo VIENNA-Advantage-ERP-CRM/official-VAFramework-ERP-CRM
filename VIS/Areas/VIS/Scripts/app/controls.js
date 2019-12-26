@@ -449,7 +449,7 @@
          *  @param ignoreCheckbox bool
          *  @return Label
          */
-        getLabel: function (mField, ignoreCheckbox) {
+        getLabel: function (mField) {
             if (mField == null)
                 return null;
 
@@ -457,7 +457,22 @@
 
             //	No Label for FieldOnly, CheckBox, Button
             if (mField.getIsFieldOnly()
-                || (displayType == VIS.DisplayType.YesNo && !ignoreCheckbox)
+                || (displayType == VIS.DisplayType.YesNo)
+                || displayType == VIS.DisplayType.Button
+                || displayType == VIS.DisplayType.Label)
+                return null;
+            return new VIS.Controls.VLabel(mField.getHeader(), mField.getColumnName(), mField.getIsMandatory());
+        },
+
+
+        getHeaderLabel: function (mField) {
+            if (mField == null)
+                return null;
+
+            var displayType = mField.getDisplayType();
+
+            //	No Label for FieldOnly, CheckBox, Button
+            if ((!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) || (mField.getHeaderHeadingOnly())
                 || displayType == VIS.DisplayType.Button
                 || displayType == VIS.DisplayType.Label)
                 return null;
@@ -3192,6 +3207,7 @@
     function VTextArea(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, displayType) {
 
         var rows = 6;
+        var minHeight = 79;
         if (displayType != VIS.DisplayType.Memo) {
             if (displayType == VIS.DisplayType.TextLong) {
                 rows = 6;
@@ -3199,20 +3215,23 @@
             }
             else {
                 rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
+                minHeight = fieldLength < 300 ? 79 : (fieldLength < 2000) ? 129 : 129;
             }
         }
         else {
             try {
                 rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : (fieldLength / 500);
+                minHeight = fieldLength < 300 ? 79 : (fieldLength < 2000) ? 129 : 129;
             }
             catch (e) {
                 rows = fieldLength < 300 ? 2 : (fieldLength < 2000) ? 4 : 6;
+                minHeight = fieldLength < 300 ? 79 : (fieldLength < 2000) ? 129 : 129;
             }
         }
 
 
         //Init Control
-        var $ctrl = $('<textarea>', { name: columnName, maxlength: fieldLength, rows: rows });
+        var $ctrl = $('<textarea>', { name: columnName, maxlength: fieldLength, rows: rows ,'style':'min-height:'+minHeight+'px'});
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
@@ -4605,7 +4624,6 @@
 
             if (imgPath) {
                 $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath + "? timestamp =" + new Date().getTime());
-
                 $img.show();
                 $icon.hide();
                 $txt.text("");
@@ -4613,15 +4631,13 @@
             }
             else if (resImg != null) {
                 $img.attr('src', "data:image/jpg;base64," + resImg + "? timestamp =" + new Date().getTime());
-
                 $img.show();
                 $icon.hide();
                 $txt.text("");
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else {
-                $img.attr('src', "data:image/jpg;base64," + resImg + "? timestamp =" + new Date().getTime());
-
+                $img.attr('src', "data:image/jpg;base64," + resImg );
                 $img.hide();
                 $txt.text("-");
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');

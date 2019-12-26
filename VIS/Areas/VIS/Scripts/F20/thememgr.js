@@ -32,7 +32,8 @@
 
 
         return {
-            init:init
+            init: init,
+            applyTheme: applyTheme
         }
     }
 

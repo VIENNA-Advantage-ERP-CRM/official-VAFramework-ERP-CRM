@@ -35,7 +35,7 @@
             $root = $("<div class='vis-pro-para-root'>");
             $table = $("<table class='vis-processpara-table'>");
             // $root.append($table);
-            $divButtons = $('<div style="overflow:auto;padding:0 10px 10px">');
+            $divButtons = $('<div class="vis-processbtnwrap">');
             // $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
             $divTable = $('<div class="vis-para-maxheight">');
 
@@ -45,8 +45,8 @@
             $btnOK.addClass("VIS_Pref_btn-2");
             $btnClose = $("<input type='button'>").val(VIS.Msg.getMsg("Close"));
             $btnClose.addClass("VIS_Pref_btn-2");
-            $btnClose.css({ "margin-bottom": "0px", "margin-top": "7px", "margin-left": "5px" });
-            $btnOK.css({ "margin-bottom": "0px", "margin-top": "7px" });
+            //$btnClose.css({ "margin-bottom": "0px", "margin-top": "7px", "margin-left": "5px" });
+            //$btnOK.css({ "margin-bottom": "0px", "margin-top": "7px" });
             //$divTable.css('max-height', (window.innerHeight - 200) + 'px');
 
             if (!splitUI) {

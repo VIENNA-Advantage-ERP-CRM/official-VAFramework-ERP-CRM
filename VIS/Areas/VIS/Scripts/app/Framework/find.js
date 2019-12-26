@@ -254,7 +254,7 @@
 
                         + '<div class="vis-advancedSearch-calender-Icon vis-pull-left">'
                           + '<ul>'
-                            + '<li class="vis-pull-left"><button id="btnSave_' + windowNo + '" disabled class="vis-advancedSearchActionIcon vis-advancedSearch-SaveIcon"><i class="vis vis-save" aria-hidden="true"></i></button></li>'
+                + '<li class="vis-pull-left"><button id="btnSave_' + windowNo + '" disabled class="vis-ads-icon"><i class="vis vis-save" aria-hidden="true"></i></button></li>'
                             + '</ul>'
                         + '</div>'
 

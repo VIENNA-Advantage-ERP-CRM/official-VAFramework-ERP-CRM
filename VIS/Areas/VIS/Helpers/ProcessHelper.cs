@@ -66,7 +66,7 @@ namespace VIS.Helpers
                     msgText += "</b>";
 
                     if (!dr.IsDBNull(2))
-                        msgText += "<p style='display: inline-block;float: left;Max-width: calc(100% - 38px);'>" + dr.GetString(2) + "</p>";
+                        msgText += "<p style='display: inline-block;Max-width: calc(100% - 38px);'>" + dr.GetString(2) + "</p>";
                     //
                     outt.MessageText = msgText;
 

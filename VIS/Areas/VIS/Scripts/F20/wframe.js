@@ -328,7 +328,10 @@
             width = window.innerWidth;
        // this.setSize(height);
         var hHeight = this.isHeaderVisible ? 85 : 43;
-        this.cPanel.sizeChanged(height - hHeight, width);
+        try {
+            this.cPanel.sizeChanged(height - hHeight, width);
+        }
+        catch (ex) { console.log("size changed error"); }
     };
 
     AWindow.prototype.refresh = function () {

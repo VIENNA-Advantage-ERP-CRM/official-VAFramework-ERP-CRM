@@ -23,7 +23,7 @@ html[dir="rtl"] .vis-feedTitleBar {
 }
 
 html[dir="rtl"] #favLinks .row.userLinks_activeTab {
-    border-left: 1px solid #1b95d7;
+    border-left: 1px solid rgba(var(--v-c-primary), 1);
     border-right: none;
 }
 
@@ -66,8 +66,7 @@ html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body, html[dir="rtl"] .vis-ad-w-p-ap-tp-o-b-
 html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body {
     box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.10);
 }
-
-html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected:before {
+html[dir="rtl"] .vis-ad-w-p-actionpanel-r li.vis-ad-w-p-ap-tp-o-li-selected:before {
     border-left: none;
     border-right: 5px solid rgba(var(--v-c-primary),1);
     right: 0;
@@ -78,14 +77,24 @@ html[dir="rtl"] .vis-ad-w-p-ap-tp-o-icorbar li {
     border-left: none;
 }
 
-html[dir="rtl"] li.vis-ad-w-p-ap-tp-o-li-selected {
+html[dir="rtl"] .vis-ad-w-p-actionpanel-r li.vis-ad-w-p-ap-tp-o-li-selected {
     border-right: 3px solid rgba(var(--v-c-primary),1);
-    border-left: none;
 }
 
 html[dir="rtl"] .vis-ev-col-msign {
     left: 10px;
     right: auto;
+}
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
+    left: 30px;
+    right: auto;
+}
+html[dir="rtl"] .vis-ad-w-p-tabs-t {
+    padding-right: 10px;
+}
+html[dir="rtl"] .vis-ad-w-p-tb-lc li span {
+    padding-left: 0;
+    padding-right: 5px;
 }
 
 html[dir="rtl"] .vis-input-wrap input:focus ~ label,
@@ -99,19 +108,42 @@ html[dir="rtl"] .vis-input-wrap select ~ label {
 }
 
 html[dir="rtl"] .vis-input-wrap label {
-    right: 15px;
+    right: 30px;
     left: auto;
 }
-
+html[dir="rtl"] .vis-ev-col input:not([type=button]), html[dir="rtl"] .vis-ev-col textarea, html[dir="rtl"] .vis-control-wrap > button {
+    padding: 5px 30px 5px 10px;
+}
+html[dir="rtl"] label.vis-ec-col-lblchkbox{
+    right: 0;
+}
+html[dir="rtl"] .vis-ev-ctrlinfowrap {
+    right: 10px;
+    left: auto;
+}
 html[dir="rtl"] select {
     background-position-x: 10px,15px;
+    padding-right: 10px;
+    padding-left: 25px;
 }
-html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory{
+html[dir="rtl"] .vis-ev-col-fieldgroup :last-child {
+    padding-left: 10px;
+    padding-right: 0;
+}
+html[dir="rtl"] .vis-ad-w-p-tb-rc-a-list li span{
+    padding-left: 0;
+    padding-right: 5px;
+}
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory {
     /*background-position: calc(10% - 25px), calc(10% - 20px);*/
 }
 
 html[dir="rtl"] .vis-statusbar-combo {
-    background-position: calc(100% - 20px), calc(100% - 15px);
+    background-position: 4px, 8px
+}
+html[dir="rtl"] .vis-app-hdr {
+    padding-right: 0;
+    padding-left: 5px;
 }
 
 html[dir="rtl"] .input-group > .input-group-append > .btn,
@@ -187,15 +219,15 @@ html[dir="rtl"] .input-group-prepend {
 html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2) {
     margin-left: -1px;
     margin-right: 10px;
-    transform: rotate(180deg);
 }
 
 html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
     margin-right: -1px;
     margin-left: 0;
-    transform: rotate(-180deg);
 }
-
+html[dir="rtl"] .vis-ad-w-p-tabs-oflow a, .vis-statusbar-ul div, html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2), html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+    transform: rotate(180deg);
+}
 html[dir="rtl"] .vis-control-wrap > button {
     text-align: center;
 }
@@ -242,8 +274,35 @@ html[dir="rtl"] .vis-attach-btns > a {
     margin-left: 0;
     margin-right: 10px;
 }
-html[dir="rtl"] .vis-attach-file-text{
+html[dir="rtl"] .vis-attach-file-text, html[dir="rtl"] .vis-ad-process-header, html[dir="rtl"] .vis-report-tittle {
     padding-left: 0;
     padding-right: 10px;
 }
+
+html[dir="rtl"] .vis-ad-w-p-header-h {
+    right: 0;
+    left:auto;
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable input, html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+    position: relative;
+    margin-top: 10px;
+}
+html[dir="rtl"] .vis-process-background-label {
+    margin-left: 0;
+    margin-right: 5px;
+}
+html[dir="rtl"] .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+html[dir="rtl"] .vis-advancedSearch-calender-Icon {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
 /*rtl css End here*/
+
+

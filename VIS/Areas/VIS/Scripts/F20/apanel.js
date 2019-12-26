@@ -138,7 +138,7 @@
             $ulNav = $root.find(".vis-ad-w-p-nav-btns");   // $("<ul class='vis-appsaction-ul vis-apanel-nav-ul'>"); //navigation list
             $ulTabControl = $root.find(".vis-ad-w-p-t-c-tc");;  // $("<ul class='vis-appsaction-ul vis-apanel-tabcontrol-ul'>");//tab control
             $divTabControl = $root.find(".vis-ad-w-p-t-c");// $("<div class='vis-apanel-tabcontrol'>").append($ulTabControl);
-            $divTabNav = $root.find(".vis-ad-w-p-tabs-oflow");// $("<div class='vis-apanel-tab-oflow'>").hide();
+            $divTabNav = $root.find(".vis-ad-w-p-tabs-oflow").hide();// $("<div class='vis-apanel-tab-oflow'>").hide();
             $divHeaderNav = $root.find(".vis-ad-w-p-tabs-t");
 
             // $td0leftbar = $root.find(".vis-ad-w-p-action");
@@ -526,6 +526,13 @@
             //this.statusBar.setPageItem(this.aPageLast.getListItm());
             this.statusBar.render();
             this.toolbarCreated = true;
+
+            this.setRightBarVisibility = function (hide) {
+                if (hide)
+                    $($ulRightBar2.parent()[0]).removeClass('show');
+                //else
+                //    $ulRightBar2.parent().addclass('show')
+            };
 
             /* Set Tool Bar */
 
@@ -1843,7 +1850,7 @@
         //else if (tis.aCall && tis.aCall.getAction() === action) {
         //    tis.cmd_call();
         //}
-
+        tis.setRightBarVisibility(true);
         tis.setBusy(false);
         tis = null;
     };
