@@ -12,6 +12,11 @@
     margin-top: 0;
 }
 
+.vis-ev-full-h{
+    height:100%;
+}
+
+
 .vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
     padding: 5px 10px 5px 30px;
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
@@ -22,8 +27,14 @@
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .vis-input-wrap button.vis-ev-col-img-ctrl {
-    min-height: 140px;
+    min-height: 136px;
     padding: 0;
+    height: 100%;
+}
+
+.vis-input-wrap label + button.vis-ev-col-img-ctrl {
+    min-height: 115px;
+    height: calc(100% - 21px);
 }
 .vis-input-wrap button.vis-ev-col-img-ctrl img{
     max-width: 100%;
@@ -43,6 +54,7 @@
 .vis-input-wrap {
     position: relative;
     margin-bottom: 15px;
+    height:100%;
 }
 
 .vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {

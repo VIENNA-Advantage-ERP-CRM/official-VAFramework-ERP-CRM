@@ -165,7 +165,7 @@
                         columnIndex += colSpan - 1;
 
                         if (rowSpan > 1) {
-                            col0.rSpan = rowSpan + 1;
+                            col0.rSpan = rowSpan + 1 +1; //extra to fill addnew minus
                             col0.cSpan = colSpan;
                             col0.cSpace = cellSpace;
                             $td0.css("grid-row", "span " + rowSpan);
@@ -604,7 +604,14 @@
     function insertCWrapper(label, editor, parent, mField) {
         var customStyle = mField.getHtmlStyle();
 
-        var ctrl = $('<div class="input-group vis-input-wrap">');
+        var wraper = '<div class="input-group vis-input-wrap">';
+        //special case for textarea and image button strech height to 100%
+        if (editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl().hasClass("vis-ev-col-img-ctrl")) {
+            wraper = '<div class="input-group vis-input-wrap vis-ev-full-h">';
+        }
+
+        var ctrl = $(wraper);
+
         if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
             var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
             if (mField.getFontClass() != '')
@@ -637,6 +644,7 @@
                 ctrlP.append(editor.getControl());
         }
 
+        
 
 
         ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
