@@ -1170,7 +1170,7 @@
         var label = $("<div style='float: left; margin-right: 5px; width: 30%; text-align: right'>");
 
         if (VIS.Application.isRTL) {
-            label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            label = $("<div style='float: right; margin-right: 5px; width: 100%; text-align: left'>");
         }
 
         var lableCtrl = $("<h5 style='width: 100%'>");

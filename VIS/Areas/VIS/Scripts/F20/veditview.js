@@ -14,10 +14,10 @@
 
         var _curParent = null;
 
-        var col0 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-        var col1 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-        var col2 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-        var col3 = { rSpan: 1, cSpan: 0, cSpace: 0 };
+        var col0 = { rSpan: 1, cSpan: 0, cSpace: 0 ,orgRSpan:1};
+        var col1 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1};
+        var col2 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1 };
+        var col3 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1};
 
         /** Map of group name to list of components in group. */
         //control = field array
@@ -68,28 +68,45 @@
 
         function reset(col) {
             if (!col) {
-                col0 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-                col1 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-                col2 = { rSpan: 1, cSpan: 0, cSpace: 0 };
-                col3 = { rSpan: 1, cSpan: 0, cSpace: 0 };
+                col0 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+                col1 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+                col2 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+                col3 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
             }
             else if (col.rSpan <= 1) {
-                col = { rSpan: 1, cSpan: 0, cSpace: 0 };
+                col = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
             }
         };
 
+        function adjustRowSpanForSameLine(colIndex){
+           // if(colIndex)
 
-        function adjustRowSpan() {
+        }
+
+        function adjustRowSpan(colIndex) {
 
             if (col0.rSpan > 1) { //skip column 
-                --col0.rSpan;
+                if (col0.set && colIndex ==1)  { //special case
+                    col0.set = false;
+                }
+                else 
+                    --col0.rSpan;
+
                 reset(col0);
             }
             if (col1.rSpan > 1) { //skip column 
+                if (colIndex == 2  && col1.set) { //special case
+                    col1.set = false;
+                }
+                else 
                 --col1.rSpan;
                 reset(col1);
             }
             if (col2.rSpan > 1) { //skip column 
+                if (colIndex == 3 && col2.set) { //special case
+                    col2.set = false;
+                }
+                else 
                 --col2.rSpan;
                 reset(col2);
             }
@@ -111,10 +128,11 @@
                 isNewRow = true;
             }
             if (isNewRow) {
-                adjustRowSpan();
+                adjustRowSpan(columnIndex);
                 addRow();
                 columnIndex = 0;
             }
+           
 
             if (columnIndex == 0) {
                 if (isLongFiled) {
@@ -165,7 +183,8 @@
                         columnIndex += colSpan - 1;
 
                         if (rowSpan > 1) {
-                            col0.rSpan = rowSpan + 1;
+                            col0.rSpan = rowSpan + 1; //extra to fill addnew minus
+                            col0.set = true;
                             col0.cSpan = colSpan;
                             col0.cSpace = cellSpace;
                             $td0.css("grid-row", "span " + rowSpan);
@@ -210,6 +229,7 @@
                     columnIndex += colSpan - 1;
                     if (rowSpan > 1) {
                         col1.rSpan = rowSpan + 1;
+                        col1.set = true;
                         col1.cSpan = colSpan;
                         col1.cSpace = cellSpace;
                         $td1.css("grid-row", "span " + rowSpan);
@@ -246,6 +266,7 @@
                     columnIndex += colSpan - 1;
                     if (rowSpan > 1) {
                         col2.rSpan = rowSpan + 1;
+                        col2.set =  true;
                         col2.cSpan = colSpan;
                         col2.cSpace = cellSpace;
                         $td2.css("grid-row", "span " + rowSpan);
@@ -272,6 +293,7 @@
                     }
                     if (rowSpan > 1) {
                         col3.rSpan = rowSpan + 1;
+                        col3.set = true;
                         col3.cSpan = colSpan;
                         col3.cSpace = cellSpace;
                         $td3.css("grid-row", "span " + rowSpan);
@@ -601,10 +623,24 @@
 
     };
 
+    /**
+     * create wrapeer div and add conrols and label in parent div
+     * @param {any} label label to add
+     * @param {any} editor controls to add
+     * @param {any} parent current row/column div
+     * @param {any} mField model field 
+     */
     function insertCWrapper(label, editor, parent, mField) {
         var customStyle = mField.getHtmlStyle();
 
-        var ctrl = $('<div class="input-group vis-input-wrap">');
+        var wraper = '<div class="input-group vis-input-wrap">';
+        //special case for textarea and image button strech height to 100%
+        if (editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl().hasClass("vis-ev-col-img-ctrl")) {
+            wraper = '<div class="input-group vis-input-wrap vis-ev-full-h">';
+        }
+
+        var ctrl = $(wraper);
+
         if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
             var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
             if (mField.getFontClass() != '')
@@ -637,6 +673,7 @@
                 ctrlP.append(editor.getControl());
         }
 
+        
 
 
         ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +

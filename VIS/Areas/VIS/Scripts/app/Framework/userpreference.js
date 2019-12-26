@@ -360,6 +360,14 @@
             var imgDateText = root.find("#imgDateText_" + windowNo);
             imgDateText.text(VIS.Msg.getMsg("Date"));
 
+            var vlblTheme = root.find("#vlblthemeText_" + windowNo);
+            vlblTheme.text(VIS.Msg.getMsg("SelectTheme"));
+
+            var imgThemetext = root.find("#imgThemetext" + windowNo);
+            imgThemetext.text(VIS.Msg.getMsg("SelectTheme"));
+
+            var drpTheme = root.find("#vis_pref_theme" + windowNo);
+
 
             var vlblPageSize = root.find("#vlblPageSize_" + windowNo);
             vlblPageSize.text(VIS.Msg.getMsg("Pagesize"));
@@ -558,6 +566,18 @@
             //    'href': test,
             //    'target': '_blank'b,sdf
             //});
+
+            //Theme changed Event
+
+           // drpTheme.on()
+            drpTheme.on("click", "div.vis-theme-rec", function (e) {
+                var clr = $(e.currentTarget).data("color");
+                if (VIS.themeMgr)
+                    VIS.themeMgr.applyTheme(clr);
+            });
+
+
+
 
             //Error get error list on click
             $savetofile.on('click', function () {
@@ -1679,6 +1699,10 @@
 
         this.disposeComponent = function () {
             $self = null;
+            if (drpTheme) {
+                drpTheme.off('click');
+            }
+
             if ($Okbtn)
                 $Okbtn.off("click");
             if ($cancelbtn)
