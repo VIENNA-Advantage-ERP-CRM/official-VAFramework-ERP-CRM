@@ -4623,7 +4623,7 @@
             //$img.attr('src', rootPath + img);
 
             if (imgPath) {
-                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb140x120/" + imgPath + "? timestamp =" + new Date().getTime());
+                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb500x375/" + imgPath + "? timestamp =" + new Date().getTime());
                 $img.show();
                 $icon.hide();
                 $txt.text("");

@@ -79,7 +79,7 @@ namespace VIS.Controllers
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                img = obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 320, 185, ctx.GetApplicationUrl());
+                img = obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 500, 375, ctx.GetApplicationUrl());
             }
             return Json(JsonConvert.SerializeObject(img), JsonRequestBehavior.AllowGet);
         }

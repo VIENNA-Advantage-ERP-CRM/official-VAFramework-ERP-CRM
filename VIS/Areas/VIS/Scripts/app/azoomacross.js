@@ -156,7 +156,7 @@
 
             if (list.length == 0) {
 
-                alert(VIS.Msg.getMsg("NoZoomTarget"));
+                VIS.ADialog.info("NoZoomTarget");
             }
             else {
                 var $root = $("<div>");
@@ -172,7 +172,7 @@
                         var zoomQuery = new VIS.Query();
                         zoomQuery.addRestriction(KeyCol, VIS.Query.prototype.EQUAL, Record_ID);
                         VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
-                        var overlay = $('#w2ui-overlay');
+                        var overlay = $('#w2ui-overlay-main');
                         overlay.hide();
                         overlay = null;
                     });
