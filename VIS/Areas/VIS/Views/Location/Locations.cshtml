@@ -32,7 +32,7 @@
         <td>
             <div class="form-group location">
                 <label id ="lblAddress1_@windowNo" class = "VIS_Pref_Label_Font control-label" >@VAdvantage.Utility.Msg.GetMsg(lang, "Address1") </label>
-                <div class="right-inner-addon margin-top">
+                <div class="right-inner-addon">
                     @Html.TextBoxFor(m => m.Address1, new { autofocus = "autofocus", id = "txtAddress1_" + ViewBag.WindowNumber, @maxlength = "60", @class = "form-control", @placeholder = @VAdvantage.Utility.Msg.GetMsg(lang, "Address1"), })
                 </div>
             </div>
