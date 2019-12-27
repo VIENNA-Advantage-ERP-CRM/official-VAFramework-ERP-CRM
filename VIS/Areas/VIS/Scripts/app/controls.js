@@ -491,6 +491,7 @@
             if (displayType == VIS.DisplayType.Image) {
                 var image = new VImage(columnName, isMandatory, true, windowNo);
                 //image.setField(mField);
+                image.setDimension(120, 140);
                 ctrl = image;
             }
             else {
@@ -3231,7 +3232,7 @@
 
 
         //Init Control
-        var $ctrl = $('<textarea>', { name: columnName, maxlength: fieldLength, rows: rows ,'style':'min-height:'+minHeight+'px'});
+        var $ctrl = $('<textarea>', { name: columnName, maxlength: fieldLength, rows: rows, 'style': 'min-height:' + minHeight + 'px' });
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
@@ -4553,8 +4554,9 @@
         var $icon = $("<i>");
         var $txt = $("<span>").text("-");
         var $ctrl = null;
+        var dimension = "Thumb500x375";
 
-        $ctrl = $('<button >', { type: 'button', name: columnName, class: 'vis-ev-col-img-ctrl' });
+        $ctrl = $('<button >', { type: 'button', name: columnName, class: 'vis-ev-col-img-ctrl',tabIndex:'-1' });
         $txt.css("color", "blue");
 
 
@@ -4619,11 +4621,15 @@
             $txt.text(text);
         };
 
+        this.setDimension = function (height, width) {
+            dimension = "Thumb" + width + "x" + height;
+        };
+
         this.setIcon = function (resImg, imgPath) {
             //$img.attr('src', rootPath + img);
 
             if (imgPath) {
-                $img.attr('src', VIS.Application.contextUrl + "Images/Thumb500x375/" + imgPath + "? timestamp =" + new Date().getTime());
+                $img.attr('src', VIS.Application.contextUrl + "Images/" + dimension + "/" + imgPath + "? timestamp =" + new Date().getTime());
                 $img.show();
                 $icon.hide();
                 $txt.text("");
@@ -4637,7 +4643,7 @@
                 this.ctrl.addClass('vis-input-wrap-button-image-add');
             }
             else {
-                $img.attr('src', "data:image/jpg;base64," + resImg );
+                $img.attr('src', "data:image/jpg;base64," + resImg);
                 $img.hide();
                 $txt.text("-");
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');
