@@ -421,7 +421,7 @@
     HeaderPanel.prototype.fieldGroupContainerUISettings = function (columns, rows, backcolor, padding, itemNo) {
         var dynamicClassName = "vis-ad-w-p-fg_container_" + rows + "_" + columns + "_" + this.windowNo + "_" + itemNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {");
-        this.dynamicStyle.push('grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);background:' + backcolor + ';padding:' + padding);
+        this.dynamicStyle.push('grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);padding:' + padding + ';' + backcolor);
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };
@@ -445,14 +445,14 @@
          */
     HeaderPanel.prototype.headerUISettings = function (alignmentHorizontal, height, width, backcolor, padding) {
         var dynamicClassName = "vis-ad-w-p-header_root_" + this.windowNo;
-        this.dynamicStyle.push(" ." + dynamicClassName + " {display:flex;flex:1;");
+        this.dynamicStyle.push(" ." + dynamicClassName + " {display:flex;overflow:auto;");
         if (alignmentHorizontal) {
-            this.dynamicStyle.push("flex-direction:row;height: " + height + "; ");
+            this.dynamicStyle.push("flex:1;flex-direction:row;height: " + height + "; ");
         }
         else {
-            this.dynamicStyle.push("flex-direction:column;width: " + width + "; ");
+            this.dynamicStyle.push("flex-direction:column;width: " + width + ";height:calc(100vh - 93px); ");
         }
-        this.dynamicStyle.push("background:" + backcolor + ";padding:" + padding);
+        this.dynamicStyle.push("padding:" + padding + ";" + backcolor );
 
         this.dynamicStyle.push("} ");
         return dynamicClassName;
@@ -469,12 +469,13 @@
         var dynamicClassName = "vis-ad-w-p-header_Custom_" + this.windowNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {flex:1;");
         //Set background Color of Header Panel. If no color found then get color from Theme
-        if (backColor) {
-            this.dynamicStyle.push('background: ' + backColor);
-        }
-        else {
-            this.dynamicStyle.push('background: ' + 'rgba(var(--v-c-primary))');
-        }
+        //if (backColor) {
+        //    this.dynamicStyle.push('background: ' + backColor);
+        //}
+        //else {
+            this.dynamicStyle.push('background: ' + 'rgba(var(--v-c-primary));');
+        //}
+        this.dynamicStyle.push(backColor);
 
         this.dynamicStyle.push("} ");
         return dynamicClassName;
@@ -495,7 +496,8 @@
         this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
 
         this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]);
-        this.dynamicStyle.push(";background:" + backColor + ";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding);
+        this.dynamicStyle.push(";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding+";");
+        this.dynamicStyle.push(backColor);
         this.dynamicStyle.push("} ");
         return dynamicClassName;
     };
