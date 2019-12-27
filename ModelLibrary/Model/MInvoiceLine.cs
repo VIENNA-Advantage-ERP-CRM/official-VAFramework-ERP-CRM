@@ -52,6 +52,9 @@ namespace VAdvantage.Model
         private int C_UOM_ID = 0;
         // Done by Bharat to check qty with MR
         private bool _checkMRQty = false;
+
+        private bool resetAmtDim = false;
+        private bool resetTotalAmtDim = false;
         /**
         * Get Invoice Line referencing InOut Line
         *	@param sLine shipment line
@@ -3693,7 +3696,7 @@ namespace VAdvantage.Model
                     }
                 }
 
-                
+
                 // Change by mohit Asked by ravikant 21/03/2016
                 //if (!_IsSOTrx)
                 //{
@@ -3715,6 +3718,39 @@ namespace VAdvantage.Model
                         }
                     }
                 }
+
+                // Reset Amount Dimension if Line Amount is different
+                if (!newRecord && Is_ValueChanged("LineNetAmt"))
+                {
+                    if (Util.GetValueOfInt(Get_Value("AmtDimLineNetAmt")) > 0)
+                    {
+                        string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimLineNetAmt"));
+                        decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                        if (amtdimAmt != GetLineNetAmt())
+                        {
+                            Set_Value("AmtDimLineNetAmt", null);
+                        }
+                    }
+                    resetAmtDim = true;
+                }
+
+                // Reset Amount Dimension if Line Total Amount is different
+                if (!newRecord && Is_ValueChanged("LineTotalAmt"))
+                {
+                    if (Util.GetValueOfInt(Get_Value("AmtDimLineTotalAmt")) > 0)
+                    {
+                        string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimLineTotalAmt"));
+                        decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                        if (amtdimAmt != GetLineTotalAmt())
+                        {
+                            Set_Value("AmtDimLineTotalAmt", null);
+                        }
+                    }
+                    resetTotalAmtDim = true;
+                }
+
                 //}
                 // End CHange
 
@@ -3739,6 +3775,14 @@ namespace VAdvantage.Model
             {
                 if (!success || IsProcessed())
                     return success;
+
+                // Reset Amount Dimension on header after save of new record
+                if (newRecord && GetLineNetAmt() != 0)
+                {
+                    resetAmtDim = true;
+                    resetTotalAmtDim = true;
+                }
+
                 if (!newRecord && Is_ValueChanged("C_Tax_ID"))
                 {
                     //	Recalculate Tax for old Tax
@@ -3757,7 +3801,7 @@ namespace VAdvantage.Model
                     {
                         tax = MInvoiceTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
-                        {                           
+                        {
                             if (!tax.CalculateSurchargeFromLines())
                                 return false;
                             if (!tax.Save(Get_TrxName()))
@@ -3846,6 +3890,13 @@ namespace VAdvantage.Model
                     log.Fine("Lines -> #" + no);
                 }
             }
+
+            // Reset Amount Dimension on header after delete of non zero line
+            if (GetLineNetAmt() != 0)
+            {
+                resetAmtDim = true;
+                resetTotalAmtDim = true;
+            }
             return UpdateHeaderTax();
         }
 
@@ -3898,6 +3949,8 @@ namespace VAdvantage.Model
             String sql = "UPDATE C_Invoice i"
                 + " SET TotalLines="
                     + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
+                    + (resetAmtDim ? ", AmtDimSubTotal = null " : "")       // reset Amount Dimension if Sub Total Amount is different
+                    + (resetTotalAmtDim ? ", AmtDimGrandTotal = null " : "")     // reset Amount Dimension if Grand Total Amount is different
                 + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
@@ -3907,7 +3960,7 @@ namespace VAdvantage.Model
 
             if (IsTaxIncluded())
                 sql = "UPDATE C_Invoice i "
-                    + "SET GrandTotal=TotalLines "                    
+                    + "SET GrandTotal=TotalLines "
                     + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             else
                 sql = "UPDATE C_Invoice i "

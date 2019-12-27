@@ -263,6 +263,12 @@ namespace VAdvantage.Model
                 }
             }
             //End
+
+            // JID_1582: system will update the Opening balance value in Completed Balance field
+            if (newRecord && Get_ColumnIndex("OpenBalance") > 0)
+            {
+                SetCompletedBalance(Util.GetValueOfDecimal(Get_Value("OpenBalance")));
+            }
             return true;
         }
 

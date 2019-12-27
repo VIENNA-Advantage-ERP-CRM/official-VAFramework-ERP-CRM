@@ -606,6 +606,12 @@ namespace VAdvantage.Model
                 return false;
             }
             //	}
+
+            // JID_1585: Set "Use User Org Access" check to false in case of "Access All Orgs" check is true.
+            if (IsAccessAllOrgs())
+            {
+                SetIsUseUserOrgAccess(false);
+            }
             return true;
         }
 
@@ -1260,17 +1266,17 @@ namespace VAdvantage.Model
             if (X_AD_Table.ACCESSLEVEL_All.Equals(strAccesLevel))
             { retValue = true; }
 
-                //	4 - System data 
+            //	4 - System data 
             else if (X_AD_Table.ACCESSLEVEL_SystemOnly.Equals(strAccesLevel)
                         && userLevel.IndexOf('S') == -1)
             { retValue = false; }
 
-        //	2 - Client data requires C
+            //	2 - Client data requires C
             else if (X_AD_Table.ACCESSLEVEL_ClientOnly.Equals(strAccesLevel)
                         && userLevel.IndexOf('C') == -1)
             { retValue = false; }
 
-                //	1 - Organization data requires O
+            //	1 - Organization data requires O
             else if (X_AD_Table.ACCESSLEVEL_Organization.Equals(strAccesLevel)
                          && userLevel.IndexOf('O') == -1)
             { retValue = false; }

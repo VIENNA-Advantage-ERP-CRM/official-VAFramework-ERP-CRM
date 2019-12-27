@@ -52,6 +52,9 @@ namespace VAdvantage.Model
 
         /** is Closed Document*/
         private bool isClosed = false;
+
+        private bool resetAmtDim = false;
+        private bool resetTotalAmtDim = false;
         #endregion
 
         /// <summary>
@@ -4302,8 +4305,39 @@ namespace VAdvantage.Model
                     }	//	stockec
                     //	update line                    
                 }	//	product
-            }	//	reverse inventory
+            }   //	reverse inventory
 
+            // Reset Amount Dimension if Line Amount is different
+            if (!newRecord && Is_ValueChanged("LineNetAmt"))
+            {
+                if (Util.GetValueOfInt(Get_Value("AmtDimLineNetAmt")) > 0)
+                {
+                    string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimLineNetAmt"));
+                    decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                    if (amtdimAmt != GetLineNetAmt())
+                    {
+                        Set_Value("AmtDimLineNetAmt", null);
+                    }
+                }
+                resetAmtDim = true;
+            }
+
+            // Reset Amount Dimension if Line Total Amount is different
+            if (!newRecord && Is_ValueChanged("LineTotalAmt"))
+            {
+                if (Util.GetValueOfInt(Get_Value("AmtDimLineTotalAmt")) > 0)
+                {
+                    string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimLineTotalAmt"));
+                    decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                    if (amtdimAmt != GetLineTotalAmt())
+                    {
+                        Set_Value("AmtDimLineTotalAmt", null);
+                    }
+                }
+                resetTotalAmtDim = true;
+            }
 
             return true;
         }
@@ -4358,6 +4392,7 @@ namespace VAdvantage.Model
                 log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "VIS_CantBeDeleted"));
                 return false;
             }
+
             return true;
         }
 
@@ -4393,6 +4428,14 @@ namespace VAdvantage.Model
         {
             if (!success)
                 return success;
+
+            // Reset Amount Dimension on header after save of new record
+            if (newRecord && GetLineNetAmt() != 0)
+            {
+                resetAmtDim = true;
+                resetTotalAmtDim = true;
+            }
+
             if (!IsProcessed())
             {
                 if (!newRecord && Is_ValueChanged("C_Tax_ID"))
@@ -4476,6 +4519,13 @@ namespace VAdvantage.Model
                 ra.Delete(true);
             }
 
+            // Reset Amount Dimension on header after delete of non zero line
+            if (GetLineNetAmt() != 0)
+            {
+                resetAmtDim = true;
+                resetTotalAmtDim = true;
+            }
+
             return UpdateHeaderTax();
         }
 
@@ -4518,6 +4568,8 @@ namespace VAdvantage.Model
             String sql = "UPDATE C_Order i"
                 + " SET TotalLines="
                     + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_OrderLine il WHERE i.C_Order_ID=il.C_Order_ID) "
+                    + (resetAmtDim ? ", AmtDimSubTotal = null " : "")       // reset Amount Dimension if Sub Total Amount is different
+                    + (resetTotalAmtDim ? ", AmtDimGrandTotal = null " : "")     // reset Amount Dimension if Grand Total Amount is different
                 + "WHERE C_Order_ID=" + GetC_Order_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)

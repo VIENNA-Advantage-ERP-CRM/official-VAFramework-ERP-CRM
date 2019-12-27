@@ -50,6 +50,8 @@ namespace VAdvantage.Model
         /**	Allocation Message 			*/
         private String _AllocMsg = "";
 
+        private bool resetAmtDim = false;
+
         // used for locking query - checking schedule is paid or not on completion
         // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
         static readonly object objLock = new object();
@@ -972,6 +974,20 @@ namespace VAdvantage.Model
                     }
                 }
             }
+
+            // Reset Amount Dimension if Payment Amount is different
+            if (Util.GetValueOfInt(Get_Value("AmtDimPaymentAmount")) > 0)
+            {
+                string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimPaymentAmount"));
+                decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                if (amtdimAmt != GetPayAmt())
+                {
+                    resetAmtDim = true;
+                    Set_Value("AmtDimPaymentAmount", null);
+                }
+            }
+
             return true;
         }	//	beforeSave
 

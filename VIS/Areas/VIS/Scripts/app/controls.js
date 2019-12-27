@@ -5254,6 +5254,8 @@
             obj.onClosing = function (rid) {
                 if (rid > 0) {
                     self.oldValue = 0;
+                    // Refresh lookup to get updated uplve
+                    self.lookup.refreshAmountDivision(rid);
                     self.setValue(rid);
                     var evt = { newValue: rid, propertyName: self.getColumnName() };
                     self.fireValueChanged(evt);
