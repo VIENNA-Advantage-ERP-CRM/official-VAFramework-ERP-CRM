@@ -162,7 +162,7 @@
                             continue;
                         }
                         var $lblControl = null;
-                        if ($label && $label.length > 0) {
+                        if ($label) {
                             $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                         }
 

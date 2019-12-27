@@ -472,7 +472,7 @@
             var displayType = mField.getDisplayType();
 
             //	No Label for FieldOnly, CheckBox, Button
-            if ((!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) || (mField.getHeaderHeadingOnly())
+            if ((mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) || (mField.getHeaderIconOnly())
                 || displayType == VIS.DisplayType.Button
                 || displayType == VIS.DisplayType.Label)
                 return null;
