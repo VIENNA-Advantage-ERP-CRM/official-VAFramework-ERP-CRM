@@ -26,7 +26,7 @@
 
             ch = new VIS.ChildDialog();
             ch.setContent($maindiv);
-            ch.setHeight(428);
+            ch.setHeight(450);
             ch.setWidth(655);
             ch.setTitle(VIS.Msg.getMsg("Chat"));
             ch.setModal(true);

@@ -98,6 +98,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/forms/vcreatefromstatement.js",
                 "~/Areas/VIS/Scripts/app/forms/generatexmodel.js",
                 "~/Areas/VIS/Scripts/app/forms/acctviewer.js",
+                "~/Areas/VIS/Scripts/app/forms/acctviewermenu.js",
                 "~/Areas/VIS/Scripts/app/forms/vinoutgen.js",
                 "~/Areas/VIS/Scripts/app/forms/vinvoicegen.js",
                  "~/Areas/VIS/Scripts/app/forms/vmatch.js",

@@ -398,6 +398,7 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
 .input-group-text {
     display: inline-flex;
     justify-content: center;
+    width:36px;
 }
 
 

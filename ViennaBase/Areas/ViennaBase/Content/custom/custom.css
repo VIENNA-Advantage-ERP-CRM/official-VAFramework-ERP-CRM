@@ -42,7 +42,7 @@
 /* align middle row data*/
 .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data {
     margin: 0px;
-    padding: 0px 5px;
+    padding: 0px 1px;
     vertical-align: middle;
 }
 
@@ -200,8 +200,8 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     width: 100%;
 }
 
-.ui-button .ui-icon, .ui-state-hover .ui-icon, .ui-state-focus .ui-icon, .ui-button:hover .ui-icon, .ui-button:focus .ui-icon, .ui-state-default .ui-icon {
-    background-image: url(../migration/themes/base/images/ui-icons_ffffff_256x240.png);
+.ui-dialog .vis-statusbar-ul select{
+  width:100%;
 }
 
 
