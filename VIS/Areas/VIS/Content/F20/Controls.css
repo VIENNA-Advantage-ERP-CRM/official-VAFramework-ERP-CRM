@@ -281,13 +281,17 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label{
 
 /*mandatory*/
 .vis-ev-col-mandatory {
+    color: inherit !important;
+    background-color: lightpink !important;
+}
+
+.vis-input-wrap .vis-ev-col-mandatory {
     color: rgba(var(--v-c-mandatory),1);
-    
+    background-color: inherit !important;
 }
 /*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
     border: 1px solid #ec3f3f;
 }*/
-
 .vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
     color: rgba(var(--v-c-mandatory),1) !important;
 }
