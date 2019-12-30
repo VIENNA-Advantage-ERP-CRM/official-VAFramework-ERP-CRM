@@ -808,6 +808,8 @@
     <Compile Include="Model\MDunningRunEntry.cs" />
     <Compile Include="Model\MDunningRunLine.cs" />
     <Compile Include="Model\MElementValueTemp.cs" />
+    <Compile Include="Model\MExpectedCost.cs" />
+    <Compile Include="Model\MExpectedCostDistribution.cs" />
     <Compile Include="Model\MExpenseType.cs" />
     <Compile Include="ModelAD\MFactAcct.cs" />
     <Compile Include="ModelAD\MFactAccumulation.cs" />
@@ -1145,6 +1147,8 @@
     <Compile Include="Model\X_C_DunningRunLine.cs" />
     <Compile Include="Model\X_C_Element.cs" />
     <Compile Include="Model\X_C_ElementValue.cs" />
+    <Compile Include="Model\X_C_ExpectedCost.cs" />
+    <Compile Include="Model\X_C_ExpectedCostDistribution.cs" />
     <Compile Include="Model\X_C_FinRptAcctGroup.cs" />
     <Compile Include="Model\X_C_FinRptAcctSubGroup.cs" />
     <Compile Include="Model\X_C_FinRptConfig.cs" />
