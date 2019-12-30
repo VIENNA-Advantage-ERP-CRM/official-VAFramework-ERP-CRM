@@ -2183,14 +2183,56 @@
         return "C_DimAmt_ID";
     };
 
-    //MAmtDivLookup.prototype.refreshLocation = function (key) {
-    //    if (key == null)
-    //        return null;
-    //    var data = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Location" + "/GetLocation", { id: key })
-    //    this.lookup[key] = data.LocItem;
-    //    this.lstLatLng[key] = data.LocLatLng;
-    //    return data;
-    //};
+    /**
+     *	Get Object of Key Value
+     *  @param value value
+     *  @return Object or null
+     */
+    MAmtDivLookup.prototype.refreshAmountDivision = function (value) {
+        if (value == null)
+            return null;
+        var C_DimAmt_ID = 0;
+        if (value instanceof Number)
+            C_DimAmt_ID = value;
+        else {
+            try {
+                C_DimAmt_ID = parseInt(value.toString());
+            }
+            catch (e) {
+                this.log.log(Level.SEVERE, "Value=" + value, e);
+            }
+        }
+
+        if (C_DimAmt_ID == 0)
+            return this.NO_INSTANCE;
+
+        var description = null;
+        try {
+            var param = [];
+            param[0] = new VIS.DB.SqlParam("@C_DimAmt_ID", C_DimAmt_ID);
+
+            var dr = executeReader("VIS_99", param);
+            if (dr.read()) {
+                description = dr.getString(0);			//	Description
+                if (description == null || description.length == 0) {
+                    if (VIS.Logging.VLogMgt.getIsLevelFine())
+                        description = "{" + C_DimAmt_ID + "}";
+                    else
+                        description = "";
+                }
+            }
+            dr.dispose();
+            dr = null;
+            this.lookup[C_DimAmt_ID] = description;
+        }
+        catch (e) {
+            this.log.log(Level.SEVERE, "get", e);
+        }
+        if (description == null)
+            return null;
+        //return { "Key": C_DimAmt_ID, "Name": description };
+        return description;
+    };
 
     //MAmtDivLookup.prototype.load = function () {
 

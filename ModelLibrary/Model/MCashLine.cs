@@ -44,6 +44,7 @@ namespace VAdvantage.Model
 
         Tuple<String, String, String> mInfo = null;
 
+        private bool resetAmtDim = false;
         #endregion
 
 
@@ -601,7 +602,7 @@ namespace VAdvantage.Model
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
                     return false;
                 }
-            
+
             }
 
             // check schedule is hold or not, if hold then no to save record
@@ -754,6 +755,20 @@ namespace VAdvantage.Model
             //    }
             //}
             //End
+
+            // Reset Amount Dimension if Amount is different
+            if (Util.GetValueOfInt(Get_Value("AmtDimAmount")) > 0)
+            {
+                string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimAmount"));
+                decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                if (amtdimAmt != GetAmount())
+                {
+                    resetAmtDim = true;
+                    Set_Value("AmtDimAmount", null);
+                }
+            }
+
             return true;
         }
 

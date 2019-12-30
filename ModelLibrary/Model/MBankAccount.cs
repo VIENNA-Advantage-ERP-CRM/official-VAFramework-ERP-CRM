@@ -152,6 +152,12 @@ namespace VAdvantage.Model
             
             }
             //End
+
+            // JID_1583: system will update the Opening balance value in Current Balance field
+            if (newRecord && Get_ColumnIndex("OpenBalance") > 0)
+            {
+                SetCurrentBalance(Util.GetValueOfDecimal(Get_Value("OpenBalance")));
+            }
             return true;
         }
 
