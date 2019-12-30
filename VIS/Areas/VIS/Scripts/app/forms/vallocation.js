@@ -109,6 +109,8 @@
 
         // is used to compare org of payment / invoice / cash journal with org of selecetd dropdown
         var isOrgMatched = true;
+        //Culture seperator object
+        var culture = new VIS.CultureSeparator();
 
         var baseUrl = VIS.Application.contextUrl;
         var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
@@ -138,31 +140,31 @@
         };
 
         var elements = [
-                        "AD_Org_ID",
-                        "C_BPartner_ID",
-                        "C_Currency_ID",
-                        "C_Payment_ID ",
-                        "C_CashLine_ID",
-                        "C_Invoice_ID ",
-                        "Date",
-                        "DocumentNo",
-                        "TrxCurrency",
-                        "C_ConversionType_ID",
-                        "Amount",
-                        "ConvertedAmount",
-                        "OpenAmount",
-                        "multiplierap",
-                        "AppliedAmount",
-                        "C_ConversionType_ID",
-                        "RECEIPTNO",
-                        "ccashlineid",
-                        "ScheduleDate",
-                        "cinvoiceid",
-                        "DiscountAmt",
-                        "DocBaseType",
-                        "WriteOffAmount",
-                        "C_InvoicePaySchedule_ID",
-                        "DateAcct"
+            "AD_Org_ID",
+            "C_BPartner_ID",
+            "C_Currency_ID",
+            "C_Payment_ID ",
+            "C_CashLine_ID",
+            "C_Invoice_ID ",
+            "Date",
+            "DocumentNo",
+            "TrxCurrency",
+            "C_ConversionType_ID",
+            "Amount",
+            "ConvertedAmount",
+            "OpenAmount",
+            "multiplierap",
+            "AppliedAmount",
+            "C_ConversionType_ID",
+            "RECEIPTNO",
+            "ccashlineid",
+            "ScheduleDate",
+            "cinvoiceid",
+            "DiscountAmt",
+            "DocBaseType",
+            "WriteOffAmount",
+            "C_InvoicePaySchedule_ID",
+            "DateAcct"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -537,57 +539,57 @@
             $divCu.append('<span class="vis-allocation-inputLabels">' + VIS.translatedTexts.C_Currency_ID + '</span>').append($cmbCurrency);
             $innerRow.append($divBp).append($divCu);
             var $rowOne = $('<div class="vis-allocation-leftControls">'
-                               + '<input name="vchkMultiCurrency" class="vis-allocation-multicheckbox" type="checkbox">'
-                               + '<label>' + VIS.Msg.getMsg("MultiCurrency") + '</label>'
-                           + '</div>'
-                           + '<div class="vis-allocation-leftControls">'
-                               + '<input  class="vis-allocation-cashbox"  type="checkbox">'
-                               + '<label>' + VIS.Msg.getMsg("Cash") + '</label>'
-                           + '</div>'
-                           + '<div class="vis-allocation-leftControls">'
-                               + '<input  class="vis-allocation-autowriteoff"  type="checkbox">'
-                               + '<label>' + VIS.Msg.getMsg("AutoWriteOff") + '</label>'
-                           + '</div>'
-                            + '<div class="vis-allocation-leftControls">'
-                               + '<input id=VIS_chkbxBPAllocation_' + $self.windowNo + ' class="vis-allocation-interBP" style="display:none !important;" type="checkbox">'
-                               + '<label style="display:none !important;">' + VIS.Msg.getMsg("BPAllocation") + '</label>'
-                           + '</div>'
-                           //---------------------------Added new parameters----Neha----3 August 2018---Asked by Amit
-                           + '<div class="vis-allocation-leftControls">'
-                             + '<div class="panel-group" style="margin: 0px;" id="accordion" role="tablist" aria-multiselectable="true">'
-                               + '<div class="panel panel-default">'
-                                      + '<div class="panel-heading" role="tab" id="headingOne">'
-                                            + '<h4 class="panel-title">'
-                                                + '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="VIS-Accordion-head collapsed">' + VIS.Msg.getMsg("InvoiceFilter")
-                                                    + '<i class="glyphicon glyphicon-chevron-down pull-right"></i>'
-                                                + '</a>'
-                                            + '</h4>'
-                                        + '</div>'
-                                    + '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" style="height: 0px;">'
-                                          + '<div class="panel-body" style=" overflow: auto; height: 140px !important; ">'
-                                            + '<div class="vis-allocation-leftControls">'
-                                                  + '<span class="vis-allocation-inputLabels">' + VIS.Utility.encodeText(VIS.Msg.getMsg("Document_No")) + '</span>'
-                                                  + ' <input class="vis-allocation-docNo" type="textbox"></input>'
-                                            + '</div>'
-                                            + '<div class="vis-allocation-leftControls vis-allocation-cmbdoctype">'
-                                                 + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("DocType") + '</span>'
-                                            + '</div>'
-                                     + '</div>'
-                                 + '</div>'
-                               + '</div>'
-                             + '</div>'
-                           + '</div>'
-                          + '</div>');
+                + '<input name="vchkMultiCurrency" class="vis-allocation-multicheckbox" type="checkbox">'
+                + '<label>' + VIS.Msg.getMsg("MultiCurrency") + '</label>'
+                + '</div>'
+                + '<div class="vis-allocation-leftControls">'
+                + '<input  class="vis-allocation-cashbox"  type="checkbox">'
+                + '<label>' + VIS.Msg.getMsg("Cash") + '</label>'
+                + '</div>'
+                + '<div class="vis-allocation-leftControls">'
+                + '<input  class="vis-allocation-autowriteoff"  type="checkbox">'
+                + '<label>' + VIS.Msg.getMsg("AutoWriteOff") + '</label>'
+                + '</div>'
+                + '<div class="vis-allocation-leftControls">'
+                + '<input id=VIS_chkbxBPAllocation_' + $self.windowNo + ' class="vis-allocation-interBP" style="display:none !important;" type="checkbox">'
+                + '<label style="display:none !important;">' + VIS.Msg.getMsg("BPAllocation") + '</label>'
+                + '</div>'
+                //---------------------------Added new parameters----Neha----3 August 2018---Asked by Amit
+                + '<div class="vis-allocation-leftControls">'
+                + '<div class="panel-group" style="margin: 0px;" id="accordion" role="tablist" aria-multiselectable="true">'
+                + '<div class="panel panel-default">'
+                + '<div class="panel-heading" role="tab" id="headingOne">'
+                + '<h4 class="panel-title">'
+                + '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="VIS-Accordion-head collapsed">' + VIS.Msg.getMsg("InvoiceFilter")
+                + '<i class="glyphicon glyphicon-chevron-down pull-right"></i>'
+                + '</a>'
+                + '</h4>'
+                + '</div>'
+                + '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" style="height: 0px;">'
+                + '<div class="panel-body" style=" overflow: auto; height: 140px !important; ">'
+                + '<div class="vis-allocation-leftControls">'
+                + '<span class="vis-allocation-inputLabels">' + VIS.Utility.encodeText(VIS.Msg.getMsg("Document_No")) + '</span>'
+                + ' <input class="vis-allocation-docNo" type="textbox"></input>'
+                + '</div>'
+                + '<div class="vis-allocation-leftControls vis-allocation-cmbdoctype">'
+                + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("DocType") + '</span>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>'
+                + '</div>');
             $innerRow.append($rowOne);
             $rowOne.find(".vis-allocation-cmbdoctype").append($cmbDocType);
             $rowOne.find(".panel-body").append('<div class="vis-allocation-leftControls">'
-                                   + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_FromDate") + '</span>'
-                                   + '<input  class="vis-allocation-fromDate"  type="date"></input>'
-                         + '</div>'
-                         + '<div class="vis-allocation-leftControls">'
-                               + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_ToDate") + '</span>'
-                               + '<input  class="vis-allocation-toDate"  type="date"></input>'
-                         + '</div>');
+                + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_FromDate") + '</span>'
+                + '<input  class="vis-allocation-fromDate"  type="date"></input>'
+                + '</div>'
+                + '<div class="vis-allocation-leftControls">'
+                + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_ToDate") + '</span>'
+                + '<input  class="vis-allocation-toDate"  type="date"></input>'
+                + '</div>');
             $divBp.find(".vis-allocation-bpartner").css('width', 'calc(100% - 30px)');
             //-----------Neha-----------------
             $vchkMultiCurrency = $innerRow.find('.vis-allocation-multicheckbox');
@@ -603,28 +605,28 @@
             var $resultDiv = $('<div class="vis-allocation-resultdiv">');
             $resultDiv.append('<div class="vis-allocation-leftControls">' +
                 '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("Difference")
-            + '</span>');
+                + '</span>');
             $resultDiv.append('<div style="width:20% !important" class="vis-allocation-leftControls">'
                 + '<span class="vis-allocation-lblCurrnecy"></span>'
-                 + '<span class="vis-allocation-lbldifferenceAmt" style="float:right;">'
+                + '<span class="vis-allocation-lbldifferenceAmt" style="float:right;">'
                 + '</span>');
             //$resultDiv.append('<div style="width:80% !important"  class="vis-allocation-leftControls">'
             //    + '<span class="vis-allocation-lbldifferenceAmt">'
             //    + '</span>');
             $resultDiv.append('<div class="vis-allocation-leftControls">'
-                                + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("TransactionDate") + '</span>'
-                                + '<input  class="vis-allocation-date" disabled  id=VIS_cmbDate_' + $self.windowNo + ' type="date"></input>'
-                           + '</div>');
+                + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("TransactionDate") + '</span>'
+                + '<input  class="vis-allocation-date" disabled  id=VIS_cmbDate_' + $self.windowNo + ' type="date"></input>'
+                + '</div>');
             $resultDiv.append('<div class="vis-allocation-leftControls">'
-                              + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("DateAcct") + '</span>'
-                              + '<input  class="vis-allocation-date" disabled id=VIS_cmbAcctDate_' + $self.windowNo + ' type="date"></input>'
-                         + '</div>');
+                + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("DateAcct") + '</span>'
+                + '<input  class="vis-allocation-date" disabled id=VIS_cmbAcctDate_' + $self.windowNo + ' type="date"></input>'
+                + '</div>');
             $resultDiv.append('<div class="vis-allocation-leftControls"> <span class="vis-allocation-inputLabels" title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_Org_ID + '</span> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select>');
 
             $resultDiv.append('<div class="vis-allocation-leftControls" id=VIS_cnvrDateDiv_' + $self.windowNo + '>'
-                            + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("ConversionDate") + '</span>'
-                            + '<input  class="vis-allocation-date" style="display:block;" id=VIS_cmbConversionDate_' + $self.windowNo + ' type="date"></input>'
-                       + '</div>');
+                + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("ConversionDate") + '</span>'
+                + '<input  class="vis-allocation-date" style="display:block;" id=VIS_cmbConversionDate_' + $self.windowNo + ' type="date"></input>'
+                + '</div>');
 
             //$resultDiv.append('<div class="vis-allocation-leftControls"><input  class="vis-allocation-autowriteoff"  type="checkbox"><label>' + VIS.Msg.getMsg("AutoWriteOff") + '</label></div>');
             //Hide the privious Process Button
@@ -961,9 +963,9 @@
             if (isPaymentGridLoaded == true && isCashGridLoaded == true && isInvoiceGridLoaded == true) {
                 $bsyDiv[0].style.visibility = "hidden";
             }
-                //else if (isPaymentGridLoaded == false && isCashGridLoaded == true && isInvoiceGridLoaded == true) {
-                //    $bsyDiv[0].style.visibility = "hidden";
-                //}
+            //else if (isPaymentGridLoaded == false && isCashGridLoaded == true && isInvoiceGridLoaded == true) {
+            //    $bsyDiv[0].style.visibility = "hidden";
+            //}
             else {
                 $bsyDiv[0].style.visibility = "visible";
             }
@@ -1122,10 +1124,16 @@
         };
 
         //payment grid bind
+        //render to culture format
         function bindPaymentGrid(data, chk) {
             var columns = [];
             columns.push({ field: 'SelectRow', caption: 'check', size: '40px', editable: { type: 'checkbox' } });
-            columns.push({ field: "Date1", caption: VIS.translatedTexts.Date, size: '80px', hidden: false });
+            columns.push({
+                field: "Date1", caption: VIS.translatedTexts.Date, size: '80px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["Date1"];
+                    return new Date(val).toLocaleString();
+                }
+            });
             columns.push({ field: "Documentno", caption: VIS.translatedTexts.DocumentNo, size: '120px', hidden: false });
             columns.push({ field: "CpaymentID", caption: VIS.translatedTexts.c_payment_id, size: '150px', hidden: true });
             if (chk) {
@@ -1136,17 +1144,47 @@
             }
             columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: false });
             if (chk) {
-                columns.push({ field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: false });
+                //render column into float with culture format
+                columns.push({
+                    field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                        var val = record["Payment"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
             }
             else {
                 columns.push({ field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: true });
             }
-            columns.push({ field: "ConvertedAmount", caption: VIS.translatedTexts.ConvertedAmount, size: '150px', hidden: false });
-            columns.push({ field: "OpenAmt", caption: VIS.translatedTexts.OpenAmount, size: '150px', hidden: false });
+            //render column into float with culture format
+            columns.push({
+                field: "ConvertedAmount", caption: VIS.translatedTexts.ConvertedAmount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["ConvertedAmount"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
+            //render column into float with culture format
+            columns.push({
+                field: "OpenAmt", caption: VIS.translatedTexts.OpenAmount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["OpenAmt"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
             columns.push({ field: "Multiplierap", caption: VIS.translatedTexts.multiplierap, size: '150px', hidden: true });
-            columns.push({ field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', hidden: false });
+            //render column into float with culture format
+            columns.push({
+                field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', hidden: false, render: function (record, index, col_index) {
+
+                    var val = record["AppliedAmt"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
             columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
-            columns.push({ field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false });
+            columns.push({
+                field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["DATEACCT"];
+                    return new Date(val).toLocaleString();
+                }
+            });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
 
@@ -1202,6 +1240,35 @@
                             $divPayment.find('#grid_openformatgrid_' + $self.windowNo + '_records').on('scroll', cartPaymentScroll);
                         }
                     }
+                },
+                //on edit grid columns need to prevent dot or comma according to culture
+                onEditField: function (event) {
+                    event.onComplete = function (event) {
+                        id = event.recid;
+
+                        $('#grid_openformatgrid_' + $self.windowNo + '_edit_' + id + '_10').keydown(function (event) {
+                            var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
+
+                            if (!isDotSeparator && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
+                                return false;
+                            }
+                            else if (isDotSeparator && event.keyCode == 188) { // . separator
+                                return false;
+                            }
+                            if (event.target.value.contains(".") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                this.value = this.value.replace('.', '');
+                            }
+                            if (event.target.value.contains(",") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                this.value = this.value.replace(',', '');
+                            }
+                            if (event.keyCode != 8 && event.keyCode != 9 && (event.keyCode < 37 || event.keyCode > 40) &&
+                                (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)
+                                && event.keyCode != 109 && event.keyCode != 189 && event.keyCode != 110
+                                && event.keyCode != 144 && event.keyCode != 188 && event.keyCode != 190) {
+                                return false;
+                            }
+                        });
+                    };
                 }
             });
 
@@ -1253,10 +1320,16 @@
         };
 
         //Cash line grid bind
+        //culture work
         function bindCashline(data, chk) {
             var columns = [];
             columns.push({ field: 'SelectRow', caption: 'check', size: '40px', editable: { type: 'checkbox' } });
-            columns.push({ field: "Created", caption: VIS.translatedTexts.Date, size: '80px', hidden: false });
+            columns.push({
+                field: "Created", caption: VIS.translatedTexts.Date, size: '80px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["Created"];
+                    return new Date(val).toLocaleString();
+                }
+            });
             columns.push({ field: "ReceiptNo", caption: VIS.translatedTexts.RECEIPTNO, size: '120px', hidden: false });
             if (chk == true) {
                 columns.push({ field: "Isocode", caption: VIS.Msg.getMsg("TrxCurrency"), size: '85px', hidden: false });
@@ -1266,19 +1339,47 @@
             }
             columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: false });
             if (chk == true) {
-                columns.push({ field: "Amount", caption: VIS.translatedTexts.Amount, size: '150px', hidden: false });
+                //render column into float with culture format
+                columns.push({
+                    field: "Amount", caption: VIS.translatedTexts.Amount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                        var val = record["Amount"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
             }
             else {
                 columns.push({ field: "Amount", caption: VIS.translatedTexts.Amount, size: '150px', hidden: true });
             }
-
-            columns.push({ field: "ConvertedAmount", caption: VIS.Msg.getMsg("ConvertedAmount"), size: '150px', hidden: false });
-            columns.push({ field: "OpenAmt", caption: VIS.translatedTexts.OpenAmount, size: '150px', hidden: false });
-            columns.push({ field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', hidden: false });
+            //render column into float with culture format
+            columns.push({
+                field: "ConvertedAmount", caption: VIS.Msg.getMsg("ConvertedAmount"), size: '150px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["ConvertedAmount"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
+            //render column into float with culture format
+            columns.push({
+                field: "OpenAmt", caption: VIS.translatedTexts.OpenAmount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["OpenAmt"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
+            //render column into float with culture format
+            columns.push({
+                field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["AppliedAmt"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
             columns.push({ field: "CcashlineiID", caption: VIS.translatedTexts.ccashlineid, size: '150px', hidden: true });
             columns.push({ field: "Multiplierap", caption: VIS.translatedTexts.multiplierap, hidden: true });
             columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
-            columns.push({ field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false });
+            columns.push({
+                field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["DATEACCT"];
+                    return new Date(val).toLocaleString();
+                }
+            });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
 
@@ -1334,6 +1435,35 @@
                             $divCashline.find('#grid_openformatgridcash_' + $self.windowNo + '_records').on('scroll', cartCashScroll);
                         }
                     }
+                },
+                //on edit grid columns need to prevent dot or comma according to culture
+                onEditField: function (event) {
+                    event.onComplete = function (event) {
+                        id = event.recid;
+
+                        $('#grid_openformatgridcash_' + $self.windowNo + '_edit_' + id + '_9').keydown(function (event) {
+                            var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
+
+                            if (!isDotSeparator && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
+                                return false;
+                            }
+                            else if (isDotSeparator && event.keyCode == 188) { // . separator
+                                return false;
+                            }
+                            if (event.target.value.contains(".") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                this.value = this.value.replace('.', '');
+                            }
+                            if (event.target.value.contains(",") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                this.value = this.value.replace(',', '');
+                            }
+                            if (event.keyCode != 8 && event.keyCode != 9 && (event.keyCode < 37 || event.keyCode > 40) &&
+                                (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)
+                                && event.keyCode != 109 && event.keyCode != 189 && event.keyCode != 110
+                                && event.keyCode != 144 && event.keyCode != 188 && event.keyCode != 190) {
+                                return false;
+                            }
+                        });
+                    };
                 }
             });
 
@@ -1387,8 +1517,18 @@
         function bindInvoiceGrid(data, chk) {
             var columns = [];
             columns.push({ field: 'SelectRow', caption: 'check', size: '40px', editable: { type: 'checkbox' } });
-            columns.push({ field: "Date1", caption: VIS.translatedTexts.Date, render: 'date:yyyy-mm-dd', size: '80px', hidden: false });
-            columns.push({ field: "InvoiceScheduleDate", caption: VIS.translatedTexts.ScheduleDate, size: '80px', hidden: false });
+            columns.push({
+                field: "Date1", caption: VIS.translatedTexts.Date, size: '80px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["Date1"];
+                    return new Date(val).toLocaleString();
+                }
+            });
+            columns.push({
+                field: "InvoiceScheduleDate", caption: VIS.translatedTexts.ScheduleDate, size: '80px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["InvoiceScheduleDate"];
+                    return new Date(val).toLocaleString();
+                }
+            });
             columns.push({ field: "Documentno", caption: VIS.translatedTexts.DocumentNo, size: '120px', hidden: false });
             columns.push({ field: "CinvoiceID", caption: VIS.translatedTexts.cinvoiceid, size: '150px', hidden: true });
             if (chk) {
@@ -1399,23 +1539,64 @@
             }
             columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: false });
             if (chk) {
-                columns.push({ field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: false });
+                //render column into float with culture format
+                columns.push({
+                    field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: false, render: function (record, index, col_index) {
+                        var val = record["Currency"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
             }
             else {
                 columns.push({ field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: true });
             }
-            columns.push({ field: "Converted", caption: VIS.Msg.getMsg("ConvertedAmount"), size: '100px', hidden: false });
-            columns.push({ field: "Amount", caption: VIS.translatedTexts.OpenAmount, size: '100px', hidden: false });
-            columns.push({ field: "Discount", caption: VIS.translatedTexts.DiscountAmt, size: '100px', hidden: false });
+            //render column into float with culture format
+            columns.push({
+                field: "Converted", caption: VIS.Msg.getMsg("ConvertedAmount"), size: '100px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["Converted"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
+            //render column into float with culture format
+            columns.push({
+                field: "Amount", caption: VIS.translatedTexts.OpenAmount, size: '100px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["Amount"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
+            //render column into float with culture format
+            columns.push({
+                field: "Discount", caption: VIS.translatedTexts.DiscountAmt, size: '100px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["Discount"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
             columns.push({ field: "Multiplierap", caption: VIS.translatedTexts.multiplierap, hidden: true });
             columns.push({ field: "DocBaseType", caption: VIS.translatedTexts.DocBaseType, size: '150px', hidden: true });
-            columns.push({ field: "Writeoff", caption: VIS.translatedTexts.WriteOffAmount, size: '100px', hidden: false });
-            columns.push({ field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '100px', hidden: false });
+            //render column into float with culture format
+            columns.push({
+                field: "Writeoff", caption: VIS.translatedTexts.WriteOffAmount, size: '100px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["Writeoff"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
+            //render column into float with culture format
+            columns.push({
+                field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '100px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["AppliedAmt"];
+                    return parseFloat(val).toLocaleString();
+                }
+            });
             if (countVA009 > 0) {
                 columns.push({ field: "C_InvoicePaySchedule_ID", caption: VIS.translatedTexts.C_InvoicePaySchedule_ID, size: '100px', hidden: false });
             }
             columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
-            columns.push({ field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false });
+            columns.push({
+                field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false, render: function (record, index, col_index) {
+                    var val = record["DATEACCT"];
+                    return new Date(val).toLocaleString();
+                }
+            });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
             //}
@@ -1482,11 +1663,41 @@
                             $divInvoice.find('#grid_openformatgridinvoice_' + $self.windowNo + '_records').on('scroll', cartInvoiceScroll);
                         }
                     }
+                },
+                //on edit grid columns need to prevent dot or comma according to culture
+                onEditField: function (event) {
+                    event.onComplete = function (event) {
+                        id = event.recid;
+                        if (event.column == 14 || event.column == 13 || event.column == 10) {
+                            $('#grid_openformatgridinvoice_' + $self.windowNo + '_edit_' + id + '_' + event.column).keydown(function (event) {
+                                var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
+
+                                if (!isDotSeparator && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
+                                    return false;
+                                }
+                                else if (isDotSeparator && event.keyCode == 188) { // . separator
+                                    return false;
+                                }
+                                if (event.target.value.contains(".") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                    this.value = this.value.replace('.', '');
+                                }
+                                if (event.target.value.contains(",") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                    this.value = this.value.replace(',', '');
+                                }
+                                if (event.keyCode != 8 && event.keyCode != 9 && (event.keyCode < 37 || event.keyCode > 40) &&
+                                    (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)
+                                    && event.keyCode != 109 && event.keyCode != 189 && event.keyCode != 110
+                                    && event.keyCode != 144 && event.keyCode != 188 && event.keyCode != 190) {
+                                    return false;
+                                }
+                            });
+                        }
+                    };
                 }
             });
             // when we load new invoice schedules either after filter or directly and if any invoice schedule is selected already than we need to trigger it's click event.
             if (totalselectedinv > 0) {
-                for (var i = 0; i < totalselectedinv ; i++) {
+                for (var i = 0; i < totalselectedinv; i++) {
                     var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
                     $(chk[i]).prop('checked', true);
                     $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, event);
@@ -1496,7 +1707,6 @@
             }
             totalselectedinv = 0;
             //end
-
             $gridInvoice.autoLoad = true;
             $($($gridInvoice.box)[0]).find('.w2ui-search-down').css('margin-top', '4px');
             $($($gridInvoice.box)[0]).find('.w2ui-search-clear').css('margin-top', '4px');
@@ -1539,7 +1749,7 @@
 
             // when we load new invoice schedules either after filter or directly and if any invoice schedule is selected already than we need to trigger it's click event.
             if (totalselectedinv > 0) {
-                for (var i = 0; i < totalselectedinv ; i++) {
+                for (var i = 0; i < totalselectedinv; i++) {
                     var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
                     $(chk[i]).prop('checked', true);
                     $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, event);
@@ -1570,8 +1780,64 @@
                     $gridPayment.columns[event.column].editable = false;
                     return;
                 }
-                $gridPayment.columns[event.column].editable = { type: 'text' }
+                //changed column type from text to number on edit event
+                $gridPayment.columns[event.column].editable = { type: 'number' }
+                $gridPayment.columns[event.column].render = function (record, index, col_index) {
+
+                    var val = 0;
+                    if ($gridPayment.columns[event.column].field == "AppliedAmt") {
+                        if (record.changes == undefined || record.changes.AppliedAmt == undefined || record.changes.SelectRow == undefined) {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.Payment, record.Payment);
+                                val = record.changes.AppliedAmt;
+                            }
+                            else {
+                                val = 0;
+                            }
+                        }
+                        else {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.Payment, record.Payment);
+                                val = record.changes.AppliedAmt;
+                            }
+                            else {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.Payment);
+                                val = record.changes.AppliedAmt;
+                            }
+                        }
+                    }
+                    else if ($gridPayment.columns[event.column].field == "Writeoff") {
+                        if (record.changes == undefined || record.changes.Writeoff == undefined) {
+                            val = 0;
+                        }
+                        else {
+                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                            val = record.changes.Writeoff;
+                        }
+                    }
+                    else if ($gridPayment.columns[event.column].field == "Discount") {
+                        if (record.changes == undefined || record.changes.Discount == undefined) {
+                            val = 0;
+                        }
+                        else {
+                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Discount);
+                            val = record.changes.Discount;
+                        }
+                    }
+
+                    if (parseFloat(val) > 0 && parseFloat(val) > parseFloat(record.OpenAmt)) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.OpenAmt);
+                    }
+                    else if (parseFloat(record.OpenAmt) < 0 && parseFloat(val) < parseFloat(record.OpenAmt)) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.OpenAmt);
+                    }
+
+                    return parseFloat(val).toLocaleString();
+                };
             }
+            //End
         };
 
         function cashDoubleClicked(event) {
@@ -1588,7 +1854,62 @@
                     $gridCashline.columns[event.column].editable = false;
                     return;
                 }
-                $gridCashline.columns[event.column].editable = { type: 'text' }
+                //changed column type from text to number on edit event
+                $gridCashline.columns[event.column].editable = { type: 'number' }
+                $gridCashline.columns[event.column].render = function (record, index, col_index) {
+
+                    var val = 0;
+                    if ($gridCashline.columns[event.column].field == "AppliedAmt") {
+                        if (record.changes == undefined || record.changes.AppliedAmt == undefined || record.changes.SelectRow == undefined) {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt, record.OpenAmt);
+                                val = record.changes.AppliedAmt;
+                            }
+                            else {
+                                val = 0;
+                            }
+                        }
+                        else {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt, record.OpenAmt);
+                                val = record.changes.AppliedAmt;
+                            }
+                            else {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.OpenAmt);
+                                val = record.changes.AppliedAmt;
+                            }
+                        }
+                    }
+                    else if ($gridCashline.columns[event.column].field == "Writeoff") {
+                        if (record.changes == undefined || record.changes.Writeoff == undefined) {
+                            val = 0;
+                        }
+                        else {
+                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                            val = record.changes.Writeoff;
+                        }
+                    }
+                    else if ($gridCashline.columns[event.column].field == "Discount") {
+                        if (record.changes == undefined || record.changes.Discount == undefined) {
+                            val = 0;
+                        }
+                        else {
+                            record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                            val = record.changes.Discount;
+                        }
+                    }
+
+                    if (parseFloat(val) > 0 && parseFloat(val) > parseFloat(record.OpenAmt)) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.OpenAmt);
+                    }
+                    else if (parseFloat(record.OpenAmt) < 0 && parseFloat(val) < parseFloat(record.OpenAmt)) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.OpenAmt);
+                    }
+                    return parseFloat(val).toLocaleString();
+                }
+                //End
             }
         };
 
@@ -1608,21 +1929,132 @@
                     $gridInvoice.columns[event.column].editable = false;
                     return;
                 }
-                $gridInvoice.columns[event.column].editable = { type: 'text' }
+                //changed column type from text to number on edit event
+                $gridInvoice.columns[event.column].editable = { type: 'number' }
+                $gridInvoice.columns[event.column].render = function (record, index, col_index) {
+
+                    var val = 0;
+                    if ($gridInvoice.columns[event.column].field == "AppliedAmt") {
+                        if (record.changes == undefined || record.changes.AppliedAmt == undefined || record.changes.SelectRow == undefined) {
+
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
+                                val = record.changes.AppliedAmt;
+                            }
+                            else {
+                                val = 0;
+                            }
+                        }
+                        else {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
+                                val = record.changes.AppliedAmt;
+                            }
+                            else {
+                                record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.Amount);
+                                val = record.changes.AppliedAmt;
+                            }
+                        }
+                    }
+                    else if ($gridInvoice.columns[event.column].field == "Writeoff") {
+                        if (record.changes == undefined || record.changes.Writeoff === undefined) {
+                            val = 0;
+                        }
+                        else {
+                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                            val = record.changes.Writeoff;
+                        }
+                    }
+                    else if ($gridInvoice.columns[event.column].field == "Discount") {
+                        if (record.changes == undefined || record.changes.Discount === undefined) {
+                            val = 0;
+                        }
+                        else {
+                            record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                            val = record.changes.Discount;
+                        }
+                    }
+                    if (parseFloat(val) > 0 && parseFloat(val) > parseFloat(record.Amount)) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.Amount);
+                    }
+                    else if (parseFloat(record.Amount) < 0 && parseFloat(val) < parseFloat(record.Amount)) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.Amount);
+                    }
+
+                    return parseFloat(val).toLocaleString();
+                }
             }
+            //End
+        };
+
+        // function to check comma or dot from given value and return new value
+        function checkcommaordot(event, val, amt) {
+            var foundComma = false;
+            event.value_new = VIS.Utility.Util.getValueOfString(val);
+            if (event.value_new.contains(".")) {
+                foundComma = true;
+                var indices = [];
+                for (var i = 0; i < event.value_new.length; i++) {
+                    if (event.value_new[i] === ".")
+                        indices.push(i);
+                }
+                if (indices.length > 1) {
+                    event.value_new = removeAllButLast(event.value_new, '.');
+                }
+            }
+            if (event.value_new.contains(",")) {
+                if (foundComma) {
+                    event.value_new = removeAllButLast(event.value_new, ',');
+                }
+                else {
+                    var indices = [];
+                    for (var i = 0; i < event.value_new.length; i++) {
+                        if (event.value_new[i] === ",")
+                            indices.push(i);
+                    }
+                    if (indices.length > 1) {
+                        event.value_new = removeAllButLast(event.value_new, ',');
+                    }
+                    else {
+                        event.value_new = event.value_new.replace(",", ".");
+                    }
+                }
+            }
+            if (event.value_new == "") {
+                event.value_new = "0";
+            }
+            return event.value_new;
+        };
+
+        // Remove all seperator but only bring last seperator
+        function removeAllButLast(amt, seprator) {
+            var parts = amt.split(seprator);
+            amt = parts.slice(0, -1).join('') + '.' + parts.slice(-1);
+            if (amt.indexOf('.') == (amt.length - 1)) {
+                amt = amt.replace(".", "");
+            }
+            return amt;
         };
 
         function invoiceCellClicked(event) {
             var colIndex = $gridInvoice.getColumn('AppliedAmt', true);
+            //get the index of SelectRow Column checkbox from grid
+            var selectColIndex = $gridInvoice.getColumn('SelectRow', true);
             if (event.column == 0 || event.column == null) {
                 var getChanges = $gridInvoice.getChanges();
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
                 if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
-                    $gridInvoice.refreshCell(0, "AppliedAmt");
-                    $gridInvoice.refreshCell(0, "Writeoff");
-                    $gridInvoice.refreshCell(0, "Discount");
+                    //Set value to 0 when element is null
+                    $gridInvoice.records[event.recid]["AppliedAmt"] = 0;
+                    $gridInvoice.records[event.recid]["Writeoff"] = 0;
+                    $gridInvoice.records[event.recid]["Discount"] = 0;
+                    $gridInvoice.refreshCell(event.recid, "AppliedAmt");
+                    $gridInvoice.refreshCell(event.recid, "Writeoff");
+                    $gridInvoice.refreshCell(event.recid, "Discount");
                 }
                 else {
                     if (element[0].SelectRow == true) {
@@ -1644,15 +2076,15 @@
                             if ($($z).find("input:checked").prop('checked')) {
                                 $($z).find("input:checked").prop('checked', false);
                             }
-
+                            //changed 0 to event.recid because we need to refresh selected row before it was working only for 1st row.
                             $gridInvoice.get(event.recid).changes = false;
                             $gridInvoice.columns[colIndex].editable = false;
                             $gridInvoice.get(event.recid).changes.AppliedAmt = "0";
-                            $gridInvoice.refreshCell(0, "AppliedAmt");
+                            $gridInvoice.refreshCell(event.recid, "AppliedAmt");
                             $gridInvoice.get(event.recid).changes.Discount = "0";
-                            $gridInvoice.refreshCell(0, "Discount");
+                            $gridInvoice.refreshCell(event.recid, "Discount");
                             $gridInvoice.get(event.recid).changes.Writeoff = "0";
-                            $gridInvoice.refreshCell(0, "Writeoff");
+                            $gridInvoice.refreshCell(event.recid, "Writeoff");
                             //alert("Conversion Type not matched");
                             VIS.ADialog.warn(("VIS_ConversionNotMatched"));
                         }
@@ -1681,14 +2113,19 @@
                     else {
                         $gridInvoice.unselect(event.recid);
                         $gridInvoice.columns[colIndex].editable = false;
-                        $gridInvoice.get(0).changes.AppliedAmt = "0";
-                        $gridInvoice.refreshCell(0, "AppliedAmt");
-                        $gridInvoice.get(0).changes.Discount = "0";
-                        $gridInvoice.refreshCell(0, "Discount");
-                        $gridInvoice.get(0).changes.Writeoff = "0";
-                        $gridInvoice.refreshCell(0, "Writeoff");
+                        //changed 0 to event.recid because we need to refresh selected row before it was working only for 1st row.
+                        $gridInvoice.get(event.recid).changes.AppliedAmt = "0";
+                        $gridInvoice.refreshCell(event.recid, "AppliedAmt");
+                        $gridInvoice.get(event.recid).changes.Discount = "0";
+                        $gridInvoice.refreshCell(event.recid, "Discount");
+                        $gridInvoice.get(event.recid).changes.Writeoff = "0";
+                        $gridInvoice.refreshCell(event.recid, "Writeoff");
                     }
 
+                }
+                //check weather someone clicked on select column checkbox in grid
+                if ((selectColIndex == event.column || event.column == null) && !(element[0].SelectRow == undefined)) {
+                    $gridInvoice.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount);
                 }
                 tableChanged(event.recid, event.column, true, false);
             }
@@ -1700,12 +2137,18 @@
                 return;
             }
             var colIndex = $gridPayment.getColumn('AppliedAmt', true);
+            //get the index of SelectRow Column checkbox from grid
+            var selectColIndex = $gridPayment.getColumn('SelectRow', true);
             if (event.column == 0 || event.column == null) {
                 var getChanges = $gridPayment.getChanges();
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
                 if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                    //Set value to 0 when element is null
+                    $gridPayment.records[event.recid]["AppliedAmt"] = 0;
+                    $gridPayment.records[event.recid]["Writeoff"] = 0;
+                    $gridPayment.records[event.recid]["Discount"] = 0;
                     $gridPayment.refreshCell(event.recid, "AppliedAmt");
                 }
                 else {
@@ -1779,6 +2222,10 @@
                     }
 
                 }
+                //check weather someone clicked on select column checkbox in grid
+                if ((selectColIndex == event.column || event.column == null) && !(element[0].SelectRow == undefined)) {
+                    $gridPayment.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt);
+                }
                 tableChanged(event.recid, event.column, false, false);
             }
         };
@@ -1789,12 +2236,18 @@
                 return;
             }
             var colIndex = $gridCashline.getColumn('AppliedAmt', true);
+            //get the index of SelectRow Column checkbox from grid
+            var selectColIndex = $gridCashline.getColumn('SelectRow', true);
             if (event.column == 0 || event.column == null) {
                 var getChanges = $gridCashline.getChanges();
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
                 if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                    //Set value to 0 when element is null
+                    $gridCashline.records[event.recid]["AppliedAmt"] = 0;
+                    $gridCashline.records[event.recid]["Writeoff"] = 0;
+                    $gridCashline.records[event.recid]["Discount"] = 0;
                     $gridCashline.refreshCell(0, "AppliedAmt");
                 }
                 else {
@@ -1868,6 +2321,10 @@
                         $gridCashline.refreshCell(0, "AppliedAmt");
                     }
                 }
+                //check weather someone clicked on select column checkbox in grid
+                if ((selectColIndex == event.column || event.column == null) && !(element[0].SelectRow == undefined)) {
+                    $gridCashline.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).Amount);
+                }
                 tableChanged(event.recid, event.column, true, true);
             }
         };
@@ -1887,11 +2344,13 @@
                 // if changes are there like  checkbox is cheked, then we have to set value in changes becoz textbox in grid show data from changes...
                 if (VIS.Utility.Util.getValueOfInt(event.value_new) > 0 && VIS.Utility.Util.getValueOfInt(event.value_new) > VIS.Utility.Util.getValueOfInt($gridPayment.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
+                    $gridPayment.get(event.recid).changes.AppliedAmt = $gridPayment.get(event.recid).OpenAmt;
                     event.preventDefault();
                     return;
                 }
                 else if (VIS.Utility.Util.getValueOfInt($gridPayment.get(event.recid).OpenAmt) < 0 && VIS.Utility.Util.getValueOfInt(event.value_new) < VIS.Utility.Util.getValueOfInt($gridPayment.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
+                    $gridPayment.get(event.recid).changes.AppliedAmt = $gridPayment.get(event.recid).OpenAmt;
                     event.preventDefault();
                     return;
                 }
@@ -1929,11 +2388,13 @@
                 // if changes are there like  checkbox is cheked, then we have to set value in changes becoz textbox in grid show data from changes...
                 if (VIS.Utility.Util.getValueOfInt(event.value_new) > 0 && VIS.Utility.Util.getValueOfInt(event.value_new) > VIS.Utility.Util.getValueOfInt($gridCashline.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
+                    $gridCashline.get(event.recid).changes.AppliedAmt = $gridCashline.get(event.recid).OpenAmt;
                     event.preventDefault();
                     return;
                 }
                 else if (VIS.Utility.Util.getValueOfInt($gridCashline.get(event.recid).OpenAmt) < 0 && VIS.Utility.Util.getValueOfInt(event.value_new) < VIS.Utility.Util.getValueOfInt($gridCashline.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
+                    $gridCashline.get(event.recid).changes.AppliedAmt = $gridCashline.get(event.recid).OpenAmt;
                     event.preventDefault();
                     return;
                 }
@@ -1982,6 +2443,7 @@
             var colIndex = $gridInvoice.getColumn('AppliedAmt', true);
             var wcolIndex = $gridInvoice.getColumn('Writeoff', true);
             var dcolIndex = $gridInvoice.getColumn('Discount', true);
+            var selectColIndex = $gridInvoice.getColumn('SelectRow', true);
             var discountchng = 0;
             if ($gridInvoice.columns[colIndex].editable == undefined && $gridInvoice.columns[wcolIndex].editable == undefined && $gridInvoice.columns[dcolIndex].editable == undefined) {
                 return;
@@ -1990,11 +2452,13 @@
                 // if changes are there like  checkbox is cheked, then we have to set value in changes becoz textbox in grid show data from changes...
                 if (VIS.Utility.Util.getValueOfInt(event.value_new) > 0 && VIS.Utility.Util.getValueOfInt(event.value_new) > VIS.Utility.Util.getValueOfInt($gridInvoice.get(event.recid).Amount)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
+                    $gridInvoice.get(event.recid).changes.AppliedAmt = $gridInvoice.get(event.recid).Amount;
                     event.preventDefault();
                     return;
                 }
                 else if (VIS.Utility.Util.getValueOfInt($gridInvoice.get(event.recid).Amount) < 0 && VIS.Utility.Util.getValueOfInt(event.value_new) < VIS.Utility.Util.getValueOfInt($gridInvoice.get(event.recid).Amount)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
+                    $gridInvoice.get(event.recid).changes.AppliedAmt = $gridInvoice.get(event.recid).Amount;
                     event.preventDefault();
                     return;
                 }
@@ -2007,16 +2471,18 @@
                 if (colIndex == event.column) {
                     // check if discount+writeoff + applied is gretaer than open amount added by vivek on 06/01/2018
                     if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
-                                                    < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                        < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
+                        $gridInvoice.get(event.recid).changes.AppliedAmt = $gridInvoice.get(event.recid).Amount;
                         event.preventDefault();
                         return;
                     }
                     else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
-                                                        > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                        > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
+                        $gridInvoice.get(event.recid).changes.AppliedAmt = $gridInvoice.get(event.recid).Amount;
                         event.preventDefault();
                         return;
                     }
@@ -2027,15 +2493,15 @@
 
                 else if (wcolIndex == event.column) {
                     if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
-                                                < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                        < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
                     }
                     else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
-                                                    > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                        > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
@@ -2045,15 +2511,15 @@
                 }
                 else if (dcolIndex == event.column) {
                     if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff))
-                                                < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff))
+                        < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
                     }
                     else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff))
-                                                    > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff))
+                        > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
@@ -2076,9 +2542,14 @@
                 }
             }
 
+            //if we click on select column checkbox in grid
+            if (selectColIndex == event.column || event.column == null) {
+                $gridInvoice.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount);
+            }
+
             if (event.column == $gridInvoice.getColumn('Discount', true)
-               || event.column == $gridInvoice.getColumn('Writeoff', true)
-               || event.column == $gridInvoice.getColumn('AppliedAmt', true)) {
+                || event.column == $gridInvoice.getColumn('Writeoff', true)
+                || event.column == $gridInvoice.getColumn('AppliedAmt', true)) {
 
                 tableChanged(event.index, event.column, true, false);
 
@@ -2157,29 +2628,31 @@
                             }
                         }
                         var isAllUncheckedInvoice = false;
-                        for (var i = 0 ; i < $gridInvoice.getChanges().length; i++) {
+                        for (var i = 0; i < $gridInvoice.getChanges().length; i++) {
                             if (!($gridInvoice.getChanges()[i].SelectRow == undefined || $gridInvoice.getChanges()[i].SelectRow == false))
                                 isAllUncheckedInvoice = true;
                         }
 
                         var isAllUncheckedCash = false;
-                        for (var i = 0 ; i < $gridCashline.getChanges().length; i++) {
+                        for (var i = 0; i < $gridCashline.getChanges().length; i++) {
                             if (!($gridCashline.getChanges()[i].SelectRow == undefined || $gridCashline.getChanges()[i].SelectRow == false))
                                 isAllUncheckedCash = true;
                         }
 
                         var isAllUncheckedPayment = false;
-                        for (var i = 0 ; i < $gridPayment.getChanges().length; i++) {
+                        for (var i = 0; i < $gridPayment.getChanges().length; i++) {
                             if (!($gridPayment.getChanges()[i].SelectRow == undefined || $gridPayment.getChanges()[i].SelectRow == false))
                                 isAllUncheckedPayment = true;
                         }
 
                         if (!isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
                             C_ConversionType_ID = 0;
+
+                        $gridPayment.columns[_payment].editable = false;
                     }
                 }
             }
-                //Cash Lines
+            //Cash Lines
             else if (cash) {
 
                 if (col == 0) {
@@ -2221,29 +2694,31 @@
                             }
                         }
                         var isAllUncheckedInvoice = false;
-                        for (var i = 0 ; i < $gridInvoice.getChanges().length; i++) {
+                        for (var i = 0; i < $gridInvoice.getChanges().length; i++) {
                             if (!($gridInvoice.getChanges()[i].SelectRow == undefined || $gridInvoice.getChanges()[i].SelectRow == false))
                                 isAllUncheckedInvoice = true;
                         }
 
                         var isAllUncheckedCash = false;
-                        for (var i = 0 ; i < $gridCashline.getChanges().length; i++) {
+                        for (var i = 0; i < $gridCashline.getChanges().length; i++) {
                             if (!($gridCashline.getChanges()[i].SelectRow == undefined || $gridCashline.getChanges()[i].SelectRow == false))
                                 isAllUncheckedCash = true;
                         }
 
                         var isAllUncheckedPayment = false;
-                        for (var i = 0 ; i < $gridPayment.getChanges().length; i++) {
+                        for (var i = 0; i < $gridPayment.getChanges().length; i++) {
                             if (!($gridPayment.getChanges()[i].SelectRow == undefined || $gridPayment.getChanges()[i].SelectRow == false))
                                 isAllUncheckedPayment = true;
                         }
 
                         if (!isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
                             C_ConversionType_ID = 0;
+
+                        $gridCashline.columns[_paymentCash].editable = false;
                     }
                 }
             }
-                //  Invoice Selection
+            //  Invoice Selection
             else if (col == 0) {
                 var columns = $gridInvoice.columns;
 
@@ -2332,6 +2807,7 @@
                             //Discount---//get column index from grid
                             _discount = getIndexFromArray(columns, "Discount");
                             changes.Discount = parseFloat($gridInvoice.get(row)[columns[_discount].field]);
+                            $gridInvoice.records[row]["AppliedAmt"] = 0;
                             $gridInvoice.refreshCell(row, "Writeoff");
                             $gridInvoice.refreshCell(row, "AppliedAmt");
                             $gridInvoice.refreshCell(row, "Discount");
@@ -2342,25 +2818,27 @@
                         }
                     }
                     var isAllUncheckedInvoice = false;
-                    for (var i = 0 ; i < $gridInvoice.getChanges().length; i++) {
+                    for (var i = 0; i < $gridInvoice.getChanges().length; i++) {
                         if (!($gridInvoice.getChanges()[i].SelectRow == undefined || $gridInvoice.getChanges()[i].SelectRow == false))
                             isAllUncheckedInvoice = true;
                     }
 
                     var isAllUncheckedCash = false;
-                    for (var i = 0 ; i < $gridCashline.getChanges().length; i++) {
+                    for (var i = 0; i < $gridCashline.getChanges().length; i++) {
                         if (!($gridCashline.getChanges()[i].SelectRow == undefined || $gridCashline.getChanges()[i].SelectRow == false))
                             isAllUncheckedCash = true;
                     }
 
                     var isAllUncheckedPayment = false;
-                    for (var i = 0 ; i < $gridPayment.getChanges().length; i++) {
+                    for (var i = 0; i < $gridPayment.getChanges().length; i++) {
                         if (!($gridPayment.getChanges()[i].SelectRow == undefined || $gridPayment.getChanges()[i].SelectRow == false))
                             isAllUncheckedPayment = true;
                     }
 
                     if (!isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
                         C_ConversionType_ID = 0;
+
+                    $gridInvoice.columns[_applied].editable = false;
                 }
                 //if (colInvCheck) {
                 //    var amount = parseFloat($gridInvoice.get(row)[columns[_open].field]);
@@ -2664,12 +3142,12 @@
                 _C_BPartner_ID = value;
                 loadBPartner();
             }
-                //	Currency
+            //	Currency
             else if (name == "C_Currency_ID") {
                 _C_Currency_ID = parseInt(value);
                 loadBPartner();
             }
-                //	Date for Multi-Currency
+            //	Date for Multi-Currency
             else if (name == "Date" && $vchkMultiCurrency) {
                 loadBPartner();
             }
@@ -2720,7 +3198,8 @@
                     //  log.Fine("Payment_" + i + " = " + bd + " - Total=" + totalPay);
                 }
             }
-            $lblPaymentSum.text(VIS.Msg.getMsg("SelectedPayments") + _noPayments + " - " + VIS.Msg.getMsg("Sum") + "  " + format.GetFormatedValue(totalPay.toFixed(stdPrecision)) + " ");
+            //$lblPaymentSum.text(VIS.Msg.getMsg("SelectedPayments") + _noPayments + " - " + VIS.Msg.getMsg("Sum") + "  " + format.GetFormatedValue(totalPay.toFixed(stdPrecision)) + " ");
+            $lblPaymentSum.text(VIS.Msg.getMsg("SelectedPayments") + _noPayments + " - " + VIS.Msg.getMsg("Sum") + "  " + parseFloat(totalPay.toFixed(stdPrecision)).toLocaleString() + " ");
 
             //  Cash******************
             var totalCash = parseFloat(0);
@@ -2748,7 +3227,8 @@
                     }
                 }
             }
-            $lblCashSum.text(VIS.Msg.getMsg("SelectedCashlines") + _noCashLines + " - " + VIS.Msg.getMsg("Sum") + "  " + format.GetFormatedValue(totalCash.toFixed(stdPrecision)) + " ");
+            //$lblCashSum.text(VIS.Msg.getMsg("SelectedCashlines") + _noCashLines + " - " + VIS.Msg.getMsg("Sum") + "  " + format.GetFormatedValue(totalCash.toFixed(stdPrecision)) + " ");
+            $lblCashSum.text(VIS.Msg.getMsg("SelectedCashlines") + _noCashLines + " - " + VIS.Msg.getMsg("Sum") + "  " + parseFloat((totalCash.toFixed(stdPrecision))).toLocaleString() + " ");
 
 
             //  Invoices******************
@@ -2793,8 +3273,8 @@
                     }
                 }
             }
-            $lblInvoiceSum.text(VIS.Msg.getMsg("SelectedInvoices") + _noInvoices + " - " + VIS.Msg.getMsg("Sum") + "  " + format.GetFormatedValue(totalInv.toFixed(stdPrecision)) + " ");
-
+            //$lblInvoiceSum.text(VIS.Msg.getMsg("SelectedInvoices") + _noInvoices + " - " + VIS.Msg.getMsg("Sum") + "  " + format.GetFormatedValue(totalInv.toFixed(stdPrecision)) + " ");
+            $lblInvoiceSum.text(VIS.Msg.getMsg("SelectedInvoices") + _noInvoices + " - " + VIS.Msg.getMsg("Sum") + "  " + parseFloat(totalInv.toFixed(stdPrecision)).toLocaleString() + " ");
 
 
             //	Set AllocationDate
@@ -2812,7 +3292,8 @@
             //var difference = (totalPay + totalCash) - totalInv;
             var difference = (parseFloat(totalPay.toFixed(stdPrecision)) + parseFloat(totalCash.toFixed(stdPrecision))) - parseFloat(totalInv.toFixed(stdPrecision));
 
-            $vtxtDifference.text(format.GetFormatedValue(difference.toFixed(stdPrecision)));
+            //$vtxtDifference.text(format.GetFormatedValue(difference.toFixed(stdPrecision)));
+            $vtxtDifference.text(parseFloat(difference.toFixed(stdPrecision)).toLocaleString());
             if (difference == parseFloat(0)) {
                 $vbtnAllocate.prop("readonly", false);
                 $vbtnAllocate.css({ "pointer-events": "auto", "opacity": "1" });
@@ -3064,7 +3545,7 @@
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
                                 isCash: $vchkAllocation.is(':checked'), _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                    , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
+                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
                             }),
                             success: function (result) {
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
@@ -3200,7 +3681,7 @@
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
                                 isCash: $vchkAllocation.is(':checked'), _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                    , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
+                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
                             }),
                             success: function (result) {
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
