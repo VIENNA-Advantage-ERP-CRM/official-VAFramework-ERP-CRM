@@ -237,6 +237,9 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
         min-height: 30px;
     }
 
+    .ui-widget input[type="radio"] {
+        min-height: auto;
+    }
 /*input:not([type=button]):focus,  select:focus, textarea:focus {
     border: 1px solid rgba(var(--v-c-primary), 1);
 }*/

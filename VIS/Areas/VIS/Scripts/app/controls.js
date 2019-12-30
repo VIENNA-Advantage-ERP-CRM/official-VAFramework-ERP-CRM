@@ -4585,10 +4585,10 @@
                 obj.onClose = function (ad_image_Id, change) {
                     //call set only when change call 
                     if (change) {
-                        self.oldValue = 0;
+                        self.oldValue = -1;
                         if (self.oldValue != ad_image_Id) {
                             // 'null' in case of image delete 
-                            ad_image_Id = (ad_image_Id == 'null' ? '' : ad_image_Id);
+                            ad_image_Id = (ad_image_Id == 'null' ? null : ad_image_Id);
                             self.setValue(ad_image_Id);
                             var evt = { newValue: ad_image_Id, propertyName: columnName };
                             self.fireValueChanged(evt, true);
