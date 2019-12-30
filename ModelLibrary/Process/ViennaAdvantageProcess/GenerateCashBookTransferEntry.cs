@@ -98,6 +98,7 @@ namespace ViennaAdvantage.Process
 
                                                 convertedamount = Decimal.Negate(Util.GetValueOfDecimal(cashline.GetConvertedAmt()));
 
+                                                // if converted amount not found then get amount based on currency conversion avaliable
                                                 if (cashline.GetAmount() != 0 && convertedamount == 0)
                                                 {
                                                     convertedamount = MConversionRate.Convert(GetCtx(), Decimal.Negate(cashline.GetAmount()), Currency_ID, C_Currencyheader_ID,
@@ -259,6 +260,7 @@ namespace ViennaAdvantage.Process
                                             //    cashheader.GetAD_Client_ID(), cashheader.GetAD_Org_ID());
                                             convertedamount = Decimal.Negate(Util.GetValueOfDecimal(cashline.GetConvertedAmt()));
 
+                                            // if converted amount not found then get amount based on currency conversion avaliable
                                             if (cashline.GetAmount() != 0 && convertedamount == 0)
                                             {
                                                 convertedamount = MConversionRate.Convert(GetCtx(), Decimal.Negate(cashline.GetAmount()), Currency_ID, C_Currencyheader_ID,
