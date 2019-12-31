@@ -225,7 +225,10 @@ html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
     margin-right: -1px;
     margin-left: 0;
 }
-html[dir="rtl"] .vis-ad-w-p-tabs-oflow a, .vis-statusbar-ul div, html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2), html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+html[dir="rtl"] .vis-ad-w-p-tabs-oflow a,
+html[dir="rtl"] .vis-statusbar-ul div,
+html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2),
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
     transform: rotate(180deg);
 }
 html[dir="rtl"] .vis-control-wrap > button {
