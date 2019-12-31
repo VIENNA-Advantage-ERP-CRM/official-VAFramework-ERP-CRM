@@ -664,7 +664,7 @@
                     //});
                     //dfLeft.append(btnInsert);
 
-                    var btnDeleteAll = $('<a title="' + VIS.Msg.getMsg('DeleteAll') + '" class="vis-btn" style="margin-left: 5px;cursor: pointer;">').append(VIS.Msg.getMsg('DeleteAll'));
+                    var btnDeleteAll = $('<a  title="' + VIS.Msg.getMsg('DeleteAll') + '" class="vis-btn">').append(VIS.Msg.getMsg('DeleteAll'));
                     dfLeft.append(btnDeleteAll);
                     btnDeleteAll.on('click', function () {
 
@@ -710,7 +710,7 @@
                     });
 
 
-                    var btnCancel = $('<a title="' + VIS.Msg.getMsg('Cancel') + '" class="vis-btn"  style="margin-left: 5px;cursor: pointer;">').append(VIS.Msg.getMsg('Cancel'));
+                    var btnCancel = $('<a title="' + VIS.Msg.getMsg('Cancel') + '" class="vis-btn">').append(VIS.Msg.getMsg('Cancel'));
                     btnCancel.on('click', function () {
                         if (selfi.onClose) {
                             selfi.onClose();
