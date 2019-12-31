@@ -971,7 +971,7 @@
     .vis-gc-vpanel-table label {
         font-weight: normal;
         margin: 0;
-        margin-top:10px;
+        margin-top: 10px;
         /*margin-left: 4px;*/
         display: block;
     }
@@ -980,27 +980,32 @@
             color: red;
         }
 
-    .vis-gc-vpanel-table input,
-    .vis-gc-vpanel-table select,
-    .vis-gc-vpanel-table textarea,
-    .vis-gc-vpanel-table button {
-        border-style: solid;
-        border-width: 1px;
-        border-color: darkgray;
-        position: relative;
-        width: 100%;
-        min-width: 100%;
-        min-height: 26px;
-        line-height: inherit !important;
-        margin-bottom: 10px;
-        padding: 1px !important;
-    }
 
-    .vis-gc-vpanel-table button {
-        /*margin-bottom: 20px;*/*/
-    }
-        
-    .vis-gc-vpanel-table-btn-blue {
+.vis-app-aform-root .vis-gc-vpanel-table select {
+    margin-bottom: 0px !important;
+}
+
+.vis-gc-vpanel-table input,
+.vis-gc-vpanel-table select,
+.vis-gc-vpanel-table textarea,
+.vis-gc-vpanel-table button {
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkgray;
+    position: relative;
+    width: 100%;
+    min-width: 100%;
+    min-height: 26px;
+    line-height: inherit !important;
+    margin-bottom: 10px;
+    padding: 1px !important;
+}
+
+.vis-gc-vpanel-table button {
+    /*margin-bottom: 20px;*/ */
+}
+
+.vis-gc-vpanel-table-btn-blue {
     border: 0px;
     background: #BFD8EE;
     padding: 10px 15px;
@@ -2445,7 +2450,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
 
 .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid {
     height: 72%;
-    width:100%;
+    width: 100%;
 }
 /*Added new classes*/
 .vis-leftpanel-wrapper {
@@ -2996,7 +3001,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     margin-top: 10px;
     width: 100%;
     float: left;
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
 .vis-btnDelete {
@@ -4020,7 +4025,8 @@ html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2 {
     margin-left: 10px;
     margin-right: 0px;
 }
-.vis-processbtnwrap input[type="button"]{
+
+.vis-processbtnwrap input[type="button"] {
     margin-top: 0;
     margin-left: 10px;
 }
@@ -4198,7 +4204,7 @@ li.vis-selected-list {
 
 .vis-window-tab-icons ul li img {
     cursor: pointer;
-    max-width:21px;
+    max-width: 21px;
 }
 
 .vis-window-tabpanel-head {
@@ -4425,7 +4431,6 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-processpara-table-SplitUI select {
     width: 200px;
     background-color: #fff;
-
 }
 
 .vis-pt-0 {
@@ -4642,7 +4647,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 
 .vis-val-tc-parCtr {
-    margin-bottom  : 40px;
+    margin-bottom: 40px;
 }
 
 .vis-val-tc-colWid {

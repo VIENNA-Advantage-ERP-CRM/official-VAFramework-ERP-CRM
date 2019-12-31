@@ -242,6 +242,7 @@
                 }
             }
             this.reportContainer.height(this.reportAreaContainer.height() - (this.$divDesc.height() + 20));
+            this.reportAreaContainer.width(this.partitionContainer.width() - (this.parameterContainer.width()));
         };
 
         this.setParameterHeights = function (height, width) {
