@@ -338,8 +338,8 @@ label.vis-ec-col-lblchkbox {
     }
 
         .vis-ec-col-lblchkbox input[type=checkbox]:focus {
-            outline-color: rgba(var(--v-c-primary), 1);
             outline: auto;
+            outline-color: rgba(var(--v-c-primary), 1);
         }
 
 .vis-ev-col input:-webkit-autofill {
