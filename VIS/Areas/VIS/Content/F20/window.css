@@ -1504,14 +1504,14 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 
 /*actions popups css*/
 .vis-chat-msgbox {
-    Height: 70px;
+    Height: 65px;
     width: 100%;
     font-size: 10pt;
     resize: none;
     outline: none;
     border: 1px solid rgba(var(--v-c-on-secondary),.1);
     border-radius: .4rem;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
     .vis-chat-msgbox:focus {
@@ -1565,7 +1565,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 
 .vis-chatdetailouterwrap {
     overflow-y: auto;
-    height: 240px;
+    height: 260px;
 }
 
     .vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
