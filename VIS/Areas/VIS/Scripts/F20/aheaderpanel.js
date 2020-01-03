@@ -373,6 +373,10 @@
             rootClass = 'vis-w-p-Header-Root-h';//Fixed Class for Horizontal Alignment
         }
 
+        if (!this.headerItems || this.headerItems.length <= 0) {
+            return;
+        }
+
         for (var j = 0; j < this.headerItems.length; j++) {
 
             var currentItem = this.headerItems[j];
@@ -396,7 +400,11 @@
             root.append($containerDiv);
 
             //Load Header Panel Items and add them to UI.
-            this.setHeaderItems(currentItem, $containerDiv);
+            if (!currentItem || !currentItem.headerItems || currentItem.headerItems.length <= 0) {
+                continue;
+            }
+
+                this.setHeaderItems(currentItem, $containerDiv);
         }
         this.addStyleToDom();
 
@@ -452,7 +460,7 @@
         else {
             this.dynamicStyle.push("flex-direction:column;width: " + width + ";height:calc(100vh - 93px); ");
         }
-        this.dynamicStyle.push("padding:" + padding + ";" + backcolor );
+        this.dynamicStyle.push("padding:" + padding + ";" + backcolor);
 
         this.dynamicStyle.push("} ");
         return dynamicClassName;
@@ -473,7 +481,7 @@
         //    this.dynamicStyle.push('background: ' + backColor);
         //}
         //else {
-            this.dynamicStyle.push('background: ' + 'rgba(var(--v-c-primary));');
+        this.dynamicStyle.push('background: ' + 'rgba(var(--v-c-primary));');
         //}
         this.dynamicStyle.push(backColor);
 
@@ -496,7 +504,7 @@
         this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
 
         this.dynamicStyle.push("justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignment]);
-        this.dynamicStyle.push(";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding+";");
+        this.dynamicStyle.push(";font-size:" + fontSize + ";color:" + fontColor + ";padding:" + padding + ";");
         this.dynamicStyle.push(backColor);
         this.dynamicStyle.push("} ");
         return dynamicClassName;
