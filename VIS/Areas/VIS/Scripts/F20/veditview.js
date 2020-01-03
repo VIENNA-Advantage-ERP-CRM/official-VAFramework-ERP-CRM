@@ -635,7 +635,7 @@
 
         var wraper = '<div class="input-group vis-input-wrap">';
         //special case for textarea and image button strech height to 100%
-        if (editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl().hasClass("vis-ev-col-img-ctrl")) {
+        if (editor && (editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl().hasClass("vis-ev-col-img-ctrl"))) {
             wraper = '<div class="input-group vis-input-wrap vis-ev-full-h">';
         }
 
@@ -681,19 +681,21 @@
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
         ctrl.append(ctrlP);
-        var count = editor.getBtnCount();
-        if (count > 0) {
-            editor.getControl().attr("data-hasBtn", " ");
-            var i = 0;
-            while (i < count) {
-                var btn = editor.getBtn(i);
-                if (btn != null) {
-                    ctrl.append($('<div class="input-group-append">').append(btn));
+        if (editor) {
+            var count = editor.getBtnCount();
+            if (count > 0) {
+                editor.getControl().attr("data-hasBtn", " ");
+                var i = 0;
+                while (i < count) {
+                    var btn = editor.getBtn(i);
+                    if (btn != null) {
+                        ctrl.append($('<div class="input-group-append">').append(btn));
+                    }
+                    ++i;
                 }
-                ++i;
+                count = -1;
+                i = 0;
             }
-            count = -1;
-            i = 0;
         }
         parent.append(ctrl);
     }
