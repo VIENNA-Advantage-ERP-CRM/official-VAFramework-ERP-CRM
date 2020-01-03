@@ -2448,7 +2448,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     background-color: #fff;
 }
 
-.vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid {
+.vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
     height: 72%;
     width: 100%;
 }
@@ -2548,7 +2548,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
         height: 100%;
     }
 
-    .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid {
+    .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
         height: 80%;
     }
 }
