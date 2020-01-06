@@ -3780,6 +3780,17 @@ namespace VAdvantage.Model
 
                 /******************/
 
+                //landed cost distribution
+                if (!IsSOTrx())
+                {
+                    String error = ExpectedlandedCostDistribution();
+                    if (!Util.IsEmpty(error))
+                    {
+                        _processMsg = error;
+                        return DocActionVariables.STATUS_INVALID;
+                    }
+                }
+
                 SetProcessed(true);
                 _processMsg = Info.ToString();
                 //
@@ -3901,6 +3912,25 @@ namespace VAdvantage.Model
                     SetDocumentNo(value);
                 }
             }
+        }
+
+        /// <summary>
+        /// Create Exepected Landed cost distribution lines
+        /// </summary>
+        /// <returns>if success then empty string else message</returns>
+        protected String ExpectedlandedCostDistribution()
+        {
+            MExpectedCost[] expectedlandedCosts = MExpectedCost.GetLines(GetCtx(), GetC_Order_ID(), Get_Trx());
+            if (expectedlandedCosts != null && expectedlandedCosts.Length > 0)
+            {
+                for (int i = 0; i < expectedlandedCosts.Length; i++)
+                {
+                    String error = expectedlandedCosts[i].DistributeLandedCost();
+                    if (!Util.IsEmpty(error))
+                        return error;
+                }
+            }
+            return "";
         }
 
         //Changes by abhishek suggested by lokesh on 7/1/2016
