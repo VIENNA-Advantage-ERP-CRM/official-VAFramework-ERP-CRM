@@ -599,7 +599,17 @@
 
                 var para = $("<p>");
                 if (data[item].DocumentNameValue == undefined || data[item].DocumentNameValue == '') {
-                    para.append(VIS.Utility.encodeText(data[item].Summary));
+
+                    // Get Workflow Activity details from selected Text Template
+                    var summary = VIS.Utility.encodeText(data[item].Summary).split("●");
+                    if (summary != null && summary.length > 0) {
+                        for (var k = 0; k < summary.length; k++) {
+                            para.append(summary[k]);
+                            if (k < summary.length - 1) {
+                                para.append("<br>");
+                            }
+                        }
+                    }
                 }
                 else {
                     para.append(VIS.Utility.encodeText(data[item].DocumentNameValue + " - " + data[item].Summary));
@@ -901,17 +911,17 @@
                     });
                 }
                 else {
-                var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom' data-id='" + index + "'>");
-                //aZoom.css("data-id", index);
-                aZoom.append($("<span class='vis-btn-ico vis vis-find vis-btn-zoom-border'>"));
-                aZoom.append(VIS.Msg.getMsg('Zoom'));
-                divHeader.append(aZoom);
-                aZoom.on(VIS.Events.onTouchStartOrClick, function (e) {
-                    var id = $(this).data("id");
-                    zoom(id);
-                });
+                    var aZoom = $("<a href='javascript:void(0)' class='vis-btn-zoom' data-id='" + index + "'>");
+                    //aZoom.css("data-id", index);
+                    aZoom.append($("<span class='vis-btn-ico vis vis-find vis-btn-zoom-border'>"));
+                    aZoom.append(VIS.Msg.getMsg('Zoom'));
+                    divHeader.append(aZoom);
+                    aZoom.on(VIS.Events.onTouchStartOrClick, function (e) {
+                        var id = $(this).data("id");
+                        zoom(id);
+                    });
+                }
             }
-        }
 
             divHeader.append($("<div class='clearfix'>"));
 
@@ -935,7 +945,18 @@
                 p2.css('margin-top', '10px');
                 p2.append(VIS.Msg.getMsg('Summary'));
                 p2.append($("<br>"));
-                p2.append(VIS.Utility.encodeText(fulldata[index].Summary));
+
+                // Get Workflow Activity details from selected Text Template
+                var summary = VIS.Utility.encodeText(fulldata[index].Summary).split("●");
+                if (summary != null && summary.length > 0) {
+                    for (var k = 0; k < summary.length; k++) {
+                        p2.append(summary[k]);
+                        if (k < summary.length - 1) {
+                            p2.append("<br>");
+                        }
+                    }
+                }
+                //p2.append(VIS.Utility.encodeText(fulldata[index].Summary));
                 li1.append(p2);
             }
             //ul.append(li2);
