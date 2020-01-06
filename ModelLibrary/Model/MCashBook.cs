@@ -250,7 +250,7 @@ namespace VAdvantage.Model
             //Issue ID- SI_0614 in Google Sheet Standard Issues.. On Cashbook currency should not allow to change if any transcation made against Cashbook.
             if (!newRecord && Is_ValueChanged("C_Currency_ID"))
             {
-                string sql = "SELECT SUM(total) AS TOTAL FROM  (SELECT COUNT(*) AS TOTAL FROM C_CashBook_Acct WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_CashBook_ID ="+ GetC_CashBook_ID()
+                string sql = "SELECT SUM(total) AS TOTAL FROM  (SELECT COUNT(*) AS TOTAL FROM C_CashBook_Acct WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_CashBook_ID =" + GetC_CashBook_ID()
                                + " UNION ALL SELECT COUNT(*) AS TOTAL FROM C_CashLine WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND  C_CashBook_ID = " + GetC_CashBook_ID()
                                + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_Cash WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND  C_CashBook_ID =" + GetC_CashBook_ID()
                                + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_POS WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND  C_CashBook_ID =" + GetC_CashBook_ID()

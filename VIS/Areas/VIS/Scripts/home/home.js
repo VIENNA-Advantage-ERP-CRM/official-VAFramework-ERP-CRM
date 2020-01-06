@@ -957,16 +957,16 @@
                                         dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                     }
                                     if (data.lstFollowups[cnt].AD_Image_ID == 0) {
-                                        uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("userImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png '/>";
+                                        uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
                                     }
                                     else {
                                         for (var a in data.lstUserImg) {
                                             if (data.lstUserImg[a].AD_Image_ID == data.lstFollowups[cnt].AD_Image_ID) {
                                                 if (data.lstUserImg[a].UserImg != "NoRecordFound" && data.lstUserImg[a].UserImg != "FileDoesn'tExist" && data.lstUserImg[a].UserImg != null) {
-                                                    uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/>";
+                                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>";
                                                 }
                                                 else {
-                                                    uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png '/>";
+                                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
                                                 }
                                                 break;
                                             }
@@ -977,8 +977,8 @@
                                             + "<div class='vis-feedTitleBar'>"
                                             + "<h3> " + data.lstFollowups[cnt].WinName + ' : ' + data.lstFollowups[cnt].Identifier + " </h3>"
                                             + "<div class='vis-feedTitleBar-buttons'>"
-                                             + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "' class='vis-feedIcons vis-icon-viewFeed'>" + VIS.Msg.getMsg("ViewFollowups") + "</a></li>"
-                                            + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='vis-feedIcons vis-icon-unsubscribeFeed'>" + VIS.Msg.getMsg("UnsubscribeFollowups") + " </a></li></ul>"
+                                             + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "'><i class='vis vis-find'></i></a></li>"
+                                            + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='fa fa-rss'></a></li></ul>"
                                             + " </div></div>"
 
                                             + "<div id='divfllcmntdata" + data.lstFollowups[cnt].ChatID + "' data-fll='fll-cmnt' class='vis-feedDetails'>"
@@ -1004,7 +1004,7 @@
 
                                     + "<div id=" + data.lstFollowups[cnt].ChatID + " class='vis-feedMessage'>"
                                     + " <input id='txtFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='txtcmntfll' placeholder='" + VIS.Msg.getMsg('TypeMessage') + "' type='text' value='' />"
-                                    + " <span  id='btnFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='btncmntfll' title='" + VIS.Msg.getMsg('PostMessage') + "'  class='vis-feedIcons vis-icon-message' ></span>"
+                                    + " <span  id='btnFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='btncmntfll' title='" + VIS.Msg.getMsg('PostMessage') + "'  class='vis vis-sms' ></span>"
                                     + " <div class='clearfix'></div> "
                                     + "</div></div> ";
                                     cnt++;
@@ -1051,16 +1051,18 @@
                                     dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                 }
                                 if (data.lstFollowups[cnt].AD_Image_ID == 0) {
-                                    uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>"
                                 }
                                 else {
                                     for (var b in data.lstUserImg) {
                                         if (data.lstUserImg[b].AD_Image_ID == data.lstFollowups[cnt].AD_Image_ID) {
                                             if (data.lstUserImg[b].UserImg != "NoRecordFound" && data.lstUserImg[b].UserImg != "FileDoesn'tExist" && data.lstUserImg[b].UserImg != null) {
-                                                uimg = "<img style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/>"
+                                                uimg = "<div class='vis-feedimgwrap' data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>"
                                             }
                                             else {
-                                                uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+                                                //uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+
+                                                uimg = "<i  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'    class='fa fa-user'></i>"
 
                                             }
                                             break;
@@ -1115,14 +1117,14 @@
                             if (user_image !== null) {
 
                                 if (user_image != "NoRecordFound" && user_image != "FileDoesn'tExist") {
-                                    uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' />"
+                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' ><img data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' /></div>"
                                 }
                                 else {
-                                    uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' alt='" + VIS.Msg.getMsg("UserImage") + "'   class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.PNG '/>"
+                                    uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
                                 }
                             }
                             else {
-                                uimg = "<img  style='cursor:pointer;'   data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' alt='" + VIS.Msg.getMsg("UserImage") + "'   class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.PNG '/>"
+                                uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
                             }
                             var str = "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
                                  + uimg
@@ -1228,7 +1230,7 @@
                                    + "<div class='vis-feedTitleBar-buttons'>"
                                    + "<ul>"
                                    + "<li style='color:#999999; padding-top:10px; font-size:14px;'>" + data[s].Name + "</li>"
-                                   + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "' class='vis-feedIcons vis-icon-viewFeed'> title='" + VIS.Msg.getMsg("View") + "'</a></li>"
+                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'><i class='vis vis-find'></i></a></li>"
                                    + "</ul>"
                                    + "</div>"
                                    + "</div>"
@@ -1330,10 +1332,10 @@
                                        + " <div class='vis-feedTitleBar'>";
 
                             if (data[s].SpecialTable) {
-                                str += "<h3 style='color:#1b95d7;width:calc(100% - 105px)'>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
+                                str += "<h3>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
                             }
                             else {
-                                str += "<h3 style='color:#1b95d7;'>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
+                                str += "<h3>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
                             }
 
 
@@ -1343,8 +1345,8 @@
                             //{
                             //    str += "<li data-vishomercrd='lispecial'><a data-vishomercrd='lispecial1' href='javascript:void(0)' id='" + data[s].Record_ID + "|" + data[s].ProcessTableName + "|" + data[s].ProcessWindowID + "' data-vishomercrd='SpecialTable' title='" + VIS.Msg.getMsg("ShowNotice") + "' class='vis-processZoomIcon vis-icon-check'> title='" + VIS.Msg.getMsg("ShowNotice") + "'</a></li>"
                             //}
-                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "' class='vis-feedIcons vis-icon-check'> title='" + VIS.Msg.getMsg("Approve") + "'</a></li>"
-                            + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "'  class='vis-feedIcons vis-icon-viewFeed'>title='" + VIS.Msg.getMsg("View") + "'</a></li>"
+                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "' class='vis vis-markx'></a></li>"
+                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
                            + "</ul>"
                          + "  </div>"
                         + "</div>"
@@ -1409,7 +1411,7 @@
             $ulHomeTabMenu.on("click", function (evnt) {
                 $hlnkRefTabData.show();
                 WelcomeTabDatacontainers.css({ "margin-left": "auto", "margin-top": "auto" });
-
+                WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
 
                 $(".vis-welcomeScreenTabMenu li").removeClass('vis-activeTab');
                 if (evnt.target.nodeName == "LI") {
@@ -1421,7 +1423,7 @@
                 var datatab = $(evnt.target).data("vishome");
                 if (datatab === "userprofile") {
                     $spanWelcomeTabtopHdr.show();
-                    $spanWelcomeTabtopHdr.css("background-position", "0px 0px");
+                    //$spanWelcomeTabtopHdr.css("background-position", "0px 0px");
                     activeTabType = ProfileType;
                     isTabscroll = false;
                     isTabDataRef = true;
@@ -1450,8 +1452,8 @@
                     $sAlrtTxtType.html("");
                     $spanWelcomeTabtopHdr.show();
                     $sAlrtTxtType.html(VIS.Msg.getMsg("KPI"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -537px");
-
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-kpi");// .css("background-position", "0px -537px");
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (window.VADB && window.VADB != null && VADB.Apps.KpiHomeScreen != undefined) {
 
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
@@ -1503,7 +1505,7 @@
                     isTabDataRef = true;
 
                     $hlnkRefTabData.css("margin-right", "17px");
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -76px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-userfeed");//  .css("background-position", "0px -76px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1539,7 +1541,7 @@
                     $hlnkRefTabData.css("margin-right", "17px");
                     WelcomeTabDatacontainers.css("overflow-y", "auto");
                     WelcomeTabDatacontainers.css({ "text-align": "auto" });
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -143px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-notice");//$spanWelcomeTabtopHdr.css("background-position", "0px -143px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1571,8 +1573,8 @@
                     });
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyTask"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -406px");
-
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-mytasks");//$spanWelcomeTabtopHdr.css("background-position", "0px -406px");
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1624,7 +1626,8 @@
 
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("TaskAssignByMe"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -340px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-taskassigned");//$spanWelcomeTabtopHdr.css("background-position", "0px -340px");
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $spanWelcomeTabtopHdr.show();
@@ -1678,7 +1681,7 @@
                     tabdataLastPage = 0;
                     $hAlrtTxtTypeCount.html(tabdataLastPage);
 
-                    $spanWelcomeTabtopHdr.css("background-position-y", "-603px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-document");//$spanWelcomeTabtopHdr.css("background-position-y", "-603px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1700,7 +1703,7 @@
                     isTabDataRef = true;
                     WelcomeTabDatacontainers.css("overflow-y", "auto");
                     WelcomeTabDatacontainers.css({ "text-align": "auto" });
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -209px");
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon fa fa-bell-o");//$spanWelcomeTabtopHdr.css("background-position", "0px -209px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
                     $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
@@ -1745,8 +1748,8 @@
                     });
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("Appointment"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -275px");
-
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-appointment");//$spanWelcomeTabtopHdr.css("background-position", "0px -275px");
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1793,8 +1796,8 @@
                     });
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyNotes"));
-                    $spanWelcomeTabtopHdr.css("background-position", "0px -473px");
-
+                    $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-contacts");//  .css("background-position", "0px -473px");
+                    WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1835,7 +1838,7 @@
             });
         }
 
-        $('.vis-icon-Info-Home').click(function () {
+        $('#vis_appInfoWindow').click(function () {
             VIS.InfoMenu.show($(this));
         });
 

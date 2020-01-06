@@ -19,11 +19,7 @@ namespace VIS.Controllers
         {
             return View();
         }
-        /// <summary>
-        /// Return ColumnName based on AD_Element_ID
-        /// </summary>
-        /// <param name="AD_Element_ID"></param>
-        /// <returns></returns>
+
         public ContentResult GetDBColunName(int AD_Element_ID)
         {
             string sql = "SELECT ColumnName from AD_Element WHERE AD_Element_ID="+AD_Element_ID;

@@ -103,7 +103,7 @@
 
                 if (event.target.nodeName === "I" || event.target.nodeName === "SPAN") {
                     //close
-                    closeContainer($(event.currentTarget)[0].id);
+                    closeFrame($(event.currentTarget));
                     return;
                 }
 
@@ -300,23 +300,23 @@
 
         /*set height of section (main container) to window size */
         function adjustHeight() {
-               
-                ////var height = 0;
-                ////if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement)
-                ////{
-                ////    height = document.documentElement.clientHeight;
-                ////}
-                ////else {
-                ////    height = window.innerHeight;
-                ////}
-
+                var height = 0;
+                if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement)
+                {
+                    height = document.documentElement.clientHeight;
+                }
+                else {
+                    height = window.innerHeight;
+                }
                 ////$section.css('height', height - 22);
-                ////VIS.Env.setScreenHeight(height - 42 - 22);
+            height = height - 23;
+            if (VIS.Utility.Util.getValueOfInt(VIS.context.ctx["#FRAMEWORK_VERSION"]) < 2)
+                height = height - 43;
 
-
-                ////if (VIS.viewManager)
-                ////    VIS.viewManager.sizeChanged();
-
+                 VIS.Env.setScreenHeight(height);
+                 document.documentElement.style.setProperty('--vis-screen-height', (height * 0.01) +'px');
+                if (VIS.viewManager)
+                    VIS.viewManager.sizeChanged(height, window.innerwidth);
             // Resize event for calling interface
             //if (window.VA048 && VA048.Apps.GetCallingInstance(false))
             //    VA048.Apps.GetCallingInstance(false).resize();
@@ -339,20 +339,24 @@
          *@param itm
          */
         function activateTaskBarItem(itm) {
-            //select unselect taskbar items
-            if (curSelTaskBarItem) {
-                curSelTaskBarItem.css('background-color', '');
+            if (itm.length > 0) {
+                if (itm[0].id == "vis_lhome")
+                    return;
+                //select unselect taskbar items
+                if (curSelTaskBarItem) {
+                    //curSelTaskBarItem.css('background-color', '');
+                    curSelTaskBarItem.removeClass('vis-app-f-selected');
+                }
+                //curSelTaskBarItem = itm.css('background-color', '#D7E3E7');
+                curSelTaskBarItem = itm.addClass('vis-app-f-selected');
+                itm = null;
             }
-            curSelTaskBarItem = itm.css('background-color', '#D7E3E7');
-            itm = null;
-        };
-
+        }; 
 
         function activateTaskBarItemUsingID(item) {
             var nId = item.data('wid');
             activateTaskBarItem($shortcutUL.find("LI#" + nId));
         };
-
 
     /*
        close active view
@@ -360,8 +364,13 @@
      *
      * @param  name name or id of view
      */
-        function closeContainer(id) {
-            VIS.viewManager.closeFrame(id)
+        function closeFrame(ele) {
+            if (viewsZIndexCache[viewsZIndexCache.length - 1] == ele[0].id)
+                VIS.viewManager.closeFrame(ele[0].id);
+            else {
+                toggleContainer(ele[0].id);
+                activateTaskBarItem(ele);
+            }
         };
 
         /* 
@@ -518,7 +527,16 @@
         *a@param name name to diplay
         */
         function addTaskBarItem(id, imgPath, name) {
-            var $li = $('<li id=' + id + '><img src= "' + imgPath + '" /> <a>' + name + '</a><span style="padding:0 7px;"><i class="fa fa-times-circle-o" /></span></li>');
+            var img = ['<li id=' + id + '>'];
+            if (imgPath) {
+                if (imgPath.indexOf(".") > -1)
+                    img.push('<img src= "' + imgPath + '" />');
+                else
+                    img.push('<i class= "' + imgPath + '" />');
+            }
+
+            img.push('<a>' + name + '</a><span style="padding:0 7px;"><i class="fa fa-times-circle-o" /></span></li>');
+            var $li = $(img.join(' '));
             $shortcutUL.append($li);
             activateTaskBarItem($li);
             $li = null;
@@ -590,11 +608,11 @@
 
 
         function navigationInit() {
-            $mainNavigationDiv = $('<div class="vis-nav-windowContainer"></div>');
-            $section.prepend($mainNavigationDiv);
         };
 
         function getNavigationSection() {
+            if (!$mainNavigationDiv)
+                $mainNavigationDiv = $(".vis-app-action-nav");
             return $mainNavigationDiv;
         };
 
@@ -616,7 +634,7 @@
             activateTaskBarItemUsingID: activateTaskBarItemUsingID,
             openMenu: openMenu,
             closeMenu: closeMenu,
-            getNavigationSection: getNavigationSection,
+            getNavSection: getNavigationSection,
             getMenuDiv: getMenuDiv
         };
         return desktopMgr;
@@ -944,7 +962,7 @@
                       '<input type="radio" name="filter" id="vis_filter_radio_3" value="X" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_3">' + VIS.Msg.getMsg("Form") + '</label><br>' +
                       '<input type="radio" name="filter" id="vis_filter_radio_4" value="P" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_4">' + VIS.Msg.getMsg("Process") + '</label><br>' +
                       '<input type="radio" name="filter" id="vis_filter_radio_5" value="R" style="margin-bottom:20px;margin:1px;"/><label for="vis_filter_radio_5">' + VIS.Msg.getMsg("Report") + '</label><br/>' +
-                      '<input type="button" name="filter" style="background-color: #616364;color:white" value=' + VIS.Msg.getMsg("Filter") + '></input>');
+                      '<input type="button" name="filter" value=' + VIS.Msg.getMsg("Filter") + '></input>');
 
             menuUL = menuTree.find(">ul"); //menu UL element
             var options = [], itm = null;

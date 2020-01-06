@@ -339,6 +339,18 @@
         return this.vo.hasPanel;
     }
 
+    GridWindow.prototype.getFontName = function () {
+        return this.vo.FontName;
+    }
+
+    GridWindow.prototype.getAD_Image_ID = function () {
+        return this.vo.AD_Image_ID;
+    }
+
+    GridWindow.prototype.getImageUrl = function () {
+        return this.vo.ImageUrl;
+    }
+
     GridWindow.prototype.dispose = function () {
 
         originalLength = this.tabs.length;
@@ -382,6 +394,7 @@
         this.gTab = gTab;
         this.vo = gTab._vo;
         this.gridTable = new VIS.GridTable(gTab._gridTable);
+        this.gridTable.onlyCurrentDays = this.vo.onlyCurrentDays;
         this.parents = [];
         this.orderBys = [];
         this.depOnFieldColumn = [];
@@ -398,18 +411,25 @@
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
+        this.isHeaderPanel = false;
+        this.headerPanel = null;
 
         this.mDataStatusEvent;
         this.mDataListenerList = [];
 
         this.loadFields();
         this.loadTabPanels();
+        this.loadHeaderPanelItems();
         this.gridTable.addDataStatusListener(this);
         this.gridTable.setAD_Tab_ID(this.vo.AD_Tab_ID);
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTab");
+
         this.loadData(windowVo);
         windowVo = null;
+
     };
+
+
 
     GridTab.prototype.getAD_Tab_ID = function () {
         return this.vo.AD_Tab_ID;
@@ -564,6 +584,9 @@
     };
 
     GridTab.prototype.getOnlyCurrentDays = function () {
+        // if zoom enabled- return 0, no need to check any thing regarding transaction window.
+        if (this.getIsZoomAction())
+            return 0;
         return this.vo.onlyCurrentDays;
     };
 
@@ -575,6 +598,9 @@
         return this.vo.ShowSummaryLevel;
     };
 
+    GridTab.prototype.getIsTPBottomAligned = function (){
+        return this.vo.TabPanelAlignment == "H";
+    };
 
 
     /* <summary>
@@ -690,7 +716,7 @@
     };	//	getIncluded_Tab_ID
 
     GridTab.prototype.getIsAlwaysUpdateField = function () {
-        for (var i = 0; i < this.gridTable.getColumnCount() ; i++) {
+        for (var i = 0; i < this.gridTable.getColumnCount(); i++) {
             var field = this.gridTable.getField(i);
             if (field.getIsAlwaysUpdateable())
                 return true;
@@ -817,16 +843,16 @@
                     var lines = dr.getInt(0);
                     arguments[0] = lines;
                     //	{1} - Line toral
-                    var lineTotal = dr.getDecimal(2);//.toFixed(2);
+                    var lineTotal = dr.getDecimal(2).toLocaleString() ;//.toFixed(2);
                     arguments[1] = lineTotal;
                     //	{2} - Grand total (including tax, etc.)
-                    var grandTotal = dr.getDecimal(3);//.toFixed(2);
+                    var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
                     arguments[2] = grandTotal;
                     //	{3} - Currency
                     var currency = dr.getString(1);
                     arguments[3] = currency;
                     //	(4) - Grand total converted to Base
-                    var grandBase = dr.getDecimal(4);//.toFixed(2);
+                    var grandBase = dr.getDecimal(4).toLocaleString();//.toFixed(2);
                     arguments[4] = grandBase;
                     arguments[5] = ctx.getContext("$CurrencyISO");
                     filled = true;
@@ -989,8 +1015,8 @@
         //  inform APanel/..    -> dataStatus with row updated
         if (this.mDataStatusEvent == null) {
             this.mDataStatusEvent = new DataStatusEvent(null, this.getRowCount(),
-                    this.gridTable.getIsInserting(),		//	changed
-                    //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
+                this.gridTable.getIsInserting(),		//	changed
+                //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
 
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
@@ -1009,8 +1035,8 @@
         //  inform APanel/..    -> dataStatus with row updated
         if (this.mDataStatusEvent == null) {
             this.mDataStatusEvent = new DataStatusEvent(null, this.getRowCount(),
-                    this.gridTable.getIsInserting(),		//	changed
-                    //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
+                this.gridTable.getIsInserting(),		//	changed
+                //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
 
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
@@ -1121,8 +1147,7 @@
                 this.parents.push(columnName);
             //	Order By
             var sortNo = gridField.getSortNo();
-            if (sortNo == 0)
-            { }
+            if (sortNo == 0) { }
             else if (Math.abs(sortNo) == 1) {
                 this.orderBys[0] = columnName;
                 if (sortNo < 0)
@@ -1168,6 +1193,58 @@
         }
         else {
             this.hasPanel = false;
+        }
+    };
+
+    GridTab.prototype.loadHeaderPanelItems = function () {
+        if (this.vo.HeaderItems) {
+            this.isHeaderPanel = true;
+            headerPanel = this.vo.HeaderItems;
+        }
+    };
+
+    GridTab.prototype.getIsHeaderPanel = function () {
+        return this.isHeaderPanel;
+    };
+
+    GridTab.prototype.getHeaderPanelItems = function () {
+        return headerPanel;
+    }
+
+    GridTab.prototype.getHeaderHeight = function () {
+        if (this.vo.HeaderHeight && this.vo.HeaderHeight > 0) {
+
+            return this.vo.HeaderHeight + 'px';
+        }
+        else {
+            return '200px';
+        }
+    };
+
+    GridTab.prototype.getHeaderWidth = function () {
+        if (this.vo.HeaderWidth && this.vo.HeaderWidth > 0) {
+            return this.vo.HeaderWidth + 'px';
+        }
+        else {
+            return '250px';
+        }
+        
+    };
+
+    GridTab.prototype.getHeaderBackColor = function () {
+        return this.vo.HeaderBackColor;
+    };
+
+    GridTab.prototype.getHeaderPadding = function () {
+        return this.vo.HeaderPadding;
+    };
+
+    GridTab.prototype.getHeaderHorizontal = function () {
+        if (this.vo.HeaderAlignment.equals("H")) {
+            return true
+        }
+        else {
+            return false;
         }
     };
 
@@ -1317,8 +1394,8 @@
         //	e.g. Column=UPPER(Name), Key=AD_Element_IDS, Query=UPPER(AD_Element.Name) LIKE '%CUSTOMER%'
         if (tableName == null) {
             this.log.info("Not successfull - Column="
-                    + colName + ", Key=" + tabKeyColumn
-                    + ", Query=" + query);
+                + colName + ", Key=" + tabKeyColumn
+                + ", Query=" + query);
             return query.getWhereClause();
         }
         //else if(tableName.equals("M_WorkOrderComponent") && tabKeyColumn.equals("M_WorkOrder_ID")){
@@ -1336,14 +1413,16 @@
 
         query.setTableName("xx");
         var result = "EXISTS (SELECT * FROM "
-         + tableName + " xx WHERE "
-         + (query.getWhereClause(true))
-         + " AND xx." + tabKeyColumn + "="
-         + this.getTableName() + "." + tabKeyColumn + ")";
+            + tableName + " xx WHERE "
+            + (query.getWhereClause(true))
+            + " AND xx." + tabKeyColumn + "="
+            + this.getTableName() + "." + tabKeyColumn + ")";
         this.log.fine(result);
         return result;
         // return "";
     };
+
+
 
 
     GridTab.prototype.setTreeNodeID = function (nodeID) {
@@ -1369,6 +1448,10 @@
     GridTab.prototype.setIsZoomAction = function (ZoomAction) {
         this.isZoomAction = ZoomAction;
         this.gridTable.isZoomAction = ZoomAction;
+    };
+    GridTab.prototype.getIsZoomAction = function () {
+        return this.isZoomAction;
+
     };
 
 
@@ -1404,6 +1487,7 @@
             where += this.vo.WhereClause;
         }
 
+
         if (!this.ShowSummaryNodes && this.getShowSummaryLevel()) {
             if (where.length > 0) {
                 where += " AND IsSummary='N'";
@@ -1414,7 +1498,8 @@
         }
 
         //    _vo.WhereClause);
-        if (this.vo.onlyCurrentDays > 0) {
+
+        if (this.getOnlyCurrentDays() > 0) {
             if (where.length > 0)
                 where += " AND ";
 
@@ -1428,7 +1513,7 @@
                 where += "Updated>=";
             //	where.append("addDays(current_timestamp, -");
             where += "addDays(SysDate, -" +
-                 this.vo.onlyCurrentDays + ")";
+                this.vo.onlyCurrentDays + ")";
             if (showNotProcessed)
                 where += ")";
         }
@@ -1444,6 +1529,7 @@
                     success = false;
                 }
                 else {
+
                     var value = VIS.context.getWindowContext(this.vo.windowNo, lc);
                     //	Same link value?
                     if (refresh) {
@@ -1483,12 +1569,14 @@
 
         //	Final Query
         if (this.query.getIsActive()) {
+
             var q = this.validateQuery(this.query);
             if (q != null && !queryDetailAll) {
                 if (where.length > 0)
                     where += " AND ";
                 where += q;
             }
+
         }
 
         /* Query */
@@ -1555,6 +1643,7 @@
             this.gridTable.setSelectWhereClause(where.toString());
             this.gridTable.open(maxRows);
         }
+
         return success;
     };
 
@@ -1625,10 +1714,10 @@
         this.setCurrentRow(this.currentRow + 1, true);
         //  process all Callouts (no dependency check - assumed that settings are valid)
         var count = this.getFieldCount();
-        for (var i = 0; i < count ; i++)
+        for (var i = 0; i < count; i++)
             this.processCallout(this.getField(i));
         //  check validity of defaults
-        for (var i = 0; i < count ; i++) {
+        for (var i = 0; i < count; i++) {
             //this.getField(i).refreshLookup();
             // getField(i).validateValue();
             this.getField(i).setError(false);
@@ -1744,14 +1833,14 @@
             //  We have a key column
             if (this.keyColumnName != null && this.keyColumnName.length > 0) {
                 info.append(" - ")
-                .append(this.keyColumnName).append("=").append(e.Record_ID);
+                    .append(this.keyColumnName).append("=").append(e.Record_ID);
             }
             else    //  we have multiple parents
             {
                 for (var i = 0; i < this.parents.length; i++) {
                     var keyCol = this.parents[i];
                     info.append(" - ")
-                    .append(keyCol).append("=").append(this.getValue(keyCol));
+                        .append(keyCol).append("=").append(this.getValue(keyCol));
                 }
             }
             e.Info = info.toString();
@@ -1989,7 +2078,7 @@
 
         //var ret = array[key];
         //if (ret) { return true; }
-        
+
         //return false;s
 
     };
@@ -2118,12 +2207,12 @@
 
 
             if (this._subscribe == null)
-                //create new list for chat
+            //create new list for chat
             {
                 this._subscribe = {};
             }
             else
-                //if contain chat then clear list
+            //if contain chat then clear list
             {
                 this._subscribe.length = 0;
             }
@@ -2190,12 +2279,12 @@
 
 
             if (this.viewDocument == null)
-                //create new list for chat
+            //create new list for chat
             {
                 this.viewDocument = {};
             }
             else
-                //if contain chat then clear list
+            //if contain chat then clear list
             {
                 this.viewDocument.length = 0;
             }
@@ -2239,12 +2328,12 @@
 
 
             if (this.chats == null)
-                //create new list for chat
+            //create new list for chat
             {
                 this.chats = {};
             }
             else
-                //if contain chat then clear list
+            //if contain chat then clear list
             {
                 this.chats.length = 0;
             }
@@ -2813,10 +2902,10 @@
                 }
                 if (columnName.toUpperCase().endsWith("_ID"))
                     singleRowWHERE = new StringBuilder(columnName)
-                .append("=").append(value);
+                        .append("=").append(value);
                 else
                     singleRowWHERE = new StringBuilder(columnName)
-                .append("=").append(VIS.DB.to_string(value.toString()));
+                        .append("=").append(VIS.DB.to_string(value.toString()));
             }
             else if (field.getIsParentColumn()) {
                 var columnName = field.getColumnName().toLowerCase();
@@ -2831,10 +2920,10 @@
                     multiRowWHERE.append(" AND ");
                 if (columnName.toUpperCase().endsWith("_ID"))
                     multiRowWHERE.append(columnName)
-                    .append("=").append(value);
+                        .append("=").append(value);
                 else
                     multiRowWHERE.append(columnName)
-                    .append("=").append(VIS.DB.to_string(value.toString()));
+                        .append("=").append(VIS.DB.to_string(value.toString()));
             }
         }	//	for all columns
         if (singleRowWHERE != null)
@@ -3167,8 +3256,8 @@
     GridTable.prototype.setValueAt = function (value, row, col, force) {
         //	Can we edit?
         if (!this.isOpen //  not accessible
-                || row < 0 || col < 0   //  invalid index
-                || this.rowCount == 0)     //  no rows
+            || row < 0 || col < 0   //  invalid index
+            || this.rowCount == 0)     //  no rows
         {
             //console.finest("r=" + row + " c=" + col + " - R/O=" + m_readOnly + ", Rows=" + m_rowCount + " - Ignored");
             return;
@@ -3180,8 +3269,8 @@
         //  update MField
 
         if (!force && (
-                oldValue == null && value == null
-                || oldValue === value)) {
+            oldValue == null && value == null
+            || oldValue === value)) {
             // log.finest("r=" + row + " c=" + col + " - New=" + value + "==Old=" + oldValue + " - Ignored");
             return;
         }
@@ -3338,9 +3427,9 @@
         if (gt._withAccessControl) {
 
             this.SQL = VIS.MRole.addAccessSQL(this.SQL,
-            gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
+                gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
             this.SQL_Count = VIS.MRole.addAccessSQL(this.SQL_Count,
-             gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
+                gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
         }
 
         //	ORDER BY
@@ -3384,8 +3473,7 @@
                 success: function (resultt) {
                     rCount = JSON.parse(resultt);
                 },
-                error: function (e)
-                { }
+                error: function (e) { }
             });
         }
         else {
@@ -3404,8 +3492,7 @@
         }
         else {
             //console.log("clear");
-            if (this.bufferList != null)
-            { this.bufferList.length = 0; };
+            if (this.bufferList != null) { this.bufferList.length = 0; };
             if (this.mSortList != null) {
                 this.mSortList = null;
             }
@@ -3560,16 +3647,16 @@
                 var displayType = field.getDisplayType();
                 //	Integer, ID, Lookup (UpdatedBy is a numeric column)
                 if ((VIS.DisplayType.IsID(displayType) // JJ: don't touch!
-                        && (columnName.endsWith("_ID") || columnName.endsWith("_Acct")))
+                    && (columnName.endsWith("_ID") || columnName.endsWith("_Acct")))
                     || columnName.endsWith("atedBy") || columnName.endsWith("_ID_1") || columnName.endsWith("_ID_2")
                     || columnName.endsWith("_ID_3") || displayType == VIS.DisplayType.Integer) {
                     colValue = VIS.Utility.Util.getValueOfInt(colValue);	//	Integer
                 }
-                    //	Number
+                //	Number
                 else if (VIS.DisplayType.IsNumeric(displayType)) {
                     colValue = VIS.Utility.Util.getValueOfDecimal(colValue);			//	BigDecimal
                 }
-                    //	Date
+                //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
 
 
@@ -3579,17 +3666,17 @@
                     //colValue = dte.toISOString();
                     dte = null;
                 }
-                    //	RowID or Key (and Selection)
+                //	RowID or Key (and Selection)
                 else if (displayType == VIS.DisplayType.RowID)
                     colValue = null;
-                    //	YesNo
+                //	YesNo
                 else if (displayType == VIS.DisplayType.YesNo) {
                     var str = colValue.toString();
                     if (field.getIsEncryptedColumn())
                         str = this.decrypt(str);
                     colValue = str.equals("Y");	//	Boolean
                 }
-                    //	LOB
+                //	LOB
                 else if (VIS.DisplayType.IsLOB(displayType)) {
                     var value = colValue;
                     if (value == null)
@@ -3602,7 +3689,7 @@
                         colValue = value;
                     }
                 }
-                    //	String
+                //	String
                 else
                     colValue = colValue.toString();//string
                 //	Encrypted
@@ -3688,7 +3775,7 @@
         }
 
         if (this.readOnly)
-            //	If Processed - not editable (Find always editable)  -> ok for changing payment terms, etc.
+        //	If Processed - not editable (Find always editable)  -> ok for changing payment terms, etc.
         {
             log.warning("IsReadOnly - ignored");
             this.dataIgnore();
@@ -3848,13 +3935,15 @@
             AD_Client_ID: AD_Client_ID,
             AD_Org_ID: AD_Org_ID,
             SelectSQL: VIS.secureEngine.encrypt(this.SQL_Select),
-            AD_WIndow_ID: m_fields[0].getAD_Window_ID() // vinay bhatt window id
+            AD_WIndow_ID: m_fields[0].getAD_Window_ID(), // vinay bhatt window id
+            MaintainVersions: false
+            //ImmediateSave: true,
+            //ValidFrom: new Date().toISOString(),
         };
 
         if (this.selectedTreeNode > 0) {
             gridTableIn['SelectedTreeNodeID'] = this.selectedTreeNode;
         }
-
 
         if (this.treeNode_ID > 0) {
             gridTableIn['ParentNodeID'] = this.treeNode_ID;
@@ -3862,6 +3951,65 @@
             gridTableIn['TreeTableID'] = this.treeTable_ID;
         }
 
+        // check if this is master window and if there is change in maintain version field
+        if (this.onlyCurrentDays == 0 && this.maintainVersionFieldChanged(RowData, OldRowData)) {
+            var self = this;
+            // in case of new record in Master Version window
+            if (OldRowData["updatedby"] == null) {
+                gridTableIn.MaintainVersions = true;
+                gridTableIn.ImmediateSave = true;
+                gridTableIn.ValidFrom = new Date().toISOString();
+                var out = self.dataSaveDB(gridTableIn, rowDataNew);
+                // check if there is workflow linked on version table
+                // then do not save in Master window and reset 
+                // and display message to user
+                if (out.Status == "E") {
+                    VIS.ADialog.info(out.ErrorMsg);
+                }
+                else if (out.Status == "W") {
+                    VIS.ADialog.info("SentForApproval");
+                    self.dataRefreshAll();
+                }
+                return out.Status;
+            }
+            else {
+                // in case of update display UI to user, 
+                // whether user want to save immediately or for future
+                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, function (immediate, valFrom, verRecID) {
+                    gridTableIn.MaintainVersions = true;
+                    gridTableIn.ImmediateSave = immediate;
+                    gridTableIn.ValidFrom = new Date(valFrom).toISOString();
+                    gridTableIn.VerRecID = verRecID;
+                    var out = self.dataSaveDB(gridTableIn, rowDataNew);
+                    // if Stauts is not OK
+                    if (out.Status != "O") {
+                        // if there is any error then display error message
+                        if (out.Status == "E") {
+                            VIS.ADialog.info(out.ErrorMsg);
+                        }
+                        else {
+                            // in case of sucess refresh UI
+                            self.dataRefreshAll();
+                            // if sent for WF Approval then display Message
+                            if (out.Status == "W")
+                                VIS.ADialog.info("SentForApproval");
+                            // if saved for future then display Message and refresh UI
+                            else if (out.Status == "F")
+                                VIS.ADialog.info("SavedForFuture");
+                        }
+                    }
+                    return out.Status;
+                });
+                msVer.show();
+            }
+        }
+        else {
+            var out = this.dataSaveDB(gridTableIn, rowDataNew);
+            return out.Status;
+        }
+    };
+
+    GridTable.prototype.dataSaveDB = function (gridTableIn, rowDataNew) {
         var out = VIS.dataContext.insertOrUpdateWRecord(gridTableIn);
 
         out = JSON.parse(out);
@@ -3870,8 +4018,9 @@
             //
         }
         else {
-
-            $.extend(true, rowDataNew, this.readDataOfObject(out.RowData));
+            if (out.RowData) {
+                $.extend(true, rowDataNew, this.readDataOfObject(out.RowData));
+            }
 
             this.fireTableModelChanged(VIS.VTable.prototype.ROW_REFRESH, rowDataNew, this.rowChanged);
 
@@ -3897,9 +4046,8 @@
             this.fireDataStatusIEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
         }
 
-        return out.Status;
+        return out;
     };
-
 
     GridTable.prototype.createGridFieldArr = function (m_fields, lessdata) {
 
@@ -3917,12 +4065,12 @@
                         this.gFieldLessData.push(
                             //{
                             //IsVirtualColumn: field.getIsVirtualColumn(),
-                           // DisplayType: field.getDisplayType(),
+                            // DisplayType: field.getDisplayType(),
                             field.getColumnName().toLowerCase()
-                           // IsKey: field.getIsKey(),
-                           // ColumnSQL: field.getColumnSQL(true),
-                           // IsEncrypted: field.getIsEncrypted(),
-                           // IsParentColumn: field.getIsParentColumn()
+                            // IsKey: field.getIsKey(),
+                            // ColumnSQL: field.getColumnSQL(true),
+                            // IsEncrypted: field.getIsEncrypted(),
+                            // IsParentColumn: field.getIsParentColumn()
                         );
                 }
                 return this.gFieldLessData;
@@ -4076,24 +4224,24 @@
                 if (field.getIsVirtualColumn())
                     ;
                 else if (field.getIsKey()
-                        || columnName.equals("AD_Client_ID")
-                        || columnName.equals("IsActive")
+                    || columnName.equals("AD_Client_ID")
+                    || columnName.equals("IsActive")
                     //
-                        || columnName.startsWith("Created") || columnName.startsWith("Updated")
-                        || columnName.equals("EntityType") || columnName.equals("DocumentNo")
-                        || columnName.equals("Processed") || columnName.equals("IsSelfService")
-                        || columnName.equals("DocAction") || columnName.equals("DocStatus")
-                        || columnName.startsWith("Ref_")
-                        || columnName.equals("Posted")
+                    || columnName.startsWith("Created") || columnName.startsWith("Updated")
+                    || columnName.equals("EntityType") || columnName.equals("DocumentNo")
+                    || columnName.equals("Processed") || columnName.equals("IsSelfService")
+                    || columnName.equals("DocAction") || columnName.equals("DocStatus")
+                    || columnName.startsWith("Ref_")
+                    || columnName.equals("Posted")
                     //	Order/Invoice
-                        || columnName.equals("GrandTotal") || columnName.equals("TotalLines")
-                        || columnName.equals("C_CashLine_ID") || columnName.equals("C_Payment_ID")
-                        || columnName.equals("IsPaid") || columnName.equals("IsAllocated")
-                        || columnName.equalsIgnoreCase("C_Location_ID")
-                        || columnName.equals("IsApproved") || columnName.equals("IsDelivered")
-                        || columnName.equals("IsInvoiced") || columnName.equals("TotalDr")
-                        || columnName.equals("TotalCr")
-                        || columnName.equalsIgnoreCase("I_IsImported")) {
+                    || columnName.equals("GrandTotal") || columnName.equals("TotalLines")
+                    || columnName.equals("C_CashLine_ID") || columnName.equals("C_Payment_ID")
+                    || columnName.equals("IsPaid") || columnName.equals("IsAllocated")
+                    || columnName.equalsIgnoreCase("C_Location_ID")
+                    || columnName.equals("IsApproved") || columnName.equals("IsDelivered")
+                    || columnName.equals("IsInvoiced") || columnName.equals("TotalDr")
+                    || columnName.equals("TotalCr")
+                    || columnName.equalsIgnoreCase("I_IsImported")) {
                     var oo = field.getDefault(this.ctx, tempWindowNo);
                     rowData[colNameLower] = oo;
 
@@ -4524,29 +4672,29 @@
             this.defaultModel[columnName.toLowerCase()] = new Number();
         }
 
-            //	Number
+        //	Number
         else if (VIS.DisplayType.IsNumeric(displayType)) {
             //dc = new DataColumn(columnName, typeof(Decimal));			//	BigDecimal
             this.defaultModel[columnName.toLowerCase()] = new Number();
         }
-            //	Date
+        //	Date
         else if (VIS.DisplayType.IsDate(displayType)) {
             //dc = new DataColumn(columnName, typeof(DateTime));	//	Timestamp
             this.defaultModel[columnName.toLowerCase()] = new Date();
         }
-            //	RowID or Key (and Selection)
+        //	RowID or Key (and Selection)
         else if (displayType == VIS.DisplayType.RowID) {
             dc = new DataColumn(columnName, typeof (Object));
             this.defaultModel[columnName.toLowerCase()] = new Object();
         }
-            //	YesNo
+        //	YesNo
         else if (displayType == VIS.DisplayType.YesNo) {
             //if (field.isEncryptedColumn())
             //	str = (String)decrypt(str);
             //dc = new DataColumn(columnName, typeof(String));	//	Boolean
             this.defaultModel[columnName.toLowerCase()] = new Boolean();
         }
-            //	LOB
+        //	LOB
         else if (VIS.DisplayType.IsLOB(displayType)) {
             //if (DisplayType.Binary == displayType)
             // {
@@ -4558,8 +4706,8 @@
             this.defaultModel[columnName.toLowerCase()] = new String();
             // }
         }
-            // For EnterpriseDB (Vienna Type Long Text is stored as Text in EDB)
-            //	String
+        // For EnterpriseDB (Vienna Type Long Text is stored as Text in EDB)
+        //	String
         else {
             //dc = new DataColumn(columnName, typeof(String));
             this.defaultModel[columnName.toLowerCase()] = new String();
@@ -4583,6 +4731,23 @@
         this.gridFields = null;
         this.gFieldLessData = null;
         this.gFieldData = null;
+    };
+
+    GridTable.prototype.maintainVersionFieldChanged = function (rowData, oldRowData) {
+        // return false if new Record is inserted
+        // do not ask for date if new Record
+        // if (oldRowData["updatedby"]) {
+            if (this.gridFields && this.gridFields.length > 0) {
+                for (var i = 0; i < this.gridFields.length; i++) {
+                    if (this.gridFields[i].vo.IsMaintainVersions) {
+                        var colName = this.gridFields[i].vo.ColumnName.toLowerCase();
+                        if (rowData[colName] != oldRowData[colName])
+                            return true;
+                    }
+                }
+            }
+        // }
+        return false;
     };
 
     //********************* END *****************//
@@ -4789,6 +4954,22 @@
         return (this.vo.DisplayLength >= 30);
     };
 
+    GridField.prototype.getFieldColSpan = function () {
+        //	if (m_vo.displayType == DisplayType.String 
+        //		|| m_vo.displayType == DisplayType.Text 
+        //		|| m_vo.displayType == DisplayType.Memo
+        //		|| m_vo.displayType == DisplayType.TextLong
+        //		|| m_vo.displayType == DisplayType.Image)
+        if (this.vo.DisplayLength <= 9)
+            return 1;
+        if (this.vo.DisplayLength <= 19)
+            return 2;
+        if (this.vo.DisplayLength <= 29)
+            return 3;
+        return 4;
+    };
+
+
     GridField.prototype.getIsMandatory = function (checkContext) {
 
         //  Do we have mandatory logic
@@ -4807,10 +4988,10 @@
         //	DocumentNo/Value/ASI ars not mandatory (persistency layer manages them)
         var _vo = this.vo;
         if ((_vo.IsKey && _vo.ColumnName.endsWith("_ID"))
-                || _vo.ColumnName.startsWith("Created") || _vo.ColumnName.startsWith("Updated")
-                || _vo.ColumnName.equals("Value")
-                || _vo.ColumnName.equals("DocumentNo")
-                || _vo.ColumnName.equals("M_AttributeSetInstance_ID"))	//	0 is valid
+            || _vo.ColumnName.startsWith("Created") || _vo.ColumnName.startsWith("Updated")
+            || _vo.ColumnName.equals("Value")
+            || _vo.ColumnName.equals("DocumentNo")
+            || _vo.ColumnName.equals("M_AttributeSetInstance_ID"))	//	0 is valid
             return false;
 
         //  Mandatory if displayed
@@ -4883,7 +5064,7 @@
             // the window to be rendered read only.
             if (_vo.ColumnName.equals("AD_Org_ID")) {
                 if (ctx.getWindowContext(_vo.windowNo, "AD_Org_ID") == null ||
-                        ctx.getWindowContext(_vo.windowNo, "AD_Org_ID").length == 0) {
+                    ctx.getWindowContext(_vo.windowNo, "AD_Org_ID").length == 0) {
                     ctx.setWindowContext(_vo.windowNo, "AD_Org_ID", ctx.getContext("#AD_Org_ID"));
                 }
             }
@@ -4903,8 +5084,8 @@
 
 
             if (!VIS.MRole.canUpdate(
-           AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID, false)
-               || !VIS.MRole.getWindowAccess(AD_Window_ID))
+                AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID, false)
+                || !VIS.MRole.getWindowAccess(AD_Window_ID))
                 return false;
             if (!VIS.MRole.getIsColumnAccess(AD_Table_ID, this.vo.AD_Column_ID, false))
                 return false;
@@ -4920,8 +5101,8 @@
 
         //  Always editable if Active
         if (_vo.ColumnName.equals("Processing")
-                || _vo.ColumnName.equals("DocAction")
-                || _vo.ColumnName.equals("GenerateTo"))
+            || _vo.ColumnName.equals("DocAction")
+            || _vo.ColumnName.equals("GenerateTo"))
             return true;
 
         //  Record is Processed	***
@@ -4996,6 +5177,13 @@
     GridField.prototype.getIsFieldOnly = function () {
         return this.vo.IsFieldOnly;
     };
+    GridField.prototype.getShowLabel = function () {
+        return true;
+    };
+
+    //GridField.prototype.getShowIcon = function () {
+    //    return true;
+    //};
 
     GridField.prototype.getIsKey = function () {
         return this.vo.IsKey;
@@ -5267,7 +5455,7 @@
             this.log.fine("[SystemAccess] " + vo.ColumnName + "=0");
             return 0;
         }
-            //	Set Org to System, if Client access
+        //	Set Org to System, if Client access
         else if (VIS.Consts.ACCESSLEVEL_SystemPlusClient.equals(ctx.getWindowTabContext(vo.windowNo, vo.tabNo, "AccessLevel"))
             && vo.ColumnName.equals("AD_Org_ID")) {
             this.log.fine("[ClientAccess] " + vo.ColumnName + "=0");
@@ -5489,7 +5677,7 @@
             this.log.fine("[SystemAccess] " + vo.ColumnName + "=0");
             return 0;
         }
-            //	Set Org to System, if Client access
+        //	Set Org to System, if Client access
         else if (VIS.Consts.ACCESSLEVEL_SystemPlusClient.equals(ctx.getWindowTabContext(vo.windowNo, vo.tabNo, "AccessLevel"))
             && vo.ColumnName.equals("AD_Org_ID")) {
             this.log.fine("[ClientAccess] " + vo.ColumnName + "=0");
@@ -5689,7 +5877,7 @@
         try {
             //	IDs & Integer & CreatedBy/UpdatedBy
             if (this.vo.ColumnName.endsWith("atedBy")
-                    || this.vo.ColumnName.toUpperCase().endsWith("_ID")) {
+                || this.vo.ColumnName.toUpperCase().endsWith("_ID")) {
                 try	//	defaults -1 => null
                 {
                     var ii = parseInt(value);
@@ -5888,6 +6076,68 @@
 
     GridField.prototype.getAskUserBGProcess = function () {
         return this.vo.AskUserBGProcess;
+    };
+
+    /****************************************/
+
+    GridField.prototype.getIsHeaderPanelitem = function () {
+        return this.vo.IsHeaderPanelitem;
+    };
+
+    GridField.prototype.getHeaderOverrideReference = function () {
+        return this.vo.HeaderOverrideReference;
+    };
+
+    GridField.prototype.getHeaderStyle = function () {
+        return this.vo.HeaderStyle;
+    };
+
+    GridField.prototype.getHeaderHeadingOnly = function () {
+        return this.vo.HeaderHeadingOnly;
+    };
+
+    GridField.prototype.getHeaderSeqno = function () {
+        return this.vo.HeaderSeqno;
+    };
+
+    GridField.prototype.getHeaderIconOnly = function () {
+        return this.vo.HeaderIconOnly;
+    };
+
+    GridField.prototype.getHtmlStyle = function () {
+        return this.vo.HtmlStyle;
+    };
+
+    GridField.prototype.getShowIcon = function () {
+        return this.vo.ShowIcon;
+    };
+
+    GridField.prototype.getAD_Image_ID = function () {
+        return this.vo.AD_Image_ID;
+    };
+
+    GridField.prototype.getFontClass = function () {
+        return this.vo.FontClass;
+    };
+
+    GridField.prototype.getPlaceHolder = function () {
+        return this.vo.PlaceHolder;
+    };
+
+    GridField.prototype.getImageName = function () {
+        return this.vo.ImageName;
+    };
+
+    GridField.prototype.getCellSpace = function () {
+        return this.vo.CellSpace;
+    };
+
+    GridField.prototype.getFieldBreadth = function () {
+        return this.vo.FieldBreadth;
+    };
+
+    GridField.prototype.getIsLineBreak = function () {
+        return this.vo.LineBreak;
     };
 
 

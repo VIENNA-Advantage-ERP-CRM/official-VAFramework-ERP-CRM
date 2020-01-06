@@ -25,104 +25,104 @@
         Globalize = window.Globalize;
     }
 
-    Globalize.addCultureInfo("sq-AL", "default", {
-        name: "sq-AL",
-        englishName: "Albanian (Albania)",
-        nativeName: "shqipe (Shqipëria)",
-        language: "sq",
-        numberFormat: {
-            ",": ".",
-            ".": ",",
-            negativeInfinity: "-infinit",
-            positiveInfinity: "infinit",
-            percent: {
-                ",": ".",
-                ".": ","
-            },
-            currency: {
-                pattern: ["-n$", "n$"],
-                ",": ".",
-                ".": ",",
-                symbol: "Lek"
-            }
-        },
-        calendars: {
-            standard: {
-                "/": "-",
-                firstDay: 1,
-                days: {
-                    names: ["e diel", "e hënë", "e martë", "e mërkurë", "e enjte", "e premte", "e shtunë"],
-                    namesAbbr: ["Die", "Hën", "Mar", "Mër", "Enj", "Pre", "Sht"],
-                    namesShort: ["Di", "Hë", "Ma", "Më", "En", "Pr", "Sh"]
-                },
-                months: {
-                    names: ["janar", "shkurt", "mars", "prill", "maj", "qershor", "korrik", "gusht", "shtator", "tetor", "nëntor", "dhjetor", ""],
-                    namesAbbr: ["Jan", "Shk", "Mar", "Pri", "Maj", "Qer", "Kor", "Gsh", "Sht", "Tet", "Nën", "Dhj", ""]
-                },
-                AM: ["PD", "pd", "PD"],
-                PM: ["MD", "md", "MD"],
-                patterns: {
-                    d: "yyyy-MM-dd",
-                    D: "yyyy-MM-dd",
-                    t: "h:mm.tt",
-                    T: "h:mm:ss.tt",
-                    f: "yyyy-MM-dd h:mm.tt",
-                    F: "yyyy-MM-dd h:mm:ss.tt",
-                    Y: "yyyy-MM"
-                }
-            }
-        },
-        messages: {
-            "Connection": "Lidhje",
-            "Defaults": "defaults",
-            "Login": "hyrje",
-            "File": "skedar",
-            "Exit": "dalje",
-            "Help": "Ndihmë",
-            "About": "për",
-            "Host": "Mikpritës",
-            "Database": "Baza e të dhënave",
-            "User": "përdorues",
-            "EnterUser": "Vendosni ID e Përdoruesit të Aplikimit",
-            "Password": "fjalëkalim",
-            "EnterPassword": "Vendosni fjalëkalimin e aplikacionit",
-            "Language": "Gjuhe",
-            "SelectLanguage": "Zgjidhni gjuhën tuaj",
-            "Role": "rol",
-            "Client": "klient",
-            "Organization": "organizatë",
-            "Date": "data",
-            "Warehouse": "depo",
-            "Printer": "printer",
-            "Connected": "i lidhur",
-            "NotConnected": "Nuk është e lidhur",
-            "DatabaseNotFound": "Baza e të dhënave nuk u gjet",
-            "UserPwdError": "Përdoruesi nuk përputhet me fjalëkalimin",
-            "RoleNotFound": "Roli nuk u gjet / e plotë",
-            "Authorized": "i autorizuar",
-            "Ok": "Ne rregull",
-            "Cancel": "anuloj",
-            "VersionConflict": "Konflikti i versionit:",
-            "VersionInfo": "Server <> Klient",
-            "PleaseUpgrade": "Ju lutemi shkarkoni versionin e ri nga Serveri",
-            "GoodMorning": "Miremengjes",
-            "GoodAfternoon": "Mirembrema",
-            "GoodEvening": "Mirembrema",
+Globalize.addCultureInfo( "sq-AL", "default", {
+	name: "sq-AL",
+	englishName: "Albanian (Albania)",
+	nativeName: "shqipe (Shqipëria)",
+	language: "sq",
+	numberFormat: {
+		",": ".",
+		".": ",",
+		negativeInfinity: "-infinit",
+		positiveInfinity: "infinit",
+		percent: {
+			",": ".",
+			".": ","
+		},
+		currency: {
+			pattern: ["-n$","n$"],
+			",": ".",
+			".": ",",
+			symbol: "Lek"
+		}
+	},
+	calendars: {
+		standard: {
+			"/": "-",
+			firstDay: 1,
+			days: {
+				names: ["e diel","e hënë","e martë","e mërkurë","e enjte","e premte","e shtunë"],
+				namesAbbr: ["Die","Hën","Mar","Mër","Enj","Pre","Sht"],
+				namesShort: ["Di","Hë","Ma","Më","En","Pr","Sh"]
+			},
+			months: {
+				names: ["janar","shkurt","mars","prill","maj","qershor","korrik","gusht","shtator","tetor","nëntor","dhjetor",""],
+				namesAbbr: ["Jan","Shk","Mar","Pri","Maj","Qer","Kor","Gsh","Sht","Tet","Nën","Dhj",""]
+			},
+			AM: ["PD","pd","PD"],
+			PM: ["MD","md","MD"],
+			patterns: {
+				d: "yyyy-MM-dd",
+				D: "yyyy-MM-dd",
+				t: "h:mm.tt",
+				T: "h:mm:ss.tt",
+				f: "yyyy-MM-dd h:mm.tt",
+				F: "yyyy-MM-dd h:mm:ss.tt",
+				Y: "yyyy-MM"
+			}
+		}
+    },
+    messages: {
+        "Connection": "Lidhje",
+        "Defaults": "defaults",
+        "Login": "hyrje",
+        "File": "skedar",
+        "Exit": "dalje",
+        "Help": "Ndihmë",
+        "About": "për",
+        "Host": "Mikpritës",
+        "Database": "Baza e të dhënave",
+        "User": "përdorues",
+        "EnterUser": "Vendosni ID e Përdoruesit të Aplikimit",
+        "Password": "fjalëkalim",
+        "EnterPassword": "Vendosni fjalëkalimin e aplikacionit",
+        "Language": "Gjuhe",
+        "SelectLanguage": "Zgjidhni gjuhën tuaj",
+        "Role": "rol",
+        "Client": "klient",
+        "Organization": "organizatë",
+        "Date": "data",
+        "Warehouse": "depo",
+        "Printer": "printer",
+        "Connected": "i lidhur",
+        "NotConnected": "Nuk është e lidhur",
+        "DatabaseNotFound": "Baza e të dhënave nuk u gjet",
+        "UserPwdError": "Përdoruesi nuk përputhet me fjalëkalimin",
+        "RoleNotFound": "Roli nuk u gjet / e plotë",
+        "Authorized": "i autorizuar",
+        "Ok": "Ne rregull",
+        "Cancel": "anuloj",
+        "VersionConflict": "Konflikti i versionit:",
+        "VersionInfo": "Server <> Klient",
+        "PleaseUpgrade": "Ju lutemi shkarkoni versionin e ri nga Serveri",
+        "GoodMorning": "Miremengjes",
+        "GoodAfternoon": "Mirembrema",
+        "GoodEvening": "Mirembrema",
 
-            //New Resource
+        //New Resource
 
-            "Back": "prapa",
-            "SelectRole": "Zgjidhni Rolin",
-            "SelectOrg": "Zgjidhni Organizatën",
-            "SelectClient": "Zgjidhni Klientin",
-            "SelectWarehouse": "Zgjidhni Magazinë",
-            "VerifyUserLanguage": "Verifikimi i përdoruesit dhe gjuhës",
-            "LoadingPreference": "Preferenca për ngarkim",
-            "Completed": "i përfunduar",
-            //new
-            "RememberMe": "Më kujto",
+        "Back": "prapa",
+        "SelectRole": "Zgjidhni Rolin",
+        "SelectOrg": "Zgjidhni Organizatën",
+        "SelectClient": "Zgjidhni Klientin",
+        "SelectWarehouse": "Zgjidhni Magazinë",
+        "VerifyUserLanguage": "Verifikimi i përdoruesit dhe gjuhës",
+        "LoadingPreference": "Preferenca për ngarkim",
+        "Completed": "i përfunduar",
+        //new
+        "RememberMe": "Më kujto",
 
-        }
-    });
+    }
+});
 
 }(this));

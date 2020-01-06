@@ -5,8 +5,8 @@
         this.onClose = null; //outer apanel close function
 
         var $maindiv = $('<div class="vis-forms-container"></div>'); //layout
-        var $div = $('<div style="overflow-y:auto;height:216px;margin-right:-2px;margin-bottom:15px"></div>');
-        var $inputChat = $('<textarea  id="input-chat-new" style="Height:70px;width:624px;text-wrap:normal;margin-top:0px;font-size: 10pt;resize: none;margin-bottom:-10px;margin-right:3px"  maxlength="500" />');
+        var $div = $('<div class="vis-chatdetailouterwrap"></div>');
+        var $inputChat = $('<textarea  id="input-chat-new" class="vis-chat-msgbox"  maxlength="500" />');
         //  var $buttonsdiv = $('<div style="overflow:auto"></div>');
         // var $btnOK = $('<button>');
         // var $btnCancel = $('<button>');
@@ -26,7 +26,7 @@
 
             ch = new VIS.ChildDialog();
             ch.setContent($maindiv);
-            ch.setHeight(428);
+            ch.setHeight(450);
             ch.setWidth(655);
             ch.setTitle(VIS.Msg.getMsg("Chat"));
             ch.setModal(true);
@@ -110,28 +110,30 @@
                     //     (Globalize.format(date, 'G', Globalize.cultureSelector));
 
 
-                    var str = '   <div style="margin-bottom: 15px; border: 1px solid DarkGray; min-height: 50px; border-radius: 4px;overflow-y:auto;margin-right:5px">';
+                    var str = '   <div class="vis-chatboxwrap">';
 
 
                     if (VIS.Application.isRTL) {
-                        str += '<div style="overflow: auto;height: 48px;width: 48px;display: inline;float: right;margin: 5px;position:relative;line-height:45px;text-align:center;">';
+                        str += '<div class="vis-chatimgwrap">';
                     }
                     else {
-                        str += '<div style="overflow: auto;height: 48px;width: 48px;display: inline;float: left;margin: 5px;position:relative;line-height:45px;text-align:center;">';
+                        str += '<div class="vis-chatimgwrap">';
                     }
 
                     var ispic = false;
 
 
                     if (data.subChat[chat].AD_Image_ID == 0) {
-                        str += "<img  data-uID='" + data.subChat[chat].AD_User_ID + "'  style=\"cursor:pointer;height: 48px;width: 48px;\" src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
+                        //str += "<img  data-uID='" + data.subChat[chat].AD_User_ID + "'  src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
+                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].AD_User_ID + "'></i>";                        
+
                         ispic = true;
                     }
                     else {
                         for (var a in data.userimages) {
                             if (data.userimages[a].AD_Image_ID == data.subChat[chat].AD_Image_ID && data.userimages[a].UserImg != "NoRecordFound" && data.userimages[a].UserImg != "FileDoesn'tExist") {
 
-                                str += '<img  data-uID="' + data.subChat[chat].AD_User_ID + '"  style="cursor:pointer;vertical-align: middle;" src="' + VIS.Application.contextUrl + data.userimages[a].UserImg + '" />';
+                                str += '<img  data-uID="' + data.subChat[chat].AD_User_ID + '" src="' + VIS.Application.contextUrl + data.userimages[a].UserImg + '" />';
                                 ispic = true;
                                 break;
                             }
@@ -141,17 +143,17 @@
 
 
                     if (ispic == false) {
-                        str += "<img   data-uID='" + data.subChat[chat].AD_User_ID + "'  style=\"cursor:pointer;height: 48px;width: 48px;\" src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
+                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].AD_User_ID + "'></i>";
                     }
 
 
-                    str += '</div><div style="overflow-y;margin-bottom:5px"><div style="overflow:auto">';
+                    str += '</div><div class="vis-chatdetailwrap"><div style="display: flex;">';
 
                     if (VIS.Application.isRTL) {
-                        str += '<span data-uID="' + data.subChat[chat].AD_User_ID + '"  style="float: right; color: #3892DA;;font-size: 10pt;margin-top:2px;cursor:pointer ">';
+                        str += '<span data-uID="' + data.subChat[chat].AD_User_ID + '" class="vis-chatusername">';
                     }
                     else {
-                        str += '<span data-uID="' + data.subChat[chat].AD_User_ID + '"  style="float: left; color: #3892DA;;font-size: 10pt;margin-top:2px;cursor:pointer ">';
+                        str += '<span data-uID="' + data.subChat[chat].AD_User_ID + '" class="vis-chatusername">';
                     }
 
                     if (VIS.Env.getCtx().getAD_User_ID() == data.subChat[chat].AD_User_ID) {
@@ -162,18 +164,18 @@
                     }
 
                     if (VIS.Application.isRTL) {
-                        str += '</span><span style="display: block; text-align: right;float:left; margin-left: 5px;margin-top:2px;font-size: 10pt;">' + date + '</span></div><div  style="overflow:auto">';
+                        str += '</span><span style="font-size: .75rem; padding-right: 5px;">' + date + '</span></div><div  style="overflow:auto">';
                     }
                     else {
-                        str += '</span><span style="display: block; text-align: right;float:right; margin-right: 5px;margin-top:2px;font-size: 10pt;">' + date + '</span></div><div  style="overflow:auto">';
+                        str += '</span><span style="font-size: .75rem; padding-right: 5px;">' + date + '</span></div><div>';
                     }
 
                           //+ '<textarea readonly style="width:640px">' + data[chat].ChatData + '</textarea>'
                     if (VIS.Application.isRTL) {
-                        str += '<span style="width:526px;font-size: 10pt;margin-right:5px">' + VIS.Utility.encodeText(data.subChat[chat].ChatData) + '</span></div>'
+                        str += '<span style="font-size: .75rem;padding-right:5px">' + VIS.Utility.encodeText(data.subChat[chat].ChatData) + '</span></div>'
                     }
                     else {
-                        str += '<span style="width:526px;font-size: 10pt;">' + VIS.Utility.encodeText(data.subChat[chat].ChatData) + '</span></div>'
+                        str += '<span style="font-size: .75rem;padding-right:5px">' + VIS.Utility.encodeText(data.subChat[chat].ChatData) + '</span></div>'
                     }
                     str += '</div>'
                     str += '            </div>  ';

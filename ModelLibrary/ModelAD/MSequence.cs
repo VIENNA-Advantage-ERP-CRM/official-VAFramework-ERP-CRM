@@ -648,7 +648,7 @@ namespace VAdvantage.Model
 
                     // if Start Document Sequence every month value is True.
                     if (isStartNewMonth)
-                    {                        
+                    {
                         calendarYearMonth += (docDate.Value.Month.ToString().Length > 1 ? docDate.Value.Month.ToString() : "0" + docDate.Value.Month.ToString());
                     }
                 }
@@ -1431,6 +1431,40 @@ namespace VAdvantage.Model
             return null;
         }
 
+        /// <summary>
+        /// Get Document No from Table (when the document doesn't have Document Type)
+        /// </summary>
+        /// <param name="TableName">Table Name</param>
+        /// <param name="trxName">Transaction Name</param>
+        /// <param name="ctx">Context</param>
+        /// <param name="po">object of PO class</param>
+        /// <returns>document no or null</returns>
+        public static String GetDocumentNo(String TableName, Trx trxName, Ctx ctx, PO po)
+        {
+            if (TableName == null || TableName.Length == 0)
+            {
+                s_log.Severe("TableName missing");
+                return null;
+            }
+
+            MSequence seq = MSequence.Get(ctx, TableName, trxName, false);
+            if (seq == null || seq.Get_ID() == 0)
+            {
+                if (!MSequence.CreateTableSequence(ctx, TableName, trxName, false))
+                {
+                    s_log.Severe("Could not create table sequence");
+                    return null;
+                }
+
+                seq = MSequence.Get(ctx, TableName, trxName, false);
+                if (seq == null || seq.Get_ID() == 0)
+                {
+                    s_log.Warning("No Sequence for Table - " + TableName);
+                    return null;
+                }
+            }
+            return GetDocumentNoFromSeq(seq, trxName, po);
+        }
 
         //[MethodImpl(MethodImplOptions.Synchronized)]
         //public static String GetDocumentNo(int C_DocType_ID, Trx trxName,Ctx ctx)
@@ -1570,7 +1604,30 @@ namespace VAdvantage.Model
             return seq.Save();
         }	//	createTableSequence
 
-
+        /// <summary>
+        /// Create Table ID Sequence 
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="TableName">table name</param>
+        /// <param name="trxName">transaction</param>
+        /// <param name="tableID">Used for Record ID</param>
+        /// <returns>true if created</returns>
+        public static Boolean CreateTableSequence(Ctx ctx, String TableName, Trx trxName, Boolean tableID)
+        {
+            if (tableID)
+            {
+                return MSequence.CreateTableSequence(ctx, TableName, trxName);
+            }
+            else
+            {
+                MSequence seq = new MSequence(ctx, 0, trxName);
+                seq.SetClientOrg(ctx.GetAD_Client_ID(), 0);
+                seq.SetName(PREFIX_DOCSEQ + TableName);
+                seq.SetDescription("DocumentNo/Value for Table " + TableName);
+                seq.SetIsTableID(tableID);
+                return seq.Save();
+            }
+        }
 
         /// <summary>
         /// Delete Table ID Sequence
@@ -1582,7 +1639,7 @@ namespace VAdvantage.Model
         public static Boolean DeleteTableSequence(Ctx ctx, String TableName, Trx trxName)
         {
             MSequence seq = Get(ctx, TableName, trxName);
-            return seq.Delete(true,trxName);
+            return seq.Delete(true, trxName);
         }	//	deleteTableSequence
 
 
@@ -1643,7 +1700,73 @@ namespace VAdvantage.Model
             return retValue;
         }	//	get
 
+        /// <summary>
+        /// Get Sequence for Table
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="tableName">Table Name</param>
+        /// <param name="trxName">Transaction Name</param>
+        /// <param name="tableID">Used for Record ID</param>
+        /// <returns></returns>
+        public static MSequence Get(Ctx ctx, String tableName, Trx trxName, Boolean tableID)
+        {
+            if (!tableID)
+            {
+                tableName = PREFIX_DOCSEQ + tableName;
+            }
 
+            String sql = "SELECT * FROM AD_Sequence "
+                + "WHERE UPPER(Name)='" + tableName.ToUpper() + "'"
+                + " AND IsTableID=@IsTableID";
+            if (!tableID)
+                sql = sql + " AND AD_Client_ID=@AD_Client_ID";
+            MSequence retValue = null;
+            DataTable dt = null;
+            IDataReader idr = null;
+            SqlParameter[] param = new SqlParameter[2];
+            param[0] = new SqlParameter("@IsTableID", (tableID ? "Y" : "N"));
+            if (!tableID)
+            {
+                param[1] = new SqlParameter("@AD_Client_ID", ctx.GetAD_Client_ID());
+            }
+            try
+            {
+                idr = DB.ExecuteReader(sql, param, trxName);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                DataRow dr = null;
+
+                int totalCount = dt.Rows.Count;
+                for (int i = 0; i < totalCount; i++)
+                {
+                    dr = dt.Rows[i];
+                    retValue = new MSequence(ctx, dr, trxName);
+                    if (i > 0)
+                    {
+                        s_log.Log(Level.SEVERE, "More then one sequence for " + tableName);
+                    }
+                }
+                dr = null;
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                s_log.Log(Level.SEVERE, sql, e);
+            }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                dt = null;
+            }
+            return retValue;
+        }
 
         /// <summary>
         /// Check/Initialize Client DocumentNo/Value Sequences 	

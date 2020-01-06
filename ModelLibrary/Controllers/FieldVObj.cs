@@ -85,7 +85,7 @@ namespace VAdvantage.Controller
         }
 
         //static long serialVersionUID = 4385061125114436797L;
-        
+
         /*field Length*/
         public const int MAX_FIELD_LENGTH = 20;
         /*DisplayLength*/
@@ -195,7 +195,7 @@ namespace VAdvantage.Controller
         public bool isRange = false;
         /**	Process Parameter Value2	*/
         public String DefaultValue2 = "";
-       
+
         /* display Type Id */
         public int AD_Reference_ID;
         /* Val_rule_ID */
@@ -207,7 +207,7 @@ namespace VAdvantage.Controller
 
         /* Squence Number */
         public int seqNo;
-       
+
         public bool IsIdentifier = false;
         public bool IsTranslated = false;
         //*Mandaotyr logic*/
@@ -246,6 +246,23 @@ namespace VAdvantage.Controller
         public bool AskUserBGProcess = false;
 
 
+        public bool IsHeaderPanelitem = false;
+        public int HeaderOverrideReference = 0;
+        public string HeaderStyle = null;
+        public bool HeaderHeadingOnly = false;
+        public decimal HeaderSeqno = 0;
+        public bool HeaderIconOnly = false;
+        public string HtmlStyle = null;
+        public bool ShowIcon = false;
+        public int AD_Image_ID = 0;
+        public string FontClass = "";
+        public string PlaceHolder = "";
+        public string ImageName = "";
+        // for checking whether Maintain Versions is marked on Column
+        public bool IsMaintainVersions = false;
+        public int CellSpace = 0;
+        public int FieldBreadth = 0;
+        public bool LineBreak= false;
 
 
 
@@ -605,4 +622,3 @@ namespace VAdvantage.Controller
         }
     }
 }
-	

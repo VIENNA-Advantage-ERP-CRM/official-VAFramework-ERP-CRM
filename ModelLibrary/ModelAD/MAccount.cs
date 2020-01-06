@@ -278,6 +278,9 @@ namespace VAdvantage.Model
             {
                 sql.Append(" AND C_BPartner_ID=" + C_BPartner_ID);
             }
+
+         
+
             if (AD_OrgTrx_ID == 0)
             {
                 sql.Append(" AND AD_OrgTrx_ID IS NULL");
@@ -477,6 +480,7 @@ namespace VAdvantage.Model
             newAccount.SetUserElement7_ID(UserElement7_ID);
             newAccount.SetUserElement8_ID(UserElement8_ID);
             newAccount.SetUserElement9_ID(UserElement9_ID);
+            
             //
             if (!newAccount.Save())
             {
@@ -850,7 +854,7 @@ namespace VAdvantage.Model
                     {
                         combiStr = "*";
                         descrStr = "*";
-                        fullyQualified = false;
+                        fullyQualified = false;                        
                     }
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(element.GetElementType()))

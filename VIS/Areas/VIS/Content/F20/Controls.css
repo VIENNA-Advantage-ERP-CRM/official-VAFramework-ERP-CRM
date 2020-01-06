@@ -338,8 +338,8 @@ label.vis-ec-col-lblchkbox {
     }
 
         .vis-ec-col-lblchkbox input[type=checkbox]:focus {
-            outline-color: rgba(var(--v-c-primary), 1);
             outline: auto;
+            outline-color: rgba(var(--v-c-primary), 1);
         }
 
 .vis-ev-col input:-webkit-autofill {
@@ -358,11 +358,11 @@ label.vis-ec-col-lblchkbox {
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: 0;
+    top: 10px;
     cursor: pointer;
     outline: none;
     z-index: 5;
-    bottom: 0;
+    /*bottom: 0;*/
     display: flex;
     align-items: center;
 }

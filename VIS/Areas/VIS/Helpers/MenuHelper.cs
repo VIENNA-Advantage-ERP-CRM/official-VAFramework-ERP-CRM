@@ -213,10 +213,22 @@ namespace VIS.Helpers
             var h = "";
             if (windowNo != "")
             {
-                h += "<li  data-value='" + id + "' data-summary='N'><img src='" + GetImageURI(img, baseUrl) + "' />" +
-                    "<a href='javascript:void(0)' data-value='" + id + "' data-action='" + action + "' data-actionid =" + aid + "> " + text + "</a>";
-                h += "<span class='vis-treewindow-span'><span class='vis-css-treewindow-arrow-up'></span></span>";
+                h += "<li  data-value='" + id + "' data-summary='N'>" +
+                    "<a href='javascript:void(0)' data-value='" + id + "' data-action='" + action + "' data-actionid =" + aid + "> ";
+
+                h += "<span " + GetSpanClass(img);
+
+                if (_ctx.GetIsRightToLeft())
+                {
+                    h += " style='float:right;margin:1px 0px 0px 10px;' ";
+                }
+
+                h += " ></span>" + text + "</a>";
+                h += "<span class='vis-treewindow-span'>";
+                h +=  "<span class='vis-css-treewindow-arrow-up'></span></span>";
                 h += "</li>";
+
+
             }
             else
             {
@@ -225,7 +237,7 @@ namespace VIS.Helpers
                      "<span " + GetSpanClass(img);
                 if (_ctx.GetIsRightToLeft())
                 {
-                    h += " Style='float:right;margin:1px 0px 0px 10px;' ";
+                    h += " style='float:right;margin:1px 0px 0px 10px;' ";
                 }
 
                 h += " ></span>" + text + "</a>";
@@ -247,25 +259,25 @@ namespace VIS.Helpers
             switch (img)
             {
                 case "W":
-                    return "class = 'vis-mainMenuIcons vis-icon-window'";
+                    return "class = 'fa fa-window-maximize'";
                 case "R":
-                    return "class = 'vis-mainMenuIcons vis-icon-report'";
+                    return "class = 'vis vis-report'";
                 case "P":
-                    return "class = 'vis-mainMenuIcons vis-icon-process'";
+                    return "class = 'fa fa-cog'";
                 case "T":
-                    return "class = 'vis-mainMenuIcons vis-icon-process'";
+                    return "class = 'fa fa-cog'";
                 case "F":
-                    return "class = 'vis-mainMenuIcons vis-icon-workspace'";
+                    return "class = 'fa fa-clone'";
                 case "B":
-                    return "class = 'vis-mainMenuIcons vis-icon-workspace'";
+                    return "class = 'fa fa-clone'";
                 case "X":
-                    return "class = 'vis-mainMenuIcons vis-icon-form'";
+                    return "class = 'fa fa-list-alt'";
                 case "V":
-                    return "class = 'vis-mainMenuIcons vis-icon-workspace'";
+                    return "class = 'fa fa-clone'";
                 case "D":
-                    return "class = 'vis-mainMenuIcons vis-icon-workspace'";
+                    return "class = 'fa fa-clone'";
                 default:
-                    return "class = 'vis-mainMenuIcons vis-icon-workspace'";
+                    return "class = 'fa fa-clone'";
             }
 
             //public static String ACTION_UserWorkbench = "B";
@@ -312,7 +324,10 @@ namespace VIS.Helpers
             else
             {
                 h += "<li  data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu'> " +
-                     "<input type='checkbox'  id='" + windowNo + id + "' /><label data-target='#ul_" + id + "' data-toggle='collapse' for='" + windowNo + id + "'>" + text + "</label>";
+                     "<input type='checkbox'  id='" + windowNo + id + "' />" +
+                     "<label data-target='#ul_" + id + "' data-toggle='collapse' for='" + windowNo + id + "'><i class='fa fa-folder-o vis-folder-open-ico'></i>" +
+                      text + 
+                      " </label>";
                 h += "<ul class='collapse'  id='ul_" + id + "'>";
             }
 

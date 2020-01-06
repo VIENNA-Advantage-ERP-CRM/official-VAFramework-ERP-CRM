@@ -26,14 +26,14 @@ namespace VAdvantage.Model
         /// <returns>Paper</returns>
         static public MPrintPaper Get(int AD_PrintPaper_ID)
         {
-            int key = AD_PrintPaper_ID;            
+            int key = AD_PrintPaper_ID;
             MPrintPaper pp = null;
-            if(s_papers.ContainsKey(key))
+            if (s_papers.ContainsKey(key))
                 pp = s_papers[key];
             if (pp == null)
             {
                 pp = new MPrintPaper(Env.GetContext(), AD_PrintPaper_ID, null);
-                if(s_papers.ContainsKey(key))
+                if (s_papers.ContainsKey(key))
                     s_papers[key] = pp;
                 else
                     s_papers.Add(key, pp);
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
 
         public MediaSize GetMediaSizeDefault()
         {
-            m_mediaSize = VAdvantage.Login.Language.GetLoginLanguage().GetMediaSize();
+            m_mediaSize = VAdvantage.Login.Language.GetLoginLanguage(GetCtx()).GetMediaSize();
             if (m_mediaSize == null)
                 m_mediaSize = MediaSize.ISO.A4;
             log.Fine("Size=" + m_mediaSize);
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
             public CMediaSizeName(int code)
                 : base(code)
             {
-                
+
             }	//	CMediaSizeName
 
             //public String[] GetStringTable()

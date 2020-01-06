@@ -38,6 +38,9 @@ namespace VAdvantage.Logging
 
         private DateTime? _lastFileDate = null;
 
+
+        private static readonly object _lock = new object();
+
         /// <summary>
         /// Initialize
         /// </summary>
@@ -46,37 +49,39 @@ namespace VAdvantage.Logging
         /// <param name="isClient">client</param>
         /// 
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+      //  [MethodImpl(MethodImplOptions.Synchronized)]
         private void Initialize(String viennaHome, bool createLogDir, bool isClient)
         {
-            Close();//close existing
-
-            _doneHeader = false;
-
-            //	New File Name
-            if (!CreateFile(viennaHome, createLogDir, isClient))
-                return;
-
-            _lastFileDate = DateTime.Now;
-
-
-            try
+            lock (_lock)
             {
-                _writer = new StreamWriter(_file);
-                m_records = 0;
-                //Publish(null);
-            }
-            catch
-            {
-            }
+                Close();//close existing
 
-            //	Foratting
-            SetFormatter(VLogFormatter.Get());
-            //	Level
-            SetLevel(Level.FINE);
-            //	Filter
-            SetFilter(VLogFilter.Get());
+                _doneHeader = false;
 
+                //	New File Name
+                if (!CreateFile(viennaHome, createLogDir, isClient))
+                    return;
+
+                _lastFileDate = DateTime.Now;
+
+
+                try
+                {
+                    _writer = new StreamWriter(_file);
+                    m_records = 0;
+                    //Publish(null);
+                }
+                catch
+                {
+                }
+
+                //	Foratting
+                SetFormatter(VLogFormatter.Get());
+                //	Level
+                SetLevel(Level.FINE);
+                //	Filter
+                SetFilter(VLogFilter.Get());
+            }
         }
 
         /// <summary>
@@ -216,64 +221,66 @@ namespace VAdvantage.Logging
         /// </summary>
         /// <param name="record">stores the values to be printed</param>
         /// 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+       // [MethodImpl(MethodImplOptions.Synchronized)]
         public override void Publish(LogRecord record)
         {
-
-            //if (DateTime.Now.Hour != Convert.ToDateTime(_lastFileDate).Hour) //Set Now Date
-            //{
-            //    Initialize(_viennaHome, true, true);
-            //}
-
-            if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddHours(1)) //Set Now Date
+            lock (_lock)
             {
-                Initialize(_viennaHome, true, true);
-            }
+                //if (DateTime.Now.Hour != Convert.ToDateTime(_lastFileDate).Hour) //Set Now Date
+                //{
+                //    Initialize(_viennaHome, true, true);
+                //}
 
-            if (!IsLoggable(record) || _writer == null)
-                return;
-
-            //	Format
-            String msg = null;
-            try
-            {
-                msg = GetFormatter().Format(record);
-            }
-            catch
-            {
-                return;
-            }
-
-            try
-            {
-                if (!_doneHeader)
+                if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddHours(1)) //Set Now Date
                 {
-                    _writer.WriteLine(GetFormatter().GetHead());
-                    //AllocConsole();
-                    //Console.WriteLine(GetFormatter().GetHead()); // outputs to console window
-                    _doneHeader = true;
+                    Initialize(_viennaHome, true, true);
                 }
-                _writer.WriteLine(msg);
-                //AllocConsole();
-                //Console.WriteLine(msg); // outputs to console window
-                m_records++;
 
-                //if (string.IsNullOrEmpty(record.message))
-                //    record.message = "Executed";
-                if (record.GetLevel() == Level.SEVERE
-                    || record.GetLevel() == Level.WARNING
-                    || m_records % 10 == 0)	//	flush every 10 records
-                    Flush();
-                //print into file
-                //_writer.WriteLine(this.Format(record));
-                //_writer.Flush();   //finally flush the print
-            }
-            catch
-            {
+                if (!IsLoggable(record) || _writer == null)
+                    return;
 
-                Close();
-                _lastFileDate = null; //try next time when publish is called 
-                //try again to initlize file 
+                //	Format
+                String msg = null;
+                try
+                {
+                    msg = GetFormatter().Format(record);
+                }
+                catch
+                {
+                    return;
+                }
+
+                try
+                {
+                    if (!_doneHeader)
+                    {
+                        _writer.WriteLine(GetFormatter().GetHead());
+                        //AllocConsole();
+                        //Console.WriteLine(GetFormatter().GetHead()); // outputs to console window
+                        _doneHeader = true;
+                    }
+                    _writer.WriteLine(msg);
+                    //AllocConsole();
+                    //Console.WriteLine(msg); // outputs to console window
+                    m_records++;
+
+                    //if (string.IsNullOrEmpty(record.message))
+                    //    record.message = "Executed";
+                    if (record.GetLevel() == Level.SEVERE
+                        || record.GetLevel() == Level.WARNING
+                        || m_records % 10 == 0)	//	flush every 10 records
+                        Flush();
+                    //print into file
+                    //_writer.WriteLine(this.Format(record));
+                    //_writer.Flush();   //finally flush the print
+                }
+                catch
+                {
+
+                    Close();
+                    _lastFileDate = null; //try next time when publish is called 
+                    //try again to initlize file 
+                }
             }
         }
 

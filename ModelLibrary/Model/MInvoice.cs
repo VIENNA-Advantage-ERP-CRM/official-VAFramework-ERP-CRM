@@ -2886,6 +2886,8 @@ namespace VAdvantage.Model
                         if (line != null && line.GetC_Invoice_ID() > 0 && line.GetQtyInvoiced() == 0)
                             continue;
 
+                        Decimal ProductLineCost = line.GetProductLineCost(line);
+
                         // check IsCostAdjustmentOnLost exist on product 
                         string sql = @"SELECT COUNT(*) FROM AD_Column WHERE IsActive = 'Y' AND 
                                        AD_Table_ID =  ( SELECT AD_Table_ID FROM AD_Table WHERE IsActive = 'Y' AND TableName LIKE 'M_Product' ) 
@@ -2900,7 +2902,7 @@ namespace VAdvantage.Model
                                 if (!IsSOTrx() && !IsReturnTrx())
                                 {
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
-                                         null, line.GetLineNetAmt(), 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                         null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
                                         if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                         {
@@ -2927,7 +2929,7 @@ namespace VAdvantage.Model
                                 {
                                     #region for Expense type product
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, 0, "Invoice(Vendor)", null, null, null, line,
-                                        null, line.GetLineNetAmt(), 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                        null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
                                         if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                         {
@@ -2967,7 +2969,7 @@ namespace VAdvantage.Model
                                         #region against SO
                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                               "Invoice(Customer)", null, null, null, line, null,
-                                              Decimal.Negate(line.GetLineNetAmt()), Decimal.Negate(line.GetQtyInvoiced()),
+                                              Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced()),
                                               Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
                                             if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
@@ -3005,11 +3007,14 @@ namespace VAdvantage.Model
                                                 DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
                                                                  @" WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
 
+                                                Decimal ProductOrderLineCost = ol1.GetProductLineCost(ol1);
+                                                Decimal ProductOrderPriceActual = ProductOrderLineCost / ol1.GetQtyEntered();
+
                                                 // calculate cost
                                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, sLine.GetM_AttributeSetInstance_ID(),
                                             "Material Receipt", null, sLine, null, line, null,
-                                            order1 != null && order1.GetDocStatus() != "VO" ? Decimal.Multiply(Decimal.Divide(ol1.GetLineNetAmt(), ol1.GetQtyOrdered()), sLine.GetMovementQty())
-                                                : Decimal.Multiply(ol1.GetPriceActual(), sLine.GetQtyEntered()),
+                                            order1 != null && order1.GetDocStatus() != "VO" ? Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, ol1.GetQtyOrdered()), sLine.GetMovementQty())
+                                                : Decimal.Multiply(ProductOrderPriceActual, sLine.GetQtyEntered()),
                                              sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                                                 {
                                                     _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
@@ -3053,7 +3058,7 @@ namespace VAdvantage.Model
                                             // calculate invoice line costing after calculating costing of linked MR line 
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, line, null,
-                                                  count > 0 && isCostAdjustableOnLost && ((inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty)) < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? line.GetLineNetAmt() : Decimal.Multiply(Decimal.Divide(line.GetLineNetAmt(), line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : matchInvQty),
+                                                  count > 0 && isCostAdjustableOnLost && ((inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty)) < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? ProductLineCost : Decimal.Multiply(Decimal.Divide(ProductLineCost, line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : matchInvQty),
                                                 //count > 0 && isCostAdjustableOnLost && line.GetM_InOutLine_ID() > 0 && sLine.GetMovementQty() < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(sLine.GetMovementQty()) : sLine.GetMovementQty()) : line.GetQtyInvoiced(),
                                                 GetDescription() != null && GetDescription().Contains("{->") ? matchInvQty : inv.GetQty(),
                                                 Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
@@ -3112,7 +3117,7 @@ namespace VAdvantage.Model
                                     {
                                         #region CRMA
                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                                          "Invoice(Customer)", null, null, null, line, null, line.GetLineNetAmt(),
+                                          "Invoice(Customer)", null, null, null, line, null, ProductLineCost,
                                            line.GetQtyInvoiced(), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
                                             if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
@@ -3142,7 +3147,7 @@ namespace VAdvantage.Model
                                             line.GetM_InOutLine_ID() == 0 && line.GetM_Product_ID() > 0 && docType.IsTreatAsDiscount())
                                         {
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                                              "Invoice(Vendor)", null, null, null, line, null, Decimal.Negate(line.GetLineNetAmt()), Decimal.Negate(line.GetQtyInvoiced())
+                                              "Invoice(Vendor)", null, null, null, line, null, Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced())
                                               , Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                             {
                                                 if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
@@ -3203,8 +3208,8 @@ namespace VAdvantage.Model
                                                   count > 0 && isCostAdjustableOnLost &&
                                                   ((inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : matchInvQty) <
                                                   (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced())
-                                                  ? Decimal.Negate(line.GetLineNetAmt())
-                                                  : Decimal.Negate(Decimal.Multiply(Decimal.Divide(line.GetLineNetAmt(), line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty))),
+                                                  ? Decimal.Negate(ProductLineCost)
+                                                  : Decimal.Negate(Decimal.Multiply(Decimal.Divide(ProductLineCost, line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty))),
                                                   GetDescription() != null && GetDescription().Contains("{->") ? (matchInvQty) : Decimal.Negate(inv.GetQty()),
                                                    Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                                 {
@@ -3285,7 +3290,7 @@ namespace VAdvantage.Model
                                 {
                                     #region landed cost allocation
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
-                                        null, line.GetLineNetAmt(), 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                        null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
                                         if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                         {
@@ -3310,7 +3315,7 @@ namespace VAdvantage.Model
                             {
                                 #region for Expense type product
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, 0, "Invoice(Vendor)", null, null, null, line,
-                                    null, line.GetLineNetAmt(), 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                    null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                 {
                                     if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                     {
@@ -3340,7 +3345,7 @@ namespace VAdvantage.Model
                                 if (IsSOTrx() && !IsReturnTrx()) // SO
                                 {
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                                          "Invoice(Customer)", null, null, null, line, null, Decimal.Negate(line.GetLineNetAmt()),
+                                          "Invoice(Customer)", null, null, null, line, null, Decimal.Negate(ProductLineCost),
                                           Decimal.Negate(line.GetQtyInvoiced()), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
                                         if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
@@ -3427,7 +3432,7 @@ namespace VAdvantage.Model
                                         // when isCostAdjustableOnLost = true on product and movement qty on MR is less than invoice qty then consider MR qty else invoice qty
                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                               "Invoice(Vendor)", null, null, null, line, null,
-                                              count > 0 && isCostAdjustableOnLost && ((inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty)) < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? line.GetLineNetAmt() : Decimal.Multiply(Decimal.Divide(line.GetLineNetAmt(), line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : matchInvQty),
+                                              count > 0 && isCostAdjustableOnLost && ((inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty)) < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? ProductLineCost : Decimal.Multiply(Decimal.Divide(ProductLineCost, line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : matchInvQty),
                                             //count > 0 && isCostAdjustableOnLost && line.GetM_InOutLine_ID() > 0 && sLine.GetMovementQty() < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(sLine.GetMovementQty()) : sLine.GetMovementQty()) : line.GetQtyInvoiced(),
                                             GetDescription() != null && GetDescription().Contains("{->") ? matchInvQty : inv.GetQty(), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
@@ -3482,7 +3487,7 @@ namespace VAdvantage.Model
                                 else if (IsSOTrx() && IsReturnTrx()) // CRMA
                                 {
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                                      "Invoice(Customer)", null, null, null, line, null, line.GetLineNetAmt(), line.GetQtyInvoiced(),
+                                      "Invoice(Customer)", null, null, null, line, null, ProductLineCost, line.GetQtyInvoiced(),
                                       Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
                                         if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
@@ -3510,7 +3515,7 @@ namespace VAdvantage.Model
                                     if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && line.GetC_OrderLine_ID() == 0 && line.GetM_InOutLine_ID() == 0 && line.GetM_Product_ID() > 0)
                                     {
                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                                          "Invoice(Vendor)", null, null, null, line, null, Decimal.Negate(line.GetLineNetAmt()), Decimal.Negate(line.GetQtyInvoiced()),
+                                          "Invoice(Vendor)", null, null, null, line, null, Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced()),
                                           Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
                                             if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
@@ -3571,8 +3576,8 @@ namespace VAdvantage.Model
                                               count > 0 && isCostAdjustableOnLost &&
                                               ((inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : matchInvQty) <
                                               (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced())
-                                              ? Decimal.Negate(line.GetLineNetAmt())
-                                              : Decimal.Negate(Decimal.Multiply(Decimal.Divide(line.GetLineNetAmt(), line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty))),
+                                              ? Decimal.Negate(ProductLineCost)
+                                              : Decimal.Negate(Decimal.Multiply(Decimal.Divide(ProductLineCost, line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty))),
                                               GetDescription() != null && GetDescription().Contains("{->") ? (matchInvQty) : Decimal.Negate(inv.GetQty()),
                                                Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                             {
@@ -3974,6 +3979,8 @@ namespace VAdvantage.Model
 
             return DocActionVariables.STATUS_COMPLETED;
         }
+
+
 
         /// <summary>
         ///  Creation of allocation against invoice whose payment is done against order

@@ -6,6 +6,7 @@ using System.Web;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using VIS.DBase;
 
 namespace VIS.Models
 {

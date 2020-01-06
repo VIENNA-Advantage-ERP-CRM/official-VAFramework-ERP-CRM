@@ -25,87 +25,87 @@
         Globalize = window.Globalize;
     }
 
-    Globalize.addCultureInfo("en-IN", "default", {
-        name: "en-IN",
-        englishName: "English (India)",
-        nativeName: "English (India)",
-        numberFormat: {
-            groupSizes: [3, 2],
-            percent: {
-                groupSizes: [3, 2]
-            },
-            currency: {
-                pattern: ["$ -n", "$ n"],
-                groupSizes: [3, 2],
-                symbol: "Rs."
-            }
-        },
-        calendars: {
-            standard: {
-                "/": "-",
-                firstDay: 1,
-                patterns: {
-                    d: "dd-MM-yyyy",
-                    D: "dd MMMM yyyy",
-                    t: "HH:mm",
-                    T: "HH:mm:ss",
-                    f: "dd MMMM yyyy HH:mm",
-                    F: "dd MMMM yyyy HH:mm:ss",
-                    M: "dd MMMM"
-                }
-            }
-        },
-        messages: {
-            "Connection": "Connection",
-            "Defaults": "Defaults",
-            "Login": "Login",
-            "File": "File",
-            "Exit": "Exit",
-            "Help": "Help",
-            "About": "About",
-            "Host": "Server",
-            "Database": "Database",
-            "User": "User ID",
-            "EnterUser": "Enter Application User ID",
-            "Password": "Password",
-            "EnterPassword": "Enter Application Password",
-            "Language": "Language",
-            "SelectLanguage": "Select your language ",
-            "Role": "Role",
-            "Client": "Client",
-            "Organization": "Organization",
-            "Date": "Date",
-            "Warehouse": "Warehouse",
-            "Printer": "Printer",
-            "Connected": "Connected",
-            "NotConnected": "Not Connected",
-            "DatabaseNotFound": "Database not found",
-            "UserPwdError": "User does not match password",
-            "RoleNotFound": "Role not found/complete",
-            "Authorized": "Authorized",
-            "Ok": "Ok",
-            "Cancel": "Cancel",
-            "VersionConflict": "Version Conflict:",
-            "VersionInfo": "Server <> Client",
-            "PleaseUpgrade": "Please download new Version from Server",
-            "GoodMorning": "Good Morning",
-            "GoodAfternoon": "Good Afternoon",
-            "GoodEvening": "Good Evening",
+Globalize.addCultureInfo( "en-IN", "default", {
+	name: "en-IN",
+	englishName: "English (India)",
+	nativeName: "English (India)",
+	numberFormat: {
+		groupSizes: [3,2],
+		percent: {
+			groupSizes: [3,2]
+		},
+		currency: {
+			pattern: ["$ -n","$ n"],
+			groupSizes: [3,2],
+			symbol: "Rs."
+		}
+	},
+	calendars: {
+		standard: {
+			"/": "-",
+			firstDay: 1,
+			patterns: {
+				d: "dd-MM-yyyy",
+				D: "dd MMMM yyyy",
+				t: "HH:mm",
+				T: "HH:mm:ss",
+				f: "dd MMMM yyyy HH:mm",
+				F: "dd MMMM yyyy HH:mm:ss",
+				M: "dd MMMM"
+			}
+		}
+    },
+    messages: {
+        "Connection": "Connection",
+        "Defaults": "Defaults",
+        "Login": "Login",
+        "File": "File",
+        "Exit": "Exit",
+        "Help": "Help",
+        "About": "About",
+        "Host": "Server",
+        "Database": "Database",
+        "User": "User ID",
+        "EnterUser": "Enter Application User ID",
+        "Password": "Password",
+        "EnterPassword": "Enter Application Password",
+        "Language": "Language",
+        "SelectLanguage": "Select your language ",
+        "Role": "Role",
+        "Client": "Client",
+        "Organization": "Organization",
+        "Date": "Date",
+        "Warehouse": "Warehouse",
+        "Printer": "Printer",
+        "Connected": "Connected",
+        "NotConnected": "Not Connected",
+        "DatabaseNotFound": "Database not found",
+        "UserPwdError": "User does not match password",
+        "RoleNotFound": "Role not found/complete",
+        "Authorized": "Authorized",
+        "Ok": "Ok",
+        "Cancel": "Cancel",
+        "VersionConflict": "Version Conflict:",
+        "VersionInfo": "Server <> Client",
+        "PleaseUpgrade": "Please download new Version from Server",
+        "GoodMorning": "Good Morning",
+        "GoodAfternoon": "Good Afternoon",
+        "GoodEvening": "Good Evening",
 
-            //New Resource
+        //New Resource
 
-            "Back": "Back",
-            "SelectRole": "Select Role",
-            "SelectOrg": "Select Organization",
-            "SelectClient": "Select Client",
-            "SelectWarehouse": "Select Warehouse",
-            "VerifyUserLanguage": "Verifying user and language",
-            "LoadingPreference": "Loading Preference",
-            "Completed": "Completed",
-            //new
-            "RememberMe": "Remember Me",
+        "Back": "Back",
+        "SelectRole": "Select Role",
+        "SelectOrg": "Select Organization",
+        "SelectClient": "Select Client",
+        "SelectWarehouse": "Select Warehouse",
+        "VerifyUserLanguage": "Verifying user and language",
+        "LoadingPreference": "Loading Preference",
+        "Completed": "Completed",
+        //new
+        "RememberMe": "Remember Me",
 
-        }
-    });
+    }
+});
 
 }(this));

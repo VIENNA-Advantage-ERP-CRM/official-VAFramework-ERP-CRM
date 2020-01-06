@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Web.Security;
 
-using VAdvantage.Model;
 using VAdvantage.Utility;
 
 ////// <summary>

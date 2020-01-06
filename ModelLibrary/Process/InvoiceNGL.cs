@@ -285,7 +285,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             batch.SetC_Currency_ID(aas.GetC_Currency_ID());
             if (!batch.Save())
             {
-                return " - Could not create Batch";
+                return GetRetrievedError(batch, "Could not create Batch");
+                //return " - Could not create Batch";
             }
             //
             MJournal journal = null;
@@ -316,7 +317,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     journal.SetGL_Category_ID(cat.GetGL_Category_ID());
                     if (!journal.Save())
                     {
-                        return " - Could not create Journal";
+                        return GetRetrievedError(journal, "Could not create Journal");
+                        //return " - Could not create Journal";
                     }
                 }
                 //

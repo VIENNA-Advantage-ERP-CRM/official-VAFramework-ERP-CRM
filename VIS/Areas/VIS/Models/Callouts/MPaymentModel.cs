@@ -123,11 +123,10 @@ namespace VIS.Models
             StringBuilder sql = new StringBuilder();
             try
             {
-                string[] paramValue = fields.Split(',');
-                sql.Append("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA027_' AND IsActive = 'Y'");
-                bool countVA027 = Convert.ToBoolean(DB.ExecuteScalar(sql.ToString(), null, null));
-                int bp_BusinessPartner = Util.GetValueOfInt(paramValue[0]);
-                DateTime? asOnDate = Util.GetValueOfDateTime(paramValue[1]);
+                string[] paramValue = fields.Split(',');                
+                bool countVA027 = Util.GetValueOfBool(paramValue[0]);
+                int bp_BusinessPartner = Util.GetValueOfInt(paramValue[1]);
+                DateTime? asOnDate = Util.GetValueOfDateTime(paramValue[2]);
                 int Client_ID = ctx.GetAD_Client_ID();
                 sql.Clear();
                 sql.Append(@"SELECT LTRIM(MAX(SYS_CONNECT_BY_PATH( ConvertPrice, ',')),',') amounts FROM " +
@@ -229,6 +228,17 @@ namespace VIS.Models
                 retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
             }
             return retDic;
+        }
+
+        /// <summary>
+        /// Get Bank Account Currency 
+        /// </summary>
+        /// <param name="fields">Parameters</param>
+        /// <returns>Currency</returns>
+        public int GetBankAcctCurrency(string fields)
+        {
+            int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID = " + Util.GetValueOfInt(fields)));
+            return Currency_ID;
         }
     }
 }

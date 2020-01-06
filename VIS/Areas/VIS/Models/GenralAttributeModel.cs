@@ -346,14 +346,27 @@ namespace VIS.Models
                         var editor = editors[i];
 
                         MGenAttributeValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MGenAttributeValue : null;
+                        // Done by Bharat on 14 Sep 2017 to handle the cases of null attributes
+                        if (value == null)
+                        {
+                            continue;
+                        }
                         attributes[i].SetCGenAttributeInstance(mAttributeSetInstanceId, value);
                     }
                     else if (MGenAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
+                        if (Convert.ToDecimal(lst[attributes[i]]) == 0)
+                        {
+                            continue;
+                        }
                         attributes[i].SetCGenAttributeInstance(mAttributeSetInstanceId, (decimal?)lst[attributes[i]]);
                     }
                     else
                     {
+                        if ((String)lst[attributes[i]] == "")
+                        {
+                            continue;
+                        }
                         attributes[i].SetCGenAttributeInstance(mAttributeSetInstanceId, (String)lst[attributes[i]]);
                     }
                 }

@@ -778,6 +778,12 @@ namespace VAdvantage.Model
 @return Disable Menu */
         public Boolean IsDisableMenu() { Object oo = Get_Value("DisableMenu"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
+        /** Set Check Document Action Access.
+@param CheckDocActionAccess Check document action access based on document type on every transaction. */
+        public void SetCheckDocActionAccess(Boolean CheckDocActionAccess) { Set_Value("CheckDocActionAccess", CheckDocActionAccess); }/** Get Check Document Action Access.
+@return Check document action access based on document type on every transaction. */
+        public Boolean IsCheckDocActionAccess() { Object oo = Get_Value("CheckDocActionAccess"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
     }
 
 }

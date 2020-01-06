@@ -742,7 +742,12 @@ namespace VAdvantage.Model
 
             return true;
         }
-
+        /// <summary>
+        /// After save logic for asset
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <param name="success"></param>
+        /// <returns></returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
             //Cost Code Commented - As not required on Asset Save

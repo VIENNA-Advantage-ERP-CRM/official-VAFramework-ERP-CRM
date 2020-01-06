@@ -138,20 +138,52 @@ namespace VAdvantage.Model
             //	Ship or Receipt
             else if (MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm.Equals(confirmType))
             {
-                line.SetTargetQty(GetTargetQty());
-                Decimal qty = GetConfirmedQty();
-                Boolean isReturnTrx = line.GetParent().IsReturnTrx();
+                //Arpit 
+                if (GetDifferenceQty() > 0)
+                {
+                    GetCtx().SetContext("DifferenceQty_", VAdvantage.Utility.Util.GetValueOfString(GetDifferenceQty()));
+                }
+                MProduct _pro = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());
+                if (_pro.GetC_UOM_ID() != line.GetC_UOM_ID())
+                {
+                    decimal? pc = null;
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetTargetQty());
+                    line.SetTargetQty(Util.GetValueOfDecimal( pc)); //TargetQty
 
-                /* In PO receipts and SO Returns, we have the responsibility 
-                 * for scrapped quantity
-                 */
-                if ((!isSOTrx && !isReturnTrx) || (isSOTrx && isReturnTrx))
-                    qty = Decimal.Add(qty, GetScrappedQty());
-                line.SetMovementQty(qty);				//	Entered NOT changed
-                //
-                line.SetScrappedQty(GetScrappedQty());
-                // vikas 12/28/2015 Mantis Issue (0000335)
-                line.SetConfirmedQty(GetConfirmedQty());
+                    Decimal qty = GetConfirmedQty();
+                    Boolean isReturnTrx = line.GetParent().IsReturnTrx();
+                    /* In PO receipts and SO Returns, we have the responsibility 
+                     * for scrapped quantity
+                     */
+                    if ((!isSOTrx && !isReturnTrx) || (isSOTrx && isReturnTrx))
+                        qty = Decimal.Add(qty, GetScrappedQty());
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), qty);
+                    line.SetMovementQty(Util.GetValueOfDecimal(pc)); //MovementQty
+
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetScrappedQty());
+                    line.SetScrappedQty(Util.GetValueOfDecimal(pc));  //ScrappedQty 
+
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetConfirmedQty());
+                    line.SetConfirmedQty(Util.GetValueOfDecimal(pc)); //confirm Qty
+
+                }
+                else
+                {
+                    line.SetTargetQty(GetTargetQty());
+                    Decimal qty = GetConfirmedQty();
+                    Boolean isReturnTrx = line.GetParent().IsReturnTrx();
+
+                    /* In PO receipts and SO Returns, we have the responsibility 
+                     * for scrapped quantity
+                     */
+                    if ((!isSOTrx && !isReturnTrx) || (isSOTrx && isReturnTrx))
+                        qty = Decimal.Add(qty, GetScrappedQty());
+                    line.SetMovementQty(qty);				//	Entered NOT changed
+                    //
+                    line.SetScrappedQty(GetScrappedQty());
+                    // vikas 12/28/2015 Mantis Issue (0000335)
+                    line.SetConfirmedQty(GetConfirmedQty());
+                }
             }
             //	Vendor
             else if (MInOutConfirm.CONFIRMTYPE_VendorConfirmation.Equals(confirmType))

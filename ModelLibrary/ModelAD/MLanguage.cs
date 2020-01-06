@@ -80,7 +80,7 @@ namespace VAdvantage.Model
         public static MLanguage Get(Ctx ctx, String AD_Language, Trx trxName)
         {
             MLanguage lang = null;
-            String sql = "SELECT * FROM AD_Language WHERE AD_Language='" + AD_Language+"'";
+            String sql = "SELECT * FROM AD_Language WHERE AD_Language='" + AD_Language + "'";
             DataSet ds = null;
             try
             {
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-              s_log.Log(Level.SEVERE, sql, ex);
+                s_log.Log(Level.SEVERE, sql, ex);
             }
             ds = null;
             return lang;
@@ -182,7 +182,7 @@ namespace VAdvantage.Model
         {
             //super(ctx, rs, trxName);
         }
-        public MLanguage(Ctx ctx,IDataReader rs, Trx trxName)
+        public MLanguage(Ctx ctx, IDataReader rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
             //super(ctx, rs, trxName);
@@ -229,8 +229,8 @@ namespace VAdvantage.Model
             //if (columns.size() == 0)
             if (columns.Count == 0)
             {
-                
-               VAdvantage.Logging.VLogger.Get().Log(Level.SEVERE, "No Columns found for " + baseTable);
+
+                VAdvantage.Logging.VLogger.Get().Log(Level.SEVERE, "No Columns found for " + baseTable);
                 //throw new Exception("No Columns found for " + baseTable);
                 return 0;
             }
@@ -252,7 +252,7 @@ namespace VAdvantage.Model
                     + "CreatedBy,UpdatedBy "
                     + cols.ToString() + ") "
                     + "SELECT '" + GetAD_Language() + "','N', AD_Client_ID,AD_Org_ID, "
-                    + AD_User_ID + "," + AD_User_ID 
+                    + AD_User_ID + "," + AD_User_ID
                     + cols.ToString()
                     + " FROM " + baseTable
                     + " WHERE " + keyColumn + " NOT IN (SELECT " + keyColumn
@@ -295,6 +295,48 @@ namespace VAdvantage.Model
         }
 
 
-       
+        public static DataTable GetSystemLanguage()
+        {
+            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
+            if (ds != null)
+                return ds.Tables[0];
+            return null;
+        }
+
+
+        private void SetAD_Language_ID()
+        {
+            int AD_Language_ID = GetAD_Language_ID();
+            if (AD_Language_ID == 0)
+            {
+                String sql = "SELECT NVL(MAX(AD_Language_ID), 999999) FROM AD_Language WHERE AD_Language_ID > 1000";
+                AD_Language_ID = DB.GetSQLValue(Get_TrxName(), sql);
+                SetAD_Language_ID(AD_Language_ID + 1);
+            }
+        }
+
+        protected override bool BeforeSave(bool newRecord)
+        {
+            string lang = GetAD_Language();
+
+            if (!lang.Contains("_"))
+            {
+                log.SaveError("Error?", "Language code must contain _ (undescore)");
+                return false;
+            }
+
+            try
+            {
+                new System.Globalization.CultureInfo(lang.Replace("_", "-"));
+            }
+            catch (Exception ex)
+            {
+                log.SaveError("Error?", "Language code not supported =>" + ex.Message);
+                return false;
+            }
+            if (newRecord)
+                SetAD_Language_ID();
+            return base.BeforeSave(newRecord);
+        }
     }
 }

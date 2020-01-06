@@ -215,7 +215,7 @@ namespace VAdvantage.Acct
             {
                 docLine.SetUserElement9(Convert.ToInt32(journalLineDimension.GetDimensionValue()));
             }
-            else if (journalLineDimension.GetLineType().Equals( MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
+            else if (journalLineDimension.GetLineType().Equals(MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
             {
                 docLine.SetAD_OrgTrx_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
             }
@@ -280,6 +280,7 @@ namespace VAdvantage.Acct
                 //  account     DR      CR
                 for (int i = 0; i < _lines.Length; i++)
                 {
+
                     // need to Post GL Journal for Multiple Accounting Schema that's why commented this condition
                     //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
                     //{

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace VIS.Controllers
                 var ctx = Session["ctx"] as Ctx;
                 if (ad_image_id > 0)
                 {
-                    obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 0);
+                    obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 0, 0, ctx.GetApplicationUrl());
                 }
             }
 
@@ -74,14 +75,13 @@ namespace VIS.Controllers
         public JsonResult GetImageAsByte(int ad_image_id)
         {
             VImageModel obj = new VImageModel();
+            ImagePathInfo img = null;
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 16);
+                img = obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 500, 375, ctx.GetApplicationUrl());
             }
-            string userImage = obj.UsrImage;
-            obj = null;
-            return Json(new { result = userImage }, JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(img), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetFileByteArray(HttpPostedFileBase file)
@@ -91,4 +91,5 @@ namespace VIS.Controllers
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
     }
+
 }

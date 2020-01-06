@@ -77,10 +77,11 @@ namespace VAdvantage.Model
         {
             if (newRecord)
             {
-                if (GetValue() == null || GetValue().Length == 0)
-                    SetValue(GetName());
-                _product = new MProduct(this);
-                return _product.Save(Get_TrxName());
+                //commented by arpit on 5 Jan,2015 Mentis issue no. 0000274
+                //if (GetValue() == null || GetValue().Length == 0)
+                //    SetValue(GetName());
+                //_product = new MProduct(this);
+                //return _product.Save(Get_TrxName());
             }
             return true;
         }
@@ -95,6 +96,13 @@ namespace VAdvantage.Model
         {
             if (!success)
                 return success;
+            //added by arpit on Jan 5,2015 Mentis issue no. 0000274       
+            _product = new MProduct(this);
+            _product.SetS_ExpenseType_ID(GetS_ExpenseType_ID());
+            if (!_product.Save(Get_TrxName()))
+            {
+
+            }
 
             MProduct prod = GetProduct();
             if (prod.SetExpenseType(this))

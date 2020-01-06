@@ -1,12 +1,6 @@
 ﻿; (function (VIS, $) {
 
- 
-
-
-
-
-
-    var AWINDOW_HEADER_HEIGHT = 43;
+    var AWINDOW_HEADER_HEIGHT = 0;// 43;
     var APANEL_HEADER_HEIGHT = 50; //margin adjust of first tr
     var APANEL_FOOTER_HEIGHT = 40
     var GC_HEADER_HEIGHT = 0;
@@ -190,6 +184,7 @@
         this.name;
         this.windowNo;
         this.id;
+        this.img = null;
         this.cPanel; // common pointer , contain Window Panel OR Form Panel OR Process Panel
         this.isHeaderVisible = true;
         this.onClosed; // event
@@ -204,14 +199,9 @@
         function initComponent() {
             // $contentGrid = $("<div class='vis-awindow-body'>");
 
+            var clone = document.importNode(tmpWindow, true);
 
-            var clone = $(document.importNode(tmpWindow, true));
-
-           
-
-            
-
-            $table = clone.find(".vis-ad-w");
+            $table =$(clone.querySelector(".vis-ad-w"));
             //var td11 = $("<td style='max-height:42px;'>");
             $contentGrid = $table.find(".vis-ad-w-body");//  ("<td class='vis-height-full'>");
             $lblTitle = $table.find("h5"); //$("<h1>");//.addClass("vis-awindow-title-label");
@@ -244,7 +234,6 @@
             return;
             $table.height(height);
         };
-
 
         this.hideHeader = function (hide) {
 
@@ -332,17 +321,17 @@
     };
 
     AWindow.prototype.sizeChanged = function (height, width) {
-        return;
+       
         if (!height)
             height = VIS.Env.getScreenHeight();
         if (!width)
             width = window.innerWidth;
-        //if (height == VIS.Env.getScreenHeight())
-        //    return;
-        // console.log("resize");
-        this.setSize(height);
-        var hHeight = this.isHeaderVisible ? AWINDOW_HEADER_HEIGHT : 0;
-        this.cPanel.sizeChanged(height - hHeight, width);
+       // this.setSize(height);
+        var hHeight = this.isHeaderVisible ? 85 : 43;
+        try {
+            this.cPanel.sizeChanged(height - hHeight, width);
+        }
+        catch (ex) { console.log("size changed error"); }
     };
 
     AWindow.prototype.refresh = function () {
@@ -350,7 +339,6 @@
         this.cPanel.refresh();
         return this;
     };
-
 
     AWindow.prototype.keyDown = function (evt) {
         //console.log("refresh");
@@ -377,7 +365,6 @@
         return this;
     };
 
-
     /**
 	 *	Dynamic Initialization Single Window
 	 *  @param AD_Window_ID window
@@ -388,15 +375,16 @@
     AWindow.prototype.initWindow = function (AD_Window_ID, query, callback, action, sel) {
 
         this.cPanel = new VIS.APanel(); //initlize Apanel
+        this.getContentGrid().css('display', 'flex'); // to support older design
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();
         this.id = windowNo + "_" + AD_Window_ID;
         this.hid = action + "=" + AD_Window_ID;
 
-        // $(this.getRootLayout()).attr('tabindex', windowNo);
-
         var self = this;
+
+        this.hideHeader(true); 
 
 
         VIS.AEnv.getGridWindow(windowNo, AD_Window_ID, function (json) {
@@ -423,12 +411,29 @@
             self.cPanel.selectFirstTab(query != null);
             VIS.MLookupCache.initWindowLookup(windowNo);
 
+            //Image 
+            var wObj = self.cPanel.gridWindow;
+            var img = null;
+            if (wObj.getFontName() != '')
+                img = wObj.getFontName();
+            else if (wObj.getImageUrl() != '')
+                img = VIS.Application.contextUrl + "Images/Thumb16x16/" + wObj.getImageUrl(); //fixed
+            else
+                img = "fa fa-window-maximize";
+
+            self.img = img;
             if (callback) {
-                callback(self.id, null, self.name, self.hid); //add shortcut
+                callback(self.id, img, self.name, self.hid); //add shortcut
             }
 
             if (self.onLoad)
                 self.onLoad();
+
+            // register popoverlay event for control's description
+            //self.cPanel.getRoot().find('.vis-ev-ctrlinfowrap').popover({
+            //    trigger: 'focus'
+            //});
+
             jsonData = null;
             self = null;
         });
@@ -462,7 +467,7 @@
 	 */
     AWindow.prototype.initForm = function (AD_Form_ID, callback, action) {
 
-        this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT); //initlize AForm
+        this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - 85); //initlize AForm
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();
@@ -491,6 +496,7 @@
 
             self.setTitle(jsonData.DisplayName);
             self.setName(jsonData.DisplayName);
+           
 
 
             if (!self.cPanel.openForm(jsonData, self, windowNo)) {
@@ -499,8 +505,12 @@
                 return;
             }
 
+            self.sizeChanged();// set size and window
+
+            var img = "fa fa-list-alt";
+            self.img = img;
             if (callback) {
-                callback(self.id, null, self.name, self.hid); //add shortcut
+                callback(self.id, img, self.name, self.hid); //add shortcut
             }
 
             jsonData = null;
@@ -531,6 +541,7 @@
         this.hid = action + "=" + AD_Process_ID;
 
         var self = this;
+        this.hideHeader(true);
         VIS.dataContext.getProcessDataString({ AD_Process_ID: AD_Process_ID }, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error
@@ -562,8 +573,23 @@
                 return;
             }
 
+
+            self.sizeChanged();// set size and window
+
+            var img = null;
+            if (jsonData.FontName != '')
+                img = jsonData.FontName;
+            else if (jsonData.ImageUrl != '')
+                img = VIS.Application.contextUrl + "Images/Thumb16x16/" + jsonData.ImageUrl; //fixed
+            else if (action == "P")
+                img = "fa fa-cog";
+            else
+                img = "vis vis-report";
+            
+            self.img = img;
+
             if (callback) {
-                callback(self.id, null, self.name, self.hid); //add shortcut
+                callback(self.id, img, self.name, self.hid); //add shortcut
             }
 
             jsonData = null;
@@ -652,7 +678,8 @@
         //if (VIS.context.getContext("#DisableMenu") == 'Y') {
         //    return;
         //}
-
+        //dispose all popover
+       // this.cPanel.getRoot().find('.vis-ev-ctrlinfowrap').popover('dispose');
         if (this.onClosed) {
             if (!this.onClosed(this.id, this.$layout, this.hid, this.AD_Window_ID))
                 return;
@@ -879,6 +906,9 @@
        textOnly:
        isSmall:
        this.onAction=null;
+       isPopoverText:
+       direction:
+
     */
     function AppsAction(options) {
         if (options) {
@@ -893,6 +923,8 @@
             this.textOnly;
             this.onAction = null;
             this.isSmall;
+            this.iconName = '';
+            this.direction = "right";
             $.extend(true, this, options);
             this.items = {};
 
@@ -922,7 +954,7 @@
 
             if (this.isSmall) {
                 //imgUrl += this.action + "16.png";
-                imgUrl = this.action.toLowerCase();
+                imgUrl = this.iconName != '' ? this.iconName.toLowerCase() : this.action.toLowerCase();
                 if (this.toggle || this.enableDisable) {
                    // imgUrlX += this.action + "X16.png";
                     imgUrlX = imgUrl + 'x';
@@ -933,7 +965,7 @@
                 //if (this.toggle || this.enableDisable) {
                 //    imgUrlX += this.action + "X24.png";
                 //}
-                imgUrl = this.action.toLowerCase();
+                imgUrl = this.iconName != '' ? this.iconName.toLowerCase() : this.action.toLowerCase();
                 if (this.toggle || this.enableDisable) {
                     // imgUrlX += this.action + "X16.png";
                     imgUrlX = imgUrl + 'x';
@@ -974,9 +1006,12 @@
                 li.append(d);
                 d.append(this.img);
             }
-            else {
+            else {  
                 //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
-                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" data-toggle="popover" data-placement="right" data-content="Attachment"></i><span>' + this.text + '</span>');
+                if (this.direction == "r")
+                    li.append('<span>' + this.text + '</span> <i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i>');
+                else
+                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '"></i><span>' + this.text + '</span>');
                 this.img = li.find("i");
             }
             this.$li = li;
@@ -1023,9 +1058,9 @@
                 d.append(this.img);
             }
             else {
-                //li.append('<img src="' + this.imgUrl + '"  title="' + this.text + '"   /><span> ' + this.text + '</span>');
-                //this.img = li.find("img");
-                //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
+                if (this.direction == "r")
+                    li.append('<span>' + this.text + '</span> <i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i>');
+                else
                 li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i><span>' + this.text + '</span>');
                 this.img = li.find("i");
             }
@@ -1060,6 +1095,10 @@
                 }
             }
         }
+    };
+
+    AppsAction.prototype.setTextDirection = function (dir) {
+        this.direction = dir;
     };
 
     AppsAction.prototype.getIsPressed = function () {
@@ -1180,9 +1219,9 @@
 
     function StatusBar(withInfo) {
 
-        var clone = $(document.importNode(statusTmp, true));
+        var clone = document.importNode(statusTmp, true);
 
-        var $root = clone.find(".vis-ad-w-p-s-main");
+        var $root = $(clone.querySelector(".vis-ad-w-p-s-main"));
 
         this.$statusLine = $root.find(".vis-ad-w-p-s-msg").find("span");// $("<span>");
         this.$statusDB = $root.find(".vis-ad-w-p-s-statusdb");// $("<span class='vis-statusbar-statusDB'>").text("0/0");
@@ -1986,7 +2025,7 @@
         sql += " WHERE t." + this.parentColumnName + "=@ID";
         if (this.identifierTranslated)
             sql += " AND t." + this.keyColumnName + "=tt." + this.keyColumnName
-                + " AND tt.AD_Language='" + VIS.Env.getAD_Language(VAdvantage.Utility.Env.getCtx()) + "'";
+                + " AND tt.AD_Language='" + VIS.context.getAD_Language() + "'";
         //	Order
         sql += " ORDER BY ";
         if (this.columnYesNoName != null)

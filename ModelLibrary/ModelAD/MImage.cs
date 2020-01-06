@@ -228,6 +228,9 @@ namespace VAdvantage.Model
                 //********** Save Original Image ********************
                 CreateThumbnail(0, 0, imageBytes, imageName);
 
+                //*********Create Thumbnail of 500/375 *******************
+                CreateThumbnail(500, 375, imageBytes, imageName);
+
                 //*********Create Thumbnail of 320/240 *******************
                 CreateThumbnail(320, 240, imageBytes, imageName);
 
@@ -494,6 +497,55 @@ namespace VAdvantage.Model
             }
 
             return GetBinaryData();
+
+        }
+
+
+        public dynamic GetThumbnail(int height, int width, out bool isUrl)
+        {
+            if (GetImageURL() != null)
+            {
+                string imageName = GetImageURL().Substring(GetImageURL().LastIndexOf('/') + 1);
+                string url = string.Empty;
+                if (height == 0 && width == 0)
+                {
+                    url = Path.Combine(HostingEnvironment.MapPath(@"~/Images//"), imageName);
+                }
+                else
+                {
+                    url = Path.Combine(HostingEnvironment.MapPath(@"~/Images//"), "Thumb" + height.ToString() + "x" + width.ToString() + "\\" + imageName);
+                }
+                if (File.Exists(url))
+                {
+                    isUrl = true;
+                    FileStream stream = null;
+                    try
+                    {
+                        //string filepath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, dsData.Tables[0].Rows[0]["imageurl"].ToString());
+                        if (File.Exists(url))
+                        {
+                            return imageName;
+                        }
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                    finally
+                    {
+                        if (stream != null)
+                            stream.Close();
+                    }
+                }
+                else
+                {
+                    isUrl = false;
+                    return null;
+                }
+            }
+            isUrl = false;
+            return GetBinaryData();
+            
 
         }
 

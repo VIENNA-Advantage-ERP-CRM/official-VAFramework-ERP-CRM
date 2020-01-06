@@ -296,8 +296,7 @@
             $(".VIS-Location-toggler").click(function (e) {
                 e.preventDefault();
                 var ctrl = $('.cat' + $(this).attr('data-prod-cat'));
-                if (ctrl) {
-                    if (ctrl.length > 0)
+                if (ctrl && ctrl.length > 0) {
                         ctrl.toggle();
                 }
                 else {

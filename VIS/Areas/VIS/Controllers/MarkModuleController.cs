@@ -34,5 +34,21 @@ namespace VIS.Areas.VIS.Controllers
             }
             
         }
+
+        // Added by Bharat on 09 June 2017
+        public JsonResult LoadModules()
+        {
+            Ctx ct = Session["ctx"] as Ctx;
+            MarkModuleHelper model = new MarkModuleHelper();
+            return Json(JsonConvert.SerializeObject(model.LoadModules(ct)), JsonRequestBehavior.AllowGet);
+        }
+
+        // Added by Bharat on 09 June 2017
+        public JsonResult GetExportData(int RecordID, int TableID)
+        {
+            Ctx ct = Session["ctx"] as Ctx;
+            MarkModuleHelper model = new MarkModuleHelper();
+            return Json(JsonConvert.SerializeObject(model.GetExportData(RecordID, TableID, ct)), JsonRequestBehavior.AllowGet);
+        }
     }
 }

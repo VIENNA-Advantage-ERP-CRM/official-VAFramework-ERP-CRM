@@ -27,7 +27,7 @@
                 <span class="vis-app-v-line"></span>
             </li>
             <li>
-                <a href="javascript:void(0)" class="vis-app-hdr-l-menu" title="@GetMsg((string)ViewBag.culture, "InfoWindow")">
+                <a href="javascript:void(0)" class="vis-app-hdr-l-menu" title="@GetMsg((string)ViewBag.culture, "InfoWindow")" id="vis_appInfoWindow">
                     <i class="fa fa-info"></i>
                 </a>
             </li>
@@ -49,27 +49,45 @@
     </div>
     <ul class="vis-app-hdr-r">
         <li id="vis_userDate"><i class="fa fa-calendar"></i> @DateTime.Now.ToString("D", new System.Globalization.CultureInfo(ViewBag.culture.ToString().Replace("_", "-")))</li>
-        <li id="vis_theme">
+        <li id="vis_theme" style="display:none">
             <div class="dropdown">
                 <span class="dropdown-toggle vis-app-hdr-r-theme" data-toggle="dropdown">
                     <i class="fa fa-paint-brush">
                     </i>
                 </span>
                 <ul class="dropdown-menu">
+
                     <li>
-                        <div class="vis-theme-rec" data-color="26,160,237|255,255,255|255,255,255|0,0,0">
-                            <span class="vis-theme-color" style="background-color:#1aa0ed"></span>
+                        <div class="vis-theme-rec" data-color="0, 152, 247|255,255,255|238,238,238|102,102,102">
+                            <span class="vis-theme-color" style="background-color:#0098f7"></span>
                             <span class="vis-theme-color" style="background-color:white"></span>
-                            <span class="vis-theme-color" style="background-color:white"></span>
-                            <span class="vis-theme-color" style="background-color:black"></span>
+                            <span class="vis-theme-color" style="background-color:#eee"></span>
+                            <span class="vis-theme-color" style="background-color:#666"></span>
                         </div>
                     </li>
+
                     <li>
-                        <div class="vis-theme-rec" data-color="209,65,17|255,255,255|240, 225, 221|0,0,0">
+                        <div class="vis-theme-rec" data-color="209,65,17|255,255,255|240, 236, 235|74, 1, 2">
                             <span class="vis-theme-color" style="background-color:#d14111"></span>
                             <span class="vis-theme-color" style="background-color:White"></span>
                             <span class="vis-theme-color" style="background-color:#f0e1dd"></span>
-                            <span class="vis-theme-color" style="background-color:black"></span>
+                            <span class="vis-theme-color" style="background-color:#4a0102"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="vis-theme-rec" data-color="129, 177, 52|255,255,255|236, 241, 228|34, 44, 10">
+                            <span class="vis-theme-color" style="background-color:#94c83f"></span>
+                            <span class="vis-theme-color" style="background-color:White"></span>
+                            <span class="vis-theme-color" style="background-color:rgba(236, 241, 228, 1)"></span>
+                            <span class="vis-theme-color" style="background-color:rgba(34,44,10, 1)"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="vis-theme-rec" data-color="0, 152, 247|255,255,255|240,249,255|36,61,76">
+                            <span class="vis-theme-color" style="background-color:#1aa0ed"></span>
+                            <span class="vis-theme-color" style="background-color:white"></span>
+                            <span class="vis-theme-color" style="background-color:#f0f9ff"></span>
+                            <span class="vis-theme-color" style="background-color:#243d4c"></span>
                         </div>
                     </li>
                     <li></li>
@@ -83,24 +101,26 @@
         <li id="vis_userDisplayName" class="vis-app-hdr-r-user">
             <a id="vis_userName">@User.Identity.Name</a>
             @*
-                <div class="vis-div-userAvatar">*@
-            @if (ViewBag.UserPic != null)
+        <div class="vis-div-userAvatar">*@
+            @if (ViewBag.UserPic == null || ViewBag.UserPic == "NoRecordFound" || ViewBag.UserPic == "FileDoesn'tExist")
             {
-                if (ViewBag.UserPic != "NoRecordFound" && ViewBag.UserPic != "FileDoesn'tExist")
-                {
-                    <img id="vis_LoginUserImage" src="@ViewBag.UserPic" class="vis-userAvatar" />
-                }
-                else
-                {
-                    <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
-                }
+            ViewBag.UserPic="";
             }
-            else
-            {
-                <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
-            }
+            <div class="vis-app-user-img-wrap">
+                <i class="fa fa-user"></i>
+                <img src="@ViewBag.UserPic" alt="profile image">
+            </div><!-- user-img-wrap -->
+            @*else
+        {
+        <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
+        }
+        }
+        else
+        {
+        <img id="vis_LoginUserImage" src="~/Areas/VIS/Images/home/userAvatar.png" class="vis-userAvatar" />
+        }*@
             @*
-                </div>*@
+        </div>*@
 
 
         </li>

@@ -1,351 +1,709 @@
 ﻿; (function (VIS, $) {
-//****************************************************//
-//**             VPanel                            **//
-//**************************************************//
-VIS.VGridPanel = function () {
+    //****************************************************//
+    //**             VPanel                            **//
+    //**************************************************//
+    VIS.VGridPanel = function () {
 
-    var oldFieldGroup = null, columnIndex = -2, allControlCount = -1;;
-    var allControls = [];
-    var allLinkControls = [];
+        var oldFieldGroup = null, columnIndex = -2, allControlCount = -1;;
+        var allControls = [];
+        var allLinkControls = [];
 
-    var $table;
-    var $row = null;
-    var $td0, $td1, $td11, $td12, $td2, $td3, $td31, $td32, $td4;
+        var $table;
 
-    /** Map of group name to list of components in group. */
-    //control = field array
-    var compToFieldMap = {}
+        var $td0, $td1, $td2, $td3;
 
-    /** Map of group name to list of components in group. */
-    var groupToCompsMap = {};
+        var _curParent = null;
 
+        var col0 = { rSpan: 1, cSpan: 0, cSpace: 0 ,orgRSpan:1};
+        var col1 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1};
+        var col2 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1 };
+        var col3 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1};
 
-    function initComponent() {
-        $table = $("<div class='vis-ad-w-p-vc-ev-grid'>"); //   $("<table class='vis-gc-vpanel-table'>");
-        //<tr><td class='vis-gc-vpanel-table-td0'><td class='vis-gc-vpanel-table-td1'>" +
-        //"<td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'><td class='vis-gc-vpanel-table-td2'>" +
-        //"<td  class='vis-gc-vpanel-table-td3'><td  class='vis-gc-vpanel-table-td-auto'><td  class='vis-gc-vpanel-table-td-auto'>" +
-        //"<td class='vis-gc-vpanel-table-td4'></tr></table>");
-    };
+        /** Map of group name to list of components in group. */
+        //control = field array
+        var compToFieldMap = {}
 
-    initComponent();
+        /** Map of group name to list of components in group. */
+        var groupToCompsMap = {};
 
-    function addRow() {
-        $td0 = $td1 = $td11 = $td12 = $td2 = $td3 = $td31 = $td32 = $td4 = $row = null;
-       // $td0 = $("<td  class='vis-gc-vpanel-table-td0'>");
-        $td0 = $("<div class='vis-ev-col'></div>");
-        //$td1 = $("<td colspan = '3' class='vis-gc-vpanel-table-td1'>");
-        $td1 = $("<div class='vis-ev-col vis-ev-col-start2'></div>");
-        //$td2 = $("<td class='vis-gc-vpanel-table-td2'>");
-        $td2 = $("<div class='vis-ev-col vis-ev-col-start3' ></div>");
-        //$td3 = $("<td colspan='3' class='vis-gc-vpanel-table-td3'>");
-        $td3 = $("<div class='vis-ev-col vis-ev-col-start4'></div>");
-        //$td4 = $("<td class='vis-gc-vpanel-table-td4'>");
+        var fieldToCompParentMap = {};
+        var colDescHelpList = {};
 
-       // $row = $("<tr>");
-       // $table.append($row);
-        $table.append($td0).append($td1).append($td2).append($td3);//.append($td4);
-    }
+        var lastPopover = null;
+        function initComponent() {
+            $table = $("<div class='vis-ad-w-p-vc-ev-grid'>"); //   $("<table class='vis-gc-vpanel-table'>");
+            $table.on("click", "span.vis-ev-ctrlinfowrap", onInfoClick);
+        };
 
-    function onGroupClick(e) {
-        e.stopPropagation();
-        var o = $(this);
-        var name = o.data("name");
-        var dis = o.data("display");
+        function onInfoClick(e) {
+            var curTgt = $(e.currentTarget);
+            var colName = curTgt.data('colname');
+            if (colName != '') {
 
-        //console.log(name);
-        //console.log(dis);
-        var show = false;
-        if (dis === "show") {
-            o.data("display", "hide");
-            $(o.children()[0]).addClass("vis-gc-vpanel-fieldgroup-img-rotate");
-        } else {
-            o.data("display", "show");
-            show = true;
-            $(o.children()[0]).removeClass("vis-gc-vpanel-fieldgroup-img-rotate");
-        }
-
-        var list = groupToCompsMap[name];
-        for (var i = 0; i < list.length; i++) {
-            var field = compToFieldMap[list[i].getName()];
-            list[i].tag = show;
-            list[i].setVisible(show && field.getIsDisplayed(true));
-        }
-    };
-
-    function addGroup(fieldGroup) {
-        if (oldFieldGroup == null) {
-            //addTop();
-            oldFieldGroup = "";
-        }
-        if (fieldGroup == null || fieldGroup.length == 0 || fieldGroup.equals(oldFieldGroup))
-            return false;
-        oldFieldGroup = fieldGroup;
-
-        setColumns(columnIndex);
-        addRow();
-        var gSpan = $("<span class='vis-gc-vpanel-fieldgroup-span'>" + fieldGroup + "</span>");
-        var gImg = $("<img class='vis-gc-vpanel-fieldgroup-img' src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/base/fieldgrpdown.png' >");
-        var gDiv = $("<div class='vis-gc-vpanel-fieldgroup' data-name='" + fieldGroup + "' data-display='show' >").append(gImg).append(gSpan);
-       
-        $td0.append(gDiv);
-        columnIndex = 8;
-
-        //VLine fp = new VLine(fieldGroup);
-        gDiv.on("click", onGroupClick);
-
-        return true;
-    };
-
-    function addToCompList(comp) {
-
-        if (oldFieldGroup != null && !oldFieldGroup.equals("")) {
-            var compList = null;
-
-            if (groupToCompsMap[oldFieldGroup]) {
-                compList = groupToCompsMap[oldFieldGroup];
-            }
-
-            if (compList == null) {
-                compList = [];
-                groupToCompsMap[oldFieldGroup] = compList;
-            }
-            compList.push(comp);
-        }
-    };
-
-    function setColumns() {
-        if ($td0 != null) {
-            if (columnIndex < 2) {
-                $td0.addClass("vis-ev-col-end2");
-                $td1.removeClass("vis-ev-col-start2").addClass("vis-ev-col-start3").addClass("vis-ev-col-end4");
-                $td2.remove();
-                $td3.remove();
-            }
-            else if (columnIndex == 8) {
-                $td3.remove();
-                $td2.remove();
-                $td2.remove();
-                $td0.addClass("vis-ev-col-end4");
-            }
-        }
-    }
-    
-    this.addField = function (editor, mField) {
-
-        var insertRow = false;
-
-        /* Dont Add in control panel */
-        if (mField.getIsLink()) {
-            allControls[++allControlCount] = editor;
-            //allControls.push(editor);
-            allLinkControls.push(editor);
-            return;
-        }
-
-        var label = VIS.VControlFactory.getLabel(mField);
-        if (label == null && editor == null)
-            return;
-        var sameLine = mField.getIsSameLine();
-        if (addGroup(mField.getFieldGroup(),columnIndex)) {
-            sameLine = false;
-        }
-
-        if (sameLine) {
-            ++columnIndex;
-            if (columnIndex > 3) {
-                sameLine = false;
-                insertRow = true;
-               // columnIndex = 0;
-            }
-            else if (columnIndex < 0) {
-                //addRow();
-                insertRow = true;
-                //columnIndex = 0;
-            }
-        }
-        else {
-            //columnIndex = 0;
-            insertRow = true;
-            //addRow();
-        }
-
-        if (insertRow) {
-            setColumns();
-            addRow();
-            columnIndex = 0;
-        }
-
-        if (label != null) {
-            if (sameLine) {
-                if (columnIndex == 1) {
-                    $td1.append(label.getControl());
+                if (lastPopover) {
+                    lastPopover.popover('dispose');
+                    lastPopover = null;
                 }
-                else if (columnIndex == 2) {
-                    $td2.append(label.getControl());
-                   
+
+                curTgt.attr('data-content', colDescHelpList[colName].help);
+                //attr('title', colDescHelpList[colName].desc);
+                lastPopover = curTgt.popover('show');
+
+            }
+        }
+
+        initComponent();
+
+        function initCols(isCol0, isCol1, isCol2, isCol3) {
+
+            if (isCol0)
+                _curParent = $td0 = $("<div class='vis-ev-col'></div>");
+            if (isCol1)
+                _curParent = $td1 = $("<div class='vis-ev-col vis-ev-col-start2'></div>");
+            if (isCol2)
+                _curParent = $td2 = $("<div class='vis-ev-col vis-ev-col-start3'></div>");
+            if (isCol3)
+                _curParent = $td3 = $("<div class='vis-ev-col vis-ev-col-start4'></div>");
+        };
+
+        function reset(col) {
+            if (!col) {
+                col0 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+                col1 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+                col2 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+                col3 = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+            }
+            else if (col.rSpan <= 1) {
+                col = { rSpan: 1, cSpan: 0, cSpace: 0, set: false };
+            }
+        };
+
+        function adjustRowSpanForSameLine(colIndex){
+           // if(colIndex)
+
+        }
+
+        function adjustRowSpan(colIndex) {
+
+            if (col0.rSpan > 1) { //skip column 
+                if (col0.set && colIndex ==1)  { //special case
+                    col0.set = false;
+                }
+                else 
+                    --col0.rSpan;
+
+                reset(col0);
+            }
+            if (col1.rSpan > 1) { //skip column 
+                if (colIndex == 2  && col1.set) { //special case
+                    col1.set = false;
+                }
+                else 
+                --col1.rSpan;
+                reset(col1);
+            }
+            if (col2.rSpan > 1) { //skip column 
+                if (colIndex == 3 && col2.set) { //special case
+                    col2.set = false;
+                }
+                else 
+                --col2.rSpan;
+                reset(col2);
+            }
+            if (col3.rSpan > 1) { //skip column 
+                --col3.rSpan;
+                reset(col3);
+            }
+        };
+
+        function adjustLayout(mField, isNewRow) {
+            var rowSpan = mField.getFieldBreadth();
+            var colSpan = mField.getFieldColSpan();
+            var cellSpace = mField.getCellSpace();
+            var isLongFiled = mField.getIsLongField();
+            var isLineBreak = mField.getIsLineBreak();
+
+            if (isLineBreak) {
+                reset();
+                isNewRow = true;
+            }
+            if (isNewRow) {
+                adjustRowSpan(columnIndex);
+                addRow();
+                columnIndex = 0;
+            }
+           
+
+            if (columnIndex == 0) {
+                if (isLongFiled) {
+                    addRow();//add last row;
+                    reset();
+                    initCols(true);
+                    $td0.addClass("vis-ev-col-end4");
+                    columnIndex = 4;
                 }
                 else {
-                    $td3.append(label.getControl());
-                }
-            } else {
-                $td0.append(label.getControl());
-            }
-
-            if (mField.getDescription().length > 0) {
-                label.getControl().prop('title', mField.getDescription());
-            }
-
-
-            addToCompList(label);
-            compToFieldMap[label.getName()] = mField;
-            allControls[++allControlCount] = label;
-        }
-        if (editor != null) {
-            if (sameLine) {
-                if (columnIndex == 1) {
-                    $td1.append(editor.getControl());
-                }
-                else if (columnIndex == 2) {
-                    $td2.append(editor.getControl());
-                }
-                else {
-                    $td3.append(editor.getControl());
-                }
-            } else {
-                $td0.append(editor.getControl());
-            }
-
-            var fieldVFormat = mField.getVFormat();
-            switch (fieldVFormat) {
-                case '': {
-                    break;
-                }
-                default: {
-                    editor.getControl().on("focusout", function (e) {
-                        var patt = new RegExp(fieldVFormat);
-                        if (VIS.DisplayType.IsString(mField.getDisplayType())) {
-                            if ($(e.target).val() != null) {
-                                if ($(e.target).val().toString().trim().length > 0) {
-                                    if (!patt.test($(e.target).val())) {
-                                        //Work DOne to set focus in field whose value does not match with regular expression.
-                                        VIS.ADialogUI.warn(VIS.Msg.getMsg('RegexFailed') + ":" + mField.getHeader(), "", function () {
-                                            $(e.target).focus();
-                                        });
-
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-
-            var count = editor.getBtnCount();
-
-           // if (count > 0) {
-            if (0 > 0) {
-
-                while (count > 0) {
-                    var ctrl = editor.getBtn(count - 1);
-
-                    if (ctrl != null) {
-                        if (sameLine) {
-                            $("<td class='vis-gc-vpanel-table-td-fix30'>").append(ctrl).insertAfter($td3);
-                        }
-                        else {
-                            $("<td class='vis-gc-vpanel-table-td-fix30'>").append(ctrl).insertAfter($td1);
-                        }
+                    // check for row span
+                    if (col0.rSpan > 1) { //skip column 
+                        columnIndex += col0.cSpan;
+                        //--col0.rSpan;
+                        //reset(col0);
                     }
-                    --count;
+                    else if (cellSpace > 0) {
+                        if (cellSpace > 3)
+                            cellSpace = 3;
+                        columnIndex += cellSpace;
+                        cellSpace = 0; //reset
+                    }
+                    else if ($td0) {
+                        columnIndex += 1;
+                    }
+                    else {
+
+                        initCols(true);
+                        if (colSpan == 2) {
+                            if (col1.rSpan <= 1) //if nor row span on on colujn 1
+                                $td0.addClass("vis-ev-col-end2");
+                        }
+
+                        else if (colSpan == 3) {
+                            if (col1.rSpan <= 1 && col2.rSpan <= 1)
+                                $td0.addClass("vis-ev-col-end3");
+                            else if (col1.cSpan < 1)
+                                $td0.addClass("vis-ev-col-end2");
+                        }
+                        else if (colSpan > 3) {
+                            if (col1.rSpan <= 1 && col2.rSpan <= 1 && col3.rSpan <= 1)
+                                $td0.addClass("vis-ev-col-end4");
+                            else if (col1.rSpan <= 1 && col2.rSpan <= 1)
+                                $td0.addClass("vis-ev-col-end3");
+                            else if (col1.rSpan <= 1)
+                                $td0.addClass("vis-ev-col-end2");
+                        }
+                        columnIndex += colSpan - 1;
+
+                        if (rowSpan > 1) {
+                            col0.rSpan = rowSpan + 1; //extra to fill addnew minus
+                            col0.set = true;
+                            col0.cSpan = colSpan;
+                            col0.cSpace = cellSpace;
+                            $td0.css("grid-row", "span " + rowSpan);
+                        }
+                        return;
+                    }
                 }
-                count = -1;
-                ctrl = null;
-            }
-            else {
-
             }
 
-            count = editor.getBtnCount();
+            if (columnIndex == 1) {
 
+                // check for row span
+                if (col1.rSpan > 1) { //skip column 
+                    columnIndex += col1.cSpan;
+                    //--col1.rSpan;
+                    //reset(col1);
+                }
+                else if (cellSpace > 0) {
+                    if (cellSpace > 2)
+                        cellSpace = 2;
+                    columnIndex += cellSpace;
+                    cellSpace = 0;
+                }
+                else if ($td1) {
+                    columnIndex += 1;
+                }
+                else {
 
-            if (!sameLine && mField.getIsLongField()) {
-                $td1.remove();
-                $td2.remove();
-                $td3.remove();
-                $td0.addClass("vis-ev-col-end4");
-                columnIndex = 4;
-            }
-            else {
-                if (sameLine) {
-                    //if (columnIndex == 1)
-                    //    $td1.addClass("vis-ev-col-start2 vis-ev-col-end2");
-                    //else if (columnIndex == 2)
-                    //    $td2.addClass("vis-ev-col-start3 vis-ev-col-end3");
-                    //else 
-                    //    $td3.addClass("vis-ev-col-start4 vis-ev-col-end4");
+                    initCols(false, true);
+                    if (colSpan == 2) {
+                        if (col2.rSpan <= 1) //if nor row span on on colujn 1
+                            $td1.addClass("vis-ev-col-end3");
+                    }
 
-                   // columnIndex += 1;
-                } else {
-                   // $td1.prop('colspan', 3 - count);
-                    //$td3.prop('colspan', 3);
+                    else if (colSpan >= 3) {
+                        if (col2.rSpan <= 1 && col3.rSpan <= 1)
+                            $td1.addClass("vis-ev-col-end4");
+                        else if (col2.cSpan < 1)
+                            $td1.addClass("vis-ev-col-end3");
+                    }
+
+                    columnIndex += colSpan - 1;
+                    if (rowSpan > 1) {
+                        col1.rSpan = rowSpan + 1;
+                        col1.set = true;
+                        col1.cSpan = colSpan;
+                        col1.cSpace = cellSpace;
+                        $td1.css("grid-row", "span " + rowSpan);
+                    }
+                    return;
                 }
             }
-            count = 0;
 
-            addToCompList(editor);
-            compToFieldMap[editor.getName()] = mField;
-            allControls[++allControlCount] = editor;
-        }
-    };
+            if (columnIndex == 2) {
 
-    this.getRoot = function () {
-        return $table;
-    };
+                // check for row span
+                if (col2.rSpan > 1) { //skip column 
+                    columnIndex += col2.cSpan;
+                    //--col2.rSpan;
+                    //reset(col2);
+                }
+                else if (cellSpace > 0) {
+                    if (cellSpace > 1)
+                        cellSpace = 1;
+                    columnIndex += cellSpace;
+                    cellSpace = 0;
+                }
+                else if ($td2) {
+                    columnIndex += 1;
+                }
+                else {
 
-    this.getComponents = function () {
-        return allControls;
-    }
+                    initCols(false, false, true);
+                    if (colSpan >= 2) {
+                        if (col3.rSpan <= 1) //if nor row span on on colujn 1
+                            $td2.addClass("vis-ev-col-end4");
+                    }
 
-    this.getLinkComponents = function () {
-        return allLinkControls;
-    }
+                    columnIndex += colSpan - 1;
+                    if (rowSpan > 1) {
+                        col2.rSpan = rowSpan + 1;
+                        col2.set =  true;
+                        col2.cSpan = colSpan;
+                        col2.cSpace = cellSpace;
+                        $td2.css("grid-row", "span " + rowSpan);
+                    }
+                    return;
+                }
+            }
 
-    this.dispose = function () {
-        allLinkControls.length = 0;
-        allLinkControls = null;
+            if (columnIndex == 3) {
+                // check for row span
+                if (col3.rSpan > 1) { //skip column 
+                    //--col3.rSpan;
+                    //reset(col3);
+                }
+                else if ($td3) {
+                    isNewRow = true;
+                    //addRow();
+                    //columnIndex = 0;
+                }
+                else {
+                    initCols(false, false, false, true);
+                    if (colSpan >= 2) {
+                        $td3.addClass("vis-ev-col-end4");
+                    }
+                    if (rowSpan > 1) {
+                        col3.rSpan = rowSpan + 1;
+                        col3.set = true;
+                        col3.cSpan = colSpan;
+                        col3.cSpace = cellSpace;
+                        $td3.css("grid-row", "span " + rowSpan);
+                    }
+                }
+            }
 
-        while (allControls.length > 0) {
-            allControls.pop().dispose();
+            //if all col index are skipped
+            if (!$td0 && !$td1 && !$td2 && !$td3) {
+                //columnIndex = 0;
+                adjustLayout(mField, isNewRow);
+            }
+        };
+
+        function addRow() {
+
+            if ($td0)
+                $table.append($td0);
+            if ($td1)
+                $table.append($td1);
+            if ($td2)
+                $table.append($td2);
+            if ($td3)
+                $table.append($td3);
+
+            $td0 = $td1 = $td2 = $td3 = $td4 = null;
+            //if (td3RSpan < 0)
+            //    $table.append($td3)
+            //else if (td3RSpan > 100) {
+            //    td3RSpan = td3RSpan - 100;
+            //    $table.append($td3.css('grid-row', 'span ' + td3RSpan));
+            //}
         };
 
 
 
-        // console.log(compToFieldMap);
-        for (var p in compToFieldMap) {
-            compToFieldMap[p] = null;
-            delete compToFieldMap[p];
-        }
-        compToFieldMap = null;
+        function onGroupClick(e) {
+            e.stopPropagation();
+            var o = $(this);
+            var name = o.data("name");
+            var dis = o.data("display");
 
-        // console.log(groupToCompsMap);
-        for (var p1 in groupToCompsMap) {
-            groupToCompsMap[p1].length = 0;
-            groupToCompsMap[p1] = null;
-            delete groupToCompsMap[p];
-        }
-        groupToCompsMap = null;
+            //console.log(name);
+            //console.log(dis);
+            var show = false;
+            if (dis === "show") {
+                o.data("display", "hide");
+                $(o.children()[2]).addClass("vis-ev-col-fg-rotate");
+            } else {
+                o.data("display", "show");
+                show = true;
+                $(o.children()[2]).removeClass("vis-ev-col-fg-rotate");
+            }
 
-        allControlCount = null;
-        allControls = null;
-        $table.remove();
-        $table = null;
-        this.addField = null;
-        addRow = null;
-        addToCompList = null;
+            var list = groupToCompsMap[name];
+
+            for (var i = 0; i < list.length; i++) {
+                var field = list[i];
+                var ctrls = compToFieldMap[field.getColumnName()];
+
+                for (var j = 0; j < ctrls.length; j++) {
+                    ctrls[j].tag = show;
+                    ctrls[j].setVisible(show && field.getIsDisplayed(true));
+                }
+                if (show && field.getIsDisplayed(true))
+                    fieldToCompParentMap[field.getColumnName()].show();
+                else
+                    fieldToCompParentMap[field.getColumnName()].hide();
+            }
+        };
+
+        function addGroup(fieldGroup) {
+            if (oldFieldGroup == null) {
+                //addTop();
+                oldFieldGroup = "";
+            }
+            if (fieldGroup == null || fieldGroup.length == 0 || fieldGroup.equals(oldFieldGroup))
+                return false;
+            oldFieldGroup = fieldGroup;
+
+            //setColumns(columnIndex);
+            // clearRowSpan();
+            addRow();
+            initCols(true);
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="hide">' +
+                '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
+                '<span class="vis-ev-col-fg-more" style="display:none"><i class="fa fa-ellipsis-h"></i></span>' +
+                '<i class= "fa fa-angle-up  vis-ev-col-fg-rotate">' +
+                '</span>' +
+                '</div>');
+
+
+            $td0.append(gDiv);
+            $td0.addClass("vis-ev-col-end4");
+            columnIndex = 0;
+
+            //VLine fp = new VLine(fieldGroup);
+            gDiv.on("click", onGroupClick);
+
+            return true;
+        };
+
+        function addToCompList(comp) {
+
+            if (oldFieldGroup != null && !oldFieldGroup.equals("")) {
+                var compList = null;
+
+                if (groupToCompsMap[oldFieldGroup]) {
+                    compList = groupToCompsMap[oldFieldGroup];
+                }
+
+                if (compList == null) {
+                    compList = [];
+                    groupToCompsMap[oldFieldGroup] = compList;
+                }
+                compList.push(comp);
+            }
+        };
+
+        function addCompToFieldList(name, comp) {
+
+            if (compToFieldMap[name])
+                compToFieldMap[name].push(comp);
+            else {
+                compToFieldMap[name] = [];
+                compToFieldMap[name].push(comp);
+            }
+        }
+
+        function addFieldToGroupList(mField) {
+
+            if (oldFieldGroup != null && !oldFieldGroup.equals("")) {
+                var fieldList = null;
+
+                if (groupToCompsMap[oldFieldGroup]) {
+                    fieldList = groupToCompsMap[oldFieldGroup];
+                }
+
+                if (fieldList == null) {
+                    fieldList = [];
+                    groupToCompsMap[oldFieldGroup] = fieldList;
+                }
+                fieldList.push(mField);
+                fieldToCompParentMap[mField.getColumnName()].hide();
+            }
+        };
+
+        this.addField = function (editor, mField) {
+
+            var insertRow = false;
+
+            /* Dont Add in control panel */
+            if (mField.getIsLink()) {
+                allControls[++allControlCount] = editor;
+                //allControls.push(editor);
+                allLinkControls.push(editor);
+                return;
+            }
+
+            var label = VIS.VControlFactory.getLabel(mField);
+            if (label == null && editor == null)
+                return;
+            var sameLine = mField.getIsSameLine();
+            if (addGroup(mField.getFieldGroup(), columnIndex)) {
+                sameLine = false;
+            }
+
+
+
+            if (sameLine) {
+                ++columnIndex;
+                if (columnIndex > 3) {
+                    sameLine = false;
+                    insertRow = true;
+                    // columnIndex = 0;
+                }
+                else if (columnIndex < 0) {
+                    //addRow();
+                    insertRow = true;
+                    //columnIndex = 0;
+                }
+            }
+            else {
+                //columnIndex = 0;
+                insertRow = true;
+                //addRow();
+            }
+
+
+            adjustLayout(mField, insertRow);
+
+
+            if (label != null) {
+
+
+                if (mField.getDescription().length > 0) {
+                    //label.getControl().prop('title', mField.getDescription());
+                }
+
+
+                //addToCompList(label);
+                //compToFieldMap[label.getName()] = mField;
+                addCompToFieldList(mField.getColumnName(), label);
+                allControls[++allControlCount] = label;
+            }
+
+            if (editor != null) {
+
+
+                var fieldVFormat = mField.getVFormat();
+                switch (fieldVFormat) {
+                    case '': {
+                        break;
+                    }
+                    default: {
+                        editor.getControl().on("focusout", function (e) {
+                            var patt = new RegExp(fieldVFormat);
+                            if (VIS.DisplayType.IsString(mField.getDisplayType())) {
+                                if ($(e.target).val() != null) {
+                                    if ($(e.target).val().toString().trim().length > 0) {
+                                        if (!patt.test($(e.target).val())) {
+                                            //Work DOne to set focus in field whose value does not match with regular expression.
+                                            VIS.ADialogUI.warn(VIS.Msg.getMsg('RegexFailed') + ":" + mField.getHeader(), "", function () {
+                                                $(e.target).focus();
+                                            });
+
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+
+                var count = editor.getBtnCount();
+
+
+                //addToCompList(editor);
+                // compToFieldMap[editor.getName()] = mField;
+                addCompToFieldList(mField.getColumnName(), editor);
+                allControls[++allControlCount] = editor;
+
+            }
+
+
+            //new design container
+            if (label != null || editor != null) {
+
+                var ctnr = _curParent;
+
+
+                insertCWrapper(label, editor, ctnr, mField);
+
+
+                fieldToCompParentMap[mField.getColumnName()] = ctnr;
+                addFieldToGroupList(mField);
+                colDescHelpList[mField.getColumnName()] = {
+                    // 'desc': mField.getDescription(),
+                    'help': mField.getHelp()
+                };
+            }
+        };
+
+        this.flushLayout = function () {
+            addRow();
+        };
+
+        this.getRoot = function () {
+            return $table;
+        };
+
+        this.getComponents = function () {
+            return allControls;
+        }
+
+        this.getLinkComponents = function () {
+            return allLinkControls;
+        }
+
+        this.setVisible = function (colName, show) {
+            if (fieldToCompParentMap[colName])
+                show ? fieldToCompParentMap[colName].show() : fieldToCompParentMap[colName].hide();
+        };
+
+        this.dispose = function () {
+            $table.off("click", "span.vis-ev-ctrlinfowrap", onInfoClick);
+            colDescHelpList = {};
+            if (lastPopover) {
+                lastPopover.popover('dispose');
+            }
+            lastPopover = null;
+
+            allLinkControls.length = 0;
+            allLinkControls = null;
+
+            while (allControls.length > 0) {
+                allControls.pop().dispose();
+            };
+
+
+
+            // console.log(compToFieldMap);
+            for (var p in compToFieldMap) {
+                compToFieldMap[p] = null;
+                delete compToFieldMap[p];
+            }
+            compToFieldMap = null;
+            fieldToCompParentMap = {};
+            fieldToCompParentMap = null;
+
+            // console.log(groupToCompsMap);
+            for (var p1 in groupToCompsMap) {
+                groupToCompsMap[p1].length = 0;
+                groupToCompsMap[p1] = null;
+                delete groupToCompsMap[p];
+            }
+            groupToCompsMap = null;
+
+            allControlCount = null;
+            allControls = null;
+            $table.remove();
+            $table = null;
+            this.addField = null;
+            addRow = null;
+            addToCompList = null;
+        };
+
     };
-    
-};
+
+    /**
+     * create wrapeer div and add conrols and label in parent div
+     * @param {any} label label to add
+     * @param {any} editor controls to add
+     * @param {any} parent current row/column div
+     * @param {any} mField model field 
+     */
+    function insertCWrapper(label, editor, parent, mField) {
+        var customStyle = mField.getHtmlStyle();
+
+        var wraper = '<div class="input-group vis-input-wrap">';
+        //special case for textarea and image button strech height to 100%
+        if (editor && (editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl().hasClass("vis-ev-col-img-ctrl"))) {
+            wraper = '<div class="input-group vis-input-wrap vis-ev-full-h">';
+        }
+
+        var ctrl = $(wraper);
+
+        if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
+            var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
+            if (mField.getFontClass() != '')
+                btns.push('<i class="' + mField.getFontClass() + '"></i>');
+            else
+                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
+            btns.push('</span></div>');
+            ctrl.append(btns.join(' '));
+
+        }
+
+        if (editor != null && customStyle != "") {
+            editor.getControl().attr('style', customStyle);
+        }
+
+        var ctrlP = $("<div class='vis-control-wrap'>");
+
+        if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName == "SELECT" ||
+            editor.getControl()[0].tagName == 'TEXTAREA') && editor.getControl()[0].type != 'checkbox') {
+            //editor.getControl().addClass("custom-select");
+            ctrlP.append(editor.getControl().attr("placeholder", " ").attr("data-placeholder", ""));
+            if (label != null) {
+                ctrlP.append(label.getControl());
+            }
+        }
+        else {
+            if (label != null)
+                ctrlP.append(label.getControl());
+            if (editor)
+                ctrlP.append(editor.getControl());
+        }
+
+        
+
+
+        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
+            "<i class='vis vis-info' aria-hidden='true'></i></span'>");
+
+        ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
+        ctrl.append(ctrlP);
+        if (editor) {
+            var count = editor.getBtnCount();
+            if (count > 0) {
+                editor.getControl().attr("data-hasBtn", " ");
+                var i = 0;
+                while (i < count) {
+                    var btn = editor.getBtn(i);
+                    if (btn != null) {
+                        ctrl.append($('<div class="input-group-append">').append(btn));
+                    }
+                    ++i;
+                }
+                count = -1;
+                i = 0;
+            }
+        }
+        parent.append(ctrl);
+    }
+
+
+
+
+
 }(VIS, jQuery));
 
 

@@ -13,7 +13,7 @@ using VIS.Helpers;
 
 using System.IO;
 using System.Net;
-using System.Text;
+
 using System.Web.Helpers;
 using System.Web.Hosting;
 
@@ -22,9 +22,7 @@ using VIS.Filters;
 using System.Web.Optimization;
 using VAdvantage.Login;
 using VAdvantage.Logging;
-using System.Web.Configuration;
 using System.Data;
-using VAdvantage.DataBase;
 
 namespace VIS.Controllers
 {
@@ -247,19 +245,30 @@ namespace VIS.Controllers
                         }
 
                         ViewBag.LibSuffix = "";
-
+                        ViewBag.FrameSuffix = "_v1";
+                        int libFound = 0;
                         foreach (Bundle b in BundleTable.Bundles)
                         {
-                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v"))
+                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v") && ViewBag.LibSuffix=="")
                             {
                                 ViewBag.LibSuffix = Util.GetValueOfInt(ctx.GetContext("#FRONTEND_LIB_VERSION")) > 2
                                                       ? "_v3" : "_v2";
+                                libFound++;
+                            }
+
+                            if (b.Path.Contains("VIS") && b.Path.Contains("_v"))
+                            {
+                                ViewBag.FrameSuffix = Util.GetValueOfInt(ctx.GetContext("#FRAMEWORK_VERSION")) > 1
+                                                      ? "_v2" : "_v1";
+                                libFound++;
+                            }
+                            if (libFound >= 2)
+                            {
                                 break;
                             }
                         }
-                        
                         //check system setting// set to skipped lib
-                       
+
                     }
                 }
             }
@@ -277,6 +286,9 @@ namespace VIS.Controllers
                 ViewBag.OrgList = new List<KeyNamePair>();
                 ViewBag.WarehouseList = new List<KeyNamePair>();
                 ViewBag.ClientList = new List<KeyNamePair>();
+
+                ViewBag.Languages = Language.GetLanguages();
+
                 Session["ctx"] = null;
                 ViewBag.direction = "ltr";
 

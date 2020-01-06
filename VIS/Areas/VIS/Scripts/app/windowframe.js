@@ -321,6 +321,7 @@
         //if (height == VIS.Env.getScreenHeight())
         //    return;
         // console.log("resize");
+       
         this.setSize(height);
         var hHeight = this.isHeaderVisible ? AWINDOW_HEADER_HEIGHT : 0;
         this.cPanel.sizeChanged(height - hHeight, width);
@@ -8240,7 +8241,7 @@
         sql += " WHERE t." + this.parentColumnName + "=@ID";
         if (this.identifierTranslated)
             sql += " AND t." + this.keyColumnName + "=tt." + this.keyColumnName
-                + " AND tt.AD_Language='" + VIS.Env.getAD_Language(VAdvantage.Utility.Env.getCtx()) + "'";
+                + " AND tt.AD_Language='" + VIS.context.getAD_Language() + "'";
         //	Order
         sql += " ORDER BY ";
         if (this.columnYesNoName != null)
@@ -9197,12 +9198,15 @@
                         if (col.displayType == VIS.DisplayType.Date) {
                             var d = new Date(val);
                             d.setMinutes(d.getTimezoneOffset() + d.getMinutes());
-                            val = Globalize.format(d, 'd');
+                            //val = Globalize.format(d, 'd');
+                            val = d.toLocaleDateString();
                         }
                         else if (col.displayType == VIS.DisplayType.DateTime)
-                            val = Globalize.format(new Date(val), 'f');
+                            val = new Date(val).toLocaleString();
+                        //val = Globalize.format(new Date(val), 'f');
                         else
-                            val = Globalize.format(new Date(val), 't');
+                            val = new Date(val).toTimeString();
+                    //val = Globalize.format(new Date(val), 't');
                     else val = "";
                     return val;
                 }

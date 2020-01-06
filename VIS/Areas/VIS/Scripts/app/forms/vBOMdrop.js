@@ -97,8 +97,8 @@
 
             var designPProcess = " <div class='vis-pSelectProcess'>"  // div pSelectProcess starts here
                                      + " <div class='vis-paymentselect-field'>"  // div starts here    
-                                      + " <input id='VIS_btnCancel_" + $self.windowNo + "' style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;height:40px;margin-left:10px;' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
-                                     + " <input id='VIS_btnOK_" + $self.windowNo + "' disabled style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;margin-left:10px;height:40px;' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
+                + " <input id='VIS_btnCancel_" + $self.windowNo + "' style='background-color:rgba(var(--v-c-primary), 1);color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;height:40px;margin-left:10px;' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
+                + " <input id='VIS_btnOK_" + $self.windowNo + "' disabled style='background-color:rgba(var(--v-c-primary), 1);color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;margin-left:10px;height:40px;' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
                                      + " </div>" // div pSelectButtons ends here 
                                      + " </div>" // div pSelectProcess ends here 
             $divContainer.append($(designPInfo)).append($divBOMLines).append($(designPProcess));
@@ -293,7 +293,7 @@
             if (data.Opportunity != null || data.Opportunity.length > 0) {
                 $cmbOpportunity.empty();
                 $cmbOpportunity.append($('<Option value="-1"></option>'));
-                for (var i in data.Product) {
+                for (var i in data.Opportunity) {
                     $cmbOpportunity.append($('<Option value="' + data.Opportunity[i].ID + '">' + data.Opportunity[i].Value + '</option>'));
                 }
             }            

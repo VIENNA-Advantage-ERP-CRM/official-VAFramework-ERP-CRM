@@ -65,12 +65,12 @@
             $root = $("<table style='width:100%;height:100%'><tr><td style='height:100%'><div class='vis-css-treewindow' ></td></tr>" +
                      "<tr><td style='text-align:center'><div class='vis-tree-search'><div class='input-group'>" +
                         "<input type='text' class='form-control ui-autocomplete-input' placeholder='Search'>" +
-                        "  <span class='input-group-addon'><a href='#' class='glyphicon glyphicon-search'></a></span>" +
+                        "  <span class='input-group-append'><button class='input-group-text'><a href='#' class='glyphicon glyphicon-search'></a></button></span>" +
                     "</div></div></td></tr></table>");
 
             //$root = $("<div class='vis-height-full' >");
             $treeRoot = $root.find(".vis-css-treewindow");
-            $treeRoot.css({ 'margin-left': '5px', "max-width": "295px", "background-color": "#eee" });
+            $treeRoot.css({"max-width": "290px" });
             $searchRoot = $root.find(".vis-tree-search");
             $btnSearch = $root.find(".input-group-addon");
             $txtSearch = $root.find("input");

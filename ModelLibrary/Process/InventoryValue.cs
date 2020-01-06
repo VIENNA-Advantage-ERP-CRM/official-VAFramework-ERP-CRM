@@ -88,6 +88,14 @@ namespace VAdvantage.Process
             StringBuilder sql = new StringBuilder("DELETE FROM T_InventoryValue WHERE AD_PInstance_ID=");
             sql.Append(GetAD_PInstance_ID());
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
+            MPInstance instance = new MPInstance(GetCtx(), GetAD_PInstance_ID(), null);
+            DateTime Createddate = instance.GetCreated();
+            Createddate = Createddate.AddHours(-1);
+
+            string qry = "select MAX(AD_PINSTANCE_ID) from AD_PINSTANCE WHERE AD_Process_ID=" + instance.GetAD_Process_ID() + " AND created<  TO_Date('" + Createddate.ToString("MM/dd/yyyy HH:mm:ss") + "', 'MM-DD-YYYY HH24:MI:SS')";
+            int MaxInstance_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+
+           int no1= DB.ExecuteQuery("DELETE FROM T_InventoryValue WHERE AD_PInstance_ID <=" + MaxInstance_ID);
 
             //	Insert Standard Costs
             sql = new StringBuilder("INSERT INTO T_InventoryValue "
@@ -140,12 +148,12 @@ namespace VAdvantage.Process
                         + " INNER JOIN M_Cost c ON (acs.C_AcctSchema_ID=c.C_AcctSchema_ID"
                             + " AND acs.M_CostType_ID=c.M_CostType_ID AND c.AD_Org_ID IN (0, w.AD_Org_ID)) "
                         + "WHERE c.M_CostElement_ID=" + _M_CostElement_ID
-                        + " AND iv.M_Warehouse_ID=w.M_Warehouse_ID"
-                        + " AND iv.M_Product_ID=c.M_Product_ID"
-                        + " AND iv.M_AttributeSetInstance_ID=c.M_AttributeSetInstance_ID) "
+                        + " AND w.M_Warehouse_ID=iv.M_Warehouse_ID"
+                        + " AND c.M_Product_ID=iv.M_Product_ID"
+                        + " AND c.M_AttributeSetInstance_ID=iv.M_AttributeSetInstance_ID AND rownum=1 AND w.m_warehouse_ID=" + _M_Warehouse_ID + ") "
                     + "WHERE EXISTS (SELECT * FROM T_InventoryValue ivv "
                         + "WHERE ivv.AD_PInstance_ID=" + GetAD_PInstance_ID()
-                        + " AND ivv.M_CostElement_ID IS NULL)");
+                        + " AND ivv.M_CostElement_ID IS NULL) AND iv.AD_PInstance_ID ="+GetAD_PInstance_ID());
                 int noUpdatedCost = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Updated Cost=" + noUpdatedCost);
             }
@@ -161,6 +169,10 @@ namespace VAdvantage.Process
              .Append("DateValue=").Append(GlobalVariable.TO_DATE(_DateValue, true)).Append(",")
             .Append("M_PriceList_Version_ID=").Append(_M_PriceList_Version_ID).Append(",")
             .Append("C_Currency_ID=").Append(_C_Currency_ID);
+            if (_M_CostElement_ID != 0)
+            {
+                sql.Append(",").Append("M_CostElement_ID=").Append(_M_CostElement_ID);
+            }
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Constants=" + no);
 

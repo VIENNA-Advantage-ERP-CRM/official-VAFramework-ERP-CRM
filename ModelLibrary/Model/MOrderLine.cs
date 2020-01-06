@@ -2664,6 +2664,91 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// This function is used for costing calculation
+        /// It gives consolidated product cost (taxable amt + tax amount + surcharge amt) based on setting
+        /// </summary>
+        /// <param name="orderline">order Line reference</param>
+        /// <returns>LineNetAmount of Product</returns>
+        public Decimal GetProductLineCost(MOrderLine orderline)
+        {
+            if (orderline == null || orderline.Get_ID() <= 0)
+            {
+                return 0;
+            }
+
+            // Get Taxable amount from orderline
+            Decimal amt = orderline.GetTaxAbleAmt();
+
+            // create object of tax - for checking tax to be include in cost or not
+            MTax tax = MTax.Get(orderline.GetCtx(), orderline.GetC_Tax_ID());
+            if (tax.Get_ColumnIndex("IsIncludeInCost") >= 0)
+            {
+                // add Tax amount in product cost
+                if (tax.IsIncludeInCost())
+                {
+                    amt += orderline.GetTaxAmt();
+                }
+
+                // add Surcharge amount in product cost
+                if (tax.Get_ColumnIndex("Surcharge_Tax_ID") >= 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    if (MTax.Get(orderline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
+                    {
+                        amt += orderline.GetSurchargeAmt();
+                    }
+                }
+            }
+
+            // if amount is ZERO, then calculate as usual with Line net amount
+            if (amt == 0)
+            {
+                amt = orderline.GetLineNetAmt();
+            }
+
+            return amt;
+        }
+
+        /// <summary>
+        /// Get Base value for Expected Cost Distribution
+        /// </summary>
+        /// <param name="CostDistribution">cost Distribution</param>
+        /// <returns>base number</returns>
+        public Decimal GetBase(String CostDistribution)
+        {
+            if (MLandedCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
+            {
+                return GetProductLineCost(this);
+            }
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
+                return Env.ONE;
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
+                return GetQtyOrdered();
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
+            {
+                MProduct product = GetProduct();
+                if (product == null)
+                {
+                    log.Severe("No Product");
+                    return Env.ZERO;
+                }
+                return Decimal.Multiply(GetQtyOrdered(), (Decimal)product.GetVolume());
+            }
+            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
+            {
+                MProduct product = GetProduct();
+                if (product == null)
+                {
+                    log.Severe("No Product");
+                    return Env.ZERO;
+                }
+                return Decimal.Multiply(GetQtyOrdered(), product.GetWeight());
+            }
+            log.Severe("Invalid Criteria: " + CostDistribution);
+            return Env.ZERO;
+        }
+
+
+        /// <summary>
         /// Set M_AttributeSetInstance_ID
         /// </summary>
         /// <param name="M_AttributeSetInstance_ID">id</param>
@@ -4305,7 +4390,7 @@ namespace VAdvantage.Model
                     }	//	stockec
                     //	update line                    
                 }	//	product
-            }   //	reverse inventory
+            }	//	reverse inventory
 
             // Reset Amount Dimension if Line Amount is different
             if (!newRecord && Is_ValueChanged("LineNetAmt"))
@@ -4392,7 +4477,6 @@ namespace VAdvantage.Model
                 log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "VIS_CantBeDeleted"));
                 return false;
             }
-
             return true;
         }
 

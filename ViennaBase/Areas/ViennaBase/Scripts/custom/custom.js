@@ -2,12 +2,8 @@
 /*add recid attribute to record object if not exist */
 
 if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
-    
-
-    // grid not getting refresh if render with records 
-    // jquery 3.4.1 compatibility issue 
-    /* extend  w2Grid rendering*/
     var old2grid = $.fn.w2grid;
+
     $.fn.w2grid = function () {
         var grd = old2grid.apply(this, arguments);
         if (grd.records.length > 0) {
@@ -122,7 +118,7 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
 
         el.addClass('w2ui-editable')
            .append(ctrl);
-        ctrl.css({ 'width': '100%' });
+        ctrl.css({ 'width': el.width()+50});
 
         edit.ctrl.gridPos = { index: index, col: column, dialog: false, recid: recid };
 

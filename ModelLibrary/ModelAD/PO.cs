@@ -619,6 +619,7 @@ namespace VAdvantage.Model
         /// <summary>
         ///Copy old values of From to new values of To.
         ///Does not copy Keys and AD_Client_ID/AD_Org_ID
+        /// do not copy those column values, whose IsCopy is False
         /// </summary>
         /// <param name="from">from old, existing & unchanged PO</param>
         /// <param name="to">to new, not saved PO</param>
@@ -631,7 +632,7 @@ namespace VAdvantage.Model
             {
                 for (int i1 = 0; i1 < from._mOldValues.Length; i1++)
                 {
-                    if (from.p_info.IsVirtualColumn(i1) || from.p_info.IsKey(i1))		//	KeyColumn
+                    if (from.p_info.IsVirtualColumn(i1) || from.p_info.IsKey(i1) || !from.p_info.IsCopy(i1))		//	KeyColumn
                         continue;
                     String colName = from.p_info.GetColumnName(i1);
                     //  Ignore Standard Values
@@ -661,7 +662,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < from._mOldValues.Length; i++)
                 {
                     if (from.p_info.IsVirtualColumn(i)
-                        || from.p_info.IsKey(i))		//	KeyColumn
+                        || from.p_info.IsKey(i) || !from.p_info.IsCopy(i))		//	KeyColumn
                         continue;
                     String colName = from.p_info.GetColumnName(i);
                     //  Ignore Standard Values
@@ -1349,6 +1350,17 @@ namespace VAdvantage.Model
             return AD_Window_ID;
         }
 
+        // Property for Master Data Versioning
+        private dynamic MasterDetails = null;
+        public void SetMasterDetails(dynamic MasterDet)
+        {
+            MasterDetails = MasterDet;
+        }
+        public dynamic GetMasterDetails()
+        {
+            return MasterDetails;
+        }
+
         /// <summary>
         /// Load LOB(large object)
         /// </summary>
@@ -1900,6 +1912,11 @@ namespace VAdvantage.Model
             {
                 _mNewValues[index] = Null.NULL;
             }
+            // Case handled for DB null
+            else if (value is DBNull)
+            {
+                _mNewValues[index] = null;
+            }
             else
             {
                 Type clazz = p_info.GetColumnClass(index);
@@ -2380,7 +2397,10 @@ namespace VAdvantage.Model
                 String value = (String)Get_Value(index);
                 if (value == null || value.Length == 0)
                 {
-                    value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                    //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                    
+                    // Handled to get Search Key based on Organization same as Document No.
+                    value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -2644,14 +2664,87 @@ namespace VAdvantage.Model
                 success = AfterSave(newRecord, success);
                 if (success && newRecord)
                     InsertTreeNode();
-
-
             }
             catch (Exception ex)
             {
                 log.Log(Level.WARNING, "afterSave" + " " + ex.Message);
                 log.SaveError("Error", ex.Message, false);
                 success = false;
+            }
+
+            // Case for Master Data Versioning, check if the record being saved is in Version table
+            if (GetTable().ToLower().EndsWith("_ver"))
+            {
+                // Get Master Data Properties
+                var MasterDetails = GetMasterDetails();
+                // check if Record has any Workflow (Value Type) linked, or Is Immediate save etc
+                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 && MasterDetails.ImmediateSave && !MasterDetails.HasDocValWF)
+                {
+                    // create object of parent table
+                    MTable tbl = MTable.Get(p_ctx, MasterDetails.AD_Table_ID);
+                    PO po = null;
+                    bool updateMasID = false;
+                    // check if Master table has single key or multiple keys or single key
+                    // then create object 
+                    if (tbl.IsSingleKey())
+                    {
+                        po = tbl.GetPO(p_ctx, MasterDetails.Record_ID, _trx);
+                        if (po.Get_ID() <= 0)
+                            updateMasID = true;
+                    }
+                    else
+                    {
+                        // fetch key columns for parent table
+                        string[] keyCols = tbl.GetKeyColumns();
+                        StringBuilder whereCond = new StringBuilder("");
+                        for (int w = 0; w < keyCols.Length; w++)
+                        {
+                            if (w == 0)
+                            {
+                                if (keyCols[w] != null)
+                                    whereCond.Append(keyCols[w] + " = " + Get_Value(keyCols[w]));
+                                else
+                                    whereCond.Append(" NVL(" + keyCols[w] + ",0) = 0");
+                            }
+                            else
+                            {
+                                if (keyCols[w] != null)
+                                    whereCond.Append(" AND " + keyCols[w] + " = " + Get_Value(keyCols[w]));
+                                else
+                                    whereCond.Append(" AND NVL(" + keyCols[w] + ",0) = 0");
+                            }
+                        }
+                        po = tbl.GetPO(p_ctx, whereCond.ToString(), _trx);
+                    }
+                    if (po != null)
+                    {
+                        po.SetAD_Window_ID(MasterDetails.AD_Window_ID);
+                        // copy date from Version table to Master table
+                        bool saveSuccess = CopyVersionToMaster(po);
+                        if (!saveSuccess)
+                        {
+                            if (_trx != null)
+                            {
+                                _trx.Rollback();
+                                _trx.Close();
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if (updateMasID)
+                            {
+                                MasterDetails.Record_ID = po.Get_ID();
+                                // set new values in MaserDetails Object
+                                SetMasterDetails(MasterDetails);
+                                // Update key column in version table against Master table 
+                                // only in case of single key column and in case of new record
+                                string sqlQuery = "UPDATE " + GetTable() + " SET " + po.Get_TableName() + "_ID = " + po.Get_ID() + " WHERE " + GetTable() + "_ID = " + Get_ID();
+                                int count = DB.ExecuteQuery(sqlQuery, null, _trx);
+                            }
+                        }
+                    }
+                }
             }
 
             if (success)
@@ -2695,6 +2788,30 @@ namespace VAdvantage.Model
 
         }
 
+        /// <summary>
+        /// Copy record from Version table to Master table
+        /// </summary>
+        /// <param name="po"></param>
+        /// <returns></returns>
+        private bool CopyVersionToMaster(PO po)
+        {
+            int count = Get_ColumnCount();
+            for (int i = 0; i < count; i++)
+            {
+                string columnName = Get_ColumnName(i);
+                // skip column if column name is either "Created" or "CreatedBy"
+                if (columnName.Trim().ToLower() == "created" || columnName.Trim().ToLower() == "createdby")
+                    continue;
+                if (po.Get_ColumnIndex(columnName) < 0)
+                    continue;
+                po.Set_ValueNoCheck(columnName, Get_Value(columnName));
+            }
+
+            if (!po.Save())
+                return false;
+
+            return true;
+        }
 
         protected virtual bool AfterSave(bool newRecord, bool success)
         {
@@ -3391,7 +3508,6 @@ namespace VAdvantage.Model
                 .Append("WHERE e.AD_Tree_ID=t.AD_Tree_ID AND Node_ID=").Append(id).Append(")");
             //
             // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
-
             if (AD_Table_ID == X_AD_Org.Table_ID)
             {
                 MOrg Org = new MOrg(GetCtx(), id, null);

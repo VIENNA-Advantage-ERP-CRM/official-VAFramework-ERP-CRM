@@ -189,29 +189,220 @@
             }
         };
 
-    this.createPageSettings = function () {
-        this.ulPaging = $('<ul style="float:right;margin-top:10px" class="vis-statusbar-ul">');
+        this.createPageSettings = function () {
+            this.ulPaging = $('<ul style="float:right;margin-top:10px" class="vis-statusbar-ul">');
 
-        this.liFirstPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="First Page" style="opacity: 0.6;"></div></li>');
+            this.liFirstPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="First Page" style="opacity: 0.6;"></div></li>');
 
-        this.liPrevPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="Page Up" style="opacity: 0.6;"></div></li>');
+            this.liPrevPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="Page Up" style="opacity: 0.6;"></div></li>');
 
-        this.cmbPage = $('<select style = "width:50px;">');
+            this.cmbPage = $('<select style = "width:50px;">');
 
-        this.liCurrPage = $('<li>').append(this.cmbPage);
+            this.liCurrPage = $('<li>').append(this.cmbPage);
 
-        this.liNextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" title="Page Down" style="opacity: 0.6;"></div></li>');
+            this.liNextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" title="Page Down" style="opacity: 0.6;"></div></li>');
 
-        this.liLastPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="Last Page" style="opacity: 0.6;"></div></li>');
+            this.liLastPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="Last Page" style="opacity: 0.6;"></div></li>');
 
 
-        this.ulPaging.append(this.liFirstPage).append(this.liPrevPage).append(this.liCurrPage).append(this.liNextPage).append(this.liLastPage);
-        this.pageEvents();
-    };
+            this.ulPaging.append(this.liFirstPage).append(this.liPrevPage).append(this.liCurrPage).append(this.liNextPage).append(this.liLastPage);
+            this.pageEvents();
+        };
 
-    this.pageEvents = function () {
-        this.liFirstPage.on("click", function () {
-            if ($(this).css("opacity") == "1") {
+        this.pageEvents = function () {
+            this.liFirstPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    $self.setBusy(true);
+                    var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
+                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_BankAccount_ID = null;
+                    if ($self.cmbBankAccount != null) {
+                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                    }
+                    var M_Product_ID = null, deliveryDate = null;
+                    if ($self.vProduct != null) {
+                        M_Product_ID = $self.vProduct.getValue();
+                    }
+                    if ($self.deliveryDate != null) {
+                        deliveryDate = $self.deliveryDate.getValue();
+                    }
+                    if (C_Order_ID != null) {
+                        if ($self.locatorField != null) {
+                            //for shipment haveing locator filed
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, 1);
+                        }
+                        else {
+                            //for invoice
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, 1);
+                        }
+                    }
+                    else if (C_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
+                    }
+                    else if (M_InOut_ID != null) {
+                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                    }
+                    else if (C_BankAccount_ID != null) {
+                        var trxDate = $self.Date.getValue();
+                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var DepositSlip = $self.DepositSlip.getValue();
+                        var DocumentNo = $self.DocumentNo.getValue();
+                        var AuthCode = $self.AuthCode.getValue();
+                        var CheckNo = $self.CheckNo.getValue();
+                        var Amount = $self.Amount.getValue();
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, 1);
+                    }
+                    //$self.setBusy(false);
+                }
+            });
+            this.liPrevPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    //displayData(true, parseInt(this.cmbPage.val()) - 1);
+                    $self.setBusy(true);
+                    var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
+                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_BankAccount_ID = null;
+                    if ($self.cmbBankAccount != null) {
+                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                    }
+                    var M_Product_ID = null, deliveryDate = null;
+                    if ($self.vProduct != null) {
+                        M_Product_ID = $self.vProduct.getValue();
+                    }
+                    if ($self.deliveryDate != null) {
+                        deliveryDate = $self.deliveryDate.getValue();
+                    }
+                    if (C_Order_ID != null) {
+                        if ($self.locatorField != null) {
+                            //for shipment haveing locator filed
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.val()) - 1);
+                        }
+                        else {
+                            //for invoice
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) - 1);
+                        }
+                    }
+                    else if (C_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
+                    }
+                    else if (M_InOut_ID != null) {
+                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
+                    }
+                    else if (C_BankAccount_ID != null) {
+                        var trxDate = $self.Date.getValue();
+                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var DepositSlip = $self.DepositSlip.getValue();
+                        var DocumentNo = $self.DocumentNo.getValue();
+                        var AuthCode = $self.AuthCode.getValue();
+                        var CheckNo = $self.CheckNo.getValue();
+                        var Amount = $self.Amount.getValue();
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) - 1);
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) - 1);
+                    }
+                    //$self.setBusy(false);
+                }
+            });
+            this.liNextPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    //displayData(true, parseInt(this.cmbPage.val()) + 1);
+                    $self.setBusy(true);
+                    var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
+                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_BankAccount_ID = null;
+                    if ($self.cmbBankAccount != null) {
+                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                    }
+                    var M_Product_ID = null, deliveryDate = null;
+                    if ($self.vProduct != null) {
+                        M_Product_ID = $self.vProduct.getValue();
+                    }
+                    if ($self.deliveryDate != null) {
+                        deliveryDate = $self.deliveryDate.getValue();
+                    }
+                    if (C_Order_ID != null) {
+                        if ($self.locatorField != null) {
+                            //for shipment haveing locator filed
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.val()) + 1);
+                        }
+                        else {
+                            //for invoice
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) + 1);
+                        }
+                    }
+                    else if (C_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
+                    }
+                    else if (M_InOut_ID != null) {
+                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
+                    }
+                    else if (C_BankAccount_ID != null) {
+                        var trxDate = $self.Date.getValue();
+                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var DepositSlip = $self.DepositSlip.getValue();
+                        var DocumentNo = $self.DocumentNo.getValue();
+                        var AuthCode = $self.AuthCode.getValue();
+                        var CheckNo = $self.CheckNo.getValue();
+                        var Amount = $self.Amount.getValue();
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) + 1);
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) + 1);
+                    }
+                    //$self.setBusy(false);
+                }
+            });
+            this.liLastPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    //displayData(true, parseInt(this.cmbPage.find("Option:last").val()));
+                    $self.setBusy(true);
+                    var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
+                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_BankAccount_ID = null;
+                    if ($self.cmbBankAccount != null) {
+                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                    }
+                    var M_Product_ID = null, deliveryDate = null;
+                    if ($self.vProduct != null) {
+                        M_Product_ID = $self.vProduct.getValue();
+                    }
+                    if ($self.deliveryDate != null) {
+                        deliveryDate = $self.deliveryDate.getValue();
+                    }
+                    if (C_Order_ID != null) {
+                        if ($self.locatorField != null) {
+                            //for shipment haveing locator filed
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.find("Option:last").val()));
+                        }
+                        else {
+                            //for invoice
+                            $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.find("Option:last").val()));
+                        }
+                    }
+                    else if (C_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                    }
+                    else if (M_InOut_ID != null) {
+                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                    }
+                    else if (C_BankAccount_ID != null) {
+                        var trxDate = $self.Date.getValue();
+                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var DepositSlip = $self.DepositSlip.getValue();
+                        var DocumentNo = $self.DocumentNo.getValue();
+                        var AuthCode = $self.AuthCode.getValue();
+                        var CheckNo = $self.CheckNo.getValue();
+                        var Amount = $self.Amount.getValue();
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.find("Option:last").val()));
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                    }
+                    //$self.setBusy(false);
+                }
+            });
+            this.cmbPage.on("change", function () {
+                //displayData(true, this.cmbPage.val());
                 $self.setBusy(true);
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                 var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
@@ -230,18 +421,18 @@
                 if (C_Order_ID != null) {
                     if ($self.locatorField != null) {
                         //for shipment haveing locator filed
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, 1);
+                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, $self.cmbPage.val());
                     }
                     else {
                         //for invoice
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, 1);
+                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, $self.cmbPage.val());
                     }
                 }
                 else if (C_Invoice_ID != null) {
-                    VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
+                    VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, $self.cmbPage.val());
                 }
                 else if (M_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
                 }
                 else if (C_BankAccount_ID != null) {
                     var trxDate = $self.Date.getValue();
@@ -251,331 +442,140 @@
                     var AuthCode = $self.AuthCode.getValue();
                     var CheckNo = $self.CheckNo.getValue();
                     var Amount = $self.Amount.getValue();
-                    VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
-                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, 1);
+                    VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
+                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, $self.cmbPage.val());
                 }
                 //$self.setBusy(false);
+            });
+        };
+
+        this.resetPageCtrls = function (psetting) {
+            this.cmbPage.empty();
+            if (psetting.TotalPage > 0) {
+                for (var i = 0; i < psetting.TotalPage; i++) {
+                    this.cmbPage.append($("<option value=" + (i + 1) + ">" + (i + 1) + "</option>"))
+                }
+                this.cmbPage.val(psetting.CurrentPage);
+
+
+                if (psetting.TotalPage > psetting.CurrentPage) {
+                    this.liNextPage.css("opacity", "1");
+                    this.liLastPage.css("opacity", "1");
+                }
+                else {
+                    this.liNextPage.css("opacity", "0.6");
+                    this.liLastPage.css("opacity", "0.6");
+                }
+
+                if (psetting.CurrentPage > 1) {
+                    this.liFirstPage.css("opacity", "1");
+                    this.liPrevPage.css("opacity", "1");
+                }
+                else {
+                    this.liFirstPage.css("opacity", "0.6");
+                    this.liPrevPage.css("opacity", "0.6");
+                }
+
+                if (psetting.TotalPage == 1) {
+                    this.liFirstPage.css("opacity", "0.6");
+                    this.liPrevPage.css("opacity", "0.6");
+                    this.liNextPage.css("opacity", "0.6");
+                    this.liLastPage.css("opacity", "0.6");
+                }
             }
-        });
-        this.liPrevPage.on("click", function () {
-            if ($(this).css("opacity") == "1") {
-                //displayData(true, parseInt(this.cmbPage.val()) - 1);
-                $self.setBusy(true);
-                var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
-                var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                var C_BankAccount_ID = null;
-                if ($self.cmbBankAccount != null) {
-                    C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                }
-                var M_Product_ID = null, deliveryDate = null;
-                if ($self.vProduct != null) {
-                    M_Product_ID = $self.vProduct.getValue();
-                }
-                if ($self.deliveryDate != null) {
-                    deliveryDate = $self.deliveryDate.getValue();
-                }
-                if (C_Order_ID != null) {
-                    if ($self.locatorField != null) {
-                        //for shipment haveing locator filed
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.val()) - 1);
-                    }
-                    else {
-                        //for invoice
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) - 1);
-                    }
-                }
-                else if (C_Invoice_ID != null) {
-                    VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
-                }
-                else if (M_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
-                }
-                else if (C_BankAccount_ID != null) {
-                    var trxDate = $self.Date.getValue();
-                    var C_BPartner_ID = $self.vBPartner.getValue();
-                    var DepositSlip = $self.DepositSlip.getValue();
-                    var DocumentNo = $self.DocumentNo.getValue();
-                    var AuthCode = $self.AuthCode.getValue();
-                    var CheckNo = $self.CheckNo.getValue();
-                    var Amount = $self.Amount.getValue();
-                    VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) - 1);
-                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) - 1);
-                }
-                //$self.setBusy(false);
+            else {
+                this.liFirstPage.css("opacity", "0.6");
+                this.liPrevPage.css("opacity", "0.6");
+                this.liNextPage.css("opacity", "0.6");
+                this.liLastPage.css("opacity", "0.6");
             }
-        });
-        this.liNextPage.on("click", function () {
-            if ($(this).css("opacity") == "1") {
-                //displayData(true, parseInt(this.cmbPage.val()) + 1);
-                $self.setBusy(true);
-                var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
-                var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                var C_BankAccount_ID = null;
-                if ($self.cmbBankAccount != null) {
-                    C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                }
-                var M_Product_ID = null, deliveryDate = null;
-                if ($self.vProduct != null) {
-                    M_Product_ID = $self.vProduct.getValue();
-                }
-                if ($self.deliveryDate != null) {
-                    deliveryDate = $self.deliveryDate.getValue();
-                }
-                if (C_Order_ID != null) {
-                    if ($self.locatorField != null) {
-                        //for shipment haveing locator filed
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.val()) + 1);
-                    }
-                    else {
-                        //for invoice
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) + 1);
-                    }
-                }
-                else if (C_Invoice_ID != null) {
-                    VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
-                }
-                else if (M_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
-                }
-                else if (C_BankAccount_ID != null) {
-                    var trxDate = $self.Date.getValue();
-                    var C_BPartner_ID = $self.vBPartner.getValue();
-                    var DepositSlip = $self.DepositSlip.getValue();
-                    var DocumentNo = $self.DocumentNo.getValue();
-                    var AuthCode = $self.AuthCode.getValue();
-                    var CheckNo = $self.CheckNo.getValue();
-                    var Amount = $self.Amount.getValue();
-                    VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) + 1);
-                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) + 1);
-                }
-                //$self.setBusy(false);
-            }
-        });
-        this.liLastPage.on("click", function () {
-            if ($(this).css("opacity") == "1") {
-                //displayData(true, parseInt(this.cmbPage.find("Option:last").val()));
-                $self.setBusy(true);
-                var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
-                var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                var C_BankAccount_ID = null;
-                if ($self.cmbBankAccount != null) {
-                    C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                }
-                var M_Product_ID = null, deliveryDate = null;
-                if ($self.vProduct != null) {
-                    M_Product_ID = $self.vProduct.getValue();
-                }
-                if ($self.deliveryDate != null) {
-                    deliveryDate = $self.deliveryDate.getValue();
-                }
-                if (C_Order_ID != null) {
-                    if ($self.locatorField != null) {
-                        //for shipment haveing locator filed
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.find("Option:last").val()));
-                    }
-                    else {
-                        //for invoice
-                        $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.find("Option:last").val()));
-                    }
-                }
-                else if (C_Invoice_ID != null) {
-                    VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
-                }
-                else if (M_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
-                }
-                else if (C_BankAccount_ID != null) {
-                    var trxDate = $self.Date.getValue();
-                    var C_BPartner_ID = $self.vBPartner.getValue();
-                    var DepositSlip = $self.DepositSlip.getValue();
-                    var DocumentNo = $self.DocumentNo.getValue();
-                    var AuthCode = $self.AuthCode.getValue();
-                    var CheckNo = $self.CheckNo.getValue();
-                    var Amount = $self.Amount.getValue();
-                    VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.find("Option:last").val()));
-                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.find("Option:last").val()));
-                }
-                //$self.setBusy(false);
-            }
-        });
-        this.cmbPage.on("change", function () {
-            //displayData(true, this.cmbPage.val());
-            $self.setBusy(true);
+        }
+
+        this.setBusy = function (isBusy) {
+            this.$busyDiv.css("display", isBusy ? 'block' : 'none');
+        };
+        // Change By Mohit 30/06/2016
+        this.MergeItemsForSave = function () {
             var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
             var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
             var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-            var C_BankAccount_ID = null;
-            if ($self.cmbBankAccount != null) {
-                C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-            }
-            var M_Product_ID = null, deliveryDate = null;
-            if ($self.vProduct != null) {
-                M_Product_ID = $self.vProduct.getValue();
-            }
-            if ($self.deliveryDate != null) {
-                deliveryDate = $self.deliveryDate.getValue();
-            }
-            if (C_Order_ID != null) {
-                if ($self.locatorField != null) {
-                    //for shipment haveing locator filed
-                    $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, $self.cmbPage.val());
-                }
-                else {
-                    //for invoice
-                    $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, $self.cmbPage.val());
-                }
-            }
-            else if (C_Invoice_ID != null) {
-                VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, $self.cmbPage.val());
-            }
-            else if (M_InOut_ID != null) {
-                VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
-            }
-            else if (C_BankAccount_ID != null) {
-                var trxDate = $self.Date.getValue();
-                var C_BPartner_ID = $self.vBPartner.getValue();
-                var DepositSlip = $self.DepositSlip.getValue();
-                var DocumentNo = $self.DocumentNo.getValue();
-                var AuthCode = $self.AuthCode.getValue();
-                var CheckNo = $self.CheckNo.getValue();
-                var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
-                //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, $self.cmbPage.val());
-            }
-            //$self.setBusy(false);
-        });
-    };
+            if ($self.editedItems.length > 0) {
+                for (var items in $self.editedItems) {
+                    var selectprd = $self.editedItems[items]["M_Product_ID_K"];
+                    var obj = $.grep($self.multiValues, function (n, i) {
 
-    this.resetPageCtrls = function (psetting) {
-        this.cmbPage.empty();
-        if (psetting.TotalPage > 0) {
-            for (var i = 0; i < psetting.TotalPage; i++) {
-                this.cmbPage.append($("<option value=" + (i + 1) + ">" + (i + 1) + "</option>"))
-            }
-            this.cmbPage.val(psetting.CurrentPage);
+                        if (C_Order_ID != null) {
+                            return n.M_Product_ID_K == selectprd && n.C_Order_ID_K == $self.editedItems[items]["C_Order_ID_K"]
+                        }
+                        else if (C_Invoice_ID != null) {
+                            return n.M_Product_ID_K == selectprd && n.C_Invoice_ID_K == $self.editedItems[items]["C_Invoice_ID_K"]
+                        }
+                        else if (M_InOut_ID != null) {
+                            return n.M_Product_ID_K == selectprd && n.M_InOut_ID_K == $self.editedItems[items]["M_InOut_ID_K"]
+                        }
+                        else {
+                            return n.C_Payment_ID_K == $self.editedItems[items]["C_Payment_ID_K"]
+                        }
+                    });
+                    if (obj.length > 0) {
 
-
-            if (psetting.TotalPage > psetting.CurrentPage) {
-                this.liNextPage.css("opacity", "1");
-                this.liLastPage.css("opacity", "1");
-            }
-            else {
-                this.liNextPage.css("opacity", "0.6");
-                this.liLastPage.css("opacity", "0.6");
-            }
-
-            if (psetting.CurrentPage > 1) {
-                this.liFirstPage.css("opacity", "1");
-                this.liPrevPage.css("opacity", "1");
-            }
-            else {
-                this.liFirstPage.css("opacity", "0.6");
-                this.liPrevPage.css("opacity", "0.6");
-            }
-
-            if (psetting.TotalPage == 1) {
-                this.liFirstPage.css("opacity", "0.6");
-                this.liPrevPage.css("opacity", "0.6");
-                this.liNextPage.css("opacity", "0.6");
-                this.liLastPage.css("opacity", "0.6");
-            }
-        }
-        else {
-            this.liFirstPage.css("opacity", "0.6");
-            this.liPrevPage.css("opacity", "0.6");
-            this.liNextPage.css("opacity", "0.6");
-            this.liLastPage.css("opacity", "0.6");
-        }
-    }
-
-    this.setBusy = function (isBusy) {
-        this.$busyDiv.css("display", isBusy ? 'block' : 'none');
-    };
-        // Change By Mohit 30/06/2016
-    this.MergeItemsForSave = function () {
-        var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-        var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
-        var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-        if ($self.editedItems.length > 0) {
-            for (var items in $self.editedItems) {
-                var selectprd = $self.editedItems[items]["M_Product_ID_K"];
-                var obj = $.grep($self.multiValues, function (n, i) {
-
-                    if (C_Order_ID != null) {
-                        return n.M_Product_ID_K == selectprd && n.C_Order_ID_K == $self.editedItems[items]["C_Order_ID_K"]
-                    }
-                    else if (C_Invoice_ID != null) {
-                        return n.M_Product_ID_K == selectprd && n.C_Invoice_ID_K == $self.editedItems[items]["C_Invoice_ID_K"]
-                    }
-                    else if (M_InOut_ID != null) {
-                        return n.M_Product_ID_K == selectprd && n.M_InOut_ID_K == $self.editedItems[items]["M_InOut_ID_K"]
                     }
                     else {
-                        return n.C_Payment_ID_K == $self.editedItems[items]["C_Payment_ID_K"]
+                        $self.multiValues.push($self.editedItems[items]);
                     }
-                });
-                if (obj.length > 0) {
-
-                }
-                else {
-                    $self.multiValues.push($self.editedItems[items]);
                 }
             }
-        }
-    };
-    this.showDialog = function () {
-        if (this.locatorField) {
-            this.locatorField.setBackground(false);
-            this.locatorField.addVetoableChangeListener(this);
-        }
-
-        if (this.vProduct) {
-            this.vProduct.addVetoableChangeListener(this);
-        }
-
-        if (this.vBPartner) {
-            this.vBPartner.addVetoableChangeListener(this);
-        }
-        var obj = this;
-        this.$root.append(this.$busyDiv);
-        this.setBusy(false);
-        this.$root.dialog({
-            modal: true,
-            title: this.title,
-            width: 900,
-            height: 600,
-            resizable: false,
-            position: { at: "center top", of: window },
-            close: function () {
-                obj.dispose();
-                if (obj.dGrid != null) {
-                    obj.dGrid.destroy();
-                }
-                $self = null;
-                obj.$root.dialog("destroy");
-                obj.$root = null;
+        };
+        this.showDialog = function () {
+            if (this.locatorField) {
+                this.locatorField.setBackground(false);
+                this.locatorField.addVetoableChangeListener(this);
             }
-        });
-    };
 
-    this.disposeComponent = function () {
-        $self = null;
-        if (this.Okbtn)
-            this.Okbtn.off("click");
-        if (this.cancelbtn)
-            this.cancelbtn.off("click");
-        if (this.selectAllButton)
-            this.selectAllButton.off("click");
-        if (this.btnRefresh)
-            this.btnRefresh.off("click");
-        if (this.Applybtn)
-            this.Applybtn.off("click");
-        this.disposeComponent = null;
+            if (this.vProduct) {
+                this.vProduct.addVetoableChangeListener(this);
+            }
+
+            if (this.vBPartner) {
+                this.vBPartner.addVetoableChangeListener(this);
+            }
+            var obj = this;
+            this.$root.append(this.$busyDiv);
+            this.setBusy(false);
+            this.$root.dialog({
+                modal: true,
+                title: this.title,
+                width: 900,
+                height: 600,
+                resizable: false,
+                position: { at: "center top", of: window },
+                close: function () {
+                    obj.dispose();
+                    if (obj.dGrid != null) {
+                        obj.dGrid.destroy();
+                    }
+                    $self = null;
+                    obj.$root.dialog("destroy");
+                    obj.$root = null;
+                }
+            });
+        };
+
+        this.disposeComponent = function () {
+            $self = null;
+            if (this.Okbtn)
+                this.Okbtn.off("click");
+            if (this.cancelbtn)
+                this.cancelbtn.off("click");
+            if (this.selectAllButton)
+                this.selectAllButton.off("click");
+            if (this.btnRefresh)
+                this.btnRefresh.off("click");
+            if (this.Applybtn)
+                this.Applybtn.off("click");
+            this.disposeComponent = null;
+        };
     };
-};
 
     //dispose call
     VCreateFrom.prototype.dispose = function () {
@@ -1170,7 +1170,7 @@
         var label = $("<div style='float: left; margin-right: 5px; width: 30%; text-align: right'>");
 
         if (VIS.Application.isRTL) {
-            label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            label = $("<div style='float: right; margin-right: 5px; width: 100%; text-align: left'>");
         }
 
         var lableCtrl = $("<h5 style='width: 100%'>");
@@ -2410,7 +2410,7 @@
                 dateCret = date;
                 DelivDate = " AND l.DatePromised <= " + date;
             }
-            var adOrgIDS = $self.mTab.getValue($self.windowNo, "AD_Org_ID")
+            var adOrgIDS = $self.mTab.getValue("AD_Org_ID")
 
 
             $.ajax({
@@ -3279,29 +3279,33 @@
         this.dGrid.on("click", function (e) {
             e.preventDefault;
             CreateNonEditableRecord();
-            if ($self.dGrid.columns[e.column].field == "M_AttributeSetInstance_ID") {
-                //var AD_Column_ID = 0;
-                //var productWindow = AD_Column_ID == 8418;		//	HARDCODED
-                //var M_Locator_ID = VIS.context.getContextAsInt($self.windowNo, "M_Locator_ID");
-                //var C_BPartner_ID = VIS.context.getContextAsInt($self.windowNo, "C_BPartner_ID");
-                //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K), VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_Product_ID_K), M_Locator_ID, C_BPartner_ID, productWindow, AD_Column_ID, $self.windowNo);
-                //if (obj.hasAttribute) {
-                //    obj.showDialog();
-                //}
-                //obj.onClose = function (mAttributeSetInstanceId, name, mLocatorId) {
-                //    $("#grid_" + $self.dGrid.name + "_rec_" + (e.recid)).find("input[type=text]").val(name);
-                //    $self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K = mAttributeSetInstanceId;
-                //    $self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID = name;
-                //};
-                var mattsetid = VIS.Utility.Util.getValueOfInt(executeScalar("SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + $self.dGrid.records[e.recid - 1]["M_Product_ID_K"]));
+            // JID_0815 : Removed check to restrict the opening of attribute from in case product is not attribute enabled. Save product in context for every click in grid row.
+            //if ($self.dGrid.columns[e.column].field == "M_AttributeSetInstance_ID") {
 
-                if (mattsetid != 0) {
-                    VIS.Env.getCtx().setContext($self.windowNo, "M_Product_ID", VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1]["M_Product_ID_K"]));
-                }
-                else {
-                    return;
-                }
-            }
+            // JID_1278: Should not allow to bind Attribute Set Instance to the Product if the Attribute Set is not mapped with the Product.
+            VIS.Env.getCtx().setContext($self.windowNo, "M_Product_ID", VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1]["M_Product_ID_K"]));
+
+            //var AD_Column_ID = 0;
+            //var productWindow = AD_Column_ID == 8418;		//	HARDCODED
+            //var M_Locator_ID = VIS.context.getContextAsInt($self.windowNo, "M_Locator_ID");
+            //var C_BPartner_ID = VIS.context.getContextAsInt($self.windowNo, "C_BPartner_ID");
+            //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K), VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_Product_ID_K), M_Locator_ID, C_BPartner_ID, productWindow, AD_Column_ID, $self.windowNo);
+            //if (obj.hasAttribute) {
+            //    obj.showDialog();
+            //}
+            //obj.onClose = function (mAttributeSetInstanceId, name, mLocatorId) {
+            //    $("#grid_" + $self.dGrid.name + "_rec_" + (e.recid)).find("input[type=text]").val(name);
+            //    $self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K = mAttributeSetInstanceId;
+            //    $self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID = name;
+            //};
+
+            //var mattsetid = VIS.Utility.Util.getValueOfInt(executeScalar("SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + $self.dGrid.records[e.recid - 1]["M_Product_ID_K"]));
+            //if (mattsetid != 0) {                    
+            //}
+            //else {
+            //    return;
+            //}
+            //}
         });
 
 

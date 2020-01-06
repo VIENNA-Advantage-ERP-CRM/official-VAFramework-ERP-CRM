@@ -294,7 +294,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             idr.Close();
                             idr = null;
                         }
-                        throw new Exception("Cannot save MPaySelectionLine");
+                        return GetRetrievedError(pselLine, "Cannot save MPaySelectionLine");
+                        //throw new Exception("Cannot save MPaySelectionLine");
                     }
                 }
                 idr.Close();

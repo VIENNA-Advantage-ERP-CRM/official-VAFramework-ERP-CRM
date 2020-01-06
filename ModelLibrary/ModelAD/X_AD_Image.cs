@@ -221,6 +221,23 @@ public KeyNamePair GetKeyNamePair()
 {
 return new KeyNamePair(Get_ID(), GetName());
 }
-}
+        /** Set Name.
+@param Name Alphanumeric identifier of the entity */
+        public void SetFontName(String FontName)
+        {
+            if (FontName.Length > 60)
+            {
+                log.Warning("Length > 60 - truncated");
+                FontName = FontName.Substring(0, 60);
+            }
+            Set_Value("FontName", FontName);
+        }
+        /** Get Name.
+@return Alphanumeric identifier of the entity */
+        public String GetFontName()
+        {
+            return (String)Get_Value("FontName");
+        }
+    }
 
 }

@@ -162,7 +162,7 @@
         var whereExtended = curTab.getWhereClause();
         var findFields = curTab.getFields();
 
-        var $root = $("<div class='vis-forms-container' style='height:100%'>");
+        var $root = $("<div  class='vis-forms-container' style='height:100%'>");
         var $busy = null;
 
         var $self = this;
@@ -207,10 +207,10 @@
 
             var html = '<div class="vis-advancedSearch-contentWrap"> <div class="vis-advancedSearchContentArea vis-pull-left" style="' + dStyle + '">'
                 + ' <div class="vis-advancedSearchContentArea-up"> <div class="vis-advanedSearch-InputsWrap">'
-                        + '<div class="vis-form-group vis-advancedSearchInput" style="width: 25%;">'
+                        + '<div class="vis-form-group vis-advancedSearchInput">'
                             + '<label id="lblQryName_' + windowNo + '" for="QueryName">' + VIS.Msg.getMsg("QueryName") + '</label>'
                             + '<input readonly id="txtQryName_' + windowNo + '" type="text" name="QueryName" maxlength="60">'
-                        + '</div> <div class="vis-form-group vis-advancedSearchInput" style="width: 25%;">'
+                        + '</div> <div class="vis-form-group vis-advancedSearchInput">'
                             + '<label id="lblSavedQry_' + windowNo + '" for="GetSavedQuery">' + VIS.Msg.getMsg("GetSavedQuery") + '</label>'
                             + '<select id="drpSavedQry_' + windowNo + '"></select>'
                         + '</div>'
@@ -218,7 +218,7 @@
                        + ' <div class="vis-advancedSearch-Icons vis-pull-left">'
                          + '   <ul>'
 
-                             + '   <li class="vis-pull-left"><button disabled id="btnDelete_' + windowNo + '" class="vis-advancedSearchActionIcon vis-advancedSearch-delIcon"></button></li>'
+                + '   <li class="vis-pull-left"><button disabled id="btnDelete_' + windowNo + '" class="vis-advancedSearchActionIcon vis-advancedSearch-delIcon"><i class="vis vis-delete" aria-hidden="true"></i></button></li>'
                             + '</ul>'
                         + '</div>'
 
@@ -254,7 +254,7 @@
 
                         + '<div class="vis-advancedSearch-calender-Icon vis-pull-left">'
                           + '<ul>'
-                            + '<li class="vis-pull-left"><button id="btnSave_' + windowNo + '" disabled class="vis-advancedSearchActionIcon vis-advancedSearch-SaveIcon"></button></li>'
+                + '<li class="vis-pull-left"><button id="btnSave_' + windowNo + '" disabled class="vis-ads-icon"><i class="vis vis-save" aria-hidden="true"></i></button></li>'
                             + '</ul>'
                         + '</div>'
 
@@ -262,7 +262,7 @@
                    + '<div id="divDynamic_' + windowNo + '">'
 
                                 + '<div class="vis-advanedSearch-InputsWrap vis-advancedSearchMrgin">'
-                                  + '<div class="vis-form-group vis-advancedSearchInput1 vis-pull-left">'
+                                  + '<div class="vis-form-group vis-advancedSearchInput1">'
                                     + '<input type="checkbox"  id="chkDynamic_' + windowNo + '"  name="IsDynamic" class="vis-pull-left">'
                                       + '<label for="IsDynamic" >' + VIS.Msg.getMsg("IsDynamic") + '</label>'
                                     + '</div>'
@@ -327,10 +327,11 @@
 
             dStyle = isRTL ? "float:right" : "float:left";
 
-            html += '<button id="btnRefresh_' + windowNo + '" class="VIS_Pref_btn-2"  style="margin-bottom:0px;margin-top:0px;' + dStyle + '">' + VIS.Msg.getMsg("Refresh") + '</button>'
-           + '<div class="vis-pull-right">'
-             + '  <button id="btnCancel_' + windowNo + '" class="VIS_Pref_btn-2"  style="margin-top:0px;margin-right:10px;margin-bottom:0px;margin-left:10px;">' + VIS.Msg.getMsg("Cancel") + '</button>'
-               + '<button id="btnOk_' + windowNo + '" class="VIS_Pref_btn-2"  style="margin-bottom:0px;margin-top:0px;">' + VIS.Msg.getMsg("Ok") + '</button>'
+            html += '<button id="btnRefresh_' + windowNo + '" class="ui-button ui-corner-all ui-widget">' + VIS.Msg.getMsg("Refresh") + '</button>'
+                + '<div class="vis-pull-right">'
+                + '<button id="btnOk_' + windowNo + '" class="ui-button ui-corner-all ui-widget" >' + VIS.Msg.getMsg("Ok") + '</button>'
+                + '  <button id="btnCancel_' + windowNo + '" class="ui-button ui-corner-all ui-widget"  style="margin: 0 10px;">' + VIS.Msg.getMsg("Cancel") + '</button>'
+               
            + '</div>'
        + '</div>'
        + '</div>'
@@ -659,7 +660,8 @@
 
             tblGrid.on("click", function (e) {
                 if (isBusy) return;
-                if (e.target.nodeName === "IMG") {
+                // if (e.target.nodeName === "IMG") {
+                if ($(e.target).hasClass('vis-delete')) {
                     var index = $(e.target).data("index");
                     dsAdvanceData.splice(index, 1);//  .Tables[0].Rows.RemoveAt(index);
                     MUserQuery.deleteLines($(e.target).data("userquery"));
@@ -1142,8 +1144,8 @@
                     control1 = crt;
                     if (btn) {
                         divValue1.append(btn);
-                        crt.getControl().css("width", "65%");
-                        btn.css("max-width", "35px");
+                        crt.getControl().css("width", "calc(100% - 30px)");
+                        btn.css("max-width", "30px");
                     }
                 }
                 else {
@@ -1151,8 +1153,8 @@
                     control2 = crt;
                     if (btn) {
                         divValue2.append(btn);
-                        crt.getControl().css("width", "65%");
-                        btn.css("max-width", "35px");
+                        crt.getControl().css("width", "calc(100% - 30px)");
+                        btn.css("max-width", "30px");
                     }
                 }
 
@@ -1175,7 +1177,7 @@
                            '</td><td>' + obj["VALUE1NAME"] + '</td><td style="display:none">' + obj["VALUE1VALUE"] + '</td><td>' + obj["VALUE2NAME"] +
                            '</td><td style="display:none">' + obj["VALUE2VALUE"] + '</td><td>' + obj["FULLDAY"] +
                            '</td><td style="display:none">' + obj["AD_USERQUERYLINE_ID"] + '</td><td style="display:none">' + obj["OPERATOR"] +
-                           '</td><td><img style="cursor:pointer" data-userQuery="' + obj["AD_USERQUERYLINE_ID"] + '" data-index = "' + i + '" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/delete10.png" /></td>';
+                        '</td><td><i style="cursor:pointer" data-userQuery="' + obj["AD_USERQUERYLINE_ID"] + '" data-index = "' + i + '" class="vis vis-delete"></i></td>';
                     htm += '</tr>';
                     html += htm;
                 }

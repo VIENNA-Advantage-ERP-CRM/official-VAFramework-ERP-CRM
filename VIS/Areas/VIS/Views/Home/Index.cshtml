@@ -55,19 +55,26 @@
 
         var lstScript = VAdvantage.ModuleBundles.GetScriptBundles(); //Get All Script Bundle
 
+        var isNewPath = false;
+
         foreach (var b in lstScript)
         {
             if (!BundleTable.Bundles.Contains(b))
             {
                 BundleTable.Bundles.Add(b); //Add in Mvc Bundlw Table
             }
+
+            
         }
+
+
+
 
         List<string> paths = new List<string>();
 
         foreach (Bundle b in BundleTable.Bundles)
         {
-            if (b.Path.EndsWith("bundles/jquery") || b.Path.EndsWith("bundles/boot"))
+            if ((b.Path.EndsWith("bundles/jquery") || b.Path.EndsWith("bundles/boot")))
             {
                 continue;
             }
@@ -136,38 +143,45 @@
         <!-- App Main Menu START -->
         @if (ViewBag.Menu != null)
         {
-        <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
-            <div class="vis-menuTitle">
-                <p>@ViewBag.Menu.GetRootNode().Text</p>
-                <a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose" id="vis_closeMenu">close menu</a>
-            </div>
-            <!-- Menu Search  -->
-            <div class="vis-menuSearch" dir="ltr">
-                <input type="text" name="vis_menuSearch" dir="@ViewBag.direction" id="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes" />
-                <!-- Leaf Nodes -->
-                <datalist id="vis_leafNodes">
-                    @foreach (var item in ViewBag.Menu.GetLeafNodes())
-                    {
-                        <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
-                    }
-                </datalist>
+            <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
+                <div class="vis-menuTitle">
+                    <p>@ViewBag.Menu.GetRootNode().Text</p>
+                    <a href="javascript:void(0)" id="vis_closeMenu"><i class="fa fa-times" aria-hidden="true"></i></a>
+                </div>
+                <!-- Menu Search  -->
+                <div class="vis-menuSearch" dir="ltr">
+                    <input type="text" name="vis_menuSearch" dir="@ViewBag.direction" id="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes" />
+                    <!-- Leaf Nodes -->
+                    <datalist id="vis_leafNodes">
+                        @foreach (var item in ViewBag.Menu.GetLeafNodes())
+                        {
+                            <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
+                        }
+                    </datalist>
 
-                <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="vis-mainMenuIcons vis-icon-searchfilter"></a>
-                <a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-search">search</a>
-            </div>
-            <!-- App Tree  -->
-            <div class="vis-sidebarMenuWrapper">
-                <div id="vis_divTree" class="vis-css-treeview vis-css-menu">
-                    @Html.Raw(@ViewBag.TreeHtml)
+                    <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="fa fa-filter"></a>
+                    <a href="javascript:void(0)" class="fa fa-search"></a>
+                </div>
+                <!-- App Tree  -->
+                <div class="vis-sidebarMenuWrapper">
+                    <div id="vis_divTree" class="vis-css-treeview vis-css-menu">
+                        @Html.Raw(@ViewBag.TreeHtml)
+                    </div>
                 </div>
             </div>
-        </div>
         }
 
-        <div id="vis_menuOverlay" class="vis-app-overlay">
+        <div id="vis_menuOverlay" class="vis-app-overlay" style="display:none">
         </div> <!-- App Main Menu END -->
         <!-- App Main Section -->
         <section id="vis_mainSection" class="vis-app-section">
+
+            @*action navigation*@
+            <div class="vis-app-action-nav">
+                <div class="vis-app-action-nav-inner">
+                </div>
+            </div>
+
             <!-- App Main Conatiner -->
             <div id="vis_mainConatiner" class="vis-app-section-main">
                 <div id="vis_busyGrid" class="full-height-div busy">
@@ -188,18 +202,22 @@
             @*taskbar div*@
             <div class="vis-app-footer-c">
                 <div class="vis-app-footer-c-l">
-                    <ul id="vis_taskbar" class="vis-taskbar">
+                    <ul id="vis_taskbar" class="vis-app-f-taskbar">
                         <li id="vis_lhome" style="display: none">
-                            <img src="~/Areas/VIS/Images/base/icon-home.png" style="vertical-align: text-top;" />
+                            @*<img src="~/Areas/VIS/Images/base/icon-home.png" style="vertical-align: text-top;" />*@
+                            <span class="vis vis-home"></span>
                             <a>@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Home")</a>
                         </li>
-                        |
+
                     </ul>
                 </div>
-                <div class="vis-footer-c-r">
+                <div class="vis-app-footer-c-r">
                 </div>
             </div>
         </footer>
+        <audio id="vis_buzzer" style="display: none">
+            <source src="~/Areas/VIS/Content/notify.wav" type="audio/wav" />
+        </audio>
     </div>
         @section scripts {
 
@@ -212,6 +230,10 @@
                     if (b.Contains("ViennaBase") && b.Contains("_v") && ViewBag.LibSuffix != "" && !b.Contains(ViewBag.LibSuffix))
                     {
                         continue;
+                    }
+                    else if (b.Contains("VIS_") && !b.Contains(ViewBag.FrameSuffix))
+                    {
+                         continue;
                     }
                     else
                     {

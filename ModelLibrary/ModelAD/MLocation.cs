@@ -23,7 +23,6 @@ using System.Data;
 using VAdvantage.Logging;
 using System.Xml;
 using System.Web;
-using System.IO;
 
 namespace VAdvantage.Model
 {
@@ -607,18 +606,11 @@ namespace VAdvantage.Model
         public string[] GetLongitudeAndLatitude(string address, string sensor)
         {
             string urlAddress = "http://maps.googleapis.com/maps/api/geocode/xml?address=" + HttpUtility.UrlEncode(address) + "&sensor=" + sensor;
-
-            
             string[] returnValue = new string[2];
             try
             {
-                System.Net.HttpWebRequest req = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(urlAddress);
-                req.Timeout = 1000 * 3; // milliseconds
-                System.Net.WebResponse res = req.GetResponse();
-                Stream responseStream = res.GetResponseStream();
-
                 XmlDocument objXmlDocument = new XmlDocument();
-                objXmlDocument.Load(responseStream);
+                objXmlDocument.Load(urlAddress);
                 XmlNodeList objXmlNodeList = objXmlDocument.SelectNodes("/GeocodeResponse/result/geometry/location");
                 foreach (XmlNode objXmlNode in objXmlNodeList)
                 {

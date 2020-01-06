@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Ionic.Zip;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -309,7 +311,7 @@ namespace VIS.Models
             bool isSyncTask = chkIsSyncTask;
 
             string sql = @"Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID() +
-                //sql = MRole.GetDefault().AddAccessSQL(sql, "WS_GmailConfiguration", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            //sql = MRole.GetDefault().AddAccessSQL(sql, "WS_GmailConfiguration", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             " and AD_Client_ID=" + ctx.GetAD_Client_ID();// +" and AD_Org_ID=" + Envs.GetCtx().GetAD_Org_ID();
             DataSet ds = DB.ExecuteDataset(sql, null);
             if (ds == null || ds.Tables[0].Rows.Count == 0)
@@ -478,6 +480,46 @@ namespace VIS.Models
             string sql = "SELECT AD_Window_ID FROM AD_Window WHERE IsActive='Y' AND Name = '" + windowName + "'";
             int windowID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             return windowID;
+        }
+
+        /// <summary>
+        /// function to filter log files for selected date passed in parameter
+        /// and zip those files in one folder, if found log for date passed in the parameter
+        /// </summary>
+        /// <param name="logDate"></param>
+        /// <returns></returns>
+        public string DownloadServerLog(DateTime? logDate)
+        {
+            // Log files path
+            string logpath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "log";
+            // Temp download folder path
+            string tempDownPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+            // filter files based on the date passed in the parameter
+            var todayFiles = Directory.GetFiles(logpath).Where(x => new FileInfo(x).LastWriteTime.Date.ToShortDateString() == logDate.Value.ToShortDateString());
+
+            var zipfileName = "SLog_" + System.DateTime.Now.Ticks + ".zip";
+
+            using (ZipFile zip = new ZipFile())
+            {
+                var logsFound = false;
+                foreach (string fl in todayFiles)
+                {
+                    zip.AddFile(fl, "LOGS");
+                    logsFound = true;
+                }
+                if (!logsFound)
+                    zipfileName = "";
+                else
+                {
+                    // check if folder exists on hosting path (TempDownload)
+                    if (!Directory.Exists(tempDownPath))
+                        Directory.CreateDirectory(tempDownPath);
+                    if (Directory.Exists(tempDownPath))
+                        zip.Save(tempDownPath + "\\" + zipfileName);
+                }
+            }
+
+            return zipfileName;
         }
     }
 }

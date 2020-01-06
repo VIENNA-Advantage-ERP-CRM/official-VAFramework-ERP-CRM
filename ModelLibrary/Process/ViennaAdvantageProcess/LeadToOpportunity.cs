@@ -78,7 +78,8 @@ namespace ViennaAdvantage.Process
                 }
                 else
                 {
-                    return Msg.GetMsg(GetCtx(), "OpprtunityGenerateNotDone");
+                    return GetRetrievedError(opp, "OpprtunityGenerateNotDone");
+                    //return Msg.GetMsg(GetCtx(), "OpprtunityGenerateNotDone");
 
                 }
             }
@@ -125,7 +126,8 @@ namespace ViennaAdvantage.Process
                 }
                 else
                 {
-                    return Msg.GetMsg(GetCtx(), "OpprtunityGenerateNotDone");
+                    return GetRetrievedError(opp, "OpprtunityGenerateNotDone");
+                    //return Msg.GetMsg(GetCtx(), "OpprtunityGenerateNotDone");
                 }
 
             }

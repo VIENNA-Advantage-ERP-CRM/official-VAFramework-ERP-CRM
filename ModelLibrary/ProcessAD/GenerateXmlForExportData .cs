@@ -49,6 +49,9 @@ namespace VAdvantage.Process
 
         String[] _ExceptionTables = new String[] { "AD_Role", "AD_User" };   //Stores tables which are not be included
 
+        // lock for simultaneous process
+        private object _lock = new object();
+
         /// <summary>
         /// Prepare any parameter to be passed
         /// </summary>
@@ -87,97 +90,115 @@ namespace VAdvantage.Process
         /// <returns></returns>
         protected override string DoIt()
         {
-            File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", "DoIT");
-
-            _ExportRecordList = GetExportData();    //fetch all the records to be exported / marked by a user
-            ds = new DataSet(); //init ds
-
-            DataTable SeqTable = new DataTable();
-            SeqTable.TableName = "ExportTableSequence";
-            SeqTable.Columns.Add("RowNum");
-            SeqTable.Columns.Add("TableName");
-            SeqTable.Columns.Add("Record_ID");
-            SeqTable.Columns.Add("AD_ColOne_ID");
-            ds.Tables.Add(SeqTable);
-
-            //Parse through the marked record one by one
-            foreach (ExportDataRecords exportdata in _ExportRecordList)
+            // lock object
+            lock (_lock)
             {
-                MTable currentTable = MTable.Get(GetCtx(), exportdata.AD_Table_ID);
-                if (currentTable == null)   //should not be null
-                {
-                    continue;   //skip the record and move further for next record
-                }
+                // check if process is already running for any module, then return with message.
+                if (PrepareModuleSchema.running)
+                    return "Module process already running, Please wait for some time....";
 
-                if (currentTable.Get_ID() == 0) //should not be 0
-                {
-                    log.Log(Level.SEVERE, "Table record not found. Continuing with next record");
-                    continue;   //move next
-                }
-                File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", "GetFData"+currentTable);
-                msg = GetForeignData(currentTable, exportdata);
-
-                if (msg.Length > 0)
-                {
-                    return msg;
-                }
-
+                PrepareModuleSchema.running = true;
             }
 
-            if (module == null)
-                module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
-            prefix = module.GetPrefix();
-            Module_Name = module.GetName();
-            versionNo = module.GetVersionNo();
-
-            // versionId = module.GetVersionID();
-
-            _FilePath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, prefix, Module_Name.Trim() + "_" + versionNo, "Data");
-
-            if (!Directory.Exists(_FilePath))
-                Directory.CreateDirectory(_FilePath);
-
-            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            try
             {
-                try
+                File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", "DoIT");
+
+                _ExportRecordList = GetExportData();    //fetch all the records to be exported / marked by a user
+                ds = new DataSet(); //init ds
+
+                DataTable SeqTable = new DataTable();
+                SeqTable.TableName = "ExportTableSequence";
+                SeqTable.Columns.Add("RowNum");
+                SeqTable.Columns.Add("TableName");
+                SeqTable.Columns.Add("Record_ID");
+                SeqTable.Columns.Add("AD_ColOne_ID");
+                ds.Tables.Add(SeqTable);
+
+                //Parse through the marked record one by one
+                foreach (ExportDataRecords exportdata in _ExportRecordList)
                 {
-
-                    DataRow r = ds.Tables[0].Rows[i];
-
-                    string str = "Record_ID='" + r["Record_ID"].ToString() + "' and TableName='" + r["TableName"].ToString() + "'";
-
-                    File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", str);
-
-                    if (r["AD_ColOne_ID"] != DBNull.Value && r["AD_ColOne_ID"] != null && r["AD_ColOne_ID"].ToString() != "")
+                    MTable currentTable = MTable.Get(GetCtx(), exportdata.AD_Table_ID);
+                    if (currentTable == null)   //should not be null
                     {
-                        str += " and AD_ColOne_ID=" + Util.GetValueOfString(r["AD_ColOne_ID"]);
+                        continue;   //skip the record and move further for next record
                     }
-                    DataRow[] row = ds.Tables[0].Select(str);
-                    int findmax = Convert.ToInt32(row[row.Count() - 1]["RowNum"]);
-                    bool isDeleted = false;
-                    foreach (DataRow a in row)
+
+                    if (currentTable.Get_ID() == 0) //should not be 0
                     {
-                        if (!Convert.ToInt32(a["RowNum"]).Equals(findmax))
+                        log.Log(Level.SEVERE, "Table record not found. Continuing with next record");
+                        continue;   //move next
+                    }
+                    File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", "GetFData" + currentTable);
+                    msg = GetForeignData(currentTable, exportdata);
+
+                    if (msg.Length > 0)
+                    {
+                        PrepareModuleSchema.running = false;
+                        return msg;
+                    }
+
+                }
+
+                if (module == null)
+                    module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                prefix = module.GetPrefix();
+                Module_Name = module.GetName();
+                versionNo = module.GetVersionNo();
+
+                // versionId = module.GetVersionID();
+
+                _FilePath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, prefix, Module_Name.Trim() + "_" + versionNo, "Data");
+
+                if (!Directory.Exists(_FilePath))
+                    Directory.CreateDirectory(_FilePath);
+
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    try
+                    {
+
+                        DataRow r = ds.Tables[0].Rows[i];
+
+                        string str = "Record_ID='" + r["Record_ID"].ToString() + "' and TableName='" + r["TableName"].ToString() + "'";
+
+                        File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", str);
+
+                        if (r["AD_ColOne_ID"] != DBNull.Value && r["AD_ColOne_ID"] != null && r["AD_ColOne_ID"].ToString() != "")
                         {
-                            a.Delete();
-                            isDeleted = true;
+                            str += " and AD_ColOne_ID=" + Util.GetValueOfString(r["AD_ColOne_ID"]);
+                        }
+                        DataRow[] row = ds.Tables[0].Select(str);
+                        int findmax = Convert.ToInt32(row[row.Count() - 1]["RowNum"]);
+                        bool isDeleted = false;
+                        foreach (DataRow a in row)
+                        {
+                            if (!Convert.ToInt32(a["RowNum"]).Equals(findmax))
+                            {
+                                a.Delete();
+                                isDeleted = true;
+                            }
+                        }
+                        if (isDeleted)
+                        {
+                            --i;
                         }
                     }
-                    if (isDeleted)
+
+                    catch (Exception ex)
                     {
-                        --i;
+                        PrepareModuleSchema.running = false;
+                        return ex.Message;
                     }
                 }
 
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                // Delete Marking of records which were not found. 
+                DeleteRecordsMarked();
             }
-
-            // Delete Marking of records which were not found. 
-            DeleteRecordsMarked();
-
+            finally
+            {
+                PrepareModuleSchema.running = false;
+            }
             return ds.ToXml(_FilePath);
         }
 
@@ -346,7 +367,7 @@ namespace VAdvantage.Process
                     if (ValidationType.Equals("T"))
                         if (tmpDS != null && tmpDS.Tables[0].Rows.Count > 0)
                         {
-                            ds.AddOrCopy(tmpDS, refTableName, refVID, 0, null, rowNum++);
+                           // ds.AddOrCopy(tmpDS, refTableName, refVID, 0, null, rowNum++);
 
                         }
                 }
@@ -418,6 +439,11 @@ namespace VAdvantage.Process
                                     int refVID = columns[cols].GetAD_Reference_Value_ID();
                                     int refID = columns[cols].GetAD_Reference_ID();
 
+                                    // Special case applied for workflow table to bypass the start node on workflow- asked by mukesh sir- done by mohit- 1 February 2019.
+                                    if (tableName == "AD_Workflow" && colName == "AD_WF_Node_ID")
+                                    {
+                                        continue;
+                                    }
                                     if (!columns[cols].IsStandardColumn() && !columns[cols].IsKey())
                                     {
                                         if (colName.EndsWith("_ID"))    //only columns ending with _ID to be processed (indicated Foreign Key )
@@ -642,7 +668,7 @@ namespace VAdvantage.Process
         {
             List<ExportDataRecords> list = new List<ExportDataRecords>();
 
-            String _sql = "SELECT AD_Table_ID, Record_ID,AD_ColOne_ID FROM AD_ExportData WHERE IsActive = 'Y' AND AD_ModuleInfo_ID = @AD_ModuleInfo_ID";
+            String _sql = "SELECT AD_Table_ID, Record_ID,AD_ColOne_ID FROM AD_ExportData WHERE IsActive = 'Y' AND AD_ModuleInfo_ID = @AD_ModuleInfo_ID ";
 
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@AD_ModuleInfo_ID", _AD_ModuleInfo_ID);

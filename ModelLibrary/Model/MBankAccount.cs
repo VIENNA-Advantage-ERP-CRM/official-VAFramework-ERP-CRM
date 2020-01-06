@@ -127,16 +127,16 @@ namespace VAdvantage.Model
             //Issue ID- SI_0613 in Google Sheet Standard Issues.. On Bank account currency should not allow to change if any transcation made against bank.
             if (!newRecord && Is_ValueChanged("C_Currency_ID"))
             {
-                string sql = "SELECT SUM(total) AS TOTAL FROM (SELECT COUNT(*) AS TOTAL FROM C_PAYMENT WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL SELECT COUNT(*) AS TOTAL FROM C_ELEMENTVALUE WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BP_BANKACCOUNT WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_BANKACCOUNT_ACCT  WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BANKSTATEMENT WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_PAYMENTPROCESSOR  WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_CASHLINE WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_PAYSELECTION WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BANKACCOUNTDOC WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID()  
-                               + " UNION ALL  SELECT COUNT(*) AS Total FROM C_BankAccountLine WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID ="+ GetC_BankAccount_ID();
+                string sql = "SELECT SUM(total) AS TOTAL FROM (SELECT COUNT(*) AS TOTAL FROM C_PAYMENT WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL SELECT COUNT(*) AS TOTAL FROM C_ELEMENTVALUE WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BP_BANKACCOUNT WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_BANKACCOUNT_ACCT  WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BANKSTATEMENT WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_PAYMENTPROCESSOR  WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_CASHLINE WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_PAYSELECTION WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BANKACCOUNTDOC WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS Total FROM C_BankAccountLine WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID();
 
                 if (Env.IsModuleInstalled("VA026_")) // if Letter Of Credit Module is Installed..
                     sql += " UNION ALL SELECT count(*) as Total FROM VA026_LCDETAIL WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID();
@@ -145,11 +145,17 @@ namespace VAdvantage.Model
 
                 sql += ")";
 
-                if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0) {
+                if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
+                {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "CouldNotChnageCurrency"));
                     return false;
                 }
-            
+
+                // JID_1583: system will update the Opening balance value in Current Balance field
+                if (newRecord && Get_ColumnIndex("OpenBalance") > 0)
+                {
+                    SetCurrentBalance(Util.GetValueOfDecimal(Get_Value("OpenBalance")));
+                }
             }
             //End
 

@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         {
             List<MLandedCostAllocation> list = new List<MLandedCostAllocation>();
             String sql = "SELECT * FROM C_LandedCostAllocation WHERE C_InvoiceLine_ID= " + C_InvoiceLine_ID;
-            DataTable dt=null;
+            DataTable dt = null;
             IDataReader idr = null;
             try
             {
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
                 {
                     list.Add(new MLandedCostAllocation(ctx, dr, trxName));
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
         public MLandedCostAllocation(MInvoiceLine parent, int M_CostElement_ID)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
-            
+
             SetClientOrg(parent);
             SetC_InvoiceLine_ID(parent.GetC_InvoiceLine_ID());
             SetM_CostElement_ID(M_CostElement_ID);

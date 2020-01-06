@@ -111,6 +111,7 @@
         var $cmdWareHouse = null;
         var defaultLogin = null;
         //*********************************
+        var drpTheme = null;
         var $root = $("<div class='vis-forms-container'>");
         var $busyDiv = $("<div class='vis-apanel-busy'>")
         var windowNo = VIS.Env.getWindowNo();
@@ -360,6 +361,14 @@
             var imgDateText = root.find("#imgDateText_" + windowNo);
             imgDateText.text(VIS.Msg.getMsg("Date"));
 
+            var vlblTheme = root.find("#vlblthemeText_" + windowNo);
+            vlblTheme.text(VIS.Msg.getMsg("SelectTheme"));
+
+            var imgThemetext = root.find("#imgThemetext" + windowNo);
+            imgThemetext.text(VIS.Msg.getMsg("SelectTheme"));
+
+            drpTheme = root.find("#vis_pref_theme" + windowNo);
+
 
             var vlblPageSize = root.find("#vlblPageSize_" + windowNo);
             vlblPageSize.text(VIS.Msg.getMsg("Pagesize"));
@@ -494,8 +503,7 @@
 
             // check if did not logged in as System Administrator Role, 
             // then hide download server log and Date section from user preference
-            // commented this line to hide button always, need to enable this in later versions
-            //if (VIS.context && !VIS.context.getAD_Role_ID() == 0)
+            if (VIS.context && !VIS.context.getAD_Role_ID() == 0)
                 root.find(".VIS_Pref_err_btnLeft").hide();
 
             $btnlogDate = root.find("#vbtnLogDate_" + windowNo);
@@ -559,6 +567,18 @@
             //    'href': test,
             //    'target': '_blank'b,sdf
             //});
+
+            //Theme changed Event
+
+           // drpTheme.on()
+            drpTheme.on("click", "div.vis-theme-rec", function (e) {
+                var clr = $(e.currentTarget).data("color");
+                if (VIS.themeMgr)
+                    VIS.themeMgr.applyTheme(clr);
+            });
+
+
+
 
             //Error get error list on click
             $savetofile.on('click', function () {
@@ -1680,6 +1700,10 @@
 
         this.disposeComponent = function () {
             $self = null;
+            if (drpTheme) {
+                drpTheme.off('click');
+            }
+
             if ($Okbtn)
                 $Okbtn.off("click");
             if ($cancelbtn)

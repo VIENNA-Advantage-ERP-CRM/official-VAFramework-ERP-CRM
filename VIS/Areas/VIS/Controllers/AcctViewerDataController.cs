@@ -117,5 +117,6 @@ namespace VIS.Controllers
             var value = obj.HasOrganizationUnit(ctx);
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

@@ -1254,7 +1254,7 @@ namespace VAdvantage.WF
             }
 
 
-              /********** SendSms ***********/
+            /********** SendSms ***********/
             else if (MWFNode.ACTION_SMS.Equals(action))
             {
                 GetPO(trx);
@@ -1386,7 +1386,7 @@ namespace VAdvantage.WF
                 return true;
             }
 
-             //Forward Document
+            //Forward Document
             else if (MWFNode.ACTION_ForwardDocument.Equals(action))
             {
                 log.Fine("ForwardDocument:?");
@@ -3486,6 +3486,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             return res;
         }
 
+        /// <summary>
+        /// Get Summary
+        /// </summary>
+        /// <returns>String, null or node summary</returns>
         public String GetSummary()
         {
             PO po = GetPO();
@@ -3495,56 +3499,69 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //String[] keyColumns = po.Get_POInfo().getKeyColumns();
             //if ((keyColumns != null) && (keyColumns.Length > 0))
             //    sb.Append(Msg.GetElement(GetCtx(), keyColumns[0])).Append(" ");
-            int index = po.Get_ColumnIndex("DocumentNo");
-            if (index != -1)
-                sb.Append(po.Get_Value(index));
 
-            index = po.Get_ColumnIndex("Value");
-            if (index != -1)
+            // Get Workflow Activity details from selected Text Template
+            MWFNode node = MWFNode.Get(po.GetCtx(), GetAD_WF_Node_ID());
+            if (node.Get_ColumnIndex("AD_TextTemplate_ID") > 0 && node.GetAD_TextTemplate_ID() > 0)
             {
-                if (sb.Length > 0)
+                string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM AD_TextTemplate WHERE AD_TextTemplate_ID = " + node.GetAD_TextTemplate_ID()));
+                sb.Append(CommonFunctions.Parse(mailtext, po));
+                sb.Replace("<br>", "●");
+            }
+            else
+            {
+
+                int index = po.Get_ColumnIndex("DocumentNo");
+                if (index != -1)
+                    sb.Append(po.Get_Value(index));
+
+                index = po.Get_ColumnIndex("Value");
+                if (index != -1)
                 {
-                    sb.Append("/").Append(po.Get_Value(index)).Append(": ");
+                    if (sb.Length > 0)
+                    {
+                        sb.Append("/").Append(po.Get_Value(index)).Append(": ");
+                    }
+                    else
+                    {
+                        sb.Append(po.Get_Value(index)).Append(": ");
+                    }
                 }
                 else
                 {
-                    sb.Append(po.Get_Value(index)).Append(": ");
+                    sb.Append(": ");
                 }
-            }
-            else
-            {
-                sb.Append(": ");
-            }
 
-            index = po.Get_ColumnIndex("Name");
-            if (index != -1)
-                sb.Append(po.Get_Value(index)).Append(": ");
-            index = po.Get_ColumnIndex("SalesRep_ID");
-            int? sr = null;
-            if (index != -1)
-                sr = (int?)po.Get_Value(index);
-            else
-            {
-                index = po.Get_ColumnIndex("AD_User_ID");
+                index = po.Get_ColumnIndex("Name");
+                if (index != -1)
+                    sb.Append(po.Get_Value(index)).Append(": ");
+                index = po.Get_ColumnIndex("SalesRep_ID");
+                int? sr = null;
                 if (index != -1)
                     sr = (int?)po.Get_Value(index);
-            }
-            if (sr != null)
-            {
-                MUser user = MUser.Get(GetCtx(), sr.Value);
-                if (user != null)
-                    sb.Append(user.GetName()).Append(" ");
-            }
-            //
-            index = po.Get_ColumnIndex("C_BPartner_ID");
-            if (index != -1)
-            {
-                int? bp = (int?)po.Get_Value(index);
-                if (bp != null)
+                else
                 {
-                    MBPartner partner = MBPartner.Get(GetCtx(), bp.Value);
-                    if (partner != null)
-                        sb.Append(partner.GetName()).Append(" ");
+                    index = po.Get_ColumnIndex("AD_User_ID");
+                    if (index != -1)
+                        sr = (int?)po.Get_Value(index);
+                }
+                if (sr != null)
+                {
+                    MUser user = MUser.Get(GetCtx(), sr.Value);
+                    if (user != null)
+                        sb.Append(user.GetName()).Append(" ");
+                }
+                //
+                index = po.Get_ColumnIndex("C_BPartner_ID");
+                if (index != -1)
+                {
+                    int? bp = (int?)po.Get_Value(index);
+                    if (bp != null)
+                    {
+                        MBPartner partner = MBPartner.Get(GetCtx(), bp.Value);
+                        if (partner != null)
+                            sb.Append(partner.GetName()).Append(" ");
+                    }
                 }
             }
             return sb.ToString();

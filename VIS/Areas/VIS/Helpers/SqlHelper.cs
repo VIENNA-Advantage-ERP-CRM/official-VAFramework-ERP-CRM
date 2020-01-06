@@ -36,6 +36,11 @@ namespace VIS.Helpers
                 JTable obj = null;
                 DataSet ds = null;
 
+                string sql = sqlIn.sql;
+                //string sql = sqlIn.sql;
+                //if (!IsTableAccess(sql))
+                //    return null;
+
                 ds = ExecuteDataSet(sqlIn);
 
                 if (ds == null || ds.Tables.Count < 1)
@@ -100,6 +105,13 @@ namespace VIS.Helpers
                 return null;
             }
         }
+
+
+
+        //private bool isDataAccess(string sql)
+        //{
+
+        //}
 
 
         public DataSet ExecuteDataSet(SqlParamsIn sqlIn)
@@ -183,8 +195,29 @@ namespace VIS.Helpers
             List<int> result = new List<int>();
 
             string[] queries = sql.Split('/');
+
+
+
             for (int i = 0; i < queries.Count(); i++)
             {
+                //if (!CanDeletingADValue(queries[i]))
+                //{
+                //    result.Add(-1);
+                //    return result;
+                //}
+
+                //if (!IsTableAccessForExecute(queries[i]))
+                //{
+                //    result.Add(-1);
+                //    return result;
+                //}
+
+                if (IsChangingSystemSettings(queries[i]))
+                {
+                    result.Add(-1);
+                    return result;
+                }
+
                 SqlParams[] paramIn = (param == null || param.Count < (i + 1) || param[i] == null) ? null : param[i].ToArray();
 
                 result.Add(VIS.DBase.DB.ExecuteQuery(queries[i], paramIn, null));
@@ -195,9 +228,186 @@ namespace VIS.Helpers
         public int ExecuteNonQuery(SqlParamsIn sqlIn)
         {
             SqlParams[] paramIn = sqlIn.param == null ? null : sqlIn.param.ToArray();
+
+            string sql = sqlIn.sql;
+
+            //if (!CanDeletingADValue(sql))
+            //{
+            //    return -1;
+            //}
+
+            //string sql = sqlIn.sql;
+            //if (!IsTableAccessForExecute(sql))
+            //    return -1;
+
+            if (IsChangingSystemSettings(sql))
+                return -1;
+
             return VIS.DBase.DB.ExecuteQuery(sqlIn.sql, paramIn, null);
         }
 
+        private bool CanDeletingADValue(string sql)
+        {
+            if (sql.ToUpper().IndexOf("DELETE") > -1)
+            {
+                sql = sql.Substring(sql.ToUpper().IndexOf("FROM") + 5).Split(' ')[0];
+                if (sql.Trim().StartsWith("AD_"))
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+
+        private bool IsChangingSystemSettings(string sql)
+        {
+            sql = sql.ToUpper();
+
+            if (sql.IndexOf("ALTER") > -1 || sql.IndexOf("DROP") > -1 || sql.IndexOf("TRUNCATE") > -1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        List<string> tables = new List<string>();
+        private List<string> parseQuery(string sql)
+        {
+            if (sql.IndexOf('~') > -1)
+            {
+                string[] sqls = sql.Split('~');
+                for (int k = 0; k < sqls.Length; k++)
+                {
+                    parseQuery(sqls[k]);
+                }
+            }
+
+
+            tables.Add(sql.Substring(sql.ToUpper().IndexOf(" FROM ") + 5).Split(' ')[0]);
+            sql = sql.Substring(sql.ToUpper().IndexOf(" FROM ") + 5);
+            if (sql.ToUpper().IndexOf("JOIN") > -1)
+            {
+                string[] stringSeparators = new string[] { "JOIN" };
+                string[] splits = sql.Split(stringSeparators, StringSplitOptions.None);
+
+                for (int i = 0; i < splits.Length; i++)
+                {
+                    var tab = splits[i].Trim();
+                    if (tab.Length > 0)
+                    {
+                        if (tab.IndexOf(' ') > -1)
+                        {
+                            string table1 = tab.Substring(0, tab.IndexOf(' '));
+                            if (tables.IndexOf(table1) == -1 && table1.Length > 0)
+                            {
+                                tables.Add(table1);
+                            }
+                        }
+                        else
+                        {
+                            string table1 = tab.Trim();
+                            if (tables.IndexOf(table1) == -1 && table1.Length > 0)
+                            {
+                                tables.Add(table1);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            if (sql.ToUpper().IndexOf(",") > -1)
+            {
+                string[] splits = sql.Split(',');
+
+                for (int i = 0; i < splits.Length; i++)
+                {
+                    var tab = splits[i].Trim();
+                    if (tab.Length > 0)
+                    {
+                        if (tab.IndexOf(' ') > -1)
+                        {
+                            string table1 = tab.Substring(0, tab.IndexOf(' '));
+                            if (tables.IndexOf(table1) == -1 && table1.Length > 0)
+                            {
+                                tables.Add(table1);
+                            }
+                        }
+                        else
+                        {
+                            string table1 = tab.Trim();
+                            if (tables.IndexOf(table1) == -1 && table1.Length > 0)
+                            {
+                                tables.Add(table1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return tables;
+        }
+
+        private bool IsTableAccess(string sql)
+        {
+            if (sql.ToUpper().IndexOf("WHERE") > -1)
+            {
+                sql = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
+            }
+
+            List<string> tables = parseQuery(sql);
+            for (int i = 0; i < tables.Count; i++)
+            {
+                string tableName = tables[i];
+
+                if (string.IsNullOrEmpty(tableName) || tableName.Trim().StartsWith("AD_"))
+                {
+                    continue;
+                }
+                int tableID = MTable.Get_Table_ID(tableName);
+                if (tableID <= 0)
+                {
+                    return false;
+                }
+                if (!MRole.GetDefault(_ctx).IsTableAccess(tableID, false))
+                    return false;
+            }
+            return true;
+        }
+
+        private bool IsTableAccessForExecute(string sql)
+        {
+            sql = sql.Trim();
+            string[] sqlArray;
+            if (sql.ToUpper().StartsWith("UPDATE") || sql.ToUpper().StartsWith("DELETE"))
+            {
+                sqlArray = sql.Split(' ');
+            }
+            else
+            {
+                sqlArray = new string[0];
+            }
+
+            if (sqlArray != null && sqlArray.Length > 0)
+            {
+                string tableName = sqlArray[1];
+                if (!string.IsNullOrEmpty(tableName))
+                {
+                    int tableID = MTable.Get_Table_ID(tableName);
+                    if (tableID <= 0)
+                    {
+                        return false;
+                    }
+                    if (!MRole.GetDefault(_ctx).IsTableAccess(tableID, false))
+                        return false;
+                }
+            }
+
+            return true;
+        }
 
     }
 }

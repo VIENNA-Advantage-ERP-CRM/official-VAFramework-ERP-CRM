@@ -16,8 +16,7 @@ using System.Text;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.UI;
-using System.Web.Mvc;
-using Newtonsoft.Json;
+
 using iTextSharp.text;
 using iTextSharp.text.html;
 using iTextSharp.text.pdf;
@@ -25,8 +24,7 @@ using VAdvantage.DataBase;
 using VAdvantage.MailBox;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using ViennaAdvantageWeb.Areas.VIS.Models;
-using System.ComponentModel;
+
 using iTextSharp.text.html.simpleparser;
 using VAdvantage.Classes;
 

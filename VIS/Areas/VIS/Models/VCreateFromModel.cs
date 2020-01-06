@@ -487,13 +487,13 @@ namespace VIS.Models
 
 
         /// <summary>
-        /// used to load product containers
+        /// used to load product container
         /// </summary>
         /// <param name="locator"></param>
         /// <returns></returns>
         public List<MoveKeyVal> GetContainer(Ctx ctx, int locator)
         {
-            List<MoveKeyVal> keyVal = new List<MoveKeyVal>();     
+            List<MoveKeyVal> keyVal = new List<MoveKeyVal>();
             string sql = "SELECT M_ProductContainer_ID,Value || '_' || Name AS Value FROM M_ProductContainer WHERE IsActive = 'Y' ";
             if (locator > 0)
             {

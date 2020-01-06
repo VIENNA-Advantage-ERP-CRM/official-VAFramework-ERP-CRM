@@ -123,6 +123,7 @@ namespace ViennaAdvantageServer.Process
                 if (!mf.Save())
                 {
                     log.SaveError("MasterForecastNotSaved", "MasterForecastNotSaved");
+                    return GetRetrievedError(mf, "MasterForecastNotSaved");
                 }
                 msg = Msg.GetMsg(GetCtx(), "ProcessCompleted");
             }

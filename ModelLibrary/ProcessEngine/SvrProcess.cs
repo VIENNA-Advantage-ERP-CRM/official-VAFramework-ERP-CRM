@@ -368,6 +368,28 @@ namespace VAdvantage.ProcessEngine
             if (_trx != null)
                 _trx.Rollback();
         }	//	rollback
+        // To get last log error while saving any MClass Suggested by Mukesh Sir and written by Manjot
+        public virtual string GetRetrievedError(VAdvantage.Model.PO po, string defaultmsg)
+        {
+
+            VAdvantage.Model.ValueNamePair vp=VLogger.RetrieveError();
+            if (vp != null)
+            {
+                string tableName = string.Empty;
+                string val = vp.GetName();
+                string connectionName = DataBase.VConnection.Get().Db_uid.ToUpper();
+                if (val.Contains("."))
+                {
+                    tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Table WHERE AD_Table_ID =" + po.Get_Table_ID()));
+                    val = val.Replace(connectionName, string.Empty).Replace(po.Get_TableName().ToUpper(), string.Empty).Replace('"', ' ').Trim();
+                    val = val.Substring(val.IndexOf(":") + 1).Replace(".", string.Empty).Replace(@")(", string.Empty);
+                }
+                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_Erroron") + tableName + " :- ", val);
+                return Msg.GetMsg(GetCtx(), "VIS_Erroron") + tableName + " :-" + val;
+            }
+            log.SaveError(defaultmsg, "");
+            return Msg.GetMsg(GetCtx(), defaultmsg);
+        }
 
     }
 }

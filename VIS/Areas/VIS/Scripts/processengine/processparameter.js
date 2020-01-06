@@ -35,7 +35,7 @@
             $root = $("<div class='vis-pro-para-root'>");
             $table = $("<table class='vis-processpara-table'>");
             // $root.append($table);
-            $divButtons = $('<div style="overflow:auto;padding:0 10px">');
+            $divButtons = $('<div class="vis-processbtnwrap">');
             // $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
             $divTable = $('<div class="vis-para-maxheight">');
 
@@ -45,8 +45,8 @@
             $btnOK.addClass("VIS_Pref_btn-2");
             $btnClose = $("<input type='button'>").val(VIS.Msg.getMsg("Close"));
             $btnClose.addClass("VIS_Pref_btn-2");
-            $btnClose.css({ "margin-bottom": "0px", "margin-top": "7px", "margin-left": "5px" });
-            $btnOK.css({ "margin-bottom": "0px", "margin-top": "7px" });
+            //$btnClose.css({ "margin-bottom": "0px", "margin-top": "7px", "margin-left": "5px" });
+            //$btnOK.css({ "margin-bottom": "0px", "margin-top": "7px" });
             //$divTable.css('max-height', (window.innerHeight - 200) + 'px');
 
             if (!splitUI) {
@@ -94,12 +94,19 @@
                 $td1.append(control);
             }
             if (c2) {
-                $td3.append(c2.getControl());
+
+                var $inputGroup = $('<div class="input-group">');
+                $td3.append($inputGroup);
+                var controll = c2.getControl();
+                $inputGroup.append(controll);
+                if (controll.is('select'))
+                    controll.addClass('vis-custom-select');
+                //$td3.append(c2.getControl());
                 if (c2.getBtnCount() > 0) {
 
                     if (splitUI) {
-                        if (c2.getControl().attr('type') == "date") {
-                            c2.getControl().css({ 'width': '100%' });
+                        if (controll.attr('type') == "date") {
+                            controll.css({ 'width': '100%' });
                         }
                         else {
                             //c2.getControl().css({ 'width': 'calc(100% - 36px)' });
@@ -107,17 +114,20 @@
                         //c2.getControl().height("26px");
                     }
                     else {
-                        c2.getControl().width("200px");
-                        //c2.getControl().height("26px");
                     }
 
                     var btn = c2.getBtn(0);
-                    $td3.append(btn);
+                    // $td3.append(btn);
+                    var $divInputGroupAppend = $('<div class="input-group-append">');
+                    $divInputGroupAppend.append(btn);
+                    $inputGroup.append($divInputGroupAppend);
 
                     //if (c2.getDisplayType() == VIS.DisplayType.MultiKey) {
                     var btn2 = c2.getBtn(1);
                     if (btn2) {
-                        $td3.append(btn2);
+                        var $divInputGroupAppend1 = $('<div class="input-group-append">');
+                        $divInputGroupAppend1.append(btn2);
+                        $inputGroup.append($divInputGroupAppend1);
                     }
                     //    if (splitUI) {
                     //        // c2.getControl().css({ 'width': 'calc(100% - 64px)' });
@@ -128,8 +138,8 @@
                 }
                 else {
                     if (splitUI) {
-                        if (c2.getControl().attr('type') == "date") {
-                            c2.getControl().css({ 'width': '100%' });
+                        if (controll.attr('type') == "date") {
+                            controll.css({ 'width': '100%' });
                         }
                         //c2.getControl().height("26px");
                     }
