@@ -540,6 +540,8 @@
      * This method will be invoked on record change in window.
      * */
     HeaderPanel.prototype.navigate = function () {
+        if (!currentItem)
+            continue;
         this.setHeaderItems();
     };
 
