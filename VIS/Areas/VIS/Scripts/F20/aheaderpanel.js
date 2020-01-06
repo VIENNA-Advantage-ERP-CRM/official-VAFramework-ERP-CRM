@@ -76,7 +76,7 @@
             else {
 
                 if (!currentItem)
-                    continue;
+                    return;
                 var fields = $self.gTab.gridTable.gridFields;
 
                 fields = $.grep(fields, function (item) {
