@@ -173,7 +173,10 @@
   <ItemGroup>
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
+    <Content Include="Areas\VIS\Content\F20\color.css" />
     <Content Include="Areas\VIS\Content\F20\Controls.css" />
+    <Content Include="Areas\VIS\Content\F20\site.css" />
+    <Content Include="Areas\VIS\Content\F20\window.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
@@ -708,6 +711,15 @@
     <Content Include="Areas\VIS\Scripts\app\viewmanager.js" />
     <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
+    <Content Include="Areas\VIS\Scripts\F20\apanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\aviewcontroller.js" />
+    <Content Include="Areas\VIS\Scripts\F20\thememgr.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vcardview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\veditview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vgridview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vmapview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\wframe.js" />
     <Content Include="Areas\VIS\Scripts\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\home\changeuserimage.js" />
     <Content Include="Areas\VIS\Scripts\home\favourite.js" />
@@ -1009,6 +1021,10 @@
   <ItemGroup>
     <Content Include="Areas\VIS\Views\PaymentAllocation\Index.cshtml" />
     <Content Include="Areas\VIS\Views\TelerikReport\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\IndexOld.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\View.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_Template.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_UserSettingsOld.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
