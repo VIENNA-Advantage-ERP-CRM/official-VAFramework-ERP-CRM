@@ -74,6 +74,9 @@
                 }
             }
             else {
+
+                if (!currentItem)
+                    continue;
                 var fields = $self.gTab.gridTable.gridFields;
 
                 fields = $.grep(fields, function (item) {
@@ -540,6 +543,7 @@
      * This method will be invoked on record change in window.
      * */
     HeaderPanel.prototype.navigate = function () {
+       
         this.setHeaderItems();
     };
 
