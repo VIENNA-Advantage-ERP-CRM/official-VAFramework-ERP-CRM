@@ -2531,26 +2531,12 @@ namespace VAdvantage.Model
                                                 C_DocType_ID = " + GetC_DocTypeTarget_ID() + " AND DocBaseType = 'SOO'", null, Get_TrxName()));
                     if (!(docSubType == "ON" || docSubType == "OB"))
                     {
-                        string retMsg = "";
-                        // JID_1451: f base currency and transaction currency are diffrerent and conersion is not avaible then system should gives an error message.
-                        Decimal grandTotal = GetGrandTotal();
-
-                        // If Amount is ZERO then no need to check currency conversion
-                        if (!grandTotal.Equals(Env.ZERO))
-                        {
-                            grandTotal = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-                            if (grandTotal == 0)
-                            {
-                                MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                                retMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                    + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
-
-                                log.SaveWarning("Warning", retMsg);
-                            }
-                        }
+                        Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                            GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
+                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
 
                         MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-
+                        string retMsg = "";
                         bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
                         if (!crdAll)
                             log.SaveWarning("Warning", retMsg);
@@ -2899,23 +2885,9 @@ namespace VAdvantage.Model
                         //        + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
                         //    return DocActionVariables.STATUS_INVALID;
                         //}
-
-                        // JID_1451: f base currency and transaction currency are diffrerent and conersion is not avaible then system should gives an error message.
-                        Decimal grandTotal = GetGrandTotal();
-
-                        // If Amount is ZERO then no need to check currency conversion
-                        if (!grandTotal.Equals(Env.ZERO))
-                        {
-                            grandTotal = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-
-                            if (grandTotal == 0)
-                            {
-                                MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
-                                _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                    + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
-                                return DocActionVariables.STATUS_INVALID;
-                            }
-                        }
+                        Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                           GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
+                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                         //if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
                         //{
                         //    _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
@@ -3808,17 +3780,6 @@ namespace VAdvantage.Model
 
                 /******************/
 
-                //landed cost distribution
-                if (!IsSOTrx())
-                {
-                    String error = ExpectedlandedCostDistribution();
-                    if (!Util.IsEmpty(error))
-                    {
-                        _processMsg = error;
-                        return DocActionVariables.STATUS_INVALID;
-                    }
-                }
-
                 SetProcessed(true);
                 _processMsg = Info.ToString();
                 //
@@ -3940,25 +3901,6 @@ namespace VAdvantage.Model
                     SetDocumentNo(value);
                 }
             }
-        }
-
-        /// <summary>
-        /// Create Exepected Landed cost distribution lines
-        /// </summary>
-        /// <returns>if success then empty string else message</returns>
-        protected String ExpectedlandedCostDistribution()
-        {
-            MExpectedCost[] expectedlandedCosts = MExpectedCost.GetLines(GetCtx(), GetC_Order_ID(), Get_Trx());
-            if (expectedlandedCosts != null && expectedlandedCosts.Length > 0)
-            {
-                for (int i = 0; i < expectedlandedCosts.Length; i++)
-                {
-                    String error = expectedlandedCosts[i].DistributeLandedCost();
-                    if (!Util.IsEmpty(error))
-                        return error;
-                }
-            }
-            return "";
         }
 
         //Changes by abhishek suggested by lokesh on 7/1/2016
