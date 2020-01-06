@@ -118,7 +118,7 @@
                 txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly style='background-color:#F1F1F1'>");
             }
             else {
-                txtTotalAmount = $("<input type='number' min='0' tabindex='1'>");
+                txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly style='background-color:#F1F1F1'>");
             }
 
             txtTotal = $("<input type='text' readonly='true' tabindex='15' style='background-color:#F1F1F1'>");
@@ -2146,17 +2146,17 @@
                     if (acctSchemaID == 0) {
                         for (var i = 0; i < allAcctSchemaID.length; i++) {
                             if (i == 0) {
-                                Sql = "SELECT Distinct elementtype FROM C_AcctSchema_Element WHERE  c_acctschema_id =" + allAcctSchemaID[i] + " AND elementtype NOT IN('AC','SA','X1','X2','X3','X4','X5','X6','X7','X8','X9') ";
+                                Sql = "SELECT Distinct ElementType, Name FROM C_AcctSchema_Element WHERE  c_acctschema_id =" + allAcctSchemaID[i] + " AND ElementType NOT IN('AC','SA','X1','X2','X3','X4','X5','X6','X7','X8','X9') ";
                             }
                             else {
-                                Sql += " AND elementtype IN(SELECT elementtype FROM C_AcctSchema_Element WHERE  c_acctschema_id =" + allAcctSchemaID[i] + " AND elementtype NOT IN('AC','SA','X1','X2','X3','X4','X5','X6','X7','X8','X9')) ";
+                                Sql += " AND ElementType IN(SELECT ElementType FROM C_AcctSchema_Element WHERE  c_acctschema_id =" + allAcctSchemaID[i] + " AND ElementType NOT IN('AC','SA','X1','X2','X3','X4','X5','X6','X7','X8','X9')) ";
                             }
                         }
-                        Sql += " ORDER BY elementtype";
+                        Sql += " ORDER BY ElementType";
 
                     }
                     else {
-                        Sql = "SELECT Distinct elementtype FROM C_AcctSchema_Element WHERE  c_acctschema_id =" + acctSchemaID + " AND elementtype<>'AC' AND elementtype<>'SA' ORDER BY elementtype";
+                        Sql = "SELECT Distinct ElementType, Name FROM C_AcctSchema_Element WHERE  c_acctschema_id =" + acctSchemaID + " AND ElementType<>'AC' AND ElementType<>'SA' ORDER BY ElementType";
                     }
                     Sql = VIS.MRole.addAccessSQL(Sql, "C_AcctSchema_Element", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RW);
                     var dr = VIS.DB.executeReader(Sql);
@@ -2164,7 +2164,7 @@
                     while (dr.read()) {
                         for (var i = 0; i < res.length; i++) {
                             if (res[i]["Key"] == dr.getString(0)) {
-                                cmbDimensionType.append($("<option></option>").val(res[i]['Key']).html(res[i]['Value']));
+                                cmbDimensionType.append($("<option></option>").val(res[i]['Key']).html(dr.getString(1)));       // Displayed name from Accounting Schema elements
                                 break;
                             }
                         }

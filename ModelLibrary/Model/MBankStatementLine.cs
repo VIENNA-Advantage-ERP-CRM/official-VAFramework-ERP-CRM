@@ -36,6 +36,8 @@ namespace VAdvantage.Model
         private decimal new_sdAmt;
         private MBankStatement _parent;
 
+        private bool resetAmtDim = false;
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -369,6 +371,32 @@ namespace VAdvantage.Model
             if (amt.CompareTo(GetChargeAmt()) != 0)
             {
                 SetChargeAmt(amt);
+            }
+
+            // Reset Amount Dimension if Trx Amount is different
+            if (Util.GetValueOfInt(Get_Value("AmtDimTrxAmount")) > 0)
+            {
+                string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimTrxAmount"));
+                decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                if (amtdimAmt != GetTrxAmt())
+                {
+                    resetAmtDim = true;
+                    Set_Value("AmtDimTrxAmount", null);
+                }
+            }
+
+            // Reset Amount Dimension if charge Amount is different
+            if (Util.GetValueOfInt(Get_Value("AmtDimChargeAmount")) > 0)
+            {
+                string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimChargeAmount"));
+                decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
+
+                if (amtdimAmt != GetChargeAmt())
+                {
+                    resetAmtDim = true;
+                    Set_Value("AmtDimChargeAmount", null);
+                }
             }
             return true;
         }
