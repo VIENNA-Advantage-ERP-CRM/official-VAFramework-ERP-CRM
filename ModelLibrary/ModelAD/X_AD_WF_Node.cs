@@ -1277,7 +1277,25 @@ namespace VAdvantage.Model
             return false;
         }
 
+        /// <summary>
+        /// Set AD_TextTemplate_ID
+        /// </summary>
+        /// <param name="AD_TextTemplate_ID">AD_TextTemplate_ID</param>
+        public void SetAD_TextTemplate_ID(int AD_TextTemplate_ID)
+        {
+            Set_Value("AD_TextTemplate_ID", AD_TextTemplate_ID);
+        }
 
+        /// <summary>
+        /// Get AD_TextTemplate_ID
+        /// </summary>
+        /// <returns>AD_TextTemplate_ID</returns>
+        public int GetAD_TextTemplate_ID()
+        {
+            Object ii = Get_Value("AD_TextTemplate_ID");
+            if (ii == null) return 0;
+            return Convert.ToInt32(ii);
+        }
     }
 
 }
