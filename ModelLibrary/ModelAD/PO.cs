@@ -2380,6 +2380,7 @@ namespace VAdvantage.Model
                 String value = (String)Get_Value(index);
                 if (value == null || value.Length == 0)
                 {
+                    // Handled to get Search Key based on Organization same as Document No.
                     value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
                     Set_ValueNoCheck(columnName, value);
                 }
