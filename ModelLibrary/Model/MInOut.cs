@@ -5209,6 +5209,9 @@ namespace VAdvantage.Model
                 reversal.SetIsReversal(true);
             }
 
+            //Set DateAccount as orignal document
+            reversal.SetMovementDate(GetMovementDate());
+
             if (!reversal.Save(Get_TrxName()))
             {
                 pp = VLogger.RetrieveError();
@@ -5576,7 +5579,7 @@ namespace VAdvantage.Model
                 OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = (OracleConnection)dbConnection;
-                cmd.CommandText = "CheckFutureDateRecord";
+                cmd.CommandText = "CheckFutureDateRecordTest";
                 cmd.Parameters.Add("p_movementdate", OracleDbType.Date, MovementDate, ParameterDirection.Input);
                 cmd.Parameters.Add("p_TableName", OracleDbType.Varchar2, TableName.ToUpper(), ParameterDirection.Input);
                 cmd.Parameters.Add("p_Record_ID", OracleDbType.Int32, Record_ID, ParameterDirection.Input);
