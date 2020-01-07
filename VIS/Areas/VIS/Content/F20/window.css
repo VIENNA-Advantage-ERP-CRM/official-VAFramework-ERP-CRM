@@ -657,6 +657,11 @@
     grid-template-columns: auto 1fr;
     color: rgba(var(--v-c-on-secondary), 1);
     background: rgba(var(--v-c-common), 1);
+    height:100%;
+}
+
+.vis-ad-w-p .vis-ad-w-p-vc {
+    height:auto;
 }
 /*tree css START here*/
 .vis-ad-w-p-vc-tree {
