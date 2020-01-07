@@ -280,8 +280,8 @@ html[dir="rtl"] .vis-attach-file-wrapla
     margin-left: 10px;
     cursor: pointer;
 }
-.vis-attach-btns > a:hover, .vis-btn-arrange:hover{
-	color:#fff;	
+.vis-attach-btns > a:hover, .vis-btn-arrange:hover, .vis-attach-btns > a:not([href]), .vis-attach-btns > a:not([href]):hover{
+	color: rgb(var(--v-c-on-primary), 1);	
 }
 .vis-attach-shift-arrow{
 	width:8px;
