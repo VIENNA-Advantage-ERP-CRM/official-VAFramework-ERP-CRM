@@ -173,15 +173,20 @@
   <ItemGroup>
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
-    <Content Include="Areas\VIS\Content\F20\color.css" />
+    <Content Include="Areas\VIS\Content\F20\Color.css" />
     <Content Include="Areas\VIS\Content\F20\Controls.css" />
-    <Content Include="Areas\VIS\Content\F20\site.css" />
-    <Content Include="Areas\VIS\Content\F20\window.css" />
+    <Content Include="Areas\VIS\Content\F20\Media.css" />
+    <Content Include="Areas\VIS\Content\F20\site-rtl.css" />
+    <Content Include="Areas\VIS\Content\F20\Site.css" />
+    <Content Include="Areas\VIS\Content\F20\Window.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
     <Content Include="Areas\VIS\Content\Home.css" />
+    <Content Include="Areas\VIS\Content\Images\logo.png" />
     <Content Include="Areas\VIS\Content\Login.css" />
+    <Content Include="Areas\VIS\Content\notify.mp3" />
+    <Content Include="Areas\VIS\Content\notify.wav" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
     <Content Include="Areas\VIS\Content\ProductContainer.css" />
@@ -697,6 +702,7 @@
     <Content Include="Areas\VIS\Scripts\app\initialize.js" />
     <Content Include="Areas\VIS\Scripts\app\logger.js" />
     <Content Include="Areas\VIS\Scripts\app\lookup.js" />
+    <Content Include="Areas\VIS\Scripts\app\masterdataversion.js" />
     <Content Include="Areas\VIS\Scripts\app\native-extension.js" />
     <Content Include="Areas\VIS\Scripts\app\processframe.js" />
     <Content Include="Areas\VIS\Scripts\app\processwrapper.js" />
@@ -711,7 +717,9 @@
     <Content Include="Areas\VIS\Scripts\app\viewmanager.js" />
     <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
+    <Content Include="Areas\VIS\Scripts\F20\aheaderpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\apanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabbedpane.js" />
     <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\aviewcontroller.js" />
     <Content Include="Areas\VIS\Scripts\F20\thememgr.js" />
@@ -733,6 +741,8 @@
     <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
     <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
+    <Content Include="Areas\VIS\Scripts\VIS1_0.min.js" />
+    <Content Include="Areas\VIS\Scripts\VIS2_0.min.js" />
     <Content Include="Areas\VIS\Templates\VIS_Templates.html" />
   </ItemGroup>
   <ItemGroup>
@@ -815,6 +825,7 @@
     <Compile Include="Areas\VIS\Controllers\OrderController.cs" />
     <Compile Include="Areas\VIS\Controllers\PAttributesController.cs" />
     <Compile Include="Areas\VIS\Controllers\PaymentAllocationController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PaymentController.cs" />
     <Compile Include="Areas\VIS\Controllers\PaymentRuleController.cs" />
     <Compile Include="Areas\VIS\Controllers\PostingController.cs" />
     <Compile Include="Areas\VIS\Controllers\ProductContainerController.cs" />
@@ -865,6 +876,7 @@
     <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
     <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
+    <Compile Include="Areas\VIS\Models\CalloutPaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MAcctSchemaModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MBankStatementModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MBPartnerModel.cs" />
@@ -963,20 +975,6 @@
   <ItemGroup>
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
     <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
-    <Content Include="LibDll\DotNetOpenAuth.dll" />
-    <Content Include="LibDll\Google.Apis.Authentication.OAuth2.dll" />
-    <Content Include="LibDll\Google.Apis.Calendar.v3.dll" />
-    <Content Include="LibDll\Google.Apis.dll" />
-    <Content Include="LibDll\Google.Apis.Tasks.v1.dll" />
-    <Content Include="LibDll\Google.GData.Client.dll" />
-    <Content Include="LibDll\Google.GData.Contacts.dll" />
-    <Content Include="LibDll\Google.GData.Extensions.dll" />
-    <Content Include="LibDll\Google.GData.YouTube.dll" />
-    <Content Include="LibDll\ICSharpCode.SharpZipLib.dll" />
-    <Content Include="LibDll\IKVM.OpenJDK.ClassLibrary.dll" />
-    <Content Include="LibDll\IKVM.Runtime.dll" />
-    <Content Include="LibDll\itextsharp.dll" />
-    <Content Include="LibDll\Mail.dll" />
     <Content Include="packages.config" />
     <Content Include="Areas\VIS\Views\AccountForm\Index.cshtml" />
     <Content Include="Areas\VIS\Views\ASearch\Index.cshtml" />
@@ -1025,18 +1023,9 @@
     <Content Include="Areas\VIS\Views\Shared\View.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_Template.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_UserSettingsOld.cshtml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

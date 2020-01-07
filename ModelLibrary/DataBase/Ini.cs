@@ -8,7 +8,7 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using System.Data;
 using VAdvantage.Utility;
-using System.Data.OracleClient;
+
 using System.Data.SqlClient;
 using System.Data.Common;
 using Npgsql;

@@ -161,7 +161,7 @@ StringBuilder.prototype.insert = function (index, string) {
         this.str =  this.str.substring(0, index) + string + this.str.substring(index, this.str.length);
     else
         this.str = string + this.str;
-    return str;
+    return this.str;
 };
 
 StringBuilder.prototype.clear = function () {
