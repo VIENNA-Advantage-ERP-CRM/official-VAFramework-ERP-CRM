@@ -5579,7 +5579,7 @@ namespace VAdvantage.Model
                 OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = (OracleConnection)dbConnection;
-                cmd.CommandText = "CheckFutureDateRecordTest";
+                cmd.CommandText = "CheckFutureDateRecord";
                 cmd.Parameters.Add("p_movementdate", OracleDbType.Date, MovementDate, ParameterDirection.Input);
                 cmd.Parameters.Add("p_TableName", OracleDbType.Varchar2, TableName.ToUpper(), ParameterDirection.Input);
                 cmd.Parameters.Add("p_Record_ID", OracleDbType.Int32, Record_ID, ParameterDirection.Input);
