@@ -271,7 +271,7 @@ html[dir="rtl"] .vis-attach-file-wrapla
     font-weight: normal;
 }
 /*.vis-attach-file-location > select{ margin-left:10px;}*/
-.vis-attach-btns > a, .vis-attach-btns > a:not([href]) {
+.vis-attach-btns > a {
     background: rgb(var(--v-c-primary), 1);
     color: rgb(var(--v-c-on-primary), 1);
     padding: 0.5rem 1.5rem;
@@ -280,8 +280,8 @@ html[dir="rtl"] .vis-attach-file-wrapla
     margin-left: 10px;
     cursor: pointer;
 }
-.vis-attach-btns > a:hover, .vis-btn-arrange:hover{
-	color:#fff;	
+.vis-attach-btns > a:hover, .vis-btn-arrange:hover, .vis-attach-btns > a:not([href]), .vis-attach-btns > a:not([href]):hover{
+	color: rgb(var(--v-c-on-primary), 1);	
 }
 .vis-attach-shift-arrow{
 	width:8px;
