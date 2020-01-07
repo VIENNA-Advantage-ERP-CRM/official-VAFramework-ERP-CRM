@@ -269,7 +269,7 @@ select.vis-ev-col-mandatory {
 /****** Style Inputs Control END*****/
 /***************************** Control Prop *******************************************/
 .vis-ev-col-readonly {
-    color: rgba(var(--v-c-on-secondary),.5) !important;
+    color: rgba(var(--v-c-on-secondary),.7) !important;
     background: rgba(var(--v-c-on-secondary),.04) !important;
     cursor: not-allowed;
 }

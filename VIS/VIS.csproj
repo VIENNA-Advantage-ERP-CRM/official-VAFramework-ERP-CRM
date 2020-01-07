@@ -62,6 +62,7 @@
     <Content Include="Areas\VIS\Content\notify.wav" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
+    <Content Include="Areas\VIS\Content\ProductContainer.css" />
     <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />
     <Content Include="Areas\VIS\Content\ReportStyle.css" />
     <Content Include="Areas\VIS\Content\Site.css" />
