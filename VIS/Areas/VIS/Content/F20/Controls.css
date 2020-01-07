@@ -269,7 +269,7 @@ select.vis-ev-col-mandatory {
 /****** Style Inputs Control END*****/
 /***************************** Control Prop *******************************************/
 .vis-ev-col-readonly {
-    color: rgba(var(--v-c-on-secondary),.5) !important;
+    color: rgba(var(--v-c-on-secondary),.7) !important;
     background: rgba(var(--v-c-on-secondary),.04) !important;
     cursor: not-allowed;
 }
@@ -327,15 +327,17 @@ label.vis-ec-col-lblchkbox {
     left: 0;
     display: inline-flex;
     color: rgba(var(--v-c-on-secondary), 1);
+    align-items: center;
 }
 
-    .vis-ec-col-lblchkbox input[type=checkbox] {
-        width: auto;
-        min-height: 0;
-        min-width: 0px;
-        margin-left: 4px;
-        margin-right: 4px;
-    }
+.vis-ec-col-lblchkbox input[type=checkbox] {
+    width: auto;
+    min-height: 0;
+    min-width: 0px;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-bottom: 0;
+}
 
         .vis-ec-col-lblchkbox input[type=checkbox]:focus {
             outline: auto;

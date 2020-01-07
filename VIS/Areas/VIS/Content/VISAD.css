@@ -997,12 +997,12 @@
     min-width: 100%;
     min-height: 26px;
     line-height: inherit !important;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     padding: 1px !important;
 }
 
 .vis-gc-vpanel-table button {
-    /*margin-bottom: 20px;*/ */
+    /*margin-bottom: 20px;*/ 
 }
 
 .vis-gc-vpanel-table-btn-blue {

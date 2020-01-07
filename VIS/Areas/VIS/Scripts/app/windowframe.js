@@ -505,13 +505,13 @@
 	 */
     AWindow.prototype.initProcess = function (AD_Process_ID, callback, action, splitUI, extrnalForm) {
 
-        this.cPanel = new VIS.AProcess(AD_Process_ID, VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT, splitUI, extrnalForm); //initlize AForm
-
+        //this.cPanel = new VIS.AProcess(AD_Process_ID, VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT, splitUI, extrnalForm); //initlize AForm
+        this.cPanel = new VIS.AProcess(AD_Process_ID, VIS.Env.getScreenHeight() - 0, splitUI, extrnalForm); //initlize AForm
         //set variable
         var windowNo = VIS.Env.getWindowNo();
         this.id = windowNo + "_" + AD_Process_ID;
         this.hid = action + "=" + AD_Process_ID;
-
+        this.hideHeader(true);
         var self = this;
         VIS.dataContext.getProcessDataString({ AD_Process_ID: AD_Process_ID }, function (json) {
             if (json.error != null) {
