@@ -3234,25 +3234,28 @@ namespace VAdvantage.Model
                                         continue;
                                 }
 
+                                Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+                                Decimal ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
+
                                 amt = 0;
                                 if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
                                     if (sLine.GetMovementQty() > 0)
-                                        amt = orderLine.GetLineNetAmt();
+                                        amt = ProductOrderLineCost;
                                     else
-                                        amt = Decimal.Negate(orderLine.GetLineNetAmt());
+                                        amt = Decimal.Negate(ProductOrderLineCost);
                                 }
                                 else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), sLine.GetMovementQty());
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty());
                                 }
                                 else if (order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), sLine.GetMovementQty());
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty());
                                 }
                                 else if (order.GetDocStatus() == "VO")
                                 {
-                                    amt = Decimal.Multiply(orderLine.GetPriceActual(), sLine.GetQtyEntered());
+                                    amt = Decimal.Multiply(ProductOrderPriceActual, sLine.GetQtyEntered());
                                 }
 
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
@@ -3304,9 +3307,10 @@ namespace VAdvantage.Model
 
                                             // calculate invoice line costing after calculating costing of linked MR line 
                                             MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), matchedInvoice[mi].GetC_InvoiceLine_ID(), Get_Trx());
+                                            Decimal ProductLineCost = invoiceLine.GetProductLineCost(invoiceLine);
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, matchedInvoice[mi].GetM_AttributeSetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, invoiceLine, null,
-                                                  count > 0 && isCostAdjustableOnLost && (matchedInvoice[mi].GetQty() < invoiceLine.GetQtyInvoiced()) ? invoiceLine.GetLineNetAmt() : Decimal.Multiply(Decimal.Divide(invoiceLine.GetLineNetAmt(), invoiceLine.GetQtyInvoiced()), matchedInvoice[mi].GetQty()),
+                                                  count > 0 && isCostAdjustableOnLost && (matchedInvoice[mi].GetQty() < invoiceLine.GetQtyInvoiced()) ? ProductLineCost : Decimal.Multiply(Decimal.Divide(ProductLineCost, invoiceLine.GetQtyInvoiced()), matchedInvoice[mi].GetQty()),
                                                 matchedInvoice[mi].GetQty(), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                             {
                                                 _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
@@ -3354,8 +3358,10 @@ namespace VAdvantage.Model
                             if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
                                 break;
 
+                            Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+
                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
-                                  "Customer Return", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), sLine.GetMovementQty()),
+                                  "Customer Return", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty()),
                                   sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
                                 if (!conversionNotFoundInOut1.Contains(conversionNotFoundInOut))
@@ -3389,8 +3395,10 @@ namespace VAdvantage.Model
 
                             if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0) { break; }
 
+                            Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+
                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
-                                 "Shipment", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty())),
+                                  "Shipment", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty())),
                                  Decimal.Negate(sLine.GetMovementQty()), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
                                 if (!conversionNotFoundInOut1.Contains(conversionNotFoundInOut))
@@ -3465,26 +3473,29 @@ namespace VAdvantage.Model
                                     isCostAdjustableOnLost = productCQ.IsCostAdjustmentOnLost();
                                 }
 
+                                Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
+                                Decimal ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
+
                                 amt = 0;
                                 if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
                                     // Cost Adjustment case
                                     if (sLine.GetMovementQty() < 0)
-                                        amt = orderLine.GetLineNetAmt();
+                                        amt = ProductOrderLineCost;
                                     else
-                                        amt = Decimal.Negate(orderLine.GetLineNetAmt());
+                                        amt = Decimal.Negate(ProductOrderLineCost);
                                 }
                                 else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
                                 }
                                 else if (order.GetDocStatus() != "VO")
                                 {
-                                    amt = Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
+                                    amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
                                 }
                                 else if (order.GetDocStatus() == "VO")
                                 {
-                                    amt = Decimal.Multiply(orderLine.GetPriceActual(), Decimal.Negate(sLine.GetQtyEntered()));
+                                    amt = Decimal.Multiply(ProductOrderPriceActual, Decimal.Negate(sLine.GetQtyEntered()));
                                 }
 
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
