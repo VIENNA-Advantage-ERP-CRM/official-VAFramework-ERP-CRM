@@ -2948,9 +2948,6 @@ namespace VAdvantage.Model
                 reversal.SetTempDocumentNo("");
             }
 
-            //Set DateAccount as orignal document
-            reversal.SetMovementDate(GetMovementDate());
-
             if (!reversal.Save())
             {
                 pp = VLogger.RetrieveError();
