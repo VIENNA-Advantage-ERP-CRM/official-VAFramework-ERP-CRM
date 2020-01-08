@@ -403,7 +403,7 @@
             root.append($containerDiv);
 
             //Load Header Panel Items and add them to UI.
-            if (!currentItem || !currentItem.headerItems || currentItem.headerItems.length <= 0) {
+            if (!currentItem || !currentItem.HeaderItems || currentItem.HeaderItems.length <= 0) {
                 continue;
             }
 

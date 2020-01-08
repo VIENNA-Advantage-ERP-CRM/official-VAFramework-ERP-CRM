@@ -5230,6 +5230,9 @@ namespace VAdvantage.Model
                 reversal.SetIsReversal(true);
             }
 
+            //Set DateAccount as orignal document
+            reversal.SetMovementDate(GetMovementDate());
+
             if (!reversal.Save(Get_TrxName()))
             {
                 pp = VLogger.RetrieveError();
