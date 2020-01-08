@@ -501,7 +501,7 @@
             var _WhereAttr = " M_AttributeSetInstance_ID IN (SELECT  asi.M_AttributeSetInstance_ID as M_AttributeSetInstance_ID   FROM M_AttributeSetInstance asi   WHERE asi.IsActive='Y' AND asi.M_ATTRIBUTESET_ID=" + cmbAttributeSet.ctrl.val() + ")";
             _AttrSetInstLookUp = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, 8472, VIS.DisplayType.Search, "M_AttributeSetInstance_ID", 0, false, _WhereAttr);
             $AttrSetInstControl = new VIS.Controls.VTextBoxButton("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.Search, _AttrSetInstLookUp);
-            $AttrSetInstControl.getControl().css("width", "68%").css('float', 'left');
+            $AttrSetInstControl.getControl().css("width", "63%").css('float', 'left');
             $AttrSetInstControl.getBtn(0).css("height", "26px");
             $AttrSetInstControl.getBtn(0).css("margin-top", "-1px");
             $AttrSetInstControl.getBtn(0).css('float','left');

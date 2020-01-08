@@ -81,6 +81,7 @@
     padding-right: 10px;
     margin-right: 0;
     flex-basis: 27%;
+    align-items: center;
 }
 
 html[dir="rtl"] .vis-advancedSearchInput
@@ -113,11 +114,12 @@ html[dir="rtl"] .vis-advancedSearchInput
     margin-right: 5px;
 }
 
-.vis-advancedSearchInput1
-{
+.vis-advancedSearchInput1 {
     width: 20.55%;
     float: left;
-    margin-top: 5px;
+    /* margin-top: 5px; */
+    display: flex;
+    align-items: center;
 }
 
 .vis-advancedSearchHorigontal > label
@@ -134,6 +136,9 @@ html[dir="rtl"] .vis-advancedSearchInput
     font-weight: 400;
     float: left;
 }
+.vis-advancedSearchInput input[type="checkbox"] + label{
+    margin-bottom: 0;
+}
 
 html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedSearchInput1 > label, html[dir="rtl"] .vis-advancedSearchHorigontal > label
 {
@@ -144,10 +149,14 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     float: left;
 }*/
 
-.vis-advancedSearchInput1 > label
-{
-    margin-left: 10px;
-    margin-top: 2px;
+.vis-advancedSearchInput1 > label {
+    /*margin-left: 10px;*/    
+    /* margin-top: 2px; */
+    margin-bottom: 0;
+}
+.vis-advanedSearch-InputsWrap.vis-advancedSearchMrgin {
+    margin-top: 5px;
+    float: left;
 }
 /*.advancedSearchMrgin{ margin-left:20%;}*/
 .vis-advancedSearchInput > input, .vis-advancedSearchInput > select {
