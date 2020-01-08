@@ -769,10 +769,22 @@ namespace VAdvantage.WF
 
 
             if (summary == null || summary.Trim().Length == 0)
-                summary = state.ToString();
-
-
-            
+            {
+                // in case of Suspend (User Approval) show the workflow node on which it is suspended for approval
+                if (state != null && state.GetState() == StateEngine.STATE_SUSPENDED)
+                {
+                    string node = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT n.Name FROM AD_WF_Activity ac INNER JOIN AD_WF_Node n ON ac.AD_WF_Node_ID = n.AD_WF_Node_ID WHERE
+                                  ac.AD_WF_Process_ID = " + process.Get_ID() + " AND ac.WFState = '" + StateEngine.STATE_SUSPENDED + "'"));
+                    if (!String.IsNullOrEmpty(node))
+                    {
+                        summary = state.ToString() + " " + Msg.GetMsg(GetCtx(), "For") + " " + node;
+                    }
+                }
+                else
+                {
+                    summary = state.ToString();
+                }
+            }
 
             pi.SetSummary(summary, state.IsTerminated() || state.IsAborted());
             log.Fine(summary);

@@ -1169,8 +1169,8 @@
                 name: grdname,
                 recordHeight: 40,
                 show: {
-
-                    toolbar: true,  // indicates if toolbar is v isible
+                    // do not show toolbar on Info Window.
+                    toolbar: false,  // indicates if toolbar is v isible
                     columnHeaders: true,   // indicates if columns is visible
                     lineNumbers: true,  // indicates if line numbers column is visible
                     selectColumn: true,  // indicates if select column is visible
