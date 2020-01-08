@@ -326,6 +326,11 @@ label.vis-ec-col-lblchkbox {
     pointer-events: auto;
     left: 0;
     display: inline-flex;
+    
+    align-items: center;
+}
+
+.vis-ev-col label.vis-ec-col-lblchkbox {
     color: rgba(var(--v-c-on-secondary), 1);
     align-items: center;
 }

@@ -2945,11 +2945,11 @@ namespace VAdvantage.Model
                         {
                             if (IsSOTrx())
                             {
-                                lineBlanket1.SetQtyDelivered(Decimal.Subtract(lineBlanket1.GetQtyDelivered(), Qty));                               
+                                lineBlanket1.SetQtyDelivered(Decimal.Subtract(lineBlanket1.GetQtyDelivered(), Qty));
                             }
                             else
                             {
-                                lineBlanket1.SetQtyDelivered(Decimal.Add(lineBlanket1.GetQtyDelivered(), Qty));                                
+                                lineBlanket1.SetQtyDelivered(Decimal.Add(lineBlanket1.GetQtyDelivered(), Qty));
                             }
 
                             lineBlanket1.SetDateDelivered(GetMovementDate());   //	overwrite=last                            
@@ -2969,6 +2969,7 @@ namespace VAdvantage.Model
                         if (origOrderLine.GetC_OrderLine_Blanket_ID() > 0)
                         {
                             lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+
                         }
 
                         if (lineBlanket != null && lineBlanket.Get_ID() > 0)
@@ -2979,7 +2980,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                lineBlanket.SetQtyReturned(Decimal.Subtract(lineBlanket.GetQtyReturned(), Qty));                               
+                                lineBlanket.SetQtyReturned(Decimal.Subtract(lineBlanket.GetQtyReturned(), Qty));
                             }
 
                             lineBlanket.SetDateDelivered(GetMovementDate());	//	overwrite=last                            
@@ -2995,7 +2996,6 @@ namespace VAdvantage.Model
                             }
                         }
                     }
-
 
                     if (!oLine.Save())
                     {

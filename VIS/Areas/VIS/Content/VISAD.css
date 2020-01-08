@@ -123,26 +123,36 @@
     height: 42px;
 }
 
-    .vis-awindow-header p {
-        margin: 0px;
-        padding: 10px 10px 0px 10px;
-        font-size: 14px;
-        font-weight: bold;
-        display: inline-block;
-        color: rgba(var(--v-c-on-primary), 1);
-        white-space: nowrap;
+.vis-awindow-header p, .vis-awindow-header h1{
+    margin: 0px;
+    padding: 10px 10px 0px 10px;
+    font-size: 14px;
+    /*font-weight: bold;*/
+    display: inline-block;
+    color: rgba(var(--v-c-on-primary), 1);
+    white-space: nowrap;
+}
+.vis-awindow-header p {
+    /*margin: 0px;
+    padding: 10px 10px 0px 10px;
+    font-size: 14px;*/
+    /*font-weight: bold;*/
+    /*display: inline-block;
+    color: rgba(var(--v-c-on-primary), 1);
+    white-space: nowrap;*/
     }
 
     .vis-awindow-header h1 {
-        margin: 0px;
+        /*margin: 0px;
         padding: 0px 10px 0px 10px;
-        font-size: 14px;
-        font-weight: bold;
-        display: inline-block;
+        font-size: 14px;*/
+        /*font-weight: bold;*/
+        /*display: inline-block;
         color: rgba(var(--v-c-on-primary), 1);
-        white-space: nowrap;
+        white-space: nowrap;*/
         line-height: 41px;
     }
+
 
 /*#vis_mainMenu .vis-menuTitle p
         {
@@ -727,7 +737,7 @@
     }
 
     .vis-apanel-rb-ul li:hover {
-        background-color: rgba(var(--v-c-primary), 1);
+        background-color: rgba(var(--v-c-primary), 1) !important;
         color: rgba(var(--v-c-on-primary), 1);
     }
 
@@ -3016,24 +3026,31 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
 }
 
 .vis-btnOk {
-    float: left;
-    background-color: #636264;
-    color: white;
+    /*float: left;
+    background-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
     padding: 6px 12px;
-    border: none;
+    border: none;*/
     margin-right: 10px;
 }
 
 .vis-btnCardViewCancle {
-    float: left;
+    /*float: left;
     background-color: #636264;
     color: white;
     padding: 6px 12px;
-    border: none;
+    border: none;*/
 }
 
 .vis-cdv-customokcancle {
     float: right;
+}
+.vis-cdv-customokcancle button{
+    float: left;
+    background-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+    padding: 6px 12px;
+    border: none;
 }
 
 html[dir="rtl"] .vis-cvd-btn {
@@ -4667,5 +4684,12 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+.vis-act-frm-parm{
+    width: 100%;
+    display: flex;
+}
+.vis-act-frm-parm input, .vis-act-frm-parm select{
+    flex: 1;
 }
 /********************** Validate Table Columns **********************/

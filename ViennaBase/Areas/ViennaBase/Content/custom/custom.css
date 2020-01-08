@@ -266,6 +266,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     .ui-dialog .ui-dialog-titlebar-close {
         height: 100% !important;
         padding: 0.2rem 0 !important;
+        border: none;
     }
 
     .ui-dialog .ui-dialog-content {
