@@ -677,9 +677,9 @@ input.vis-group-search-icon {
     }
 
 .vis-group-grayBtn {
-    background: #626365 none repeat scroll 0% 0%;
+    background: rgba(var(--v-c-primary), 1);
     border-radius: 0px;
-    color: #FFF;
+    color: rgba(var(--v-c-on-primary), 1);
     font-size: 13px;
 }
 
