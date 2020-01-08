@@ -997,7 +997,7 @@
     min-width: 100%;
     min-height: 26px;
     line-height: inherit !important;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     padding: 1px !important;
 }
 
@@ -3016,24 +3016,31 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
 }
 
 .vis-btnOk {
-    float: left;
-    background-color: #636264;
-    color: white;
+    /*float: left;
+    background-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
     padding: 6px 12px;
-    border: none;
+    border: none;*/
     margin-right: 10px;
 }
 
 .vis-btnCardViewCancle {
-    float: left;
+    /*float: left;
     background-color: #636264;
     color: white;
     padding: 6px 12px;
-    border: none;
+    border: none;*/
 }
 
 .vis-cdv-customokcancle {
     float: right;
+}
+.vis-cdv-customokcancle button{
+    float: left;
+    background-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+    padding: 6px 12px;
+    border: none;
 }
 
 html[dir="rtl"] .vis-cvd-btn {

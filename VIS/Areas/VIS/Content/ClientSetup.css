@@ -163,7 +163,7 @@ html[dir="rtl"] .vis-initial-form-checkbox > label {
 }
 .vis-initial-btn, .vis-initial-btn:hover {
     color: rgba(var(--v-c-on-primary), 1) !important;
-    background: #626365;
+    background: rgba(var(--v-c-primary), 1);
     padding: 10px 20px;
     cursor: pointer;
     text-decoration: none;
