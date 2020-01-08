@@ -1107,8 +1107,8 @@ namespace VAdvantage.Model
 
             String qry1 = "";
 
-            // for Service Type Product set value in Locator field
-            if (_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item && GetM_Locator_ID() == 0)
+            // for Service Type Product or Charge set value in Locator field
+            if (((_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item) || GetC_Charge_ID() > 0) && GetM_Locator_ID() == 0)
             {
                 qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
                 int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));

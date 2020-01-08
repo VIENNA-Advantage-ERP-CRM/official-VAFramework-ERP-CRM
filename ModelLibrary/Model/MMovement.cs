@@ -444,12 +444,12 @@ namespace VAdvantage.Model
         public String CompleteIt()
         {
 
-            // To check weather future date records are available in Transaction window
-            _processMsg = MInOut.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Movement_ID(), Get_Trx());
-            if (!string.IsNullOrEmpty(_processMsg))
-            {
-                return DocActionVariables.STATUS_INVALID;
-            }
+            //// To check weather future date records are available in Transaction window
+            //_processMsg = MInOut.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Movement_ID(), Get_Trx());
+            //if (!string.IsNullOrEmpty(_processMsg))
+            //{
+            //    return DocActionVariables.STATUS_INVALID;
+            //}
 
             // is used to check Container applicable into system
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
@@ -3359,9 +3359,6 @@ namespace VAdvantage.Model
             {
                 reversal.SetTempDocumentNo("");
             }
-
-            //Set DateAccount as orignal document
-            reversal.SetMovementDate(GetMovementDate());
 
             reversal.AddDescription("{->" + GetDocumentNo() + ")");
             if (!reversal.Save())

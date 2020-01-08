@@ -69,7 +69,7 @@
                              + " <input type='checkbox' id='VIS_chkShowPrintPayment_" + $self.windowNo + "' style='height: 15px;width: auto;'></input>"
                              + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("ShowPrintedPayments") + " </label>"
                              + " </div>" // div ShowPrintedPayments ends here 
-                             + " <select id='VIS_PaySelection_" + $self.windowNo + "' style='background-position: 99%;'></select>"
+                             + " <select id='VIS_PaySelection_" + $self.windowNo + "'></select>"
                              + " </div>" // div PaySelection ends here 
                              + " <div class='vis-paymentPrint-field' style='margin-right:24px;'>"  // div bankAccount starts here
                              + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"

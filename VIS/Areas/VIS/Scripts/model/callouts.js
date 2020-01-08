@@ -438,8 +438,8 @@
                     mTab.setValue("C_UOM_ID", C_UOM_ID);
                 }
 
-                if (Qty != 0 && Qty != null && QtyReleased != null) {
-                    mTab.setValue("QtyBlanket", ((Qty + QtyReleased) - QtyReleased));
+                if (QtyOrdered != 0 && QtyOrdered != null && QtyReleased != null) {
+                    mTab.setValue("QtyBlanket", ((QtyOrdered + QtyReleased) - QtyReleased));
                 }
 
                 if (M_AttributeSetInstance_ID != 0 && M_AttributeSetInstance_ID != null) {
@@ -4700,7 +4700,7 @@
         //  
         if ((value == null || value.toString() == "") && mField.getColumnName() != "C_ConversionType_ID") {
             //if (value == null || value.toString() == "") {
-            mTab.setValue("C_Currency_ID", 0);
+            //mTab.setValue("C_Currency_ID", 0);
             return "";
         }
         if (this.isCalloutActive())		// assuming it is resetting value
@@ -5481,6 +5481,12 @@
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
         var statementDate = mTab.getValue("ValutaDate");
+
+        // JID_1418: When select payment on Bank statement line, system gives an error meassage
+        if (statementDate == null) {
+            statementDate = new Date();
+        }
+
         //var sql = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";		//	1
         //var dr = null;
         //var param = [];
@@ -5506,12 +5512,7 @@
         }
         catch (err) {
             this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
             this.log.log(Level.SEVERE, "BankStmt_Payment", err);
-            //ErrorLog.FillErrorLog("BankStmt_Payment", sql, e.Message.toString(), VAdvantage.Framework.Message.MessageType.ERROR);
-            //return e.getLocalizedMessage();
             return err.toString();
         }
         //  Recalculate Amounts
@@ -5553,10 +5554,7 @@
             //}
         }
         catch (err) {
-            this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
+            this.setCalloutActive(false);            
             this.log.log(Level.SEVERE, "BankStmt_DateAcct", err);
             return err.toString();
         }
@@ -16071,7 +16069,7 @@
         }
 
         var price = Util.getValueOfDecimal(mTab.getValue("PriceActual"));
-        var val = Util.getValueOfDecimal(value);
+        var val = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
         //
         var C_Tax_ID = 0;
         var Rate = VIS.Env.ZERO;
@@ -16080,13 +16078,45 @@
         mTab.setValue("LineNetAmt", price * val);
 
         C_Tax_ID = Util.getValueOfInt(mTab.getValue("C_Tax_ID"));
-        var sqltax = "select rate from c_tax WHERE c_tax_id=" + C_Tax_ID + "";
-        Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));
-        var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
-        TotalRate = Util.getValueOfDecimal((Util.getValueOfDecimal(LineNetAmt) * Util.getValueOfDecimal(Rate)) / 100);
-        TotalRate = TotalRate.toFixed(2);
-        mTab.setValue("taxamt", TotalRate);
-        mTab.setValue("GrandTotal", ((price * val) + Util.getValueOfDecimal(mTab.getValue("TaxAmt"))));
+
+        // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+        if (mTab.getField("SurchargeAmt") != null) {
+            var StdPrecision = 0;
+            var IsTaxIncluded = false;
+
+            var currency = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", mTab.getValue("M_PriceList_ID").toString());
+            if (currency != null) {
+                StdPrecision = currency["StdPrecision"];
+                IsTaxIncluded = "Y" == currency["IsTaxIncluded"];
+            }
+
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+
+            var dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", C_Tax_ID.toString() + "," + LineNetAmt.toString() + "," + StdPrecision.toString()
+                + "," + IsTaxIncluded.toString());
+
+            TotalRate = dr["TaxAmt"];
+            mTab.setValue("TaxAmt", TotalRate);
+            mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
+
+            if (!IsTaxIncluded) {
+                mTab.setValue("GrandTotal", (LineNetAmt + TotalRate + dr["SurchargeAmt"]));
+            }
+            else {
+                mTab.setValue("GrandTotal", LineNetAmt);
+            }
+        }
+        else {
+            //var sqltax = "select rate from c_tax WHERE c_tax_id=" + C_Tax_ID + "";
+            //Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));
+
+            Rate = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", C_Tax_ID.toString());
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+            TotalRate = Util.getValueOfDecimal((Util.getValueOfDecimal(LineNetAmt) * Util.getValueOfDecimal(Rate)) / 100);
+            TotalRate = TotalRate.toFixed(2);
+            mTab.setValue("taxamt", TotalRate);
+            mTab.setValue("GrandTotal", ((price * val) + Util.getValueOfDecimal(mTab.getValue("TaxAmt"))));
+        }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
@@ -16625,7 +16655,7 @@
     VIS.Utility.inheritPrototype(CalloutTax, VIS.CalloutEngine); //inherit prototype
     CalloutTax.prototype.Tax = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
-        if (value == null || value.toString() == "") {
+        if (value == null || value == 0 ||value.toString() == "") {
             return "";
         }
         var C_Tax_ID = 0;
@@ -16634,17 +16664,46 @@
         var TotalRate = VIS.Env.ZERO;
         C_Tax_ID = Util.getValueOfInt(mTab.getValue("C_Tax_ID"));
         //var sqltax = "select rate from c_tax WHERE c_tax_id=" + C_Tax_ID + "";
-        //Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));
+        //Rate = Util.getValueOfDecimal(VIS.DB.executeScalar(sqltax, null, null));        
 
-        // JID_0872: Grand Total is not calculating right
-        Rate = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", C_Tax_ID.toString());
-        var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
-        TotalRate = Util.getValueOfDecimal((LineNetAmt * Rate) / 100);
+        // if Surcharge Tax is selected on Tax Rate, calculate surcharge tax amount accordingly
+        if (mTab.getField("SurchargeAmt") != null) {
+            var StdPrecision = 0;
+            var IsTaxIncluded = false;
 
-        TotalRate = Util.getValueOfDecimal(TotalRate.toFixed(2));
+            var currency = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", mTab.getValue("M_PriceList_ID").toString());
+            if (currency != null) {
+                StdPrecision = currency["StdPrecision"];
+                IsTaxIncluded = "Y" == currency["IsTaxIncluded"];
+            }
 
-        mTab.setValue("GrandTotal", (TotalRate + LineNetAmt));
-        mTab.setValue("taxamt", TotalRate);
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+
+            var dr = VIS.dataContext.getJSONRecord("MTax/CalculateSurcharge", C_Tax_ID.toString() + "," + LineNetAmt.toString() + "," + StdPrecision.toString()
+                + "," + IsTaxIncluded.toString());
+
+            TotalRate = dr["TaxAmt"];
+            mTab.setValue("TaxAmt", TotalRate);
+            mTab.setValue("SurchargeAmt", dr["SurchargeAmt"]);
+
+            if (!IsTaxIncluded) {
+                mTab.setValue("GrandTotal", (LineNetAmt + TotalRate + dr["SurchargeAmt"]));
+            }
+            else {
+                mTab.setValue("GrandTotal", LineNetAmt);
+            }           
+        }
+        else {
+            // JID_0872: Grand Total is not calculating right
+            Rate = VIS.dataContext.getJSONRecord("MTax/GetTaxRate", C_Tax_ID.toString());
+            var LineNetAmt = Util.getValueOfDecimal(mTab.getValue("LineNetAmt"));
+            TotalRate = Util.getValueOfDecimal((LineNetAmt * Rate) / 100);
+
+            TotalRate = Util.getValueOfDecimal(TotalRate.toFixed(2));
+
+            mTab.setValue("GrandTotal", (TotalRate + LineNetAmt));
+            mTab.setValue("taxamt", TotalRate);
+        }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
@@ -19356,7 +19415,7 @@
 
         var sql = "";
         try {
-            if (value == null || value.toString() == "") {
+            if (value == null || value == 0 || value.toString() == "") {
                 return "";
             }
             var C_BPartner_ID = 0;
@@ -19550,7 +19609,7 @@
     CalloutOrderContract.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
 
-        if (value == null || value.toString() == "") {
+        if (value == null || value == 0 ||value.toString() == "") {
             return "";
         }
         try {  ///
@@ -21915,7 +21974,7 @@
     */
     CalloutCashJournalLine.prototype.setAccountNo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
-            mTab.setValue("C_BankAccount_ID", null);
+            //mTab.setValue("C_BankAccount_ID", null);
             return "";
         }
         this.setCalloutActive(true);

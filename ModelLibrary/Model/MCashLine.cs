@@ -602,7 +602,7 @@ namespace VAdvantage.Model
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
                     return false;
                 }
-            
+
             }
 
             // check schedule is hold or not, if hold then no to save record

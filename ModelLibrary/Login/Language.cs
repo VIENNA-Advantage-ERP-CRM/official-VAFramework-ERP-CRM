@@ -59,6 +59,8 @@ namespace VAdvantage.Login
         private static String AD_Language_zh_HK = "zh_HK";//y
         private static String AD_Language_es_UY = "es_UY"; //y
         private static String AD_Language_ar_SA = "ar_SA"; //y
+        private static String AD_Language_en_IN = "en_IN"; //y
+        private static String AD_Language_sq_AL = "sq_AL"; //y
 
 
         static private CCache<int, Language> _languages = new CCache<int, Language>("loginlang", 10);

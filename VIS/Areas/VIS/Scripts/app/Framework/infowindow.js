@@ -54,7 +54,7 @@
                 searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
                 searchTab.append(searchSec);
                 datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
-                btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
+                btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 0px;'>");
             }
             else {
                 searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;display: inline-block; float: left;width:23%;height:87.8%;overflow:auto;'>");

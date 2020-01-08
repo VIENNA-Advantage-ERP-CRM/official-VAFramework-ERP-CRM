@@ -45,19 +45,146 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine">
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web">
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth, Version=4.0.0.11165, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\DotNetOpenAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.2.4640.29187, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Authentication.OAuth2, Version=1.2.4640.29180, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Authentication.OAuth2.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Calendar.v3, Version=1.2.4640.29145, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Calendar.v3.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Tasks.v1, Version=1.2.4573.23226, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Tasks.v1.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Contacts, Version=2.1.0.0, Culture=neutral, PublicKeyToken=7e065189dd4b982f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Contacts.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.YouTube, Version=2.1.0.0, Culture=neutral, PublicKeyToken=af04a32718ae8833, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.YouTube.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\ViennaAdvantageWeb\Dll\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.1.2\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.1.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
     <Content Include="Areas\VIS\Content\F20\Color.css" />
     <Content Include="Areas\VIS\Content\F20\Controls.css" />
     <Content Include="Areas\VIS\Content\F20\Media.css" />
-    <Content Include="Areas\VIS\Content\F20\Site.css" />
     <Content Include="Areas\VIS\Content\F20\site-rtl.css" />
+    <Content Include="Areas\VIS\Content\F20\Site.css" />
+    <Content Include="Areas\VIS\Content\F20\Window.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
+    <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
     <Content Include="Areas\VIS\Content\Home.css" />
     <Content Include="Areas\VIS\Content\Images\logo.png" />
     <Content Include="Areas\VIS\Content\Login.css" />
-    <Content Include="Areas\VIS\Content\F20\Window.css" />
     <Content Include="Areas\VIS\Content\notify.mp3" />
     <Content Include="Areas\VIS\Content\notify.wav" />
     <Content Include="Areas\VIS\Content\PaymentRule.css" />
@@ -137,8 +264,6 @@
     <Content Include="Areas\VIS\Images\base\Copy24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocument24.png" />
     <Content Include="Areas\VIS\Images\base\CreateDocumentX24.png" />
-    <Content Include="Areas\VIS\Images\base\defpanel.ico" />
-    <Content Include="Areas\VIS\Images\base\defPanel.png" />
     <Content Include="Areas\VIS\Images\base\Delete-W24.png" />
     <Content Include="Areas\VIS\Images\base\delete10.png" />
     <Content Include="Areas\VIS\Images\base\Delete24.PNG" />
@@ -158,7 +283,6 @@
     <Content Include="Areas\VIS\Images\base\First16.PNG" />
     <Content Include="Areas\VIS\Images\base\FirstX16.PNG" />
     <Content Include="Areas\VIS\Images\base\Folder20.png" />
-    <Content Include="Areas\VIS\Images\base\FormPic.PNG" />
     <Content Include="Areas\VIS\Images\base\Help16.png" />
     <Content Include="Areas\VIS\Images\base\Help24.png" />
     <Content Include="Areas\VIS\Images\base\History24.png" />
@@ -171,7 +295,6 @@
     <Content Include="Areas\VIS\Images\base\Info20.png" />
     <Content Include="Areas\VIS\Images\base\Info24.png" />
     <Content Include="Areas\VIS\Images\base\InfoAccount20.png" />
-    <Content Include="Areas\VIS\Images\base\InfoHelp.png" />
     <Content Include="Areas\VIS\Images\base\Last16.PNG" />
     <Content Include="Areas\VIS\Images\base\LastX16.PNG" />
     <Content Include="Areas\VIS\Images\base\Left32.png" />
@@ -209,7 +332,6 @@
     <Content Include="Areas\VIS\Images\base\PageUpX16.PNG" />
     <Content Include="Areas\VIS\Images\base\PAttribute20.png" />
     <Content Include="Areas\VIS\Images\base\Payment20.png" />
-    <Content Include="Areas\VIS\Images\base\pContainer.png" />
     <Content Include="Areas\VIS\Images\base\pencil.png" />
     <Content Include="Areas\VIS\Images\base\PickOpen20.png" />
     <Content Include="Areas\VIS\Images\base\Preference16.PNG" />
@@ -217,13 +339,11 @@
     <Content Include="Areas\VIS\Images\base\PreviousX16.PNG" />
     <Content Include="Areas\VIS\Images\base\Print24.PNG" />
     <Content Include="Areas\VIS\Images\base\Process20.png" />
-    <Content Include="Areas\VIS\Images\base\processPic.PNG" />
     <Content Include="Areas\VIS\Images\base\Product20.png" />
     <Content Include="Areas\VIS\Images\base\RecordAccess24.png" />
     <Content Include="Areas\VIS\Images\base\RecordAccessX24.png" />
     <Content Include="Areas\VIS\Images\base\Refresh24.PNG" />
     <Content Include="Areas\VIS\Images\base\RefreshX24.PNG" />
-    <Content Include="Areas\VIS\Images\base\report-pic.png" />
     <Content Include="Areas\VIS\Images\base\Report24.png" />
     <Content Include="Areas\VIS\Images\base\requery.png" />
     <Content Include="Areas\VIS\Images\base\Request24.png" />
@@ -237,8 +357,6 @@
     <Content Include="Areas\VIS\Images\base\select-att.png" />
     <Content Include="Areas\VIS\Images\base\seprator16.PNG" />
     <Content Include="Areas\VIS\Images\base\seprator24.PNG" />
-    <Content Include="Areas\VIS\Images\base\ShowSummaryNodes16.png" />
-    <Content Include="Areas\VIS\Images\base\ShowSummaryNodesX16.png" />
     <Content Include="Areas\VIS\Images\base\Sms24.png" />
     <Content Include="Areas\VIS\Images\base\Subscribe24.png" />
     <Content Include="Areas\VIS\Images\base\SubscribeX24.png" />
@@ -259,7 +377,6 @@
     <Content Include="Areas\VIS\Images\base\warning-cros.png" />
     <Content Include="Areas\VIS\Images\base\warning-icon.png" />
     <Content Include="Areas\VIS\Images\base\window-default.png" />
-    <Content Include="Areas\VIS\Images\base\winPic.PNG" />
     <Content Include="Areas\VIS\Images\base\Workflow24.png" />
     <Content Include="Areas\VIS\Images\base\zoom.png" />
     <Content Include="Areas\VIS\Images\base\Zoom16.jpg" />
@@ -426,7 +543,6 @@
     <Content Include="Areas\VIS\Images\login\user-ico.png" />
     <Content Include="Areas\VIS\Images\login\warehouse.png" />
     <Content Include="Areas\VIS\Images\logo.jpg" />
-    <Content Include="Areas\VIS\Images\logo.png" />
     <Content Include="Areas\VIS\Images\main_screen.png" />
     <Content Include="Areas\VIS\Images\mDocAction.png" />
     <Content Include="Areas\VIS\Images\menuTree.PNG" />
@@ -441,7 +557,6 @@
     <Content Include="Areas\VIS\Images\orderedList0.png" />
     <Content Include="Areas\VIS\Images\orderedList1.png" />
     <Content Include="Areas\VIS\Images\orderedList2.png" />
-    <Content Include="Areas\VIS\Images\pallet-icon.png" />
     <Content Include="Areas\VIS\Images\pdf.png" />
     <Content Include="Areas\VIS\Images\ppt-ico.png" />
     <Content Include="Areas\VIS\Images\ppt.png" />
@@ -582,7 +697,6 @@
     <Content Include="Areas\VIS\Scripts\app\grouprights\groupinfo.js" />
     <Content Include="Areas\VIS\Scripts\app\grouprights\importcontacts.js" />
     <Content Include="Areas\VIS\Scripts\app\grouprights\orgaccess.js" />
-    <Content Include="Areas\VIS\Scripts\app\headerPanelFrame.js" />
     <Content Include="Areas\VIS\Scripts\app\historymgr.js" />
     <Content Include="Areas\VIS\Scripts\app\i18N.js" />
     <Content Include="Areas\VIS\Scripts\app\initialize.js" />
@@ -603,14 +717,23 @@
     <Content Include="Areas\VIS\Scripts\app\viewmanager.js" />
     <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
-    <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\aheaderpanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\apanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabbedpane.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
+    <Content Include="Areas\VIS\Scripts\F20\aviewcontroller.js" />
+    <Content Include="Areas\VIS\Scripts\F20\thememgr.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vcardview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\veditview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vgridview.js" />
+    <Content Include="Areas\VIS\Scripts\F20\vmapview.js" />
     <Content Include="Areas\VIS\Scripts\F20\wframe.js" />
     <Content Include="Areas\VIS\Scripts\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\home\changeuserimage.js" />
     <Content Include="Areas\VIS\Scripts\home\favourite.js" />
     <Content Include="Areas\VIS\Scripts\home\home.js" />
     <Content Include="Areas\VIS\Scripts\home\shortcut.js" />
+    <Content Include="Areas\VIS\Scripts\model\calloutColumn.js" />
     <Content Include="Areas\VIS\Scripts\model\callouts.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
@@ -640,6 +763,7 @@
     <Compile Include="Areas\VIS\Controllers\Bitmap.cs" />
     <Compile Include="Areas\VIS\Controllers\BPartnerController.cs" />
     <Compile Include="Areas\VIS\Controllers\CalloutOrderController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\CalloutColumnController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MAcctSchemaController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MBankStatementController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MBPartnerController.cs" />
@@ -839,10 +963,18 @@
     <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.designer.cs">
       <DependentUpon>CreateUser.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.cs">
+      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx.designer.cs">
+      <DependentUpon>CrystalReprotViewer.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
+    <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
     <Content Include="packages.config" />
     <Content Include="Areas\VIS\Views\AccountForm\Index.cshtml" />
     <Content Include="Areas\VIS\Views\ASearch\Index.cshtml" />
@@ -850,7 +982,7 @@
     <Content Include="Areas\VIS\Views\Email\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Email\Init.cshtml" />
     <Content Include="Areas\VIS\Views\Home\Home.cshtml" />
-    <Content Include="Areas\VIS\Views\Home\IndexOld.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Home\TimeoutRedirect.cshtml" />
     <Content Include="Areas\VIS\Views\Home\_Login.cshtml" />
     <Content Include="Areas\VIS\Views\Home\_Login2.cshtml" />
@@ -858,7 +990,7 @@
     <Content Include="Areas\VIS\Views\Locator\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_Menu.cshtml" />
-    <Content Include="Areas\VIS\Views\Shared\_UserSettingsOld.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_UserSettings.cshtml" />
     <Content Include="Areas\VIS\Views\UserPreference\Index.cshtml" />
     <Content Include="Areas\VIS\Views\ValuePreference\Index.cshtml" />
     <Content Include="Areas\VIS\Views\VImageForm\Index.cshtml" />
@@ -883,23 +1015,14 @@
     <Folder Include="Areas\VIS\Views\VCreateFrom\" />
     <Folder Include="Areas\VIS\Views\VPayPrint\" />
     <Folder Include="Areas\VIS\Views\VTrxMaterial\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\VIS\Views\PaymentAllocation\Index.cshtml" />
     <Content Include="Areas\VIS\Views\TelerikReport\Index.cshtml" />
-    <Content Include="Areas\VIS\Scripts\F20\apanel.js" />
-    <Content Include="Areas\VIS\Scripts\F20\aviewcontroller.js" />
-    <Content Include="Areas\VIS\Scripts\F20\thememgr.js" />
-    <Content Include="Areas\VIS\Scripts\F20\veditview.js" />
-    <Content Include="Areas\VIS\Scripts\F20\vgridview.js" />
-    <Content Include="Areas\VIS\Scripts\F20\vmapview.js" />
-    <Content Include="Areas\VIS\Scripts\F20\atabbedpane.js" />
-    <Content Include="Areas\VIS\Scripts\F20\vcardview.js" />
-    <Content Include="Areas\VIS\Views\Shared\_UserSettings.cshtml" />
-    <Content Include="Areas\VIS\Views\Home\Index.cshtml" />
+    <Content Include="Areas\VIS\Views\Home\IndexOld.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\View.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_Template.cshtml" />
+    <Content Include="Areas\VIS\Views\Shared\_UserSettingsOld.cshtml" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -918,100 +1041,6 @@
       <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
       <Name>ModelLibrary</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth">
-      <HintPath>..\ViennaAdvantageWeb\Dll\DotNetOpenAuth.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Authentication.OAuth2">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Authentication.OAuth2.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Calendar.v3">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Calendar.v3.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Tasks.v1">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Tasks.v1.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.GData.Client">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.GData.Contacts">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Contacts.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.GData.Extensions">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.GData.YouTube">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.YouTube.dll</HintPath>
-    </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp, Version=4.1.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ViennaAdvantageWeb\Dll\itextsharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.1.2\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.1.2\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
-    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

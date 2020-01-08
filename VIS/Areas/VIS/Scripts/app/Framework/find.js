@@ -246,7 +246,7 @@
                     + '<label for="QueryName"  id="lblToQryValue_' + windowNo + '">' + VIS.Msg.getMsg("ToQueryValue") + '</label>'
                       + '<input  id="txtToQryValue_' + windowNo + '" type="text" name="QueryName">'
                         + '</div>'
-                        + '<div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" style="display:none;padding-top: 30px;" id="divFullDay_' + windowNo + '">'
+                        + '<div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" style="display:none;padding-top: 20px;" id="divFullDay_' + windowNo + '">'
 
                       + '<input style="width: auto;float: left;margin-top: 2px;" id="checkFullDay_' + windowNo + '" type="checkbox" name="QueryName">'
                        + '<label for="QueryName"  id="lblToQryValue_' + windowNo + '">' + VIS.Msg.getMsg("FullDay") + '</label>'
@@ -1037,7 +1037,7 @@
         *   Added By Karan
         */
         function showFullDay(show) {
-            divFullDay.css('display', show ? "block" : "none");
+            divFullDay.css('display', show ? "flex" : "none");
         };
 
         /*

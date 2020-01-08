@@ -1,4 +1,5 @@
-﻿html, body {
+﻿
+html, body {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -2068,25 +2069,30 @@ html[dir="rtl"] .vis-filter-dialog {
             color: red;
         }
 
-    .vis-gc-vpanel-table input,
-    .vis-gc-vpanel-table select,
-    .vis-gc-vpanel-table textarea,
-    .vis-gc-vpanel-table button {
-        border-style: solid;
-        border-width: 1px;
-        border-color: darkgray;
-        position: relative;
-        width: 100%;
-        min-width: 100%;
-        min-height: 26px;
-        line-height: inherit !important;
-        margin-bottom: 10px;
-        padding: 1px !important;
-    }
 
-    .vis-gc-vpanel-table button {
-        /*margin-bottom: 20px;*/ */
-    }
+.vis-app-aform-root .vis-gc-vpanel-table select {
+    margin-bottom: 0px !important;
+}
+
+.vis-gc-vpanel-table input,
+.vis-gc-vpanel-table select,
+.vis-gc-vpanel-table textarea,
+.vis-gc-vpanel-table button {
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkgray;
+    position: relative;
+    width: 100%;
+    min-width: 100%;
+    min-height: 26px;
+    line-height: inherit !important;
+    margin-bottom: 0px;
+    padding: 1px !important;
+}
+
+.vis-gc-vpanel-table button {
+    /*margin-bottom: 20px;*/
+}
 
 .vis-gc-vpanel-table-btn-blue {
     border: 0px;
@@ -3531,7 +3537,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
     background-color: #fff;
 }
 
-.vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid {
+.vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
     height: 72%;
     width: 100%;
 }
@@ -3631,7 +3637,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
         height: 100%;
     }
 
-    .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid {
+    .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
         height: 80%;
     }
 }
@@ -10527,7 +10533,7 @@ html[dir="rtl"] .vis-attach-file-wrapla {
         font-weight: normal;
     }
 /*.vis-attach-file-location > select{ margin-left:10px;}*/
-.vis-attach-btns > a {
+.vis-attach-btns > a, .vis-attach-btns > a:not([href]) {
     background: rgb(var(--v-c-primary), 1);
     color: rgb(var(--v-c-on-primary), 1);
     padding: 0.5rem 1.5rem;
@@ -10537,8 +10543,8 @@ html[dir="rtl"] .vis-attach-file-wrapla {
     cursor: pointer;
 }
 
-    .vis-attach-btns > a:hover, .vis-btn-arrange:hover {
-        color: #fff;
+    .vis-attach-btns > a:hover, .vis-btn-arrange:hover, .vis-attach-btns > a:not([href]), .vis-attach-btns > a:not([href]):hover {
+        color: rgb(var(--v-c-on-primary), 1);
     }
 
 .vis-attach-shift-arrow {
@@ -14417,6 +14423,7 @@ select {
     grid-row-start: 3;
     background-color: rgba(var(--v-c-primary),0.12);
     border-top: 1px solid rgba(var(--v-c-primary), 0.3);
+    z-index: 99;
 }
 
     .vis-app-footer ul {
@@ -14714,7 +14721,7 @@ select {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 10;
     bottom: 0;
     top: 0;
     color: rgba(var(--v-c-primary),1);
@@ -15269,6 +15276,11 @@ select {
     grid-template-columns: auto 1fr;
     color: rgba(var(--v-c-on-secondary), 1);
     background: rgba(var(--v-c-common), 1);
+    height: 100%;
+}
+
+.vis-ad-w-p .vis-ad-w-p-vc {
+    height: auto;
 }
 /*tree css START here*/
 .vis-ad-w-p-vc-tree {
@@ -16118,14 +16130,14 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 
 /*actions popups css*/
 .vis-chat-msgbox {
-    Height: 70px;
+    Height: 65px;
     width: 100%;
     font-size: 10pt;
     resize: none;
     outline: none;
     border: 1px solid rgba(var(--v-c-on-secondary),.1);
     border-radius: .4rem;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
     .vis-chat-msgbox:focus {
@@ -16179,7 +16191,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 
 .vis-chatdetailouterwrap {
     overflow-y: auto;
-    height: 240px;
+    height: 260px;
 }
 
 .vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
@@ -16231,6 +16243,8 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     min-height: 136px;
     padding: 0;
     height: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .vis-input-wrap label + button.vis-ev-col-img-ctrl {
@@ -16241,6 +16255,13 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-input-wrap button.vis-ev-col-img-ctrl img {
     max-width: 100%;
     max-height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
 }
 
 .vis-input-wrap-button-image-add {
@@ -16256,7 +16277,6 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-input-wrap {
     position: relative;
     margin-bottom: 15px;
-    height: 100%;
 }
 
     .vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
@@ -16469,7 +16489,7 @@ select.vis-ev-col-mandatory {
 /****** Style Inputs Control END*****/
 /***************************** Control Prop *******************************************/
 .vis-ev-col-readonly {
-    color: rgba(var(--v-c-on-secondary),.5) !important;
+    color: rgba(var(--v-c-on-secondary),.7) !important;
     background: rgba(var(--v-c-on-secondary),.04) !important;
     cursor: not-allowed;
 }
@@ -16482,15 +16502,20 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
 
 /*mandatory*/
 .vis-ev-col-mandatory {
-    color: rgba(var(--v-c-mandatory),1);
+    color: inherit !important;
+    background-color: lightpink !important;
 }
-/*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
+
+.vis-input-wrap .vis-ev-col-mandatory {
+    color: rgba(var(--v-c-mandatory),1);
+    background-color: inherit !important;
+}
+    /*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
     border: 1px solid #ec3f3f;
 }*/
-
-.vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
-    color: rgba(var(--v-c-mandatory),1) !important;
-}
+    .vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
+        color: rgba(var(--v-c-mandatory),1) !important;
+    }
 
 .vis-ev-col-msign {
     position: absolute;
@@ -16525,6 +16550,7 @@ label.vis-ec-col-lblchkbox {
     left: 0;
     display: inline-flex;
     color: rgba(var(--v-c-on-secondary), 1);
+    align-items: center;
 }
 
 .vis-ec-col-lblchkbox input[type=checkbox] {
@@ -16533,14 +16559,17 @@ label.vis-ec-col-lblchkbox {
     min-width: 0px;
     margin-left: 4px;
     margin-right: 4px;
+    margin-bottom: 0;
 }
+
+    .vis-ec-col-lblchkbox input[type=checkbox]:focus {
+        outline: auto;
+        outline-color: rgba(var(--v-c-primary), 1);
+    }
 
 .vis-ev-col input:-webkit-autofill {
     -webkit-box-shadow: inset 0 0 0px 9999px rgba(var(--v-c-common), 0.7);
 }
-
-
-
 
 
 /*.vis-ev-col-mandatory .input-group-text {
@@ -16602,6 +16631,7 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
 .input-group-text {
     display: inline-flex;
     justify-content: center;
+    width: 36px;
 }
 
 
@@ -17058,7 +17088,10 @@ html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
     margin-left: 0;
 }
 
-html[dir="rtl"] .vis-ad-w-p-tabs-oflow a, .vis-statusbar-ul div, html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2), html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+html[dir="rtl"] .vis-ad-w-p-tabs-oflow a,
+html[dir="rtl"] .vis-statusbar-ul div,
+html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2),
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
     transform: rotate(180deg);
 }
 

@@ -1259,7 +1259,6 @@ namespace VAdvantage.Model
                 string docBaseType = docType.GetDocBaseType();
                 for (int i = 0; i < fromLines.Length; i++)
                 {
-
                     //issue JID_1474 If full quantity of any line is released from blanket order then system will not create that line in Release order
                     if (docType.IsReleaseDocument())
                     {
@@ -1305,7 +1304,6 @@ namespace VAdvantage.Model
                     if (docType.IsReleaseDocument())
                     {
                         line.SetC_OrderLine_Blanket_ID(fromLines[i].GetC_OrderLine_ID());
-
                         // Blanket order qty not updated correctly by Release order process
                         line.SetQtyBlanket(fromLines[i].GetQtyOrdered());
                     }
@@ -1317,8 +1315,6 @@ namespace VAdvantage.Model
                     if (line.Get_ColumnIndex("C_Order_Quotation") > 0)
                         line.Set_Value("C_Order_Quotation", fromLines[i].GetC_Order_ID());
 
-                    // JID_0416 If we create SO/PO by using "Copy From" process system update return qty on new order.. we set this ZERO When we copy any order
-                    line.SetQtyReturned(I_ZERO);
                     line.SetQtyDelivered(Env.ZERO);
                     line.SetQtyInvoiced(Env.ZERO);
                     line.SetQtyReserved(Env.ZERO);

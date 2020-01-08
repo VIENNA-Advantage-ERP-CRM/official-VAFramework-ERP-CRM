@@ -119,11 +119,6 @@ namespace VIS.Controllers
             return msg;
         }
 
-        /// <summary>
-        /// To check state of period weather it is Open or Close
-        /// </summary>
-        /// <param name="DateTrx">Transaction Date </param>
-        /// <returns>Return Empty if period is OPEN else it will return ErrorMsg</returns>
         public string CheckPeriodState(string DateTrx)
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -132,16 +127,6 @@ namespace VIS.Controllers
             return payments.CheckPeriodState(date);
         }
 
-        /// <summary>
-        /// To get all the unallocated payments
-        /// </summary>
-        /// <param name="_C_Currency_ID">Currency</param>
-        /// <param name="_C_BPartner_ID">Business Partner</param>
-        /// <param name="isInterBPartner">Inter-Business Partner</param>
-        /// <param name="chk">For MultiCurrency Check</param>
-        /// <param name="page">Page Number</param>
-        /// <param name="size">Page Size</param>
-        /// <returns>No of unallocated payments</returns>
         public JsonResult GetPayments(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size)
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -149,16 +134,7 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(payments.GetPayments(_C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, page, size)), JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// To get all the unallocated Cash Lines
-        /// </summary>
-        /// <param name="_C_Currency_ID">Currency</param>
-        /// <param name="_C_BPartner_ID">Business Partner</param>
-        /// <param name="isInterBPartner">Inter-Business Partner</param>
-        /// <param name="chk">For MultiCurrency Check</param>
-        /// <param name="page">Page Number</param>
-        /// <param name="size">Page Size</param>
-        /// <returns>No of unallocated Cash Lines</returns>
+
         public JsonResult GetCashJounral(int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size)
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -190,10 +166,6 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(payments.GetInvoice(_C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, date, page, size, docNo, c_docType_ID, fromDate, toDate, conversionDate)), JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// to get DataTypes
-        /// </summary>
-        /// <returns>List of Data Types</returns>
         public JsonResult GetDocType()
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -201,11 +173,6 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(payments.GetDocType()));
         }
 
-        /// <summary>
-        /// TO get currency precision from currency window
-        /// </summary>
-        /// <param name="_C_Currency_ID">Currency</param>
-        /// <returns>precision of currency</returns>
         public JsonResult GetCurrencyPrecision(int _C_Currency_ID)
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -223,68 +190,6 @@ namespace VIS.Controllers
             PaymentAllocation payments = new PaymentAllocation(ct);
             return Json(JsonConvert.SerializeObject(payments.GetOrganization(ct)), JsonRequestBehavior.AllowGet);
         }
-
-        /// <summary>
-        /// To get all the unallocated GL Lines
-        /// <param name="_C_Currency_ID">Currency</param>
-        /// <param name="_C_BPartner_ID">Business Partner</param>
-        /// <param name="page">Page Number</param>
-        /// <param name="size">Page Size</param>
-        /// <returns>No of unallocated GL Lines</returns>
-        public JsonResult GetGLData(int _C_Currency_ID, int _C_BPartner_ID, int page, int size)
-        {
-            Ctx ct = Session["ctx"] as Ctx;
-            PaymentAllocation payments = new PaymentAllocation(ct);
-            return Json(JsonConvert.SerializeObject(payments.GetGLData(_C_Currency_ID, _C_BPartner_ID, page, size)), JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// to create view allocation against GL journal line
-        /// </summary>
-        /// <param name="paymentData">Selected payment data</param>
-        /// <param name="invoiceData">Selected invoice data</param>
-        /// <param name="cashData"> Selected cash line data</param>
-        /// <param name="glData"> Selected gl line data</param>
-        /// <param name="DateTrx"> Transaction Date </param>
-        /// <param name="_windowNo"> Window Number</param>
-        /// <param name="C_Currency_ID">Currency</param>
-        /// <param name="C_BPartner_ID"> Business Partner</param>
-        /// <param name="AD_Org_ID">Org ID</param>
-        /// <param name="C_CurrencyType_ID">Currency ConversionType ID</param>
-        /// <returns>Will Return Msg Either Allocation is Saved or Not Saved</returns>
-        [HttpPost]
-        public string saveGLJData(string paymentData, string invoiceData, string cashData, string glData, string DateTrx, string _windowNo, int C_Currency_ID, int C_BPartner_ID, string AD_Org_ID, int C_CurrencyType_ID)
-        {
-            List<Dictionary<string, string>> pData = null;
-            List<Dictionary<string, string>> cData = null;
-            List<Dictionary<string, string>> gData = null;
-            List<Dictionary<string, string>> iData = null;
-            Ctx ct = Session["ctx"] as Ctx;
-            string msg = string.Empty;
-            DateTime date = Convert.ToDateTime(DateTrx);
-            if (paymentData != null)
-            {
-                pData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(paymentData);
-            }
-            if (cashData != null)
-            {
-                cData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(cashData);
-            }
-            if (glData != null)
-            {
-                gData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(glData);
-            }
-            if (invoiceData != null)
-            {
-
-                iData = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(invoiceData);
-            }
-
-            PaymentAllocation payments = new PaymentAllocation(ct);
-            msg = payments.SaveGLData(pData, iData, cData, gData, date, Util.GetValueOfInt(_windowNo), Util.GetValueOfInt(C_Currency_ID), Util.GetValueOfInt(C_BPartner_ID), Util.GetValueOfInt(AD_Org_ID), Util.GetValueOfInt(C_CurrencyType_ID));
-            return msg;
-        }
-
     }
 
 

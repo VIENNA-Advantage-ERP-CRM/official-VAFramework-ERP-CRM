@@ -863,9 +863,9 @@
                         parameterDiv.parent().css({ "width": "27%", "padding": "0 10px 0 0" });
 
                         var sizeCrtl = $(tableSArea.find("button").parent().find("input")[0]).width();
-                        $(tableSArea.find("select")).width(sizeCrtl + 35);
-                        $(tableSArea.find("input")[0]).width(sizeCrtl + 32);
-                        $(tableSArea.find("input")[1]).width(sizeCrtl + 32);
+                        //$(tableSArea.find("select")).width(sizeCrtl + 35);
+                        //$(tableSArea.find("input")[0]).width(sizeCrtl + 32);
+                        //$(tableSArea.find("input")[1]).width(sizeCrtl + 32);
 
                         // }
                         //if (window.innerHeight >= 700) {
@@ -924,7 +924,7 @@
                 if (editor.getBtnCount() >= 2) {
 
                     tr.append(tdChild2);
-                    var div = $("<Div style='width: 100%'>");
+                    var div = $("<Div class='vis-act-frm-parm'>");
                     tdChild2.append(div);
                     if (window.innerHeight > 700) {
                         div.append(editor.getControl().css('width', '85%'));
