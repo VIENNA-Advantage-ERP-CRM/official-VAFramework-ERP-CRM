@@ -2947,34 +2947,62 @@ namespace VAdvantage.Model
                     {
                         MOrderLine lineBlanket1 = new MOrderLine(GetCtx(), oLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
                         MOrderLine origOrderLine = new MOrderLine(GetCtx(), oLine.GetOrig_OrderLine_ID(), Get_TrxName());
-                        MOrderLine lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+                        MOrderLine lineBlanket = null;
 
-
-                        if ((lineBlanket != null && lineBlanket.Get_ID() > 0) || (lineBlanket1 != null && lineBlanket1.Get_ID() > 0))
+                        if (lineBlanket1 != null && lineBlanket1.Get_ID() > 0)
                         {
                             if (IsSOTrx())
                             {
                                 lineBlanket1.SetQtyDelivered(Decimal.Subtract(lineBlanket1.GetQtyDelivered(), Qty));
-                                lineBlanket.SetQtyReturned(Decimal.Add(lineBlanket.GetQtyReturned(), Qty));
                             }
                             else
                             {
                                 lineBlanket1.SetQtyDelivered(Decimal.Add(lineBlanket1.GetQtyDelivered(), Qty));
+                            }
+
+                            lineBlanket1.SetDateDelivered(GetMovementDate());   //	overwrite=last                            
+
+                            if (!lineBlanket1.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                                    _processMsg = "Could not update Blanket Order Line. " + pp.GetName();
+                                else
+                                    _processMsg = "Could not update Blanket Order Line";
+                                return DocActionVariables.STATUS_INVALID;
+                            }
+                        }
+
+                        // For Return Order created for Blanket Order
+                        if (origOrderLine.GetC_OrderLine_Blanket_ID() > 0)
+                        {
+                            lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+                        }
+
+                        if (lineBlanket != null && lineBlanket.Get_ID() > 0)
+                        {
+                            if (IsSOTrx())
+                            {
+                                lineBlanket.SetQtyReturned(Decimal.Add(lineBlanket.GetQtyReturned(), Qty));
+                            }
+                            else
+                            {
                                 lineBlanket.SetQtyReturned(Decimal.Subtract(lineBlanket.GetQtyReturned(), Qty));
                             }
-                            lineBlanket.SetDateDelivered(GetMovementDate());	//	overwrite=last
-                            lineBlanket1.SetDateDelivered(GetMovementDate());	//	overwrite=last
 
-                            //JID_0688: On MR Complete against the Released Purchase order, need to decrease the Reserved Qty from Blanket order.
-                            lineBlanket1.SetQtyReserved(oLine.GetQtyReserved());
+                            lineBlanket.SetDateDelivered(GetMovementDate());	//	overwrite=last                            
 
-                            lineBlanket.Save();
-                            lineBlanket1.Save();
-                            //MOrderLine oLine1 = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-
+                            if (!lineBlanket.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                                    _processMsg = "Could not update Blanket Order Line. " + pp.GetName();
+                                else
+                                    _processMsg = "Could not update Blanket Order Line";
+                                return DocActionVariables.STATUS_INVALID;
+                            }
                         }
                     }
-
 
                     if (!oLine.Save())
                     {
