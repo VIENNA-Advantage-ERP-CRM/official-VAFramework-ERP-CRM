@@ -383,7 +383,7 @@ select {
     border-width: 0;
     border-collapse: collapse;
     border-spacing: 0;
-    vertical-align: bottom;
+    vertical-align: top;
 }
 .vis-app-aform-root input[type=checkbox], .ui-dialog input[type=checkbox] {
     margin: 4px 4px 0;
