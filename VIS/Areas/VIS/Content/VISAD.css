@@ -151,6 +151,7 @@
         color: rgba(var(--v-c-on-primary), 1);
         white-space: nowrap;*/
         line-height: 41px;
+        padding-top: 0;
     }
 
 
@@ -1007,7 +1008,7 @@
     min-width: 100%;
     min-height: 26px;
     line-height: inherit !important;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     padding: 1px !important;
 }
 
