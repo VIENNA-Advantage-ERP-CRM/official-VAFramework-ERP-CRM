@@ -74,7 +74,9 @@
     float: left;
     margin-right: 10px;
 }
-
+.vis-advancedSearchHorigontal{
+    width: auto;
+}
 .vis-advancedSearchInput {
     width: auto;
     /* float: left; */
@@ -124,7 +126,7 @@ html[dir="rtl"] .vis-advancedSearchInput
 
 .vis-advancedSearchHorigontal > label
 {
-    width: 16%;
+    /*width: 16%;*/
     margin-top: 6px;
     margin-right: 10px;
 }

@@ -352,10 +352,11 @@
 
 
 .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input {
-    border: none;
+    border: none !important;
     background: transparent;
     height: 100%;
     padding-left: 8px;
+    border-radius: 0;
 }
 
     .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input:focus {
