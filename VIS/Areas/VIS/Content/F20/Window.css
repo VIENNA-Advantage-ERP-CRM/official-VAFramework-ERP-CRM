@@ -1405,6 +1405,10 @@ li.vis-page-item-select {
         cursor: pointer;
     }
 
+.vis-ad-w-p-ap-tp-o-b-content {
+    height: calc(100% - 30px);
+}
+
 .vis-ad-w-p-a-oflow span {
     width: 100%;
     cursor: pointer;
