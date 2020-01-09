@@ -754,6 +754,7 @@
     border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     font-weight: bold;
     margin-bottom: 0;
+    padding: 5px;
 }
 
 
