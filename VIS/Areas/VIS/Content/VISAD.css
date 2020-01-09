@@ -151,6 +151,7 @@
         color: rgba(var(--v-c-on-primary), 1);
         white-space: nowrap;*/
         line-height: 41px;
+        padding-top: 0;
     }
 
 
@@ -753,6 +754,7 @@
     border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     font-weight: bold;
     margin-bottom: 0;
+    padding: 5px;
 }
 
 
