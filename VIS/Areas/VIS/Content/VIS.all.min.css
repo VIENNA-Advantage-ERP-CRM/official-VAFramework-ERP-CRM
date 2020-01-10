@@ -1,4 +1,4 @@
-﻿
+﻿/*** version 1.0.9.0***/
 html, body {
     height: 100%;
     width: 100%;
@@ -11736,6 +11736,8 @@ html[dir="rtl"] .vis-advancedSearchInput {
     color: #535353;
     font-weight: 400;
     float: left;
+    width: 100%;
+    margin-bottom: 0;
 }
 
 .vis-advancedSearchInput input[type="checkbox"] + label {
@@ -11771,6 +11773,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     height: 30px;
     display: inline-flex;
     outline: none;
+    float: left;
 }
 
     .vis-advancedSearchInput > input:focus, .vis-advancedSearchInput > select:focus, .vis-advancedSearchHorigontal > select:focus {
@@ -11813,6 +11816,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     color: rgba(var(--v-c-on-secondary), .8);
     align-items: center;
     justify-content: center;
+    float: left;
 }
 
 .vis-advancedSearch-Icons {
@@ -11831,7 +11835,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
         list-style: none;
         margin: 0;
         padding: 0;
-        margin-top: 22px;
+        margin-top: 17px;
     }
 
         .vis-advancedSearch-Icons > ul > li {
@@ -11936,7 +11940,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 
     .vis-advancedSearchTableHead > th, .vis-advancedSearchTableRow > td {
         text-align: center;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: normal;
         color: #494949;
         padding: 10px 0;
@@ -15022,6 +15026,7 @@ select {
     height: 100%;
     padding-left: 8px;
     border-radius: 0;
+    font-size: 14px;
 }
 
     .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input:focus {
