@@ -134,7 +134,7 @@
             //*******LookUp Product Ends**************
             $divContainer = $("<div class='vis-mainContainer' style='height:" + height + " !important'>");
 
-            var $divInfo = $("<div class='vis-pSelectInfo' style='height:76%;'>");
+            var $divInfo = $("<div class='vis-pSelectInfo'>");
 
             var $divOrganization = $("<div class='vis-paymentselect-field'>");
             $divOrganization.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "AD_Org_ID") + " </label>"));
