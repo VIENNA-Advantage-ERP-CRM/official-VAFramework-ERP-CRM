@@ -1665,17 +1665,17 @@
 
             if (!self.visRepformatIcons || self.visRepformatIcons.length == 0) {
                 if (self.cssForAll) {
-                    self.visRepformatIcons = self.cssForAll + ' vis-repformat-ico ';
+                    self.visRepformatIcons = self.cssForAll + 'vis vis-format';
                 }
                 else {
-                    self.visRepformatIcons = 'vis-repformat-ico vis-report-icon ';
+                    self.visRepformatIcons = 'vis vis-format';
                 }
 
             }
 
 
             if (!self.visSaveCsvIcons || self.visSaveCsvIcons.length == 0) {
-                self.visSaveCsvIcons = ' vis-savecsv-ico vis-report-icon ';
+                self.visSaveCsvIcons = ' vis vis-save-csv';
 
             }
             else {
@@ -1683,35 +1683,35 @@
             }
 
             if (!self.visSavePdfIcons || self.visSavePdfIcons.length == 0) {
-                self.visSavePdfIcons = ' vis-savepdf-ico vis-report-icon ';
+                self.visSavePdfIcons = ' vis vis-save-pdf';
             }
             else {
                 self.visSavePdfIcons = self.visSavePdfIcons + ' vis-report-icon ';
             }
 
             if (!self.visArchiveIcons || self.visArchiveIcons.length == 0) {
-                self.visArchiveIcons = ' vis-archive-ico vis-report-icon ';
+                self.visArchiveIcons = ' vis vis-archive';
             }
             else {
                 self.visArchiveIcons = self.visArchiveIcons + ' vis-report-icon ';
             }
 
             if (!self.visRequeryIcons || self.visRequeryIcons.length == 0) {
-                self.visRequeryIcons = ' vis-requery-ico vis-report-icon ';
+                self.visRequeryIcons = ' vis vis-refresh';
             }
             else {
                 self.visRequeryIcons = self.visRequeryIcons + ' vis-report-icon ';
             }
 
             if (!self.visCustomizeIcons || self.visCustomizeIcons.length == 0) {
-                self.visCustomizeIcons = ' vis-customize-ico vis-report-icon ';
+                self.visCustomizeIcons = ' vis vis-customize';
             }
             else {
                 self.visCustomizeIcons = self.visCustomizeIcons + ' vis-report-icon ';
             }
 
             if (!self.visPrintIcons || self.visPrintIcons.length == 0) {
-                self.visPrintIcons = ' vis-print-ico vis-report-icon ';
+                self.visPrintIcons = ' vis vis-print ';
 
             }
             else {
