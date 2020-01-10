@@ -21,17 +21,20 @@
         /** Method to open the account viewer form called on init. **/
         this.openAccountViewer = function () {
             // Open account viewer form 
+            //_btnResult.trigger("click");
+
+
             var obj = new VIS.AcctViewer(VIS.context.getAD_Client_ID(), 1, 1, this.windowNo, 1);
             if (obj != null) {
                 obj.setIsMenu(true);
                 obj.showDialog();
             }
-            obj = null;
+            //obj = null;
 
-            // Click event for button
-            window.setTimeout(function () {
+            //Click event for button
+            //window.setTimeout(function () {
                 _btnResult.trigger("click");
-            }, 10);
+          //  }, 10);
         };
 
         /** Create busy indicator **/
@@ -56,7 +59,7 @@
 
     VIS.AcctViewerMenu.prototype.init = function (windowNo, frame) {
         this.frame = frame;
-        $($(this.frame.parent.getContentGrid()).parent()).parent().css("display", "none");
+        //$($(this.frame.parent.getContentGrid()).parent()).parent().css("display", "none");
         this.windowNo = windowNo;
         this.initalize();
         this.openAccountViewer();
