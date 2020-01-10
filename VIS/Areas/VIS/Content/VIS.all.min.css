@@ -1241,6 +1241,7 @@ html[dir="rtl"] .vis-filter-dialog {
         color: rgba(var(--v-c-on-primary), 1);
         white-space: nowrap;*/
         line-height: 41px;
+        padding-top: 0;
     }
 
 
@@ -1843,6 +1844,7 @@ html[dir="rtl"] .vis-filter-dialog {
     border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     font-weight: bold;
     margin-bottom: 0;
+    padding: 5px;
 }
 
 
@@ -2097,7 +2099,7 @@ html[dir="rtl"] .vis-filter-dialog {
     min-width: 100%;
     min-height: 26px;
     line-height: inherit !important;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     padding: 1px !important;
 }
 
@@ -7034,7 +7036,7 @@ html[dir="rtl"] .input-group-addon {
 #workflowActivityData {
     position: absolute;
     z-index: 1;
-    top: 45px;
+    top: 41px;
     bottom: 0px;
     width: 100%;
     overflow: hidden;
@@ -7938,6 +7940,9 @@ html[dir="rtl"] .vis-feedContainer {
         overflow: hidden;
         flex: 1;
         margin: 0;
+        min-height: 30px;
+        display: flex;
+        align-items: center;
     }
 
 
@@ -11673,6 +11678,10 @@ html[dir="rtl"] .vis-initial-form-checkbox > label {
     margin-right: 10px;
 }
 
+.vis-advancedSearchHorigontal {
+    width: auto;
+}
+
 .vis-advancedSearchInput {
     width: auto;
     /* float: left; */
@@ -11717,7 +11726,7 @@ html[dir="rtl"] .vis-advancedSearchInput {
 }
 
 .vis-advancedSearchHorigontal > label {
-    width: 16%;
+    /*width: 16%;*/
     margin-top: 6px;
     margin-right: 10px;
 }
@@ -12597,7 +12606,7 @@ html[dir="rtl"] .vis-email-btns {
     padding: 15px;
     background: #f8f8f8;
     position: relative;
-    height: 79%;
+    height: 88%;
     margin: 10px;
     margin-right: 0px;
     margin-left: 5px;
@@ -12775,7 +12784,7 @@ html[dir="rtl"] .vis-email-btns {
     /*padding: 10px 0px 10px 0px;*/
     /*float: left;*/
     /*padding-left: 10px;*/
-    /*padding: 5px 0 5px 0;*/
+    padding: 5px 0 5px 0;
     display: flex;
     align-items: center;
 }
@@ -15008,10 +15017,11 @@ select {
 
 
 .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input {
-    border: none;
+    border: none !important;
     background: transparent;
     height: 100%;
     padding-left: 8px;
+    border-radius: 0;
 }
 
     .vis-ad-w-p-tb-search .vis-ad-w-p-tb-s-input:focus {
@@ -16065,6 +16075,10 @@ li.vis-page-item-select {
         display: inline-flex;
         cursor: pointer;
     }
+
+.vis-ad-w-p-ap-tp-o-b-content {
+    height: calc(100% - 30px);
+}
 
 .vis-ad-w-p-a-oflow span {
     width: 100%;
