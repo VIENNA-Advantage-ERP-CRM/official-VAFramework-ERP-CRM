@@ -1441,7 +1441,7 @@
                     event.onComplete = function (event) {
                         id = event.recid;
 
-                        $('#grid_openformatgridcash_' + $self.windowNo + '_edit_' + id + '_9').keydown(function (event) {
+                        $('#grid_openformatgridcash_' + $self.windowNo + '_edit_' + id + '_8').keydown(function (event) {
                             var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
 
                             if (!isDotSeparator && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
