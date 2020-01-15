@@ -1276,6 +1276,8 @@
                                 activitIDs = fulldata[index].AD_WF_Activity_ID;
                             }
 
+                            // set window ID of activity
+                            windowID = fulldata[index].AD_Window_ID;
 
                             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/ApproveIt",
                                 { "activityID": activitIDs, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer, "AD_Window_ID": windowID }, function apprvoIt(info) {

@@ -320,7 +320,8 @@ namespace VAdvantage.WF
             String attribute = base.GetAttributeName();
             if (attribute != null && attribute.Length > 0)
                 return attribute;
-            SetAttributeName(GetColumn().GetColumnName());
+            // change to pick Name instead of Column Name to be set on WF Activity or Event
+            SetAttributeName(GetColumn().GetName());
             return base.GetAttributeName();
         }
 
