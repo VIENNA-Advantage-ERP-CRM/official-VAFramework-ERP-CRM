@@ -1296,6 +1296,45 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
+
+        /** Set Notify Previous Transition Message.
+        @param IsNotifyPrevTsnMsg Notify Previous Transition Message */
+        public void SetIsNotifyPrevTsnMsg(Boolean IsNotifyPrevTsnMsg)
+        {
+            Set_Value("IsNotifyPrevTsnMsg", IsNotifyPrevTsnMsg);
+        }
+        /** Get Notify Previous Transition Message.
+        @return Notify Previous Transition Message */
+        public Boolean IsNotifyPrevTsnMsg()
+        {
+            Object oo = Get_Value("IsNotifyPrevTsnMsg");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
+
+        /** NotifyNode_ID AD_Reference_ID=1000348 */
+        public static int NOTIFYNODE_ID_AD_Reference_ID = 1000348;/** Set Notify Nodes.
+        @param NotifyNode_ID Notify Nodes */
+        public void SetNotifyNode_ID(String NotifyNode_ID)
+        {
+            if (NotifyNode_ID != null && NotifyNode_ID.Length > 500)
+            {
+                log.Warning("Length > 500 - truncated");
+                NotifyNode_ID = NotifyNode_ID.Substring(0, 500);
+            }
+            Set_Value("NotifyNode_ID", NotifyNode_ID);
+        }
+        /** Get Notify Nodes.
+        @return Notify Nodes */
+        public String GetNotifyNode_ID()
+        {
+            return (String)Get_Value("NotifyNode_ID");
+        }
     }
 
 }

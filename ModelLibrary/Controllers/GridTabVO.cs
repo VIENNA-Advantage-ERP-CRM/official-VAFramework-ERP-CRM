@@ -143,6 +143,9 @@ namespace VAdvantage.Controller
 
         public string TabPanelAlignment = "V";
 
+        // Maintain versions on approval // for Master data Versioning
+        public bool MaintainVerOnApproval = false;
+
         public List<GridFieldVO> GetFields()
         {
             return fields;
@@ -491,6 +494,9 @@ namespace VAdvantage.Controller
                 vo.HeaderBackColor = Utility.Util.GetValueOfString(dr["HeaderBackgroundColor"]);
 
                 /***************** End Header panel work ***************/
+
+                // set property for Maintain version on aapproval
+                vo.MaintainVerOnApproval = Utility.Util.GetValueOfString(dr["MaintainVerOnApproval"]).Equals("Y");
 
             }
             catch (System.Exception ex)
@@ -946,7 +952,9 @@ namespace VAdvantage.Controller
             clone.HeaderWidth = HeaderWidth;
             clone.HeaderPadding = HeaderPadding;
             clone.HeaderBackColor = HeaderBackColor;
-           
+
+            // set Maintain Version on Approval from Tab
+            clone.MaintainVerOnApproval = MaintainVerOnApproval;
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)

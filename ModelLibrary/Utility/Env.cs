@@ -71,6 +71,9 @@ namespace VAdvantage.Utility
         //	Array of active Windows
         private static List<object> _sWindows = new List<object>(20);
 
+        // property for Approve column name in case of workflow approval
+        // for full record approval
+        public static String ApproveColName = "IsApproved";
 
 
         #endregion
