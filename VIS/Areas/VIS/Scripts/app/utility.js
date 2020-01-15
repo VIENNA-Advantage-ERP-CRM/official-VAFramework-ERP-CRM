@@ -711,7 +711,8 @@
             SHOW_CLIENT_ONLY: 1,
             SHOW_ORG_ONLY: 2,
             HIDE_CLIENT_ORG: 3,
-            NULLString: NULLString
+            NULLString: NULLString,
+            approveCol: "IsApproved"
         }
     }();
     // ******************** END ENV *********************//
