@@ -1473,7 +1473,8 @@
                         }
 
                         if (d.IsError) {
-                            VIS.ADialog.error(d.ErrorText);
+                            // Show proper message in case user do not have role for Print
+                            VIS.ADialog.error("", "", d.Message, null);
                             // rv.close();
                             return;
                         }
