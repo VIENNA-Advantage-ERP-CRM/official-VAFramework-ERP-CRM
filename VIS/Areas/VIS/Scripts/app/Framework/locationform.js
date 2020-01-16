@@ -1,8 +1,9 @@
 ﻿
 ; (function (VIS, $) {
 
-    //form declaretion
-    function LocationForm(locationId) {
+    //form declaration
+    // added new parameter for Maintain Versions
+    function LocationForm(locationId, maintainVersinos) {
 
         //call parent function on close
         this.onClose = null;
@@ -34,6 +35,8 @@
 
         var stringAddress = null;
         var change = false;
+
+        var maintainVer = maintainVersinos;
 
         this.load = function () {
             // Parameter - AD_Language - Added to get country from location
@@ -79,27 +82,27 @@
             }
 
             if (add3.val()) {
-                var obj = $("#aCollection");
-                var ctrl = $('.cat' + $(obj).attr('data-prod-cat'));
+                var obj = $root.find("#aCollection");
+                var ctrl = $root.find('.cat' + $(obj).attr('data-prod-cat'));
                 if (ctrl) {
                     if (ctrl.length > 0)
                         ctrl.toggle();
                 }
                 else {
-                    $('.cat' + $(obj).attr('data-prod-close')).hide()
+                    $root.find('.cat' + $(obj).attr('data-prod-close')).hide()
                 }
                 add3.val((add3.val()));
             }
 
             if (add4.val()) {
                 var obj = $root.find(".cat3").find("a")[0];
-                var ctrl = $('.cat' + $(obj).attr('data-prod-cat'));
+                var ctrl = $root.find('.cat' + $(obj).attr('data-prod-cat'));
                 if (ctrl) {
                     if (ctrl.length > 0)
                         ctrl.toggle();
                 }
                 else {
-                    $('.cat' + $(obj).attr('data-prod-close')).hide()
+                    $root.find('.cat' + $(obj).attr('data-prod-close')).hide()
                 }
                 add4.val((add4.val()));
             }
@@ -152,10 +155,10 @@
                     //var cityId = null;
                 },
                 open: function () {
-                    $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+                    $root.find(this).removeClass("ui-corner-all").addClass("ui-corner-top");
                 },
                 close: function () {
-                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+                    $root.find(this).removeClass("ui-corner-top").addClass("ui-corner-all");
                     //state.val("");
                     //city.val("");
                     //stateId = 0;
@@ -196,10 +199,10 @@
                     stateId = ui.item.id;
                 },
                 open: function () {
-                    $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+                    $root.find(this).removeClass("ui-corner-all").addClass("ui-corner-top");
                 },
                 close: function () {
-                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+                    $root.find(this).removeClass("ui-corner-top").addClass("ui-corner-all");
                 }
             });
 
@@ -255,10 +258,10 @@
                     contryId = ui.item.C_COUNTRY_ID;
                 },
                 open: function () {
-                    $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+                    $root.find(this).removeClass("ui-corner-all").addClass("ui-corner-top");
                 },
                 close: function () {
-                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+                    $root.find(this).removeClass("ui-corner-top").addClass("ui-corner-all");
 
                 }
             });
@@ -271,6 +274,12 @@
                     setBusy(false);
                     return;
                 }
+
+                // Set C_Location_ID as 0, 
+                // if maintain Version is marked on column and there is any change in value on Location Control
+                if (maintainVer && change)
+                    $C_Location_ID = 0;
+
                 var objValue = {
                     countryName: country.val(),
                     addvalue1: add1.val(),
@@ -293,14 +302,14 @@
                 $root.dialog('close');
             });
 
-            $(".VIS-Location-toggler").click(function (e) {
+            $root.find(".VIS-Location-toggler").click(function (e) {
                 e.preventDefault();
-                var ctrl = $('.cat' + $(this).attr('data-prod-cat'));
+                var ctrl = $root.find('.cat' + $root.find(this).attr('data-prod-cat'));
                 if (ctrl && ctrl.length > 0) {
                         ctrl.toggle();
                 }
                 else {
-                    $('.cat' + $(this).attr('data-prod-close')).hide()
+                    $root.find('.cat' + $root.find(this).attr('data-prod-close')).hide()
                 }
                 // $('img.expand').toggleClass('collapse');
             });
