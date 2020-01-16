@@ -437,6 +437,13 @@
                             var field = _mTab.getField("AD_Org_ID");
                             f_AD_Org_ID = VIS.VControlFactory.getControl(_mTab, field, false);
                             addLine(field, f_AD_Org_ID, isMandatory, lblNames, eLEMENTTYPE_Organization);
+
+                            // On Change of Organization validate Trx Organization based on organization 
+                            f_AD_Org_ID.fireValueChanged = locationChangedOrg;
+                            function locationChangedOrg() {
+                                var org_ID = f_AD_Org_ID.getValue();
+                                VIS.Env.getCtx().setContext(windowNo, "AcctOrg_ID", org_ID);
+                            };
                         }
                         else if (type.equals(eLEMENTTYPE_Account)) {
                             var field = _mTab.getField("Account_ID");
