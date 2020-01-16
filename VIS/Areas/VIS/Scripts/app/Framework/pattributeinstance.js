@@ -29,7 +29,7 @@
             + " INNER JOIN M_AttributeSetInstance asi ON (patr.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)";
 
         var msqlWhere = " patr.M_Product_ID=@M_Product_ID AND patr.M_AttributeSetInstance_ID != 0";
-        msqlNonZero = " AND (s.QtyOnHand<>0 OR s.QtyReserved<>0 OR s.QtyOrdered<>0)";
+        msqlNonZero = " AND s.QtyOnHand>0";            // (s.QtyOnHand<>0 OR s.QtyReserved<>0 OR s.QtyOrdered<>0)";
         var msqlMinLife = "";
 
         this.log = VIS.Logging.VLogger.getVLogger("PAttributeInstance");
