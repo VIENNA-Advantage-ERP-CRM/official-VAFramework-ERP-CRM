@@ -871,7 +871,8 @@
                 var appendAND = false;
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
-                    if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1) {
+                    // Consider checkbox value only in case of true value
+                    if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
                         continue;
                     }
 
@@ -938,8 +939,10 @@
                             var toValue = null;
                             fromValue = srchCtrls[i].Ctrl.getValue();
                             if (srchCtrls[i].IsRange) {
-                                toValue = srchCtrls[i].CtrlTo.getValue();
-                                whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN '" + fromValue + "' AND '" + toValue + "')";
+                                if (srchCtrls[i].Ctrl.getValue()) {     // Consider checkbox value only in case of true value
+                                    srchValue = srchCtrls[i].Ctrl.getValue() == true ? "Y" : "";
+                                    whereClause += srchCtrls[i].SearchColumnName + " = '" + srchValue + "'";
+                                }
                             }
                             else {
                                 whereClause += " " + srchCtrls[i].SearchColumnName + " ='" + fromValue + "'";
@@ -1170,7 +1173,8 @@
                 recordHeight: 40,
                 show: {
 
-                    toolbar: true,  // indicates if toolbar is v isible
+                    // do not show toolbar on Info Window.
+                    toolbar: false,  // indicates if toolbar is v isible
                     columnHeaders: true,   // indicates if columns is visible
                     lineNumbers: true,  // indicates if line numbers column is visible
                     selectColumn: true,  // indicates if select column is visible
