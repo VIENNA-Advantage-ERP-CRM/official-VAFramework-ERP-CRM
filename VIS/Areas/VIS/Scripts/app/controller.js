@@ -395,6 +395,9 @@
         this.vo = gTab._vo;
         this.gridTable = new VIS.GridTable(gTab._gridTable);
         this.gridTable.onlyCurrentDays = this.vo.onlyCurrentDays;
+        // Maintain version on approval property on tab
+        this.gridTable.MaintainVerOnApproval = this.vo.MaintainVerOnApproval;
+
         this.parents = [];
         this.orderBys = [];
         this.depOnFieldColumn = [];
@@ -4066,9 +4069,11 @@
             var self = this;
             // in case of new record in Master Version window
             if (OldRowData["updatedby"] == null) {
-                gridTableIn.MaintainVersions = true;
-                gridTableIn.ImmediateSave = true;
-                gridTableIn.ValidFrom = new Date().toISOString();
+                if (!this.MaintainVerOnApproval || (this.MaintainVerOnApproval && VIS.context.getWindowContext(this.gTable._windowNo, VIS.Env.approveCol) == 'Y')) {
+                    gridTableIn.MaintainVersions = true;
+                    gridTableIn.ImmediateSave = true;
+                    gridTableIn.ValidFrom = new Date().toISOString();
+                }
                 var out = self.dataSaveDB(gridTableIn, rowDataNew);
                 // check if there is workflow linked on version table
                 // then do not save in Master window and reset 
@@ -4080,6 +4085,10 @@
                     VIS.ADialog.info("SentForApproval");
                     self.dataRefreshAll();
                 }
+                return out.Status;
+            }
+            else if (this.MaintainVerOnApproval && VIS.context.getWindowContext(this.gTable._windowNo, VIS.Env.approveCol) != 'Y') {
+                var out = this.dataSaveDB(gridTableIn, rowDataNew);
                 return out.Status;
             }
             else {

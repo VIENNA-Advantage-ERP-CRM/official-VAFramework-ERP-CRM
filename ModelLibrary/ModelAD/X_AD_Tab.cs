@@ -240,5 +240,12 @@ public String GetTabPanelAlignment() {return (String)Get_Value("TabPanelAlignmen
 @param WhereClause Fully qualified SQL WHERE clause */
 public void SetWhereClause (String WhereClause){if (WhereClause != null && WhereClause.Length > 2000){log.Warning("Length > 2000 - truncated");WhereClause = WhereClause.Substring(0,2000);}Set_Value ("WhereClause", WhereClause);}/** Get Sql WHERE.
 @return Fully qualified SQL WHERE clause */
-public String GetWhereClause() {return (String)Get_Value("WhereClause");}}
+public String GetWhereClause() {return (String)Get_Value("WhereClause");}
+
+        /** Set Maintain Versions on Approval.
+@param MaintainVerOnApproval Maintain Versions on Approval */
+        public void SetMaintainVerOnApproval(Boolean MaintainVerOnApproval) { Set_Value("MaintainVerOnApproval", MaintainVerOnApproval); }/** Get Maintain Versions on Approval.
+@return Maintain Versions on Approval */
+        public Boolean IsMaintainVerOnApproval() { Object oo = Get_Value("MaintainVerOnApproval"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+    }
 }

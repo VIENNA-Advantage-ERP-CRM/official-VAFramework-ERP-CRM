@@ -267,5 +267,37 @@ namespace VAdvantage.Model
                 return null;
             return MTable.Get(GetCtx(),  tab.GetAD_Table_ID());
         }
+
+        /// <summary>
+        /// After save of Tab
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <param name="success"></param>
+        /// <returns></returns>
+        protected override bool AfterSave(bool newRecord, bool success)
+        {
+            if (!success)
+                return false;
+
+            // check if there is any change in MaintainVersionOnApproval field on Tab
+            if (Is_ValueChanged("MaintainVerOnApproval"))
+            {
+                int windowID = GetAD_Window_ID();
+                int SeqNo = GetSeqNo();
+                // Get all tabs from current window which have greater sequence than current tab
+                int[] TabIDs = MTab.GetAllIDs("AD_Tab", "AD_Window_ID = " + windowID + " AND SeqNo > " + SeqNo, Get_TrxName());
+                // if there are tabs with sequence greater than current tab
+                if (TabIDs.Length > 0)
+                {
+                    string tabs = string.Join(",", TabIDs);
+                    // Update MaintainVerOnApproval field to the value set in current field of current tab in all tabs with greater
+                    // sequence of current tab
+                    int updateCount = DB.ExecuteQuery("UPDATE AD_Tab SET MaintainVerOnApproval = '" + (IsMaintainVerOnApproval() ? "Y" : "N") + "' WHERE AD_Tab_ID IN (" + tabs + ")", null, Get_TrxName());
+                    if (updateCount < 0)
+                        log.Info("UPDATE AD_Tab SET MaintainVerOnApproval = '" + (IsMaintainVerOnApproval() ? "Y" : "N") + "' WHERE AD_Tab_ID IN (" + tabs + ")");
+                }
+            }
+            return true;
+        }
     }
 }

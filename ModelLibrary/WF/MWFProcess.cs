@@ -341,6 +341,8 @@ namespace VAdvantage.WF
 
                 //	Start new Activity
                 MWFActivity activity = new MWFActivity(this, transitions[i].GetAD_WF_Next_ID());
+                // set Last Activity ID property in current WF Activity
+                activity.SetLastActivity(last.GetAD_WF_Activity_ID());
                 // new Thread(activity).Start();
                 //thred = new Thread(new ThreadStart(activity.Run));
                 //thred.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());

@@ -4187,21 +4187,15 @@
                     if (tht && tht.statusBar)
                         tht.statusBar.setInfo(err);
                 });
-
-
         }
         else {
             this.statusBar.setInfo(null);
-        }
+       }
 
         if (this.curWinTab == this.vTabbedPane) {
             this.curWinTab.evaluate(null);
         }
-
-
-
-
-    };   //
+   };   //
 
     /**
      *	Set Status Line to text
