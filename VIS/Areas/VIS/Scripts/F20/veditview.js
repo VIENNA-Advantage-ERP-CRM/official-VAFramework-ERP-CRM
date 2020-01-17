@@ -646,7 +646,7 @@
             if (mField.getFontClass() != '')
                 btns.push('<i class="' + mField.getFontClass() + '"></i>');
             else
-                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
+                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName() + '"></img>');
             btns.push('</span></div>');
             ctrl.append(btns.join(' '));
 

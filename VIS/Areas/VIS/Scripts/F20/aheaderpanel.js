@@ -313,9 +313,12 @@
                 }
                 else {
                     if ($parentRoot.width() == 0) {
-                        $parentRoot.width($self.gTab.getHeaderWidth());
-                        $root.show();
                         $slider.removeClass('fa-angle-double-right').addClass('fa-angle-double-left').removeClass('vis-ad-w-p-header-h');
+                        $parentRoot.width($self.gTab.getHeaderWidth());
+                        window.setTimeout(function () {
+                            $root.show();
+                        }, 50);
+                       
                     }
                     else {
                         $parentRoot.width(0);
@@ -461,7 +464,7 @@
             this.dynamicStyle.push("flex:1;flex-direction:row;height: " + height + "; ");
         }
         else {
-            this.dynamicStyle.push("flex-direction:column;width: " + width + ";height:calc(100vh - 93px); ");
+            this.dynamicStyle.push("flex-direction:column;width: " + width + ";height:calc(100vh - 94px); ");
         }
         this.dynamicStyle.push("padding:" + padding + ";" + backcolor);
 

@@ -762,6 +762,116 @@
         return this.gridTable.getKeyID(row);
     };   //  get
 
+    /**
+     *  Get addition info message for status for for seleted tables
+     * @param {any} tableName 
+     * @param {any} ctx   Record context
+     * @param {any} windowNo 
+     * @param {any} tabNo  
+     * @param {any} rec_id  primary key Id
+     */
+
+    GridTab.prototype.getFooterInfo = function (tableName, ctx, windowNo, tabNo, rec_id) {
+        return new Promise(function (resolve, reject) {
+            if (tableName.startsWith("C_Order") || tableName.startsWith("C_Invoice")) {
+                var Record_ID;
+                var isOrder = tableName.startsWith("C_Order");
+
+                var mf = null;
+                var mfMC = null;
+                try {
+                    mf = new VIS.MessageFormat(VIS.Msg.getMsg("OrderSummary"));
+                    mfMC = new VIS.MessageFormat(VIS.Msg.getMsg("OrderSummaryMC"));
+                }
+                catch (e) {
+                    reject("");
+                    return;
+                    //log.log(Level.SEVERE, "OrderSummary/MC", e);
+                }
+                if (mf == null || mfMC == null) {
+                    resolve("");
+                    return;
+                }
+                /**********************************************************************
+                 *	** Message: OrderSummary/MC **
+                 *	{0} Line(s) - {1,number,#,##0.00} - Total: {3}{2,number,#,##0.00} = {5}{4,number,#,##0.00}
+                 *	{0} Line(s) - {1,number,#,##0.00} - Total: {3}{2,number,#,##0.00}
+                 *
+                 *	{0} - Number of lines
+                 *	{1} - Line toral
+                 *	{2} - Grand total (including tax, etc.)
+                 *	{3} - Source Currency
+                 *	(4) - Grand total converted to local currency
+                 *	{5} - Base Currency
+                 */
+
+                //
+
+                var Record_ID = 0;
+                if (isOrder) {
+                    Record_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
+                }
+                else {
+                    Record_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
+                }
+
+                if (Record_ID < 1 && rec_id > 0)
+                    Record_ID = rec_id;
+
+                // var dr = null;
+                $.ajax({
+                    type: 'Get',
+                    async: true,
+                    url: VIS.Application.contextUrl + "Form/GetTrxInfo",
+                    data: { Record_ID: Record_ID, isOrder: isOrder },
+                    success: function (data) {
+                        try {
+                            var arguments = [];//new Object[6];
+                            var filled = false;
+                            var dr = new VIS.DB.DataReader().toJson(data);
+                            //dr = executeReader(sql.toString());
+                            if (dr.read()) {
+                                //	{0} - Number of lines
+                                var lines = dr.getInt(0);
+                                arguments[0] = lines;
+                                //	{1} - Line toral
+                                var lineTotal = dr.getDecimal(2).toLocaleString();//.toFixed(2);
+                                arguments[1] = lineTotal;
+                                //	{2} - Grand total (including tax, etc.)
+                                var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
+                                arguments[2] = grandTotal;
+                                //	{3} - Currency
+                                var currency = dr.getString(1);
+                                arguments[3] = currency;
+                                //	(4) - Grand total converted to Base
+                                var grandBase = dr.getDecimal(4).toLocaleString();//.toFixed(2);
+                                arguments[4] = grandBase;
+                                arguments[5] = ctx.getContext("$CurrencyISO");
+                                filled = true;
+                            }
+                        }
+                        catch (e) {
+                            reject("");//log.log(Level.SEVERE, tableName + "\nSQL=" + sql, e);
+                        }
+
+                        if (filled) {
+                            if (arguments[2] === arguments[4])
+                                resolve(mf.format(arguments));
+                            else
+                                resolve(mfMC.format(arguments));
+                        }
+                        else
+                            resolve(" ");
+                    },
+                    error: function (e) {
+                        reject("");
+                    }
+                });
+            }	//	Order || Invoice
+        });
+    };
+
+
     GridTab.prototype.getTrxInfo = function (tableName, ctx, windowNo, tabNo) {
         if (tableName.startsWith("C_Order") || tableName.startsWith("C_Invoice")) {
             var Record_ID;
@@ -6241,6 +6351,13 @@
         /** Record ID				*/
         this.Record_ID;
         this.source = source1;
+    };
+
+    /** 
+     *  Get Primar Id of Record
+     *  */
+    DataStatusEvent.prototype.getRecord_ID = function () {
+        return this.Record_ID;
     };
 
     DataStatusEvent.prototype.setLoading = function (loadedRows) {

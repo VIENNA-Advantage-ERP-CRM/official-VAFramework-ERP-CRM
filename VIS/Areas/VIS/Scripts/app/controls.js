@@ -1901,17 +1901,24 @@
     function VDate(columnName, isMandatory, isReadOnly, isUpdateable, displayType, title) {
 
         var type = 'date';
+        var max = '9999-12-31';
 
         if (displayType == VIS.DisplayType.Time) {
-            type = 'time'
+            type = 'time';
+            max = '';
         }
         if (displayType == VIS.DisplayType.DateTime) {
-            type = 'datetime-local'
+            type = 'datetime-local';
+            max += 'T24:00:00';
         }
 
         var $ctrl = $('<input>', {
-            'type': type, name: columnName
+            'type': type, name: columnName,
         });
+
+        if (max != '') {
+            $ctrl.attr('max', max);
+        }
 
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
