@@ -4191,6 +4191,9 @@
             //if (trxInfo != null)
             //    this.statusBar.setInfo(trxInfo);
         }
+        else {
+            this.statusBar.setInfo(null);
+        }
 
         if (this.curWinTab == this.vTabbedPane) {
             this.curWinTab.evaluate(null);
