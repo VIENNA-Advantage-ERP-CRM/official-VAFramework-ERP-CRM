@@ -1345,7 +1345,9 @@
                             //{
                             //    str += "<li data-vishomercrd='lispecial'><a data-vishomercrd='lispecial1' href='javascript:void(0)' id='" + data[s].Record_ID + "|" + data[s].ProcessTableName + "|" + data[s].ProcessWindowID + "' data-vishomercrd='SpecialTable' title='" + VIS.Msg.getMsg("ShowNotice") + "' class='vis-processZoomIcon vis-icon-check'> title='" + VIS.Msg.getMsg("ShowNotice") + "'</a></li>"
                             //}
-                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "' class='vis vis-markx'></a></li>"
+
+                            // Renaming of Approve highlight to Acknowledge under notification
+                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Acknowledge") + "' class='vis vis-markx'></a></li>"
                                 + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
                            + "</ul>"
                          + "  </div>"
