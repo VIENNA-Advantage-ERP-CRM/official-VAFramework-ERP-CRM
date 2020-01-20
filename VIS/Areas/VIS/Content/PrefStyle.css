@@ -1198,3 +1198,7 @@ html[dir="rtl"] .input-group-addon {
 .VIS_Pref-tbl-Row {
     border-bottom: 2px solid #ECECEC;
 }
+.vis-locator-ctrl {
+    float: right;
+    width: 70%;
+}
