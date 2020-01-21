@@ -1202,3 +1202,8 @@ html[dir="rtl"] .input-group-addon {
     float: right;
     width: 70%;
 }
+.VIS-locator-DivStyle input.form-control:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #0098f7;
+}
