@@ -329,17 +329,30 @@ namespace VAdvantage.Model
                 return _roles;
 
             List<MRole> list = new List<MRole>();
-            String sql = "SELECT * FROM AD_Role r "
-                + "WHERE r.IsActive='Y'"
-                + " AND EXISTS (SELECT * FROM AD_Role_OrgAccess ro"
-                    + " WHERE r.AD_Role_ID=ro.AD_Role_ID AND ro.IsActive='Y' AND ro.AD_Org_ID=@orgid)"
-                + " AND EXISTS (SELECT * FROM AD_User_Roles ur"
-                    + " WHERE r.AD_Role_ID=ur.AD_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID=@userid) "
-                + "ORDER BY AD_Role_ID";
 
-            SqlParameter[] param = new SqlParameter[2];
-            param[0] = new SqlParameter("@orgid", AD_Org_ID);
-            param[1] = new SqlParameter("@userid", GetAD_User_ID());
+            //String sql = "SELECT * FROM AD_Role r "
+            //    + "WHERE r.IsActive='Y'"
+            //    + " AND EXISTS (SELECT * FROM AD_Role_OrgAccess ro"
+            //        + " WHERE r.AD_Role_ID=ro.AD_Role_ID AND ro.IsActive='Y' AND ro.AD_Org_ID=@orgid)"
+            //    + " AND EXISTS (SELECT * FROM AD_User_Roles ur"
+            //        + " WHERE r.AD_Role_ID=ur.AD_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID=@userid) "
+            //    + "ORDER BY AD_Role_ID";
+            // SqlParameter[] param = new SqlParameter[2];
+            // param[0] = new SqlParameter("@orgid", AD_Org_ID);
+            // param[1] = new SqlParameter("@userid", GetAD_User_ID());
+
+            // Commented code above to resolve issue in Fetching Roles of selected user against Organization
+            // and rewritten query 
+            String sql = @"SELECT * FROM AD_Role r WHERE r.IsActive='Y' 
+                        AND EXISTS (SELECT * FROM AD_User_Roles ur WHERE r.AD_Role_ID=ur.AD_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID = @userid)
+                        AND ((r.isaccessallorgs = 'Y') OR (r.IsUseUserOrgAccess <> 'Y' AND EXISTS (SELECT * FROM AD_Role_OrgAccess ro WHERE r.AD_Role_ID=ro.AD_Role_ID AND ro.IsActive='Y' AND ro.AD_Org_ID=@orgid)) 
+                        OR (r.IsUseUserOrgAccess = 'Y' AND EXISTS (SELECT * FROM AD_User_OrgAccess uo WHERE uo.AD_User_ID=@userid1 AND uo.IsActive='Y' AND uo.AD_Org_ID=@orgid1))) ORDER BY AD_Role_ID";
+
+            SqlParameter[] param = new SqlParameter[4];
+            param[0] = new SqlParameter("@userid", GetAD_User_ID());
+            param[1] = new SqlParameter("@orgid", AD_Org_ID); 
+            param[2] = new SqlParameter("@userid1", GetAD_User_ID());
+            param[3] = new SqlParameter("@orgid1", AD_Org_ID);
 
             try
             {

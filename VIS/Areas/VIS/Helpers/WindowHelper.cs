@@ -1045,6 +1045,7 @@ namespace VIS.Helpers
         /// <summary>
         /// function to check whether there is any Document Value 
         /// type workflow linked with table
+        /// check Document Value workflow in Tenant Only
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="AD_Client_ID"></param>
@@ -1054,7 +1055,7 @@ namespace VIS.Helpers
         public bool GetDocValueWF(Ctx ctx, int AD_Client_ID, int AD_Table_ID, Trx _trx)
         {
             String sql = "SELECT COUNT(AD_Workflow_ID) FROM AD_Workflow "
-                + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID
+                + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID + " AND AD_Client_ID = " + AD_Client_ID
                 + " ORDER BY AD_Client_ID, AD_Table_ID";
 
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
