@@ -1453,10 +1453,11 @@
     VIS.GridController.prototype.dataDeleteAsync = function () {
         this.aPanel.setBusy(true);
         var that = this;
-         that.gTab.dataDeleteAsync(that.vTable.getSelection(true)).then(function (info) {
+        that.gTab.getTableModel().dataDeleteAsync(that.vTable.getSelection(true),that.gTab.currentRow).then(function (info) {
+            that.gTab.setCurrentRow(that.gTab.currentRow, true);
             that.refreshTabPanelData(that.gTab.getRecord_ID());
              that.dynamicDisplay(-1);
-             that.aPanel.setBusy(false);
+            that.aPanel.setBusy(false); canDeleteRecords
         });
         
         //return retValue;

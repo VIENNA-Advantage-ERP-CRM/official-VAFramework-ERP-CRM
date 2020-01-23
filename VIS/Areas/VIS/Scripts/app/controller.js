@@ -1845,15 +1845,7 @@
         return retValue;
     };
 
-    GridTab.prototype.dataDeleteAsync = function (indices) {
-        var that = this;
-        return new Promise(function (resolve, reject) {
-            that.gridTable.dataDeleteAsync(indices, that.currentRow).then(function (info) {
-                that.setCurrentRow(that.currentRow, true);
-                resolve(info);
-            });
-        });
-    };
+    
 
 
     GridTab.prototype.findColumn = function (columnName) {
