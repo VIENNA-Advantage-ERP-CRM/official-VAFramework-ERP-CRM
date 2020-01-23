@@ -634,7 +634,7 @@ namespace VAdvantage.WF
         /// <param name="ownDocument">the document is owned by AD_User_ID</param>
         /// <returns>AD_User_ID - if -1 no Approver</returns>
         public int GetApprovalUser(int AD_User_ID, int C_Currency_ID, Decimal amount,
-            int AD_Org_ID, bool ownDocument)
+            int AD_Org_ID, bool ownDocument, bool FetchLastApprover)
         {
             //	Nothing to approve
             if (Math.Sign(amount) == 0)
@@ -651,8 +651,11 @@ namespace VAdvantage.WF
                 {
                     log.Info("Loop - " + user.GetName() + " ==>> User and Old User are same");
                     // change here to set Approver as the User that is fetched at the end
-                    return user.GetAD_User_ID();
-                    //return -1;
+                    // In case if fetchlastapprover is true else return -1
+                    if (FetchLastApprover)
+                        return user.GetAD_User_ID();
+                    else
+                        return -1;
                 }
                 oldUser = user;
                 log.Fine("User=" + user.GetName());
@@ -1121,19 +1124,19 @@ namespace VAdvantage.WF
                         int nextAD_User_ID = GetApprovalUser(startAD_User_ID,
                             doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
                             doc.GetAD_Org_ID(),
-                            startAD_User_ID == doc.GetDoc_User_ID());	//	own doc
+                            startAD_User_ID == doc.GetDoc_User_ID(), true);	//	own doc
                         //	same user = approved
                         autoApproval = startAD_User_ID == nextAD_User_ID;
                         if (!autoApproval)
                             SetAD_User_ID(nextAD_User_ID);
-                        
+
                         //Lakhwinder
                         //if (GetAD_User_ID() == 0)
                         //{
                         //    nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + p_ctx.GetAD_User_ID()));
                         //    SetAD_User_ID(nextAD_User_ID);
 
-                            //}
+                        //}
                     }
                     else	//	fixed Approver
                     {
@@ -2307,7 +2310,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                             int nextAD_User_ID = GetApprovalUser(startAD_User_ID,
                                 doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
                                 doc.GetAD_Org_ID(),
-                                startAD_User_ID == doc.GetDoc_User_ID());	//	own doc
+                                startAD_User_ID == doc.GetDoc_User_ID(), false);	//	own doc
                             //	No Approver
                             if (nextAD_User_ID <= 0)
                             {
