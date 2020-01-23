@@ -1457,7 +1457,7 @@
             that.gTab.setCurrentRow(that.gTab.currentRow, true);
             that.refreshTabPanelData(that.gTab.getRecord_ID());
              that.dynamicDisplay(-1);
-            that.aPanel.setBusy(false); canDeleteRecords
+            that.aPanel.setBusy(false);
         });
         
         //return retValue;
