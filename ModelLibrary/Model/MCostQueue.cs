@@ -2137,11 +2137,41 @@ namespace VAdvantage.Model
                             #endregion
                         }
 
-                        if (windowName == "Production Execution")
+                        if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                         {
                             #region Get Price
-                            M_Warehouse_Id = Util.GetValueOfInt(po.Get_Value("M_Warehouse_ID"));
-                            price = MCostQueue.CalculateCost(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, M_Warehouse_Id);
+                            //M_Warehouse_Id = Util.GetValueOfInt(po.Get_Value("M_Warehouse_ID"));
+                            DateTime? VAMFG_DateAcct = null;
+                            DataSet dsProductDetail = DB.ExecuteDataset(@"SELECT VAMFG_DateAcct , M_Warehouse_ID FROM VAMFG_M_WorkOrderTransaction  
+                                                        WHERE VAMFG_M_WorkOrderTransaction_ID = " + po.Get_ValueAsInt("VAMFG_M_WorkOrderTransaction_ID"), null, trxName);
+                            if (dsProductDetail != null && dsProductDetail.Tables.Count > 0 && dsProductDetail.Tables[0].Rows.Count > 0)
+                            {
+                                M_Warehouse_Id = Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["M_Warehouse_ID"]);
+                                VAMFG_DateAcct = Util.GetValueOfDateTime(dsProductDetail.Tables[0].Rows[0]["VAMFG_DateAcct"]);
+                            }
+                            if (windowName.Equals("PE-FinishGood"))
+                            {
+                                price = Price;
+                                // checking price for Finished Good
+                                if (acctSchema.GetC_Currency_ID() != Util.GetValueOfInt(ctx.GetContextAsInt("$C_Currency_ID")))
+                                {
+                                    price = MConversionRate.Convert(ctx, price, Util.GetValueOfInt(ctx.GetContext("$C_Currency_ID")), acctSchema.GetC_Currency_ID(),
+                                                                        VAMFG_DateAcct, 0, AD_Client_ID, AD_Org_ID);
+                                }
+                                if (price == 0)
+                                {
+                                    if (optionalstr == "process")
+                                    {
+                                        trxName.Rollback();
+                                    }
+                                    conversionNotFound = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocumentNo from VAMFG_M_WrkOdrTransaction where VAMFG_M_WrkOdrTransaction_ID = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTransaction_ID"))));
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                price = MCostQueue.CalculateCost(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, M_Warehouse_Id);
+                            }
                             cmPrice = price;
                             Price = price * Qty;
                             cmPrice = cmPrice * Qty;
@@ -2208,7 +2238,7 @@ namespace VAdvantage.Model
 
                         // calculate expected landed cost 
                         if (windowName == "Material Receipt" && orderline != null && orderline.Get_ID() > 0
-                            && order != null && order.Get_ID() > 0 && inoutline != null && inoutline.Get_ID() > 0)
+                            && order != null && order.Get_ID() > 0 && inoutline != null && inoutline.Get_ID() > 0 && !inoutline.IsCostImmediate())
                         {
                             decimal expectedAmt = 0;
                             decimal expectedQty = 0;
@@ -2515,7 +2545,7 @@ namespace VAdvantage.Model
                                 {
                                     query.Append(" AND M_InventoryLine_ID = " + inventoryLine.GetM_InventoryLine_ID());
                                 }
-                                else if (windowName == "Production Execution")
+                                else if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                                 {
                                     query.Append(" AND VAMFG_M_WrkOdrTrnsctionLine_ID = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
                                 }
@@ -2565,7 +2595,7 @@ namespace VAdvantage.Model
                                 movementline != null && movementline.GetM_MovementLine_ID() > 0 &&
                                 !movementline.IsCostImmediate()) // window = movement 
                                 || (optionalstr == "process" && client.IsCostImmediate() &&
-                                po != null && windowName == "Production Execution" && Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")) > 0 &&
+                                po != null && (windowName == "Production Execution" || windowName.Equals("PE-FinishGood")) && Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")) > 0 &&
                                 !Util.GetValueOfBool(po.Get_Value("IsCostImmediate")))
                                 ))
                         {
@@ -2620,7 +2650,7 @@ namespace VAdvantage.Model
                                 }
                                 #endregion
                             }
-                            else if (windowName == "Production Execution")
+                            else if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                             {
                                 #region Production Execution
                                 if (Qty > 0)
@@ -2846,7 +2876,7 @@ namespace VAdvantage.Model
                                     return false;
                                 }
                             }
-                            else if (windowName == "Production Execution")
+                            else if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                             {
                                 result = cd.UpdateProductCost(windowName, cd, acctSchema, product, M_ASI_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), optionalStrCd: optionalstr);
                                 if (!result)

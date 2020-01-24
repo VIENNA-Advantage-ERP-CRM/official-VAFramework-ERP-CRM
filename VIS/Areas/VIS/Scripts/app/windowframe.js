@@ -4177,9 +4177,24 @@
         //	Transaction info
 
         if (!e.getIsInserting()) {
-            var trxInfo = VIS.GridTab.prototype.getTrxInfo(this.curTab.getTableName(), VIS.context, this.curTab.getWindowNo(), this.curTab.getTabNo());
-            if (trxInfo != null)
-                this.statusBar.setInfo(trxInfo);
+            //var trxInfo = VIS.GridTab.prototype.getTrxInfo(this.curTab.getTableName(), VIS.context, this.curTab.getWindowNo(), this.curTab.getTabNo());
+            var tht = this;
+            VIS.GridTab.prototype.getFooterInfo(this.curTab.getTableName(), VIS.context, this.curTab.getWindowNo(),
+                this.curTab.getTabNo(), e.getRecord_ID()).then(function (info) {
+                    if (tht && tht.statusBar)
+                        tht.statusBar.setInfo(info);
+                }, function (err) {
+                    if (tht && tht.statusBar)
+                        tht.statusBar.setInfo(err);
+                });
+
+            //if (trxInfo != null)
+            //    this.statusBar.setInfo(trxInfo);
+
+        }
+        else {
+            this.statusBar.setInfo(null);
+
         }
 
         if (this.curWinTab == this.vTabbedPane) {

@@ -1045,6 +1045,7 @@ namespace VIS.Helpers
         /// <summary>
         /// function to check whether there is any Document Value 
         /// type workflow linked with table
+        /// check Document Value workflow in Tenant Only
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="AD_Client_ID"></param>

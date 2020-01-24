@@ -82,6 +82,7 @@ namespace VAdvantage.Process
         int table_WrkOdrTransaction = 0;
         MTable tbl_WrkOdrTransaction = null;
         PO po_WrkOdrTransaction = null;
+        String woTrxType = null;
         PO po_WrkOdrTrnsctionLine = null;
 
         //Production
@@ -150,14 +151,14 @@ namespace VAdvantage.Process
                     _log.Info("Cost Calculation Start for " + minDateRecord);
 
                     sql.Clear();
-                    sql.Append(@"SELECT * FROM (
-                        SELECT ad_client_id , ad_org_id , isactive , to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby , to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,  
-                               documentno , m_inout_id AS Record_Id , issotrx ,  isreturntrx , ''  AS IsInternalUse, 'M_InOut' AS TableName,
-                               docstatus, movementdate AS DateAcct , iscostcalculated , isreversedcostcalculated 
-                         FROM M_InOut WHERE dateacct   = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive = 'Y'
-                               AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
-                               AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
-                         UNION
+                    sql.Append(@"SELECT * FROM ( 
+                    SELECT ad_client_id , ad_org_id , isactive , to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby , to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,  
+                           documentno , m_inout_id AS Record_Id , issotrx ,  isreturntrx , ''  AS IsInternalUse, 'M_InOut' AS TableName,
+                           docstatus, movementdate AS DateAcct , iscostcalculated , isreversedcostcalculated 
+                     FROM M_InOut WHERE dateacct   = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive = 'Y'
+                           AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
+                           AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%')) 
+                    UNION
                          SELECT ad_client_id , ad_org_id , isactive , to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,
                                 documentno , C_Invoice_id AS Record_Id , issotrx , isreturntrx , '' AS IsInternalUse, 'C_Invoice' AS TableName,
                                 docstatus, DateAcct AS DateAcct, iscostcalculated , isreversedcostcalculated 
@@ -202,11 +203,11 @@ namespace VAdvantage.Process
                     if (count > 0)
                     {
                         sql.Append(@" UNION
-                         SELECT ad_client_id , ad_org_id , isactive ,to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby , 
+                        SELECT ad_client_id , ad_org_id , isactive ,to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby , 
                                 DOCUMENTNO ,  VAMFG_M_WrkOdrTransaction_id AS Record_Id , '' AS issotrx , '' AS isreturntrx , '' AS IsInternalUse,  'VAMFG_M_WrkOdrTransaction'  AS TableName,
                                 docstatus,  vamfg_dateacct AS DateAcct , iscostcalculated ,  isreversedcostcalculated 
-                         FROM VAMFG_M_WrkOdrTransaction WHERE VAMFG_WorkOrderTxnType IN ('CI', 'CR') AND vamfg_dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" 
-                              AND isactive  = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
+                         FROM VAMFG_M_WrkOdrTransaction WHERE VAMFG_WorkOrderTxnType IN ('CI', 'CR' , 'AI' , 'AR') AND vamfg_dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" 
+                              AND isactive  = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE' , 'VO') AND iscostcalculated = 'Y'
                               AND ISREVERSEDCOSTCALCULATED  = 'N' AND VAMFG_description LIKE '%{->%')) ");
                     }
                     sql.Append(@" ) t order by dateacct , created");
@@ -2626,6 +2627,8 @@ namespace VAdvantage.Process
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL"))
                                     {
                                         po_WrkOdrTransaction = tbl_WrkOdrTransaction.GetPO(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                        // Production Execution Transaction Type
+                                        woTrxType = Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType"));
                                         sql.Clear();
                                         if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_Description")) != null &&
                                             Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_Description")).Contains("{->"))
@@ -2653,7 +2656,9 @@ namespace VAdvantage.Process
 
                                                     #region get price from m_cost (Current Cost Price)
                                                     // get price from m_cost (Current Cost Price)
-                                                    if (Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("CurrentCostPrice")) == 0)
+                                                    if (Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("CurrentCostPrice")) == 0 &&
+                                                        !(woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)))
                                                     {
                                                         currentCostPrice = 0;
                                                         currentCostPrice = MCost.GetproductCosts(Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Client_ID")), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Org_ID")),
@@ -2667,15 +2672,41 @@ namespace VAdvantage.Process
                                                             Get_Trx().Rollback();
                                                         }
                                                     }
+                                                    else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))
+                                                    {
+                                                        // when product having checkbox "IsBAsedOnRollup" then not to calculate cot of finished Good
+                                                        if (product.IsBasedOnRollup())
+                                                        {
+                                                            continue;
+                                                        }
+
+                                                        currentCostPrice = GetCostForProductionFinishedGood(Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")), Get_Trx());
+
+                                                        // if currentCostPrice is ZERO, then not to calculate cost of finished Good
+                                                        if (currentCostPrice == 0)
+                                                        {
+                                                            continue;
+                                                        }
+
+                                                        // Update cost on Record
+                                                        DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction SET CurrentCostPrice = " + currentCostPrice + @" 
+                                                                        WHERE VAMFG_M_WrkOdrTransaction_ID = " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), null, Get_Trx());
+                                                    }
                                                     #endregion
 
-                                                    if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CI")
+                                                    // ComponentIssueToWorkOrder / AssemblyReturnFromInventory
+                                                    if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_1_ComponentIssueToWorkOrder)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))
                                                     {
                                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Client_ID")),
                                                             Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Org_ID")), product, 0,
-                                                            "Production Execution", null, null, null, null, po_WrkOdrTrnsctionLine, 0,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? "PE-FinishGood" : "Production Execution",
+                                                            null, null, null, null, po_WrkOdrTrnsctionLine,
+                                                             woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? currentCostPrice : 0,
                                                             countGOM01 > 0 ? Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("GOM01_ActualQuantity"))) :
-                                                            Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("VAMFG_QtyEntered"))), Get_Trx(), out conversionNotFoundInOut))
+                                                            Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("VAMFG_QtyEntered"))),
+                                                            Get_Trx(), out conversionNotFoundInOut))
                                                         {
                                                             if (!conversionNotFoundProductionExecution1.Contains(conversionNotFoundProductionExecution))
                                                             {
@@ -2704,11 +2735,15 @@ namespace VAdvantage.Process
                                                             }
                                                         }
                                                     }
-                                                    else if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CR")
+                                                    // ComponentReturnFromWorkOrder / TransferAssemblyToStore
+                                                    else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_ComponentReturnFromWorkOrder)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore))
                                                     {
                                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Client_ID")),
                                                             Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Org_ID")), product, 0,
-                                                            "Production Execution", null, null, null, null, po_WrkOdrTrnsctionLine, 0,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore) ? "PE-FinishGood" : "Production Execution",
+                                                            null, null, null, null, po_WrkOdrTrnsctionLine,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore) ? currentCostPrice : 0,
                                                             countGOM01 > 0 ? Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("GOM01_ActualQuantity")) :
                                                             Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("VAMFG_QtyEntered")), Get_Trx(), out conversionNotFoundInOut))
                                                         {
@@ -2767,7 +2802,7 @@ namespace VAdvantage.Process
                                             {
                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                 _log.Info("Error found for saving Production execution for this Record ID = " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]) +
-                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                             }
                                             else
                                             {
@@ -2792,9 +2827,12 @@ namespace VAdvantage.Process
                                 if (count > 0)
                                 {
                                     if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "VAMFG_M_WrkOdrTransaction" &&
-                                        Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE")
+                                        (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE" ||
+                                        Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "VO"))
                                     {
                                         po_WrkOdrTransaction = tbl_WrkOdrTransaction.GetPO(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                        // Production Execution Transaction Type
+                                        woTrxType = Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType"));
                                         sql.Clear();
                                         if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_Description")) != null &&
                                             Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_Description")).Contains("{->"))
@@ -2822,7 +2860,9 @@ namespace VAdvantage.Process
 
                                                     #region get price from m_cost (Current Cost Price)
                                                     // get price from m_cost (Current Cost Price)
-                                                    if (Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("CurrentCostPrice")) == 0)
+                                                    if (Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("CurrentCostPrice")) == 0 &&
+                                                        !(woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)))
                                                     {
                                                         currentCostPrice = 0;
                                                         currentCostPrice = MCost.GetproductCosts(Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Client_ID")), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Org_ID")),
@@ -2832,17 +2872,41 @@ namespace VAdvantage.Process
                                                         {
                                                             ValueNamePair pp = VLogger.RetrieveError();
                                                             _log.Info("Error found for Production execution Line for this Line ID = " + Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAMFG_M_WrkOdrTrnsctionLine_ID"]) +
-                                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                             Get_Trx().Rollback();
                                                         }
                                                     }
+                                                    else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore))
+                                                    {
+                                                        // when product having checkbox "IsBAsedOnRollup" then not to calculate cot of finished Good
+                                                        if (product.IsBasedOnRollup())
+                                                        {
+                                                            continue;
+                                                        }
+
+                                                        currentCostPrice = GetCostForProductionFinishedGood(Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")), Get_Trx());
+
+                                                        // if currentCostPrice is ZERO, then not to calculate cost of finished Good
+                                                        if (currentCostPrice == 0)
+                                                        {
+                                                            continue;
+                                                        }
+
+                                                        // Update cost on Record
+                                                        DB.ExecuteQuery(@"UPDATE VAMFG_M_WrkOdrTransaction SET CurrentCostPrice = " + currentCostPrice + @" 
+                                                                        WHERE VAMFG_M_WrkOdrTransaction_ID = " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), null, Get_Trx());
+                                                    }
                                                     #endregion
 
-                                                    if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CI")
+                                                    if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_1_ComponentIssueToWorkOrder)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))
                                                     {
                                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Client_ID")),
                                                             Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Org_ID")), product, 0,
-                                                            "Production Execution", null, null, null, null, po_WrkOdrTrnsctionLine, 0,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? "PE-FinishGood" : "Production Execution",
+                                                            null, null, null, null, po_WrkOdrTrnsctionLine,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? currentCostPrice : 0,
                                                             countGOM01 > 0 ? Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("GOM01_ActualQuantity"))) :
                                                             Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("VAMFG_QtyEntered"))), Get_Trx(), out conversionNotFoundInOut))
                                                         {
@@ -2863,7 +2927,7 @@ namespace VAdvantage.Process
                                                             {
                                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                                 _log.Info("Error found for Production Execution for this Line ID = " + Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAMFG_M_WrkOdrTrnsctionLine_ID"]) +
-                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                 Get_Trx().Rollback();
                                                             }
                                                             else
@@ -2873,11 +2937,14 @@ namespace VAdvantage.Process
                                                             }
                                                         }
                                                     }
-                                                    else if (Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_WorkOrderTxnType")) == "CR")
+                                                    else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_ComponentReturnFromWorkOrder)
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore))
                                                     {
                                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Client_ID")),
                                                             Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Org_ID")), product, 0,
-                                                            "Production Execution", null, null, null, null, po_WrkOdrTrnsctionLine, 0,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore) ? "PE-FinishGood" : "Production Execution",
+                                                            null, null, null, null, po_WrkOdrTrnsctionLine,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore) ? currentCostPrice : 0,
                                                             countGOM01 > 0 ? Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("GOM01_ActualQuantity")) :
                                                             Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("VAMFG_QtyEntered")), Get_Trx(), out conversionNotFoundInOut))
                                                         {
@@ -2898,7 +2965,7 @@ namespace VAdvantage.Process
                                                             {
                                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                                 _log.Info("Error found for Production Execution for this Line ID = " + Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAMFG_M_WrkOdrTrnsctionLine_ID"]) +
-                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                 Get_Trx().Rollback();
                                                             }
                                                             else
@@ -2936,7 +3003,7 @@ namespace VAdvantage.Process
                                             {
                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                 _log.Info("Error found for saving Production execution for this Record ID = " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]) +
-                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                             }
                                             else
                                             {
@@ -3052,7 +3119,7 @@ namespace VAdvantage.Process
                                                             {
                                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                                 _log.Info("Error found for Customer Return for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                 Get_Trx().Rollback();
                                                             }
                                                             else
@@ -3088,7 +3155,7 @@ namespace VAdvantage.Process
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
                                             _log.Info("Error found for saving M_inout for this Record ID = " + inout.GetM_InOut_ID() +
-                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
@@ -3200,7 +3267,7 @@ namespace VAdvantage.Process
                                                             {
                                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                                 _log.Info("Error found for Customer Return for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                 Get_Trx().Rollback();
                                                             }
                                                             else
@@ -3236,7 +3303,7 @@ namespace VAdvantage.Process
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
                                             _log.Info("Error found for saving M_inout for this Record ID = " + inout.GetM_InOut_ID() +
-                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
@@ -3300,7 +3367,7 @@ namespace VAdvantage.Process
                                             {
                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                 _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                 Get_Trx().Rollback();
                                             }
                                             else
@@ -3419,7 +3486,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for Return To Vendor for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -3481,7 +3548,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for Return To Vendor for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -3519,7 +3586,7 @@ namespace VAdvantage.Process
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
                                             _log.Info("Error found for saving M_inout for this Record ID = " + inout.GetM_InOut_ID() +
-                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
@@ -3607,7 +3674,7 @@ namespace VAdvantage.Process
                                                     {
                                                         ValueNamePair pp = VLogger.RetrieveError();
                                                         _log.Info("Error found for saving Inventory Move for this Line ID = " + movementLine.GetM_MovementLine_ID() +
-                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                         Get_Trx().Rollback();
                                                     }
                                                     else
@@ -3640,7 +3707,7 @@ namespace VAdvantage.Process
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
                                             _log.Info("Error found for saving Internal Use Inventory for this Record ID = " + movement.GetM_Movement_ID() +
-                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
@@ -3731,7 +3798,7 @@ namespace VAdvantage.Process
                                                         {
                                                             ValueNamePair pp = VLogger.RetrieveError();
                                                             _log.Info("Error found for saving Internal Use Inventory for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                             Get_Trx().Rollback();
                                                         }
                                                         else
@@ -3789,7 +3856,7 @@ namespace VAdvantage.Process
                                                         {
                                                             ValueNamePair pp = VLogger.RetrieveError();
                                                             _log.Info("Error found for saving Internal Use Inventory for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                             Get_Trx().Rollback();
                                                         }
                                                         else
@@ -3915,7 +3982,7 @@ namespace VAdvantage.Process
                                                         {
                                                             ValueNamePair pp = VLogger.RetrieveError();
                                                             _log.Info("Error found for saving Internal Use Inventory for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                             Get_Trx().Rollback();
                                                         }
                                                         else
@@ -3973,7 +4040,7 @@ namespace VAdvantage.Process
                                                         {
                                                             ValueNamePair pp = VLogger.RetrieveError();
                                                             _log.Info("Error found for saving Internal Use Inventory for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                             Get_Trx().Rollback();
                                                         }
                                                         else
@@ -4072,7 +4139,7 @@ namespace VAdvantage.Process
                                             {
                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                 _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                 Get_Trx().Rollback();
                                             }
                                             else
@@ -4168,7 +4235,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4209,7 +4276,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4264,7 +4331,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
                                                                         _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
@@ -4310,7 +4377,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
                                                                         _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
@@ -4349,7 +4416,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
                                                                         _log.Info("Error found for saving Invoice(Customer) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
@@ -4396,7 +4463,7 @@ namespace VAdvantage.Process
                                                                         {
                                                                             ValueNamePair pp = VLogger.RetrieveError();
                                                                             _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                             Get_Trx().Rollback();
                                                                         }
                                                                         else
@@ -4443,7 +4510,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4483,7 +4550,7 @@ namespace VAdvantage.Process
                                                             {
                                                                 ValueNamePair pp = VLogger.RetrieveError();
                                                                 _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                 Get_Trx().Rollback();
                                                             }
                                                             else
@@ -4531,7 +4598,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4576,7 +4643,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4616,7 +4683,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4662,7 +4729,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
                                                                         _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
-                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
@@ -4701,7 +4768,7 @@ namespace VAdvantage.Process
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
                                             _log.Info("Error found for saving C_Invoice for this Record ID = " + invoice.GetC_Invoice_ID() +
-                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
@@ -4804,7 +4871,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4882,7 +4949,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
                                                                     _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
@@ -4919,7 +4986,7 @@ namespace VAdvantage.Process
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
                                             _log.Info("Error found for saving M_inout for this Record ID = " + inout.GetM_InOut_ID() +
-                                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                                                                                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
@@ -5071,5 +5138,37 @@ namespace VAdvantage.Process
             }
             return minDate;
         }
+
+        /// <summary>
+        /// Get - sum of all component whose available on "Component Issue To Work Order" transaction
+        /// </summary>
+        /// <param name="VAMFG_M_WorkOrder_ID">production Order</param>
+        /// <param name="trxName">transaction</param>
+        /// <returns>cost of finished good</returns>
+        private Decimal GetCostForProductionFinishedGood(int VAMFG_M_WorkOrder_ID, Trx trxName)
+        {
+            decimal currentcostprice = 0;
+
+            // check any record havoing Zero cost, then return with ZERO Value
+            String sql = @"SELECT COUNT(VAMFG_M_WrkOdrTrnsctionLine_ID) as NotFoundCurrentCost
+                             FROM VAMFG_M_WrkOdrTransaction wot
+                             INNER JOIN VAMFG_M_WorkOrder wo ON wo.VAMFG_M_WorkOrder_ID = wot.VAMFG_M_WorkOrder_ID
+                             INNER JOIN VAMFG_M_WrkOdrTrnsctionLine wotl ON wot.VAMFG_M_WrkOdrTransaction_ID = wotl.VAMFG_M_WrkOdrTransaction_ID
+                           WHERE wotl.IsActive = 'Y' AND wot.VAMFG_M_WorkOrder_ID = " + VAMFG_M_WorkOrder_ID +
+                             @" AND wot.VAMFG_WorkOrderTxnType = 'CI' AND NVL(wotl.currentcostprice , 0) = 0 AND wot.DocStatus IN ('CO'  , 'CL') GROUP BY wot.VAMFG_QtyEntered ";
+            if (VAdvantage.Utility.Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName)) == 0)
+            {
+                // sum of all component whose available on "Component Issue To Work Order" transaction
+                sql = @"SELECT ROUND((SUM(wotl.VAMFG_QtyEntered * wotl.CurrentCostPrice) / wot.VAMFG_QtyEntered) , 10) as Currenctcost
+                             FROM VAMFG_M_WrkOdrTransaction wot
+                             INNER JOIN VAMFG_M_WorkOrder wo ON wo.VAMFG_M_WorkOrder_ID = wot.VAMFG_M_WorkOrder_ID
+                             INNER JOIN VAMFG_M_WrkOdrTrnsctionLine wotl ON wot.VAMFG_M_WrkOdrTransaction_ID = wotl.VAMFG_M_WrkOdrTransaction_ID
+                           WHERE wotl.IsActive = 'Y' AND wot.VAMFG_M_WorkOrder_ID = " + VAMFG_M_WorkOrder_ID +
+                                 @" AND wot.VAMFG_WorkOrderTxnType = 'CI' AND wot.DocStatus IN ('CO'  , 'CL') GROUP BY wot.VAMFG_QtyEntered ";
+                currentcostprice = VAdvantage.Utility.Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
+            }
+            return currentcostprice;
+        }
+
     }
 }
