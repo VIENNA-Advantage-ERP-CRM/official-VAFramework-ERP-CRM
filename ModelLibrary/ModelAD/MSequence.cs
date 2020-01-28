@@ -252,18 +252,22 @@ namespace VAdvantage.Model
                     {
                         //	int AD_Sequence_ID = dr.getInt(4);
                         //
+                        int tempRetValue =-1;
                         int incrementNo = int.Parse(ds.Tables[0].Rows[0]["IncrementNo"].ToString());
                         if (viennaSys)
                         {
-                            retValue = int.Parse(ds.Tables[0].Rows[0]["CurrentNextSys"].ToString());
-                            ds.Tables[0].Rows[0]["CurrentNextSys"] = retValue + incrementNo;
+                            tempRetValue = int.Parse(ds.Tables[0].Rows[0]["CurrentNextSys"].ToString());
+                            ds.Tables[0].Rows[0]["CurrentNextSys"] = tempRetValue + incrementNo;
                         }
                         else
                         {
-                            retValue = int.Parse(ds.Tables[0].Rows[0]["Export_ID"].ToString());
-                            ds.Tables[0].Rows[0]["Export_ID"] = retValue + incrementNo;
+                            tempRetValue = int.Parse(ds.Tables[0].Rows[0]["Export_ID"].ToString());
+                            ds.Tables[0].Rows[0]["Export_ID"] = tempRetValue + incrementNo;
                         }
+                       
                         da.Update(ds);
+                        retValue = tempRetValue;
+                        s_log.Info("Export ID for Table " + TableName + ": " + retValue);
                     }
 
                     conn = null;
@@ -272,7 +276,8 @@ namespace VAdvantage.Model
                 }
                 catch (Exception e)
                 {
-                    s_log.Severe(e.ToString());
+                    s_log.Severe("Error Generating Export ID for Table " + TableName + ": " + e.ToString());
+                    return -1;
                 }
                 conn = null;
             }	//	loop
