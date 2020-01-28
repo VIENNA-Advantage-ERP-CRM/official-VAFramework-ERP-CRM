@@ -651,11 +651,13 @@ namespace VAdvantage.WF
                 {
                     log.Info("Loop - " + user.GetName() + " ==>> User and Old User are same");
                     // change here to set Approver as the User that is fetched at the end
+
                     // In case if fetchlastapprover is true else return -1
                     if (FetchLastApprover)
                         return user.GetAD_User_ID();
                     else
                         return -1;
+
                 }
                 oldUser = user;
                 log.Fine("User=" + user.GetName());
@@ -1130,12 +1132,14 @@ namespace VAdvantage.WF
                         if (!autoApproval)
                             SetAD_User_ID(nextAD_User_ID);
 
+
                         ////Lakhwinder
                         //if (GetAD_User_ID() == 0)
                         //{
                         //    nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + p_ctx.GetAD_User_ID()));
                         //    SetAD_User_ID(nextAD_User_ID);
                         //}
+
                     }
                     else	//	fixed Approver
                     {
