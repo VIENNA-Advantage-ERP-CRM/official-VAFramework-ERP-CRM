@@ -601,7 +601,7 @@
         return this.vo.ShowSummaryLevel;
     };
 
-    GridTab.prototype.getIsTPBottomAligned = function (){
+    GridTab.prototype.getIsTPBottomAligned = function () {
         return this.vo.TabPanelAlignment == "H";
     };
 
@@ -956,7 +956,7 @@
                     var lines = dr.getInt(0);
                     arguments[0] = lines;
                     //	{1} - Line toral
-                    var lineTotal = dr.getDecimal(2).toLocaleString() ;//.toFixed(2);
+                    var lineTotal = dr.getDecimal(2).toLocaleString();//.toFixed(2);
                     arguments[1] = lineTotal;
                     //	{2} - Grand total (including tax, etc.)
                     var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
@@ -1341,7 +1341,7 @@
         else {
             return '250px';
         }
-        
+
     };
 
     GridTab.prototype.getHeaderBackColor = function () {
@@ -4079,7 +4079,8 @@
                 // then do not save in Master window and reset 
                 // and display message to user
                 if (out.Status == "E") {
-                    VIS.ADialog.info(out.ErrorMsg);
+                    if (!(out.FireEEvent || out.FireIEvent))
+                        VIS.ADialog.info(out.ErrorMsg);
                 }
                 else if (out.Status == "W") {
                     VIS.ADialog.info("SentForApproval");
@@ -4104,7 +4105,8 @@
                     if (out.Status != "O") {
                         // if there is any error then display error message
                         if (out.Status == "E") {
-                            VIS.ADialog.info(out.ErrorMsg);
+                            if (!(out.FireEEvent || out.FireIEvent))
+                                VIS.ADialog.info(out.ErrorMsg);
                         }
                         else {
                             // in case of sucess refresh UI
@@ -4856,15 +4858,15 @@
         // return false if new Record is inserted
         // do not ask for date if new Record
         // if (oldRowData["updatedby"]) {
-            if (this.gridFields && this.gridFields.length > 0) {
-                for (var i = 0; i < this.gridFields.length; i++) {
-                    if (this.gridFields[i].vo.IsMaintainVersions) {
-                        var colName = this.gridFields[i].vo.ColumnName.toLowerCase();
-                        if (rowData[colName] != oldRowData[colName])
-                            return true;
-                    }
+        if (this.gridFields && this.gridFields.length > 0) {
+            for (var i = 0; i < this.gridFields.length; i++) {
+                if (this.gridFields[i].vo.IsMaintainVersions) {
+                    var colName = this.gridFields[i].vo.ColumnName.toLowerCase();
+                    if (rowData[colName] != oldRowData[colName])
+                        return true;
                 }
             }
+        }
         // }
         return false;
     };

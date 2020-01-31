@@ -879,6 +879,61 @@ namespace VIS.Helpers
                 // check whether any Document Value type workflow is attached with Version table
                 hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
+
+                /// Change to Validate before save logic in master table if any
+                /// otherwise rollback and return                
+                Trx trxMas = null;
+                try
+                {
+                    trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
+                    int parentWinID = inn.AD_WIndow_ID;
+                    PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
+                    //	No Persistent Object
+                    if (poMas == null)
+                    {
+                        throw new NullReferenceException("No Persistent Obj");
+                    }
+                    SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false);
+                    if (!poMas.Save(trxMas))
+                    {
+                        String msg = "SaveError";
+                        String info = "";
+                        ValueNamePair ppE =VLogger.RetrieveError();
+                        if (ppE == null)
+                            ppE = VLogger.RetrieveWarning();
+                        if (ppE != null)
+                        {
+                            msg = ppE.GetValue();
+                            info = ppE.GetName();
+                            //	Unique Constraint
+                            Exception ex = VLogger.RetrieveException();
+                            if (ex != null)
+                                msg = "SaveErrorNotUnique";
+                        }
+                        outt.IsError = true;
+                        outt.FireEEvent = true;
+                        outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
+                        outt.Status = GridTable.SAVE_ERROR;
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = ex.Message, Info = "", IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+                }
+                finally
+                {
+                    if (trxMas != null)
+                    {
+                        trxMas.Rollback();
+                        trxMas.Close();
+                        trxMas = null;
+                    }
+                }
             }
 
             int Ver_Window_ID = 0;
