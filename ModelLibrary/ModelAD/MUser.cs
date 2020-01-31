@@ -339,9 +339,11 @@ namespace VAdvantage.Model
             //    + "ORDER BY AD_Role_ID";
 
 
+
             //SqlParameter[] param = new SqlParameter[2];
             //param[0] = new SqlParameter("@orgid", AD_Org_ID);
             //param[1] = new SqlParameter("@userid", GetAD_User_ID());
+
 
 
             // Commented code above to resolve issue in Fetching Roles of selected user against Organization
@@ -354,7 +356,9 @@ namespace VAdvantage.Model
             SqlParameter[] param = new SqlParameter[4];
             param[0] = new SqlParameter("@userid", GetAD_User_ID());
 
+
             param[1] = new SqlParameter("@orgid", AD_Org_ID);            
+
             param[2] = new SqlParameter("@userid1", GetAD_User_ID());
             param[3] = new SqlParameter("@orgid1", AD_Org_ID);
 

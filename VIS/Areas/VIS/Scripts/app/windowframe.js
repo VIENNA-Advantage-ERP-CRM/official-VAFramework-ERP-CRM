@@ -4189,6 +4189,7 @@
                 });
 
 
+
             //if (trxInfo != null)
             //    this.statusBar.setInfo(trxInfo);
 
