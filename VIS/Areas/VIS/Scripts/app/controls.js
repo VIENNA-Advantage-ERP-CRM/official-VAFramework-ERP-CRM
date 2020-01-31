@@ -496,6 +496,7 @@
             }
             else {
                 var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
+                $ctrl.canSkipSetValue(false);
                 ctrl = $ctrl;
             }
 
@@ -923,7 +924,7 @@
      */
     function VLabel(value, name, isMandatory, isADControl) {
         value = value != null ? value.replace("[&]", "") : "";
-
+        this.canSkip = true;
         var strFor = ' for="' + name + '"';
         if (isADControl)
             strFor = '';
@@ -948,6 +949,10 @@
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
     VLabel.prototype.setValue = function (newValue, isHTML) {
+
+        if (this.canSkip) {// here isHTML can be false from Header panel so no direct if clause check link if(!isHTML). 
+            return;     //In case of window, isHTML is null or undefined, so this function should not work.
+        }
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
@@ -955,6 +960,10 @@
                 this.ctrl.html(newValue);
             }
         }
+    };
+
+    VLabel.prototype.canSkipSetValue = function (canSkip) {
+        this.canSkip = canSkip;
     };
 
 
@@ -4564,7 +4573,7 @@
         var $ctrl = null;
         var dimension = "Thumb500x375";
 
-        $ctrl = $('<button >', { type: 'button', name: columnName, class: 'vis-ev-col-img-ctrl',tabIndex:'-1' });
+        $ctrl = $('<button >', { type: 'button', name: columnName, class: 'vis-ev-col-img-ctrl', tabIndex: '-1' });
         $txt.css("color", "blue");
 
 
