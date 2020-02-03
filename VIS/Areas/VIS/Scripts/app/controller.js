@@ -6459,6 +6459,10 @@
         return this.vo.SeqNo;
     }
 
+    GridTabPanel.prototype.getExtraInfo = function () {
+        return this.vo.ExtraInfo;
+    }
+
 
     function DataStatusEvent(source1, totalRows, changed, autoSave, inserting) {
 
