@@ -150,6 +150,7 @@ namespace VIS
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
                   "~/Areas/VIS/Scripts/app/masterdataversion.js",
+                  "~/Areas/VIS/Scripts/tabpanels/bipanel.js",
                    "~/Areas/VIS/Scripts/model/CalloutColumn.js",
 
 
