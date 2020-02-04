@@ -21,8 +21,9 @@
         this.getRoot = function () {
             return $root;
         };
-
+        var that = this;
         var loadSession = function (record_ID) {
+            
             $.ajax({
                 url: VIS.Application.contextUrl + 'BiPanel/GetUserBILogin',
                 success: function (data) {
@@ -44,7 +45,7 @@
                         }
                         else {
 
-                            var _src = data[1] + "JsAPI?token=" + data[0] + "&reportUUID=" + extraInfo + "=" + record_ID;
+                            var _src = data[1] + "JsAPI?token=" + data[0] + "&reportUUID=" + that.extraInfo + "=" + record_ID;
                             $root.html('<iframe src=' + _src + ' ; height=100%; width="100%"; frameborder="0" ></iframe>');
                         }
                     }
@@ -96,4 +97,4 @@
     */
     VIS.BiPanel = BiPanel;
 
-});
+})();
