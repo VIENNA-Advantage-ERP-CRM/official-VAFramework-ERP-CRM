@@ -496,7 +496,6 @@
             }
             else {
                 var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
-                $ctrl.canSkipSetValue(false);
                 ctrl = $ctrl;
             }
 
@@ -924,7 +923,6 @@
      */
     function VLabel(value, name, isMandatory, isADControl) {
         value = value != null ? value.replace("[&]", "") : "";
-        this.canSkip = true;
         var strFor = ' for="' + name + '"';
         if (isADControl)
             strFor = '';
@@ -948,11 +946,43 @@
 
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
-    VLabel.prototype.setValue = function (newValue, isHTML) {
+    // END VLabel 
 
-        if (this.canSkip) {// here isHTML can be false from Header panel so no direct if clause check link if(!isHTML). 
-            return;     //In case of window, isHTML is null or undefined, so this function should not work.
+    //2.  VSPAN
+
+    /**
+     *  VSpan with Mnemonics interpretation
+     *  VSpan against model field control like (textbox, combobox etc)
+     *  @param value  The text to be displayed by the VSpan.
+     *  @param name  name of control to bind VSpan with
+     */
+    function VSpan(value, name, isMandatory, isADControl) {
+        value = value != null ? value.replace("[&]", "") : "";
+
+        var strFor = ' for="' + name + '"';
+        if (isADControl)
+            strFor = '';
+
+        var $ctrl = $('<span ' + strFor + '></span>');
+
+        IControl.call(this, $ctrl, VIS.DisplayType.Label, true, isADControl ? name : "lbl" + name);
+        if (isMandatory) {
+            $ctrl.text(value).append("<sup>*</sup>");
         }
+        else {
+            $ctrl.text(value);
+        }
+
+        this.disposeComponent = function () {
+            $ctrl = null;
+            self = null;
+        }
+    };
+
+
+    VIS.Utility.inheritPrototype(VSpan, IControl); //Inherit
+
+    VSpan.prototype.setValue = function (newValue, isHTML) {
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
@@ -962,12 +992,8 @@
         }
     };
 
-    VLabel.prototype.canSkipSetValue = function (canSkip) {
-        this.canSkip = canSkip;
-    };
 
-
-    VLabel.prototype.getValue = function () {
+    VSpan.prototype.getValue = function () {
         if (this.value != null) {
             return this.ctrl.text().toString();
         }
@@ -977,7 +1003,9 @@
     };
 
 
-    // END VLabel 
+    // END VSpan 
+
+
 
 
 
