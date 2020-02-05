@@ -4190,12 +4190,9 @@
 
 
 
-            //if (trxInfo != null)
-            //    this.statusBar.setInfo(trxInfo);
-
         }
         else {
-            this.statusBar.setInfo(null);
+               this.statusBar.setInfo(null);
 
         }
 
