@@ -495,8 +495,7 @@
                 ctrl = image;
             }
             else {
-                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
-                $ctrl.canSkipSetValue(false);
+                var $ctrl = new VSpan(mField.getHelp(), columnName, false, true);
                 ctrl = $ctrl;
             }
 
