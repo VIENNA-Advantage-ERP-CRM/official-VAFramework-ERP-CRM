@@ -496,6 +496,7 @@
             }
             else {
                 var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
+                $ctrl.canSkipSetValue(false);
                 ctrl = $ctrl;
             }
 
@@ -923,6 +924,7 @@
      */
     function VLabel(value, name, isMandatory, isADControl) {
         value = value != null ? value.replace("[&]", "") : "";
+
         var strFor = ' for="' + name + '"';
         if (isADControl)
             strFor = '';
@@ -945,6 +947,7 @@
 
 
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
+
 
     // END VLabel 
 
@@ -983,6 +986,7 @@
     VIS.Utility.inheritPrototype(VSpan, IControl); //Inherit
 
     VSpan.prototype.setValue = function (newValue, isHTML) {
+
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
@@ -991,7 +995,6 @@
             }
         }
     };
-
 
     VSpan.prototype.getValue = function () {
         if (this.value != null) {

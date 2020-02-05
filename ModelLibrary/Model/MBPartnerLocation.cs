@@ -229,14 +229,32 @@ namespace VAdvantage.Model
                 _uniqueName = "";
             _unique++;
 
-            //	0 - City
+            // 0 + Address1 
+            // to set address1
             if (_uniqueName.Length == 0)
+            {
+                String xx = address.GetAddress1();
+                if (xx != null && xx.Length > 0)
+                {
+                    _uniqueName = xx;
+                }
+                _unique = 0;
+            }
+
+            //	0 - City
+            // to set address1 and City as Name
+            if (_unique == 0 && _uniqueName.Length >= 0)
             {
                 String xx = address.GetCity();
                 if (xx != null && xx.Length > 0)
-                    _uniqueName = xx;
+                {
+                    if (_uniqueName.Length > 0)
+                        _uniqueName += " ";
+                    _uniqueName += xx;
+                }
                 _unique = 0;
             }
+
             //	1 + Address1
             if (_unique == 1 || _uniqueName.Length == 0)
             {
