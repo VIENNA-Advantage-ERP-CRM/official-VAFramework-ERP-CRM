@@ -9,9 +9,18 @@
         this.panelWidth;
         this.extraInfo = null;
         var $root;
+        var iFrame;
 
         this.init = function () {
-            $root = $('<div style="height:100%;width:100%;padding:15px"></div>');
+            $root = $('<div style="height:100%;width:100%"></div>');
+            //if (window.VA037) {
+                iFrame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
+                $root.html(iFrame);
+            //}
+            //else {
+            //    var $span = $('<span class="vis-bi-tab-panel">' + VIS.Msg.getMsg("PleaseInstallBIReportTool") + '</span>');
+            //    $root.append($span);
+            //}
         };
 
         this.update = function (record_ID) {
@@ -22,38 +31,23 @@
             return $root;
         };
         var that = this;
+
+
+
+
         var loadSession = function (record_ID) {
-            
-            $.ajax({
-                url: VIS.Application.contextUrl + 'BiPanel/GetUserBILogin',
-                success: function (data) {
-                    if (data) {
-                        data = JSON.parse(data);
-                    }
-                    if (data.length > 0) {
-                        if (data[0] == "1") {
-                            VIS.ADialog.error("VA037_BIToolMembership");
-                        }
-                        else if (data[0] == "2") {
-                            VIS.ADialog.error("VA037_BIUrlNotFound");
-                        }
-                        else if (data[0] == "3") {
-                            VIS.ADialog.error("VA037_NotBIUser");
-                        }
-                        else if (data[0] == "3") {
-                            VIS.ADialog.error("VA037_BICallingError");
-                        }
-                        else {
+            if (!iFrame)
+                return;
+            var _src = VIS.Application.contextUrl + "BiPanel/GetUserBILogin?extraInfo=" + that.extraInfo + "&recID=" + record_ID;
+            iFrame.prop('src', _src);
+        };
 
-                            var _src = data[1] + "JsAPI?token=" + data[0] + "&reportUUID=" + that.extraInfo + "=" + record_ID;
-                            $root.html('<iframe src=' + _src + ' ; height=100%; width="100%"; frameborder="0" ></iframe>');
-                        }
-                    }
-                },
-                error: function (er) {
-
-                }
-            });
+        this.disposeComponent = function () {
+            if (iFrame)
+                iFrame.remove();
+            $root.remove();
+            iFrame = null;
+            $root = null;
         };
 
     };
