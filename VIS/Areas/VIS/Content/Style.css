@@ -1051,6 +1051,13 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
     background-color:white;border:white;border-bottom:2px #EBEBEB solid;
 }
 
+.vis-bi-tab-panel {
+display:flex;
+height:100%;
+width:100%;
+align-items:center;
+justify-content:center;
+}
 
 
 
