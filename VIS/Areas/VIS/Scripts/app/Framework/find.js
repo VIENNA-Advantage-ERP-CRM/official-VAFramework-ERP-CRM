@@ -196,13 +196,13 @@
         function setView() {
             var dStyle = '';
             var isRTL = false;
-            if (VIS.Application.isRTL) {
-                isRTL = true;
-                dStyle = "border-left: 3px solid #d9e3e7;";
-            }
-            else {
-                dStyle = "border-right: 3px solid #d9e3e7;";
-            }
+            //if (VIS.Application.isRTL) {
+            //    isRTL = true;
+            //    dStyle = "border-left: 3px solid #d9e3e7;";
+            //}
+            //else {
+            //    dStyle = "border-right: 3px solid #d9e3e7;";
+            //}
 
 
             var html = '<div class="vis-advancedSearch-contentWrap"> <div class="vis-advancedSearchContentArea vis-pull-left" style="' + dStyle + '">'
@@ -246,9 +246,9 @@
                     + '<label for="QueryName"  id="lblToQryValue_' + windowNo + '">' + VIS.Msg.getMsg("ToQueryValue") + '</label>'
                       + '<input  id="txtToQryValue_' + windowNo + '" type="text" name="QueryName">'
                         + '</div>'
-                        + '<div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" style="display:none;padding-top: 20px;" id="divFullDay_' + windowNo + '">'
+                        + '<div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" style="display:none;padding-top: 17px;" id="divFullDay_' + windowNo + '">'
 
-                      + '<input style="width: auto;float: left;margin-top: 2px;" id="checkFullDay_' + windowNo + '" type="checkbox" name="QueryName">'
+                      + '<input style="width: auto;float: left;" id="checkFullDay_' + windowNo + '" type="checkbox" name="QueryName">'
                        + '<label for="QueryName"  id="lblToQryValue_' + windowNo + '">' + VIS.Msg.getMsg("FullDay") + '</label>'
                         + '</div>'
 
@@ -341,13 +341,13 @@
        + '<div class="vis-advancedSearch-RecentRecords">'
          + '  <div class="vis-RecentRecords-Heading">';
 
-            dStyle = isRTL ? "margin-right:15px" : "margin-left:15px";
+            //dStyle = isRTL ? "margin-right:15px" : "margin-left:15px";
 
-            html += '<h4 style="' + dStyle + '" >' + VIS.Msg.getMsg("VHistory") + '</h4>'
+            html += '<h4>' + VIS.Msg.getMsg("VHistory") + '</h4>'
 
 
     + '</div>'
-    + '<div class="vis-RecentRecords-listWrap" style="' + dStyle + '">'
+    + '<div class="vis-RecentRecords-listWrap">'
        + ' <ul id="ulQry_' + windowNo + '" >'
              + '<li data-value="0" title="' + VIS.Msg.getMsg("All") + '" >' + VIS.Msg.getMsg("All") + '</li>'
                 + '<li data-value="365" title="' + VIS.Msg.getMsg("YearAll") + '">' + VIS.Msg.getMsg("YearAll") + '</li>'
@@ -360,12 +360,13 @@
                 + '<li data-value="1 | C" title="' + VIS.Msg.getMsg("DayCreated") + '">' + VIS.Msg.getMsg("DayCreated") + '</li>'
         + '</ul>'
     + '</div>'
-    + '</div>'
-
-    + '</div>'
     + '<div class="vis-advancedSearchFooter vis-pull-right"> '
         + '<p id="pstatus_' + windowNo + '" >16 / 16</p>'
     + '</div>'
+    + '</div>'
+
+    + '</div>'
+    
             //<!-- end of advancedSearch-GrayWrap -->
 
     + '<div class="vis-apanel-busy vis-advancedSearchbusy" id="divBusy_' + windowNo + '" >'

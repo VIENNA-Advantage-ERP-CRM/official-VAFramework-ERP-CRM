@@ -6,18 +6,18 @@
 }
 .vis-header-wrap{ width:100%; float:left;}
 .vis-vsetup-tittle {
-    width: 96%;
-    background: #1aa0ed;
+    /*width: 96%;
+    background: rgba(var(--v-c-primary), 1);
     padding: 14px 0px 14px 15px;
     float: left;
 	font-size:13.5px;
 	 margin: 0;
     font-family: helvetica;
     font-weight: bold;
-    color: white;
+    color: white;*/
 }
 .vis-btn-close {
-    width: 4%;
+    /*width: 4%;
 	height:29px;
     background: url('../Images/close.png');
     background-color: #616364;
@@ -28,49 +28,57 @@
     cursor: pointer;
     background-position: center;
     border: 0px;
-    margin: 0;
+    margin: 0;*/
 }
 .vis-clear-both{
 	clear: both;
 }
-.vis-graywrap{
-	/*background:#f4f4f4;*/
-	width:100%;
-	float:left;
-	/*border-left:2px solid #1aa0ed;
+.vis-graywrap, initial-client-form {
+    /*background:#f4f4f4;*/
+    width: 100%;
+    float: left;    
+    /*border-left:2px solid #1aa0ed;
 	border-right:2px solid #1aa0ed;
 	border-bottom:2px solid #1aa0ed;*/
-	/*padding: 15px;*/
+    /*padding: 15px;*/
+}
+.vis-graywrap {
+    height: 100%;
 }
 .vis-graywrap > p{
-	color:#666;
+	/*color:#666;*/
 	font-size:14px;	
 }
-.vis-intial-form-data, .vis-initial-form-buttons{ 
-	float:left; 
-	width:50%;
-	margin-bottom:10px;
+.vis-intial-form-data, .vis-initial-form-buttons, .vis-intial-form-dataCombo {
+    float: left;
+    width: 50%;
+    /*margin-bottom:10px;*/
     /*margin-left:15px;*/
-    padding-left:15px;
-    margin-top: 10px;
-    padding-right:15px;
+    padding-left: 12px;
+    margin-bottom: 10px;
+    padding-right: 12px;
 }
+
 .vis-intial-form-data > label, .vis-intial-form-dataCombo > label{
 	font-size:14px;
-	color:#666;
-	font-weight:normal;
+	/*color:#666;
+	font-weight:normal;*/
 	width:100%;
 	float:left;	
+    /*margin-bottom: 2px;*/
    
 }
-.vis-intial-form-data > input{
+.vis-intial-form-data > input, .vis-intial-form-dataCombo > select{
 	float:left;
 	width:100%;	
-	border:1px solid #ccc;
+	/*border:1px solid #ccc;*/
 	border-radius:3px;
 	padding:5px 10px;
      height:30px;
    
+}
+.vis-intial-form-dataCombo > select {
+    margin-right: 10px;
 }
 .vis-intial-form-data > a{
 	float:right;
@@ -98,28 +106,10 @@ ul.vis-initial-client-form-list > li{
 	width:48%;	
     margin-left:15px;
 }
-.vis-intial-form-dataCombo{
-	width:50%;
-	float:left;
-	/*margin-right:20px;*/	
-	margin-bottom:10px;
-     /*margin-left:15px;*/
-     margin-top:10px;
-     padding-left:15px;
-     padding-right:15px;
-}
-.vis-intial-form-dataCombo > select{
-	float:left;
-	width:100%;
-	border:1px solid #ccc;
-	margin-right:10px;
-	padding:5px 10px;	
-     height:30px;
-}
 .vis-initial-form-checkbox{ 
 	width: 50%;
 	float: left;
-	/*margin-left: 10px;*/	
+	margin-top: 10px;	
 }
 .vis-initial-form-checkbox > input{
 	float:left;	
@@ -139,15 +129,17 @@ html[dir="rtl"] .vis-initial-form-checkbox > input {
 .vis-initial-form-checkbox > label{
 	float:left;
 	font-size:14px;
-	color:#666;
-	font-weight:normal;	
+	/*color:#666;
+	font-weight:normal;*/	
 }
 
 html[dir="rtl"] .vis-initial-form-checkbox > label {
 	float:right;	
 }
 
-
+.vis-cs-op-lbl, .vis-its-ryt-panel h3 {
+    color: rgba(var(--v-c-primary), 1);
+}
 .vis-initial-form-buttons{
 	margin-top:20px;	
     width: 100%;
@@ -167,7 +159,53 @@ html[dir="rtl"] .vis-initial-form-checkbox > label {
     padding: 10px 20px;
     cursor: pointer;
     text-decoration: none;
+    float: left;
 }
 .vis-initial-btn-blue, .vis-initial-btn-blue:hover {
     background: rgba(var(--v-c-primary), 1);
+}
+.vis-cs-op-lbl {
+    margin-left: 12px;
+    font-size: 16px;
+}
+.vis-fieldset-wrap, .vis-fieldset-inn, .initial-client-form {
+    width: 100%;
+    float: left;
+}
+.vis-fieldset-wrap{ padding: 0 12px;}
+.vis-fieldset-inn {
+    border: 1px solid rgba(var(--v-c-on-secondary), .3);
+    padding: 0 10px 10px;
+    border-radius: 5px;
+    margin-top: 0px;
+}
+.vis-its-main-wrap {
+    width: 80%;
+    height: 100%;
+}
+.initial-client-form {
+    height: calc(100% - 60px);
+    overflow: auto;
+}
+.vis-its-ryt-panel {
+    background-color: rgba(var(--v-c-secondary), .8);
+    width: 20%;
+    height: 100%;
+    padding: 12px;
+    word-wrap: break-word;
+}
+.vis-its-ryt-panel h3 {
+    margin-top: 0;
+    font-size: 16px;    
+}
+.vis-its-ryt-panel-inner{
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow: auto;
+}
+.vis-initial-btn i {
+    font-size: 1rem;
+}
+.vis-its-ryt-panel .vis-initial-btn {
+    float: right;
 }

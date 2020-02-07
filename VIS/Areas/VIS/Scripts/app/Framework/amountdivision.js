@@ -114,14 +114,14 @@
             txtAmount = $("<input type='number' min='0' tabindex='6'>");
             modalTxtAmount = $("<input type='number' min='0' tabindex='11'>");
 
-            if (isReadOnly) {
-                txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly style='background-color:#F1F1F1'>");
-            }
-            else {
-                txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly style='background-color:#F1F1F1'>");
-            }
+            //if (isReadOnly) {
+            //    txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly>");
+            //}
+            //else {
+                txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly>");
+            //}
 
-            txtTotal = $("<input type='text' readonly='true' tabindex='15' style='background-color:#F1F1F1'>");
+            txtTotal = $("<input type='text' readonly='true' tabindex='15'>");
             btnAdd = $("<a style='cursor:pointer;' tabindex='7'>");
             btnNew = $("<a>");
             modalBtnAdd = $("<a style='cursor:pointer;' tabindex='12'>");
@@ -141,10 +141,10 @@
             ulStatusdimension = $('<ul class="vis-statusbar-ul"></ul>');
             divStatusContainer = $('<div class="VIS-AMTD-StatusContainer"></div>');
 
-            liStatusFirst = $('<li  style="opacity: 0.6;"><div><img style="opacity: 1;" action="first" title="First Page" alt="First Page" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png"></div></li>');
+            liStatusFirst = $('<li  style="opacity: 0.6;"><div><i class="vis vis-shiftleft" style="opacity: 1;" action="first" title="First Page" ></i></div></li>');
             ulStatusdimension.append(liStatusFirst);
 
-            liStatusPrev = $('<li style="opacity: 0.6;"><div><img style="opacity: 1;" action="prev" title="Page Down" alt="Page Up" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png"></div></li>');
+            liStatusPrev = $('<li style="opacity: 0.6;"><div><i class="vis vis-pageup" style="opacity: 1;" action="prev" title="Page Down" ></i></div></li>');
             ulStatusdimension.append(liStatusPrev);
 
             cmbStausRecordCount = $('<select class="vis-statusbar-combo" style="width:50px;"></select>');
@@ -152,10 +152,10 @@
             li.append(cmbStausRecordCount);
             ulStatusdimension.append(li);
 
-            liStatusNext = $('<li style="opacity: 1;"><div><img style="opacity: 1;" action="next" title="Page Up" alt="Page Down" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png"></div></li>');
+            liStatusNext = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" style="opacity: 1;" action="next" title="Page Up" alt="Page Down" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png"></div></li>');
             ulStatusdimension.append(liStatusNext);
 
-            liStatusLast = $('<li style="opacity: 1;"><div><img style="opacity: 1;" action="last" title="Last Page" alt="Last Page" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png"></div></li>');
+            liStatusLast = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" style="opacity: 1;" action="last" title="Last Page" ></i></div></li>');
             ulStatusdimension.append(liStatusLast);
 
             divStatusContainer.append(ulStatusdimension);
@@ -221,11 +221,11 @@
             modalDivAmount = $("<div class='VIS-AMTD-formData VIS-AMTD-amountTxt'>");
             modalDivAmount.append(modalLblAmount).append(modalTxtAmount);
             divbutton = $("<div class='VIS-AMTD-formBtns'>");
-            var divButton1 = $("<div class='pull-right'>");
+            var divButton1 = $("<div>");
             divButton1.append(btnAdd);//.append(btnNew);
             divbutton.append(divButton1);
             modalDivButton = $("<div class='VIS-AMTD-ModalformBtns'>");
-            var modalButton1 = $("<div class='pull-right'>");
+            var modalButton1 = $("<div>");
             modalButton1.append(modalBtnAdd).append(modalBtnNew);
             modalDivButton.append(modalButton1);
             var divTotal = $("<div class='VIS-AMTD-formData'>");
@@ -281,7 +281,7 @@
                                         txtAmount.val("0");
                                         checkValUpdate = false;
                                         btnNew.css("display", "none");
-                                        divbutton.css("width", "6%");
+                                        //divbutton.css("width", "6%");
                                         if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                                             divAmount.css("width", "25%");
                                         }
@@ -414,7 +414,7 @@
                                 txtAmount.val("0");
                                 checkValUpdate = false;
                                 btnNew.css("display", "none");
-                                divbutton.css("width", "6%");
+                                //divbutton.css("width", "6%");
                                 if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                                     divAmount.css("width", "25%");
                                 }
@@ -597,7 +597,7 @@
                 txtAmount.val("");
                 checkValUpdate = false;
                 btnNew.css("display", "none");
-                divbutton.css("width", "6%");
+                //divbutton.css("width", "6%");
                 if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                     divAmount.css("width", "25%");
                 }
@@ -1651,7 +1651,7 @@
             checkValUpdate = false;
             btnNew.css("display", "none");
             modalDiv.css("display", "none");
-            divbutton.css("width", "6%");
+            //divbutton.css("width", "6%");
             if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                 divAmount.css("width", "25%");
             }
@@ -1763,11 +1763,11 @@
 
         // Funcion to Generate dynamic control
         var getOrg = function (orgType) {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblOrg = $("<label>");
             modalLblOrg = $("<label>");
             var orgWhere = "";
@@ -1790,7 +1790,7 @@
             lblOrg.append(VIS.Msg.translate(VIS.Env.getCtx(), "Org_ID"));
             modalLblOrg.append(VIS.Msg.translate(VIS.Env.getCtx(), "Org_ID"));
             divOrg = $("<div class='VIS-AMTD-formData'>");
-            divOrg.css("width", "103%");
+            divOrg.css("width", "100%");
             modalDivOrg = $("<div class='VIS-AMTD-formData'>");
             modalDivOrg.css("width", "100%");
             divOrg.append(lblOrg).append(cmbOrg);
@@ -1802,11 +1802,11 @@
 
         };
         var getActivity = function () {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblActivity = $("<label>");
             modalLblActivity = $("<label>");
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_Activity_ID", 0, false, null);
@@ -1819,7 +1819,7 @@
             modalCmbActivity.attr("tabindex", "9");
             lblActivity.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_Activity_ID"));
             divActivity = $("<div class='VIS-AMTD-formData'>");
-            divActivity.css("width", "103%");
+            divActivity.css("width", "100%");
             divActivity.append(lblActivity).append(cmbActivity);
             generateControl.append(divActivity);
             cmbActivity.focus();
@@ -1831,11 +1831,11 @@
             modalCmbActivity.focus();
         };
         var getCampaign = function () {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
-            divAmount.css("width", "32.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "32.3%");
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
+            divAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblCampaign = $("<label>");
             modalLblCampaign = $("<label>");
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_Campaign_ID", 0, false, null);
@@ -1848,7 +1848,7 @@
             modalCmbCampaign.attr("tabindex", "9");
             lblCampaign.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_Campaign_ID"));
             divCampaign = $("<div class='VIS-AMTD-formData'>");
-            divCampaign.css("width", "103%");
+            divCampaign.css("width", "100%");
             divCampaign.append(lblCampaign).append(cmbCampaign);
             generateControl.append(divCampaign);
             cmbCampaign.focus();
@@ -1860,11 +1860,11 @@
             modalCmbCampaign.focus();
         };
         var getSalesRegion = function () {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblSalesRegion = $("<label>");
             modalLblSalesRegion = $("<label>");
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_SalesRegion_ID", 0, false, null);
@@ -1873,7 +1873,7 @@
             cmbSalesRegion.attr("tabindex", "4");
             lblSalesRegion.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_SalesRegion_ID"));
             divSales = $("<div class='VIS-AMTD-formData'>");
-            divSales.css("width", "103%");
+            divSales.css("width", "100%");
             divSales.append(lblSalesRegion).append(cmbSalesRegion);
             generateControl.append(divSales);
             cmbSalesRegion.focus();
@@ -1909,11 +1909,11 @@
                     colName += " ||'_'|| " + dr.getString(1);
                 }
             }
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblUserElement = $("<label>");
             cmbUserElement.empty().append('<option value=-1></option>');
             modalCmbUserElement.empty().append('<option value=-1></option>');
@@ -1932,7 +1932,7 @@
             cmbUserElement.attr("tabindex", "4");
             lblUserElement.append(VIS.Msg.translate(VIS.Env.getCtx(), "AD_Column_ID"));
             divUserElement = $("<div class='VIS-AMTD-formData'>");
-            divUserElement.css("width", "103%");
+            divUserElement.css("width", "100%");
             divUserElement.append(lblUserElement).append(cmbUserElement);
             generateControl.append(divUserElement);
             cmbUserElement.focus();
@@ -1950,11 +1950,11 @@
             modalCmbUserElement.focus();
         };
         var getBPartner = function () {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblBPartner = $("<label>");
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_BPartner_ID", 0, false, null);
             txtb = new VIS.Controls.VTextBoxButton("C_BPartner_ID", false, false, true, VIS.DisplayType.Search, lookup);
@@ -1978,11 +1978,11 @@
 
         };
         var getAddress = function () {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblAddress = $("<label>");
             var lookups = new VIS.MLocationLookup(VIS.Env.getCtx(), windowNo);
             txtLoc = new VIS.Controls.VLocation("C_Location_ID", false, false, true, VIS.DisplayType.Location, lookups);
@@ -2005,11 +2005,11 @@
             modalGenerateControl.append(modalDivLocation);
         };
         var getProject = function () {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            //divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblProject = $("<label>");
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_Project_ID", 0, false, null);
             txtProj = new VIS.Controls.VTextBoxButton("C_Project_ID", false, false, true, VIS.DisplayType.Search, lookup);
@@ -2033,11 +2033,11 @@
 
         };
         var getProduct = function () {
-            generateControl.css({ "width": "32.3%" });
-            modalGenerateControl.css({ "width": "32.3%" });
+            generateControl.css({ "width": "33.3%" });
+            modalGenerateControl.css({ "width": "33.3%" });
             divAmount.css("width", "33.3%");
-            divbutton.css("width", "6%");
-            modalDivAmount.css("width", "33.3%");
+            ////divbutton.css("width", "6%");
+            //modalDivAmount.css("width", "33.3%");
             lblProduct = $("<label>");
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "M_Product_ID", 0, false, null);
             txtProd = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, lookup);
@@ -2064,7 +2064,7 @@
             generateControl.css({ "width": "65.7%" });
             modalGenerateControl.css({ "width": "65.7%", "margin-right": "9px" });
             divAmount.css("width", "26.5%");
-            divbutton.css("width", "6%");
+            //divbutton.css("width", "6%");
             modalDivAmount.css("width", "26.5%");
             lblElement = $("<label>");
             lblAccountElement = $("<label>");
@@ -2292,7 +2292,7 @@
             }
             else {
                 divAmount.css("width", "33.3%");
-                modalDivAmount.css("width", "33.3%");
+                //modalDivAmount.css("width", "33.3%");
             }
             // btnAdd.empty().append(VIS.Msg.getMsg("Update"));
             checkValUpdate = true;
@@ -2438,7 +2438,7 @@
         //};
         this.show = function () {
             displayDialog();
-            ch.getRoot().css("padding-right", "5px");
+            ch.getRoot();
             busyDiv("visible");
             getAccountingSchema(AD_Org_ID, function () {
 

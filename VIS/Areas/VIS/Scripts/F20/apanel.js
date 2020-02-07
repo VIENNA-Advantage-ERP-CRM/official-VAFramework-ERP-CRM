@@ -702,6 +702,20 @@
             var offSet = Math.ceil(dWidth / 2);
             //console.log(dWidth + "--" + ulWidth + '---' + cPos);
             var s = 0;
+            if (VIS.Application.isRTL) {
+                if (dir == 'r') {
+                    dir = 'b';
+                }
+                else if (dir == 'rl'){
+                    dir = 'bf';
+                }
+                else if (dir == 'bf') {
+                    dir = 'rl';
+                }
+                else if (dir == 'b') {
+                    dir = 'r';
+                }
+            }
             if (dir == 'r') {
                 if ((cPos + offSet) >= ulWidth - offSet)
                     return;

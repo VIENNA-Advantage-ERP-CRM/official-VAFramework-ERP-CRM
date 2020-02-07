@@ -1425,7 +1425,7 @@
                             }
                             else {
 
-                                textToInsert += "<td class='VIS_Pref_table-row1' style='border-left: 1px solid #ECECEC;'>" + obj + "</td>";
+                                textToInsert += "<td class='VIS_Pref_table-row1'>" + obj + "</td>";
                             }
                         }
                         else if (i == arrOfarr[a].length - 1) {

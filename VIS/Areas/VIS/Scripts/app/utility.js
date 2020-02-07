@@ -788,19 +788,19 @@
             var ulPopup = $("<ul class='vis-apanel-rb-ul'>");
             if (typeof options[VIS.Actions.zoom] !== "undefined")
                 ulPopup.append($("<li data-action='" + VIS.Actions.zoom + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
-                    "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
+                    "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
             if (options[VIS.Actions.preference])
-                ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog' /><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog'></i><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));
             if (options[VIS.Actions.refresh])
-                ulPopup.append($("<li data-action='" + VIS.Actions.refresh + "'><i data-action='" + VIS.Actions.refresh + "' class='vis vis-refresh' /><span data-action='" + VIS.Actions.refresh + "'>" + VIS.Msg.getMsg("Requery") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.refresh + "'><i data-action='" + VIS.Actions.refresh + "' class='vis vis-refresh'></i><span data-action='" + VIS.Actions.refresh + "'>" + VIS.Msg.getMsg("Requery") + "</span></li>"));
             if (options[VIS.Actions.add])
-                ulPopup.append($("<li data-action='" + VIS.Actions.add + "'><i data-action='" + VIS.Actions.add + "' class='vis vis-addbp' /><span data-action='" + VIS.Actions.add + "'>" + VIS.Msg.getMsg("Add") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.add + "'><i data-action='" + VIS.Actions.add + "' class='vis vis-addbp'></i><span data-action='" + VIS.Actions.add + "'>" + VIS.Msg.getMsg("Add") + "</span></li>"));
             if (options[VIS.Actions.update])
-                ulPopup.append($("<li data-action='" + VIS.Actions.update + "'><i data-action='" + VIS.Actions.update + "' class='vis vis-updatebp' /><span data-action='" + VIS.Actions.update + "'>" + VIS.Msg.getMsg("Update") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.update + "'><i data-action='" + VIS.Actions.update + "' class='vis vis-updatebp'></i><span data-action='" + VIS.Actions.update + "'>" + VIS.Msg.getMsg("Update") + "</span></li>"));
             if (options[VIS.Actions.remove])
-                ulPopup.append($("<li data-action='" + VIS.Actions.remove + "'><i data-action='" + VIS.Actions.remove + "' class='fa fa-arrow-left' /><span data-action='" + VIS.Actions.remove + "'>" + VIS.Msg.getMsg("Clear") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.remove + "'><i data-action='" + VIS.Actions.remove + "' class='fa fa-arrow-left'></i><span data-action='" + VIS.Actions.remove + "'>" + VIS.Msg.getMsg("Clear") + "</span></li>"));
             if (options[VIS.Actions.contact])
-                ulPopup.append($("<li data-action='" + VIS.Actions.contact + "'><i data-action='" + VIS.Actions.contact + "' class='fa fa-user' /><span data-action='" + VIS.Actions.contact + "'>" + VIS.Msg.getMsg("Contact") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.contact + "'><i data-action='" + VIS.Actions.contact + "' class='fa fa-user'></i><span data-action='" + VIS.Actions.contact + "'>" + VIS.Msg.getMsg("Contact") + "</span></li>"));
             return ulPopup;
         };
 
