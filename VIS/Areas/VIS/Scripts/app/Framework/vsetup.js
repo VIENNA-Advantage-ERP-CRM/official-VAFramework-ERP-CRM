@@ -27,14 +27,17 @@
 
         var $root = $("<div class='vis-forms-container' style='height:100%'>");
         // $root.height($(window).height() - 70);
-        var container = $("<div style='width:80%;height:100%;overflow:auto;' class='vis-pull-left'>");
+        var container = $("<div class='vis-its-main-wrap vis-pull-left'>");
 
         var subRoot = $("<div style='height:100%'>");
         $root.append(subRoot);
         subRoot.append(container);
-        var divRight = $("<div style='background-color: rgb(241, 241, 241);width:20%;height:100%;padding:15px;word-wrap: break-word;' class='vis-pull-right' >");
+        var divRight = $("<div class='vis-its-ryt-panel vis-pull-right' >");
+        var divRightInner = $("<div class='vis-its-ryt-panel-inner vis-pull-left' >");
+
         subRoot.append(divRight);
-        divRight.append($('<h3 style="margin-top:5px;font-size: 16px;font-weight: 200px;color: #1b95d7;">').append(VIS.Msg.getMsg('Result')));
+        divRight.append(divRightInner);
+        divRightInner.append($('<h3>').append(VIS.Msg.getMsg('Result')));
         var $busyDiv = $("<div class='vis-apanel-busy' style='height:100%'>");
         var windowNo = VIS.Env.getWindowNo();
 
@@ -69,7 +72,7 @@
             dContent.append(dTForm);
 
             //dTForm.append($("<div Style='margin-left:15px;margin-top:15px'>").append($("<label>").append(VIS.Msg.getMsg('TenantHeaderComment'))));
-            dTForm.append($("<h3 class='VIS_Pref_change-pass' style='margin-left:15px;margin-right: 15px;'>").append($("<label class='VIS_Pref_Label_Font' style='margin-top:0px'>").append(VIS.Msg.getMsg("TenantHeaderComment"))));
+            dTForm.append($("<h3 class='VIS_Pref_change-pass'>").append($("<label class='VIS_Pref_Label_Font'>").append(VIS.Msg.getMsg("TenantHeaderComment"))));
 
             var dTenant = $("<div class='vis-intial-form-data'>");
             dTenant.append($('<label>').append(VIS.Msg.translate(VIS.context, "AD_Client_ID")));
@@ -158,9 +161,9 @@
             //var liChks = $("<li>");
             //ulCase.append(liChks);
 
-            dTForm.append($('<div style="width:100%;float:left;">').append( $("<label  style='margin-right:15px;margin-left:15px;margin-top:10px;color: #499EDE;font-family: helvetica;font-weight: 400;font-size: 16px;' class='vis-pull-left'>").append(VIS.Msg.getMsg("Optional"))));
-            var dChkContainer = $('<div style="padding-left:15px;padding-right:15px;">');
-            var dChkBox = $("<div class='vis-intial-form-data' style='width: 100%;border:1px darkgrey solid;padding:10px;border-radius: 5px;margin-top:0px;'>");
+            dTForm.append($('<div style="width:100%;float:left;">').append($("<label  class='vis-cs-op-lbl' class='vis-pull-left'>").append(VIS.Msg.getMsg("Optional"))));
+            var dChkContainer = $('<div class="vis-fieldset-wrap">');
+            var dChkBox = $("<div class='vis-intial-form-data vis-fieldset-inn'>");
             dChkContainer.append(dChkBox);
             dTForm.append(dChkContainer);
             //liChks.append(dChkBox);
@@ -204,7 +207,7 @@
 
             // var dRbtns = $("<div class='initial-btn-right'>");
             var dLbtns = $("<div class='vis-initial-btn-left vis-pull-right'>");
-            dTForm.append(dLbtns);
+            dContent.append(dLbtns);
 
             var dDefaulAcct = $('<div style="display: inline;">');
             dLbtns.append(dDefaulAcct);
@@ -328,7 +331,7 @@
         var createTenant = function () {
             //showLog(null);
             //return;
-            divRight.empty();
+            divRightInner.empty();
             var clientName = txtTenant.val();
             if (clientName == null || clientName.length == 0 || clientName.trim().length == 0) {
                 VIS.ADialog.error('FillTenantName');
@@ -446,18 +449,18 @@
             
 
             if(tInfo.Log!=null && tInfo.Log.trim().length > 0){
-                divRight.append($('<div style="margin-bottom:10px">').append(" Error - " + tInfo.Log));
-                divRight.append($('<div style="margin-bottom:10px">').append(VIS.Msg.getMsg('VIS_TenantErrorMsg')));
+                divRightInner.append($('<div style="margin-bottom:10px">').append(" Error - " + tInfo.Log));
+                divRightInner.append($('<div style="margin-bottom:10px">').append(VIS.Msg.getMsg('VIS_TenantErrorMsg')));
             }
 
-            divRight.append($('<div style="margin-bottom:10px">').append(" Tenant Name - " + tInfo.TenantName));
-            divRight.append($('<div style="margin-bottom:10px">').append(" Organization Name - " + tInfo.OrgName));
-            divRight.append($('<div style="margin-bottom:10px">').append(" Admin Role - " + tInfo.AdminRole));
-            divRight.append($('<div style="margin-bottom:10px">').append(" User Role - " + tInfo.UserRole));
-            divRight.append($('<div style="margin-bottom:10px">').append(" Admin Username - " + tInfo.AdminUser));
-            divRight.append($('<div style="margin-bottom:10px">').append(" Admin User Password - " + tInfo.AdminUserPwd));
-            divRight.append($('<div style="margin-bottom:10px">').append(" Org Username - " + tInfo.OrgUser));
-            divRight.append($('<div style="margin-bottom:10px">').append(" Org User Password - " + tInfo.OrgUserPwd));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" Tenant Name - " + tInfo.TenantName));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" Organization Name - " + tInfo.OrgName));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" Admin Role - " + tInfo.AdminRole));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" User Role - " + tInfo.UserRole));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" Admin Username - " + tInfo.AdminUser));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" Admin User Password - " + tInfo.AdminUserPwd));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" Org Username - " + tInfo.OrgUser));
+            divRightInner.append($('<div style="margin-bottom:10px">').append(" Org User Password - " + tInfo.OrgUserPwd));
 
 
             //divRight.append($('<div style="margin-bottom:10px">').append(" Tenant Name - A"));
@@ -470,12 +473,12 @@
             //divRight.append($('<div style="margin-bottom:10px">').append(" Org User Password - BB"));
 
             var btnSave = null;
-            if (VIS.Application.isRTL) {
-                btnSave = $('<a href="javascript:void(o)" style="float:left;" class="vis-initial-btn vis-initial-btn-blue">').append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/Save24.png'>"));
-            }
-            else {
-                btnSave = $('<a href="javascript:void(o)" style="float:right;" class="vis-initial-btn vis-initial-btn-blue">').append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/Save24.png'>"));
-            }
+            //if (VIS.Application.isRTL) {
+            //    btnSave = $('<a href="javascript:void(o)" style="float:left;" class="vis-initial-btn vis-initial-btn-blue">').append($("<i class='vis vis-save'></i>"));
+            //}
+            //else {
+                btnSave = $('<a href="javascript:void(o)" class="vis-initial-btn vis-initial-btn-blue">').append($("<i class='vis vis-save'></i>"));
+            //}
             btnSave.on('click', function () {
 
                 var text = '';
