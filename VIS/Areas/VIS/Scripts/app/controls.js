@@ -994,7 +994,6 @@
         }
     };
 
-
     VSpan.prototype.getValue = function () {
         if (this.value != null) {
             return this.ctrl.text().toString();
@@ -5922,5 +5921,3 @@
     VIS.Controls.VProductContainer = VProductContainer;
     /* END */
 }(jQuery, VIS));
-
-
