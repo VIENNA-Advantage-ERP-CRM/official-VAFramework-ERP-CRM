@@ -469,7 +469,7 @@
 
         .vis-ad-w-p-tb-rc-a-list li span {
             font-size: 0.8rem;
-            padding-left: 2px;
+            padding-left: 5px;
         }
 
 .vis-ad-w-p-tb-rc .dropdown-menu {
@@ -1225,7 +1225,8 @@ li.vis-page-item-select {
 
 .vis-ad-w-p-header_root_common {
     overflow-x: auto;
-    font-family: 'NoirPro-Regular' !important;
+    /*font-family: 'NoirPro-Regular' !important;*/
+    font-family: 'Montserrat-Regular', sans-serif !important;
 }
 
 .vis-w-p-header-data-f {

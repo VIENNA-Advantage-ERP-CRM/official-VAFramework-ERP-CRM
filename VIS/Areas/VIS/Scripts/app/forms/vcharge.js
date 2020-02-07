@@ -49,9 +49,9 @@
 
         var sideDivWidth = 260;
         var minSideWidth = 50;
-        var selectDivWidth = $(window).width() - (sideDivWidth + 30);
-        var selectDivFullWidth = $(window).width() - (30 + minSideWidth);
-        var selectDivToggelWidth = selectDivWidth + sideDivWidth + 5;
+        var selectDivWidth = $(window).width() - (sideDivWidth);
+        var selectDivFullWidth = $(window).width() - (minSideWidth);
+        var selectDivToggelWidth = selectDivWidth + sideDivWidth ;
         var sideDivHeight = $(window).height() - 210;
 
 
@@ -69,82 +69,74 @@
             chkExpense.setValue(true);
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
             //left side div
-            leftsideDiv = $("<div id='sideDiv_" + $self.windowNo + "' style='float: left; margin-left: 0px; width:260px" +
-                ";height: 90%'>");//" + sideDivHeight + "
+            leftsideDiv = $("<div id='sideDiv_" + $self.windowNo + "' class='vis-archive-left-sidebar'>");//" + sideDivHeight + "
 
             //topLeftSide div
-            topLeftDiv = $("<div id='btnSpaceDiv_" + $self.windowNo + "' style='width: 260px; height: 45px;float: left;padding-left: 11px; padding-top: 11px;" +
-                       "background-color: #F1F1F1;   margin-bottom: 1px;'>" +
-                       "<button id='btnSpace_" + $self.windowNo + "' style='border: 0px;background-color: transparent; padding: 0px;' >" +
-                       "<img src='" + src + "' /></button></div>" +
+            topLeftDiv = $("<div id='btnSpaceDiv_" + $self.windowNo + "' class='vis-archive-l-s-head'>" +
+                       "<button id='btnSpace_" + $self.windowNo + "' class='vis-archive-sb-t-button'>" +
+                       "<i class='vis vis-arrow-left'></i></button></div>" +
                       "</div>");
 
             //left side parameter div
-            paradiv = $("<div style='float: left; width: 100%;background-color: #F1F1F1;height:" + sideDivHeight + "px ' id='parameterDiv_" + $self.windowNo + "'>");
+            paradiv = $("<div class='vis-archive-l-s-content' id='parameterDiv_" + $self.windowNo + "'>");
             leftsideDiv.append(topLeftDiv).append(paradiv);
 
             //Refresh
             src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
-            btnRefresh = $("<button id='btnRefresh_" + $self.windowNo + "' style='margin-bottom: 1px; margin-top: 0px; float: left;" +
-                "margin-left: 15px;height: 38px; ' class='VIS_Pref_btn-2'><img src='" + src + "'></button>");
+            btnRefresh = $("<button id='btnRefresh_" + $self.windowNo + "' style='margin-left: 12px;' class='VIS_Pref_btn-2 vis-frm-button vis-pull-left'><i class='vis vis-refresh'></i></button>");
             //JID_0134: Change the button name as "Create New" available at left section.
             //Create charge
-            btnCreateCharge = $("<input id='btnCreateCharge_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px;" +
-               "margin-top: 1px; float: right; margin-right:10px; height:38px;' type='button' value='" + VIS.Msg.getMsg("CreateNew", false, false) + "'>");
+            btnCreateCharge = $("<input id='btnCreateCharge_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' type='button' value='" + VIS.Msg.getMsg("CreateNew", false, false) + "'>");
             //Cancel button
-            btnCancel = $("<input id='btnCancel_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px; margin-top: 1px; float: right;" +
-               "margin-right:5px; width:70px; height:38px;' type='button' value='" + VIS.Msg.getMsg("Cancel", false, false) + "'>");
+            btnCancel = $("<input id='btnCancel_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' type='button' value='" + VIS.Msg.getMsg("Cancel", false, false) + "'>");
             //JID_0134: Change the button name as "Create From Account" at right section.
             //Create charge from Account
-            btnAccount = $("<input id='btnAccount_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px;" +
-               "margin-top: 1px; float:right; margin-right: 0px; height:38px;' type='button' value='" + VIS.Msg.getMsg("ChargeFromAccount", false, false) + "'>");
+            btnAccount = $("<input id='btnAccount_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' type='button' value='" + VIS.Msg.getMsg("ChargeFromAccount", false, false) + "'>");
 
 
             var tble = $("<table style='width: 100%;'>");
             var tr = $("<tr>");
-            var td = $("<td style='padding: 4px 15px 2px;'>");
+            var td = $("<td style='padding: 0px 10px 0px;'>");
             paradiv.append(tble);
             tble.append(tr);
             tr.append(td);
             td.append(lblSearchKey.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(txtSearchKey.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblName.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(txtName.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(chkExpense.getControl().css("height", "30px"));
 
-            bottumDiv = $("<div style='width: 100%; height: 45px; float: left; background-color: #F1F1F1;'>");
-            var buttonDiv = $("<div style='width: 100%; float: right; text-align: right; margin-bottom: 0px;'>");
+            bottumDiv = $("<div class='vis-frm-bot-btn-wrp'>");
+            var buttonDiv = $("<div class='vis-frm-bttsec'>");
             buttonDiv.append(btnAccount).append(btnCancel);
 
             bottumDiv.append(btnCreateCharge).append(btnRefresh);
 
             //Right side div
-            rightSideGridDiv = $("<div id='rightSideGridDiv_" + $self.windowNo + "' style='height: 98%; float: right; " +
-               " margin-left: 15px;margin-right: 15px;'>");
-            rightSideGridDiv.css("width", selectDivWidth);
+            rightSideGridDiv = $("<div id='rightSideGridDiv_" + $self.windowNo + "' class='vis-frm-grid-wrap'>");
+            //rightSideGridDiv.css("width", selectDivWidth);
 
-            gridDiv = $("<div id='gridDiv_" + $self.windowNo + "' style=' float: left; border: 1px solid rgb(169, 169, 169); width: 100%;margin-top: 1px;" +
-               "height:" + (paradiv.height() + 45) + "px'>");
+            gridDiv = $("<div id='gridDiv_" + $self.windowNo + "' class='vis-frm-grid-inn'>");
             rightSideGridDiv.append(gridDiv);
             rightSideGridDiv.append(buttonDiv);
             //Add to root
@@ -397,7 +389,7 @@
                         // btnToggel.animate({ width: sideDivWidth }, "slow");
                         rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
                         //paradiv.css("display", "block");
-                        topLeftDiv.animate({ width: sideDivWidth }, "slow");
+                        //topLeftDiv.animate({ width: sideDivWidth }, "slow");
                         leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
                             dGrid.resize();
                         });
@@ -421,7 +413,7 @@
 
                         toggleside = true;
                         // btnToggel.animate({ width: minSideWidth }, "slow");
-                        topLeftDiv.animate({ width: minSideWidth }, "slow");
+                        //topLeftDiv.animate({ width: minSideWidth }, "slow");
                         leftsideDiv.animate({ width: minSideWidth }, "slow");
                         // paradiv.css("display", "none");
                         rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
@@ -429,6 +421,24 @@
                         });
                     }
                 });
+
+            //size chnage 
+            //this.sizeChanged = function (h, w) {
+            //    selectDivWidth = w - (sideDivWidth + 1);
+            //    var selectDivFullWidth = w - (minSideWidth);
+            //    if (toggleside == true) {
+            //        leftsideDiv.animate({ width: minSideWidth }, "slow");
+            //        rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
+            //            dGrid.resize();
+            //        });
+            //    }
+            //    else {
+            //        rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
+            //        leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
+            //            dGrid.resize();
+            //        });
+            //    }
+            //}
 
             if (btnAccount != null)
                 btnAccount.on(VIS.Events.onTouchStartOrClick, function () {

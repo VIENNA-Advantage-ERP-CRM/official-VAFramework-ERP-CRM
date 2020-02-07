@@ -6,9 +6,9 @@
         var ctx = VIS.Env.getCtx();
         var $self = this;
         var $root = $('<div class="vis-allocate-root vis-forms-container">');
-        var $row1 = $('<div class="vis-leftpanel-wrapper" style="padding-right:0px">');
+        var $row1 = $('<div class="vis-leftpanel-wrapper vis-pad-0">');
         //set height of filters div and Process Button div
-        var $innerRow = $('<div style="height: calc(100% - 42px);padding-right:15px; overflow: auto;">');
+        var $innerRow = $('<div class="vis-leftpanel-inn-wrap" >');
         var rowContiner = $('<div class="vis-allocation-rightContainer">');
         var $row2 = $('<div class="vis-allocate-paymentdiv" >');
         var $row3 = $('<div class="vis-allocate-cashdiv" >');
@@ -249,7 +249,7 @@
             //------------------------------
             $root.append($row1.append($innerRow)).append(rowContiner);
             // to set process button static in design it will not scroll with other filters
-            var $divProcess = $('<div style="padding-right: 15px;">');
+            var $divProcess = $('<div style="padding-right: 15px; margin-top: 10px;">');
             $divProcess.append(' <a class="vis-group-btn vis-group-create vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg('Process') + '</a>');
             $row1.append($divProcess);
             $root.append($row1.append($innerRow).append($divProcess)).append(rowContiner);
@@ -1005,8 +1005,8 @@
                 + '<div class="panel panel-default">'
                 + '<div class="panel-heading" role="tab" id="headingOne">'
                 + '<h4 class="panel-title">'
-                + '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="VIS-Accordion-head collapsed">' + VIS.Msg.getMsg("InvoiceFilter")
-                + '<i class="glyphicon glyphicon-chevron-down pull-right"></i>'
+                + '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="VIS-Accordion-head collapsed"><span>' + VIS.Msg.getMsg("InvoiceFilter") 
+                + '</span><i class="glyphicon glyphicon-chevron-down pull-right"></i>'
                 + '</a>'
                 + '</h4>'
                 + '</div>'
@@ -1099,14 +1099,14 @@
         };
 
         function createRow2() {
-            $row2.append('<div style=" width: 100%; float: left; "><p style="float:left;">' + VIS.translatedTexts.C_Payment_ID + '</p>  <input style="float:left;" type="checkbox" id="paymentselectall" /><p class="vis-allocate-paymentSum">' + VIS.Msg.getMsg("SelectedPayments") + '0-Sum 0.00</p></div>').append('<div class="vis-allocation-payment-grid"></div>');//.append('<p class="vis-allocate-paymentSum">0-Sum 0.00</p>');
+            $row2.append('<div class="d-flex"><p>' + VIS.translatedTexts.C_Payment_ID + '</p>  <input type="checkbox" id="paymentselectall" /><p class="vis-allocate-paymentSum">' + VIS.Msg.getMsg("SelectedPayments") + '0-Sum 0.00</p></div>').append('<div class="vis-allocation-payment-grid"></div>');//.append('<p class="vis-allocate-paymentSum">0-Sum 0.00</p>');
             $divPayment = $row2.find('.vis-allocation-payment-grid');
             $lblPaymentSum = $row2.find('.vis-allocate-paymentSum');
             $paymentSelctAll = $row2.find('#paymentselectall');
         };
 
         function createRow3() {
-            $row3.append('<div style=" width: 100%; float: left; "><p style="float:left;">' + VIS.translatedTexts.C_CashLine_ID + '</p> <input style="float:left;" type="checkbox" id="cashselectall" /><p class="vis-allocate-cashSum">' + VIS.Msg.getMsg("SelectedCashlines") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
+            $row3.append('<div class="d-flex"><p>' + VIS.translatedTexts.C_CashLine_ID + '</p> <input type="checkbox" id="cashselectall" /><p class="vis-allocate-cashSum">' + VIS.Msg.getMsg("SelectedCashlines") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
             $divCashline = $row3.find('.vis-allocation-cashLine-grid');
             $lblCashSum = $row3.find('.vis-allocate-cashSum');
             $cashSelctAll = $row3.find('#cashselectall');
@@ -1114,7 +1114,7 @@
 
         function createRow4() {
             //
-            $row4.append('<div style=" width: 100%; float: left; "><p style="float:left;">' + VIS.translatedTexts.C_Invoice_ID + '</p> <input style="float:left;" type="checkbox" id="invoiceselectall" /><p style="float:left;margin-left: 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="clrbutton_' + $self.windowNo + '" style="float:left;cursor: pointer !important;margin-left: 5px;margin-top: 2px;" class="glyphicon glyphicon-refresh"></span><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
+            $row4.append('<div class="d-flex"><p>' + VIS.translatedTexts.C_Invoice_ID + '</p> <input type="checkbox" id="invoiceselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="clrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
             $divInvoice = $row4.find('.vis-allocation-invoice-grid');
             $lblInvoiceSum = $row4.find('.vis-allocate-invoiceSum');
             $invSelectAll = $row4.find('#invoiceselectall');
@@ -1123,7 +1123,7 @@
         };
         //added grid design for gl-allocation
         function createRow5() {
-            $row5.append('<div style=" width: 100%; float: left; "><p style="float:left;">' + VIS.translatedTexts.GL_Journal_ID + '</p> <input style="float:left;" type="checkbox" id="glselectall" /><p class="vis-allocate-glSum">' + VIS.Msg.getMsg("SelectedGL") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-gl-grid" style="height:400px;"></div>');
+            $row5.append('<div class="d-flex"><p>' + VIS.translatedTexts.GL_Journal_ID + '</p> <input type="checkbox" id="glselectall" /><p class="vis-allocate-glSum">' + VIS.Msg.getMsg("SelectedGL") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-gl-grid" style="height:400px;"></div>');
             $divGl = $row5.find('.vis-allocation-gl-grid');
             $lblglSum = $row5.find('.vis-allocate-glSum');
             $glSelectAll = $row5.find('#glselectall');
