@@ -4188,6 +4188,7 @@
                         tht.statusBar.setInfo(err);
                 });
 
+
             //if (trxInfo != null)
             //    this.statusBar.setInfo(trxInfo);
 
@@ -6273,7 +6274,7 @@
                     }
 
                     str += '<li ><img alt="' + panels[i].getName() + '" title="' + panels[i].getName() + '" default="' + panels[i].getIsDefault() + '" data-panelID="' + panels[i].getAD_TabPanel_ID() + '" data-cName="' + panels[i].getClassName()
-                        + '" data-Name="' + panels[i].getName() + '" src="' + VIS.Application.contextUrl + 'Areas/' + iconPath + '"></img></li>';
+                        + '" data-Name="' + panels[i].getName() + '" data-extrainfo="' + panels[i].getExtraInfo() + '" src="' + VIS.Application.contextUrl + 'Areas/' + iconPath + '"></img></li>';
                 }
                 this.ul_tabPanels = str;
             }

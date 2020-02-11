@@ -601,7 +601,7 @@
         return this.vo.ShowSummaryLevel;
     };
 
-    GridTab.prototype.getIsTPBottomAligned = function (){
+    GridTab.prototype.getIsTPBottomAligned = function () {
         return this.vo.TabPanelAlignment == "H";
     };
 
@@ -956,7 +956,7 @@
                     var lines = dr.getInt(0);
                     arguments[0] = lines;
                     //	{1} - Line toral
-                    var lineTotal = dr.getDecimal(2).toLocaleString() ;//.toFixed(2);
+                    var lineTotal = dr.getDecimal(2).toLocaleString();//.toFixed(2);
                     arguments[1] = lineTotal;
                     //	{2} - Grand total (including tax, etc.)
                     var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
@@ -1341,7 +1341,7 @@
         else {
             return '250px';
         }
-        
+
     };
 
     GridTab.prototype.getHeaderBackColor = function () {
@@ -1839,12 +1839,14 @@
         return retValue;
 
     }; // dataNew
-
     GridTab.prototype.dataDelete = function (indices) {
         var retValue = this.gridTable.dataDelete(indices, this.currentRow);
         this.setCurrentRow(this.currentRow, true);
         return retValue;
     };
+
+    
+
 
     GridTab.prototype.findColumn = function (columnName) {
         return this.gridTable.findColumn(columnName);
@@ -4552,6 +4554,144 @@
         return true;
     };
 
+    GridTable.prototype.dataDeleteAsync = function (selIndices, currentRow) {
+        var localthis = this;
+        return new Promise(function (resolve, reject) {
+            if (!selIndices || selIndices.length < 0) {
+                resolve(false);
+                return;
+            }
+
+            //	Tab R/O
+            if (localthis.readOnly) {
+                localthis.fireDataStatusEEvent("AccessCannotDelete", "", true);	//	privileges
+                resolve(false);
+                return;
+            }
+
+            //	Is this record deletable?
+            if (!localthis.deleteable) {
+                tlocalthishis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
+                resolve(false);
+                return;
+            }
+
+
+            var hasKeyColumn = localthis.gTable._indexKeyColumn != -1;
+            var hasProcessedColumn = localthis.gTable._indexProcessedColumn > 0 && !localthis.gTable._tableName.startsWith("I_");
+            var hasProcessedRecord = [];
+
+            //PrepareJson Object
+            var recIds = [];
+            var singleKeyWhere = [];
+            var multiKeyWhere = [];
+            var AD_Table_ID = localthis.AD_Table_ID;
+
+
+
+            var rowData = null;
+
+            //prepare postive list 
+            //collect all records, exclude processed records
+            for (var sel = 0; sel < selIndices.length; sel++) {
+
+                rowData = localthis.mSortList[selIndices[sel]];
+
+                if (hasProcessedColumn) {
+
+                    var processed = localthis.getValueAt(selIndices[sel], "processed");
+                    if (processed != null && processed) {
+                        //fireDataStatusEEvent("CannotDeleteTrx", "", true);
+                        hasProcessedRecord.push(rowData.recid);
+                        continue;
+                    }
+                }
+
+                recIds.push(rowData.recid);
+                if (hasKeyColumn) {
+                    singleKeyWhere.push(rowData[localthis.keyColumnName.toLowerCase()]);
+                }
+                else {
+                    multiKeyWhere.push(localthis.getWhereClause(rowData));
+                }
+            } //end
+
+            var out = null;
+            if (recIds.length > 0) //has records to delete
+            {
+                var inn = {
+                    RecIds: recIds,
+                    HasKeyColumn: hasKeyColumn,
+                    TableName: localthis.gTable._tableName,
+                    AD_Table_ID: AD_Table_ID
+                }
+                if (hasKeyColumn)
+                    inn.SingleKeyWhere = singleKeyWhere;
+                else
+                    inn.MultiKeyWhere = multiKeyWhere;
+
+                //var that = this;
+
+                //call Delete
+                out = VIS.dataContext.deleteWRecords(inn).then(function (out) {
+                    out = JSON.parse(out);
+                    if (out) {
+
+                        var selIndexOrIds = null;
+                        if (out.UnDeletedRecIds && out.UnDeletedRecIds.length > 0) {
+                            selIndexOrId = out.UnDeletedRecIds;
+                        }
+                        else if (hasProcessedRecord.length > 0) {
+                            selIndexOrId = hasProcessedRecord;
+                        }
+                        else {
+                            selIndexOrId = currentRow;
+                        }
+
+                        if (out.DeletedRecIds && out.DeletedRecIds.length > 0) {
+                            localthis.rowCount -= out.DeletedRecIds.length;
+                            localthis.fireTableModelChanged(VIS.VTable.prototype.ROW_DELETE, out.DeletedRecIds, selIndexOrId);
+
+                            if (out.RecIds && out.RecIds.length > 0)
+                                localthis.fireRowChanged(false, out.RecIds);
+
+                        }
+
+                        if (out.ErrorMsg) {
+                            localthis.log.log(Level.SEVERE, out.ErrorMsg);
+                        }
+                        if (out.InfoMsg) {
+                            localthis.log.log(Level.Info, out.InfoMsg);
+                        }
+
+                        if (out.IsError) {
+
+                            if (out.FireEEvent)
+                                localthis.fireDataStatusEEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
+                            resolve(false);
+                            return;
+                        }
+                        else {
+
+                            localthis.changed = false;
+                            localthis.rowChanged = -1;
+                            localthis.fireDataStatusIEvent("Deleted", "");
+                        }
+                        resolve(true);
+                        return;
+                    }
+                });
+
+            }
+            else if (hasProcessedRecord.length > 0) //Single Record
+            {
+                this.fireDataStatusEEvent("CannotDeleteTrx", "", true);
+                resolve(false);
+                return ;
+            }
+        });
+    };
+
     GridTable.prototype.readData = function (dr) {
         var rowDB = {};
         var size = this.gridFields.length;
@@ -4856,15 +4996,15 @@
         // return false if new Record is inserted
         // do not ask for date if new Record
         // if (oldRowData["updatedby"]) {
-            if (this.gridFields && this.gridFields.length > 0) {
-                for (var i = 0; i < this.gridFields.length; i++) {
-                    if (this.gridFields[i].vo.IsMaintainVersions) {
-                        var colName = this.gridFields[i].vo.ColumnName.toLowerCase();
-                        if (rowData[colName] != oldRowData[colName])
-                            return true;
-                    }
+        if (this.gridFields && this.gridFields.length > 0) {
+            for (var i = 0; i < this.gridFields.length; i++) {
+                if (this.gridFields[i].vo.IsMaintainVersions) {
+                    var colName = this.gridFields[i].vo.ColumnName.toLowerCase();
+                    if (rowData[colName] != oldRowData[colName])
+                        return true;
                 }
             }
+        }
         // }
         return false;
     };
@@ -6317,6 +6457,10 @@
 
     GridTabPanel.prototype.getSeqNo = function () {
         return this.vo.SeqNo;
+    }
+
+    GridTabPanel.prototype.getExtraInfo = function () {
+        return this.vo.ExtraInfo;
     }
 
 

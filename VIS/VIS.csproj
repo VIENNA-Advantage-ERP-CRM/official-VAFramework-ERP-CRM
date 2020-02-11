@@ -739,6 +739,7 @@
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
     <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
+    <Content Include="Areas\VIS\Scripts\tabpanels\bipanel.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
     <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
     <Content Include="Areas\VIS\Scripts\VIS1_0.min.js" />
@@ -834,6 +835,7 @@
     <Compile Include="Areas\VIS\Controllers\ResourceController.cs" />
     <Compile Include="Areas\VIS\Controllers\SmsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\TabPanel\BiPanelController.cs" />
     <Compile Include="Areas\VIS\Controllers\TreeMaintenanceController.cs" />
     <Compile Include="Areas\VIS\Controllers\UserPreferenceController.cs" />
     <Compile Include="Areas\VIS\Controllers\ValuePreferenceController.cs" />
@@ -941,6 +943,7 @@
     <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
     <Compile Include="Areas\VIS\Models\SmsModel.cs" />
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
+    <Compile Include="Areas\VIS\Models\TabPanels\BiPanelModel.cs" />
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
     <Compile Include="Areas\VIS\Models\ValuePreferenceModel.cs" />
@@ -1026,6 +1029,7 @@
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Areas\VIS\Views\BiPanel\GetUserBILogin.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

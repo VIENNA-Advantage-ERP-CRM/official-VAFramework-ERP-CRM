@@ -3156,7 +3156,7 @@
 
         VIS.ADialog.confirm("DeleteRecord?", true, "", "Confirm", function (result) {
             if (result) {
-                thisPanel.curGC.dataDelete();
+                thisPanel.curGC.dataDeleteAsync();
             }
         });
 

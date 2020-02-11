@@ -53,7 +53,7 @@
             if ($target) {
                 selLI= $target.addClass('vis-ad-w-p-ap-tp-o-li-selected');
                 $spnName.text($target.data('name'));
-                self.setCurrentPanel($target.data('cname'), windowNo);
+                self.setCurrentPanel($target.data('cname'), windowNo, $target.data('extrainfo'));
             }
             else 
                 self.setCurrentPanel(null);
@@ -130,7 +130,7 @@
                     iconPath = 'fa fa-object-group';// 'VIS/Images/base/defPanel.ico';// "fa fa-window-maximize";//'VIS/Images/base/defPanel.ico';
                 }
                 str.push('<li default="' + panels[i].getIsDefault() + '" data-panelid="' + panels[i].getAD_TabPanel_ID() +
-                    '" data-cname="' + panels[i].getClassName() + '" data-name="' + panels[i].getName() + '">');
+                    '" data-cname="' + panels[i].getClassName() + '" data-name="' + panels[i].getName() + '"  data-extrainfo="' + panels[i].getExtraInfo() + '" >');
                 if (iconPath.indexOf('.')>-1)
                     str.push('<img alt = "' + panels[i].getName() + '" title = "' + panels[i].getName() +
                         '"  src = "' + VIS.Application.contextUrl + 'Areas/' + iconPath + '" onerror=this.src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/defpanel.ico"></img >');
@@ -150,7 +150,7 @@
         this.sizeChangedListner = lsner;
     };
 
-    VTabPanel.prototype.setCurrentPanel = function (className, windowNo) {
+    VTabPanel.prototype.setCurrentPanel = function (className, windowNo,extrainfo) {
         if (this.curTabPanel) {
             if (this.curTabPanel.dispose) {
                 this.curTabPanel.dispose();
@@ -161,7 +161,7 @@
             var type = VIS.Utility.getFunctionByName(className, window);
             if (type) {
                 var panel = new type();
-                panel.startPanel(windowNo, this.gTab);
+                panel.startPanel(windowNo, this.gTab, extrainfo);
                 if (this.gTab.getRecord_ID() > -1) {
                     panel.refreshPanelData(this.gTab.getRecord_ID(), this.gTab.getTableModel().getRow(this.gTab.getCurrentRow()));
                 }
