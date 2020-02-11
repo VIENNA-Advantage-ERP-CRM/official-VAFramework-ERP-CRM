@@ -423,22 +423,22 @@
                 });
 
             //size chnage 
-            //this.sizeChanged = function (h, w) {
-            //    selectDivWidth = w - (sideDivWidth + 1);
-            //    var selectDivFullWidth = w - (minSideWidth);
-            //    if (toggleside == true) {
-            //        leftsideDiv.animate({ width: minSideWidth }, "slow");
-            //        rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
-            //            dGrid.resize();
-            //        });
-            //    }
-            //    else {
-            //        rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
-            //        leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
-            //            dGrid.resize();
-            //        });
-            //    }
-            //}
+            this.sizeChanged = function (h, w) {
+                selectDivWidth = w - (sideDivWidth + 1);
+                selectDivFullWidth = w - (minSideWidth + 1);
+                if (toggleside == true) {
+                    leftsideDiv.animate({ width: minSideWidth }, "slow");
+                    rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
+                        dGrid.resize();
+                    });
+                }
+                else {
+                    rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
+                    leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
+                        dGrid.resize();
+                    });
+                }
+            }
 
             if (btnAccount != null)
                 btnAccount.on(VIS.Events.onTouchStartOrClick, function () {

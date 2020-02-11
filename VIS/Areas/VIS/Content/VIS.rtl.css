@@ -154,7 +154,8 @@ html[dir="rtl"] .VIS_Pref_err_btnRight span,
 html[dir="rtl"] .vis-viewMoreComments,
 html[dir="rtl"] .vis-group-user-ico,
 html[dir="rtl"] .VIS-TM-data-head input[type="checkbox"],
-html[dir="rtl"] .vis-advancedSearchHorigontal {
+html[dir="rtl"] .vis-advancedSearchHorigontal,
+html[dir="rtl"] .vis-btnOk {
     margin-right: 0;
     margin-left: 10px;
 }
