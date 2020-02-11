@@ -28,12 +28,11 @@
     overflow: auto;
 }
 
-.vis-email-leftDiv
-{
+.vis-email-leftDiv {
     width: 200px;
     float: left;
     height: 100%;
-    background-color: #444343;
+    background-color: rgba(var(--v-c-on-secondary), 1);
     display: inline;
     overflow: auto;
 }

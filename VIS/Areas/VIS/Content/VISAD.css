@@ -501,28 +501,27 @@
     height: 40px;
     /*padding-top:4px;*/
     border-top: 1px solid white;
-    background-color: #444343;
+    /*background-color: #444343;*/
     /*position:absolute;
     bottom:40px;*/
 }
-
-    .vis-apanel-lb-oflow a {
-        height: 18px;
-        display: block;
-        /*position:absolute;
-    bottom:40px;*/
-        text-align: left;
-    }
+.vis-apanel-lb-oflow a {
+    /* height: 18px; */
+    display: block;
+    text-align: left;
+    font-size: 1rem;
+    color: rgba(var(--v-c-on-primary),1);
+}
 
     .vis-apanel-lb-oflow img {
-        vertical-align: central;
+        /*vertical-align: central;*/
     }
 
 
 
 .vis-apanel-lb-toggle {
-    background: rgba(var(--v-c-on-secondary), 0.2);
-    /* border-bottom: 1px solid white; */
+    /*background: rgba(var(--v-c-on-secondary), 0.2);*/
+    border-bottom: 1px solid rgba(var(--v-c-secondary), 1);
     padding-top: 7px;
     padding-bottom: 7px;
     padding-left: 10px;
