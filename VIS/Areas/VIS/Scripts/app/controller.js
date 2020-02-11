@@ -4065,63 +4065,81 @@
         }
 
         // check if this is master window and if there is change in maintain version field
-        if (this.onlyCurrentDays == 0 && this.maintainVersionFieldChanged(RowData, OldRowData)) {
-            var self = this;
-            // in case of new record in Master Version window
-            if (OldRowData["updatedby"] == null) {
-                if (!this.MaintainVerOnApproval || (this.MaintainVerOnApproval && VIS.context.getWindowContext(this.gTable._windowNo, VIS.Env.approveCol) == 'Y')) {
-                    gridTableIn.MaintainVersions = true;
-                    gridTableIn.ImmediateSave = true;
-                    gridTableIn.ValidFrom = new Date().toISOString();
-                }
-                var out = self.dataSaveDB(gridTableIn, rowDataNew);
-                // check if there is workflow linked on version table
-                // then do not save in Master window and reset 
-                // and display message to user
-                if (out.Status == "E") {
-                    if (!(out.FireEEvent || out.FireIEvent))
-                        VIS.ADialog.info(out.ErrorMsg);
-                }
-                else if (out.Status == "W") {
-                    VIS.ADialog.info("SentForApproval");
-                    self.dataRefreshAll();
-                }
-                return out.Status;
-            }
-            else if (this.MaintainVerOnApproval && VIS.context.getWindowContext(this.gTable._windowNo, VIS.Env.approveCol) != 'Y') {
-                var out = this.dataSaveDB(gridTableIn, rowDataNew);
-                return out.Status;
-            }
-            else {
-                // in case of update display UI to user, 
-                // whether user want to save immediately or for future
-                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, function (immediate, valFrom, verRecID) {
-                    gridTableIn.MaintainVersions = true;
-                    gridTableIn.ImmediateSave = immediate;
-                    gridTableIn.ValidFrom = new Date(valFrom).toISOString();
-                    gridTableIn.VerRecID = verRecID;
+        if (this.onlyCurrentDays == 0) {
+            if (this.maintainVersionFieldChanged(RowData, OldRowData)) {
+                var self = this;
+                // in case of new record in Master Version window
+                if (OldRowData["updatedby"] == null) {
+                    if (!this.MaintainVerOnApproval || (this.MaintainVerOnApproval && VIS.context.getWindowContext(this.gTable._windowNo, VIS.Env.approveCol) == 'Y')) {
+                        gridTableIn.MaintainVersions = true;
+                        gridTableIn.ImmediateSave = true;
+                        gridTableIn.ValidFrom = new Date().toISOString();
+                    }
                     var out = self.dataSaveDB(gridTableIn, rowDataNew);
-                    // if Stauts is not OK
-                    if (out.Status != "O") {
-                        // if there is any error then display error message
-                        if (out.Status == "E") {
-                            if (!(out.FireEEvent || out.FireIEvent))
-                                VIS.ADialog.info(out.ErrorMsg);
-                        }
-                        else {
-                            // in case of sucess refresh UI
-                            self.dataRefreshAll();
-                            // if sent for WF Approval then display Message
-                            if (out.Status == "W")
-                                VIS.ADialog.info("SentForApproval");
-                            // if saved for future then display Message and refresh UI
-                            else if (out.Status == "F")
-                                VIS.ADialog.info("SavedForFuture");
-                        }
+                    // check if there is workflow linked on version table
+                    // then do not save in Master window and reset 
+                    // and display message to user
+                    if (out.Status == "E") {
+                        if (!(out.FireEEvent || out.FireIEvent))
+                            VIS.ADialog.info(out.ErrorMsg);
+                    }
+                    else if (out.Status == "W") {
+                        VIS.ADialog.info("SentForApproval");
+                        self.dataRefreshAll();
                     }
                     return out.Status;
-                });
-                msVer.show();
+                }
+                else if (this.MaintainVerOnApproval && VIS.context.getWindowContext(this.gTable._windowNo, VIS.Env.approveCol) != 'Y') {
+                    var out = this.dataSaveDB(gridTableIn, rowDataNew);
+                    return out.Status;
+                }
+                else {
+                    // in case of update display UI to user, 
+                    // whether user want to save immediately or for future
+                    var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, function (immediate, valFrom, verRecID) {
+                        gridTableIn.MaintainVersions = true;
+                        gridTableIn.ImmediateSave = immediate;
+                        gridTableIn.ValidFrom = new Date(valFrom).toISOString();
+                        gridTableIn.VerRecID = verRecID;
+                        var out = self.dataSaveDB(gridTableIn, rowDataNew);
+                        // if Stauts is not OK
+                        if (out.Status != "O") {
+                            // if there is any error then display error message
+                            if (out.Status == "E") {
+                                if (!(out.FireEEvent || out.FireIEvent))
+                                    VIS.ADialog.info(out.ErrorMsg);
+                            }
+                            else {
+                                // in case of sucess refresh UI
+                                self.dataRefreshAll();
+                                // if sent for WF Approval then display Message
+                                if (out.Status == "W")
+                                    VIS.ADialog.info("SentForApproval");
+                                // if saved for future then display Message and refresh UI
+                                else if (out.Status == "F")
+                                    VIS.ADialog.info("SavedForFuture");
+                            }
+                        }
+                        return out.Status;
+                    });
+                    msVer.show();
+                }
+            }
+            else {
+                var self = this;
+                var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Common/CheckVersions", { RowData: gridTableIn });
+                if (res.result) {
+                    VIS.ADialog.confirm("FoundVersions", true, "", "Confirm", function (result) {
+                        if (result) {
+                            var out = self.dataSaveDB(gridTableIn, rowDataNew);
+                            return out.Status;
+                        }
+                    });
+                }
+                else {
+                    var out = this.dataSaveDB(gridTableIn, rowDataNew);
+                    return out.Status;
+                }
             }
         }
         else {

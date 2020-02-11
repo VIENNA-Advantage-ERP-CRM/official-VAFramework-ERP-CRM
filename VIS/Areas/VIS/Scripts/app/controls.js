@@ -3725,7 +3725,10 @@
                 return;
             }
             // passed new parameter for Maintain Versions in case of Location Control
-            var obj = new VIS.LocationForm(self.value, self.mField.vo.IsMaintainVersions);
+            var maintainVers = null;
+            if (self.mField && self.mField.vo)
+                maintainVers = self.mField.vo.IsMaintainVersions;
+            var obj = new VIS.LocationForm(self.value, maintainVers);
             obj.load();
             obj.showDialog();
             obj.onClose = function (location, change) {

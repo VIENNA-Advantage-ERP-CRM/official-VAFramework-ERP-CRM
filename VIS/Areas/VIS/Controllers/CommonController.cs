@@ -15,6 +15,7 @@ using VAdvantage.Model;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 using VIS.Classes;
+using VIS.DataContracts;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -446,6 +447,18 @@ namespace VIS.Controllers
                 return Json(retJSON, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CheckVersions(SaveRecordIn RowData)
+        {
+            bool hasRecords = false;
+            if (Session["Ctx"] != null)
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                CommonModel cmm = new CommonModel();
+                hasRecords = cmm.HasVersions(ctx, RowData);
+            }
+            return Json(new { result = hasRecords }, JsonRequestBehavior.AllowGet);
         }
     }
 
@@ -953,6 +966,8 @@ namespace VIS.Controllers
                 return _iData;
             }
         }
+
+
 
         public bool SaveShipmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_Locator_ID, int M_InOut_ID, int Container_ID)
         {
@@ -3263,6 +3278,70 @@ namespace VIS.Controllers
                 return retRes;
             }
             return retRes;
+        }
+
+        public bool HasVersions(Ctx ctx, SaveRecordIn rowData)
+        {
+            if (rowData != null)
+            {
+                MTable tbl = new MTable(ctx, rowData.AD_Table_ID, null);
+
+                StringBuilder sbSql = new StringBuilder("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE TableName = '" + rowData.TableName + "_Ver'");
+
+                int Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString(), null, null));
+
+                if (Count > 0)
+                {
+                    if (tbl.IsSingleKey())
+                    {
+                        if (rowData.Record_ID > 0)
+                        {
+                            sbSql.Clear();
+                            sbSql.Append(@"SELECT COUNT(" + rowData.TableName + "_ID) FROM " + rowData.TableName + "_Ver " +
+                                " WHERE " + rowData.TableName + "_ID = " + rowData.Record_ID + " AND ProcessedVersion = 'N' AND VersionLog IS NULL AND TRUNC(VersionValidFrom) >= TRUNC(SYSDATE)");
+                            Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString()));
+                            if (Count > 0)
+                                return true;
+                        }
+                        return false;
+                    }
+                    else
+                    {
+                        sbSql.Clear();
+                        
+                        string[] keyCols = tbl.GetKeyColumns();
+                        bool hasCols = false;
+                        for (int w = 0; w < keyCols.Length; w++)
+                        {
+                            hasCols = true;
+                            if (w == 0)
+                            {
+                                sbSql.Append(@"SELECT COUNT(" + keyCols[w] + ") FROM " + rowData.TableName + "_Ver WHERE ");
+
+                                if (keyCols[w] != null)
+                                    sbSql.Append(keyCols[w] + " = " + rowData.RowData[keyCols[w].ToLower()]);
+                                else
+                                    sbSql.Append(" NVL(" + keyCols[w] + ",0) = 0");
+                            }
+                            else
+                            {
+                                if (keyCols[w] != null)
+                                    sbSql.Append(" AND " + keyCols[w] + " = " + rowData.RowData[keyCols[w].ToLower()]);
+                                else
+                                    sbSql.Append(" AND NVL(" + keyCols[w] + ",0) = 0");
+                            }
+                        }
+                        if (hasCols)
+                        {
+                            sbSql.Append(" AND ProcessedVersion = 'N' AND VersionLog IS NULL AND TRUNC(VersionValidFrom) >= TRUNC(SYSDATE)");
+                            Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString()));
+                            if (Count > 0)
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 

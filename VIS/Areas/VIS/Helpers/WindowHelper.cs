@@ -876,6 +876,7 @@ namespace VIS.Helpers
                 versionInfo.Record_ID = Record_ID;
                 versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
+                versionInfo.TableName = inn.TableName;
                 // check whether any Document Value type workflow is attached with Version table
                 hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
@@ -898,7 +899,7 @@ namespace VIS.Helpers
                     {
                         String msg = "SaveError";
                         String info = "";
-                        ValueNamePair ppE =VLogger.RetrieveError();
+                        ValueNamePair ppE = VLogger.RetrieveError();
                         if (ppE == null)
                             ppE = VLogger.RetrieveWarning();
                         if (ppE != null)
