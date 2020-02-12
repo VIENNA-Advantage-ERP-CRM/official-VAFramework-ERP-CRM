@@ -6399,6 +6399,10 @@
         return this.vo.LineBreak;
     };
 
+    GridField.prototype.getIsFieldgroupDefault = function () {
+        return this.vo.FieldgroupDefault;
+    };
+
 
     /**
      *  Refresh Lookup if the lookup is unstable

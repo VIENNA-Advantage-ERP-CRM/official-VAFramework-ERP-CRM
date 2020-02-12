@@ -15,7 +15,7 @@
             $root = $('<div style="height:100%;width:100%"></div>');
             //if (window.VA037) {
                 iFrame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
-                $root.html(iFrame);
+               // $root.html(iFrame);
             //}
             //else {
             //    var $span = $('<span class="vis-bi-tab-panel">' + VIS.Msg.getMsg("PleaseInstallBIReportTool") + '</span>');
@@ -39,7 +39,9 @@
             if (!iFrame)
                 return;
             var _src = VIS.Application.contextUrl + "BiPanel/GetUserBILogin?extraInfo=" + that.extraInfo + "&recID=" + record_ID;
-            iFrame.prop('src', _src);
+            //iFrame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
+            $root.html('<iframe src='+_src+'; height=100%; width="100%"; frameborder="0" ></iframe>');
+            //iFrame.prop('src', _src);
         };
 
         this.disposeComponent = function () {
