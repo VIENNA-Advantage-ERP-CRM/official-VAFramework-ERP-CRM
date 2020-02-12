@@ -921,7 +921,7 @@
         //size chnage 
         this.sizeChanged = function (h, w) {
             selectLeftDivWidth = w - (leftDivWidth + 1);
-            selectDivFullWidth = w - (minSideWidth);
+            selectDivFullWidth = w - (minSideWidth + 1);
             if (toggleside == true) {
                 topLeftDiv.animate({ width: minSideWidth }, "slow");
                 topleftparaDiv.animate({ width: minSideWidth }, "slow");

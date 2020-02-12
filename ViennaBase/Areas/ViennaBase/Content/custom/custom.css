@@ -315,13 +315,6 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 .ui-widget-content a {
     color: rgba(var(--v-c-on-secondary), 1);
 }
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-    border-top-right-radius: 0;
-}
-.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-    border-top-left-radius: 0;
-}
-
 
 /****************** w2ui-grid ***********************/
 .w2ui-reset table {

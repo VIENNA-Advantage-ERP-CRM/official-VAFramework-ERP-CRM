@@ -23,7 +23,7 @@
     align-items: center;
     display: flex;
     /*margin: 0 5px;*/
-    color: rgb(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-primary), 1);
 }
 
     .vis-ad-w-name h5 {

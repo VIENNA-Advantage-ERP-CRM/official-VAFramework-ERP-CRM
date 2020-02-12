@@ -573,9 +573,9 @@
 
                 ///$divlbNav = $("<div class='vis-apanel-lb-oflow'>").hide();
                 $divlbNav = $("<div class='vis-apanel-lb-oflow' style='border-top:0;display:none' >");
-                $divlbNav.html("<a data-dir='u' href='javascript:void(0)'><img style='margin-left:10px' data-dir='u' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-top.png' ></a><a data-dir='d' href='javascript:void(0)' ><img style='margin-left:10px' data-dir='d' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-bottom.png' /></a>");
+                $divlbNav.html("<a data-dir='u' href='javascript:void(0)'><i class='vis vis-arrow-up' data-dir='u'></i></a><a data-dir='d' href='javascript:void(0)' ><i class='vis vis-arrow-down' data-dir='d'></i></a>");
 
-                $scrollIcon = $('<div class="vis-apanel-lb-toggle" style="padding-top:5px;height:50px;overflow-x:hidden;overflow-y: hidden;"></div>');
+                $scrollIcon = $('<div class="vis-apanel-lb-toggle" style="padding-top:5px;overflow-x:hidden;overflow-y: hidden;"></div>');
                 $scrollIcon.append($divlbNav);
 
 
@@ -591,7 +591,7 @@
                 $ulFieldNames = $('<ul class="vis-apanel-lb-ul"></ul>');
 
                 //$ulFieldNames.append($divlbNav);
-                $ulFieldNames.css({ "overflow": "auto", "overflow-x": "hidden", "white-space": "nowrap", "width": "150%" });
+                $ulFieldNames.css({ "overflow": "auto", "overflow-x": "hidden", "white-space": "nowrap", "width": "100%" });
 
             }
             else {
@@ -651,7 +651,7 @@
             debugger;
 
             if (!callingFromOutsideofWindow) {
-                var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 60;
+                var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 57;
                 $($ulFieldNames.parent()).height($leftDiv.height() - ulHeight);
 
 
@@ -669,14 +669,14 @@
 
             if (!callingFromOutsideofWindow) {
                 if ($ulFieldNames.height() > $($ulFieldNames.parent()).height()) {
-                    $toggleAction.css("border-bottom", "1px solid white");
+                    $toggleAction.css("border-bottom", "1px solid rgba(var(--v-c-secondary), 1)");
                     $divlbNav.css("display", "inherit");
 
-                    var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 60;
+                    var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 57;
                     $toggleAction.height($leftDiv.height() - ulHeight);
 
                     $leftDiv.css("overflow", "hidden");
-                    $toggleAction.css({ "overflow-x": "hidden", "width": "107%", "overflow-y": "visible" });
+                    $toggleAction.css({ "overflow-x": "hidden", "width": "100%", "overflow-y": "visible" });
 
 
                 }
@@ -1165,7 +1165,7 @@
 
             divup.append($Attachdiv);
 
-            dLAContent = $("<div class='vis-attach-content-wrap' style='height:83px;border-bottom:2px solid white;padding-bottom:0px'>");
+            dLAContent = $("<div class='vis-attach-content-wrap' style='height:83px;border-bottom:2px solid rgba(var(--v-c-secondary), 1);padding-bottom:0px'>");
             dLAContent.append($('<div style="height:auto;overflow:auto" ></div>'));
             $Attachdiv.append(dLAContent);
             $root.find('.vis-email-attachmentContainer').append(divReadOnly);
@@ -2710,7 +2710,7 @@
             var middleDivWidth = 0;
             $root.height(formHeight);
             $root.width(formWidth);
-            $root.find('.contentArea').css('height', $root.height() - 44);
+            $root.find('.contentArea').css('height', $root.height() - 42);
 
 
             $root.find('.vis-Email-BccList').height(1);

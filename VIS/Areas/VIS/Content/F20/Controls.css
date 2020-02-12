@@ -79,6 +79,7 @@
 .vis-control-wrap {
     flex: 1;
     position: relative;
+    z-index: 1;
 }
 .vis-input-wrap input {
     display: block;
