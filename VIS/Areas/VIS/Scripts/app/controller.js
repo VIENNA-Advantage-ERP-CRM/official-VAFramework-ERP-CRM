@@ -6421,7 +6421,7 @@
     };
 
     GridField.prototype.getIsFieldgroupDefault = function () {
-        return this.vo.FieldgroupDefault;
+        return this.vo.FieldGroupDefault;
     };
 
 

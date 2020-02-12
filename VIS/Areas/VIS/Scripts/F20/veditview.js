@@ -328,7 +328,7 @@
             //}
         };
 
-
+       
 
         function onGroupClick(e) {
             e.stopPropagation();
@@ -336,21 +336,16 @@
             var target = $(e.target);
             var name = o.data("name");
             var dis = o.data("display");
-
-            if (target.hasClass('vis-ev-col-fg-more')) {
-                onShowMoreclick(target,name);
-            }
-
-            
-
+            var viewMore = $(o.find('.vis-ev-col-fg-more')[0]);
             //console.log(name);
             //console.log(dis);
             var show = false;
             var showGroupFieldDefault = false;
             if (target.hasClass('vis-ev-col-fg-more')) {
-                if (dis !== "show") {
-                    show = true;
+                if (dis !== "show") {// If group is vlosed and user click on show more then no processing.
+                    return;
                 }
+                show = true;
                 if (target.data("showmore") == 'Y') {
                     showGroupFieldDefault = true;
                     target.data("showmore", "N");
@@ -362,11 +357,18 @@
                 }
             }
             else {
+                if (viewMore.data("showmore") == 'N') {
+                    showGroupFieldDefault = true;
+                }
+
                 if (dis === "show") {
                     o.data("display", "hide");
+                    viewMore.hide();
                     $(o.children()[2]).addClass("vis-ev-col-fg-rotate");
                 } else {
+                   
                     o.data("display", "show");
+                    viewMore.show();
                     show = true;
                     $(o.children()[2]).removeClass("vis-ev-col-fg-rotate");
                 }
@@ -404,10 +406,10 @@
             addRow();
             initCols(true);
             //<i class="fa fa-ellipsis-h"></i>
-            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="hide">' +
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="show">' +
                 '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
                 '<span class="vis-ev-col-fg-more" data-showmore="Y">' + VIS.Msg.getMsg("ShowMore") + '</span>' +
-                '<i class= "fa fa-angle-up  vis-ev-col-fg-rotate">' +
+                '<i class= "fa fa-angle-up">' +
                 '</span>' +
                 '</div>');
 
