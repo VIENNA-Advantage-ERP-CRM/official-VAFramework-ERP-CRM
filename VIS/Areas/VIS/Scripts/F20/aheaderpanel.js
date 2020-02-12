@@ -129,7 +129,14 @@
                         var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
                             backgroundColor, FontColor, fontSize, fieldPadding);
 
-                        $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
+                        // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
+                        $div = $containerDiv.find('.' + dynamicClassName);
+
+                        //If div not found, then create new one.
+                        if ($div.length <= 0)
+                            $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
+
+
 
                         $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
 
@@ -212,12 +219,12 @@
                         iControl.refreshImage(colValue);
                     }
                 }
-                iControl.setValue(w2utils.encodeTags(colValue),false);
+                iControl.setValue(w2utils.encodeTags(colValue), false);
             }
             else {
                 if (mField.getDisplayType() == VIS.DisplayType.Image) {
                     iControl.getControl().hide();
-                    iControl.setValue(null,false);
+                    iControl.setValue(null, false);
                 }
                 else
                     iControl.setValue("- -", true);
@@ -318,7 +325,7 @@
                         window.setTimeout(function () {
                             $root.show();
                         }, 50);
-                       
+
                     }
                     else {
                         $parentRoot.width(0);
@@ -410,7 +417,7 @@
                 continue;
             }
 
-                this.setHeaderItems(currentItem, $containerDiv);
+            this.setHeaderItems(currentItem, $containerDiv);
         }
         this.addStyleToDom();
 
@@ -546,7 +553,7 @@
      * This method will be invoked on record change in window.
      * */
     HeaderPanel.prototype.navigate = function () {
-       
+
         this.setHeaderItems();
     };
 
