@@ -4189,7 +4189,6 @@
                 });
 
 
-
         }
         else {
                this.statusBar.setInfo(null);
