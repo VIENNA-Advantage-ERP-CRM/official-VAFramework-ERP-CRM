@@ -220,12 +220,14 @@
                     }
                 }
 
-                iControl.setValue(w2utils.encodeTags(colValue),false);
+                iControl.setValue(w2utils.encodeTags(colValue), false);
+
             }
             else {
                 if (mField.getDisplayType() == VIS.DisplayType.Image) {
                     iControl.getControl().hide();
-                    iControl.setValue(null,false);
+
+                    iControl.setValue(null, false);
                 }
                 else
                     iControl.setValue("- -", true);

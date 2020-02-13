@@ -1138,8 +1138,6 @@ namespace VAdvantage.WF
                         //    nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + p_ctx.GetAD_User_ID()));
                         //    SetAD_User_ID(nextAD_User_ID);
 
-
-
                     }
                     else	//	fixed Approver
                     {
