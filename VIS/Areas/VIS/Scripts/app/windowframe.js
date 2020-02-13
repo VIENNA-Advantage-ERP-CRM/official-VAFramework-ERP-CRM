@@ -4192,6 +4192,7 @@
         }
         else {
                this.statusBar.setInfo(null);
+
         }
 
         if (this.curWinTab == this.vTabbedPane) {

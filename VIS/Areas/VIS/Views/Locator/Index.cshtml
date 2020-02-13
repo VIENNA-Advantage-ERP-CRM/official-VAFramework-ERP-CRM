@@ -18,10 +18,16 @@
 }
 
 
-<div class="VIS-locator-DivStyle">
-    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblLocator_@windowNo" title="jh">@GetText("M_Locator_ID", true)</label>
-    <select class="VIS_Pref_pass" id="cmbLocator_@windowNo"></select>
-</div>
+    <div class="VIS-locator-DivStyle" style="margin-bottom:10px;">
+        <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblLocator_@windowNo" title="jh">@GetText("M_Locator_ID", true)</label>
+        @* work to make locator control to autocomplete *@
+        <div class="input-group vis-locator-ctrl">
+            <input type="text" class="form-control ui-autocomplete-input" placeholder="Search Locator" aria-haspopup="true" id="lstLocator_@windowNo" autocomplete="off">
+            <span class="input-group-append" id="locatorSearch_@windowNo"><span class="input-group-text"><a href="javascript:void(0)" class="glyphicon glyphicon-search"></a></span></span>
+        </div>
+        @* End *@
+    </div>
+
 <div id="divchkCreateNew_@windowNo"  class="VIS-locator-DivStyle">
     <div style="width: 70%; float: right; margin-bottom: 7px;">
         <input id="chkCreateNew_@windowNo" type="checkbox" /><label class="VIS_Pref_Label_Font">@GetText("CreateNew", true)</label>

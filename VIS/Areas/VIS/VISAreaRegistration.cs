@@ -153,6 +153,7 @@ namespace VIS
                    "~/Areas/VIS/Scripts/model/CalloutColumn.js",
 
 
+
                   "~/Areas/VIS/Scripts/TestPanel.js");
 
 

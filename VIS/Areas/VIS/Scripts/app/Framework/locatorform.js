@@ -23,6 +23,11 @@
         var mLocator = lookup;
 
         //controlls
+
+        //added for locator search control
+        var locators_lst = null;
+        var srchLocator = null;
+        //end
         var cmbLocator = null;
         var chkCreateNew = null;
         var divCreateNew = null;
@@ -81,6 +86,9 @@
             cancelbtn = null;
             $self = null;
 
+            locators_lst = null; //set null when close the form
+            srchLocator = null; //set null when close the form
+
             columnName = null;
             locatorId = null;
             mandatory = null;
@@ -119,6 +127,10 @@
             Okbtn = $root.find("#btnOk_" + windowNo);
             cancelbtn = $root.find("#btnCancel_" + windowNo);
             cmbLocator = $root.find("#cmbLocator_" + windowNo);
+            //added for locator search control
+            locators_lst = $root.find("#lstLocator_" + windowNo);
+            srchLocator = $root.find("#locatorSearch_" + windowNo);
+            //end
             chkCreateNew = $root.find("#chkCreateNew_" + windowNo);
             txtWarehouseInfo = $root.find("#txtWarehouseInfo_" + windowNo);
             cmbWarehouse = $root.find("#cmbWarehouse_" + windowNo);
@@ -146,16 +158,21 @@
             //fill locator in the control
             mLocator.refresh();
             mLocator.fillCombobox(mandatory, true, true, false);
-            var selectedIndex = 0;
-            //load locator and set selected locator into the combo
-            for (var i = 0; i < mLocator.data.length ; i++) {
-                cmbLocator.append(" <option value=" + mLocator.data[i].Key + ">" + mLocator.data[i].Name + "</option>");
-                if (locatorId == mLocator.data[i].Key) {
-                    selectedIndex = i;
-                }
-            };
-            cmbLocator.prop('selectedIndex', selectedIndex);
 
+            // commented code because we added autocomplte control
+
+            //var selectedIndex = 0;
+            //commented because of autocomplete control now we added autocomplte control.
+            //load locator and set selected locator into the combo
+            //for (var i = 0; i < mLocator.data.length; i++) {
+            //    cmbLocator.append(" <option value=" + mLocator.data[i].Key + ">" + mLocator.data[i].Name + "</option>");
+            //    if (locatorId == mLocator.data[i].Key) {
+            //        selectedIndex = i;
+            //    }
+            //};
+            //cmbLocator.prop('selectedIndex', selectedIndex);
+
+            //end
             //load warehouse combo
             //var sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse";
             //if (onlyWarehouseId != 0) {
@@ -177,8 +194,47 @@
             }
             cmbWarehouse.prop('selectedIndex', 0);
 
+            //When we are opening locator form first time OR locator ID is 0 then we have to set first locator into autocomplete control
+            if (mLocator.data.length > 0 && locatorId == 0) {
+                locatorId = mLocator.data[0].Key;
+            }
             //fill all textboxes on bases of selected locatorId
             displayLocator(ds);
+
+            /*Locator Fill*/
+            locators_lst.autocomplete({
+                source: function (request, response) {
+                    if (request != null && request.term != null && request.term.trim().length == 0) {
+                            return;
+                    }
+                    //send matched items into reponse
+                    if (mLocator.data.length > 0) {
+                        response($.map(mLocator.data, function (item) {
+                            if (item.Name.toUpperCase().contains(request.term.trim().toUpperCase())) {
+                                return {
+                                    label: item.Name,
+                                    value: item.Name,
+                                    locatorID: item.Key
+                                }
+                            }
+                        }));
+                    }
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    //update locator_ID after selection from autocomplete
+                    locatorId = ui.item.locatorID;
+                    displayLocator(ds);
+                },
+                open: function () {
+                    $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+                },
+                close: function () {
+                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+
+                }
+            });
+            //end
 
             //show and hide controls
             if (mLocator.getIsOnlyOutgoing()) {
@@ -230,8 +286,8 @@
 
             function valueChange() {
                 var buf = cmbWarehouse.find('option:selected').text() + " " + sep + " " + txtX.val()
-           + " " + sep + " " + txtY.val()
-           + " " + sep + " " + txtZ.val();
+                    + " " + sep + " " + txtY.val()
+                    + " " + sep + " " + txtZ.val();
                 txtValue.val(buf);
             }
 
@@ -261,9 +317,35 @@
                     valueChange();
                 });
 
-                cmbLocator.change(function () {
-                    displayLocator(ds);
+                //Search button of autocomplete it will load all the locators
+                srchLocator.on("click", function () {
+                    if (locators_lst.val() == "") {
+                        locators_lst.autocomplete({
+                            source: $.map(mLocator.data, function (item) {
+                                return {
+                                    label: item.Name,
+                                    value: item.Name,
+                                    locatorID: item.Key
+                                }
+                            }),
+                            minLength: 0
+                        }).bind('focus', function () {
+                            if (locators_lst.val().length == 0) {
+                                locators_lst.autocomplete("search", "");
+                            }
+                        });
+                        locators_lst.trigger("focus");
+                    }
+                    else {
+                        locators_lst.autocomplete("search");
+                    }
                 });
+
+                // commented code because added autocomplte control.
+                //cmbLocator.change(function () {
+                //    displayLocator(ds);
+                //});
+                //end
             };
         };
 
@@ -285,7 +367,7 @@
 
                 var lblWText = lblWarehouse.val();
                 var tValue = txtValue.val(), tX = txtX.val(), tY = txtY.val(), tZ = txtZ.val();
-                var warehId = cmbWarehouse.find('option:selected').val();                
+                var warehId = cmbWarehouse.find('option:selected').val();
 
                 if (warehId != 0) {
                     if (warehouseId != warehId) {
@@ -327,7 +409,8 @@
         };
 
         function displayLocator(ds) {
-            locatorId = cmbLocator.find('option:selected').val();
+            //commented because of autocomplete control now we already set value of locator onSelect event of autocomplte control.
+            //locatorId = cmbLocator.find('option:selected').val();
             var separator = "";
             var warehouseValue = "";
             //var sql = "SELECT  w.name,l.x,l.y,l.z,l.value, w.M_Warehouse_ID,w.Value wValue,w.separator from m_warehouse w" +
@@ -356,13 +439,16 @@
                 warehouseId = dsw["M_Warehouse_ID"];
                 warehouseValue = dsw["wValue"];
                 separator = dsw["Separator"];
+                //Set text into autocomplete control in specific format.
+                if (locators_lst.length > 0)
+                    locators_lst[0].value = dsw["Name"] + "_" + dsw["Value"] + "(" + dsw["x"] + dsw["Separator"] + dsw["y"] + dsw["Separator"] + dsw["z"] + ")";
             }
 
             sep = separator;
             //show values in the value text box
             var buf = warehouseValue + " " + separator + " " + txtX.val()
-            + " " + separator + " " + txtY.val()
-            + " " + separator + " " + txtZ.val();
+                + " " + separator + " " + txtY.val()
+                + " " + separator + " " + txtZ.val();
 
             txtValue.val(buf);
 

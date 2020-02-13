@@ -495,7 +495,7 @@
                 ctrl = image;
             }
             else {
-                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
+                var $ctrl = new VSpan(mField.getHelp(), columnName, false, true);
                 ctrl = $ctrl;
             }
 
@@ -946,6 +946,7 @@
 
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
+
     // END VLabel 
 
     //2.  VSPAN
@@ -983,6 +984,7 @@
     VIS.Utility.inheritPrototype(VSpan, IControl); //Inherit
 
     VSpan.prototype.setValue = function (newValue, isHTML) {
+
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
