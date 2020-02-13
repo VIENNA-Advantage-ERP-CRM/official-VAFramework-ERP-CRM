@@ -127,7 +127,7 @@ namespace VAdvantage.Model
                 {
                     cd.SetM_InventoryLine_ID(inventoryLine.GetM_InventoryLine_ID());
                 }
-                else if (WindowName == "Production Execution")
+                else if (WindowName == "Production Execution" || WindowName.Equals("PE-FinishGood"))
                 {
                     cd.SetVAMFG_M_WrkOdrTrnsctionLine_ID(Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
                 }
@@ -338,7 +338,7 @@ namespace VAdvantage.Model
                             {
                                 isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM C_InvoiceLine WHERE C_InvoiceLine_ID =  " + cd.GetC_InvoiceLine_ID(), null, Get_Trx()));
                             }
-                            if (windowName == "Production Execution")
+                            if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                             {
                                 isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM VAMFG_M_WrkOdrTrnsctionLine WHERE VAMFG_M_WrkOdrTrnsctionLine_ID =  " + cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID(), null, Get_Trx()));
                             }
@@ -1645,7 +1645,7 @@ namespace VAdvantage.Model
                 {
                     amt = GetAmt();
                 }
-                else if (cost.GetCurrentCostPrice() != 0)
+                else if (!windowName.Equals("PE-FinishGood") && cost.GetCurrentCostPrice() != 0)
                 {
                     amt = cost.GetCurrentCostPrice() * qty;
                 }
@@ -1655,12 +1655,29 @@ namespace VAdvantage.Model
                 if (ce.IsAverageInvoice())
                 {
                     #region Av. invoice
-                    //if (addition)
-                    //    cost.SetWeightedAverage(amt, qty);
-                    //else
-                    //    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
-                    /**********************************/
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                        if (Env.Signum(cost.GetCumulatedQty()) != 0)
+                        {
+                            cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero));
+                        }
+                        else
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -1711,7 +1728,6 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-
                             if (windowName == "Internal Use Inventory")
                             {
                                 if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -1736,8 +1752,7 @@ namespace VAdvantage.Model
                                     cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                                 }
                             }
-                            else
-                                if (movement != null && movement.GetDescription() != null && movement.GetDescription().Contains("{->") && windowName == "Inventory Move")
+                            else if (movement != null && movement.GetDescription() != null && movement.GetDescription().Contains("{->") && windowName == "Inventory Move")
                             {
                                 // reverse entry of Inventory Move
                                 // only impact on qty 
@@ -1911,7 +1926,34 @@ namespace VAdvantage.Model
                 else if (ce.IsWeightedAverageCost())
                 {
                     #region Weighted Av. invoice
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) != 0)
+                        {
+                            cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(
+                                Decimal.Add(
+                                Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                                amt),
+                                Decimal.Add(cost.GetCurrentQty(), qty)), precision, MidpointRounding.AwayFromZero));
+                        }
+                        else
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
+
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -2252,13 +2294,28 @@ namespace VAdvantage.Model
                 else if (ce.IsAveragePO())
                 {
                     #region Av. Purchase Order
-                    //if (addition)
-                    //    cost.SetWeightedAverage(amt, qty);
-                    //else
-                    //    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
-
-                    /**********************************/
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                        if (Env.Signum(cost.GetCumulatedQty()) != 0)
+                        {
+                            cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero));
+                        }
+                        else
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -2493,7 +2550,34 @@ namespace VAdvantage.Model
                 else if (ce.IsWeightedAveragePO())
                 {
                     #region Weighted Av. PO
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+
+                        if (Env.Signum(Decimal.Add(cost.GetCurrentQty(), qty)) != 0)
+                        {
+                            cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(
+                                Decimal.Add(
+                                Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()),
+                                amt),
+                                Decimal.Add(cost.GetCurrentQty(), qty)), precision, MidpointRounding.AwayFromZero));
+                        }
+                        else
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
+
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -2837,7 +2921,20 @@ namespace VAdvantage.Model
                 else if (ce.IsFifo() || ce.IsLifo())
                 {
                     #region Lifo / Fifo
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -3085,7 +3182,20 @@ namespace VAdvantage.Model
                 else if (ce.IsLastInvoice())
                 {
                     #region Last Invoice
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -3286,7 +3396,20 @@ namespace VAdvantage.Model
                 else if (ce.IsLastPOPrice())
                 {
                     #region Last PO
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
@@ -3486,7 +3609,22 @@ namespace VAdvantage.Model
                 else if (ce.IsStandardCosting())
                 {
                     #region Std Costing
-                    if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
+                    if (windowName.Equals("PE-FinishGood"))
+                    {
+                        if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                        }
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                        if (Env.Signum(cost.GetCurrentCostPrice()) == 0)
+                            cost.SetCurrentCostPrice(price);
+                    }
+                    else if (addition && windowName == "Shipment" && inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
