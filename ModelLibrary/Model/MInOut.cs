@@ -24,6 +24,7 @@ using VAdvantage.Utility;
 using System.Data;
 using System.IO;
 using VAdvantage.Logging;
+using Oracle.ManagedDataAccess.Client;
 using System.Data.SqlClient;
 
 
@@ -1506,6 +1507,9 @@ namespace VAdvantage.Model
                 }
             }
 
+            //JID_1483- Accounts date should remain same as movement date
+            SetDateAcct(GetMovementDate());
+
             //	Shipment - Needs Order
             if (IsSOTrx() && GetC_Order_ID() == 0)
             {
@@ -1891,6 +1895,14 @@ namespace VAdvantage.Model
             //Dictionary<int, MInOutLineMA[]> lineAttributes = null;
             //if (IsSOTrx())
             //{
+
+            // To check weather future date records are available in Transaction window
+            _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx());
+            if (!string.IsNullOrEmpty(_processMsg))
+            {
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             String MovementTyp = GetMovementType();
 
             int VAPOS_POSTerminal_ID = 0;
