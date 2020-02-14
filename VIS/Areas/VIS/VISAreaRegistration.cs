@@ -172,7 +172,8 @@ namespace VIS
                  "~/Areas/VIS/Scripts/F20/vgridview.js",
                  "~/Areas/VIS/Scripts/F20/vmapview.js",
                  "~/Areas/VIS/Scripts/F20/aviewcontroller.js",
-                 "~/Areas/VIS/Scripts/F20/apanel.js"
+                 "~/Areas/VIS/Scripts/F20/apanel.js",
+                 "~/Areas/VIS/Scripts/F20/acontentpane.js"
                  );
 
 

@@ -401,14 +401,16 @@
 	 *  Unlock UI & dispose 
 	 */
     ProcessCtl.prototype.unlock = function () {
-        var summary = this.jObjectFromServer.Result;
+        var summary = this.jObjectFromServer ? this.jObjectFromServer.Result :null;
         if (summary != null && summary.indexOf("@") != -1) {
             this.pi.setSummary(VIS.Msg.parseTranslation(VIS.Env.getCtx(), summary));
         }
         else if (summary) {
             this.pi.setSummary(summary);
         }
-        this.pi.setError(this.jObjectFromServer.IsError);
+        if (this.jObjectFromServer)
+            this.pi.setError(this.jObjectFromServer.IsError);
+
         if (this.parent) {
             ////if (IsPosReport == "IsPosReport") {
             ////    this.parent.unlockUI(this.pi, "IsPosReport");

@@ -724,17 +724,17 @@ VIS.GridController.prototype.onTableRowSelect = function (event) {
     //	Query Included Tab
     if (!this.getIsSingleRow()) {
         window.setTimeout(function () {
-            if (selfThis.vIncludedGC != null) {
-                selfThis.switchIncludedGC();
+            //if (selfThis.vIncludedGC != null) {
+                selfThis.notifyDependents();
                 //vIncludedGC.getMTab().query(0, 0, false);
-            }
+            //}
         }, 50);
     }
     else {
-        if (selfThis.vIncludedGC != null) {
-            selfThis.switchIncludedGC();
+        //if (selfThis.vIncludedGC != null) {
+        selfThis.notifyDependents();
             //vIncludedGC.getMTab().query(0, 0, false);
-        }
+        //}
     }
     //if (this.currentRowIndex === event.index) {
     //    return;
@@ -743,13 +743,6 @@ VIS.GridController.prototype.onTableRowSelect = function (event) {
 
     //this.gTab.navigate(this.currentRowIndex, true);
     //this.dynamicDisplay(-1);
-};
-
-VIS.GridController.prototype.switchIncludedGC = function () {
-    if (this.vIncludedGC != null) {
-        this.switchIncludedGC();
-        //vIncludedGC.getMTab().query(0, 0, false);
-    }
 };
 
 VIS.GridController.prototype.dynamicDisplay = function (col) {
@@ -1008,40 +1001,39 @@ VIS.GridController.prototype.activate = function (oldGC) {
     this.vTable.activate();
     oldGC = oldGC || {};
 
-    //if (oldGC.isIncludedGCVisible) { //Hide Included of Old GC
-    //    oldGC.vIncludedGC.setVisible(false);
-    //}
     this.vTable.setReadOnly(false);
 
-    if (this.displayAsIncludedGC) {
-        var tdArea = this.aPanel.getLayout();
-        this.setUI(false);
-        this.getRoot().detach();
-        tdArea.append(this.getRoot());
-        this.displayAsIncludedGC = false;
-        this.aPanel.getIncludedEmptyArea().css({ 'display': 'none'});
-    }
-    else if (this.gTab.getIncluded_Tab_ID() == 0) {
-        var olcIncludedTab = oldGC.vIncludedGC;
-        if (olcIncludedTab) {
-            var tdArea = olcIncludedTab.aPanel.getLayout();
-            olcIncludedTab.setUI(false);
-            olcIncludedTab.getRoot().detach();
-            this.aPanel.getIncludedEmptyArea().css({ 'display': 'none' });
-        }
+
+
+
+    //if (this.displayAsIncludedGC) {
+    //    var tdArea = this.aPanel.getLayout();
+    //    this.setUI(false);
+    //    this.getRoot().detach();
+    //    tdArea.append(this.getRoot());
+    //    this.displayAsIncludedGC = false;
+    //    this.aPanel.getIncludedEmptyArea().css({ 'display': 'none'});
+    //}
+    //else if (this.gTab.getIncluded_Tab_ID() == 0) {
+    //    var olcIncludedTab = oldGC.vIncludedGC;
+    //    if (olcIncludedTab) {
+    //        var tdArea = olcIncludedTab.aPanel.getLayout();
+    //        olcIncludedTab.setUI(false);
+    //        olcIncludedTab.getRoot().detach();
+    //        this.aPanel.getIncludedEmptyArea().css({ 'display': 'none' });
+    //    }
        
-    }
-    //vIncludedGC
-    this.isIncludedGCVisible = false;
+    //}
+    ////vIncludedGC
+    //this.isIncludedGCVisible = false;
 
-    if (this.vIncludedGC) { // has included GC
-        //  this.vIncludedGC.vTable.activate();
-        this.vIncludedGC.displayAsIncludedGC = false;
-        this.vIncludedGC.isIncludedGCVisible = false;
+    //if (this.vIncludedGC) { // has included GC
+    //    //  this.vIncludedGC.vTable.activate();
+    //    this.vIncludedGC.displayAsIncludedGC = false;
+    //    this.vIncludedGC.isIncludedGCVisible = false;
 
-    }
+    //}
     this.activateTree();
-
 };
 
 VIS.GridController.prototype.multiRowResize = function () {
@@ -1238,7 +1230,7 @@ VIS.GridController.prototype.queryCompleted = function (result) {
 };
 
 VIS.GridController.prototype.checkInsertNewRow = function () {
-    if (this.aPanel == null)
+    if (this.aPanel == null || this.aContentPane)
         return false;
 
     var parentValid = true;
@@ -1379,7 +1371,7 @@ VIS.GridController.prototype.navigateRelative = function (rowChange) {
 VIS.GridController.prototype.dataRefresh = function () {
     var record = this.gTab.dataRefresh();
     this.dynamicDisplay(-1);
-    window.setTimeout(function (t) { t.switchIncludedGC(); t = null }, 500, this);
+    window.setTimeout(function (t) { t.notifyDependents(); t = null }, 500, this);
 };
 
 VIS.GridController.prototype.dataRefreshAll = function () {
@@ -1421,7 +1413,7 @@ VIS.GridController.prototype.dataNew = function (copy) {
 
     this.gTab.dataNew(copy);
     this.dynamicDisplay(-1);
-    this.switchIncludedGC();
+    this.notifyDependents();
     if (this.onRowInserted) {
         this.onRowInserted();
     }
@@ -1483,17 +1475,41 @@ VIS.GridController.prototype.rowChanged = function (save, keyID) {
 VIS.GridController.prototype.dataIgnore = function () {
     this.gTab.dataIgnore();
     this.dynamicDisplay(-1);
-    this.switchIncludedGC();
+    this.notifyDependents();
     this.vTable.refreshUndo();
-};
+    };
 
+    /**
+     * add sub tab view datastatus listner 
+     * --contentpane
+     * @param {any} lsnr
+     */
+    VIS.GridController.prototype.addSubTabDataStatusListner = function (lsnr) {
+        this.aContentPane = lsnr;
+    };
+
+    /**
+     * Remove subtab view data status listnerlistner
+     * */
+    VIS.GridController.prototype.removeSubTabDataStatusListner = function () {
+        this.aContentPane = null;
+    };
+
+    /**
+     * listen data state changed 
+     * @param {any} e
+     */
 VIS.GridController.prototype.dataStatusChanged = function (e) {
 
     if (this.displayAsIncludedGC) {
         this.enableDisableToolbarItems(true);
         return;
     }
-    this.aPanel.dataStatusChanged(e);
+    if (this.aContentPane) //Sub tab view lister
+        this.aContentPane.dataStatusChanged(e);
+    else 
+        this.aPanel.dataStatusChanged(e);
+
     var col = e.getChangedColumn();
     if (!e.getIsChanged() || col < 0)
         return;
@@ -1592,7 +1608,7 @@ VIS.GridController.prototype.switchMultiRow = function () {
         this.vTable.resize();
         this.vTable.refreshRow();
     }
-    //this.switchIncludedGC();
+    
 };
 
 VIS.GridController.prototype.switchCardRow = function () {
@@ -1620,7 +1636,7 @@ VIS.GridController.prototype.switchCardRow = function () {
         p1 = null;
         //this.vTable.resize();
     }
-    //this.switchIncludedGC();
+    
 };
 
 VIS.GridController.prototype.switchMapRow = function () {
@@ -1648,55 +1664,68 @@ VIS.GridController.prototype.switchMapRow = function () {
         p1 = null;
         //this.vTable.resize();
     }
-    //this.switchIncludedGC();
+  
 };
 
-//show hide Included grid
-VIS.GridController.prototype.switchIncludedGC = function () {
-    if (!this.vIncludedGC || this.displayAsIncludedGC) //has included grid
-        return;
 
-    var visible = this.isIncludedGCVisible; //`
-    //return;
-
-    if (!visible) {
-        var tdArea = this.aPanel.getIncludedEmptyArea();
-        tdArea.empty();
-        var inGc = this.vIncludedGC.getRoot();
-        inGc.detach();
-        this.vIncludedGC.setUI(true);
-
+    VIS.GridController.prototype.notifyDependents = function () {
         
-        tdArea.append(inGc);
-
-        
-        //tdArea.height(VIS.Application.isMobile ? 250 : 350);
-        tdArea.css('display','flex');
-
-        inGc.show();
-        this.vIncludedGC.vTable.activate();
-        this.vIncludedGC.vTable.setReadOnly(true);
-       
-
-        //this.getRoot().show();
-        this.isIncludedGCVisible = true;
-
-        if (!this.singleRow) {
-            this.singleRow = true;
-            this.switchMultiRow();
+        if (this.vIncludedGC) {
+            this.switchIncludedGC();
         }
 
-        
-        this.vIncludedGC.displayAsIncludedGC = true;
-        this.vIncludedGC.singleRow = true;
-        this.vIncludedGC.switchMultiRow();
-        
+    };
 
-        this.vTable.resize();
-    }
+//show hide Included grid
+    /**
+     * 
+     * */
+    VIS.GridController.prototype.switchIncludedGC = function () {
 
-    window.setTimeout(function (s) { s.vIncludedGC.query(0, 0, false); s = null; }, 1, this);
-};
+        if (!this.vIncludedGC || this.displayAsIncludedGC) //has included grid
+            return;
+
+        var visible = this.isIncludedGCVisible; //`
+        //return;
+
+        if (!visible) {
+            var tdArea = this.aPanel.getIncludedEmptyArea();
+            tdArea.empty();
+            var inGc = this.vIncludedGC.getRoot();
+            inGc.detach();
+            this.vIncludedGC.setUI(true);
+
+
+            tdArea.append(inGc);
+
+
+            //tdArea.height(VIS.Application.isMobile ? 250 : 350);
+            tdArea.css('display', 'flex');
+
+            inGc.show();
+            this.vIncludedGC.vTable.activate();
+            this.vIncludedGC.vTable.setReadOnly(true);
+
+
+            //this.getRoot().show();
+            this.isIncludedGCVisible = true;
+
+            if (!this.singleRow) {
+                this.singleRow = true;
+                this.switchMultiRow();
+            }
+
+
+            this.vIncludedGC.displayAsIncludedGC = true;
+            this.vIncludedGC.singleRow = true;
+            this.vIncludedGC.switchMultiRow();
+
+
+            this.vTable.resize();
+        };
+
+        window.setTimeout(function (s) { s.vIncludedGC.query(0, 0, false); s = null; }, 1, this);
+    };
 
 
 VIS.GridController.prototype.removeRecord = function (e) {

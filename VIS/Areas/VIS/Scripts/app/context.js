@@ -11,7 +11,7 @@ VIS.context.m_map = {}; //window's context
     if (context == null)
         throw new ArgumentException("Require Context");
     if (arguments.length > 2) {
-        if (typeof (arguments[1]) == "int") {
+        if (typeof (arguments[1]) == "number") {
             return this.getWindowTabContext(arguments[0], arguments[1], arguments[2]);
         }
         return this.getWindowContext(arguments[0], arguments[1], arguments[2]);
@@ -33,10 +33,21 @@ VIS.context.m_map = {}; //window's context
     return value;
 };
 
-VIS.context.getWindowContext = function (windowNo, context, onlyWindow) {
+VIS.context.getWindowContext = function (windowNo, context, onlyWindow,val2) {
     if (context == null)
         throw new ArgumentException("Require Context");
-    var key = windowNo + "|" + context;
+    if (typeof (arguments[1]) == "number" && arguments.length > 2) {
+        return VIS.context.getWindowTabContext(arguments[0], arguments[1], arguments[2]);
+    }
+
+    var tabNo = "";
+    if (typeof (context) == "number") {
+        tabNo = "-" + context;
+        context = onlyWindow;
+        onlyWindow = val2;
+    }
+
+    var key = windowNo + tabNo + "|" + context;
 
     var value = "";
     if (this.m_map[windowNo]) {
@@ -68,6 +79,34 @@ VIS.context.getWindowTabContext = function (windowNo, tabNo, context) {
     return value;
 };
 
+VIS.context.getTabRecordContext = function (windowNo, tabNo, context) {
+    if (context == null)
+        throw new ArgumentException("Require Context");
+    //check windowNo exist in map or not
+    var value = "";
+    if (this.m_map[windowNo]) {
+        value = this.m_map[windowNo][windowNo + "-" + tabNo + "|" + context];
+    }
+    //m_map.TryGetValue(windowNo + "|" + tabNo + "|" + context,out value);
+    if (!value || value == "")
+        return VIS.context.getWindowContext(windowNo, context, true);
+    return value;
+};
+
+VIS.context.setTabRecordContext = function (windowNo, tabNo,context, value) {
+    if (context == null) {
+        return;
+    }
+
+    if (!this.m_map[windowNo])
+        this.m_map[windowNo] = {};
+
+    if (value == null || value === "")
+        this.m_map[windowNo][windowNo +'-'+ tabNo + "|" + context] = null;
+    else
+        this.m_map[windowNo][windowNo +'-'+ tabNo + "|" + context] = value;
+};
+
 VIS.context.setContext = function (key, value) {
     if (arguments.length == 4) {
         this.setWindowTabContext(arguments[0], arguments[1], arguments[2], arguments[3]);
@@ -81,17 +120,24 @@ VIS.context.setContext = function (key, value) {
     return key;
 };
 
-VIS.context.setWindowContext = function (windowNo, context, value) {
+VIS.context.setWindowContext = function (windowNo, context, value,val2) {
     if (context == null) {
         return;
     }
+
     if (!this.m_map[windowNo])
         this.m_map[windowNo] = {};
+    var tabNo = "";
+    if (typeof (context) == "number") {
+        tabNo = "-" + context;
+        context = value;
+        value = val2;
+    }
 
     if (value == null || value === "")
-        this.m_map[windowNo][windowNo + "|" + context] = null;
+        this.m_map[windowNo][windowNo +tabNo+ "|" + context] = null;
     else
-        this.m_map[windowNo][windowNo + "|" + context] = value;
+        this.m_map[windowNo][windowNo + tabNo+"|" + context] = value;
 };
 
 VIS.context.setWindowTabContext = function (windowNo, tabNo, context, value) {
@@ -105,6 +151,25 @@ VIS.context.setWindowTabContext = function (windowNo, tabNo, context, value) {
     else
         this.m_map[windowNo][windowNo + "|" + tabNo + "|" + context] = value;
 };
+
+
+/**
+	 * Clean up context for Window Tab (i.e. delete it).
+	 * Please note that this method is not clearing the tab info context (i.e. _TabInfo).
+	 * @param ctx context
+	 * @param WindowNo window
+	 * @param TabNo tab
+	 */
+VIS.context.clearTabContext = function (windowNo, tabNo) {
+
+    var wCtx = this.m_map[windowNo];
+
+    for (var prop in wCtx) {
+        if (prop.startsWith(windowNo + "-" + tabNo + "|"))
+            delete wCtx[prop];
+    }
+};
+
 
 VIS.context.getAD_User_ID = function () {
     return VIS.context.getContext("##AD_User_ID");
@@ -134,7 +199,6 @@ VIS.context.getAD_Org_ID = function () {
     return VIS.context.getContext("#AD_Org_ID");
 };
 
-
 VIS.context.getAD_Language = function () {
     return VIS.context.getContext('#AD_Language');
 };
@@ -153,9 +217,11 @@ VIS.context.isAutoNew = function () {
         return true;
     return false;
 };
+
 VIS.context.getStdPrecision = function () {
     return VIS.context.getContext('#StdPrecision');
 };
+
 VIS.context.setStdPrecision = function () {
     return VIS.context.getContext('#StdPrecision');
 };
@@ -192,9 +258,17 @@ VIS.context.setContextOfWindow = function (ctxArray, winodowNo) {
     }
 };
 
+/**
+ * 
+ * @param {any} windowNo
+ * @param {any} context
+ * @param {any} onlyWindow
+ */
 VIS.context.getContextAsInt = function (windowNo, context, onlyWindow) {
 
     var s = "";
+    if (arguments.length > 1 && typeof (arguments[1] )== "number")
+        s = this.getWindowTabContext(arguments[0], arguments[1], arguments[2]);
     if (arguments.length > 1 && typeof (arguments[0]) == "number")
         s = this.getWindowContext(windowNo, context, onlyWindow);
     else {
@@ -212,6 +286,20 @@ VIS.context.getContextAsInt = function (windowNo, context, onlyWindow) {
     return 0;
 };	//
 
+	/**
+	 *	Get Context and convert it to an integer (0 if error)
+	 *  @param windowNo window no
+	 *  @param tabNo tab no
+	 * 	@param context context key
+	 *  @return value or 0
+//	 */
+//VIS.context.getContextAsInt = function (windowNo, TabNo, context) {
+//    var s = this.getContext(windowNo, TabNo, context);
+//    if (!s || s == "" || isNaN(s))
+//        return 0;
+//    return parseInt(s);
+//};
+
 VIS.context.getWindowContextAsInt = function (windowNo, context, onlyWindow) {
 
     var s = this.getWindowContext(windowNo, context, onlyWindow);
@@ -225,7 +313,6 @@ VIS.context.getWindowContextAsInt = function (windowNo, context, onlyWindow) {
     }
     return 0;
 };
-
 
 VIS.context.getContextAsTime = function (windowNo, context) {
     var s = this.getContext(windowNo, context, false);
@@ -245,9 +332,6 @@ VIS.context.getContextAsTime = function (windowNo, context) {
     //// return Convert.ToInt64(DateTime.Now); 
     //return CommonFunctions.CurrentTimeMillis();// Convert.ToInt64(DateTime.Now);// System.currentTimeMillis();
 };
-
-
-
 
 VIS.context.getShowClientOrg = function () {
     return this.getContextAsInt("#ClientOrgLevel");
@@ -294,7 +378,6 @@ VIS.context.getEntireCtx = function () {
     return ctx;
 };
 
-
 /**
 	 *	Is Sales Order Trx 
 	 *  @param WindowNo window no
@@ -320,57 +403,10 @@ VIS.context.setIsSOTrx = function (windowNo, isSOTrx) {
         this.setContext("IsSOTrx", arguments[0] ? "Y" : "N");
 };
 
-
 VIS.context.getIsUseCrystalReportViewer = function ()
 {
     return VIS.context.getContext("#USE_CRYSTAL_REPORT_VIEWER")=="Y";
 };
 
 
-//;(function (VIS) {
-
-//    function context() {
-//        var context = {
-//            getContext: getContext,
-//            setContext: setContext,
-//            createContext: createContext,
-//            getAD_User_ID: getAD_User_ID,
-//            getAD_Language: getAD_Language,
-//            getAD_Role_ID:getAD_Role_ID
-//        };
-
-//        return context;
-
-//        var ctx = {};
-
-//        function getContext(key) {
-//            return ctx[key];
-//        };
-
-//        function setContext(key, value) {
-//            return ctx[key] = value;
-//        };
-
-
-//        function getAD_User_ID() {
-//            return ctx['##AD_User_ID'];
-//        };
-
-//        function getAD_Language() {
-//            return ctx['#AD_Language'];
-//        };
-
-//        function getAD_Role_ID() {
-//            return ctx['#AD_Role_ID'];
-//        };
-
-//        function createContext(jsonObject) {
-//            console.log(jsonObject);
-//            ctx = jsonObject;
-//        };
-//    }
-
-//    VIS.context = context();
-
-//})(VIS);
 

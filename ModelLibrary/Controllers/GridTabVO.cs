@@ -454,6 +454,7 @@ namespace VAdvantage.Controller
                 //    vo.Included_Tab_ID = 0;
                 //
                 vo.TabLevel = Utility.Util.GetValueOfInt(dr["TabLevel"]);
+                vo.ctx.SetContext(vo.windowNo, vo.tabNo, "TabLevel", vo.TabLevel.ToString());
                 //if (dr.wasNull())
                 //    vo.TabLevel = 0;
                 //
@@ -917,6 +918,7 @@ namespace VAdvantage.Controller
             clone.ReplicationType = ReplicationType;
             myCtx.SetContext(windowNo, clone.tabNo, "AccessLevel", clone.AccessLevel);
             myCtx.SetContext(windowNo, clone.tabNo, "AD_Table_ID", clone.AD_Table_ID.ToString());
+            myCtx.SetContext(windowNo, clone.tabNo, "TabLevel", clone.TabLevel.ToString());
 
             //
             clone.IsSortTab = IsSortTab;

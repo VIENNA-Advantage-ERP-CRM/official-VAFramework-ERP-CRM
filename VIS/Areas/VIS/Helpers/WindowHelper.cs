@@ -1695,7 +1695,12 @@ namespace VIS.Helpers
         /// <returns>Json cutom equalvalent to dataset</returns>
         internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID)
         {
+            WindowRecordOut retVal = new WindowRecordOut();
+
+            var lookupDirect = new Dictionary<string, Dictionary<object, string>>();
+
             List<JTable> outO = new List<JTable>();
+            
             JTable obj = null;
 
 
@@ -1759,7 +1764,50 @@ namespace VIS.Helpers
                 outO.Add(obj);
 
             }
-            return outO;
+
+            //Direct Query
+            if (sqlIn.sqlDirect != "")
+            {
+                bool doPaging = sqlIn.pageSize > 0;
+                if (!doPaging)
+                {
+                    ds = new SqlHelper().ExecuteDataSet(sqlIn.sqlDirect);
+                }
+                else
+                {
+                    ds = VIS.DBase.DB.ExecuteDatasetPaging(sqlIn.sqlDirect, sqlIn.page, sqlIn.pageSize);
+                }
+
+                if (ds != null)
+                {
+                    var dt = ds.Tables[0];
+                    int count = dt.Rows.Count;
+                    for (int row = 0; row < count; row++)
+                    {
+                        for (int column = 0; column < dt.Columns.Count; column++)
+                        {
+                            string colName = dt.Columns[column].ColumnName.ToLower();
+                            object val = dt.Rows[row][column].ToString();
+                            if (colName.EndsWith("_t") || val.ToString() == "")
+                                continue;
+                            if (!lookupDirect.ContainsKey(colName))
+                                lookupDirect.Add(colName, new Dictionary<object, string>());
+
+                            if (colName.EndsWith("_id"))
+                            {
+                                val = Convert.ToInt32(dt.Rows[row][column]);
+                            }
+                            if (!lookupDirect[colName].ContainsKey(val))
+                                lookupDirect[colName][val] = dt.Rows[row][colName + "_t"].ToString();
+                        }
+                    }
+                }
+            }
+
+            retVal.Tables = outO;
+            retVal.LookupDirect = lookupDirect;
+
+            return retVal;
         }
 
         /// <summary>

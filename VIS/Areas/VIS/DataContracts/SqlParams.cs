@@ -32,6 +32,8 @@ namespace VIS.DataContracts
         public int pageSize { get; set; }
         public int page { get; set; }
         public string sql { get; set; }
+
+        public string sqlDirect { get; set; }
         public string increment { get; set; }
 
         public List<SqlParams> param { get; set; }

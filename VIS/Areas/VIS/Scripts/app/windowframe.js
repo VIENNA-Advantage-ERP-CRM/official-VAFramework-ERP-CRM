@@ -3651,25 +3651,25 @@
         return true;
     };
 
-    APanel.prototype.tabActionPerformedCallback2 = function (curEle, oldGC) {
-        curEle = this.curGC;
-        oldGC = this.curGC;
-        this.curGC = null;
-    }
+    //APanel.prototype.tabActionPerformedCallback2 = function (curEle, oldGC) {
+    //    curEle = this.curGC;
+    //    oldGC = this.curGC;
+    //    this.curGC = null;
+    //}
 
 
-    APanel.prototype.tabActionPerformedCallback3 = function (curEle, isAPanelTab, gc, tpIndex) {
-        if (this.curST != null) {
-            this.curST.saveData();
-            this.curST.unRegisterAPanel();
-            curEle = this.curST;
-            this.curST = null;
-        }
+    //APanel.prototype.tabActionPerformedCallback3 = function (curEle, isAPanelTab, gc, tpIndex) {
+    //    if (this.curST != null) {
+    //        this.curST.saveData();
+    //        this.curST.unRegisterAPanel();
+    //        curEle = this.curST;
+    //        this.curST = null;
+    //    }
 
-        this.curTabIndex = tpIndex;
-        if (!isAPanelTab)
-            this.curGC = gc;
-    }
+    //    this.curTabIndex = tpIndex;
+    //    if (!isAPanelTab)
+    //        this.curGC = gc;
+    //}
 
     APanel.prototype.tabActionPerformedCallback = function (action, back, isAPanelTab, tabEle, curEle, oldGC, gc, st) {
         this.setSelectedTab(action); //set Seleted tab
