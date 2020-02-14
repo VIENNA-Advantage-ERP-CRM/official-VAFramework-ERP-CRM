@@ -178,7 +178,6 @@
     <Content Include="Areas\VIS\Content\F20\Media.css" />
     <Content Include="Areas\VIS\Content\F20\site-rtl.css" />
     <Content Include="Areas\VIS\Content\F20\Site.css" />
-    <Content Include="Areas\VIS\Content\F20\Window.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />

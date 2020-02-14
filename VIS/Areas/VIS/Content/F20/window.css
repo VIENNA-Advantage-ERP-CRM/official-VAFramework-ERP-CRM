@@ -1079,8 +1079,8 @@ li.vis-page-item-select {
 }
 .vis-ad-w-p-s-infoline {
     grid-row: 1/1;
-    grid-column: 2/2;
-    text-align: center !important;
+    grid-column: 1/4;
+    text-align: center;
 }
 /*.vis-ad-w-p-s-result {
     grid-row: 2/2;
@@ -1092,7 +1092,7 @@ li.vis-page-item-select {
 }
 
 .vis-ad-w-p-s-msg {
-    grid-row: 1/1;
+    grid-row: 2/2;
     grid-column: 1/1;
     overflow-y: auto;
     min-height: 17px;
@@ -1116,7 +1116,7 @@ li.vis-page-item-select {
     right: 0;
 }
 .vis-ad-w-p-s-pages {
-    grid-row: 1/1;
+    grid-row: 2/2;
     grid-column: 3/3;
 }
 
@@ -1593,11 +1593,11 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     height: 260px;
 }
 
-.vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
-    padding: 4px;
-    min-height: 32px;
-    font-size: .875rem;
-    height: 32px;
-    position: absolute;
-    margin-top: -15px !important;
-}
+    .vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+        padding: 4px;
+        min-height: 32px;
+        font-size: .875rem;
+        height: 32px;
+        position: absolute;
+        margin-top: -15px !important;
+    }

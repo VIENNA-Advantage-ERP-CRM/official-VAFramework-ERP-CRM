@@ -16,6 +16,7 @@
     /*background-color: rgba(var(--v-c-primary),1);
     color: rgba(var(--v-c-on-primary));*/
     padding: 10px;
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
 }
 
 .vis-ad-w-name {
@@ -1076,13 +1077,11 @@ li.vis-page-item-select {
     grid-template-rows: auto 1fr;
     align-items: center;
 }
-
 .vis-ad-w-p-s-infoline {
     grid-row: 1/1;
     grid-column: 1/4;
     text-align: center;
 }
-
 /*.vis-ad-w-p-s-result {
     grid-row: 2/2;
     grid-column: 1/1;
@@ -1107,17 +1106,15 @@ li.vis-page-item-select {
     margin-right: 10px;
     color: rgba(var(--v-c-primary),1);
 }
-
-    .vis-ad-w-p-s-statusdb:after {
-        position: absolute;
-        content: '';
-        width: 1px;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.28);
-        display: inline-block;
-        right: 0;
-    }
-
+.vis-ad-w-p-s-statusdb:after {
+    position: absolute;
+    content: '';
+    width: 1px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.28);
+    display: inline-block;
+    right: 0;
+}
 .vis-ad-w-p-s-pages {
     grid-row: 2/2;
     grid-column: 3/3;
@@ -1596,11 +1593,11 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     height: 260px;
 }
 
-.vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
-    padding: 4px;
-    min-height: 32px;
-    font-size: .875rem;
-    height: 32px;
-    position: absolute;
-    margin-top: -15px !important;
-}
+    .vis-gc-vtable.w2ui-grid .w2ui-editable input, .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+        padding: 4px;
+        min-height: 32px;
+        font-size: .875rem;
+        height: 32px;
+        position: absolute;
+        margin-top: -15px !important;
+    }
