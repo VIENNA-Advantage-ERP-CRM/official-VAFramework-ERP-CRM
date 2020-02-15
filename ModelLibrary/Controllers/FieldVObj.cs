@@ -263,6 +263,7 @@ namespace VAdvantage.Controller
         public int CellSpace = 0;
         public int FieldBreadth = 0;
         public bool LineBreak= false;
+        public bool FieldGroupDefault = false;
 
 
 

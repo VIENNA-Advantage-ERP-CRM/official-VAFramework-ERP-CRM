@@ -30,6 +30,9 @@ namespace VAdvantage.Controller
         /**       ***/
         public int AD_TabPanel_ID;
 
+        /**       ***/
+        public string ExtraInfo;
+
 
 
 
@@ -61,10 +64,10 @@ namespace VAdvantage.Controller
         public static String GetSQL(Ctx ctx)
         {
             //  View only returns IsActive='Y'
-            String sql = "SELECT panel.classname, panel.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.ad_tabpanel_id, panel.ad_tab_id FROM AD_TabPanel panel WHERE panel.AD_Tab_ID =@tabID AND panel.IsActive='Y'";
+            String sql = "SELECT panel.classname, panel.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.ad_tabpanel_id, panel.ad_tab_id, panel.ExtraInfo FROM AD_TabPanel panel WHERE panel.AD_Tab_ID =@tabID AND panel.IsActive='Y'";
             if (!Env.IsBaseLanguage(ctx, "AD_Window"))
             {
-                sql = "SELECT panel.classname, trl.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.ad_tabpanel_id, panel.ad_tab_id FROM AD_TabPanel panel JOIN AD_TabPanel_trl  trl ON panel.ad_tabpanel_id=trl.ad_tabpanel_id "
+                sql = "SELECT panel.classname, trl.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.ad_tabpanel_id, panel.ad_tab_id, panel.ExtraInfo FROM AD_TabPanel panel JOIN AD_TabPanel_trl  trl ON panel.ad_tabpanel_id=trl.ad_tabpanel_id "
                     + " WHERE panel.AD_Tab_ID =@tabID AND trl.AD_Language='" + Env.GetAD_Language(ctx) + "'";
             }
             sql += " ORDER BY panel.SeqNo, panel.ad_tabpanel_id asc";
@@ -92,6 +95,7 @@ namespace VAdvantage.Controller
                 vo.IsDefault = dr["IsDefault"].Equals("Y") ? true : false;
                 vo.Name = dr["Name"].ToString();
                 vo.SeqNo = Convert.ToInt32(dr["Seqno"]);
+                vo.ExtraInfo = dr["ExtraInfo"].ToString();
             }
             catch (Exception ex)
             {
@@ -111,6 +115,7 @@ namespace VAdvantage.Controller
             clone.IsDefault = IsDefault;
             clone.Name = Name;
             clone.SeqNo = SeqNo;
+            clone.ExtraInfo = ExtraInfo;
             return clone;
         }
     }

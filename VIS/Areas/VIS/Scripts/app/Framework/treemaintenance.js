@@ -5,7 +5,7 @@
         this.frame;
         this.windowNo;
         var $self = this;
-        var $root = $('<div class="vis-forms-container" style="padding:15px 0 7px;background-color:white;height:100%"/>');
+        var $root = $('<div class="vis-forms-container" style="padding:5px 0 7px;background-color:white;height:100%"/>');
 
         var $leftTreeKeno;
         //var $isSummary = false;
@@ -62,7 +62,7 @@
         var nonQueryUrl = baseUrl + "JsonData/ExecuteNonQuer";
 
 
-        var $ldiv = $("<div  class='VIS-TM-left-tree' style='border-right:1px solid #ccc' >");
+        var $ldiv = $("<div  class='VIS-TM-left-tree'>");
         var $mdiv = $("<div  class='VIS-TM-middle'>");
         var $rdiv = $("<div class='VIS-TM-right-slide'>");
         var mouseEnter = false;
@@ -172,13 +172,13 @@
 
         //var $cmbRefresh = $('<input class="ass-btns search-icon" type="button" title=' + VIS.Msg.getMsg("VIS_RefreshSelectTree") + ' >');
         //var $treeRefresh = $('<input class="ass-btns search-icon" type="button" style="margin-left: 5px;" title=' + VIS.Msg.getMsg("VIS_RefreshTree") + ' >')
-        var $treeRefresh = $('<span style="display:none" class="VIS-Tm-search-icontree glyphicon glyphicon-refresh"  title=' + VIS.Msg.getMsg("RefreshSelectTree") + '></span>');
-        var $cmbRefresh = $('<span class="VIS-Tm-search-icontree glyphicon glyphicon-refresh" style="float:left" title="' + VIS.Msg.getMsg("tmRefresh") + '"></span>');
+        var $treeRefresh = $('<span style="display:none" class="VIS-Tm-btnicon vis vis-refresh"  title=' + VIS.Msg.getMsg("RefreshSelectTree") + '></span>');
+        var $cmbRefresh = $('<span class="VIS-Tm-btnicon vis vis-refresh" style="float:left" title="' + VIS.Msg.getMsg("tmRefresh") + '"></span>');
         //var $cmbRefresh = $('<span class="VIS-Tm-search-icontree glyphicon glyphicon-refresh" style="float:left"></span>');
 
-        var $treeExpandColapse = $('<input class="VIS-tm-expandtree search-icon" type="button" style="margin-bottom:2px;float:right;display:none;margin-left: 5px;" title="' + VIS.Msg.getMsg("TreeCollapse") + '" >')
+        var $treeExpandColapse = $('<span class="VIS-Tm-btnicon fa fa-minus-square-o"  style="display:none;" title="' + VIS.Msg.getMsg("TreeCollapse") + '" ></span>')
 
-        var $treeCollapseColapse = $('<input class="VIS-tm-collapsetree search-icon" type="button" style="margin-bottom:2px;float:right;margin-left: 5px;" title="' + VIS.Msg.getMsg("TreeExpand") + '" >')
+        var $treeCollapseColapse = $('<span class="VIS-Tm-btnicon fa fa-plus-square-o" title="' + VIS.Msg.getMsg("TreeExpand") + '" ></span>')
 
 
         ////var ZoomTreeWindow = $('<span class="VIS-Tm-search-icontree glyphicon glyphicon-plus" style="float:left" title="' + VIS.Msg.getMsg("CreateNewTree") + '"></span>');
@@ -186,7 +186,7 @@
 
         ////var ZoomTreeWindow = $("<img class='VIS-Tm-zoombtn'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png'></img>");
 
-        var ZoomTreeWindow = $("<img class='VIS-Tm-zoombtn' title='" + VIS.Msg.getMsg("CreateNewTree") + "'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/Zoom16.png'></img>");
+        var ZoomTreeWindow = $("<i class='vis vis-find VIS-Tm-btnicon' title='" + VIS.Msg.getMsg("CreateNewTree") + "'></i>");
 
         var treeCmbDisable = $('<div class="vis-tm-treeCmbDisable "></div>');
 
@@ -194,7 +194,7 @@
 
         //$lTopMidDiv.append($cmbSelectTree).append($cmbRefresh);
 
-        var $treeBackDiv = $('<div class="VIS-TM-tree-wrap" style="border-bottom:1px solid #1aa0ed" >');
+        var $treeBackDiv = $('<div class="VIS-TM-tree-wrap">');
         var $leftTreeDiv = $('<div class="VIS-TM-root-node" style="overflow:visible">');
 
         //        var topTreeDiv = $('<div style="width: 100%;height: 262px; overflow: auto;">');
@@ -233,10 +233,10 @@
 
 
 
-        var $btnSearch = $('<span class="VIS-Tm-search-icontree glyphicon glyphicon-search" style="top:0px"></span>');
+        var $btnSearch = $('<span class="VIS-Tm-btnicon vis vis-search"></span>');
 
-        var $treeNodeSearch = $('<div style="float: left;padding: 4px 2px;">');
-        var $chktreeNode = $('<input type="checkbox" disabled style="float: left;margin-right:6px">');
+        var $treeNodeSearch = $('<div class="vis-tm-b-s-ryt">');
+        var $chktreeNode = $('<input type="checkbox" disabled>');
         //        var $lblNodetext = $('<label style="font-weight: normal;margin-bottom:0px">Tree Node</label>');
         var $lblNodetext = $('<label style="font-weight: normal;margin-bottom:0px">' + VIS.Msg.getMsg("NodeItem") + '</label>');
 
@@ -254,9 +254,9 @@
 
         //var $deleteChild = $("<span style='cursor:pointer;font-size:18px;float:right;margin:9px 0'  class='glyphicon glyphicon-trash vis-tm-delete' title='" + VIS.Msg.getMsg("VA005_DeleteChild") + "' ></span>");
         //var $deleteChild = $("<span style='margin-top:10px;margin-bottom:4px' class='VIS-Tm-search-icontree glyphicon glyphicon-trash vis-tm-delete' title='" + VIS.Msg.getMsg("DeleteChild") + "' ></span>");
-        /////var $deleteChild = $("<span style='margin-top:10px;margin-bottom:4px' class='VIS-Tm-search-icontree VIS-Tm-unlinkforbottmo ' title='" + VIS.Msg.getMsg("DeleteChild") + "' ></span>");
+        /////var $deleteChild = $("<span style='margin-top:10px;margin-bottom:4px' class='VIS-Tm-search-icontree VIS-Tm-unlinkforbottmo vis vis-link ' title='" + VIS.Msg.getMsg("DeleteChild") + "' ></span>");
 
-        var $deleteChild = $("<span style='display:inherit;margin-top:10px;margin-bottom:4px' class='VIS-Tm-unlinkforbottmo ' title='" + VIS.Msg.getMsg("UnlinkNode") + "' ></span>");
+        var $deleteChild = $("<span style='display:inherit;' class='VIS-Tm-unlinkforbottmo vis vis-link ' title='" + VIS.Msg.getMsg("UnlinkNode") + "' ></span>");
 
         //"<span style='cursor:pointer;font-size:18px;'  class='glyphicon glyphicon-trash' title='" + VIS.Msg.getMsg("VA005_DeleteChild") + "' ></span>"
 
@@ -266,9 +266,9 @@
 
         var $ulMid = $('<ul class="vis-tm-sortable" style="list-style: none;padding:0">');
 
-        var $chkAllCheckOrNot = $('<input type="checkbox" disabled style="float: left;margin: 12px 10px 0 0;" />');
+        var $chkAllCheckOrNot = $('<input type="checkbox" disabled />');
 
-        var $checkSearchOrNot = $('<span class="glyphicon glyphicon-search" style="display:none;cursor:pointer;float:left;color:#000;margin: 14px 0 0 6px;font-size: 10px;" ></span>')
+        var $checkSearchOrNot = $('<span class="vis vis-search" style="display:none;cursor:pointer;float:left;color:#000;margin: 14px 0 0 6px;font-size: 10px;" ></span>')
 
 
 
@@ -279,15 +279,15 @@
 
         /////var $squenceDailog = $("<span style='display:inherit;margin-top:10px;margin-bottom:4px' class='vis-tm-childnodeinidailog glyphicon glyphicon-list-alt' title='" + VIS.Msg.getMsg("SetOrder") + "' ></span>");
 
-        var $squenceDailog = $('<span style="display:inherit;margin-top:10px;margin-bottom:4px" class="vis-tm-childnodeinidailog" title="' + VIS.Msg.getMsg("SetOrder") + '">Set Order</span>');
+        var $squenceDailog = $('<span style="display:inherit;" class="vis-tm-childnodeinidailog" title="' + VIS.Msg.getMsg("SetOrder") + '">Set Order</span>');
 
         $squenceDailog.addClass("vis-tm-delete");
 
 
-        var mMouseRestrict = $('<div style="display:none;position:absolute;height: 40.2px;width: 100%; z-index: 5;"></div>');
+        var mMouseRestrict = $('<div style="display:none;position:absolute;height: 40.2px;width: 100%; z-index: 5;"></div>'); 
 
 
-        $mTopHeader.append(mMouseRestrict).append($chkAllCheckOrNot).append($lblMh4).append($checkSearchOrNot).append($deleteChild).append($squenceDailog);
+        $mTopHeader.append(mMouseRestrict).append($chkAllCheckOrNot).append($lblMh4).append($checkSearchOrNot).append($squenceDailog).append($deleteChild);
         ////$mTopHeader.append($chkAllCheckOrNot).append($lblMh4).append($checkSearchOrNot).append($squenceDailog).append($deleteChild);
 
 
@@ -303,7 +303,7 @@
         //var $btnRightSearch = $("<input class='ass-btns search-icon' type='button'>");
 
 
-        var $btnRightSearch = $('<span class="VIS-Tm-search-icontree glyphicon glyphicon-search" style="top:0px;float:none"></span>');
+        var $btnRightSearch = $('<span class="VIS-Tm-btnicon vis vis-search" style="top:0px;float:none"></span>');
 
 
         var $pathRightlist = $("<div class='VIS-TM-path'>");
@@ -311,7 +311,7 @@
 
         var $rightMenuDemand = $('<select disabled style="float: right;"></select>');
 
-        var $lblGetMenu = $('<span style="margin-right: 7px;float:left">' + VIS.Msg.getMsg("Show") + '<span/>');
+        var $lblGetMenu = $('<span style="margin: 0 7px;">' + VIS.Msg.getMsg("Show") + '<span/>');
 
         //$rTopHeard.append($lblRh4).append($lblGetMenu).append($rightMenuDemand);
 
@@ -321,10 +321,10 @@
         var $chkTrace = $('<input type="checkbox"  style="float:left;margin-right:9px" disabled  />');
         //        var $lblTrace = $('<span style="float:left;margin-right:2px">' + VIS.Msg.getMsg("TraceItem") + '<span/>');
 
-        var $lblTrace = $('<span style="margin-right: 2px;float: left;margin-top: 4px;">' + VIS.Msg.getMsg("TraceItem") + '<span/>');
+        var $lblTrace = $('<span>' + VIS.Msg.getMsg("TraceItem") + '<span/>');
 
 
-        var $chkAllRightPannel = $('<input type="checkbox" disabled style="float: left;margin: 4px 10px 0 0;" />');
+        var $chkAllRightPannel = $('<input type="checkbox" disabled />');
 
 
         var unlinkeAllNode = $('<span class="vis-unlinkallNodes vis-tm-opacity" title="' + VIS.Msg.getMsg("UnlinkItem") + '"  ><b></b><b></b><b></b></span>');
@@ -332,7 +332,7 @@
 
         //$rTopHeard.append($chkAllRightPannel).append($lblRh4).append($('<div style="float: right;">').append($lblTrace).append($chkTrace).append($lblGetMenu).append(unlinkeAllNode).append($rightMenuDemand));
 
-        $rTopHeard.append($chkAllRightPannel).append($lblRh4).append($('<div style="float: right;">').append($lblGetMenu).append(unlinkeAllNode).append($rightMenuDemand));
+        $rTopHeard.append($chkAllRightPannel).append($lblRh4).append($('<div class="vis-tm-r-list-w">').append($lblGetMenu).append($rightMenuDemand).append(unlinkeAllNode));
 
 
 
@@ -365,7 +365,7 @@
 
         var leftstopdiv = $('<div style="display:none;height: 100%; width: 100%; position: absolute;z-index: 9999;"></div>');
 
-        $ldiv.append(leftstopdiv).append($('<div style="height:100%;margin-top:3px" >').append($lTopLeftDiv).append($lTopMidDiv).append(leftMianDataDiv).append($searchDiv));
+        $ldiv.append(leftstopdiv).append($('<div style="height:100%;" >').append($lTopLeftDiv).append($lTopMidDiv).append(leftMianDataDiv).append($searchDiv));
         //$ldiv.append($('<div style="height:100%" >').append($lTopLeftDiv).append($lTopMidDiv).append($treeBackDiv).append($searchDiv));
 
         //   $mdiv.append($('<div style="height:100%">').append($mTopHeader).append($mData));
@@ -666,10 +666,10 @@
             //  else
             //  {
             $treeNodeSearch.css("display", "none");
-            $cmbSearch.css("border-right", "none");
+            //$cmbSearch.css("border-right", "none");
             $isSummary = false;
             $secoundDiv.css("display", "none");
-            $treeBackDiv.css("border-bottom", "0px");
+            //$treeBackDiv.css("border-bottom", "0px");
             $treeBackDiv.css("height", "100%");
             topTreeDiv.css("height", "100%");
             $treeBackDiv.resizable('destroy')
@@ -814,13 +814,13 @@
                 },
                 template: "<div class='treechild'  data-getparentnode='#= item.getparentnode #'       data-IsSummary='#= item.IsSummary #' data-TableName='#= item.TableName #' data-NodeID='#= item.NodeID #'   data-TreeParentID='#= item.TreeParentID #' data-ParentID='#= item.ParentID #'  >" +
 
-                                "<div class='imgdivTree' style='float:left;margin-top:3px'>" +
-                                    "<img src='" + VIS.Application.contextUrl + "#= item.ImageSource #' style='height:20px' >" +
+                                "<div class='imgdivTree'>" +
+                                    "<i class='fa fa-folder-o'></i>" +
                                  "</div>" +
 
                                 //"<div class='textdivTree VIS-TM-textdivTreedata' style='float:left;margin:3px 5px 0 10px'>" +
 
-                                "<div class='textdivTree' style='float:left;margin:3px 5px 0 10px'>" +
+                                "<div class='textdivTree'>" +
 
                                 "<p>" + VIS.Utility.encodeText("#= item.text #") + "</p>" +
                                      //"<p>#= item.text #</p>" +
@@ -1747,21 +1747,21 @@
                             }
 
 
-                            var checkBox = $('<input class="VIS-tm-checkbox" style="cursor:pointer;float:left; margin-right: 10px;margin-left:0" type="checkbox" />');
+                            var checkBox = $('<input class="VIS-tm-checkbox" type="checkbox" />');
                             if (res[i]["issummary"] == "Y") {
                                 continue;
-                                summImage = "<img class='summNonsumImage' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/folder.png'></img>";
+                                summImage = "<i class='vis vis-m-window summNonsumImage'></i>";
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-NodePID='" + res[i]["NodeParentID"] + "' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
 
-                                $ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
+                                $ulMid.append($('<li class="VIS-tm-topMLi">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                             }
                             else {
-                                nonSummImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/mWindow.png'></img>";
+                                nonSummImage = "<i class='vis vis-m-window summNonsumImage '></i>";
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(nonSummImage).append($("<li class='VIS-tm-MLi' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(nonSummImage).append($("<li class='VIS-tm-MLi'  data-NodePID='" + res[i]["NodeParentID"] + "'  data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
 
-                                $ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(nonSummImage).append($("<li class='VIS-tm-MLi'    data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
+                                $ulMid.append($('<li class="VIS-tm-topMLi">').append(checkBox).append(nonSummImage).append($("<li class='VIS-tm-MLi'    data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                             }
 
                             //var checkBox = $('<input class="VIS-tm-checkbox" style="float:left; margin-right: 10px;margin-left:0" type="checkbox" />');
@@ -2314,7 +2314,7 @@
                     var summImage;
                     var nonSummImage;
                     var checkBox;
-                    var unlink = $("<span style='margin-left:8px'></span>");
+                    var unlink = $("<span></span>");
                     if (res) {
                         for (var i = 0; i < res.length; i++) {
                             if ($ulRight.find("li li").length > 0) {
@@ -2331,17 +2331,17 @@
                                 continue;
                             }
 
-
+                            
 
 
                             if (res[i]["issummary"] == 'Y') {
                                 if (res[i]["disabled"] == true) {
-                                    checkBox = $('<input class="vis-tm-chkbox" disabled  style="float:left; margin-right: 10px;" type="checkbox" />');
-                                    summImage = "<img class='" + res[i]["classopacity"] + " summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/summary.png'></img>";
+                                    checkBox = $('<input class="vis-tm-chkbox" disabled type="checkbox" />');
+                                    summImage = "<i class='" + res[i]["classopacity"] + " vis vis-m-window summNonsumImage '></i>";
                                 }
                                 else {
-                                    checkBox = $('<input  class="vis-tm-chkbox"  style="cursor:pointer;float:left; margin-right: 10px;" type="checkbox" />');
-                                    summImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/folder.png'></img>";
+                                    checkBox = $('<input  class="vis-tm-chkbox" type="checkbox" />');
+                                    summImage = "<i class='vis vis-m-window summNonsumImage '></i>";
                                 }
 
 
@@ -2350,12 +2350,12 @@
                             }
                             else {
                                 if (res[i]["disabled"] == true) {
-                                    checkBox = $('<input  class="vis-tm-chkbox"  disabled  style="float:left; margin-right: 10px;" type="checkbox" />');
-                                    nonSummImage = "<img class='" + res[i]["classopacity"] + " summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/nonSummary.png'></img>";
+                                    checkBox = $('<input  class="vis-tm-chkbox"  disabled type="checkbox" />');
+                                    nonSummImage = "<i class='" + res[i]["classopacity"] + " vis vis-m-window summNonsumImage '></i>";
                                 }
                                 else {
-                                    checkBox = $('<input  class="vis-tm-chkbox"  style="cursor:pointer;float:left; margin-right: 10px;" type="checkbox" />');
-                                    nonSummImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/mWindow.png'></img>";
+                                    checkBox = $('<input  class="vis-tm-chkbox" type="checkbox" />');
+                                    nonSummImage = "<i class='vis vis-m-window summNonsumImage '></i>";
                                 }
 
 
@@ -3119,10 +3119,10 @@
                                     summImage = "<img class='summNonsumImage' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/mWindow.png'></img>";
                                 }
                                 else if (src == "summary.png") {
-                                    summImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/folder.png'></img>";
+                                    summImage = "<i class='vis vis-m-window summNonsumImage '></i>";
                                 }
                                 else if (src == "folder.png") {
-                                    summImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/folder.png'></img>";
+                                    summImage = "<i class='vis vis-m-window summNonsumImage '></i>";
                                     continue;
                                 }
                                 if (src == "mWindow.png") {
@@ -3137,8 +3137,8 @@
                                 }
 
 
-                                var checkBox = $('<input class="VIS-tm-checkbox" style="cursor:pointer;float:left; margin-right: 10px;margin-left:0" type="checkbox" />');
-                                $ulMid.prepend($('<li class="VIS-tm-topMLi" style="padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-id='" + Id + "'  id='" + Id + "' style='cursor:default'  >" + VIS.Utility.encodeText(text) + "</li>")));
+                                var checkBox = $('<input class="VIS-tm-checkbox" type="checkbox" />');
+                                $ulMid.prepend($('<li class="VIS-tm-topMLi">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-id='" + Id + "'  id='" + Id + "' style='cursor:default'  >" + VIS.Utility.encodeText(text) + "</li>")));
                                 //  }
                                 //$squenceDailog.removeClass("vis-tm-delete");
                                 //isulMidData = true;
@@ -3688,7 +3688,7 @@
             //$searchDiv.append($cmbSearch).append($treeNodeSearch).append($btnSearch);
 
             window.setTimeout(function () {
-                $cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
+               // $cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
             }, 200);
 
 
@@ -3936,13 +3936,13 @@
                 var $pintohomeOverlay = $('<ul class="vis-apanel-tm-ul"></ul>');
 
                 var $outerDiv = $('<div>');
-                var $traceDiv = $('<div style="padding:0 8px 0 5px;min-width:150px">');
-                var imgSpan = $('<span class="VIS-Tm-glyphiconglyphicon-link" style="float:left;margin-right:6px" ></span>');
-                $outerP = $('<p style="line-height:19px;cursor:pointer;float:left;margin-left: 4px;margin-bottom: 8px;">' + VIS.Msg.getMsg("RemoveLinkedItem") + '</p>').append(imgSpan);
+                var $traceDiv = $('<div style="padding:0 10px;min-width:150px">');
+                var imgSpan = $('<span class="VIS-Tm-glyphiconglyphicon-link VIS-Tm-unlinkforbottmo vis vis-link"></span>');
+                $outerP = $('<p style="line-height:19px;cursor:pointer;">' + VIS.Msg.getMsg("RemoveLinkedItem") + '</p>').append(imgSpan);
 
                 $outerDiv.append($traceDiv);
-                $traceDiv.append($('<div style="margin-top: 7px;" ></div>').append($chkTrace).append($lblTrace));
-                $traceDiv.append($('<div style="float: left;margin-bottom: 6px;margin-top: 15px;width:100%" ></div>').append($outerP));
+                $traceDiv.append($('<div style="margin-top: 10px;" ></div>').append($chkTrace).append($lblTrace));
+                $traceDiv.append($('<div style="float: left;margin-bottom: 6px;margin-top: 5px;width:100%" ></div>').append($outerP));
 
 
 
@@ -4464,15 +4464,15 @@
                                 continue;
                             }
 
-                            var checkBox = $('<input class="VIS-tm-checkbox" style="cursor:pointer;float:left; margin-right: 10px;margin-left:0" type="checkbox" />');
+                            var checkBox = $('<input class="VIS-tm-checkbox" type="checkbox" />');
                             if (res[i]["issummary"] == "Y") {
                                 // continue;
-                                summImage = "<img class='summNonsumImage' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/folder.png'></img>";
-                                $ulSeq.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-NodePID='" + res[i]["NodeParentID"] + "' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
+                                summImage = "<i class='fa fa-folder-o summNonsumImage'></i>";
+                                $ulSeq.append($('<li class="VIS-tm-topMLi">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-NodePID='" + res[i]["NodeParentID"] + "' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                             }
                             else {
-                                nonSummImage = "<img class=' summNonsumImage ' style='float:left;margin-right:10px;margin-top:3px' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/mWindow.png'></img>";
-                                var li = $('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">');
+                                nonSummImage = "<i class='vis vis-m-window summNonsumImage '></i>";
+                                var li = $('<li class="VIS-tm-topMLi" >');
                                 li.append(checkBox);
                                 li.append(nonSummImage);
                                 li.append($("<li class='VIS-tm-MLi'  data-NodePID='" + res[i]["NodeParentID"] + "'  data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>"));
@@ -7555,9 +7555,9 @@
                 $isSummary = true;
                 ChkSummayOnTreeChange = true;
                 $treeNodeSearch.css("display", "inherit");
-                $cmbSearch.css("border-right", "1px solid #ccc");
+                //$cmbSearch.css("border-right", "1px solid #ccc");
                 $secoundDiv.css("display", "inherit");
-                $treeBackDiv.css("border-bottom", "1px solid #1aa0ed");
+                //$treeBackDiv.css("border-bottom", "1px solid #1aa0ed");
                 $treeBackDiv.css("height", "70%");
                 topTreeDiv.css("height", "100%");
                 $treeBackDiv.resizable({
@@ -7567,7 +7567,7 @@
                 $treeBackDiv.find(".ui-resizable-s").css("bottom", "0px");
                 topTreeDiv.addClass("VIS-TM-resizediv");
                 $secoundDiv.height(leftMianDataDiv.height() - $treeBackDiv.height() - 20);
-                $cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
+                //$cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
                 crossImages.css("right", "145px");
             }
             else {
@@ -7675,7 +7675,7 @@
                 if ($chkSummaryLevel.is(":checked")) {
                     $isSummary = true;
                     $secoundDiv.css("display", "inherit");
-                    $treeBackDiv.css("border-bottom", "1px solid #1aa0ed");
+                    //$treeBackDiv.css("border-bottom", "1px solid #1aa0ed");
                     $treeBackDiv.css("height", "70%");
                     topTreeDiv.css("height", "100%");
                     $treeBackDiv.resizable({});
@@ -7685,14 +7685,14 @@
                     $secoundDiv.height(leftMianDataDiv.height() - $treeBackDiv.height() - 20);
                     $mData.height(leftMianDataDiv.height() - ($treeBackDiv.height() + $mTopHeader.height() + 40));
                     $treeNodeSearch.css("display", "inherit");
-                    $cmbSearch.css("border-right", "1px solid #ccc");
+                    //$cmbSearch.css("border-right", "1px solid #ccc");
                 }
                 else {
-                    $cmbSearch.css("border-right", "none");
+                    //$cmbSearch.css("border-right", "none");
                     $treeNodeSearch.css("display", "none");
                     $isSummary = false;
                     $secoundDiv.css("display", "none");
-                    $treeBackDiv.css("border-bottom", "0px");
+                    //$treeBackDiv.css("border-bottom", "0px");
                     $treeBackDiv.css("height", "100%");
                     topTreeDiv.css("height", "100%");
                     $treeBackDiv.resizable('destroy')
@@ -7821,9 +7821,9 @@
                     $bsyDivforbottom[0].style.visibility = "hidden";
                     $isSummary = true;
                     $treeNodeSearch.css("display", "inherit");
-                    $cmbSearch.css("border-right", "1px solid #ccc");
+                    //$cmbSearch.css("border-right", "1px solid #ccc");
                     $secoundDiv.css("display", "inherit");
-                    $treeBackDiv.css("border-bottom", "1px solid #1aa0ed");
+                    //$treeBackDiv.css("border-bottom", "1px solid #1aa0ed");
                     $treeBackDiv.css("height", "70%");
                     topTreeDiv.css("height", "100%");
                     $treeBackDiv.resizable({
@@ -7837,7 +7837,7 @@
                     }
                     $secoundDiv.height(leftMianDataDiv.height() - $treeBackDiv.height() - 20);
 
-                    $cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
+                    //$cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
                     crossImages.css("right", "145px");
                 }
                 else {
@@ -7848,7 +7848,7 @@
                     }
 
 
-                    $cmbSearch.width($searchDiv.width() - ($btnSearch.width() + 30));
+                    //$cmbSearch.width($searchDiv.width() - ($btnSearch.width() + 30));
                     crossImages.css("right", "35px");
 
                     //$treeNodeSearch.css("display", "none");
@@ -8062,7 +8062,7 @@
 
         this.formSizeChanged = function (height, width) {
             $secoundDiv.height(leftMianDataDiv.height() - $treeBackDiv.height() - 20);
-            $cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
+            //$cmbSearch.width($searchDiv.width() - ($treeNodeSearch.width() + 40 + $btnSearch.width()));
             $mData.height($secoundDiv.height());
             $secoundDiv.css("overflow", "hidden");
 

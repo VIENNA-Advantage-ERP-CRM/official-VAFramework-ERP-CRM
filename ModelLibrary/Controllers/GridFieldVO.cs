@@ -278,7 +278,7 @@ namespace VAdvantage.Controller
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
                     /******************************/
-                    else if (columnName.Equals("Isheaderpanelitem",StringComparison.OrdinalIgnoreCase))
+                    else if (columnName.Equals("Isheaderpanelitem", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.IsHeaderPanelitem = "Y".Equals(dr[i].ToString());
                     }
@@ -342,6 +342,10 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("IsLineBreak", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.LineBreak = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("FieldGroupDefault", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.FieldGroupDefault= "Y".Equals(dr[i].ToString());
                     }
                 }
                 if (vo.Header == null)
@@ -833,8 +837,7 @@ namespace VAdvantage.Controller
             clone.CellSpace = CellSpace;
             clone.FieldBreadth = FieldBreadth;
             clone.LineBreak = LineBreak;
-
-
+            clone.FieldGroupDefault = FieldGroupDefault;
             return clone;
         }
 

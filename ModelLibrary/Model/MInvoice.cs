@@ -976,7 +976,13 @@ namespace VAdvantage.Model
                     line.SetM_InOutLine_ID(0);
                 }
 
-                //
+                // to set OrderLine and InoutLine in case of reversal if it is available 
+                if (IsReversal()) {
+                    line.SetC_OrderLine_ID(fromLine.GetC_OrderLine_ID());
+                    line.SetM_InOutLine_ID(fromLine.GetM_InOutLine_ID());
+                }
+                //end 
+
                 line.SetProcessed(false);
                 if (line.Save(Get_TrxName()))
                 {

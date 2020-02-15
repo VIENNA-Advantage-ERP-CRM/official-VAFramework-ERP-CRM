@@ -127,18 +127,21 @@
             isBusyRoot = $("<div class='vis-apanel-busy vis-cardviewmainbusy'></div> ");
             rootCardViewUI = $("<div class='vis-cardviewmain'></div>");
             var divCardViewMainFirstChild = $("<div class='vis-cardviewmainfirstchild vis-pull-left'></div>");
+            var CardViewTopFiledsWrap = $("<div class='vis-cardviewtopfieldswrap'></div>");
             var divCardViewMainSecondChild = $("<div class='vis-cardviewmainsecondchild'></div>");
             var divCardViewCondition = $("<div class='vis-cardviewCondition'></div>").append("<div class='vis-cardviewConditionControls'> </div>  <div class='vis-cardviewConditionGrid'> </div> ");
-            var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'> </button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
+            var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
-            divCardViewMainFirstChild.append("<div class='vis-firstdiv vis-pull-left' ></div>");
-            divCardViewMainFirstChild.append("<div class='vis-seconddiv vis-pull-right'></div>");
+            divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
+            CardViewTopFiledsWrap.append("<div class='vis-firstdiv vis-pull-left' ></div>");
+            CardViewTopFiledsWrap.append("<div class='vis-cv-blankdiv' ></div>");
+            CardViewTopFiledsWrap.append("<div class='vis-seconddiv vis-pull-right'></div>");
             divCardViewMainFirstChild.append("<div class='vis-thirddiv vis-pull-left' ></div>");
             rootCardViewUI.find(".vis-firstdiv").append("<div class='vis-first-divHeader'><label class='vis-ddlcardview'>" + VIS.Msg.getMsg("SelectCardView") + " </label><label style='display:none' class='vis-lbcardviewname'>" + VIS.Msg.getMsg("CardViewName") + " </label></div>  ")
             var divCardView = $("<div class='vis-CardView vis-pull-left'> <div  class='vis-cardviewchild vis-pull-left'></div>  </div>");
-            var divCardViewName = $("<input style='width:100%;display:none' class='vis-txtcardviewname' type='text'>");
+            var divCardViewName = $("<input style='display:none' class='vis-txtcardviewname' type='text'>");
             var divUser = $("<div class='vis-User vis-pull-left'></div>");
-            var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'>  </button><button style='display:none' class='vis-btncancle vis-cvd-canclebtn'>  </button> <button class='vis-btnedit vis-cvd-editbtn'>  </button></div>");
+            var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'><i class='vis vis-plus'></i></button><button style='display:none' class='vis-btncancle vis-cvd-canclebtn'><i class='vis vis-mark'></i></button> <button class='vis-btnedit vis-cvd-editbtn'><i class='vis vis-pencil'></i></button></div>");
             divCardView.find(".vis-cardviewchild").append("<select class='vis-cmbcardview'> </select>");
 
 
@@ -152,7 +155,7 @@
                 rootCardViewUI.find(".vis-firstdiv").append(divCardView);
 
                 rootCardViewUI.find(".vis-cardviewchild").append(divCardViewName);
-                rootCardViewUI.find(".vis-cardviewchild").css({ "width": "67%" });
+                rootCardViewUI.find(".vis-cardviewchild");
                 rootCardViewUI.find(".vis-CardView").append(btnNewAndCancle);
                 cmbUser = rootCardViewUI.find(".vis-cmbuser");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
@@ -163,11 +166,11 @@
             }
             else {
 
-                divCardViewCondition.css('width', '100%');
+                divCardViewCondition;
                 rootCardViewUI.find(".vis-firstdiv").append(divCardView);
                 rootCardViewUI.find(".vis-cardviewchild").append(divCardViewName);
-                rootCardViewUI.find(".vis-cardviewchild").css({ "width": "92%" });
-                divCardViewMainFirstChild.css({ "width": "100%", "float": "left" });
+                rootCardViewUI.find(".vis-cardviewchild");
+                //divCardViewMainFirstChild.css({ "width": "100%", "float": "left" });
                 rootCardViewUI.find(".k ").css("display", "none");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
                 rootCardViewUI.append(divCardViewCondition);
@@ -178,7 +181,7 @@
             CreateCVGrid(rootCardViewUI.find(".vis-cardviewConditionGrid"));
             divCardViewMainSecondChild.append("<label class='vis-pull-left'> " + VIS.Msg.getMsg("SelectRole") + "</label>");
 
-            divCardViewMainSecondChild.append("<div style='border: 1px solid #ccc;height: 171px;margin-top: 25px;overflow:auto'><ul class='vis-ulrole'> </ul></div>");
+            divCardViewMainSecondChild.append("<div class='vis-cardviewmainsecondchildinner'><ul class='vis-ulrole'> </ul></div>");
             ulRole = rootCardViewUI.find(".vis-ulrole");
             // controls 
             ddlCardView = rootCardViewUI.find(".vis-ddlcardview");
@@ -191,9 +194,9 @@
             // Textbox Control
             var rootTextControl = $("<div class='vis-divtextcontrol' ></div>");
 
-            rootTextControl.append("<div style='display:none' class='vis-second-divHeader vis-pull-left' ><div style='width:100%'> <label>" + VIS.Msg.getMsg("Window") + "</label></div><div style='width:100%'><input type='text'  class='vis-txtwindowname' style='width:100%' > </input></div></div>");
-            rootTextControl.append("<div style='display:none' class='vis-second-divHeader vis-pull-left' ><div style='width:100%'><label>" + VIS.Msg.getMsg("Tab") + "</label></div><div style='width:100%'><input type='text'  class='vis-txttabname' style='width:100%' > </input></div></div>");
-            rootTextControl.append("<div class='vis-second-divHeader vis-pull-left' ><div style='width:100%'><label>" + VIS.Msg.getMsg("GroupByField") + "</label></div><div style='width:92%'><select   class='vis-cmbgroupfield' style='width:100%;height:31px'> </select></div></div>");
+            rootTextControl.append("<div style='display:none' class='vis-second-divHeader vis-pull-left' ><div> <label>" + VIS.Msg.getMsg("Window") + "</label></div><div><input type='text'  class='vis-txtwindowname'></div></div>");
+            rootTextControl.append("<div style='display:none' class='vis-second-divHeader vis-pull-left' ><div><label>" + VIS.Msg.getMsg("Tab") + "</label></div><div><input type='text'  class='vis-txttabname'></div></div>");
+            rootTextControl.append("<div class='vis-second-divHeader vis-pull-left' ><div><label>" + VIS.Msg.getMsg("GroupByField") + "</label></div><div class='vis-CardView'><select class='vis-cmbgroupfield'> </select></div></div>");
             rootCardViewUI.find(".vis-seconddiv").append(rootTextControl);
             // TextBox Control
             txtWindowName = rootTextControl.find(".vis-txtwindowname");
@@ -208,12 +211,12 @@
             }
             divLeftGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left'></div>");
             divRightGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left' ></div>");
-            centerBtn = $("<div class='vis-cardviewbutton vis-pull-left' ><button class='vis-btnup'  style='margin-top:10px'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/up-cardview.png'></button><button  class='vis-btnright'  style='margin-top:10px'><img  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/" + (VIS.Application.isRTL ? "left" : "right") + "-shift.png' ></button></div>");
-            centerBtn.append("<button   class='vis-btnleft' style='margin-top:10px'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/" + (VIS.Application.isRTL ? "right" : "left") + "-shift.png' ></button><button  class='vis-btndown' style='margin-top:10px'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/down arrow.png' ></button>");
+            centerBtn = $("<div class='vis-cardviewbutton vis-pull-left' ><button class='vis-btnup'><i class='vis vis-arrow-up'></i></button><button  class='vis-btnright'><i class='vis vis-shiftright'></i></button></div>");
+            centerBtn.append("<button   class='vis-btnleft'><i class='vis vis-shiftleft'></i></button><button  class='vis-btndown'><i class='vis vis-arrow-down'></i></button>");
             divChildLeftLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("SelectField") + "</label></div>");
             divChildRightLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("IncludedField") + "</label></div>");
-            divChildLeftColumns = $("<div style='width:99%;border: 1px solid #ccc;height:77%;overflow:auto'></div>");
-            divChildRightColumns = $("<div style='width:100%;border: 1px solid #ccc;height:77%;overflow:auto'></div>");
+            divChildLeftColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
+            divChildRightColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
             ulLeftColumns = $("<ul  class='vis-windowfield'></ul>");
             ulRightColumns = $("<ul  class='vis-cardviewcolumnfield'></ul>");
             divChildLeftColumns.append(ulLeftColumns);
@@ -268,12 +271,12 @@
 
         var AddCVConditionControl = function (root) {
 
-            var pDiv = $('<div style="float:left;Width:calc( 100% - 41px)">');
+            var pDiv = $('<div class="vis-cv-condctrl-inner">');
             var divCVConditionCmbColor = $("<div class='vis-divcvc-cmbcolor'><div style='width:100%'><lable>" + VIS.Msg.getMsg("BGColor") + "</lable></div> <div style='width:100%'> <input class='vis-cmbcolor' type='color' /></div></div>");
             var divCVConditionCmbColumnColor = $("<div class='vis-divcvc-cmbcolumn'><div style='width:100%'><lable>" + VIS.Msg.getMsg("Column") + "</lable></div> <div><select class='vis-cmbcolumn'></select></div></div>");
             var divCVConditionCmbOperator = $("<div class='vis-divcvc-cmboperator'><div style='width:100%'><lable>" + VIS.Msg.getMsg("Operator") + "</lable></div>  <div><select class='vis-cmboperator'></select> </div></div>");
             var divCVConditionQueryValue = $("<div class='vis-divcvc-queryvalue'><div style='width:100%'><lable>" + VIS.Msg.getMsg("QueryValue") + "</lable></div> <div class='vis-cvd-valcontainer' style='width:100%'></div></div>");
-            var divCVConditionBtnSave = $("<div class='vis-divcvc-btnsave'><button class='vis-btnsave'></button></div>");
+            var divCVConditionBtnSave = $("<div class='vis-divcvc-btnsave'><button class='vis-btnsave'><i class='vis vis-plus'></i></button></div>");
             pDiv.append(divCVConditionCmbColor);
             pDiv.append(divCVConditionCmbColumnColor);
             pDiv.append(divCVConditionCmbOperator);
@@ -469,7 +472,7 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
-                    rootCardViewUI.find(".vis-cardviewchild").css({ "width": "81%" });
+                    rootCardViewUI.find(".vis-cardviewchild");
                     isNewRecord = true;
                     LstRoleID = [];
                     UnSelectRoleUl();
@@ -494,7 +497,7 @@
                     btnCancle.css({ "display": "none" });
                     txtCardViewName.val("");
                     btnEdit.css({ "display": "block" });
-                    rootCardViewUI.find(".vis-cardviewchild").css({ "width": "67%" });
+                    rootCardViewUI.find(".vis-cardviewchild");
                     isNewRecord = false;
                     FillColumnInclude(true, false);
                     FillGroupFields();
@@ -514,7 +517,7 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
-                    rootCardViewUI.find(".vis-cardviewchild").css({ "width": "81%" });
+                    rootCardViewUI.find(".vis-cardviewchild");
                     txtCardViewName.val(cmbCardView.find(":selected").text().trim());
 
                 });
@@ -540,9 +543,11 @@
             if (ulWindowField != null) {
                 ulWindowField.on("click", "li", function () {
                     if (lastSelectWindowFieldItem != null) {
-                        lastSelectWindowFieldItem.css("background-color", "white");
+                        //lastSelectWindowFieldItem.css(vis-btnsave"background-color", "white");
+                        lastSelectWindowFieldItem.removeClass('vis-cv-liselected');
                     }
-                    $(this).css("background-color", "#1aa0ed");
+                    //$(this).css("background-color", "#1aa0ed");
+                    $(this).addClass('vis-cv-liselected');
                     lastSelectWindowFieldItem = $(this);
                     //windowFieldindex = $(this).attr("index");
                     windowFieldindex = $(this).index();
@@ -553,9 +558,12 @@
             if (ulCardViewColumnField != null) {
                 ulCardViewColumnField.on("click", "li", function () {
                     if (lastSelectCardViewColumnFieldItem != null) {
-                        lastSelectCardViewColumnFieldItem.css("background-color", "white");
+                        //lastSelectCardViewColumnFieldItem.css("background-color", "white");
+                        lastSelectCardViewColumnFieldItem.removeClass('vis-cv-liselected');
+
                     }
-                    $(this).css("background-color", "#1aa0ed");
+                    //$(this).css("background-color", "#1aa0ed");
+                    $(this).addClass('vis-cv-liselected');
                     lastSelectCardViewColumnFieldItem = $(this);
                     //cardViewColumnFieldindex = $(this).attr("index");
                     cardViewColumnFieldindex = $(this).index();
@@ -897,7 +905,7 @@
             }
 
             if (cvTable != null) {
-                cvTable.on("click", "tr td img", function () {
+                cvTable.on("click", "tr td i", function () {
                     var rowIndex = $(this).parent().parent().index();
                     var selectRowColor = $(this).parent().parent().children().eq(0).attr("value");
                     var colName = $(this).parent().parent().children().eq(1).attr("value");
@@ -951,7 +959,8 @@
             }
             if (ad_Field_ID > 0) {
                 lastSelectCardViewColumnFieldItem = ulRoot.find("[fieldid='" + ad_Field_ID + "']");
-                ulRoot.find("[fieldid='" + ad_Field_ID + "']").css("background-color", "#1aa0ed");
+                //ulRoot.find("[fieldid='" + ad_Field_ID + "']").css("background-color", "#1aa0ed");
+                ulRoot.find("[fieldid='" + ad_Field_ID + "']").addClass('vis-cv-liselected');
             }
         };
         var ReloadWindowFieldsColumn = function (ulRoot, result) {
@@ -1230,7 +1239,7 @@
                         row.append("<td style='width:" + col2Width + "px' value=" + data[i].Condition[j].ColName + ">" + data[i].Condition[j].ColHeader + "</td>");
                         row.append("<td style='width:" + col3Width + "px' value=" + data[i].Condition[j].Operator + ">" + data[i].Condition[j].OperatorText + "</td>");
                         row.append("<td style='width:" + col4Width + "px' value=" + data[i].Condition[j].QueryValue + ">" + data[i].Condition[j].QueryText + "</td>");
-                        row.append("<td style='width:" + col5Width + "px'><img  style='cursor:pointer;margin-right:5px;width:20px;height:20px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/delete-ico.png' > </td>");
+                        row.append("<td style='width:" + col5Width + "px'><i class='vis vis-delete'></i></td>");
                         cvTable.append(row);
                     }
                 }

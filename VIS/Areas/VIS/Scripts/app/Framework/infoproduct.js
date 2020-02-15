@@ -12,7 +12,7 @@
 
         var inforoot = $("<div>");
         var isExpanded = true;
-        var subroot = $("<div>");
+        var subroot = $("<div class='vis-info-subroot'>");
         var sSContainer = null;
         var ssHeader = null;
         var btnExpander = null;
@@ -117,9 +117,9 @@
             inforoot.css("width", "100%");
             inforoot.css("height", "100%");
             inforoot.css("position", "relative");
-            subroot.css("width", "98%");
-            subroot.css("height", "97%");
-            subroot.css("position", "absolute");
+            //subroot.css("width", "98%");
+            //subroot.css("height", "97%");
+            //subroot.css("position", "absolute");
             tableSArea.css("width", "100%");
             //subroot.css("margin-left", "-10px");
 
@@ -130,20 +130,20 @@
             //ssHeader.append(btnExpander);
             //sSContainer.append(ssHeader);
 
-            if (VIS.Application.isRTL) {
-                searchTab = $("<div style='background-color: rgb(241, 241, 241);display: inline-block; float:right;width:23%;height:87.8%;overflow:auto;padding-right: 7px;margin-left: 10px;'>");
-                searchSec = $("<div style='background-color: rgb(241, 241, 241);'>");
+            //if (VIS.Application.isRTL) {
+            //    searchTab = $("<div style='background-color: rgb(241, 241, 241);display: inline-block; float:right;width:23%;height:87.8%;overflow:auto;padding-right: 7px;margin-left: 10px;'>");
+            //    searchSec = $("<div style='background-color: rgb(241, 241, 241);'>");
+            //    searchTab.append(searchSec);
+            //    datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
+            //    btnsec = $("<div style='display: inline-block;float: right;width:99%;height:auto;margin-top: 2px;'>");
+            //}
+            //else {
+                searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0'>");
+                searchSec = $("<div class='vis-info-l-s-content'>");
                 searchTab.append(searchSec);
-                datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
-                btnsec = $("<div style='display: inline-block;float: right;width:99%;height:auto;margin-top: 2px;'>");
-            }
-            else {
-                searchTab = $("<div style='background-color: rgb(241, 241, 241);display: inline-block; float: left;width:23%;height:87.8%;overflow:auto;padding-left: 7px;'>");
-                searchSec = $("<div style='background-color: rgb(241, 241, 241);'>");
-                searchTab.append(searchSec);
-                datasec = $("<div style='display: inline-block; float: left;width:75%;height:87.8%;margin-left:10px;'>");
-                btnsec = $("<div style='display: inline-block; float: left;width:99%;height:auto;margin-top: 2px;'>");
-            }
+                datasec = $("<div class='vis-info-datasec'>");
+                btnsec = $("<div class='vis-info-btnsec'>");
+            //}
             //searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;overflow:auto;'>");
             //searchSec = $("<div style='background-color: rgb(241, 241, 241)'>");
             //if (true) {//IPAD
@@ -232,7 +232,7 @@
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblValuetxt);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblValuetxt);
             td.append(label);
             tr.append(td);
 
@@ -247,13 +247,13 @@
             srchCtrl.ColumnName = "Value";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(ctrl.getControl());
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblNametxt);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblNametxt);
             td.append(label);
             tr.append(td);
 
@@ -269,13 +269,13 @@
             ctrl.setValue(value);
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(ctrl.getControl());
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblUPCtxt);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblUPCtxt);
             td.append(label);
             tr.append(td);
 
@@ -290,13 +290,13 @@
             srchCtrl.ColumnName = "UPC";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(ctrl.getControl());
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblSKUtxt);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblSKUtxt);
             td.append(label);
             tr.append(td);
 
@@ -311,13 +311,13 @@
             srchCtrl.ColumnName = "SKU";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(ctrl.getControl());
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblWarehousetxt);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblWarehousetxt);
             td.append(label);
             tr.append(td);
 
@@ -332,13 +332,13 @@
             srchCtrl.ColumnName = "M_Warehouse_ID";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(cmbWarehoue.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(cmbWarehoue.getControl());
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblPriceListtxt);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblPriceListtxt);
             td.append(label);
             tr.append(td);
 
@@ -353,7 +353,7 @@
             srchCtrl.ColumnName = "M_PriceList_Version_ID";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(cmbPriceList.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(cmbPriceList.getControl());
             srchCtrls.push(srchCtrl);
 
 
@@ -361,7 +361,7 @@
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblAttrCodeText);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttrCodeText);
             td.append(label);
             tr.append(td);
 
@@ -376,14 +376,14 @@
             srchCtrl.ColumnName = "AttributeCode";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(ctrl.getControl());
             srchCtrls.push(srchCtrl);
 
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblAttributeSet);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttributeSet);
             td.append(label);
             tr.append(td);
 
@@ -397,13 +397,13 @@
             srchCtrl.ColumnName = "M_AttributeSet_ID";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(cmbAttributeSet.getControl().css("width", "97%").css("font-weight", "inherit"));
+            tdctrl.append(cmbAttributeSet.getControl());
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblAttrSetInstance);
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttrSetInstance);
             td.append(label);
             tr.append(td);
 
@@ -416,27 +416,27 @@
             //---end--------
 
             searchSec.append(tableSArea);
-            divbtnRight = $("<div style='float:right;'>");
+            divbtnRight = $("<div class='vis-info-btnswrap'>");
 
-            if (VIS.Application.isRTL) {
-                divbtnsec = $("<div style='float:left;'>");
-                btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(Oktxt);
-                btnAddCart = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px;display:block;'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/addToCart.png'>"));
-                btnShowSaved = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/list.png'>"));
-                btnScanFile = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/scan.png'>"));
-                btnShowCart = $("<button class='VIS_Pref_btn-2'style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/opencart.png'>"));
-            }
-            else {
-                divbtnsec = $("<div style='float:right;'>");
-                btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(Oktxt);
-                btnAddCart = $("<button class='VIS_Pref_btn-2' style='margin-right:5px;margin-top: 5px;margin-bottom: -10px;display:block;'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/addToCart.png'>"));
-                btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled style='margin-right:5px;margin-top: 5px;margin-bottom: -10px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/list.png'>"));
-                btnScanFile = $("<button class='VIS_Pref_btn-2' style='margin-right:5px;margin-top: 5px;margin-bottom: -10px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/scan.png'>"));
-                btnShowCart = $("<button class='VIS_Pref_btn-2' style='margin-right:5px;margin-top: 5px;margin-bottom: -10px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/opencart.png'>"));
+            //if (VIS.Application.isRTL) {
+            //    divbtnsec = $("<div style='float:left;'>");
+            //    btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(canceltxt);
+            //    btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(Oktxt);
+            //    btnAddCart = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px;display:block;'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/addToCart.png'>"));
+            //    btnShowSaved = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/list.png'>"));
+            //    btnScanFile = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/scan.png'>"));
+            //    btnShowCart = $("<button class='VIS_Pref_btn-2'style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/opencart.png'>"));
+            //}
+            //else {
+                divbtnsec = $("<div class='vis-info-ls-btnswrap'>");
+                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+                btnAddCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-cart-plus'></i>"));
+                btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled>").append($("<i class='fa fa-list-ul'></i>"));
+                btnScanFile = $("<button class='VIS_Pref_btn-2'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/scan.png'>"));
+                btnShowCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-shopping-cart'></i>"));
                 //btnShowSaved.prop('disabled', true);
-            }
+            //}
 
             //divbtnRight.append(btnCancel);
             //divbtnRight.append(btnOK);
@@ -447,25 +447,25 @@
             //btnsec.append(divbtnRight);
 
 
-            divbtnLeft = $("<div style='float:left;'>");
-            btnRequery = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png'>"))//.append(refreshtxt);
+            divbtnLeft = $("<div class='vis-info-btnleft'>");
+            btnRequery = $("<button class='VIS_Pref_btn-2' style='margin-top: 10px;'>").append($("<i class='vis vis-refresh'></i>"))//.append(refreshtxt);
 
             //PagingCtrls
-            divPaging = $('<div>');
+            divPaging = $('<div class="vis-info-pagingwrp">');
             createPageSettings();
             divPaging.append(ulPaging);
 
-            if (VIS.Application.isRTL) {
-                divbtnLeft.append(btnCancel);
-                divbtnLeft.append(btnOK);
-                divbtnLeft.append(btnShowSaved);
-                divbtnLeft.append(btnAddCart);
-                divbtnsec.append(btnScanFile);
-                divbtnsec.append(btnShowCart);
-                searchTab.append(divbtnsec);
-                divbtnRight.append(btnRequery);
-            }
-            else {
+            //if (VIS.Application.isRTL) {
+            //    divbtnLeft.append(btnCancel);
+            //    divbtnLeft.append(btnOK);
+            //    divbtnLeft.append(btnShowSaved);
+            //    divbtnLeft.append(btnAddCart);
+            //    divbtnsec.append(btnScanFile);
+            //    divbtnsec.append(btnShowCart);
+            //    searchTab.append(divbtnsec);
+            //    divbtnRight.append(btnRequery);
+            //}
+            //else {
                 divbtnRight.append(btnCancel);
                 divbtnRight.append(btnOK);
                 divbtnRight.append(btnShowSaved);
@@ -474,12 +474,12 @@
                 divbtnsec.append(btnShowCart);
                 searchTab.append(divbtnsec);
                 divbtnLeft.append(btnRequery);
-            }
+            //}
 
             // divbtnLeft.append(btnRequery);
-            btnsec.append(divbtnRight);
-            btnsec.append(divPaging);
             btnsec.append(divbtnLeft);
+            btnsec.append(divPaging);
+            btnsec.append(divbtnRight);
             //Busy Indicator
             bsyDiv = $("<div class='vis-apanel-busy'>");
             bsyDiv.css("width", "98%");
@@ -501,12 +501,12 @@
             var _WhereAttr = " M_AttributeSetInstance_ID IN (SELECT  asi.M_AttributeSetInstance_ID as M_AttributeSetInstance_ID   FROM M_AttributeSetInstance asi   WHERE asi.IsActive='Y' AND asi.M_ATTRIBUTESET_ID=" + cmbAttributeSet.ctrl.val() + ")";
             _AttrSetInstLookUp = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, 8472, VIS.DisplayType.Search, "M_AttributeSetInstance_ID", 0, false, _WhereAttr);
             $AttrSetInstControl = new VIS.Controls.VTextBoxButton("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.Search, _AttrSetInstLookUp);
-            $AttrSetInstControl.getControl().css("width", "63%").css('float', 'left');
-            $AttrSetInstControl.getBtn(0).css("height", "26px");
-            $AttrSetInstControl.getBtn(0).css("margin-top", "-1px");
-            $AttrSetInstControl.getBtn(0).css('float','left');
-            $AttrSetInstControl.getBtn(1).css("height", "26px");
-            $AttrSetInstControl.getBtn(1).css("margin-top", "-1px");
+            $AttrSetInstControl.getControl().css("width", "calc(100% - 60px)");
+            //$AttrSetInstControl.getBtn(0).css("height", "26px");
+            //$AttrSetInstControl.getBtn(0).css("margin-top", "-1px");
+            //$AttrSetInstControl.getBtn(0).css('float','left');
+            //$AttrSetInstControl.getBtn(1).css("height", "26px");
+            //$AttrSetInstControl.getBtn(1).css("margin-top", "-1px");
             srchCtrl.Ctrl = $AttrSetInstControl;
             srchCtrl.AD_Reference_ID = VIS.DisplayType.Search;
             srchCtrl.ColumnName = "M_AttributeSetInstance_ID";
@@ -1243,11 +1243,11 @@
                     },
                     {
                         field: "Delete", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "DeleteActivity") + '</span></div>', sortable: false, size: '60px', min: 40, hidden: false,
-                        render: function () { return '<div style="text-align: center;"><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/delete-ico-hover.png" alt="Delete record" title="Delete record" style="opacity: 1;"></div>'; }
+                        render: function () { return '<div class="vis-info-grid-icowrap"><i class="vis vis-delete title="Delete record" style="opacity: 1;"></i></div>'; }
                     },
                     {
                         field: "Copy", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "Copy") + '</span></div>', sortable: false, size: '60px', min: 40, hidden: false,
-                        render: function () { return '<div style="text-align: center;"><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/add-edit.png" alt="Copy record" title="Copy record" style="opacity: 1;"></div>'; }
+                        render: function () { return '<div class="vis-info-grid-icowrap"><i class="vis vis-new title="Copy record" style="opacity: 1;"></i></div>'; }
                     },
                     { field: "ProdID", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "ProdID") + '</span></div>', sortable: false, size: '20%', min: 150, hidden: true }
                 ],
@@ -2550,19 +2550,19 @@
         //******************
 
         function createPageSettings() {
-            ulPaging = $('<ul style="float:right;margin-top:10px" class="vis-statusbar-ul">');
+            ulPaging = $('<ul class="vis-statusbar-ul">');
 
-            liFirstPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="' + VIS.Msg.getMsg("FirstPage") + '"  style="opacity: 0.6;"></div></li>');
+            liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="' + VIS.Msg.getMsg("FirstPage") + '"  style="opacity: 0.6;"></i></div></li>');
 
-            liPrevPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="' + VIS.Msg.getMsg("PageUp") + '"  style="opacity: 0.6;"></div></li>');
+            liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="' + VIS.Msg.getMsg("PageUp") + '"  style="opacity: 0.6;"></i></div></li>');
 
             cmbPage = $("<select>");
 
             liCurrPage = $('<li>').append(cmbPage);
 
-            liNextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" title="' + VIS.Msg.getMsg("PageDown") + '" style="opacity: 0.6;"></div></li>');
+            liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" title="' + VIS.Msg.getMsg("PageDown") + '" style="opacity: 0.6;"></i></div></li>');
 
-            liLastPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="' + VIS.Msg.getMsg("LastPage") + '" style="opacity: 0.6;"></div></li>');
+            liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" title="' + VIS.Msg.getMsg("LastPage") + '" style="opacity: 0.6;"></i></div></li>');
 
 
             ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);

@@ -79,6 +79,7 @@
 .vis-control-wrap {
     flex: 1;
     position: relative;
+    z-index: 1;
 }
 .vis-input-wrap input {
     display: block;
@@ -282,7 +283,8 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label{
 /*mandatory*/
 .vis-ev-col-mandatory {
     color: inherit !important;
-    background-color: lightpink !important;
+    background-color: rgba(var(--v-c-mandatory), .2);
+    /*border: 1px solid rgba(var(--v-c-mandatory), 1) !important;*/
 }
 
 .vis-input-wrap .vis-ev-col-mandatory {
@@ -325,9 +327,9 @@ label.vis-ec-col-lblchkbox {
     position: relative;
     pointer-events: auto;
     left: 0;
-    display: inline-flex;
-    
+    display: inline-flex;    
     align-items: center;
+    font-weight: normal;
 }
 
 .vis-ev-col label.vis-ec-col-lblchkbox {
@@ -339,9 +341,7 @@ label.vis-ec-col-lblchkbox {
     width: auto;
     min-height: 0;
     min-width: 0px;
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-bottom: 0;
+    margin: 0 4px;
 }
 
         .vis-ec-col-lblchkbox input[type=checkbox]:focus {

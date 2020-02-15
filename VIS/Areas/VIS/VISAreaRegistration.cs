@@ -150,7 +150,7 @@ namespace VIS
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
                   "~/Areas/VIS/Scripts/app/masterdataversion.js",
-
+                  "~/Areas/VIS/Scripts/tabpanels/bipanel.js",
 
                   "~/Areas/VIS/Scripts/TestPanel.js");
 
@@ -205,7 +205,7 @@ namespace VIS
                 );
 
 
-            //style.Include("~/Areas/VIS/Content/VIS.rtl.css");
+            style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
             //style.Include("~/Areas/VIS/Content/VIS.all.min.css");
 

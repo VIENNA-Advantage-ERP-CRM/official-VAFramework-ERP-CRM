@@ -3,9 +3,11 @@ html, body {
     height: 100%;
     width: 100%;
     margin: 0;
-    font-weight: 200;
+    font-weight: 400;
     overflow: hidden;
-    font-family: 'NoirPro-Regular' !important;
+    /*font-family: 'NoirPro-Regular' !important;*/
+    font-family: 'Montserrat-Regular', sans-serif !important;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
 * {
@@ -28,7 +30,7 @@ select {
     appearance: none;
     /*background: transparent;*/
     background-image: linear-gradient(45deg, transparent 50%, rgba(var(--v-c-primary),1) 50%), linear-gradient(135deg, rgba(var(--v-c-primary),1) 50%, transparent 50%);
-    background-position: calc(100% - 14.8px), calc(100% - 10px);
+    background-position: calc(100% - 14px), calc(100% - 10px);
     background-size: 5px 4px, 5px 4px, 1px 1.5em;
     background-repeat: no-repeat;
     flex: 1;
@@ -386,7 +388,7 @@ select {
     vertical-align: top;
 }
 .vis-app-aform-root input[type=checkbox], .ui-dialog input[type=checkbox] {
-    margin: 4px 4px 0;
+    margin: 4px 4px 0 0;
 }
 
 /*End */
