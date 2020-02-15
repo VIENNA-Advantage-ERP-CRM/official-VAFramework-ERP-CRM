@@ -734,6 +734,11 @@
 
     ContentPane.prototype.dispose = function () {
         this.disposeComponents();
+        this.aNew.dispose();
+        this.aSave.dispose();
+        this.aDelete.dispose();
+        this.aRefresh.dispose();
+
         this.aPanel = null;
     };
 

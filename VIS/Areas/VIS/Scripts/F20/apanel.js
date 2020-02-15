@@ -1326,8 +1326,8 @@
 
         this.ctx.setContext(curWindowNo, "WindowName", gridWindow.getName());
 
-        var multitabview = false; //Get From DB Field
-        this.vTabbedPane.init(this, multitabview);
+        var multiTabview = gridWindow.getIsCompositeView();
+        this.vTabbedPane.init(this, multiTabview);
 
 
         /* Select Record */
@@ -1451,7 +1451,7 @@
         this.setTitle(VIS.Env.getHeader(this.ctx, curWindowNo));
         $parent.setName(jsonData._vo.DisplayName);
         this.curWindowNo = curWindowNo;
-        if (multitabview) {
+        if (multiTabview) {
             this.setIncTabReziable();
         }
         jsonData = null;

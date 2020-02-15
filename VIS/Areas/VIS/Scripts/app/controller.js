@@ -366,6 +366,10 @@
         return this.vo.ImageUrl;
     }
 
+    GridWindow.prototype.getIsCompositeView = function () {
+        return this.vo.IsCompositeView;
+    }
+
     GridWindow.prototype.dispose = function () {
 
         originalLength = this.tabs.length;

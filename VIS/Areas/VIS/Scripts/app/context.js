@@ -37,7 +37,7 @@ VIS.context.getWindowContext = function (windowNo, context, onlyWindow,val2) {
     if (context == null)
         throw new ArgumentException("Require Context");
     if (typeof (arguments[1]) == "number" && arguments.length > 2) {
-        return VIS.context.getWindowTabContext(arguments[0], arguments[1], arguments[2]);
+        return VIS.context.getTabRecordContext(arguments[0], arguments[1], arguments[2]);
     }
 
     var tabNo = "";
@@ -269,7 +269,7 @@ VIS.context.getContextAsInt = function (windowNo, context, onlyWindow) {
     var s = "";
     if (arguments.length > 1 && typeof (arguments[1] )== "number")
         s = this.getWindowTabContext(arguments[0], arguments[1], arguments[2]);
-    if (arguments.length > 1 && typeof (arguments[0]) == "number")
+    else if (arguments.length > 1 && typeof (arguments[0]) == "number")
         s = this.getWindowContext(windowNo, context, onlyWindow);
     else {
         s = this.getContext(arguments[0]);
