@@ -122,8 +122,10 @@ namespace VIS.Controllers
                 {
                     Ctx ctx = Session["ctx"] as Ctx;
                     sqlIn.sql = SecureEngineBridge.DecryptByClientKey(sqlIn.sql, ctx.GetSecureKey());
+                    sqlIn.sqlDirect = SecureEngineBridge.DecryptByClientKey(sqlIn.sqlDirect, ctx.GetSecureKey());
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
+                    sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
                     data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID);
                 }
             }

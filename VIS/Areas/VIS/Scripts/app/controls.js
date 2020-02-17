@@ -2681,7 +2681,7 @@
                 //	//log.finest("ZoomQuery=" + (_lookup.getZoomQuery()==null ? "" : _lookup.getZoomQuery().getWhereClause())
                 //		+ ", Validation=" + _lookup.getValidation());
                 if (WhereClause.indexOf('@') != -1) {
-                    var validated = VIS.Env.parseContext(ctx, _Lookup.getWindowNo(), WhereClause, false, true);
+                    var validated = VIS.Env.parseContext(ctx, _Lookup.getWindowNo(), _Lookup.getTabNo(), WhereClause, false, true);
                     if (validated.length == 0) {
                         ////log.severe(_columnName + " - Cannot Parse=" + whereClause);
                     }
@@ -5751,7 +5751,7 @@
 
             var text = $ctrl.val().trim();
 
-            var validated = VIS.Env.parseContext(VIS.Env.getCtx(), windowNo, self.lookup.info.validationCode, false, true);
+            var validated = VIS.Env.parseContext(VIS.Env.getCtx(), windowNo, self.lookup.getTabNo(), self.lookup.info.validationCode, false, true);
 
             if (!text || mustOpen) {
                 self.openForm(0, 0, text, validated);
