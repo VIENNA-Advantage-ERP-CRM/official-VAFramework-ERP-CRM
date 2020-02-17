@@ -588,8 +588,6 @@ padding-left: 1%;
     /*color: #1aa0ed;*/
     margin-top: 10px;
 }
-
-
 .VIS-TM-data-headMID > h4{
     /*float: left; */
     color: rgba(var(--v-c-primary), 1);
@@ -597,25 +595,17 @@ padding-left: 1%;
     font-size: 16px;
     flex: 1;
 }
-
-
 .VIS-Tm-glyphiconglyphicon-link {
-    /*background: url('../Images/link-del.png') no-repeat;
-    height: 19px;
-    width: 16px;
-    vertical-align:middle;
-    display: inline-block;*/
     margin-left: 10px;
+    position: relative;
+    font-family: 'vis-fonts' !important;
+    cursor: pointer;
 }
-
 .VIS-Tm-deletetreenode {
     background: url('../Images/link-del.png') no-repeat;
     height: 19px;
     width: 16px;    
 }
-
-
-
 .VIS-TM-tree-wrap {
     padding-top: 8px;
     /*height: calc(100% - 118px);
@@ -814,6 +804,7 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
     background-position: 0 11px;
     float:left;
     width:100%;*/
+        display: flex;
 }
 .VIS-TM-treeList ul > li {
         padding: 5px 0px;
@@ -870,8 +861,8 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
     /* padding: 5px; */
     /* float: left; */
     color: rgba(var(--v-c-on-secondary), 1);
-    width: 29px;
-    height: 29px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
      top: 0px; 
     margin-right: 5px;
@@ -903,7 +894,8 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
     display: inline-flex;
     align-items: center;
 }
-.VIS-Tm-unlinkforbottmo:after {
+.VIS-Tm-unlinkforbottmo:after,
+.VIS-Tm-glyphiconglyphicon-link:after{
     content: "\e91e";
     position: absolute;
     bottom: 5px;
@@ -912,7 +904,14 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
     color: red;
     font-weight: bolder;
 }
-
+.VIS-Tm-glyphiconglyphicon-link:before {
+    position: relative;
+    content: "\e93f";
+}
+.VIS-TM-treeList ul li .VIS-Tm-glyphiconglyphicon-link:after {
+    bottom: -2px;
+    right: -3px;
+}
 
 .vis-tm-unlinkimgss
 {
@@ -1071,9 +1070,8 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
     align-items: center;
     padding: 0 10px;
 }
-
 .vis-tm-b-s-ryt input[type="checkbox"] {
-    margin: 2px 5px 0 0;
+    margin: 1px 5px 0 0 !important;
 }
 .VIS-TM-left-tree input:focus, .VIS-TM-left-tree select:focus,
 .VIS-TM-right-slide input:focus, .VIS-TM-right-slide select:focus {

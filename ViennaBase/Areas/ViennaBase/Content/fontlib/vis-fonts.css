@@ -51,447 +51,646 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.vis-import:before {
-  content: "\e927";
+.vis-contacts-o:before {
+    content: "\e994";
 }
-.vis-export:before {
-  content: "\e93b";
+
+.vis-shopping-cart:before {
+    content: "\e995";
 }
+
 .vis-lock:before {
-  content: "\e98f";
+    content: "\e98f";
 }
+
 .vis-lockx:before {
-  content: "\e990";
+    content: "\e990";
 }
+
+.vis-users-o:before {
+    content: "\e996";
+}
+
+.vis-user-o:before {
+    content: "\e997";
+}
+
 .vis-m-window:before {
     content: "\e900";
 }
+
 .vis-graph:before {
-  content: "\e991";
+    content: "\e991";
 }
+
 .vis-product:before {
-  content: "\e993";
+    content: "\e993";
 }
+
 .vis-bars:before {
-  content: "\e992";
+    content: "\e992";
 }
+
+.vis-import:before {
+    content: "\e927";
+}
+
+.vis-open-book:before {
+    content: "\e998";
+}
+
+.vis-export:before {
+    content: "\e93b";
+}
+
+.vis-browser:before {
+    content: "\e999";
+}
+
+.vis-code:before {
+    content: "\e99a";
+}
+
+.vis-paper-plane:before {
+    content: "\e99d";
+}
+
+.vis-publish:before {
+    content: "\e99e";
+}
+
+.vis-scanner:before {
+    content: "\e99b";
+}
+
+.vis-save-attach:before {
+    content: "\e99f";
+}
+
+.vis-save-as:before {
+    content: "\e9a0";
+}
+
+.vis-open-file:before {
+    content: "\e9a1";
+}
+
 .vis-account:before {
-  content: "\e901";
+    content: "\e901";
 }
+
 .vis-action:before {
-  content: "\e902";
+    content: "\e902";
 }
+
 .vis-addbp:before {
-  content: "\e903";
+    content: "\e903";
 }
+
 .vis-address-book:before {
-  content: "\e904";
+    content: "\e904";
 }
+
 .vis-amtdimension:before {
-  content: "\e905";
+    content: "\e905";
 }
+
 .vis-appointment:before {
-  content: "\e906";
+    content: "\e906";
 }
+
 .vis-archive:before {
-  content: "\e907";
+    content: "\e907";
 }
+
 .vis-arrow-down:before {
-  content: "\e908";
+    content: "\e908";
 }
+
 .vis-arrow-left:before {
-  content: "\e909";
+    content: "\e909";
 }
+
 .vis-arrow-right:before {
-  content: "\e90a";
+    content: "\e90a";
 }
+
 .vis-arrow-up:before {
-  content: "\e90b";
+    content: "\e90b";
 }
+
 .vis-attachdocumentfrom:before {
-  content: "\e90c";
+    content: "\e90c";
 }
+
 .vis-attachment:before {
-  content: "\e90d";
+    content: "\e90d";
 }
+
 .vis-attachment1:before {
-  content: "\e90e";
+    content: "\e90e";
 }
+
 .vis-attachmentx:before {
-  content: "\e90f";
+    content: "\e90f";
 }
+
 .vis-bin:before {
-  content: "\e910";
+    content: "\e910";
 }
+
 .vis-calculator:before {
-  content: "\e911";
+    content: "\e911";
 }
+
 .vis-cancel-circle:before {
-  content: "\e912";
+    content: "\e912";
 }
+
 .vis-card:before {
-  content: "\e913";
+    content: "\e913";
 }
+
 .vis-carddialog:before {
-  content: "\e914";
+    content: "\e914";
 }
+
 .vis-chat:before {
-  content: "\e915";
+    content: "\e915";
 }
+
 .vis-chatx:before {
-  content: "\e916";
+    content: "\e916";
 }
+
 .vis-clock:before {
-  content: "\e917";
+    content: "\e917";
 }
+
 .vis-cog:before {
-  content: "\e918";
+    content: "\e918";
 }
+
 .vis-contacts:before {
-  content: "\e919";
+    content: "\e919";
 }
+
 .vis-copy:before {
-  content: "\e91a";
+    content: "\e91a";
 }
+
 .vis-copy1:before {
-  content: "\e91b";
+    content: "\e91b";
 }
+
 .vis-createdocument:before {
-  content: "\e91c";
+    content: "\e91c";
 }
+
 .vis-createdocumentx:before {
-  content: "\e91d";
+    content: "\e91d";
 }
+
 .vis-cross:before {
-  content: "\e91e";
+    content: "\e91e";
 }
+
 .vis-csv-all:before {
-  content: "\e91f";
+    content: "\e91f";
 }
+
 .vis-customize:before {
-  content: "\e920";
+    content: "\e920";
 }
+
 .vis-delete:before {
-  content: "\e921";
+    content: "\e921";
 }
+
 .vis-document:before {
-  content: "\e922";
+    content: "\e922";
 }
+
 .vis-edit:before {
-  content: "\e923";
+    content: "\e923";
 }
+
 .vis-email:before {
-  content: "\e924";
+    content: "\e924";
 }
+
 .vis-enter:before {
-  content: "\e925";
+    content: "\e925";
 }
+
 .vis-exit:before {
-  content: "\e926";
+    content: "\e926";
 }
+
 .vis-eye:before {
-  content: "\e928";
+    content: "\e928";
 }
+
 .vis-eye-blocked:before {
-  content: "\e929";
+    content: "\e929";
 }
+
 .vis-eye-minus:before {
-  content: "\e92a";
+    content: "\e92a";
 }
+
 .vis-eye-plus:before {
-  content: "\e92b";
+    content: "\e92b";
 }
+
 .vis-favourite:before {
-  content: "\e92c";
+    content: "\e92c";
 }
+
 .vis-faxemail:before {
-  content: "\e92d";
+    content: "\e92d";
 }
+
 .vis-file-empty:before {
-  content: "\e92e";
+    content: "\e92e";
 }
+
 .vis-file-pdf:before {
-  content: "\e92f";
+    content: "\e92f";
 }
+
 .vis-file-text:before {
-  content: "\e930";
+    content: "\e930";
 }
+
 .vis-find:before {
-  content: "\e931";
+    content: "\e931";
 }
+
 .vis-format:before {
-  content: "\e932";
+    content: "\e932";
 }
+
 .vis-gear:before {
-  content: "\e933";
+    content: "\e933";
 }
+
 .vis-hammer:before {
-  content: "\e934";
+    content: "\e934";
 }
+
 .vis-help:before {
-  content: "\e935";
+    content: "\e935";
 }
+
 .vis-history:before {
-  content: "\e936";
+    content: "\e936";
 }
+
 .vis-home:before {
-  content: "\e937";
+    content: "\e937";
 }
+
 .vis-ignore:before {
-  content: "\e938";
+    content: "\e938";
 }
+
 .vis-image:before {
-  content: "\e939";
+    content: "\e939";
 }
+
 .vis-images:before {
-  content: "\e93a";
+    content: "\e93a";
 }
+
 .vis-info:before {
-  content: "\e93c";
+    content: "\e93c";
 }
+
 .vis-kpi:before {
-  content: "\e93d";
+    content: "\e93d";
 }
+
 .vis-letter:before {
-  content: "\e93e";
+    content: "\e93e";
 }
+
 .vis-link:before {
-  content: "\e93f";
+    content: "\e93f";
 }
+
 .vis-location:before {
-  content: "\e940";
+    content: "\e940";
 }
+
 .vis-locator:before {
-  content: "\e941";
+    content: "\e941";
 }
+
 .vis-f-lock:before {
-  content: "\e942";
+    content: "\e942";
 }
+
 .vis-f-lockx:before {
-  content: "\e943";
+    content: "\e943";
 }
+
 .vis-logout:before {
-  content: "\e944";
+    content: "\e944";
 }
+
 .vis-loop:before {
-  content: "\e945";
+    content: "\e945";
 }
+
 .vis-mark:before {
-  content: "\e946";
+    content: "\e946";
 }
+
 .vis-markx:before {
-  content: "\e947";
+    content: "\e947";
 }
+
 .vis-multi:before {
-  content: "\e948";
+    content: "\e948";
 }
+
 .vis-multix:before {
-  content: "\e949";
+    content: "\e949";
 }
+
 .vis-multix1:before {
-  content: "\e94a";
+    content: "\e94a";
 }
+
 .vis-mytasks:before {
-  content: "\e94b";
+    content: "\e94b";
 }
+
 .vis-new:before {
-  content: "\e94c";
+    content: "\e94c";
 }
+
 .vis-new-tab:before {
-  content: "\e94d";
+    content: "\e94d";
 }
+
 .vis-next:before {
-  content: "\e94e";
+    content: "\e94e";
 }
+
 .vis-notice:before {
-  content: "\e94f";
+    content: "\e94f";
 }
+
 .vis-pagedown:before {
-  content: "\e950";
+    content: "\e950";
 }
+
 .vis-pageup:before {
-  content: "\e951";
+    content: "\e951";
 }
+
 .vis-paste:before {
-  content: "\e952";
+    content: "\e952";
 }
+
 .vis-pattribute:before {
-  content: "\e953";
+    content: "\e953";
 }
+
 .vis-payment:before {
-  content: "\e954";
+    content: "\e954";
 }
+
 .vis-pcontainer:before {
-  content: "\e955";
+    content: "\e955";
 }
+
 .vis-pdf-all:before {
-  content: "\e956";
+    content: "\e956";
 }
+
 .vis-pencil:before {
-  content: "\e957";
+    content: "\e957";
 }
+
 .vis-plus:before {
-  content: "\e958";
+    content: "\e958";
 }
+
 .vis-preference:before {
-  content: "\e959";
+    content: "\e959";
 }
+
 .vis-previous:before {
-  content: "\e95a";
+    content: "\e95a";
 }
+
 .vis-print:before {
-  content: "\e95b";
+    content: "\e95b";
 }
+
 .vis-f-product:before {
-  content: "\e95c";
+    content: "\e95c";
 }
+
 .vis-recordaccess:before {
-  content: "\e95d";
+    content: "\e95d";
 }
+
 .vis-recordaccessx:before {
-  content: "\e95e";
+    content: "\e95e";
 }
+
 .vis-refresh:before {
-  content: "\e95f";
+    content: "\e95f";
 }
+
 .vis-removefav:before {
-  content: "\e960";
+    content: "\e960";
 }
+
 .vis-report:before {
-  content: "\e961";
+    content: "\e961";
 }
+
 .vis-request:before {
-  content: "\e962";
+    content: "\e962";
 }
+
 .vis-save:before {
-  content: "\e963";
+    content: "\e963";
 }
+
 .vis-save-csv:before {
-  content: "\e964";
+    content: "\e964";
 }
+
 .vis-save-pdf:before {
-  content: "\e965";
+    content: "\e965";
 }
+
 .vis-search:before {
-  content: "\e966";
+    content: "\e966";
 }
+
 .vis-share:before {
-  content: "\e967";
+    content: "\e967";
 }
+
 .vis-shiftleft:before {
-  content: "\e968";
+    content: "\e968";
 }
+
 .vis-shiftright:before {
-  content: "\e969";
+    content: "\e969";
 }
+
 .vis-shortcut:before {
-  content: "\e96a";
+    content: "\e96a";
 }
+
 .vis-shuffle:before {
-  content: "\e96b";
+    content: "\e96b";
 }
+
 .vis-sms:before {
-  content: "\e96c";
+    content: "\e96c";
 }
+
 .vis-smsx:before {
-  content: "\e96d";
+    content: "\e96d";
 }
+
 .vis-spinner:before {
-  content: "\e96e";
+    content: "\e96e";
 }
+
 .vis-stack:before {
-  content: "\e96f";
+    content: "\e96f";
 }
+
 .vis-star-empty:before {
-  content: "\e970";
+    content: "\e970";
 }
+
 .vis-star-full:before {
-  content: "\e971";
+    content: "\e971";
 }
+
 .vis-star-half:before {
-  content: "\e972";
+    content: "\e972";
 }
+
 .vis-stats-bars:before {
-  content: "\e973";
+    content: "\e973";
 }
+
 .vis-stats-dots:before {
-  content: "\e974";
+    content: "\e974";
 }
+
 .vis-subscribe:before {
-  content: "\e975";
+    content: "\e975";
 }
+
 .vis-subscribex:before {
-  content: "\e976";
+    content: "\e976";
 }
+
 .vis-task:before {
-  content: "\e977";
+    content: "\e977";
 }
+
 .vis-taskassigned:before {
-  content: "\e978";
+    content: "\e978";
 }
+
 .vis-ticket:before {
-  content: "\e979";
+    content: "\e979";
 }
+
 .vis-tl-1:before {
-  content: "\e97a";
+    content: "\e97a";
 }
+
 .vis-tl-2:before {
-  content: "\e97b";
+    content: "\e97b";
 }
+
 .vis-tl-3:before {
-  content: "\e97c";
+    content: "\e97c";
 }
+
 .vis-tl-4:before {
-  content: "\e97d";
+    content: "\e97d";
 }
+
 .vis-undo2:before {
-  content: "\e97e";
+    content: "\e97e";
 }
+
 .vis-updatebp:before {
-  content: "\e97f";
+    content: "\e97f";
 }
+
 .vis-uploaddocument:before {
-  content: "\e980";
+    content: "\e980";
 }
+
 .vis-uploaddocumentx:before {
-  content: "\e981";
+    content: "\e981";
 }
+
 .vis-url:before {
-  content: "\e982";
+    content: "\e982";
 }
+
 .vis-user:before {
-  content: "\e983";
+    content: "\e983";
 }
+
 .vis-user-check:before {
-  content: "\e984";
+    content: "\e984";
 }
+
 .vis-userfeed:before {
-  content: "\e985";
+    content: "\e985";
 }
+
 .vis-user-minus:before {
-  content: "\e986";
+    content: "\e986";
 }
+
 .vis-userprofile:before {
-  content: "\e987";
+    content: "\e987";
 }
+
 .vis-users:before {
-  content: "\e988";
+    content: "\e988";
 }
+
 .vis-viewdocument:before {
-  content: "\e989";
+    content: "\e989";
 }
+
 .vis-viewdocumentx:before {
-  content: "\e98a";
+    content: "\e98a";
 }
+
 .vis-warning:before {
-  content: "\e98b";
+    content: "\e98b";
 }
+
 .vis-web:before {
-  content: "\e98c";
+    content: "\e98c";
 }
+
 .vis-workflow:before {
-  content: "\e98d";
+    content: "\e98d";
 }
+
 .vis-zoomacross:before {
-  content: "\e98e";
+    content: "\e98e";
 }

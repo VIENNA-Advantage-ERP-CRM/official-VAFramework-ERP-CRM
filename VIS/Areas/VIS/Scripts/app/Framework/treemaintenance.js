@@ -268,7 +268,7 @@
 
         var $chkAllCheckOrNot = $('<input type="checkbox" disabled />');
 
-        var $checkSearchOrNot = $('<span class="vis vis-search" style="display:none;cursor:pointer;float:left;color:#000;margin: 14px 0 0 6px;font-size: 10px;" ></span>')
+        var $checkSearchOrNot = $('<span class="vis vis-search" style="display:none;cursor:pointer;float:left;margin: 14px 0 0 6px;font-size: 10px;" ></span>')
 
 
 
@@ -1750,7 +1750,7 @@
                             var checkBox = $('<input class="VIS-tm-checkbox" type="checkbox" />');
                             if (res[i]["issummary"] == "Y") {
                                 continue;
-                                summImage = "<i class='vis vis-m-window summNonsumImage'></i>";
+                                summImage = "<i class='fa fa-folder-o summNonsumImage'></i>";
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-NodePID='" + res[i]["NodeParentID"] + "' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
 
@@ -2337,7 +2337,7 @@
                             if (res[i]["issummary"] == 'Y') {
                                 if (res[i]["disabled"] == true) {
                                     checkBox = $('<input class="vis-tm-chkbox" disabled type="checkbox" />');
-                                    summImage = "<i class='" + res[i]["classopacity"] + " vis vis-m-window summNonsumImage '></i>";
+                                    summImage = "<i class='" + res[i]["classopacity"] + " fa fa-folder-o summNonsumImage '></i>";
                                 }
                                 else {
                                     checkBox = $('<input  class="vis-tm-chkbox" type="checkbox" />');
@@ -2345,7 +2345,7 @@
                                 }
 
 
-                                $ulRight.append($('<li class="vis-tm-upperLi">').append($("<div class='vis-tm-upperdivchkandimg'>").append(checkBox).append(summImage)).append($("<div class='vis-tm-upperdivli'>").append($("<li class='" + res[i]["classopacity"] + " vis-tm-textli ' checkSummary='checkSummary'  style='cursor:default;color:" + res[i]["color"] + "' id='" + res[i]["ID"] + "' data-id='" + res[i]["ID"] + "'  style='cursor:pointer'  >" + VIS.Utility.encodeText(res[i].Name) + " (" + VIS.Utility.encodeText(res[i].description) + ")" + "</li>").append($("<span title='" + VIS.Msg.getMsg("UnlinkNode") + "' style='cursor:pointer;margin-left:8px' class='" + res[i]["unlinkClass"] + "'></span>")))));
+                                $ulRight.append($('<li class="vis-tm-upperLi">').append($("<div class='vis-tm-upperdivchkandimg'>").append(checkBox).append(summImage)).append($("<div class='vis-tm-upperdivli'>").append($("<li class='" + res[i]["classopacity"] + " vis-tm-textli ' checkSummary='checkSummary'  style='cursor:default;' id='" + res[i]["ID"] + "' data-id='" + res[i]["ID"] + "'  style='cursor:pointer'  >" + VIS.Utility.encodeText(res[i].Name) + " (" + VIS.Utility.encodeText(res[i].description) + ")" + "</li>").append($("<span title='" + VIS.Msg.getMsg("UnlinkNode") + "' class='" + res[i]["unlinkClass"] + "'></span>")))));
 
                             }
                             else {
@@ -2359,7 +2359,7 @@
                                 }
 
 
-                                $ulRight.append($('<li class="vis-tm-upperLi">').append($("<div class='vis-tm-upperdivchkandimg'>").append(checkBox).append(nonSummImage)).append($("<div class='vis-tm-upperdivli'>").append($("<li class='" + res[i]["classopacity"] + " vis-tm-textli ' style='cursor:default;color:" + res[i]["color"] + "' id='" + res[i]["ID"] + "' data-id='" + res[i]["ID"] + "'   style='cursor:pointer'  >" + VIS.Utility.encodeText(res[i].Name) + " (" + VIS.Utility.encodeText(res[i].description) + ")" + "</li>").append($("<span title='" + VIS.Msg.getMsg("UnlinkNode") + "'  style='cursor:pointer;margin-left:8px' class='" + res[i]["unlinkClass"] + "'></span>")))));
+                                $ulRight.append($('<li class="vis-tm-upperLi">').append($("<div class='vis-tm-upperdivchkandimg'>").append(checkBox).append(nonSummImage)).append($("<div class='vis-tm-upperdivli'>").append($("<li class='" + res[i]["classopacity"] + " vis-tm-textli ' style='cursor:default;' id='" + res[i]["ID"] + "' data-id='" + res[i]["ID"] + "'   style='cursor:pointer'  >" + VIS.Utility.encodeText(res[i].Name) + " (" + VIS.Utility.encodeText(res[i].description) + ")" + "</li>").append($("<span title='" + VIS.Msg.getMsg("UnlinkNode") + "' class='" + res[i]["unlinkClass"] + "'></span>")))));
 
                             }
                         }

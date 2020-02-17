@@ -121,6 +121,7 @@
     vertical-align: middle;
     display: block;
     height: 42px;
+    color: rgba(var(--v-c-on-primary), 1);
 }
 
 .vis-awindow-header p, .vis-awindow-header h1{
@@ -515,21 +516,21 @@
     .vis-apanel-lb-oflow img {
         /*vertical-align: central;*/
     }
-
-
-
 .vis-apanel-lb-toggle {
-    /*background: rgba(var(--v-c-on-secondary), 0.2);*/
-    border-bottom: 1px solid rgba(var(--v-c-secondary), 1);
+    /* background: rgba(var(--v-c-on-secondary), 0.2); */
+    border-bottom: 1px solid rgba(var(--v-c-on-primary), 1);
     padding-top: 7px;
     padding-bottom: 7px;
     padding-left: 10px;
     padding-right: 10px;
     /* filter: brightness(0.9); */
-    color: rgba(var(--v-c-on-primary), 1);
+    color: rgba(var(--v-c-primary), 1);
     font-size: 1.3rem;
 }
-
+.vis-email-leftDiv .vis-apanel-lb-toggle,
+.vis-sms-leftDiv .vis-apanel-lb-toggle {
+    color: rgba(var(--v-c-on-primary), 1);
+}
 .vis-apanel-lb-img {
     cursor: pointer;
 }
@@ -1318,28 +1319,19 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
     width: 100%;
     height: 100%;
 }
-
-
-
 .vis-sms-leftDiv {
     width: 200px;
     float: left;
     height: 100%;
-    background-color: #444343;
+    background-color: rgba(var(--v-c-on-secondary), 1);
     display: inline;
     overflow: auto;
 }
-
-    .vis-sms-leftDiv li {
-        font-size: .875rem;
-        border-bottom: 1px solid rgba(var(--v-c-secondary), .1);
-        padding: 10px 0;
-    }
-
-html[dir="rtl"] .vis-sms-leftDiv {
-    float: right;
+.vis-sms-leftDiv li {
+    /* font-size: .875rem; */
+    border-bottom: 1px solid rgba(var(--v-c-secondary), .1);
+    /* padding: 10px 0; */
 }
-
 
 .vis-sms-middleDiv {
     width: auto;
@@ -1586,32 +1578,26 @@ html[dir="rtl"] .vis-sms-leftFooter > label {
     margin-left: 0px;
     margin-right: 10px;
 }
-
-
 .vis-Sms-sendButton {
-    margin-top: 0px;
+    /*margin-top: 0px;
     margin-right: 0px;
     cursor: pointer;
-    float: right;
+    float: right;*/
 }
-
 html[dir="rtl"] .vis-Sms-sendButton {
-    margin-left: 0px;
-    float: left;
+    /*margin-left: 0px;
+    float: left;*/
 }
-
 .vis-sms-preview-btn {
-    margin-top: 10px;
+    /*margin-top: 10px;
     margin-right: 20px;
     cursor: pointer;
-    float: right;
+    float: right;*/
 }
-
-
 html[dir="rtl"] .vis-sms-preview-btn {
-    margin-right: 0px;
+    /*margin-right: 0px;
     margin-left: 20px;
-    float: left;
+    float: left;*/
 }
 
 .vis-sms-counter {
@@ -3912,7 +3898,7 @@ html[dir="rtl"] .VIS-AMTD-ModalformBtns a {
 }
 .vis-processbtnwrap input[type="button"] {
     margin-top: 0;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
 }
 /*END Amount Division Control*/
 .vis-selected-li-print {
@@ -3960,14 +3946,11 @@ html[dir="rtl"] .VIS-AMTD-ModalformBtns a {
 tr.vis-processpara-table-SplitUI {
     padding: 10px 10px 0px 10px;
 }
-
-    tr.vis-processpara-table-SplitUI label {
-        margin-bottom: 0px;
-        color: white;
-        font-weight: normal;
-    }
-
-
+tr.vis-processpara-table-SplitUI label {
+    margin-bottom: 0px;
+    /* color: white; */
+    font-weight: normal;
+}
 .vis-process-background {
     Display: none;
     float: left;
@@ -3975,7 +3958,7 @@ tr.vis-processpara-table-SplitUI {
 
 .vis-process-background-label {
     Display: none;
-    color: white;
+    /*color: white;*/
     line-height: 12px;
     margin-left: 5px;
 }
@@ -4169,16 +4152,15 @@ li.vis-selected-list {
 
 
 /**** End Tab Panels ****/
-
-
 .vis-process-left-sidebar {
     display: flex;
     flex-basis: 280px;
-    /*height: 100%;*/
+    /* height: 100%; */
     flex-direction: column;
-    background: rgba(var(--v-c-primary), 1);
+    background: rgba(var(--v-c-secondary), .8);
+    color: rgba(var(--v-c-on-secondary), 1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .1);
 }
-
 .vis-process-outer-wrap {
     display: flex;
     height: 100%;
@@ -4246,17 +4228,17 @@ li.vis-selected-list {
     display: block;
     margin-bottom: 0;
 }
-
-
+.vis-processbtnwrap {
+    padding: 0 10px;
+}
 .vis-process-left-sidebar .VIS_Pref_btn-2.vis-process-ok-btn {
-    background-color: rgba(var(--v-c-on-secondary), .7);
+    background-color: rgba(var(--v-c-on-secondary), 1);
     margin-bottom: 0px;
     margin-top: 7px;
     width: 100%;
     border-radius: 0;
     text-align: center;
 }
-
 /*.vis-process-description-Span p {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -4288,10 +4270,13 @@ li.vis-selected-list {
 }
 
 .vis-processpara-table-SplitUI select, .vis-processpara-table-SplitUI button, .vis-processpara-table-SplitUI input:not([type="checkbox"]) {
-    height: 26px;
+    height: 30px;
     border-radius: 0;
+    outline: none;
 }
-
+.vis-processpara-table-SplitUI select:focus, .vis-processpara-table-SplitUI input:not([type="checkbox"]):focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
 .vis-processpara-table-SplitUI button {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     float: right;
@@ -4601,7 +4586,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-frm-grid-wrap {
     height: 100%;
     float: left;
-    padding: 0 12px;
+    padding: 10px 12px 0;
     width: calc(100% - 260px);
 }
 .vis-frm-grid-inn {

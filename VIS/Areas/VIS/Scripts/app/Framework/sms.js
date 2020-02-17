@@ -96,7 +96,7 @@
 
         function loadDesign() {
 
-            var html = '         <div class="contentArea" style="width: 100%; float: left; height: 96%">';
+            var html = '         <div class="contentArea" style="width: 100%; float: left;">';
             html += ' <div class="vis-sms-leftDiv"></div>';
             html += '   <div class="vis-sms-ContentWrap"><div class="vis-sms-ContentArea"><div class="vis-sms-leftWrap"><div class="vacom-form-horizontal">';
             html += '   <div class="vis-sms-inputWrap"><div class="vis-sms-form-data-sub">';
@@ -110,8 +110,8 @@
             html += ' <input id="' + self.windowNo + '_dyndis" type="checkbox"><label  id="' + self.windowNo + '_dyndislbl"  for="' + self.windowNo + '_dyndis" >' + VIS.Msg.getMsg("DynamicSms") + '</label></div></div>';
             html += '  <div class="vis-sms-divider"></div>';
             html += ' <div class="vis-sms-rytWrap"><div class="vis-sms-rytContent">';
-            html += ' <div class="vis-sms-rytBcc"><div><h4 style="float:left">' + VIS.Msg.getMsg("Mobile") + '</h4>';
-            html += ' <img  id="' + self.windowNo + '_SmsRefresh"  style="cursor: pointer;float:right;margin-top:8px" title="' + VIS.Msg.getMsg("Refresh") + '" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/Refresh24.png">';
+            html += ' <div class="vis-sms-rytBcc"><div class="vis-email-rytBcc-header"><h4>' + VIS.Msg.getMsg("Mobile") + '</h4>';
+            html += ' <i id="' + self.windowNo + '_SmsRefresh" title="' + VIS.Msg.getMsg("Refresh") + '" class="vis vis-refresh"></i>';
             html += '   </div><div class="vis-sms-BccList">';
             html += ' </div></div></div></div>  </div></div>';
 
@@ -119,8 +119,8 @@
             var middleDivWidth = 0;
             $dynamicDisplay = $root.find('#' + self.windowNo + "_dyndis");
 
-            $root.find('.contentArea').css('height', $root.height() - 44);
-            $root.find('.vis-sms-leftDiv').height($root.height() - 44);
+            $root.find('.contentArea').css('height', $root.height() - 42);
+            $root.find('.vis-sms-leftDiv').height($root.height() - 42);
             $leftDiv = $root.find('.vis-sms-leftDiv');
             $rightDiv = $root.find('.vis-sms-BccList');
             $mobileContainer = $root.find('#' + self.windowNo + "_emailMoblie");
@@ -166,13 +166,13 @@
 
         function loadFields() {
 
-            $imgAction = $('<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/Action.png" style="cursor:pointer" ></img>');
-            var $toggleAction = $('<div class="vis-apanel-lb-toggle" style="height:100%;overflow-x:hidden;overflow-y:hidden"></div>');
+            $imgAction = $('<i class="fa fa-bars"></i>');
+            var $toggleAction = $('<div class="vis-apanel-lb-toggle" style="overflow-x:hidden;overflow-y:hidden"></div>');
             $toggleAction.append($imgAction);
             $leftDiv.append($toggleAction);
 
             $ulFieldNames = $('<ul class="vis-apanel-lb-ul"></ul>');
-            $ulFieldNames.css({ "height": ($root.height() - 80) + 'px', "overflow": "auto", "white-space": "nowrap", "width": "150%" });
+            $ulFieldNames.css({ "height": "calc(100% - 54px)", "overflow": "auto", "white-space": "nowrap", "width": "100%" });
 
 
             for (var i = 0; i < _curtab.gridTable.getFields().length; i++) {
@@ -204,7 +204,7 @@
                 }
                 fillIDsOFUsers(bpList, pkList);
             }
-            $toggleAction.append($ulFieldNames);
+            $leftDiv.append($ulFieldNames);
         };
 
         function loadMobileNumbers(refrsh) {
@@ -261,10 +261,10 @@
 
         function Addbuttons() {
 
-            $btnHdrSend = $('<img  class="vis-Sms-sendButton" title="' + VIS.Msg.getMsg("SendSms").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/sendSms.png"> </img>');
+            $btnHdrSend = $('<i class="vis-email-sendbtn vis vis-paper-plane vis-Sms-sendButton" title="' + VIS.Msg.getMsg("SendSms").replace('&', '') + '" ></i>');
             $toolbarDiv.append($btnHdrSend);
             if (!callingFromOutsideofWindow) {
-                $btnHdrPreview = $('<img  class="vis-sms-preview-btn" title="' + VIS.Msg.getMsg("Preview").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/preview.png"> </img>');
+                $btnHdrPreview = $('<i class="vis-email-btns vis vis-viewdocument vis-sms-preview-btn" title="' + VIS.Msg.getMsg("Preview").replace('&', '') + '"></i>');
                 $toolbarDiv.append($btnHdrPreview);
             }
 
@@ -774,9 +774,9 @@
                     }
                     $maincheGrid.append($table);
 
-                    var oks = $('<a style="float:right" href="javascript:void(0)" ><img title="' + VIS.Msg.getMsg("SaveSmsLog") + '" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/Save24.PNG"></img></a>');
+                    var oks = $('<a style="float:right" href="javascript:void(0)" ><i title="' + VIS.Msg.getMsg("SaveSmsLog") + '" class="vis vis-save"></i></a>');
 
-                    $maincheGrid.append(oks);
+                    $maincheGrid.append(oks); _SmsRefresh
 
                     var che = new VIS.ChildDialog();
                     che.setTitle(VIS.Msg.getMsg("Information"));
@@ -898,8 +898,8 @@
             $root.height(formHeight);
             $root.width(formWidth);
             var middleDivWidth = 0;
-            $root.find('.contentArea').css('height', $root.height() - 44);
-            $root.find('.vis-sms-leftDiv').height($root.height() - 44);
+            $root.find('.contentArea').css('height', $root.height() - 42);
+            $root.find('.vis-sms-leftDiv').height($root.height() - 42);
             $root.find(".vis-sms-textarea-div").css('margin-top', '10px');
             $root.find('.vis-sms-rytBcc').height($root.find('.vis-sms-rytContent').height() - 10);
             if (callingFromOutsideofWindow) {
