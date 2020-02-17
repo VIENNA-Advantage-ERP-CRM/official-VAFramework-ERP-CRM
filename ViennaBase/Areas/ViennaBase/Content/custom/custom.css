@@ -312,6 +312,10 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary), 1);
 }
+.ui-widget-content .ui-corner-all {
+    border-top-right-radius: .1rem;
+    border-top-left-radius: .1rem;
+}
 .ui-widget-content a {
     color: rgba(var(--v-c-on-secondary), 1);
 }

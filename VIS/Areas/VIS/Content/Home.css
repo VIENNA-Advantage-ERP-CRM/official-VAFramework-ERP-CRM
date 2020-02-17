@@ -146,13 +146,15 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
     }
 
 .vis-userAvatar-Container {
-    background: rgba(var(--v-c-on-secondary), .07);
+    background: rgba(var(--v-c-secondary), 1);
     margin: 20px auto 8px;
     padding: 10px;
     width: 164px;
     line-height: 111px;
-    /*height:120px;*/
+    /* height: 120px; */
     text-align: center !important;
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 3rem;
 }
 
     .vis-userAvatar-Container .vis-userAvatar-Large {
@@ -1464,6 +1466,7 @@ ul.vis-userLinks-ListMenu li a {
     text-align: center;
     flex-direction: column;
     align-items: center;
+    color: rgba(var(--v-c-primary), 1);
 }
 
 ul.vis-userLinks-ListMenu li:last-child {
