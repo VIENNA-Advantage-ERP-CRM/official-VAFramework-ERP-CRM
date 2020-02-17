@@ -333,8 +333,8 @@
             }
 
 
-            $root.find('.vis-email-leftDiv').height($root.height() - 44);
-            $root.find('.vis-Email-rytWrap').height($root.height() - 44);
+            $root.find('.vis-email-leftDiv').height($root.find('.contentArea').height());
+            $root.find('.vis-Email-rytWrap').height($root.find('.contentArea').height());
             if (callingFromOutsideofWindow) {
                 $root.find('.vis-form-data-sub').css('margin-top', '0px');
                 $root.find('.vis-email-leftDiv').hide();
@@ -575,7 +575,7 @@
                 $divlbNav = $("<div class='vis-apanel-lb-oflow' style='border-top:0;display:none' >");
                 $divlbNav.html("<a data-dir='u' href='javascript:void(0)'><i class='vis vis-arrow-up' data-dir='u'></i></a><a data-dir='d' href='javascript:void(0)' ><i class='vis vis-arrow-down' data-dir='d'></i></a>");
 
-                $scrollIcon = $('<div class="vis-apanel-lb-toggle" style="padding-top:5px;overflow-x:hidden;overflow-y: hidden;"></div>');
+                $scrollIcon = $('<div class="vis-apanel-lb-toggle" style="padding: 5px 10px;overflow-x:hidden;overflow-y: hidden;"></div>');
                 $scrollIcon.append($divlbNav);
 
 
@@ -670,9 +670,9 @@
             if (!callingFromOutsideofWindow) {
                 if ($ulFieldNames.height() > $($ulFieldNames.parent()).height()) {
                     $toggleAction.css("border-bottom", "1px solid rgba(var(--v-c-secondary), 1)");
-                    $divlbNav.css("display", "inherit");
+                    $divlbNav.css("display", "block");
 
-                    var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 53;
+                    var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 37;
                     $toggleAction.height($leftDiv.height() - ulHeight);
 
                     $leftDiv.css("overflow", "hidden");
@@ -2715,7 +2715,7 @@
 
             $root.find('.vis-Email-BccList').height(1);
 
-            $root.find('.vis-email-leftDiv').height($root.height() - 44);
+            $root.find('.vis-email-leftDiv').height($root.find('.contentArea').height());
             if (callingFromOutsideofWindow) {
                 if (!$root.find('.vis-email-attachmentContainer').is(":visible")) {
 
