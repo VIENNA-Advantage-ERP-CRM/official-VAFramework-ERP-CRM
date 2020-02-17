@@ -433,7 +433,7 @@
                 btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
                 btnAddCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-cart-plus'></i>"));
                 btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled>").append($("<i class='fa fa-list-ul'></i>"));
-                btnScanFile = $("<button class='VIS_Pref_btn-2'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/scan.png'>"));
+                btnScanFile = $("<button class='VIS_Pref_btn-2'>").append($("<i class='vis vis-scanner'>"));
                 btnShowCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-shopping-cart'></i>"));
                 //btnShowSaved.prop('disabled', true);
             //}

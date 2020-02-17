@@ -298,7 +298,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
         border-top-right-radius: 5px;
     }
 .vis-menuTitle i {
-    color: #fff;
+    /*color: #fff;*/
 }
 
 .vis-menuTitle a {
