@@ -1866,7 +1866,7 @@
                         closeText: VIS.Msg.getMsg("close"),
                         close: onClosing
                     });
-                    displayData(false, cmbPage.val());
+                    displayData(true, cmbPage.val());
                 }
             });
         };

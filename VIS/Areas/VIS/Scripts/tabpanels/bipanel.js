@@ -10,17 +10,18 @@
         this.extraInfo = null;
         var $root;
         var iFrame;
+        var $span
 
         this.init = function () {
             $root = $('<div style="height:100%;width:100%"></div>');
-            //if (window.VA037) {
+           if (window.VA037) {
                 iFrame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
-               // $root.html(iFrame);
-            //}
-            //else {
-            //    var $span = $('<span class="vis-bi-tab-panel">' + VIS.Msg.getMsg("PleaseInstallBIReportTool") + '</span>');
-            //    $root.append($span);
-            //}
+                $root.append(iFrame);
+            }
+            if (!window.VA037) {
+                $span = $('<span class="vis-bi-tab-panel">' + VIS.Msg.getMsg("PleaseInstallBIReportTool") + '</span>');
+                $root.append($span);
+            }
         };
 
         this.update = function (record_ID) {
@@ -38,10 +39,11 @@
         var loadSession = function (record_ID) {
             if (!iFrame)
                 return;
-            var _src = VIS.Application.contextUrl + "BiPanel/GetUserBILogin?extraInfo=" + that.extraInfo + "&recID=" + record_ID;
-            //iFrame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
-            $root.html('<iframe src='+_src+'; height=100%; width="100%"; frameborder="0" ></iframe>');
-            //iFrame.prop('src', _src);
+            //$root.empty();
+            var _src = VIS.Application.contextUrl + "BiPanel/GetUserBILogin?recID=" + record_ID +"&extraInfo=" + that.extraInfo;
+            //Frame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
+            //$root.html('<iframe src="'+_src+'"; height=100%; width="100%"; frameborder="0" ></iframe>');
+            iFrame.prop('src', _src);
         };
 
         this.disposeComponent = function () {
