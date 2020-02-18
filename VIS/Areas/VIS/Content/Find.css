@@ -37,7 +37,7 @@
     padding-right: 10px;
 }
 .vis-advancedSearchContentArea-up {
-    height: 154px;
+    min-height: 80px;
 }
 .vis-advancedSearchContentArea-down {
     height: calc(100% - 197px);
