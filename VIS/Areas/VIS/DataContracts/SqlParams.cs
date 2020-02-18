@@ -35,6 +35,9 @@ namespace VIS.DataContracts
         public string increment { get; set; }
 
         public List<SqlParams> param { get; set; }
+        public int tree_id { get; set; }
+        public int treeNode_ID { get; set; }
+
     }
 
     /// <summary>

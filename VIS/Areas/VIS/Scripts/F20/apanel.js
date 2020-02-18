@@ -271,16 +271,20 @@
             }
         };
 
+        var self = this;
+
         function finishLayout() {
             $divHeaderNav.show();
             $divStatus.show();
             if (VIS.Application.isMobile) {
                 $divlbNav.hide();
                 $divlbMain.addClass("vis-ad-w-p-a-main-mob");
+                $divTabControl.addClass("vis-ad-w-p-t-c-mob");
             }
+            self.vTabbedPane.finishLayout(VIS.Application.isMobile);
         };
         /* Tool bar */
-        var self = this;
+       
         initComponenet();
         $divStatus.append(this.statusBar.getRoot()); //Status bar
 
@@ -1259,6 +1263,7 @@
 
     APanel.prototype.sizeChanged = function (height, width) {
         this.setTabNavigation();
+        this.vTabbedPane.sizeChanged();
         return;
     };
 
@@ -1269,6 +1274,7 @@
                 this.curGC.vIncludedGC.vTable.refresh();
             }
         }
+        this.vTabbedPane.refresh();
     };
 
     APanel.prototype.refreshData = function () {
@@ -1329,6 +1335,9 @@
 
         this.ctx.setContext(curWindowNo, "WindowName", gridWindow.getName());
 
+        var multiTabview = gridWindow.getIsCompositeView();
+        this.vTabbedPane.init(this, multiTabview);
+
 
         /* Select Record */
         if (!query && sel) {
@@ -1348,21 +1357,9 @@
 
         var gTab;
         var tabActions = []; //Tabs Apps Action
-        //var firstTabId = null;
 
         var includedMap = {};
-
-        //if (gridWindow.getHasPanel()) {
-        //    var panelwidth = gridWindow.getWindowWidth();
-        //    if (panelwidth && panelwidth > 0 && panelwidth < 75) {
-        //        this.setWidth(panelwidth, true);
-        //    }
-        //    else {
-        //        this.setWidth(75, true);
-        //    }
-        //}
-
-
+        
 
         for (var i = 0; i < tabs.length; i++) {
 
@@ -1405,84 +1402,43 @@
             {
                 var gc = new VIS.GridController(true, true, id);
                 gc.initGrid(false, curWindowNo, this, gTab);
-                //            gc.addDataStatusListener(this);
 
                 //Set Title of Tab
                 if (i === 0) {
                     this.curGC = gc;
                     this.firstTabId = id;
-                    //if (gTab.getIsTPBottomAligned()) {
-                    //    this.setTabPanelClass(gTab.getIsTPBottomAligned());
-                    //    $tabPanel.removeClass("vis-ad-w-p-actionpanel-b");
-                    //    $tabPanel.addClass("vis-ad-w-p-actionpanel-b");
-                    //}
 
                     if (gTab.getIsHeaderPanel()) {
-                        //gc.vHeaderPanel = new VIS.HeaderPanel();
-                        //var parentDetailPane = this.getParentDetailPane();
                         gc.initHeaderPanel(this.getParentDetailPane());
-                        //vHeaderPanel.init(gTab, parentDetailPane);
-                        //this.getLayout().append(parentDetailPane);
                     }
                 }
-
-
-
                 tabElement = gc;
                 //	If we have a zoom query, switch to single row
                 if (i === 0 && goSingleRow)
                     gc.switchSingleRow();
-
-                // For first tab, if panel avilable, then set width for window
-
-                //if (gTab.getIncluded_Tab_ID() == 0) {
-
-                //}
-                //else {
-                //    this.setIncludedTabWidth(true);
-                //}
-                //var panelwidth = gridWindow.getWindowWidth();
-                //if (panelwidth && panelwidth > 0 && panelwidth < 75) {
-                //    this.setWidth(panelwidth, true);
-                //}
-                //else {
-                //    this.setWidth(75, true);
-                //}
-
-                // END Tab Panel
-
                 //	Store GC if it has a included Tab
                 if (gTab.getIncluded_Tab_ID() != 0) {
-
                     includedMap[gTab.getIncluded_Tab_ID()] = gc;
-                    //if (i == 0)
-                    //    this.aParentDetail = new VIS.AParentDetail(gc, this.getParentDetailPane());
                 }
-
 
                 if (gTab.getHasPanel()) {
                     gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);
                 }
 
-
                 //	Is this tab included?
-                if (!$.isEmptyObject(includedMap)) {
-                    var parent = includedMap[gTab.getAD_Tab_ID()];
-                    if (parent != null) {
-                        var included = parent.includeTab(gc);
-                        //if (!included)
-                        //  log.log(Level.SEVERE, "Not Included = " + gc);
-                    }
-                }
+                //if (oldTabLayout &&  !$.isEmptyObject(includedMap)) {
+                //    var parent = includedMap[gTab.getAD_Tab_ID()];
+                //    if (parent != null) {
+                //        var included = parent.includeTab(gc);
+                //    }
+                //}
             }	//	normal tab
 
             this.vTabbedPane.addTab(id, gTab, tabElement, tabActions[i]);
 
-
-
-            if (tabElement) {
-                this.getLayout().append(tabElement.getRoot());
-            }
+            //if (!oldTabLayout) {
+            //    this.getLayout().append(tabElement.getRoot());
+            //}
             //TabChange Action Callback
             tabActions[i].onAction = this.onTabChange; //Perform tab Change
         }
@@ -1490,7 +1446,9 @@
         // for (var item = 0 ; item < this.vTabbedPane.Items.length ; item++) {
         // this.vTabbedPane.Items[item].setTabControl(tabActions); //Set TabPage 
         // }
-        this.setTabControl(tabActions);
+        //this.setTabControl(tabActions);
+
+        this.vTabbedPane.setTabControl(tabActions);
 
         tabActions = null;
 
@@ -1507,6 +1465,50 @@
         $parent = null;
         // this.curGC.setVisible(true);
     };
+
+    /**
+     * make Include tab Resizable 
+     * */
+    APanel.prototype.setIncTabReziable = function () {
+        var incTab = this.getIncludedEmptyArea();
+        var aPanel = this;
+        if (!incTab.is('.ui-resizable')) {
+            incTab.resizable({
+                handles: 'n',
+                ghost: true, 
+               minHeight:40,
+                maxHeight: 500,
+                //width: 'auto',
+
+                resize: function (event, ui) {
+                    //self.panelWidth = ui.size.width;
+                    //incTab.css({ 'position': 'absolute', "left": "", "z-index": "99" });
+                    incTab.css('flex-basis', ui.size.height + 'px');
+                },
+                start: function (event, ui) {
+                   // incTab.css({ 'position': 'absolute', "z-index": "99" });
+                    //windowWidth=
+                },
+                stop: function (event, ui) {
+                    incTab.css({
+                        'flex-basis': ui.size.height + 'px',
+                        'top': '',
+                        'width':''
+                    });
+                    //incTab.css('flex-basis', ui.size.height + 'px');
+                    //if (VIS.Application.isRTL) {
+                    //    incTab.css({ 'position': 'relative', "right": "", "z-index": "" });
+                    //}
+                    //else {
+                    //    incTab.css({ 'position': 'relative', "left": "", "z-index": "" });
+                    //}
+                    aPanel.refresh();
+                }
+            });
+        }
+    };
+
+
 
     //Updated by raghu 
     //date:19-01-2016
@@ -2481,27 +2483,35 @@
         return true;
     };
 
-    APanel.prototype.tabActionPerformedCallback2 = function (curEle, oldGC) {
-        curEle = this.curGC;
-        oldGC = this.curGC;
-        this.curGC = null;
-    }
+    //APanel.prototype.tabActionPerformedCallback2 = function (curEle, oldGC) {
+    //    curEle = this.curGC;
+    //    oldGC = this.curGC;
+    //    this.curGC = null;
+    //}
 
-    APanel.prototype.tabActionPerformedCallback3 = function (curEle, isAPanelTab, gc, tpIndex) {
-        if (this.curST != null) {
-            this.curST.saveData();
-            this.curST.unRegisterAPanel();
-            curEle = this.curST;
-            this.curST = null;
-        }
+    //APanel.prototype.tabActionPerformedCallback3 = function (curEle, isAPanelTab, gc, tpIndex) {
+    //    if (this.curST != null) {
+    //        this.curST.saveData();
+    //        this.curST.unRegisterAPanel();
+    //        curEle = this.curST;
+    //        this.curST = null;
+    //    }
 
-        this.curTabIndex = tpIndex;
-        if (!isAPanelTab)
-            this.curGC = gc;
-    }
+    //    this.curTabIndex = tpIndex;
+    //    if (!isAPanelTab)
+    //        this.curGC = gc;
+    //}
 
     APanel.prototype.tabActionPerformedCallback = function (action, back, isAPanelTab, tabEle, curEle, oldGC, gc, st) {
-        this.setSelectedTab(action); //set Seleted tab
+        
+
+        curEle.setVisible(false);
+        curEle.getRoot().detach();
+        this.getLayout().append(tabEle.getRoot());
+        tabEle.setVisible(true);
+
+        this.vTabbedPane.setSelectedTab(action); //set Seleted tab
+
 
         if (isAPanelTab) {
             this.curST = st;
@@ -2605,8 +2615,10 @@
             //aChat.setEnabled(true);
         }
 
-        curEle.setVisible(false);
-        tabEle.setVisible(true);
+       
+           
+       
+
 
         ///*******     Tab Panels      ******/
         //if (this.curTab.getHasPanel()) {
@@ -3020,6 +3032,7 @@
 
         if (this.curWinTab == this.vTabbedPane) {
             this.curWinTab.evaluate(null);
+            this.curWinTab.notifyDataChanged();
         }
 
 
