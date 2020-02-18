@@ -49,6 +49,12 @@ VIS.VTabbedPane = function (isWorkBench) {
         this.tabObj = obj
     };
 
+
+    VIS.VTabbedPane.prototype.finishLayout = function (isMobile) {
+        if (this.contentPane)
+            this.contentPane.finishLayout(isMobile);
+    };
+
 /**
  * 	Add Tab
  *	@param id tab id

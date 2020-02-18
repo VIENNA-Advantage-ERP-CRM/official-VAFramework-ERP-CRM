@@ -272,16 +272,20 @@
             }
         };
 
+        var self = this;
+
         function finishLayout() {
             $divHeaderNav.show();
             $divStatus.show();
             if (VIS.Application.isMobile) {
                 $divlbNav.hide();
                 $divlbMain.addClass("vis-ad-w-p-a-main-mob");
+                $divTabControl.addClass("vis-ad-w-p-t-c-mob");
             }
+            self.vTabbedPane.finishLayout(VIS.Application.isMobile);
         };
         /* Tool bar */
-        var self = this;
+       
         initComponenet();
         $divStatus.append(this.statusBar.getRoot()); //Status bar
 
@@ -3099,7 +3103,7 @@
                 if (manual && !retValue && !selfPanel.errorDisplayed) {
 
                 }
-                this.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
+                selfPanel.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
                 if (manual)
                     selfPanel.curGC.dynamicDisplay(-1);
 

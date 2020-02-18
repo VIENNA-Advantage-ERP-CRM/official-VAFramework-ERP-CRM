@@ -3566,20 +3566,23 @@
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
                 var lInfo = field.getLookup().info;
 
-                //if (lInfo.isParent || !lInfo.isValidated) {
+                if (selectDirect == null)
+                    selectDirect = new StringBuilder("SELECT ");
+                else
+                    selectDirect.append(",");
 
-                    var qryDirect = lInfo.queryDirect.replace('@key', gt._tableName + '.' + field.getColumnSQL());
+                var qryDirect = lInfo.queryDirect.substring(lInfo.queryDirect.lastIndexOf(' FROM ' + lInfo.tableName + ' '));
 
-                    if (selectDirect == null)
-                        selectDirect = new StringBuilder("SELECT ");
-                    else
-                        selectDirect.append(",");
+                if (!field.getIsVirtualColumn())
+                    qryDirect = qryDirect.replace('@key', gt._tableName + '.' + field.getColumnSQL());
+                else
+                    qryDirect = qryDirect.replace('@key',  field.getColumnSQL(false));
 
-                selectDirect.append("( SELECT (").append(lInfo.displayColSubQ).append(') ').append(qryDirect.substring(qryDirect.lastIndexOf(' FROM ' + lInfo.tableName + ' ')))
-                        .append(" ) AS ").append(field.getColumnSQL() + '_T')
-                        .append(',').append(field.getColumnSQL());
-                //}
-            }
+
+                selectDirect.append("( SELECT (").append(lInfo.displayColSubQ).append(') ').append(qryDirect)
+                    .append(" ) AS ").append(field.getColumnSQL() + '_T')
+                    .append(',').append(field.getColumnSQL(true));
+            };
         }
 
         selectSql = null;
@@ -3757,51 +3760,55 @@
         this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
 
         var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
-        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0 };
+        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID:0 };
+
+        
+
         dataIn.sqlDirect = VIS.secureEngine.encrypt(this.SQL_Direct);
         dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
         // VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, function (buffer) {
         if (this.treeNode_ID > 0) {
-          
-            VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
+            //For On demand tree  add these parameter
+            dataIn.treeID = this.treeID, dataIn.treeNode_ID = this.treeNode_ID;
+            //VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
 
-                try {
+            //    try {
 
-                    if (buffer != null) {
-                        var count = 0;
+            //        if (buffer != null) {
+            //            var count = 0;
 
-                        if (buffer.getTables().length != 0) {
+            //            if (buffer.getTables().length != 0) {
 
-                            var rows = buffer.getTable(0).getRows();
+            //                var rows = buffer.getTable(0).getRows();
 
-                            var columns = buffer.getTable(0).getColumnsName();
-                            for (var row = 0; row < rows.length; row++) {
-                                var cells = rows[row].getJSCells();
-                                for (var cell = 0; cell < columns.length; cell++) {
+            //                var columns = buffer.getTable(0).getColumnsName();
+            //                for (var row = 0; row < rows.length; row++) {
+            //                    var cells = rows[row].getJSCells();
+            //                    for (var cell = 0; cell < columns.length; cell++) {
 
-                                    cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
-                                }
-                                //cells.recid = row;
-                                that.bufferList[row] = cells;
-                                count++;
-                                //break;
-                            }
+            //                        cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
+            //                    }
+            //                    //cells.recid = row;
+            //                    that.bufferList[row] = cells;
+            //                    count++;
+            //                    //break;
+            //                }
 
-                            //console.log(this.bufferList);
-                        }
-                        buffer.dispose();
-                        buffer = null;
-                    }
-                }
-                catch (e) {
-                    //alert(e);
-                    this.log.Log(Level.SEVERE, that.SQL, e);
-                }
-                that.fireQueryCompleted(true); // inform gridcontroller
-                that = null;
-            });
+            //                //console.log(this.bufferList);
+            //            }
+            //            buffer.dispose();
+            //            buffer = null;
+            //        }
+            //    }
+            //    catch (e) {
+            //        //alert(e);
+            //        this.log.Log(Level.SEVERE, that.SQL, e);
+            //    }
+            //    that.fireQueryCompleted(true); // inform gridcontroller
+            //    that = null;
+            //});
         }
-        else {
+       // else {
            
             VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, function (buffer,lookupDirect) {
 
@@ -3840,7 +3847,7 @@
                 that.fireQueryCompleted(true); // inform gridcontroller
                 that = null;
             });
-        }
+        //}
     };
 
     GridTable.prototype.readDataOfColumn = function (colName, colValue) {
@@ -4675,7 +4682,7 @@
 
             //	Is this record deletable?
             if (!localthis.deleteable) {
-                tlocalthishis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
+                localthis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
                 resolve(false);
                 return;
             }

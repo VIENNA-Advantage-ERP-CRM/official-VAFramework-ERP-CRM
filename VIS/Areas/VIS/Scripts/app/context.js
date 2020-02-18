@@ -37,7 +37,7 @@ VIS.context.getWindowContext = function (windowNo, context, onlyWindow,val2) {
     if (context == null)
         throw new ArgumentException("Require Context");
     if (typeof (arguments[1]) == "number" && arguments.length > 2) {
-        return VIS.context.getTabRecordContext(arguments[0], arguments[1], arguments[2]);
+        return VIS.context.getTabRecordContext(arguments[0], arguments[1], arguments[2],val2);
     }
 
     var tabNo = "";
@@ -79,7 +79,7 @@ VIS.context.getWindowTabContext = function (windowNo, tabNo, context) {
     return value;
 };
 
-VIS.context.getTabRecordContext = function (windowNo, tabNo, context) {
+VIS.context.getTabRecordContext = function (windowNo, tabNo, context,onlyWindow) {
     if (context == null)
         throw new ArgumentException("Require Context");
     //check windowNo exist in map or not
@@ -89,7 +89,7 @@ VIS.context.getTabRecordContext = function (windowNo, tabNo, context) {
     }
     //m_map.TryGetValue(windowNo + "|" + tabNo + "|" + context,out value);
     if (!value || value == "")
-        return VIS.context.getWindowContext(windowNo, context, true);
+        return VIS.context.getWindowContext(windowNo, context, onlyWindow);
     return value;
 };
 

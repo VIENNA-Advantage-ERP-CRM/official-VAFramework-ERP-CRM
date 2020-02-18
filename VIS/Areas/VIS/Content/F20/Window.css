@@ -16,7 +16,7 @@
     /*background-color: rgba(var(--v-c-primary),1);
     color: rgba(var(--v-c-on-primary));*/
     padding: 10px;
-    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
+    position:relative; 
 }
 
 .vis-ad-w-name {
@@ -54,7 +54,15 @@
     padding: 0 10px;
 }
 
-
+.vis-ad-w-header-border {
+    position: absolute;
+    content: '';
+    height: 2px;
+    width: 100%;
+    background: rgba(var(--v-c-primary), 1);
+    left: 0;
+    bottom: 0;
+}
 .vis-ad-print-process {
     background: transparent !important;
 }
@@ -495,9 +503,12 @@
 .vis-ad-w-p-tabs-t .vis-ad-w-p-t-c {
     flex: 1;
     display: flex;
-    overflow-x: auto;
     width: 1px;
     overflow: hidden;
+}
+
+.vis-ad-w-p-tabs-t .vis-ad-w-p-t-c-mob {
+    overflow-x: auto;
 }
 
 .vis-ad-w-p-t-c-inc {
@@ -578,8 +589,21 @@
     margin-bottom: -1px;
     border-bottom: none;
     background: #fff;
+    position: relative;
 }
-
+.vis-ad-w-p-inc-tabs .vis-apanel-tab-selected:before {
+    position: absolute;
+    content: '';
+    border: solid rgba(var(--v-c-primary), 1);
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 2px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    top: -4px;
+    background: #fff;
+    left: 47%;
+}
 .vis-ad-w-p-t-c-inc li {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     border-bottom: none;
