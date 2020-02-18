@@ -4285,13 +4285,12 @@
                 return this.gFieldLessData;
             else {
                 this.gFieldLessData = [];
-                this.gFieldEncryptCols = [];
-                this.gFieldLookupCols = [];
+                
                 for (var i = 0; i < size; i++) {
                     var field = m_fields[i];
                     var colName = field.getColumnName().toLowerCase();
                     if (field.getIsEncryptedColumn()) {
-                        this.gFieldEncryptCols.push(
+                        this.gFieldLessData.push(
                             //{
                             //IsVirtualColumn: field.getIsVirtualColumn(),
                             // DisplayType: field.getDisplayType(),
@@ -4304,8 +4303,7 @@
                     }
                    
                 }
-                this.gFieldLessData.push(this.gFieldEncryptCols);
-                this.gFieldLessData.push(this.gFieldLookupCols);
+               
                 return this.gFieldLessData;
             }
         }
