@@ -500,14 +500,6 @@ html[dir="rtl"] .vis-Email-rytWrap
 
 /*End*/
 
-
-.vis-email-sendbtn
-{
-    margin-top: 0px;
-    margin-right: 0px;
-    cursor: pointer;
-    float: right;
-}
 .vis-emailattchico {
     width: 31px;
     height: 31px;
@@ -540,42 +532,22 @@ html[dir="rtl"] .vis-Email-rytWrap
     cursor: pointer;
     font-size: 1.2rem;
 }
-
-html[dir="rtl"] .vis-email-sendbtn
-{
-    margin-right: 0px;
-    margin-left: 0px;
-    float: left;
-}
-
-.vis-email-saveAttachbtn
-{
-    margin-top: 10px;
-    margin-right: 15px;
+.vis-email-btns, .vis-email-sendbtn, .vis-email-saveAttachbtn {
+    /* margin-top: 10px; */
+    /* margin-right: 20px; */
     cursor: pointer;
     float: right;
+    font-size: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 10px;
 }
-
-html[dir="rtl"] .vis-email-saveAttachbtn
-{
-    margin-right: 0px;
-    margin-left:15px;
-    float: left;
-}
-
-.vis-email-btns
-{
-    margin-top: 10px;
-    margin-right: 20px;
-    cursor: pointer;
-    float: right;
-}
-
-html[dir="rtl"] .vis-email-btns
-{
-    margin-right: 0px;
-    margin-left:20px;
-    float: left;
+.vis-email-sendbtn {
+    background: rgba(var(--v-c-on-secondary), .5);
+    margin-right: 0;
+    width: 42px;
+    justify-content: center;
 }
 
 

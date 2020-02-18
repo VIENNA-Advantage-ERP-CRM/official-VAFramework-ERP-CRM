@@ -150,31 +150,34 @@ h4.vis-group-rights:before {
     margin-top: 10px;
     display: flex;
 }
-
 .vis-group-ass-btns {
-    width: 29px;
-    height: 29px;
-    border: none !important;
-    /*margin-right: 10px;*/
+    width: 30px;
+    height: 30px;
     border-radius: 0px;
-}
-
-.vis-group-add-btn {
-    background: url(../Images/group-add.png);
+    background: rgba(var(--v-c-secondary), 1);
+    border: 1px solid rgba(var(--v-c-on-secondary), .25);
+    color: rgba(var(--v-c-on-secondary), 1);
+    display: inline-flex;
     float: left;
+    font-size: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+.vis-group-add-btn {
+    /*background: url(../Images/group-add.png);*/
     margin-right: 5px;
 }
-
+.vis-group-search-icon {
+    border-left: none;
+}
 input.vis-group-search-icon {
-    background: url(../Images/group-search.png);
+    /*background: url(../Images/group-search.png);*/
     margin-right: 0px;
     /*margin-right: 5px;*/
-    float: left;
 }
 
 .vis-group-save-btn {
-    background: url(../Images/group-save.png);
-    float: left;
+    /*background: url(../Images/group-save.png);*/
 }
 
 .vis-group-addLeft {
@@ -512,7 +515,7 @@ input.vis-group-search-icon {
 .vis-group-assinRole-data, .vis-group-assinRole-check {
     width: 100%;
     float: left;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     position: relative;
 }
 

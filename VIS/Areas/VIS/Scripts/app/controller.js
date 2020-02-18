@@ -205,8 +205,9 @@
 
         this.tabs = [];
         for (var i = 0; i < json._tabs.length; i++) {
-            //console.log(json._tabs.length);
-            this.tabs.push(new VIS.GridTab(json._tabs[i], this.vo));
+            var gridTab = new VIS.GridTab(json._tabs[i], this.vo);
+            gridTab.setGridWindow(this);
+            this.tabs.push(gridTab);
         }
 
         // console.log(this);
@@ -214,9 +215,23 @@
         json = null;
     };
 
+
+
     GridWindow.prototype.getTabs = function () {
         return this.tabs;
     };
+
+    /**
+	 *	Get tab by index 
+	 *  @param i index
+	 *  @return MTab
+	 */
+    GridWindow.prototype.getTab = function (index) {
+        if (i < 0 || i + 1 > this.tabs.length)
+            return null;
+        return this.tabs[i];
+    };
+
 
     GridWindow.prototype.getIsAppointment = function () {
         return this.vo.IsAppointment;
@@ -351,6 +366,10 @@
         return this.vo.ImageUrl;
     }
 
+    GridWindow.prototype.getIsCompositeView = function () {
+        return this.vo.IsCompositeView;
+    }
+
     GridWindow.prototype.dispose = function () {
 
         originalLength = this.tabs.length;
@@ -429,10 +448,43 @@
 
         this.loadData(windowVo);
         windowVo = null;
-
+        this.gridWindow = null;
     };
 
+    /**
+     * set Grid Window 
+     * @param {any} gWindow
+     */
+    GridTab.prototype.setGridWindow = function (gWindow) {
+        this.gridWindow = gWindow;
+    };
 
+    GridTab.prototype.getParentTab = function () {
+        var pTabNo = this.getParentTabNo();
+        if (pTabNo < 0 || pTabNo == this.vo.tabNo)
+            return null;
+        return this.gridWindow.getTab(pTabNo);
+    };
+
+    /**
+	 * get Parent Tab No
+	 * @return Tab No
+	 */
+    GridTab.prototype.getParentTabNo = function () {
+        var tabNo = this.vo.tabNo;
+        var currentLevel = this.vo.TabLevel;
+        
+        var parentLevel = currentLevel - 1;
+
+        if (parentLevel < 0)
+            return tabNo;
+
+        while (parentLevel < currentLevel && tabNo > 0) {
+            tabNo--;
+            currentLevel = VIS.context.getContextAsInt(this.vo.windowNo, tabNo,"TabLevel"); //Replace this magic string 
+        }
+        return tabNo;
+    };
 
     GridTab.prototype.getAD_Tab_ID = function () {
         return this.vo.AD_Tab_ID;
@@ -522,7 +574,7 @@
     };	//	i
 
     GridTab.prototype.getValueAsString = function (variableName) {
-        return VIS.context.getWindowContext(this.vo.windowNo, variableName, true);
+        return VIS.context.getWindowContext(this.vo.windowNo, this.vo.windowNo, variableName, true);
     };
 
     GridTab.prototype.getIsCurrent = function () {
@@ -1001,7 +1053,7 @@
             if (typeof (oo) == "boolean")
                 return oo;
         }
-        return "Y".equals(VIS.context.getWindowContext(this.vo.windowNo, "Processed"));
+        return "Y".equals(VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, "Processed"));
     };	//	
 
     GridTab.prototype.getKeyColumnName = function () {
@@ -1246,7 +1298,7 @@
     GridTab.prototype.loadFields = function () {
         for (var i = 0; i < this.gTab._gridTable.m_fields.length; i++) {
             var gridField = new GridField(this.gTab._gridTable.m_fields[i]);
-
+            gridField.setGridTab(this);
             this.gridTable.gridFields.push(gridField);
 
             var columnName = gridField.getColumnName();
@@ -1567,14 +1619,20 @@
 
     };
 
-
+    /**
+     * 
+     * @param {any} onlyCurrentDays
+     * @param {any} maxRows
+     * @param {any} created
+     * @param {any} isVisualEdtr
+     */
     GridTab.prototype.prepareQuery = function (onlyCurrentDays, maxRows, created, isVisualEdtr) {
-
-
-
 
         var success = true;
         var queryDetailAll = false;
+
+        VIS.context.clearTabContext(this.vo.windowNo, this.vo.tabNo);
+
         //	is it same query?
         var refresh = this.oldQuery.equals(this.query.getWhereClause())
             && this.vo.onlyCurrentDays == onlyCurrentDays;
@@ -1643,7 +1701,7 @@
                 }
                 else {
 
-                    var value = VIS.context.getWindowContext(this.vo.windowNo, lc);
+                    var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(),lc);
                     //	Same link value?
                     if (refresh) {
                         refresh = this.linkValue.equals(value);
@@ -1768,8 +1826,10 @@
     };
 
     GridTab.prototype.dataIgnore = function () {
-        this.gridTable.dataIgnore();
-        this.setCurrentRow(this.currentRow, false);    //  re-load data
+        if (this.gridTable.dataIgnore(true)) {
+            this.setCurrentRow(this.currentRow, false);    //  re-load data
+            this.gridTable.fireDataStatusIEvent("Ignored", "");
+        }
 
         //log.fine("#" + m_vo.TabNo + "- fini");
     };   //  dataIgnore
@@ -1813,7 +1873,7 @@
         }
         //	Prevent New Where Main Record is processed
         if (this.vo.tabNo > 0) {
-            var processed = "Y".equals(VIS.context.getWindowContext(this.vo.windowNo, "Processed"));
+            var processed = "Y".equals(VIS.context.getWindowContext(this.vo.windowNo,  "Processed"));
             //	boolean active = "Y".equals(m_vo.ctx.getContext( m_vo.WindowNo, "IsActive"));
             if (processed) {
                 this.log.warning("Not allowed in TabNo=" + this.vo.tabNo + " -> Processed=" + processed);
@@ -1827,6 +1887,7 @@
         this.setCurrentRow(this.currentRow + 1, true);
         //  process all Callouts (no dependency check - assumed that settings are valid)
         var count = this.getFieldCount();
+        this.gridTable.setDisableNotification(true);
         for (var i = 0; i < count; i++)
             this.processCallout(this.getField(i));
         //  check validity of defaults
@@ -1835,7 +1896,8 @@
             // getField(i).validateValue();
             this.getField(i).setError(false);
         }
-        //m_mTable.setChanged(false);
+        this.gridTable.setDisableNotification(false);
+        this.gridTable.fireDataStatusIEvent(copy ? "UpdateCopied" : "Inserted", "");
         return retValue;
 
     }; // dataNew
@@ -1923,9 +1985,7 @@
         if (oldCurrentRow == this.currentRow) {
             var field = this.gridTable.getField(e.getChangedColumn());
             if (field != null) {
-                //Object value = m_mTable.getValueAt(m_currentRow, e.getChangedColumn());
-                // field.setValue(value, m_mTable.isInserting());
-            }
+                            }
         }
         else    //  Redistribute Info with current row info
             this.fireDataStatusChanged(this.mDataStatusEvent);
@@ -2020,7 +2080,7 @@
                 }
             }
             if (dependentField != null && dependentField.getLookup() instanceof VIS.MLocatorLookup) {
-                // gwu: invalidate currently selected locator if any dependent fields changed
+               
                 //var locLookup = dependentField.getLookup();
                 //var valueAsInt = 0;
                 //if (changedField.getValue() != null && changedField.getValue() instanceof Number)
@@ -3412,9 +3472,19 @@
         _rowData[field.getColumnName().toLowerCase()] = value;
 
         //  inform
-        var evt = this.createDSE();
-        evt.setChangedColumn(col, field.getColumnName());
-        this.fireDataStatusChanged(evt);
+        if (!this.disableNotification) {
+            var evt = this.createDSE();
+            evt.setChangedColumn(col, field.getColumnName());
+            this.fireDataStatusChanged(evt);
+        }
+    };
+
+    /**
+     * set this flag to disable notification loop (callout) for new record inserting
+     * @param {any} disable
+     */
+    GridTable.prototype.setDisableNotification = function (disable) {
+        this.disableNotification = disable;
     };
 
     /**
@@ -3478,10 +3548,12 @@
 
         //	Create SELECT Part
         var select = new StringBuilder("SELECT ");
+        var selectDirect = null;
         var selectSql = null;
         for (var i = 0; i < this.gridFields.length; i++) {
-            if (i > 0)
+            if (i > 0) {
                 select.append(", ");
+            }
             var field = this.gridFields[i];
             selectSql = field.getColumnSQL(true);
             if (selectSql.indexOf("@") == -1) {
@@ -3490,6 +3562,27 @@
             else {
                 select.append(VIS.Env.parseContext(this.ctx, gt._windowNo, selectSql, false));
             }
+
+            if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
+                var lInfo = field.getLookup().info;
+
+                if (selectDirect == null)
+                    selectDirect = new StringBuilder("SELECT ");
+                else
+                    selectDirect.append(",");
+
+                var qryDirect = lInfo.queryDirect.substring(lInfo.queryDirect.lastIndexOf(' FROM ' + lInfo.tableName + ' '));
+
+                if (!field.getIsVirtualColumn())
+                    qryDirect = qryDirect.replace('@key', gt._tableName + '.' + field.getColumnSQL());
+                else
+                    qryDirect = qryDirect.replace('@key',  field.getColumnSQL(false));
+
+
+                selectDirect.append("( SELECT (").append(lInfo.displayColSubQ).append(') ').append(qryDirect)
+                    .append(" ) AS ").append(field.getColumnSQL() + '_T')
+                    .append(',').append(field.getColumnSQL(true));
+            };
         }
 
         selectSql = null;
@@ -3547,12 +3640,18 @@
                 gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
         }
 
+        if (selectDirect != null) 
+            this.SQL_Direct = selectDirect.toString() + ' ' + this.SQL_Count.substring(this.SQL_Count.indexOf(" COUNT(*) FROM") + 9);
+        else
+            this.SQL_Direct = "";   
+
         //	ORDER BY
-        if (!gt._orderClause.equals(""))
+        if (!gt._orderClause.equals("")) {
             this.SQL += " ORDER BY " + gt._orderClause;
+            this.SQL_Direct += " ORDER BY " + gt._orderClause;
+        }
 
-
-
+        
         //
         ////log.fine(_SQL_Count);
         this.ctx.setWindowTabContext(gt._windowNo, gt._tabNo, "SQL", this.SQL);
@@ -3657,16 +3756,61 @@
 
         //prepare josn 
 
-        var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
 
-        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0 };
+        this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
+
+        var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
+        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID:0 };
+
+        
+
+        dataIn.sqlDirect = VIS.secureEngine.encrypt(this.SQL_Direct);
+        dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
         // VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, function (buffer) {
         if (this.treeNode_ID > 0) {
-            var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0 };
+            //For On demand tree  add these parameter
+            dataIn.treeID = this.treeID, dataIn.treeNode_ID = this.treeNode_ID;
+            //VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
 
-            this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
-            dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
-            VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
+            //    try {
+
+            //        if (buffer != null) {
+            //            var count = 0;
+
+            //            if (buffer.getTables().length != 0) {
+
+            //                var rows = buffer.getTable(0).getRows();
+
+            //                var columns = buffer.getTable(0).getColumnsName();
+            //                for (var row = 0; row < rows.length; row++) {
+            //                    var cells = rows[row].getJSCells();
+            //                    for (var cell = 0; cell < columns.length; cell++) {
+
+            //                        cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
+            //                    }
+            //                    //cells.recid = row;
+            //                    that.bufferList[row] = cells;
+            //                    count++;
+            //                    //break;
+            //                }
+
+            //                //console.log(this.bufferList);
+            //            }
+            //            buffer.dispose();
+            //            buffer = null;
+            //        }
+            //    }
+            //    catch (e) {
+            //        //alert(e);
+            //        this.log.Log(Level.SEVERE, that.SQL, e);
+            //    }
+            //    that.fireQueryCompleted(true); // inform gridcontroller
+            //    that = null;
+            //});
+        }
+       // else {
+           
+            VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, function (buffer,lookupDirect) {
 
                 try {
 
@@ -3676,7 +3820,6 @@
                         if (buffer.getTables().length != 0) {
 
                             var rows = buffer.getTable(0).getRows();
-
                             var columns = buffer.getTable(0).getColumnsName();
                             for (var row = 0; row < rows.length; row++) {
                                 var cells = rows[row].getJSCells();
@@ -3689,12 +3832,13 @@
                                 count++;
                                 //break;
                             }
-
-                            //console.log(this.bufferList);
+                            console.log(buffer.getTable(0).lookupDirect);
                         }
                         buffer.dispose();
                         buffer = null;
                     }
+                    if (lookupDirect)
+                        VIS.MLookupCache.addRecordLookup(that.gTable._windowNo, that.gTable._tabNo, lookupDirect);
                 }
                 catch (e) {
                     //alert(e);
@@ -3703,47 +3847,7 @@
                 that.fireQueryCompleted(true); // inform gridcontroller
                 that = null;
             });
-        }
-        else {
-            this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
-            dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
-            VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, function (buffer) {
-
-                try {
-
-                    if (buffer != null) {
-                        var count = 0;
-
-                        if (buffer.getTables().length != 0) {
-
-                            var rows = buffer.getTable(0).getRows();
-                            var columns = buffer.getTable(0).getColumnsName();
-                            for (var row = 0; row < rows.length; row++) {
-                                var cells = rows[row].getJSCells();
-                                for (var cell = 0; cell < columns.length; cell++) {
-
-                                    cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
-                                }
-                                //cells.recid = row;
-                                that.bufferList[row] = cells;
-                                count++;
-                                //break;
-                            }
-
-                            //console.log(this.bufferList);
-                        }
-                        buffer.dispose();
-                        buffer = null;
-                    }
-                }
-                catch (e) {
-                    //alert(e);
-                    this.log.Log(Level.SEVERE, that.SQL, e);
-                }
-                that.fireQueryCompleted(true); // inform gridcontroller
-                that = null;
-            });
-        }
+        //}
     };
 
     GridTable.prototype.readDataOfColumn = function (colName, colValue) {
@@ -3818,6 +3922,8 @@
             return colValue;
         }
     };
+
+    
 
     GridTable.prototype.encrypt = function (xx) {
         if (xx == null || xx.length < 1)
@@ -4179,21 +4285,27 @@
                 return this.gFieldLessData;
             else {
                 this.gFieldLessData = [];
+                this.gFieldEncryptCols = [];
+                this.gFieldLookupCols = [];
                 for (var i = 0; i < size; i++) {
                     var field = m_fields[i];
-                    if (field.getIsEncryptedColumn())
-
-                        this.gFieldLessData.push(
+                    var colName = field.getColumnName().toLowerCase();
+                    if (field.getIsEncryptedColumn()) {
+                        this.gFieldEncryptCols.push(
                             //{
                             //IsVirtualColumn: field.getIsVirtualColumn(),
                             // DisplayType: field.getDisplayType(),
-                            field.getColumnName().toLowerCase()
+                            colName
                             // IsKey: field.getIsKey(),
                             // ColumnSQL: field.getColumnSQL(true),
                             // IsEncrypted: field.getIsEncrypted(),
                             // IsParentColumn: field.getIsParentColumn()
                         );
+                    }
+                   
                 }
+                this.gFieldLessData.push(this.gFieldEncryptCols);
+                this.gFieldLessData.push(this.gFieldLookupCols);
                 return this.gFieldLessData;
             }
         }
@@ -4407,8 +4519,7 @@
 
         this.rowChanged = this.newRow;  //  force save checking on new record
         //	add Data at end of buffer
-        //MSort sort = new MSort(m_buffer.size(), null);	//	index
-        //m_buffer.add(rowData);
+        
         //if (!this.mSortList) {
 
         //}
@@ -4422,7 +4533,7 @@
         //	inform
         //log.finer("Current=" + currentRow + ", New=" + m_newRow);
         this.fireTableModelChanged(VIS.VTable.prototype.ROW_ADD, rowData, this.newRow);
-        this.fireDataStatusIEvent(copyCurrent ? "UpdateCopied" : "Inserted", "");
+       //this.fireDataStatusIEvent(copyCurrent ? "UpdateCopied" : "Inserted", "");
         this.log.fine("Current=" + this.currentRow + ", New=" + this.newRow + " - complete");
         return true;
     };//	dataNew
@@ -4571,7 +4682,7 @@
 
             //	Is this record deletable?
             if (!localthis.deleteable) {
-                tlocalthishis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
+                localthis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
                 resolve(false);
                 return;
             }
@@ -4758,7 +4869,7 @@
         this.isOpen = false;
     };	//	close
 
-    GridTable.prototype.dataIgnore = function () {
+    GridTable.prototype.dataIgnore = function (skipNotify) {
 
         if (!this.inserting && !this.changed && this.rowChanged < 0) {
             return;
@@ -4798,7 +4909,11 @@
         this.rowData = null;
         this.inserting = false;
         this.newRow = -1;
-        this.fireDataStatusIEvent("Ignored", "");
+        //return true;
+        if (!skipNotify) {
+            this.fireDataStatusIEvent("Ignored", "");
+        }
+        return true;
     };
 
     GridTable.prototype.createDSE = function () {
@@ -4847,7 +4962,7 @@
     };
 
     GridTable.prototype.fireQueryCompleted = function (args) {
-        this.fireDataStatusIEvent(this.dseEvent);
+       // this.fireDataStatusIEvent(this.dseEvent);
         if (this.mQueryCompletedListener)
             this.mQueryCompletedListener.queryCompleted(args);
         args = null;
@@ -5038,6 +5153,7 @@
         this.error;
         this.valueNoFire = true;
 
+        this.gridTab = null;
 
         var m_lookup = null;
         /* Load Lookup */
@@ -5092,6 +5208,10 @@
     GridField.prototype.PROPERTY = 'FieldValue';
     /** Indicator for new Value				*/
     GridField.prototype.INSERTING = 'FieldValueInserting';
+
+    GridField.prototype.setGridTab = function (gridTab) {
+        this.gridTab = gridTab;
+    };
 
     GridField.prototype.getIsDisplayed = function (checkContext) {
         if (arguments.length == 0) {
@@ -5273,11 +5393,19 @@
         return this.vo.IsReadOnly;
     };
 
+    /**
+     * set readonly property of field 
+     * @param {any} value
+     */
     GridField.prototype.setReadOnly = function (value) {
-
         this.vo.IsReadOnly = value;
     };
 
+    /**
+     * check is 
+     * @param {any} checkContext
+     * @param {any} isMR
+     */
     GridField.prototype.getIsEditable = function (checkContext, isMR) {
         //TODO:
         var _vo = this.vo;
@@ -5366,8 +5494,8 @@
 
         //  Record is Processed	***
         if (checkContext
-            && (ctx.getWindowContext(_vo.windowNo, "Processed").equals("Y")
-                || ctx.getWindowContext(_vo.windowNo, "Processing").equals("Y"))) {
+            && (ctx.getWindowContext(_vo.windowNo,_vo.tabNo, "Processed").equals("Y")
+                || ctx.getWindowContext(_vo.windowNo,_vo.tabNo, "Processing").equals("Y"))) {
             if (!hasMRDisplayLogic)
                 return false;
         }
@@ -5377,7 +5505,7 @@
             return true;
 
         //  Record is not Active
-        if (checkContext && !ctx.getWindowContext(_vo.windowNo, "IsActive").equals("Y"))
+        if (checkContext && !ctx.getWindowContext(_vo.windowNo,_vo.tabNo, "IsActive").equals("Y"))
             return false;
 
         if (!isMR)
@@ -5503,7 +5631,7 @@
     }
 
     GridField.prototype.getValueAsString = function (variableName) {
-        return VIS.context.getWindowContext(this.vo.windowNo, variableName, true);
+        return VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, variableName, true);
     };
 
     GridField.prototype.getColumnSQL = function (withAS) {
@@ -6230,10 +6358,29 @@
         this.inserting = inserting;
         this.error = false;        //  reset error
 
+        this.updateContext();
+
+
+        //  Does not fire, if same value
+        var oldValue = this.oldValue;
+        if (inserting) {
+            oldValue = this.INSERTING;
+        }
+        //console.log(_vo.ColumnName + " ===> " + newValue)
+        if ((oldValue !== newValue || this.forcefirepropchange) && this.propertyChangeListner) {
+            //console.log(_vo.ColumnName + " ===> " + newValue);
+            this.propertyChangeListner.setValue(newValue, inserting);
+        }
+        this.forcefirepropchange = this.inserting || this.vo.displayType == VIS.DisplayType.YesNo
+    };
+
+    GridField.prototype.updateContext = function () {
+
         //	Set Context
         var _vo = this.vo;
         var DisplayType = VIS.DisplayType;
         var ctx = VIS.context;
+        var newValue = this.value;
 
         if (_vo.displayType == DisplayType.Text
             || _vo.displayType == DisplayType.Memo
@@ -6247,31 +6394,49 @@
             ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, null);
         }
         else if (typeof newValue == typeof Boolean || _vo.displayType == DisplayType.YesNo) {
-            if (newValue.toString() == "Y" || newValue.toString() == "N") {
-                ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, newValue.toString());
-            } else {
-                ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, newValue.toString().toLowerCase() == "true" ? "Y" : "N");
+
+            var newVal = newValue.toString().toLowerCase() == "true" || newValue.toString() == "Y" ? "Y" : "N";
+            if (!this.getIsParentTabField()) {
+                ctx.setWindowContext(_vo.windowNo, _vo.ColumnName,
+                    newVal);
             }
+           else  if (this.gridTab)
+                ctx.setTabRecordContext(_vo.windowNo , _vo.tabNo, _vo.ColumnName,
+                    newVal);
         }
         else if (typeof newValue == typeof date || DisplayType.IsDate(_vo.displayType)) {
-            ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, newValue);
+            if (!this.getIsParentTabField()) {
+                ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, newValue);
+            }
+            else if (this.gridTab)
+                ctx.setTabRecordContext(_vo.windowNo, _vo.tabNo, _vo.ColumnName,
+                    newValue);
         }
 
         else {
-            ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, newValue == null ? null : newValue.toString());
+            if (!this.getIsParentTabField()) {
+                ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, newValue == null ? null : newValue.toString());
+            }
+            else if (this.gridTab)
+                ctx.setTabRecordContext(_vo.windowNo, _vo.tabNo, _vo.ColumnName,
+                    newValue.toString());
         }
+    };
 
-        //  Does not fire, if same value
-        var oldValue = this.oldValue;
-        if (inserting) {
-            oldValue = this.INSERTING;
-        }
-        //console.log(_vo.ColumnName + " ===> " + newValue)
-        if ((oldValue !== newValue || this.forcefirepropchange) && this.propertyChangeListner) {
-            //console.log(_vo.ColumnName + " ===> " + newValue);
-            this.propertyChangeListner.setValue(newValue, inserting);
-        }
-        this.forcefirepropchange = this.inserting || _vo.displayType == DisplayType.YesNo
+    /**
+     * check field exist in parent tab 
+     * @param {any} colName column name 
+     */
+    GridField.prototype.getIsParentTabField = function (colName) {
+        if (!this.gridTab)
+            return false;
+        if (!colName)
+            colName = this.vo.ColumnName;
+
+        var parentTab = this.gridTab.getParentTab();
+        if (parentTab == null)
+            return false;
+        return parentTab.getField(colName) != null;
     };
 
     GridField.prototype.setNullValue = function () {

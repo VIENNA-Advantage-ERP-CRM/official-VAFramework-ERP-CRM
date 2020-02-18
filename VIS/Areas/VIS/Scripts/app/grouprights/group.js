@@ -152,8 +152,8 @@
 
             /***** end of content-head *****/
 
-            $leftPanel.append('<div class="vis-group-content-headDown"><input class="vis-group-add-btn vis-group-pointer vis-group-addLeft vis-group-ass-btns" type="button">' +
-                    '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><input class=" vis-group-pointer vis-group-ass-btns vis-group-search-icon" type="button">' +
+            $leftPanel.append('<div class="vis-group-content-headDown"><button class="vis-group-add-btn vis-group-ass-btns"><i class="vis vis-plus"></i></button>' +
+                '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
                  //   '<input class="vis-group-importUser" type="button" title="' + VIS.Msg.getMsg("VIS_Importuser") + '"><div class="vis-group-clear-both"></div> </div>');
                     '<div class="vis-group-clear-both"></div> </div>');
             $searchUser = $leftPanel.find('.vis-group-SearchText');
@@ -179,11 +179,11 @@
                       '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_RoleSaved") + '</h7>' +
 
                       '<div class="vis-group-top-right">' +
-                          '<input class="vis-group-ass-btns vis-group-pointer vis-group-add-btn" type="button">' +
-                          '<input class="vis-group-ass-btns vis-group-pointer vis-group-save-btn" type="button">' +
+                          '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus"></i></button>' +
+                          '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save"></i></button>' +
                       '</div>' +
                       '<div class="vis-group-content-headDown"><span><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<input class="vis-group-ass-btns vis-group-ass-btnse vis-group-pointer vis-group-search-icon" type="button"> </span></div>' +
+                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button></span></div>' +
                       '<div class="vis-group-clear-both"></div>' +
                   '</div>');
 
@@ -210,15 +210,15 @@
                          '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_GroupSaved") + '</h7>' +
                        '<div class="vis-group-top-right">' +
                            '<div class="vis-group-top-right">' +
-                           '<input class="vis-group-ass-btns vis-group-pointer vis-group-add-btn" type="button">' +
-                           '<input class="vis-group-ass-btns vis-group-pointer vis-group-save-btn" type="button">' +
+                           '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus"></i></button>' +
+                          '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save"></i></button>' +
                            '</div>' +
                        '</div>' +
 
                        '<div class="vis-group-content-headDown"><span>' +
 
                        '<input class="vis-group-SearchText"  value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<input class="vis-group-ass-btns vis-group-ass-btnse vis-group-pointer vis-group-search-icon" type="button"> ' +
+                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
                        '</span>' +
                        '</div>' +
 
@@ -374,7 +374,7 @@
                             '{{else}}' +
                             '<input disabled type="checkbox" data-UID="{{AD_Role_ID}}" checked="">' +            // if selected user cannot be updated
                             '{{/if}}' +
-                            '<label style="color: #535353;font-weight: bold;">{{Name}}</label>' +
+                            '<label style="color: rgba(var(--v-c-on-secondary), 1);font-weight: bold;">{{Name}}</label>' +
                             '{{else}}' +
                             '{{#if IsUpdate}}' +
                             '<input type="checkbox" data-UID="{{AD_Role_ID}}" >' +                                  // if selected user can be updated
@@ -408,7 +408,7 @@
                 '<div class="vis-group-user-profile">' +
                     '{{#if IsAssignedToUser}}' +
                         	'<input type="checkbox" data-UID="{{AD_Group_ID}}" checked="">' +
-                            '<label style="color: #535353;font-weight: bold;">{{Name}}</label>' +
+                            '<label style="color: rgba(var(--v-c-on-secondary), 1);font-weight: bold;">{{Name}}</label>' +
                             '{{else}}' +
                             '<input type="checkbox" data-UID="{{AD_Group_ID}}" >' +
                             '<label>{{Name}}</label>' +

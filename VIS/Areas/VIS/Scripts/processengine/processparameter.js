@@ -90,7 +90,7 @@
             if (c1) {
                 var control = c1.getControl();
                 if (splitUI)
-                    control.css('color', 'white');
+                    //control.css('color', 'white');
                 $td1.append(control);
             }
             if (c2) {

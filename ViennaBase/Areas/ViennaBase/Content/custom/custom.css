@@ -53,9 +53,9 @@
     vertical-align: middle;
 }
 .w2ui-grid .w2ui-grid-body table .w2ui-col-select {
-    min-width: 28px;
+    /*min-width: 28px;*/
     vertical-align: middle;
-    width: 28px;
+    /*width: 28px;*/
 }
 
 .w2ui-grid .w2ui-grid-body {
@@ -311,6 +311,10 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     /*border: 1px solid rgba(var(--v-c-on-secondary),.1);*/
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary), 1);
+}
+.ui-widget-content .ui-corner-all {
+    border-top-right-radius: .1rem;
+    border-top-left-radius: .1rem;
 }
 .ui-widget-content a {
     color: rgba(var(--v-c-on-secondary), 1);

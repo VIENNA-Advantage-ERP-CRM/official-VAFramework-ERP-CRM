@@ -112,6 +112,12 @@ namespace VIS.DataContracts
         public EventParamOut EventParam;
     }
 
+    public class WindowRecordOut
+    {
+        public List<JTable> Tables { get; set; }
+        public Dictionary<string, Dictionary<object, string>> LookupDirect  { get;set; }
+    }
+
     public class RecordInfoIn
     {
         public int CreatedBy

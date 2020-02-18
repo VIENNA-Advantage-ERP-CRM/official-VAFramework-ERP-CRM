@@ -27,6 +27,11 @@ namespace VAdvantage.Model
         {
         }
 
+        public MLookup(Ctx ctx, int windowNo, int tabNo, int displayType)
+            : base(ctx, windowNo, tabNo, displayType)
+        {
+        }
+
         /** Inactive Marker Start       */
         public const String INACTIVE_S = "~";
         /** Inactive Marker End         */

@@ -160,6 +160,7 @@
         this.selectedObject;
         this.windowNo = windowNo;
         this.validationDisabled = false;
+        this.tabNo = 0;
 
         this.data = [];
         this.ctx = ctx;
@@ -170,6 +171,7 @@
             this.hasInactive = lookup._hasInactive;
             this.displayType = lookup._displayType;
             this.windowNo = lookup._WindowNo;
+            this.tabNo = lookup._TabNo;
             if (this.info) {
                 this.info.windowNo = lookup._WindowNo;
             }
@@ -190,6 +192,11 @@
     Lookup.prototype.getWindowNo = function () {
         return this.windowNo;
     };
+
+    Lookup.prototype.getTabNo = function () {
+        return this.tabNo;
+    };
+
     Lookup.prototype.getDisplayType = function () {
         return this.displayType;
     };
@@ -474,6 +481,7 @@
         if (retValue)
             return retValue;
 
+        
         // Always check for parents - not if we SQL was validated and completely
         // loaded
         if (!this.info.isParent && this.info.isValidated && this.allLoaded) {
@@ -517,6 +525,17 @@
         if (retValue != null)
             return retValue;
 
+        var keyCol = this.info.keyColumn.substring(this.info.keyColumn.indexOf('.') + 1).toLowerCase();
+
+        var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), keyCol, key);
+        if (text) {
+            //var keyValue = var isNumber = this.info.keyColumn.toUpperCase().endsWith("_ID");
+            retValue = { Key: key, Name: VIS.Utility.encodeText(text) };
+            this.lookup[" " + key] = retValue;
+            return retValue;
+        }
+
+
         //  Always check for parents - not if we SQL was validated and completely loaded
         if (!this.info.isParent && this.info.isValidated && this.allLoaded) {
             this.getDirectFromList(key, false, true);		//	cache locally
@@ -528,15 +547,7 @@
             && !this.info.isCreadedUpdatedBy
             && !this.info.isParent
             && this.getDisplayType() != VIS.DisplayType.Search) {
-            //_loader = new System.Threading.Thread(new System.Threading.ThreadStart(Load));
-            //_loader.CurrentCulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetAD_Language());
-            //_loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetAD_Language());
-
-            //_loader.Start();
-
-            // Load();
-            //	sync! 
-            // LoadComplete();
+            
 
             retValue = this.lookup[" " + key];
             if (retValue != null)
@@ -728,7 +739,7 @@
 
         // not validated
         if (!this.info.isValidated) {
-            var validation = VIS.Env.parseContext(VIS.context, this.getWindowNo(), this.info.validationCode, false, true);
+            var validation = VIS.Env.parseContext(VIS.context, this.getWindowNo(), this.getTabNo(), this.info.validationCode, false, true);
             if (validation.length == 0 && this.info.validationCode.length > 0) {
                 this.log.fine(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
                 //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
@@ -1946,8 +1957,7 @@
         s_loadedLookups: new VIS.CCache("MLookupCache"),
         s_sentLookups: new VIS.CCache("MLookupCacheSent"),
         s_windowLookup: {},
-
-
+        s_windowRecordLookup: {},
 
         getKey: function (info) {
             if (info == null)
@@ -2032,12 +2042,7 @@
                         lookupTarget.setCLookup($.extend({}, cacheLookup.getCLookup()));
 
 
-                        //IEnumerator<Object> iterator = cacheLookup.CLookup.Keys.GetEnumerator();
-                        //while (iterator.MoveNext())
-                        //{
-                        //    Object cacheKey = iterator.Current;
-                        //    NamePair cacheData = cacheLookup.CLookup[cacheKey];
-                        //    lookupTarget.CLookup[cacheKey] = cacheData;
+                        
                         //}
                         lookupTarget.setIsLoading(false);
                     }
@@ -2078,6 +2083,12 @@
             for (var i = 0; i < toDelete.length; i++)
                 this.s_loadedLookups.remove(toDelete[i]);
             var endNo = this.s_loadedLookups.size();
+
+            // Remove window tab Record lookup
+            for (var prop in this.s_windowRecordLookup) {
+                if (prop.startsWith(keyStart))
+                    delete this.s_windowRecordLookup[prop];
+            }
         },
 
         addWindowLookup: function (windowNo, lookup) {
@@ -2101,6 +2112,31 @@
                 arr.length = 0;
                 delete this.s_windowLookup[windowNo];
             }
+        },
+
+        /**
+         * Add window tab lookup direct record
+         * @param {any} windowNo
+         * @param {any} tabNo
+         * @param {any} lookupDirect
+         */
+        addRecordLookup: function (windowNo, tabNo, lookupDirect) {
+            var key = windowNo + ':' + tabNo;
+            this.s_windowRecordLookup[key] = lookupDirect;
+        },
+
+        /**
+         * Get Window Record Lookup
+         * @param {any} windowNo
+         * @param {any} tabNo
+         * @param {any} keyCol
+         * @param {any} key
+         */
+        getRecordLookup: function (windowNo, tabNo, keyCol,key) {
+            var lookup = this.s_windowRecordLookup[windowNo + ':' + tabNo];
+            if (lookup && keyCol in lookup)
+                return lookup[keyCol][key];
+            return null;
         }
     };
 

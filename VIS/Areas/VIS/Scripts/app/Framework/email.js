@@ -243,11 +243,11 @@
 
         function Addbuttons() {
             if (isEmail) {
-                $btnHdrSend = $('<img  class="vis-email-sendbtn" title="' + VIS.Msg.getMsg("SendMail").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/email-send.png"> </img>');
+                $btnHdrSend = $('<i class="vis-email-sendbtn vis vis-paper-plane"></i>');
                 $toolbarDiv.append($btnHdrSend);
             }
             else {
-                $btnHdrSend = $('<img  class="vis-email-saveAttachbtn" title="' + VIS.Msg.getMsg("SaveAttachment").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/email-saveAttachment.png"> </img>');
+                $btnHdrSend = $('<i class="vis-email-saveAttachbtn vis vis-save-attach"></i>');
                 $toolbarDiv.append($btnHdrSend);
             }
 
@@ -257,22 +257,22 @@
             //$btnHdrCancel = $('<img  style="margin-top:10px;margin-right:20px;cursor: pointer;float:right" title="' + VIS.Msg.getMsg("Cancel").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/cancel.png"> </img>');
             //$toolbarDiv.append($btnHdrCancel);
             if (!callingFromOutsideofWindow) {
-                $btnHdrPreview = $('<img  class="vis-email-btns" title="' + VIS.Msg.getMsg("Preview").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/email-preview.png"> </img>');
+                $btnHdrPreview = $('<i class="vis-email-btns vis vis-viewdocument"></i>');
                 $toolbarDiv.append($btnHdrPreview);
 
-                $btnHdrSaveAs = $('<img  class="vis-email-btns" title="' + VIS.Msg.getMsg("SaveAs").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/email-saveas.png"> </img>');
+                $btnHdrSaveAs = $('<i class="vis-email-btns vis vis-save-as"></i>');
                 $toolbarDiv.append($btnHdrSaveAs);
 
-                $btnHdrSave = $('<img  class="vis-email-btns"  title="' + VIS.Msg.getMsg("Save").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/email-save.png"> </img>');
+                $btnHdrSave = $('<i class="vis-email-btns vis vis-save"></i>');
                 $toolbarDiv.append($btnHdrSave);
 
-                $btnHdrOpen = $('<img  class="vis-email-btns" title="' + VIS.Msg.getMsg("Open").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/email-open.png"> </img>');
+                $btnHdrOpen = $('<i class="vis-email-btns vis vis-open-file"></i>');
                 $toolbarDiv.append($btnHdrOpen);
             }
             if (!isEmail) {
-                $btnSavePdf = $('<img  class="vis-email-btns" title="' + VIS.Msg.getMsg("SavePdf").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/email-savepdf.png"> </img>');
+                $btnSavePdf = $('<i class="vis-email-btns vis vis-save-pdf"></i>');
                 ///Manish 31/5/2016                                                                                                                                    
-                $btnNewLetter = $('<img  class="vis-email-btns" style="width:20px" title="' + VIS.Msg.getMsg("NewLetter").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/New24.png"> </img>');
+                $btnNewLetter = $('<i class="vis-email-btns vis vis-new"></i>');
                 ///End 31/5/2016
                 $toolbarDiv.append($btnSavePdf).append($btnNewLetter);
             }
@@ -333,8 +333,8 @@
             }
 
 
-            $root.find('.vis-email-leftDiv').height($root.height() - 44);
-            $root.find('.vis-Email-rytWrap').height($root.height() - 44);
+            $root.find('.vis-email-leftDiv').height($root.find('.contentArea').height());
+            $root.find('.vis-Email-rytWrap').height($root.find('.contentArea').height());
             if (callingFromOutsideofWindow) {
                 $root.find('.vis-form-data-sub').css('margin-top', '0px');
                 $root.find('.vis-email-leftDiv').hide();
@@ -566,7 +566,7 @@
             if (!isRefresh) {
                 $lineImgDiv = $('<div class="vis-apanel-lb-toggle">');
 
-                $imgAction = $('<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/Action.png" style="cursor:pointer" ></img>');
+                $imgAction = $('<i class="fa fa-bars"></i>');
                 //$toggleAction = $('<div class="vis-apanel-lb-toggle" style="height:100%;overflow-x:hidden;overflow-y: hidden;"></div>');
                 $toggleAction = $('<div class="vis-apanel-lb-toggle" style="border:none;height:100%;overflow-x:hidden;overflow-y: hidden;"></div>');
 
@@ -575,7 +575,7 @@
                 $divlbNav = $("<div class='vis-apanel-lb-oflow' style='border-top:0;display:none' >");
                 $divlbNav.html("<a data-dir='u' href='javascript:void(0)'><i class='vis vis-arrow-up' data-dir='u'></i></a><a data-dir='d' href='javascript:void(0)' ><i class='vis vis-arrow-down' data-dir='d'></i></a>");
 
-                $scrollIcon = $('<div class="vis-apanel-lb-toggle" style="padding-top:5px;overflow-x:hidden;overflow-y: hidden;"></div>');
+                $scrollIcon = $('<div class="vis-apanel-lb-toggle" style="padding: 5px 10px;overflow-x:hidden;overflow-y: hidden;"></div>');
                 $scrollIcon.append($divlbNav);
 
 
@@ -651,7 +651,7 @@
             debugger;
 
             if (!callingFromOutsideofWindow) {
-                var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 57;
+                var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 53;
                 $($ulFieldNames.parent()).height($leftDiv.height() - ulHeight);
 
 
@@ -670,9 +670,9 @@
             if (!callingFromOutsideofWindow) {
                 if ($ulFieldNames.height() > $($ulFieldNames.parent()).height()) {
                     $toggleAction.css("border-bottom", "1px solid rgba(var(--v-c-secondary), 1)");
-                    $divlbNav.css("display", "inherit");
+                    $divlbNav.css("display", "block");
 
-                    var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 57;
+                    var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 37;
                     $toggleAction.height($leftDiv.height() - ulHeight);
 
                     $leftDiv.css("overflow", "hidden");
@@ -2715,7 +2715,7 @@
 
             $root.find('.vis-Email-BccList').height(1);
 
-            $root.find('.vis-email-leftDiv').height($root.height() - 44);
+            $root.find('.vis-email-leftDiv').height($root.find('.contentArea').height());
             if (callingFromOutsideofWindow) {
                 if (!$root.find('.vis-email-attachmentContainer').is(":visible")) {
 
