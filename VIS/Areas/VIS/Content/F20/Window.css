@@ -1200,24 +1200,7 @@ li.vis-page-item-select {
 
 /*Header panel css START*/
 
-.vis-ev-col-fg-more {
-    display: flex;
-    align-items: center;
-    padding-right: 10px !important;
-    font-size: .875rem;
-    color: rgba(var(--v-c-primary), 1) !important;
-}
 
-.vis-ev-col-fieldgroup :last-child {
-    padding-right: 10px;
-    padding-top: 5px;
-}
-
-.vis-ev-col-fg-rotate {
-    transform: rotateX(180deg);
-    padding-top: 0 !important;
-    padding-bottom: 5px;
-}
 
 .vis-ad-w-p-header-v {
     /*margin-top: -19px;*/
