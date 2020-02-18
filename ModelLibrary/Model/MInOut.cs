@@ -447,7 +447,10 @@ namespace VAdvantage.Model
                 from.SetRef_InOut_ID(to.GetM_InOut_ID());
             }
 
-            if (to.CopyLinesFrom(from, counter, setOrder) == 0)
+            // Check applied by Mohit - JID_1640 - 18 Feb 2020
+            // in case of counter document - do not create the lines here - it will be created while creating the counter document.
+            // in case of reversal, need to copy the lines as well
+            if (!counter && to.CopyLinesFrom(from, counter, setOrder) == 0)
             {
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (!String.IsNullOrEmpty(pp.GetName()))
