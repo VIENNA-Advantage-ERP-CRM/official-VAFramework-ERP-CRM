@@ -519,17 +519,27 @@
 .vis-apanel-lb-toggle {
     /* background: rgba(var(--v-c-on-secondary), 0.2); */
     border-bottom: 1px solid rgba(var(--v-c-on-primary), 1);
-    padding-top: 7px;
-    padding-bottom: 7px;
+    /* padding-top: 2px; */
+    /* padding-bottom: 2px; */
     padding-left: 10px;
     padding-right: 10px;
     /* filter: brightness(0.9); */
     color: rgba(var(--v-c-primary), 1);
     font-size: 1.3rem;
+    height: 35px;
+    display: flex;
+    align-items: center;
 }
 .vis-email-leftDiv .vis-apanel-lb-toggle,
 .vis-sms-leftDiv .vis-apanel-lb-toggle {
     color: rgba(var(--v-c-on-primary), 1);
+    height: auto;
+    padding: 6px 10px;
+    display: block;
+}
+.vis-email-leftDiv .vis-apanel-lb-toggle i,
+.vis-sms-leftDiv .vis-apanel-lb-toggle i {
+    cursor: pointer
 }
 .vis-apanel-lb-img {
     cursor: pointer;
