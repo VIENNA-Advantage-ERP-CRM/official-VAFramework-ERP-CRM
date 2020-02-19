@@ -541,7 +541,7 @@
                                 this.leftPaneLinkItems.push(iControl);
                             }
                         }
-                        iControl.addActionListner(aPanel);
+                        iControl.addActionListner(this);
                     }
 
                     iControl = null;
@@ -1281,6 +1281,14 @@ VIS.GridController.prototype.checkInsertNewRow = function () {
         mTable.setValueAt(e.newValue, row, col);	//	-> dataStatusChanged -> dynamicDisplay
 
     };
+
+    VIS.GridController.prototype.actionPerformed = function (evt) {
+        if (this.aContentPane) {
+            this.aContentPane.actionPerformed(evt);
+            return;
+        }
+        this.aPanel.actionPerformed(evt);
+    }
 
     /*
      - handle UI refresh Request 
