@@ -53,9 +53,9 @@
     vertical-align: middle;
 }
 .w2ui-grid .w2ui-grid-body table .w2ui-col-select {
-    min-width: 28px;
+    /*min-width: 28px;*/
     vertical-align: middle;
-    width: 28px;
+    /*width: 28px;*/
 }
 
 .w2ui-grid .w2ui-grid-body {

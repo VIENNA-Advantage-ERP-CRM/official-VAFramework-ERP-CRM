@@ -18,22 +18,17 @@
         this.tabs = [];
         this.headerTab = null;
 
-
         this.aNew = null;
         this.aSave = null;
         this.aDelete = null;
         this.aRefresh = null;
-
         //tolbar 
-
         var $ulTabControl = null;
         var $divTabControl = null;
         var $divTabNav = null;
         var $divHeaderNav = null;
         var $divContent = null;
         var $ulToolbar = null;
-
-
 
         var self = this;
 
@@ -171,8 +166,6 @@
             }
         };
 
-      
-
         this.createToolBar = function () {
 
             var pnl = this.aTabbedPane.getAPanel();
@@ -200,6 +193,11 @@
         }
 
         this.createToolBar();
+
+        this.finishLayout = function () {
+            if (!VIS.Application.isMobile)
+                $divTabControl.addClass("vis-ad-w-p-t-c-mob");
+        },
 
         this.disposeComponents = function () {
             self = null;

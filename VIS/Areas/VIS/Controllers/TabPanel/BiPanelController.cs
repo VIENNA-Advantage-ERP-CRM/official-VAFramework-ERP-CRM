@@ -36,7 +36,7 @@ namespace VIS.Controllers
             ViewBag.scriptt = null;
             if (!int.TryParse(result[0], out outvalue))
             {
-                string script = result[1] + "JsAPI?" + extraInfo.ToLower().Replace("@recordid", recID.ToString()).Replace("||","&") + "&token=" + result[0];
+                string script = result[1] + "JsAPI?" + extraInfo.Replace("@recordid", recID.ToString()).Replace("||","&") + "&token=" + result[0];
                 ViewBag.scriptt = script;
             }
             else {

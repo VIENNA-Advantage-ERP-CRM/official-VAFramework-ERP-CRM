@@ -701,7 +701,7 @@
                 close: onClosing
             });
 
-            displayData(false, cmbPage.val());
+            displayData(true, cmbPage.val());
         };
 
         var getControl = function (displayType, columnName, header, refvalueID, lookup) {

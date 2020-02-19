@@ -1698,17 +1698,21 @@ namespace VIS.Helpers
         {
             WindowRecordOut retVal = new WindowRecordOut();
 
+            //Loookup fileds 
             var lookupDirect = new Dictionary<string, Dictionary<object, string>>();
 
             List<JTable> outO = new List<JTable>();
             
             JTable obj = null;
 
-
             MSession session = MSession.Get(ctx, true);
             session.QueryLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), AD_Table_ID,
                 sqlCount, rowCount);
 
+            if (sqlIn.tree_id > 0)
+            {
+                SetTreeRecordSql(ctx, AD_Table_ID, sqlIn);
+            }
 
 
             DataSet ds = new SqlHelper().ExecuteDataSet(sqlIn);
@@ -1717,7 +1721,6 @@ namespace VIS.Helpers
 
             bool checkEncrypted = encryptedColNames != null && encryptedColNames.Count > 0;
             key = ctx.GetSecureKey();
-
 
             for (int table = 0; table < ds.Tables.Count; table++)
             {
@@ -1810,6 +1813,68 @@ namespace VIS.Helpers
 
             return retVal;
         }
+/// <summary>
+/// Set Tree Record sql in if query is for on demnad tree records
+/// </summary>
+/// <param name="ctx"></param>
+/// <param name="AD_Table_ID"></param>
+/// <param name="sqlIn"></param>
+        private void SetTreeRecordSql(Ctx ctx , int AD_Table_ID, SqlParamsIn sqlIn)
+        {
+            string tableName = MTable.GetTableName(ctx, AD_Table_ID);
+            MTree tree = new MTree(ctx, sqlIn.tree_id, null);
+
+            if (sqlIn.tree_id > 0)
+            {
+
+                GetChildNodesID(sqlIn.treeNode_ID, tree.GetNodeTableName(), sqlIn.tree_id, tableName);
+
+                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND AD_Tree_ID=" + sqlIn.tree_id;
+
+                string sqlQuery = sqlIn.sql;
+                string sqlDirect = sqlIn.sqlDirect;
+
+                if (sqlQuery.ToUpper().LastIndexOf("WHERE") > -1)
+                {
+                    if (sqlQuery.ToUpper().LastIndexOf("ORDER BY") > -1)
+                    {
+                        sqlIn.sql = sqlQuery.Insert(sqlQuery.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sqlWhere + ") ");
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect.Insert(sqlDirect.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sqlWhere + ") ");
+                    }
+                    else
+                    {
+                        sqlIn.sql = sqlQuery + " AND " + tableName + "_ID IN (" + sqlWhere + ") ";
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect + " AND " + tableName + "_ID IN (" + sqlWhere + ") ";
+                    }
+                }
+            }
+            else
+            {
+                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + sqlIn.tree_id + " AND (Parent_ID = " + sqlIn.treeNode_ID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
+
+                string sqlQuery = sqlIn.sql;
+                string sqlDirect = sqlIn.sqlDirect;
+
+                if (sqlIn.sql.ToUpper().LastIndexOf("WHERE") > -1)
+                {
+
+                    if (sqlQuery.ToUpper().LastIndexOf("ORDER BY") > -1)
+                    {
+                        sqlIn.sql = sqlQuery.Insert(sqlQuery.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sql + ") ");
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect.Insert(sqlDirect.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sql + ") ");
+                    }
+                    else
+                    {
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect + " AND " + tableName + "_ID IN (" + sql + ") ";
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Get a record of window
