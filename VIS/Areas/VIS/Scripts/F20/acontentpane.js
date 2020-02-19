@@ -29,6 +29,8 @@
         var $divHeaderNav = null;
         var $divContent = null;
         var $ulToolbar = null;
+        var $dynActionList = null;
+        var $actionDiv = null;
 
         var self = this;
 
@@ -42,7 +44,8 @@
 
             $divContent = $root.find(".vis-ad-w-p-inc-content");
             $ulToolbar = $root.find(".vis-ad-w-p-inc-tb-lc");
-
+            $dynActionList = $root.find(".vis-ad-w-p-inc-tab-a-list");
+            $actionDiv = $root.find(".vis-ad-w-p-inc-tab-ac-buttons");
         }
         init();
 
@@ -197,12 +200,45 @@
         this.finishLayout = function () {
             if (!VIS.Application.isMobile)
                 $divTabControl.addClass("vis-ad-w-p-t-c-mob");
-        },
+        };
+
+        this.setDynamicActions = function (gc,remove) {
+            $actionDiv.css('display', 'none');
+            if (gc == null)
+                return;
+            if (remove) {
+                gc.detachDynamicAction();
+            }
+            else {
+               
+                var index = 0;
+                var actions = [];
+                if (gc.leftPaneLinkItems.length > 0) {
+                    actions = this.curGC.leftPaneLinkItems;
+                    for (index = 0; index < actions.length; index++) {
+                        $dynActionList.append(actions[index].getControl());
+                    }
+                }
+                index = 0;
+                if (gc.rightPaneLinkItems.length > 0) {
+                    actions = this.curGC.rightPaneLinkItems;
+                    for (index = 0; index < actions.length; index++) {
+                        $dynActionList.append(actions[index].getControl());
+                    }
+                }
+                if (gc.leftPaneLinkItems.length > 0 || gc.rightPaneLinkItems.length > 0) {
+                    $actionDiv.css('display', 'flex');
+                }
+
+                actions = null;
+            }
+        };
 
         this.disposeComponents = function () {
             self = null;
             $root.remove();
             $ulToobar = $ulNav = $root = $ulTabControl = $divTabControl = $divTabNav = $divHeaderNav = null;
+            $dynActionList = $actionDiv = null;
         };
     };
 
@@ -226,6 +262,7 @@
         this.tabItems = []; //tab elements 
         this.tabIds = [];
         this.tabs = [];
+        this.setDynamicActions(this.curGC,true);
 
         if (this.curST)
             this.curST.setVisible(false);
@@ -373,12 +410,15 @@
 
     ContentPane.prototype.tabActionPerformedCallback = function (action, back, isAPanelTab, tabEle, curEle, oldGC, gc, st) {
 
+        this.setDynamicActions(oldGC,true); //remove action
+
         if (this.getIsZoomToHeader(action)) {
             console.log("zoom to parent tab");
             this.onParentTabChange(action);
             return false;
         }
         this.curTabIndex = this.newTabIndex;
+        
 
 
         if (isAPanelTab) {
@@ -389,6 +429,7 @@
         else {
             this.curGC = gc;
             gc.activate(oldGC);
+            this.setDynamicActions(this.curGC);
            
             this.curTab = gc.getMTab();
             //this.setDynamicActions();
@@ -569,12 +610,12 @@
         setTimeout(function () {
             //  Command Buttons
 
-            //if (action.source instanceof VIS.Controls.VButton) {
-            //    if (!selfPan.actionButton(action.source)) {
-            //        selfPan.setBusy(false, true);
-            //    }
-            //    return;
-            //}
+            if (action.source instanceof VIS.Controls.VButton) {
+                if (!selfPan.actionButton(action.source)) {
+                    selfPan.setBusy(false, true);
+                }
+                return;
+            }
 
             selfPan.actionPerformedCallback(selfPan, action);
 
@@ -704,6 +745,10 @@
         });
 
 
+    };
+
+    ContentPane.prototype.actionButton = function (btn) {
+        this.aTabbedPane.getAPanel().actionButton(btn,this);
     };
 
     /**

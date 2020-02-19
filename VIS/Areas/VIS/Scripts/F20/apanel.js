@@ -1877,19 +1877,35 @@
      *  @param vButton button
      *  @retrun true to hide busy indicator
      */
-    APanel.prototype.actionButton = function (vButton) {
+    APanel.prototype.actionButton = function (vButton,curCtrller) {
         var startWOasking = false;
         var batch = false;
         var dateScheduledStart = null;
         var columnName = vButton.getColumnName();
         var ctx = VIS.context;
-        var self = this;
+        if (!curCtrller)
+            curCtrller = this;
+        var aPanel = this;
+       // self.curWindowNo = this.curWindowNo;
+
+               
+        var curTabNo = 0;
+        var AD_Table_ID = 0;
+        var Record_ID = 0;
+
+        if (curCtrller.curTab) {
+            curTabNo = curCtrller.curTab.getTabNo();
+            AD_Table_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "AD_Table_ID");
+            Record_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "Record_ID");
+        }
+        if (AD_Table_ID < 0)
+            AD_Table_ID = ctx.getContextAsInt(aPanel.curWindowNo, "AD_Table_ID");
+        if (Record_ID < 0)
+            Record_ID = ctx.getContextAsInt(aPanel.curWindowNo, "Record_ID");
 
 
         //  Zoom Button
         if (columnName.equals("Record_ID")) {
-            var AD_Table_ID = ctx.getContextAsInt(this.curWindowNo, "AD_Table_ID");
-            var Record_ID = ctx.getContextAsInt(this.curWindowNo, "Record_ID");
             VIS.AEnv.zoom(AD_Table_ID, Record_ID);
             return;
         }   //  Zoom
@@ -1898,11 +1914,11 @@
 
         var needExecute = true;
 
-        if (this.curTab.needSave(true, false)) {
+        if (curCtrller.curTab.needSave(true, false)) {
             needExecute = false;
-            this.cmd_save(true, function (result) {
+            curCtrller.cmd_save(true, function (result) {
                 if (result) {
-                    self.actionButtonCallBack(vButton, startWOasking, batch, dateScheduledStart, columnName, ctx, self);
+                    aPanel.actionButtonCallBack(vButton, startWOasking, batch, dateScheduledStart, columnName, ctx, curCtrller);
                 }
             })
         }
@@ -1912,7 +1928,7 @@
          *  Start Process ----
          */
         if (needExecute) {
-            return self.actionButtonCallBack(vButton, startWOasking, batch, dateScheduledStart, columnName, ctx, self);
+            return aPanel.actionButtonCallBack(vButton, startWOasking, batch, dateScheduledStart, columnName, ctx, curCtrller);
         }
 
 
@@ -1920,70 +1936,63 @@
 
 
     APanel.prototype.actionButtonCallBack = function (vButton, startWOasking, batch, dateScheduledStart, columnName, ctx, self) {
-        var table_ID = this.curTab.getAD_Table_ID();
+        var table_ID = self.curTab.getAD_Table_ID();
         //	Record_ID
-        var record_ID = this.curTab.getRecord_ID();
+        var record_ID = self.curTab.getRecord_ID();
+
+        var curTab = self.curTab;
+        var curGC = self.curGC;
+        var aPanel = this;
+        var curWindowNo = this.curWindowNo;
+
         //	Record_ID - Language Handling
-        if (record_ID == -1 && this.curTab.getKeyColumnName().equals("AD_Language"))
-            record_ID = ctx.getContextAsInt(this.curWindowNo, "AD_Language_ID");
+        if (record_ID == -1 && gTab.getKeyColumnName().equals("AD_Language"))
+            record_ID = ctx.getContextAsInt(curWindowNo, "AD_Language_ID");
         //	Record_ID - Change Log ID
         if (record_ID == -1
             && (vButton.getProcess_ID() == 306 || vButton.getProcess_ID() == 307)) {
-            var id = this.curTab.getValue("AD_ChangeLog_ID");
+            var id = curTab.getValue("AD_ChangeLog_ID");
             record_ID = id;
         }
         //	Record_ID - EntityType
-        if (record_ID == -1 && this.curTab.getKeyColumnName().equals("EntityType")) {
-            record_ID = this.curTab.getValue("AD_EntityType_ID");
+        if (record_ID == -1 && curTab.getKeyColumnName().equals("EntityType")) {
+            record_ID = curTab.getValue("AD_EntityType_ID");
         }
         //	Ensure it's saved
-        if (record_ID == -1 && this.curTab.getKeyColumnName().toUpperCase().endsWith("_ID")) {
+        if (record_ID == -1 && curTab.getKeyColumnName().toUpperCase().endsWith("_ID")) {
             VIS.ADialog.error("SaveErrorRowNotFound", true, "");
             return;
         }
 
         //	Pop up Payment Rules
         if (columnName.equals("PaymentRule")) {
-            var vp = new VIS.VPayment(this.curWindowNo, this.curTab, vButton);
+            var vp = new VIS.VPayment(curWindowNo, curTab, vButton);
             vp.show();
             vp.init();
             vp.onClose = function () {
 
                 if (vp.isInitOK()) {
-                    self.curGC.dynamicDisplay(vButton.getName());
-                    self.cmd_save(false);
-                    //if (vp.btnTextChange) {
-                    //    SetRowState(true, false);
-                    //    SetButtons(true, true);
-                    //}
-                    //if (vp.NeedSave()) {
-
-                    //}
-                    checkAndCallProcess(vButton, table_ID, record_ID, ctx, self, startWOasking, batch);
+                    curGC.dynamicDisplay(vButton.getName());
+                    curGC.cmd_save(false);
+                    
+                    this.checkAndCallProcess(vButton, table_ID, record_ID, ctx, self, startWOasking, batch);
                 }
             };
             return;
 
-            //if (vp.isInitOK())		//	may not be allowed
-            //    vp.setVisible(true);
-            //vp.dispose();
-            //if (vp.needSave())
-            //{
-            //    cmd_save(false);
-            //    cmd_refresh();
-            //}
+           
         }	//	PaymentRule
 
         //	Pop up Document Action (Workflow)
         else if (columnName.equals("DocAction")) {
-            var vda = new VIS.VDocAction(this.curWindowNo, this.curTab, record_ID);
+            var vda = new VIS.VDocAction(curWindowNo, curTab, record_ID);
             vda.show();
             vda.onClose = function () {
 
                 //	Something to select from?
                 if (vda.getNumberOfOptions() == 0) {
                     vda.dispose();
-                    self.log.info("DocAction - No Options");
+                    aPanel.log.info("DocAction - No Options");
                     return;
                 }
                 else {
@@ -1996,7 +2005,7 @@
                     //  dateScheduledStart = vda.getDateScheduledStart();
                     startWOasking = true;
 
-                    checkAndCallProcess(vButton, table_ID, record_ID, ctx, self, startWOasking, batch);
+                    this.checkAndCallProcess(vButton, table_ID, record_ID, ctx, self, startWOasking, batch);
                     vda.dispose();
                     self = null;
                 }
@@ -2012,26 +2021,26 @@
             //  m_curWindowNo
             // Change by Lokesh Chauhan 18/05/2015
             var chkModule = false;
-            if (this.curTab.getAD_Window_ID() == 341 || this.curTab.getAD_Window_ID() == 170) {
+            if (curTab.getAD_Window_ID() == 341 || curTab.getAD_Window_ID() == 170) {
                 if (window.MMPM) {
-                    var vvcf = MMPM.Requisition.prototype.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID());
+                    var vvcf = MMPM.Requisition.prototype.create(curTab.getAD_Window_ID(), curTab.getRecord_ID());
                     chkModule = true;
                 }
                 else if (window.DTD001) {
-                    var vvcf = DTD001.Requisition.prototype.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID());
+                    var vvcf = DTD001.Requisition.prototype.create(curTab.getAD_Window_ID(), curTab.getRecord_ID());
                     chkModule = true;
                 }
             }
             if (chkModule) {
                 return;
             }
-            var vcf = VIS.VCreateFrom.prototype.create(this.curTab);
+            var vcf = VIS.VCreateFrom.prototype.create(curTab);
             if (vcf != null) {
                 if (vcf.isInitOK()) {
                     vcf.showDialog();
                     vcf.onClose = function (value) {
                         vcf.dispose();
-                        this.curTab.dataRefresh();//DataRefreshRow
+                        curTab.dataRefresh();//DataRefreshRow
                     };
                     vcf = null;
                 }
@@ -2048,7 +2057,7 @@
 
             if (window.DTD001) {
 
-                var vvcf = DTD001.StickerProduct.prototype.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID());
+                var vvcf = DTD001.StickerProduct.prototype.create(curTab.getAD_Window_ID(), curTab.getRecord_ID());
             }
             return;
         }
@@ -2056,7 +2065,7 @@
 
             if (window.DTD001) {
 
-                var vvcf = DTD001.MRProductSticker.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID(), this.curTab.getTabLevel());
+                var vvcf = DTD001.MRProductSticker.create(curTab.getAD_Window_ID(), curTab.getRecord_ID(), curTab.getTabLevel());
             }
             return;
         }
@@ -2064,7 +2073,7 @@
         //requested by Mohit ,Mukesh Arora
         else if (columnName.equals("BGT01_CreateLinePo")) {
             if (window.BGT01) {
-                BGT01.CreateLineMovement(this.curTab.getAD_Window_ID(), this.curTab.getAD_Tab_ID(), this.curTab.getRecord_ID());
+                BGT01.CreateLineMovement(curTab.getAD_Window_ID(), curTab.getAD_Tab_ID(), curTab.getRecord_ID());
             }
             return;
         }
@@ -2073,9 +2082,9 @@
 
         else if (columnName == "Posted" && VIS.MRole.getDefault().getIsShowAcct()) {
             //  Check Doc Status
-            var processed = VIS.context.getWindowContext(this.curWindowNo, "Processed");//
+            var processed = VIS.context.getWindowContext(curWindowNo, "Processed");//
             if (processed != "Y") {
-                var docStatus = VIS.context.getWindowContext(this.curWindowNo, "DocStatus");
+                var docStatus = VIS.context.getWindowContext(curWindowNo, "DocStatus");
                 if (DocActionVariables.STATUS_Completed == docStatus
                     || DocActionVariables.STATUS_Closed == docStatus
                     || DocActionVariables.STATUS_Reversed == docStatus
@@ -2089,12 +2098,12 @@
             }
 
             //  Check Post Status
-            var ps = this.curTab.getValue("Posted");
+            var ps = curTab.getValue("Posted");
             if (ps != null && ps == "Y") {
                 //get Current record orgID by window no
-                var obj = new VIS.AcctViewer(VIS.context.getAD_Client_ID(), this.curTab.getAD_Table_ID(), this.curTab.getRecord_ID(), this.curWindowNo, this.curTab.getAD_Window_ID());
+                var obj = new VIS.AcctViewer(VIS.context.getAD_Client_ID(), curTab.getAD_Table_ID(), curTab.getRecord_ID(), curWindowNo, curTab.getAD_Window_ID());
                 if (obj != null) {
-                    this.setBusy(false);
+                    aPanel.setBusy(false);
                     obj.showDialog();
                 }
                 obj = null;
@@ -2102,10 +2111,10 @@
             else {
                 //  if (VIS.ADialog.ask("PostImmediate?")) {
                 VIS.ADialog.confirm("PostImmediate?", true, "", "Confirm", function (results) {
-                    var selfLocal = self;
+                    
                     if (results) {
 
-                        selfLocal.setBusy(true, true);
+                        aPanel.setBusy(true, true);
 
                         var force = ps != null && ps != "N";//	force when problems
                         //check for old and new posting logic
@@ -2115,12 +2124,12 @@
                                 postingByNewLogic = true;
                             }
                             if (window.FRPT && postingByNewLogic) {
-                                var orgID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "AD_Org_ID"));
-                                var winID = selfLocal.curTab.getAD_Window_ID();
-                                var docTypeID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "C_DocType_ID"));
-                                var postObj = FRPT.PostingLogic(selfLocal.curWindowNo, selfLocal.curTab.getAD_Table_ID(), selfLocal.curTab.getRecord_ID(), force, orgID, winID, docTypeID);
-                                selfLocal.curGC.dataRefresh();
-                                selfLocal.setBusy(false, true);
+                                var orgID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "AD_Org_ID"));
+                                var winID = curTab.getAD_Window_ID();
+                                var docTypeID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "C_DocType_ID"));
+                                var postObj = FRPT.PostingLogic(curWindowNo, curTab.getAD_Table_ID(), curTab.getRecord_ID(), force, orgID, winID, docTypeID);
+                                curGC.dataRefresh();
+                                aPanel.setBusy(false, true);
                                 return;
                             }
                             else {
@@ -2129,24 +2138,24 @@
                                     dataType: "json",
                                     data: {
                                         AD_Client_ID: VIS.context.getAD_Client_ID(),
-                                        AD_Table_ID: selfLocal.curTab.getAD_Table_ID(),
-                                        Record_ID: selfLocal.curTab.getRecord_ID(),
+                                        AD_Table_ID: curTab.getAD_Table_ID(),
+                                        Record_ID: curTab.getRecord_ID(),
                                         force: force
                                     },
                                     error: function (e) {
-                                        selfLocal.setBusy(false, true);
+                                        aPanel.setBusy(false, true);
                                         VIS.ADialog.info('ERRORGettingPostingServer');
                                         //bsyDiv[0].style.visibility = "hidden";
                                     },
                                     success: function (data) {
 
                                         if (data.result != "OK") {
-                                            selfLocal.setBusy(false, true);
+                                            aPanel.setBusy(false, true);
                                             VIS.ADialog.info(data.result);
                                         }
                                         else {
-                                            selfLocal.setBusy(false, true);
-                                            selfLocal.curGC.dataRefresh();
+                                            aPanel.setBusy(false, true);
+                                            curGC.dataRefresh();
                                             //refresh Row
                                         }
 
@@ -2156,7 +2165,7 @@
                         });
                     }
                     else {
-                        selfLocal.setBusy(false, true);
+                        aPanel.setBusy(false, true);
                         return false;
                     }
                 });
@@ -2194,19 +2203,20 @@
 
         if (vButton.AD_Process_ID > 0) {
 
-            var ret = checkAndCallProcess(vButton, table_ID, record_ID, ctx, self);
+            var ret = this.checkAndCallProcess(vButton, table_ID, record_ID, ctx, self);
             self = null;
             return ret;
         }
         else if (vButton.AD_Form_ID > 0) {
 
             if (VIS.MRole.getFormAccess(vButton.AD_Form_ID)) {
-                var wForm = new VIS.WForm(VIS.Env.getScreenHeight(), vButton.AD_Form_ID, this.curTab, this.curWindowNo);
+                var wForm = new VIS.WForm(VIS.Env.getScreenHeight(), vButton.AD_Form_ID, curTab, curWindowNo);
             }
             else {
                 VIS.ADialog.warn("AccessTableNoView");
             }
         }
+        curTab = curGC =  aPanel = null;
 
     };
 
@@ -2229,16 +2239,17 @@
         });
     }
 
-    function checkAndCallProcess(vButton, table_ID, record_ID, ctx, aPanel, startWOasking, batch) {
+    APanel.prototype.checkAndCallProcess=function(vButton, table_ID, record_ID, ctx, curCtrler, startWOasking, batch) {
         if (vButton.getProcess_ID() == 0)
             return;
         //	Save item changed
 
         var canExecute = true;
+        var aPanel = this;
 
-        if (aPanel.curTab.needSave(true, false)) {
+        if (curCtrler.curTab.needSave(true, false)) {
             canExecute = false;
-            aPanel.cmd_save(true, function (result) {
+            curCtrler.cmd_save(true, function (result) {
                 if (!result)
                     return;
                 else {
