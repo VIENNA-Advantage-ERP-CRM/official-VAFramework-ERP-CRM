@@ -65,8 +65,14 @@ namespace ViennaAdvantage.Process
                 payment.SetDateTrx(DateTime.Now);
                 payment.SetDateAcct(DateTime.Now);
                 payment.SetC_BPartner_ID(order.GetC_BPartner_ID());
+
+                // Set Business Partner Location from sales Order
+                payment.SetC_BPartner_Location_ID(order.GetC_BPartner_Location_ID());
                 payment.SetPayAmt(order.GetGrandTotal());
                 payment.SetC_Currency_ID(order.GetC_Currency_ID());
+
+                // Set conversion type from sales Order
+                payment.SetC_ConversionType_ID(order.GetC_ConversionType_ID());
                 payment.SetTenderType("K");
                 payment.SetDocStatus("IP");
                 C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID From C_DocType WHERE isactive='Y' AND DocBaseType = 'ARR' AND AD_Client_ID = " + order.GetAD_Client_ID() + " ORDER BY IsDefault DESC"));

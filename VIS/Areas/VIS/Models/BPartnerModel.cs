@@ -443,6 +443,10 @@ namespace VIS.Models
             else
             {
                 _partner = MBPartner.GetTemplate(ctx, AD_Client_ID);
+
+                // Need to set Current Date as created.
+                _partner.Set_ValueNoCheck("Created", DateTime.Now);
+                _partner.Set_ValueNoCheck("Updated", DateTime.Now);
             }
             bool isSOTrx = ctx.IsSOTrx(_windowNo);
             _partner.SetIsCustomer(isSOTrx);
