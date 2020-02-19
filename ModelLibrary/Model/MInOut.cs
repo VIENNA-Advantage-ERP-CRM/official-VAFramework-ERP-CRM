@@ -4997,6 +4997,17 @@ namespace VAdvantage.Model
             //
             counter.SetProcessing(false);
             counter.Save(Get_TrxName());
+            // Create Lines
+            if (counter.CopyLinesFrom(this, true, true) == 0)
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (!String.IsNullOrEmpty(pp.GetName()))
+                    counter._processMsg = "Could not create Shipment Lines, " + pp.GetName();
+                else
+                    counter._processMsg = "Could not create Shipment Lines";
+                counter = null;
+                throw new Exception(counter._processMsg);
+            }
 
             string MovementType = counter.GetMovementType();
             //bool inTrx = MovementType.charAt(1) == '+';	//	V+ Vendor Receipt
