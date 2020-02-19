@@ -168,7 +168,7 @@
         var $self = this;
         var ch = null;
         var btnOk, btnCancel, btnDelete, btnSave, btnRefresh;
-        var txtQryName, drpSavedQry, drpColumns, drpOp, drpDynamicOp, chkDynamic, txtYear, txtMonth, txtDay, txtStatus, chkFullDay, spanAddFilter;
+        var txtQryName, drpSavedQry, drpColumns, drpOp, drpDynamicOp, chkDynamic, txtYear, txtMonth, txtDay, txtStatus, chkFullDay, spanAddFilter, btnBack;
         var ulQryList, divDynamic, divYear, divMonth, divDay, divValue1, divValue2, tblGrid, tblBody, divFullDay, inputWarps
 
         var FIELDLENGTH = 20, TABNO = 99;
@@ -182,6 +182,7 @@
         var control1, control2, ulListStaticHtml = "";;
         this.saveQueryID = -1;
         var saveChanges = false;
+        var savedFiltersCount = 0;
 
         var query = new VIS.Query(tableName); //query
         query.addRestriction(whereExtended); // restriction
@@ -206,26 +207,27 @@
 
 
             var html = '<div class="vis-advancedSearch-contentWrap"> <div class="vis-advancedSearchContentArea vis-pull-left" style="' + dStyle + '">'
-                + ' <div class="vis-advancedSearchContentArea-up"> <div class="vis-advanedSearch-InputsWrap">'
-                + '<div class="vis-form-group vis-advancedSearchInput">'
+                + ' <div class="vis-advancedSearchContentArea-up"> <div class="vis-advanedSearch-InputsWrap"><div class="vis-as-topfieldswrap">'
+                + '<div style="display:none" class="vis-form-group vis-advancedSearchInput vis-adsearchgroup1">'
                 + '<label id="lblQryName_' + windowNo + '" for="QueryName">' + VIS.Msg.getMsg("AddNameToSaveSearch") + '</label>'
                 + '<input readonly id="txtQryName_' + windowNo + '" type="text" name="QueryName" maxlength="60">'
-                + '</div> <div class="vis-form-group vis-advancedSearchInput">'
+                + '</div> <div  class="vis-form-group vis-advancedSearchInput vis-adsearchgroup2">'
                 + '<label id="lblSavedQry_' + windowNo + '" for="GetSavedQuery">' + VIS.Msg.getMsg("GetSavedSearch") + '</label>'
                 + '<select id="drpSavedQry_' + windowNo + '"></select>'
                 + '</div>'
 
-                + ' <div class="vis-advancedSearch-Icons vis-pull-left">'
+                + ' <div class="vis-advancedSearch-Icons vis-pull-left vis-adsearchgroup2">'
                 + '   <ul>'
 
                 + '   <li class="vis-pull-left"><button disabled id="btnDelete_' + windowNo + '" class="vis-advancedSearchActionIcon vis-advancedSearch-delIcon"><i class="vis vis-delete" aria-hidden="true"></i></button></li>'
                 + '</ul>'
-                + '</div>'
-
-                + '</div>'
+                + '</div></div>'
                 + '<div class="vis-advanedSearch-AddFilterWrap vis-pull-left">'
                 + '<label id="spnAddFilter_' + windowNo + '" class="vis-advancedSearch-AddFilter">' + VIS.Msg.getMsg("AddFilter") + '</label>'
                 + '</div>'
+                + '  <div class="vis-as-backbtn"><button id="btnArowBack_' + windowNo + '" class="vis-ads-icon"><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div> '
+                + '</div>'
+                
                 + '<div class="vis-advanedSearch-InputsWrap vis-advs-inputwraps vis-pull-left" data-show="N" style="display:none">'
                 + '  <div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v">'
                 + '    <label id="lblColumn_' + windowNo + '"  for="Column">' + VIS.Msg.getMsg("Column") + '</label>'
@@ -255,7 +257,7 @@
 
                 + '<div class="vis-advancedSearch-calender-Icon vis-pull-left">'
                 + '<ul>'
-                + '<li class="vis-pull-left"><button id="btnSave_' + windowNo + '" disabled class="vis-ads-icon"><i class="vis vis-save" aria-hidden="true"></i></button></li>'
+                + '<li class="vis-pull-left"><button id="btnSave_' + windowNo + '" disabled class="vis-ads-icon"><i class="vis vis-plus" aria-hidden="true"></i></button></li>'
                 + '</ul>'
                 + '</div>'
 
@@ -267,7 +269,6 @@
                 + '<input type="checkbox"  id="chkDynamic_' + windowNo + '"  name="IsDynamic" class="vis-pull-left">'
                 + '<label for="IsDynamic" >' + VIS.Msg.getMsg("IsDynamic") + '</label>'
                 + '</div>'
-
                 + '<div class="vis-form-group vis-advancedSearchInput">'
                 + '<select id="drpDynamicOp_' + windowNo + '" disabled>'
                 + '<option>' + VIS.Msg.getMsg("Today") + '</option>'
@@ -414,6 +415,7 @@
             divDay = $root.find("#divDay_" + windowNo);
             chkFullDay = $root.find('#checkFullDay_' + windowNo);
             spanAddFilter = $root.find('#spnAddFilter_' + windowNo);
+            btnBack = $root.find('#btnArowBack_' + windowNo);
             inputWarps = $($root.find('.vis-advs-inputwraps')[0]);
             divYear.hide();
             divMonth.hide();
@@ -548,12 +550,13 @@
                     }
 
                     var f = curTab.getField(columnName);
-
+                    $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 135px)');
                     if (f != null && VIS.DisplayType.IsDate(f.getDisplayType())) {
                         drpDynamicOp.html($self.getOperatorsQuery(VIS.Query.prototype.OPERATORS_DATE_DYNAMIC, true));
                         divDynamic.show();
                         chkDynamic.prop("disabled", false);
                         setDynamicQryControls();
+                        $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 175px)');
 
                         if (f.getDisplayType() == VIS.DisplayType.DateTime)// If Datetime, then on = operator, show full day checkbox.
                         {
@@ -564,6 +567,7 @@
                     else if ($self.getIsUserColumn(columnName)) {
                         drpDynamicOp.html($self.getOperatorsQuery(VIS.Query.prototype.OPERATORS_DYNAMIC_ID, true));
                         divDynamic.show();
+                        $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 175px)');
                         chkDynamic.prop("disabled", false);
                         setDynamicQryControls(true);
                     }
@@ -670,6 +674,11 @@
                     dsAdvanceData.splice(index, 1);//  .Tables[0].Rows.RemoveAt(index);
                     MUserQuery.deleteLines($(e.target).data("userquery"));
                     bindGrid(dsAdvanceData);
+                    savedFiltersCount--;
+                    if (savedFiltersCount == 0) {
+                        txtQryName.prop("readonly", true);
+                        txtQryName.val("");
+                    }
                 }
             });
 
@@ -812,12 +821,29 @@
             spanAddFilter.on("click", function () {
                 if (inputWarps && inputWarps.data('show') == "N") {
                     inputWarps.data('show', 'Y');
-                    inputWarps.show();
                     $(this).hide();
+                    inputWarps.show();
+                    btnBack.show();
+                    $('.vis-adsearchgroup2').hide();
+                    $('.vis-adsearchgroup1').show();
+                    $('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 135px)');
                 }
             });
 
-            txtQryName.on('keyup', function () {
+            btnBack.on("click", function () {
+                inputWarps.data('show', 'N');
+                inputWarps.hide();
+                spanAddFilter.show();
+                btnBack.hide();
+                toggleDisplay();
+                if (savedFiltersCount == 0) {
+                    $('.vis-adsearchgroup1').hide();
+                    $('.vis-adsearchgroup2').show();
+                    
+                }
+            });
+
+            txtQryName.on("input", function (){
                 if (txtQryName.length > 0) {
                     btnOk.text(VIS.Msg.getMsg("SaveAndApply"));
                 }
@@ -826,6 +852,20 @@
                 }
             });
         };
+
+        function toggleDisplay() {
+            
+            drpColumns[0].selectedIndex = 0;
+            drpOp[0].selectedIndex = 0;
+            setControlNullValue();
+            setControlNullValue(true);
+            showFullDay(false);
+            showValue2(true);
+            chkDynamic.prop('checked', false);
+            chkFullDay.prop('checked', false);
+            divDynamic.hide();
+            $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 90px)');
+        }
 
         function unBindEvents() {
 
@@ -1369,21 +1409,16 @@
                 addRow(colName, colValue, opName, opValue, getControlText(true), getControlValue(true), getControlText(false), getControlValue(false), getFullDay());
             }
             //reset column & operator comboBox
-            drpColumns[0].selectedIndex = 0;
-            drpOp[0].selectedIndex = 0;
-            setControlNullValue();
-            setControlNullValue(true);
             txtQryName.prop("readonly", false);
-            showFullDay(false);
-            showValue2(true);
-            chkDynamic.prop('checked', false);
-            chkFullDay.prop('checked', false);
-            divDynamic.hide();
-
+            toggleDisplay();
+            savedFiltersCount++;
             if (inputWarps && inputWarps.data('show') == "Y") {
                 inputWarps.data('show', 'N');
                 inputWarps.hide();
                 spanAddFilter.show();
+                btnBack.hide();
+                $('.vis-adsearchgroup2').hide();
+                $('.vis-adsearchgroup1').show();
             }
             return true;
         };
