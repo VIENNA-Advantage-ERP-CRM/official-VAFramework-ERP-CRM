@@ -3331,6 +3331,13 @@ namespace VAdvantage.Model
             try
             {
                 log.Fine("New=" + newRecord);
+                // JID_1624: If user do not select Product or Charge on Invoice Line, it will displayed the message "Please select the Product or charge".
+                if (GetC_Charge_ID() == 0 && GetM_Product_ID() == 0)
+                {
+                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NOProductOrCharge"));
+                    return false;
+                }
+
                 //	Charge
                 if (GetC_Charge_ID() != 0)
                 {
