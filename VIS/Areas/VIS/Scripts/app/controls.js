@@ -4602,6 +4602,7 @@
         var $img = $("<img >");
         var $icon = $("<i>");
         var $txt = $("<span>").text("-");
+        var $spanIcon = $('<span class="vis vis-edit vis-img-ctrl-icon">')
         var $ctrl = null;
         var dimension = "Thumb500x375";
 
@@ -4611,7 +4612,7 @@
 
 
 
-        $ctrl.append($img).append($icon).append($txt);
+        $ctrl.append($spanIcon).append($img).append($icon).append($txt);
 
         IControl.call(this, $ctrl, VIS.DisplayType.Button, isReadOnly, columnName, mandatoryField);
 
@@ -4625,7 +4626,7 @@
 
         var self = this; //self pointer
 
-        $ctrl.on(VIS.Events.onClick, function (e) { //click handler
+        $spanIcon.on(VIS.Events.onClick, function (e) { //click handler
             e.stopPropagation();
             if (!self.isReadOnly) {
                 //self.invokeActionPerformed({ source: self });
