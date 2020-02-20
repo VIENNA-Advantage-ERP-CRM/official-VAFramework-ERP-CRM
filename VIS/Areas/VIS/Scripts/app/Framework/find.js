@@ -169,7 +169,7 @@
         var ch = null;
         var btnOk, btnCancel, btnDelete, btnSave, btnRefresh;
         var txtQryName, drpSavedQry, drpColumns, drpOp, drpDynamicOp, chkDynamic, txtYear, txtMonth, txtDay, txtStatus, chkFullDay, spanAddFilter, btnBack;
-        var ulQryList, divDynamic, divYear, divMonth, divDay, divValue1, divValue2, tblGrid, tblBody, divFullDay, inputWarps
+        var ulQryList, divDynamic, divYear, divMonth, divDay, divValue1, divValue2, tblGrid, tblBody, divFullDay, inputWarps, lblQryValue;
 
         var FIELDLENGTH = 20, TABNO = 99;
 
@@ -227,7 +227,7 @@
                 + '</div>'
                 + '  <div class="vis-as-backbtn"><button id="btnArowBack_' + windowNo + '" class="vis-ads-icon"><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div> '
                 + '</div>'
-                
+
                 + '<div class="vis-advanedSearch-InputsWrap vis-advs-inputwraps vis-pull-left" data-show="N" style="display:none">'
                 + '  <div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v">'
                 + '    <label id="lblColumn_' + windowNo + '"  for="Column">' + VIS.Msg.getMsg("Column") + '</label>'
@@ -249,7 +249,7 @@
                 + '<label for="QueryName"  id="lblToQryValue_' + windowNo + '">' + VIS.Msg.getMsg("ToQueryValue") + '</label>'
                 + '<input  id="txtToQryValue_' + windowNo + '" type="text" name="QueryName">'
                 + '</div>'
-                + '<div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" style="display:none;padding-top: 17px;" id="divFullDay_' + windowNo + '">'
+                + '<div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" style="display:none;" id="divFullDay_' + windowNo + '">'
 
                 + '<input style="width: auto;float: left;" id="checkFullDay_' + windowNo + '" type="checkbox" name="QueryName">'
                 + '<label for="QueryName"  id="lblToQryValue_' + windowNo + '">' + VIS.Msg.getMsg("FullDay") + '</label>'
@@ -332,7 +332,7 @@
             html += '<button id="btnRefresh_' + windowNo + '" class="ui-button ui-corner-all ui-widget">' + VIS.Msg.getMsg("Refresh") + '</button>'
                 + '<div class="vis-pull-right">'
                 + '<button id="btnOk_' + windowNo + '" class="ui-button ui-corner-all ui-widget" >' + VIS.Msg.getMsg("Apply") + '</button>'
-                + '  <button id="btnCancel_' + windowNo + '" class="ui-button ui-corner-all ui-widget"  style="margin: 0 10px;">' + VIS.Msg.getMsg("Close") + '</button>'
+                + '  <button id="btnCancel_' + windowNo + '" class="ui-button ui-corner-all ui-widget"  style="margin: 0 10px;">' + VIS.Msg.getMsg("close") + '</button>'
 
                 + '</div>'
                 + '</div>'
@@ -393,6 +393,7 @@
             drpColumns = $root.find("#drpColumn_" + windowNo);
             drpOp = $root.find("#drpOperator_" + windowNo);
             divValue1 = $root.find("#divValue1_" + windowNo);
+            lblQryValue = $root.find("#lblQryValue_" + windowNo);
             divValue2 = $root.find("#divValue2_" + windowNo);
             divFullDay = $root.find("#divFullDay_" + windowNo);
             txtQryName = $root.find("#txtQryName_" + windowNo);
@@ -550,13 +551,13 @@
                     }
 
                     var f = curTab.getField(columnName);
-                    $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 135px)');
+                    $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 150px)');
                     if (f != null && VIS.DisplayType.IsDate(f.getDisplayType())) {
                         drpDynamicOp.html($self.getOperatorsQuery(VIS.Query.prototype.OPERATORS_DATE_DYNAMIC, true));
                         divDynamic.show();
                         chkDynamic.prop("disabled", false);
                         setDynamicQryControls();
-                        $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 175px)');
+                        $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 195px)');
 
                         if (f.getDisplayType() == VIS.DisplayType.DateTime)// If Datetime, then on = operator, show full day checkbox.
                         {
@@ -567,7 +568,7 @@
                     else if ($self.getIsUserColumn(columnName)) {
                         drpDynamicOp.html($self.getOperatorsQuery(VIS.Query.prototype.OPERATORS_DYNAMIC_ID, true));
                         divDynamic.show();
-                        $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 175px)');
+                        $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 195px)');
                         chkDynamic.prop("disabled", false);
                         setDynamicQryControls(true);
                     }
@@ -576,6 +577,13 @@
                     {
                         showValue2(true);
                         showFullDay(false);
+                    }
+
+                    if (f.getDisplayType() == VIS.DisplayType.YesNo) {
+                        lblQryValue.hide();
+                    }
+                    else {
+                        lblQryValue.show();
                     }
 
                     drpOp.html(dsOp);
@@ -826,7 +834,7 @@
                     btnBack.show();
                     $('.vis-adsearchgroup2').hide();
                     $('.vis-adsearchgroup1').show();
-                    $('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 135px)');
+                    $('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 150px)');
                 }
             });
 
@@ -836,14 +844,17 @@
                 spanAddFilter.show();
                 btnBack.hide();
                 toggleDisplay();
-                if (savedFiltersCount == 0) {
-                    $('.vis-adsearchgroup1').hide();
-                    $('.vis-adsearchgroup2').show();
-                    
-                }
+                //if (savedFiltersCount == 0) {
+                $('.vis-adsearchgroup1').hide();
+                $('.vis-adsearchgroup2').show();
+                drpSavedQry[0].selectedIndex = 0;
+                tblBody.empty();
+                dsAdvanceData = [];
+                txtQryName.val("");
+                //}
             });
 
-            txtQryName.on("input", function (){
+            txtQryName.on("input", function () {
                 if (txtQryName.length > 0) {
                     btnOk.text(VIS.Msg.getMsg("SaveAndApply"));
                 }
@@ -854,7 +865,7 @@
         };
 
         function toggleDisplay() {
-            
+
             drpColumns[0].selectedIndex = 0;
             drpOp[0].selectedIndex = 0;
             setControlNullValue();
@@ -864,7 +875,7 @@
             chkDynamic.prop('checked', false);
             chkFullDay.prop('checked', false);
             divDynamic.hide();
-            $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 90px)');
+            $root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 100px)');
         }
 
         function unBindEvents() {

@@ -40,7 +40,7 @@
     /*min-height: 80px;*/
 }
 .vis-advancedSearchContentArea-down {
-    height: calc(100% - 90px);
+    height: calc(100% - 100px);
     float: left;
     width: 100%;
 }
@@ -70,14 +70,14 @@
     margin-right: 10px;
 }
 .vis-advancedSearchHorigontal {
-    width: auto;
+    width: 14%;
     display: flex;
 }
 .vis-advancedSearchContentArea input[type="checkbox"] {
     margin-top: 0 !important;
 }
 .vis-advancedSearchInput {
-    width: 29%;
+    width: 42%;
      padding-right: 10px;
     margin-right: 0;
     flex-basis: 27%;
@@ -109,7 +109,7 @@
     margin-right: 5px;
 }
 .vis-advancedSearchInput1 {
-    width: 22%;
+    width: 27%;
     float: left;
     /* margin-top: 5px; */
     display: flex;
@@ -117,10 +117,10 @@
 }
 .vis-advancedSearchHorigontal input {
     flex: 1;
+    position:relative;
 }
 .vis-advancedSearchHorigontal > label{
     /*width: 16%;*/
-    margin-top: 6px;
     padding-right: 5px;
 }
 
@@ -135,7 +135,7 @@
     background: #fff;
     padding: 0 5px;
 }
-..vis-advancedSearchInput input[type="checkbox"] + label {
+.vis-advancedSearchInput input[type="checkbox"] + label {
     margin-bottom: 0;
     position: relative;
     top: auto;
@@ -449,7 +449,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 
 .vis-form-group
 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .vis-advancedSearchbusy
@@ -477,12 +477,13 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     font-weight: normal;
     text-decoration: underline;
     color: rgba(var(--v-c-primary), 1);
+    font-size: 1rem;
 }
 
 
 .vis-as-topfieldswrap {
     flex: 1;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .vis-advancedSearchContentArea-up .vis-advanedSearch-InputsWrap:nth-child(2) {
