@@ -1751,7 +1751,7 @@
         }
 
         /* Query */
-
+        this.mDataStatusEvent = null; //reset 
         if (this.gridTable.getIsOpen()) {
             if (refresh) {
                 this.gridTable.dataRefreshAll();
@@ -3565,23 +3565,25 @@
 
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
                 var lInfo = field.getLookup().info;
+                if (lInfo.displayColSubQ && lInfo.displayColSubQ != "") {
 
-                if (selectDirect == null)
-                    selectDirect = new StringBuilder("SELECT ");
-                else
-                    selectDirect.append(",");
+                    if (selectDirect == null)
+                        selectDirect = new StringBuilder("SELECT ");
+                    else
+                        selectDirect.append(",");
 
-                var qryDirect = lInfo.queryDirect.substring(lInfo.queryDirect.lastIndexOf(' FROM ' + lInfo.tableName + ' '));
+                    var qryDirect = lInfo.queryDirect.substring(lInfo.queryDirect.lastIndexOf(' FROM ' + lInfo.tableName + ' '));
 
-                if (!field.getIsVirtualColumn())
-                    qryDirect = qryDirect.replace('@key', gt._tableName + '.' + field.getColumnSQL());
-                else
-                    qryDirect = qryDirect.replace('@key',  field.getColumnSQL(false));
+                    if (!field.getIsVirtualColumn())
+                        qryDirect = qryDirect.replace('@key', gt._tableName + '.' + field.getColumnSQL());
+                    else
+                        qryDirect = qryDirect.replace('@key', field.getColumnSQL(false));
 
 
-                selectDirect.append("( SELECT (").append(lInfo.displayColSubQ).append(') ').append(qryDirect)
-                    .append(" ) AS ").append(field.getColumnSQL() + '_T')
-                    .append(',').append(field.getColumnSQL(true));
+                    selectDirect.append("( SELECT (").append(lInfo.displayColSubQ).append(') ').append(qryDirect)
+                        .append(" ) AS ").append(field.getColumnSQL() + '_T')
+                        .append(',').append(field.getColumnSQL(true));
+                }
             };
         }
 
@@ -4961,6 +4963,7 @@
 
     GridTable.prototype.fireQueryCompleted = function (args) {
        // this.fireDataStatusIEvent(this.dseEvent);
+        
         if (this.mQueryCompletedListener)
             this.mQueryCompletedListener.queryCompleted(args);
         args = null;
