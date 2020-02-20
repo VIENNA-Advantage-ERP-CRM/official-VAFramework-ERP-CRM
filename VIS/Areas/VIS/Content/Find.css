@@ -462,6 +462,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     display: flex;
     height: 30px;
     align-items: center;
+    top: auto;
 }
 
 .vis-advancedSearchInput label.vis-ec-col-lblchkbox input[type="checkbox"] {
