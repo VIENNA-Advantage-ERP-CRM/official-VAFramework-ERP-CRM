@@ -498,3 +498,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 .vis-as-backbtn button {
     display: none;
 }
+
+.vis-advancedSearch-AddFilter {
+cursor:pointer;
+}
