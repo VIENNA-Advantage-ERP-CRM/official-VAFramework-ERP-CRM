@@ -15,6 +15,7 @@ using VAdvantage.Model;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 using VIS.Classes;
+using VIS.DataContracts;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -446,6 +447,18 @@ namespace VIS.Controllers
                 return Json(retJSON, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CheckVersions(SaveRecordIn RowData)
+        {
+            bool hasRecords = false;
+            if (Session["Ctx"] != null)
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                CommonModel cmm = new CommonModel();
+                hasRecords = cmm.HasVersions(ctx, RowData);
+            }
+            return Json(new { result = hasRecords }, JsonRequestBehavior.AllowGet);
         }
     }
 
@@ -953,6 +966,8 @@ namespace VIS.Controllers
                 return _iData;
             }
         }
+
+
 
         public bool SaveShipmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_Locator_ID, int M_InOut_ID, int Container_ID)
         {

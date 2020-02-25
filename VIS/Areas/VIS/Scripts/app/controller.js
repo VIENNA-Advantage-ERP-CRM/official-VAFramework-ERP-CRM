@@ -1846,7 +1846,7 @@
         return retValue;
     };
 
-    
+
 
 
     GridTab.prototype.findColumn = function (columnName) {
@@ -4082,7 +4082,8 @@
                 // then do not save in Master window and reset 
                 // and display message to user
                 if (out.Status == "E") {
-                    VIS.ADialog.info(out.ErrorMsg);
+                    if (!(out.FireEEvent || out.FireIEvent))
+                        VIS.ADialog.info(out.ErrorMsg);
                 }
                 else if (out.Status == "W") {
                     VIS.ADialog.info("SentForApproval");
@@ -4107,7 +4108,8 @@
                     if (out.Status != "O") {
                         // if there is any error then display error message
                         if (out.Status == "E") {
-                            VIS.ADialog.info(out.ErrorMsg);
+                            if (!(out.FireEEvent || out.FireIEvent))
+                                VIS.ADialog.info(out.ErrorMsg);
                         }
                         else {
                             // in case of sucess refresh UI
@@ -4688,7 +4690,7 @@
             {
                 this.fireDataStatusEEvent("CannotDeleteTrx", "", true);
                 resolve(false);
-                return ;
+                return;
             }
         });
     };

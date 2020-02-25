@@ -67,7 +67,7 @@ namespace VAdvantage.Process
                         log.Info("Processing for " + sbTblName.ToString());
                         // Select all data from "_Version" Table which needs to be updated on Master Table
                         // only those records which are approved and Not Processed by Schedular and Valid from or effective from Today or before Today's date
-                        DataSet dsApprovedData = DB.ExecuteDataset("SELECT * FROM " + sbTblName.ToString() + " WHERE IsVersionApproved = 'Y' AND ProcessedVersion = 'N' AND VersionValidFrom <= SYSDATE ORDER BY VersionValidFrom");
+                        DataSet dsApprovedData = DB.ExecuteDataset("SELECT * FROM " + sbTblName.ToString() + " WHERE IsVersionApproved = 'Y' AND ProcessedVersion = 'N' AND VersionValidFrom <= SYSDATE AND VersionLog IS NULL ORDER BY VersionValidFrom");
                         if (dsApprovedData != null && dsApprovedData.Tables[0].Rows.Count > 0)
                         {
                             log.Info("Processing for " + sbTblName.ToString() + " ==>> Found unprocessed records " + dsApprovedData.Tables[0].Rows.Count);
