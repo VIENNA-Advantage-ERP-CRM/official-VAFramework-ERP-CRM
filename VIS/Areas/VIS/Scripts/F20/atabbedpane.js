@@ -277,12 +277,15 @@ VIS.VTabbedPane.prototype.evaluate = function (e) {
         this.contentPane.sizeChanged();
         return;
     };
+
     VIS.VTabbedPane.prototype.refresh = function () {
         if (this.multiTabView)
             this.contentPane.refresh();
         return;
     };
 
+    
+        
 /**
  *  Dispose all contained VTabbedPanes and GridControllers
  */

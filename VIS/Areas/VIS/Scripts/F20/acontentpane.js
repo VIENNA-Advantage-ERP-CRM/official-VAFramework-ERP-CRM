@@ -228,11 +228,13 @@
                 }
                 if (gc.leftPaneLinkItems.length > 0 || gc.rightPaneLinkItems.length > 0) {
                     $actionDiv.css('display', 'flex');
+                    $actionDiv.find('span').show();
                 }
 
                 actions = null;
             }
         };
+        
 
         this.disposeComponents = function () {
             self = null;
