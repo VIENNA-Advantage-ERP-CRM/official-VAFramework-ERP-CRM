@@ -923,7 +923,6 @@
      */
     function VLabel(value, name, isMandatory, isADControl) {
         value = value != null ? value.replace("[&]", "") : "";
-
         var strFor = ' for="' + name + '"';
         if (isADControl)
             strFor = '';
@@ -994,6 +993,7 @@
             }
         }
     };
+
 
     VSpan.prototype.getValue = function () {
         if (this.value != null) {
