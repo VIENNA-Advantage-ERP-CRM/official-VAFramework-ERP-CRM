@@ -2142,8 +2142,8 @@ namespace VAdvantage.Model
                             #region Get Price
                             //M_Warehouse_Id = Util.GetValueOfInt(po.Get_Value("M_Warehouse_ID"));
                             DateTime? VAMFG_DateAcct = null;
-                            DataSet dsProductDetail = DB.ExecuteDataset(@"SELECT VAMFG_DateAcct , M_Warehouse_ID FROM VAMFG_M_WorkOrderTransaction  
-                                                        WHERE VAMFG_M_WorkOrderTransaction_ID = " + po.Get_ValueAsInt("VAMFG_M_WorkOrderTransaction_ID"), null, trxName);
+                            DataSet dsProductDetail = DB.ExecuteDataset(@"SELECT VAMFG_DateAcct , M_Warehouse_ID FROM VAMFG_M_WrkOdrTransaction   
+                                                        WHERE VAMFG_M_WrkOdrTransaction_ID = " + po.Get_ValueAsInt("VAMFG_M_WrkOdrTransaction_ID"), null, trxName);
                             if (dsProductDetail != null && dsProductDetail.Tables.Count > 0 && dsProductDetail.Tables[0].Rows.Count > 0)
                             {
                                 M_Warehouse_Id = Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["M_Warehouse_ID"]);
