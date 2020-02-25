@@ -42,6 +42,7 @@
 .vis-input-wrap label + button.vis-ev-col-img-ctrl {
     min-height: 115px;
     height: calc(100% - 21px);
+    cursor:default;
 }
 .vis-input-wrap button.vis-ev-col-img-ctrl img {
     max-width: 100%;
@@ -413,6 +414,16 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     display: inline-flex;
     justify-content: center;
     width:36px;
+}
+
+.vis-img-ctrl-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(var(--v-c-on-secondary), .2);
+    padding: 10px;
+    border-bottom-left-radius: .25rem;
+    cursor:pointer;
 }
 
 

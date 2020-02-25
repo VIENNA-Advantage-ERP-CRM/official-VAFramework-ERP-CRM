@@ -39,8 +39,8 @@
         var loadSession = function (record_ID) {
             if (!iFrame)
                 return;
-            //$root.empty();
-            var _src = VIS.Application.contextUrl + "BiPanel/GetUserBILogin?recID=" + record_ID +"&extraInfo=" + that.extraInfo;
+            //$root.empty();VIS.Utility.encodeText(mails)
+            var _src = VIS.Application.contextUrl + "BiPanel/GetUserBILogin?recID=" + record_ID + "&extraInfo=" + VIS.Utility.encodeText(that.extraInfo);
             //Frame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
             //$root.html('<iframe src="'+_src+'"; height=100%; width="100%"; frameborder="0" ></iframe>');
             iFrame.prop('src', _src);
