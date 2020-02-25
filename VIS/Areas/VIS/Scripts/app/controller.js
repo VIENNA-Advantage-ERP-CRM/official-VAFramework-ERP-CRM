@@ -397,6 +397,7 @@
         this.gridTable.onlyCurrentDays = this.vo.onlyCurrentDays;
         // Maintain version on approval property on tab
         this.gridTable.MaintainVerOnApproval = this.vo.MaintainVerOnApproval;
+        this.gridTable.IsMaintainVersions = this.vo.IsMaintainVersions;
 
         this.parents = [];
         this.orderBys = [];
@@ -4067,7 +4068,7 @@
         }
 
         // check if this is master window and if there is change in maintain version field
-        if (this.onlyCurrentDays == 0 && this.maintainVersionFieldChanged(RowData, OldRowData)) {
+        if (this.onlyCurrentDays == 0 && (this.IsMaintainVersions || this.maintainVersionFieldChanged(RowData, OldRowData))) {
             var self = this;
             // in case of new record in Master Version window
             if (OldRowData["updatedby"] == null) {
@@ -4096,7 +4097,7 @@
             else {
                 // in case of update display UI to user, 
                 // whether user want to save immediately or for future
-                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, function (immediate, valFrom, verRecID) {
+                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, this.IsMaintainVersions, function (immediate, valFrom, verRecID) {
                     gridTableIn.MaintainVersions = true;
                     gridTableIn.ImmediateSave = immediate;
                     gridTableIn.ValidFrom = new Date(valFrom).toISOString();
@@ -4571,7 +4572,7 @@
 
             //	Is this record deletable?
             if (!localthis.deleteable) {
-                tlocalthishis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
+                localthis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
                 resolve(false);
                 return;
             }

@@ -45,7 +45,19 @@ namespace VAdvantage.Model
             : base(ctx, idr, trxName)
         { 
             
-        }	
+        }
+
+        /// <summary>
+        /// Load Constructor
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="idr"></param>
+        /// <param name="trxName"></param>
+        public MAcctProcessorLog(Ctx ctx, DataRow dr, Trx trxName)
+            : base(ctx, dr, trxName)
+        {
+
+        }
 
         /// <summary>
         /// Parent Constructor

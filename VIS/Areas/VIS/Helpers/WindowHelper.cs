@@ -894,14 +894,17 @@ namespace VIS.Helpers
             //      
             // check and set field values based on Master Versions 
             // else execute normally
+            bool hasSingleKey = true;
             if (inn.MaintainVersions)
             {
+                MTable tblParent = new MTable(ctx, AD_Table_ID, trx);
+                hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
                 po.SetAD_Window_ID(Ver_Window_ID);
-                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true);
+                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey);
             }
             else
-                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false);
+                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey);
 
             if (!po.Save())
             {
@@ -1088,7 +1091,7 @@ namespace VIS.Helpers
         /// <param name="Record_ID"></param>
         /// <param name="HasDocValWF"></param>
         /// <param name="VersionRecord"></param>
-        private void SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord)
+        private void SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey)
         {
             var rowData = inn.RowData; // new 
             var _rowData = inn.OldRowData;
@@ -1255,9 +1258,21 @@ namespace VIS.Helpers
                 {
                     int VerRec = 1;
                     int curMaxVer = 0;
+                    int curProcessedVer = 0;
                     // Get Max Record version saved in Version Record field of Version table
-                    if (parentLinkCols.Count <= 0)
-                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + inn.TableName + "_ID = " + Record_ID));
+                    if (SingleKey || parentLinkCols.Count <= 0)
+                    {
+                        // Check if this is a new record
+                        if (po.Get_Value(inn.TableName + "_ID") != null)
+                        {
+                            curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + inn.TableName + "_ID = " + Record_ID));
+                            if (curMaxVer > 1)
+                            {
+                                curProcessedVer = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT RecordVersion FROM " + inn.TableName + @"_Ver WHERE VersionValidFrom <= SYSDATE AND ProcessedVersion = 'Y' 
+                            AND IsVersionApproved = 'Y' AND " + inn.TableName + "_ID = " + Record_ID + " ORDER BY VersionValidFrom DESC, RecordVersion DESC", null, null));
+                            }
+                        }
+                    }
                     else
                     {
                         StringBuilder whClause = new StringBuilder("");
@@ -1278,11 +1293,19 @@ namespace VIS.Helpers
                                     whClause.Append(" AND NVL(" + parentLinkCols[i] + ",0) = 0");
                             }
                         }
-                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + whClause));
+                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + whClause));
+                        if (curMaxVer > 1)
+                        {
+                            curProcessedVer = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT RecordVersion FROM " + inn.TableName + @"_Ver WHERE VersionValidFrom <= SYSDATE AND ProcessedVersion = 'Y'
+                            AND IsVersionApproved = 'Y' AND " + whClause + " ORDER BY VersionValidFrom DESC, RecordVersion DESC", null, null));
+                        }
                     }
                     if (curMaxVer > 0)
                         VerRec = curMaxVer;
+                    if (curProcessedVer > 0)
+                        po.Set_Value("OldVersion", curProcessedVer);
                     po.Set_Value("RecordVersion", VerRec);
+
                 }
                 if (!inn.ImmediateSave)
                 {

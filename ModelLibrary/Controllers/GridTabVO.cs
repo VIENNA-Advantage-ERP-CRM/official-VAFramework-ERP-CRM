@@ -146,6 +146,9 @@ namespace VAdvantage.Controller
         // Maintain versions on approval // for Master data Versioning
         public bool MaintainVerOnApproval = false;
 
+        // Maintain versions on table level // for Master data Versioning
+        public bool IsMaintainVersions = false;
+
         public List<GridFieldVO> GetFields()
         {
             return fields;
@@ -495,8 +498,10 @@ namespace VAdvantage.Controller
 
                 /***************** End Header panel work ***************/
 
-                // set property for Maintain version on aapproval
+                // set property for Maintain version on approval
                 vo.MaintainVerOnApproval = Utility.Util.GetValueOfString(dr["MaintainVerOnApproval"]).Equals("Y");
+
+                vo.IsMaintainVersions = Utility.Util.GetValueOfString(dr["IsMaintainVersions"]).Equals("Y");
 
             }
             catch (System.Exception ex)
@@ -955,6 +960,8 @@ namespace VAdvantage.Controller
 
             // set Maintain Version on Approval from Tab
             clone.MaintainVerOnApproval = MaintainVerOnApproval;
+
+            clone.IsMaintainVersions = IsMaintainVersions;
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)

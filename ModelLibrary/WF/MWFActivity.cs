@@ -2121,7 +2121,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 for (int i = 0; i < dsTabData.Tables[0].Rows.Count; i++)
                 {
                     PO oldPO = tbl.GetPO(GetCtx(), dsTabData.Tables[0].Rows[i], Get_TrxName());
-                    InsertVersionData(oldPO, tbl, keyIDs);
+                    if (oldPO != null)
+                        InsertVersionData(oldPO, tbl, keyIDs);
+                    else
+                        log.Info("Error in creating PO against table for Version");
                 }
             }
             return true;
