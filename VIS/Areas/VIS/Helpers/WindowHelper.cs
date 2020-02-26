@@ -894,7 +894,7 @@ namespace VIS.Helpers
                     {
                         throw new NullReferenceException("No Persistent Obj");
                     }
-                    SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false);
+                    SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false);
                     if (!poMas.Save(trxMas))
                     {
                         String msg = "SaveError";
