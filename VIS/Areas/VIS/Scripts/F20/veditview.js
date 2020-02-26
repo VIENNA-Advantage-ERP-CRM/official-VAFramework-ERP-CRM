@@ -705,7 +705,7 @@
 
 
 
-        if (editor && (editor.getControl()[0].tagName != 'LABEL')) {
+        if (mField.getDisplayType() != VIS.DisplayType.Label) { // exclude Label display type
             ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
                 "<i class='vis vis-info' aria-hidden='true'></i></span'>");
         }
