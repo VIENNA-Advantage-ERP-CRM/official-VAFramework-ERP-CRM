@@ -311,26 +311,36 @@ namespace VAdvantage.Process
                         return Msg.GetMsg(GetCtx(), "ColumnNameNotFound") + " :: " + origFld.GetAD_Column_ID();
                     }
 
-                    // Create Field for Column, copy field from Master tables Field tab on Version Field against Version Tab
-                    MField verFld = new MField(GetCtx(), 0, Get_TrxName());
-                    origFld.CopyTo(verFld);
-                    verFld.SetAD_Tab_ID(Ver_AD_Tab_ID);
-                    verFld.SetAD_Column_ID(VerColID);
-                    if (!verFld.Save())
+                    // Only create Version Field if Version Column found
+                    if (VerColID > 0)
                     {
-                        ValueNamePair vnp = VLogger.RetrieveError();
-                        string error = "";
-                        if (vnp != null)
+                        // check if field is already created with column
+                        // else skip creating field
+                        int fldID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Field_ID FROM AD_Field WHERE AD_Column_ID = " + VerColID + " AND AD_Tab_ID = " + Ver_AD_Tab_ID, null, Get_TrxName()));
+                        if (fldID <= 0)
                         {
-                            error = vnp.GetName();
-                            if (error == "" && vnp.GetValue() != null)
-                                error = vnp.GetValue();
+                            // Create Field for Column, copy field from Master tables Field tab on Version Field against Version Tab
+                            MField verFld = new MField(GetCtx(), 0, Get_TrxName());
+                            origFld.CopyTo(verFld);
+                            verFld.SetAD_Tab_ID(Ver_AD_Tab_ID);
+                            verFld.SetAD_Column_ID(VerColID);
+                            if (!verFld.Save())
+                            {
+                                ValueNamePair vnp = VLogger.RetrieveError();
+                                string error = "";
+                                if (vnp != null)
+                                {
+                                    error = vnp.GetName();
+                                    if (error == "" && vnp.GetValue() != null)
+                                        error = vnp.GetValue();
+                                }
+                                if (error == "")
+                                    error = "Error in creating Version Field";
+                                log.Log(Level.SEVERE, "Version Field not saved :: " + verFld.GetName() + " :: " + error);
+                                Get_TrxName().Rollback();
+                                return Msg.GetMsg(GetCtx(), "FieldNotSaved") + " :: " + verFld.GetName();
+                            }
                         }
-                        if (error == "")
-                            error = "Error in creating Version Field";
-                        log.Log(Level.SEVERE, "Version Field not saved :: " + verFld.GetName() + " :: " + error);
-                        Get_TrxName().Rollback();
-                        return Msg.GetMsg(GetCtx(), "FieldNotSaved") + " :: " + verFld.GetName();
                     }
                 }
             }
