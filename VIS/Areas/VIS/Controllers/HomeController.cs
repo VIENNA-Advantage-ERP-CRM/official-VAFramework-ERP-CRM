@@ -73,11 +73,12 @@ namespace VIS.Controllers
                 return RedirectPermanent(url);
             }
 
+            VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection 
 
             LoginModel model = null;
             if (User.Identity.IsAuthenticated)
             {
-                VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
+                
 
                 try
                 {
