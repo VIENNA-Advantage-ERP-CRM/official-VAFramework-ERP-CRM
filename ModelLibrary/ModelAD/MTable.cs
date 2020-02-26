@@ -26,16 +26,16 @@ namespace VAdvantage.Model
         private MViewComponent[] m_vcs = null;
         /**	Special Classes				*/
         private static String[] _special = new String[] {
-		"AD_Element", "VAdvantage.Model.M_Element",
-		"AD_Registration", "VAdvantage.Model.M_Registration",
-		"AD_Tree", "VAdvantage.Model.MTree_Base",
-		"R_Category", "VAdvantage.Model.MRequestCategory",
-		"GL_Category", "VAdvantage.Model.MGLCategory",
-		"K_Category", "VAdvantage.Model.MKCategory",
-		"C_ValidCombination", "VAdvantage.Model.MAccount",
-		"C_Phase", "VAdvantage.Model.MProjectTypePhase",
-		"C_Task", "VAdvantage.Model.MProjectTypeTask",
-		"K_Source", "VAdvantage.Model.X_K_Source",
+        "AD_Element", "VAdvantage.Model.M_Element",
+        "AD_Registration", "VAdvantage.Model.M_Registration",
+        "AD_Tree", "VAdvantage.Model.MTree_Base",
+        "R_Category", "VAdvantage.Model.MRequestCategory",
+        "GL_Category", "VAdvantage.Model.MGLCategory",
+        "K_Category", "VAdvantage.Model.MKCategory",
+        "C_ValidCombination", "VAdvantage.Model.MAccount",
+        "C_Phase", "VAdvantage.Model.MProjectTypePhase",
+        "C_Task", "VAdvantage.Model.MProjectTypeTask",
+        "K_Source", "VAdvantage.Model.X_K_Source",
         "RC_ViewColumn","VAdvantage.Model.X_RC_ViewColumn",
 	//	AD_Attribute_Value, AD_TreeNode
 	    };
@@ -744,7 +744,7 @@ namespace VAdvantage.Model
 
 
             //Modules
-            if (Env.HasModulePrefix(tableName, out  moduleInfo))
+            if (Env.HasModulePrefix(tableName, out moduleInfo))
             {
                 asm = GetAssembly(moduleInfo.Item1);
                 if (asm != null)
@@ -931,10 +931,45 @@ namespace VAdvantage.Model
         {
             if (IsView() && IsDeleteable())
                 SetIsDeleteable(false);
+
+            // check applied for maintain Versions 
+            // if there is change in maintain Versions checkbox, then before unchecking need to check if
+            // any other column is not marked as maintainversions and data is there in Version table then do not allow to uncheck maintain version on Table
+            // else allow to change
+            if (Is_ValueChanged("IsMaintainVersions"))
+            {
+                if (!IsMaintainVersions())
+                {
+                    string verTblName = GetTableName() + "_Ver";
+                    if (HasVersionData(verTblName))
+                    {
+                        int countMtnVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = " + GetAD_Table_ID() + " AND IsMaintainVersions = 'Y'"));
+                        if (countMtnVerCol == 0)
+                            return false;
+                    }
+                }
+            }
             return true;
         }
 
-
+        /// <summary>
+        /// if there is data in version table passed in parameter then return true else false
+        /// </summary>
+        /// <param name="TblName"></param>
+        /// <returns>True/False</returns>
+        public bool HasVersionData(string TblName)
+        {
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE TableName = '" + TblName + "'", null, Get_Trx())) > 0)
+            {
+                int countRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Client_ID) FROM " + TblName, null, Get_TrxName()));
+                if (countRec > 0)
+                {
+                    log.SaveError("VersionDataExists", Utility.Msg.GetElement(GetCtx(), "VersionDataExists"));
+                    return true;
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// After Save
@@ -944,6 +979,8 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            if (!success)
+                return false;
             //	Sync Table ID
             if (newRecord)
                 MSequence.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName());
@@ -956,6 +993,20 @@ namespace VAdvantage.Model
                 {
                     seq.SetName(GetTableName());
                     seq.Save();
+                }
+            }
+            // checked if value is changed in Maintain Version
+            if (Is_ValueChanged("IsMaintainVersions"))
+            {
+                if (!newRecord && IsMaintainVersions())
+                {
+                    int ColID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT AD_Column_ID FROM AD_Column WHERE IsActive = 'Y' AND AD_Table_ID = " + GetAD_Table_ID() + " ORDER BY ColumnName", null, Get_Trx()));
+                    if (ColID > 0)
+                    {
+                        MColumn column = new MColumn(GetCtx(), ColID, Get_Trx());
+                        MasterVersions mv = new MasterVersions();
+                        string versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
+                    }
                 }
             }
             return success;

@@ -397,6 +397,7 @@
         this.gridTable.onlyCurrentDays = this.vo.onlyCurrentDays;
         // Maintain version on approval property on tab
         this.gridTable.MaintainVerOnApproval = this.vo.MaintainVerOnApproval;
+        this.gridTable.IsMaintainVersions = this.vo.IsMaintainVersions;
 
         this.parents = [];
         this.orderBys = [];
@@ -1845,7 +1846,7 @@
         return retValue;
     };
 
-    
+
 
 
     GridTab.prototype.findColumn = function (columnName) {
@@ -4067,7 +4068,7 @@
         }
 
         // check if this is master window and if there is change in maintain version field
-        if (this.onlyCurrentDays == 0 && this.maintainVersionFieldChanged(RowData, OldRowData)) {
+        if (this.onlyCurrentDays == 0 && (this.IsMaintainVersions || this.maintainVersionFieldChanged(RowData, OldRowData))) {
             var self = this;
             // in case of new record in Master Version window
             if (OldRowData["updatedby"] == null) {
@@ -4081,7 +4082,8 @@
                 // then do not save in Master window and reset 
                 // and display message to user
                 if (out.Status == "E") {
-                    VIS.ADialog.info(out.ErrorMsg);
+                    if (!(out.FireEEvent || out.FireIEvent))
+                        VIS.ADialog.info(out.ErrorMsg);
                 }
                 else if (out.Status == "W") {
                     VIS.ADialog.info("SentForApproval");
@@ -4096,7 +4098,7 @@
             else {
                 // in case of update display UI to user, 
                 // whether user want to save immediately or for future
-                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, function (immediate, valFrom, verRecID) {
+                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, this.IsMaintainVersions, function (immediate, valFrom, verRecID) {
                     gridTableIn.MaintainVersions = true;
                     gridTableIn.ImmediateSave = immediate;
                     gridTableIn.ValidFrom = new Date(valFrom).toISOString();
@@ -4106,7 +4108,8 @@
                     if (out.Status != "O") {
                         // if there is any error then display error message
                         if (out.Status == "E") {
-                            VIS.ADialog.info(out.ErrorMsg);
+                            if (!(out.FireEEvent || out.FireIEvent))
+                                VIS.ADialog.info(out.ErrorMsg);
                         }
                         else {
                             // in case of sucess refresh UI
@@ -4571,7 +4574,7 @@
 
             //	Is this record deletable?
             if (!localthis.deleteable) {
-                tlocalthishis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
+                localthis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
                 resolve(false);
                 return;
             }
@@ -4687,7 +4690,7 @@
             {
                 this.fireDataStatusEEvent("CannotDeleteTrx", "", true);
                 resolve(false);
-                return ;
+                return;
             }
         });
     };
