@@ -189,7 +189,7 @@
         this.isHeaderVisible = true;
         this.onClosed; // event
         this.title = "window";
-
+        this.closeable = true;
         var $header = null;
 
         var $table, $contentGrid, $lblTitle, $btnClose;
@@ -250,10 +250,16 @@
         this.hideCloseIcon = function (hide) {
             if (hide) {
                 $btnClose.hide();
+                this.closeable = false;
             }
             else {
                 $btnClose.show();
+                this.closeable = true;
             }
+        };
+
+        this.isCloseable = function (hide) {
+            return this.closeable
         };
 
         /** encode
@@ -675,6 +681,8 @@
      */
     AWindow.prototype.dispose = function () {
 
+        if (!this.closeable)
+            return;
         //if (VIS.context.getContext("#DisableMenu") == 'Y') {
         //    return;
         //}
