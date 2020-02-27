@@ -15,6 +15,7 @@ using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.Logging;
+using System.Threading;
 
 namespace VAdvantage.Model
 {
@@ -56,6 +57,8 @@ namespace VAdvantage.Model
         private const String TAG_START = "[Req#";
         /** Request Tag End					*/
         private const String TAG_END = "#ID]";
+
+        private StringBuilder message = null;
 
         /**************************************************************************
          * 	Constructor
@@ -1004,11 +1007,11 @@ namespace VAdvantage.Model
                 if (oldSalesRep_ID != 0)
                 {
                     //  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
-                    Object[] args = new Object[] {GetDocumentNo(), 
-					    MUser.GetNameOfUser(AD_User_ID), 
-					    MUser.GetNameOfUser(oldSalesRep_ID),
-					    MUser.GetNameOfUser(GetSalesRep_ID())
-					    };
+                    Object[] args = new Object[] {GetDocumentNo(),
+                        MUser.GetNameOfUser(AD_User_ID),
+                        MUser.GetNameOfUser(oldSalesRep_ID),
+                        MUser.GetNameOfUser(GetSalesRep_ID())
+                        };
                     String msg = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
                     AddToResult(msg);
                     sendInfo.Add("SalesRep_ID");
@@ -1061,8 +1064,7 @@ namespace VAdvantage.Model
             _emailTo = new StringBuilder();
             if (update != null || sendInfo.Count > 0)
             {
-                SendNotices(sendInfo);
-
+                prepareNotificMsg(sendInfo);
                 //	Update
                 if (ra != null)
                     SetDateLastAction(ra.GetCreated());
@@ -1077,9 +1079,250 @@ namespace VAdvantage.Model
                 SetResult(null);
                 //	SetQtySpent(null);
                 //	SetQtyInvoiced(null);
+
+
+
+
             }
+           
             return true;
         }
+
+        /// <summary>
+        /// Prepare the notification message before going to after save.
+        /// </summary>
+        /// <param name="list"></param>
+        private void prepareNotificMsg(List<String> list)
+        {
+             message = new StringBuilder();
+            //		UpdatedBy: Joe
+            int UpdatedBy = GetCtx().GetAD_User_ID();
+            MUser from = MUser.Get(GetCtx(), UpdatedBy);
+            if (from != null)
+                message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
+                    .Append(from.GetName());
+            //		LastAction/Created: ...	
+            if (GetDateLastAction() != null)
+                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateLastAction"))
+                    .Append(": ").Append(GetDateLastAction());
+            else
+                message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
+                    .Append(": ").Append(GetCreated());
+            //	Changes
+            for (int i = 0; i < list.Count; i++)
+            {
+                String columnName = (String)list[i];
+                message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
+                    .Append(": ").Append(Get_DisplayValue(columnName, false))
+                    .Append(" -> ").Append(Get_DisplayValue(columnName, true));
+            }
+            //	NextAction
+            if (GetDateNextAction() != null)
+                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
+                    .Append(": ").Append(GetDateNextAction());
+            message.Append(SEPARATOR)
+                .Append(GetSummary());
+            if (GetResult() != null)
+                message.Append("\n----------\n").Append(GetResult());
+            message.Append(GetMailTrailer(null));
+        }
+
+        /// <summary>
+        /// Send notice to role
+        /// </summary>
+        /// <param name="list">change information</param>
+        private List<int> SendRoleNotice()
+        {
+            List<int> _users = new List<int>();
+            string sql = @"SELECT AD_User.ad_user_ID,
+                         AD_User_Roles.AD_Role_ID
+                        FROM AD_User_Roles
+                        INNER JOIN ad_user
+                        ON (AD_User_Roles.AD_User_ID    =AD_User.AD_User_ID)
+                        WHERE AD_User_Roles.AD_Role_ID IN
+                          (SELECT AD_Role_ID
+                          FROM R_RequestTypeUpdates
+                          WHERE AD_Role_ID   IS NOT NULL
+                          AND R_RequestType_ID=" + GetR_RequestType_ID() + @"
+                          AND IsActive        ='Y'
+                          )
+                        AND AD_User_Roles.AD_User_ID NOT IN
+                          (SELECT u.AD_User_ID
+                          FROM RV_RequestUpdates_Only ru
+                          INNER JOIN AD_User u
+                          ON (ru.AD_User_ID=u.AD_User_ID)
+                          LEFT OUTER JOIN AD_User_Roles r
+                          ON (u.AD_User_ID     =r.AD_User_ID)
+                          WHERE ru.R_Request_ID=" + GetR_Request_ID() + @"
+                          )
+                        AND ad_user.email IS NOT NULL";
+
+            DataSet _ds = DB.ExecuteDataset(sql, null, null);
+            if (_ds != null && _ds.Tables[0].Rows.Count > 0)
+            {
+                _users = validateUsers(_ds);
+            }
+            return _users;
+
+        }
+
+
+        /// <summary>
+        /// Validate the organization access of users according to the role.
+        /// </summary>
+        /// <param name="_ds"></param>
+        /// <returns></returns>
+        private List<int> validateUsers(DataSet _ds)
+        {
+            List<int> users = new List<int>();
+            MRole role = new MRole(GetCtx(), Util.GetValueOfInt(_ds.Tables[0].Rows[0]["AD_Role_ID"]), null);
+            bool isAllUser = false;
+            // if access all organization
+            if (role.IsAccessAllOrgs())
+            {
+                isAllUser = true;
+            }
+            // if not access user organization access.
+            if (!isAllUser && !role.IsUseUserOrgAccess())
+            {
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                {
+                    isAllUser = true;
+                }
+                else
+                {
+                    return users;
+                }
+            }
+            for (int i = 0; i < _ds.Tables[0].Rows.Count; i++)
+            {
+                if (isAllUser)
+                {
+                    users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
+                }
+                else
+                {
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID="+ Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                    {
+                        users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
+                    }
+                }
+            }
+            return users;
+        }
+
+        /// <summary>
+        /// Send notifications to users
+        /// </summary>
+        /// <param name="newRec">if new record or not</param>
+        private void SendNotifications(bool newRec)
+        {
+            if (newRec)
+            {
+                prepareNotificMsg(new List<String>());
+                Thread thread = new Thread(new ThreadStart(() => SendNotices(new List<String>())));
+                thread.Start();
+            }
+            else
+            {
+                _changed = false;
+                List<String> sendInfo = new List<String>();
+                MRequestAction ra = new MRequestAction(this, false);
+                //
+                if (CheckChange(ra, "R_RequestType_ID"))
+                    sendInfo.Add("R_RequestType_ID");
+                if (CheckChange(ra, "R_Group_ID"))
+                    sendInfo.Add("R_Group_ID");
+                if (CheckChange(ra, "R_Category_ID"))
+                    sendInfo.Add("R_Category_ID");
+                if (CheckChange(ra, "R_Status_ID"))
+                    sendInfo.Add("R_Status_ID");
+                if (CheckChange(ra, "R_Resolution_ID"))
+                    sendInfo.Add("R_Resolution_ID");
+                //
+                if (CheckChange(ra, "SalesRep_ID"))
+                {
+                    //	Sender
+                    int AD_User_ID = p_ctx.GetAD_User_ID();
+                    if (AD_User_ID == 0)
+                        AD_User_ID = GetUpdatedBy();
+                    //	Old
+                    Object oo = Get_ValueOld("SalesRep_ID");
+                    int oldSalesRep_ID = 0;
+                    if (oo is int)
+                    {
+                        oldSalesRep_ID = ((int)oo);
+                    }
+                    if (oldSalesRep_ID != 0)
+                    {
+                        //  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
+                        Object[] args = new Object[] {GetDocumentNo(),
+                        MUser.GetNameOfUser(AD_User_ID),
+                        MUser.GetNameOfUser(oldSalesRep_ID),
+                        MUser.GetNameOfUser(GetSalesRep_ID())
+                        };
+                        String msg = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
+                        AddToResult(msg);
+                        sendInfo.Add("SalesRep_ID");
+                    }
+                }
+                CheckChange(ra, "AD_Role_ID");
+                //
+                CheckChange(ra, "Priority");
+                if (CheckChange(ra, "PriorityUser"))
+                    sendInfo.Add("PriorityUser");
+                if (CheckChange(ra, "IsEscalated"))
+                    sendInfo.Add("IsEscalated");
+                //
+                CheckChange(ra, "ConfidentialType");
+                CheckChange(ra, "Summary");
+                CheckChange(ra, "IsSelfService");
+                CheckChange(ra, "C_BPartner_ID");
+                CheckChange(ra, "AD_User_ID");
+                CheckChange(ra, "C_Project_ID");
+                CheckChange(ra, "A_AsSet_ID");
+                CheckChange(ra, "C_Order_ID");
+                CheckChange(ra, "C_Invoice_ID");
+                CheckChange(ra, "M_Product_ID");
+                CheckChange(ra, "C_Payment_ID");
+                CheckChange(ra, "M_InOut_ID");
+                //	checkChange(ra, "C_Campaign_ID");
+                //	checkChange(ra, "RequestAmt");
+                CheckChange(ra, "IsInvoiced");
+                CheckChange(ra, "C_Activity_ID");
+                CheckChange(ra, "DateNextAction");
+                CheckChange(ra, "M_ProductSpent_ID");
+                CheckChange(ra, "QtySpent");
+                CheckChange(ra, "QtyInvoiced");
+                CheckChange(ra, "StartDate");
+                CheckChange(ra, "CloseDate");
+                CheckChange(ra, "TaskStatus");
+                CheckChange(ra, "DateStartPlan");
+                CheckChange(ra, "DateCompletePlan");
+                //
+                if (_changed)
+                    ra.Save();
+
+                //	Current Info
+                MRequestUpdate update = new MRequestUpdate(this);
+                if (update.IsNewInfo())
+                    update.Save();
+                else
+                    update = null;
+                //
+                _emailTo = new StringBuilder();
+                if (update != null || sendInfo.Count > 0)
+                {
+
+                    // For Role Changes
+                    Thread thread = new Thread(new ThreadStart(() => SendNotices(sendInfo)));
+                    thread.Start();
+
+                }
+            }
+        }
+
+
 
         /**
          * 	Check for changes
@@ -1248,8 +1491,9 @@ namespace VAdvantage.Model
                 update.Save();
             }
             //	Initial Mail
-            if (newRecord)
-                SendNotices(new List<String>());
+
+            SendNotifications(newRecord);
+            //SendNotices(new List<String>());
 
             //	ChangeRequest - created in Request Processor
             if (GetM_ChangeRequest_ID() != 0
@@ -1277,10 +1521,12 @@ namespace VAdvantage.Model
                 }
             }
 
-            if (_emailTo.Length > 0)
-            {
-                log.SaveInfo("RequestActionEMailOK", _emailTo.ToString());
-            }
+            //if (_emailTo.Length > 0)
+            // {
+            //log.SaveInfo("RequestActionEMailOK", _emailTo.ToString());
+
+            //}
+            log.SaveInfo("R_EmailSentBackgrnd", "");
             return success;
         }
 
@@ -1303,11 +1549,11 @@ namespace VAdvantage.Model
             }
 
             //  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
-            Object[] args = new Object[] {GetDocumentNo(), 
-			        MUser.GetNameOfUser(AD_User_ID), 
-			        MUser.GetNameOfUser(oldSalesRep_ID),
-			        MUser.GetNameOfUser(GetSalesRep_ID())
-			        };
+            Object[] args = new Object[] {GetDocumentNo(),
+                    MUser.GetNameOfUser(AD_User_ID),
+                    MUser.GetNameOfUser(oldSalesRep_ID),
+                    MUser.GetNameOfUser(GetSalesRep_ID())
+                    };
             String subject = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
             String message = subject + "\n" + GetSummary();
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
@@ -1323,41 +1569,18 @@ namespace VAdvantage.Model
          */
         protected void SendNotices(List<String> list)
         {
+            bool isEmailSent = false;
+            StringBuilder finalMsg = new StringBuilder();
+            finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NotificSent"));
             //	Subject
             String subject = Msg.Translate(GetCtx(), "R_Request_ID")
                 + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
             //	Message
-            StringBuilder message = new StringBuilder();
+           
             //		UpdatedBy: Joe
             int UpdatedBy = GetCtx().GetAD_User_ID();
             MUser from = MUser.Get(GetCtx(), UpdatedBy);
-            if (from != null)
-                message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
-                    .Append(from.GetName());
-            //		LastAction/Created: ...	
-            if (GetDateLastAction() != null)
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateLastAction"))
-                    .Append(": ").Append(GetDateLastAction());
-            else
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
-                    .Append(": ").Append(GetCreated());
-            //	Changes
-            for (int i = 0; i < list.Count; i++)
-            {
-                String columnName = (String)list[i];
-                message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
-                    .Append(": ").Append(Get_DisplayValue(columnName, false))
-                    .Append(" -> ").Append(Get_DisplayValue(columnName, true));
-            }
-            //	NextAction
-            if (GetDateNextAction() != null)
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
-                    .Append(": ").Append(GetDateNextAction());
-            message.Append(SEPARATOR)
-                .Append(GetSummary());
-            if (GetResult() != null)
-                message.Append("\n----------\n").Append(GetResult());
-            message.Append(GetMailTrailer(null));
+            
             FileInfo pdf = CreatePDF();
             log.Finer(message.ToString());
 
@@ -1443,11 +1666,66 @@ namespace VAdvantage.Model
                     if (userList.Contains(ii))
                         continue;
                     userList.Add(ii);
+
+                    // check the user roles for organization access.
+                    MUser user = new MUser(GetCtx(), AD_User_ID, null);
+                    MRole[] role = user.GetRoles(GetAD_Org_ID());
+                    if (role.Length == 0)
+                        continue;
+
+
                     //
                     SendNoticeNow(AD_User_ID, NotificationType,
                         client, from, subject, message.ToString(), pdf);
+                    finalMsg.Append("\n").Append(user.GetName()).Append(".");
+                    isEmailSent = true;
                 }
+
                 idr.Close();
+                // Notification For Role
+                List<int> _users = SendRoleNotice();
+                for (int i = 0; i < _users.Count; i++)
+                {
+                    MUser user = new MUser(GetCtx(), _users[i], null);
+                    int AD_User_ID = user.GetAD_User_ID();
+                    String NotificationType = user.GetNotificationType(); //idr.GetString(1);
+                    if (NotificationType == null)
+                        NotificationType = X_AD_User.NOTIFICATIONTYPE_EMail;
+                    String email = user.GetEMail();// idr.GetString(2);
+
+                    if (String.IsNullOrEmpty(email))
+                    {
+                        continue;
+                    }
+
+                    String Name = user.GetName();//idr.GetString(3);
+                                                 //	Role                  
+
+                    if (X_AD_User.NOTIFICATIONTYPE_None.Equals(NotificationType))
+                    {
+                        log.Config("Opt out: " + Name);
+                        continue;
+                    }
+
+                    //
+                    SendNoticeNow(_users[i], NotificationType,
+                        client, from, subject, message.ToString(), pdf);
+                    finalMsg.Append("\n").Append(user.GetName()).Append(".");
+                    isEmailSent = true;
+                }
+
+                if (!isEmailSent)
+                {
+                    finalMsg.Clear();
+                    finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
+                }
+
+                int AD_Message_ID = 834;
+                MNote note = new MNote(GetCtx(), AD_Message_ID, GetCtx().GetAD_User_ID(),
+                    X_R_Request.Table_ID, GetR_Request_ID(),
+                    subject, finalMsg.ToString(), Get_TrxName());
+                if (note.Save())
+                    log.Log(Level.INFO, "ProcessFinished", "");
             }
             catch (Exception e)
             {
@@ -1607,7 +1885,7 @@ namespace VAdvantage.Model
             {
                 String Importance = GetPriorityUser();
                 if (PRIORITYUSER_Urgent.Equals(Importance))
-                { ;}	//	high as it goes
+                {; }	//	high as it goes
                 else if (PRIORITYUSER_High.Equals(Importance))
                     SetPriorityUser(PRIORITYUSER_Urgent);
                 else if (PRIORITYUSER_Medium.Equals(Importance))
@@ -1621,7 +1899,7 @@ namespace VAdvantage.Model
             {
                 String Importance = GetPriority();
                 if (PRIORITY_Urgent.Equals(Importance))
-                { ;}	//	high as it goes
+                {; }	//	high as it goes
                 else if (PRIORITY_High.Equals(Importance))
                     SetPriority(PRIORITY_Urgent);
                 else if (PRIORITY_Medium.Equals(Importance))
