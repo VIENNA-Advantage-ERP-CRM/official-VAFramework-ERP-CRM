@@ -3678,6 +3678,24 @@ namespace VAdvantage.Model
                     }
                 }
 
+                //  cannot change of invoice price, If it is created with refrence to relase order. 
+                if (!newRecord && GetC_OrderLine_ID() > 0 && (Is_ValueChanged("PriceEntered") || Is_ValueChanged("PriceList")))
+                {
+                    int ref_Orderline_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_OrderLine_Blanket_ID FROM C_OrderLine WHERE C_OrderLine_ID=" + GetC_OrderLine_ID(), null, Get_Trx()));
+                    if (ref_Orderline_id > 0)
+                    {
+                        if (Is_ValueChanged("PriceEntered"))
+                        {
+                            SetPriceEntered(Util.GetValueOfDecimal(Get_ValueOld("PriceEntered")));
+                            SetPriceActual(GetPriceEntered());
+                        }
+                        if (Is_ValueChanged("PriceList"))
+                        {
+                            SetPriceList(Util.GetValueOfDecimal(Get_ValueOld("PriceList")));
+                        }
+                    }
+                }
+
                 //	Set Tax
 
                 if (GetC_Tax_ID() == 0)

@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.Logging;
 
-namespace VAdvantage.Model 
+namespace VAdvantage.Model
 {
     public class MProductPO : X_M_Product_PO
     {
@@ -60,7 +60,8 @@ namespace VAdvantage.Model
                 }
                 _log.Log(Level.SEVERE, sql, ex);
             }
-            finally {
+            finally
+            {
                 if (idr != null)
                 {
                     idr.Close();
@@ -160,7 +161,7 @@ namespace VAdvantage.Model
                 int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (no > 0)
                 {
-                    log.SaveError("CurrentVendorIsDefined", "");
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "CurrentVendorIsDefined"));
                     return false;
                 }
             }

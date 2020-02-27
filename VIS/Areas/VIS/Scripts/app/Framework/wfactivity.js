@@ -597,19 +597,20 @@
                 var divContent = $("<div class='vis-feedDetails'>");
 
 
-                var para = $("<p>");
+                var para = $("<pre>");
                 if (data[item].DocumentNameValue == undefined || data[item].DocumentNameValue == '') {
 
                     // Get Workflow Activity details from selected Text Template
-                    var summary = VIS.Utility.encodeText(data[item].Summary).split("●");
-                    if (summary != null && summary.length > 0) {
-                        for (var k = 0; k < summary.length; k++) {
-                            para.append(summary[k]);
-                            if (k < summary.length - 1) {
-                                para.append("<br>");
-                            }
-                        }
-                    }
+                    //var summary = VIS.Utility.encodeText(data[item].Summary).split("●");
+                    //if (summary != null && summary.length > 0) {
+                    //    for (var k = 0; k < summary.length; k++) {
+                    //        para.append(summary[k]);
+                    //        if (k < summary.length - 1) {
+                    //            para.append("<br>");
+                    //        }
+                    //    }
+                    //}
+                    para.append(VIS.Utility.encodeText(data[item].Summary));
                 }
                 else {
                     para.append(VIS.Utility.encodeText(data[item].DocumentNameValue + " - " + data[item].Summary));

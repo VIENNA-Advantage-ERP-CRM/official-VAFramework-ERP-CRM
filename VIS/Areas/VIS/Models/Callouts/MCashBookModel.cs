@@ -79,7 +79,7 @@ namespace VIS.Models
             try
             {
                 string[] Data = fields.Split(',');
-                decimal amt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT CASHLINE.Amount FROM C_CashLine CASHLINE INNER JOIN C_Cashbook CB ON (CB.C_Cashbook_ID=CASHLINE.C_Cashbook_ID) WHERE CASHLINE.C_CashLine_ID =" + Util.GetValueOfInt(Data[0])));
+                decimal amt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT CASHLINE.ConvertedAmt FROM C_CashLine CASHLINE INNER JOIN C_Cashbook CB ON (CB.C_Cashbook_ID=CASHLINE.C_Cashbook_ID) WHERE CASHLINE.C_CashLine_ID =" + Util.GetValueOfInt(Data[0])));
                 int currTo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_CashBook WHERE C_CashBook_ID=(SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=" + Util.GetValueOfInt(Data[1]) + ")"));
                 int CurrFrom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_Cashbook WHERE C_Cashbook_ID= (SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=(SELECT C_Cash_ID FROM C_CashLine WHERE C_CashLine_ID= " + Util.GetValueOfInt(Data[0]) + "))"));
 

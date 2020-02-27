@@ -3929,7 +3929,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM AD_TextTemplate WHERE AD_TextTemplate_ID = " + node.GetAD_TextTemplate_ID()));
                 sb.Append(CommonFunctions.Parse(mailtext, po));
-                sb.Replace("<br>", "●");
+                //sb.Replace("<br>", "●");
             }
             else
             {

@@ -1317,15 +1317,15 @@
                             var divtitle_ = "";
                             var title_ = data[s].Description;
                             if (title_.length <= 100) {
-                                divtitle_ = "<p><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].AD_Note_ID + "'>" + VIS.Utility.encodeText(data[s].Title) + "</strong></p>";
+                                divtitle_ = "<pre><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].AD_Note_ID + "'>" + VIS.Utility.encodeText(data[s].Title) + "</strong></pre>";
                             }
                             else {
-                                divtitle_ = "<p>"
+                                divtitle_ = "<pre>"
                                                + "<strong  id='snoticetitle_" + data[s].AD_Note_ID + "'  style='color:#666666;' >" + VIS.Utility.encodeText(data[s].Title) + "...</strong>"
                                                + "<strong id='snoticedesc_" + data[s].AD_Note_ID + "' style='display:none; color:#666666;'>" + VIS.Utility.encodeText(data[s].Description) + "...</strong> "
                                                + "<span id='snoticemore_" + data[s].AD_Note_ID + "' data-vishomercrd='more' style='color:gray; float:right;'>" + VIS.Msg.getMsg("more") + "</span>"
                                                + "<span id='snoticeless_" + data[s].AD_Note_ID + "' data-vishomercrd='less' style='display:none; color:gray; float:right;'>" + VIS.Msg.getMsg("less") + "</span>"
-                                               + "</p>";
+                                               + "</pre>";
                             }
 
                             str += "<div data-vishomercrd='view-recrd-cntainer' id='divrecdcntnr_" + data[s].AD_Note_ID + "' class='vis-activityContainer'>"

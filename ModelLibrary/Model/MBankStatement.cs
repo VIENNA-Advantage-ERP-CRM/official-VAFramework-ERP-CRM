@@ -503,8 +503,7 @@ namespace VAdvantage.Model
             Decimal transactionAmt = 0; //Arpit to update only transaction amount in Bank Account UnMatched Balance asked by Ashish Gandhi
             for (int i = 0; i < lines.Length; i++)
             {
-                MBankStatementLine line = lines[i];
-                transactionAmt += line.GetTrxAmt();
+                MBankStatementLine line = lines[i];                
                 if (line.GetC_Payment_ID() != 0)
                 {
                     MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_TrxName());
@@ -512,6 +511,7 @@ namespace VAdvantage.Model
                     if (_CountVA034 > 0)
                         payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
                     payment.Save(Get_TrxName());
+                    transactionAmt += line.GetTrxAmt();
                 }
 
                 //Pratap 1-2-16
@@ -524,6 +524,7 @@ namespace VAdvantage.Model
                         MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), Get_TrxName());
                         cashLine.SetVA012_IsReconciled(true);
                         cashLine.Save(Get_TrxName());
+                        transactionAmt += line.GetTrxAmt();
                     }
                 }
                 ////

@@ -3303,7 +3303,15 @@ namespace VAdvantage.Model
             if (PrintName != null && PrintName.Length > 0)
                 dt.SetPrintName(PrintName);	//	Defaults to Name
             if (DocSubTypeSO != null)
+            {
                 dt.SetDocSubTypeSO(DocSubTypeSO);
+
+                //JID_0481: Sales Proposal (Non Binding Offer) document type, need to mark the Sales Quotation check box true
+                if (DocSubTypeSO.Equals(MDocType.DOCSUBTYPESO_Proposal))
+                {
+                    dt.Set_Value("IsSalesQuotation", true);
+                }
+            }
             // For Blanket Order Set Document Type of Release
             if (C_DocTypeShipment_ID != 0)
             {

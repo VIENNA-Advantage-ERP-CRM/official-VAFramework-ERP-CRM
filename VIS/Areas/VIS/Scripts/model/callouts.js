@@ -4785,32 +4785,36 @@
             return "";
         }
         this.setCalloutActive(true);
-        var sql = "SELECT CASHLINE.Amount FROM C_CashLine CASHLINE INNER JOIN C_Cashbook CB ON (CB.C_Cashbook_ID=CASHLINE.C_Cashbook_ID) WHERE CASHLINE.C_CashLine_ID =" + value;
+        var paramString = "";
+
         try {
-            var currTo = Util.getValueOfInt(VIS.DB.executeScalar("SELECT C_Currency_ID FROM C_CashBook WHERE C_CashBook_ID=(SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=" + mTab.getValue("C_Cash_ID") + ")"));
+            //To remove client side query
+            paramString = value.toString() + "," + mTab.getValue("C_Cash_ID").toString();
+            var data = VIS.dataContext.getJSONRecord("MCashBook/GetConvertedAmt", paramString);
+
+            var currTo = Util.getValueOfInt(data["CurrTo"]);
             if (currTo == 0) {
                 // ShowMessage.Info("PleaseSelectCashBook", true, null, null);
                 this.setCalloutActive(false);
                 return "";
             }
-            var amt = Util.getValueOfDecimal(VIS.DB.executeScalar(sql));
-            var CurrFrom = Util.getValueOfInt(VIS.DB.executeScalar("SELECT C_Currency_ID FROM C_Cashbook WHERE C_Cashbook_ID= (SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID="
-                + " (SELECT C_Cash_ID FROM C_CashLine WHERE C_CashLine_ID= " + value + "))"));
-            var paramString = amt.toString() + "," + CurrFrom.toString() + "," + currTo.toString() + "," +
+
+
+            var CurrFrom = Util.getValueOfInt(data["CurrFrom"]);
+            var amt = Util.getValueOfDecimal(data["Amt"]);
+            paramString = "";
+            paramString = amt.toString() + "," + CurrFrom.toString() + "," + currTo.toString() + "," +
                 ctx.getAD_Client_ID().toString() + "," + ctx.getAD_Org_ID().toString();
 
             //ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(ctx,
             //    ConvertedAmt, Util.getValueOfInt(C_Currency_From_ID), C_Currency_To_ID,
             //    DateExpense, 0, AD_Client_ID, AD_Org_ID);
             var transferdAmt = VIS.dataContext.getJSONRecord("MConversionRate/Convert", paramString);
-            //var transferdAmt = MConversionRate.Convert(Env.GetCtx(),amt,CurrFrom,currTo,
-            //     Env.GetCtx().GetAD_Client_ID(), Env.GetCtx().GetAD_Org_ID());
             if (amt != 0 && transferdAmt == 0) {
                 VIS.ADialog.info("NoCurrencyConversion");
             }
             mTab.setValue("ConvertedAmt", transferdAmt);
             mTab.setValue("Amount", amt);
-            //mTab.setValue("Amount", transferdAmt);
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -5554,7 +5558,7 @@
             //}
         }
         catch (err) {
-            this.setCalloutActive(false);            
+            this.setCalloutActive(false);
             this.log.log(Level.SEVERE, "BankStmt_DateAcct", err);
             return err.toString();
         }
@@ -16655,7 +16659,7 @@
     VIS.Utility.inheritPrototype(CalloutTax, VIS.CalloutEngine); //inherit prototype
     CalloutTax.prototype.Tax = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
-        if (value == null || value == 0 ||value.toString() == "") {
+        if (value == null || value == 0 || value.toString() == "") {
             return "";
         }
         var C_Tax_ID = 0;
@@ -16691,7 +16695,7 @@
             }
             else {
                 mTab.setValue("GrandTotal", LineNetAmt);
-            }           
+            }
         }
         else {
             // JID_0872: Grand Total is not calculating right
@@ -19609,7 +19613,7 @@
     CalloutOrderContract.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
 
-        if (value == null || value == 0 ||value.toString() == "") {
+        if (value == null || value == 0 || value.toString() == "") {
             return "";
         }
         try {  ///
