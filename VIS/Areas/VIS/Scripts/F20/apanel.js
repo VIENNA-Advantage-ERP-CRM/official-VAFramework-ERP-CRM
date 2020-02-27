@@ -570,6 +570,7 @@
             }
             if (this.curGC.leftPaneLinkItems.length > 0 || this.curGC.rightPaneLinkItems.length > 0) {
                 $uldynactionbar.css('display', 'flex');
+                this.updateLabelVisbility();
             }
 
             actions = null;
@@ -980,7 +981,21 @@
             self.$parentWindow.dispose(); //dispose
         });
 
-        /* left bar toggle */
+    /* left bar toggle */
+        this.updateLabelVisbility = function () {
+            var w = parseInt($divlbMain.width());
+
+            if (w > 50) {
+                $ulactionbar.find('span').show();
+                $uldynactionbar.find('span').show();
+            }
+            else {
+                $ulactionbar.find('span').hide();
+                $uldynactionbar.find('span').hide();
+            }
+            
+        };
+
         $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
             e.stopPropagation();
             e.preventDefault();
