@@ -94,7 +94,7 @@
         this.curST;
         this.curTab;
         this.vTabbedPane = new VIS.VTabbedPane(false);
-        
+
         this.statusBar = new VIS.StatusBar();
         /* current Tab panel */
         this.curWinTab = null;
@@ -117,6 +117,7 @@
         var $ulRightBar2; //right bar
         var $btnlbToggle, $ulactionbar, $uldynactionbar, $divlbMain, $divlbNav; //right bar
         var $hdrPanel = "", $divIncludeTab, $divHeaderNav;
+        var $fltrPanel = "";
         var $tabPanel = null;
         var $spnAdvSearch = null;
         var $btnClose = null;
@@ -152,6 +153,8 @@
             $divlbNav = $root.find('.vis-ad-w-p-a-oflow');// ("<div class='vis-ad-w-p-a-oflow'>").hide();
 
             $hdrPanel = $root.find(".vis-ad-w-p-header-l");
+
+            $fltrPanel = $root.find('.vis-ad-w-p-filterpnl');
 
             $divIncludeTab = $root.find(".vis-ad-w-p-center-inctab");
 
@@ -285,7 +288,7 @@
             self.vTabbedPane.finishLayout(VIS.Application.isMobile);
         };
         /* Tool bar */
-       
+
         initComponenet();
         $divStatus.append(this.statusBar.getRoot()); //Status bar
 
@@ -586,6 +589,10 @@
             return $hdrPanel;
         };
 
+        this.getFilterPane = function () {
+            return $fltrPanel;
+        };
+
         /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
         *   @param {boolean} show - show tab panel if true
@@ -621,9 +628,15 @@
             }
         };
 
-       
+        this.showFilterPanel = function (show) {
+            $fltrPanel.empty();
+            if (this.curGC)
+                $fltrPanel.append(this.curGC.getFilterPanel());
+        };
 
-    /* END Set Tab Panel Icons */
+
+
+        /* END Set Tab Panel Icons */
 
         this.getTabControl = function () {
             return $ulTabControl;
@@ -657,7 +670,7 @@
             }
         };
 
-        
+
         this.navigateThroghtShortcut = function (forward) {
 
 
@@ -711,7 +724,7 @@
                 if (dir == 'r') {
                     dir = 'b';
                 }
-                else if (dir == 'rl'){
+                else if (dir == 'rl') {
                     dir = 'bf';
                 }
                 else if (dir == 'bf') {
@@ -1112,7 +1125,7 @@
             $hdrPanel.remove();
             $hdrPanel = null;
             this.getParentDetailPane = null;
-            
+
             $ulTabControl.remove();
         };
     };
@@ -1354,7 +1367,7 @@
         var tabActions = []; //Tabs Apps Action
 
         var includedMap = {};
-        
+
 
         for (var i = 0; i < tabs.length; i++) {
 
@@ -1407,6 +1420,8 @@
                         gc.initHeaderPanel(this.getParentDetailPane());
                     }
                 }
+                gc.initFilterPanel(100,this.getFilterPane());
+
                 tabElement = gc;
                 if (i === 0 && goSingleRow)
                     gc.switchSingleRow();
@@ -1472,8 +1487,8 @@
         if (!incTab.is('.ui-resizable')) {
             incTab.resizable({
                 handles: 'n',
-                ghost: true, 
-               minHeight:40,
+                ghost: true,
+                minHeight: 40,
                 maxHeight: 500,
                 //width: 'auto',
 
@@ -1483,14 +1498,14 @@
                     incTab.css('flex-basis', ui.size.height + 'px');
                 },
                 start: function (event, ui) {
-                   // incTab.css({ 'position': 'absolute', "z-index": "99" });
+                    // incTab.css({ 'position': 'absolute', "z-index": "99" });
                     //windowWidth=
                 },
                 stop: function (event, ui) {
                     incTab.css({
                         'flex-basis': ui.size.height + 'px',
                         'top': '',
-                        'width':''
+                        'width': ''
                     });
                     //incTab.css('flex-basis', ui.size.height + 'px');
                     //if (VIS.Application.isRTL) {
@@ -1874,7 +1889,7 @@
      *  @param vButton button
      *  @retrun true to hide busy indicator
      */
-    APanel.prototype.actionButton = function (vButton,curCtrller) {
+    APanel.prototype.actionButton = function (vButton, curCtrller) {
         var startWOasking = false;
         var batch = false;
         var dateScheduledStart = null;
@@ -1883,9 +1898,9 @@
         if (!curCtrller)
             curCtrller = this;
         var aPanel = this;
-       // self.curWindowNo = this.curWindowNo;
+        // self.curWindowNo = this.curWindowNo;
 
-               
+
         var curTabNo = 0;
         var AD_Table_ID = 0;
         var Record_ID = 0;
@@ -1971,13 +1986,13 @@
                 if (vp.isInitOK()) {
                     curGC.dynamicDisplay(vButton.getName());
                     curGC.cmd_save(false);
-                    
+
                     this.checkAndCallProcess(vButton, table_ID, record_ID, ctx, self, startWOasking, batch);
                 }
             };
             return;
 
-           
+
         }	//	PaymentRule
 
         //	Pop up Document Action (Workflow)
@@ -2108,7 +2123,7 @@
             else {
                 //  if (VIS.ADialog.ask("PostImmediate?")) {
                 VIS.ADialog.confirm("PostImmediate?", true, "", "Confirm", function (results) {
-                    
+
                     if (results) {
 
                         aPanel.setBusy(true, true);
@@ -2213,7 +2228,7 @@
                 VIS.ADialog.warn("AccessTableNoView");
             }
         }
-        curTab = curGC =  aPanel = null;
+        curTab = curGC = aPanel = null;
 
     };
 
@@ -2236,7 +2251,7 @@
         });
     }
 
-    APanel.prototype.checkAndCallProcess=function(vButton, table_ID, record_ID, ctx, curCtrler, startWOasking, batch) {
+    APanel.prototype.checkAndCallProcess = function (vButton, table_ID, record_ID, ctx, curCtrler, startWOasking, batch) {
         if (vButton.getProcess_ID() == 0)
             return;
         //	Save item changed
@@ -2511,7 +2526,7 @@
     //}
 
     APanel.prototype.tabActionPerformedCallback = function (action, back, isAPanelTab, tabEle, curEle, oldGC, gc, st) {
-        
+
 
         curEle.setVisible(false);
         curEle.getRoot().detach();
@@ -2623,9 +2638,9 @@
             //aChat.setEnabled(true);
         }
 
-       
-           
-       
+
+
+
 
 
         ///*******     Tab Panels      ******/
@@ -2637,6 +2652,8 @@
         //else {
         //    this.setTabPanelIcons();
         this.showTabPanel(this.curTab.getHasPanel());
+        this.showFilterPanel();
+
         //}
 
         this.refresh();
