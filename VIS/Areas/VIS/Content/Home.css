@@ -1028,6 +1028,7 @@ html[dir="rtl"] .userAvatar-Feeds {
     /*padding-left: 10px;*/
     margin: 0;
     width: 100%;
+    font-family: 'NoirPro-Regular' !important;
 }
 
     .vis-feedDetails pre strong {

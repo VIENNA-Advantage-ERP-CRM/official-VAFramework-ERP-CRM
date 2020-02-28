@@ -945,7 +945,9 @@
             if (selectedItems.length <= 1) {
                 var p2 = $("<pre>");
                 p2.css('margin-top', '10px');
+                p2.css('margin-bottom', '0px');
                 p2.css('font-size', '14px');
+                p2.css('font-family', 'NoirPro-Regular');
                 p2.append(VIS.Msg.getMsg('Summary'));
                 p2.append($("<br>"));
 
