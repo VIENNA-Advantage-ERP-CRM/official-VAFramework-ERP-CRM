@@ -325,6 +325,10 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("ImageUrl", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.ImageName = Utility.Util.GetValueOfString(dr[i]);
+                        if (vo.ImageName != "" && vo.ImageName.Contains("/"))
+                        {
+                            vo.ImageName = vo.ImageName.Substring(vo.ImageName.LastIndexOf("/") + 1);
+                        }
                     }
                     // new column added for maintain versions
                     else if (columnName.Equals("ISMAINTAINVERSIONS", StringComparison.OrdinalIgnoreCase))
