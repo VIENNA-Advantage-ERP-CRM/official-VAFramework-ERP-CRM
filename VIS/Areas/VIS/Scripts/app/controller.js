@@ -5593,6 +5593,11 @@
     GridField.prototype.getIsSelectionColumn = function () {
         return this.vo.IsSelectionColumn;
     };
+
+    GridField.prototype.getSelectionSeqNo = function () {
+        return this.vo.SelectionSeqNo;
+    };
+
     GridField.prototype.getIsIncludedColumn = function () {
         return this.vo.IsIncludedColumn;
     };
