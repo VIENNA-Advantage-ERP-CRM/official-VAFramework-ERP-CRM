@@ -140,6 +140,8 @@ namespace VAdvantage.Process
         {
             // create new version window
             MWindow verWnd = new MWindow(GetCtx(), 0, Get_TrxName());
+            verWnd.SetAD_Client_ID(0);
+            verWnd.SetAD_Org_ID(0);
             verWnd.SetName(DisplayName + "_" + TabName);
             verWnd.SetDisplayName(DisplayName);
             // set window as Query Only
