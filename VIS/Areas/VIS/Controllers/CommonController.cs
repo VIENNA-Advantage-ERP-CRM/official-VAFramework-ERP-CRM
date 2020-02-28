@@ -3362,7 +3362,7 @@ namespace VIS.Controllers
             List<string> dbColNames = new List<string>();
             List<object> oldValues = new List<object>();
             // create list of default columns for which Version change details not required
-            List<string> defColNames = new List<string>(new string[] { "Created", "CreatedBy", "Updated", "UpdatedBy" });
+            List<string> defColNames = new List<string>(new string[] { "Created", "CreatedBy", "Updated", "UpdatedBy", "Export_ID" });
             dynamic data = new ExpandoObject();
             string TableName = od.TName.Value;
             // Get original table name by removing "_Ver" suffix from the end
