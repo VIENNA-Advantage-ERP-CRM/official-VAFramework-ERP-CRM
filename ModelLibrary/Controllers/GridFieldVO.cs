@@ -345,7 +345,11 @@ namespace VAdvantage.Controller
                     }
                     else if (columnName.Equals("FieldGroupDefault", StringComparison.OrdinalIgnoreCase))
                     {
-                        vo.FieldGroupDefault= "Y".Equals(dr[i].ToString());
+                        vo.FieldGroupDefault = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("ShowFilterOption", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.ShowFilterOption = "Y".Equals(dr[i].ToString());
                     }
                 }
                 if (vo.Header == null)
@@ -838,6 +842,7 @@ namespace VAdvantage.Controller
             clone.FieldBreadth = FieldBreadth;
             clone.LineBreak = LineBreak;
             clone.FieldGroupDefault = FieldGroupDefault;
+            clone.ShowFilterOption = ShowFilterOption;
             return clone;
         }
 

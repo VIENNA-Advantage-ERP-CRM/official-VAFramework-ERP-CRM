@@ -6585,7 +6585,10 @@
     GridField.prototype.getIsFieldgroupDefault = function () {
         return this.vo.FieldGroupDefault;
     };
-
+    //
+    GridField.prototype.getShowFilterOption = function () {
+        return this.vo.ShowFilterOption;
+    };
 
     /**
      *  Refresh Lookup if the lookup is unstable

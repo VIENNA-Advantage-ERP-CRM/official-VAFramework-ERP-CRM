@@ -4,10 +4,10 @@
         this.curTabfields;
         var $root = $('<div class="main-fp-wrap">');
         this.curTab;
-        var bodyDiv;
+        var bodyDiv, divStatic;
         var that = this;
         this.inputWrapContainer = $('<div class="vis-fp-outerwrp"></div>');
-
+        var listOfFilterQueries = [];
 
         this.addRootToParent = function () {
             $root.append(this.inputWrapContainer);
@@ -19,7 +19,7 @@
         };
 
         this.setLayout = function () {
-           bodyDiv = $(' <div class="vis-fp-bodywrap"> </div>');
+            bodyDiv = $(' <div class="vis-fp-bodywrap"> </div>');
 
             //<div class="vis-fp-custcolumns" id="accordion">'
             //    + '<div class="card"><div class="card-header"><span>' + VIS.Msg.getMsg('Custom Condition') + '</span>'
@@ -39,14 +39,8 @@
             var $spanViewAll = $('<span>' + VIS.Msg.getMsg("ViewAll") + '</span>');
             divSpan.append($spanViewAll);
 
-            var divStatic = $('<div class="vis-fp-static-ctrlwrp">')
+            divStatic = $('<div class="vis-fp-static-ctrlwrp">')
             bodyDiv.append(divStatic.append(divSpan));
-
-
-            //this.inputWrapContainer.append(divSpan.append(cusLogDiv));
-
-            //<span>Invoice To Customer = Aleesha Stephen</span>
-            //<i class="vis vis-mark"></i>
 
             if (this.selectionfields && this.selectionfields.length > 0) {
                 for (var i = 0; i < this.selectionfields.length; i++) {
@@ -72,53 +66,119 @@
                             $divInputGroupAppend.append(btn);
                             inputWrap.append(btn);
                         }
-                        var that = this;
-
-                        $.ajax({
-                            type: "GET",
-                            url: VIS.Application.contextUrl + "JsonData/GetRecordForFilter",
-                            data: {
-                                keyCol: field.getLookup().info.keyColumn, displayCol: field.getLookup().info.displayColSubQ, validationCode: field.getLookup().info.validationCode
-                                , tableName: field.getLookup().info.tableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: field.gridTab.getTableName(), pColumnName: field.getColumnName()
-                            },
-                            success: function (data) {
-                                data = JSON.parse(data);
-                                var key = data["keyCol"];
-                                data = data["list"];
-                                if (data && data.length > 0) {
-                                    var fields = $('<div class="vis-fp-lst-searchrcrds"></div>')
-                                    var wrapper = divStatic.find('[data-cid="' + key + '_' + that.curTab.getAD_Tab_ID() + '"]');
-                                    wrapper.append(fields);
-                                    for (var i = 0; i < data.length; i++) {
-                                        var divinpuspanWrapper = $('<div class="vis-fp-inputspan">');
-                                        divinpuspanWrapper.append('<input class="vis-fp-chboxInput vis-fp-inputvalueForUpdate" type="checkbox" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"><span data-id="' + data[i].ID + '">' + data[i].Name + '</span><span class="vis-fp-spanCount">' + data[i].Count + '</span>');
-                                        fields.append(divinpuspanWrapper);
-                                    }
-                                }
-
-                            },
-                            error: function () { }
-                        });
-
-                        //var btn2 = crt.getBtn(1);
-                        //if (btn2) {
-                        //    var $divInputGroupAppend1 = $('<div class="input-group-append">');
-                        //    $divInputGroupAppend1.append(btn2);
-                        //    inputWrap.append($divInputGroupAppend1);
-                        //}
                     }
+                    updateSuggestions(field)
+
+                    //var btn2 = crt.getBtn(1);
+                    //if (btn2) {
+                    //    var $divInputGroupAppend1 = $('<div class="input-group-append">');
+                    //    $divInputGroupAppend1.append(btn2);
+                    //    inputWrap.append($divInputGroupAppend1);
+                    //}
                 }
                 bodyDiv.on("click", function (e) {
                     $target = $(e.target);
-
-                    changeVal($target);
+                    if ($target.is('input') && $target.hasClass('vis-fp-chboxInput')) {
+                        var currentColumnName = $target.data('column');
+                        changeVal(false, $target, currentColumnName);
+                    }
                 });
             }
         };
 
-        function changeVal($target) {
-            if ($target.hasClass('vis-fp-inputvalueForUpdate')) {
-                var whereClause = '';
+        function updateSuggestions(field, whereClause) {
+            if (field && field.getShowFilterOption()) {
+
+                var keyCol;
+                var displayCol;
+                var validationCode;
+                var lookupTableName;
+                if (field.getLookup()) {
+                    keyCol = field.getLookup().info.keyColumn;
+                    displayCol = field.getLookup().info.displayColSubQ;
+                    validationCode = field.getLookup().info.validationCode;
+                    lookupTableName = field.getLookup().info.tableName;
+                }
+                else {
+                    keyCol = "";
+                    displayCol = "";
+                    validationCode = "";
+                    lookupTableName = "";
+                }
+
+                var finalWhere = that.curTab.getWhereClause();
+                if (whereClause)
+                    finalWhere += " AND " + whereClause;
+
+                $.ajax({
+                    type: "GET",
+                    url: VIS.Application.contextUrl + "JsonData/GetRecordForFilter",
+                    data: {
+                        keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
+                        , tableName: lookupTableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: that.curTab.getTableName(), pColumnName: field.getColumnName(), whereClause: finalWhere
+                    },
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        var key = data["keyCol"];
+                        data = data["list"];
+                        if (data && data.length > 0) {
+                            var fields;
+                            var wrapper = divStatic.find('[data-cid="' + key + '_' + that.curTab.getAD_Tab_ID() + '"]');
+                            if (wrapper && wrapper.length > 0) {
+                                fields = wrapper.find('.vis-fp-lst-searchrcrds');
+                                var inputs = wrapper.find('input');
+                                if (inputs && inputs.length > 0) {
+                                    for (var a = 0; a < inputs.length; a++) {
+                                        if (!$(inputs[a]).is(':checked')) {
+                                            $(inputs[a]).parents('.vis-fp-inputspan').remove();
+                                        }
+                                    }
+                                }
+
+                            }
+                            if (!fields || fields.length == 0) {
+                                fields = $('<div class="vis-fp-lst-searchrcrds"></div>');
+                                wrapper.append(fields);
+                            }
+
+                            for (var i = 0; i < data.length; i++) {
+                                var divinpuspanWrapper = $('<div class="vis-fp-inputspan">');
+                                divinpuspanWrapper.append('<input class="vis-fp-chboxInput vis-fp-inputvalueForUpdate" type="checkbox" data-column="'+key+'" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"><span data-id="' + data[i].ID + '">' + data[i].Name + '</span><span class="vis-fp-spanCount">' + data[i].Count + '</span>');
+                                fields.append(divinpuspanWrapper);
+                            }
+                        }
+
+                    },
+                    error: function () { }
+                });
+            }
+        };
+
+
+        //CurrentColumn is column whose filter is just clicked...
+        function getQueryToUpdateSuggestion(currentColumnName) {
+            for (var i = 0; i < that.selectionfields.length; i++) {
+                if (that.selectionfields[i].getShowFilterOption()) {
+                    var field = that.selectionfields[i];
+                    if (field.getColumnName() != currentColumnName) {
+                        var whereClause = '';
+                        for (var j = 0; j < listOfFilterQueries.length; j++) {
+                            var query = listOfFilterQueries[j];
+                            if (query.columnName != field.getColumnName()) {
+                                whereClause += query.whereClause;
+                            }
+                        }
+                        updateSuggestions(field, whereClause);
+                    }
+
+                }
+            }
+        };
+
+        function changeVal($target, ignoreTarget, currentColumnName) {
+            if (ignoreTarget || $target.hasClass('vis-fp-inputvalueForUpdate')) {
+
+                var finalWhereClause = '';
                 var listOfDiv = bodyDiv.find('.vis-fp-inputgroupSeprtr');
                 if (listOfDiv && listOfDiv.length > 0) {
                     for (var i = 0; i < listOfDiv.length; i++) {
@@ -128,14 +188,33 @@
                         var col = selectedDiv.data('columnname');
 
                         if (listOfSelectedIDs && listOfSelectedIDs.length > 0) {
-                            if (i == 0)
-                                whereClause += '(';
-                            else
-                                whereClause += ') AND (';
+                            //if (i == 0)
+                            //    whereClause += '(';
+                            //else
+                            //    whereClause += ') AND (';
+
+                            if (finalWhereClause.length > 2) {
+                                finalWhereClause += ' AND ';
+                            }
+                            var whereClause = '';
                             var appendOR = false;
                             for (var j = 0; j < listOfSelectedIDs.length; j++) {
                                 var inputType = $(listOfSelectedIDs[j]);
                                 if (inputType.is('input') && !inputType.is(':checked')) {
+                                    if (j == listOfSelectedIDs.length - 1 && whereClause.length > 2) {
+                                        whereClause += ")";
+                                        if (listOfFilterQueries.length > 0) {
+                                            for (var k = 0; k < listOfFilterQueries.length; k++) {
+                                                if (listOfFilterQueries[k].columnName == col) {
+                                                    listOfFilterQueries[k].columnName = whereClause;
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            listOfFilterQueries.push({ 'columnName': col, 'whereClause': whereClause });
+                                        }
+                                        finalWhereClause += whereClause;
+                                    }
                                     continue;
                                 }
 
@@ -143,26 +222,43 @@
                                     whereClause += ' OR ' + col + ' =' + inputType.data('id');
                                 }
                                 else {
-                                    whereClause += col + '=' + inputType.data('id');
+                                    whereClause += "(" + col + '=' + inputType.data('id');
                                     appendOR = true;
+                                }
+
+                                if (j == listOfSelectedIDs.length - 1) {
+                                    whereClause += ")";
+                                    if (listOfFilterQueries.length > 0) {
+                                        for (var k = 0; k < listOfFilterQueries.length; k++) {
+                                            if (listOfFilterQueries[i].columnName == col) {
+                                                listOfFilterQueries[i].columnName = whereClause;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        listOfFilterQueries.push({ 'columnName': col, 'whereClause': whereClause });
+                                    }
+                                    finalWhereClause += whereClause;
                                 }
                             }
                         }
 
                     }
-                    if (whereClause.length > 2)
-                        whereClause += ')';
+                    if (finalWhereClause.length > 2)
+                        finalWhereClause += ')';
                     else
-                        whereClause = "";
+                        finalWhereClause = "";
                 }
                 var query = new VIS.Query(that.curTab.getTableName(), true);
-                query.addRestriction(whereClause);
+                query.addRestriction(finalWhereClause);
                 that.curTab.setQuery(query);
                 that.curGC.query(0, 0, null);
+
+                getQueryToUpdateSuggestion(currentColumnName);
             }
         }
 
-        
+
 
         this.vetoablechange = function (evt) {
             //data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID()
@@ -172,11 +268,20 @@
                 if (field.getColumnName() == evt.propertyName)
                     return field;
             });
-            var displayVal = field[0].lookup.getDisplay(evt.newValue);
+            var displayVal;
+            if (field[0].lookup)
+                displayVal = field[0].lookup.getDisplay(evt.newValue);
+            else
+                displayVal = evt.newValue;
+
             var spann = $('<span data-id="' + evt.newValue + '" class="vis-fp-inputvalueForUpdate" >' + displayVal + '</span>');
             var iconCross = $('<i data-id="' + evt.newValue + '" data-keyval="' + evt.propertyName + "_" + evt.newValue + '" class="vis vis-mark vis-fp-inputvalueForUpdate"></i></div></div>');
             wrapper.append($('<div class="vis-fp-currntrcrdswrap">').append($('<div class="vis-fp-currntrcrds">').append(spann).append(iconCross)));
-            changeVal(spann);
+            changeVal(false, spann, evt.propertyName);
+            iconCross.on("click", function () {
+                ($(this).parents('.vis-fp-currntrcrdswrap')[0]).remove();
+                changeVal(true, spann, evt.propertyName);
+            });
         };
 
         //Dispose and remove votable events too...
