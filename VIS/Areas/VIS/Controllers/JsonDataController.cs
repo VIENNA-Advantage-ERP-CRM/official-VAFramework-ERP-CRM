@@ -985,33 +985,50 @@ namespace VIS.Controllers
         }
 
         public ActionResult GetRecordForFilter(string keyCol, string displayCol, string validationCode, string tableName,
-            string AD_Referencevalue_ID, string pTableName, string pColumnName)
+            string AD_Referencevalue_ID, string pTableName, string pColumnName, string whereClause)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             string sql = null;
-            if (tableName.Equals("AD_Ref_List"))
+            if (keyCol == "")
             {
-                //sql = "SELECT " + keyCol + ", " + displayCol + " || '('|| count(" + keyCol + ") || ')' FROM " + tableName + " WHERE IsActive='Y'";
-                sql = "SELECT " + pColumnName + ", (Select Name from AD_REf_List where Value= " + pColumnName + " AND AD_Reference_ID=" + AD_Referencevalue_ID + ")  as name ,count(" + pColumnName + ")"
-                    + " FROM " + pTableName + " WHERE " + pTableName + ".IsActive='Y'";
+                sql = "SELECT " + pColumnName + ","+ pColumnName + " as Name, count(" + pColumnName + ") FROM " + pTableName;
                 sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
                 if (!string.IsNullOrEmpty(validationCode))
                     sql += " AND " + validationCode;
-
+                if (!string.IsNullOrEmpty(whereClause))
+                    sql += " AND " + whereClause;
                 sql += " GROUP BY " + pColumnName +
                          " ORDER BY count(" + pColumnName + ") desc) WHERE rownum <6";
             }
             else
             {
-                sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
-                    + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + tableName + "_ID"
-                    + " WHERE " + pTableName + ".IsActive='Y'";
-                sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
-                if (!string.IsNullOrEmpty(validationCode))
-                    sql += " AND " + validationCode;
-                sql += "GROUP BY " + keyCol + ", " + displayCol
-                    + "ORDER BY count(" + keyCol + ") desc) WHERE rownum <6";
+                if (tableName.Equals("AD_Ref_List"))
+                {
+                    //sql = "SELECT " + keyCol + ", " + displayCol + " || '('|| count(" + keyCol + ") || ')' FROM " + tableName + " WHERE IsActive='Y'";
+                    sql = "SELECT " + pColumnName + ", (Select Name from AD_REf_List where Value= " + pColumnName + " AND AD_Reference_ID=" + AD_Referencevalue_ID + ")  as name ,count(" + pColumnName + ")"
+                        + " FROM " + pTableName + " WHERE " + pTableName + ".IsActive='Y'";
+                    sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
+                    if (!string.IsNullOrEmpty(validationCode))
+                        sql += " AND " + validationCode;
+                    if (!string.IsNullOrEmpty(whereClause))
+                        sql += " AND " + whereClause;
+                    sql += " GROUP BY " + pColumnName +
+                             " ORDER BY count(" + pColumnName + ") desc) WHERE rownum <6";
+                }
+                else
+                {
+                    sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
+                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + tableName + "_ID"
+                        + " WHERE " + pTableName + ".IsActive='Y'";
+                    sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
+                    if (!string.IsNullOrEmpty(validationCode))
+                        sql += " AND " + validationCode;
+                    if (!string.IsNullOrEmpty(whereClause))
+                        sql += " AND " + whereClause;
+                    sql += "GROUP BY " + keyCol + ", " + displayCol
+                        + "ORDER BY count(" + keyCol + ") desc) WHERE rownum <6";
 
+                }
             }
 
             Dictionary<string, object> result = new Dictionary<string, object>();
@@ -1024,7 +1041,7 @@ namespace VIS.Controllers
                     FilterDataContract val = new FilterDataContract();
                     val.ID = Convert.ToString(ds.Tables[0].Rows[i][0]);
                     val.Name = Convert.ToString(ds.Tables[0].Rows[i][1]);
-                    val.Count= Convert.ToInt32(ds.Tables[0].Rows[i][2]);
+                    val.Count = Convert.ToInt32(ds.Tables[0].Rows[i][2]);
                     keyva.Add(val);
                 }
             }

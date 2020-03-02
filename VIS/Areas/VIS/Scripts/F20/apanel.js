@@ -112,7 +112,7 @@
         this.isSummaryVisible = false;
         //private 
         var $divContentArea, $ulNav, $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
-        var $txtSearch, $imgSearch, $btnClrSearch, $imgdownSearch;
+        var $txtSearch, $imgSearch, $btnClrSearch, $imgdownSearch, $imgFilter;
         var $root, $busyDiv;
         var $ulRightBar2; //right bar
         var $btnlbToggle, $ulactionbar, $uldynactionbar, $divlbMain, $divlbNav; //right bar
@@ -174,6 +174,7 @@
             $txtSearch = $root.find(".vis-ad-w-p-tb-s-input");
             $btnClrSearch = $root.find(".vis-ad-w-p-tb-s-icon");
             $imgdownSearch = $root.find(".vis-ad-w-p-tb-s-icon-down");
+            $imgFilter = $root.find(".fa-filter");
 
             $txtSearch.attr('placeholder', VIS.Msg.getMsg("Search"));
             // Mohit - Shortcut as title.
