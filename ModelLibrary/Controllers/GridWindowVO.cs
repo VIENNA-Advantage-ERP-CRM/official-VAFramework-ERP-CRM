@@ -350,6 +350,10 @@ namespace VAdvantage.Controller
                             vo.IsRoleCenterView = !("N".Equals(dr[33].ToString()));
                             vo.FontName= dr[34].ToString();
                             vo.ImageUrl = dr[35].ToString();
+                            if (vo.ImageUrl != "" && vo.ImageUrl.Contains("/"))
+                            {
+                                vo.ImageUrl = vo.ImageUrl.Substring(vo.ImageUrl.LastIndexOf("/") + 1);
+                            }
                             vo.IsCompositeView = dr[36].ToString() == "Y";
                         }
                     }

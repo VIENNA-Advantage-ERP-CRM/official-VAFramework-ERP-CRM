@@ -1828,6 +1828,8 @@
     GridTab.prototype.dataIgnore = function () {
         if (this.gridTable.dataIgnore(true)) {
             this.setCurrentRow(this.currentRow, false);    //  re-load data
+            if (this.currentRow < 0)
+                this.currentRow = 0;
             this.gridTable.fireDataStatusIEvent("Ignored", "");
         }
 
