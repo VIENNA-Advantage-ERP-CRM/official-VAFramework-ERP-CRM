@@ -144,6 +144,9 @@
     .vis-ev-col-end4 {
         grid-column-end: 5;
     }
+    .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-o-b-content > div {
+        position: relative;
+    }
 
     /*Single layout*/
 }

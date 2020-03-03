@@ -1420,8 +1420,12 @@ li.vis-page-item-select {
 
 .vis-ad-w-p-ap-tp-o-b-content {
     height: calc(100% - 30px);
+    position: relative;
+    overflow: auto;
 }
-
+.vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-o-b-content > div {
+    position: absolute;
+}
 .vis-ad-w-p-a-oflow span {
     width: 100%;
     cursor: pointer;

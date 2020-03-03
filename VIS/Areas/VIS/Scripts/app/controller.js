@@ -397,6 +397,7 @@
         this.gridTable.onlyCurrentDays = this.vo.onlyCurrentDays;
         // Maintain version on approval property on tab
         this.gridTable.MaintainVerOnApproval = this.vo.MaintainVerOnApproval;
+        this.gridTable.IsMaintainVersions = this.vo.IsMaintainVersions;
 
         this.parents = [];
         this.orderBys = [];
@@ -1845,7 +1846,7 @@
         return retValue;
     };
 
-    
+
 
 
     GridTab.prototype.findColumn = function (columnName) {
@@ -4067,7 +4068,7 @@
         }
 
         // check if this is master window and if there is change in maintain version field
-        if (this.onlyCurrentDays == 0 && this.maintainVersionFieldChanged(RowData, OldRowData)) {
+        if (this.onlyCurrentDays == 0 && (this.IsMaintainVersions || this.maintainVersionFieldChanged(RowData, OldRowData))) {           
             var self = this;
             // in case of new record in Master Version window
             if (OldRowData["updatedby"] == null) {
@@ -4081,7 +4082,8 @@
                 // then do not save in Master window and reset 
                 // and display message to user
                 if (out.Status == "E") {
-                    VIS.ADialog.info(out.ErrorMsg);
+                    if (!(out.FireEEvent || out.FireIEvent))
+                        VIS.ADialog.info(out.ErrorMsg);
                 }
                 else if (out.Status == "W") {
                     VIS.ADialog.info("SentForApproval");
@@ -4094,40 +4096,59 @@
                 return out.Status;
             }
             else {
-                // in case of update display UI to user, 
-                // whether user want to save immediately or for future
-                var msVer = new VIS.MasterDataVersion(this.gTable._tableName, this.gridFields, Record_ID, gridTableIn.WhereClause, function (immediate, valFrom, verRecID) {
-                    gridTableIn.MaintainVersions = true;
-                    gridTableIn.ImmediateSave = immediate;
-                    gridTableIn.ValidFrom = new Date(valFrom).toISOString();
-                    gridTableIn.VerRecID = verRecID;
-                    var out = self.dataSaveDB(gridTableIn, rowDataNew);
-                    // if Stauts is not OK
-                    if (out.Status != "O") {
-                        // if there is any error then display error message
-                        if (out.Status == "E") {
-                            VIS.ADialog.info(out.ErrorMsg);
+                // applied check for checking future versions
+                // if found any records then ask for confirmation to proceed
+                var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Common/CheckVersions", { RowData: gridTableIn });
+                if (res.result) {
+                    VIS.ADialog.confirm("FoundVersions", true, "", "Confirm", function (result) {
+                        if (result) {
+                            self.showVersions(self, Record_ID, gridTableIn, rowDataNew);
                         }
-                        else {
-                            // in case of sucess refresh UI
-                            self.dataRefreshAll();
-                            // if sent for WF Approval then display Message
-                            if (out.Status == "W")
-                                VIS.ADialog.info("SentForApproval");
-                            // if saved for future then display Message and refresh UI
-                            else if (out.Status == "F")
-                                VIS.ADialog.info("SavedForFuture");
-                        }
-                    }
-                    return out.Status;
-                });
-                msVer.show();
+                    });
+                }
+                else {
+                    // in case of update display UI to user, 
+                    // whether user want to save immediately or for future
+                    self.showVersions(self, Record_ID, gridTableIn, rowDataNew);
+                }
             }
         }
         else {
             var out = this.dataSaveDB(gridTableIn, rowDataNew);
             return out.Status;
         }
+    };
+
+    GridTable.prototype.showVersions = function (slf, rec_ID, gTblIn, rdNew) {
+        // in case of update display UI to user, 
+        // whether user want to save immediately or for future
+        var msVer = new VIS.MasterDataVersion(slf.gTable._tableName, slf.gridFields, rec_ID, gTblIn.WhereClause, slf.IsMaintainVersions, function (immediate, valFrom, verRecID) {
+            gTblIn.MaintainVersions = true;
+            gTblIn.ImmediateSave = immediate;
+            gTblIn.ValidFrom = new Date(valFrom).toISOString();
+            gTblIn.VerRecID = verRecID;
+            var out = slf.dataSaveDB(gTblIn, rdNew);
+            // if Stauts is not OK
+            if (out.Status != "O") {
+                // if there is any error then display error message
+                if (out.Status == "E") {
+                    if (!(out.FireEEvent || out.FireIEvent))
+                        VIS.ADialog.info(out.ErrorMsg);
+                }
+                else {
+                    // in case of sucess refresh UI
+                    slf.dataRefreshAll();
+                    // if sent for WF Approval then display Message
+                    if (out.Status == "W")
+                        VIS.ADialog.info("SentForApproval");
+                    // if saved for future then display Message and refresh UI
+                    else if (out.Status == "F")
+                        VIS.ADialog.info("SavedForFuture");
+                }
+            }
+            return out.Status;
+        });
+        msVer.show();
     };
 
     GridTable.prototype.dataSaveDB = function (gridTableIn, rowDataNew) {
@@ -4571,7 +4592,7 @@
 
             //	Is this record deletable?
             if (!localthis.deleteable) {
-                tlocalthishis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
+                localthis.fireDataStatusEEvent("AccessNotDeleteable", "", true);	//	audit
                 resolve(false);
                 return;
             }
@@ -4687,7 +4708,7 @@
             {
                 this.fireDataStatusEEvent("CannotDeleteTrx", "", true);
                 resolve(false);
-                return ;
+                return;
             }
         });
     };

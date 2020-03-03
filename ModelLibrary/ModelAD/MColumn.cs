@@ -879,11 +879,17 @@ namespace VAdvantage.Model
                     // check whether version table exists in database
                     if (dt != null && dt.Tables[0] != null && dt.Tables[0].Rows.Count > 0)
                     {
-                        sb.Append("SELECT COUNT(AD_Client_ID) FROM " + tableName + "_Ver");
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx())) > 0)
+                        MTable tblVer = MTable.Get(GetCtx(), tableName + "_Ver");
+                        if (tblVer.HasVersionData(tableName + "_Ver"))
                         {
-                            log.SaveError("VDE", Utility.Msg.GetElement(GetCtx(), "VersionDataExists"));
-                            return false;
+                            // if Maintain Version is marked on Table Level then allow to remove Maintain Version from Column
+                            if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM AD_Table WHERE AD_Table_ID = " + GetAD_Table_ID(), null, Get_Trx())) == "Y")
+                                return true;
+                            else
+                            {
+                                log.SaveError("VersionDataExists", Utility.Msg.GetElement(GetCtx(), "VersionDataExists"));
+                                return false;
+                            }
                         }
                     }
                 }

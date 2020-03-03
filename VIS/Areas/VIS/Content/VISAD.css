@@ -123,21 +123,22 @@
     height: 42px;
 }
 
-.vis-awindow-header p, .vis-awindow-header h1{
-    margin: 0px;
-    padding: 10px 10px 0px 10px;
-    font-size: 14px;
-    /*font-weight: bold;*/
-    display: inline-block;
-    color: rgba(var(--v-c-on-primary), 1);
-    white-space: nowrap;
-}
-.vis-awindow-header p {
-    /*margin: 0px;
+    .vis-awindow-header p, .vis-awindow-header h1 {
+        margin: 0px;
+        padding: 10px 10px 0px 10px;
+        font-size: 14px;
+        /*font-weight: bold;*/
+        display: inline-block;
+        color: rgba(var(--v-c-on-primary), 1);
+        white-space: nowrap;
+    }
+
+    .vis-awindow-header p {
+        /*margin: 0px;
     padding: 10px 10px 0px 10px;
     font-size: 14px;*/
-    /*font-weight: bold;*/
-    /*display: inline-block;
+        /*font-weight: bold;*/
+        /*display: inline-block;
     color: rgba(var(--v-c-on-primary), 1);
     white-space: nowrap;*/
     }
@@ -1014,7 +1015,7 @@
 }
 
 .vis-gc-vpanel-table button {
-    /*margin-bottom: 20px;*/ 
+    /*margin-bottom: 20px;*/
 }
 
 .vis-gc-vpanel-table-btn-blue {
@@ -3047,13 +3048,14 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
 .vis-cdv-customokcancle {
     float: right;
 }
-.vis-cdv-customokcancle button{
-    float: left;
-    background-color: rgba(var(--v-c-primary), 1);
-    color: rgba(var(--v-c-on-primary), 1);
-    padding: 6px 12px;
-    border: none;
-}
+
+    .vis-cdv-customokcancle button {
+        float: left;
+        background-color: rgba(var(--v-c-primary), 1);
+        color: rgba(var(--v-c-on-primary), 1);
+        padding: 6px 12px;
+        border: none;
+    }
 
 html[dir="rtl"] .vis-cvd-btn {
     background-color: transparent;
@@ -4583,17 +4585,73 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     border: none;
 }
 
-/********************** MASTER DATA VERSIONS **********************/
-
-
-/********************** Validate Table Columns **********************/
-.vis-val-tc-mainwrap {
-    /*max-height: 450px;*/
+.vis-mas-verinf-wrap {
+    height: 100%;
     width: 100%;
-    overflow: auto;
-    min-height: 300px;
-    padding-top: 10px;
+    padding: 15px
 }
+.vis-mas-verinf-CngCtr {
+    width: 100%;
+    height: calc(100% - 36px);
+    background-color: rgba(var(--v-c-secondary), 1);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.vis-mas-verinf-hdrCtr {
+    width: 100%;
+    /* height: 31px; */
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+    font-size: larger;
+    font-weight: bold;
+    color: rgba(var(--v-c-on-secondary), .9);
+    display: flex;
+}
+.vis-mas-verinf-hdrsLft, .vis-mas-verinf-hdrsRgt {
+    flex: 1;
+    padding: 5px;
+}
+.vis-mas-verinf-hdrsLft {
+    /*border-right: 1px solid rgba(var(--v-c-on-secondary), .2);*/
+}
+.vis-mas-verinf-cntCtr {
+    width: 100%;
+    /* height: 31px; */
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /* padding-top: 4px; */
+}
+.vis-mas-verinf-cnt {
+    width: 50%;
+    float: left;
+    padding-left: 10px;
+    color: rgba(var(--v-c-on-secondary), .9);
+    padding: 5px 10px;
+    word-break: break-word;
+}
+
+.vis-mas-verinf-newrecord {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.vis-mas-verinf-cnt:first-child {
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
+}
+
+.vis-mas-verinf-cnt:last-child {
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .2);
+    margin-left: -1px;
+}
+    /********************** MASTER DATA VERSIONS **********************/
+    /********************** Validate Table Columns **********************/
+    .vis-val-tc-mainwrap {
+        /*max-height: 450px;*/
+        width: 100%;
+        overflow: auto;
+        min-height: 300px;
+        padding-top: 10px;
+    }
 
 .vis-val-tc-col-red-r {
     width: 50%;
@@ -4687,11 +4745,13 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     overflow: hidden;
     white-space: nowrap;
 }
-.vis-act-frm-parm{
+
+.vis-act-frm-parm {
     width: 100%;
     display: flex;
 }
-.vis-act-frm-parm input, .vis-act-frm-parm select{
-    flex: 1;
-}
+
+    .vis-act-frm-parm input, .vis-act-frm-parm select {
+        flex: 1;
+    }
 /********************** Validate Table Columns **********************/

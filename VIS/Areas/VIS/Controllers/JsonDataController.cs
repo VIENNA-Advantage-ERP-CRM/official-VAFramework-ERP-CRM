@@ -981,6 +981,21 @@ namespace VIS.Controllers
             WindowHelper obj = new WindowHelper();
             return Json(JsonConvert.SerializeObject(obj.GetZoomParentRecord(SelectColumn, SelectTable, WhereColumn, WhereValue)), JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Controller function to fetch Version details
+        /// </summary>
+        /// <param name="RowData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult GetVerInfo(string RowData)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            dynamic od = JsonConvert.DeserializeObject(RowData);            
+            CommonModel cm = new CommonModel();
+            var retRes = cm.GetVerDetails(ctx, od);
+            return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
+        }
     }
 
 

@@ -24,10 +24,11 @@ namespace VAdvantage.Process
     {
         #region Private Variables
         private int _AD_Tab_ID = 0;
-        public List<String> listDefVerCols = new List<String> { "VersionValidFrom", "IsVersionApproved", "ProcessedVersion", "RecordVersion", "Processed", "Processing", "VersionLog" };
-        public List<int> listDefVerRef = new List<int> { 15, 20, 20, 11, 20, 20, 14 };
-        public List<String> listDefVerValues = new List<String> { "Created", "'Y'", "'Y'", "1", "'Y'", "'N'", "''" };
+        public List<String> listDefVerCols = new List<String> { "VersionValidFrom", "IsVersionApproved", "ProcessedVersion", "RecordVersion", "Processed", "Processing", "VersionLog", "OldVersion" };
+        public List<int> listDefVerRef = new List<int> { 15, 20, 20, 11, 20, 20, 14, 11 };
+        public List<String> listDefVerValues = new List<String> { "Created", "'Y'", "'Y'", "1", "'Y'", "'N'", "''", "''" };
         private List<int> _listDefVerElements = new List<int>();  //{ 617, 351, 1047, 524, 624 };
+        private string className = "VIS.verinfo";
         #endregion Private Variables
 
         /// <summary>
@@ -67,10 +68,13 @@ namespace VAdvantage.Process
             // Created object of MTab with Tab ID (either selected from parameter or from Record ID)
             MTab tab = new MTab(GetCtx(), _AD_Tab_ID, Get_TrxName());
 
-            // Checked whether there are any columns with the table which is marked as "Maintain Versions"
-            // if no such column found then return message
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = " + tab.GetAD_Table_ID() + " AND IsMaintainVersions = 'Y'", null, Get_TrxName())) <= 0)
-                return Msg.GetMsg(GetCtx(), "NoVerColFound");
+            if (!(Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM AD_Table WHERE AD_Table_ID = " + tab.GetAD_Table_ID(), null, Get_TrxName())) == "Y"))
+            {
+                // Checked whether there are any columns with the table which is marked as "Maintain Versions"
+                // if no such column found then return message
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = " + tab.GetAD_Table_ID() + " AND IsMaintainVersions = 'Y'", null, Get_TrxName())) <= 0)
+                    return Msg.GetMsg(GetCtx(), "NoVerColFound");
+            }
 
             // Always called this function so that in case if new column is added
             // to table this function creates new columns to table
@@ -109,6 +113,11 @@ namespace VAdvantage.Process
             // if version tab do not exist, then create new version tab
             if (Ver_AD_Tab_ID <= 0)
                 Ver_AD_Tab_ID = CreateVerTab(tab, Ver_AD_Window_ID, Ver_AD_Table_ID);
+            else
+            {
+                MTab verTab = new MTab(GetCtx(), Ver_AD_Tab_ID, Get_TrxName());
+                CreateVerTabPanel(verTab);
+            }
 
             // if version tab not found then return message
             if (Ver_AD_Tab_ID <= 0)
@@ -131,6 +140,8 @@ namespace VAdvantage.Process
         {
             // create new version window
             MWindow verWnd = new MWindow(GetCtx(), 0, Get_TrxName());
+            verWnd.SetAD_Client_ID(0);
+            verWnd.SetAD_Org_ID(0);
             verWnd.SetName(DisplayName + "_" + TabName);
             verWnd.SetDisplayName(DisplayName);
             // set window as Query Only
@@ -197,7 +208,35 @@ namespace VAdvantage.Process
                 Get_TrxName().Rollback();
                 return 0;
             }
+            else
+                CreateVerTabPanel(verTab);
+
             return verTab.GetAD_Tab_ID();
+        }
+
+        /// <summary>
+        /// Create tab panel for Version window's Tab
+        /// </summary>
+        /// <param name="tab"></param>
+        public void CreateVerTabPanel(MTab tab)
+        {
+            int AD_TabPanel_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_TabPanel_ID FROM AD_TabPanel WHERE Classname = '" + className + "' AND AD_Tab_ID = " + tab.GetAD_Tab_ID(), null, null));
+            if (AD_TabPanel_ID <= 0)
+            {
+                MTabPanel tbPnl = new MTabPanel(GetCtx(), 0, Get_TrxName());
+                tbPnl.SetAD_Client_ID(tab.GetAD_Client_ID());
+                tbPnl.SetAD_Org_ID(tab.GetAD_Org_ID());
+                tbPnl.SetAD_Tab_ID(tab.GetAD_Tab_ID());
+                tbPnl.SetAD_Window_ID(tab.GetAD_Window_ID());
+                tbPnl.SetClassname(className);
+                tbPnl.SetName(tab.GetName() + " " + Msg.GetMsg(GetCtx(), "VersionHistory"));
+                tbPnl.SetIsDefault(true);
+                tbPnl.SetSeqNo(Util.GetValueOfInt(DB.ExecuteScalar("SELECT (NVL(MAX(SeqNo), 0) + 10) FROM AD_TabPanel WHERE AD_Tab_ID = " + tab.GetAD_Tab_ID(), null, null)));
+                if (!tbPnl.Save())
+                {
+                    log.SaveError("MasterVerField", "Tab Panel data not created");
+                }
+            }
         }
 
         /// <summary>
@@ -274,26 +313,36 @@ namespace VAdvantage.Process
                         return Msg.GetMsg(GetCtx(), "ColumnNameNotFound") + " :: " + origFld.GetAD_Column_ID();
                     }
 
-                    // Create Field for Column, copy field from Master tables Field tab on Version Field against Version Tab
-                    MField verFld = new MField(GetCtx(), 0, Get_TrxName());
-                    origFld.CopyTo(verFld);
-                    verFld.SetAD_Tab_ID(Ver_AD_Tab_ID);
-                    verFld.SetAD_Column_ID(VerColID);
-                    if (!verFld.Save())
+                    // Only create Version Field if Version Column found
+                    if (VerColID > 0)
                     {
-                        ValueNamePair vnp = VLogger.RetrieveError();
-                        string error = "";
-                        if (vnp != null)
+                        // check if field is already created with column
+                        // else skip creating field
+                        int fldID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Field_ID FROM AD_Field WHERE AD_Column_ID = " + VerColID + " AND AD_Tab_ID = " + Ver_AD_Tab_ID, null, Get_TrxName()));
+                        if (fldID <= 0)
                         {
-                            error = vnp.GetName();
-                            if (error == "" && vnp.GetValue() != null)
-                                error = vnp.GetValue();
+                            // Create Field for Column, copy field from Master tables Field tab on Version Field against Version Tab
+                            MField verFld = new MField(GetCtx(), 0, Get_TrxName());
+                            origFld.CopyTo(verFld);
+                            verFld.SetAD_Tab_ID(Ver_AD_Tab_ID);
+                            verFld.SetAD_Column_ID(VerColID);
+                            if (!verFld.Save())
+                            {
+                                ValueNamePair vnp = VLogger.RetrieveError();
+                                string error = "";
+                                if (vnp != null)
+                                {
+                                    error = vnp.GetName();
+                                    if (error == "" && vnp.GetValue() != null)
+                                        error = vnp.GetValue();
+                                }
+                                if (error == "")
+                                    error = "Error in creating Version Field";
+                                log.Log(Level.SEVERE, "Version Field not saved :: " + verFld.GetName() + " :: " + error);
+                                Get_TrxName().Rollback();
+                                return Msg.GetMsg(GetCtx(), "FieldNotSaved") + " :: " + verFld.GetName();
+                            }
                         }
-                        if (error == "")
-                            error = "Error in creating Version Field";
-                        log.Log(Level.SEVERE, "Version Field not saved :: " + verFld.GetName() + " :: " + error);
-                        Get_TrxName().Rollback();
-                        return Msg.GetMsg(GetCtx(), "FieldNotSaved") + " :: " + verFld.GetName();
                     }
                 }
             }

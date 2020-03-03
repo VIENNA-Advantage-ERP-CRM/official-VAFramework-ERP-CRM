@@ -894,6 +894,10 @@ html[dir="rtl"] ul.vis-IIColumnContent li {
             color: rgba(var(--v-c-primary), 1);
         }
 
+        .vis-activityContainer .vis-feedDetails:hover pre {
+            color: rgba(var(--v-c-primary), 1);
+        }
+
     .vis-activityContainer:hover {
         border-color: rgba(var(--v-c-primary), 1);
     }
@@ -1011,6 +1015,23 @@ html[dir="rtl"] .userAvatar-Feeds {
 }
 
     .vis-feedDetails p strong {
+        color: rgba(var(--v-c-primary), 1);
+        font-weight: normal;
+        cursor: pointer;
+        padding-bottom: 2px;
+    }
+
+.vis-feedDetails pre {
+    font-size: 12px;
+    color: rgba(var(--v-c-on-secondary), 1);
+    display: inline;
+    /*padding-left: 10px;*/
+    margin: 0;
+    width: 100%;
+    font-family: 'NoirPro-Regular' !important;
+}
+
+    .vis-feedDetails pre strong {
         color: rgba(var(--v-c-primary), 1);
         font-weight: normal;
         cursor: pointer;

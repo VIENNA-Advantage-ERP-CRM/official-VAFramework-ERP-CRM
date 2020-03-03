@@ -624,6 +624,26 @@ namespace VAdvantage.Model
         {
             return test.Equals("M") || test.Equals("N") || test.Equals("O");
         }
+
+        /** Set Maintain Versions.
+       @param IsMaintainVersions Versioning will be maintained for the columns marked as maintain versions */
+        public void SetIsMaintainVersions(Boolean IsMaintainVersions)
+        {
+            Set_Value("IsMaintainVersions", IsMaintainVersions);
+        }
+        /** Get Maintain Versions.
+        @return Versioning will be maintained for the columns marked as maintain versions */
+        public Boolean IsMaintainVersions()
+        {
+            Object oo = Get_Value("IsMaintainVersions");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
     }
 
     public class X_Ref_AD_Table_SubTableType
@@ -666,8 +686,6 @@ namespace VAdvantage.Model
                 return true;
 
             return false;
-        }
+        }       
     }
-
-
 }

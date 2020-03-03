@@ -219,6 +219,10 @@ namespace VAdvantage.Process
             bool hasMainVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + column.GetAD_Table_ID() + " AND IsActive ='Y' AND IsMaintainVersions = 'Y'", null, Get_Trx())) > 0;
             // check whether there are any columns in the table
             // marked as "Maintain Versions", then proceed else return
+
+            if(!hasMainVerCol)
+                hasMainVerCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM AD_Table WHERE AD_Table_ID = " + column.GetAD_Table_ID(), null, Get_Trx())) == "Y";
+
             string versionMsg = "";
             if (hasMainVerCol)
             {

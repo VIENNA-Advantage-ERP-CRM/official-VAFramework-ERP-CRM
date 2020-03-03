@@ -3079,7 +3079,7 @@
                 if (manual && !retValue && !selfPanel.errorDisplayed) {
 
                 }
-                this.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
+                selfPanel.curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
                 if (manual)
                     selfPanel.curGC.dynamicDisplay(-1);
 
