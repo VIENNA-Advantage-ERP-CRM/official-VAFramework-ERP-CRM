@@ -80,7 +80,13 @@
 
         this.setPanelList = function (htm, defPnlId) {
             $ulIconList.append(htm);
-            setContent($($ulIconList.find('li[data-panelid="' + defPnlId + '"]')));
+            var defaultPanel = $ulIconList.find("[default='true']").first();
+            if (defaultPanel && defaultPanel.length > 0) {
+                defaultPanel.trigger("click");
+            }
+            else {
+                setContent(null);
+            }
         };
 
         this.setSize = function (size) {
