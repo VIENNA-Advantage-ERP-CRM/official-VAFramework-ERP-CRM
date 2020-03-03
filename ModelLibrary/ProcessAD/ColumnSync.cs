@@ -432,15 +432,15 @@ namespace VAdvantage.Process
                                     && (PKTableNameDB != null) && (PKTableNameDB.ToString().Equals(PKTableName.ToString(), StringComparison.OrdinalIgnoreCase))
                                     && (PKColumnNameDB != null) && (PKColumnNameDB.ToString().Equals(PKColumnName.ToString(), StringComparison.OrdinalIgnoreCase))
                                     && ((constraintTypeDB == DatabaseMetaData.importedKeyRestrict) &&
-                                            (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType)
-                                                    || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType))))
+                                            (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType.ToString())
+                                                    || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType.ToString()))))
                                                     ||
                                                     ((constraintTypeDB == DatabaseMetaData.importedKeyCascade) &&
-                                                            (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType)
-                                                                    || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType)))
+                                                            (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType.ToString())
+                                                                    || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType.ToString())))
                                                                     ||
                                                                     ((constraintTypeDB == DatabaseMetaData.importedKeySetNull) &&
-                                                                            (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType)))
+                                                                            (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType.ToString())))
 
                             )
                             {
@@ -469,25 +469,25 @@ namespace VAdvantage.Process
                                 /* Now create the sql foreign key constraint */
                                 sql = new StringBuilder("ALTER TABLE ")
                                     .Append(TableName)
-                                    .Append(" ADD CONSTRAINT ").Append(ConstraintName)
-                                    .Append(" FOREIGN KEY (").Append(ColumnName)
-                                    .Append(") REFERENCES ").Append(PKTableName)
-                                    .Append(" (").Append(PKColumnName).Append(")");
+                                    .Append(" ADD CONSTRAINT ").Append(ConstraintName.ToString())
+                                    .Append(" FOREIGN KEY (").Append(ColumnName.ToString())
+                                    .Append(") REFERENCES ").Append(PKTableName.ToString())
+                                    .Append(" (").Append(PKColumnName.ToString()).Append(")");
                                 Boolean createfk = true;
                                 if (!String.IsNullOrEmpty(ConstraintType.ToString()))
                                 {
-                                    if (X_AD_Column.CONSTRAINTTYPE_DoNOTCreate.Equals(ConstraintType))
+                                    if (X_AD_Column.CONSTRAINTTYPE_DoNOTCreate.Equals(ConstraintType.ToString()))
                                         createfk = false;
-                                    else if (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType)
-                                        || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType))
+                                    else if (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType.ToString())
+                                        || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType.ToString()))
                                     {
                                         ;
                                     }
-                                    else if (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType)
-                                        || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType))
+                                    else if (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType.ToString())
+                                        || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType.ToString()))
                                         sql.Append(" ON DELETE CASCADE");
-                                    else if (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType)
-                                        || X_AD_Column.CONSTRAINTTYPE_NullTrigger.Equals(ConstraintType))
+                                    else if (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType.ToString())
+                                        || X_AD_Column.CONSTRAINTTYPE_NullTrigger.Equals(ConstraintType.ToString()))
                                         sql.Append(" ON DELETE SET NULL");
                                 }
                                 else
