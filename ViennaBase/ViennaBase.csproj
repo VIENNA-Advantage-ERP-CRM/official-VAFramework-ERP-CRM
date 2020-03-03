@@ -286,6 +286,14 @@
     <Content Include="Areas\ViennaBase\Content\fonts\vis.eot" />
     <Content Include="Areas\ViennaBase\Content\fonts\vis.ttf" />
     <Content Include="Areas\ViennaBase\Content\fonts\vis.woff" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Bold.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Italic.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Light.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Medium.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-MediumItalic.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Regular.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-SemiBold.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-SemiBoldItalic.ttf" />
     <None Include="Areas\ViennaBase\Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\ActiveXControls\PrintControl.cab" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\ActiveXControls\PrintControl_res_cs.cab" />

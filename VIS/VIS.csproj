@@ -558,6 +558,7 @@
     <Content Include="Areas\VIS\Images\orderedList1.png" />
     <Content Include="Areas\VIS\Images\orderedList2.png" />
     <Content Include="Areas\VIS\Images\pdf.png" />
+    <Content Include="Areas\VIS\Images\plug-img.png" />
     <Content Include="Areas\VIS\Images\ppt-ico.png" />
     <Content Include="Areas\VIS\Images\ppt.png" />
     <Content Include="Areas\VIS\Images\Preference16.png" />

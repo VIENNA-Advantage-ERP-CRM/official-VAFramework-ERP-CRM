@@ -11,11 +11,11 @@
     /* common*/
     --v-c-common: 255,255,255;
     --v-c-on-common: 0,0,0;
-
-
-    --v-c-mandatory:236,63,63;
-    --v-c-readonly:241,241,241;
-
+    --v-c-mandatory: 236,63,63;
+    --v-c-readonly: 241,241,241;
+    /*font family*/
+    --v-c-font-family: 'NoirPro-Regular', sans-serif;
+    /*--v-c-font-family: 'Montserrat-Regular', sans-serif;*/
 }
 
 
