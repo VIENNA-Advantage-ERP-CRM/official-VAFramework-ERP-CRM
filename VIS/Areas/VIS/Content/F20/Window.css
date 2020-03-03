@@ -412,6 +412,9 @@
     color: rgba(var(--v-c-on-secondary), 1);
     cursor: pointer;
 }
+span.vis-ad-w-p-tb-rc-action {
+    margin-right: 0;
+}
 .vis-ad-w-p-inc-tab-ac-buttons .dropdown-toggle:after {
     margin-left: 0px;
     margin-right: 5px;
