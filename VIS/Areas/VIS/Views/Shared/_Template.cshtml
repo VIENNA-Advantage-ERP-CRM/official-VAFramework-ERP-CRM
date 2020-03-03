@@ -290,3 +290,39 @@
         </div>
     </div>
 </template>
+
+
+<template id="vis-ad-fptmp">
+    <div class="vis-fp-outerwrp">
+        <div class="vis-fp-header"><h4> Filter</h4><i class="vis vis-mark"></i></div>
+        <div class="vis-fp-bodywrap">
+            <div class="vis-fp-static-ctrlwrp">
+                <div class="vis-fp-viwall">
+                    <span>[ViewAll]</span>
+                </div>
+                @*controls*@
+            </div>
+            <div class="vis-fp-custcolumns" id="accordion">
+                <div class="card">
+                    <div class="card-header">
+                        <span>[Custom Condition]</span>
+                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                            <i class="vis vis-arrow-up"></i>
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                        <div class="card-body">
+                            @*Custom controls .....*@ 
+                        </div>
+                    </div>
+                </div>
+                <div class="vis-fp-custcoltagswrp">
+                    <div class="vis-fp-custcoltag">
+                        @*<span>Invoice To Customer = Aleesha Stephen</span>
+                        <i class="vis vis-mark"></i>*@
+                    </div>
+                </div><!-- vis-fp-custcoltagswrp -->
+            </div>
+        </div>
+        </div>
+</template>

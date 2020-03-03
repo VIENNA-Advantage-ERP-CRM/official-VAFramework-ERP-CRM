@@ -1758,6 +1758,9 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 }
 
 
+
+/**********************Filter Panel*/
+
 .vis-fp-outerwrp {
     width: 300px;
     height: 100%;
@@ -1987,3 +1990,5 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     float: right;
     margin-right: 5px;
 }
+
+/**********************END Filter Panel*/
