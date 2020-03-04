@@ -1767,12 +1767,14 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 /**********************Filter Panel*/
 
 .vis-fp-outerwrp {
-    width: 100%;
-    position:absolute;
+    width: 260px;
+    position: absolute;
+    z-index: 2;
     height: 100%;
     display: flex;
     flex-direction: column;
     border-right: 1px solid #f3f3f3;
+    background: white;
 }
 
 .vis-fp-header {

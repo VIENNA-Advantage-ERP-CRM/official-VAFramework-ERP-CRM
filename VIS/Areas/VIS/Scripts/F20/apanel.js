@@ -112,12 +112,14 @@
         this.isSummaryVisible = false;
         //private 
         var $divContentArea, $ulNav, $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
-        var $txtSearch, $imgSearch, $btnClrSearch, $imgdownSearch, $imgFilter;
+        var $txtSearch, $imgSearch, $btnClrSearch, $imgdownSearch, $btnFilter;
         var $root, $busyDiv;
         var $ulRightBar2; //right bar
         var $btnlbToggle, $ulactionbar, $uldynactionbar, $divlbMain, $divlbNav; //right bar
         var $hdrPanel = "", $divIncludeTab, $divHeaderNav;
         var $fltrPanel = "";
+        var $fltrPnlBody = "";
+        var $btnFPClose = "";
         var $tabPanel = null;
         var $spnAdvSearch = null;
         var $btnClose = null;
@@ -154,7 +156,7 @@
 
             $hdrPanel = $root.find(".vis-ad-w-p-header-l");
 
-            $fltrPanel = $root.find('.vis-ad-w-p-filterpnl');
+           
 
             $divIncludeTab = $root.find(".vis-ad-w-p-center-inctab");
 
@@ -174,7 +176,7 @@
             $txtSearch = $root.find(".vis-ad-w-p-tb-s-input");
             $btnClrSearch = $root.find(".vis-ad-w-p-tb-s-icon");
             $imgdownSearch = $root.find(".vis-ad-w-p-tb-s-icon-down");
-            $imgFilter = $root.find(".fa-filter");
+           // $imgFilter = $root.find(".fa-filter");
 
             $txtSearch.attr('placeholder', VIS.Msg.getMsg("Search"));
             // Mohit - Shortcut as title.
@@ -185,6 +187,16 @@
             //close 
             $btnClose = $root.find(".vis-ad-w-p-t-close");
             $spnTitle = $root.find('.vis-ad-w-p-t-name h5');
+
+            //Filter Panel
+            $btnFilter = $root.find(".vis-ad-w-p-tb-rc-action");
+            $fltrPanel = $root.find('.vis-ad-w-p-filterpnl');
+
+            $fltrPnlBody = $fltrPanel.find('.vis-fp-bodywrap');
+            $fltrPanel.find('.vis-fp-header h4').text(VIS.Msg.getMsg("Filter"));
+            $btnFPClose = $fltrPanel.find('.vis-fp-header .vis-mark');
+            
+
         };
 
         this.createSearchAutoComplete = function (text) {
@@ -592,7 +604,7 @@
         };
 
         this.getFilterPane = function () {
-            return $fltrPanel;
+            return $fltrPnlBody;
         };
 
         /**
@@ -631,9 +643,9 @@
         };
 
         this.showFilterPanel = function (show) {
-            $fltrPanel.empty();
+            //$fltrPanel.empty();
             if (this.curGC)
-                $fltrPanel.append(this.curGC.getFilterPanel());
+                $fltrPnlBody.append(this.curGC.getFilterPanel());
         };
 
         this.setTabPanelclass = function (clss) {
@@ -710,6 +722,15 @@
                 }
             }
         };
+
+        $btnFilter.on("click", function (e) {
+            $fltrPanel.show();
+            self.refresh();
+        });
+        $btnFPClose.on("click", function (e) {
+            $fltrPanel.hide();
+            self.refresh();
+        });
 
         $divTabNav.on("click", function (e) {
             e.stopPropagation();
