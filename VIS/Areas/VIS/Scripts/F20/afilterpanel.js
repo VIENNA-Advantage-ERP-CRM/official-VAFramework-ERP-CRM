@@ -2,7 +2,7 @@
 
     var tmpfp = document.querySelector('#vis-ad-fptmp').content;// $("#vis-ad-windowtmp");
 
-    function FilterPanel(width, $parentRoot) {
+    function FilterPanel(windowNo,gc) {
 
         var clone = document.importNode(tmpfp, true);
 
@@ -18,6 +18,9 @@
         //headerDiv.find('h4').text(VIS.Msg.getMsg("Filter"));
         spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
 
+
+        this.curGC = gc;
+        this.winNo = windowNo;
         this.selectionfields = null;
         this.curTabfields = null;
         this.curTab = null;
@@ -38,21 +41,51 @@
                         crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
                             field.getColumnName());
                     }
+
+
+
                     else {
                         crt = VIS.VControlFactory.getControl(null, field, true, true, false);
                     }
+
+                    crt.setReadOnly(false);
                     this.ctrlObjects[field.getColumnName()] = crt;
 
-                    label = VIS.VControlFactory.getLabel(field); //get label
-                    crt.addVetoableChangeListener(this);
-                    //field.setPropertyChangeListener(crt);
+
+
                     var inputWrapGroup = $('<div class="vis-fp-inputgroupseprtr" data-ColumnName="' + crt.getName() + '" data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID() + '"></div>');
                     var inputWrap = $('<div class="vis-control-wrap">');
-                    inputWrap.append(crt.getControl()).append(label.getControl());
-
                     var grp = $('<div class="input-group vis-input-wrap">');
-                    grp.append(inputWrap);
-                    if (crt.getBtnCount() > 1) {
+
+                    if (field.getDisplayType() == VIS.DisplayType.YesNo) {
+                       
+
+                        htm.push('<div class="vis-fp-lst-searchrcrds">');
+                        htm.push('<div class="vis-fp-inputspan">');
+                        htm.push('<div class="vis-fp-istagwrap"><input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + crt.getName() + '" data-keyval="' + crt.getName() + '_Y" data-id="Y"');
+                        htm.push('><span data-id="Y">' + VIS.Msg.getMsg("Yes") + '</span> </div>');
+                        htm.push('</div>');
+                        htm.push('<div class="vis-fp-inputspan">');
+                        htm.push('<div class="vis-fp-istagwrap"><input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + crt.getName() + '" data-keyval="' + crt.getName() + '_N" data-id="N"');
+                        htm.push('><span data-id="N">' + VIS.Msg.getMsg("No") + '</span> </div>');
+                        htm.push('</div>');
+                        htm.push('</div>');
+
+                        inputWrap.append('<label>' + field.getHeader() + '</label>');
+                        grp.append(inputWrap);
+                        grp.append(htm.join(''));
+                    }
+
+                    else {
+
+                        label = VIS.VControlFactory.getLabel(field); //get label
+                        crt.addVetoableChangeListener(this);
+                        inputWrap.append(crt.getControl());
+                        if (label)
+                            inputWrap.append(label.getControl());
+                        grp.append(inputWrap);
+                    }
+                    if (crt && crt.getBtnCount() > 1) {
                         var btn = crt.getBtn(0);
                         if (btn) {
                             var $divInputGroupAppend = $('<div class="input-group-append">');
@@ -61,7 +94,9 @@
                         }
                     }
                     inputWrapGroup.append(grp);
+
                     divStatic.append(inputWrapGroup);
+
                     this.getFilterOption(field);
                 }
             }
@@ -79,9 +114,9 @@
                     var col = selectedDiv.data('columnname');
 
                     if (listOfSelectedIDs && listOfSelectedIDs.length > 0) {
-                        if (finalWhereClause.length > 2) {
-                            finalWhereClause += ' AND ';      //Append and in main where
-                        }
+                        //if (finalWhereClause.length > 2) {
+                        //    finalWhereClause += ' AND ';      //Append and in main where
+                        //}
 
                         var whereClause = '';
                         for (var j = 0; j < listOfSelectedIDs.length; j++) {
@@ -100,7 +135,10 @@
                         }
                         if (whereClause != '') {
                             whereClause += ")";
-                            finalWhereClause += whereClause;
+                            if (finalWhereClause!="")
+                                finalWhereClause += " AND "+ whereClause;
+                            else 
+                                finalWhereClause += whereClause;
                         }
 
                         var found = false;
@@ -172,11 +210,11 @@
                         var ctr = $(inputs[a]);
                         if (ctr.is(':checked')) {
                             selIds.push(ctr.data("id"));
-                            ctr.parent().find('.vis-fp-spanCount').text("0");
-                            selItems.push(ctr.parent());
+                            ctr.parent().parent().find('.vis-fp-spanCount').text("0");
+                            selItems.push(ctr.parent().parent());
                         }
                         //else
-                         ctr.parent().remove();
+                        ctr.parent().parent().remove();
                     }
                 }
             }
@@ -211,8 +249,6 @@
             selIds = [];
         };
 
-        
-
         var that = this;
         //Events ... 
         divStatic.on("click", "i", function (e) {
@@ -223,8 +259,6 @@
                 that.fireValChanged(tgt.data('keyval'));// evt.propertyName);
             }
         });
-
-        
 
         bodyDiv.on("click", function (e) {
             $target = $(e.target);
@@ -242,18 +276,69 @@
         //Dispose and remove votable events too...
     };
 
-    FilterPanel.prototype.init = function (curTab, curGC) {
-        this.curGC = curGC;
-        this.curTab = curTab;
-        this.curTabfields = curTab.getFields();
-        this.selectionfields = $.grep(this.curTabfields, function (field, index) {
+    FilterPanel.prototype.init = function () {
+
+        if (this.initialzed)
+            return;
+
+        
+        this.curTab = this.curGC.getMTab();
+        this.curTabfields = this.curTab.getFields();
+        this.selectionfields = [];
+
+       
+        var html = '<option value="-1"> </option>';
+
+        //Fill Dynamic Column List 
+        for (var c = 0; c < this.curTabfields.length; c++) {
+            // get field
+            var field = this.curTabfields[c];
+            if (field.getIsEncrypted())
+                continue;
+            // get field's column name
+            var columnName = field.getColumnName();
+            if (field.getDisplayType() == VIS.DisplayType.Button) {
+                if (field.getAD_Reference_Value_ID() == 0)
+                    // change done here to display textbox for search in case where buttons don't have Reference List bind with Column
+                    //continue;
+                    field.setDisplayType(VIS.DisplayType.String);
+                else {
+                    if (columnName.endsWith("_ID"))
+                        field.setDisplayType(VIS.DisplayType.Table);
+                    else {
+                        field.setDisplayType(VIS.DisplayType.List);
+                        // bind lookup for buttons having Reference List bind with column
+                        field.lookup = new VIS.MLookupFactory.getMLookUp(VIS.context, this.winNo, field.getAD_Column_ID(), VIS.DisplayType.List);
+                    }
+                    //field.loadLookUp();
+                }
+            }
+
+            // get text to be displayed
+            var header = field.getHeader();
+            if (header == null || header.length == 0) {
+                // get text according to the language selected
+                header = VIS.Msg.getElement(VIS.context, columnName);
+                if (header == null || header.Length == 0)
+                    continue;
+            }
+            // if given field is any key, then add "(ID)" to it
+            if (field.getIsKey())
+                header += (" (ID)");
+
             if (field.getIsSelectionColumn())
-                return field;
-        });
+                this.selectionfields.push(field);
+            else
+                html += '<option value="' + columnName + '">' + header + '</option>';
+        }
+
+        //Add this html in Dynamic created column
+
         this.selectionfields.sort(function (a, b) { return a.getSelectionSeqNo() - b.getSelectionSeqNo() });
         this.getFixedColumns();
         this.setLayout();
-        //this.addRootToParent();
+        this.initialzed = true;
+        
     };
 
     FilterPanel.prototype.getFixedColumns = function () {
@@ -270,27 +355,26 @@
     FilterPanel.prototype.getFilterOption = function (field, whereClause) {
         if (field && field.getShowFilterOption()) {
 
-            var keyCol;
-            var displayCol;
-            var validationCode;
-            var lookupTableName;
+            var keyCol="";
+            var displayCol="";
+            var validationCode="";
+            var lookupTableName="";
             if (field.getLookup()) {
                 keyCol = field.getLookup().info.keyColumn;
                 displayCol = field.getLookup().info.displayColSubQ;
                 validationCode = field.getLookup().info.validationCode;
                 lookupTableName = field.getLookup().info.tableName;
             }
-            else {
-                keyCol = "";
-                displayCol = "";
-                validationCode = "";
-                lookupTableName = "";
-            }
+            //if (!displayCol || displayCol == '')
+            //    return;
 
             var finalWhere = this.curTab.getWhereClause();
-            if (whereClause)
-                finalWhere += " AND " + whereClause;
-
+            if (whereClause) {
+                if (finalWhere != "")
+                    finalWhere += " AND " + whereClause;
+                else
+                    finalWhere += " " + whereClause;
+            }
             var data = {
                 keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
                 , tableName: lookupTableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: this.curTab.getTableName(),
@@ -302,9 +386,9 @@
 
                 var key = data["keyCol"];
                 data = data["list"];
-                if (data && data.length > 0) {
+                //if (data && data.length > 0) {
                     tht.setFilterOptions(data, key);
-                }
+                //}
                 tht = null;
             });
         }
@@ -532,7 +616,6 @@
                 var date = parsedValue.getDate();
                 parsedValue2 = new Date(yearr, month, date, 24, 00, 00);
                 parsedValue = new Date(yearr, month, date, 00, 00, 00);
-                dtRowObj["VALUE2VALUE"] = parsedValue2.toUTCString();
                 optr = VIS.Query.prototype.BETWEEN;
             }
             //	Value2
@@ -651,4 +734,5 @@
     };
 
     VIS.FilterPanel = FilterPanel;
+
 }(VIS, jQuery));

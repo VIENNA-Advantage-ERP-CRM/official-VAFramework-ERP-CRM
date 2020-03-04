@@ -449,12 +449,15 @@
         this.vHeaderPanel.addSizeChangeListner(this);
     };
 
-    VIS.GridController.prototype.initFilterPanel = function (wWidth, parent) {
-        this.aFilterPanel = new VIS.FilterPanel(wWidth,parent);
-        this.aFilterPanel.init(this.getMTab(), this);
-        //this.aFilterPanel.addSizeChangeListner(this);
+    VIS.GridController.prototype.initFilterPanel = function (winNo) {
+        this.aFilterPanel = new VIS.FilterPanel(winNo,this);
+        
     };
 
+    VIS.GridController.prototype.initFilterUI = function () {
+        if (this.aFilterPanel)
+            this.aFilterPanel.init();
+    };
 
     VIS.GridController.prototype.getTabPanel = function () {
         return this.vTabPanel.getRoot();
