@@ -162,6 +162,7 @@
         this.setFilterOptions = function (data, key) {
             var fields;
             var selIds = [];
+            var selItems = [];
             var wrapper = divStatic.find('[data-cid="' + key + '_' + this.curTab.getAD_Tab_ID() + '"]');
             if (wrapper && wrapper.length > 0) {
                 fields = wrapper.find('.vis-fp-lst-searchrcrds');
@@ -171,8 +172,11 @@
                         var ctr = $(inputs[a]);
                         if (ctr.is(':checked')) {
                             selIds.push(ctr.data("id"));
+                            ctr.parent().find('.vis-fp-spanCount').text("0");
+                            selItems.push(ctr.parent());
                         }
-                        ctr.parent().remove();
+                        //else
+                         ctr.parent().remove();
                     }
                 }
             }
@@ -181,24 +185,30 @@
                 wrapper.append(fields);
             }
 
-            var htm = [];
+            
             for (var i = 0; i < data.length; i++) {
+                var htm = [];
+                var index = selIds.indexOf(parseInt(data[i].ID));
+
+                if (index > -1) {
+                    selItems[index].find('.vis-fp-spanCount').text(data[i].Count);
+                    fields.append(selItems[index]);
+                    selItems.splice(index, 1);
+                    selIds.splice(index, 1);
+                    continue;
+                }
                 htm.push('<div class="vis-fp-inputspan">');
                 htm.push('<input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + key + '" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"');
-                if (selIds.indexOf(parseInt(data[i].ID)) > -1) {
-                    htm.push(' checked ');
-                }
                 htm.push('><span data-id="' + data[i].ID + '">' + data[i].Name + '</span> <span class="vis-fp-spanCount">' + data[i].Count + '</span>');
                 htm.push('</div>');
+                fields.append(htm.join(''));
+            }
+            for (i = 0; i < selItems.length; i++) {
+                fields.append(selItems[i]);
             }
 
-            //var divinpuspanWrapper = $('<div class="vis-fp-inputspan">');
-            //divinpuspanWrapper.append('<input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + key + '" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"');
-            //if (selIds.indexOf(data[i].ID) > -1) {
-            //    divinpuspanWrapper.append(' checked ');
-            //}
-            //divinpuspanWrapper.append('> <span data-id="' + data[i].ID + '">' + data[i].Name + '</span> <span class="vis-fp-spanCount">' + data[i].Count + '</span>');
-            fields.append(htm.join(''));
+            selItems = [];
+            selIds = [];
         };
 
         this.disposeComponent = function () {
