@@ -1934,11 +1934,12 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     display: flex;
     flex-direction: column;
     font-size: .75rem;
+    margin: 5px 0;
 }
 
 .vis-fp-currntrcrds {
     background: rgba(var(--v-c-secondary), .7);
-    border-radius: .5rem;
+    border-radius: .6rem;
     padding: 3px 7px;
     cursor: pointer;
     display: flex;
@@ -1967,6 +1968,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     width: 12px;
     height: 12px;
     margin: 4px 4px 0 0;
+    outline: none;
 }
 
     .vis-fp-inputspan input[type=checkbox]:checked {
