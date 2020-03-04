@@ -92,17 +92,16 @@
                             var pasedVal = context.parseWhereCondition(col, VIS.Query.prototype.EQUAL, inputType.data('id'), null);
 
                             if (whereClause != '') {
-                                whereClause += " OR " + pasedVal  ;
+                                whereClause += " OR " + pasedVal;
                             }
                             else {
-                                whereClause += "(" + pasedVal ;
+                                whereClause += "(" + pasedVal;
                             }
                         }
                         if (whereClause != '') {
                             whereClause += ")";
                             finalWhereClause += whereClause;
                         }
-
 
                         var found = false;
                         for (var k = 0; k < context.listOfFilterQueries.length; k++) {
@@ -116,6 +115,13 @@
                         }
                         if (!found && whereClause != '')
                             context.listOfFilterQueries.push({ 'columnName': col, 'whereClause': whereClause });
+                    }
+                    else { //delete consiftion of exist
+                        for (var k = 0; k < context.listOfFilterQueries.length; k++) {
+                            if (context.listOfFilterQueries[k].columnName == col) {
+                                context.listOfFilterQueries.splice(k, 1);
+                            }
+                        }
                     }
                 }
             }
