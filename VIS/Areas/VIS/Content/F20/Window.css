@@ -1918,13 +1918,24 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 
 .vis-fp-lst-searchrcrds {
     font-size: .75rem;
+    position: relative;
+    top: -10px;
 }
-
-    .vis-fp-lst-searchrcrds span {
-        /*padding: 4px 0;*/
-        /*cursor: pointer;*/
-        margin-bottom: 0;
-    }
+.vis-fp-inputspan, .vis-fp-istagwrap {
+    display: flex;
+    align-items: center;
+}
+.vis-fp-inputspan {
+    margin-bottom: 3px;
+}
+.vis-fp-istagwrap {
+    flex: 1;
+}
+.vis-fp-lst-searchrcrds span {
+    /* padding: 4px 0; */
+    /* cursor: pointer; */
+    margin-bottom: 0;
+}
 
 .vis-fp-viwall {
     display: flex;
@@ -1937,7 +1948,9 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     display: flex;
     flex-direction: column;
     font-size: .75rem;
-    margin: 5px 0;
+    margin: 5px 0 7px 0;
+    position: relative;
+    top: -7px;
 }
 
 .vis-fp-currntrcrds {
@@ -1970,7 +1983,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     position: relative;
     width: 12px;
     height: 12px;
-    margin: 4px 4px 0 0;
+    margin: 0 5px 0 0;
     outline: none;
 }
 

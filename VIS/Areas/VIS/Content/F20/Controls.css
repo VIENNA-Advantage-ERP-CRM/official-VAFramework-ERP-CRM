@@ -81,6 +81,7 @@
     flex: 1;
     position: relative;
     z-index: 1;
+    width: 100%;
 }
 .vis-input-wrap input {
     display: block;
