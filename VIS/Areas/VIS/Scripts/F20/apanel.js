@@ -190,7 +190,7 @@
 
             //Filter Panel
             $btnFilter = $root.find(".vis-ad-w-p-tb-rc-action");
-            $fltrPanel = $root.find('.vis-ad-w-p-filterpnl');
+            $fltrPanel = $root.find('.vis-ad-w-p-filterpnl').hide();
 
             $fltrPnlBody = $fltrPanel.find('.vis-fp-bodywrap');
             $fltrPanel.find('.vis-fp-header h4').text(VIS.Msg.getMsg("Filter"));
@@ -644,8 +644,13 @@
 
         this.showFilterPanel = function (show) {
             //$fltrPanel.empty();
-            if (this.curGC)
+            if (this.curGC) {
                 $fltrPnlBody.append(this.curGC.getFilterPanel());
+                this.curGC.initFilterUI();
+            }
+            else {
+                $fltrPanel.hide();
+            }
         };
 
 
@@ -1457,7 +1462,7 @@
                         gc.initHeaderPanel(this.getParentDetailPane());
                     }
                 }
-                gc.initFilterPanel(100,this.getFilterPane());
+                gc.initFilterPanel(curWindowNo,this.getFilterPane());
 
                 tabElement = gc;
                 if (i === 0 && goSingleRow)

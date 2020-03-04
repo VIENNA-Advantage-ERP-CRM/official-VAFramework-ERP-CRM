@@ -997,8 +997,11 @@ namespace VIS.Controllers
                     sql += " AND " + validationCode;
                 if (!string.IsNullOrEmpty(whereClause))
                     sql += " AND " + whereClause;
+
+                sql += " AND " + pColumnName + " IS NOT NULL ";
+
                 sql += " GROUP BY " + pColumnName +
-                         " ORDER BY count(" + pColumnName + ") desc) WHERE rownum <6";
+                         " ORDER BY COUNT(" + pColumnName + ") DESC) ";
             }
             else
             {
@@ -1006,34 +1009,34 @@ namespace VIS.Controllers
                 {
                     //sql = "SELECT " + keyCol + ", " + displayCol + " || '('|| count(" + keyCol + ") || ')' FROM " + tableName + " WHERE IsActive='Y'";
                     sql = "SELECT " + pColumnName + ", (Select Name from AD_REf_List where Value= " + pColumnName + " AND AD_Reference_ID=" + AD_Referencevalue_ID + ")  as name ,count(" + pColumnName + ")"
-                        + " FROM " + pTableName + " WHERE " + pTableName + ".IsActive='Y'";
+                        + " FROM " + pTableName;// + " WHERE " + pTableName + ".IsActive='Y'";
                     sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))
                         sql += " AND " + validationCode;
                     if (!string.IsNullOrEmpty(whereClause))
                         sql += " AND " + whereClause;
                     sql += " GROUP BY " + pColumnName +
-                             " ORDER BY count(" + pColumnName + ") desc) WHERE rownum <6";
+                             " ORDER BY COUNT(" + pColumnName + ") DESC)";
                 }
                 else
                 {
                     sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
                         + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + tableName + "_ID"
-                        + " WHERE " + pTableName + ".IsActive='Y'";
+                        + " ";// WHERE " + pTableName + ".IsActive='Y'";
                     sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))
                         sql += " AND " + validationCode;
                     if (!string.IsNullOrEmpty(whereClause))
                         sql += " AND " + whereClause;
                     sql += "GROUP BY " + keyCol + ", " + displayCol
-                        + "ORDER BY count(" + keyCol + ") desc) WHERE rownum <6";
+                        + "ORDER BY COUNT(" + keyCol + ") DESC) ";
 
                 }
             }
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             List<FilterDataContract> keyva = new List<FilterDataContract>();
-            DataSet ds = DB.ExecuteDataset(sql);
+            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql,1,5);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
