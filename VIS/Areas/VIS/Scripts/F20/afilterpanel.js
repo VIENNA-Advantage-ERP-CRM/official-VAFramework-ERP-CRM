@@ -59,7 +59,7 @@
 
                     if (field.getDisplayType() == VIS.DisplayType.YesNo) {
                        
-
+                        var htm = [];
                         htm.push('<div class="vis-fp-lst-searchrcrds">');
                         htm.push('<div class="vis-fp-inputspan">');
                         htm.push('<div class="vis-fp-istagwrap"><input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + crt.getName() + '" data-keyval="' + crt.getName() + '_Y" data-id="Y"');
