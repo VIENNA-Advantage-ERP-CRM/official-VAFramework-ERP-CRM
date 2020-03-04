@@ -198,8 +198,8 @@
                     continue;
                 }
                 htm.push('<div class="vis-fp-inputspan">');
-                htm.push('<input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + key + '" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"');
-                htm.push('><span data-id="' + data[i].ID + '">' + data[i].Name + '</span> <span class="vis-fp-spanCount">' + data[i].Count + '</span>');
+                htm.push('<div class="vis-fp-istagwrap"><input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + key + '" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"');
+                htm.push('><span data-id="' + data[i].ID + '">' + data[i].Name + '</span> </div><span class="vis-fp-spanCount">(' + data[i].Count + ')</span>');
                 htm.push('</div>');
                 fields.append(htm.join(''));
             }
