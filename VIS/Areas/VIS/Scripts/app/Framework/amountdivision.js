@@ -452,6 +452,9 @@
                         if (cmbDimensionType.val() == "AC") {
                             dGrid.showColumn("C_BPartner");
                         }
+                        else {
+                            dGrid.hideColumn("C_BPartner");
+                        }
                     }
                     hideShowDimensionValue();
                     cmbDimensionType.focus();
@@ -1540,8 +1543,10 @@
                             w2ui[LineGridName].set(recid, { DimensionName: dimensionName });
                             w2ui[LineGridName].set(recid, { DimensionValueAmount: lineAmount });
                             w2ui[LineGridName].set(recid, { CalculateDimValAmt: lineAmount });
-                            w2ui[LineGridName].set(recid, { C_BPartner: bpartnerName });
-                            w2ui[LineGridName].set(recid, { C_BPartner_ID: C_BPartner_ID });
+                            if (elementTypeID == "AC") {
+                                w2ui[LineGridName].set(recid, { C_BPartner: bpartnerName });
+                                w2ui[LineGridName].set(recid, { C_BPartner_ID: C_BPartner_ID });
+                            }
                             var temp = format.GetFormatedValue(parseFloat(parseFloat(txtTotal.val()) - parseFloat(oldAmount)) + parseFloat(lineAmount));
                             txtTotal.val(temp);
                         }
