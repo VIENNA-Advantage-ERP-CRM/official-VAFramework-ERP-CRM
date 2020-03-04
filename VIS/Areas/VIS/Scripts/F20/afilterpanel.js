@@ -6,16 +6,16 @@
 
         var clone = document.importNode(tmpfp, true);
 
-        var $outerwrap = $(clone.querySelector(".vis-fp-outerwrp"));
-        var bodyDiv = $outerwrap.find(".vis-fp-bodywrap");
-        var headerDiv = $outerwrap.find(".vis-fp-header");
-        var btnclose = headerDiv.find("vis vis-mark");
+        //var $outerwrap = $(clone.querySelector("vis-fp-bodycontent);
+        var bodyDiv = $(clone.querySelector(".vis-fp-bodycontent"));
+       // var headerDiv = $outerwrap.find(".vis-fp-header");
+        //var btnclose = headerDiv.find(".vis-mark");
 
-        var divStatic = $outerwrap.find(".vis-fp-static-ctrlwrp");
+        var divStatic = bodyDiv.find(".vis-fp-static-ctrlwrp");
         var spnViewAll = divStatic.find(".vis-fp-static-ctrlwrp");
 
         //Translation 
-        headerDiv.find('h4').text(VIS.Msg.getMsg("Filter"));
+        //headerDiv.find('h4').text(VIS.Msg.getMsg("Filter"));
         spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
 
         this.selectionfields = null;
@@ -25,7 +25,7 @@
         this.ctrlObjects = {};
 
         this.getRoot = function () {
-            return $outerwrap;
+            return bodyDiv;
         };
 
         this.setLayout = function () {
@@ -135,7 +135,7 @@
 
         this.vetoablechange = function (evt) {
             //data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID()
-            var wrapper = $outerwrap.find('[data-cid="' + evt.propertyName + '_' + this.curTab.getAD_Tab_ID() + '"]');
+            var wrapper = bodyDiv.find('[data-cid="' + evt.propertyName + '_' + this.curTab.getAD_Tab_ID() + '"]');
             //wrapper.append('<span >' + evt.newValue + '</span>');
             var field = $.grep(this.selectionfields, function (field, index) {
                 if (field.getColumnName() == evt.propertyName)
@@ -211,10 +211,7 @@
             selIds = [];
         };
 
-        this.disposeComponent = function () {
-            $outerwrap.remove();
-            this.listOfFilterQueries = [];
-        };
+        
 
         var that = this;
         //Events ... 
@@ -227,9 +224,7 @@
             }
         });
 
-        btnclose.on("click", function (e) {
-            $parentRoot.width(0);
-        });
+        
 
         bodyDiv.on("click", function (e) {
             $target = $(e.target);
@@ -239,6 +234,11 @@
             }
         });
 
+        this.disposeComponent = function () {
+            bodyDiv.remove();
+            this.listOfFilterQueries = [];
+            that = null;
+        };
         //Dispose and remove votable events too...
     };
 
