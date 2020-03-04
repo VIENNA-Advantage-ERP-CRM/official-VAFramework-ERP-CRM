@@ -575,7 +575,7 @@ namespace VIS.Models
                     }
 
                     string sql = "SELECT distinct COALESCE(cl.ad_column_id,cl.C_ELEMENTVALUE_ID,cl.c_activity_id,cl.C_BPARTNER_ID,cl.C_CAMPAIGN_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
-                                  " cl.amount,ct.c_acctschema_id,ct.elementtype,adref.Name as DimensionType, " +
+                                  " cl.amount,ct.c_acctschema_id,ct.elementtype,rl.Name as DimensionType, " +
                                    " COALESCE(o.name ";
                     if (uElementColumn != "")
                     {
