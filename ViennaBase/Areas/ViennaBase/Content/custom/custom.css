@@ -106,23 +106,18 @@
 
 
 
-    /* grid Header*/
-    .w2ui-grid .w2ui-grid-body table .w2ui-head {
-        margin: 0px;
-        padding: 0px;
-        border-right: 0;
-        border-top: 2px solid rgba(var(--v-c-on-secondary), 0.2);
-        border-bottom: 2px solid rgba(var(--v-c-on-secondary), 0.2);
-        color: rgba(0, 0, 0, 0.70);
-        background: transparent;
-        font-weight: 600;
-        /*background-image: -webkit-linear-gradient(#f9f9f9, #e4e4e4);
-  background-image: -moz-linear-gradient(#f9f9f9, #e4e4e4);
-  background-image: -ms-linear-gradient(#f9f9f9, #e4e4e4);
-  background-image: -o-linear-gradient(#f9f9f9, #e4e4e4);
-  background-image: linear-gradient(#f9f9f9, #e4e4e4);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fff9f9f9', endColorstr='#ffe4e4e4', GradientType=0);*/
-    }
+/* grid Header*/
+.w2ui-grid .w2ui-grid-body table .w2ui-head {
+    margin: 0px;
+    padding: 0px;
+    border-right: 0;
+    border-top: 2px solid rgba(var(--v-c-on-secondary), 0.2);
+    border-bottom: 2px solid rgba(var(--v-c-on-secondary), 0.2);
+    color: rgba(0, 0, 0, 0.70);
+    background: transparent;
+    font-weight: 600;
+    font-size: 12px;
+}
 
         .w2ui-grid .w2ui-grid-body table .w2ui-head > div {
             padding: 12px 7px;
@@ -232,14 +227,12 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 }
 
 .ui-widget {
-    /*font-family: 'NoirPro-Regular' !important;*/
-    font-family: 'Montserrat-Regular', sans-serif !important;
+    font-family: var(--v-c-font-family) !important;
     font-size: 1em;
 }
 
     .ui-widget input:not([type="checkbox"]), .ui-widget select, .ui-widget textarea, .ui-widget button {
-        /*font-family: 'NoirPro-Regular';*/
-        font-family: 'Montserrat-Regular', sans-serif;
+        font-family: var(--v-c-font-family);
         outline: none;
         min-height: 30px;
     }
@@ -323,11 +316,10 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 /****************** w2ui-grid ***********************/
 .w2ui-reset table {
     /*font-size: .75rem;*/
-    font-family: 'Montserrat-Regular', sans-serif;
+    font-family: var(--v-c-font-family);
 }
 .w2ui-reset {
-    /*font-family: 'NoirPro-Regular';*/
-    font-family: 'Montserrat-Regular', sans-serif;
+    font-family: 'var(--v-c-font-family);
 }
 .w2ui-grid {
     border: none;

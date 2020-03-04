@@ -5,8 +5,7 @@ html, body {
     margin: 0;
     font-weight: 400;
     overflow: hidden;
-    /*font-family: 'NoirPro-Regular' !important;*/
-    font-family: 'Montserrat-Regular', sans-serif !important;
+    font-family: var(--v-c-font-family) !important;
     color: rgba(var(--v-c-on-secondary), 1);
 }
 
