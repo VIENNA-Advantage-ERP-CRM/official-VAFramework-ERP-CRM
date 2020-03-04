@@ -126,6 +126,8 @@
 .vis-ad-w-p-filterpnl {
     grid-column: 1/1;
     grid-row: 1/8;
+    position:relative;
+    width:260px;
 }
 
 .vis-ad-w-p-tabs-l {
@@ -1765,7 +1767,8 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 /**********************Filter Panel*/
 
 .vis-fp-outerwrp {
-    width: 300px;
+    width: 100%;
+    position:absolute;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -1908,8 +1911,6 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 }
 
 .vis-fp-static-ctrlwrp {
-    max-height: 300px;
-    overflow: hidden;
     padding: 10px;
 }
 

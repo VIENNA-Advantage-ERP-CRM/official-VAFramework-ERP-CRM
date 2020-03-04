@@ -1,6 +1,5 @@
 ﻿; (function (VIS, $) {
 
-
     var tmpfp = document.querySelector('#vis-ad-fptmp').content;// $("#vis-ad-windowtmp");
 
     function FilterPanel(width, $parentRoot) {
@@ -15,19 +14,15 @@
         var divStatic = $outerwrap.find(".vis-fp-static-ctrlwrp");
         var spnViewAll = divStatic.find(".vis-fp-static-ctrlwrp");
 
-
         //Translation 
         headerDiv.find('h4').text(VIS.Msg.getMsg("Filter"));
         spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
-
-
 
         this.selectionfields = null;
         this.curTabfields = null;
         this.curTab = null;
         this.listOfFilterQueries = [];
         this.ctrlObjects = {};
-
 
         this.getRoot = function () {
             return $outerwrap;
@@ -54,21 +49,23 @@
                     var inputWrapGroup = $('<div class="vis-fp-inputgroupseprtr" data-ColumnName="' + crt.getName() + '" data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID() + '"></div>');
                     var inputWrap = $('<div class="vis-control-wrap">');
                     inputWrap.append(crt.getControl()).append(label.getControl());
+
+                    var grp = $('<div class="input-group vis-input-wrap">');
+                    grp.append(inputWrap);
                     if (crt.getBtnCount() > 1) {
                         var btn = crt.getBtn(0);
                         if (btn) {
                             var $divInputGroupAppend = $('<div class="input-group-append">');
                             $divInputGroupAppend.append(btn);
-                            inputWrap.append($divInputGroupAppend);
+                            grp.append($divInputGroupAppend);
                         }
                     }
-                    inputWrapGroup.append($('<div class="input-group vis-input-wrap">').append(inputWrap));
+                    inputWrapGroup.append(grp);
                     divStatic.append(inputWrapGroup);
                     this.getFilterOption(field);
                 }
             }
         };
-
       
         function prepareWhereClause(context) {
             var finalWhereClause = '';
@@ -583,7 +580,6 @@
         this.disposeComponent();
         this.curGC = this.curTab = this.curTabfields = this.selectionfields = null;
     };
-
 
     var filterContext = {
 
