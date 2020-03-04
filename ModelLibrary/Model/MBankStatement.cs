@@ -489,11 +489,7 @@ namespace VAdvantage.Model
             //Changes by SUkhwinder on 20 April, if all lines are not matched then dont allow complete.
             foreach (MBankStatementLine line in lines)
             {
-                if (line.GetC_Payment_ID() > 0 || line.GetC_Charge_ID() > 0)
-                {
-
-                }
-                else
+                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0) || (line.GetChargeAmt() != Env.ZERO && line.GetC_Charge_ID() == 0))
                 {
                     m_processMsg = Msg.GetMsg(Env.GetCtx(), "LinesNotMatchedYet");
                     return DocActionVariables.STATUS_INVALID;
@@ -503,7 +499,7 @@ namespace VAdvantage.Model
             Decimal transactionAmt = 0; //Arpit to update only transaction amount in Bank Account UnMatched Balance asked by Ashish Gandhi
             for (int i = 0; i < lines.Length; i++)
             {
-                MBankStatementLine line = lines[i];                
+                MBankStatementLine line = lines[i];
                 if (line.GetC_Payment_ID() != 0)
                 {
                     MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_TrxName());

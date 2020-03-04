@@ -342,7 +342,7 @@
                         ulRole.attr('disabled', 'disabled');
                     }
                 }, error: function (errorThrown) {
-                    alert(errorThrown.statusText);
+                    VIS.ADialog.error("", true, errorThrown.statusText);
                 }
             });
 
@@ -384,8 +384,7 @@
         };
 
         var FillGroupFields = function () {
-            if (cmbGroupField != null)
-            { cmbGroupField.children().remove(); }
+            if (cmbGroupField != null) { cmbGroupField.children().remove(); }
             var fields = null;
             var dbResult = null;
             if (mTab != null && mTab.getFields().length > 0) {
@@ -693,28 +692,29 @@
                         }
 
 
+                        return SaveCardViewColumn(e);
 
-
-                        var retVal = {};
-                        retVal.FieldGroupID = AD_GroupField_ID;
-                        retVal.IncludedCols = SaveCardViewColumn(cardViewColArray);
-                        if (!retVal.IncludedCols) {
-                            return false;
-                        }
-                        retVal.Conditions = strConditionArray;
-                        retVal.AD_CardView_ID = AD_CardView_ID;
-                        if (isNewRecord && parseInt(AD_User_ID) < 0) {
-                            retVal.FieldGroupID = orginalAD_GroupField_ID;
-                            retVal.IncludedCols = orginalIncludedCols;
-                            retVal.Conditions = strConditionArray;
-                            retVal.AD_CardView_ID = orginalAD_CardView_ID;
-                        }
-                        cardView.setCardViewData(retVal);
-                        if (gc.isCardRow)
-                            cardView.refreshUI(gc.getVCardPanel().width());
-                        ch.close();
-                        e.stopPropagation();
-                        e.preventDefault();
+                        //var retVal = {};
+                        //retVal.FieldGroupID = AD_GroupField_ID;
+                        //retVal.IncludedCols = SaveCardViewColumn();
+                        //if (!retVal.IncludedCols) {
+                        //    IsBusy(false);
+                        //    return false;
+                        //}
+                        //retVal.Conditions = strConditionArray;
+                        //retVal.AD_CardView_ID = AD_CardView_ID;
+                        //if (isNewRecord && parseInt(AD_User_ID) < 0) {
+                        //    retVal.FieldGroupID = orginalAD_GroupField_ID;
+                        //    retVal.IncludedCols = orginalIncludedCols;
+                        //    retVal.Conditions = strConditionArray;
+                        //    retVal.AD_CardView_ID = orginalAD_CardView_ID;
+                        //}
+                        //cardView.setCardViewData(retVal);
+                        //if (gc.isCardRow)
+                        //    cardView.refreshUI(gc.getVCardPanel().width());
+                        //ch.close();
+                        //e.stopPropagation();
+                        //e.preventDefault();
                     }, 50);
                 });
             }
@@ -725,22 +725,23 @@
             }
             if (btnDelete != null) {
                 btnDelete.on("click", function (e) {
-                    var diaDel = confirm(VIS.Msg.getMsg("SureWantToDelete"));
-                    if (diaDel) {
-                        isFirstLoad = false;
-                        DeleteCardView();
+                    VIS.ADialog.confirm("SureWantToDelete", true, "", "", function (diaDel) {
+                        if (diaDel) {
+                            isFirstLoad = false;
+                            DeleteCardView();
 
-                        FillCardViewCombo(true);
-                        FillTextControl();
-                        FillGroupFields();
-                        FillColumnInclude(true, false);
-                        if (cardViewUserID == VIS.context.getAD_User_ID()) {
-                            AD_User_ID = 0;
-                            cardViewUserID = 0;
+                            FillCardViewCombo(true);
+                            FillTextControl();
+                            FillGroupFields();
+                            FillColumnInclude(true, false);
+                            if (cardViewUserID == VIS.context.getAD_User_ID()) {
+                                AD_User_ID = 0;
+                                cardViewUserID = 0;
+                            }
                         }
-                    }
-                    e.stopPropagation();
-                    e.preventDefault();
+                        e.stopPropagation();
+                        e.preventDefault();
+                    });
                 });
             }
 
@@ -1016,7 +1017,7 @@
                             AddRow(cardviewCondition);
                         }
                     }, error: function (errorThrown) {
-                        alert(errorThrown.statusText);
+                        VIS.ADialog.error("", true, errorThrown.statusText);
                     }
                 });
             }
@@ -1042,7 +1043,7 @@
             }
         };
 
-        var SaveCardViewColumn = function (lstCardView) {
+        var SaveCardViewColumn = function (e) {
 
             var isShow
             if (VIS.MRole.isAdministrator) {
@@ -1050,16 +1051,25 @@
                     cardViewName = txtCardViewName.val();
                     if (LstRoleID == null || LstRoleID.length <= 0) {
                         if (AD_User_ID != VIS.context.getAD_User_ID()) {
-                            if (!confirm(VIS.Msg.getMsg("CardViewWarning"))) {
-                                AD_User_ID = 0;
-                                return false;
-                            }
+                            VIS.ADialog.confirm("CardViewWarning", true, "", "", function (result) {
+                                if (!result) {
+                                    AD_User_ID = 0;
+                                    IsBusy(false);
+                                    return false;
+                                }
+                                return callBackSaveCard(e);
+                            });
                             AD_User_ID = VIS.context.getAD_User_ID();
                         }
-                        else
+                        else {
                             AD_User_ID = 0;
+                            IsBusy(false);
+                        }
                     }
-                    else AD_User_ID = 0;
+                    else {
+                        AD_User_ID = 0;
+                        IsBusy(false);
+                    }
                 } else {
                     cardViewName = txtCardViewName.val();
                     if (AD_User_ID == cardViewUserID) {
@@ -1071,6 +1081,7 @@
                     else {
                         AD_User_ID = 0;
                     }
+                    return callBackSaveCard(e);
                 }
             }
             else {
@@ -1091,7 +1102,11 @@
                         cardViewName = cmbCardView.find(":selected").text() + " " + defaultMsg;
                     }
                 }
+                return callBackSaveCard(e);
             }
+        };
+
+        var callBackSaveCard = function (e) {
             if (cardViewName.length < 1 && !isEdit) {
                 cardViewName = cmbCardView.find(":selected").text();
             }
@@ -1123,14 +1138,33 @@
                     AD_CardView_ID = result;
                     IsBusy(false);
                 }, error: function (errorThrown) {
-                    alert(errorThrown.statusText);
+                    VIS.ADialog.error("", true, errorThrown.statusText);
                     IsBusy(false);
                 }
             });
-            return includeCols;
-
-
-        };
+            //return includeCols;
+            var retVal = {};
+            retVal.FieldGroupID = AD_GroupField_ID;
+            retVal.IncludedCols = includeCols;
+            if (!retVal.IncludedCols) {
+                IsBusy(false);
+                return false;
+            }
+            retVal.Conditions = strConditionArray;
+            retVal.AD_CardView_ID = AD_CardView_ID;
+            if (isNewRecord && parseInt(AD_User_ID) < 0) {
+                retVal.FieldGroupID = orginalAD_GroupField_ID;
+                retVal.IncludedCols = orginalIncludedCols;
+                retVal.Conditions = strConditionArray;
+                retVal.AD_CardView_ID = orginalAD_CardView_ID;
+            }
+            cardView.setCardViewData(retVal);
+            if (gc.isCardRow)
+                cardView.refreshUI(gc.getVCardPanel().width());
+            ch.close();
+            e.stopPropagation();
+            e.preventDefault();
+        }
 
         var DeleteCardView = function () {
             var url = VIS.Application.contextUrl + "CardView/DeleteCardViewRecord";
@@ -1145,14 +1179,13 @@
                     var result = JSON.parse(data);
 
                 }, error: function (errorThrown) {
-                    alert(errorThrown.statusText);
+                    VIS.ADialog.error("", true, errorThrown.statusText);
                 }
             });
         };
 
         var FillUserList = function (root) {
-            if (root != null)
-            { root.children().remove(); }
+            if (root != null) { root.children().remove(); }
             root.append("<Option ad_user_id=" + -1 + " ></Option>");
             for (var i = 0; i < userInfo.length; i++) {
                 root.append("<Option ad_user_id=" + userInfo[i].AD_User_ID + " > " + userInfo[i].UserName + "</Option>");
@@ -1169,8 +1202,7 @@
                 d = 'disabled';
             }
 
-            if (root != null)
-            { root.children().remove(); }
+            if (root != null) { root.children().remove(); }
             for (var i = 0; i < roleInfo.length; i++) {
                 root.append("<li ad_role_id=" + roleInfo[i].AD_Role_ID + " > <input type='checkbox' " + d + "> " + w2utils.encodeTags(roleInfo[i].RoleName) + "</li>");
             }
@@ -1201,12 +1233,12 @@
 
         var CreateCVGrid = function (root) {
             var cvHeaderTable = $("<Table class='vis-cv-headertable'><tr class='vis-cv-TableHead'>" +
-                                "<th >" + VIS.Msg.getMsg("BGColor") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("Column") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("Operator") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("QueryValue") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("Action") + "</th>" +
-                            "<tr></Table>");
+                "<th >" + VIS.Msg.getMsg("BGColor") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("Column") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("Operator") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("QueryValue") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("Action") + "</th>" +
+                "<tr></Table>");
             var cvRowTable = $("<div class='vis-cv-divrowtable'><Table class='vis-cv-rowtable'></Table></div>");
             root.append(cvHeaderTable);
             root.append(cvRowTable);
@@ -1446,7 +1478,7 @@
                 // if field id any key, then show number textbox 
                 if (field.getIsKey()) {
                     crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
-                                     field.getColumnName());
+                        field.getColumnName());
                 }
                 else {
                     crt = VIS.VControlFactory.getControl(null, field, true, true, false);
@@ -1455,7 +1487,7 @@
             else {
                 // if no field is given show an empty disabled textbox
                 crt = new VIS.Controls.VTextBox("columnName", false, true, false, 20, 20, "format",
-                          "GetObscureType", false);// VAdvantage.Controls.VTextBox.TextType.Text, DisplayType.String);
+                    "GetObscureType", false);// VAdvantage.Controls.VTextBox.TextType.Text, DisplayType.String);
             }
             if (crt != null) {
                 //crt.SetIsMandatory(false);
@@ -1601,7 +1633,7 @@
                 //}
                 var retVal = {};
                 retVal.FieldGroupID = AD_GroupField_ID;
-                retVal.IncludedCols = SaveCardViewColumn(cardViewColArray);
+                retVal.IncludedCols = SaveCardViewColumn();
                 if (!retVal.IncludedCols) {
                     return false;
                 }
