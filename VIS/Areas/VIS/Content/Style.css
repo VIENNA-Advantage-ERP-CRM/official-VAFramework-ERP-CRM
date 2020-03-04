@@ -896,7 +896,7 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
 }
 .VIS-Tm-unlinkforbottmo:after,
 .VIS-Tm-glyphiconglyphicon-link:after{
-    content: "\e91e";
+    content: "\e94d";
     position: absolute;
     bottom: 5px;
     right: 2px;
@@ -906,7 +906,7 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
 }
 .VIS-Tm-glyphiconglyphicon-link:before {
     position: relative;
-    content: "\e93f";
+    content: "\e946";
 }
 .VIS-TM-treeList ul li .VIS-Tm-glyphiconglyphicon-link:after {
     bottom: -2px;
