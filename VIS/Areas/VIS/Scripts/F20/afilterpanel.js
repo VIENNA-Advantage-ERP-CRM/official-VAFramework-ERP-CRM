@@ -51,16 +51,19 @@
                     label = VIS.VControlFactory.getLabel(field); //get label
                     crt.addVetoableChangeListener(this);
                     //field.setPropertyChangeListener(crt);
-                    var inputWrap = $('<div class="vis-fp-inputgroupseprtr" data-ColumnName="' + crt.getName() + '" data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID() + '"></div>');
-                    divStatic.append(inputWrap.append(label.getControl()).append(crt.getControl()));
+                    var inputWrapGroup = $('<div class="vis-fp-inputgroupseprtr" data-ColumnName="' + crt.getName() + '" data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID() + '"></div>');
+                    var inputWrap = $('<div class="vis-control-wrap">');
+                    inputWrap.append(crt.getControl()).append(label.getControl());
                     if (crt.getBtnCount() > 1) {
                         var btn = crt.getBtn(0);
                         if (btn) {
-                            var $divInputGroupAppend = $('<div>');
+                            var $divInputGroupAppend = $('<div class="input-group-append">');
                             $divInputGroupAppend.append(btn);
-                            inputWrap.append(btn);
+                            inputWrap.append($divInputGroupAppend);
                         }
                     }
+                    inputWrapGroup.append($('<div class="input-group vis-input-wrap">').append(inputWrap));
+                    divStatic.append(inputWrapGroup);
                     this.getFilterOption(field);
                 }
             }
