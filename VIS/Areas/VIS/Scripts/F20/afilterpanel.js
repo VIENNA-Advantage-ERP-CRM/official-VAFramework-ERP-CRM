@@ -210,7 +210,7 @@
                         var ctr = $(inputs[a]);
                         if (ctr.is(':checked')) {
                             selIds.push(ctr.data("id"));
-                            ctr.parent().parent().find('.vis-fp-spanCount').text("0");
+                            ctr.parent().parent().find('.vis-fp-spanCount').text("(0)");
                             selItems.push(ctr.parent().parent());
                         }
                         //else
