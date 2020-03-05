@@ -15,7 +15,7 @@
         //var btnclose = headerDiv.find(".vis-mark");
 
         var divStatic = bodyDiv.find(".vis-fp-static-ctrlwrp");
-        var spnViewAll = divStatic.find(".vis-fp-static-ctrlwrp");
+        var spnViewAll = divStatic.find(".vis-fp-viwall");
 
         var divDynamic = bodyDiv.find(".vis-fp-custcolumns");
 
