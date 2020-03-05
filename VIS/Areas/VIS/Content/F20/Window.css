@@ -2011,5 +2011,22 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     float: right;
     margin-right: 5px;
 }
+.vis-input-wrap .vis-fp-lst-searchrcrds {
+    display: flex;
+    top: auto;
+}
 
+.vis-input-wrap .vis-fp-lst-searchrcrds .vis-fp-inputspan {
+    padding-left: 10px;
+}
+.vis-fp-cc-addbutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+    border-radius: .25rem;
+    padding: 7px;
+    cursor: pointer;
+}
 /**********************END Filter Panel*/
