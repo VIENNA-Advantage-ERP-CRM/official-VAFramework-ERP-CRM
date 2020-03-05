@@ -651,7 +651,7 @@
                     }
                 }
                 else {
-                    whereCondition = this.createDirectSql(parsedValue, parsedValue2, columnSQL, optr, false);
+                    whereCondition = this.createDirectSql(parsedValue, parsedValue2, columnSQL, optr, true);
 
                 }
             }
