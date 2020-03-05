@@ -12,8 +12,9 @@
         //var btnclose = headerDiv.find(".vis-mark");
 
         var divStatic = bodyDiv.find(".vis-fp-static-ctrlwrp");
-        var spnViewAll = divStatic.find(".vis-fp-static-ctrlwrp");
+        var spnViewAll = divStatic.find(".vis-fp-viwall");
 
+        
         //Translation 
         //headerDiv.find('h4').text(VIS.Msg.getMsg("Filter"));
         spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
@@ -266,6 +267,10 @@
                 var currentColumnName = $target.data('column');
                 that.fireValChanged(currentColumnName);
             }
+        });
+
+        spnViewAll.on("click", "span", function () {
+            divStatic.css('height', 'auto');
         });
 
         this.disposeComponent = function () {
