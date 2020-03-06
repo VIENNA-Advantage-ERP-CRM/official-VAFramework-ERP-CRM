@@ -24,7 +24,7 @@
         var btnAdd = divDynamic.find('.vis-fp-cc-addbtnwrp');
         var divValue1 = divDynamic.find('.vis-fp-valueone');
         var divValue2 = divDynamic.find('.vis-fp-valuetwo');
-        var lblQryValue = divDynamic.find('.vis-fp-valueone label');
+        //var lblQryValue = divDynamic.find('.vis-fp-valueone label');
         var divDynFilters = divDynamic.find('.vis-fp-custcoltag');
 
 
@@ -363,12 +363,7 @@
                     // showFullDay(false);
                 }
 
-                if (f.getDisplayType() == VIS.DisplayType.YesNo) {
-                      lblQryValue.hide();
-                }
-                else {
-                     lblQryValue.show();
-                }
+                
 
                 cmbOp.html(dsOp);
                 cmbOp[0].SelectedIndex = 0;
@@ -449,14 +444,14 @@
             var ctrl = null;
             var ctrl2 = null;
             if (isValue1) {
-                ctrl = divValue1.children()[1];
-                if (divValue1.children().length > 2)
-                    ctrl2 = divValue1.children()[2];
+                ctrl = divValue1.children()[0];
+                //if (divValue1.children().length > 2)
+                    //ctrl2 = divValue1.children()[2];
             }
             else {
-                ctrl = divValue2.children()[1];
-                if (divValue2.children().length > 2)
-                    ctrl2 = divValue2.children()[2];
+                ctrl = divValue2.children()[0];
+                //if (divValue2.children().length > 2)
+                    //ctrl2 = divValue2.children()[2];
             }
 
             //var eList = from child in tblpnlA.Children
@@ -507,31 +502,56 @@
                 }
 
                 var btn = null;
+                var valueGrp = $('<div class="input-group vis-input-wrap">');
+                var valueInputWrap = $('<div class="vis-control-wrap">');
                 if (crt.getBtnCount() > 0 && !(crt instanceof VIS.Controls.VComboBox))
                     btn = crt.getBtn(0);
 
                 if (isValue1) {
-
-                    divValue1.append(crt.getControl());
+                    divValue1.append(valueGrp);
+                    valueGrp.append(valueInputWrap);
+                    valueInputWrap.append(crt.getControl());
                     control1 = crt;
                     if (btn) {
-                        divValue1.append(btn);
-                        crt.getControl().css("width", "calc(100% - 30px)");
-                        btn.css("max-width", "30px");
+                        var $divInputGroupBtn = $('<div class="input-group-append">');
+                        valueGrp.append($divInputGroupBtn);
+                        $divInputGroupBtn.append(btn);
+                        //crt.getControl().css("width", "calc(100% - 30px)");
+                        //btn.css("max-width", "30px");
                     }
+                    if (field.getDisplayType() == VIS.DisplayType.YesNo) {
+                        ;
+                    }
+                    else {
+                        var $InputLabel1 = $('<label>Query Value</label>');
+                        valueInputWrap.append($InputLabel1);
+                    }
+
+                    
                 }
                 else {
-                    divValue2.append(crt.getControl());
+                    divValue2.append(valueGrp);
+                    valueGrp.append(valueInputWrap);
+                    valueInputWrap.append(crt.getControl());
                     control2 = crt;
                     if (btn) {
-                        divValue2.append(btn);
-                        crt.getControl().css("width", "calc(100% - 30px)");
-                        btn.css("max-width", "30px");
+                        var $divInputGroupBtn = $('<div class="input-group-append">');
+                        valueGrp.append($divInputGroupBtn);
+                        $divInputGroupBtn.append(btn);
+                        //crt.getControl().css("width", "calc(100% - 30px)");
+                        //btn.css("max-width", "30px");
+                    }
+                    if (field.getDisplayType() == VIS.DisplayType.YesNo) {
+                        ;
+                    }
+                    else {
+                        var $InputLabel1 = $('<label>Query Value</label>');
+                        valueInputWrap.append($InputLabel1);
                     }
                 }
 
                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
-                    crt.getControl().css("width", "100%");
+                    //crt.getControl().css("width", "100%");
                 }
             }
 };
