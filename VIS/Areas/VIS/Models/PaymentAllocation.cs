@@ -278,7 +278,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -308,7 +308,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = "Error: " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate")+ ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -342,7 +342,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = "Error: " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave") + ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -385,7 +385,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated")+ ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -435,7 +435,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -466,7 +466,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -505,7 +505,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = "Error: " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave")+":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -524,7 +524,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved")+ ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -568,7 +568,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated")+ ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -601,7 +601,7 @@ namespace VIS.Models
                     ValueNamePair pp = VLogger.RetrieveError();
                     if (pp != null)
                     {
-                        msg = "Error: " + pp.GetName();
+                        msg = Msg.GetMsg(ctx, "VIS_AllocNotCompleted") +":- " + pp.GetName();
                     }
                     else
                     {
@@ -708,7 +708,7 @@ namespace VIS.Models
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
-                            msg = "Error: " + pp.GetName();
+                            msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate")+ ":- " + pp.GetName();
                         }
                         else
                         {
@@ -964,7 +964,7 @@ namespace VIS.Models
                                         ValueNamePair pp = VLogger.RetrieveError();
                                         if (pp != null)
                                         {
-                                            msg = "Error: " + pp.GetName();
+                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
                                         }
                                         else
                                         {
@@ -997,7 +997,7 @@ namespace VIS.Models
                                         ValueNamePair pp = VLogger.RetrieveError();
                                         if (pp != null)
                                         {
-                                            msg = "Error: " + pp.GetName();
+                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate")+ ":- " + pp.GetName();
                                         }
                                         else
                                         {
@@ -1018,7 +1018,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = "Error: " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -1064,7 +1064,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = "Error: " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -1104,7 +1104,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -1141,7 +1141,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -1178,7 +1178,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = "Error: " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave")+ ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -1197,7 +1197,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved")+":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -1243,7 +1243,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated")+ ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -1280,7 +1280,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved")+ ":- " + pp.GetName();
                             }
                             else
                             {
@@ -1303,7 +1303,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -1333,7 +1333,7 @@ namespace VIS.Models
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
-                            msg = "Error: " + pp.GetName();
+                            msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                         }
                         else
                         {
@@ -1387,7 +1387,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "PaymentNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -1424,7 +1424,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "PaymentNotCreated") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -2097,7 +2097,7 @@ namespace VIS.Models
         public List<NameValue> GetOrganization(Ctx ctx)
         {
             List<NameValue> retValue = new List<NameValue>();
-            string _sql = " SELECT AD_Org.AD_Org_ID, AD_Org.Name FROM AD_Org AD_Org WHERE AD_Org.AD_Org_ID NOT IN (0) AND AD_Org.IsSummary='N' AND AD_Org.IsActive='Y' ";
+            string _sql = " SELECT AD_Org.AD_Org_ID, AD_Org.Name FROM AD_Org AD_Org WHERE AD_Org.AD_Org_ID NOT IN (0) AND AD_Org.IsSummary='N' AND AD_Org.IsActive='Y' AND AD_Org.IsCostCenter='N' AND AD_Org.IsProfitCenter='N' ";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "AD_Org", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             _sql += " ORDER BY AD_Org.Name ";
             DataSet _ds = DB.ExecuteDataset(_sql);
@@ -2255,7 +2255,7 @@ namespace VIS.Models
                      NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.C_Currency_ID ," + _C_Currency_ID + @",j.DATEACCT ,j.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), " + objCurrency.GetStdPrecision() + @"),0) AS AMTACCTCR, 
                     j.GL_Journal_ID, jl.GL_JOURNALLINE_ID FROM GL_Journal j INNER JOIN GL_JOURNALLINE JL ON JL.GL_JOURNAL_ID=J.GL_JOURNAL_ID 
                     INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= j.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
-                    ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE j.docstatus = 'CO' AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L') ");
+                    ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE j.docstatus IN ('CO','CL') AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L') ");
 
             if (_C_BPartner_ID > 0)
                 sql.Append(" AND JL.C_BPartner_ID= " + _C_BPartner_ID);
@@ -2501,7 +2501,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -2568,7 +2568,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -2656,7 +2656,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -2731,7 +2731,7 @@ namespace VIS.Models
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
-                            msg = "Error: " + pp.GetName();
+                            msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                         }
                         else
                         {
@@ -2778,7 +2778,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "PaymentNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -2817,7 +2817,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "PaymentNotCreated") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -2866,7 +2866,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = "Error: " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -2905,7 +2905,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated") +":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -2940,7 +2940,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = "Error: " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_ScheduleNotAllocated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -2960,7 +2960,7 @@ namespace VIS.Models
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (pp != null)
                 {
-                    msg = "Error: " + pp.GetName();
+                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                 }
                 else
                 {
@@ -2973,6 +2973,16 @@ namespace VIS.Models
             return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
         }
 
+        /// <summary>
+        /// TO create new schedule 
+        /// </summary>
+        /// <param name="mpay">Invoice Pay Schedule object</param>
+        /// <param name="invoice">Invoice Header Object</param>
+        /// <param name="journalLine">Journal Line Object</param>
+        /// <param name="aLine">Allocation Line Object</param>
+        /// <param name="amount">Amount to create schedule</param>
+        /// <param name="trx">Transaction Object</param>
+        /// <returns>Return new schedule object</returns>
         public MInvoicePaySchedule CreateNewSchedule(MInvoicePaySchedule mpay, MInvoice invoice, MJournalLine journalLine, MAllocationLine aLine, Decimal amount, Trx trx)
         {
             MInvoicePaySchedule mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
