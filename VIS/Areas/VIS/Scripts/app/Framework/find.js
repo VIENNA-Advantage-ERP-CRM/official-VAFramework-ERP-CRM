@@ -1365,7 +1365,7 @@
                     return field;
             }
             return null;
-        };
+        }; addRow
 
         function saveRowTemp() {
             // set column name
