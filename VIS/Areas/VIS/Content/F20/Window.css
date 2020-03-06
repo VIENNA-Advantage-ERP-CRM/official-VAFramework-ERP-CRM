@@ -1784,23 +1784,23 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     padding: 5px 10px;
     align-items: center;
 }
-
-    .vis-fp-header h4 {
-        margin: 0;
-        font-size: 1rem;
-        flex: 1;
-    }
-
-    .vis-fp-header i {
-        font-size: .75rem;
-        cursor: pointer;
-    }
-
+.vis-fp-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    flex: 1;
+}
+.vis-fp-header i {
+    font-size: .75rem;
+    cursor: pointer;
+}
 .vis-fp-bodywrap {
     flex: 1;
     overflow: auto;
+    height: calc(100% - 30px);
 }
-
+.vis-fp-bodycontent {
+    height: 100%;
+}
 .vis-fp-custcolumns {
     padding: 10px;
     border-top: 1px solid rgba(var(--v-c-on-secondary), .2);
@@ -1851,7 +1851,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-fp-custcolumns .card-header {
     background: rgba(var(--v-c-secondary), .5);
     display: flex;
-    padding: 10px;
+    padding: 5px 10px;
     font-size: .875rem;
 }
 
@@ -1913,7 +1913,9 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 }
 
 .vis-fp-static-ctrlwrp {
-    padding: 10px;
+    padding: 5px 10px 10px;
+    height: calc(100% - 270px);
+    overflow: auto;
 }
 
 .vis-fp-lst-searchrcrds {
@@ -1943,6 +1945,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     font-size: .75rem;
     cursor: pointer;
     color: rgba(var(--v-c-primary), 1);
+    padding: 5px 10px 0 10px;
 }
 .vis-fp-currntrcrdswrap {
     display: flex;
