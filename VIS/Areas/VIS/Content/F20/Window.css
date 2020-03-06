@@ -1870,14 +1870,14 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-fp-custcoltagswrp {
     padding-top: 10px;
 }
-
 .vis-fp-custcoltag {
     display: flex;
     font-size: .75rem;
-    align-items: center;
+    /* align-items: center; */
     border-radius: 1rem;
-    background: rgba(var(--v-c-secondary), .5);
-    padding: 3px 10px;
+    /* background: rgba(var(--v-c-secondary), .5); */
+    /*padding: 3px 10px;*/
+    flex-direction: column;
 }
 
     .vis-fp-custcoltag span {
@@ -1951,11 +1951,10 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     display: flex;
     flex-direction: column;
     font-size: .75rem;
-    margin: 5px 0 7px 0;
+    /*margin: 5px 0 7px 0;*/
     position: relative;
     top: -7px;
 }
-
 .vis-fp-currntrcrds {
     background: rgba(var(--v-c-secondary), .7);
     border-radius: .6rem;
@@ -1963,22 +1962,23 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     cursor: pointer;
     display: flex;
     align-items: center;
+    flex: 1;
+    margin: 5px 0 5px 0;
 }
-
-    .vis-fp-currntrcrds span {
-        flex: 1;
-    }
-
-    .vis-fp-currntrcrds i {
-        font-size: .6rem;
-        cursor: pointer;
-    }
-
-    .vis-fp-currntrcrds:hover {
-        background: rgba(var(--v-c-primary), .1);
-        color: rgba(var(--v-c-primary), 1);
-    }
-
+.vis-fp-valueone .vis-input-wrap label {
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+.vis-fp-currntrcrds span {
+    flex: 1;
+}
+.vis-fp-currntrcrds i {
+    font-size: .6rem;
+    cursor: pointer;
+}
+.vis-fp-currntrcrds:hover {
+    background: rgba(var(--v-c-primary), .1);
+    color: rgba(var(--v-c-primary), 1);
+}
 .vis-fp-inputspan input[type=checkbox] {
     border: 1px solid rgba(var(--v-c-on-secondary), 0.3);
     -webkit-appearance: none;
