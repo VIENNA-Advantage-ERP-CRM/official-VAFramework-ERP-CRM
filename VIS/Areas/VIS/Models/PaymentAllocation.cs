@@ -308,7 +308,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate")+ ":- " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -385,7 +385,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated")+ ":- " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -505,7 +505,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave")+":- " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave") + ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -524,7 +524,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved")+ ":- " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -568,7 +568,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated")+ ":- " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -601,7 +601,7 @@ namespace VIS.Models
                     ValueNamePair pp = VLogger.RetrieveError();
                     if (pp != null)
                     {
-                        msg = Msg.GetMsg(ctx, "VIS_AllocNotCompleted") +":- " + pp.GetName();
+                        msg = Msg.GetMsg(ctx, "VIS_AllocNotCompleted") + ":- " + pp.GetName();
                     }
                     else
                     {
@@ -708,7 +708,7 @@ namespace VIS.Models
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
-                            msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate")+ ":- " + pp.GetName();
+                            msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate") + ":- " + pp.GetName();
                         }
                         else
                         {
@@ -997,7 +997,7 @@ namespace VIS.Models
                                         ValueNamePair pp = VLogger.RetrieveError();
                                         if (pp != null)
                                         {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate")+ ":- " + pp.GetName();
+                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
                                         }
                                         else
                                         {
@@ -1178,7 +1178,7 @@ namespace VIS.Models
                                     ValueNamePair pp = VLogger.RetrieveError();
                                     if (pp != null)
                                     {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave")+ ":- " + pp.GetName();
+                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave") + ":- " + pp.GetName();
                                     }
                                     else
                                     {
@@ -1197,7 +1197,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved")+":- " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -1243,7 +1243,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated")+ ":- " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
@@ -1280,7 +1280,7 @@ namespace VIS.Models
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved")+ ":- " + pp.GetName();
+                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
                             }
                             else
                             {
@@ -2028,10 +2028,13 @@ namespace VIS.Models
                     pData.Currency = dr.Tables[0].Rows[i]["CURRENCY"].ToString();
                     pData.Converted = dr.Tables[0].Rows[i]["CONVERTED"].ToString();
                     pData.Amount = dr.Tables[0].Rows[i]["Amount"].ToString();
-                    pData.Discount = dr.Tables[0].Rows[i]["DISCOUNT"].ToString();
+                    //commented because as per ashish and surya user will enter writeoff and discount if he/she want to give
+                    //pData.Discount = dr.Tables[0].Rows[i]["DISCOUNT"].ToString();
+                    //pData.Writeoff = dr.Tables[0].Rows[i]["WRITEOFF"].ToString();
+                    pData.Discount = decimal.Zero.ToString();
+                    pData.Writeoff = decimal.Zero.ToString();
                     pData.Multiplierap = dr.Tables[0].Rows[i]["MULTIPLIERAP"].ToString();
                     pData.DocBaseType = dr.Tables[0].Rows[i]["docbasetype"].ToString();
-                    pData.Writeoff = dr.Tables[0].Rows[i]["WRITEOFF"].ToString();
                     pData.AppliedAmt = dr.Tables[0].Rows[i]["APPLIEDAMT"].ToString();
                     pData.C_InvoicePaySchedule_ID = dr.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"].ToString();
                     pData.InvoiceScheduleDate = dr.Tables[0].Rows[i]["Scheduledate"].ToString();
@@ -2451,6 +2454,7 @@ namespace VIS.Models
             decimal balanceAmt = 0;
             string msg = string.Empty;
             int C_InvoicePaySchedule_ID = 0;
+
             Trx trx = Trx.GetTrx(Trx.CreateTrxName("GL"));
             MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
                DateTime.Now, C_Currency_ID, ctx.GetContext("#AD_User_Name"), trx);
@@ -2595,14 +2599,16 @@ namespace VIS.Models
                     }
                 }
 
-                decimal overUnderAmt = 0;
-                decimal dueamt = 0;
+                decimal overUnderAmt = 0, DiscountAmt = 0;
+                decimal dueamt = 0, WriteOffAmt = 0;
                 //create allocation line if invoice row selected
                 for (int i = 0; i < rowsInvoice.Count; i++)
                 {
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]));
                     amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]));
                     remainingAmt = amtToAllocate;
+                    DiscountAmt = Util.GetValueOfDecimal(rowsInvoice[i]["Discount"]);
+                    WriteOffAmt = Util.GetValueOfDecimal(rowsInvoice[i]["Writeoff"]);
                     if (Util.GetValueOfBool(rowsInvoice[i]["IsPaid"]))
                         continue;
 
@@ -2641,12 +2647,14 @@ namespace VIS.Models
                             balanceAmt = actualAmt - remainingAmt;
                             remainingAmt = 0;
                         }
-                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
+                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, DiscountAmt, WriteOffAmt, overUnderAmt);
                         aLine.SetDocInfo(C_BPartner_ID, 0, 0);
                         aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
                         aLine.SetDateTrx(DateTrx);
                         aLine.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
                         aLine.SetC_Invoice_ID(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
+                        aLine.SetDiscountAmt(DiscountAmt);
+                        aLine.SetWriteOffAmt(WriteOffAmt);
                         aLine.SetOverUnderAmt(overUnderAmt);
                         if (!aLine.Save())
                         {
@@ -2688,6 +2696,12 @@ namespace VIS.Models
                                     if (inv.GetC_Currency_ID() != C_Currency_ID)
                                     {
                                         var conertedAmount = MConversionRate.Convert(ctx, dueamt, C_Currency_ID, inv.GetC_Currency_ID(), alloc.GetDateAcct(), alloc.GetC_ConversionType_ID(), inv.GetAD_Client_ID(), inv.GetAD_Org_ID());
+                                        if(conertedAmount == 0)
+                                        {
+                                            trx.Rollback();
+                                            trx.Close();
+                                            return Msg.GetMsg(ctx, "ConversionNotFoundCheckAccountDate");
+                                        }
                                         invpay.SetDueAmt(Math.Abs(conertedAmount));
                                     }
                                     else
@@ -2905,7 +2919,7 @@ namespace VIS.Models
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null)
                                 {
-                                    msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated") +":- " + pp.GetName();
+                                    msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {

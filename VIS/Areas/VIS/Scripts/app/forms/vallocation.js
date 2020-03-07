@@ -2157,24 +2157,66 @@
                             }
                         }
                     }
-                    else if ($gridPayment.columns[event.column].field == "Writeoff") {
-                        if (record.changes == undefined || record.changes.Writeoff == undefined) {
-                            val = 0;
+                    if ($gridPayment.columns[event.column].field == "Writeoff") {
+                        if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
+                            else {
+                                val = 0;
+                            }
                         }
                         else {
-                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
-                            val = record.changes.Writeoff;
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
+                            else {
+                                record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
                         }
                     }
-                    else if ($gridPayment.columns[event.column].field == "Discount") {
-                        if (record.changes == undefined || record.changes.Discount == undefined) {
-                            val = 0;
+                    if ($gridPayment.columns[event.column].field == "Discount") {
+                        if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
+                            else {
+                                val = 0;
+                            }
                         }
                         else {
-                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Discount);
-                            val = record.changes.Discount;
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
+                            else {
+                                record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
                         }
                     }
+                    //else if ($gridPayment.columns[event.column].field == "Writeoff") {
+                    //    if (record.changes == undefined || record.changes.Writeoff == undefined) {
+                    //        val = 0;
+                    //    }
+                    //    else {
+                    //        record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                    //        val = record.changes.Writeoff;
+                    //    }
+                    //}
+                    //else if ($gridPayment.columns[event.column].field == "Discount") {
+                    //    if (record.changes == undefined || record.changes.Discount == undefined) {
+                    //        val = 0;
+                    //    }
+                    //    else {
+                    //        record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Discount);
+                    //        val = record.changes.Discount;
+                    //    }
+                    //}
 
                     if (parseFloat(val) > 0 && parseFloat(val) > parseFloat(record.OpenAmt)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
@@ -2231,24 +2273,66 @@
                             }
                         }
                     }
-                    else if ($gridCashline.columns[event.column].field == "Writeoff") {
-                        if (record.changes == undefined || record.changes.Writeoff == undefined) {
-                            val = 0;
+                    if ($gridCashline.columns[event.column].field == "Writeoff") {
+                        if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
+                            else {
+                                val = 0;
+                            }
                         }
                         else {
-                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
-                            val = record.changes.Writeoff;
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
+                            else {
+                                record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
                         }
                     }
-                    else if ($gridCashline.columns[event.column].field == "Discount") {
-                        if (record.changes == undefined || record.changes.Discount == undefined) {
-                            val = 0;
+                    if ($gridCashline.columns[event.column].field == "Discount") {
+                        if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
+                            else {
+                                val = 0;
+                            }
                         }
                         else {
-                            record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
-                            val = record.changes.Discount;
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
+                            else {
+                                record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
                         }
                     }
+                    //else if ($gridCashline.columns[event.column].field == "Writeoff") {
+                    //    if (record.changes == undefined || record.changes.Writeoff == undefined) {
+                    //        val = 0;
+                    //    }
+                    //    else {
+                    //        record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                    //        val = record.changes.Writeoff;
+                    //    }
+                    //}
+                    //else if ($gridCashline.columns[event.column].field == "Discount") {
+                    //    if (record.changes == undefined || record.changes.Discount == undefined) {
+                    //        val = 0;
+                    //    }
+                    //    else {
+                    //        record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                    //        val = record.changes.Discount;
+                    //    }
+                    //}
 
                     if (parseFloat(val) > 0 && parseFloat(val) > parseFloat(record.OpenAmt)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
@@ -2308,21 +2392,47 @@
                         }
                     }
                     else if ($gridInvoice.columns[event.column].field == "Writeoff") {
-                        if (record.changes == undefined || record.changes.Writeoff === undefined) {
-                            val = 0;
+                        if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
+
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
+                            else {
+                                val = 0;
+                            }
                         }
                         else {
-                            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
-                            val = record.changes.Writeoff;
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
+                            else {
+                                record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                                val = record.changes.Writeoff;
+                            }
                         }
                     }
                     else if ($gridInvoice.columns[event.column].field == "Discount") {
-                        if (record.changes == undefined || record.changes.Discount === undefined) {
-                            val = 0;
+                        if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
+
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
+                            else {
+                                val = 0;
+                            }
                         }
                         else {
-                            record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
-                            val = record.changes.Discount;
+                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
+                            else {
+                                record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                                val = record.changes.Discount;
+                            }
                         }
                     }
                     if (parseFloat(val) > 0 && parseFloat(val) > parseFloat(record.Amount)) {
