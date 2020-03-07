@@ -1,35 +1,83 @@
 ﻿; (function (VIS, $) {
 
-    var tmpfp = document.querySelector('#vis-ad-fptmp').content;// $("#vis-ad-windowtmp");
+   // var tmpfp = document.querySelector('#vis-ad-fptmp').content;// $("#vis-ad-windowtmp");
 
+    function getTemplate(winNo) {
+        var str =                                                                                                    
+            ' <div class="vis-fp-bodycontent">                                                 ' +
+            '     <div class="vis-fp-viwall">                                                  ' +
+            '         <span>'+VIS.Msg.getMsg("ViewAll")+'</span>                               ' +
+            '     </div>                                                                       ' +
+            '     <div class="vis-fp-static-ctrlwrp">                                          ' +
+            '     </div>                                                                       ' +
+            '     <div class="vis-fp-custcolumns" id="accordion_' + winNo +'"">                ' +
+            '         <div class="card">                                                       ' +
+            '             <div class="card-header">                                            ' +
+            '                 <span>' + VIS.Msg.getMsg("AdvanceSearch") +'</span>                                  ' +
+            '                 <a class="card-link" data-toggle="collapse" href="#collapseOne_' +winNo+'"> ' +
+            '                     <i class="vis vis-arrow-up"></i>                             ' +
+            '                 </a>                                                             ' +
+            '             </div>                                                               ' +
+            '             <div id="collapseOne_' + winNo +'"" class="collapse show" data-parent="#accordion_' + winNo +'">' +
+            '                 <div class="card-body">                                          ' +
+            '                     <div class="input-group vis-input-wrap">                     ' +
+            '                         <div class="vis-control-wrap">                           ' +
+            '                             <select class="vis-fp-cols">                         ' +
+            '                             </select>                                            ' +
+            '                             <label class="vis-fp-lblcols">'+VIS.Msg.getMsg("Column")+'</label>         ' +
+            '                         </div>                                                   ' +
+            '                     </div>                                                       ' +
+            '                     <div class="input-group vis-input-wrap">                     ' +
+            '                         <div class="vis-control-wrap">                           ' +
+            '                             <select class="vis-fp-op">                           ' +
+            '                             </select>                                            ' +
+            '                             <label class="vis-fp-lblop">' + VIS.Msg.getMsg("Operator") + '</label>         ' +
+            '                         </div>                                                   ' +
+            '                     </div>                                                       ' +
+            '                     <div class="vis-fp-valueone">                                ' +
+            '                     </div>                                                       ' +
+            '                     <div class="vis-fp-valuetwo">                                ' +
+            '                     </div>                                                       ' +
+            '                     <div class="vis-fp-valuethree">                              ' +
+            '                     </div>                                                       ' +
+            '                     <div class="vis-fp-cc-addbtnwrp">                            ' +
+            '                         <span class="vis-fp-cc-addbutton">' + VIS.Msg.getMsg("Add") + '</span>             ' +
+            '                     </div>                                                       ' +
+            '                 </div>                                                           ' +
+            '             </div>                                                               ' +
+            '         </div>                                                                   ' +
+            '         <div class="vis-fp-custcoltagswrp">                                      ' +
+            '             <div class="vis-fp-custcoltag">                                      ' +
+            '             </div>                                                               ' +
+            '         </div><!-- vis-fp-custcoltagswrp -->                                     ' +
+            '     </div>                                                                       ' +
+            ' </div>';
+        return str;
+    };
+
+
+    //AdvanceSearch
     function FilterPanel(windowNo, gc) {
 
-        var clone = document.importNode(tmpfp, true);
+        var tmp = getTemplate(windowNo);
+
+        //var clone = $(tmp);//document.importNode(tmpfp, true);
 
         var control1, control2;
         var dsAdvanceData = null;
 
-        //var $outerwrap = $(clone.querySelector("vis-fp-bodycontent);
-        var bodyDiv = $(clone.querySelector(".vis-fp-bodycontent"));
-        // var headerDiv = $outerwrap.find(".vis-fp-header");
-        //var btnclose = headerDiv.find(".vis-mark");
-
+        var bodyDiv = $(tmp);
         var divStatic = bodyDiv.find(".vis-fp-static-ctrlwrp");
         var spnViewAll = divStatic.find(".vis-fp-viwall");
 
         var divDynamic = bodyDiv.find(".vis-fp-custcolumns");
-
         var cmbColumns = divDynamic.find('.vis-fp-cols');
         var cmbOp = divDynamic.find('.vis-fp-op');
         var btnAdd = divDynamic.find('.vis-fp-cc-addbtnwrp');
         var divValue1 = divDynamic.find('.vis-fp-valueone');
         var divValue2 = divDynamic.find('.vis-fp-valuetwo');
-        //var lblQryValue = divDynamic.find('.vis-fp-valueone label');
         var divDynFilters = divDynamic.find('.vis-fp-custcoltag');
 
-
-        //Translation 
-        //headerDiv.find('h4').text(VIS.Msg.getMsg("Filter"));
         spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
 
         this.curGC = gc;
@@ -114,7 +162,6 @@
                 }
             }
         };
-
 
         function prepareWhereClause(context) {
             var finalWhereClause = '';
@@ -306,7 +353,11 @@
 
         btnAdd.on("click", function (e) {
             saveDynFilter();
-});
+        });
+
+        spnViewAll.on("click", function (e) {
+            alert('ss');
+        });
 
         //dynamic
         cmbColumns.on('change', function (e) {
@@ -445,18 +496,10 @@
             var ctrl2 = null;
             if (isValue1) {
                 ctrl = divValue1.children()[0];
-                //if (divValue1.children().length > 2)
-                    //ctrl2 = divValue1.children()[2];
             }
             else {
                 ctrl = divValue2.children()[0];
-                //if (divValue2.children().length > 2)
-                    //ctrl2 = divValue2.children()[2];
             }
-
-            //var eList = from child in tblpnlA.Children
-            //where Grid.GetRow((FrameworkElement)child) == row && Grid.GetColumn((FrameworkElement)child) == col
-            //select child;
 
             //Remove any elements in the list
             if (ctrl != null) {
@@ -516,38 +559,34 @@
                         var $divInputGroupBtn = $('<div class="input-group-append">');
                         valueGrp.append($divInputGroupBtn);
                         $divInputGroupBtn.append(btn);
-                        //crt.getControl().css("width", "calc(100% - 30px)");
-                        //btn.css("max-width", "30px");
+                       
                     }
                     if (field.getDisplayType() == VIS.DisplayType.YesNo) {
                         ;
                     }
                     else {
-                        var $InputLabel1 = $('<label>Query Value</label>');
-                        valueInputWrap.append($InputLabel1);
+                        valueInputWrap.append('<label>' + VIS.Msg.getMsg("QueryValue")+'</label>'); 
                     }
-
-                    
                 }
                 else {
-                    divValue2.append(valueGrp);
-                    valueGrp.append(valueInputWrap);
-                    valueInputWrap.append(crt.getControl());
-                    control2 = crt;
-                    if (btn) {
-                        var $divInputGroupBtn = $('<div class="input-group-append">');
-                        valueGrp.append($divInputGroupBtn);
-                        $divInputGroupBtn.append(btn);
-                        //crt.getControl().css("width", "calc(100% - 30px)");
-                        //btn.css("max-width", "30px");
-                    }
-                    if (field.getDisplayType() == VIS.DisplayType.YesNo) {
-                        ;
-                    }
-                    else {
-                        var $InputLabel1 = $('<label>Query Value</label>');
-                        valueInputWrap.append($InputLabel1);
-                    }
+                    //divValue2.append(valueGrp);
+                    //valueGrp.append(valueInputWrap);
+                    //valueInputWrap.append(crt.getControl());
+                    //control2 = crt;
+                    //if (btn) {
+                    //    var $divInputGroupBtn = $('<div class="input-group-append">');
+                    //    valueGrp.append($divInputGroupBtn);
+                    //    $divInputGroupBtn.append(btn);
+                    //    //crt.getControl().css("width", "calc(100% - 30px)");
+                    //    //btn.css("max-width", "30px");
+                    //}
+                    //if (field.getDisplayType() == VIS.DisplayType.YesNo) {
+                    //    ;
+                    //}
+                    //else {
+                    //    var $InputLabel1 = $('<label>Query Value</label>');
+                    //    valueInputWrap.append($InputLabel1);
+                    //}
                 }
 
                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
@@ -634,7 +673,7 @@
                     arrCondition.push(" ) ");
                 if (dynWhere != '')
                     dynWhere += ' AND ';
-                dynWhere += arr.join(' ');
+                dynWhere += arrCondition.join(' ');
             }
             return dynWhere;
         };
