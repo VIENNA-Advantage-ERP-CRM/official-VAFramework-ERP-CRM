@@ -6,7 +6,7 @@
         var str =                                                                                                    
             ' <div class="vis-fp-bodycontent">                                                 ' +
             '     <div class="vis-fp-viwall">                                                  ' +
-            '         <span>'+VIS.Msg.getMsg("ViewAll")+'</span>                               ' +
+            '         <span>'+VIS.Msg.getMsg("Auto")+'</span>                               ' +
             '     </div>                                                                       ' +
             '     <div class="vis-fp-static-ctrlwrp">                                          ' +
             '     </div>                                                                       ' +
@@ -68,7 +68,7 @@
 
         var bodyDiv = $(tmp);
         var divStatic = bodyDiv.find(".vis-fp-static-ctrlwrp");
-        var spnViewAll = divStatic.find(".vis-fp-viwall");
+        var btnViewAll = bodyDiv.find(".vis-fp-viwall"); 
 
         var divDynamic = bodyDiv.find(".vis-fp-custcolumns");
         var cmbColumns = divDynamic.find('.vis-fp-cols');
@@ -78,7 +78,7 @@
         var divValue2 = divDynamic.find('.vis-fp-valuetwo');
         var divDynFilters = divDynamic.find('.vis-fp-custcoltag');
 
-        spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
+        //spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
 
         this.curGC = gc;
         this.winNo = windowNo;
@@ -355,8 +355,8 @@
             saveDynFilter();
         });
 
-        spnViewAll.on("click", function (e) {
-            alert('ss');
+        btnViewAll.on("click", function (e) {
+            divStatic.toggleClass('.vis-fp-static-ctrlwrp-auto');
         });
 
         //dynamic
