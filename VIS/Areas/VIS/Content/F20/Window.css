@@ -1918,6 +1918,10 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     overflow: auto;
 }
 
+.vis-fp-static-ctrlwrp-auto {
+    height: auto;
+}
+
 .vis-fp-lst-searchrcrds {
     font-size: .75rem;
     position: relative;
