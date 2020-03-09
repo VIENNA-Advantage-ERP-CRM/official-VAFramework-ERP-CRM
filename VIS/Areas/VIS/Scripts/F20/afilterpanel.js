@@ -8,6 +8,7 @@
             '     <div class="vis-fp-viwall">                                                  ' +
             '         <span>'+VIS.Msg.getMsg("Auto")+'</span>                               ' +
             '     </div>                                                                       ' +
+            '  <div class="vis-fp-datawrap"> '+
             '     <div class="vis-fp-static-ctrlwrp">                                          ' +
             '     </div>                                                                       ' +
             '     <div class="vis-fp-custcolumns" id="accordion_' + winNo +'"">                ' +
@@ -50,7 +51,7 @@
             '             <div class="vis-fp-custcoltag">                                      ' +
             '             </div>                                                               ' +
             '         </div><!-- vis-fp-custcoltagswrp -->                                     ' +
-            '     </div>                                                                       ' +
+            '     </div>  </div>                                                                     ' +
             ' </div>';
         return str;
     };
@@ -352,7 +353,7 @@
             saveDynFilter();
         });
 
-        btnViewAll.on("click", function (e) {
+        btnViewAll.on("click", "span", function (e) {
             divStatic.toggleClass('vis-fp-static-ctrlwrp-auto');
         });
 
