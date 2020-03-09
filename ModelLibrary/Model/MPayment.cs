@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using VAdvantage.Process;
 using VAdvantage.Logging;
 using VAdvantage.ProcessEngine;
+using Oracle.ManagedDataAccess.Client;
 
 namespace VAdvantage.Model
 {
@@ -51,6 +52,8 @@ namespace VAdvantage.Model
         private String _AllocMsg = "";
 
         private bool resetAmtDim = false;
+
+        private bool autoCheck = false;
 
         // used for locking query - checking schedule is paid or not on completion
         // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
@@ -893,12 +896,16 @@ namespace VAdvantage.Model
             }
             catch (Exception ex) { }
 
+            string isAutoControl = Util.GetValueOfString(DB.ExecuteScalar("SELECT ChkNoAutoControl FROM C_BankAccount  WHERE IsActive='Y' AND C_BankAccount_ID=" + GetC_BankAccount_ID()));
             if (GetTenderType() == "K")
             {
-                if (string.IsNullOrEmpty(GetCheckNo()))
+                if (isAutoControl == "N")
                 {
-                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_PayMetAndPayTermSame"));
-                    return false;
+                    if (string.IsNullOrEmpty(GetCheckNo()))
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_PayMetAndPayTermSame"));
+                        return false;
+                    }
                 }
                 // when post dated check module is not installed then system check Cheque date can not be greater than Current Date
                 if (Env.IsModuleInstalled("VA027_"))
@@ -988,6 +995,71 @@ namespace VAdvantage.Model
                 }
             }
 
+            // auto check number work - Mohit - 7 march 2020
+            string docBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocBaseType FROM C_DocType WHERE IsActive='Y' AND C_DocType_ID=" + GetC_DocType_ID()));
+            string payBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod  WHERE IsActive='Y' AND VA009_PaymentMethod_ID=" + GetVA009_PaymentMethod_ID()));
+            if (payBaseType == "S" && !IsReversal())
+            {
+                // if not auto control.
+                if (isAutoControl == "N")
+                {
+                    if (docBaseType == "APP"  && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+                    else if (docBaseType == "ARR"  && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+                    else
+                    {
+                        // no check
+                    }
+                }
+                else
+                {
+                    autoCheck = false;
+                    // if AP Pay and payamt less than 0
+                    if (docBaseType == "APP" && GetPayAmt() < 0 && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+                    // if AR Rec and payamt greater than 0
+                    else if (docBaseType == "ARR" && GetPayAmt() >= 0 && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+                    #region commented code check
+                    // if AP Payment and amt greatr than 0.
+                    //else if ((docBaseType == "APP" && GetPayAmt() >= 0) || (docBaseType == "ARR" && GetPayAmt() < 0))
+                    //{
+                    //    // get Check number
+                    //    string _sql = @"SELECT CURRENTNEXT FROM   (SELECT     CURRENTNEXT,    dense_rank() over(order by PRIORITY ASC) AS rnk
+                    //      FROM C_BankAccountDoc  WHERE C_BANKACCOUNT_ID = " + GetC_BankAccount_ID() + @"  AND VA009_PaymentMethod_ID = " + GetVA009_PaymentMethod_ID() + @" AND Priority
+                    //    IS NOT NULL  AND CURRENTNEXT BETWEEN STARTCHKNUMBER AND ENDCHKNUMBER  )WHERE rnk = 1 ";
+                    //    string currentNext = Util.GetValueOfString(DB.ExecuteScalar(_sql));
+                    //    if (string.IsNullOrEmpty(currentNext))
+                    //    {
+                    //        log.SaveError("Error", Msg.GetMsg(GetCtx(), "no check number found for selected bank."));
+                    //        return false;
+                    //    }
+                    //    autoCheck = true;
+                    //}
+                    #endregion
+                    else
+                    {
+                        // no check
+                    }
+
+                }
+            }
+
+
+
             return true;
         }	//	beforeSave
 
@@ -1076,10 +1148,58 @@ namespace VAdvantage.Model
                         log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
                 }
             }
+          
 
             return true;
         }
+        /// <summary>
+        /// Get checknumber for selected bank account and payment method from GetCheckNo procedure.
+        /// </summary>
+        /// <param name="payMethod_ID">Payment Mehtod ID</param>
+        /// <param name="BankAccount_ID"> Bank Account ID</param>
+        /// <param name="trx">transaction object</param>
+        /// <returns></returns>
+        public  string getChecknumber(int payMethod_ID, int BankAccount_ID,Trx trx)
+        {
+            string retval = string.Empty;
+            IDbConnection dbConnection = null;            
+            if (trx == null)
+            {
+                return string.Empty; ;
+            }
+            try
+            {
+                dbConnection = trx.GetConnection();
+                if (dbConnection != null)
+                {
+                    // execute procedure for updating cost of components
+                    OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Connection = (OracleConnection)dbConnection;
+                    cmd.CommandText = "GETCHECKNO";
+                    cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
+                    cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
+                    cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
+                    cmd.BindByName = true;                    
+                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());                    
+                    retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
+                    if (retval == "0") // If Record Found
+                    {
+                        retval = string.Empty;
+                    }
+                   
+                }               
+                
+                return retval.ToString();
 
+            }
+            catch (Exception e)
+            {
+                return retval;
+            }
+           
+            
+        }
 
         /**
          * 	Get Allocated Amt in Payment Currency
@@ -3196,6 +3316,32 @@ namespace VAdvantage.Model
 
             ////Arpit 18 Dec,2017 Asked BY Ashish Sir
             ////if (!UpdateUnMatchedBalanceForAccount(false))
+            // Auto check work-Mohit-7 March 2020
+            MBankAccount bnkAct = new MBankAccount(GetCtx(), GetC_BankAccount_ID(), null);
+            MDocType dt = new MDocType(GetCtx(), GetC_DocType_ID(), null);
+            string payBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod  WHERE IsActive='Y' AND VA009_PaymentMethod_ID=" + GetVA009_PaymentMethod_ID()));
+            
+            if (payBaseType.Equals("S") && bnkAct.IsChkNoAutoControl() && !IsReversal())
+            {
+                if ((dt.GetDocBaseType().Equals("APP") && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals("ARR") && GetPayAmt() < 0))
+                {
+                    // get Check number
+                    string checkNo = getChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
+                    if (!string.IsNullOrEmpty(checkNo))
+                    {
+                        DB.ExecuteQuery("UPDATE C_Payment SET CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(),null, Get_Trx());
+                    }
+                    else
+                    {
+                        _processMsg = Msg.GetMsg(GetCtx(), "NoCheckNum");
+                        log.Info("" + _processMsg + ": Payment Document No " + GetDocumentNo());
+                        return DocActionVariables.STATUS_INVALID;
+                    }
+                    
+                }
+            }
+
+
             if (!UpdateUnMatchedBalanceForAccount())
             {
                 return DocActionVariables.STATUS_INVALID;
