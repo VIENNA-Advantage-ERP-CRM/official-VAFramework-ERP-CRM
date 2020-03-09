@@ -56,17 +56,9 @@ namespace VAdvantage.DataBase
 		if (retValue.Length == 0 )
 			return  oraStatement;
 		
-        //if (retValue == null)
-        //{	
-        //    log.Log(Level.SEVERE,("DB_PostgreSQL.convertStatement - Not Converted (" + oraStatement + ") - "
-        //            + m_convert.getConversionError()));
-        //    throw new IllegalArgumentException
-        //        ("DB_PostgreSQL.convertStatement - Not Converted (" + oraStatement + ") - "
-        //            + m_convert.getConversionError());
-        //}
-		//		end vpj-cd 24/06/2005 e-evolution
+      
 		if (retValue.Length != 1)
-			//begin vpj-cd 24/06/2005 e-evolution
+			
 			{
 			log.Log(Level.SEVERE, ("DB_PostgreSQL.convertStatement - Convert Command Number=" + retValue.Length
 				+ " (" + oraStatement + ") - " + m_convert.GetConversionError()));
@@ -75,147 +67,10 @@ namespace VAdvantage.DataBase
 					+ " (" + oraStatement + ") - " + m_convert.GetConversionError());
 			}
 		
-    	//Convert.logMigrationScript(oraStatement, retValue[0], null);
+    	
 		return retValue[0];
 
-
-
-
-            ////jz Postgre is sensitive between Numeric and Integer
-
-            //while (oraStatement.StartsWith("\t"))
-            //{
-            //    oraStatement = oraStatement.Replace("\t", "");
-            //}
-
-            //if (oraStatement.StartsWith("ALTER TABLE") && (oraStatement.IndexOf(" MODIFY ") > 0))
-            //{
-            //    String[] tokens = oraStatement.Split(' ');
-            //    String sql = "ALTER TABLE " + tokens[2] + " ALTER " + tokens[4];
-            //    int idef = oraStatement.IndexOf(" DEFAULT ");
-            //    if ((idef > 0) || (oraStatement.IndexOf(" NULL") < 0))
-            //    {
-            //        int i = sql.Length + 1; //alter v.s. modify
-            //        if (idef > 0)
-            //        {
-            //            if (!("DEFAULT".Equals(tokens[5]) || (tokens[5].Length == 0)))
-            //            {
-            //                sql += " TYPE " + oraStatement.Substring(i, (idef + 1) - i); //type stuff
-            //                sql += ", ALTER " + tokens[4];
-            //            }
-            //            sql += " SET DEFAULT " + oraStatement.Substring(idef + 9, (oraStatement.Length) - (idef + 9));
-            //        }
-            //        else
-            //        {
-            //            int rpDrop = 0;
-            //            if ((oraStatement.IndexOf(" MODIFY (") > 0) || (oraStatement.IndexOf(" MODIFY(") > 0))
-            //                rpDrop = 1;
-            //            sql += " TYPE " + oraStatement.Substring(i, oraStatement.Length - rpDrop);
-            //        }
-            //        oraStatement = sql;
-            //    }
-            //    else
-            //    {
-            //        if (oraStatement.IndexOf(" NOT NULL") > 0)
-            //        {
-            //            sql += " SET NOT NULL";
-            //            return sql;
-            //        }
-            //        else if (oraStatement.IndexOf(" NULL") > 0)
-            //        {
-            //            sql += " DROP NOT NULL";
-            //            return sql;
-            //        }
-            //    }
-            //}
-
-            //if (oraStatement.StartsWith("CREATE UNIQUE INDEX ") && (oraStatement.IndexOf("TO_NCHAR(AD_User_ID)") > 0)) //jz hack number pad
-            //{
-            //    oraStatement = oraStatement.Replace("TO_NCHAR(AD_User_ID)", "TO_CHAR(AD_User_ID,'9999999')::VARCHAR");
-            //}
-
-            //if (oraStatement.StartsWith("ALTER TABLE") && (oraStatement.IndexOf(" ADD (") > 0)) //jz remove () for add
-            //{
-            //    oraStatement = oraStatement.Replace(" ADD (", " ADD ");
-            //    oraStatement = oraStatement.Substring(0, oraStatement.Length - 1);
-            //}
-
-            //if (oraStatement.StartsWith("UPDATE")) //jz use tablename to replace co-relation id
-            //{
-            //    //    while (oraStatement.IndexOf('\t') > -1)
-            //    //        oraStatement = oraStatement.Replace('\t', ' ');
-            //    //    String[] tokens = oraStatement.Split(' ');
-            //    //    if (!"SET".Equals(tokens[2].ToUpper()))
-            //    //    {
-            //    //        String[] sep = { " ", "=", ">", "<", "(", "," };
-            //    //        String crid = tokens[2] + ".";
-            //    //        String ncrid = tokens[1] + ".";
-
-            //    //        oraStatement = oraStatement.Replace(" " + tokens[2] + " ", " ");
-            //    //        foreach (String element in sep)
-            //    //        {
-            //    //            String crid1 = (element + crid).ToUpper();
-            //    //            String ncrid1 = element + ncrid;
-            //    //            int l = crid1.Length;
-            //    //            int ix = oraStatement.ToUpper().IndexOf(crid1);
-            //    //            while (ix > -1)
-            //    //            {
-            //    //                int sl = oraStatement.Length;
-            //    //                string s = oraStatement;
-            //    //                int x1 = ix + 1;
-            //    //                int y1 = sl - x1;
-            //    //                oraStatement = s.Substring(0, ix) + ncrid1 + s.Substring(x1, y1);
-            //    //                ix = oraStatement.ToUpper().IndexOf(crid1);
-            //    //                //oraStatement = oraStatement.replace(crid1, ncrid1);
-            //    //            }
-            //    //        }
-            //    //    }
-
-            //    oraStatement = DBUtils.UpdateSetSelectList(oraStatement);
-            //}
-
-            //if (oraStatement.StartsWith("DELETE FROM ")) //jz use tablename to replace co-relation id
-            //{
-            //    String[] tokens = oraStatement.Split(' ');
-            //    if ((tokens.Length > 3) && !"WHERE".Equals(tokens[3]))
-            //    {
-            //        String[] sep = { " ", "=", ">", "<", "(", "," };
-            //        String crid = tokens[3] + ".";
-            //        String ncrid = tokens[2] + ".";
-
-            //        oraStatement = oraStatement.Replace(" " + tokens[3] + " ", " ");
-            //        foreach (String element in sep)
-            //        {
-            //            String crid1 = element + crid;
-            //            String ncrid1 = element + ncrid;
-            //            while (oraStatement.IndexOf(crid1) > -1)
-            //                oraStatement = oraStatement.Replace(crid1, ncrid1);
-            //        }
-            //    }
-            //}
-
-            //StringBuilder sb = new StringBuilder(oraStatement.ToString());
-
-            //while (sb.ToString().IndexOf("NUMBER(10,0)") > -1)
-            //    sb.Replace("NUMBER(10,0)", "INTEGER");
-            //while (sb.ToString().IndexOf("NUMBER(10)") > -1)
-            //    sb.Replace("NUMBER(10)", "INTEGER");
-            //while (sb.ToString().IndexOf("NUMERIC(10,0)") > -1)
-            //    sb.Replace("NUMERIC(10,0)", "INTEGER");
-            //while (sb.ToString().IndexOf("NUMERIC(10)") > -1)
-            //    sb.Replace("NUMERIC(10)", "INTEGER");
-
-
-            //sb.Replace("NVARCHAR2", "VARCHAR");
-            //sb.Replace("SYSDATE", "CURRENT_TIMESTAMP");
-            ////sb.Replace(", New", ", "+ '"' + "New" + '"');
-            ////sb.Replace(", NEW", ", " + '"' + "NEW" + '"');
-
-            //sb.Replace("END CASE", "END"); // added by veena on 11 Aug
-
-            //return sb.ToString();
-
-
+                                 
 
         }   //  convertStatement
 
