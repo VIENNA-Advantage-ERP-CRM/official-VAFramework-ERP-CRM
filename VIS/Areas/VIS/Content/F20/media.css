@@ -203,4 +203,10 @@
     vertical-align: middle;
     position: relative;
 }*/
+
+@media (hover: none) {
+    .vis-fp-static-ctrlwrp, .vis-fp-datawrap {
+        overflow: auto;
+    }
+}
     /* END */

@@ -301,56 +301,55 @@
             <div class="vis-fp-viwall">
                 <span>[ViewAll]</span>
             </div>
-            <div class="vis-fp-static-ctrlwrp">                
-                @*controls*@
-            </div>
-            <div class="vis-fp-custcolumns" id="accordion">
-                <div class="card">
-                    <div class="card-header">
-                        <span>[Custom Condition]</span>
-                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                            <i class="vis vis-arrow-up"></i>
-                        </a>
-                    </div>
-                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                        <div class="card-body">
+            
+                <div class="vis-fp-static-ctrlwrp">
+                    @*controls*@
+                </div>
+                <div class="vis-fp-custcolumns" id="accordion">
+                    <div class="card">
+                        <div class="card-header">
+                            <span>[Custom Condition]</span>
+                            <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                                <i class="vis vis-arrow-up"></i>
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                            <div class="card-body">
                                 <div class="input-group vis-input-wrap">
                                     <div class="vis-control-wrap">
-                                        <select class="vis-fp-cols">
-                                        </select>
+                                        <select class="vis-fp-cols"></select>
                                         <label class="vis-fp-lblcols">Column</label>
                                     </div>
                                 </div>
                                 <div class="input-group vis-input-wrap">
                                     <div class="vis-control-wrap">
-                                        <select class="vis-fp-op">
-                                           
-                                        </select>
-                                        <label  class="vis-fp-lblop">Operator</label>
+                                        <select class="vis-fp-op"></select>
+                                        <label class="vis-fp-lblop">Operator</label>
                                     </div>
                                 </div>
-                           
-                            <div class="vis-fp-valueone">
-                                @*<label style="">Query Value</label>*@
-                            </div>
-                            <div class="vis-fp-valuetwo">
-                                @*<label style="">Query Value To</label>*@
-                            </div>
-                            <div class="vis-fp-valuethree">
 
-                            </div>
-                            <div class="vis-fp-cc-addbtnwrp">
-                                <span class="vis-fp-cc-addbutton">Add</span>
+                                <div class="vis-fp-valueone">
+                                    @*<label style="">Query Value</label>*@
+                                </div>
+                                <div class="vis-fp-valuetwo">
+                                    @*<label style="">Query Value To</label>*@
+                                </div>
+                                <div class="vis-fp-valuethree">
+
+                                </div>
+                                <div class="vis-fp-cc-addbtnwrp">
+                                    <span class="vis-fp-cc-addbutton">Add</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="vis-fp-custcoltagswrp">
+                        <div class="vis-fp-custcoltag">
+
+                        </div>
+                    </div><!-- vis-fp-custcoltagswrp -->
                 </div>
-                <div class="vis-fp-custcoltagswrp">
-                    <div class="vis-fp-custcoltag">
-                       
-                    </div>
-                </div><!-- vis-fp-custcoltagswrp -->
-            </div>
+            
         </div>
     
 </template>
