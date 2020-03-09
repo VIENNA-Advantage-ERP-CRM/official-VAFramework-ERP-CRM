@@ -32,6 +32,10 @@ namespace VAdvantage.Model
             set { byteArray = value; }
         }
         private string imageFormat;
+
+
+        private List<string> imageExtensions = new List<string>() { ".png", ".jpg", ".ico", ".webp", ".svg" };
+
         public string ImageFormat
         {
             get { return imageFormat; }
@@ -179,15 +183,23 @@ namespace VAdvantage.Model
                 //        return false;
                 //    }
                 //}
-                if (!string.IsNullOrEmpty(imageUrl))
+                if (!string.IsNullOrEmpty(imageUrl) && !string.IsNullOrEmpty(ImageFormat))
                 {
                     imageUrl = imageUrl.Insert(imageUrl.Length, "/" + GetAD_Image_ID() + ImageFormat);
                     int count = DB.ExecuteQuery("UPDATE AD_IMAGE SET IMAGEURL='" + imageUrl + "' WHERE AD_IMAGE_ID=" + GetAD_Image_ID());
                 }
+
                 ConvertByteArrayToThumbnail(byteArray, GetAD_Image_ID().ToString() + ImageFormat);
             }
             else if (GetBinaryData() != null)
             {
+                String imageUrl = GetImageURL();
+                if (!string.IsNullOrEmpty(imageUrl) && imageUrl.Contains("."))
+                {
+                    imageFormat = imageUrl.Substring(imageUrl.LastIndexOf("."));
+                    imageUrl = "Images/" + GetAD_Image_ID() + imageFormat;
+                    int count = DB.ExecuteQuery("UPDATE AD_IMAGE SET IMAGEURL='" + imageUrl + "' WHERE AD_IMAGE_ID=" + GetAD_Image_ID());
+                }
                 ConvertByteArrayToThumbnail(GetBinaryData(), GetAD_Image_ID().ToString() + ImageFormat);
             }
             return success;
@@ -546,7 +558,7 @@ namespace VAdvantage.Model
             }
             isUrl = false;
             return GetBinaryData();
-            
+
 
         }
 
@@ -735,6 +747,13 @@ namespace VAdvantage.Model
         {
             if (GetAD_Org_ID() != 0)
                 SetAD_Org_ID(0);
+            string imageUrl = GetImageURL().ToLower();
+            if (!imageUrl.Contains(".") || imageExtensions.IndexOf(imageUrl.Substring(imageUrl.LastIndexOf("."))) < 0)
+            {
+                log.SaveError("AddExtension", "");
+                return false;
+            }
+
             return true;
         }
     }   //  MImage
