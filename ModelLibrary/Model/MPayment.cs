@@ -899,7 +899,7 @@ namespace VAdvantage.Model
             string isAutoControl = Util.GetValueOfString(DB.ExecuteScalar("SELECT ChkNoAutoControl FROM C_BankAccount  WHERE IsActive='Y' AND C_BankAccount_ID=" + GetC_BankAccount_ID()));
             if (GetTenderType() == "K")
             {
-                if (isAutoControl == "N")
+                if (isAutoControl.Equals("N"))
                 {
                     if (string.IsNullOrEmpty(GetCheckNo()))
                     {
@@ -997,63 +997,40 @@ namespace VAdvantage.Model
 
             // auto check number work - Mohit - 7 march 2020
             string docBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocBaseType FROM C_DocType WHERE IsActive='Y' AND C_DocType_ID=" + GetC_DocType_ID()));
-            string payBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod  WHERE IsActive='Y' AND VA009_PaymentMethod_ID=" + GetVA009_PaymentMethod_ID()));
-            if (payBaseType == "S" && !IsReversal())
+            
+            if (GetTenderType() == X_C_Payment.TENDERTYPE_Check  && !IsReversal())
             {
                 // if not auto control.
-                if (isAutoControl == "N")
+                if (isAutoControl.Equals("N"))
                 {
-                    if (docBaseType == "APP"  && GetCheckNo() == null)
+                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT)  && GetCheckNo() == null)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
-                    else if (docBaseType == "ARR"  && GetCheckNo() == null)
+                    else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetCheckNo() == null)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
-                    else
-                    {
-                        // no check
-                    }
+                 
                 }
                 else
                 {
                     autoCheck = false;
                     // if AP Pay and payamt less than 0
-                    if (docBaseType == "APP" && GetPayAmt() < 0 && GetCheckNo() == null)
+                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() < 0 && GetCheckNo() == null)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
                     // if AR Rec and payamt greater than 0
-                    else if (docBaseType == "ARR" && GetPayAmt() >= 0 && GetCheckNo() == null)
+                    else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() >= 0 && GetCheckNo() == null)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
-                    #region commented code check
-                    // if AP Payment and amt greatr than 0.
-                    //else if ((docBaseType == "APP" && GetPayAmt() >= 0) || (docBaseType == "ARR" && GetPayAmt() < 0))
-                    //{
-                    //    // get Check number
-                    //    string _sql = @"SELECT CURRENTNEXT FROM   (SELECT     CURRENTNEXT,    dense_rank() over(order by PRIORITY ASC) AS rnk
-                    //      FROM C_BankAccountDoc  WHERE C_BANKACCOUNT_ID = " + GetC_BankAccount_ID() + @"  AND VA009_PaymentMethod_ID = " + GetVA009_PaymentMethod_ID() + @" AND Priority
-                    //    IS NOT NULL  AND CURRENTNEXT BETWEEN STARTCHKNUMBER AND ENDCHKNUMBER  )WHERE rnk = 1 ";
-                    //    string currentNext = Util.GetValueOfString(DB.ExecuteScalar(_sql));
-                    //    if (string.IsNullOrEmpty(currentNext))
-                    //    {
-                    //        log.SaveError("Error", Msg.GetMsg(GetCtx(), "no check number found for selected bank."));
-                    //        return false;
-                    //    }
-                    //    autoCheck = true;
-                    //}
-                    #endregion
-                    else
-                    {
-                        // no check
-                    }
+                   
 
                 }
             }
@@ -1159,7 +1136,7 @@ namespace VAdvantage.Model
         /// <param name="BankAccount_ID"> Bank Account ID</param>
         /// <param name="trx">transaction object</param>
         /// <returns></returns>
-        public  string getChecknumber(int payMethod_ID, int BankAccount_ID,Trx trx)
+        public  string GetChecknumber(int payMethod_ID, int BankAccount_ID,Trx trx)
         {
             string retval = string.Empty;
             IDbConnection dbConnection = null;            
@@ -1195,6 +1172,7 @@ namespace VAdvantage.Model
             }
             catch (Exception e)
             {
+                log.SaveError("Error:GetCheckNumber", e.Message);
                 return retval;
             }
            
@@ -3317,16 +3295,18 @@ namespace VAdvantage.Model
             ////Arpit 18 Dec,2017 Asked BY Ashish Sir
             ////if (!UpdateUnMatchedBalanceForAccount(false))
             // Auto check work-Mohit-7 March 2020
-            MBankAccount bnkAct = new MBankAccount(GetCtx(), GetC_BankAccount_ID(), null);
-            MDocType dt = new MDocType(GetCtx(), GetC_DocType_ID(), null);
-            string payBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod  WHERE IsActive='Y' AND VA009_PaymentMethod_ID=" + GetVA009_PaymentMethod_ID()));
             
-            if (payBaseType.Equals("S") && bnkAct.IsChkNoAutoControl() && !IsReversal())
+            MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
+            MDocType dt= MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+
+
+            if (GetTenderType() == X_C_Payment.TENDERTYPE_Check && bnkAct.IsChkNoAutoControl() && !IsReversal())
             {
                 if ((dt.GetDocBaseType().Equals("APP") && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals("ARR") && GetPayAmt() < 0))
                 {
                     // get Check number
-                    string checkNo = getChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
+                    string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
                     if (!string.IsNullOrEmpty(checkNo))
                     {
                         DB.ExecuteQuery("UPDATE C_Payment SET CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(),null, Get_Trx());

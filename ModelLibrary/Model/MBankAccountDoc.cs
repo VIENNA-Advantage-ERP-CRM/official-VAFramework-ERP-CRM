@@ -38,7 +38,7 @@ namespace VAdvantage.Model
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_BankAccountDoc_ID) FROM C_BankAccountDoc WHERE IsActive = 'Y' AND VA009_PaymentMethod_ID=" + Util.GetValueOfInt(Get_Value("VA009_PaymentMethod_ID")) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND Priority = " + GetPriority())) > 0)
                 {
-                    log.SaveError("RecSamePriority", "");
+                    log.SaveError("Error:", Msg.GetMsg(GetCtx(), "RecSamePriority"));
                     return false;
                 }
             }
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_BankAccountDoc_ID) FROM C_BankAccountDoc WHERE IsActive = 'Y' AND VA009_PaymentMethod_ID=" + Util.GetValueOfInt(Get_Value("VA009_PaymentMethod_ID")) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND Priority = " + GetPriority() + " AND C_BankAccountDoc_ID !=" + GetC_BankAccountDoc_ID())) > 0)
                 {
-                    log.SaveError("RecSamePriority", "");
+                    log.SaveError("Error:", Msg.GetMsg(GetCtx(), "RecSamePriority"));
                     return false;
 
                 }
@@ -56,8 +56,8 @@ namespace VAdvantage.Model
             {
 
                 if (Util.GetValueOfInt(GetEndChkNumber()) < Util.GetValueOfInt(GetCurrentNext()))
-                {
-                    log.SaveError("CurrNextGrtr", "");
+                {                   
+                    log.SaveError("Error:", Msg.GetMsg(GetCtx(), "CurrNextGrtr"));
                     return false;
                 }
             }
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
                 {
                     if (Util.GetValueOfInt(GetEndChkNumber()) < Util.GetValueOfInt(GetCurrentNext()))
                     {
-                        log.SaveError("CurrNextGrtr", "");
+                        log.SaveError("Error:", Msg.GetMsg(GetCtx(), "CurrNextGrtr"));
                         return false;
 
                     }
@@ -78,14 +78,14 @@ namespace VAdvantage.Model
             {
                 if (GetStartChkNumber() > GetEndChkNumber())
                 {
-                    log.SaveError("StrtNoGrtEndNo", "");
+                    log.SaveError("Error:", Msg.GetMsg(GetCtx(), "StrtNoGrtEndNo"));                    
                     return false;
                 }
             }
             // Validation : Start check number cant be greater than current next
             if (GetStartChkNumber() > GetCurrentNext())
             {
-                log.SaveError("StrtNoGrtCurrnext", "");
+                log.SaveError("Error:", Msg.GetMsg(GetCtx(), "StrtNoGrtCurrnext"));                
                 return false;
             }
 
