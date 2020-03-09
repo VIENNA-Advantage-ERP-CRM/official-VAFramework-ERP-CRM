@@ -60,8 +60,6 @@
 
         var tmp = getTemplate(windowNo);
 
-        //var clone = $(tmp);//document.importNode(tmpfp, true);
-
         var control1, control2;
         var dsAdvanceData = null;
 
