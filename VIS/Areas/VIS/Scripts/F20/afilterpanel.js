@@ -55,7 +55,6 @@
         return str;
     };
 
-
     //AdvanceSearch
     function FilterPanel(windowNo, gc) {
 
@@ -356,7 +355,7 @@
         });
 
         btnViewAll.on("click", function (e) {
-            divStatic.toggleClass('.vis-fp-static-ctrlwrp-auto');
+            divStatic.toggleClass('vis-fp-static-ctrlwrp-auto');
         });
 
         //dynamic
