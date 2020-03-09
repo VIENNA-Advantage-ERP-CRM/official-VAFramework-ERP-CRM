@@ -997,13 +997,13 @@ namespace VAdvantage.Model
 
             // auto check number work - Mohit - 7 march 2020
             string docBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocBaseType FROM C_DocType WHERE IsActive='Y' AND C_DocType_ID=" + GetC_DocType_ID()));
-            
-            if (GetTenderType() == X_C_Payment.TENDERTYPE_Check  && !IsReversal())
+
+            if (GetTenderType() == X_C_Payment.TENDERTYPE_Check && !IsReversal())
             {
                 // if not auto control.
                 if (isAutoControl.Equals("N"))
                 {
-                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT)  && GetCheckNo() == null)
+                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetCheckNo() == null)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
@@ -1013,7 +1013,7 @@ namespace VAdvantage.Model
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
-                 
+
                 }
                 else
                 {
@@ -1030,7 +1030,7 @@ namespace VAdvantage.Model
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
-                   
+
 
                 }
             }
@@ -1125,7 +1125,7 @@ namespace VAdvantage.Model
                         log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
                 }
             }
-          
+
 
             return true;
         }
@@ -1136,10 +1136,10 @@ namespace VAdvantage.Model
         /// <param name="BankAccount_ID"> Bank Account ID</param>
         /// <param name="trx">transaction object</param>
         /// <returns></returns>
-        public  string GetChecknumber(int payMethod_ID, int BankAccount_ID,Trx trx)
+        public string GetChecknumber(int payMethod_ID, int BankAccount_ID, Trx trx)
         {
             string retval = string.Empty;
-            IDbConnection dbConnection = null;            
+            IDbConnection dbConnection = null;
             if (trx == null)
             {
                 return string.Empty; ;
@@ -1157,16 +1157,16 @@ namespace VAdvantage.Model
                     cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
                     cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
                     cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
-                    cmd.BindByName = true;                    
-                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());                    
+                    cmd.BindByName = true;
+                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());
                     retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
                     if (retval == "0") // If Record Found
                     {
                         retval = string.Empty;
                     }
-                   
-                }               
-                
+
+                }
+
                 return retval.ToString();
 
             }
@@ -1175,8 +1175,8 @@ namespace VAdvantage.Model
                 log.SaveError("Error:GetCheckNumber", e.Message);
                 return retval;
             }
-           
-            
+
+
         }
 
         /**
@@ -3295,21 +3295,21 @@ namespace VAdvantage.Model
             ////Arpit 18 Dec,2017 Asked BY Ashish Sir
             ////if (!UpdateUnMatchedBalanceForAccount(false))
             // Auto check work-Mohit-7 March 2020
-            
-            MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
-            MDocType dt= MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            MBankAccount bnkAct = MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
 
 
-            if (GetTenderType() == X_C_Payment.TENDERTYPE_Check && bnkAct.IsChkNoAutoControl() && !IsReversal())
+            if (GetTenderType().Equals(X_C_Payment.TENDERTYPE_Check) && bnkAct.IsChkNoAutoControl() && !IsReversal())
             {
-                if ((dt.GetDocBaseType().Equals("APP") && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals("ARR") && GetPayAmt() < 0))
+                if ((dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() < 0))
                 {
                     // get Check number
                     string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
                     if (!string.IsNullOrEmpty(checkNo))
                     {
-                        DB.ExecuteQuery("UPDATE C_Payment SET CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(),null, Get_Trx());
+                        DB.ExecuteQuery("UPDATE C_Payment SET CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(), null, Get_Trx());
                     }
                     else
                     {
@@ -3317,7 +3317,7 @@ namespace VAdvantage.Model
                         log.Info("" + _processMsg + ": Payment Document No " + GetDocumentNo());
                         return DocActionVariables.STATUS_INVALID;
                     }
-                    
+
                 }
             }
 
