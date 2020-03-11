@@ -2239,7 +2239,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <returns>true/false</returns>
         public bool CheckMaintainVerCol(int AD_Table_ID)
         {
-            int countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            int countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            if (countVerCol > 0)
+                return true;
+
+            countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
             if (countVerCol > 0)
                 return true;
             return false;
