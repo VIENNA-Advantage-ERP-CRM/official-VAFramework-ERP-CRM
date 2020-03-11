@@ -126,7 +126,7 @@
         var $spnTitle = null;
         /***END Tab panel**/
 
-        var tabItems = [], tabLIObj = {};
+        //var tabItems = [], tabLIObj = {};
         this.defaultSearch = true;
         this.isAutoCompleteOpen = false;
 
@@ -596,7 +596,7 @@
 
         this.getIncludedEmptyArea = function () {
             return $divIncludeTab;
-        }
+        };
         /*left bar */
 
         this.getParentDetailPane = function () {
@@ -657,21 +657,31 @@
 
         };
 
+
+
         /* END Set Tab Panel Icons */
 
-        /*tabcontrol */
-        this.setTabControl = function (tabs) {
-            tabItems = tabs;
-            for (var i = 0; i < tabs.length; i++) {
-                var li = tabs[i].getListItm();
-                tabLIObj[tabItems[i].action] = li;
-                $ulTabControl.append(li);
-            }
-            if ($ulTabControl.width() > $divTabControl.width()) {
-                if (!VIS.Application.isMobile)
-                    $divTabNav.show();
-            }
-        };
+        this.getTabControl = function () {
+            return $ulTabControl;
+        }
+
+        this.getLinkControl = function () {
+            return " New Link Control for header Composite";
+        }
+
+        ///*tabcontrol */
+        //this.setTabControl = function (tabs) {
+        //    tabItems = tabs;
+        //    for (var i = 0; i < tabs.length; i++) {
+        //        var li = tabs[i].getListItm();
+        //        tabLIObj[tabItems[i].action] = li;
+        //        $ulTabControl.append(li);
+        //    }
+        //    if ($ulTabControl.width() > $divTabControl.width()) {
+        //        if (!VIS.Application.isMobile)
+        //            $divTabNav.show();
+        //    }
+        //};
 
         this.setTabNavigation = function () {
             if ($ulTabControl.width() > $divTabControl.width()) {
@@ -1471,7 +1481,6 @@
                 gc.initFilterPanel(curWindowNo,this.getFilterPane());
 
                 tabElement = gc;
-                //	If we have a zoom query, switch to single row
                 if (i === 0 && goSingleRow)
                     gc.switchSingleRow();
                 //	Store GC if it has a included Tab
@@ -1525,6 +1534,48 @@
         jsonData = null;
         $parent = null;
         // this.curGC.setVisible(true);
+    };
+
+    /**
+     * make Include tab Resizable 
+     * */
+    APanel.prototype.setIncTabReziable = function () {
+        var incTab = this.getIncludedEmptyArea();
+        var aPanel = this;
+        if (!incTab.is('.ui-resizable')) {
+            incTab.resizable({
+                handles: 'n',
+                ghost: true,
+                minHeight: 40,
+                maxHeight: 500,
+                //width: 'auto',
+
+                resize: function (event, ui) {
+                    //self.panelWidth = ui.size.width;
+                    //incTab.css({ 'position': 'absolute', "left": "", "z-index": "99" });
+                    incTab.css('flex-basis', ui.size.height + 'px');
+                },
+                start: function (event, ui) {
+                    // incTab.css({ 'position': 'absolute', "z-index": "99" });
+                    //windowWidth=
+                },
+                stop: function (event, ui) {
+                    incTab.css({
+                        'flex-basis': ui.size.height + 'px',
+                        'top': '',
+                        'width': ''
+                    });
+                    //incTab.css('flex-basis', ui.size.height + 'px');
+                    //if (VIS.Application.isRTL) {
+                    //    incTab.css({ 'position': 'relative', "right": "", "z-index": "" });
+                    //}
+                    //else {
+                    //    incTab.css({ 'position': 'relative', "left": "", "z-index": "" });
+                    //}
+                    aPanel.refresh();
+                }
+            });
+        }
     };
 
     /**

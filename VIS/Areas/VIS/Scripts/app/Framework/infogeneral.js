@@ -405,7 +405,7 @@
                 close: onClosing,
                 closeText: VIS.Msg.getMsg("close")
             });
-            displayData(false, cmbPage.val());
+            displayData(true, cmbPage.val());
 
 
         };

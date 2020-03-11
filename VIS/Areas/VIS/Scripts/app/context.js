@@ -11,7 +11,7 @@ VIS.context.m_map = {}; //window's context
     if (context == null)
         throw new ArgumentException("Require Context");
     if (arguments.length > 2) {
-        if (typeof (arguments[1]) == "int") {
+        if (typeof (arguments[1]) == "number") {
             return this.getWindowTabContext(arguments[0], arguments[1], arguments[2]);
         }
         return this.getWindowContext(arguments[0], arguments[1], arguments[2]);
@@ -33,10 +33,21 @@ VIS.context.m_map = {}; //window's context
     return value;
 };
 
-VIS.context.getWindowContext = function (windowNo, context, onlyWindow) {
+VIS.context.getWindowContext = function (windowNo, context, onlyWindow,val2) {
     if (context == null)
         throw new ArgumentException("Require Context");
-    var key = windowNo + "|" + context;
+    if (typeof (arguments[1]) == "number" && arguments.length > 2) {
+        return VIS.context.getTabRecordContext(arguments[0], arguments[1], arguments[2],val2);
+    }
+
+    var tabNo = "";
+    if (typeof (context) == "number") {
+        tabNo = "-" + context;
+        context = onlyWindow;
+        onlyWindow = val2;
+    }
+
+    var key = windowNo + tabNo + "|" + context;
 
     var tabNo = "";
     if (typeof (context) == "number") {
@@ -122,6 +133,7 @@ VIS.context.setWindowContext = function (windowNo, context, value,val2) {
     if (context == null) {
         return;
     }
+
     if (!this.m_map[windowNo])
         this.m_map[windowNo] = {};
     var tabNo = "";
@@ -196,7 +208,6 @@ VIS.context.getAD_Org_ID = function () {
     return VIS.context.getContext("#AD_Org_ID");
 };
 
-
 VIS.context.getAD_Language = function () {
     return VIS.context.getContext('#AD_Language');
 };
@@ -215,9 +226,11 @@ VIS.context.isAutoNew = function () {
         return true;
     return false;
 };
+
 VIS.context.getStdPrecision = function () {
     return VIS.context.getContext('#StdPrecision');
 };
+
 VIS.context.setStdPrecision = function () {
     return VIS.context.getContext('#StdPrecision');
 };
@@ -310,7 +323,6 @@ VIS.context.getWindowContextAsInt = function (windowNo, context, onlyWindow) {
     return 0;
 };
 
-
 VIS.context.getContextAsTime = function (windowNo, context) {
     var s = this.getContext(windowNo, context, false);
     if (s == null || s.length == 0) {
@@ -329,9 +341,6 @@ VIS.context.getContextAsTime = function (windowNo, context) {
     //// return Convert.ToInt64(DateTime.Now); 
     //return CommonFunctions.CurrentTimeMillis();// Convert.ToInt64(DateTime.Now);// System.currentTimeMillis();
 };
-
-
-
 
 VIS.context.getShowClientOrg = function () {
     return this.getContextAsInt("#ClientOrgLevel");
@@ -378,7 +387,6 @@ VIS.context.getEntireCtx = function () {
     return ctx;
 };
 
-
 /**
 	 *	Is Sales Order Trx 
 	 *  @param WindowNo window no
@@ -404,57 +412,10 @@ VIS.context.setIsSOTrx = function (windowNo, isSOTrx) {
         this.setContext("IsSOTrx", arguments[0] ? "Y" : "N");
 };
 
-
 VIS.context.getIsUseCrystalReportViewer = function ()
 {
     return VIS.context.getContext("#USE_CRYSTAL_REPORT_VIEWER")=="Y";
 };
 
 
-//;(function (VIS) {
-
-//    function context() {
-//        var context = {
-//            getContext: getContext,
-//            setContext: setContext,
-//            createContext: createContext,
-//            getAD_User_ID: getAD_User_ID,
-//            getAD_Language: getAD_Language,
-//            getAD_Role_ID:getAD_Role_ID
-//        };
-
-//        return context;
-
-//        var ctx = {};
-
-//        function getContext(key) {
-//            return ctx[key];
-//        };
-
-//        function setContext(key, value) {
-//            return ctx[key] = value;
-//        };
-
-
-//        function getAD_User_ID() {
-//            return ctx['##AD_User_ID'];
-//        };
-
-//        function getAD_Language() {
-//            return ctx['#AD_Language'];
-//        };
-
-//        function getAD_Role_ID() {
-//            return ctx['#AD_Role_ID'];
-//        };
-
-//        function createContext(jsonObject) {
-//            console.log(jsonObject);
-//            ctx = jsonObject;
-//        };
-//    }
-
-//    VIS.context = context();
-
-//})(VIS);
 

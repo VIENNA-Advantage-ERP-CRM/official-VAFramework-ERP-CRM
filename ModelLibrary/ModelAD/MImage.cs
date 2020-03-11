@@ -222,6 +222,7 @@ namespace VAdvantage.Model
             DeleteThumbnail("140", "120", imageName);
             DeleteThumbnail("320", "185", imageName);
             DeleteThumbnail("320", "240", imageName);
+            DeleteThumbnail("500", "375", imageName);
             return success;
         }
 

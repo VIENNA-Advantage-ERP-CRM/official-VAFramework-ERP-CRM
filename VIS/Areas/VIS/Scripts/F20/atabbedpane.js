@@ -156,10 +156,12 @@ VIS.VTabbedPane.prototype.getIsTabChanged = function (action) {
     if (newGC != null) {
         newGC.setMnemonics(true);
     }
+
     this.oldTabIndex = index;
 
     return true;
-};
+
+    };
 
     VIS.VTabbedPane.prototype.restoreTabChange = function () {
         this.oldTabIndex = -1;
@@ -279,6 +281,7 @@ VIS.VTabbedPane.prototype.evaluate = function (e) {
  *  Dispose all contained VTabbedPanes and GridControllers
  */
 VIS.VTabbedPane.prototype.dispose = function () {
+
     for (var prop in this.Items) {
         this.Items[prop].dispose();
         this.Items[prop] = null;
@@ -294,6 +297,17 @@ VIS.VTabbedPane.prototype.dispose = function () {
 
     this.dependents.length = 0;
     this.dependents = null;
+
+    if (this.TabAppsItems) {
+        for (var i = 0; i < this.TabAppsItems.length; i++) {
+            this.TabAppsItems[i].dispose();
+        }
+    }
+
+    if (this.contentPane)
+        this.contentPane.dispose();
+    this.contentPane = null;
+    this.TabAppsItems = null;
 };
     //****************APanel END************************//
     //Assignment Gobal Namespace

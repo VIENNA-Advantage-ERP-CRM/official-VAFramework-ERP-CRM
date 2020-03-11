@@ -155,10 +155,11 @@
                 data: JSON.stringify(data)
             }).done(function (jString) {
                 if (callback) {
+                    var retObj = JSON.parse(jString);
                     var dataSet = null;
-                    if (jString)
-                        dataSet = new VIS.DB.DataSet().toJson(jString);
-                    callback(dataSet);
+                    if (retObj)
+                        dataSet = new VIS.DB.DataSet().toJson(retObj.Tables);
+                    callback(dataSet, retObj.LookupDirect);
                 }
             })
         };

@@ -215,6 +215,8 @@
         json = null;
     };
 
+
+
     GridWindow.prototype.getTabs = function () {
         return this.tabs;
     };
@@ -1986,9 +1988,7 @@
         if (oldCurrentRow == this.currentRow) {
             var field = this.gridTable.getField(e.getChangedColumn());
             if (field != null) {
-                //Object value = m_mTable.getValueAt(m_currentRow, e.getChangedColumn());
-                // field.setValue(value, m_mTable.isInserting());
-            }
+                            }
         }
         else    //  Redistribute Info with current row info
             this.fireDataStatusChanged(this.mDataStatusEvent);
@@ -2083,7 +2083,7 @@
                 }
             }
             if (dependentField != null && dependentField.getLookup() instanceof VIS.MLocatorLookup) {
-                // gwu: invalidate currently selected locator if any dependent fields changed
+               
                 //var locLookup = dependentField.getLookup();
                 //var valueAsInt = 0;
                 //if (changedField.getValue() != null && changedField.getValue() instanceof Number)
@@ -3765,6 +3765,7 @@
         this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
 
         var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
+        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID:0 };
 
         
 
@@ -3841,6 +3842,8 @@
                         buffer.dispose();
                         buffer = null;
                     }
+                    if (lookupDirect)
+                        VIS.MLookupCache.addRecordLookup(that.gTable._windowNo, that.gTable._tabNo, lookupDirect);
                 }
                 catch (e) {
                     //alert(e);
@@ -3924,6 +3927,8 @@
             return colValue;
         }
     };
+
+    
 
     GridTable.prototype.encrypt = function (xx) {
         if (xx == null || xx.length < 1)
@@ -4537,8 +4542,7 @@
 
         this.rowChanged = this.newRow;  //  force save checking on new record
         //	add Data at end of buffer
-        //MSort sort = new MSort(m_buffer.size(), null);	//	index
-        //m_buffer.add(rowData);
+        
         //if (!this.mSortList) {
 
         //}
@@ -5417,10 +5421,14 @@
      * @param {any} value
      */
     GridField.prototype.setReadOnly = function (value) {
-
         this.vo.IsReadOnly = value;
     };
 
+    /**
+     * check is 
+     * @param {any} checkContext
+     * @param {any} isMR
+     */
     GridField.prototype.getIsEditable = function (checkContext, isMR) {
         //TODO:
         var _vo = this.vo;

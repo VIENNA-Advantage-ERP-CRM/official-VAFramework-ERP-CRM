@@ -373,10 +373,16 @@
             return VIS.context;
         };
 
+        function parseContext(ctx, windowNo, tabNo, value, onlyWindow, ignoreUnparsable) {
 
+            if (typeof (tabNo) != "number") {
+                ignoreUnparsable = onlyWindow;
+                onlyWindow = value;
+                value = tabNo;
+                tabNo = 0;
+            }
 
-        function parseContext(ctx, WindowNo, value, onlyWindow, ignoreUnparsable) {
-            if (value == null || value.Length == 0)
+            if (value == null || value.length == 0)
                 return "";
 
             var token = "";;
@@ -401,39 +407,11 @@
                 token = value.substring(0, j);
 
                 if (token.contains(".")) {
-                    ctxInfo = ctx.getWindowContext(WindowNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
-                    //if (token.toUpper().contains("TODATE()"))
-                    // {
-                    //   if (!string.IsNullOrEmpty(ctxInfo))
-                    // {
-                    //   if (getValue.Contains("=") && !getValue.Contains("<=") && !getValue.Contains(">="))
-                    // {
-                    //   string dt2 = DB.TO_DATE(Convert.ToDateTime(ctxInfo).AddHours(24), false); ;
-                    // string dt1 = DB.TO_DATE(Convert.ToDateTime(ctxInfo), false);
-                    // ctxInfo = " BETWEEN " + dt1 + " AND " + dt2 + "";
-
-                    // string backUP = outStr.ToString().Trim().Substring(0, outStr.ToString().Trim().Length - 1);
-                    // outStr.Clear();
-                    // outStr.Append(backUP);
-
-                    //}
-                    // else
-                    // {
-                    //    ctxInfo = DB.TO_DATE(Convert.ToDateTime(ctxInfo), true);
-                    // }
-                    // }
-                    //}
-                    // else if (token.ToUpper().Contains("TODATETIME()"))
-                    // {
-                    //   if (!string.IsNullOrEmpty(ctxInfo))
-                    //   {
-                    //     ctxInfo = DB.TO_DATE(Convert.ToDateTime(ctxInfo), false);
-                    // }
-                    // }
+                    token = token.substring(0, token.indexOf("."));
+                   //txInfo = ctx.getWindowContext(WindowNo, tabNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
                 }
-                else {
-                    ctxInfo = ctx.getWindowContext(WindowNo, token, onlyWindow);	// get context
-                }
+                
+                ctxInfo = ctx.getWindowContext(windowNo, tabNo, token, onlyWindow);	// get context
 
                 if (ctxInfo.length == 0 && (token.startsWith("#") || token.startsWith("$")))
                     ctxInfo = ctx.getContext(token);	// get global context
@@ -1659,8 +1637,9 @@
     };
 
     DataSet.prototype.toJson = function (jsonString) {
-
-        var tables = JSON.parse(jsonString);
+        var tables = jsonString;
+        if(typeof(jsonString) == "string")
+            tables = JSON.parse(jsonString);
 
         tables = $.isArray(tables) ? tables : [tables];
 
@@ -1701,6 +1680,7 @@
         this.rows = []; // rows of column
         this.totalRecord = 0; // total record 
         this.columnsName = [];
+        
     };
 
     DataTable.prototype.toJson = function (js) {
