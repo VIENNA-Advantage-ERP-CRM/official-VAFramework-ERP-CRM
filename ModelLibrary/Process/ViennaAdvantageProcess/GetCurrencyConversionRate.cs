@@ -471,6 +471,46 @@ namespace ViennaAdvantage.Process
                 string content = reader.ReadToEnd();
                 return content;
             }
+            //else if (url.ToLower().Contains("pwebapps.ezv.admin.ch"))
+            //{
+            //decimal exchangeRate = 0;
+            //string currencyQty = "";
+
+            //string newUrl = @"http://www.pwebapps.ezv.admin.ch/apps/rates/rate/getxml?activeSearchType=userDefinedDay";
+            //WebRequest myReq = WebRequest.Create(newUrl);
+            //WebResponse wr = myReq.GetResponse();
+            //Stream receiveStream = wr.GetResponseStream();
+            //StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
+            //string content = reader.ReadToEnd();
+            //return content;
+
+            //XmlDocument xml = new XmlDocument();
+            //xml.LoadXml(content);
+
+            //XmlNamespaceManager manager = new XmlNamespaceManager(xml.NameTable);
+            //manager.AddNamespace("xsi", "http://www.pwebapps.ezv.admin.ch/apps/rates");
+            //manager.AddNamespace("car", "http://www.pwebapps.ezv.admin.ch/apps/rates");
+
+            //XmlNodeList xnList = xml.SelectNodes("//car:wechselkurse/car:devise", manager);
+
+            //foreach (XmlNode xn in xnList)
+            //{
+            //    if (xn.Attributes["code"].Value == to.ToLower())
+            //    {
+            //        currencyQty = xn["waehrung"].InnerText;
+            //        exchangeRate = Util.GetValueOfDecimal(xn["kurs"].InnerText);
+            //        break;
+            //    }
+            //}
+
+            //if (!String.IsNullOrEmpty(currencyQty) && exchangeRate != 0)
+            //{
+            //    decimal qty = Util.GetValueOfDecimal(currencyQty.Substring(0, currencyQty.Length - 4));
+            //    exchangeRate = exchangeRate / qty;
+            //}
+
+            //return exchangeRate.ToString();
+            //}
             else
             {
                 WebClient web = new WebClient();

@@ -1,4 +1,5 @@
-﻿/*** version 1.0.9.0***/
+﻿/*** version 1.0.12.0***/
+
 html, body {
     height: 100%;
     width: 100%;
@@ -6998,6 +6999,17 @@ html[dir="rtl"] .input-group-addon {
     border-bottom: 2px solid #ECECEC;
 }
 
+.vis-locator-ctrl {
+    float: right;
+    width: 70%;
+}
+
+.VIS-locator-DivStyle input.form-control:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px solid #0098f7;
+}
+
 #dataContainer {
     overflow: hidden;
     position: fixed;
@@ -11736,7 +11748,7 @@ html[dir="rtl"] .vis-advancedSearchInput {
     color: #535353;
     font-weight: 400;
     float: left;
-    width: 100%;
+    /*width: 100%;*/
     margin-bottom: 0;
 }
 
@@ -14801,6 +14813,8 @@ select {
     display: flex;
     overflow: auto;
     box-shadow: 1px 0px 4px 0px rgba(var(--v-c-on-secondary), 0.4);
+    color: rgba(var(--v-c-on-primary),1);
+    font-size: 1rem;
 }
 
 .vis-ad-w-p-title {
@@ -14825,6 +14839,8 @@ select {
     grid-row: 3/3;
     display: flex;
     overflow: auto;
+    color: rgba(var(--v-c-on-primary),1);
+    font-size: 1rem;
 }
 
 .vis-ad-w-p-filter {
@@ -15899,13 +15915,15 @@ li.vis-page-item-select {
 
 .vis-ad-w-p-header_root_common {
     overflow-x: auto;
-    font-family: 'NoirPro-Regular' !important;
+    /*font-family: 'NoirPro-Regular' !important;*/
+    /*color:white;*/
+    /*font-size:1rem;*/
 }
 
 .vis-w-p-header-data-f {
-    font-size: 0.875rem;
+    /*font-size: 1rem;*/
     padding: 5px 10px 5px 0px;
-    color: #fff;
+    /*color: #fff;*/
     display: flex;
     /*align-items: center;*/
     flex: 1;
@@ -15913,7 +15931,7 @@ li.vis-page-item-select {
 }
 
 .vis-w-p-header-data-label {
-    font-size: 0.80rem;
+    /*font-size: 0.80rem;*/
 }
 
 
@@ -15930,7 +15948,7 @@ li.vis-page-item-select {
 
 .vis-w-p-header-data-f label {
     display: block;
-    font-weight: normal;
+    font-weight: unset;
     margin-bottom: unset;
     word-break: break-all;
 }
@@ -15939,8 +15957,8 @@ li.vis-page-item-select {
 .vis-w-p-header-icon-f {
     /* background: rgba(var(--v-c-on-secondary), 0.2); */
     border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    min-width: 35px;
+    min-height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
