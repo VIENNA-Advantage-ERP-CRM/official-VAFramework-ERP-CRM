@@ -1,31 +1,31 @@
 ﻿; (function (VIS, $) {
 
-   // var tmpfp = document.querySelector('#vis-ad-fptmp').content;// $("#vis-ad-windowtmp");
+    // var tmpfp = document.querySelector('#vis-ad-fptmp').content;// $("#vis-ad-windowtmp");
 
     function getTemplate(winNo) {
-        var str =                                                                                                    
+        var str =
             ' <div class="vis-fp-bodycontent">                                                 ' +
             '     <div class="vis-fp-viwall">                                                  ' +
-            '         <span>'+VIS.Msg.getMsg("Auto")+'</span>                               ' +
+            '         <span>' + VIS.Msg.getMsg("ViewMore") + '</span>                               ' +
             '     </div>                                                                       ' +
-            '  <div class="vis-fp-datawrap"> '+
+            '  <div class="vis-fp-datawrap"> ' +
             '     <div class="vis-fp-static-ctrlwrp">                                          ' +
             '     </div>                                                                       ' +
-            '     <div class="vis-fp-custcolumns" id="accordion_' + winNo +'"">                ' +
+            '     <div class="vis-fp-custcolumns" id="accordion_' + winNo + '"">                ' +
             '         <div class="card">                                                       ' +
             '             <div class="card-header">                                            ' +
-            '                 <span>' + VIS.Msg.getMsg("AdvanceSearch") +'</span>                                  ' +
-            '                 <a class="card-link" data-toggle="collapse" href="#collapseOne_' +winNo+'"> ' +
+            '                 <span>' + VIS.Msg.getMsg("CustomCondition") + '</span>                                  ' +
+            '                 <a class="card-link" data-toggle="collapse" href="#collapseOne_' + winNo + '"> ' +
             '                     <i class="vis vis-arrow-up"></i>                             ' +
             '                 </a>                                                             ' +
             '             </div>                                                               ' +
-            '             <div id="collapseOne_' + winNo +'"" class="collapse show" data-parent="#accordion_' + winNo +'">' +
+            '             <div id="collapseOne_' + winNo + '"" class="collapse show" data-parent="#accordion_' + winNo + '">' +
             '                 <div class="card-body">                                          ' +
             '                     <div class="input-group vis-input-wrap">                     ' +
             '                         <div class="vis-control-wrap">                           ' +
             '                             <select class="vis-fp-cols">                         ' +
             '                             </select>                                            ' +
-            '                             <label class="vis-fp-lblcols">'+VIS.Msg.getMsg("Column")+'</label>         ' +
+            '                             <label class="vis-fp-lblcols">' + VIS.Msg.getMsg("Column") + '</label>         ' +
             '                         </div>                                                   ' +
             '                     </div>                                                       ' +
             '                     <div class="input-group vis-input-wrap">                     ' +
@@ -66,8 +66,8 @@
 
         var bodyDiv = $(tmp);
         var divStatic = bodyDiv.find(".vis-fp-static-ctrlwrp");
-        var btnViewAll = bodyDiv.find(".vis-fp-viwall"); 
-
+        var btnViewAll = bodyDiv.find(".vis-fp-viwall");
+        var spnViewAll = $(btnViewAll.find('span')[0]);
         var divDynamic = bodyDiv.find(".vis-fp-custcolumns");
         var cmbColumns = divDynamic.find('.vis-fp-cols');
         var cmbOp = divDynamic.find('.vis-fp-op');
@@ -76,7 +76,7 @@
         var divValue2 = divDynamic.find('.vis-fp-valuetwo');
         var divDynFilters = divDynamic.find('.vis-fp-custcoltag');
 
-        //spnViewAll.text(VIS.Msg.getMsg("ViewAll"));
+        spnViewAll.text(VIS.Msg.getMsg("ViewMore"));
 
         this.curGC = gc;
         this.winNo = windowNo;
@@ -226,9 +226,9 @@
             var dynFilter = getDynamicFilter();
             if (dynFilter != '') {
                 if (finalWhereClause != '')
-                    finalWhereClause = ' AND ' + dynFilter;    
-                else 
-                    finalWhereClause =  dynFilter;    
+                    finalWhereClause = ' AND ' + dynFilter;
+                else
+                    finalWhereClause = dynFilter;
             }
             return finalWhereClause;
         };
@@ -336,7 +336,7 @@
         divDynFilters.on("click", "i", function (e) {
             var tgt = $(this);
             if (tgt.hasClass("vis-mark")) {
-                var colName= tgt.parent().data("id");
+                var colName = tgt.parent().data("id");
                 deleteDynRow(colName);// evt.propertyName);
             }
         });
@@ -355,11 +355,17 @@
 
         btnViewAll.on("click", "span", function (e) {
             divStatic.toggleClass('vis-fp-static-ctrlwrp-auto');
+            if (spnViewAll.text() == VIS.Msg.getMsg("ViewMore")) {
+                spnViewAll.text(VIS.Msg.getMsg('ViewLess'));
+            }
+            else {
+                spnViewAll.text(VIS.Msg.getMsg('ViewMore'));
+            }
         });
 
         //dynamic
         cmbColumns.on('change', function (e) {
-           // if (isBusy) return;
+            // if (isBusy) return;
             //chkDynamic.prop("disabled", true);
             //chkDynamic.prop("checked", false);
             // chkDynamic.trigger("change");
@@ -399,11 +405,11 @@
                     // }
                 }
                 //else if (self.getIsUserColumn(columnName)) {
-                    //drpDynamicOp.html($self.getOperatorsQuery(VIS.Query.prototype.OPERATORS_DYNAMIC_ID, true));
-                    //divDynamic.show();
-                    //$root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 195px)');
-                    //chkDynamic.prop("disabled", false);
-                    //setDynamicQryControls(true);
+                //drpDynamicOp.html($self.getOperatorsQuery(VIS.Query.prototype.OPERATORS_DYNAMIC_ID, true));
+                //divDynamic.show();
+                //$root.find('.vis-advancedSearchContentArea-down').css('height', 'calc(100% - 195px)');
+                //chkDynamic.prop("disabled", false);
+                //setDynamicQryControls(true);
                 //}
 
                 if (f.getDisplayType() != VIS.DisplayType.DateTime)// If Datetime, then on = operator, show full day checkbox.
@@ -412,7 +418,7 @@
                     // showFullDay(false);
                 }
 
-                
+
 
                 cmbOp.html(dsOp);
                 cmbOp[0].SelectedIndex = 0;
@@ -557,13 +563,13 @@
                         var $divInputGroupBtn = $('<div class="input-group-append">');
                         valueGrp.append($divInputGroupBtn);
                         $divInputGroupBtn.append(btn);
-                       
+
                     }
                     if (field.getDisplayType() == VIS.DisplayType.YesNo) {
                         ;
                     }
                     else {
-                        valueInputWrap.append('<label>' + VIS.Msg.getMsg("QueryValue")+'</label>'); 
+                        valueInputWrap.append('<label>' + VIS.Msg.getMsg("QueryValue") + '</label>');
                     }
                 }
                 else {
@@ -591,7 +597,7 @@
                     //crt.getControl().css("width", "100%");
                 }
             }
-};
+        };
 
         function getControlValue(isValue1) {
             var crtlObj = null;
@@ -712,7 +718,7 @@
             if (dsAdvanceData == null)
                 dsAdvanceData = {};
 
-          
+
             if (!(colValue in dsAdvanceData))
                 dsAdvanceData[colValue] = [];
 
@@ -724,7 +730,7 @@
         };
 
         function deleteDynRow(colValue) {
-            
+
             if (dsAdvanceData == null)
                 dsAdvanceData = {};
             if (colValue in dsAdvanceData) {
@@ -774,12 +780,12 @@
         if (this.initialzed)
             return;
 
-        
+
         this.curTab = this.curGC.getMTab();
         this.curTabfields = this.curTab.getFields();
         this.selectionfields = [];
 
-       
+
         var html = '<option value="-1"> </option>';
 
         //Fill Dynamic Column List 
@@ -832,7 +838,7 @@
         this.getFixedColumns();
         this.setLayout();
         this.initialzed = true;
-        
+
     };
 
     FilterPanel.prototype.getFixedColumns = function () {
@@ -849,10 +855,10 @@
     FilterPanel.prototype.getFilterOption = function (field, whereClause) {
         if (field && field.getShowFilterOption()) {
 
-            var keyCol="";
-            var displayCol="";
-            var validationCode="";
-            var lookupTableName="";
+            var keyCol = "";
+            var displayCol = "";
+            var validationCode = "";
+            var lookupTableName = "";
             if (field.getLookup()) {
                 keyCol = field.getLookup().info.keyColumn;
                 displayCol = field.getLookup().info.displayColSubQ;
@@ -881,7 +887,7 @@
                 var key = data["keyCol"];
                 data = data["list"];
                 //if (data && data.length > 0) {
-                    tht.setFilterOptions(data, key);
+                tht.setFilterOptions(data, key);
                 //}
                 tht = null;
             });
