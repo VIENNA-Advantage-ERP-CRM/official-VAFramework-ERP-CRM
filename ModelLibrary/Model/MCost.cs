@@ -100,6 +100,65 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// This function is used to get cost against costing method (material type) which is to be define on Cost Combination
+        /// </summary>
+        /// <param name="client_Id">clinet</param>
+        /// <param name="org_Id">org</param>
+        /// <param name="product_id">product</param>
+        /// <param name="M_ASI_Id">attributesetinstance</param>
+        /// <param name="trxName">trx</param>
+        /// <param name="M_Warehouse_ID"> warehouse id -- when to get cost against costing level - "Warehouse + Batch, Warehouse"</param>
+        /// <param name="IsRequiredQty">when true, give current qty else current cost"</param>
+        /// <returns>cost</returns>
+        public static Decimal GetproductCostAndQtyMaterial(int client_Id, int org_Id, int product_id, int M_ASI_Id, Trx trxName, int M_Warehouse_ID, bool IsRequiredQty)
+        {
+            Decimal cost = 0;
+            string sql = "";
+            try
+            {
+                sql = @"SELECT ROUND(" + (IsRequiredQty ? "AVG(CST.CURRENTQTY)" : "AVG(CST.CURRENTCOSTPRICE)") + @", 10)   FROM M_PRODUCT P   INNER JOIN M_COST CST   ON P.M_PRODUCT_ID=CST.M_PRODUCT_ID
+                               LEFT JOIN M_PRODUCT_CATEGORY PC   ON P.M_PRODUCT_CATEGORY_ID=PC.M_PRODUCT_CATEGORY_ID
+                               INNER JOIN C_ACCTSCHEMA ACC   ON CST.C_ACCTSCHEMA_ID=ACC.C_ACCTSCHEMA_ID
+                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID
+                               INNER JOIN M_COSTELEMENT CE  ON CST.M_COSTELEMENT_ID=CE.M_COSTELEMENT_ID
+                              WHERE ((   CASE WHEN PC.COSTINGMETHOD IS NOT NULL  AND PC.COSTINGMETHOD   = 'C'  THEN (SELECT CAST( Cel.M_Ref_Costelement AS NUMBER)
+                                                  FROM M_CostElement ced  INNER JOIN M_Costelementline Cel ON Ced.M_Costelement_Id = Cel.M_Ref_Costelement
+                                                  WHERE Ced.Ad_Client_Id  =" + client_Id + @" AND Ced.Isactive ='Y' AND ced.CostElementType ='M'
+                                                  AND Cel.Isactive ='Y' AND Cel.M_Costelement_Id=PC.M_costelement_id AND ced.CostingMethod  IS NOT NULL )
+                                            WHEN PC.COSTINGMETHOD IS NOT NULL  THEN (SELECT M_CostElement_ID FROM M_costelement 
+                                                  WHERE COSTINGMETHOD = pc.COSTINGMETHOD AND ad_client_id    = " + client_Id + @" )
+                                            WHEN ACC.COSTINGMETHOD IS NOT NULL AND ACC.COSTINGMETHOD   = 'C' THEN (SELECT CAST( Cel.M_Ref_Costelement AS NUMBER)
+                                                  FROM M_CostElement ced  INNER JOIN M_Costelementline Cel ON Ced.M_Costelement_Id = Cel.M_Ref_Costelement
+                                                  WHERE Ced.Ad_Client_Id  =" + client_Id + @" AND Ced.Isactive ='Y' AND ced.CostElementType ='M'
+                                                  AND Cel.Isactive ='Y' AND Cel.M_Costelement_Id= ACC.M_costelement_id AND ced.CostingMethod  IS NOT NULL ) 
+                                            ELSE
+                                                  (SELECT M_CostElement_ID FROM M_costelement WHERE COSTINGMETHOD = acc.COSTINGMETHOD 
+                                                  AND ad_client_id    = " + client_Id + @" ) END) = ce.M_COSTELEMENT_id)
+                             AND ((    CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D')  THEN " + org_Id + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('B' , 'C')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D') THEN " + org_Id + @"
+                                            ELSE 0  END) = CST.AD_Org_ID)
+                            AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'B', 'D')  THEN " + M_ASI_Id + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('C' , 'O', 'W')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'B', 'D') THEN " + M_ASI_Id + @"
+                                            ELSE 0   END) = NVL(CST.M_AttributeSetInstance_ID , 0))
+                             AND ((     CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('W' ,'D')  THEN " + M_Warehouse_ID + @"
+                                             WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' ,'B' , 'C' ,'O')  THEN 0 
+                                             WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('W' ,'D') THEN " + M_Warehouse_ID + @"
+                                            ELSE 0   END) = NVL(CST.M_Warehouse_ID , 0))
+                            AND P.M_PRODUCT_ID      =" + product_id + @"
+                            AND CST.C_ACCTSCHEMA_ID = (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + client_Id + " )";
+                cost = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
+            }
+            catch
+            {
+                _log.Info("GetproductCosts : " + sql);
+                throw new ArgumentException("Error in getting cost from GetProductCosts");
+            }
+            return cost;
+        }
+
+        /// <summary>
         /// Get Product Cost based on Accouting schema
         /// </summary>
         /// <param name="client_Id">client</param>

@@ -1242,20 +1242,21 @@ namespace VAdvantage.Model
 
             // get current cost from Orignal Document on new record and when product changed
             // when record is  return transaction then price should pick from its Original record
-            decimal currentcostprice = 0;
-            if (inO.IsReturnTrx() && GetC_OrderLine_ID() > 0)
-            {
-                MOrderLine RMALine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_Trx());
-                if (RMALine != null)
-                {
-                    MInOutLine origInOutLine = new MInOutLine(GetCtx(), RMALine.GetOrig_InOutLine_ID(), Get_Trx());
-                    if (origInOutLine != null)
-                    {
-                        currentcostprice = origInOutLine.GetCurrentCostPrice();
-                    }
-                }
-                SetCurrentCostPrice(currentcostprice);
-            }
+            // now, not to set orignal record cost, system will update current cost
+            //decimal currentcostprice = 0;
+            //if (inO.IsReturnTrx() && GetC_OrderLine_ID() > 0)
+            //{
+            //    MOrderLine RMALine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_Trx());
+            //    if (RMALine != null)
+            //    {
+            //        MInOutLine origInOutLine = new MInOutLine(GetCtx(), RMALine.GetOrig_InOutLine_ID(), Get_Trx());
+            //        if (origInOutLine != null)
+            //        {
+            //            currentcostprice = origInOutLine.GetCurrentCostPrice();
+            //        }
+            //    }
+            //    SetCurrentCostPrice(currentcostprice);
+            //}
 
 
             // By Amit for Obsolete Inventory - 25-May-2016
