@@ -92,7 +92,7 @@
             $cmbMoventType = new VIS.Controls.VComboBox("MovementType", false, false, true, lookupMoventType, 29);
 
             //*************Lookup for Locator************            
-            var containerdivLocator = $('<div></div>');
+            var containerdivLocator = $('<div class="d-flex"></div>');
             var lookupLocator = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Locator_ID", 0, false, "");
             $locator = new VIS.Controls.VTextBoxButton("M_Locator_ID", false, false, true, VIS.DisplayType.Search, lookupLocator);
             containerdivLocator.append($locator.getControl());
@@ -112,7 +112,7 @@
             $locator.getBtn(1).css("padding", "0px");
             //*******LookUp Locator Ends**************
             //*************Lookup for Product************            
-            var containerdivProduct = $('<div></div>');
+            var containerdivProduct = $('<div class="d-flex"></div>');
             var lookupProduct = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Product_ID", 0, false, "");
             $product = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, lookupProduct);
             containerdivProduct.append($product.getControl());
@@ -132,55 +132,58 @@
             $product.getBtn(0).css("padding", "0px");
             $product.getBtn(1).css("padding", "0px");
             //*******LookUp Product Ends**************
-            $divContainer = $("<div class='vis-mainContainer' style='height:" + height + " !important'>");
+            $divContainer = $("<div class='vis-mainContainer'>");
 
             var $divInfo = $("<div class='vis-pSelectInfo'>");
+            var $divInfoinn = $("<div class='vis-pSelectInner'>");
+
+            $divInfo.append($divInfoinn);
 
             var $divOrganization = $("<div class='vis-paymentselect-field'>");
             $divOrganization.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "AD_Org_ID") + " </label>"));
             $divOrganization.append($cmbOrganization.getControl());
-            $divInfo.append($divOrganization);
+            $divInfoinn.append($divOrganization);
 
             var $divMovementType = $("<div class='vis-paymentselect-field'>");
             $divMovementType.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "MovementType") + " </label>"));
             $divMovementType.append($cmbMoventType.getControl());
-            $divInfo.append($divMovementType);
+            $divInfoinn.append($divMovementType);
 
             var $divLocator = $("<div class='vis-paymentselect-field'>");
             $divLocator.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + " </label>"));
             $divLocator.append(containerdivLocator);
-            $divInfo.append($divLocator);
+            $divInfoinn.append($divLocator);
 
             var $divProduct = $("<div class='vis-paymentselect-field'>");
             $divProduct.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Product") + " </label>"));
             $divProduct.append(containerdivProduct);
-            $divInfo.append($divProduct);
+            $divInfoinn.append($divProduct);
 
             var $divFromDate = $("<div class='vis-paymentselect-field'>");
             $divFromDate.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateFrom") + " </label>"));
             $divFromDate.append($("<input  id='VIS_dtpFromDate" + $self.windowNo + "'type='date'>"));
-            $divInfo.append($divFromDate);
+            $divInfoinn.append($divFromDate);
 
             var $divToDate = $("<div class='vis-paymentselect-field'>");
             $divToDate.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateTo") + " </label>"));
             $divToDate.append($("<input  id='VIS_dtpToDate" + $self.windowNo + "'type='date'>"));
-            $divInfo.append($divToDate);
+            $divInfoinn.append($divToDate);
 
-            var $divRefresh = $("<div class='vis-paymentselect-field' style='float:right;width:20%;'>");
+            var $divRefresh = $("<div class='vis-paymentselect-field'>");
             // $divRefresh.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateTo") + " </label>"));
-            $divRefresh.append($("<button class='VIS_Pref_btn-2' id='VIS_btnRefresh_" + $self.windowNo + "' style='margin-top: 5px;'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/requery.png'></button>"));
+            $divRefresh.append($("<button class='VIS_Pref_btn-2' id='VIS_btnRefresh_" + $self.windowNo + "' style='margin-top: 0px;'><i class='vis vis-refresh'></i></button>"));
             $divInfo.append($divRefresh);
-            var $divZoom = $("<div class='vis-paymentselect-field' style='float:right;width:20%;'>");
+            var $divZoom = $("<div class='vis-paymentselect-field'>");
             // $divRefresh.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateTo") + " </label>"));
-            $divZoom.append($("<button class='VIS_Pref_btn-2' id='VIS_btnZoom_" + $self.windowNo + "' style='margin-top: 5px;margin-right: 10px;'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/zoom.png'></button>"));
+            $divZoom.append($("<button class='VIS_Pref_btn-2' id='VIS_btnZoom_" + $self.windowNo + "' style='margin-top: 0px;'><i class='vis vis-find'></i></button>"));
             $divInfo.append($divZoom);
 
             $divGridPSelect = $("<div class='vis-pSelectIionGrid'>");
 
-            var designPSelectProcess = " <div class='vis-pSelectProcess' style='float:none;'>"  // div pSelectProcess starts here
+            var designPSelectProcess = " <div class='vis-pSelectProcess'>"  // div pSelectProcess starts here
                                      + " <div class='vis-paymentselect-field'>"  // div  starts here    
-                                     + " <input id='VIS_btnCancel_" + $self.windowNo + "' style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;height:40px;margin-left:10px;margin-right:5px;' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
-                                     + " <input id='VIS_btnOK_" + $self.windowNo + "'  style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-left:10px;height:40px;' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
+                                     + " <input id='VIS_btnCancel_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
+                                     + " <input id='VIS_btnOK_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
                                      + " </div>" // div pSelectButons ends here 
                                      + " </div>" // div pSelectProcess ends here 
             $divContainer.append($divInfo).append($divGridPSelect).append($(designPSelectProcess));

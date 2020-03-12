@@ -83,11 +83,11 @@
         var minSideWidth = 50;
 
         //window with-(sidediv with_margin from left+ space)
-        var selectLeftDivWidth = $(window).width() - (leftDivWidth + 10);
-        var selectDivFullWidth = $(window).width() - (10 + minSideWidth);
+        var selectLeftDivWidth = $(window).width() - (leftDivWidth);
+        var selectDivFullWidth = $(window).width() - (minSideWidth);
         var sideDivHeight = $(window).height() - 193;
-        var gridHeight = $(window).height() - 366;
-        var rightparaHeight = $(window).height() - (gridHeight + 40 + 118);
+        var gridHeight = $(window).height() - 382;
+        var rightparaHeight = $(window).height() - (gridHeight + 55 + 118);
 
         function initializeComponent() {
 
@@ -135,8 +135,8 @@
 
             lblRecordsCount = new VIS.Controls.VLabel();
 
-            btnOk = $("<input id='" + "btnOk_" + $self.windowNo + "' class='VIS_Pref_btn-2' style=' margin-top: 0px; margin-right: 0px;' type='button' value='Ok'>");
-            btnSave = $("<input id='" + "btnSave_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 0px; margin-top: 0px; margin-right: 10px; margin-left: 10px;float: right;' type='button' value='Save'>");
+            btnOk = $("<input id='" + "btnOk_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' style=' margin-top: 0px; margin-right: 0px;' type='button' value='Ok'>");
+            btnSave = $("<input id='" + "btnSave_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin-top: 0px;float: right;' type='button' value='Save'>");
             btnNext = $("<input id='" + "btnNext_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin: 10px; display: none;'  type='button' value='>>'>");
             btnPre = $("<input id='" + "btnPre_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin: 10px; display: none;' type='button' value='<<'>");
 
@@ -145,17 +145,16 @@
 
             //Left Div Design settings 
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
-            topLeftDiv = $("<div class='vis-archive-left-sidebar' id='" + "topLeftDiv_" + $self.windowNo + "' style='float: left; height: 100%; margin-bottom: 2px;margin-left: 0px;position: absolute;'>" +
-                  "<div id='" + "topToggalDiv_" + $self.windowNo + "' style='width: 100%; height: 45px;float: left;padding-left: 11px; padding-top: 11px; background-color: #F1F1F1;'>" +
-                       "<button id='" + "btnToggal_" + $self.windowNo + "' style='border: 0px;background-color: transparent; padding: 0px;' >" +
-                       "<img src='" + src + "' /></button></div></div>");
+            topLeftDiv = $("<div class='vis-archive-left-sidebar' id='" + "topLeftDiv_" + $self.windowNo + "'>" +
+                "<div id='" + "topToggalDiv_" + $self.windowNo + "' class='vis-archive-l-s-head'>" +
+                       "<button id='" + "btnToggal_" + $self.windowNo + "' class='vis-archive-sb-t-button'><i class='vis vis-arrow-left'></i></button></div></div>");
 
             this.btnToggal = topLeftDiv.find("#btnToggal_" + $self.windowNo);
 
-            topleftparaDiv = $("<div style='float: left; width: 100%;height: 74%;' id='" + "topleftparaDiv_" + $self.windowNo + "'>");
-            topleftparaDiv.css("height", sideDivHeight);
+            topleftparaDiv = $("<div class='vis-archive-l-s-content' id='" + "topleftparaDiv_" + $self.windowNo + "'>");
+            //topleftparaDiv.css("height", sideDivHeight);
 
-            topleftInnerParaDiv = $("<div style='height: 100%; margin-top: 1px;background-color: #F1F1F1;' id='" + "topleftInnerParaDiv_" + $self.windowNo + "'>");
+            topleftInnerParaDiv = $("<div  class='vis-archive-l-s-content-inner' id='" + "topleftInnerParaDiv_" + $self.windowNo + "'>");
             topleftparaDiv.append(topleftInnerParaDiv);
             topLeftDiv.append(topleftparaDiv);
             topLeftDiv.css("width", leftDivWidth);
@@ -163,7 +162,7 @@
             var tble = $("<table>");
 
             var tr = $("<tr>");
-            var td = $("<td style='padding: 4px 12px 2px;'>");
+            var td = $("<td style='padding: 0px 10px 2px;'>");
 
             topleftInnerParaDiv.append(tble);
             tble.append(tr);
@@ -171,7 +170,7 @@
             td.append(chkReportQ);
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
+            td = $("<td style='padding: 0px 10px 2px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblProcessQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font")).append(lblBPartnerQ.getControl().addClass("VIS-Search-hide").css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
@@ -185,26 +184,26 @@
             cmbProcess.getControl().hide();
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
+            td = $("<td style='padding: 0px 10px 2px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblTableQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 12px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(cmbTableQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
+            td = $("<td style='padding: 0px 10px 2px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblNameQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 12px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(txtNameQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
@@ -222,69 +221,70 @@
             td.append(txtDescriptionQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
+            td = $("<td style='padding: 0px 10px 2px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblCommentQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 12px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(txtCommentQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
+            td = $("<td style='padding: 0px 10px 2px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblCreatedByQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 12px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(cmbCreatedByQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
+            td = $("<td style='padding: 0px 10px 2px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblCreatedOnQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 12px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(dtpCreatedFromQ.css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
+            td = $("<td style='padding: 0px 10px 2px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(dtpCreatedToQ.css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             //Bottom Ok Button for search
-            leftBottomDiv = $("<div style='float: left; width: 100%;height:45px;position: relative;background-color: #F1F1F1; padding-left: 13px;padding-right: 13px;' id='" + "leftBottomDiv_" + $self.windowNo + "'>");
+            leftBottomDiv = $("<div class='vis-frm-bot-btn-wrp' id='" + "leftBottomDiv_" + $self.windowNo + "'>");
             topLeftDiv.append(leftBottomDiv);
             leftBottomDiv.append(btnOk);
 
             //Right Div Setting
-            topRightDiv = $("<div id='" + "topRightDiv_" + $self.windowNo + "' style='float: right;height: 100%; margin-left: 0px;'>");
-            topRightDiv.css("width", selectLeftDivWidth);
+            topRightDiv = $("<div id='" + "topRightDiv_" + $self.windowNo + "' class='vis-frm-grid-wrap'>");
+            //topRightDiv.css("width", selectLeftDivWidth);
             //topRightDiv.css("height", sideDivHeight);
 
             //check Arebic Calture
-            if (VIS.Application.isRTL) {
-                topRightDiv.css("float", "left");
-                btnSave.css("float", "left");
-                chkReportQ.css("margin-left", "5px");
-            }
+            //if (VIS.Application.isRTL) {
+            //    topRightDiv.css("float", "left");
+            //    btnSave.css("float", "left");
+            //    chkReportQ.css("margin-left", "5px");
+            //}
 
 
 
-            rightTopDiv = $("<div id='" + "rightTopDiv_" + $self.windowNo + "' style='float: left; width: 98.5%; height: 55%; margin-right: 10px; margin-left: 5px; margin-top: 5px;'>");
-            rightBottomDiv = $("<div id='" + "rightBottomDiv_" + $self.windowNo + "' style='float: left; width: 99.5%; margin-right: 0px; margin-left: 0px; margin-top: 5px; '>");
-            rightTopDiv.css("height", gridHeight);
+            rightTopDiv = $("<div id='" + "rightTopDiv_" + $self.windowNo + "' style='float: left; width: 100%; height: 55%;'>");
+            rightBottomDiv = $("<div id='" + "rightBottomDiv_" + $self.windowNo + "' style='float: left; width: 100%;margin-top: 5px; margin-bottom: 10px; '>");
+            //rightTopDiv.css("height", gridHeight);
+            rightTopDiv.css("height", "calc(100% - 274px)");
             rightBottomDiv.css("height", rightparaHeight);
 
 
@@ -878,7 +878,7 @@
                         topLeftDiv.animate({ width: leftDivWidth }, "slow");
                         topleftparaDiv.animate({ width: leftDivWidth }, "slow");
                         topleftparaDiv.find("table").css("display", "block");
-                        topleftparaDiv.css("background-color", "transparent");
+                        //topleftparaDiv.css("background-color", "transparent");
                         btnOk.css("display", "block");
                         topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
                             dGrid.resize();
@@ -898,7 +898,7 @@
                         topLeftDiv.animate({ width: minSideWidth }, "slow");
                         topleftparaDiv.animate({ width: minSideWidth }, "slow");
                         topleftparaDiv.find("table").css("display", "none");
-                        topleftparaDiv.css("background-color", "#F1F1F1");
+                        //topleftparaDiv.css("background-color", "#F1F1F1");
                         btnOk.css("display", "none");
                         topRightDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
                             dGrid.resize();
@@ -916,6 +916,32 @@
                     $(".VIS-Search-hide").hide();
                 }
             });
+        }
+
+        //size chnage 
+        this.sizeChanged = function (h, w) {
+            selectLeftDivWidth = w - (leftDivWidth + 1);
+            selectDivFullWidth = w - (minSideWidth + 1);
+            if (toggleside == true) {
+                topLeftDiv.animate({ width: minSideWidth }, "slow");
+                topleftparaDiv.animate({ width: minSideWidth }, "slow");
+                topleftparaDiv.find("table").css("display", "none");
+                //topleftparaDiv.css("background-color", "#F1F1F1");
+                btnOk.css("display", "none");
+                topRightDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
+                    dGrid.resize();
+                });
+            }
+            else {
+                topLeftDiv.animate({ width: leftDivWidth }, "slow");
+                topleftparaDiv.animate({ width: leftDivWidth }, "slow");
+                topleftparaDiv.find("table").css("display", "block");
+                //topleftparaDiv.css("background-color", "transparent");
+                btnOk.css("display", "block");
+                topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
+                    dGrid.resize();
+                });
+            }
         }
 
         this.display = function () {

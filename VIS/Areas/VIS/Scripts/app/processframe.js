@@ -63,7 +63,7 @@
         this.visPrintIcons = null;
         this.toolbarColor = null;
         var $divOuterMain = null;
-        var $imgToggle = $('<img class="vis-apanel-lb-img" title="Actions" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/mt24.png">');
+        var $imgToggle = $('<i class="fa fa-bars vis-apanel-lb-img" title="Actions"></i>');
         if (this.splitUI) {
             this.partitionContainer = $('<div class="vis-process-outer-wrap">');
             this.parameterContainer = $('<div class="vis-process-left-sidebar">');
@@ -106,7 +106,7 @@
             $text = $("<span class='vis-process-description-Span' style='height: 40px;'>").val("asassasasasasaasa");
             //ProcessDialog
             $contentGrid.append($text);
-            $lblRptTypeHeader = $('<label style="float: left;margin: 0px 10px 0px 0px;display:none;color:white">' + VIS.Msg.getMsg("ChooseReportType") + '</label>');
+            $lblRptTypeHeader = $('<label style="float: left;margin: 0px 10px 0px 0px;display:none;">' + VIS.Msg.getMsg("ChooseReportType") + '</label>');
             var divrptType = $('<div style="display:inherit"></div>');
             self.parameterFixedArea.append($lblRptTypeHeader).append($cmbType).append($chkIsBG).append($lblIsBG);
 

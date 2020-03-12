@@ -67,9 +67,6 @@
                         var colValue = getFieldValue(mField);
 
                         setValue(colValue, iControl, mField);
-
-
-
                     }
                 }
             }
@@ -377,9 +374,7 @@
         var alignmentHorizontal = this.gTab.getHeaderHorizontal();
         var height = this.gTab.getHeaderHeight();
         var width = this.gTab.getHeaderWidth();
-
         var padding = this.gTab.getHeaderPadding();
-
 
         var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, "", padding);
         root.addClass(rootCustomStyle);
