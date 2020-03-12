@@ -459,7 +459,7 @@ namespace VAdvantage.Model
                 }
 
                 query.Clear();
-                query.Append("SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + AD_Client_ID);//AD_Org_ID = " + AD_Org_ID;
+                query.Append("SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + AD_Client_ID);
                 ds = DB.ExecuteDataset(query.ToString(), null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2240,6 +2240,7 @@ namespace VAdvantage.Model
                         if (windowName == "Material Receipt" && orderline != null && orderline.Get_ID() > 0
                             && order != null && order.Get_ID() > 0 && inoutline != null && inoutline.Get_ID() > 0 && !inoutline.IsCostImmediate())
                         {
+                            #region calculate expected landed cost 
                             decimal expectedAmt = 0;
                             decimal expectedQty = 0;
                             query.Clear();
@@ -2265,13 +2266,23 @@ namespace VAdvantage.Model
                                     expectedAmt = Util.GetValueOfDecimal(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["Amt"]);
                                     // Orderline qty
                                     expectedQty = Util.GetValueOfDecimal(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["Qty"]);
-                                    // distributed amount of each qty
-                                    expectedAmt = Decimal.Divide(expectedAmt, expectedQty);
 
-                                    //total amount of movement qty
-                                    expectedAmt = Decimal.Multiply(expectedAmt, inoutline.GetMovementQty());
                                     // movement qty
                                     expectedQty = inoutline.GetMovementQty();
+
+                                    // during cost adjustment - all amount to be distributed
+                                    if (!product.IsCostAdjustmentOnLost())
+                                    {
+                                        // distributed amount of each qty
+                                        expectedAmt = Decimal.Divide(expectedAmt, Util.GetValueOfDecimal(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["Qty"]));
+                                        //total amount of movement qty
+                                        expectedAmt = Decimal.Multiply(expectedAmt, inoutline.GetMovementQty());
+                                    }
+                                    else if (expectedQty < 0 && expectedAmt > 0)
+                                    {
+                                        // In case of normal loss, when qty is less than ZERO then nagate amount 
+                                        expectedAmt = Decimal.Negate(expectedAmt);
+                                    }
 
                                     if (order.GetC_Currency_ID() != acctSchema.GetC_Currency_ID())
                                     {
@@ -2347,6 +2358,7 @@ namespace VAdvantage.Model
                                     }
                                 }
                             }
+                            #endregion
                         }
 
                         // landed cost calculated on completion, not through process

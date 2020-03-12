@@ -5228,15 +5228,24 @@ namespace VAdvantage.Model
             Decimal differenceAmt = 0.0M;
             // get expected freight amount of each (round upto 15 in query only) 
             String sql = @"Select CASE When C_Expectedcostdistribution.Qty = 0 THEN 0
-                            ELSE  ROUND(C_Expectedcostdistribution.Amt / C_Expectedcostdistribution.Qty , 15)
-                            END AS Amt
+                            ELSE  ROUND(C_Expectedcostdistribution.Amt / C_Expectedcostdistribution.Qty , 15) 
+                            END AS Amt , CASE WHEN M_Product.IsCostAdjustmentOnLost='Y' THEN C_Expectedcostdistribution.Qty ELSE 0 END AS OrderlineQty 
                         From M_Inoutline Inner Join C_Expectedcostdistribution On M_Inoutline.C_Orderline_Id = C_Expectedcostdistribution.C_Orderline_Id
                         INNER JOIN C_Expectedcost ON C_Expectedcost.C_Expectedcost_Id = C_Expectedcostdistribution.C_Expectedcost_Id
+                        INNER JOIN M_Product ON M_Product.M_Product_ID = M_Inoutline.M_Product_ID 
                         WHERE m_inoutline.M_InoutLine_ID = " + M_Inoutline_ID + @"  AND C_Expectedcost.C_ExpectedCost_ID=" + C_ExpectedCost_ID;
-            differenceAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+            //differenceAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+            // order qty
+            Decimal orderedQty = 0;
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                differenceAmt = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["Amt"]);
+                orderedQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["OrderlineQty"]);
+            }
 
             // multiply with movement qty of MR
-            differenceAmt = Decimal.Multiply(differenceAmt, Quantity);
+            differenceAmt = Decimal.Multiply(differenceAmt, (orderedQty > 0 ? orderedQty : Quantity));
 
             // diffrence between actual landed cost - expected received cost
             if (ActualLandeCost > 0)  // during invoice completion
@@ -5262,8 +5271,9 @@ namespace VAdvantage.Model
             String sql = @"Select Unique C_Expectedcost.C_ExpectedCost_ID From C_Expectedcost 
                             INNER JOIN C_Expectedcostdistribution ON C_Expectedcost.C_Expectedcost_Id = C_Expectedcostdistribution.C_Expectedcost_Id
                             WHERE C_Expectedcost.M_Costelement_Id = " + lc.GetM_CostElement_ID() + @"
-                            And C_Expectedcost.Landedcostdistribution = '" + lc.GetLandedCostDistribution() + @"'
                             AND C_Expectedcostdistribution.C_OrderLine_ID = " + C_OrderLine_ID;
+            // commeneted afetr discussion with ashish - not consider "cost distribution type" during re-distribution
+            /*And C_Expectedcost.Landedcostdistribution = '" + lc.GetLandedCostDistribution() + @"'*/
             C_ExpectedCost_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             return C_ExpectedCost_ID;
         }
