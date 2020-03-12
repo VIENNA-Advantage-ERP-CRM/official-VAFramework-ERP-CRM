@@ -261,7 +261,16 @@ VIS.VTabbedPane.prototype.evaluate = function (e) {
             this.contentPane.setTabControl(this.TabLevelsItems[this.oldTabIndex]);
         }
     }
-};
+
+    VIS.VTabbedPane.prototype.getAPanel = function () {
+        return this.aPanel;
+    };
+
+    VIS.VTabbedPane.prototype.notifyDataChanged = function () {
+        if (this.multiTabView) {
+            this.contentPane.dataStatusChanged();
+        }
+    };
 
     VIS.VTabbedPane.prototype.sizeChanged = function () {
         if(this.multiTabView)

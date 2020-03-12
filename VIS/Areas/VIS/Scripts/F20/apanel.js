@@ -126,7 +126,7 @@
         var $spnTitle = null;
         /***END Tab panel**/
 
-        //var tabItems = [], tabLIObj = {};
+        var tabItems = [], tabLIObj = {};
         this.defaultSearch = true;
         this.isAutoCompleteOpen = false;
 
@@ -670,18 +670,18 @@
         }
 
         ///*tabcontrol */
-        //this.setTabControl = function (tabs) {
-        //    tabItems = tabs;
-        //    for (var i = 0; i < tabs.length; i++) {
-        //        var li = tabs[i].getListItm();
-        //        tabLIObj[tabItems[i].action] = li;
-        //        $ulTabControl.append(li);
-        //    }
-        //    if ($ulTabControl.width() > $divTabControl.width()) {
-        //        if (!VIS.Application.isMobile)
-        //            $divTabNav.show();
-        //    }
-        //};
+        this.setTabControl = function (tabs) {
+            tabItems = tabs;
+            for (var i = 0; i < tabs.length; i++) {
+                var li = tabs[i].getListItm();
+                tabLIObj[tabItems[i].action] = li;
+                $ulTabControl.append(li);
+            }
+            if ($ulTabControl.width() > $divTabControl.width()) {
+                if (!VIS.Application.isMobile)
+                    $divTabNav.show();
+            }
+        };
 
         this.setTabNavigation = function () {
             if ($ulTabControl.width() > $divTabControl.width()) {
