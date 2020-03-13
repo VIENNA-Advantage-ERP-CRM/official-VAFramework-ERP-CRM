@@ -375,3 +375,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/ViennaBase/Scripts/modernizr-2.6.2.js

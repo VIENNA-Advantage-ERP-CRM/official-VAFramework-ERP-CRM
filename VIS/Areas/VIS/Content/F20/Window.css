@@ -1804,7 +1804,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-fp-custcolumns {
     padding: 10px;
     border-top: 1px solid rgba(var(--v-c-on-secondary), .2);
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .vis-fp-savedsearch {
@@ -1917,9 +1917,6 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     max-height: calc(100% - 340px);
     overflow: hidden;
 }
-.vis-fp-inputgroupseprtr:last-child .vis-input-wrap {
-    margin-bottom: 0;
-}
 .vis-fp-static-ctrlwrp:hover{
     overflow: overlay;
 }
@@ -1955,6 +1952,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     font-size: .75rem;
     color: rgba(var(--v-c-primary), 1);
     padding: 4px 10px 0 10px;
+    visibility:hidden;
 }
 .vis-fp-viwall span {
     cursor: pointer;
