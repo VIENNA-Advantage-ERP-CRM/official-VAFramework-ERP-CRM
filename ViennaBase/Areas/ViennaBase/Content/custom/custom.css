@@ -314,20 +314,17 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 }
 
 /****************** w2ui-grid ***********************/
-.w2ui-reset table {
+.w2ui-reset table,
+.w2ui-reset {
     /*font-size: .75rem;*/
     font-family: var(--v-c-font-family);
-}
-.w2ui-reset {
-    font-family: 'var(--v-c-font-family);
 }
 .w2ui-grid {
     border: none;
 }
-
-    .w2ui-grid .w2ui-grid-body table td {
-        border-right: none;
-    }
+.w2ui-grid .w2ui-grid-body table td {
+    border-right: none;
+}
 
     .w2ui-grid .w2ui-grid-body .w2ui-grid-columns {
         box-shadow: none;
@@ -339,15 +336,17 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     border-right: 1px solid transparent;
     min-width: 28px;
 }
-
-    .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-selected td.w2ui-grid-data > div {
-        color: rgba(var(--v-c-on-secondary), 1);
-    }
-
-    .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data:first-child > div {
-        padding: 10px 0;
-    }
-
+.w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-selected td.w2ui-grid-data > div {
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+.w2ui-grid .w2ui-grid-body table td.w2ui-grid-data:first-child > div {
+    padding: 10px 0;
+}
+.w2ui-grid .w2ui-grid-body table .w2ui-head:first-child > div,
+.w2ui-grid .w2ui-grid-body table td.w2ui-grid-data:first-child > div{
+    text-overflow: unset;
+    white-space: normal;
+}
 .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even:hover, 
 .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-odd:hover, 
 .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-even.w2ui-empty-record:hover {
