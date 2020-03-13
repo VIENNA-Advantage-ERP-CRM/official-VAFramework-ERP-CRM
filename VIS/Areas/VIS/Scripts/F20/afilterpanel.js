@@ -5,11 +5,12 @@
     function getTemplate(winNo) {
         var str =
             ' <div class="vis-fp-bodycontent">                                                 ' +
-            '     <div class="vis-fp-viwall">                                                  ' +
+            '     <div class="vis-fp-viwall" >                                                  ' +
             '         <span>' + VIS.Msg.getMsg("ViewMore") + '</span>                               ' +
             '     </div>                                                                       ' +
             '  <div class="vis-fp-datawrap"> ' +
             '     <div class="vis-fp-static-ctrlwrp">                                          ' +
+            ' <div class="vis-fp-static-ctrlinnerwrp"></div>    ' +
             '     </div>                                                                       ' +
             '     <div class="vis-fp-custcolumns" id="accordion_' + winNo + '"">                ' +
             '         <div class="card">                                                       ' +
@@ -65,7 +66,9 @@
         var dsAdvanceData = null;
 
         var bodyDiv = $(tmp);
+        var divCtrlWrap = bodyDiv.find(".vis-fp-datawrap");
         var divStatic = bodyDiv.find(".vis-fp-static-ctrlwrp");
+        var divStaticInner = bodyDiv.find(".vis-fp-static-ctrlinnerwrp");
         var btnViewAll = bodyDiv.find(".vis-fp-viwall");
         var spnViewAll = $(btnViewAll.find('span')[0]);
         var divDynamic = bodyDiv.find(".vis-fp-custcolumns");
@@ -154,7 +157,7 @@
                     }
                     inputWrapGroup.append(grp);
 
-                    divStatic.append(inputWrapGroup);
+                    divStaticInner.append(inputWrapGroup);
 
                     this.getFilterOption(field);
                 }
@@ -438,6 +441,20 @@
             setValueEnabled(true);
             // disable control at value2 position
             setValue2Enabled(false);
+        });
+
+        bodyDiv.on("mouseover", function () {
+            if ((divStaticInner.height() > (divStatic.parent().height() - 340)) && (divStaticInner.height() + 15) >= divStatic.height()) {
+                btnViewAll.css('visibility', 'visible');
+            }
+            else {
+                btnViewAll.css('visibility', 'hidden');
+            }
+        });
+
+        bodyDiv.on("mouseout", function () {
+            if (spnViewAll.text() == VIS.Msg.getMsg("ViewMore"))
+                btnViewAll.css('visibility', 'hidden');
         });
 
         this.disposeComponent = function () {

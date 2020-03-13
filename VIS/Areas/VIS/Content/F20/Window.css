@@ -1952,6 +1952,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     font-size: .75rem;
     color: rgba(var(--v-c-primary), 1);
     padding: 4px 10px 0 10px;
+    visibility:hidden;
 }
 .vis-fp-viwall span {
     cursor: pointer;

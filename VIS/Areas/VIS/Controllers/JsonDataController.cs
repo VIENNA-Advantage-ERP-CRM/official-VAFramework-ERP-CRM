@@ -1052,6 +1052,24 @@ namespace VIS.Controllers
             result["list"] = keyva;
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
+
+
+
+        /// <summary>
+        /// Controller function to fetch Version details
+        /// </summary>
+        /// <param name="RowData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult GetVerInfo(string RowData)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            dynamic od = JsonConvert.DeserializeObject(RowData);
+            CommonModel cm = new CommonModel();
+            var retRes = cm.GetVerDetails(ctx, od);
+            return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
+        }
+
     }
 
     public class FilterDataContract

@@ -208,5 +208,9 @@
     .vis-fp-static-ctrlwrp, .vis-fp-datawrap {
         overflow: auto;
     }
+
+    .vis-fp-viwall {
+    visibility:visible;
+    }
 }
     /* END */
