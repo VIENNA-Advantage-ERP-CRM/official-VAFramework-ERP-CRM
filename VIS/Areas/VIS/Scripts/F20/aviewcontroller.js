@@ -1407,15 +1407,8 @@ VIS.GridController.prototype.dataRefresh = function () {
 
     VIS.GridController.prototype.dataRefreshAll = function () {
 
-        this.gTab.getTableModel().dataRefreshAll();
+        this.gTab.dataRefreshAll();
 
-        //this.vTable.clear();
-        //this.vTable.add(this.gTab.getTableModel().getDataTable());
-        //this.gTab.getTableModel().setSortModel(this.vTable.getGrid().records);
-
-        //this.setRecord(this.gTab.getTableModel().getTotalRowCount());
-
-        //this.navigate(this.gTab.getCurrentRow(), true);
 
     };
 

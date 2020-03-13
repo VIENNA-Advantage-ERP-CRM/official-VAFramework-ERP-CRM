@@ -1825,6 +1825,11 @@
         this.setCurrentRow(row, true);
         return record;
     };
+    GridTab.prototype.dataRefreshAll = function () {
+        /* Query */
+        this.mDataStatusEvent = null; //reset 
+        this.getTableModel().dataRefreshAll();
+    };
 
     GridTab.prototype.dataIgnore = function () {
         if (this.gridTable.dataIgnore(true)) {

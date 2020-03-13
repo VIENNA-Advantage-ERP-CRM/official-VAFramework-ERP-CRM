@@ -189,7 +189,7 @@
             $spnTitle = $root.find('.vis-ad-w-p-t-name h5');
 
             //Filter Panel
-            $btnFilter = $root.find(".vis-ad-w-p-tb-rc-action");
+            $btnFilter = $root.find("span.vis-ad-w-p-tb-rc-action");
             $fltrPanel = $root.find('.vis-ad-w-p-filterpnl').hide();
 
             $fltrPnlBody = $fltrPanel.find('.vis-fp-bodywrap');

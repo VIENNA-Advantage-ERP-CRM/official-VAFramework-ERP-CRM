@@ -783,13 +783,13 @@
                             return;
                         var ms = ulheight - dHeight;
                         s = cPos + offSet;
-                        ($ulFieldNames.parent()).animate({ scrollTop: s > ms ? ms : s }, 1000, "easeOutBounce");
+                        ($ulFieldNames.parent()).animate({ scrollTop: s > ms ? ms : s }, 1000);
                     }
                     else if (dir == 'u') {
                         if (cPos == 0)
                             return;
                         s = (cPos - offSet);
-                        ($ulFieldNames.parent()).animate({ scrollTop: s < 0 ? 0 : s }, 1000, "easeOutBounce");
+                        ($ulFieldNames.parent()).animate({ scrollTop: s < 0 ? 0 : s }, 1000);
                         //$divTabControl.scrollLeft(cPos - offSet);
                     }
 
