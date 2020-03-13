@@ -1493,12 +1493,12 @@
                 }
 
                 //	Is this tab included?
-                //if (oldTabLayout &&  !$.isEmptyObject(includedMap)) {
-                //    var parent = includedMap[gTab.getAD_Tab_ID()];
-                //    if (parent != null) {
-                //        var included = parent.includeTab(gc);
-                //    }
-                //}
+                if (!multiTabview &&  !$.isEmptyObject(includedMap)) {
+                    var parent = includedMap[gTab.getAD_Tab_ID()];
+                    if (parent != null) {
+                        var included = parent.includeTab(gc);
+                    }
+                }
             }	//	normal tab
 
             this.vTabbedPane.addTab(id, gTab, tabElement, tabActions[i]);

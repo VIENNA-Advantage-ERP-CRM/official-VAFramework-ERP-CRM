@@ -1737,7 +1737,7 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
             tdArea.append(inGc);
 
 
-            //tdArea.height(VIS.Application.isMobile ? 250 : 350);
+            tdArea.height(VIS.Application.isMobile ? 250 : 350);
             tdArea.css('display', 'flex');
 
             inGc.show();
