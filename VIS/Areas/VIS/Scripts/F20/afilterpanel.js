@@ -226,7 +226,7 @@
             var dynFilter = getDynamicFilter();
             if (dynFilter != '') {
                 if (finalWhereClause != '')
-                    finalWhereClause = ' AND ' + dynFilter;
+                    finalWhereClause += ' AND ' + dynFilter;
                 else
                     finalWhereClause = dynFilter;
             }
