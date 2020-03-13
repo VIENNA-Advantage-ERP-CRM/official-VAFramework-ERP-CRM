@@ -1804,7 +1804,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-fp-custcolumns {
     padding: 10px;
     border-top: 1px solid rgba(var(--v-c-on-secondary), .2);
-    margin-top: -5px;
+    margin-top: 5px;
 }
 
 .vis-fp-savedsearch {
