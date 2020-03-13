@@ -332,48 +332,49 @@
 
         function onGroupClick(e) {
             e.stopPropagation();
-            var o = $(this);
+            var divGroup = $(this);
             var target = $(e.target);
-            var name = o.data("name");
-            var dis = o.data("display");
-            var viewMore = $(o.find('.vis-ev-col-fg-more')[0]);
+            var name = divGroup.data("name");
+            var dis = divGroup.data("display");
+            var viewMore = $(divGroup.find('.vis-ev-col-fg-more')[0]);
             //console.log(name);
             //console.log(dis);
             var show = false;
             var showGroupFieldDefault = false;
-            if (target.hasClass('vis-ev-col-fg-more')) {
+
+
+            if (target.is('span')) {
                 if (dis !== "show") {// If group is vlosed and user click on show more then no processing.
                     return;
                 }
                 show = true;
-                if (target.data("showmore") == 'Y') {
+                if (divGroup.data("showmore") == 'Y') {
                     showGroupFieldDefault = true;
-                    target.data("showmore", "N");
-                    target.text(VIS.Msg.getMsg("ShowLess"));
+                    divGroup.data("showmore", "N");
+                    viewMore.text(VIS.Msg.getMsg("ShowLess"));
                 }
                 else {
-                    target.data("showmore", "Y");
-                    target.text(VIS.Msg.getMsg("ShowMore"));
+                    divGroup.data("showmore", "Y");
+                    viewMore.text(VIS.Msg.getMsg("ShowMore"));
                 }
             }
             else {
-                if (viewMore.data("showmore") == 'N') {
+                if (divGroup.data("showmore") == 'N') {
                     showGroupFieldDefault = true;
                 }
 
                 if (dis === "show") {
-                    o.data("display", "hide");
+                    divGroup.data("display", "hide");
                     viewMore.hide();
-                    $(o.children()[2]).addClass("vis-ev-col-fg-rotate");
+                    $(divGroup.children()[2]).addClass("vis-ev-col-fg-rotate");
                 } else {
-                   
-                    o.data("display", "show");
+
+                    divGroup.data("display", "show");
                     viewMore.show();
                     show = true;
-                    $(o.children()[2]).removeClass("vis-ev-col-fg-rotate");
+                    $(divGroup.children()[2]).removeClass("vis-ev-col-fg-rotate");
                 }
             }
-            
 
             var list = groupToCompsMap[name];
 
@@ -406,9 +407,9 @@
             addRow();
             initCols(true);
             //<i class="fa fa-ellipsis-h"></i>
-            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="show">' +
-                '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
-                '<span class="vis-ev-col-fg-more" data-showmore="Y">' + VIS.Msg.getMsg("ShowMore") + '</span>' +
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-showmore="Y" data-name="' + fieldGroup + '" data-display="show">' +
+                '<span class="vis-ev-col-fg-hdr"  >' + fieldGroup + ' </span> ' +
+                '<span class="vis-ev-col-fg-more">' + VIS.Msg.getMsg("ShowMore") + '</span>' +
                 '<i class= "fa fa-angle-up">' +
                 '</span>' +
                 '</div>');
