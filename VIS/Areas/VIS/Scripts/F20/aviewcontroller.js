@@ -1057,7 +1057,7 @@
 
         }
         this.activateTree();
-
+        
     };
 
     VIS.GridController.prototype.multiRowResize = function () {
@@ -1204,6 +1204,34 @@
         }
 
         var result = this.gTab.prepareQuery(onlyCurrentDays, maxRows, created, false);
+    };
+
+    VIS.GridController.prototype.applyFilters = function (qry) {
+
+       //var finalwhere = qry.getWhereClause();
+        var whrs = [];
+        if (this.searchCode && this.searchCode != '') {
+            whrs.push(this.searchCode);
+            //qry.addRestriction(this.seachCode);
+        }
+        var qryWhere = qry.getWhereClause();
+        if (qryWhere!="")
+            whrs.push(qry.getWhereClause());
+
+        if (this.aFilterPanel) {
+            var where = this.aFilterPanel.getFilterClause();
+            if (where != '')
+                whrs.push(where);
+                //qry.addRestriction(where);
+        }
+        qry.clear();
+        if (whrs.length > 0)
+            qry.addRestriction(whrs.join(' AND '));
+        else qry = null;
+        //Set Page value to 1
+        this.getMTab().getTableModel().setCurrentPage(1);
+        this.getMTab().setQuery(qry);
+        this.query(0, 0, null);
     };
 
     VIS.GridController.prototype.queryCompleted = function (result) {
@@ -1737,7 +1765,7 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
             tdArea.append(inGc);
 
 
-            //tdArea.height(VIS.Application.isMobile ? 250 : 350);
+            tdArea.height(VIS.Application.isMobile ? 250 : 350);
             tdArea.css('display', 'flex');
 
             inGc.show();

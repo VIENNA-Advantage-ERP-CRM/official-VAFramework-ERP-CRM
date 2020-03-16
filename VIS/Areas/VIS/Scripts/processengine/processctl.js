@@ -457,7 +457,8 @@
         function initializedComponenet() {
 
             $root = $("<div class='vis-height-full'>");
-            $rightDiv = $("<div class='vis-height-full' style='background: #63BFE9;'>");
+            $rightDiv = $("<div class='vis-height-full'>");
+            $rightDiv.css('background-color','rgba(var(--v-c-primary), .3)');
             $innerRightDiv = $("<div class='vis-height-full' style='padding:5px;'>");
             $root.append($rightDiv);
             $root.append(bsyDiv);
