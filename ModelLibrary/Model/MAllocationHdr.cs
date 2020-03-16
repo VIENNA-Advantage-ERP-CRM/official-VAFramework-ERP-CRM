@@ -1121,12 +1121,11 @@ namespace VAdvantage.Model
                             AD_Org_ID = payment.GetAD_Org_ID();
                         }
                         return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
-                    }                    
+                    }
                 }
             }
             return currencymultiplyRate;
         }
-
 
         private int C_InvoicePaySch_ID = 0;
         /// <summary>
