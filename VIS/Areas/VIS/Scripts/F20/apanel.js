@@ -156,7 +156,7 @@
 
             $hdrPanel = $root.find(".vis-ad-w-p-header-l");
 
-           
+
 
             $divIncludeTab = $root.find(".vis-ad-w-p-center-inctab");
 
@@ -176,7 +176,7 @@
             $txtSearch = $root.find(".vis-ad-w-p-tb-s-input");
             $btnClrSearch = $root.find(".vis-ad-w-p-tb-s-icon");
             $imgdownSearch = $root.find(".vis-ad-w-p-tb-s-icon-down");
-           // $imgFilter = $root.find(".fa-filter");
+            // $imgFilter = $root.find(".fa-filter");
 
             $txtSearch.attr('placeholder', VIS.Msg.getMsg("Search"));
             // Mohit - Shortcut as title.
@@ -195,7 +195,7 @@
             $fltrPnlBody = $fltrPanel.find('.vis-fp-bodywrap');
             $fltrPanel.find('.vis-fp-header h4').text(VIS.Msg.getMsg("Filter"));
             $btnFPClose = $fltrPanel.find('.vis-fp-header .vis-mark');
-            
+
 
         };
 
@@ -1018,7 +1018,7 @@
             self.$parentWindow.dispose(); //dispose
         });
 
-    /* left bar toggle */
+        /* left bar toggle */
         this.updateLabelVisbility = function () {
             var w = parseInt($divlbMain.width());
 
@@ -1030,7 +1030,7 @@
                 $ulactionbar.find('span').hide();
                 $uldynactionbar.find('span').hide();
             }
-            
+
         };
 
         $btnlbToggle.on(VIS.Events.onTouchStartOrClick, function (e) {
@@ -1478,7 +1478,7 @@
                         gc.initHeaderPanel(this.getParentDetailPane());
                     }
                 }
-                gc.initFilterPanel(curWindowNo,this.getFilterPane());
+                gc.initFilterPanel(curWindowNo, this.getFilterPane());
 
                 tabElement = gc;
                 if (i === 0 && goSingleRow)
@@ -1493,7 +1493,7 @@
                 }
 
                 //	Is this tab included?
-                if (!multiTabview &&  !$.isEmptyObject(includedMap)) {
+                if (!multiTabview && !$.isEmptyObject(includedMap)) {
                     var parent = includedMap[gTab.getAD_Tab_ID()];
                     if (parent != null) {
                         var included = parent.includeTab(gc);
@@ -1719,7 +1719,7 @@
         if (this.getIsUILocked())
             return;
         //	Do Screenrt w/o busy
-
+        this.setBusy(true);
         var selfPan = this;
         setTimeout(function () {
             //  Command Buttons
@@ -1733,11 +1733,7 @@
 
             selfPan.actionPerformedCallback(selfPan, action);
 
-        });
-
-        this.setBusy(true);
-
-
+        }, 100);
     };
 
     APanel.prototype.actionPerformedCallback = function (tis, action) {
