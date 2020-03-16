@@ -2696,7 +2696,7 @@ namespace VIS.Models
                                     if (inv.GetC_Currency_ID() != C_Currency_ID)
                                     {
                                         var conertedAmount = MConversionRate.Convert(ctx, dueamt, C_Currency_ID, inv.GetC_Currency_ID(), alloc.GetDateAcct(), alloc.GetC_ConversionType_ID(), inv.GetAD_Client_ID(), inv.GetAD_Org_ID());
-                                        if(conertedAmount == 0)
+                                        if (conertedAmount == 0)
                                         {
                                             trx.Rollback();
                                             trx.Close();

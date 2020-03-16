@@ -261,32 +261,6 @@
         margin: 0;
     }
 
-@media only screen and (max-device-width : 1024px) {
-    .vis-apanel-table-td3 {
-        width: 0px;
-        padding-left: 1px !important;
-        padding-right: 1px !important;
-    }
-}
-
-/* Desktops and laptops ----------- */
-@media only screen and (min-width : 1224px) {
-    .vis-apanel-table-td3 {
-        width: 300px;
-        padding-left: 1px !important;
-        padding-right: 1px !important;
-    }
-}
-
-/* Large screens ----------- */
-@media only screen and (min-width : 1824px) {
-    .vis-apanel-table-td3 {
-        width: 500px;
-        padding-left: 1px !important;
-        padding-right: 1px !important;
-    }
-}
-
 .vis-apanel-search {
     display: inline-block;
     padding: 7px 10px;
@@ -2433,7 +2407,7 @@ findImg {
     filter: brightness(.4);
 }
 .vis-allocation-leftControls .panel-default > .panel-heading {
-    background-color: rgba(var(--v-c-on-secondary), .1);
+    background-color: rgba(var(--v-c-on-secondary), .2);
     background-image: none;
     padding: 0;
     color: rgba(var(--v-c-on-secondary), 1);
@@ -2452,75 +2426,20 @@ findImg {
 .vis-allocation-leftControls .panel-title > a span {
     flex: 1;
 }
-.vis-allocation-leftControls .panel-title > a span {
-    flex: 1;
-}
 .vis-allocation-leftControls .panel-title > a:hover {
     color: rgba(var(--v-c-primary), 1);
     text-decoration: none;
     filter: brightness(1);
 }
-
 .vis-allocation-leftControls .panel-group .panel {
     background-color: rgba(var(--v-c-common), 1);
     border: none;
 }
-
 .vis-allocation-leftControls .panel-title {
     margin-top: 0;
     margin-bottom: 0;
 }
 /*-------------------*/
-
-@media (max-width: 1566px) {
-    .vis-allocation-bpartner {
-        width: 90%;
-    }
-}
-
-@media (max-width: 1460) {
-    .vis-allocation-bpartner {
-        width: 89%;
-    }
-
-    .vis-allocation-bpartner {
-        width: 89%;
-    }
-}
-
-@media (max-width: 1366px) {
-    .vis-allocation-bpartner {
-        width: 88%;
-    }
-}
-
-@media (max-width: 1152px) {
-    .vis-allocation-bpartner {
-        width: 84%;
-    }
-}
-
-@media (max-width: 999px) {
-    .vis-allocation-bpartner {
-        width: 82%;
-    }
-}
-
-@media (max-width: 900px) {
-    .vis-allocation-bpartner {
-        width: 80%;
-    }
-}
-
-@media (max-height: 767px) {
-    .vis-allocate-root {
-        height: 100%;
-    }
-
-    .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
-        height: 80%;
-    }
-}
 
 
 /**********************************************************************************************/
@@ -2576,9 +2495,9 @@ findImg {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    color: #428bca;
+    color: rgba(var(--v-c-primary), 1);
     margin: 0 5px;
-    border-bottom: 2px solid #428bca;
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
     /*background-color: ghostwhite;*/
 }
 
@@ -2602,9 +2521,9 @@ findImg {
     /*-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);*/
     /*box-shadow: 0 1px 1px rgba(0,0,0,.05);*/
     /*-moz-box-shadow: 0 1px 1px rgba(0,0,0,.05);*/
-    box-shadow: 0 8px 12px 1px rgba(0, 0, 0, 0.4);
-    -webkit-box-shadow: 0 8px 12px 1px rgba(0, 0, 0, 0.4);
-    -moz-box-shadow: 0 8px 12px 1px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 10px 1px rgba(var(--v-c-on-secondary), .2);
+    -webkit-box-shadow: 0 8px 10px 1px rgba(var(--v-c-on-secondary), .2);
+    -moz-box-shadow: 0 8px 10px 1px rgba(var(--v-c-on-secondary), .2);
     border-color: #ddd;
     /*background-color: whitesmoke;
     background-color: lightgoldenrodyellow;*/
@@ -2616,9 +2535,9 @@ findImg {
 }
 
 .vis-cv-card-selected {
-    box-shadow: 0 8px 12px 1px rgba(26, 160, 237, .7);
-    -webkit-box-shadow: 0 8px 12px 1px rgba(26, 160, 237, .7);
-    -moz-box-shadow: 0 8px 12px 1px rgba(26, 160, 237, .7);
+    box-shadow: 0 4px 12px 1px rgba(var(--v-c-primary), .3);
+    -webkit-box-shadow: 0 4px 12px 1px rgba(var(--v-c-primary), .3);
+    -moz-box-shadow: 0 4px 12px 1px rgba(var(--v-c-primary), .3);
 }
 
 /*.vis-cv-card-selected
