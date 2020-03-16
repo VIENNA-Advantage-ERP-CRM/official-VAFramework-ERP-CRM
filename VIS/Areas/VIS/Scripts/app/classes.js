@@ -494,6 +494,10 @@
         return this.list.length;
     };
 
+    VIS.Query.prototype.clear = function () {
+        this.list = [];
+    };
+
     VIS.Query.prototype.getRestrictions = function () {
         /// <summary>
         ///Get VIS.Query Restriction Count

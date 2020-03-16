@@ -238,7 +238,8 @@
 
         this.fireValChanged = function (colName) {
             // if (ignoreTarget || $target.hasClass('vis-fp-inputvalueforupdate')) {
-            this.refreshAll(colName, prepareWhereClause(this));
+           // this.refreshAll(colName, prepareWhereClause(this));
+            this.refreshAll(colName);
         };
 
         this.vetoablechange = function (evt) {
@@ -317,6 +318,10 @@
 
             selItems = [];
             selIds = [];
+        };
+
+        this.getFilterClause = function () {
+            return prepareWhereClause(this);
         };
 
         //dynamic
@@ -931,9 +936,10 @@
 
     FilterPanel.prototype.refreshAll = function (colName, finalWhereClause) {
         var query = new VIS.Query(this.curTab.getTableName(), true);
-        query.addRestriction(finalWhereClause);
-        this.curTab.setQuery(query);
-        this.curGC.query(0, 0, null);
+        //query.addRestriction(finalWhereClause);
+        //this.curTab.setQuery(query);
+        //this.curGC.query(0, 0, null);
+        this.curGC.applyFilters(query);
         this.refreshFilterOptions(colName);
     };
 

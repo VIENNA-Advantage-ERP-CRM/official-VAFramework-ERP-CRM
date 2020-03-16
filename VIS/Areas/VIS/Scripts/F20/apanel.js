@@ -218,15 +218,17 @@
                         self.curTab.userQueryID = ui.item.id;
 
                         if (ui.item.code != VIS.Msg.getMsg("All")) {
-                            query.addRestriction(ui.item.code);
+                            //query.addRestriction(ui.item.code);
+                            self.curGC.searchCode = ui.item.code;
                         }
                         //	History
 
                         //Set Page value to 1
-                        self.curTab.getTableModel().setCurrentPage(1);
-                        //	Confirmed query
-                        self.curTab.setQuery(query);
-                        self.curGC.query(0, 0, false);   //  autoSize
+                        //self.curTab.getTableModel().setCurrentPage(1);
+                        ////	Confirmed query
+                        //self.curTab.setQuery(query);
+                        //self.curGC.query(0, 0, false);   //  autoSize
+                        self.curGC.applyFilters(query);
                         $btnClrSearch.css("visibility", "visible");
                         $imgdownSearch.css("visibility", "visible").css("transform", "rotate(360deg)");
                         ev.stopPropagation();
@@ -831,7 +833,8 @@
         //Search
         $imgSearch.on(VIS.Events.onTouchStartOrClick, function (e) {
             self.cmd_find($txtSearch.val());
-            self.curTab.searchText = "";
+            //self.curTab.searchText = "";
+            self.clearSearchText();
             $txtSearch.val("");
             e.stopPropagation();
         });
@@ -871,10 +874,12 @@
         $btnClrSearch.on("click", function () {
             $btnClrSearch.css("visibility", "hidden");
             self.defaultSearch = true;
-            self.curTab.searchText = "";
+            //self.curTab.searchText = "";
+            self.clearSearchText();
             $txtSearch.val("");
             var query = new VIS.Query();
-            //query.addRestriction(" 1 = 1 ");
+            ////query.addRestriction(" 1 = 1 ");
+            //self.findRecords(query);
             self.findRecords(query);
             $imgdownSearch.css("transform", "rotate(360deg)");
         });
@@ -993,19 +998,19 @@
             }
 
             this.curGC.skipRowInserting(true); // do - not insert row 
-            if (query != null && query.getIsActive()) {
-                //log.config(query.toString());
-                this.curTab.setQuery(query);
-                this.curGC.query(0, 0, created);   //  autoSize
+            if (!query)
+                query = new VIS.Query();
+            //if (query != null && query.getIsActive()) {
+                this.curGC.applyFilters(query);
                 //, this.curGC.treeNodeID, this.treeID
-            }
-            else {
-                //var maxRows = VIS.MRole.getMaxQueryRecords();
-                var maxRows = 0;
-                //log.config("OnlyCurrentDays=" + onlyCurrentDays + ", MaxRows=" + maxRows);
-                this.curTab.setQuery(null);	//	reset previous queries
-                this.curGC.query(onlyCurrentDays, maxRows, created);   //  autoSize
-            }
+            //}
+            //else {
+            //    //var maxRows = VIS.MRole.getMaxQueryRecords();
+            //    var maxRows = 0;
+            //    //log.config("OnlyCurrentDays=" + onlyCurrentDays + ", MaxRows=" + maxRows);
+            //    this.curTab.setQuery(null);	//	reset previous queries
+            //    this.curGC.query(onlyCurrentDays, maxRows, created);   //  autoSize
+            //}
         };
 
         this.setTitle = function (title) {
@@ -2679,7 +2684,8 @@
                     //query.addRestriction(" 1 = 1 ");
                     //this.curTab.setQuery(query);
 
-                    this.curTab.searchText = "";
+                    //this.curTab.searchText = "";
+                    this.clearSearchText();
                     //if (this.curTab.getTabLevel() > 0) {
                     //    this.curTab.linkValue = "-1";
                     //}
@@ -3321,34 +3327,7 @@
             query = this.curTab.getSearchQuery(val);
         }
 
-        var onlyCurrentDays = 0;
-        var created = false;
-
-        this.curTab.getTableModel().setCurrentPage(1);
-
-        if (this.isSummaryVisible) {
-            this.curTab.setShowSummaryNodes(true);
-        }
-        else {
-            this.curTab.setShowSummaryNodes(false);
-        }
-
-        this.curGC.skipRowInserting(true); // do - not insert row 
-        if (query != null && query.getIsActive()) {
-            //log.config(query.toString());
-            this.curTab.setQuery(query);
-            this.curGC.query(0, 0, created);   //  autoSize
-            //, this.curGC.treeNodeID, this.treeID
-        }
-        else {
-            //var maxRows = VIS.MRole.getMaxQueryRecords();
-            var maxRows = 0;
-            //log.config("OnlyCurrentDays=" + onlyCurrentDays + ", MaxRows=" + maxRows);
-            this.curTab.setQuery(null);	//	reset previous queries
-            this.curGC.query(onlyCurrentDays, maxRows, created);   //  autoSize
-        }
-        // this.curGC.dynamicDisplay(-1);
-        //this.setBusy(false);
+        this.findRecords(query);
     };
 
     APanel.prototype.cmd_chat = function () {
@@ -3789,6 +3768,13 @@
         atHistory.show();
     };
 
+    APanel.prototype.clearSearchText = function () {
+        if (this.curGC) {
+            this.curGC.searchCode = "";
+            this.curTab.searchText = "";
+        }
+    };
+
     APanel.prototype.cmd_finddialog = function () {
 
         var find = new VIS.Find(this.curWindowNo, this.curTab, 0);
@@ -3800,7 +3786,7 @@
                 //if (find.getIsOKPressed()) {
 
                 self.setAdvancedSerachText(true, "");
-                self.curTab.searchText = "";
+                self.clearSearchText();
 
                 if (self.isSummaryVisible) {
                     self.curTab.setShowSummaryNodes(true);
