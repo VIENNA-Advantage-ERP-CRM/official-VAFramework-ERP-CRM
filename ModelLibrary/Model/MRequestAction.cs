@@ -153,6 +153,15 @@ namespace VAdvantage.Model
             }
         }
 
+        /// <summary>
+        /// Get Column Value
+        /// </summary>
+        /// <param name="columnName"> Column name</param>
+        /// <returns>Returns value of the column.</returns>
+        public string getColumnValue(string columnName)
+        {
+            return Get_DisplayValue(columnName, true);
+        }
         /**
          * 	Before Save
          *	@param newRecord new

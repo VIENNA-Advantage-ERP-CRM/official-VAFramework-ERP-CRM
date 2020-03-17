@@ -1084,7 +1084,7 @@ namespace VAdvantage.Model
 
 
             }
-           
+
             return true;
         }
 
@@ -1094,7 +1094,7 @@ namespace VAdvantage.Model
         /// <param name="list"></param>
         private void prepareNotificMsg(List<String> list)
         {
-             message = new StringBuilder();
+            message = new StringBuilder();
             //		UpdatedBy: Joe
             int UpdatedBy = GetCtx().GetAD_User_ID();
             MUser from = MUser.Get(GetCtx(), UpdatedBy);
@@ -1126,6 +1126,8 @@ namespace VAdvantage.Model
                 message.Append("\n----------\n").Append(GetResult());
             message.Append(GetMailTrailer(null));
         }
+
+
 
         /// <summary>
         /// Send notice to role
@@ -1202,7 +1204,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID="+ Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
                     {
                         users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
                     }
@@ -1300,8 +1302,8 @@ namespace VAdvantage.Model
                 CheckChange(ra, "DateStartPlan");
                 CheckChange(ra, "DateCompletePlan");
                 //
-                if (_changed)
-                    ra.Save();
+                //if (_changed)
+                //    ra.Save();
 
                 //	Current Info
                 MRequestUpdate update = new MRequestUpdate(this);
@@ -1344,7 +1346,15 @@ namespace VAdvantage.Model
             }
             return false;
         }
-
+        /// <summary>
+        /// Get Column Value
+        /// </summary>
+        /// <param name="columnName"> Column name</param>
+        /// <returns>Returns value of the column.</returns>
+        public string getColumnValue(string columnName)
+        {
+            return Get_DisplayValue(columnName, true);
+        }
         /**
          *  Check the ability to send email.
          *  @return AD_Message or null if no error
@@ -1490,9 +1500,12 @@ namespace VAdvantage.Model
                 MRequestUpdate update = new MRequestUpdate(this);
                 update.Save();
             }
+            MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
             //	Initial Mail
-
-            SendNotifications(newRecord);
+            if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify())
+            {
+                SendNotifications(newRecord);
+            }
             //SendNotices(new List<String>());
 
             //	ChangeRequest - created in Request Processor
@@ -1526,7 +1539,11 @@ namespace VAdvantage.Model
             //log.SaveInfo("RequestActionEMailOK", _emailTo.ToString());
 
             //}
-            log.SaveInfo("R_EmailSentBackgrnd", "");
+
+            if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify())
+            {
+                log.SaveInfo("R_EmailSentBackgrnd", "");
+            }
             return success;
         }
 
@@ -1576,11 +1593,11 @@ namespace VAdvantage.Model
             String subject = Msg.Translate(GetCtx(), "R_Request_ID")
                 + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
             //	Message
-           
+
             //		UpdatedBy: Joe
             int UpdatedBy = GetCtx().GetAD_User_ID();
             MUser from = MUser.Get(GetCtx(), UpdatedBy);
-            
+
             FileInfo pdf = CreatePDF();
             log.Finer(message.ToString());
 
