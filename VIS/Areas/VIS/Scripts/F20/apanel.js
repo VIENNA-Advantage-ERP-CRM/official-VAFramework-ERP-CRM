@@ -2118,7 +2118,7 @@
                     //  dateScheduledStart = vda.getDateScheduledStart();
                     startWOasking = true;
 
-                    this.checkAndCallProcess(vButton, table_ID, record_ID, ctx, self, startWOasking, batch);
+                    aPanel.checkAndCallProcess(vButton, table_ID, record_ID, ctx, self, startWOasking, batch);
                     vda.dispose();
                     self = null;
                 }
