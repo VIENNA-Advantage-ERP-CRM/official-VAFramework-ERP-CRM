@@ -1910,10 +1910,12 @@
     };
 
     VIS.VSortTab.prototype.getIsEnabled = function () {
+        var enable = false;
         if (this.aContentPane)
-            this.aContentPane.aSave.getIsEnabled();
+            enable = this.aContentPane.aSave.getIsEnabled();
         else if (this.aPanel)
-            this.aPanel.aSave.getIsEnabled();
+            enable = this.aPanel.aSave.getIsEnabled();
+        return enable;
     };
 
     VIS.VSortTab.prototype.saveData = function () {
