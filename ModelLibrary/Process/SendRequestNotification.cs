@@ -103,6 +103,10 @@ namespace VAdvantage.Process
             return "";
         }
 
+        /// <summary>
+        /// Send notice to users.
+        /// </summary>
+        /// <param name="list"> List of columns changed.</param>
         protected void SendNotices(List<String> list)
         {
             bool isEmailSent = false;
@@ -281,7 +285,9 @@ namespace VAdvantage.Process
            
         }
 
-
+        /// <summary>
+        /// get history record of request.
+        /// </summary>
         private void GetReqHistory()
         {
             int _reqAction_ID = 0;
