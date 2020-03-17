@@ -99,6 +99,10 @@
                     var crt;
                     var label;
                     var field = this.selectionfields[i];
+                    if (!field.getIsDisplayed())
+                        continue;
+
+
                     if (field.getIsKey()) {
                         crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
                             field.getColumnName());
@@ -866,7 +870,7 @@
     FilterPanel.prototype.getFixedColumns = function () {
         if (!this.selectionfields || this.selectionfields.length == 0) {
             this.selectionfields = $.grep(this.curTabfields, function (field, index) {
-                if (field.getColumnName() == "Name" || field.getColumnName() == "Description"
+                if (field.getColumnName() == "Name"
                     || field.getColumnName() == "Value" || field.getColumnName() == "DocumentNo") {
                     return field;
                 }
