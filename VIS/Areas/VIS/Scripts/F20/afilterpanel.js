@@ -242,7 +242,7 @@
 
         this.fireValChanged = function (colName) {
             // if (ignoreTarget || $target.hasClass('vis-fp-inputvalueforupdate')) {
-           // this.refreshAll(colName, prepareWhereClause(this));
+            // this.refreshAll(colName, prepareWhereClause(this));
             this.refreshAll(colName);
         };
 
@@ -895,6 +895,9 @@
             //    return;
 
             var finalWhere = this.curTab.getWhereClause();
+
+            finalWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), finalWhere, false);
+
             if (whereClause) {
                 if (finalWhere != "")
                     finalWhere += " AND " + whereClause;
