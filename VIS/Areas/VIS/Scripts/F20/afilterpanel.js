@@ -866,7 +866,7 @@
     FilterPanel.prototype.getFixedColumns = function () {
         if (!this.selectionfields || this.selectionfields.length == 0) {
             this.selectionfields = $.grep(this.curTabfields, function (field, index) {
-                if (field.getColumnName() == "Name" || field.getColumnName() == "Description"
+                if (field.getColumnName() == "Name" 
                     || field.getColumnName() == "Value" || field.getColumnName() == "DocumentNo") {
                     return field;
                 }
@@ -891,6 +891,8 @@
             //    return;
 
             var finalWhere = this.curTab.getWhereClause();
+
+            finalWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), finalWhere, false);
             if (whereClause) {
                 if (finalWhere != "")
                     finalWhere += " AND " + whereClause;
