@@ -1127,6 +1127,8 @@ namespace VAdvantage.Model
             message.Append(GetMailTrailer(null));
         }
 
+
+
         /// <summary>
         /// Send notice to role
         /// </summary>
@@ -1300,8 +1302,8 @@ namespace VAdvantage.Model
                 CheckChange(ra, "DateStartPlan");
                 CheckChange(ra, "DateCompletePlan");
                 //
-                if (_changed)
-                    ra.Save();
+                //if (_changed)
+                //    ra.Save();
 
                 //	Current Info
                 MRequestUpdate update = new MRequestUpdate(this);
@@ -1345,6 +1347,10 @@ namespace VAdvantage.Model
             return false;
         }
 
+        public string getColumnValue(string columnName)
+        {
+            return Get_DisplayValue(columnName, true);
+        }
         /**
          *  Check the ability to send email.
          *  @return AD_Message or null if no error
@@ -1490,9 +1496,12 @@ namespace VAdvantage.Model
                 MRequestUpdate update = new MRequestUpdate(this);
                 update.Save();
             }
+            MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
             //	Initial Mail
-
-            SendNotifications(newRecord);
+            if (reqType != null && reqType.IsR_AllowSaveNotify())
+            {
+                SendNotifications(newRecord);
+            }
             //SendNotices(new List<String>());
 
             //	ChangeRequest - created in Request Processor
@@ -1526,7 +1535,11 @@ namespace VAdvantage.Model
             //log.SaveInfo("RequestActionEMailOK", _emailTo.ToString());
 
             //}
-            log.SaveInfo("R_EmailSentBackgrnd", "");
+           
+            if (reqType != null && reqType.IsR_AllowSaveNotify())
+            {
+                log.SaveInfo("R_EmailSentBackgrnd", "");
+            }
             return success;
         }
 
