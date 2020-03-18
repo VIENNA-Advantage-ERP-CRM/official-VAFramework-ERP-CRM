@@ -13,14 +13,14 @@
 
         this.init = function () {
             $root = $('<div style="height:100%;width:100%"></div>');
-            //if (window.VA037) {
+            if (window.VA037) {
                 iFrame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
-               // $root.html(iFrame);
-            //}
-            //else {
-            //    var $span = $('<span class="vis-bi-tab-panel">' + VIS.Msg.getMsg("PleaseInstallBIReportTool") + '</span>');
-            //    $root.append($span);
-            //}
+                $root.html(iFrame);
+            }
+            else {
+                var $span = $('<span class="vis-bi-tab-panel">' + VIS.Msg.getMsg("PleaseInstallBIReportTool") + '</span>');
+                $root.append($span);
+            }
         };
 
         this.update = function (record_ID) {
