@@ -431,6 +431,7 @@ namespace VAdvantage.Process
                     {
                         dPO.Set_ValueNoCheck(keyCols[j], sPO.Get_Value(keyCols[j]));
                     }
+                    dPO.Set_Value("Export_ID", null);
                     if (!dPO.Save())
                     {
                         ValueNamePair vnp = VLogger.RetrieveError();
