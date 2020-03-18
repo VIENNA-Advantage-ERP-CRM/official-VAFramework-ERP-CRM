@@ -27,7 +27,9 @@ namespace VIS.Controllers
             ViewBag.recID = recID;
             int outvalue = 0;
             ViewBag.scriptt = null;
-            extraInfo= Server.HtmlDecode(extraInfo);
+
+            //extraInfo=HttpUtility.UrlDecode(extraInfo);
+
             if (!int.TryParse(result[0], out outvalue))
             {
                 string script = result[1] + "JsAPI?clientOrg=" + MClient.Get(ctx).GetValue() + "&" + extraInfo.Replace("@recordid", recID.ToString()) + "&token=" + result[0];
