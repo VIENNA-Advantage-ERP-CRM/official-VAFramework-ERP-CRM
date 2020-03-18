@@ -932,7 +932,10 @@
                     for (var j = 0; j < this.listOfFilterQueries.length; j++) {
                         var query = this.listOfFilterQueries[j];
                         if (query.columnName != field.getColumnName()) {
+                            if (whereClause.length > 1)
+                                whereClause += " AND ";
                             whereClause += query.whereClause;
+
                         }
                     }
                     this.getFilterOption(field, whereClause);
