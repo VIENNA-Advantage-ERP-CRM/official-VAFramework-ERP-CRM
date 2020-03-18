@@ -4257,7 +4257,8 @@ namespace VAdvantage.Model
                 //dCopy._mNewValues[i] = GlobalVariable.TO_DATE(DateTime.Now,false) ;//new DateTime(CommonFunctions.CurrentTimeMillis());
                 else if (colName.Equals(dCopy.p_info.GetTableName() + "_ID"))    //  KeyColumn
                     dCopy._mNewValues[i] = I_ZERO;
-
+                else if (colName.Equals("Export_ID"))
+                    continue;
                 else
                 {
                     dCopy.Set_Value(colName, this.Get_Value(colName));
