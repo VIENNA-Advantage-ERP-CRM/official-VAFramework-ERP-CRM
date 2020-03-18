@@ -188,6 +188,7 @@ namespace VAdvantage.Process
             verTab.SetSeqNo(10);
             verTab.SetAD_Column_ID(0);
             verTab.SetTabLevel(0);
+            verTab.SetExport_ID(null);
             verTab.SetDescription("Version tab for " + tab.GetName());
             verTab.SetHelp("Version tab for " + tab.GetName() + ", to display versions for current record");
             // set order by on Version Window's tab on "Version Valid From column"
@@ -326,6 +327,7 @@ namespace VAdvantage.Process
                             origFld.CopyTo(verFld);
                             verFld.SetAD_Tab_ID(Ver_AD_Tab_ID);
                             verFld.SetAD_Column_ID(VerColID);
+                            verFld.SetExport_ID(null);
                             if (!verFld.Save())
                             {
                                 ValueNamePair vnp = VLogger.RetrieveError();
