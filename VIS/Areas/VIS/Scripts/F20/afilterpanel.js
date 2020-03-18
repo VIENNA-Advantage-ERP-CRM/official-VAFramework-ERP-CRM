@@ -1093,6 +1093,11 @@
         var field = this.getTargetMField(columnName);
         var columnSQL = field.getColumnSQL(); //
 
+        if (VIS.DisplayType.IsText(field.getDisplayType())) {
+            optr = VIS.Query.prototype.LIKE;
+            value += '%';
+        }
+
         var whereCondition = '';
 
         var parsedValue = null;
