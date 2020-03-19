@@ -87,8 +87,15 @@ namespace VIS.Controllers
                 GridWindowVO vo = AEnv.GetMWindowVO(ctx, windowNo, AD_Window_ID, 0);
                 if (vo != null)
                 {
-                    wVo = new GridWindow(vo);
-                    retJSON = JsonConvert.SerializeObject(wVo, Formatting.None);
+                    try
+                    {
+                        wVo = new GridWindow(vo);
+                        retJSON = JsonConvert.SerializeObject(wVo, Formatting.None);
+                    }
+                    catch(Exception ex)
+                    {
+                        retError = ex.Message;
+                    }
                 }
                 else
                 {
