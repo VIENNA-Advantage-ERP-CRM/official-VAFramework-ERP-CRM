@@ -227,9 +227,9 @@
 	 *  @return MTab
 	 */
     GridWindow.prototype.getTab = function (index) {
-        if (i < 0 || i + 1 > this.tabs.length)
+        if (index < 0 || index + 1 > this.tabs.length)
             return null;
-        return this.tabs[i];
+        return this.tabs[index];
     };
 
 
@@ -5859,7 +5859,12 @@
         //	Set Parent to context if not explicitly set
         if (this.getIsParentValue()
             && VIS.Utility.Util.isEmpty(vo.DefaultValue)) {
+            //fix parent value
             var parent = ctx.getWindowContext(vo.windowNo, vo.ColumnName);
+            if (this.gridTab) {
+               parent = ctx.getWindowContext(vo.windowNo,this.gridTab.getParentTabNo(), vo.ColumnName);
+            }
+            
             this.log.fine("[Parent] " + vo.ColumnName + "=" + parent);
             return this.createDefault(vo.ColumnName, parent);
         }
