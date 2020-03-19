@@ -899,14 +899,14 @@
             var tabWhere = this.curTab.getWhereClause();
             tabWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), tabWhere, false);
 
-            if (tabWhere) {
+            if (tabWhere && tabWhere.length>0) {
                 if (whereClause != "")
                     whereClause += " AND " + tabWhere;
                 else
                     whereClause += " " + tabWhere;
             }
             var dynFilter = this.getDynamicFilter();
-            if (dynFilter) {
+            if (dynFilter && dynFilter.length>0) {
                 if (whereClause != "")
                     whereClause += " AND " + dynFilter;
                 else
