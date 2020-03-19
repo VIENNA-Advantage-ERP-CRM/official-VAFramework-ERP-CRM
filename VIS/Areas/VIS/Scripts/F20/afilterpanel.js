@@ -230,7 +230,7 @@
                 }
             }
 
-            var dynFilter = getDynamicFilter();
+            var dynFilter = self.getDynamicFilter();
             if (dynFilter != '') {
                 if (finalWhereClause != '')
                     finalWhereClause += ' AND ' + dynFilter;
@@ -685,7 +685,7 @@
             return "";
         };
 
-        function getDynamicFilter() {
+        this.getDynamicFilter = function () {
             var dynWhere = '';
             for (var col in dsAdvanceData) {
                 var arr = dsAdvanceData[col];
@@ -879,6 +879,8 @@
     };
 
     FilterPanel.prototype.getFilterOption = function (field, whereClause) {
+        if (!whereClause)
+            whereClause = "";
         if (field && field.getShowFilterOption()) {
 
             var keyCol = "";
@@ -894,20 +896,27 @@
             //if (!displayCol || displayCol == '')
             //    return;
 
-            var finalWhere = this.curTab.getWhereClause();
+            var tabWhere = this.curTab.getWhereClause();
+            tabWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), tabWhere, false);
 
-            finalWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), finalWhere, false);
-
-            if (whereClause) {
-                if (finalWhere != "")
-                    finalWhere += " AND " + whereClause;
+            if (tabWhere && tabWhere.length>0) {
+                if (whereClause != "")
+                    whereClause += " AND " + tabWhere;
                 else
-                    finalWhere += " " + whereClause;
+                    whereClause += " " + tabWhere;
             }
+            var dynFilter = this.getDynamicFilter();
+            if (dynFilter && dynFilter.length>0) {
+                if (whereClause != "")
+                    whereClause += " AND " + dynFilter;
+                else
+                    whereClause += " " + dynFilter;
+            }
+
             var data = {
                 keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
                 , tableName: lookupTableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: this.curTab.getTableName(),
-                pColumnName: field.getColumnName(), whereClause: finalWhere
+                pColumnName: field.getColumnName(), whereClause: whereClause
             };
             var tht = this;
 
