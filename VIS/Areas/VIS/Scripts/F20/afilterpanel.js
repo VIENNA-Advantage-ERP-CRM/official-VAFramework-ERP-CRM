@@ -301,7 +301,7 @@
 
             for (var i = 0; i < data.length; i++) {
                 var htm = [];
-                var index = selIds.indexOf(parseInt(data[i].ID));
+                var index = selIds.indexOf(data[i].ID);
 
                 if (index > -1) {
                     selItems[index].find('.vis-fp-spanCount').text(data[i].Count);
@@ -1105,7 +1105,7 @@
         var field = this.getTargetMField(columnName);
         var columnSQL = field.getColumnSQL(); //
 
-        if (VIS.DisplayType.IsText(field.getDisplayType())) {
+        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.EQUAL) {
             optr = VIS.Query.prototype.LIKE;
             value += '%';
         }
