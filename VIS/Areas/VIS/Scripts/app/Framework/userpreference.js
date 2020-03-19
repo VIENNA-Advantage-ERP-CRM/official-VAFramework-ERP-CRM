@@ -681,7 +681,7 @@
                 $(".VIS_Pref_content-right").css("display", "none");
                 $(".VIS_Pref_content-right-2").css("display", "none");
                 $(".VIS_Pref_content-right-3").css("display", "none");
-                $(".VIS_Pref_content-right-4").css("display", "block");
+                $(".VIS_Pref_content-right-4").css("display", "flex");
                 $(".VIS_Pref_content-right-5").css("display", "none");
             });
             //**************************************

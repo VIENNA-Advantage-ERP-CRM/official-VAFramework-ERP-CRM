@@ -227,9 +227,9 @@
 	 *  @return MTab
 	 */
     GridWindow.prototype.getTab = function (index) {
-        if (i < 0 || i + 1 > this.tabs.length)
+        if (index < 0 || index + 1 > this.tabs.length)
             return null;
-        return this.tabs[i];
+        return this.tabs[index];
     };
 
 
@@ -5474,7 +5474,7 @@
 
         var ctx = VIS.context;
         if (checkContext) {
-            var AD_Client_ID = parseInt(ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, "AD_Client_ID"));
+            var AD_Client_ID = parseInt(ctx.getTabRecordContext(_vo.windowNo, _vo.tabNo, "AD_Client_ID"));
             // If the AD_Org_ID is null then set it to default value (from global Context) as it may cause 
             // the window to be rendered read only.
             if (_vo.ColumnName.equals("AD_Org_ID")) {
@@ -5483,7 +5483,7 @@
                     ctx.setWindowContext(_vo.windowNo, "AD_Org_ID", ctx.getContext("#AD_Org_ID"));
                 }
             }
-            var AD_Org_ID = parseInt(ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, "AD_Org_ID"));
+            var AD_Org_ID = parseInt(ctx.getTabRecordContext(_vo.windowNo, _vo.tabNo, "AD_Org_ID"));
             var keyColumn = ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, "KeyColumnName");
             var AD_Window_ID = _vo.AD_Window_ID;
 
@@ -5859,7 +5859,12 @@
         //	Set Parent to context if not explicitly set
         if (this.getIsParentValue()
             && VIS.Utility.Util.isEmpty(vo.DefaultValue)) {
+            //fix parent value
             var parent = ctx.getWindowContext(vo.windowNo, vo.ColumnName);
+            if (this.gridTab) {
+               parent = ctx.getWindowContext(vo.windowNo,this.gridTab.getParentTabNo(), vo.ColumnName);
+            }
+            
             this.log.fine("[Parent] " + vo.ColumnName + "=" + parent);
             return this.createDefault(vo.ColumnName, parent);
         }
