@@ -102,6 +102,10 @@ namespace VAdvantage.Model
                     ml.SetDisplayType(DisplayType.Search);
                 }
                 //
+                if (_vo.lookupInfo == null)
+                {
+                    throw new Exception(Msg.GetMsg(_vo.GetCtx(), "Error")+ " " + _vo.Header);
+                }
                 _vo.lookupInfo.isKey = _vo.IsKey;
                 _lookup = ml.Initialize(_vo.lookupInfo);
             }

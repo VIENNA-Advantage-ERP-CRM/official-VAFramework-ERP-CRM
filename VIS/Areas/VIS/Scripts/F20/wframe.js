@@ -1903,7 +1903,7 @@
         }
         catch (e) {
             // if (!dr.IsClosed)
-            this.log.Log(VIS.Logging.Level.SEVERE, sql, e);
+            this.log.log(VIS.Logging.Level.SEVERE, sql, e);
         }
         this.notifyFireChanged(false);
         //this.aPanel.aSave.setEnabled(false);
