@@ -12,7 +12,7 @@ using VAdvantage.Model;
 
 namespace VAdvantage.Utility
 {
-    class ExternalWebMethod
+    public class ExternalWebMethod
     {
         /// <summary>
         /// Call external web service
