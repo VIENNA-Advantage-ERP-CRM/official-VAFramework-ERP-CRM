@@ -5474,7 +5474,7 @@
 
         var ctx = VIS.context;
         if (checkContext) {
-            var AD_Client_ID = parseInt(ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, "AD_Client_ID"));
+            var AD_Client_ID = parseInt(ctx.getTabRecordContext(_vo.windowNo, _vo.tabNo, "AD_Client_ID"));
             // If the AD_Org_ID is null then set it to default value (from global Context) as it may cause 
             // the window to be rendered read only.
             if (_vo.ColumnName.equals("AD_Org_ID")) {
@@ -5483,7 +5483,7 @@
                     ctx.setWindowContext(_vo.windowNo, "AD_Org_ID", ctx.getContext("#AD_Org_ID"));
                 }
             }
-            var AD_Org_ID = parseInt(ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, "AD_Org_ID"));
+            var AD_Org_ID = parseInt(ctx.getTabRecordContext(_vo.windowNo, _vo.tabNo, "AD_Org_ID"));
             var keyColumn = ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, "KeyColumnName");
             var AD_Window_ID = _vo.AD_Window_ID;
 
