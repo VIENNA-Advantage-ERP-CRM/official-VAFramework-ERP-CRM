@@ -230,12 +230,16 @@ namespace VAdvantage.Model
         public static String FILELOCATION_FTPLocation = "FT";
         /** Server File System = SR */
         public static String FILELOCATION_ServerFileSystem = "SR";
+
+        /** Web Service = WS */
+        public static String FILELOCATION_WebService = "WS";
+
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
         public bool IsFileLocationValid(String test)
         {
-            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR");
+            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR") || test.Equals("WS");
         }
         /** Set File Location.
         @param FileLocation File Location */
