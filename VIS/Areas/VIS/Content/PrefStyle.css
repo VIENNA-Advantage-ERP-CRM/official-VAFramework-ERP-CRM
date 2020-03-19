@@ -145,6 +145,9 @@ div.VIS_Pref_slide-show.pp {
     width: 80%;
     padding-left: 20px;
 }
+.VIS_Pref_content-right-4{
+    flex-direction: column;
+}
 .VIS_Pref_content-right,
 .VIS_Pref_content-right-5 {
     padding-right: 10px;
@@ -546,6 +549,10 @@ div.VIS_Pref_slide-show.pp {
     width: 50%;
     margin-top: 5px;
     float: left;    
+}
+.VIS_Pref_show .VIS_Pref_dd{
+    flex: 1;
+    width: auto;
 }
 .VIS_Pref_show {
     display: flex;
@@ -1186,12 +1193,16 @@ html[dir="rtl"] .input-group-addon {
 
 @media (max-width:962px) {
     .VIS_Pref_pass {
-        width: 96%;
+        width: 100%;
         border: 1px solid #AAAAAA !Important;
-        padding: 10px !Important;
+        padding: 5px 10px !Important;
         border-radius: 5px !Important;
         background: white;
         float: right;
         margin-bottom: 10px;
+    }
+
+    .VIS_Pref_log-width h4 span {
+        top: 0;
     }
 }

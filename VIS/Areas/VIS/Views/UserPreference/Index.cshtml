@@ -469,7 +469,7 @@
     <div class="VIS_Pref_content-right-4" style="display: none; height:100%;" id="@("content4_" + ViewBag.WindowNumber)">
         <h3 class="VIS_Pref_change-pass">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Error")</h3>
         <p id= "@("pError_" + ViewBag.WindowNumber)">Nam vulputate vitae libero sed gravida. Integer ornare vulputate justo, at vehicula leo lobortis consequat. Vivamus purus.</p>
-        <div id="@("divError_" + ViewBag.WindowNumber)" style="overflow-y:auto; height: calc(100% - 110px);">
+        <div id="@("divError_" + ViewBag.WindowNumber)" style="overflow-y:auto; max-height: calc(100% - 130px); flex: 1;">
             <table id="@("prefErrortbl_" + ViewBag.WindowNumber)" border="0" width="100%" bordercolor="#ffffff" cellpadding="0" cellspacing="0">
                 <tr>
                     <td class="VIS_Pref_table-row vis-pref-table-head VIS_Pref_oblik1">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_Time")</td>
