@@ -1019,14 +1019,16 @@ namespace VAdvantage.Model
             }
             CheckChange(ra, "AD_Role_ID");
             //
-            CheckChange(ra, "Priority");
+            if (CheckChange(ra, "Priority"))
+                sendInfo.Add("Priority");
             if (CheckChange(ra, "PriorityUser"))
                 sendInfo.Add("PriorityUser");
             if (CheckChange(ra, "IsEscalated"))
                 sendInfo.Add("IsEscalated");
             //
             CheckChange(ra, "ConfidentialType");
-            CheckChange(ra, "Summary");
+            if (CheckChange(ra, "Summary"))
+                sendInfo.Add("Summary");
             CheckChange(ra, "IsSelfService");
             CheckChange(ra, "C_BPartner_ID");
             CheckChange(ra, "AD_User_ID");
@@ -1052,7 +1054,14 @@ namespace VAdvantage.Model
             CheckChange(ra, "DateCompletePlan");
             //
             if (_changed)
+            {
+                if (sendInfo.Count > 0)
+                {
+                    string colsChanged = getChangedString(sendInfo);
+                    ra.SetChangedValues(colsChanged);
+                }
                 ra.Save();
+            }
 
             //	Current Info
             MRequestUpdate update = new MRequestUpdate(this);
@@ -1086,6 +1095,28 @@ namespace VAdvantage.Model
             }
 
             return true;
+        }
+
+        private string getChangedString(List<string> sendInfo)
+        {
+            StringBuilder colString = null;
+            if (sendInfo.Count > 0)
+            {
+                colString = new StringBuilder();
+                for (int i = 0; i < sendInfo.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        colString.Append(sendInfo[i]);
+                    }
+                    else
+                    {
+                        colString.Append(',').Append(sendInfo[i]);
+                    }
+
+                }
+            }
+            return colString.ToString();
         }
 
         /// <summary>
@@ -1270,14 +1301,16 @@ namespace VAdvantage.Model
                 }
                 CheckChange(ra, "AD_Role_ID");
                 //
-                CheckChange(ra, "Priority");
+                if (CheckChange(ra, "Priority"))
+                    sendInfo.Add("Priority");
                 if (CheckChange(ra, "PriorityUser"))
                     sendInfo.Add("PriorityUser");
                 if (CheckChange(ra, "IsEscalated"))
                     sendInfo.Add("IsEscalated");
                 //
                 CheckChange(ra, "ConfidentialType");
-                CheckChange(ra, "Summary");
+                if (CheckChange(ra, "Summary"))
+                    sendInfo.Add("Summary");
                 CheckChange(ra, "IsSelfService");
                 CheckChange(ra, "C_BPartner_ID");
                 CheckChange(ra, "AD_User_ID");
@@ -1540,7 +1573,7 @@ namespace VAdvantage.Model
 
             //}
 
-            if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify())
+            if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify() && _changed)
             {
                 log.SaveInfo("R_EmailSentBackgrnd", "");
             }

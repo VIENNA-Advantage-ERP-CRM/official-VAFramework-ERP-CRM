@@ -35,58 +35,73 @@ namespace VAdvantage.Process
             {
                 return Msg.GetMsg(GetCtx(), "R_NoReqChanges");
             }
+            string changedValues = _reqAction.GetChangedValues();
             bool _changed = false;
             List<String> sendInfo = new List<String>();
 
-            //
-            if (_req.GetR_RequestType_ID() != _reqAction.GetR_RequestType_ID() && _reqAction.GetR_RequestType_ID()>0)
+            if (!string.IsNullOrEmpty(changedValues))
             {
-                _changed = true;
-                sendInfo.Add("R_RequestType_ID");
-            }
-            if (_req.GetR_Group_ID() != _reqAction.GetR_Group_ID() && _reqAction.GetR_Group_ID()>0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Group_ID");
-            }
-            if (_req.GetR_Category_ID() != _reqAction.GetR_Category_ID() && _reqAction.GetR_Category_ID()>0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Category_ID");
-            }
-            if (_req.GetR_Status_ID() != _reqAction.GetR_Status_ID() && _reqAction.GetR_Status_ID()>0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Status_ID");
-            }
-            if (_req.GetR_Resolution_ID() != _reqAction.GetR_Resolution_ID() && _reqAction.GetR_Resolution_ID() >0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Resolution_ID");
-            }
-            //
-            if (_req.GetSalesRep_ID() != _reqAction.GetSalesRep_ID() && _reqAction.GetSalesRep_ID()>0) 
-            {
-                _changed = true;
-                sendInfo.Add("SalesRep_ID");
-            }
-            //
-            if (_req.GetPriority() != _reqAction.GetPriority() && !string.IsNullOrEmpty( _reqAction.GetPriority()))
-            {
-                _changed = true;
-                sendInfo.Add("Priority");
-            }
-            if (_req.GetPriorityUser() != _reqAction.GetPriorityUser() && !string.IsNullOrEmpty(_reqAction.GetPriorityUser()))
-            {
-                _changed = true;
-                sendInfo.Add("PriorityUser");
-            }
-            if (_req.GetSummary() != _reqAction.GetSummary() && !string.IsNullOrEmpty(_reqAction.GetSummary()))
-            {
-                _changed = true;
-                sendInfo.Add("Summary");
+                string[] strValues = changedValues.Split(',');
+                if (strValues.Length > 0)
+                {
+                    for (int i = 0; i < strValues.Length; i++)
+                    {
+                        _changed = true;
+                        sendInfo.Add(strValues[i]);
+                    }
+                }
             }
 
+            #region commented
+            //
+            //if (_req.GetR_RequestType_ID() != _reqAction.GetR_RequestType_ID() && _reqAction.GetR_RequestType_ID() > 0)
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("R_RequestType_ID");
+            //}
+            //if (_req.GetR_Group_ID() != _reqAction.GetR_Group_ID() && _reqAction.GetR_Group_ID() > 0)
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("R_Group_ID");
+            //}
+            //if (_req.GetR_Category_ID() != _reqAction.GetR_Category_ID() && _reqAction.GetR_Category_ID() > 0)
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("R_Category_ID");
+            //}
+            //if (_req.GetR_Status_ID() != _reqAction.GetR_Status_ID() && _reqAction.GetR_Status_ID() > 0)
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("R_Status_ID");
+            //}
+            //if (_req.GetR_Resolution_ID() != _reqAction.GetR_Resolution_ID() && _reqAction.GetR_Resolution_ID() > 0)
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("R_Resolution_ID");
+            //}
+            ////
+            //if (_req.GetSalesRep_ID() != _reqAction.GetSalesRep_ID() && _reqAction.GetSalesRep_ID() > 0)
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("SalesRep_ID");
+            //}
+            ////
+            //if (_req.GetPriority() != _reqAction.GetPriority() && !string.IsNullOrEmpty(_reqAction.GetPriority()))
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("Priority");
+            //}
+            //if (_req.GetPriorityUser() != _reqAction.GetPriorityUser() && !string.IsNullOrEmpty(_reqAction.GetPriorityUser()))
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("PriorityUser");
+            //}
+            //if (_req.GetSummary() != _reqAction.GetSummary() && !string.IsNullOrEmpty(_reqAction.GetSummary()))
+            //{
+            //    _changed = true;
+            //    sendInfo.Add("Summary");
+            //}
+            #endregion
             if (sendInfo.Count > 0 && _changed)
             {
                 prepareNotificMsg(sendInfo);
@@ -97,7 +112,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                return Msg.GetMsg(GetCtx(), "R_NoReqChanges");                
+                return Msg.GetMsg(GetCtx(), "R_NoReqChanges");
             }
 
             return "";
@@ -173,7 +188,7 @@ namespace VAdvantage.Process
 
                     //	No confidential to externals
                     if (AD_Role_ID == -1
-                        && ( _req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_Internal)
+                        && (_req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_Internal)
                             || _req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_PrivateInformation)))
                         continue;
 
@@ -262,7 +277,7 @@ namespace VAdvantage.Process
 
                 int AD_Message_ID = 834;
                 MNote note = new MNote(GetCtx(), AD_Message_ID, GetCtx().GetAD_User_ID(),
-                    X_R_Request.Table_ID,_req.GetR_Request_ID(),
+                    X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
                     log.Log(Level.INFO, "ProcessFinished", "");
@@ -282,7 +297,7 @@ namespace VAdvantage.Process
                 SendNoticeNow(_req.GetSalesRep_ID(), null,
                     client, from, subject, message.ToString(), pdf);
 
-           
+
         }
 
         /// <summary>
@@ -324,7 +339,7 @@ namespace VAdvantage.Process
             for (int i = 0; i < list.Count; i++)
             {
                 X_R_Request req = new X_R_Request(GetCtx(), 0, null);
-               
+
                 String columnName = (String)list[i];
                 message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
                     .Append(": ").Append(_reqAction.getColumnValue(columnName))
@@ -339,9 +354,9 @@ namespace VAdvantage.Process
             if (_req.GetResult() != null)
                 message.Append("\n----------\n").Append(_req.GetResult());
             message.Append(_req.GetMailTrailer(null));
-           
+
         }
-      
+
         /// <summary>
         /// Create pdf
         /// </summary>
@@ -435,7 +450,7 @@ namespace VAdvantage.Process
             {
                 int AD_Message_ID = 834;
                 MNote note = new MNote(GetCtx(), AD_Message_ID, AD_User_ID,
-                    X_R_Request.Table_ID,_req.GetR_Request_ID(),
+                    X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())
                     _notices++;
@@ -500,7 +515,7 @@ namespace VAdvantage.Process
             // if not access user organization access.
             if (!isAllUser && !role.IsUseUserOrgAccess())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND AD_Org_ID IN (" + _req.GetAD_Org_ID() + ",0)")) > 0)
                 {
                     isAllUser = true;
                 }
@@ -517,7 +532,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + _req.GetAD_Org_ID() + ",0)")) > 0)
                     {
                         users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
                     }

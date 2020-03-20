@@ -833,6 +833,12 @@ public String GetTaskStatus()
 {
 return (String)Get_Value("TaskStatus");
 }
-}
+
+        /** Set Changed Values.
+@param ChangedValues Changed Values */
+        public void SetChangedValues(String ChangedValues) { if (ChangedValues != null && ChangedValues.Length > 255) { log.Warning("Length > 255 - truncated"); ChangedValues = ChangedValues.Substring(0, 255); } Set_Value("ChangedValues", ChangedValues); }/** Get Changed Values.
+@return Changed Values */
+        public String GetChangedValues() { return (String)Get_Value("ChangedValues"); }
+    }
 
 }
