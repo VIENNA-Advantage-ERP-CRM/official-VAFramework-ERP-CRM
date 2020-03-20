@@ -1368,7 +1368,7 @@ li.vis-page-item-select {
     position: absolute;
     color: rgba(var(--v-c-on-primary),1);
     top: 18px;
-    left: 0;
+    left: auto;
     background: rgba(var(--v-c-primary),1);
     border-top-right-radius: .75rem;
     border-bottom-right-radius: .75rem;
@@ -1382,7 +1382,7 @@ li.vis-page-item-select {
     position: absolute;
     color: rgba(var(--v-c-on-primary),1);
     top: 18px;
-    left: 0;
+    left: auto;
     background: rgba(var(--v-c-primary),1);
     border-top-right-radius: .75rem;
     border-bottom-right-radius: .75rem;

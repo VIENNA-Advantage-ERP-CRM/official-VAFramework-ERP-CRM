@@ -310,11 +310,13 @@
                     if ($parentRoot.height() == 0) {
                         $parentRoot.height($self.gTab.getHeaderHeight());
                         $root.show();
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
                         $slider.removeClass('fa-angle-double-down').addClass('fa-angle-double-up').removeClass('vis-ad-w-p-header-v');
                     }
                     else {
                         $parentRoot.height(0);
                         $root.hide();
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-up').addClass('fa-angle-double-down').addClass('vis-ad-w-p-header-v');
                     }
                 }
@@ -322,6 +324,7 @@
                     if ($parentRoot.width() == 0) {
                         $slider.removeClass('fa-angle-double-right').addClass('fa-angle-double-left').removeClass('vis-ad-w-p-header-h');
                         $parentRoot.width($self.gTab.getHeaderWidth());
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
                         window.setTimeout(function () {
                             $root.show();
                         }, 50);
@@ -330,6 +333,7 @@
                     else {
                         $parentRoot.width(0);
                         $root.hide();
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-right').addClass('vis-ad-w-p-header-h');
                     }
                 }
