@@ -161,6 +161,7 @@
         this.windowNo = windowNo;
         this.validationDisabled = false;
         this.tabNo = 0;
+        this.colName = "";
 
         this.data = [];
         this.ctx = ctx;
@@ -172,6 +173,7 @@
             this.displayType = lookup._displayType;
             this.windowNo = lookup._WindowNo;
             this.tabNo = lookup._TabNo;
+            this.colName = lookup._columnName;
             if (this.info) {
                 this.info.windowNo = lookup._WindowNo;
             }
@@ -195,6 +197,10 @@
 
     Lookup.prototype.getTabNo = function () {
         return this.tabNo;
+    };
+
+    Lookup.prototype.getFieldColName = function () {
+        return this.colName; //lower case
     };
 
     Lookup.prototype.getDisplayType = function () {
@@ -525,15 +531,15 @@
         if (retValue != null)
             return retValue;
 
-        var keyCol = this.info.keyColumn.substring(this.info.keyColumn.indexOf('.') + 1).toLowerCase();
+        //var keyCol = this.info.keyColumn.substring(this.info.keyColumn.indexOf('.') + 1).toLowerCase();
 
-        var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), keyCol, key);
-        if (text) {
-            //var keyValue = var isNumber = this.info.keyColumn.toUpperCase().endsWith("_ID");
-            retValue = { Key: key, Name: VIS.Utility.encodeText(text) };
-            this.lookup[" " + key] = retValue;
-            return retValue;
-        }
+        //var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), keyCol, key);
+        //if (text) {
+        //    //var keyValue = var isNumber = this.info.keyColumn.toUpperCase().endsWith("_ID");
+        //    retValue = { Key: key, Name: VIS.Utility.encodeText(text) };
+        //    this.lookup[" " + key] = retValue;
+        //    return retValue;
+        //}
 
 
         //  Always check for parents - not if we SQL was validated and completely loaded
@@ -662,6 +668,17 @@
 
         var p;
 
+        if (!this.lookupDirectAll[" " + key]) {
+            var keyCol = this.getFieldColName();// this.info.keyColumn.substring(this.info.keyColumn.indexOf('.') + 1).toLowerCase();
+
+            var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), keyCol, key);
+            if (text) {
+                //var keyValue = var isNumber = this.info.keyColumn.toUpperCase().endsWith("_ID");
+                retValue = { Key: key, Name: VIS.Utility.encodeText(text) };
+                this.lookupDirectAll[" " + key] = retValue;
+               // return retValue;
+            }
+        }
 
         if (this.lookupDirectAll[" " + key]) {
             p = this.lookupDirectAll[" " + key];
