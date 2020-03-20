@@ -63,7 +63,7 @@ namespace VAdvantage.Model
         //logger
         protected VLogger log = null;
 
-
+        public string _columnName="";
 
         #endregion
 
@@ -108,6 +108,11 @@ namespace VAdvantage.Model
         public void SetTabNo(int tabNo)
         {
             _TabNo = tabNo;
+        }
+
+        public void SetColumnName(string colName)
+        {
+            _columnName = colName;
         }
 
         /// <summary>
