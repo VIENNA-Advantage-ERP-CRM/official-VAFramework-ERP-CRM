@@ -1028,7 +1028,7 @@ namespace VIS.Controllers
                 else
                 {
                     sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
-                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + tableName + "_ID"
+                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + pColumnName 
                         + " ";// WHERE " + pTableName + ".IsActive='Y'";
                     sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))

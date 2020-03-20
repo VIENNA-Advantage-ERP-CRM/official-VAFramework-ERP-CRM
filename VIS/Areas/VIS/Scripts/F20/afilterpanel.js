@@ -301,10 +301,14 @@
 
             for (var i = 0; i < data.length; i++) {
                 var htm = [];
-                var index = selIds.indexOf(data[i].ID);
+                var dId = data[i].ID;
+                if (!isNaN(dId)) {
+                    dId = parseFloat(dId);
+                }
+                var index = selIds.indexOf(dId);
 
                 if (index > -1) {
-                    selItems[index].find('.vis-fp-spanCount').text(data[i].Count);
+                    selItems[index].find('.vis-fp-spanCount').text("("+data[i].Count+")");
                     fields.append(selItems[index]);
                     selItems.splice(index, 1);
                     selIds.splice(index, 1);
@@ -887,6 +891,7 @@
             var displayCol = "";
             var validationCode = "";
             var lookupTableName = "";
+           
             if (field.getLookup()) {
                 keyCol = field.getLookup().info.keyColumn;
                 displayCol = field.getLookup().info.displayColSubQ;
@@ -916,7 +921,7 @@
             var data = {
                 keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
                 , tableName: lookupTableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: this.curTab.getTableName(),
-                pColumnName: field.getColumnName(), whereClause: whereClause
+                pColumnName: field.getColumnName(), whereClause: whereClause, 
             };
             var tht = this;
 
@@ -1036,7 +1041,7 @@
             sb += " UPPER( ";
         }
 
-        sb += column;
+        sb += this.curTab.getTableName()+'.'+column;
 
 
         if (typeof code == "string") {
