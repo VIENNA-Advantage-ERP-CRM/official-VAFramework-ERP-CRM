@@ -1035,8 +1035,8 @@ namespace VIS.Controllers
                         sql += " AND " + validationCode;
                     if (!string.IsNullOrEmpty(whereClause))
                         sql += " AND " + whereClause;
-                    sql += "GROUP BY " + keyCol + ", " + displayCol
-                        + "ORDER BY COUNT(" + keyCol + ") DESC) ";
+                    sql += " GROUP BY " + keyCol + ", " + displayCol
+                        + " ORDER BY COUNT(" + keyCol + ") DESC) ";
 
                 }
             }
