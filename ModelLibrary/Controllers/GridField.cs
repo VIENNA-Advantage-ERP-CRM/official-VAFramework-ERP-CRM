@@ -84,6 +84,7 @@ namespace VAdvantage.Model
             if (DisplayType.IsLookup(_vo.displayType))
             {
                 MLookup ml = new MLookup(_vo.GetCtx(), _vo.windowNo,_vo.tabNo, _vo.displayType);
+                ml.SetColumnName(_vo.ColumnName.ToLower());
                 if (_vo.lookupInfo == null)
                 {
                     _vo.lookupInfo = VLookUpFactory.GetLookUpInfo(ml, _vo.AD_Column_ID,
