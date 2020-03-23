@@ -205,7 +205,7 @@
                 success: function (result) {
                     var data = JSON.parse(result);
 
-                    var $divRoles = $('<div style="height:230px;overflow:auto;margin-bottom:10px">');
+                    var $divRoles = $('<div style="height:212px;overflow:auto;margin-bottom:10px">');
 
                     $divRoles.append(roletheModTmp(data));
                     $divRoleGroup.append($divRoles);

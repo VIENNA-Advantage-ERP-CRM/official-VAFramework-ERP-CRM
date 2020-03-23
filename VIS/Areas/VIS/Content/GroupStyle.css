@@ -573,7 +573,7 @@ input.vis-group-search-icon {
 
 .vis-group-roleContainer {
     visibility: visible;
-    overflow: scroll;
+    overflow: auto;
     display: inline;
     float: left;
     width: 100%;
