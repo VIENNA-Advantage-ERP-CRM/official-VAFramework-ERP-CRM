@@ -3845,7 +3845,7 @@ html[dir="rtl"] .VIS-AMTD-ModalformBtns a {
 }
 .vis-processbtnwrap input[type="button"] {
     margin-top: 0;
-    /*margin-left: 10px;*/
+    margin-left: 10px;
 }
 /*END Amount Division Control*/
 .vis-selected-li-print {
@@ -4177,6 +4177,9 @@ li.vis-selected-list {
 }
 .vis-processbtnwrap {
     padding: 0 10px;
+}
+.vis-pro-para-root .vis-processbtnwrap {
+    padding: 0;
 }
 .vis-process-left-sidebar .VIS_Pref_btn-2.vis-process-ok-btn {
     background-color: rgba(var(--v-c-on-secondary), 1);
