@@ -739,6 +739,7 @@
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
     <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
+    <Content Include="Areas\VIS\Scripts\tabpanels\verinfo.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
     <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
     <Content Include="Areas\VIS\Scripts\VIS1_0.min.js" />
