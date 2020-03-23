@@ -2355,6 +2355,7 @@ namespace VAdvantage.Model
             else
                 log.Fine("[" + _trx.GetTrxName() + "] - " + p_info.GetTableName() + " - " + Get_WhereClause(true));
 
+            dynamic masDet = GetMasterDetails();
 
             //	Set new DocumentNo
             String columnName = "DocumentNo";
@@ -2383,8 +2384,13 @@ namespace VAdvantage.Model
                     if (dt != -1)		//	get based on Doc Type (might return null)
                         //value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx());
                         value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx(), false, this);
-                    if (value == null)	//	not overwritten by DocType and not manually entered
-                        value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                    if (value == null)  //	not overwritten by DocType and not manually entered
+                    {
+                        if (masDet != null && masDet.TableName != null && masDet.TableName != "")
+                            value = MSequence.GetDocumentNo(GetAD_Client_ID(), masDet.TableName, _trx, GetCtx());
+                        else
+                            value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                    }
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -2398,9 +2404,11 @@ namespace VAdvantage.Model
                 if (value == null || value.Length == 0)
                 {
                     //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
-                    
-                    // Handled to get Search Key based on Organization same as Document No.
-                    value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
+                    if (masDet != null && masDet.TableName != null && masDet.TableName != "")
+                        value = MSequence.GetDocumentNo(masDet.TableName, _trx, GetCtx(), this);
+                    else
+                        // Handled to get Search Key based on Organization same as Document No.
+                        value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -2804,7 +2812,11 @@ namespace VAdvantage.Model
                     continue;
                 if (po.Get_ColumnIndex(columnName) < 0)
                     continue;
-                po.Set_ValueNoCheck(columnName, Get_Value(columnName));
+
+                if (po.Get_Value(columnName) != Get_ValueOld(columnName))
+                {
+                    po.Set_ValueNoCheck(columnName, Get_Value(columnName));
+                }
             }
 
             if (!po.Save())
@@ -4245,7 +4257,8 @@ namespace VAdvantage.Model
                 //dCopy._mNewValues[i] = GlobalVariable.TO_DATE(DateTime.Now,false) ;//new DateTime(CommonFunctions.CurrentTimeMillis());
                 else if (colName.Equals(dCopy.p_info.GetTableName() + "_ID"))    //  KeyColumn
                     dCopy._mNewValues[i] = I_ZERO;
-
+                else if (colName.Equals("Export_ID"))
+                    continue;
                 else
                 {
                     dCopy.Set_Value(colName, this.Get_Value(colName));

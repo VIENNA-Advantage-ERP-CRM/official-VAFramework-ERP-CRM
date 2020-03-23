@@ -328,24 +328,52 @@
             //}
         };
 
-
+       
 
         function onGroupClick(e) {
             e.stopPropagation();
-            var o = $(this);
-            var name = o.data("name");
-            var dis = o.data("display");
-
+            var divGroup = $(this);
+            var target = $(e.target);
+            var name = divGroup.data("name");
+            var dis = divGroup.data("display");
+            var viewMore = $(divGroup.find('.vis-ev-col-fg-more')[0]);
             //console.log(name);
             //console.log(dis);
             var show = false;
-            if (dis === "show") {
-                o.data("display", "hide");
-                $(o.children()[2]).addClass("vis-ev-col-fg-rotate");
-            } else {
-                o.data("display", "show");
+            var showGroupFieldDefault = false;
+
+
+            if (target.is('span')) {
+                if (dis !== "show") {// If group is vlosed and user click on show more then no processing.
+                    return;
+                }
                 show = true;
-                $(o.children()[2]).removeClass("vis-ev-col-fg-rotate");
+                if (divGroup.data("showmore") == 'Y') {
+                    showGroupFieldDefault = true;
+                    divGroup.data("showmore", "N");
+                    viewMore.text(VIS.Msg.getMsg("ShowLess"));
+                }
+                else {
+                    divGroup.data("showmore", "Y");
+                    viewMore.text(VIS.Msg.getMsg("ShowMore"));
+                }
+            }
+            else {
+                if (divGroup.data("showmore") == 'N') {
+                    showGroupFieldDefault = true;
+                }
+
+                if (dis === "show") {
+                    divGroup.data("display", "hide");
+                    viewMore.hide();
+                    $(divGroup.children()[2]).addClass("vis-ev-col-fg-rotate");
+                } else {
+
+                    divGroup.data("display", "show");
+                    viewMore.show();
+                    show = true;
+                    $(divGroup.children()[2]).removeClass("vis-ev-col-fg-rotate");
+                }
             }
 
             var list = groupToCompsMap[name];
@@ -358,7 +386,7 @@
                     ctrls[j].tag = show;
                     ctrls[j].setVisible(show && field.getIsDisplayed(true));
                 }
-                if (show && field.getIsDisplayed(true))
+                if (show && field.getIsDisplayed(true) && (field.getIsFieldgroupDefault() || showGroupFieldDefault))
                     fieldToCompParentMap[field.getColumnName()].show();
                 else
                     fieldToCompParentMap[field.getColumnName()].hide();
@@ -378,10 +406,11 @@
             // clearRowSpan();
             addRow();
             initCols(true);
-            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="hide">' +
-                '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
-                '<span class="vis-ev-col-fg-more" style="display:none"><i class="fa fa-ellipsis-h"></i></span>' +
-                '<i class= "fa fa-angle-up  vis-ev-col-fg-rotate">' +
+            //<i class="fa fa-ellipsis-h"></i>
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-showmore="Y" data-name="' + fieldGroup + '" data-display="show">' +
+                '<span class="vis-ev-col-fg-hdr"  >' + fieldGroup + ' </span> ' +
+                '<span class="vis-ev-col-fg-more">' + VIS.Msg.getMsg("ShowMore") + '</span>' +
+                '<i class= "fa fa-angle-up">' +
                 '</span>' +
                 '</div>');
 
@@ -437,7 +466,9 @@
                     groupToCompsMap[oldFieldGroup] = fieldList;
                 }
                 fieldList.push(mField);
-                fieldToCompParentMap[mField.getColumnName()].hide();
+                if (!mField.getIsFieldgroupDefault()) {
+                    fieldToCompParentMap[mField.getColumnName()].hide();
+                }
             }
         };
 
@@ -675,7 +706,7 @@
 
 
 
-        if (editor && (editor.getControl()[0].tagName != 'LABEL')) {
+        if (mField.getDisplayType() != VIS.DisplayType.Label) { // exclude Label display type
             ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
                 "<i class='vis vis-info' aria-hidden='true'></i></span'>");
         }

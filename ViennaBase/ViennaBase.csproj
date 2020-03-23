@@ -143,6 +143,7 @@
     <Content Include="Areas\ViennaBase\Content\fontlib\font-awesome.min.css" />
     <Content Include="Areas\ViennaBase\Content\fontlib\vis-fonts.css" />
     <Content Include="Areas\ViennaBase\Content\fonts\vis-fonts.svg" />
+    <Content Include="Areas\ViennaBase\Content\fonts\vis.svg" />
     <Content Include="Areas\ViennaBase\Content\migration\ad-cust.css" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-grid.css" />
     <Content Include="Areas\ViennaBase\Content\migration\bootstrap-grid.min.css" />
@@ -282,6 +283,17 @@
     <Content Include="Areas\ViennaBase\Content\fonts\vis-fonts.eot" />
     <Content Include="Areas\ViennaBase\Content\fonts\vis-fonts.ttf" />
     <Content Include="Areas\ViennaBase\Content\fonts\vis-fonts.woff" />
+    <Content Include="Areas\ViennaBase\Content\fonts\vis.eot" />
+    <Content Include="Areas\ViennaBase\Content\fonts\vis.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\vis.woff" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Bold.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Italic.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Light.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Medium.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-MediumItalic.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-Regular.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-SemiBold.ttf" />
+    <Content Include="Areas\ViennaBase\Content\fonts\NoirPro-SemiBoldItalic.ttf" />
     <None Include="Areas\ViennaBase\Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\ActiveXControls\PrintControl.cab" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\ActiveXControls\PrintControl_res_cs.cab" />
@@ -1211,6 +1223,7 @@
     <Content Include="Areas\ViennaBase\Scripts\globalize\globalize.js" />
     <Content Include="Areas\ViennaBase\Scripts\jquery-2.1.0.js" />
     <Content Include="Areas\ViennaBase\Scripts\jquery-2.1.0.min.js" />
+    <Content Include="Areas\ViennaBase\Scripts\jquery.imgareaselect.js" />
     <Content Include="Areas\ViennaBase\Scripts\jszip-utils.js" />
     <Content Include="Areas\ViennaBase\Scripts\jszip.js" />
     <Content Include="Areas\ViennaBase\Scripts\migration\bootstrap.js" />

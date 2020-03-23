@@ -755,6 +755,55 @@ namespace VAdvantage.Model
             //{
             //    UpdateAssetCost();
             //}
+
+            // create default Account
+            StringBuilder _sql = new StringBuilder("");
+            // check table exist or not
+            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Asset_Group_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
+            if (count > 0)
+            {
+                PO obj = null;
+                int assetId = GetA_Asset_ID();
+                int assetGroupId = GetA_Asset_Group_ID();
+                // get related to value agaisnt asset = 75
+                string sql = "SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where   r.name='FRPT_RelatedTo' and l.name='Asset'";
+                string _RelatedToProduct = Convert.ToString(DB.ExecuteScalar(sql));
+
+                _sql.Clear();
+                _sql.Append("Select Count(*) From FRPT_Asset_Acct   where A_Asset_ID=" + assetId + " AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
+                int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
+                if (value < 1)
+                {
+                    _sql.Clear();
+                    _sql.Append(@"Select  PCA.c_acctschema_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id " +
+                        " From FRPT_Asset_Group_Acct PCA " +
+                        " inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id " +
+                        " where PCA.A_Asset_Group_ID=" + assetGroupId +
+                        " and acc.frpt_relatedto=" + _RelatedToProduct + 
+                        " AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
+
+                    DataSet ds = DB.ExecuteDataset(_sql.ToString());
+                    if (ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            obj = MTable.GetPO(GetCtx(), "FRPT_Asset_Acct", 0, null);
+                            obj.Set_ValueNoCheck("AD_Org_ID", 0);
+                            obj.Set_ValueNoCheck("A_Asset_ID", assetId);
+                            obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
+                            obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
+                            obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
+                            if (!obj.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                _log.Log(Level.SEVERE, "Could Not create FRPT_Asset_Acct. ERRor Value : " + pp.GetValue() + "ERROR NAME : " + pp.GetName());
+                            }
+                        }
+                    }
+                }
+            }
+
             return true;
         }
 

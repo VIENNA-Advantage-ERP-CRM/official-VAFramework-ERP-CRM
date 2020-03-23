@@ -1044,15 +1044,15 @@
     var wakeupDialog = function () {
         // ui root
         var root = $('<div class="vis-wakeup-main"></div>'
-                    + '<div class="vis-wakeup"></div>'
+                    + '<div class="vis-wakeup-outerwrap">'
                     + '<div class="vis-wakeup-content">'
-                    + '<div style="width: 40%; float: left; height: 100%">'
-                    + '<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/smiley-sleep.gif" style="padding: 10px;padding-top:15px;" class="vis-wakeup-sleep" />'
-                    + '<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/smiley-awake.gif" style="padding: 10px;display:none;padding-top:15px;" class="vis-wakeup-awake" />'
-                    + '</div><div style="width: 60%; height: 100%; float: right;text-align:right">'
-                    + '<div style="height: 70%;margin: 10px; overflow: auto;" class="vis-wakeup-text">'
+                    + '<div class="vis-wakeup-headsec">'
+                    + '</div>'
+                    + '<div class="vis-wakeup-datawrp">'
+                    + '<strong>Oh no! Something went wrong</strong>'
+                    + '<div class="vis-wakeup-text">'
                     //+ VIS.Msg.getMsg('WakeupText')
-                    + '</div><button style="margin-right:5px;">WakeUp </button></div></div></div>');
+                    + '</div><button>Refresh</button></div></div></div></div>');
 
         var btn = root.find('button');
         var imgS = root.find('.vis-wakeup-sleep');
@@ -1069,8 +1069,8 @@
 
         btn.on('click', function () {
             btn.prop("disabled", true);
-            imgS.hide();
-            imgA.show();
+            //imgS.hide();
+            //imgA.show();
             window.location.reload(); //refresh url
         });
 

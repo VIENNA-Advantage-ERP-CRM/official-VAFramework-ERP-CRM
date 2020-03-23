@@ -1,19 +1,19 @@
 namespace VAdvantage.Model
 {
 
-/** Generated Model - DO NOT CHANGE */
-using System;
-using System.Text;
-using VAdvantage.DataBase;
-using VAdvantage.Common;
-using VAdvantage.Classes;
-using VAdvantage.Process;
-using VAdvantage.Model;
-using VAdvantage.Utility;
-using System.Data;
-/** Generated Model for AD_ClientInfo
- *  @author Jagmohan Bhatt (generated) 
- *  @version Vienna Framework 1.1.1 - $Id$ */
+    /** Generated Model - DO NOT CHANGE */
+    using System;
+    using System.Text;
+    using VAdvantage.DataBase;
+    using VAdvantage.Common;
+    using VAdvantage.Classes;
+    using VAdvantage.Process;
+    using VAdvantage.Model;
+    using VAdvantage.Utility;
+    using System.Data;
+    /** Generated Model for AD_ClientInfo
+     *  @author Jagmohan Bhatt (generated) 
+     *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_AD_ClientInfo : PO
     {
         public X_AD_ClientInfo(Context ctx, int AD_ClientInfo_ID, Trx trxName)
@@ -219,7 +219,7 @@ using System.Data;
         @param AD_Tree_Product_ID Tree to determine product hierarchy */
         public void SetAD_Tree_Product_ID(int AD_Tree_Product_ID)
         {
-           // if (AD_Tree_Product_ID < 1) throw new ArgumentException("AD_Tree_Product_ID is mandatory.");
+            // if (AD_Tree_Product_ID < 1) throw new ArgumentException("AD_Tree_Product_ID is mandatory.");
             if (AD_Tree_Product_ID < 1)
             {
                 Set_Value("AD_Tree_Product_ID", null);
@@ -601,12 +601,15 @@ using System.Data;
         public static String SAVEATTACHMENTON_FTPLocation = "FT";
         /** Server File System = SR */
         public static String SAVEATTACHMENTON_ServerFileSystem = "SR";
+        /** Web Service = WS */
+        public static String SAVEATTACHMENTON_WebService = "WS";
+
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
         public bool IsSaveAttachmentOnValid(String test)
         {
-            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR");
+            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR") || test.Equals("WS");
         }
         /** Set Save Attachment On.
         @param SaveAttachmentOn Save Attachment On */
@@ -695,6 +698,48 @@ using System.Data;
         public String GetFTPUsername()
         {
             return (String)Get_Value("FTPUsername");
+        }
+
+
+
+        /** Set Web Service Token.
+         * @param AD_WebServiceToken Token to access web service. */
+        public void SetAD_WebServiceToken(String AD_WebServiceToken)
+        {
+            if (AD_WebServiceToken != null && AD_WebServiceToken.Length > 100)
+            {
+                log.Warning("Length > 100 - truncated");
+                AD_WebServiceToken = AD_WebServiceToken.Substring(0, 100);
+            }
+
+            Set_Value("AD_WebServiceToken", AD_WebServiceToken);
+        }
+
+        /** Get Web Service Token. 
+         * @return Token to access web service. */
+        public String GetAD_WebServiceToken()
+        {
+            return (String)Get_Value("AD_WebServiceToken");
+        }
+
+        /** Set Web Service URL. 
+         * @param AD_WebServiceURL URL of Web service. */
+        public void SetAD_WebServiceURL(String AD_WebServiceURL)
+        {
+            if (AD_WebServiceURL != null && AD_WebServiceURL.Length > 100)
+            {
+                log.Warning("Length > 100 - truncated");
+                AD_WebServiceURL = AD_WebServiceURL.Substring(0, 100);
+            }
+
+            Set_Value("AD_WebServiceURL", AD_WebServiceURL);
+        }
+
+        /** Get Web Service URL. 
+         * @return URL of Web service. */
+        public String GetAD_WebServiceURL()
+        {
+            return (String)Get_Value("AD_WebServiceURL");
         }
     }
 

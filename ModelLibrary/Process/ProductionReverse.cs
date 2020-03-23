@@ -82,7 +82,7 @@ namespace VAdvantage.Process
                     productionTo.SetName("{->" + productionTo.GetName() + ")");
                     if (production.Get_ColumnIndex("DocumentNo") > 0)
                     {
-                        productionTo.Set_Value("DocumentNo", ("{->" + productionTo.Get_Value("DocumentNo") + ")"));
+                        productionTo.Set_Value("DocumentNo", ("{->" + production.Get_Value("DocumentNo") + ")"));
                     }
                     productionTo.SetMovementDate(production.GetMovementDate()); //SI_0662 : not to create reverse record in current date, it should be created with the same date.
                     productionTo.SetProcessed(false);
@@ -143,6 +143,7 @@ namespace VAdvantage.Process
                                                         toProdline.SetPlannedQty(Decimal.Negate(toProdline.GetPlannedQty()));
                                                         toProdline.SetM_Production_ID(productionTo.GetM_Production_ID());
                                                         toProdline.SetM_ProductionPlan_ID(toProdPlan.GetM_ProductionPlan_ID());
+                                                        toProdline.SetM_ProductContainer_ID(fromProdline.GetM_ProductContainer_ID()); // bcz not a copy record
                                                         toProdline.SetReversalDoc_ID(fromProdline.GetM_ProductionLine_ID()); //maintain refernce of Orignal record on reversed record
                                                         toProdline.SetProcessed(false);
                                                         if (!CheckQtyAvailablity(GetCtx(), toProdline.GetM_Warehouse_ID(), toProdline.GetM_Locator_ID(), toProdline.GetM_ProductContainer_ID(), toProdline.GetM_Product_ID(), toProdline.GetM_AttributeSetInstance_ID(), toProdline.GetMovementQty(), Get_Trx()))
@@ -207,8 +208,20 @@ namespace VAdvantage.Process
                         result = productionTo.GetName();
                     }
 
+                    // To check weather future date records are available in Transaction window
+                    // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
+                    string _processMsg = MTransaction.CheckFutureDateRecord(productionTo.GetMovementDate(),
+                                           productionTo.Get_TableName(), productionTo.GetM_Production_ID(), production.Get_Trx());
+                    if (!string.IsNullOrEmpty(_processMsg))
+                    {
+                        production.Get_Trx().Rollback();
+                        _log.Log(Level.SEVERE, "Could Not create Production reverse entry. Future Date record Exists - " + _processMsg);
+                        throw new Exception("Could not create Production reverse entry");
+                    }
+
                     //set Reversed as True
                     productionTo.SetIsReversed(true);
+                    productionTo.SetIsCreated(true);
                     if (!productionTo.Save(production.Get_Trx()))
                     {
                         production.Get_Trx().Rollback();

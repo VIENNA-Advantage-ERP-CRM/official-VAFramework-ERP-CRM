@@ -65,6 +65,7 @@ namespace ViennaAdvantage.Process
             XDocument doc = null;
             decimal exchangeRate = 0;
             string currencyQty = "";
+            string content = "";
 
             ds.Clear();
             try
@@ -125,6 +126,10 @@ namespace ViennaAdvantage.Process
                             if (!String.IsNullOrEmpty(currencySourceName) && currencySourceName.ToLower().Contains("pwebapps.ezv.admin.ch"))
                             {
                                 doc = XDocument.Load("http://www.pwebapps.ezv.admin.ch/apps/rates/rate/getxml?activeSearchType=userDefinedDay");
+                            }
+                            else if (!String.IsNullOrEmpty(currencySourceName) && currencySourceName.ToLower().Contains("api.bnm.gov.my"))
+                            {
+                                content = GetConvertedCurrencyValue("", "", currencySourceName, apiKey);
                             }
 
                             DataSet dsConversion = DB.ExecuteDataset(@"SELECT C_ConversionType_id, Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency 
@@ -219,6 +224,58 @@ namespace ViennaAdvantage.Process
                                                 if (!conversion.Save())
                                                 {
 
+                                                }
+                                            }
+                                        }
+                                        else if (!String.IsNullOrEmpty(currencySourceName) && currencySourceName.ToLower().Contains("api.bnm.gov.my"))
+                                        {
+                                            exchangeRate = 0;
+
+                                            if (!String.IsNullOrEmpty(content))
+                                            {
+                                                dynamic rates = JsonConvert.DeserializeObject<dynamic>(content);
+                                                if (rates != null && rates.data != null)
+                                                {
+                                                    for (int j = 0; j < rates.data.Count; j++)
+                                                    {
+                                                        if (rates.data[j].currency_code == myCurrency.ToUpper())
+                                                        {
+                                                            exchangeRate = rates.data[i].rate["selling_rate"];
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (exchangeRate != 0)
+                                                {
+                                                    conversion = new MConversionRate(GetCtx(), 0, Get_Trx());
+                                                    conversion.SetAD_Org_ID((_lstCurr[k].AD_Org_ID));
+                                                    conversion.SetAD_Client_ID(_lstCurr[k].AD_Client_ID);
+                                                    //conversion.SetValidFrom(DateTime.Now.AddDays(-1));
+                                                    conversion.SetValidFrom(DateTime.Now);
+                                                    if (updateFrequency.Equals("D"))
+                                                    {
+                                                        conversion.SetValidTo(DateTime.Now);
+                                                    }
+                                                    else if (updateFrequency.Equals("W"))
+                                                    {
+                                                        conversion.SetValidTo(DateTime.Now.AddDays(7));
+                                                    }
+                                                    else if (updateFrequency.Equals("M"))
+                                                    {
+                                                        conversion.SetValidTo(DateTime.Now.AddMonths(1));
+                                                    }
+
+                                                    conversion.SetC_ConversionType_ID(defaultconversionType);
+                                                    conversion.SetC_Currency_ID(myCurrencyID);
+                                                    conversion.SetC_Currency_To_ID(301);
+
+                                                    rate1 = Convert.ToDecimal(exchangeRate);
+                                                    conversion.SetMultiplyRate(rate1);
+                                                    if (!conversion.Save())
+                                                    {
+
+                                                    }
                                                 }
                                             }
                                         }
@@ -396,6 +453,23 @@ namespace ViennaAdvantage.Process
                     response = response.Substring(0, response.IndexOf(" "));
                     return response;
                 }
+            }
+            else if (url.ToLower().Contains("api.bnm.gov.my"))
+            {
+                string newUrl = @"https://api.bnm.gov.my/public/exchange-rate";
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+
+                HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(newUrl);
+                myReq.Method = "GET";
+                myReq.Accept = "application/vnd.BNM.API.v1+json";
+
+                HttpWebResponse wr = (HttpWebResponse)myReq.GetResponse();
+
+                Stream receiveStream = wr.GetResponseStream();
+                StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
+                string content = reader.ReadToEnd();
+                return content;
             }
             //else if (url.ToLower().Contains("pwebapps.ezv.admin.ch"))
             //{

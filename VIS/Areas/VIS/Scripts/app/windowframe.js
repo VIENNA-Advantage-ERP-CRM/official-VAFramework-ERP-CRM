@@ -3651,25 +3651,25 @@
         return true;
     };
 
-    APanel.prototype.tabActionPerformedCallback2 = function (curEle, oldGC) {
-        curEle = this.curGC;
-        oldGC = this.curGC;
-        this.curGC = null;
-    }
+    //APanel.prototype.tabActionPerformedCallback2 = function (curEle, oldGC) {
+    //    curEle = this.curGC;
+    //    oldGC = this.curGC;
+    //    this.curGC = null;
+    //}
 
 
-    APanel.prototype.tabActionPerformedCallback3 = function (curEle, isAPanelTab, gc, tpIndex) {
-        if (this.curST != null) {
-            this.curST.saveData();
-            this.curST.unRegisterAPanel();
-            curEle = this.curST;
-            this.curST = null;
-        }
+    //APanel.prototype.tabActionPerformedCallback3 = function (curEle, isAPanelTab, gc, tpIndex) {
+    //    if (this.curST != null) {
+    //        this.curST.saveData();
+    //        this.curST.unRegisterAPanel();
+    //        curEle = this.curST;
+    //        this.curST = null;
+    //    }
 
-        this.curTabIndex = tpIndex;
-        if (!isAPanelTab)
-            this.curGC = gc;
-    }
+    //    this.curTabIndex = tpIndex;
+    //    if (!isAPanelTab)
+    //        this.curGC = gc;
+    //}
 
     APanel.prototype.tabActionPerformedCallback = function (action, back, isAPanelTab, tabEle, curEle, oldGC, gc, st) {
         this.setSelectedTab(action); //set Seleted tab
@@ -4270,7 +4270,7 @@
                 if (manual && !retValue && !selfPanel.errorDisplayed) {
 
                 }
-                this.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
+                selfPanel.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
                 if (manual)
                     selfPanel.curGC.dynamicDisplay(-1);
 
@@ -6270,7 +6270,7 @@
                     }
 
                     str += '<li ><img alt="' + panels[i].getName() + '" title="' + panels[i].getName() + '" default="' + panels[i].getIsDefault() + '" data-panelID="' + panels[i].getAD_TabPanel_ID() + '" data-cName="' + panels[i].getClassName()
-                        + '" data-Name="' + panels[i].getName() + '" src="' + VIS.Application.contextUrl + 'Areas/' + iconPath + '"></img></li>';
+                        + '" data-Name="' + panels[i].getName() + '" data-extrainfo="' + panels[i].getExtraInfo() + '" src="' + VIS.Application.contextUrl + 'Areas/' + iconPath + '"></img></li>';
                 }
                 this.ul_tabPanels = str;
             }

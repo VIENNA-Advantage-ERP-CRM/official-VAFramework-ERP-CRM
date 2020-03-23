@@ -27,9 +27,14 @@ namespace VAdvantage.Process
         private int _failure = 0;
         private int _notices = 0;
         private StringBuilder _emailTo = new StringBuilder();
+        int Request_ID = 0;
         protected override string DoIt()
         {
-            _req = new MRequest(GetCtx(), GetRecord_ID(), null);
+            if (Request_ID < 1)
+            {
+                return "Failed";
+            }
+            _req = new MRequest(GetCtx(), Request_ID, null);
             GetReqHistory();
             if (_reqAction == null)
             {
@@ -527,7 +532,25 @@ namespace VAdvantage.Process
         }
         protected override void Prepare()
         {
+            ProcessInfoParameter[] para = GetParameter();
+            for (int i = 0; i < para.Length; i++)
+            {
+                String name = para[i].GetParameterName();
+                //	log.fine("prepare - " + para[i]);
+                if (para[i].GetParameter() == null)
+                {
+                    ;
+                }
+                else if (name.Equals("R_Request_ID"))
+                {
+                    Request_ID = para[i].GetParameterAsInt();
+                }
 
+                else
+                {
+                    log.Log(Level.SEVERE, "Unknown Parameter: " + name);
+                }
+            }
         }
     }
 }

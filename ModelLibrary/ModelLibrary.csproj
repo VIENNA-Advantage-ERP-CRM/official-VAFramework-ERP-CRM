@@ -371,6 +371,7 @@
     <Compile Include="ModelAD\MAttachment.cs" />
     <Compile Include="ModelAD\MAttachmentEntry.cs" />
     <Compile Include="ModelAD\MAttachmentNote.cs" />
+    <Compile Include="ModelAD\MAttachmentReference.cs" />
     <Compile Include="ModelAD\MCardView.cs" />
     <Compile Include="ModelAD\MCardViewColumn.cs" />
     <Compile Include="ModelAD\MCardViewCondition.cs" />
@@ -398,6 +399,7 @@
     <Compile Include="ModelAD\MModuleTable.cs" />
     <Compile Include="ModelAD\MTabPanel.cs" />
     <Compile Include="ModelAD\X_AD_AlertRuleCondition.cs" />
+    <Compile Include="ModelAD\X_AD_AttachmentReference.cs" />
     <Compile Include="ModelAD\X_AD_CardView.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Column.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Condition.cs" />
@@ -1799,6 +1801,7 @@
     <Compile Include="Process\RfQResponseRank.cs" />
     <Compile Include="Process\ScheduleContract.cs" />
     <Compile Include="Process\SendMailText.cs" />
+    <Compile Include="Process\SendRequestNotification.cs" />
     <Compile Include="Process\StorageCleanup.cs" />
     <Compile Include="Process\SubscribeCustomerInterestArea.cs" />
     <Compile Include="Process\TaxDeclarationCreate.cs" />
@@ -1920,6 +1923,7 @@
     <Compile Include="Utility\EmailSingleton.cs" />
     <Compile Include="Utility\Env.cs" />
     <Compile Include="Utility\EnvConstants.cs" />
+    <Compile Include="Utility\ExternalWebMethod.cs" />
     <Compile Include="Utility\Msg.cs" />
     <Compile Include="Utility\NativeDigitConverter.cs" />
     <Compile Include="Utility\Null.cs" />

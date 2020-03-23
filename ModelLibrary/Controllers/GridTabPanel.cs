@@ -51,6 +51,12 @@ namespace VAdvantage.Model
             return _vo.IsDefault;
         }
 
+        public String GetExtraInfo()
+        {
+            return _vo.ExtraInfo;
+        }
+
+
 
     }
 }

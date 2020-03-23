@@ -12,7 +12,7 @@
         this.arrListColumns = [];
         var inforoot = $("<div>");
         var isExpanded = true;
-        var subroot = $("<div>");
+        var subroot = $("<div class='vis-info-subroot'>");
         var searchTab = null;
         var searchSec = null;
         var datasec = null;
@@ -57,9 +57,9 @@
             inforoot.css("width", "100%");
             inforoot.css("height", "100%");
             inforoot.css("position", "relative");
-            subroot.css("width", "98%");
-            subroot.css("height", "97%");
-            subroot.css("position", "absolute");
+            //subroot.css("width", "98%");
+            //subroot.css("height", "97%");
+            //subroot.css("position", "absolute");
             tableSArea.css("width", "100%");
             //subroot.css("margin-left", "-10px");
 
@@ -70,20 +70,20 @@
             //ssHeader.append(btnExpander);
             //sSContainer.append(ssHeader);
 
-            if (VIS.Application.isRTL) {
-                searchTab = $("<div style='background-color: rgb(241, 241, 241);height:88.9%;display: inline-block;width:25%;height:87.8%;overflow:auto;padding-right: 10px;margin-left: 10px;'>");
-                searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
+            //if (VIS.Application.isRTL) {
+            //    searchTab = $("<div style='background-color: rgb(241, 241, 241);height:88.9%;display: inline-block;width:25%;height:87.8%;overflow:auto;padding-right: 10px;margin-left: 10px;'>");
+            //    searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
+            //    searchTab.append(searchSec);
+            //    datasec = $("<div style='display: inline-block;width:73%;height:87.8%;overflow:auto;'>");
+            //    btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
+            //}
+            //else {
+                searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0'>");
+                searchSec = $("<div class='vis-info-l-s-content'>");
                 searchTab.append(searchSec);
-                datasec = $("<div style='display: inline-block;width:73%;height:87.8%;overflow:auto;'>");
-                btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
-            }
-            else {
-                searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;display: inline-block; float: left;width:25%;height:87.8%;overflow:auto;'>");
-                searchSec = $("<div style='background-color: rgb(241, 241, 241);'>");
-                searchTab.append(searchSec);
-                datasec = $("<div style='display: inline-block; float: left;width:73%;height:87.8%;margin-left:10px;'>");
-                btnsec = $("<div style='display: inline-block; float: left;width:99%;height:auto;margin-top: 2px;'>");
-            }
+                datasec = $("<div class='vis-info-datasec'>");
+                btnsec = $("<div class='vis-info-btnsec vis-just-cont-end'>");
+            //}
 
             subroot.append(searchTab);
             subroot.append(datasec);
@@ -122,14 +122,14 @@
             if (Oktxt.indexOf('&') > -1) {
                 Oktxt = Oktxt.replace('&', '');
             }
-            divbtnRight = $("<div style='float:right;'>");
-            divbtnsec = $("<div style='float:right;'>");
-            if (VIS.Application.isRTL) {
-                btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(Oktxt);
-                btnSearch = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:10px'>").append(searchtxt);
-            }
-            else {
+            divbtnRight = $("<div class='vis-info-btnswrap'>");
+            divbtnsec = $("<div class='vis-info-ls-btnswrap'>");
+            //if (VIS.Application.isRTL) {
+            //    btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+            //    btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+            //    btnSearch = $("<button class='VIS_Pref_btn-2'>").append(searchtxt);
+            //}
+            //else {
 
                 tr = $("<tr>");
                 tableSArea.append(tr);
@@ -218,40 +218,40 @@
 
                 searchSec.append(tableSArea);
 
-                btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(Oktxt);
-                btnSearch = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:10px'>").append(searchtxt);
-            }
+                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+                btnSearch = $("<button class='VIS_Pref_btn-2'>").append(searchtxt);
+            //}
 
             divbtnRight.append(btnCancel);
             divbtnRight.append(btnOK);
-            divbtnRight.append($('<div style="float:left;margin-right:10px;margin-top:15px;"><input type="checkbox" id="chkDelCart_' + windowNo + '" style="float:left"><span style="float:left">' + VIS.Msg.getMsg("DeleteCart") + '</span>'));
+            divbtnRight.append($('<div><input type="checkbox" id="chkDelCart_' + windowNo + '" ><span>' + VIS.Msg.getMsg("DeleteCart") + '</span>'));
             divbtnsec.append(btnSearch);
             searchTab.append(divbtnsec);
             btnsec.append(divbtnRight);
 
             //PagingCtrls
-            divPaging = $('<div>');
+            divPaging = $('<div class="vis-info-pagingwrp">');
             createPageSettings();
             divPaging.append(ulPaging);
 
-            if (VIS.Application.isRTL) {
-                divbtnLeft.append(btnCancel);
-                divbtnLeft.append(btnOK);
-                divbtnsec.append(btnSearch);
-                searchTab.append(divbtnsec);
-            }
-            else {
+            //if (VIS.Application.isRTL) {
+            //    divbtnLeft.append(btnCancel);
+            //    divbtnLeft.append(btnOK);
+            //    divbtnsec.append(btnSearch);
+            //    searchTab.append(divbtnsec);
+            //}
+            //else {
                 divbtnRight.append(btnCancel);
                 divbtnRight.append(btnOK);
                 divbtnsec.append(btnSearch);
                 searchTab.append(divbtnsec);
-            }
+            //}
 
             // divbtnLeft.append(btnRequery);
-            btnsec.append(divbtnRight);
-            btnsec.append(divPaging);
             btnsec.append(divbtnLeft);
+            btnsec.append(divPaging);
+            btnsec.append(divbtnRight);
             //Busy Indicator
             bsyDiv = $("<div class='vis-apanel-busy'>");
             bsyDiv.css("width", "98%");
@@ -540,19 +540,19 @@
         };
 
         function createPageSettings() {
-            ulPaging = $('<ul style="float:right;margin-top:10px" class="vis-statusbar-ul">');
+            ulPaging = $('<ul class="vis-statusbar-ul">');
 
-            liFirstPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="First Page" style="opacity: 0.6;"></div></li>');
+            liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="First Page" style="opacity: 0.6;"></i></div></li>');
 
-            liPrevPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="Page Up" style="opacity: 0.6;"></div></li>');
+            liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="Page Up" style="opacity: 0.6;"></i></div></li>');
 
             cmbPage = $("<select>");
 
             liCurrPage = $('<li>').append(cmbPage);
 
-            liNextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" title="Page Down" style="opacity: 0.6;"></div></li>');
+            liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" title="Page Down" style="opacity: 0.6;"></i></div></li>');
 
-            liLastPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="Last Page" style="opacity: 0.6;"></div></li>');
+            liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" title="Last Page" style="opacity: 0.6;"></i></div></li>');
 
 
             ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);

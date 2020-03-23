@@ -277,8 +277,8 @@ namespace VAdvantage.Process
                                                             {
                                                                 // get price from m_cost (Current Cost Price)
                                                                 currentCostPrice = 0;
-                                                                currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
+                                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
                                                                 inoutLine.SetCurrentCostPrice(currentCostPrice);
                                                                 if (!inoutLine.Save(Get_Trx()))
                                                                 {
@@ -303,8 +303,8 @@ namespace VAdvantage.Process
                                                                 {
                                                                     // get price from m_cost (Current Cost Price)
                                                                     currentCostPrice = 0;
-                                                                    currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                        inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
+                                                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                        inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
                                                                 }
                                                                 if (inoutLine.GetCurrentCostPrice() == 0)
                                                                 {
@@ -345,8 +345,8 @@ namespace VAdvantage.Process
                                                             {
                                                                 // get price from m_cost (Current Cost Price)
                                                                 currentCostPrice = 0;
-                                                                currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
+                                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
                                                                 inoutLine.SetCurrentCostPrice(currentCostPrice);
                                                                 if (!inoutLine.Save(Get_Trx()))
                                                                 {
@@ -393,8 +393,8 @@ namespace VAdvantage.Process
                                                                 {
                                                                     // get price from m_cost (Current Cost Price)
                                                                     currentCostPrice = 0;
-                                                                    currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                        inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
+                                                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                        inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
                                                                 }
                                                                 if (inoutLine.GetCurrentCostPrice() == 0)
                                                                 {
@@ -1209,8 +1209,8 @@ namespace VAdvantage.Process
                                             {
                                                 // get price from m_cost (Current Cost Price)
                                                 currentCostPrice = 0;
-                                                currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID);
+                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID, false);
                                                 _log.Info("product cost " + inoutLine.GetM_Product_ID() + " - " + currentCostPrice);
                                                 DB.ExecuteQuery("UPDATE M_Inoutline SET CurrentCostPrice = " + currentCostPrice + " WHERE M_Inoutline_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                             }
@@ -1233,8 +1233,8 @@ namespace VAdvantage.Process
                                                 {
                                                     // get price from m_cost (Current Cost Price)
                                                     currentCostPrice = 0;
-                                                    currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                        inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID);
+                                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                        inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID, false);
                                                 }
                                                 if (inoutLine.GetCurrentCostPrice() == 0)
                                                 {
@@ -1264,8 +1264,8 @@ namespace VAdvantage.Process
                                         if (matchInvoice.Get_ColumnIndex("CurrentCostPrice") >= 0)
                                         {
                                             // get pre cost before invoice cost calculation and update on match invoice
-                                            currentCostPrice = MCost.GetproductCosts(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
-                                                                                            product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID);
+                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                               product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID, false);
                                             DB.ExecuteQuery(@"UPDATE M_MatchInv SET CurrentCostPrice =
                                                               CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                              @" END WHERE M_MatchInv_ID = " + matchInvoice.GetM_MatchInv_ID(), null, Get_Trx());
@@ -1310,8 +1310,8 @@ namespace VAdvantage.Process
                                                 if (matchInvoice.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                 {
                                                     // get post cost after invoice cost calculation and update on match invoice
-                                                    currentCostPrice = MCost.GetproductCosts(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
-                                                                                                    product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID);
+                                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                                       product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_ID, false);
                                                     matchInvoice.SetPostCurrentCostPrice(currentCostPrice);
                                                 }
                                                 // set is cost calculation true on match invoice
@@ -1384,21 +1384,12 @@ namespace VAdvantage.Process
                                                         currentCostPrice = 0;
                                                         currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
                                                             inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
-                                                        //inventoryLine.SetCurrentCostPrice(currentCostPrice);
-                                                        //if (!inventoryLine.Save(Get_Trx()))
-                                                        //{
-                                                        //    ValueNamePair pp = VLogger.RetrieveError();
-                                                        //    _log.Info("Error found for Internal Use Inventory Line for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                        //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                        //    Get_Trx().Rollback();
-                                                        //}
                                                         DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
                                                                           WHERE M_InventoryLine_ID = " + inventoryLine.GetM_InventoryLine_ID(), null, Get_Trx());
                                                     }
                                                     #endregion
 
                                                     quantity = Decimal.Negate(inventoryLine.GetQtyInternalUse());
-                                                    // Change by mohit - Client id and organization was passed from context but neede to be passed from document itself as done in several other documents.-27/06/2017
                                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), inventory.GetAD_Client_ID(), inventory.GetAD_Org_ID(), product, inventoryLine.GetM_AttributeSetInstance_ID(),
                                                    "Internal Use Inventory", inventoryLine, null, null, null, null, 0, quantity, Get_Trx(), out conversionNotFoundInventory))
                                                     {
@@ -1450,16 +1441,18 @@ namespace VAdvantage.Process
                                                     {
                                                         // get price from m_cost (Current Cost Price)
                                                         currentCostPrice = 0;
-                                                        currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
-                                                            inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
-                                                        //inventoryLine.SetCurrentCostPrice(currentCostPrice);
-                                                        //if (!inventoryLine.Save(Get_Trx()))
-                                                        //{
-                                                        //    ValueNamePair pp = VLogger.RetrieveError();
-                                                        //    _log.Info("Error found for Physical Inventory Line for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                        //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                        //    Get_Trx().Rollback();
-                                                        //}
+                                                        if (Decimal.Subtract(inventoryLine.GetQtyCount(), inventoryLine.GetQtyBook()) < 0)
+                                                        {
+                                                            // stock reduce
+                                                            currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
+                                                                inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
+                                                        }
+                                                        else
+                                                        {
+                                                            // stock increase
+                                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
+                                                            inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID(), false);
+                                                        }
                                                         DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
                                                                            WHERE M_InventoryLine_ID = " + inventoryLine.GetM_InventoryLine_ID(), null, Get_Trx());
                                                     }
@@ -1477,14 +1470,6 @@ namespace VAdvantage.Process
                                                     }
                                                     else
                                                     {
-                                                        //if (inventoryLine.GetCurrentCostPrice() == 0)
-                                                        //{
-                                                        //    // get price from m_cost (Current Cost Price)
-                                                        //    currentCostPrice = 0;
-                                                        //    currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
-                                                        //        inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
-                                                        //    inventoryLine.SetCurrentCostPrice(currentCostPrice);
-                                                        //}
                                                         if (inventory.GetDescription() != null && inventory.GetDescription().Contains("{->"))
                                                         {
                                                             inventoryLine.SetIsReversedCostCalculated(true);
@@ -1493,8 +1478,16 @@ namespace VAdvantage.Process
                                                         // when post current cost price is ZERO, than need to update cost here 
                                                         if (inventoryLine.GetPostCurrentCostPrice() == 0)
                                                         {
-                                                            currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
+                                                            if (Decimal.Subtract(inventoryLine.GetQtyCount(), inventoryLine.GetQtyBook()) < 0)
+                                                            {
+                                                                currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
                                                               inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
+                                                            }
+                                                            else
+                                                            {
+                                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
+                                                               inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID(), false);
+                                                            }
                                                             inventoryLine.SetPostCurrentCostPrice(currentCostPrice);
                                                         }
                                                         if (client.IsCostImmediate() && !inventoryLine.IsCostImmediate())
@@ -1595,21 +1588,12 @@ namespace VAdvantage.Process
                                                         currentCostPrice = 0;
                                                         currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
                                                             inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
-                                                        //inventoryLine.SetCurrentCostPrice(currentCostPrice);
-                                                        //if (!inventoryLine.Save(Get_Trx()))
-                                                        //{
-                                                        //    ValueNamePair pp = VLogger.RetrieveError();
-                                                        //    _log.Info("Error found for Internal Use Inventory Line for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                        //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                        //    Get_Trx().Rollback();
-                                                        //}
                                                         DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
                                                                          WHERE M_InventoryLine_ID = " + inventoryLine.GetM_InventoryLine_ID(), null, Get_Trx());
                                                     }
                                                     #endregion
 
                                                     quantity = Decimal.Negate(inventoryLine.GetQtyInternalUse());
-                                                    // Change by mohit - Client id and organization was passed from context but neede to be passed from document itself as done in several other documents.-27/06/2017
                                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), inventory.GetAD_Client_ID(), inventory.GetAD_Org_ID(), product, inventoryLine.GetM_AttributeSetInstance_ID(),
                                                    "Internal Use Inventory", inventoryLine, null, null, null, null, 0, quantity, Get_Trx(), out conversionNotFoundInventory))
                                                     {
@@ -1621,14 +1605,6 @@ namespace VAdvantage.Process
                                                     }
                                                     else
                                                     {
-                                                        //if (inventoryLine.GetCurrentCostPrice() == 0)
-                                                        //{
-                                                        //    // get price from m_cost (Current Cost Price)
-                                                        //    currentCostPrice = 0;
-                                                        //    currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
-                                                        //        inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
-                                                        //    inventoryLine.SetCurrentCostPrice(currentCostPrice);
-                                                        //}
                                                         // when post current cost price is ZERO, than need to update cost here 
                                                         if (inventoryLine.GetPostCurrentCostPrice() == 0)
                                                         {
@@ -1671,14 +1647,6 @@ namespace VAdvantage.Process
                                                         currentCostPrice = 0;
                                                         currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
                                                             inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
-                                                        //inventoryLine.SetCurrentCostPrice(currentCostPrice);
-                                                        //if (!inventoryLine.Save(Get_Trx()))
-                                                        //{
-                                                        //    ValueNamePair pp = VLogger.RetrieveError();
-                                                        //    _log.Info("Error found for Physical Line for this Line ID = " + inventoryLine.GetM_InventoryLine_ID() +
-                                                        //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                        //    Get_Trx().Rollback();
-                                                        //}
                                                         DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
                                                                          WHERE M_InventoryLine_ID = " + inventoryLine.GetM_InventoryLine_ID(), null, Get_Trx());
                                                     }
@@ -2058,14 +2026,8 @@ namespace VAdvantage.Process
                                                                 currentCostPrice = 0;
                                                                 currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
                                                                     inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
-                                                                inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                                if (!inoutLine.Save(Get_Trx()))
-                                                                {
-                                                                    ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                                    Get_Trx().Rollback();
-                                                                }
+                                                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                        @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                             }
                                                             #endregion
 
@@ -2228,7 +2190,7 @@ namespace VAdvantage.Process
                                     invoiceLine = new MInvoiceLine(GetCtx(), matchInvoice.GetC_InvoiceLine_ID(), Get_Trx());
                                     invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
                                     product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
-
+                                    bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
                                     ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
 
                                     if (inoutLine.GetC_OrderLine_ID() > 0)
@@ -2282,6 +2244,13 @@ namespace VAdvantage.Process
 
                                                     // set is cost calculation true on match invoice
                                                     matchInvoice.SetIsCostCalculated(true);
+                                                    if (matchInvoice.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
+                                                    {
+                                                        // get cost from Product Cost after cost calculation
+                                                        currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                                                                 product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inoutLine.GetM_Warehouse_ID());
+                                                        matchInvoice.SetPostCurrentCostPrice(currentCostPrice);
+                                                    }
                                                     if (!matchInvoice.Save(Get_Trx()))
                                                     {
                                                         ValueNamePair pp = VLogger.RetrieveError();
@@ -2292,6 +2261,12 @@ namespace VAdvantage.Process
                                                     else
                                                     {
                                                         Get_Trx().Commit();
+                                                        // update the Post current price after Invoice receving on inoutline
+                                                        if (!isUpdatePostCurrentcostPriceFromMR)
+                                                        {
+                                                            DB.ExecuteQuery(@"UPDATE M_InoutLine SET PostCurrentCostPrice =   " + currentCostPrice +
+                                                                            @" WHERE M_InoutLine_ID = " + matchInvoice.GetM_InOutLine_ID(), null, Get_Trx());
+                                                        }
                                                     }
                                                 }
                                             }
@@ -2363,14 +2338,8 @@ namespace VAdvantage.Process
                                                             currentCostPrice = 0;
                                                             currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
                                                                 inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
-                                                            inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                            if (!inoutLine.Save(Get_Trx()))
-                                                            {
-                                                                ValueNamePair pp = VLogger.RetrieveError();
-                                                                _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                                Get_Trx().Rollback();
-                                                            }
+                                                            DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                          @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                         }
                                                         #endregion
 
@@ -2518,16 +2487,10 @@ namespace VAdvantage.Process
                                                         {
                                                             // get price from m_cost (Current Cost Price)
                                                             currentCostPrice = 0;
-                                                            currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
-                                                            inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                            if (!inoutLine.Save(Get_Trx()))
-                                                            {
-                                                                ValueNamePair pp = VLogger.RetrieveError();
-                                                                _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                                Get_Trx().Rollback();
-                                                            }
+                                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
+                                                            DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                           @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                         }
                                                         #endregion
 
@@ -2550,8 +2513,8 @@ namespace VAdvantage.Process
                                                             {
                                                                 // get price from m_cost (Current Cost Price)
                                                                 currentCostPrice = 0;
-                                                                currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
+                                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
                                                                 inoutLine.SetCurrentCostPrice(currentCostPrice);
                                                             }
                                                             if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -3077,17 +3040,10 @@ namespace VAdvantage.Process
                                                         if (!client.IsCostImmediate())
                                                         {
                                                             // get price from m_cost (Current Cost Price)
-                                                            //currentCostPrice = 0;
-                                                            //currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                            //    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                                            //inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                            //if (!inoutLine.Save(Get_Trx()))
-                                                            //{
-                                                            //    ValueNamePair pp = VLogger.RetrieveError();
-                                                            //    _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                            //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                            //    Get_Trx().Rollback();
-                                                            //}
+                                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                               inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
+                                                            DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                            @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                         }
                                                         #endregion
 
@@ -3225,17 +3181,11 @@ namespace VAdvantage.Process
                                                         if (!client.IsCostImmediate())
                                                         {
                                                             // get price from m_cost (Current Cost Price)
-                                                            //currentCostPrice = 0;
-                                                            //currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                            //    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                                            //inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                            //if (!inoutLine.Save(Get_Trx()))
-                                                            //{
-                                                            //    ValueNamePair pp = VLogger.RetrieveError();
-                                                            //    _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                            //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                            //    Get_Trx().Rollback();
-                                                            //}
+                                                            currentCostPrice = 0;
+                                                            currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
+                                                            DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                          @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                         }
                                                         #endregion
 
@@ -3448,17 +3398,10 @@ namespace VAdvantage.Process
                                                             if (!client.IsCostImmediate())
                                                             {
                                                                 // get price from m_cost (Current Cost Price)
-                                                                //currentCostPrice = 0;
-                                                                //currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                //    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                                                //inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                                //if (!inoutLine.Save(Get_Trx()))
-                                                                //{
-                                                                //    ValueNamePair pp = VLogger.RetrieveError();
-                                                                //    _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                                //    Get_Trx().Rollback();
-                                                                //}
+                                                                currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                   inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
+                                                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                        @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                             }
                                                             #endregion
 
@@ -4833,17 +4776,11 @@ namespace VAdvantage.Process
                                                             if (!client.IsCostImmediate())
                                                             {
                                                                 // get price from m_cost (Current Cost Price)
-                                                                //currentCostPrice = 0;
-                                                                //currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                //    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                                                //inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                                //if (!inoutLine.Save(Get_Trx()))
-                                                                //{
-                                                                //    ValueNamePair pp = VLogger.RetrieveError();
-                                                                //    _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                                //    Get_Trx().Rollback();
-                                                                //}
+                                                                currentCostPrice = 0;
+                                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
+                                                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                        @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                             }
                                                             #endregion
 
@@ -4887,17 +4824,10 @@ namespace VAdvantage.Process
                                                             if (!client.IsCostImmediate())
                                                             {
                                                                 // get price from m_cost (Current Cost Price)
-                                                                //currentCostPrice = 0;
-                                                                //currentCostPrice = MCost.GetproductCosts(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
-                                                                //    inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                                                //inoutLine.SetCurrentCostPrice(currentCostPrice);
-                                                                //if (!inoutLine.Save(Get_Trx()))
-                                                                //{
-                                                                //    ValueNamePair pp = VLogger.RetrieveError();
-                                                                //    _log.Info("Error found for Material Receipt for this Line ID = " + inoutLine.GetM_InOutLine_ID() +
-                                                                //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                                                //    Get_Trx().Rollback();
-                                                                //}
+                                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID(),
+                                                                   inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
+                                                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                        @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                                             }
                                                             #endregion
 

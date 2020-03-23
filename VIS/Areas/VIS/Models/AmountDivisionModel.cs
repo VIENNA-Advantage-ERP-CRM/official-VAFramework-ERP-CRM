@@ -23,6 +23,8 @@ namespace VIS.Models
         public string DimensionTypeVal { get; set; }
         public int DimensionNameVal { get; set; }
         public int ElementID { get; set; }
+        public int C_BPartner_ID { get; set; }
+        public String C_BPartner { get; set; }
         public String lineAmountID { get; set; }
         public int TotalRecord { get; set; }
         public decimal TotalLineAmount { get; set; }
@@ -181,7 +183,22 @@ namespace VIS.Models
                 }
             }
         }
-        public string[] InsertDimensionLine(Ctx ctx, int RecordId, decimal TotalAmount, decimal LineAmount, int[] acctSchemaID, string elementTypeID, int dimensionValue, int elementID, int oldDimensionName)
+        /// <summary>
+        /// Insert Line on Amount Dimension
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="recordId">Amount Dimension ID</param>
+        /// <param name="totalAmount">Total Amount</param>
+        /// <param name="lineAmount">Line Amount</param>
+        /// <param name="acctSchemaID">selected Accounting Schema</param>
+        /// <param name="elementTypeID">Element Type</param>
+        /// <param name="dimensionValue">Dimension Value</param>
+        /// <param name="elementID">Element ID</param>
+        /// <param name="oldDimensionName">Old Dimension Value</param>
+        /// <param name="bpartner_ID">Business Partner</param>
+        /// <param name="oldBPartner_ID"Old Business Partner></param>
+        /// <returns>Amount Dimension Line</returns>
+        public string[] InsertDimensionLine(Ctx ctx, int RecordId, decimal TotalAmount, decimal LineAmount, int[] acctSchemaID, string elementTypeID, int dimensionValue, int elementID, int oldDimensionName, int bpartner_ID, int oldBPartner_ID)
         {
             string Sql = "";
             int DimAcctTypeId;
@@ -247,7 +264,7 @@ namespace VIS.Models
                             Sql = "select nvl(c_dimamtline_id,0) from c_dimamtline where c_Dimamt_ID=" + RecordId + " and c_dimamtaccttype_id=" + objDimAcctType.GetC_DimAmtAcctType_ID() + "";
                             if (elementTypeID == "AC")
                             {
-                                Sql += " and c_elementvalue_id=" + oldDimensionName;
+                                Sql += " and c_elementvalue_id=" + oldDimensionName + " AND NVL(C_BPartner_ID, 0)=" + oldBPartner_ID;
                             }//Account
                             else if (elementTypeID == "AY") { Sql += " and c_activity_id=" + oldDimensionName; }//Activity
                             else if (elementTypeID == "BP") { Sql += " and c_BPartner_ID=" + oldDimensionName; }//BPartner
@@ -284,6 +301,7 @@ namespace VIS.Models
                             {
                                 objDimAmtLine.SetC_Element_ID(elementID);
                                 objDimAmtLine.SetC_ElementValue_ID(dimensionValue);
+                                objDimAmtLine.SetC_BPartner_ID(bpartner_ID);
                             }//Account
                             else if (elementTypeID == "AY") { objDimAmtLine.SetC_Activity_ID(dimensionValue); }//Activity
                             else if (elementTypeID == "BP") { objDimAmtLine.SetC_BPartner_ID(dimensionValue); }//BPartner
@@ -556,14 +574,14 @@ namespace VIS.Models
                         uElementColumn = Convert.ToString(dsUelement.Tables[0].Rows[0][1]);
                     }
 
-                    string sql = "SELECT distinct COALESCE(cl.ad_column_id,cl.c_activity_id,cl.C_BPARTNER_ID,cl.C_CAMPAIGN_ID,cl.C_ELEMENTVALUE_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
-                                  " cl.amount,ct.c_acctschema_id,ct.elementtype,adref.Name as DimensionType, " +
+                    string sql = "SELECT distinct COALESCE(cl.ad_column_id,cl.C_ELEMENTVALUE_ID,cl.c_activity_id,cl.C_BPARTNER_ID,cl.C_CAMPAIGN_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
+                                  " cl.amount,ct.c_acctschema_id,ct.elementtype,rl.Name as DimensionType, " +
                                    " COALESCE(o.name ";
                     if (uElementColumn != "")
                     {
                         sql += " ,(" + uElementColumn + ") ";
                     }
-                    sql += " ,act.Name,cb.Name,cc.Name,cloc.address1,cpr.Name,cs.Name,mp.NAME,cel.Name) AS DimensionName ,nvl(cl.C_ELEMENT_ID,0) as ElementID,cl.c_dimamtline_id as LineID " +
+                    sql += " ,cel.Name,act.Name,cb.Name,cc.Name,cloc.address1,cpr.Name,cs.Name,mp.NAME) AS DimensionName ,nvl(cl.C_ELEMENT_ID,0) as ElementID,cl.c_dimamtline_id as LineID, cl.C_BPartner_ID, cb.Name AS BPartnerName " +
                         " from c_dimamt cdm ";
 
                     //{
@@ -675,6 +693,9 @@ namespace VIS.Models
                             {
                                 obj.DimensionNameVal = 0;
                             }
+                            obj.C_BPartner_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]);
+                            obj.C_BPartner = Convert.ToString(ds.Tables[0].Rows[i]["BPartnerName"]);
+
                             obj.DimensionType = Convert.ToString(ds.Tables[0].Rows[i]["DimensionType"]);
                             obj.DimensionTypeVal = Convert.ToString(ds.Tables[0].Rows[i]["elementtype"]);
                             if (obj.DimensionTypeVal == "LF" || obj.DimensionTypeVal == "LT")
@@ -722,6 +743,34 @@ namespace VIS.Models
 
             }
             return objAmtdimModel;
+        }
+
+        /// <summary>
+        /// Get Element linked with Account on Accounting Schema Element
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="accountingSchema">selected Accounting Schema</param>
+        /// <returns>Element ID</returns>
+        public int GetElementID(Ctx ctx, int[] accountingSchema)
+        {
+            int c_element_id = 0;
+            List<int> elementID = new List<int>();
+            for (int i = 0; i < accountingSchema.Length; i++)
+            {
+                string qry = "SELECT C_Element_ID FROM C_AcctSchema_Element WHERE ElementType = 'AC' AND IsActive='Y' AND C_AcctSchema_ID = " + accountingSchema[i];
+                c_element_id = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+                elementID.Add(c_element_id);
+                if (i > 0)
+                {
+                    if (elementID[i - 1] != elementID[i])
+                    {
+                        c_element_id = 0;
+                        break;
+                    }
+                }
+            }
+
+            return c_element_id;
         }
     }
 }

@@ -444,12 +444,12 @@
             canExport = VIS.MRole.getDefault().getIsCanExport(Ad_Table_ID);
             if (isPrint != true) {
                 if (canExport) {
-                    btnSaveCsv.css('display', 'block');
-                    btnSavePdf.css('display', 'block');
+                    btnSaveCsv.css('display', 'inline-flex');
+                    btnSavePdf.css('display', 'inline-flex');
 
                     if (VIS.context.ctx["#BULK_REPORT_DOWNLOAD"] == 'Y') {
-                        btnSaveAllCsv.css('display', 'block');
-                        btnSaveAllPdf.css('display', 'block');
+                        btnSaveAllCsv.css('display', 'inline-flex');
+                        btnSaveAllPdf.css('display', 'inline-flex');
                     }
                     else {
                         btnSaveAllCsv.css('display', 'none');
@@ -514,12 +514,12 @@
         var createHeader = function () {
 
 
-            if (VIS.Application.isRTL) {
-                toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle">').append(VIS.Msg.getMsg("Report")));
-                btnClose = $('<a href="javascript:void(0)" class="vis-icon-menuclose vis vis-cross">');
-                actionContainer = $('<div class="vis-report-top-icons">');
-                ulAction = $('<ul class="vis-reporticonsul">');
-                actionContainer.append(ulAction);
+            //if (VIS.Application.isRTL) {
+            //    toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle">').append(VIS.Msg.getMsg("Report")));
+            //    btnClose = $('<a href="javascript:void(0)" class="vis-icon-menuclose vis vis-cross">');
+            //    actionContainer = $('<div class="vis-report-top-icons">');
+            //    ulAction = $('<ul class="vis-reporticonsul">');
+            //    actionContainer.append(ulAction);
                 //if (showPaging == true) {
 
 
@@ -540,45 +540,45 @@
                 //}
                 //if (isPrint != true) {
 
-                btnPrint = $('<li><a title="' + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Print")) + '" class="vis vis-print"></a></li>');
-                ulAction.append(btnPrint);
-                btnCustomize = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("PrintCustomize")) + "' class='vis vis-customize'></a></li>");
-                ulAction.append(btnCustomize);
-                btnSearch = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Search")) + "' class='vis vis-find'></a></li>");
-                ulAction.append(btnSearch);
-                btnRequery = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Requery")) + "' class='vis vis-refresh'></a></li>");
-                ulAction.append(btnRequery);
-                btnArchive = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Archive")) + "' class='vis vis-archive'></a></li>");
-                ulAction.append(btnArchive);
-                // bulk download icon pdf
-                btnSaveAllPdf = $("<li style='display:none'><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllPagePdf")) + "' class='vis vis-pdf-all'></a></li>");
-                ulAction.append(btnSaveAllPdf);
+            //    btnPrint = $('<li><a title="' + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Print")) + '" class="vis vis-print"></a></li>');
+            //    ulAction.append(btnPrint);
+            //    btnCustomize = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("PrintCustomize")) + "' class='vis vis-customize'></a></li>");
+            //    ulAction.append(btnCustomize);
+            //    btnSearch = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Search")) + "' class='vis vis-find'></a></li>");
+            //    ulAction.append(btnSearch);
+            //    btnRequery = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Requery")) + "' class='vis vis-refresh'></a></li>");
+            //    ulAction.append(btnRequery);
+            //    btnArchive = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Archive")) + "' class='vis vis-archive'></a></li>");
+            //    ulAction.append(btnArchive);
+            //    // bulk download icon pdf
+            //    btnSaveAllPdf = $("<li style='display:none'><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllPagePdf")) + "' class='vis vis-pdf-all'></a></li>");
+            //    ulAction.append(btnSaveAllPdf);
 
-                btnSavePdf = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SavePdf")) + "' class='vis vis-save-pdf'></a></li>");
-                ulAction.append(btnSavePdf);
-                // bulk download icon csv
-                btnSaveAllCsv = $("<li style='display:none'><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllRecordCsv")) + "' class='vis vis-csv-all'></a></li>");
-                ulAction.append(btnSaveAllCsv);
+            //    btnSavePdf = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SavePdf")) + "' class='vis vis-save-pdf'></a></li>");
+            //    ulAction.append(btnSavePdf);
+            //    // bulk download icon csv
+            //    btnSaveAllCsv = $("<li style='display:none'><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllRecordCsv")) + "' class='vis vis-csv-all'></a></li>");
+            //    ulAction.append(btnSaveAllCsv);
 
-                btnSaveCsv = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveCSV")) + "' class='vis vis-save-csv'></a></li>");
-                ulAction.append(btnSaveCsv);
-                btnRF = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("ReportFormat")) + "' class='vis vis-format'></a></li>");
-                ulAction.append(btnRF);
+            //    btnSaveCsv = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveCSV")) + "' class='vis vis-save-csv'></a></li>");
+            //    ulAction.append(btnSaveCsv);
+            //    btnRF = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("ReportFormat")) + "' class='vis vis-format'></a></li>");
+            //    ulAction.append(btnRF);
 
-                // }
+            //    // }
 
-                divPaging = $("<div class='vis-report-top-icons'>");
-                createPageSettings();
-                divPaging.append(ulPaging);
+            //    divPaging = $("<div class='vis-report-top-icons'>");
+            //    createPageSettings();
+            //    divPaging.append(ulPaging);
 
 
-                toolbar.append(divPaging);
-                toolbar.append(actionContainer);
-                toolbar.append(btnClose);
-                $root.append(toolbar);
-            }
-            else {
-                toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle">').append(VIS.Msg.getMsg("Report")));
+            //    toolbar.append(divPaging);
+            //    toolbar.append(actionContainer);
+            //    toolbar.append(btnClose);
+            //    $root.append(toolbar);
+            //}
+            //else {
+                toolbar = $("<div class='vis-report-header' style='padding: 0;'>").append($('<h3 class="vis-report-tittle">').append(VIS.Msg.getMsg("Report")));
                 btnClose = $('<a href="javascript:void(0)" class="vis-icon-menuclose vis vis-cross">');
                 actionContainer = $('<div class="vis-report-top-icons">');
                 ulAction = $('<ul class="vis-reporticonsul">');
@@ -636,7 +636,7 @@
                 toolbar.append(actionContainer);
                 toolbar.append(btnClose);
                 $root.append(toolbar);
-            }
+            //}
             bindEvents();
         };
 

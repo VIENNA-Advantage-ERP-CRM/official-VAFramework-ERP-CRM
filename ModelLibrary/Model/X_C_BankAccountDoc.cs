@@ -269,6 +269,24 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("PaymentRule");
         }
+
+        /** Set Start Check No..
+@param StartChkNumber Denotes Start Check No. */
+        public void SetStartChkNumber(int StartChkNumber) { Set_Value("StartChkNumber", StartChkNumber); }/** Get Start Check No..
+@return Denotes Start Check No. */
+        public int GetStartChkNumber() { Object ii = Get_Value("StartChkNumber"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        /** Set End Check No..
+@param EndChkNumber Denotes End Check No. */
+        public void SetEndChkNumber(int EndChkNumber) { Set_Value("EndChkNumber", EndChkNumber); }/** Get End Check No..
+@return Denotes End Check No. */
+        public int GetEndChkNumber() { Object ii = Get_Value("EndChkNumber"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+
+        /** Set Priority.
+        @param Priority Indicates if this request is of a high, medium or low priority. */
+        public void SetPriority(int Priority) { Set_Value("Priority", Priority); }/** Get Priority.
+        @return Indicates if this request is of a high, medium or low priority. */
+        public int GetPriority() { Object ii = Get_Value("Priority"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

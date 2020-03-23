@@ -2115,7 +2115,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 for (int i = 0; i < dsTabData.Tables[0].Rows.Count; i++)
                 {
                     PO oldPO = tbl.GetPO(GetCtx(), dsTabData.Tables[0].Rows[i], Get_TrxName());
-                    InsertVersionData(oldPO, tbl, keyIDs);
+                    if (oldPO != null)
+                        InsertVersionData(oldPO, tbl, keyIDs);
+                    else
+                        log.Info("Error in creating PO against table for Version");
                 }
             }
             return true;
@@ -2236,7 +2239,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <returns>true/false</returns>
         public bool CheckMaintainVerCol(int AD_Table_ID)
         {
-            int countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            int countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            if (countVerCol > 0)
+                return true;
+
+            countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
             if (countVerCol > 0)
                 return true;
             return false;
@@ -3929,7 +3936,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM AD_TextTemplate WHERE AD_TextTemplate_ID = " + node.GetAD_TextTemplate_ID()));
                 sb.Append(CommonFunctions.Parse(mailtext, po));
-                sb.Replace("<br>", "●");
+                //sb.Replace("<br>", "●");
             }
             else
             {
