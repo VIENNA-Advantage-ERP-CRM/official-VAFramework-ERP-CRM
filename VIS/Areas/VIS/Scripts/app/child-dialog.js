@@ -9,7 +9,7 @@
         var modal = true;
         var removeClose = false;
         var resize = true;
-        //var position = { at: "center center", of: window };
+        var position = { at: "center center", of: window };
 
         this.onOkClick = null;
         this.onCancelClick = null;
@@ -33,7 +33,7 @@
 
         this.setHeight = function (h) { height = h; };
         this.setWidth = function (w) { width = w; };
-        //this.setPostion = function (p) { position = p; };
+        this.setPosition = function (p) { position = p; };
 
         this.setEnableResize = function (isResize) { resize = isResize; };
 
@@ -103,7 +103,7 @@
                 closeOnEscape: !removeClose,
                 closeText: VIS.Msg.getMsg("close"),
                 //zIndex: 999999,
-                // position: position,
+                 position: position ,
                 buttons: [
                                 {
                                     text: VIS.Msg.getMsg("Ok"),
