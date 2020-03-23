@@ -150,12 +150,15 @@ namespace VIS
 
                  "~/Areas/VIS/Scripts/app/windowformcontainer.js",
                   "~/Areas/VIS/Scripts/app/masterdataversion.js",
-                   "~/Areas/VIS/Scripts/model/CalloutColumn.js",
+
+ "~/Areas/VIS/Scripts/tabpanels/bipanel.js",	
+                   "~/Areas/VIS/Scripts/model/CalloutColumn.js",	
+
+
 
 
 
                    "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
-
                   "~/Areas/VIS/Scripts/TestPanel.js");
 
 
@@ -176,7 +179,9 @@ namespace VIS
                  "~/Areas/VIS/Scripts/F20/vgridview.js",
                  "~/Areas/VIS/Scripts/F20/vmapview.js",
                  "~/Areas/VIS/Scripts/F20/aviewcontroller.js",
-                 "~/Areas/VIS/Scripts/F20/apanel.js"
+                 "~/Areas/VIS/Scripts/F20/apanel.js",
+                 "~/Areas/VIS/Scripts/F20/acontentpane.js",
+                 "~/Areas/VIS/Scripts/F20/afilterpanel.js"
                  );
 
 

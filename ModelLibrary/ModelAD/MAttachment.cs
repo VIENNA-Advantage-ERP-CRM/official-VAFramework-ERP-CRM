@@ -351,7 +351,7 @@ namespace VAdvantage.Model
 
                 retValue = true;
             }
-            catch 
+            catch
             { }
             log.Fine(item.ToString());
             AddTextMsg(" ");	//	otherwise not saved
@@ -720,6 +720,75 @@ namespace VAdvantage.Model
                     SetBinaryData(zipData);
                     return true;
 
+                } // No need to implement for now, but do not delete
+                if (GetFileLocation() == FILELOCATION_WebService)
+                {
+                    string filePath = GlobalVariable.AttachmentPath;
+                    string folderKey = "0";
+                    int AD_AttachmentLine_ID = 0;
+                    try
+                    {
+                        // Create client info object
+                        if (cInfo == null)
+                        {
+                            if (AD_Client_ID > 0)
+                            {
+                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            }
+                            else
+                            {
+                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            }
+                        }
+
+                        // Get file information
+                        FileInfo fInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
+                        byte[] bytes = System.IO.File.ReadAllBytes(filePath + "\\" + folderKey + "\\" + fileName);
+                        string file = Convert.ToBase64String(bytes);
+
+                        ExtWebServiceData ewsData = new ExtWebServiceData();
+                        ewsData.Token = cInfo.GetAD_WebServiceToken();
+                        ewsData.DocumentData = new ExtDocumentData()
+                        {
+                            DocumentName = fInfo.Name,
+                            Size = fInfo.Length,
+                            DocumentBytes = file
+                        };
+
+                        // Call external web service methods and file info to it
+                        ExternalWebMethod ewm = new ExternalWebMethod();
+                        string resURI = ewm.CallWebService(cInfo.GetAD_WebServiceURL() + "/StoreDocument", ewsData);
+
+                        MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
+
+                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
+                        attRef.SetAD_AttachmentRef(resURI);
+                        if (!attRef.Save(Get_Trx()))
+                        {
+                            log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
+                            return false;
+                        }
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        log.Severe("Web Service Location->" + e.Message);
+                        error.Append(e.Message);
+                        if (!Force)
+                        {
+                            return false;
+                        }
+                    }
+                    finally
+                    {
+                        CleanUp(filePath + "\\" + folderKey, filePath + "\\" + folderKey + "\\" + fileName, filePath + "\\" + fileName, null);
+                    }
+                    //SetIsFileSystem(false);
+                    SetFileLocation(FILELOCATION_Database);
+                    DeleteFileData(fileName);
+                    SetBinaryData(zipData);
+                    return true;
+
                 }
                 else
                 {
@@ -946,7 +1015,6 @@ namespace VAdvantage.Model
 
             try
             {
-
                 if (GetFileLocation() == FILELOCATION_FTPLocation)
                 {
                     fileName = this.GetAD_Table_ID() + "_" + this.GetRecord_ID();
@@ -986,6 +1054,59 @@ namespace VAdvantage.Model
                         }
                         //sdata = Utility.SecureEngine.Decrypt(sdata);
                     }
+                } // No need to implement for now, but do not delete
+                if (GetFileLocation() == FILELOCATION_WebService)
+                {
+                    DataSet ds = DB.ExecuteDataset("SELECT FileName, FileType FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + 0);
+
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        // Get file from web service and save it in temp folder
+
+                        //(filename, Path.Combine(filePath, "TempDownload", folder));
+
+                        string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+
+                        // Create client info object
+                        MClientInfo cInfo = null;
+                        if (AD_Client_ID > 0)
+                        {
+                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        }
+                        else
+                        {
+                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        }
+
+                        string documentURI = GetDocumentURI(AD_Attachment_ID);
+
+                        if (!string.IsNullOrEmpty(documentURI))
+                        {
+                            // Get file information
+                            ExtWebServiceData ewsData = new ExtWebServiceData();
+                            ewsData.Token = cInfo.GetAD_WebServiceToken();
+                            ewsData.DocumentData = new ExtDocumentData()
+                            {
+                                DocumentName = Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]),
+                                URI = documentURI
+                            };
+
+                            // Call external web service method to get file based on URI
+                            ExternalWebMethod ewm = new ExternalWebMethod();
+                            string resFile = ewm.CallWebService(cInfo.GetAD_WebServiceURL() + "/GetDocument", ewsData);
+
+                            byte[] byteData = Convert.FromBase64String(resFile);
+
+                            string savedFile = Path.Combine(filePath, "TempDownload", FolderKey, Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]));
+
+                            using (FileStream fs = new FileStream(savedFile, FileMode.Create, FileAccess.Write))
+                            {
+                                fs.Write(byteData, 0, byteData.Length);
+                            }
+                            return true;
+                        }
+                    }
+                    return false;
                 }
                 else
                 {
@@ -1187,24 +1308,16 @@ namespace VAdvantage.Model
         {
             try
             {
-
                 string filePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
                 string zipinput = filePath + "\\" + folderKey + "\\zipInput";
                 string zipfileName = System.IO.Path.Combine(filePath, folderKey, DateTime.Now.Ticks.ToString());
 
-                Directory.CreateDirectory(zipinput);
-                System.IO.File.Copy(filePath + "\\" + folderKey + "\\" + fileName, zipinput + "\\" + newFileName);
-
-                System.IO.File.Delete(filePath + "\\" + folderKey + "\\" + fileName);
                 if (!Directory.Exists(filePath))
                 {
                     error.Append("PathNotFound:" + filePath);
                     return false;
                 }
-                ICSharpCode.SharpZipLib.Zip.FastZip z = new ICSharpCode.SharpZipLib.Zip.FastZip();
-                z.CreateZip(zipfileName, zipinput, true, null);
-                System.IO.File.Delete(zipinput + "\\" + fileName);
-                //log.Fine("Length=" + zipData.Length);
+
                 MClientInfo cInfo = null;
                 if (string.IsNullOrEmpty(GetFileLocation()))
                 {
@@ -1226,8 +1339,82 @@ namespace VAdvantage.Model
                     }
                     SetFileLocation(fileLocation);
                 }
+                // If file saving location is web service
+                if (GetFileLocation() == FILELOCATION_WebService)
+                {
+                    try
+                    {
+                        SetFileLocation(FILELOCATION_WebService);
 
+                        // Create client info object
+                        if (cInfo == null)
+                        {
+                            if (AD_Client_ID > 0)
+                            {
+                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            }
+                            else
+                            {
+                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            }
+                        }
 
+                        // Get file information
+                        FileInfo fInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
+                        byte[] bytes = System.IO.File.ReadAllBytes(filePath + "\\" + folderKey + "\\" + fileName);
+                        string file = Convert.ToBase64String(bytes);
+
+                        ExtWebServiceData ewsData = new ExtWebServiceData();
+                        ewsData.Token = cInfo.GetAD_WebServiceToken();
+                        ewsData.DocumentData = new ExtDocumentData()
+                        {
+                            DocumentName = fInfo.Name,
+                            Size = fInfo.Length,
+                            DocumentBytes = file
+                        };
+
+                        // Call external web service methods and file info to it
+                        ExternalWebMethod ewm = new ExternalWebMethod();
+                        string resURI = ewm.CallWebService(cInfo.GetAD_WebServiceURL() + "/StoreDocument", ewsData);
+
+                        MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
+
+                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
+                        attRef.SetAD_AttachmentRef(resURI);
+                        if (!attRef.Save(Get_Trx()))
+                        {
+                            log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
+                            return false;
+                        }
+
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        log.Severe("Web Service Location->" + e.Message);
+                        error.Append(e.Message);
+                        if (!Force)
+                        {
+                            return false;
+                        }
+                    }
+                    finally
+                    {
+                        CleanUp(filePath + "\\" + folderKey, filePath + "\\" + folderKey + "\\" + fileName, filePath + "\\" + fileName, null);
+                    }
+                    return true;
+                }
+
+                Directory.CreateDirectory(zipinput);
+
+                System.IO.File.Copy(filePath + "\\" + folderKey + "\\" + fileName, zipinput + "\\" + newFileName);
+
+                System.IO.File.Delete(filePath + "\\" + folderKey + "\\" + fileName);
+
+                ICSharpCode.SharpZipLib.Zip.FastZip z = new ICSharpCode.SharpZipLib.Zip.FastZip();
+                z.CreateZip(zipfileName, zipinput, true, null);
+                System.IO.File.Delete(zipinput + "\\" + fileName);
+                //log.Fine("Length=" + zipData.Length);
 
                 //Is user need to encription
                 SetCryptAndZipWay(CRYPTANDZIPWAY_PasswordEncryptionAndServerSideZip);
@@ -1457,7 +1644,7 @@ namespace VAdvantage.Model
                     }
                 }
                 Directory.Delete(System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", FolderKey));
-               
+
             }
             return true;
         }
@@ -1466,59 +1653,111 @@ namespace VAdvantage.Model
         {
             try
             {
-                string fileLocation = GetFileLocation();
-                string folder = DateTime.Now.Ticks.ToString();
-                string filePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath);
-                Directory.CreateDirectory(Path.Combine(filePath, "TempDownload", folder));
-                string filename = GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AD_AttachmentLine_ID;
-                string zipFileName = "zip" + DateTime.Now.Ticks.ToString();
-                if (fileLocation == X_AD_Attachment.FILELOCATION_Database)
+                DataSet ds = DB.ExecuteDataset("SELECT FileName, FileType FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + AD_AttachmentLine_ID);
+
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
-                    byte[] data = null;
-                    object d= (DB.ExecuteScalar("SELECT BinaryData FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + AD_AttachmentLine_ID)); //GetBinaryData();
-                    if (d != null && d!=DBNull.Value)
+                    string fileLocation = GetFileLocation();
+                    string folder = DateTime.Now.Ticks.ToString();
+                    string filePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath);
+                    Directory.CreateDirectory(Path.Combine(filePath, "TempDownload", folder));
+                    string filename = GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AD_AttachmentLine_ID;
+                    string zipFileName = "zip" + DateTime.Now.Ticks.ToString();
+                    if (fileLocation == X_AD_Attachment.FILELOCATION_Database)
                     {
-                        data = (byte[])d;
-                        System.IO.File.WriteAllBytes(Path.Combine(filePath, "TempDownload", folder, filename), data);
+                        byte[] data = null;
+                        object d = (DB.ExecuteScalar("SELECT BinaryData FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + AD_AttachmentLine_ID)); //GetBinaryData();
+                        if (d != null && d != DBNull.Value)
+                        {
+                            data = (byte[])d;
+                            System.IO.File.WriteAllBytes(Path.Combine(filePath, "TempDownload", folder, filename), data);
+                            SecureEngine.DecryptFile(Path.Combine(filePath, "TempDownload", folder, filename), Password, Path.Combine(filePath, "TempDownload", folder, zipFileName));
+                            //Delete fle from temp
+                            System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
+                        }
+                    }
+                    else if (fileLocation == X_AD_Attachment.FILELOCATION_FTPLocation)
+                    {
+
+                        DownloadFtpFileWithoutRAM(filename, Path.Combine(filePath, "TempDownload", folder));
                         SecureEngine.DecryptFile(Path.Combine(filePath, "TempDownload", folder, filename), Password, Path.Combine(filePath, "TempDownload", folder, zipFileName));
                         //Delete fle from temp
                         System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
+
                     }
+                    else if (fileLocation == X_AD_Attachment.FILELOCATION_ServerFileSystem)
+                    {
+                        //Copy to temp
+                        System.IO.File.Copy(Path.Combine(filePath, "Attachments", filename), Path.Combine(filePath, "TempDownload", folder, filename));
+                        //Decrypt File
+
+                        SecureEngine.DecryptFile(Path.Combine(filePath, "TempDownload", folder, filename), Password, Path.Combine(filePath, "TempDownload", folder, zipFileName));
+                        //Delete fle from temp
+                        System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
+
+                    }
+                    else if (fileLocation == X_AD_Attachment.FILELOCATION_WebService)
+                    {
+                        // Get file from web service and save it in temp folder
+
+                        //(filename, Path.Combine(filePath, "TempDownload", folder));
+
+                        // Create client info object
+                        MClientInfo cInfo = null;
+                        if (AD_Client_ID > 0)
+                        {
+                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        }
+                        else
+                        {
+                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        }
+
+                        string documentURI = GetDocumentURI(AD_Attachment_ID);
+
+                        if (!string.IsNullOrEmpty(documentURI))
+                        {
+                            // Get file information
+                            ExtWebServiceData ewsData = new ExtWebServiceData();
+                            ewsData.Token = cInfo.GetAD_WebServiceToken();
+                            ewsData.DocumentData = new ExtDocumentData()
+                            {
+                                DocumentName = Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]),
+                                URI = documentURI
+                            };
+
+                            // Call external web service method to get file based on URI
+                            ExternalWebMethod ewm = new ExternalWebMethod();
+                            string resFile = ewm.CallWebService(cInfo.GetAD_WebServiceURL() + "/GetDocument", ewsData);
+
+                            byte[] byteData = Convert.FromBase64String(resFile);
+
+                            string savedFile = Path.Combine(filePath, "TempDownload", folder, Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]));
+
+                            using (FileStream fs = new FileStream(savedFile, FileMode.Create, FileAccess.Write))
+                            {
+                                fs.Write(byteData, 0, byteData.Length);
+                            }
+                            return folder;
+                        }
+                        return "";
+                    }
+
+                    //unzipfile
+                    ICSharpCode.SharpZipLib.Zip.FastZip z = new ICSharpCode.SharpZipLib.Zip.FastZip();
+                    ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage = 720;
+
+                    z.ExtractZip(Path.Combine(filePath, "TempDownload", folder, zipFileName), Path.Combine(filePath, "TempDownload", folder), null);
+                    System.IO.File.Copy(Path.Combine(filePath, "TempDownload", folder) + "\\" + AD_AttachmentLine_ID + ds.Tables[0].Rows[0][1], Path.Combine(filePath, "TempDownload", folder) + "\\" + ds.Tables[0].Rows[0][0]);
+                    System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder) + "\\" + AD_AttachmentLine_ID + ds.Tables[0].Rows[0][1]);
+                    System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, zipFileName));
+
+                    return folder;
                 }
-                else if (fileLocation == X_AD_Attachment.FILELOCATION_FTPLocation)
+                else
                 {
-
-                    DownloadFtpFileWithoutRAM(filename, Path.Combine(filePath, "TempDownload", folder));
-                    SecureEngine.DecryptFile(Path.Combine(filePath, "TempDownload", folder, filename), Password, Path.Combine(filePath, "TempDownload", folder, zipFileName));
-                    //Delete fle from temp
-                    System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
-
+                    return "";
                 }
-                else if (fileLocation == X_AD_Attachment.FILELOCATION_ServerFileSystem)
-                {
-                    //Copy to temp
-                    System.IO.File.Copy(Path.Combine(filePath, "Attachments", filename), Path.Combine(filePath, "TempDownload", folder, filename));
-                    //Decrypt File
-
-                    SecureEngine.DecryptFile(Path.Combine(filePath, "TempDownload", folder, filename), Password, Path.Combine(filePath, "TempDownload", folder, zipFileName));
-                    //Delete fle from temp
-                    System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
-
-
-                }
-                DataSet ds = DB.ExecuteDataset("SELECT FileName,FileType FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + AD_AttachmentLine_ID);
-
-                //unzipfile
-                ICSharpCode.SharpZipLib.Zip.FastZip z = new ICSharpCode.SharpZipLib.Zip.FastZip();
-                ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage = 720;
-
-                z.ExtractZip(Path.Combine(filePath, "TempDownload", folder, zipFileName), Path.Combine(filePath, "TempDownload", folder), null);
-                System.IO.File.Copy(Path.Combine(filePath, "TempDownload", folder) + "\\" + AD_AttachmentLine_ID + ds.Tables[0].Rows[0][1], Path.Combine(filePath, "TempDownload", folder) + "\\" + ds.Tables[0].Rows[0][0]);
-                System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder) + "\\" + AD_AttachmentLine_ID + ds.Tables[0].Rows[0][1]);
-                System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, zipFileName));
-
-
-                return folder;
             }
             catch (Exception ex)
             {
@@ -1585,6 +1824,24 @@ namespace VAdvantage.Model
             }
         }
 
+        public string GetDocumentURI(int AD_Attachment_ID)
+        {
+            DataSet attRefDs = DB.ExecuteDataset(@"
+SELECT 
+--ar.AD_AttachmentLine_ID, ar.AD_AttachmentReference_ID, 
+ar.AD_AttachmentRef AS DocumentURI
+FROM AD_Attachment att 
+INNER JOIN AD_AttachmentLine al ON att.AD_Attachment_ID = al.AD_Attachment_ID
+INNER JOIN AD_AttachmentReference ar ON al.AD_AttachmentLine_ID = ar.AD_AttachmentLine_ID
+WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_Attachment_ID = " + AD_Attachment_ID
+);
+
+            if (attRefDs != null && attRefDs.Tables.Count > 0 && attRefDs.Tables[0].Rows.Count > 0)
+            {
+                return Util.GetValueOfString(attRefDs.Tables[0].Rows[0]["DocumentURI"]);
+            }
+            return "";
+        }
     }
 
     public class AttachmentLineInfo

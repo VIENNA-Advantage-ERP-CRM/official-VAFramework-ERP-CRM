@@ -1,7 +1,35 @@
 ﻿/*  */
+/* Large screens ----------- */
+@media only screen and (min-width : 1824px) {
+    .vis-apanel-table-td3 {
+        width: 500px;
+        padding-left: 1px !important;
+        padding-right: 1px !important;
+    }
+}
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1224px) {
+    .vis-apanel-table-td3 {
+        width: 300px;
+        padding-left: 1px !important;
+        padding-right: 1px !important;
+    }
+}
+@media only screen and (max-device-width : 1024px) {
+    .vis-apanel-table-td3 {
+        width: 0px;
+        padding-left: 1px !important;
+        padding-right: 1px !important;
+    }
+}
 @media (max-width: 999px){
     .ui-dialog{
         max-width: 80% !important;
+    }
+}
+@media (max-height: 767px) {
+    .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
+        height: 80%;
     }
 }
 @media (max-width:600px) {
@@ -203,4 +231,14 @@
     vertical-align: middle;
     position: relative;
 }*/
+
+@media (hover: none) {
+    .vis-fp-static-ctrlwrp, .vis-fp-datawrap {
+        overflow: auto;
+    }
+
+    .vis-fp-viwall {
+    visibility:visible;
+    }
+}
     /* END */

@@ -278,7 +278,7 @@ namespace VAdvantage.Controller
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
                     /******************************/
-                    else if (columnName.Equals("Isheaderpanelitem",StringComparison.OrdinalIgnoreCase))
+                    else if (columnName.Equals("Isheaderpanelitem", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.IsHeaderPanelitem = "Y".Equals(dr[i].ToString());
                     }
@@ -325,6 +325,10 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("ImageUrl", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.ImageName = Utility.Util.GetValueOfString(dr[i]);
+                        if (vo.ImageName != "" && vo.ImageName.Contains("/"))
+                        {
+                            vo.ImageName = vo.ImageName.Substring(vo.ImageName.LastIndexOf("/") + 1);
+                        }
                     }
                     // new column added for maintain versions
                     else if (columnName.Equals("ISMAINTAINVERSIONS", StringComparison.OrdinalIgnoreCase))
@@ -342,6 +346,14 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("IsLineBreak", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.LineBreak = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("FieldGroupDefault", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.FieldGroupDefault = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("ShowFilterOption", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.ShowFilterOption = "Y".Equals(dr[i].ToString());
                     }
                 }
                 if (vo.Header == null)
@@ -833,8 +845,8 @@ namespace VAdvantage.Controller
             clone.CellSpace = CellSpace;
             clone.FieldBreadth = FieldBreadth;
             clone.LineBreak = LineBreak;
-
-
+            clone.FieldGroupDefault = FieldGroupDefault;
+            clone.ShowFilterOption = ShowFilterOption;
             return clone;
         }
 

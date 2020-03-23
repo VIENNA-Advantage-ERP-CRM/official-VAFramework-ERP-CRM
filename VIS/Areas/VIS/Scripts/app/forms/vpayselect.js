@@ -80,8 +80,9 @@
         //******************
         function customDesign() {
             var height = ($(window).height())*(94/100);
-            $divContainer = $("<div class='vis-mainContainer' style='height:"+height +"px !important'>");
+            $divContainer = $("<div class='vis-mainContainer'>");
             var designPSelectInfo = " <div class='vis-pSelectInfo'>"  // div pSelectInfo starts here
+                             +"<div class='vis-pSelectInner'>"
                              + " <div class='vis-paymentselect-field'>"  // div bankAccount starts here
                              + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"
                              + " <select id='VIS_cmbBankAccount_" + $self.windowNo + "'></select>"
@@ -107,22 +108,24 @@
                              + " <input type='number' id='VIS_txtPaymentAmount_" + $self.windowNo + "' disabled MaxLength='50'></input>"
                              + " </div>" // div paymentAmount ends here 
                              + " <div class='vis-paymentselect-field'>"  // div onlyDueInvoice starts here
-                             + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "' style='height: 15px;width: auto;'></input>"
+                             + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "' style='height: auto;width: auto; float: none;'></input>"
                              + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("OnlyDue") + " </label>"
-                             + " <div class='vis-paymentselect-field'>"  // div onlyDueInvoice starts here
+                             + " </div>"  // div onlyDueInvoice starts here
                              + " <div class='vis-paymentselect-field'>"  // div lblSHowDetail starts here                            
                              + " <label for='VIS_lblShowDetail_" + $self.windowNo + "'></label>"
+                             + " </div>" // div lblSHowDetail ends here 
+                             + " </div>" // div vis-pSelectInner ends here 
                              + " <div class='vis-paymentselect-field'>"  // div lblSHowDetail starts here
-                             + " <button class='VIS_Pref_btn-2' disabled id='VIS_btnRefresh_" + $self.windowNo + "' style='margin-top: 5px;margin-bottom: -10px;'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png'></button>"
-                             + " </div>" // div onlyDueInvoice ends here 
+                             + " <button class='VIS_Pref_btn-2' disabled id='VIS_btnRefresh_" + $self.windowNo + "' style='margin-top: 0px;'><i class='vis vis-refresh'></i></button>"
+                             + " </div>" // btn ends here 
                              + " </div>" // div pSelectInfo ends here 
 
             $divGridPSelect = $("<div class='vis-pSelectIionGrid'>");
 
             var designPSelectProcess = " <div class='vis-pSelectProcess'>"  // div pSelectProcess starts here
                                      + " <div class='vis-paymentselect-field'>"  // div lblMsg starts here    
-                                      + " <input id='VIS_btnCancel_" + $self.windowNo + "' style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;height:40px;margin-left:10px;' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
-                                     + " <input id='VIS_btnOK_" + $self.windowNo+"' disabled style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;margin-left:10px;height:40px;' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"                                    
+                                      + " <input id='VIS_btnCancel_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
+                                     + " <input id='VIS_btnOK_" + $self.windowNo+"' disabled class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"                                    
                                      + " </div>" // div pSelectButtons ends here 
                                      + " </div>" // div pSelectProcess ends here 
             $divContainer.append($(designPSelectInfo)).append($divGridPSelect).append($(designPSelectProcess));

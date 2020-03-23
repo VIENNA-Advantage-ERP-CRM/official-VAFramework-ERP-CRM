@@ -11,7 +11,7 @@
 
 
         var inforoot = $("<div class='vis-forms-container'>");
-        var subroot = $("<div>");
+        var subroot = $("<div class='vis-info-subroot'>");
         var isExpanded = true;
         var sSContainer, ssHeader, btnExpander, searchTab, searchSec, datasec, btnsec;   /* decalare Variable */
         var bsyDiv, divbtnRight, btnCancel, btnOK, btnRequery;
@@ -32,11 +32,11 @@
             inforoot.css("width", "100%");
             inforoot.css("height", "100%");
             inforoot.css("position", "relative");
-            subroot.css("width", "98%");
-            subroot.css("height", "97%");
-            subroot.css("position", "absolute");
+            //subroot.css("width", "98%");
+            //subroot.css("height", "97%");
+            //subroot.css("position", "absolute");
             // subroot.css("margin-left", "-10px");
-            subroot.css('overflow', 'auto');
+            //subroot.css('overflow', 'auto');
 
 
 
@@ -49,20 +49,20 @@
             // sSContainer.append(ssHeader);
 
             //searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;overflow:auto;'>");
-            if (VIS.Application.isRTL) {
-                searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;display: inline-block;width:23%;height:87.8%;overflow:auto;margin-left:10px;padding-right: 10px;'>");
-                searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
+            //if (VIS.Application.isRTL) {
+            //    searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;display: inline-block;width:23%;height:87.8%;overflow:auto;margin-left:10px;padding-right: 10px;'>");
+            //    searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
+            //    searchTab.append(searchSec);
+            //    datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
+            //    btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 0px;'>");
+            //}
+            //else {
+                searchTab = $("<div class='vis-info-l-s-wrap'>");
+                searchSec = $("<div>");
                 searchTab.append(searchSec);
-                datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
-                btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 0px;'>");
-            }
-            else {
-                searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;display: inline-block; float: left;width:23%;height:87.8%;overflow:auto;'>");
-                searchSec = $("<div style='background-color: rgb(241, 241, 241);'>");
-                searchTab.append(searchSec);
-                datasec = $("<div style='display: inline-block; float: left;width:75%;height:87.8%;margin-left:10px;'>");
-                btnsec = $("<div style='display: inline-block; float: left;width:99%;height:auto;margin-top: 2px;'>");
-            }
+                datasec = $("<div class='vis-info-datasec'>");
+                btnsec = $("<div class='vis-info-btnsec'>");
+            //}
             //if (true) {//IPAD
             //    ssHeader.css('display', 'none');
             //    searchTab.css('height', '100%');
@@ -92,38 +92,38 @@
             if (Oktxt.indexOf('&') > -1) {
                 Oktxt = Oktxt.replace('&', '');
             }
-            divbtnRight = $("<div style='float:right;'>");
-            if (VIS.Application.isRTL) {
-                btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(Oktxt);
-            }
-            else {
-                btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(Oktxt);
-            }
+            divbtnRight = $("<div class='vis-info-btnswrap'>");
+            //if (VIS.Application.isRTL) {
+            //    btnCancel = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;margin-right:5px'>").append(canceltxt);
+            //    btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(Oktxt);
+            //}
+            //else {
+                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+            //}
 
-            var divbtnLeft = $("<div style='float:left;'>");
-            btnRequery = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png'>"))//.append(refreshtxt);
+            var divbtnLeft = $("<div class='vis-info-btnleft'>");
+            btnRequery = $("<button class='VIS_Pref_btn-2' style='margin-top: 10px;'>").append($("<i class='vis vis-refresh'></i>"))//.append(refreshtxt);
 
             //PagingCtrls
-            divPaging = $('<div>');
+            divPaging = $('<div class="vis-info-pagingwrp">');
             createPageSettings();
             divPaging.append(ulPaging);
 
-            if (VIS.Application.isRTL) {
-                divbtnLeft.append(btnCancel);
-                divbtnLeft.append(btnOK);
-                divbtnRight.append(btnRequery);
-            }
-            else {
+            //if (VIS.Application.isRTL) {
+            //    divbtnLeft.append(btnCancel);
+            //    divbtnLeft.append(btnOK);
+            //    divbtnRight.append(btnRequery);
+            //}
+            //else {
                 divbtnRight.append(btnCancel);
                 divbtnRight.append(btnOK);
                 divbtnLeft.append(btnRequery);
-            }
+            //}
 
-            btnsec.append(divbtnRight);
-            btnsec.append(divPaging);
             btnsec.append(divbtnLeft);
+            btnsec.append(divPaging);
+            btnsec.append(divbtnRight);
 
             //Busy Indicator
             bsyDiv = $("<div class='vis-apanel-busy'>");
@@ -315,8 +315,8 @@
                       || schema[item].AD_Reference_ID == VIS.DisplayType.Label)) {
                         //Set label
                         label = new VIS.Controls.VLabel(schema[item].Name, schema[item].ColumnName);
-                        var lblctrl = label.getControl().css("margin-bottom", "0px").css("margin-top", "5px");
-                        lblctrl.css("font-weight", "inherit");
+                        var lblctrl = label.getControl();
+                        //lblctrl.css("font-weight", "inherit");
                         td.append(lblctrl);
 
                     }
@@ -479,81 +479,80 @@
                     tr.append(tdctrl);
                     var count = ctrl.getBtnCount();
                     if (count == 2) {
-                        var div = $("<div>");
+                        var div = $("<div class='d-flex vis-info-ctrlwrap'>");
                         if (appendTopMargin) {
-                            div.css('margin-top', '5px');
+                            //div.css('margin-top', '5px');
                         }
 
-                        if (VIS.Application.isRTL) {
-                            div.css("width", "97%");
+                        //if (VIS.Application.isRTL) {
+                        //    div.css("width", "97%");
 
 
-                            ctrlBtn = ctrl.getBtn(1);
-                            if (ctrlBtn != null) {
-                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
-                            }
+                        //    ctrlBtn = ctrl.getBtn(1);
+                        //    if (ctrlBtn != null) {
+                        //        div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
+                        //    }
+                        //    var ctrlBtn = ctrl.getBtn(0);
+                        //    if (ctrlBtn != null) {
+                        //        div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
+                        //    }
+                        //    div.append(ctrl.getControl().css("width", "72%").css("float", "left").css('height', '30px'));
+
+                        //    count = -1;
+                        //    ctrl = null;
+                        //}
+                        //else {
+                            //div.css("width", "97%");
+                            div.append(ctrl.getControl());
                             var ctrlBtn = ctrl.getBtn(0);
                             if (ctrlBtn != null) {
-                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
-                            }
-                            div.append(ctrl.getControl().css("width", "72%").css("float", "left").css('height', '30px'));
-
-                            count = -1;
-                            ctrl = null;
-                        }
-                        else {
-                            div.css("width", "97%");
-                            div.append(ctrl.getControl().css("width", "72%").css("float", "left").css('height', '30px'));
-                            var ctrlBtn = ctrl.getBtn(0);
-                            if (ctrlBtn != null) {
-                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px'));
+                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
                             }
                             ctrlBtn = ctrl.getBtn(1);
                             if (ctrlBtn != null) {
-                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px'));
+                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
                             }
                             count = -1;
                             ctrl = null;
-                        }
+                        //}
                         tdctrl.append(div);
                     }
                     else if (count == 1) {
-                        var div = $("<div>");
+                        var div = $("<div class='d-flex vis-info-ctrlwrap'>");
                         if (appendTopMargin) {
-                            div.css('margin-top', '5px');
+                            //div.css('margin-top', '5px');
                         }
-                        if (VIS.Application.isRTL) {
-                            div.css("width", "97%");
+                        //if (VIS.Application.isRTL) {
+                        //    div.css("width", "97%");
+                        //    var ctrlBtn = ctrl.getBtn(0);
+                        //    if (ctrlBtn != null) {
+                        //        div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%")
+                        //            .css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
+                        //    }
+                        //    div.append(ctrl.getControl().css("width", "86%").css("float", "left").css('height', '30px'));
+                        //    count = -1;
+                        //    ctrl = null;
+                        //}
+                        //else {
+                           // div.css("width", "97%");
+                            div.append(ctrl.getControl());
                             var ctrlBtn = ctrl.getBtn(0);
                             if (ctrlBtn != null) {
-                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%")
-                                    .css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
-                            }
-                            div.append(ctrl.getControl().css("width", "86%").css("float", "left").css('height', '30px'));
-                            count = -1;
-                            ctrl = null;
-                        }
-                        else {
-                            div.css("width", "97%");
-                            div.append(ctrl.getControl().css("width", "86%").css("float", "left").css('height', '30px'));
-                            var ctrlBtn = ctrl.getBtn(0);
-                            if (ctrlBtn != null) {
-                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%")
-                                    .css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px'));
+                                div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
                             }
                             count = -1;
                             ctrl = null;
-                        }
+                        //}
                         tdctrl.append(div);
                     }
                     else {
                         if (appendTopMargin) {
-                            ctrl.getControl().css('margin-top', '5px');
+                            ctrl.getControl();
                         }
                         if (schema[item].AD_Reference_ID == VIS.DisplayType.YesNo) {
-                            ctrl.getControl().css('margin-top', '12px').css('height', '17px');
+                            ctrl.getControl();
                         }
-                        tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit").css('height', '30px'));
+                        tdctrl.append(ctrl.getControl());
                     }
 
                     if (schema[item].IsRange) {
@@ -561,7 +560,7 @@
                         tr = $("<tr>");
                         tableSArea.append(tr);
 
-                        tr.append((new VIS.Controls.VLabel(VIS.Msg.getMsg("To"), schema[item].ColumnName)).getControl().css("margin-bottom", "0px").css("margin-top", "5px").css("font-weight", "inherit"));
+                        tr.append((new VIS.Controls.VLabel(VIS.Msg.getMsg("To"), schema[item].ColumnName)).getControl());
                         tr = $("<tr>");
                         tableSArea.append(tr);
 
@@ -570,55 +569,55 @@
                         var tdctrlTo = $("<td>");
                         var count = ctrl.getBtnCount();
                         if (count == 2) {
-                            var div = $("<div>");
-                            div.css("width", "97%");
+                            var div = $("<div class='d-flex vis-info-ctrlwrap'>");
+                            //div.css("width", "97%");
                             if (appendTopMargin) {
-                                ctrl.getControl().css('margin-top', '5px');
+                                ctrl.getControl();
                             }
-                            if (VIS.Application.isRTL) {
-                                div.css("width", "97%");
+                            //if (VIS.Application.isRTL) {
+                            //    div.css("width", "97%");
 
 
-                                ctrlBtn = ctrl.getBtn(1);
-                                if (ctrlBtn != null) {
-                                    div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
-                                }
+                            //    ctrlBtn = ctrl.getBtn(1);
+                            //    if (ctrlBtn != null) {
+                            //        div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
+                            //    }
+                            //    var ctrlBtn = ctrl.getBtn(0);
+                            //    if (ctrlBtn != null) {
+                            //        div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
+                            //    }
+                            //    div.append(ctrl.getControl().css("width", "72%").css("float", "left").css('height', '30px'));
+
+                            //    count = -1;
+                            //    ctrl = null;
+                            //}
+                            //else {
+                            //    div.css("width", "97%");
+                                div.append(ctrl.getControl());
                                 var ctrlBtn = ctrl.getBtn(0);
                                 if (ctrlBtn != null) {
-                                    div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px').css('float', 'left'));
-                                }
-                                div.append(ctrl.getControl().css("width", "72%").css("float", "left").css('height', '30px'));
-
-                                count = -1;
-                                ctrl = null;
-                            }
-                            else {
-                                div.css("width", "97%");
-                                div.append(ctrl.getControl().css("width", "72%").css("float", "left").css('height', '30px'));
-                                var ctrlBtn = ctrl.getBtn(0);
-                                if (ctrlBtn != null) {
-                                    div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px'));
+                                    div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
                                 }
                                 ctrlBtn = ctrl.getBtn(1);
                                 if (ctrlBtn != null) {
-                                    div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2").css("width", "14%").css('padding', '0px').css('border-color', '#BBBBBB').css('height', '30px'));
+                                    div.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
                                 }
                                 count = -1;
                                 ctrl = null;
-                            }
+                            //}
                             tdctrlTo.append(div);
                         }
                         else {
                             if (appendTopMargin) {
-                                ctrl.getControl().css('margin-top', '5px');
+                                ctrl.getControl();
                             }
                             if (schema[item].AD_Reference_ID == VIS.DisplayType.YesNo) {
-                                ctrl.getControl().css('margin-top', '12px').css('height', '17px');
+                                ctrl.getControl();
                             }
                             else {
-                                ctrl.getControl().css('height', '30px');
+                                ctrl.getControl();
                             }
-                            tdctrlTo.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+                            tdctrlTo.append(ctrl.getControl());
                         }
 
 
@@ -702,7 +701,7 @@
                 close: onClosing
             });
 
-            displayData(false, cmbPage.val());
+            displayData(true, cmbPage.val());
         };
 
         var getControl = function (displayType, columnName, header, refvalueID, lookup) {
@@ -1356,19 +1355,19 @@
         };
 
         function createPageSettings() {
-            ulPaging = $('<ul style="float:right;margin-top:10px" class="vis-statusbar-ul">');
+            ulPaging = $('<ul class="vis-statusbar-ul">');
 
-            liFirstPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="' + VIS.Msg.getMsg("FirstPage") + '" style="opacity: 0.6;"></div></li>');
+            liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="' + VIS.Msg.getMsg("FirstPage") + '" style="opacity: 0.6;"></i></div></li>');
 
-            liPrevPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="' + VIS.Msg.getMsg("PageUp") + '" style="opacity: 0.6;"></div></li>');
+            liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="' + VIS.Msg.getMsg("PageUp") + '" style="opacity: 0.6;"></i></div></li>');
 
             cmbPage = $("<select>");
 
             liCurrPage = $('<li>').append(cmbPage);
 
-            liNextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" "' + VIS.Msg.getMsg("PageDown") + '" style="opacity: 0.6;"></div></li>');
+            liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" title="' + VIS.Msg.getMsg("PageDown") + '" style="opacity: 0.6;"></i></div></li>');
 
-            liLastPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="' + VIS.Msg.getMsg("LastPage") + '" style="opacity: 0.6;"></div></li>');
+            liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" title="' + VIS.Msg.getMsg("LastPage") + '" style="opacity: 0.6;"></i></div></li>');
 
 
             ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);

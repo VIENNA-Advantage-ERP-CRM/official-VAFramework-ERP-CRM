@@ -146,13 +146,15 @@ ul.vis-userLinks-ListMenu li, ul.vis-userLinks-ListMenu li  *{
     }
 
 .vis-userAvatar-Container {
-    background: rgba(var(--v-c-on-secondary), .07);
+    background: rgba(var(--v-c-secondary), 1);
     margin: 20px auto 8px;
     padding: 10px;
     width: 164px;
     line-height: 111px;
-    /*height:120px;*/
+    /* height: 120px; */
     text-align: center !important;
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 3rem;
 }
 
     .vis-userAvatar-Container .vis-userAvatar-Large {
@@ -929,9 +931,8 @@ html[dir="rtl"] .vis-feedContainer {
     display: flex;
     align-items: center;
 }
-
-    .vis-feedTitleBar h3 {
-        font-size: 14px;
+.vis-feedTitleBar h3 {
+    font-size: 14px;
     color: rgba(var(--v-c-primary), 1);
     /* margin: 15px 0px 10px 0px; */
     text-overflow: ellipsis;
@@ -939,9 +940,9 @@ html[dir="rtl"] .vis-feedContainer {
     overflow: hidden;
     flex: 1;
     margin: 0;
-    min-height: 30px;
-    display: flex;
-    align-items: center;
+    /* min-height: 30px; */
+    /* display: flex; */
+    /* align-items: center; */
 }
 
 
@@ -1105,21 +1106,20 @@ html[dir="rtl"] .vis-viewMoreComments {
         outline: none;
     }
 
-
-    .vis-feedMessage span {
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: rgba(var(--v-c-on-secondary), .07);
-        outline: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 1rem !important;
-        color: rgba(var(--v-c-on-secondary), 1);
-        cursor: pointer;
-    }
+.vis-feedMessage span, .vis-rad-navBtn, .vis-rad-actionBtn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: rgba(var(--v-c-on-secondary), .07);
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem !important;
+    color: rgba(var(--v-c-on-secondary), 1);
+    cursor: pointer;
+}
 
 
 /*Feed icons */
@@ -1483,8 +1483,11 @@ html[dir="rtl"] ul.vis-userLinks-ListMenu li {
 }
 
 ul.vis-userLinks-ListMenu li a {
-    display: block;
+    display: flex;
     text-align: center;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(var(--v-c-primary), 1);
 }
 
 ul.vis-userLinks-ListMenu li:last-child {

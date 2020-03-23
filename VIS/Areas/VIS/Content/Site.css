@@ -16,10 +16,10 @@
 
 textarea, select, button
 {
-    -webkit-appearance: none;
+    /*-webkit-appearance: none;
     border-radius: 0;
     -webkit-border-radius: 0;
-    -moz-appearance: none;
+    -moz-appearance: none;*/
 }
 
 *
@@ -33,8 +33,12 @@ select {
     background-color: white;
     padding-right: 25px;
     padding-left: 10px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    color: rgba(var(--v-c-on-secondary), 1)
 }
-
+button:focus {
+    outline: none;
+}
 /*html[dir="rtl"] select
 {
     background-position: 3%;
@@ -62,16 +66,6 @@ select {
     float:right;
 }
 
-html[dir="rtl"] .vis-pull-left
-{
-    float:right;
-}
-
-html[dir="rtl"] .vis-pull-right
-{
-    float:left;
-}
-
 /* main Page */
 
 
@@ -83,8 +77,6 @@ html[dir="rtl"] .vis-pull-right
     left: 0px;
     right: 0px;
 }
-
-
 .vis-scrollerVertical
 {
     /*position: absolute;
@@ -306,7 +298,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home
         border-top-right-radius: 5px;
     }
 .vis-menuTitle i {
-    color: #fff;
+    color: rgba(var(--v-c-on-primary), 1);
 }
 
 .vis-menuTitle a {
@@ -1047,36 +1039,57 @@ html[dir="rtl"] .vis-taskbar-right
     background-color: lightgray;
     opacity: .5;
 }
-
-.vis-wakeup
-{
+.vis-wakeup-content {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -150px;
-    margin-top: -100px;
-    border: solid #1AA0ED 10px;
-    height: 200px;
-    width: 300px;
-    opacity: .6;
-    border-radius: 7px;
-    z-index: 99998;
-}
-
-.vis-wakeup-content
-{
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -140px;
-    margin-top: -90px;
-    height: 180px;
-    width: 280px;
+    left: auto;
+    top: 22%;
+    width: 250px;
     opacity: 1;
     z-index: 99999;
     background-color: white;
+    /* transform: translateY(-50%); */
+}
+.vis-wakeup-outerwrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.vis-wakeup-headsec {
+    width: 100%;
+    height: 130px;
+    background: rgba(var(--v-c-primary), 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../images/plug-img.png);
+    background-position: center;
+}
+.vis-wakeup-datawrp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    font-size: .8rem;
+}
+.vis-wakeup-datawrp strong {
+    padding-bottom: 15px;
+    font-weight: 600;
+}
+.vis-wakeup-text {
+    padding-bottom: 20px;
 }
 
+.vis-wakeup-datawrp button {
+    background: rgba(var(--v-c-primary), 1);
+    border: none;
+    color: rgba(var(--v-c-on-primary), 1);
+    border-radius: .25rem;
+    padding: 6px 22px;
+    font-size: .875rem;
+}
 
 .vis-dialog {
     z-index: 99999;
@@ -1149,28 +1162,25 @@ html[dir="rtl"] .vis-auth-dialog
 .vis-auth-dialog input[disabled] {
     text-decoration: line-through;
 }
-
-
-
 .vis-filter-dialog {
     top: 132px;
     left: 200px;
-    padding: 15px;
+    padding: 10px;
     display: none;
     color: rgba(var(--v-c-on-secondary), 1);
     box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
     border: 1px solid rgba(var(--v-c-primary), .15);
+    min-width: 150px;
 }
 .vis-filter-dialog label {
     font-weight: normal;
     padding-left: 5px;
 }
-
 .vis-filter-dialog::before {
     border: 10px solid transparent;
     border-bottom-color: rgba(var(--v-c-secondary), 1);
     bottom: 100%;
-    right: 25%;
+    right: 20px;
 }
 
 html[dir="rtl"] .vis-filter-dialog

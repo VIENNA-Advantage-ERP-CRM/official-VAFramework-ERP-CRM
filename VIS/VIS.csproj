@@ -558,6 +558,7 @@
     <Content Include="Areas\VIS\Images\orderedList1.png" />
     <Content Include="Areas\VIS\Images\orderedList2.png" />
     <Content Include="Areas\VIS\Images\pdf.png" />
+    <Content Include="Areas\VIS\Images\plug-img.png" />
     <Content Include="Areas\VIS\Images\ppt-ico.png" />
     <Content Include="Areas\VIS\Images\ppt.png" />
     <Content Include="Areas\VIS\Images\Preference16.png" />
@@ -717,11 +718,15 @@
     <Content Include="Areas\VIS\Scripts\app\viewmanager.js" />
     <Content Include="Areas\VIS\Scripts\app\windowformcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\windowframe.js" />
+    <Content Include="Areas\VIS\Scripts\F20\acontentpane.js" />
+    <Content Include="Areas\VIS\Scripts\F20\afiltercontrols.js" />
+    <Content Include="Areas\VIS\Scripts\F20\afilterpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\aheaderpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\apanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\atabbedpane.js" />
     <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\aviewcontroller.js" />
+    <Content Include="Areas\VIS\Scripts\F20\atabbedpanemgr.js" />
     <Content Include="Areas\VIS\Scripts\F20\thememgr.js" />
     <Content Include="Areas\VIS\Scripts\F20\vcardview.js" />
     <Content Include="Areas\VIS\Scripts\F20\veditview.js" />
@@ -739,7 +744,7 @@
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
     <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
-    <Content Include="Areas\VIS\Scripts\tabpanels\verinfo.js" />
+    <Content Include="Areas\VIS\Scripts\tabpanels\bipanel.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
     <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
     <Content Include="Areas\VIS\Scripts\VIS1_0.min.js" />
@@ -835,6 +840,7 @@
     <Compile Include="Areas\VIS\Controllers\ResourceController.cs" />
     <Compile Include="Areas\VIS\Controllers\SmsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
+    <Compile Include="Areas\VIS\Controllers\TabPanel\BiPanelController.cs" />
     <Compile Include="Areas\VIS\Controllers\TreeMaintenanceController.cs" />
     <Compile Include="Areas\VIS\Controllers\UserPreferenceController.cs" />
     <Compile Include="Areas\VIS\Controllers\ValuePreferenceController.cs" />
@@ -942,6 +948,7 @@
     <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
     <Compile Include="Areas\VIS\Models\SmsModel.cs" />
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
+    <Compile Include="Areas\VIS\Models\TabPanels\BiPanelModel.cs" />
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
     <Compile Include="Areas\VIS\Models\ValuePreferenceModel.cs" />
@@ -1027,6 +1034,7 @@
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Areas\VIS\Views\BiPanel\GetUserBILogin.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

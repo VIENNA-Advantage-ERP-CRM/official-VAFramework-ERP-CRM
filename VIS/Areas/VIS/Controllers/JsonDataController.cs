@@ -87,8 +87,15 @@ namespace VIS.Controllers
                 GridWindowVO vo = AEnv.GetMWindowVO(ctx, windowNo, AD_Window_ID, 0);
                 if (vo != null)
                 {
-                    wVo = new GridWindow(vo);
-                    retJSON = JsonConvert.SerializeObject(wVo, Formatting.None);
+                    try
+                    {
+                        wVo = new GridWindow(vo);
+                        retJSON = JsonConvert.SerializeObject(wVo, Formatting.None);
+                    }
+                    catch(Exception ex)
+                    {
+                        retError = ex.Message;
+                    }
                 }
                 else
                 {
@@ -122,8 +129,10 @@ namespace VIS.Controllers
                 {
                     Ctx ctx = Session["ctx"] as Ctx;
                     sqlIn.sql = SecureEngineBridge.DecryptByClientKey(sqlIn.sql, ctx.GetSecureKey());
+                    sqlIn.sqlDirect = SecureEngineBridge.DecryptByClientKey(sqlIn.sqlDirect, ctx.GetSecureKey());
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
+                    sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
                     data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID);
                 }
             }
@@ -955,7 +964,7 @@ namespace VIS.Controllers
             IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
             if (newDic != null && newDic.Count() > 0)
             {
-                for (int i = 0; i < newDic.Count(); )
+                for (int i = 0; i < newDic.Count();)
                 {
                     KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
                     toastrMessage.Remove(keyVal.Key);
@@ -977,10 +986,81 @@ namespace VIS.Controllers
         /// <returns></returns>
         public ActionResult GetZoomParentRec(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
         {
-            
+
             WindowHelper obj = new WindowHelper();
             return Json(JsonConvert.SerializeObject(obj.GetZoomParentRecord(SelectColumn, SelectTable, WhereColumn, WhereValue)), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetRecordForFilter(string keyCol, string displayCol, string validationCode, string tableName,
+            string AD_Referencevalue_ID, string pTableName, string pColumnName, string whereClause)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            string sql = null;
+            if (keyCol == "")
+            {
+                sql = "SELECT " + pColumnName + ","+ pColumnName + " as Name, count(" + pColumnName + ") FROM " + pTableName;
+                sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
+                if (!string.IsNullOrEmpty(validationCode))
+                    sql += " AND " + validationCode;
+                if (!string.IsNullOrEmpty(whereClause))
+                    sql += " AND " + whereClause;
+
+                sql += " AND " + pColumnName + " IS NOT NULL ";
+
+                sql += " GROUP BY " + pColumnName +
+                         " ORDER BY COUNT(" + pColumnName + ") DESC) ";
+            }
+            else
+            {
+                if (tableName.Equals("AD_Ref_List"))
+                {
+                    //sql = "SELECT " + keyCol + ", " + displayCol + " || '('|| count(" + keyCol + ") || ')' FROM " + tableName + " WHERE IsActive='Y'";
+                    sql = "SELECT " + pColumnName + ", (Select Name from AD_REf_List where Value= " + pColumnName + " AND AD_Reference_ID=" + AD_Referencevalue_ID + ")  as name ,count(" + pColumnName + ")"
+                        + " FROM " + pTableName;// + " WHERE " + pTableName + ".IsActive='Y'";
+                    sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
+                    if (!string.IsNullOrEmpty(validationCode))
+                        sql += " AND " + validationCode;
+                    if (!string.IsNullOrEmpty(whereClause))
+                        sql += " AND " + whereClause;
+                    sql += " GROUP BY " + pColumnName +
+                             " ORDER BY COUNT(" + pColumnName + ") DESC)";
+                }
+                else
+                {
+                    sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
+                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + pColumnName 
+                        + " ";// WHERE " + pTableName + ".IsActive='Y'";
+                    sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
+                    if (!string.IsNullOrEmpty(validationCode))
+                        sql += " AND " + validationCode;
+                    if (!string.IsNullOrEmpty(whereClause))
+                        sql += " AND " + whereClause;
+                    sql += " GROUP BY " + keyCol + ", " + displayCol
+                        + " ORDER BY COUNT(" + keyCol + ") DESC) ";
+
+                }
+            }
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            List<FilterDataContract> keyva = new List<FilterDataContract>();
+            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql,1,5);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    FilterDataContract val = new FilterDataContract();
+                    val.ID = Convert.ToString(ds.Tables[0].Rows[i][0]);
+                    val.Name = Convert.ToString(ds.Tables[0].Rows[i][1]);
+                    val.Count = Convert.ToInt32(ds.Tables[0].Rows[i][2]);
+                    keyva.Add(val);
+                }
+            }
+            result["keyCol"] = pColumnName;
+            result["list"] = keyva;
+            return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
+        }
+
+
 
         /// <summary>
         /// Controller function to fetch Version details
@@ -991,11 +1071,19 @@ namespace VIS.Controllers
         public JsonResult GetVerInfo(string RowData)
         {
             Ctx ctx = Session["ctx"] as Ctx;
-            dynamic od = JsonConvert.DeserializeObject(RowData);            
+            dynamic od = JsonConvert.DeserializeObject(RowData);
             CommonModel cm = new CommonModel();
             var retRes = cm.GetVerDetails(ctx, od);
             return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
         }
+
+    }
+
+    public class FilterDataContract
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public int Count { get; set; }
     }
 
 
@@ -1025,6 +1113,8 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(m.updateTree(ctx, nodeID, oldParentID, newParentID, AD_Tree_ID)), JsonRequestBehavior.AllowGet);
         }
 
-       
+
     }
+
+
 }

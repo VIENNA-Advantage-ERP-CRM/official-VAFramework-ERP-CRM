@@ -67,8 +67,9 @@
         //******************
         function customDesign() {
             var height = ($(window).height()) * (92 / 100);
-            $divContainer = $("<div class='vis-mainContainer' style='height:" + height + "px !important'>");
-            var designPInfo = " <div class='vis-pBOMInfo'>"  // div pSelectInfo starts here
+            $divContainer = $("<div class='vis-mainContainer'>");
+            var designPInfo = " <div class='vis-pSelectInfo'>"  // div pSelectInfo starts here
+                             +"<div class='vis-pSelectInner'>"
                              + " <div class='vis-paymentselect-field'>"  // div Product starts here
                              + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID") + " </label>"
                              + " <select id='VIS_cmbProduct_" + $self.windowNo + "'></select>"
@@ -88,17 +89,18 @@
                              + " <div class='vis-paymentselect-field'>"  // div Quantity starts here
                              + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Qty") + "</label>"
                              + " <input type='number' id='VIS_txtQuantity_" + $self.windowNo + "' min='0' MaxLength='50'></input>"
-                             + " </div>" // div Quantity ends here    
+                             + " </div>" // div Quantity ends here 
+                             + " </div>"// div vis-pSelectInner ends here
                              + " <div class='vis-paymentselect-field'>"  // div btnRefresh starts here
-                             + " <button class='VIS_Pref_btn-2'  id='VIS_btnRefresh_" + $self.windowNo + "' style='margin-top: 5px;margin-bottom: -10px;'><img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png'></button>"
+                             + " <button class='VIS_Pref_btn-2'  id='VIS_btnRefresh_" + $self.windowNo + "' style='margin-top: 0px;'><i class='vis vis-refresh'></i></button>"
                              + " </div>" // div btnRefresh ends here 
                              + " </div>" // div pSelectInfo ends here 
-            $divBOMLines = $("<div class='vis-BOMLines'>");
+            $divBOMLines = $("<div class='vis-pSelectIionGrid'>");
 
             var designPProcess = " <div class='vis-pSelectProcess'>"  // div pSelectProcess starts here
                                      + " <div class='vis-paymentselect-field'>"  // div starts here    
-                + " <input id='VIS_btnCancel_" + $self.windowNo + "' style='background-color:rgba(var(--v-c-primary), 1);color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;height:40px;margin-left:10px;' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
-                + " <input id='VIS_btnOK_" + $self.windowNo + "' disabled style='background-color:rgba(var(--v-c-primary), 1);color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;margin-left:10px;height:40px;' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
+                + " <input id='VIS_btnCancel_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
+                + " <input id='VIS_btnOK_" + $self.windowNo + "' disabled class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
                                      + " </div>" // div pSelectButtons ends here 
                                      + " </div>" // div pSelectProcess ends here 
             $divContainer.append($(designPInfo)).append($divBOMLines).append($(designPProcess));

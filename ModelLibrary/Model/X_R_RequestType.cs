@@ -413,6 +413,12 @@ Object ii = Get_Value("R_StatusCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-}
+
+        /** Set Allow Notification on Save.
+@param R_AllowSaveNotify Allow Notification on Save */
+        public void SetR_AllowSaveNotify(Boolean R_AllowSaveNotify) { Set_Value("R_AllowSaveNotify", R_AllowSaveNotify); }/** Get Allow Notification on Save.
+@return Allow Notification on Save */
+        public Boolean IsR_AllowSaveNotify() { Object oo = Get_Value("R_AllowSaveNotify"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+    }
 
 }

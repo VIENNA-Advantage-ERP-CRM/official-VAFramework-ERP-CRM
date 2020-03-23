@@ -57,7 +57,7 @@
             Create layouts of Left , Middle and Right Panels
         */
         function createPanels() {
-            $root.append('<div class="col-lg-4 col-md-4"><div class="vis-group-content-wrap"></div></div><div class="col-lg-4 col-md-4"><div class="vis-group-content-wrap"></div></div><div class="col-lg-4 col-md-4 last-child"><div class="vis-group-content-wrap"></div></div>');
+            $root.append('<div class="vis-group-colwrap"><div class="vis-group-content-wrap"></div></div><div class="vis-group-colwrap"><div class="vis-group-content-wrap"></div></div><div class="vis-group-colwrap last-child"><div class="vis-group-content-wrap"></div></div>');
             var panels = $root.find('.vis-group-content-wrap');
             $leftPanel = $(panels[0]);
             $middlePanel = $(panels[1]);
@@ -146,14 +146,14 @@
         */
         function leftPanel() {
             $bsyDiv[0].style.visibility = "visible";
-            $leftPanel.append('<div class="vis-group-content-head"><h4 class="vis-group-content-tittle vis-group-createUser">' + VIS.Msg.getMsg("VIS_CreateInviteUser") + '</h4>' +
+            $leftPanel.append('<div class="vis-group-content-head"><h4 class="vis-group-content-tittle"><i class="vis vis-addbp"></i>' + VIS.Msg.getMsg("VIS_CreateInviteUser") + '</h4>' +
                   '<span class=" vis-group-pointer vis-group-head-right">' + VIS.Msg.getMsg("SortBy") + '</span><div class="vis-group-clear-both"></div></div>');
             $btnSortUsers = $leftPanel.find('.vis-group-head-right');
 
             /***** end of content-head *****/
 
-            $leftPanel.append('<div class="vis-group-content-headDown"><input class="vis-group-add-btn vis-group-pointer vis-group-addLeft vis-group-ass-btns" type="button">' +
-                    '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><input class=" vis-group-pointer vis-group-ass-btns vis-group-search-icon" type="button">' +
+            $leftPanel.append('<div class="vis-group-content-headDown"><button class="vis-group-add-btn vis-group-ass-btns"><i class="vis vis-plus"></i></button>' +
+                '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
                  //   '<input class="vis-group-importUser" type="button" title="' + VIS.Msg.getMsg("VIS_Importuser") + '"><div class="vis-group-clear-both"></div> </div>');
                     '<div class="vis-group-clear-both"></div> </div>');
             $searchUser = $leftPanel.find('.vis-group-SearchText');
@@ -163,7 +163,7 @@
 
 
             /*****  end of content-headDown  *****/
-            $divUserGroup = $('<div class="vis-group-users-container">').append('<div style="border-top: 1px solid #dfdfdf; width: 97%;"></div>');
+            $divUserGroup = $('<div class="vis-group-users-container">').append('<div class="vis-group-bordertop"></div>');
             $divUserGroup.height($($root.parent()).height() - 95);
             $leftPanel.append($divUserGroup);
 
@@ -175,15 +175,15 @@
         */
         function middlePanel() {
             $middlePanel.append(' <div class="vis-group-content-head">' +
-                      '<h4 class="vis-group-content-tittle vis-group-role">' + VIS.Msg.getMsg("Role") + '</h4>' +
+                      '<h4 class="vis-group-content-tittle vis-group-role"><i class="vis vis-task"></i>' + VIS.Msg.getMsg("Role") + '</h4>' +
                       '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_RoleSaved") + '</h7>' +
 
                       '<div class="vis-group-top-right">' +
-                          '<input class="vis-group-ass-btns vis-group-pointer vis-group-add-btn" type="button">' +
-                          '<input class="vis-group-ass-btns vis-group-pointer vis-group-save-btn" type="button">' +
+                          '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus"></i></button>' +
+                          '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save"></i></button>' +
                       '</div>' +
                       '<div class="vis-group-content-headDown"><span><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<input class="vis-group-ass-btns vis-group-ass-btnse vis-group-pointer vis-group-search-icon" type="button"> </span></div>' +
+                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button></span></div>' +
                       '<div class="vis-group-clear-both"></div>' +
                   '</div>');
 
@@ -194,7 +194,7 @@
             /**end of content-head**/
 
             $divRoleGroup = $('<div class="vis-group-role-container">');
-            $divRoleGroup.append('<div style="border-top: 1px solid #dfdfdf; width: 97%;"></div>');
+            $divRoleGroup.append('<div class="vis-group-bordertop"></div>');
             $middlePanel.append($divRoleGroup);
             $divRoleGroup.height($($root.parent()).height() - 95);
             roleTemplate();
@@ -206,19 +206,19 @@
         */
         function rightPanel() {
             $rightPanel.append('<div class="vis-group-content-head">' +
-                       '<h4 class="vis-group-content-tittle vis-group-rights">' + VIS.Msg.getMsg("VIS_Groups") + '</h4>' +
+                       '<h4 class="vis-group-content-tittle vis-group-rights"><i class="vis vis-users"></i>' + VIS.Msg.getMsg("VIS_Groups") + '</h4>' +
                          '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_GroupSaved") + '</h7>' +
                        '<div class="vis-group-top-right">' +
                            '<div class="vis-group-top-right">' +
-                           '<input class="vis-group-ass-btns vis-group-pointer vis-group-add-btn" type="button">' +
-                           '<input class="vis-group-ass-btns vis-group-pointer vis-group-save-btn" type="button">' +
+                           '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus"></i></button>' +
+                          '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save"></i></button>' +
                            '</div>' +
                        '</div>' +
 
                        '<div class="vis-group-content-headDown"><span>' +
 
                        '<input class="vis-group-SearchText"  value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<input class="vis-group-ass-btns vis-group-ass-btnse vis-group-pointer vis-group-search-icon" type="button"> ' +
+                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
                        '</span>' +
                        '</div>' +
 
@@ -230,7 +230,7 @@
             $btnSaveGroup = $rightPanel.find('.vis-group-save-btn');
 
 
-            $divGroupsGroup = $('<div class="vis-group-role-container">').append('<div style="vis-group-border-top: 1px solid #dfdfdf; width: 97%;"></div>');
+            $divGroupsGroup = $('<div class="vis-group-role-container">').append('<div class="vis-group-bordertop"></div>');
 
             $rightPanel.append($divGroupsGroup);
             $divGroupsGroup.height($($root.parent()).height() - 95);
@@ -280,11 +280,11 @@
                  '{{#each this}}' +
             '<div class="vis-group-user-wrap"  data-UID="{{AD_UserID}}">' +
              '<div class="vis-group-user-profile vis-group-pro-width">' +
-                        	'<div style=" height:46px;width:46px" class="vis-group-user-img">' +
+                        	'<div style=" height:46px;width:46px" class="vis-group-user-img vis-chatimgwrap">' +
                             '{{#if UserImage}}' +
                             	'<img src="' + VIS.Application.contextUrl + '{{UserImage}}" alt="user-img">' +
                                 '{{else}}' +
-                                '<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/home/defaultUser46X46.PNG" alt="user-img">' +
+                                '<i class="fa fa-user"></i>' +
                                 '{{/if}}' +
                             '</div>' +
                                         '<div class="vis-group-user-text">' +
@@ -299,20 +299,20 @@
 
                         '<div class="vis-group-user-right">' +
                         	'<ul>' +
+                            	'<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '{{#if IsActive }}' +
                                         '{{#if IsUpdate}}' +
-                                            '<li><span class="vis-group-user-ico vis-group-pointer vis-group-activeUser" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                            '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                                            '<li><span disabled class="vis-group-user-ico vis-group-pointer vis-group-activeUser" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                                            '<li><span disabled class="vis-group-user-ico vis-group-activeUser vis vis-user" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                             '{{/if}}' +
                                  '{{else}}' +
                                         '{{#if IsUpdate}}' +
-                                        '<li><span class="vis-group-user-ico vis-group-pointer vis-group-inactiveUser"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                        '<li><span class="vis-group-user-ico vis-group-inactiveUser vis vis-user"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                                        '<li><span disabled class="vis-group-user-ico vis-group-pointer vis-group-inactiveUser"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                                        '<li><span disabled class="vis-group-user-ico vis-group-inactiveUser vis vis-user"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                          '{{/if}}' +
                                  '{{/if}}' +
-                            	'<li><span class="vis-group-user-ico vis-group-pointer vis-group-edit" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '</ul>' +
                             '<p>{{Country}}</p>' +
                         '</div>' +
@@ -374,7 +374,7 @@
                             '{{else}}' +
                             '<input disabled type="checkbox" data-UID="{{AD_Role_ID}}" checked="">' +            // if selected user cannot be updated
                             '{{/if}}' +
-                            '<label style="color: #535353;font-weight: bold;">{{Name}}</label>' +
+                            '<label style="color: rgba(var(--v-c-on-secondary), 1);font-weight: bold;">{{Name}}</label>' +
                             '{{else}}' +
                             '{{#if IsUpdate}}' +
                             '<input type="checkbox" data-UID="{{AD_Role_ID}}" >' +                                  // if selected user can be updated
@@ -387,7 +387,7 @@
                         '</div>' +
                             '<div class="vis-group-user-right">' +
                         	'<ul>' +
-                            	'<li><span class="vis-group-user-ico vis-group-pointer vis-group-edit"  data-UID="{{AD_Role_ID}}-{{roleWindowID}}"></span></li>' +
+                            	'<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"  data-UID="{{AD_Role_ID}}-{{roleWindowID}}"></span></li>' +
                             '</ul>' +
                             '</div>' +
                 '</div>' +
@@ -408,7 +408,7 @@
                 '<div class="vis-group-user-profile">' +
                     '{{#if IsAssignedToUser}}' +
                         	'<input type="checkbox" data-UID="{{AD_Group_ID}}" checked="">' +
-                            '<label style="color: #535353;font-weight: bold;">{{Name}}</label>' +
+                            '<label style="color: rgba(var(--v-c-on-secondary), 1);font-weight: bold;">{{Name}}</label>' +
                             '{{else}}' +
                             '<input type="checkbox" data-UID="{{AD_Group_ID}}" >' +
                             '<label>{{Name}}</label>' +
@@ -417,8 +417,8 @@
                 '</div>' +
                 '<div class="vis-group-user-right">' +
                     '<ul>' +
-                        '<li><span class="vis-group-user-ico vis-group-info vis-group-pointer"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
-                        '<li><span class="vis-group-user-ico vis-group-edit vis-group-pointer"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                        '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                        '<li><span class="vis-group-user-ico vis-group-info fa fa-info"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                     '</ul>                           ' +
                 '</div>' +
             '</div>' +
@@ -607,16 +607,16 @@
             //    userID = $(target.parents().find('.vis-group-selected-op')).data("uid");
             //}
 
-            if (target.hasClass('vis-group-user-ico vis-group-pointer vis-group-edit')) {
+            if (target.hasClass('vis-group-user-ico vis-group-edit')) {
                 var UserID = target.data("uid").split('-');
                 var zoomQuery = new VIS.Query();
                 zoomQuery.addRestriction("AD_User_ID", VIS.Query.prototype.EQUAL, UserID[0]);
                 VIS.viewManager.startWindow(UserID[2], zoomQuery);
             }
-            else if (target.hasClass('vis-group-user-ico vis-group-pointer vis-group-activeUser') && target.attr("disabled") != "disabled") {
+            else if (target.hasClass('vis-group-user-ico vis-group-activeUser') && target.attr("disabled") != "disabled") {
                 activeUser(target, false);
             }
-            else if (target.hasClass('vis-group-user-ico vis-group-pointer vis-group-inactiveUser') && target.attr("disabled") != "disabled") {
+            else if (target.hasClass('vis-group-user-ico vis-group-inactiveUser') && target.attr("disabled") != "disabled") {
                 activeUser(target, true);
             }
 
@@ -759,7 +759,7 @@
                 roleID = $(target.parents('.vis-group-user-wrap')).addClass('vis-group-selected-op vis-group-selected-opbackground').data("uid");
             }
 
-            if (target.hasClass('vis-group-user-ico vis-group-pointer vis-group-edit')) {
+            if (target.hasClass('vis-group-user-ico vis-group-edit')) {
                 roleID = target.data("uid");
                 roleID = roleID.split('-');
                 var zoomQuery = new VIS.Query();
@@ -792,14 +792,14 @@
                 groupID = $(target.parents().find('.vis-group-selected-op')).data("uid");
             }
 
-            if (target.hasClass('vis-group-user-ico vis-group-edit vis-group-pointer')) {
+            if (target.hasClass('vis-group-user-ico vis-group-edit')) {
                 groupID = target.data("uid");
                 groupID = groupID.split('-');
                 var zoomQuery = new VIS.Query();
                 zoomQuery.addRestriction("AD_GroupInfo_ID", VIS.Query.prototype.EQUAL, groupID[0]);
                 VIS.viewManager.startWindow(groupID[1], zoomQuery);
             }
-            else if (target.hasClass('vis-group-user-ico vis-group-info vis-group-pointer')) {
+            else if (target.hasClass('vis-group-user-ico vis-group-info')) {
                 groupID = target.data("uid");
                 groupID = groupID.split('-');
                 getGroupInfo(groupID[0]);
@@ -975,13 +975,13 @@
             $bsyDiv[0].style.visibility = "visible";
             var url = '';
             if (activate) {
-                target.removeClass('vis-group-user-ico vis-group-pointer vis-group-inactiveUser');
-                target.addClass('vis-group-user-ico vis-group-pointer vis-group-activeUser');
+                target.removeClass('vis-group-user-ico vis-group-inactiveUser');
+                target.addClass('vis-group-user-ico vis-group-activeUser');
                 url = VIS.Application.contextUrl + "Group/ActiveUser";
             }
             else {
-                target.removeClass('vis-group-user-ico vis-group-pointer vis-group-activeUser')
-                target.addClass('vis-group-user-ico vis-group-pointer vis-group-inactiveUser');
+                target.removeClass('vis-group-user-ico vis-group-activeUser')
+                target.addClass('vis-group-user-ico vis-group-inactiveUser');
                 url = VIS.Application.contextUrl + "Group/InActiveUser";
             }
 
