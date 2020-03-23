@@ -277,8 +277,8 @@ select.vis-ev-col-mandatory {
     cursor: not-allowed;
 }
 select.vis-ev-col-readonly ~ label,
-input.vis-ev-col-readonly:not(:placeholder-shown) ~ label{
-    background: linear-gradient(0deg, rgba(var(--v-c-secondary),.5), rgba(var(--v-c-common), 1)); /*Dynamic color*/
+input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
+    background: linear-gradient(#fff 50%, transparent 50%); /*Dynamic color*/
 }
 
 
