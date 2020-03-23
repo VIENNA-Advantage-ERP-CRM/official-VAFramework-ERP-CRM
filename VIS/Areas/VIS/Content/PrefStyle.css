@@ -1106,6 +1106,10 @@ html[dir="rtl"] .input-group-addon {
     display: flex;
     align-items: center;
 }
+.input-group.vis-locator-ctrl {
+    width: 70%;
+    float: right;
+}
 @media (max-width:679px) {
     .VIS_Pref_close {
         width: 8%;
