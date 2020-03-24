@@ -72,6 +72,7 @@
 .vis-advancedSearchHorigontal {
     width: 14%;
     display: flex;
+    position: relative;
 }
 .vis-advancedSearchContentArea input[type="checkbox"] {
     margin-top: 0 !important;
@@ -124,7 +125,7 @@
     padding-right: 5px;
 }
 
-.vis-advancedSearchInput > label,  .vis-advancedSearchHorigontal > label {
+.vis-advancedSearchInput > label, .vis-advancedSearchHorigontal > label {
     font-size: 12px;
     font-weight: 400;
     float: left;
@@ -132,7 +133,7 @@
     position: absolute;
     top: -8px;
     left: 5px;
-    background: #fff;
+    background: linear-gradient(#fff 51%, transparent 50%);
     padding: 0 5px;
 }
 .vis-advancedSearchInput input[type="checkbox"] + label {
@@ -468,11 +469,6 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 .vis-advancedSearchInput label.vis-ec-col-lblchkbox input[type="checkbox"] {
     margin-left: 0;
 }
-
-.vis-advancedSearchInput input:not([type=button])[readonly] + label {
-    background: linear-gradient(rgba(var(--v-c-on-primary),1), rgba(var(--v-c-secondary),.4));
-}
-
 .vis-advanedSearch-AddFilterWrap label {
     margin-bottom: 0;
     font-weight: normal;
@@ -480,8 +476,6 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     color: rgba(var(--v-c-primary), 1);
     font-size: 1rem;
 }
-
-
 .vis-as-topfieldswrap {
     flex: 1;
     margin-top: 10px;
