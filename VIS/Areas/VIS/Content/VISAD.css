@@ -4685,6 +4685,8 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     width: 25%;
     height: calc(100% - 50px);
     overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 .vis-info-l-s-wrap label {
     margin-bottom: 0px;
@@ -4731,14 +4733,18 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     margin-bottom: 0;
 }
 .vis-info-l-s-content {
-    height: calc(100% - 60px);
+    /*height: calc(100% - 60px);*/
     overflow: auto;
     padding: 0 10px;
+    flex: 1;
 }
 .vis-leftpanel-inn-wrap {
     height: calc(100% - 59px);
     padding: 15px 10px;
     overflow: auto;
+}
+.vis-info-ls-btnswrap {
+    padding-bottom: 10px;
 }
 .vis-info-ls-btnswrap button {
     margin-top: 10px;
@@ -4750,96 +4756,6 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-just-cont-end {
     justify-content: flex-end;
 }
-
-.vis-info-btnswrap,
-.vis-info-btnswrap > div,
-.vis-info-btmcnt-wrap,
-.vis-frm-ls-top {
-    display: flex;
-    align-items: center;
-}
-.vis-info-btnswrap input[type="checkbox"] {
-    margin-top: 0 !important;
-}
-.vis-info-grid-icowrap {
-    text-align: center !important;
-    font-size: 1rem;
-}
-.vis-info-btmcnt-wrap {
-    padding: 4px 10px;
-    width: 100%;
-}
-.vis-info-searchbtn-wrap {
-    width: 250px;
-    display: flex;
-}
-.vis-info-btnfileds-wrap {
-    flex: 1;
-    padding: 0 20px;
-}
-.vis-p-t-10 {
-    padding-top: 10px;
-}
-.vis-allocate-paymentSum,
-.vis-allocate-invoiceSum,
-.vis-allocate-cashSum,
-.vis-allocate-glSum {
-    flex: 1;
-    justify-content: flex-end;
-    display: inline-flex;
-}
-.VIS-TM-data-head input[type="checkbox"] {
-    margin: 0 10px 0 0;
-}
-a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
-    color: rgba(var(--v-c-on-primary), 1);
-}
-.vis-l-s-headwrp {
-    width: 260px;
-    height: 45px;
-    padding: 10px 10px 0 10px;
-    background-color: rgba(var(--v-c-secondary), .8);
-}
-.vis-frm-grid-outerwrp {
-    float: right;
-    margin-right: 10px;
-    border: 1px solid rgba(var(--v-c-on-secondary), 0.3);
-    width: calc(100% - 280px);
-    height: calc(100% - 103px);
-}
-.vis-allocation-rightContainer input[type="checkbox"] {
-    margin: 4px 5px 0 !important;
-}
-.vis-info-ctrlwrap button, .vis-info-l-s-wrap button {
-    width: 30px;
-}
-.VIS-AMTD-formData:nth-child(4) {
-    padding-right: 0;
-}
-.VIS-AMTD-Grid + .VIS-AMTD-formData{
-    margin-bottom: 0;
-}
-.vis-info-l-s-content {
-    height: calc(100% - 60px);
-    overflow: auto;
-    padding: 0 10px;
-}
-.vis-leftpanel-inn-wrap {
-    height: calc(100% - 59px);
-    padding: 15px 10px;
-    overflow: auto;
-}
-.vis-info-ls-btnswrap button {
-    margin-top: 10px;
-    height: 40px;
-    margin-right: 10px;
-    width: auto;
-}
-.vis-pad-0{ padding: 0;}
-.vis-just-cont-end {
-    justify-content: flex-end;
-}
-
 .vis-info-btnswrap,
 .vis-info-btnswrap > div,
 .vis-info-btmcnt-wrap,
