@@ -2414,7 +2414,7 @@ namespace VAdvantage.Model
                 SetCompletedDocumentNo();
 
                 // set withholding tax amount
-                if (GetC_Order_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() > 0)
+                if (Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() > 0)
                 {
                     SetWithholdingAmount();
                 }
@@ -4233,9 +4233,14 @@ namespace VAdvantage.Model
         {
             Decimal withholdingAmt = 0;
 
-            // system will check whether any payment exits against the order. If it exists then the system will not calculate the withholding amount at the Invoice level.    
-            int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Payment_ID) FROM C_Payment WHERE DocStatus IN ('CO' , 'CL')
+            // system will check whether any payment exits against the order. If it exists then the system will not calculate the withholding amount at the Invoice level.  
+            int count = 0;
+            if (GetC_Order_ID() > 0)
+            {
+                count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Payment_ID) FROM C_Payment WHERE DocStatus IN ('CO' , 'CL')
                         AND C_Order_ID = " + GetC_Order_ID(), null, Get_Trx()));
+            }
+
             if (count == 0)
             {
                 DataSet dsWithholding = DB.ExecuteDataset(@"SELECT IsApplicableonInv, InvCalculation , InvPercentage 
