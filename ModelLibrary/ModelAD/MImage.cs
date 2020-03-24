@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         private string imageFormat;
 
 
-        private List<string> imageExtensions = new List<string>() { ".png", ".jpg", ".ico", ".webp", ".svg" ,"jpeg"};
+        private List<string> imageExtensions = new List<string>() { ".png", ".jpg", ".ico", ".webp", ".svg" ,".jpeg"};
 
         public string ImageFormat
         {
