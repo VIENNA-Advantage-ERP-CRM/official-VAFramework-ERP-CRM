@@ -53,7 +53,7 @@ namespace VIS.Models
             else
             {
                 //mimg.SetImageURL(HostingEnvironment.MapPath(@"~/Images/100by100"));//Image Saved in File System so instead of byteArray image Url will be set
-                mimg.SetImageURL("Images");//Image Saved in File System so instead of byteArray image Url will be set
+                mimg.SetImageURL(mimg.ImageFormat);//Image Saved in File System so instead of byteArray image Url will be set
                 mimg.SetBinaryData(new byte[0]);
 
 

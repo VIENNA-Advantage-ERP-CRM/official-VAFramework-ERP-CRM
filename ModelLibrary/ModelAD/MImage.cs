@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         private string imageFormat;
 
 
-        private List<string> imageExtensions = new List<string>() { ".png", ".jpg", ".ico", ".webp", ".svg" };
+        private List<string> imageExtensions = new List<string>() { ".png", ".jpg", ".ico", ".webp", ".svg" ,"jpeg"};
 
         public string ImageFormat
         {
@@ -185,7 +185,8 @@ namespace VAdvantage.Model
                 //}
                 if (!string.IsNullOrEmpty(imageUrl) && !string.IsNullOrEmpty(ImageFormat))
                 {
-                    imageUrl = imageUrl.Insert(imageUrl.Length, "/" + GetAD_Image_ID() + ImageFormat);
+                    //imageUrl = imageUrl.Insert(imageUrl.Length, "/" + GetAD_Image_ID() + ImageFormat);
+                    imageUrl = "Images/" + GetAD_Image_ID() + imageFormat;
                     int count = DB.ExecuteQuery("UPDATE AD_IMAGE SET IMAGEURL='" + imageUrl + "' WHERE AD_IMAGE_ID=" + GetAD_Image_ID());
                 }
 
