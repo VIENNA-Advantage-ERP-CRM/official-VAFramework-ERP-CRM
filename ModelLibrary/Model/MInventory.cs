@@ -1688,17 +1688,17 @@ namespace VAdvantage.Model
                         {
                             // get price from m_cost (Current Cost Price)
                             currentCostPrice = 0;
-                            if (IsInternalUse() || (!IsInternalUse() && Decimal.Subtract(line.GetQtyCount(), line.GetQtyBook()) < 0))
-                            {
-                                currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                            }
-                            else if (!IsInternalUse())
-                            {
-                                // in Case of physical Inventory, when we increase stock - get price of costing method, which is defined into cost combination
-                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                  line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                            }
+                            //if (IsInternalUse() || (!IsInternalUse() && Decimal.Subtract(line.GetQtyCount(), line.GetQtyBook()) < 0))
+                            //{
+                            currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
+                            //}
+                            //else if (!IsInternalUse())
+                            //{
+                            //    // in Case of physical Inventory, when we increase stock - get price of costing method, which is defined into cost combination
+                            //    currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                            //      line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                            //}
                             DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
                                                 WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
                         }
@@ -1723,16 +1723,16 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                if (quantity < 0)
-                                {
-                                    currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                }
-                                else
-                                {
-                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                                }
+                                //if (quantity < 0)
+                                //{
+                                currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
+                                //}
+                                //else
+                                //{
+                                //    currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                //    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                                //}
                                 DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 
                                                 WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
                             }
