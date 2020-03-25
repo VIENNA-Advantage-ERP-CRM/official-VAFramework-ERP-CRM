@@ -151,8 +151,8 @@ namespace VIS
             //                "~/Areas/VIS/Scripts/app/windowformcontainer.js",
             //                 "~/Areas/VIS/Scripts/app/masterdataversion.js",
 
-            //"~/Areas/VIS/Scripts/tabpanels/bipanel.js",	
-            //                  "~/Areas/VIS/Scripts/model/CalloutColumn.js",	
+            //"~/Areas/VIS/Scripts/tabpanels/bipanel.js",
+            //                  "~/Areas/VIS/Scripts/model/CalloutColumn.js",
 
 
 
@@ -187,33 +187,33 @@ namespace VIS
 
 
 
-            //           style.Include("~/Areas/VIS/Content/Site.css",
+            //style.Include("~/Areas/VIS/Content/Site.css",
 
-            //               "~/Areas/VIS/Content/VISAD.css",
-            //               "~/Areas/VIS/Content/PrefStyle.css",
-            //               "~/Areas/VIS/Content/Home.css",
-            //               "~/Areas/VIS/Content/PaymentRule.css",
-            //               "~/Areas/VIS/Content/Style.css",
-            //               "~/Areas/VIS/Content/ClientSetup.css",
-            //               "~/Areas/VIS/Content/Find.css",
-            //               "~/Areas/VIS/Content/Email.css",
-            //               "~/Areas/VIS/Content/VPaySelect.css",
-            //                "~/Areas/VIS/Content/reportstyle.css",
-            //                "~/Areas/VIS/Content/RecordAccessDialog.css",
-            //               "~/Areas/VIS/Content/GroupStyle.css",
-            //                "~/Areas/VIS/Content/ProductContainer.css",
-            //               "~/Areas/VIS/Content/GlJournalDimension.css"
-            //              );
+            //    "~/Areas/VIS/Content/VISAD.css",
+            //    "~/Areas/VIS/Content/PrefStyle.css",
+            //    "~/Areas/VIS/Content/Home.css",
+            //    "~/Areas/VIS/Content/PaymentRule.css",
+            //    "~/Areas/VIS/Content/Style.css",
+            //    "~/Areas/VIS/Content/ClientSetup.css",
+            //    "~/Areas/VIS/Content/Find.css",
+            //    "~/Areas/VIS/Content/Email.css",
+            //    "~/Areas/VIS/Content/VPaySelect.css",
+            //     "~/Areas/VIS/Content/reportstyle.css",
+            //     "~/Areas/VIS/Content/RecordAccessDialog.css",
+            //    "~/Areas/VIS/Content/GroupStyle.css",
+            //     "~/Areas/VIS/Content/ProductContainer.css",
+            //    "~/Areas/VIS/Content/GlJournalDimension.css"
+            //   );
 
-            //           style.Include("~/Areas/VIS/Content/F20/Color.css",
-            //               "~/Areas/VIS/Content/F20/Site.css",
-            //               "~/Areas/VIS/Content/F20/Window.css",
-            //                       "~/Areas/VIS/Content/F20/Controls.css",
-            //                        "~/Areas/VIS/Content/F20/Media.css"
-            //               );
+            //style.Include("~/Areas/VIS/Content/F20/Color.css",
+            //    "~/Areas/VIS/Content/F20/Site.css",
+            //    "~/Areas/VIS/Content/F20/Window.css",
+            //            "~/Areas/VIS/Content/F20/Controls.css",
+            //             "~/Areas/VIS/Content/F20/Media.css"
+            //    );
 
 
-            //           style.Include("~/Areas/VIS/Content/VIS.rtl.css");
+            //style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
             style.Include("~/Areas/VIS/Content/VIS.all.min.css");
 
