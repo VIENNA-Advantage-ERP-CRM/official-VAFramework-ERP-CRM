@@ -11971,7 +11971,7 @@
             sql += "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
                 + " l.C_BPartner_Location_ID,c.AD_User_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID, "
-                + " p.SalesRep_ID,p.IsSalesRep "
+                + " p.SalesRep_ID,p.IsSalesRep, p.C_Withholding_ID "
                 + " FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
@@ -12013,7 +12013,6 @@
                         }
                         mTab.setValue("PaymentRule", s);
                     }
-                    //payment method ID set to Column----Anuj- 04-09-2015-------------------------------------------------------------------------------------------
 
                     var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
                     if (_CountVA009 > 0) {
@@ -12076,17 +12075,13 @@
                         }
                     }
 
-                    //payment method ID set to Column----Anuj- 04-09-2015-----------------------------------------
-
                     //  Payment Term
-
                     var PaymentTermPresent = Util.getValueOfInt(mTab.getValue("C_PaymentTerm_ID")); // from BSO/BPO window
                     var C_Order_Blanket = Util.getValueOfDecimal(mTab.getValue("C_Order_Blanket"))
                     if (PaymentTermPresent > 0 && C_Order_Blanket > 0) {
                     }
                     else {
                         ii = Util.getValueOfInt(dr.get(isSOTrx ? "c_paymentterm_id" : "po_paymentterm_id"));
-                        //if (!dr.wasNull())
                         if (ii > 0) {
                             mTab.setValue("C_PaymentTerm_ID", ii);
                         }
@@ -12196,6 +12191,8 @@
                     else {
                         mTab.setValue("IsDiscountPrinted", "N");
                     }
+                    // set withholding tax defined on vendor/customer
+                    mTab.setValue("C_Withholding_ID", Util.getValueOfInt(dr.get("C_Withholding_ID")));
                 }
                 dr.close();
             }
@@ -18491,6 +18488,7 @@
             // Change by mohit to set the Sales transaction value in window context according to the selection of document type on payment window- asked by Mukesh Sir- 3 April 2019.
             ctx.setWindowContext(windowNo, "IsSOTrx", isSOTrx ? "Y" : "N");
             //ctx.setContext("IsSOTrx", isSOTrx ? "Y" : "N");
+            mTab.setValue("IsReceipt", isSOTrx ? "Y" : "N");
         }
         //	Invoice//	Invoice
         if (C_Invoice_ID != 0) {

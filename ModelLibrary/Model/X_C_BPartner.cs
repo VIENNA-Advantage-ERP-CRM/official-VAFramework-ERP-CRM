@@ -2884,6 +2884,21 @@ namespace VAdvantage.Model
         @return Promotional Discount Schema */
         public int GetVA025_PromotionalDiscount() { Object ii = Get_Value("VA025_PromotionalDiscount"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
+        /// <summary>
+        /// Set Withholding Tax.
+        /// </summary>
+        /// <param name="C_Withholding_ID">Withholding type defined</param>
+        public void SetC_Withholding_ID(int C_Withholding_ID)
+        {
+            if (C_Withholding_ID <= 0) Set_Value("C_Withholding_ID", null);
+            else
+                Set_Value("C_Withholding_ID", C_Withholding_ID);
+        }
+        /// <summary>
+        /// Get Withholding Tax.
+        /// </summary>
+        /// <returns>Withholding type defined</returns>
+        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }
