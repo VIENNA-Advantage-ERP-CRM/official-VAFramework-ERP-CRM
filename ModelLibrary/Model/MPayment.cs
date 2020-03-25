@@ -2772,6 +2772,25 @@ namespace VAdvantage.Model
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
 
+            // set withholding tax amount
+            if (IsPrepayment() && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
+            {
+                // check withholding applicable on Business Partner 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_ID) FROM C_BPartner WHERE NVL(C_Withholding_ID , 0) > 0 
+                        AND C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx()));
+
+                // Applicable, but withholding not selected on record
+                if (count > 0 && GetC_Withholding_ID() == 0)
+                {
+                    SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
+                    return DocActionVariables.STATUS_INVALID;
+                }
+                else if (count > 0)
+                {
+                    SetWithholdingAmount();
+                }
+            }
+
             // Amit for VA009 27-10-2015
             int countPaymentAllocateRecords = 0;
             if (Env.IsModuleInstalled("VA009_"))
@@ -3373,6 +3392,38 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set Withholding Tax Amount
+        /// </summary>
+        private void SetWithholdingAmount()
+        {
+            Decimal withholdingAmt = 0;
+
+            DataSet dsWithholding = DB.ExecuteDataset(@"SELECT IsApplicableonPay, PayCalculation , PayPercentage 
+                                        FROM C_Withholding WHERE C_Withholding_ID = " + GetC_Withholding_ID(), null, Get_Trx());
+            if (dsWithholding != null && dsWithholding.Tables.Count > 0 && dsWithholding.Tables[0].Rows.Count > 0)
+            {
+                // check on withholding - "Applicable on Payment" or not
+                if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["IsApplicableonPay"]).Equals("Y"))
+                {
+                    // get amount on which we have to derive withholding tax amount
+                    if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["PayCalculation"]).Equals(X_C_Withholding.INVCALCULATION_PaymentAmount))
+                    {
+                        withholdingAmt = GetPayAmt();
+                    }
+
+                    _log.Info("Payment withholding detail, Payment Document No = " + GetDocumentNo() + " , Amount on distribute = " + withholdingAmt +
+                           " , Payment Withhold Percentage " + Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["PayPercentage"]));
+
+                    // derive formula
+                    withholdingAmt = Decimal.Divide(
+                                     Decimal.Multiply(withholdingAmt, Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["PayPercentage"]))
+                                     , 100);
+                    SetWithholdingAmt(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID())));
                 }
             }
         }
@@ -4823,6 +4874,12 @@ namespace VAdvantage.Model
             reversal.SetDiscountAmt(Decimal.Negate(GetDiscountAmt()));
             reversal.SetWriteOffAmt(Decimal.Negate(GetWriteOffAmt()));
             reversal.SetOverUnderAmt(Decimal.Negate(GetOverUnderAmt()));
+
+            //negate witholding amount - 
+            if (Get_ColumnIndex("WithholdingAmt") > 0)
+            {
+                reversal.SetWithholdingAmt(Decimal.Negate(GetWithholdingAmt()));
+            }
             //
             // make unique record based on Bank and cheque no - thats why on reversing a record - place reverse indicator on it.
             if (!string.IsNullOrEmpty(reversal.GetCheckNo()))

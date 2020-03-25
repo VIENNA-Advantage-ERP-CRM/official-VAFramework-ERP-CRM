@@ -991,9 +991,10 @@ namespace VIS.Helpers
                         msg = "SaveErrorNotUnique";
                 }
                 //End
+                //End
                 if (inn.MaintainVersions)
                 {
-                    msg += Msg.GetMsg(ctx,"MaintainVersionError");
+                    msg += Msg.GetMsg(ctx, "MaintainVersionError");
                 }
                 outt.IsError = true;
                 outt.FireEEvent = true;
