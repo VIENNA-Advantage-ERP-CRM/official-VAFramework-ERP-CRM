@@ -2082,29 +2082,6 @@
   <ItemGroup>
     <None Include="Service References\CloudService\Service.disco" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="LibDll\CrystalDecisions.CrystalReports.Engine.dll" />
-    <Content Include="LibDll\CrystalDecisions.Shared.dll" />
-    <Content Include="LibDll\DotNetOpenAuth.dll" />
-    <Content Include="LibDll\Google.Apis.Authentication.OAuth2.dll" />
-    <Content Include="LibDll\Google.Apis.Calendar.v3.dll" />
-    <Content Include="LibDll\Google.Apis.dll" />
-    <Content Include="LibDll\Google.Apis.Tasks.v1.dll" />
-    <Content Include="LibDll\Google.GData.Client.dll" />
-    <Content Include="LibDll\Google.GData.Contacts.dll" />
-    <Content Include="LibDll\Google.GData.Extensions.dll" />
-    <Content Include="LibDll\Google.GData.YouTube.dll" />
-    <Content Include="LibDll\ICSharpCode.SharpZipLib.dll" />
-    <Content Include="LibDll\IKVM.OpenJDK.ClassLibrary.dll" />
-    <Content Include="LibDll\IKVM.Runtime.dll" />
-    <Content Include="LibDll\Interop.Excel.dll" />
-    <Content Include="LibDll\Mail.dll" />
-    <Content Include="LibDll\MySql.Data.dll" />
-    <Content Include="LibDll\Npgsql.dll" />
-    <Content Include="LibDll\Oracle.ManagedDataAccess.dll" />
-    <Content Include="LibDll\PdfSharp.dll" />
-    <Content Include="LibDll\System.Web.Optimization.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
