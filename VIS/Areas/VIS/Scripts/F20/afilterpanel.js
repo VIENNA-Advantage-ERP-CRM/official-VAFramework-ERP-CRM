@@ -98,10 +98,12 @@
                 for (var i = 0; i < this.selectionfields.length; i++) {
                     var crt;
                     var label;
-                    var field = this.selectionfields[i];
-                    if (!field.getIsDisplayed())
+                    var fieldorg = this.selectionfields[i];
+                    if (!fieldorg.getIsDisplayed())
                         continue;
-
+                    var field = {};
+                    field = jQuery.extend(true, {}, fieldorg);
+                    field.lookup = jQuery.extend(true, {}, fieldorg.lookup);
 
                     if (field.getIsKey()) {
                         crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
@@ -308,7 +310,7 @@
                 var index = selIds.indexOf(dId);
 
                 if (index > -1) {
-                    selItems[index].find('.vis-fp-spanCount').text("("+data[i].Count+")");
+                    selItems[index].find('.vis-fp-spanCount').text("(" + data[i].Count + ")");
                     fields.append(selItems[index]);
                     selItems.splice(index, 1);
                     selIds.splice(index, 1);
@@ -891,11 +893,11 @@
             var displayCol = "";
             var validationCode = "";
             var lookupTableName = "";
-           
+
             if (field.getLookup()) {
                 keyCol = field.getLookup().info.keyColumn;
                 displayCol = field.getLookup().info.displayColSubQ;
-                validationCode = field.getLookup().info.validationCode;
+                validationCode = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), field.getLookup().info.validationCode, false);
                 lookupTableName = field.getLookup().info.tableName;
             }
             //if (!displayCol || displayCol == '')
@@ -904,14 +906,14 @@
             var tabWhere = this.curTab.getWhereClause();
             tabWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), tabWhere, false);
 
-            if (tabWhere && tabWhere.length>0) {
+            if (tabWhere && tabWhere.length > 0) {
                 if (whereClause != "")
                     whereClause += " AND " + tabWhere;
                 else
                     whereClause += " " + tabWhere;
             }
             var dynFilter = this.getDynamicFilter();
-            if (dynFilter && dynFilter.length>0) {
+            if (dynFilter && dynFilter.length > 0) {
                 if (whereClause != "")
                     whereClause += " AND " + dynFilter;
                 else
@@ -921,7 +923,7 @@
             var data = {
                 keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
                 , tableName: lookupTableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: this.curTab.getTableName(),
-                pColumnName: field.getColumnName(), whereClause: whereClause, 
+                pColumnName: field.getColumnName(), whereClause: whereClause,
             };
             var tht = this;
 
@@ -1041,7 +1043,7 @@
             sb += " UPPER( ";
         }
 
-        sb += this.curTab.getTableName()+'.'+column;
+        sb += this.curTab.getTableName() + '.' + column;
 
 
         if (typeof code == "string") {
