@@ -257,7 +257,7 @@ namespace VAdvantage.Process
             bool hasVerCols = false;
 
             // Get columns from Master table
-            DataSet origColDS = DB.ExecuteDataset("SELECT AD_Column_ID, Name, ColumnName FROM AD_Column WHERE AD_Table_ID = " + tab.GetAD_Table_ID(), null, Get_TrxName());
+            DataSet origColDS = DB.ExecuteDataset("SELECT AD_Column_ID, Name,ColumnSql, ColumnName FROM AD_Column WHERE AD_Table_ID = " + tab.GetAD_Table_ID(), null, Get_TrxName());
             if (origColDS != null && origColDS.Tables[0].Rows.Count > 0)
                 hasOrigCols = true;
 
@@ -294,6 +294,8 @@ namespace VAdvantage.Process
                     DataRow[] drOrigColName = origColDS.Tables[0].Select("AD_Column_ID = " + origFld.GetAD_Column_ID());
                     if (drOrigColName.Length > 0)
                     {
+                        if (Util.GetValueOfString(drOrigColName[0]["ColumnSQL"]).Trim() != "")
+                            continue;
                         sbColName.Append(Util.GetValueOfString(drOrigColName[0]["ColumnName"]));
                         // check whether  Column exist in Version table with column name of Master Table
                         // if column not found return with Message

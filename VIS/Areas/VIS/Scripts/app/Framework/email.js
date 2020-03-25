@@ -243,11 +243,11 @@
 
         function Addbuttons() {
             if (isEmail) {
-                $btnHdrSend = $('<i class="vis-email-sendbtn vis vis-paper-plane"></i>');
+                $btnHdrSend = $('<i class="vis-email-sendbtn vis vis-paper-plane"  title="' + VIS.Msg.getMsg("SendMail").replace('&', '') + '"></i>');
                 $toolbarDiv.append($btnHdrSend);
             }
             else {
-                $btnHdrSend = $('<i class="vis-email-saveAttachbtn vis vis-save-attach"></i>');
+                $btnHdrSend = $('<i class="vis-email-saveAttachbtn vis vis-save-attach"  title="' + VIS.Msg.getMsg("SaveAttachment").replace('&', '') + '" ></i>');
                 $toolbarDiv.append($btnHdrSend);
             }
 
@@ -257,22 +257,22 @@
             //$btnHdrCancel = $('<img  style="margin-top:10px;margin-right:20px;cursor: pointer;float:right" title="' + VIS.Msg.getMsg("Cancel").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/cancel.png"> </img>');
             //$toolbarDiv.append($btnHdrCancel);
             if (!callingFromOutsideofWindow) {
-                $btnHdrPreview = $('<i class="vis-email-btns vis vis-viewdocument"></i>');
+                $btnHdrPreview = $('<i class="vis-email-btns vis vis-viewdocument"  title="' + VIS.Msg.getMsg("Preview").replace('&', '') + '" ></i>');
                 $toolbarDiv.append($btnHdrPreview);
 
-                $btnHdrSaveAs = $('<i class="vis-email-btns vis vis-save-as"></i>');
+                $btnHdrSaveAs = $('<i class="vis-email-btns vis vis-save-as" title="' + VIS.Msg.getMsg("SaveAs").replace('&', '') + '" ></i>');
                 $toolbarDiv.append($btnHdrSaveAs);
 
-                $btnHdrSave = $('<i class="vis-email-btns vis vis-save"></i>');
+                $btnHdrSave = $('<i class="vis-email-btns vis vis-save" title="' + VIS.Msg.getMsg("Save").replace('&', '') + '"></i>');
                 $toolbarDiv.append($btnHdrSave);
 
-                $btnHdrOpen = $('<i class="vis-email-btns vis vis-open-file"></i>');
+                $btnHdrOpen = $('<i class="vis-email-btns vis vis-open-file" title="' + VIS.Msg.getMsg("Open").replace('&', '') + '" ></i>');
                 $toolbarDiv.append($btnHdrOpen);
             }
             if (!isEmail) {
-                $btnSavePdf = $('<i class="vis-email-btns vis vis-save-pdf"></i>');
+                $btnSavePdf = $('<i class="vis-email-btns vis vis-save-pdf" title="' + VIS.Msg.getMsg("SavePdf").replace('&', '') + '"></i>');
                 ///Manish 31/5/2016                                                                                                                                    
-                $btnNewLetter = $('<i class="vis-email-btns vis vis-new"></i>');
+                $btnNewLetter = $('<i class="vis-email-btns vis vis-new" title="' + VIS.Msg.getMsg("NewLetter").replace('&', '') + '" ></i>');
                 ///End 31/5/2016
                 $toolbarDiv.append($btnSavePdf).append($btnNewLetter);
             }
