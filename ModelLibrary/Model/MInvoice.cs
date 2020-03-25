@@ -1333,6 +1333,12 @@ namespace VAdvantage.Model
                     log.SaveWarning("NotActive", Msg.GetMsg(GetCtx(), "C_BPartner_ID"));
                     return false;
                 }
+
+                // set withholding refernce, if bind on Business partner
+                if (Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() == 0)
+                {
+                    SetC_Withholding_ID(bp.GetC_Withholding_ID());
+                }
             }
 
 
@@ -2407,15 +2413,20 @@ namespace VAdvantage.Model
                 // JID_1290: Set the document number from completed document sequence after completed (if needed)
                 SetCompletedDocumentNo();
 
+                // set withholding tax amount
+                if (Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() > 0)
+                {
+                    SetWithholdingAmount();
+                }
+
                 //	Implicit Approval
                 if (!IsApproved())
                     ApproveIt();
+
                 log.Info(ToString());
                 StringBuilder Info = new StringBuilder();
                 MDocType dt = new MDocType(GetCtx(), GetC_DocTypeTarget_ID(), Get_Trx());
                 //	Create Cash when the invoice againt order and payment method cash and  order is of POS type
-                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) <= 0)
-                //{
                 if ((PAYMENTRULE_Cash.Equals(GetPaymentRule()) || PAYMENTRULE_CashAndCredit.Equals(GetPaymentRule())) && GetC_Order_ID() > 0)
                 {
                     int posDocType = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT c_doctype_id FROM c_doctype WHERE docbasetype = 'SOO' AND docsubtypeso  = 'WR' 
@@ -2510,7 +2521,6 @@ namespace VAdvantage.Model
                         } //End Std Pos Order
                     }//Pos order type
                 }	//	CashBook
-                //}
 
 
                 //	Update Order & Match
@@ -3461,7 +3471,7 @@ namespace VAdvantage.Model
                                                 {
                                                     // get cost from Product Cost after cost calculation
                                                     currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                             product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id , false);
+                                                                                             product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
                                                     inv.SetPostCurrentCostPrice(currentCostPrice);
                                                 }
                                                 inv.SetIsCostImmediate(true);
@@ -3984,8 +3994,6 @@ namespace VAdvantage.Model
             return DocActionVariables.STATUS_COMPLETED;
         }
 
-
-
         /// <summary>
         ///  Creation of allocation against invoice whose payment is done against order
         /// </summary>
@@ -4215,6 +4223,65 @@ namespace VAdvantage.Model
                 {
                     SetDocumentNo(value);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Set Withholding Tax Amount
+        /// </summary>
+        private void SetWithholdingAmount()
+        {
+            Decimal withholdingAmt = 0;
+
+            // system will check whether any payment exits against the order. If it exists then the system will not calculate the withholding amount at the Invoice level.  
+            int count = 0;
+            if (GetC_Order_ID() > 0)
+            {
+                count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Payment_ID) FROM C_Payment WHERE DocStatus IN ('CO' , 'CL')
+                        AND C_Order_ID = " + GetC_Order_ID(), null, Get_Trx()));
+            }
+
+            if (count == 0)
+            {
+                DataSet dsWithholding = DB.ExecuteDataset(@"SELECT IsApplicableonInv, InvCalculation , InvPercentage 
+                                        FROM C_Withholding WHERE C_Withholding_ID = " + GetC_Withholding_ID(), null, Get_Trx());
+                if (dsWithholding != null && dsWithholding.Tables.Count > 0 && dsWithholding.Tables[0].Rows.Count > 0)
+                {
+                    // check on withholding - "Applicable on Invoice" or not
+                    if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["IsApplicableonInv"]).Equals("Y"))
+                    {
+                        // get amount on which we have to derive withholding tax amount
+                        if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_GrandTotal))
+                        {
+                            withholdingAmt = GetGrandTotal();
+                        }
+                        else if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_SubTotal))
+                        {
+                            withholdingAmt = GetTotalLines();
+                        }
+                        else if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_TaxAmount))
+                        {
+                            // get tax amount from Invoice tax
+                            withholdingAmt = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT SUM(TaxAmt) FROM C_InvoiceTax 
+                                             WHERE C_Invoice_ID  = " + GetC_Invoice_ID(), null, Get_Trx()));
+                        }
+
+                        _log.Info("Invoice withholding detail, Invoice Document No = " + GetDocumentNo() + " , Amount on distribute = " + withholdingAmt +
+                         " , Invoice Withhold Percentage " + Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["InvPercentage"]));
+
+                        // derive formula
+                        withholdingAmt = Decimal.Divide(
+                                         Decimal.Multiply(withholdingAmt, Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["InvPercentage"]))
+                                         , 100);
+
+                        SetWithholdingAmt(Decimal.Round(withholdingAmt, GetPrecision()));
+                    }
+                }
+            }
+            else
+            {
+                // when payment exist agsinst order, then set withholding reference as null
+                SetC_Withholding_ID(0);
             }
         }
 

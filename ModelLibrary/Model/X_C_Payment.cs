@@ -997,5 +997,32 @@ SetTrxType (null);// S
         {
             return (String)Get_Value("TempDocumentNo");
         }
+
+        /// <summary>
+        /// Set Withholding Tax.
+        /// </summary>
+        /// <param name="C_Withholding_ID">Withholding type defined</param>
+        public void SetC_Withholding_ID(int C_Withholding_ID)
+        {
+            if (C_Withholding_ID <= 0) Set_Value("C_Withholding_ID", null);
+            else
+                Set_Value("C_Withholding_ID", C_Withholding_ID);
+        }
+        /// <summary>
+        /// Get Withholding Tax.
+        /// </summary>
+        /// <returns>Withholding type defined</returns>
+        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /// <summary>
+        /// Set Withholding Amt.
+        /// </summary>
+        /// <param name="WithholdingAmt">Withholding Amt </param>
+        public void SetWithholdingAmt(Decimal? WithholdingAmt) { Set_Value("WithholdingAmt", (Decimal?)WithholdingAmt); }
+        /// <summary>
+        /// Get Withholding Amt.
+        /// </summary>
+        /// <returns>Withholding Amt</returns>
+        public Decimal GetWithholdingAmt() { Object bd = Get_Value("WithholdingAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
     }
 }
