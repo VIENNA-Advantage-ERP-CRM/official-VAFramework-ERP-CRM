@@ -299,12 +299,16 @@
                         $td3.css("grid-row", "span " + rowSpan);
                     }
                 }
+                return;
             }
 
             //if all col index are skipped
             if (!$td0 && !$td1 && !$td2 && !$td3) {
                 //columnIndex = 0;
                 adjustLayout(mField, isNewRow);
+            }
+            else if (!isLongFiled && columnIndex > 3) {
+                adjustLayout(mField, true);
             }
         };
 
