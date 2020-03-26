@@ -307,7 +307,7 @@
                 //columnIndex = 0;
                 adjustLayout(mField, isNewRow);
             }
-            else if (columnIndex > 3) {
+            else if (!isLongFiled && columnIndex > 3) {
                 adjustLayout(mField, true);
             }
         };
