@@ -33,7 +33,7 @@ namespace VIS
 
             ScriptBundle modScript_v2 = new ScriptBundle("~/Areas/VIS/Scripts/VIS_v2");
 
-
+           
 
             //           modScript.Include(
             //                "~/Areas/VIS/Scripts/app/native-extension.js",
