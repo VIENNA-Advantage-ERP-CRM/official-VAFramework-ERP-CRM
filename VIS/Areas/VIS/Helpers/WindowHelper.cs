@@ -1169,7 +1169,7 @@ namespace VIS.Helpers
                 if (field.IsVirtualColumn)
                     continue;
                 String columnName = field.ColumnName;
-
+                
                 //bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
 
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -1208,6 +1208,8 @@ namespace VIS.Helpers
                 // In case of Version record
                 if (VersionRecord)
                 {
+                    if (po.Get_ColumnIndex(columnName) < 0)
+                        continue;
                     if (columnName.ToLower() == "created" || columnName.ToLower() == "updated")
                         value = System.DateTime.Now;
                     if (columnName.ToLower() == "createdby" || columnName.ToLower() == "updatedby")
