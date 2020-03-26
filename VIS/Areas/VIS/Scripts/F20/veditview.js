@@ -86,7 +86,7 @@
         function adjustRowSpan(colIndex) {
 
             if (col0.rSpan > 1) { //skip column 
-                if (col0.set && colIndex == 1) { //special case
+                if (col0.set && colIndex == 1 &&  col0.cSpan < 4) { //special case
                     col0.set = false;
                 }
                 else
@@ -95,7 +95,7 @@
                 reset(col0);
             }
             if (col1.rSpan > 1) { //skip column 
-                if (colIndex == 2 && col1.set) { //special case
+                if (colIndex == 2 && col1.set &&  col1.cSpan < 3) { //special case
                     col1.set = false;
                 }
                 else
@@ -103,7 +103,7 @@
                 reset(col1);
             }
             if (col2.rSpan > 1) { //skip column 
-                if (colIndex == 3 && col2.set) { //special case
+                if (colIndex == 3 && col2.set && col2.cSpan <2) { //special case
                     col2.set = false;
                 }
                 else
@@ -299,12 +299,16 @@
                         $td3.css("grid-row", "span " + rowSpan);
                     }
                 }
+                return;
             }
 
             //if all col index are skipped
             if (!$td0 && !$td1 && !$td2 && !$td3) {
                 //columnIndex = 0;
                 adjustLayout(mField, isNewRow);
+            }
+            else if (!isLongFiled && columnIndex > 3) {
+                adjustLayout(mField, true);
             }
         };
 
