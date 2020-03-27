@@ -33,6 +33,7 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             _req = new MRequest(GetCtx(), GetRecord_ID(), null);
+            // check mail template if found on request or request type.
             mailText_ID = _req.GetR_MailText_ID();
             if (mailText_ID == 0)
             {

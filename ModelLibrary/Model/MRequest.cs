@@ -1059,6 +1059,7 @@ namespace VAdvantage.Model
             {
                 if (sendInfo.Count > 0)
                 {
+                    // get the columns which were changed.
                     string colsChanged = getChangedString(sendInfo);
                     ra.SetChangedValues(colsChanged);
                 }
@@ -1072,6 +1073,7 @@ namespace VAdvantage.Model
             else
                 update = null;
             //
+            // check mail templates from request or request type.
             if (GetR_MailText_ID() > 0)
             {
                 mailText_ID = GetR_MailText_ID();
@@ -1115,12 +1117,18 @@ namespace VAdvantage.Model
             }
             else
             {
+                // get message if mail template is found.
                 prepareNotificMsg(sendInfo);
             }
 
             return true;
         }
 
+        /// <summary>
+        /// get string of the changed columns
+        /// </summary>
+        /// <param name="sendInfo">list of columns changed.</param>
+        /// <returns>return the comma separated string.</returns>
         private string getChangedString(List<string> sendInfo)
         {
             StringBuilder colString = null;
