@@ -1406,7 +1406,6 @@ namespace VAdvantage.Model
                         // For Role Changes
                         Thread thread = new Thread(new ThreadStart(() => SendNotices(sendInfo)));
                         thread.Start();
-
                     }
                 }
                 else
