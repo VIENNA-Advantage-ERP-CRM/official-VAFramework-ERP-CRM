@@ -334,7 +334,6 @@
 
 
             $root.find('.vis-email-leftDiv').height($root.find('.contentArea').height());
-            $root.find('.vis-Email-rytWrap').height($root.find('.contentArea').height());
             if (callingFromOutsideofWindow) {
                 $root.find('.vis-form-data-sub').css('margin-top', '0px');
                 $root.find('.vis-email-leftDiv').hide();
