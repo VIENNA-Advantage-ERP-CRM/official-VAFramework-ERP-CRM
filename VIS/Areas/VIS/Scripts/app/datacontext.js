@@ -157,9 +157,12 @@
                 if (callback) {
                     var retObj = JSON.parse(jString);
                     var dataSet = null;
-                    if (retObj)
+                    var lookupDirect = null;
+                    if (retObj) {
                         dataSet = new VIS.DB.DataSet().toJson(retObj.Tables);
-                    callback(dataSet, retObj.LookupDirect);
+                        lookupDirect = retObj.LookupDirect;
+                    }
+                    callback(dataSet, lookupDirect);
                 }
             })
         };
