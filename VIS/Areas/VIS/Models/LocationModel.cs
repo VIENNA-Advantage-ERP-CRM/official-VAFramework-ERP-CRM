@@ -372,6 +372,7 @@ namespace VIS.Models
             DataSet _ds = null;
             try
             {
+
                 // load the country from login orgnization's organization info loaction.
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Location_ID FROM AD_OrgInfo WHERE IsActive='Y' AND AD_Org_ID=" + ctx.GetAD_Org_ID() + " ", null, null)) > 0)
                 {
