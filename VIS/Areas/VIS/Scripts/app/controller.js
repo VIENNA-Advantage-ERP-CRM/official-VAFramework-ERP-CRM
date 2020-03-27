@@ -1702,7 +1702,7 @@
                 }
                 else {
 
-                    var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(),lc);
+                    var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(),lc,true);
                     //	Same link value?
                     if (refresh) {
                         refresh = this.linkValue.equals(value);

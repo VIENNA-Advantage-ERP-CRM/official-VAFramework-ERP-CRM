@@ -1223,6 +1223,7 @@
     <Content Include="Areas\ViennaBase\Scripts\globalize\globalize.js" />
     <Content Include="Areas\ViennaBase\Scripts\jquery-2.1.0.js" />
     <Content Include="Areas\ViennaBase\Scripts\jquery-2.1.0.min.js" />
+    <Content Include="Areas\ViennaBase\Scripts\jquery.imgareaselect.js" />
     <Content Include="Areas\ViennaBase\Scripts\jszip-utils.js" />
     <Content Include="Areas\ViennaBase\Scripts\jszip.js" />
     <Content Include="Areas\ViennaBase\Scripts\migration\bootstrap.js" />

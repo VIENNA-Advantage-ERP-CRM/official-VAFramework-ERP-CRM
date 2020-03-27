@@ -1804,6 +1804,7 @@
     <Compile Include="Process\RfQResponseRank.cs" />
     <Compile Include="Process\ScheduleContract.cs" />
     <Compile Include="Process\SendMailText.cs" />
+    <Compile Include="Process\SendRequestNotification.cs" />
     <Compile Include="Process\StorageCleanup.cs" />
     <Compile Include="Process\SubscribeCustomerInterestArea.cs" />
     <Compile Include="Process\TaxDeclarationCreate.cs" />
