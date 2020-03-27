@@ -59,6 +59,8 @@ namespace VAdvantage.Model
         private const String TAG_END = "#ID]";
 
         private StringBuilder message = null;
+        private String subject = "";
+        private int mailText_ID = 0;
 
         /**************************************************************************
          * 	Constructor
@@ -1019,14 +1021,16 @@ namespace VAdvantage.Model
             }
             CheckChange(ra, "AD_Role_ID");
             //
-            CheckChange(ra, "Priority");
+            if (CheckChange(ra, "Priority"))
+                sendInfo.Add("Priority");
             if (CheckChange(ra, "PriorityUser"))
                 sendInfo.Add("PriorityUser");
             if (CheckChange(ra, "IsEscalated"))
                 sendInfo.Add("IsEscalated");
             //
             CheckChange(ra, "ConfidentialType");
-            CheckChange(ra, "Summary");
+            if (CheckChange(ra, "Summary"))
+                sendInfo.Add("Summary");
             CheckChange(ra, "IsSelfService");
             CheckChange(ra, "C_BPartner_ID");
             CheckChange(ra, "AD_User_ID");
@@ -1052,7 +1056,15 @@ namespace VAdvantage.Model
             CheckChange(ra, "DateCompletePlan");
             //
             if (_changed)
+            {
+                if (sendInfo.Count > 0)
+                {
+                    // get the columns which were changed.
+                    string colsChanged = getChangedString(sendInfo);
+                    ra.SetChangedValues(colsChanged);
+                }
                 ra.Save();
+            }
 
             //	Current Info
             MRequestUpdate update = new MRequestUpdate(this);
@@ -1061,32 +1073,84 @@ namespace VAdvantage.Model
             else
                 update = null;
             //
-            _emailTo = new StringBuilder();
-            if (update != null || sendInfo.Count > 0)
+            // check mail templates from request or request type.
+            if (GetR_MailText_ID() > 0)
             {
+                mailText_ID = GetR_MailText_ID();
+            }
+            if (mailText_ID == 0)
+            {
+                MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
+                if (reqType.GetR_MailText_ID() > 0)
+                {
+                    mailText_ID = reqType.GetR_MailText_ID();
+                }
+
+            }
+
+
+            if (mailText_ID == 0)
+            {
+                _emailTo = new StringBuilder();
+                if (update != null || sendInfo.Count > 0)
+                {
+                    prepareNotificMsg(sendInfo);
+                    //	Update
+                    if (ra != null)
+                        SetDateLastAction(ra.GetCreated());
+                    SetLastResult(GetResult());
+                    SetDueType();
+                    //	ReSet
+                    SetConfidentialTypeEntry(GetConfidentialType());
+                    SetStartDate(null);
+                    SetEndTime(null);
+                    SetR_StandardResponse_ID(0);
+                    SetR_MailText_ID(0);
+                    SetResult(null);
+                    //	SetQtySpent(null);
+                    //	SetQtyInvoiced(null);
+
+
+
+
+                }
+            }
+            else
+            {
+                // get message if mail template is found.
                 prepareNotificMsg(sendInfo);
-                //	Update
-                if (ra != null)
-                    SetDateLastAction(ra.GetCreated());
-                SetLastResult(GetResult());
-                SetDueType();
-                //	ReSet
-                SetConfidentialTypeEntry(GetConfidentialType());
-                SetStartDate(null);
-                SetEndTime(null);
-                SetR_StandardResponse_ID(0);
-                SetR_MailText_ID(0);
-                SetResult(null);
-                //	SetQtySpent(null);
-                //	SetQtyInvoiced(null);
-
-
-
-
             }
 
             return true;
         }
+
+        /// <summary>
+        /// get string of the changed columns
+        /// </summary>
+        /// <param name="sendInfo">list of columns changed.</param>
+        /// <returns>return the comma separated string.</returns>
+        private string getChangedString(List<string> sendInfo)
+        {
+            StringBuilder colString = null;
+            if (sendInfo.Count > 0)
+            {
+                colString = new StringBuilder();
+                for (int i = 0; i < sendInfo.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        colString.Append(sendInfo[i]);
+                    }
+                    else
+                    {
+                        colString.Append(',').Append(sendInfo[i]);
+                    }
+
+                }
+            }
+            return colString.ToString();
+        }
+
 
         /// <summary>
         /// Prepare the notification message before going to after save.
@@ -1094,37 +1158,56 @@ namespace VAdvantage.Model
         /// <param name="list"></param>
         private void prepareNotificMsg(List<String> list)
         {
-            message = new StringBuilder();
-            //		UpdatedBy: Joe
-            int UpdatedBy = GetCtx().GetAD_User_ID();
-            MUser from = MUser.Get(GetCtx(), UpdatedBy);
-            if (from != null)
-                message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
-                    .Append(from.GetName());
-            //		LastAction/Created: ...	
-            if (GetDateLastAction() != null)
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateLastAction"))
-                    .Append(": ").Append(GetDateLastAction());
-            else
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
-                    .Append(": ").Append(GetCreated());
-            //	Changes
-            for (int i = 0; i < list.Count; i++)
+            if (mailText_ID == 0)
             {
-                String columnName = (String)list[i];
-                message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
-                    .Append(": ").Append(Get_DisplayValue(columnName, false))
-                    .Append(" -> ").Append(Get_DisplayValue(columnName, true));
+                message = new StringBuilder();
+                //		UpdatedBy: Joe
+                int UpdatedBy = GetCtx().GetAD_User_ID();
+                MUser from = MUser.Get(GetCtx(), UpdatedBy);
+                if (from != null)
+                    message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
+                        .Append(from.GetName());
+                //		LastAction/Created: ...	
+                if (GetDateLastAction() != null)
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "DateLastAction"))
+                        .Append(": ").Append(GetDateLastAction());
+                else
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
+                        .Append(": ").Append(GetCreated());
+                //	Changes
+                for (int i = 0; i < list.Count; i++)
+                {
+                    String columnName = (String)list[i];
+                    message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
+                        .Append(": ").Append(Get_DisplayValue(columnName, false))
+                        .Append(" -> ").Append(Get_DisplayValue(columnName, true));
+                }
+                //	NextAction
+                if (GetDateNextAction() != null)
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
+                        .Append(": ").Append(GetDateNextAction());
+                message.Append(SEPARATOR)
+                    .Append(GetSummary());
+                if (GetResult() != null)
+                    message.Append("\n----------\n").Append(GetResult());
+                message.Append(GetMailTrailer(null));
             }
-            //	NextAction
-            if (GetDateNextAction() != null)
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
-                    .Append(": ").Append(GetDateNextAction());
-            message.Append(SEPARATOR)
-                .Append(GetSummary());
-            if (GetResult() != null)
-                message.Append("\n----------\n").Append(GetResult());
-            message.Append(GetMailTrailer(null));
+            else
+            {
+                message = new StringBuilder();
+
+                MRequest _req = new MRequest(GetCtx(), GetR_Request_ID(), null);
+                MMailText text = new MMailText(GetCtx(), mailText_ID, null);
+                text.SetPO(_req, true); //Set _Po Current value
+                subject += GetDocumentNo() + ": " + text.GetMailHeader();
+
+                message.Append(text.GetMailText(true));
+                if (GetDateNextAction() != null)
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
+                        .Append(": ").Append(GetDateNextAction());
+
+                // message.Append(GetMailTrailer(null));
+            }
         }
 
 
@@ -1270,14 +1353,16 @@ namespace VAdvantage.Model
                 }
                 CheckChange(ra, "AD_Role_ID");
                 //
-                CheckChange(ra, "Priority");
+                if (CheckChange(ra, "Priority"))
+                    sendInfo.Add("Priority");
                 if (CheckChange(ra, "PriorityUser"))
                     sendInfo.Add("PriorityUser");
                 if (CheckChange(ra, "IsEscalated"))
                     sendInfo.Add("IsEscalated");
                 //
                 CheckChange(ra, "ConfidentialType");
-                CheckChange(ra, "Summary");
+                if (CheckChange(ra, "Summary"))
+                    sendInfo.Add("Summary");
                 CheckChange(ra, "IsSelfService");
                 CheckChange(ra, "C_BPartner_ID");
                 CheckChange(ra, "AD_User_ID");
@@ -1312,14 +1397,22 @@ namespace VAdvantage.Model
                 else
                     update = null;
                 //
-                _emailTo = new StringBuilder();
-                if (update != null || sendInfo.Count > 0)
+                if (mailText_ID == 0)
                 {
+                    _emailTo = new StringBuilder();
+                    if (update != null || sendInfo.Count > 0)
+                    {
 
+                        // For Role Changes
+                        Thread thread = new Thread(new ThreadStart(() => SendNotices(sendInfo)));
+                        thread.Start();
+                    }
+                }
+                else
+                {
                     // For Role Changes
                     Thread thread = new Thread(new ThreadStart(() => SendNotices(sendInfo)));
                     thread.Start();
-
                 }
             }
         }
@@ -1590,8 +1683,11 @@ namespace VAdvantage.Model
             StringBuilder finalMsg = new StringBuilder();
             finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NotificSent"));
             //	Subject
-            String subject = Msg.Translate(GetCtx(), "R_Request_ID")
-                + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+            if (mailText_ID == 0)
+            {
+                subject = Msg.Translate(GetCtx(), "R_Request_ID")
+                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+            }
             //	Message
 
             //		UpdatedBy: Joe

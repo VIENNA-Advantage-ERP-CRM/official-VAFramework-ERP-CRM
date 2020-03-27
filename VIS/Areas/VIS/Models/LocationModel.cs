@@ -372,16 +372,35 @@ namespace VIS.Models
             DataSet _ds = null;
             try
             {
-                // Check applied by mohit - asked by mukesh sir - to check if login langauge is base language - then pick non translated data.
-                if (Env.IsBaseLanguage(ctx, ""))
+                // load the country from login orgnization's organization info loaction.
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Location_ID FROM AD_OrgInfo WHERE IsActive='Y' AND AD_Org_ID=" + ctx.GetAD_Org_ID() + " ", null, null)) > 0)
                 {
-                    _ds = DB.ExecuteDataset("SELECT Name , C_Country_ID FROM C_Country WHERE IsActive='Y' AND CountryCode=(SELECT CountryCode FROM AD_Language WHERE IsActive='Y' AND AD_Language='" + AD_language + "')");
+                    if (Env.IsBaseLanguage(ctx, ""))
+                    {
+                        _ds = DB.ExecuteDataset("SELECT cnt.C_Country_ID,  cnt.Name FROM C_Country cnt INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) "
+                                         + " INNER JOIN AD_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE oi.AD_Org_ID =  " + ctx.GetAD_Org_ID());
+                    }
+                    else
+                    {
+                        _ds = DB.ExecuteDataset(@"SELECT cnt.C_Country_ID,  cntrl.Name FROM C_Country cnt INNER JOIN C_Country_Trl cntrl ON(cnt.c_country_ID = cntrl.c_country_id)
+                                                INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) INNER JOIN AD_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE 
+                                                oi.AD_Org_ID = " + ctx.GetAD_Org_ID() + "  AND CNTRL.AD_Language = '" + AD_language + "'");
+                    }
                 }
                 else
                 {
-                    // Check applied by mohit - Picked data from translation tab - if base language
-                    _ds = DB.ExecuteDataset("SELECT CNTRL.Name , CN.C_Country_ID FROM C_Country CN INNER JOIN C_Country_trl CNTRL ON (CN.C_Country_ID=CNTRL.C_Country_ID)" +
-                        " WHERE CN.IsActive='Y' AND CN.CountryCode=(SELECT CountryCode FROM AD_Language WHERE IsActive='Y' AND AD_Language='" + AD_language + "') AND CNTRL.AD_Language='" + AD_language + "'");
+
+                    // Check applied by mohit - asked by mukesh sir - to check if login langauge is base language - then pick non translated data.
+                    if (Env.IsBaseLanguage(ctx, ""))
+                    {
+                        _ds = DB.ExecuteDataset("SELECT Name , C_Country_ID FROM C_Country WHERE IsActive='Y' AND CountryCode=(SELECT CountryCode FROM AD_Language WHERE IsActive='Y' AND AD_Language='" + AD_language + "')");
+                    }
+                    else
+                    {
+                        // Check applied by mohit - Picked data from translation tab - if base language
+                        _ds = DB.ExecuteDataset("SELECT CNTRL.Name , CN.C_Country_ID FROM C_Country CN INNER JOIN C_Country_trl CNTRL ON (CN.C_Country_ID=CNTRL.C_Country_ID)" +
+                            " WHERE CN.IsActive='Y' AND CN.CountryCode=(SELECT CountryCode FROM AD_Language WHERE IsActive='Y' AND AD_Language='" + AD_language + "') AND CNTRL.AD_Language='" + AD_language + "'");
+                    }
                 }
                 if (_ds != null && _ds.Tables[0].Rows.Count > 0)
                 {

@@ -419,6 +419,17 @@ return Convert.ToInt32(ii);
         public void SetR_AllowSaveNotify(Boolean R_AllowSaveNotify) { Set_Value("R_AllowSaveNotify", R_AllowSaveNotify); }/** Get Allow Notification on Save.
 @return Allow Notification on Save */
         public Boolean IsR_AllowSaveNotify() { Object oo = Get_Value("R_AllowSaveNotify"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /** Set Mail Template.
+@param R_MailText_ID Text templates for mailings */
+        public void SetR_MailText_ID(int R_MailText_ID)
+        {
+            if (R_MailText_ID <= 0) Set_Value("R_MailText_ID", null);
+            else
+                Set_Value("R_MailText_ID", R_MailText_ID);
+        }/** Get Mail Template.
+@return Text templates for mailings */
+        public int GetR_MailText_ID() { Object ii = Get_Value("R_MailText_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }
