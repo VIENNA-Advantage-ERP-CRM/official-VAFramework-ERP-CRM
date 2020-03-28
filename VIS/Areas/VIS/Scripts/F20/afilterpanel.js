@@ -322,8 +322,10 @@
                 htm.push('</div>');
                 fields.append(htm.join(''));
             }
-            for (i = 0; i < selItems.length; i++) {
-                fields.append(selItems[i]);
+            if (data.length < 5) {
+                for (i = 0; i < selItems.length; i++) {
+                    fields.append(selItems[i]);
+                }
             }
 
             selItems = [];
