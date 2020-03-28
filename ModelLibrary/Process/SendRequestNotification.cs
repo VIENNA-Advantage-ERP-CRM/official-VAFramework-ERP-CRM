@@ -27,82 +27,118 @@ namespace VAdvantage.Process
         private int _failure = 0;
         private int _notices = 0;
         private StringBuilder _emailTo = new StringBuilder();
-        int Request_ID = 0;
+        private int mailText_ID = 0;
+        private List<String> sendInfo = null;
+        private String subject = "";
         protected override string DoIt()
         {
-            if (Request_ID < 1)
-            {
-                return "Failed";
-            }
-            _req = new MRequest(GetCtx(), Request_ID, null);
-            GetReqHistory();
-            if (_reqAction == null)
-            {
-                return Msg.GetMsg(GetCtx(), "R_NoReqChanges");
-            }
-            bool _changed = false;
-            List<String> sendInfo = new List<String>();
+            _req = new MRequest(GetCtx(), GetRecord_ID(), null);
 
-            //
-            if (_req.GetR_RequestType_ID() != _reqAction.GetR_RequestType_ID() && _reqAction.GetR_RequestType_ID()>0)
+            // check mail template if found on request or request type.
+            mailText_ID = _req.GetR_MailText_ID();
+            if (mailText_ID == 0)
             {
-                _changed = true;
-                sendInfo.Add("R_RequestType_ID");
-            }
-            if (_req.GetR_Group_ID() != _reqAction.GetR_Group_ID() && _reqAction.GetR_Group_ID()>0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Group_ID");
-            }
-            if (_req.GetR_Category_ID() != _reqAction.GetR_Category_ID() && _reqAction.GetR_Category_ID()>0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Category_ID");
-            }
-            if (_req.GetR_Status_ID() != _reqAction.GetR_Status_ID() && _reqAction.GetR_Status_ID()>0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Status_ID");
-            }
-            if (_req.GetR_Resolution_ID() != _reqAction.GetR_Resolution_ID() && _reqAction.GetR_Resolution_ID() >0)
-            {
-                _changed = true;
-                sendInfo.Add("R_Resolution_ID");
-            }
-            //
-            if (_req.GetSalesRep_ID() != _reqAction.GetSalesRep_ID() && _reqAction.GetSalesRep_ID()>0) 
-            {
-                _changed = true;
-                sendInfo.Add("SalesRep_ID");
-            }
-            //
-            if (_req.GetPriority() != _reqAction.GetPriority() && !string.IsNullOrEmpty( _reqAction.GetPriority()))
-            {
-                _changed = true;
-                sendInfo.Add("Priority");
-            }
-            if (_req.GetPriorityUser() != _reqAction.GetPriorityUser() && !string.IsNullOrEmpty(_reqAction.GetPriorityUser()))
-            {
-                _changed = true;
-                sendInfo.Add("PriorityUser");
-            }
-            if (_req.GetSummary() != _reqAction.GetSummary() && !string.IsNullOrEmpty(_reqAction.GetSummary()))
-            {
-                _changed = true;
-                sendInfo.Add("Summary");
-            }
+                MRequestType reqType = new MRequestType(GetCtx(), _req.GetR_RequestType_ID(), null);
+                if (reqType.GetR_MailText_ID() > 0)
+                {
+                    mailText_ID = reqType.GetR_MailText_ID();
+                }
 
-            if (sendInfo.Count > 0 && _changed)
+            }
+            if (mailText_ID == 0)
+            {
+                GetReqHistory();
+                if (_reqAction == null)
+                {
+                    return Msg.GetMsg(GetCtx(), "R_NoReqChanges");
+                }
+                string changedValues = _reqAction.GetChangedValues();
+                bool _changed = false;
+                 sendInfo = new List<String>();
+
+                if (!string.IsNullOrEmpty(changedValues))
+                {
+                    string[] strValues = changedValues.Split(',');
+                    if (strValues.Length > 0)
+                    {
+                        for (int i = 0; i < strValues.Length; i++)
+                        {
+                            _changed = true;
+                            sendInfo.Add(strValues[i]);
+                        }
+                    }
+                }
+
+                #region commented
+                //
+                //if (_req.GetR_RequestType_ID() != _reqAction.GetR_RequestType_ID() && _reqAction.GetR_RequestType_ID() > 0)
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("R_RequestType_ID");
+                //}
+                //if (_req.GetR_Group_ID() != _reqAction.GetR_Group_ID() && _reqAction.GetR_Group_ID() > 0)
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("R_Group_ID");
+                //}
+                //if (_req.GetR_Category_ID() != _reqAction.GetR_Category_ID() && _reqAction.GetR_Category_ID() > 0)
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("R_Category_ID");
+                //}
+                //if (_req.GetR_Status_ID() != _reqAction.GetR_Status_ID() && _reqAction.GetR_Status_ID() > 0)
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("R_Status_ID");
+                //}
+                //if (_req.GetR_Resolution_ID() != _reqAction.GetR_Resolution_ID() && _reqAction.GetR_Resolution_ID() > 0)
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("R_Resolution_ID");
+                //}
+                ////
+                //if (_req.GetSalesRep_ID() != _reqAction.GetSalesRep_ID() && _reqAction.GetSalesRep_ID() > 0)
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("SalesRep_ID");
+                //}
+                ////
+                //if (_req.GetPriority() != _reqAction.GetPriority() && !string.IsNullOrEmpty(_reqAction.GetPriority()))
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("Priority");
+                //}
+                //if (_req.GetPriorityUser() != _reqAction.GetPriorityUser() && !string.IsNullOrEmpty(_reqAction.GetPriorityUser()))
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("PriorityUser");
+                //}
+                //if (_req.GetSummary() != _reqAction.GetSummary() && !string.IsNullOrEmpty(_reqAction.GetSummary()))
+                //{
+                //    _changed = true;
+                //    sendInfo.Add("Summary");
+                //}
+                #endregion
+                if (sendInfo.Count > 0 && _changed)
+                {
+                    prepareNotificMsg(sendInfo);
+                    // For Role Changes
+                    Thread thread = new Thread(new ThreadStart(() => SendNotices(sendInfo)));
+                    thread.Start();
+                    return Msg.GetMsg(GetCtx(), "R_EmailBackgrndRun");
+                }
+                else
+                {
+                    return Msg.GetMsg(GetCtx(), "R_NoReqChanges");
+                }
+            }
+            else
             {
                 prepareNotificMsg(sendInfo);
                 // For Role Changes
                 Thread thread = new Thread(new ThreadStart(() => SendNotices(sendInfo)));
                 thread.Start();
                 return Msg.GetMsg(GetCtx(), "R_EmailBackgrndRun");
-            }
-            else
-            {
-                return Msg.GetMsg(GetCtx(), "R_NoReqChanges");                
             }
 
             return "";
@@ -118,8 +154,11 @@ namespace VAdvantage.Process
             StringBuilder finalMsg = new StringBuilder();
             finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + _req.GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NotificSent"));
             //	Subject
-            String subject = Msg.Translate(GetCtx(), "R_Request_ID")
-                + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + _req.GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + _req.GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+            if (mailText_ID == 0)
+            {
+                subject = Msg.Translate(GetCtx(), "R_Request_ID")
+                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + _req.GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + _req.GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+            }
             //	Message
 
             //		UpdatedBy: Joe
@@ -178,7 +217,7 @@ namespace VAdvantage.Process
 
                     //	No confidential to externals
                     if (AD_Role_ID == -1
-                        && ( _req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_Internal)
+                        && (_req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_Internal)
                             || _req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_PrivateInformation)))
                         continue;
 
@@ -267,7 +306,7 @@ namespace VAdvantage.Process
 
                 int AD_Message_ID = 834;
                 MNote note = new MNote(GetCtx(), AD_Message_ID, GetCtx().GetAD_User_ID(),
-                    X_R_Request.Table_ID,_req.GetR_Request_ID(),
+                    X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
                     log.Log(Level.INFO, "ProcessFinished", "");
@@ -287,7 +326,7 @@ namespace VAdvantage.Process
                 SendNoticeNow(_req.GetSalesRep_ID(), null,
                     client, from, subject, message.ToString(), pdf);
 
-           
+
         }
 
         /// <summary>
@@ -311,42 +350,60 @@ namespace VAdvantage.Process
         /// <param name="list">list of the values changed.</param>
         private void prepareNotificMsg(List<String> list)
         {
-            message = new StringBuilder();
-            //		UpdatedBy: Joe
-            int UpdatedBy = GetCtx().GetAD_User_ID();
-            MUser from = MUser.Get(GetCtx(), UpdatedBy);
-            if (from != null)
-                message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
-                    .Append(from.GetName());
-            //		LastAction/Created: ...	
-            if (_req.GetDateLastAction() != null)
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateLastAction"))
-                    .Append(": ").Append(_req.GetDateLastAction());
-            else
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
-                    .Append(": ").Append(_req.GetCreated());
-            //	Changes
-            for (int i = 0; i < list.Count; i++)
+            if (mailText_ID == 0)
             {
-                X_R_Request req = new X_R_Request(GetCtx(), 0, null);
-               
-                String columnName = (String)list[i];
-                message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
-                    .Append(": ").Append(_reqAction.getColumnValue(columnName))
-                    .Append(" -> ").Append(_req.getColumnValue(columnName));
+                message = new StringBuilder();
+                //		UpdatedBy: Joe
+                int UpdatedBy = GetCtx().GetAD_User_ID();
+                MUser from = MUser.Get(GetCtx(), UpdatedBy);
+                if (from != null)
+                    message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
+                        .Append(from.GetName());
+                //		LastAction/Created: ...	
+                if (_req.GetDateLastAction() != null)
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "DateLastAction"))
+                        .Append(": ").Append(_req.GetDateLastAction());
+                else
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
+                        .Append(": ").Append(_req.GetCreated());
+                //	Changes
+                for (int i = 0; i < list.Count; i++)
+                {
+                    X_R_Request req = new X_R_Request(GetCtx(), 0, null);
+
+                    String columnName = (String)list[i];
+                    message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
+                        .Append(": ").Append(_reqAction.getColumnValue(columnName))
+                        .Append(" -> ").Append(_req.getColumnValue(columnName));
+                }
+                //	NextAction
+                if (_req.GetDateNextAction() != null)
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
+                        .Append(": ").Append(_req.GetDateNextAction());
+                message.Append(SEPARATOR)
+                    .Append(_req.GetSummary());
+                if (_req.GetResult() != null)
+                    message.Append("\n----------\n").Append(_req.GetResult());
+                message.Append(_req.GetMailTrailer(null));
             }
-            //	NextAction
-            if (_req.GetDateNextAction() != null)
-                message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
-                    .Append(": ").Append(_req.GetDateNextAction());
-            message.Append(SEPARATOR)
-                .Append(_req.GetSummary());
-            if (_req.GetResult() != null)
-                message.Append("\n----------\n").Append(_req.GetResult());
-            message.Append(_req.GetMailTrailer(null));
-           
+            else
+            {
+                message = new StringBuilder();
+                
+                MMailText text = new MMailText(GetCtx(), mailText_ID, null);
+                text.SetPO(_req, true); //Set _Po Current value
+                subject += _req. GetDocumentNo() + ": " + text.GetMailHeader();
+
+                message.Append(text.GetMailText(true));
+                if (_req.GetDateNextAction() != null)
+                    message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
+                        .Append(": ").Append(_req.GetDateNextAction());
+
+                // message.Append(GetMailTrailer(null));
+            }
+
         }
-      
+
         /// <summary>
         /// Create pdf
         /// </summary>
@@ -440,7 +497,7 @@ namespace VAdvantage.Process
             {
                 int AD_Message_ID = 834;
                 MNote note = new MNote(GetCtx(), AD_Message_ID, AD_User_ID,
-                    X_R_Request.Table_ID,_req.GetR_Request_ID(),
+                    X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())
                     _notices++;
@@ -505,7 +562,7 @@ namespace VAdvantage.Process
             // if not access user organization access.
             if (!isAllUser && !role.IsUseUserOrgAccess())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND AD_Org_ID IN (" + _req.GetAD_Org_ID() + ",0)")) > 0)
                 {
                     isAllUser = true;
                 }
@@ -522,7 +579,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + _req.GetAD_Org_ID() + ",0)")) > 0)
                     {
                         users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
                     }
@@ -532,25 +589,7 @@ namespace VAdvantage.Process
         }
         protected override void Prepare()
         {
-            ProcessInfoParameter[] para = GetParameter();
-            for (int i = 0; i < para.Length; i++)
-            {
-                String name = para[i].GetParameterName();
-                //	log.fine("prepare - " + para[i]);
-                if (para[i].GetParameter() == null)
-                {
-                    ;
-                }
-                else if (name.Equals("R_Request_ID"))
-                {
-                    Request_ID = para[i].GetParameterAsInt();
-                }
 
-                else
-                {
-                    log.Log(Level.SEVERE, "Unknown Parameter: " + name);
-                }
-            }
         }
     }
 }

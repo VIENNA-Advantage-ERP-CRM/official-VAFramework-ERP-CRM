@@ -1043,7 +1043,7 @@ namespace VIS.Controllers
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             List<FilterDataContract> keyva = new List<FilterDataContract>();
-            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql,1,5);
+            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql,1,10);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
