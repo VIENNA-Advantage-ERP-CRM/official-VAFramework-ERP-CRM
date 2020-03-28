@@ -304,9 +304,11 @@
             for (var i = 0; i < data.length; i++) {
                 var htm = [];
                 var dId = data[i].ID;
+
                 if (!isNaN(dId)) {
                     dId = parseFloat(dId);
                 }
+
                 var index = selIds.indexOf(dId);
 
                 if (index > -1) {
@@ -316,17 +318,18 @@
                     selIds.splice(index, 1);
                     continue;
                 }
-                htm.push('<div class="vis-fp-inputspan">');
-                htm.push('<div class="vis-fp-istagwrap"><input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + key + '" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"');
-                htm.push('><span data-id="' + data[i].ID + '">' + data[i].Name + '</span> </div><span class="vis-fp-spanCount">(' + data[i].Count + ')</span>');
-                htm.push('</div>');
-                fields.append(htm.join(''));
+                if (i < 5) {
+                    htm.push('<div class="vis-fp-inputspan">');
+                    htm.push('<div class="vis-fp-istagwrap"><input class="vis-fp-chboxInput vis-fp-inputvalueforupdate" type="checkbox" data-column="' + key + '" data-keyval="' + key + '_' + data[i].ID + '" data-id="' + data[i].ID + '"');
+                    htm.push('><span data-id="' + data[i].ID + '">' + data[i].Name + '</span> </div><span class="vis-fp-spanCount">(' + data[i].Count + ')</span>');
+                    htm.push('</div>');
+                    fields.append(htm.join(''));
+                }
             }
-            if (data.length < 5) {
+           
                 for (i = 0; i < selItems.length; i++) {
                     fields.append(selItems[i]);
                 }
-            }
 
             selItems = [];
             selIds = [];
