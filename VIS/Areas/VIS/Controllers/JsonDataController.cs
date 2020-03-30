@@ -1049,6 +1049,8 @@ namespace VIS.Controllers
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     FilterDataContract val = new FilterDataContract();
+                    if (ds.Tables[0].Rows[i][0] == null || ds.Tables[0].Rows[i][0] == DBNull.Value)
+                        continue;
                     val.ID = Convert.ToString(ds.Tables[0].Rows[i][0]);
                     val.Name = Convert.ToString(ds.Tables[0].Rows[i][1]);
                     val.Count = Convert.ToInt32(ds.Tables[0].Rows[i][2]);
