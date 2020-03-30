@@ -6,6 +6,7 @@
         var $root, $busyDiv, $contentGrid, ch;
         var ctx = VIS.Env.getCtx(); //ctx
         var log = VIS.Logging.VLogger.getVLogger("VIS.AForm"); //Logger
+        var windowNo = VIS.Env.getWindowNo();
         var self = this;
         //InitComponenet
         function initComponent() {
@@ -19,11 +20,14 @@
 
         initComponent();
 
+        this.getWindowNo = function () {
+            return windowNo;
+        };
+
         this.getContentGrid = function () { return $contentGrid; };
 
         this.close = function () {
-            if (ch)
-            {
+            if (ch) {
                 ch.close();
             }
         };
@@ -59,7 +63,7 @@
             })
         };
 
-        openForm = function (json, $parent, windowNo) {
+        openForm = function (json, $parent, pWwindowNo) {
 
             if (json.IsReport) {
                 VIS.ADialog.info("Form Report is not supported");
@@ -74,13 +78,13 @@
 
 
             log.info("Form Name= " + json.Name + ", Class=" + className);
-            ctx.setWindowContext(pWwindowNo, "WindowName", json.DisplayName);
+            ctx.setWindowContext(windowNo, "WindowName", json.DisplayName);
 
             try {
 
                 var type = VIS.Utility.getFunctionByName(className, window);
                 var o = new type(windowNo);
-                o.init(windowNo, self);
+                o.init(pWwindowNo, self);
                 if (o.setRecordID) {
                     o.setRecordID(curTab.getRecord_ID());
                 }
