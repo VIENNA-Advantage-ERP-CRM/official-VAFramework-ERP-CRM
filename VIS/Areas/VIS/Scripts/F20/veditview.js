@@ -409,6 +409,7 @@
             //setColumns(columnIndex);
             // clearRowSpan();
             addRow();
+            reset();
             initCols(true);
             //<i class="fa fa-ellipsis-h"></i>
             var gDiv = $('<div class="vis-ev-col-fieldgroup" data-showmore="Y" data-name="' + fieldGroup + '" data-display="show">' +

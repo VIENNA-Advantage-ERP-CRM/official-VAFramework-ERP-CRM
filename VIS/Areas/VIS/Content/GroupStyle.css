@@ -250,13 +250,12 @@ input.vis-group-search-icon {
 }
 
 .vis-group-user-wrap {
-    /*border-top: 1px solid #dfdfdf;*/
     border-bottom: 1px solid rgba(var(--v-c-on-secondary), .25);
     padding-top: 10px;
     padding-bottom: 10px;
-    /*margin-right: 10px;*/
     float: left;
     width: 100%;
+    display: flex;
 }
 
 .vis-group-user-profile, .vis-group-user-img {
@@ -682,6 +681,8 @@ input.vis-group-search-icon {
     font-size: 13px;
 }
 
+
+
 .vis-group-SaveMessage {
     display: compact;
     display: none;
@@ -695,6 +696,7 @@ input.vis-group-search-icon {
 .vis-group-role-pad .vis-group-user-profile {
     display: flex;
     align-items: center;
+    flex: 1;
 }
 .vis-group-role-pad .vis-group-user-profile label {
     width: calc(100% - 24px);

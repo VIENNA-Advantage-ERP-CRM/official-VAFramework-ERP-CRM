@@ -101,16 +101,21 @@
                     var fieldorg = this.selectionfields[i];
                     if (!fieldorg.getIsDisplayed())
                         continue;
+
                     var field = {};
-                    field = jQuery.extend(true, {}, fieldorg);
-                    field.lookup = jQuery.extend(true, {}, fieldorg.lookup);
+                    if (VIS.DisplayType.IsLookup(fieldorg.getDisplayType()) || VIS.DisplayType.ID == fieldorg.getDisplayType()) {
+                        field = jQuery.extend(true, {}, fieldorg);
+                        field.lookup = jQuery.extend(true, {}, fieldorg.lookup);
+                        field.lookup.initialize();
+                    }
+                    else {
+                        field = fieldorg;
+                    }
 
                     if (field.getIsKey()) {
                         crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
                             field.getColumnName());
                     }
-
-
 
                     else {
                         crt = VIS.VControlFactory.getControl(null, field, true, true, false);
