@@ -64,20 +64,22 @@ namespace VAdvantage.DBPort
                 ;
             }
             else if (isCreate && cmpString.IndexOf(" TRIGGER ") != -1)
-            { ;}
+            {; }
             else if (isCreate && cmpString.IndexOf(" PROCEDURE ") != -1)
-            { ;}
+            {; }
             else if (isCreate && cmpString.IndexOf(" VIEW ") != -1)
-            { ;}
+            {; }
             else if (cmpString.IndexOf("ALTER TABLE") != -1)
             {
                 statement = RecoverQuotedStrings(statement, retVars);
                 retVars.Clear();
                 //statement = ConvertDDL(ConvertComplexStatement(statement));
                 statement = ConvertComplexStatement(statement);
-                /*
-                } else if (cmpString.indexOf("ROWNUM") != -1) {
-                    result.add(convertRowNum(convertComplexStatement(convertAlias(statement))));*/
+
+            }
+            else if (cmpString.IndexOf("ROWNUM") != -1)
+            {
+                statement = ConvertRowNum(ConvertComplexStatement(ConvertAlias(statement)));
             }
             else if (cmpString.IndexOf("DELETE ") != -1
                   && cmpString.IndexOf("DELETE FROM") == -1)
@@ -104,7 +106,7 @@ namespace VAdvantage.DBPort
             return result;
         }
 
-       
+
 
 
         protected override IDictionary GetConvertMap()
@@ -112,30 +114,465 @@ namespace VAdvantage.DBPort
             return (IDictionary)m_map;
         }
 
-     
-	protected override String EscapeQuotedString(String inStr)
-	{
-		StringBuilder oStr = new StringBuilder();
-		bool escape = false;
-		int size = inStr.Length;
-		for(int i = 0; i < size; i++) {
-			char c = inStr[i];
-			oStr.Append(c);
-			if (c == '\\')
-			{
-				escape  = true;
-				oStr.Append(c);
-			}
-		}
-		if (escape)
-		{
-			return "E" + oStr.ToString();
-		}
-		else
-		{
-			return oStr.ToString();
-		}
-	}
+
+        protected override String EscapeQuotedString(String inStr)
+        {
+            StringBuilder oStr = new StringBuilder();
+            bool escape = false;
+            int size = inStr.Length;
+            for (int i = 0; i < size; i++)
+            {
+                char c = inStr[i];
+                oStr.Append(c);
+                if (c == '\\')
+                {
+                    escape = true;
+                    oStr.Append(c);
+                }
+            }
+            if (escape)
+            {
+                return "E" + oStr.ToString();
+            }
+            else
+            {
+                return oStr.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Converts ROWNUM
+        /// </summary>
+        /// <param name="sqlStatement">sql Statement</param>
+        /// <returns>converted statement</returns>
+        private String ConvertRowNum(String sqlStatement)
+        {
+            sqlStatement = sqlStatement.Replace("rownum", "ROWNUM");
+
+            String retValue = null;
+
+            int s_end = 0;
+            int s_start = -1;
+            String select = sqlStatement;
+            String convert = "";
+
+            while (true)
+            {
+                s_end = 0;
+                s_start = select.IndexOf("(SELECT");
+
+                if (s_start == -1)
+                    break;
+
+                convert = convert + select.Substring(0, s_start);
+
+                int open = -1;
+                for (int i = s_start; i < select.Length; i++)
+                {
+                    char c = select[i];
+                    if (c == '(')
+                        open++;
+
+                    if (c == ')')
+                        open--;
+
+                    if (open == -1)
+                    {
+                        s_end = i + 1;
+                        break;
+                    }
+                }
+
+                String subselect = select.Substring(s_start, s_end - s_start);
+
+                if (subselect.IndexOf("AND ROWNUM=1") > 1)
+                {
+                    subselect = subselect.Substring(0, subselect.Length - 1)
+                    + " LIMIT 1 )";
+
+                    convert = convert + Utility.Util.Replace(subselect, "AND ROWNUM=1", "");
+
+                }
+                else if (subselect.IndexOf(" WHERE ROWNUM=1 AND") > 1)
+                {
+                    subselect = subselect.Substring(0, subselect.Length - 1)
+                    + " LIMIT 1 )";
+
+                    convert = convert
+                    + Utility.Util.Replace(subselect, " WHERE ROWNUM=1 AND",
+                    " WHERE ");
+                }
+                if (subselect.IndexOf("AND ROWNUM=-1") > 1)
+                {
+                    subselect = subselect.Substring(0, subselect.Length - 1)
+                    + " LIMIT 0 )";
+
+                    convert = convert + Utility.Util.Replace(subselect, "AND ROWNUM=-1", "");
+
+                }
+                else if (subselect.IndexOf(" WHERE ROWNUM=-1 AND") > 1)
+                {
+                    subselect = subselect.Substring(0, subselect.Length - 1)
+                    + " LIMIT 0 )";
+
+                    convert = convert
+                    + Utility.Util.Replace(subselect, " WHERE ROWNUM=-1 AND",
+                    " WHERE ");
+                }
+                else
+                {
+                    convert = convert + subselect;
+                }
+
+                select = select.Substring(s_end);
+                retValue = select;
+
+            }
+
+            if (retValue == null)
+                retValue = sqlStatement;
+
+            if (retValue.IndexOf("AND ROWNUM=1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM=1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=1", "");
+                    return convert + retValue + " LIMIT 1";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=1", " LIMIT 1");
+                    return convert + retValue;
+                }
+
+            }
+            else if (retValue.IndexOf("AND ROWNUM= 1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM= 1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM= 1", "");
+                    return convert + retValue + " LIMIT 1";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM= 1", " LIMIT 1");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("AND ROWNUM = 1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM = 1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(sqlStatement, "AND ROWNUM = 1", "");
+                    return convert + retValue + " LIMIT 1";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(sqlStatement, "AND ROWNUM = 1",
+                    " LIMIT 1");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("AND ROWNUM =1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM =1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM =1", "");
+                    return convert + retValue + " LIMIT 1";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM =1", " LIMIT 1");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("ROWNUM=1") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM=1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM=1", "");
+                    return convert + retValue + " LIMIT 1";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM=1 ", " LIMIT 1");
+                    return convert + retValue;
+                }
+            }
+
+            else if (retValue.IndexOf("AND ROWNUM=-1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM=-1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=-1", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=-1", " LIMIT 0");
+                    return convert + retValue;
+                }
+
+            }
+            else if (retValue.IndexOf("AND ROWNUM= -1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM= -1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM= -1", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM= -1", " LIMIT 0");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("AND ROWNUM = -1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM = -1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(sqlStatement, "AND ROWNUM = -1", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(sqlStatement, "AND ROWNUM = -1",
+                     " LIMIT 0");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("AND ROWNUM =-1") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM =-1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM =-1", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM =-1", " LIMIT 0");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("ROWNUM=-1 AND") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM=-1 AND");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM=-1 AND", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM=-1 AND", " LIMIT 0");
+                    return convert + retValue;
+                }
+
+            }
+            else if (retValue.IndexOf("ROWNUM= -1 AND") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM= -1 AND");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM= -1 AND", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM= -1 AND", " LIMIT 0");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("ROWNUM = -1 AND") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM = -1 AND");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(sqlStatement, "ROWNUM = -1 AND", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(sqlStatement, "ROWNUM = -1 AND",
+                     " LIMIT 0");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("ROWNUM =-1 AND") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM =-1 AND");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM =-1 AND", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM =-1 AND", " LIMIT 0");
+                    return convert + retValue;
+                }
+            }
+            else if (retValue.IndexOf("ROWNUM=-1") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM=-1");
+                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM=-1", "");
+                    return convert + retValue + " LIMIT 0";
+                }
+                else
+                {
+                    retValue = Utility.Util.Replace(retValue, "ROWNUM=-1 ", " LIMIT 0");
+                    return convert + retValue;
+                }
+            }
+
+            else if (retValue.IndexOf("AND ROWNUM<=") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM<=");
+                int indAnd = rownum + 12;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+            else if (retValue.IndexOf("AND ROWNUM<") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM <");
+                int indAnd = rownum + 11;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+            else if (retValue.IndexOf("AND ROWNUM <=") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM <");
+                int indAnd = rownum + 13;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+            else if (retValue.IndexOf("AND ROWNUM <") > 1)
+            {
+                int rownum = retValue.IndexOf("AND ROWNUM <");
+                int indAnd = rownum + 12;
+                string rnumStr = retValue.Substring(indAnd);
+
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+
+            else if (retValue.IndexOf("ROWNUM <=") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM <=");
+                int indAnd = rownum + 9;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+            else if (retValue.IndexOf("ROWNUM <") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM <");
+                int indAnd = rownum + 8;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+            else if (retValue.IndexOf("ROWNUM<=") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM<=");
+                int indAnd = rownum + 8; ;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+            else if (retValue.IndexOf("ROWNUM<") > 1)
+            {
+                int rownum = retValue.IndexOf("ROWNUM<");
+                int indAnd = rownum + 7; ;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
+                {
+                    indAnd = rnumStr.IndexOf("AND");
+                }
+                else
+                {
+                    indAnd = rnumStr.Length;
+                }
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+            }
+            return convert + retValue;
+
+        } // convertRowNum
 
         /// <summary>
         /// Converts Decode and Outer Join.
@@ -188,21 +625,21 @@ namespace VAdvantage.DBPort
             String PATTERN_String = "\'([^']|(''))*\'";
             String PATTERN_DataType = "([\\w]+)(\\(\\d+\\))?";
             String pattern =
-                               "\\bCAST\\b[\\s]*\\([\\s]*"					// CAST<sp>(<sp>		
-                               + "((" + PATTERN_String + ")|([^\\s]+))"		//	arg1				1(2,3)
-                               + "[\\s]*AS[\\s]*"						//	<sp>AS<sp>
-                               + "(" + PATTERN_DataType + ")"				//	arg2 (datatype)		4
-                               + "\\s*\\)"								//	<sp>)
+                               "\\bCAST\\b[\\s]*\\([\\s]*"                  // CAST<sp>(<sp>		
+                               + "((" + PATTERN_String + ")|([^\\s]+))"     //	arg1				1(2,3)
+                               + "[\\s]*AS[\\s]*"                       //	<sp>AS<sp>
+                               + "(" + PATTERN_DataType + ")"               //	arg2 (datatype)		4
+                               + "\\s*\\)"                              //	<sp>)
            ;
             int gidx_arg1 = 1;
-            int gidx_arg2 = 7;	// datatype w/o length
-            // Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-            MatchCollection mc = Regex.Matches(sqlStatement, pattern,RegexOptions.IgnoreCase);
+            int gidx_arg2 = 7;  // datatype w/o length
+                                // Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            MatchCollection mc = Regex.Matches(sqlStatement, pattern, RegexOptions.IgnoreCase);
 
             IDictionary convertMap = GetConvertMap();
             StringBuilder retValue = new StringBuilder(sqlStatement.Length);
             int last = 0;
-            foreach(Match m in mc)
+            foreach (Match m in mc)
             {
                 String arg1 = m.Groups[gidx_arg1].Value;
                 String arg2 = m.Groups[gidx_arg2].Value;
@@ -210,9 +647,9 @@ namespace VAdvantage.DBPort
                 String datatype = (String)convertMap["\\b" + arg2.ToUpper() + "\\b"];
                 if (datatype == null)
                     datatype = arg2;
-                 retValue.Append(sqlStatement.Substring(last, m.Index - last));
-                 retValue.Append(m.Result("cast(" + arg1 + " as " + datatype + ")"));
-                 last = m.Index + m.Length;
+                retValue.Append(sqlStatement.Substring(last, m.Index - last));
+                retValue.Append(m.Result("cast(" + arg1 + " as " + datatype + ")"));
+                last = m.Index + m.Length;
             }
             retValue.Append(sqlStatement.Substring(last));
             return retValue.ToString();
@@ -302,7 +739,7 @@ namespace VAdvantage.DBPort
                 else
                 {
                     result = result + " " + token;
-                    if ("SELECT".Equals(test,StringComparison.OrdinalIgnoreCase))
+                    if ("SELECT".Equals(test, StringComparison.OrdinalIgnoreCase))
                     {
                         o = 0;
                     }
@@ -313,11 +750,11 @@ namespace VAdvantage.DBPort
             return result;
         }
 
-       /// <summary>
-       /// Check if one of the field is using standard sql aggregate function
-       /// </summary>
-       /// <param name="fields"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// Check if one of the field is using standard sql aggregate function
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
         private bool UseAggregateFunction(String fields)
         {
             String fieldsUpper = fields.ToUpper();
@@ -365,16 +802,16 @@ namespace VAdvantage.DBPort
             return false;
         }
 
-       
-	 /// <summary>
-	 ///Converts Update.
-	 /// <pre>
-	 ///        UPDATE C_Order i SET 
-	 ///         =&gt; UPDATE C_Order SET
-	 /// </pre>
-	 /// </summary>
-	 /// <param name="sqlStatement">sqlStatement</param>
-	 /// <returns>converted statement</returns>
+
+        /// <summary>
+        ///Converts Update.
+        /// <pre>
+        ///        UPDATE C_Order i SET 
+        ///         =&gt; UPDATE C_Order SET
+        /// </pre>
+        /// </summary>
+        /// <param name="sqlStatement">sqlStatement</param>
+        /// <returns>converted statement</returns>
 
         private String ConvertUpdate(String sqlStatement)
         {
@@ -399,13 +836,13 @@ namespace VAdvantage.DBPort
                     {
                         cnt++;
                         if (cnt == 1)
-                            isUpdate = "UPDATE".Equals(token.ToString(),StringComparison.OrdinalIgnoreCase);
+                            isUpdate = "UPDATE".Equals(token.ToString(), StringComparison.OrdinalIgnoreCase);
                         else if (cnt == 2)
                             targetTable = token.ToString();
                         else if (cnt == 3)
                         {
                             targetAlias = token.ToString().Trim();
-                            if ("SET".Equals(targetAlias,StringComparison.OrdinalIgnoreCase)) //no alias
+                            if ("SET".Equals(targetAlias, StringComparison.OrdinalIgnoreCase)) //no alias
                                 targetAlias = targetTable;
                         }
                         previousToken = token.ToString();
@@ -414,7 +851,7 @@ namespace VAdvantage.DBPort
                 }
                 else
                 {
-                    if ("SET".Equals(previousToken,StringComparison.OrdinalIgnoreCase))
+                    if ("SET".Equals(previousToken, StringComparison.OrdinalIgnoreCase))
                         break;
                     else
                         token.Append(c);
@@ -571,7 +1008,7 @@ namespace VAdvantage.DBPort
                     {
                         if (token.Length > 0 && open < 0)
                         {
-                            if ("FROM".Equals(previousToken,StringComparison.OrdinalIgnoreCase))
+                            if ("FROM".Equals(previousToken, StringComparison.OrdinalIgnoreCase))
                             {
                                 joinTable = token.ToString();
                             }
@@ -581,7 +1018,7 @@ namespace VAdvantage.DBPort
                                 joinFromClause = subQuery.Substring(joinFromClauseStart, i - 5).Trim();
                                 break;
                             }
-                            if ("FROM".Equals(token.ToString(),StringComparison.OrdinalIgnoreCase))
+                            if ("FROM".Equals(token.ToString(), StringComparison.OrdinalIgnoreCase))
                             {
                                 joinFields = subQuery.Substring(joinFieldsBegin, i - 4);
                                 joinFromClauseStart = i;
@@ -692,7 +1129,7 @@ namespace VAdvantage.DBPort
                         {
                             joinField = joinAlias + "." + joinField;
                         }
-                        Update.Append(updateField.Trim  ());
+                        Update.Append(updateField.Trim());
                         Update.Append("=");
                         if (useSubQuery)
                         {
@@ -723,11 +1160,11 @@ namespace VAdvantage.DBPort
             return sqlStatement;
         } // convertDecode
 
-       /// <summary>
-       /// Check if token is a valid sql identifier
-       /// </summary>
-       /// <param name="token"></param>
-       /// <returns>True if token is a valid sql identifier, false otherwise</returns>
+        /// <summary>
+        /// Check if token is a valid sql identifier
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>True if token is a valid sql identifier, false otherwise</returns>
         private bool IsIdentifier(String token)
         {
             int size = token.Length;
@@ -746,7 +1183,7 @@ namespace VAdvantage.DBPort
                     Decimal.Parse(token);
                     return false;
                 }
-                catch  { }
+                catch { }
             }
 
             if (IsSQLFunctions(token))
@@ -757,26 +1194,26 @@ namespace VAdvantage.DBPort
 
         private bool IsSQLFunctions(String token)
         {
-            if (token.Equals("current_timestamp",StringComparison.OrdinalIgnoreCase))
+            if (token.Equals("current_timestamp", StringComparison.OrdinalIgnoreCase))
                 return true;
-            else if (token.Equals("current_time",StringComparison.OrdinalIgnoreCase))
+            else if (token.Equals("current_time", StringComparison.OrdinalIgnoreCase))
                 return true;
-            else if (token.Equals("current_date",StringComparison.OrdinalIgnoreCase))
+            else if (token.Equals("current_date", StringComparison.OrdinalIgnoreCase))
                 return true;
-            else if (token.Equals("localtime",StringComparison.OrdinalIgnoreCase))
+            else if (token.Equals("localtime", StringComparison.OrdinalIgnoreCase))
                 return true;
-            else if (token.Equals("localtimestamp",StringComparison.OrdinalIgnoreCase))
+            else if (token.Equals("localtimestamp", StringComparison.OrdinalIgnoreCase))
                 return true;
             return false;
         }
 
         // begin 
 
-       /// <summary>
-       ///convertAlias - for compatibility with 8.1
-       /// </summary>
-       /// <param name="sqlStatement">sqlstatement</param>
-       /// <returns>converted statementf</returns>
+        /// <summary>
+        ///convertAlias - for compatibility with 8.1
+        /// </summary>
+        /// <param name="sqlStatement">sqlstatement</param>
+        /// <returns>converted statementf</returns>
         private String ConvertAlias(String sqlStatement)
         {
             //string[] str =new string[1];
@@ -784,16 +1221,16 @@ namespace VAdvantage.DBPort
             String[] tokens = sqlStatement.Split(' ');//str,StringSplitOptions.None);
             String table = null;
             String alias = null;
-            if ("UPDATE".Equals(tokens[0],StringComparison.OrdinalIgnoreCase))
+            if ("UPDATE".Equals(tokens[0], StringComparison.OrdinalIgnoreCase))
             {
-                if ("SET".Equals(tokens[2],StringComparison.OrdinalIgnoreCase))
+                if ("SET".Equals(tokens[2], StringComparison.OrdinalIgnoreCase))
                     return sqlStatement;
                 table = tokens[1];
                 alias = tokens[2];
             }
-            else if ("INSERT".Equals(tokens[0],StringComparison.OrdinalIgnoreCase))
+            else if ("INSERT".Equals(tokens[0], StringComparison.OrdinalIgnoreCase))
             {
-                if ("VALUES".Equals(tokens[3],StringComparison.OrdinalIgnoreCase) ||
+                if ("VALUES".Equals(tokens[3], StringComparison.OrdinalIgnoreCase) ||
                     "SELECT".Equals(tokens[3], StringComparison.OrdinalIgnoreCase))
                     return sqlStatement;
                 if (tokens[2].IndexOf('(') > 0)
@@ -809,10 +1246,10 @@ namespace VAdvantage.DBPort
                     return sqlStatement;
                 }
             }
-            else if ("DELETE".Equals(tokens[0],StringComparison.OrdinalIgnoreCase))
+            else if ("DELETE".Equals(tokens[0], StringComparison.OrdinalIgnoreCase))
             {
                 if (tokens.Length < 4) return sqlStatement;
-                if ("WHERE".Equals(tokens[3],StringComparison.OrdinalIgnoreCase))
+                if ("WHERE".Equals(tokens[3], StringComparison.OrdinalIgnoreCase))
                     return sqlStatement;
                 table = tokens[2];
                 alias = tokens[3];
@@ -820,7 +1257,7 @@ namespace VAdvantage.DBPort
             if (table != null && alias != null)
             {
                 if (alias.IndexOf('(') > 0) alias = alias.Substring(0, alias.IndexOf('('));
-                String converted = Utility.Util.ReplaceFirst(sqlStatement,"\\s" + alias + "\\s", " ");
+                String converted = Utility.Util.ReplaceFirst(sqlStatement, "\\s" + alias + "\\s", " ");
                 converted = converted.Replace("\\b" + alias + "\\.", table + ".");
                 converted = converted.Replace("[+]" + alias + "\\.", "+" + table + ".");
                 converted = converted.Replace("[-]" + alias + "\\.", "-" + table + ".");

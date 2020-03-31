@@ -2170,7 +2170,7 @@
                 var row = {};
                 for (var item in dynData) {
                     //grdCol[item] = { field: dynData[item].ColumnName, sortable: true, attr: 'align=center' };
-                    row[dynData[item].ColumnName] = dynData[item].Values[j];
+                    row[dynData[item].ColumnName.toUpperCase()] = dynData[item].Values[j];
                 }
                 row['M_AttributeSetInstance_ID'] = 0;
                 row['recid'] = j + 1;

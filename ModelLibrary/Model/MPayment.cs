@@ -4931,7 +4931,7 @@ namespace VAdvantage.Model
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
-                string sql = "SELECT UNIQUE C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
+                string sql = "SELECT DISTINCT C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
                 DataSet ds = new DataSet();
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
