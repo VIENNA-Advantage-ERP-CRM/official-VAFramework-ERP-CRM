@@ -112,6 +112,8 @@
                         field = fieldorg;
                     }
 
+                    this.selectionfields[i] = field;
+
                     if (field.getIsKey()) {
                         crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
                             field.getColumnName());
