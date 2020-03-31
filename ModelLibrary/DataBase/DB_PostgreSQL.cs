@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using VAdvantage.DBPort;
 using VAdvantage.Logging;
 
@@ -186,6 +187,9 @@ namespace VAdvantage.DataBase
                     }
                 }
             }
+
+            // Replace SYSDATE with CURRENT_TIMESTAMP
+            oraStatement = Regex.Replace(oraStatement, "SYSDATE", "CURRENT_DATE", RegexOptions.IgnoreCase);
 
             StringBuilder sb = new StringBuilder(oraStatement.ToString());
 
