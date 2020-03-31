@@ -325,7 +325,7 @@ WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VA
                     }
                     else
                     {
-                        sql += "  ) ";
+                        sql += "  ) t";
                     }
 
                     info.count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
