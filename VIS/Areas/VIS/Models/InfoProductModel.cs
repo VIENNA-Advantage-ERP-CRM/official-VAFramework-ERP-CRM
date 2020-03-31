@@ -219,7 +219,7 @@ namespace VIS.Models
                         , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, w.M_Warehouse_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
                 sqlPaging = MRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, row_number() over (order by prd.M_Product_ID) AS row_num FROM 
-                        (" + sqlPaging + @") prd) WHERE row_num BETWEEN " + startPage + " AND " + endPage +
+                        (" + sqlPaging + @") prd) t WHERE row_num BETWEEN " + startPage + " AND " + endPage +
                         @") pp ON pp.M_Product_ID = p.M_Product_ID AND pp.M_AttriButeSetInstance_ID = NVL(pr.M_AttriButeSetInstance_ID,0) AND pp.C_UOM_ID = NVL(pr.C_UOM_ID,0) 
                         AND pp.M_Warehouse_ID = w.M_Warehouse_ID AND pp.M_PriceList_Version_ID = NVL(pr.M_PriceList_Version_ID,0)";
                 sql += sqlPaging + where;
