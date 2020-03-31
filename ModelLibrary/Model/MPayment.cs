@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using VAdvantage.Process;
 using VAdvantage.Logging;
 using VAdvantage.ProcessEngine;
+using Oracle.ManagedDataAccess.Client;
 
 namespace VAdvantage.Model
 {
@@ -51,6 +52,8 @@ namespace VAdvantage.Model
         private String _AllocMsg = "";
 
         private bool resetAmtDim = false;
+
+        private bool autoCheck = false;
 
         // used for locking query - checking schedule is paid or not on completion
         // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
@@ -893,12 +896,16 @@ namespace VAdvantage.Model
             }
             catch (Exception ex) { }
 
+            string isAutoControl = Util.GetValueOfString(DB.ExecuteScalar("SELECT ChkNoAutoControl FROM C_BankAccount  WHERE IsActive='Y' AND C_BankAccount_ID=" + GetC_BankAccount_ID()));
             if (GetTenderType() == "K")
             {
-                if (string.IsNullOrEmpty(GetCheckNo()))
+                if (isAutoControl.Equals("N"))
                 {
-                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_PayMetAndPayTermSame"));
-                    return false;
+                    if (string.IsNullOrEmpty(GetCheckNo()))
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_PayMetAndPayTermSame"));
+                        return false;
+                    }
                 }
                 // when post dated check module is not installed then system check Cheque date can not be greater than Current Date
                 if (Env.IsModuleInstalled("VA027_"))
@@ -987,6 +994,48 @@ namespace VAdvantage.Model
                     Set_Value("AmtDimPaymentAmount", null);
                 }
             }
+
+            // auto check number work - Mohit - 7 march 2020
+            string docBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocBaseType FROM C_DocType WHERE IsActive='Y' AND C_DocType_ID=" + GetC_DocType_ID()));
+
+            if (GetTenderType() == X_C_Payment.TENDERTYPE_Check && !IsReversal())
+            {
+                // if not auto control.
+                if (isAutoControl.Equals("N"))
+                {
+                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+                    else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+
+                }
+                else
+                {
+                    autoCheck = false;
+                    // if AP Pay and payamt less than 0
+                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() < 0 && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+                    // if AR Rec and payamt greater than 0
+                    else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() >= 0 && GetCheckNo() == null)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        return false;
+                    }
+
+
+                }
+            }
+
+
 
             return true;
         }	//	beforeSave
@@ -1077,9 +1126,58 @@ namespace VAdvantage.Model
                 }
             }
 
+
             return true;
         }
+        /// <summary>
+        /// Get checknumber for selected bank account and payment method from GetCheckNo procedure.
+        /// </summary>
+        /// <param name="payMethod_ID">Payment Mehtod ID</param>
+        /// <param name="BankAccount_ID"> Bank Account ID</param>
+        /// <param name="trx">transaction object</param>
+        /// <returns></returns>
+        public string GetChecknumber(int payMethod_ID, int BankAccount_ID, Trx trx)
+        {
+            string retval = string.Empty;
+            IDbConnection dbConnection = null;
+            if (trx == null)
+            {
+                return string.Empty; ;
+            }
+            try
+            {
+                dbConnection = trx.GetConnection();
+                if (dbConnection != null)
+                {
+                    // execute procedure for updating cost of components
+                    OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Connection = (OracleConnection)dbConnection;
+                    cmd.CommandText = "GETCHECKNO";
+                    cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
+                    cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
+                    cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
+                    cmd.BindByName = true;
+                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());
+                    retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
+                    if (retval == "0") // If Record Found
+                    {
+                        retval = string.Empty;
+                    }
 
+                }
+
+                return retval.ToString();
+
+            }
+            catch (Exception e)
+            {
+                log.SaveError("Error:GetCheckNumber", e.Message);
+                return retval;
+            }
+
+
+        }
 
         /**
          * 	Get Allocated Amt in Payment Currency
@@ -2674,6 +2772,25 @@ namespace VAdvantage.Model
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
 
+            // set withholding tax amount
+            if (IsPrepayment() && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
+            {
+                // check withholding applicable on Business Partner 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_ID) FROM C_BPartner WHERE NVL(C_Withholding_ID , 0) > 0 
+                        AND C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx()));
+
+                // Applicable, but withholding not selected on record
+                if (count > 0 && GetC_Withholding_ID() == 0)
+                {
+                    SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
+                    return DocActionVariables.STATUS_INVALID;
+                }
+                else if (count > 0)
+                {
+                    SetWithholdingAmount();
+                }
+            }
+
             // Amit for VA009 27-10-2015
             int countPaymentAllocateRecords = 0;
             if (Env.IsModuleInstalled("VA009_"))
@@ -3196,6 +3313,34 @@ namespace VAdvantage.Model
 
             ////Arpit 18 Dec,2017 Asked BY Ashish Sir
             ////if (!UpdateUnMatchedBalanceForAccount(false))
+            // Auto check work-Mohit-7 March 2020
+
+            MBankAccount bnkAct = MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+
+
+            if (GetTenderType().Equals(X_C_Payment.TENDERTYPE_Check) && bnkAct.IsChkNoAutoControl() && !IsReversal())
+            {
+                if ((dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() < 0))
+                {
+                    // get Check number
+                    string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
+                    if (!string.IsNullOrEmpty(checkNo))
+                    {
+                        DB.ExecuteQuery("UPDATE C_Payment SET CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(), null, Get_Trx());
+                    }
+                    else
+                    {
+                        _processMsg = Msg.GetMsg(GetCtx(), "NoCheckNum");
+                        log.Info("" + _processMsg + ": Payment Document No " + GetDocumentNo());
+                        return DocActionVariables.STATUS_INVALID;
+                    }
+
+                }
+            }
+
+
             if (!UpdateUnMatchedBalanceForAccount())
             {
                 return DocActionVariables.STATUS_INVALID;
@@ -3247,6 +3392,38 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set Withholding Tax Amount
+        /// </summary>
+        private void SetWithholdingAmount()
+        {
+            Decimal withholdingAmt = 0;
+
+            DataSet dsWithholding = DB.ExecuteDataset(@"SELECT IsApplicableonPay, PayCalculation , PayPercentage 
+                                        FROM C_Withholding WHERE C_Withholding_ID = " + GetC_Withholding_ID(), null, Get_Trx());
+            if (dsWithholding != null && dsWithholding.Tables.Count > 0 && dsWithholding.Tables[0].Rows.Count > 0)
+            {
+                // check on withholding - "Applicable on Payment" or not
+                if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["IsApplicableonPay"]).Equals("Y"))
+                {
+                    // get amount on which we have to derive withholding tax amount
+                    if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["PayCalculation"]).Equals(X_C_Withholding.INVCALCULATION_PaymentAmount))
+                    {
+                        withholdingAmt = GetPayAmt();
+                    }
+
+                    _log.Info("Payment withholding detail, Payment Document No = " + GetDocumentNo() + " , Amount on distribute = " + withholdingAmt +
+                           " , Payment Withhold Percentage " + Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["PayPercentage"]));
+
+                    // derive formula
+                    withholdingAmt = Decimal.Divide(
+                                     Decimal.Multiply(withholdingAmt, Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["PayPercentage"]))
+                                     , 100);
+                    SetWithholdingAmt(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID())));
                 }
             }
         }
@@ -4697,6 +4874,12 @@ namespace VAdvantage.Model
             reversal.SetDiscountAmt(Decimal.Negate(GetDiscountAmt()));
             reversal.SetWriteOffAmt(Decimal.Negate(GetWriteOffAmt()));
             reversal.SetOverUnderAmt(Decimal.Negate(GetOverUnderAmt()));
+
+            //negate witholding amount - 
+            if (Get_ColumnIndex("WithholdingAmt") > 0)
+            {
+                reversal.SetWithholdingAmt(Decimal.Negate(GetWithholdingAmt()));
+            }
             //
             // make unique record based on Bank and cheque no - thats why on reversing a record - place reverse indicator on it.
             if (!string.IsNullOrEmpty(reversal.GetCheckNo()))

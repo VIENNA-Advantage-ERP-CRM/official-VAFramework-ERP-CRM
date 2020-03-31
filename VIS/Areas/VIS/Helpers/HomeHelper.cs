@@ -1080,8 +1080,8 @@ namespace VIS.Helpers
 
             strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             strQuery += "  AND adr.Name='_PriorityRule' AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.AD_Role_ID =" + ctx.GetAD_Role_ID() + ")"
-            + " AND R_Request.Processed ='N'  AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N')) ORDER By to_char(R_Request.Updated,'mm/dd/yy'), R_Request.Priority ";
-
+            + " AND R_Request.Processed ='N'  AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N')) ORDER By R_Request.Updated, R_Request.Priority ";
+            // change to sort Requests based on updated date and time
 
 
             //Request

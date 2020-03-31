@@ -225,14 +225,20 @@ namespace VAdvantage.Process
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
-                String exportid = module.GetPrefix() + MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), tableName, null);
+                int expID = MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), tableName, null);
+                if (expID == -1)
+                {
+                    throw new InvalidConstraintException("ExportID -1 for TableName: " + tableName);
+                }
+                String exportid = module.GetPrefix() + expID;
 
                 String _updateSql = "Update " + refTable + " SET Export_ID = " + DB.TO_STRING(exportid) + " WHERE " + tableName + "_ID = " + PrimaryKey;
                 int result = DB.ExecuteQuery(_updateSql);
                 return exportid;
             }
-            catch
+            catch(Exception ex)
             {
+                throw ex;
                 return "";
             }
         }
@@ -250,7 +256,13 @@ namespace VAdvantage.Process
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
-                String exportid = module.GetPrefix() + MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), tableName, null);
+                int expID = MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), tableName, null);
+                if (expID == -1)
+                {
+                    throw new InvalidConstraintException("ExportID -1 for TableName: " + tableName);
+                }
+
+                String exportid = module.GetPrefix() + expID;
 
                 string[] ds = GetParentColumns(_table_ID);
 
@@ -270,8 +282,9 @@ namespace VAdvantage.Process
                 int result = DB.ExecuteQuery(_updateSql);
                 return exportid;
             }
-            catch
+            catch(Exception ex)
             {
+                throw ex;
                 return "";
             }
         }

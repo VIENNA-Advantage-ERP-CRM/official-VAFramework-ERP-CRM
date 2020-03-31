@@ -1317,15 +1317,15 @@
                             var divtitle_ = "";
                             var title_ = data[s].Description;
                             if (title_.length <= 100) {
-                                divtitle_ = "<p><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].AD_Note_ID + "'>" + VIS.Utility.encodeText(data[s].Title) + "</strong></p>";
+                                divtitle_ = "<pre><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].AD_Note_ID + "'>" + VIS.Utility.encodeText(data[s].Title) + "</strong></pre>";
                             }
                             else {
-                                divtitle_ = "<p>"
-                                               + "<strong  id='snoticetitle_" + data[s].AD_Note_ID + "'  style='color:#666666;' >" + VIS.Utility.encodeText(data[s].Title) + "...</strong>"
-                                               + "<strong id='snoticedesc_" + data[s].AD_Note_ID + "' style='display:none; color:#666666;'>" + VIS.Utility.encodeText(data[s].Description) + "...</strong> "
-                                               + "<span id='snoticemore_" + data[s].AD_Note_ID + "' data-vishomercrd='more' style='color:gray; float:right;'>" + VIS.Msg.getMsg("more") + "</span>"
-                                               + "<span id='snoticeless_" + data[s].AD_Note_ID + "' data-vishomercrd='less' style='display:none; color:gray; float:right;'>" + VIS.Msg.getMsg("less") + "</span>"
-                                               + "</p>";
+                                divtitle_ = "<pre>"
+                                    + "<strong  id='snoticetitle_" + data[s].AD_Note_ID + "'  style='color:#666666;' >" + VIS.Utility.encodeText(data[s].Title) + "...</strong>"
+                                    + "<strong id='snoticedesc_" + data[s].AD_Note_ID + "' style='display:none; color:#666666;'>" + VIS.Utility.encodeText(data[s].Description) + "...</strong> "
+                                    + "<span id='snoticemore_" + data[s].AD_Note_ID + "' data-vishomercrd='more' style='color:gray; float:right;'>" + VIS.Msg.getMsg("more") + "</span>"
+                                    + "<span id='snoticeless_" + data[s].AD_Note_ID + "' data-vishomercrd='less' style='display:none; color:gray; float:right;'>" + VIS.Msg.getMsg("less") + "</span>"
+                                    + "</pre>";
                             }
 
                             str += "<div data-vishomercrd='view-recrd-cntainer' id='divrecdcntnr_" + data[s].AD_Note_ID + "' class='vis-activityContainer'>"
@@ -1345,7 +1345,9 @@
                             //{
                             //    str += "<li data-vishomercrd='lispecial'><a data-vishomercrd='lispecial1' href='javascript:void(0)' id='" + data[s].Record_ID + "|" + data[s].ProcessTableName + "|" + data[s].ProcessWindowID + "' data-vishomercrd='SpecialTable' title='" + VIS.Msg.getMsg("ShowNotice") + "' class='vis-processZoomIcon vis-icon-check'> title='" + VIS.Msg.getMsg("ShowNotice") + "'</a></li>"
                             //}
-                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Approve") + "' class='vis vis-markx'></a></li>"
+
+                            // Renaming of Approve highlight to Acknowledge under notification
+                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Acknowledge") + "' class='vis vis-markx'></a></li>"
                                 + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
                            + "</ul>"
                          + "  </div>"

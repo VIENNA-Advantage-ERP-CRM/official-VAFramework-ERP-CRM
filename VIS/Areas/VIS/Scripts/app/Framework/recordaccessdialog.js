@@ -50,34 +50,34 @@
             _AD_Table_ID = AD_Table_ID;
             _Record_ID = Record_ID;
 
-            if (VIS.Application.isRTL) {
-                divRecord = $("<div class='vis-rad-recordData' style='float:right'>");
-                btnDown = $("<button  class='vis-rad-navBtn' disabled='disabled' style='float:left'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/down-arrow.png'>"));
-                btnUp = $("<button  class='vis-rad-navBtn' disabled='disabled' style='float:left'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/up-arrow.png'>"));
-                divAction = $("<div class='vis-rad-actionIcons' style='float:right'>");
-                btnNew = $("<button  class='vis-rad-actionBtn' style='margin-right:0px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/add-new.png'>"));
-                divWrap = $("<div class='vis-rad-btnWrap' style='float:left'>");
-                btnCancel = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons' style='margin-left:0px'>").append(VIS.Msg.getMsg('Cancel'));
-                spanRec = $("<span class='vis-rad-paging' style='float:none' >").append(lblRecNo);
-                chkActive = $("<input type='checkbox' checked style='float:right' >");
-                lblActive = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsActive'));
+            //if (VIS.Application.isRTL) {
+            //    divRecord = $("<div class='vis-rad-recordData' style='float:right'>");
+            //    btnDown = $("<button  class='vis-rad-navBtn' disabled='disabled' style='float:left'>").append($("<i class='fa fa-caret-down'></i>"));
+            //    btnUp = $("<button  class='vis-rad-navBtn' disabled='disabled' style='float:left'>").append($("<i class='fa fa-caret-up' ></i>"));
+            //    divAction = $("<div class='vis-rad-actionIcons' style='float:right'>");
+            //    btnNew = $("<button  class='vis-rad-actionBtn' style='margin-right:0px'>").append($("<i class='vis vis-plus'></i>"));
+            //    divWrap = $("<div class='vis-rad-btnWrap' style='float:left'>");
+            //    btnCancel = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons VIS_Pref_btn-2' style='margin-left:0px'>").append(VIS.Msg.getMsg('Cancel'));
+            //    spanRec = $("<span class='vis-rad-paging' style='float:none' >").append(lblRecNo);
+            //    chkActive = $("<input type='checkbox' checked style='float:right' >");
+            //    lblActive = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsActive'));
 
-                chkExclude = $("<input type='checkbox' checked style='float:right'>");
-                lblExclude = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsExclude'));
-                chkReadOnly = $("<input type='checkbox' style='float:right'>");
-                lblReadOnly = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly'));
-                chkDepEntry = $("<input type='checkbox' style='float:right'>");
-                lblDepEntry = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities'));
+            //    chkExclude = $("<input type='checkbox' checked style='float:right'>");
+            //    lblExclude = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsExclude'));
+            //    chkReadOnly = $("<input type='checkbox' style='float:right'>");
+            //    lblReadOnly = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly'));
+            //    chkDepEntry = $("<input type='checkbox' style='float:right'>");
+            //    lblDepEntry = $("<label style='float:right'>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities'));
 
-            }
-            else {
+            //}
+            //else {
                 divRecord = $("<div class='vis-rad-recordData'>");
-                btnDown = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/down-arrow.png'>"));
-                btnUp = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/up-arrow.png'>"));
+                btnDown = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<i class='fa fa-caret-down'></i>"));
+                btnUp = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<i class='fa fa-caret-up'></i>"));
                 divAction = $("<div class='vis-rad-actionIcons' >");
-                btnNew = $("<button  class='vis-rad-actionBtn'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/add-new.png'>"));
+                btnNew = $("<button  class='vis-rad-actionBtn'>").append($("<i class='vis vis-plus'></i>"));
                 divWrap = $("<div class='vis-rad-btnWrap' >");
-                btnCancel = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons'>").append(VIS.Msg.getMsg('Cancel'));
+                btnCancel = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons VIS_Pref_btn-2'>").append(VIS.Msg.getMsg('Cancel'));
                 spanRec = $("<span class='vis-rad-paging'>").append(lblRecNo);
                 chkActive = $("<input type='checkbox' checked >");
                 lblActive = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsActive'));
@@ -89,7 +89,7 @@
                 chkDepEntry = $("<input type='checkbox'>");
                 lblDepEntry = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities'));
 
-            }
+            //}
             root = $("<div class='vis-forms-container'>");
             subroot = $("<div class='vis-forms-container vis-rad-contantWrap'>");
             drow1 = $("<div class='vis-rad-contantTop'>");
@@ -144,7 +144,7 @@
             drow2 = $("<div class='vis-rad-contantBottom'>");
             //divAction = $("<div class='vis-rad-actionIcons' style='float:" + VIS.Application.isRTL ? 'right' : 'left' + "'>");
             //btnNew = $("<button  class='vis-rad-actionBtn' style='margin-right:" + VIS.Application.isRTL ? '0px' : '5px' + "'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/add-new.png'>"));
-            btnDelete = $("<button  class='vis-rad-actionBtn'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/del.png'>"));
+            btnDelete = $("<button  class='vis-rad-actionBtn'>").append($("<i class='vis vis-delete'></i>"));
             divAction.append(btnNew);
             divAction.append(btnDelete);
             drow2.append(divAction);
@@ -155,7 +155,7 @@
 
             //divWrap = $("<div class='vis-rad-btnWrap' style='float:" + VIS.Application.isRTL ? 'left' : 'right' + "'>");
             //btnCancel = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons' style='margin-left:" + VIS.Application.isRTL ? '0px' : '5px' + "'>").append(VIS.Msg.getMsg('Cancel'));
-            btnOk = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons'>").append(VIS.Msg.getMsg('Ok'));
+            btnOk = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons VIS_Pref_btn-2'>").append(VIS.Msg.getMsg('Ok'));
             divWrap.append(btnCancel);
             divWrap.append(btnOk);
             drow2.append(divWrap);

@@ -7,7 +7,7 @@
 
 ; (function (VIS, $) {
 
-    function MasterDataVersion(baseTblName, gridFields, Record_ID, whereClause, callback) {
+    function MasterDataVersion(baseTblName, gridFields, Record_ID, whereClause, mtnTblVer, callback) {
         this._tblName = baseTblName;
         this.rec_ID = Record_ID;
         this.sqlWhere = whereClause;
@@ -15,7 +15,9 @@
         this._callbackClose = callback;
         this.gridCols = new Array();
         this.htmlUI = new Array();
+        
         this.deletable = false;
+        this.maintTblVer = mtnTblVer;
         this.defaultCols = [
             Approved = VIS.Msg.translate(VIS.Env.getCtx(), "IsVersionApproved"),
             Version = VIS.Msg.translate(VIS.Env.getCtx(), "RecordVersion"),
@@ -29,6 +31,14 @@
             ValidFrom = "VERSIONVALIDFROM",
             VersionLog = "VERSIONLOG",
             Delete = "ACTION"
+        ];
+        this.exclCols = [
+            Tenant = "AD_Client_ID",
+            Created = "Created",
+            CreatedBy = "CreatedBy",
+            Updated = "Updated",
+            UpdatedBy = "UpdatedBy",
+            Export_ID = "Export_ID"
         ];
     };
 
@@ -342,7 +352,7 @@
         if (this.gFields && this.gFields.length > 0) {
             for (var i = 0; i < this.gFields.length; i++) {
                 var field = this.gFields[i];
-                if (field.vo.IsMaintainVersions) {
+                if ((field.vo.IsMaintainVersions || this.maintTblVer) && (this.exclCols.indexOf(field.vo.ColumnName) < 0)) {
                     this.gridCols.push(field.vo.ColumnName.toUpper());
                     if (field.vo.displayType == 20)
                         hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(field.vo.Header) + '</th>');

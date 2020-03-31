@@ -144,7 +144,13 @@ namespace VAdvantage.Process
                         object Export_ID = DB.ExecuteScalar("SELECT Export_ID FROM " + TableName + " WHERE " + whereClause);
                         if (Export_ID == null || Export_ID.ToString() == "")
                         {
-                            string sql = "UPDATE " + TableName + " SET Export_ID = '" + modulePrefix + MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), TableName, null) + "' WHERE " +
+                            int expID = MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), TableName, null);
+                            if (expID == -1)
+                            {
+                                throw new InvalidConstraintException("ExportID -1 for TableName: " + TableName);
+                            }
+
+                            string sql = "UPDATE " + TableName + " SET Export_ID = '" + modulePrefix + expID + "' WHERE " +
                                                     whereClause;
                             // insert Export Id
                             if (DB.ExecuteQuery(sql, null, Get_TrxName()) != 1)

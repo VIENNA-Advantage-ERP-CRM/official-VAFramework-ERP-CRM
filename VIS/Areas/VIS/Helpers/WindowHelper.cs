@@ -876,9 +876,65 @@ namespace VIS.Helpers
                 versionInfo.Record_ID = Record_ID;
                 versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
+                versionInfo.TableName = inn.TableName;
                 // check whether any Document Value type workflow is attached with Version table
                 hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
+
+                /// Change to Validate before save logic in master table if any
+                /// otherwise rollback and return                
+                Trx trxMas = null;
+                try
+                {
+                    trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
+                    int parentWinID = inn.AD_WIndow_ID;
+                    PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
+                    //	No Persistent Object
+                    if (poMas == null)
+                    {
+                        throw new NullReferenceException("No Persistent Obj");
+                    }
+                    SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false);
+                    if (!poMas.Save(trxMas))
+                    {
+                        String msg = "SaveError";
+                        String info = "";
+                        ValueNamePair ppE = VLogger.RetrieveError();
+                        if (ppE == null)
+                            ppE = VLogger.RetrieveWarning();
+                        if (ppE != null)
+                        {
+                            msg = ppE.GetValue();
+                            info = ppE.GetName();
+                            //	Unique Constraint
+                            Exception ex = VLogger.RetrieveException();
+                            if (ex != null)
+                                msg = "SaveErrorNotUnique";
+                        }
+                        outt.IsError = true;
+                        outt.FireEEvent = true;
+                        outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
+                        outt.Status = GridTable.SAVE_ERROR;
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = ex.Message, Info = "", IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+                }
+                finally
+                {
+                    if (trxMas != null)
+                    {
+                        trxMas.Rollback();
+                        trxMas.Close();
+                        trxMas = null;
+                    }
+                }
             }
 
             int Ver_Window_ID = 0;
@@ -894,14 +950,17 @@ namespace VIS.Helpers
             //      
             // check and set field values based on Master Versions 
             // else execute normally
+            bool hasSingleKey = true;
             if (inn.MaintainVersions)
             {
+                MTable tblParent = new MTable(ctx, AD_Table_ID, trx);
+                hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
                 po.SetAD_Window_ID(Ver_Window_ID);
-                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true);
+                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey);
             }
             else
-                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false);
+                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey);
 
             if (!po.Save())
             {
@@ -932,7 +991,11 @@ namespace VIS.Helpers
                         msg = "SaveErrorNotUnique";
                 }
                 //End
-
+                //End
+                if (inn.MaintainVersions)
+                {
+                    msg += Msg.GetMsg(ctx, "MaintainVersionError");
+                }
                 outt.IsError = true;
                 outt.FireEEvent = true;
                 outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
@@ -1045,6 +1108,7 @@ namespace VIS.Helpers
         /// <summary>
         /// function to check whether there is any Document Value 
         /// type workflow linked with table
+        /// check Document Value workflow in Tenant Only
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="AD_Client_ID"></param>
@@ -1054,7 +1118,7 @@ namespace VIS.Helpers
         public bool GetDocValueWF(Ctx ctx, int AD_Client_ID, int AD_Table_ID, Trx _trx)
         {
             String sql = "SELECT COUNT(AD_Workflow_ID) FROM AD_Workflow "
-                + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID
+                + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID + " AND AD_Client_ID = " + AD_Client_ID
                 + " ORDER BY AD_Client_ID, AD_Table_ID";
 
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
@@ -1087,7 +1151,7 @@ namespace VIS.Helpers
         /// <param name="Record_ID"></param>
         /// <param name="HasDocValWF"></param>
         /// <param name="VersionRecord"></param>
-        private void SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord)
+        private void SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey)
         {
             var rowData = inn.RowData; // new 
             var _rowData = inn.OldRowData;
@@ -1105,7 +1169,7 @@ namespace VIS.Helpers
                 if (field.IsVirtualColumn)
                     continue;
                 String columnName = field.ColumnName;
-
+                
                 //bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
 
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -1144,6 +1208,8 @@ namespace VIS.Helpers
                 // In case of Version record
                 if (VersionRecord)
                 {
+                    if (po.Get_ColumnIndex(columnName) < 0)
+                        continue;
                     if (columnName.ToLower() == "created" || columnName.ToLower() == "updated")
                         value = System.DateTime.Now;
                     if (columnName.ToLower() == "createdby" || columnName.ToLower() == "updatedby")
@@ -1254,9 +1320,21 @@ namespace VIS.Helpers
                 {
                     int VerRec = 1;
                     int curMaxVer = 0;
+                    int curProcessedVer = 0;
                     // Get Max Record version saved in Version Record field of Version table
-                    if (parentLinkCols.Count <= 0)
-                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + inn.TableName + "_ID = " + Record_ID));
+                    if (SingleKey || parentLinkCols.Count <= 0)
+                    {
+                        // Check if this is a new record
+                        if (po.Get_Value(inn.TableName + "_ID") != null)
+                        {
+                            curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + inn.TableName + "_ID = " + Record_ID));
+                            if (curMaxVer > 1)
+                            {
+                                curProcessedVer = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT RecordVersion FROM " + inn.TableName + @"_Ver WHERE VersionValidFrom <= SYSDATE AND ProcessedVersion = 'Y' 
+                            AND IsVersionApproved = 'Y' AND " + inn.TableName + "_ID = " + Record_ID + " ORDER BY VersionValidFrom DESC, RecordVersion DESC", null, null));
+                            }
+                        }
+                    }
                     else
                     {
                         StringBuilder whClause = new StringBuilder("");
@@ -1277,11 +1355,19 @@ namespace VIS.Helpers
                                     whClause.Append(" AND NVL(" + parentLinkCols[i] + ",0) = 0");
                             }
                         }
-                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + whClause));
+                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + whClause));
+                        if (curMaxVer > 1)
+                        {
+                            curProcessedVer = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT RecordVersion FROM " + inn.TableName + @"_Ver WHERE VersionValidFrom <= SYSDATE AND ProcessedVersion = 'Y'
+                            AND IsVersionApproved = 'Y' AND " + whClause + " ORDER BY VersionValidFrom DESC, RecordVersion DESC", null, null));
+                        }
                     }
                     if (curMaxVer > 0)
                         VerRec = curMaxVer;
+                    if (curProcessedVer > 0)
+                        po.Set_Value("OldVersion", curProcessedVer);
                     po.Set_Value("RecordVersion", VerRec);
+
                 }
                 if (!inn.ImmediateSave)
                 {
@@ -1695,14 +1781,23 @@ namespace VIS.Helpers
         /// <returns>Json cutom equalvalent to dataset</returns>
         internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID)
         {
-            List<JTable> outO = new List<JTable>();
-            JTable obj = null;
+            WindowRecordOut retVal = new WindowRecordOut();
 
+            //Loookup fileds 
+            var lookupDirect = new Dictionary<string, Dictionary<object, string>>();
+
+            List<JTable> outO = new List<JTable>();
+            
+            JTable obj = null;
 
             MSession session = MSession.Get(ctx, true);
             session.QueryLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), AD_Table_ID,
                 sqlCount, rowCount);
 
+            if (sqlIn.tree_id > 0)
+            {
+                SetTreeRecordSql(ctx, AD_Table_ID, sqlIn);
+            }
 
 
             DataSet ds = new SqlHelper().ExecuteDataSet(sqlIn);
@@ -1711,7 +1806,6 @@ namespace VIS.Helpers
 
             bool checkEncrypted = encryptedColNames != null && encryptedColNames.Count > 0;
             key = ctx.GetSecureKey();
-
 
             for (int table = 0; table < ds.Tables.Count; table++)
             {
@@ -1759,8 +1853,113 @@ namespace VIS.Helpers
                 outO.Add(obj);
 
             }
-            return outO;
+
+            //Direct Query
+            if (sqlIn.sqlDirect != "")
+            {
+                bool doPaging = sqlIn.pageSize > 0;
+                if (!doPaging)
+                {
+                    ds = new SqlHelper().ExecuteDataSet(sqlIn.sqlDirect);
+                }
+                else
+                {
+                    ds = VIS.DBase.DB.ExecuteDatasetPaging(sqlIn.sqlDirect, sqlIn.page, sqlIn.pageSize);
+                }
+
+                if (ds != null)
+                {
+                    var dt = ds.Tables[0];
+                    int count = dt.Rows.Count;
+                    for (int row = 0; row < count; row++)
+                    {
+                        for (int column = 0; column < dt.Columns.Count; column++)
+                        {
+                            string colName = dt.Columns[column].ColumnName.ToLower();
+                            object val = dt.Rows[row][column].ToString();
+                            if (colName.EndsWith("_t") || val.ToString() == "")
+                                continue;
+                            if (!lookupDirect.ContainsKey(colName))
+                                lookupDirect.Add(colName, new Dictionary<object, string>());
+
+                            if (colName.EndsWith("_id"))
+                            {
+                                val = Convert.ToInt32(dt.Rows[row][column]);
+                            }
+                            if (!lookupDirect[colName].ContainsKey(val))
+                                lookupDirect[colName][val] = dt.Rows[row][colName + "_t"].ToString();
+                        }
+                    }
+                }
+            }
+
+            retVal.Tables = outO;
+            retVal.LookupDirect = lookupDirect;
+
+            return retVal;
         }
+/// <summary>
+/// Set Tree Record sql in if query is for on demnad tree records
+/// </summary>
+/// <param name="ctx"></param>
+/// <param name="AD_Table_ID"></param>
+/// <param name="sqlIn"></param>
+        private void SetTreeRecordSql(Ctx ctx , int AD_Table_ID, SqlParamsIn sqlIn)
+        {
+            string tableName = MTable.GetTableName(ctx, AD_Table_ID);
+            MTree tree = new MTree(ctx, sqlIn.tree_id, null);
+
+            if (sqlIn.tree_id > 0)
+            {
+
+                GetChildNodesID(sqlIn.treeNode_ID, tree.GetNodeTableName(), sqlIn.tree_id, tableName);
+
+                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND AD_Tree_ID=" + sqlIn.tree_id;
+
+                string sqlQuery = sqlIn.sql;
+                string sqlDirect = sqlIn.sqlDirect;
+
+                if (sqlQuery.ToUpper().LastIndexOf("WHERE") > -1)
+                {
+                    if (sqlQuery.ToUpper().LastIndexOf("ORDER BY") > -1)
+                    {
+                        sqlIn.sql = sqlQuery.Insert(sqlQuery.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sqlWhere + ") ");
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect.Insert(sqlDirect.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sqlWhere + ") ");
+                    }
+                    else
+                    {
+                        sqlIn.sql = sqlQuery + " AND " + tableName + "_ID IN (" + sqlWhere + ") ";
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect + " AND " + tableName + "_ID IN (" + sqlWhere + ") ";
+                    }
+                }
+            }
+            else
+            {
+                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + sqlIn.tree_id + " AND (Parent_ID = " + sqlIn.treeNode_ID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
+
+                string sqlQuery = sqlIn.sql;
+                string sqlDirect = sqlIn.sqlDirect;
+
+                if (sqlIn.sql.ToUpper().LastIndexOf("WHERE") > -1)
+                {
+
+                    if (sqlQuery.ToUpper().LastIndexOf("ORDER BY") > -1)
+                    {
+                        sqlIn.sql = sqlQuery.Insert(sqlQuery.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sql + ") ");
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect.Insert(sqlDirect.ToUpper().LastIndexOf("ORDER BY"), " AND " + tableName + "_ID IN (" + sql + ") ");
+                    }
+                    else
+                    {
+                        if (!String.IsNullOrEmpty(sqlDirect))
+                            sqlIn.sqlDirect = sqlDirect + " AND " + tableName + "_ID IN (" + sql + ") ";
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Get a record of window

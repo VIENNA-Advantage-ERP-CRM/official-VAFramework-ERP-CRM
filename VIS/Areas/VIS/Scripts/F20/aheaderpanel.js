@@ -67,9 +67,6 @@
                         var colValue = getFieldValue(mField);
 
                         setValue(colValue, iControl, mField);
-
-
-
                     }
                 }
             }
@@ -129,7 +126,14 @@
                         var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
                             backgroundColor, FontColor, fontSize, fieldPadding);
 
-                        $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
+                        // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
+                        $div = $containerDiv.find('.' + dynamicClassName);
+
+                        //If div not found, then create new one.
+                        if ($div.length <= 0)
+                            $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
+
+
 
                         $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
 
@@ -212,12 +216,15 @@
                         iControl.refreshImage(colValue);
                     }
                 }
-                iControl.setValue(w2utils.encodeTags(colValue));
+
+                iControl.setValue(w2utils.encodeTags(colValue), false);
+
             }
             else {
                 if (mField.getDisplayType() == VIS.DisplayType.Image) {
                     iControl.getControl().hide();
-                    iControl.setValue(null);
+
+                    iControl.setValue(null, false);
                 }
                 else
                     iControl.setValue("- -", true);
@@ -303,23 +310,30 @@
                     if ($parentRoot.height() == 0) {
                         $parentRoot.height($self.gTab.getHeaderHeight());
                         $root.show();
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
                         $slider.removeClass('fa-angle-double-down').addClass('fa-angle-double-up').removeClass('vis-ad-w-p-header-v');
                     }
                     else {
                         $parentRoot.height(0);
                         $root.hide();
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-up').addClass('fa-angle-double-down').addClass('vis-ad-w-p-header-v');
                     }
                 }
                 else {
                     if ($parentRoot.width() == 0) {
-                        $parentRoot.width($self.gTab.getHeaderWidth());
-                        $root.show();
                         $slider.removeClass('fa-angle-double-right').addClass('fa-angle-double-left').removeClass('vis-ad-w-p-header-h');
+                        $parentRoot.width($self.gTab.getHeaderWidth());
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
+                        window.setTimeout(function () {
+                            $root.show();
+                        }, 50);
+
                     }
                     else {
                         $parentRoot.width(0);
                         $root.hide();
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-right').addClass('vis-ad-w-p-header-h');
                     }
                 }
@@ -364,9 +378,7 @@
         var alignmentHorizontal = this.gTab.getHeaderHorizontal();
         var height = this.gTab.getHeaderHeight();
         var width = this.gTab.getHeaderWidth();
-
         var padding = this.gTab.getHeaderPadding();
-
 
         var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, "", padding);
         root.addClass(rootCustomStyle);
@@ -407,7 +419,7 @@
                 continue;
             }
 
-                this.setHeaderItems(currentItem, $containerDiv);
+            this.setHeaderItems(currentItem, $containerDiv);
         }
         this.addStyleToDom();
 
@@ -461,7 +473,7 @@
             this.dynamicStyle.push("flex:1;flex-direction:row;height: " + height + "; ");
         }
         else {
-            this.dynamicStyle.push("flex-direction:column;width: " + width + ";height:calc(100vh - 93px); ");
+            this.dynamicStyle.push("flex-direction:column;width: " + width + ";height:calc(100vh - 94px); ");
         }
         this.dynamicStyle.push("padding:" + padding + ";" + backcolor);
 
@@ -543,7 +555,7 @@
      * This method will be invoked on record change in window.
      * */
     HeaderPanel.prototype.navigate = function () {
-       
+
         this.setHeaderItems();
     };
 

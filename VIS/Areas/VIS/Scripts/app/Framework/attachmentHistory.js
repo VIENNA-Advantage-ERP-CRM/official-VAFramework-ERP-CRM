@@ -70,8 +70,8 @@
             $historytabletop = $('<div class="vis-attachhistory-table-top">');
 
             $visattachhistorysearchwrap = $('<div class="vis-attachhistory-search-wrap">');
-            $historysearch = $('<div class="vis-attachhistory-search">').append(' <input placeholder="' + VIS.Msg.getMsg("Search") + '" type="text">').append('<span class="vis-attachhistory-search-icon"></span>');
-            $visattachhistorysearchwrap.append('<img class="prthistory" style="margin-top:15px;margin-left:40px" title="' + VIS.Msg.getMsg("Print") + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-print.png"  />').append($historysearch);
+            $historysearch = $('<div class="vis-attachhistory-search">').append(' <input placeholder="' + VIS.Msg.getMsg("Search") + '" type="text">').append('<span class="vis-attachhistory-search-icon vis vis-search"></span>');
+            $visattachhistorysearchwrap.append('<i class="prthistory vis vis-print" title="' + VIS.Msg.getMsg("Print") + '"></i>').append($historysearch);
 
 
 
@@ -114,23 +114,23 @@
             //$btnSaveAppoint = $('<div class="vis-attachhistory-save-btn"><a> ' + VIS.Msg.getMsg("Save") + '</a>');
 
             $menu = $("<ul class='vis-apanel-rb-ul'>");
-            $menu.append('<li style="display:none" data-type="R"><a><span class="vis-attachhistory-email-icon vis-attachhistory-reply-icon"></span>' + VIS.Msg.getMsg('Reply') + '</a></li> <li data-type="F"><a style="color: rgb(111, 111, 111); "><span class="vis-attachhistory-email-icon vis-attachhistory-forword-icon"></span>' + VIS.Msg.getMsg('Forward') + '</a></li>');
+            $menu.append('<li style="display:none" data-type="R"><a><span class="vis-attachhistory-email-icon vis-attachhistory-reply-icon"></span>' + VIS.Msg.getMsg('Reply') + '</a></li> <li data-type="F"><a><span class="vis-attachhistory-email-icon vis-attachhistory-forword-icon vis vis-undo2"></span>' + VIS.Msg.getMsg('Forward') + '</a></li>');
 
 
         };
 
         function createPageSettings() {
-            ulPagging = $('<ul style="float:right;margin-top:10px" class="vis-statusbar-ul">');
+            ulPagging = $('<ul style="margin-top:10px" class="vis-statusbar-ul pull-right">');
 
-            $firstPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="First Page" style="opacity: 0.6;"></div></li>');
+            $firstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" style="opacity: 0.6;"></i></div></li>');
 
-            $previousPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="Page Up" style="opacity: 0.6;"></div></li>');
+            $previousPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" style="opacity: 0.6;"></i></div></li>');
 
             $pageCombo = $('<li><select class="vis-statusbar-combo"></select></li>');
 
-            $nextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" title="Page Down" style="opacity: 0.6;"></div></li>');
+            $nextPage = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" style="opacity: 0.6;"></i></div></li>');
 
-            $lastPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="Last Page" style="opacity: 0.6;"></div></li>');
+            $lastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" style="opacity: 0.6;"></i></div></li>');
 
 
             ulPagging.append($firstPage).append($previousPage).append($pageCombo).append($nextPage).append($lastPage);
@@ -374,7 +374,7 @@
             if (VIS.Application.isRTL) {
                 userColumns.push({
                     field: "TableName", caption: VIS.Msg.getMsg("Table"), size: '150px', hidden: false, resizable: true, style: 'text-align: right', render: function (record) {
-                        var img = $('<img class="findImg" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '" style="margin-left:10px;cursor:pointer" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email"  >');
+                        var img = $('<i class="findImg vis vis-find" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '" ></i>');
                         var html = $('<div >').append(img).append(record.TableName);
                         return html.html();
                     }
@@ -383,7 +383,7 @@
             else {
                 userColumns.push({
                     field: "TableName", caption: VIS.Msg.getMsg("Table"), size: '150px', hidden: false, resizable: true, style: 'text-align: left', render: function (record) {
-                        var img = $('<img class="findImg" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '" style="margin-right:10px;cursor:pointer" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email"  >');
+                        var img = $('<i class="findImg vis vis-find" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '" ></i>');
                         var html = $('<div >').append(img).append(record.TableName);
                         return html.html();
                     }
@@ -457,7 +457,7 @@
             if (VIS.Application.isRTL) {
                 relatedcolumns.push({
                     field: "TableName", caption: VIS.Msg.getMsg("Table"), size: '150px', hidden: false, resizable: true, style: 'text-align: right', render: function (record) {
-                        var img = $('<img class="findImg" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '" style="margin-left:10px;cursor:pointer" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email"  >');
+                        var img = $('<i class="findImg vis vis-find" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '"></i>');
                         var html = $('<div >').append(img).append(record.TableName);
                         return html.html();
                     }
@@ -466,7 +466,7 @@
             else {
                 relatedcolumns.push({
                     field: "TableName", caption: VIS.Msg.getMsg("Table"), size: '150px', hidden: false, resizable: true, style: 'text-align: left', render: function (record) {
-                        var img = $('<img class="findImg" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '" style="margin-right:10px;cursor:pointer" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email"  >');
+                        var img = $('<i class="findImg vis vis-find" data-ids="' + record.Record_ID + '-' + record.AD_Table_ID + '"></i>');
                         var html = $('<div >').append(img).append(record.TableName);
                         return html.html();
                     }
@@ -892,7 +892,7 @@
 
 
             $visattachhistorysearchwrap.find('input').on("keydown", search);
-            $visattachhistorysearchwrap.find('img').on("click", printData);
+            $visattachhistorysearchwrap.find('i').on("click", printData);
             $ulAttach.on("click", downLoadAttach);
             $ulAttachCall.on("click", downLoadAttachCall); // for call history attachment
             $visattachhistoryrightwrap.on("keydown", save)
@@ -1833,10 +1833,10 @@
                 $fullname = $('<p>' + VIS.Utility.encodeText(fullname) + '</p>');
                 $isconference  = $('<p>' + (isconference == 'Y' ? VIS.Msg.getMsg("VA048_Conference") : VIS.Msg.getMsg("VA048_CallType")) + '</p>');
 
-                if (VIS.Application.isRTL)
-                    $bpzoomIcon = $('<img style="float:left;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="' + VIS.Msg.getMsg("VA048_CallType") + '">');
-                else
-                    $bpzoomIcon = $('<img style="float:right;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="' + VIS.Msg.getMsg("VA048_CallType") + '">');
+                //if (VIS.Application.isRTL)
+                //    $bpzoomIcon = $('<img style="float:left;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="' + VIS.Msg.getMsg("VA048_CallType") + '">');
+                //else
+                    $bpzoomIcon = $('<i class=" vis vis-find" data-ids="' + zoomID + '">');
 
                 if (zoomID == 0)
                     $bpzoomIcon.hide();
@@ -1848,7 +1848,7 @@
 
                 var div0 = $('<div style="float:left;width:100%;margin-bottom:10px"></div>')
                     .append($('<div class="vis-attachhistory-right-row2">')
-                    .append($('<h6>' + VIS.Msg.getMsg("Title") + ' <img src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-call.png" alt="' + VIS.Msg.getMsg("Title") + '"></h6>')
+                    .append($('<h6>' + VIS.Msg.getMsg("Title") + ' <i class="fa fa-phone"></i></h6>')
                     .append($bpzoomIcon))
                     .append($isconference))
 
@@ -1907,7 +1907,7 @@
                 $visattachhistorygriddataForCall.append($('<div class="vis-attachhistory-right-row">').append('<h6>' + VIS.Msg.getMsg("Attachments") + '</h6>'));
                 if (attachInfo != undefined && attachInfo.length > 0) {
                     for (var k = 0; k < attachInfo.length; k++) {
-                        $ulAttachCall.append('<li><a data-attid="' + attachInfo[k].AttID + '" data-id="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a><span class="vis-attachhistory-attach-download"><img src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-download.png" alt="' + VIS.Msg.getMsg("VA048_CallType") + '"></span></li>');
+                        $ulAttachCall.append('<li><span class="vis-attachhistory-attach-download"><i class="fa fa-long-arrow-down"></i></span><a data-attid="' + attachInfo[k].AttID + '" data-id="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a></li>');
                     }
                 }
                 else {
@@ -1923,8 +1923,8 @@
                 
                 resltGrdforCall = $('<div class="vis-attachhistory-bottom"></div>');
 
-                hisCommentforCall = $('<div class="vis-attachhistory-comments"></div>');
-                hisCommentforCall.append($txtAreacall).append('<span class="vis-attachhistory-comment-icon"></span>');
+                hisCommentforCall = $('<div class="vis-attachhistory-comments vis-feedMessage"></div>');
+                hisCommentforCall.append($txtAreacall).append('<span class="vis-attachhistory-comment-icon vis vis-sms"></span>');
                 resltGrdforCall.append(($('<div class="vis-attachhistory-right-row" style="margin-top:0px">').append(hisCommentforCall).append('<p class="vis-attachhistory-view-comments">' + VIS.Msg.getMsg('ViewMoreComments') + '</p>')));
                 $visattachhistoryrightcontentForCall.append('<div style="display:none" class="vis-attachhistory-grid-data">').append($visattachhistorygriddataForCall).append(resltGrdforCall);
                 
@@ -1958,7 +1958,7 @@
                 if (attachInfo != undefined && attachInfo.length > 0) {
                     $ulAttachCall.empty();
                     for (var k = 0; k < attachInfo.length; k++) {
-                        $ulAttachCall.append('<li><a data-attid="' + attachInfo[k].AttID + '" data-id="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a><span class="vis-attachhistory-attach-download"><img src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-download.png" alt="' + VIS.Msg.getMsg("VA048_CallType") + '"></span></li>');
+                        $ulAttachCall.append('<li><span class="vis-attachhistory-attach-download"><i class="fa fa-long-arrow-down"></i></span><a data-attid="' + attachInfo[k].AttID + '" data-id="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a></li>');
                     }
                     $($ulAttachCall.parent()).show();
                 }
@@ -2026,7 +2026,7 @@
                 $cc = $('<p>' + VIS.Utility.encodeText(cc) + '</p>');
                 $from = $(' <p>' + VIS.Utility.encodeText(from) + '</p>');
                 $date = $('<p>' + VIS.Utility.encodeText(date) + '</p>');
-                $emaildropdown = $('<a class="vis-attachhistory-email-dropdown"></a>');
+                $emaildropdown = $('<a class="vis-attachhistory-email-dropdown fa fa-ellipsis-v" tabindex=""></a>');
 
 
                 if ($detail == undefined || $detail == null) {
@@ -2036,13 +2036,13 @@
                 if ($txtArea == undefined || $txtArea == null) {
                     $txtArea = $('<input type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input>');
                 }
-                $titleIcon = $('<img src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-email.png" alt="email">');
-                if (VIS.Application.isRTL) {
-                    $zoomIcon = $('<img style="float:left;cursor:pointer;margin-top:3px;margin-right:5px" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
-                }
-                else {
-                    $zoomIcon = $('<img style="float:right;cursor:pointer;margin-top:3px;margin-right:5px" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
-                }
+                $titleIcon = $('<i class="vis vis-email"></i>');
+                //if (VIS.Application.isRTL) {
+                //    $zoomIcon = $('<img style="float:left;cursor:pointer;margin-top:3px;margin-right:5px" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
+                //}
+                //else {
+                    $zoomIcon = $('<i class="vis vis-find pull-right" data-ids="' + zoomID + '" ></i>');
+                //}
 
                 $visattachhistoryrightcontentFormail = $('<div class="vis-attachhistory-right-content">');
 
@@ -2071,10 +2071,12 @@
                 }
 
                 if (isMail == true) {
-                    $titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-email.png');
+                    //$titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-email.png');
+                    $titleIcon.removeClass('vis vis-letter').addClass('vis vis-email');
                 }
                 else if (isLetter == true) {
-                    $titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-letter.png');
+                    //$titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-letter.png');
+                    $titleIcon.removeClass('vis vis-email').addClass('vis vis-letter');
                 }
 
                 $visattachhistorygriddata.append($('<div class="vis-attachhistory-right-row vis-attachhistory-to">').append('<h6>' + VIS.Msg.getMsg("To") + '</h6> ').append($to));
@@ -2102,7 +2104,7 @@
 
                 if (attachInfo != undefined && attachInfo.length > 0) {
                     for (var k = 0; k < attachInfo.length; k++) {
-                        $ulAttach.append('<li><a data-IDs="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a><span class="vis-attachhistory-attach-download"><img src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-download.png" alt="email"></span></li>');
+                        $ulAttach.append('<li><span class="vis-attachhistory-attach-download"><i class="fa fa-long-arrow-down"></i></span><a data-IDs="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a></li>');
                     }
                 }
                 else {
@@ -2117,9 +2119,9 @@
 
                 resltGrdforMail = $('<div class="vis-attachhistory-bottom"></div>');
 
-                hisCommentforMail = $('<div class="vis-attachhistory-comments"></div>');
+                hisCommentforMail = $('<div class="vis-attachhistory-comments vis-feedMessage"></div>');
 
-                hisCommentforMail.append($txtArea).append('<span class="vis-attachhistory-comment-icon"></span>');
+                hisCommentforMail.append($txtArea).append('<span class="vis-attachhistory-comment-icon vis vis-sms"></span>');
 
                 resltGrdforMail.append(($('<div class="vis-attachhistory-right-row" style="margin-top:0px">').append(hisCommentforMail).append('<p class="vis-attachhistory-view-comments" style="float:right;width:auto">' + VIS.Msg.getMsg('ViewMoreComments') + '</p>')));
 
@@ -2149,15 +2151,17 @@
 
                 $($visattachhistoryrightcontentFormail[0].children[0]).hide();
                 if ($emaildropdown == undefined || $emaildropdown == null) {
-                    $emaildropdown = $('<a class="vis-attachhistory-email-dropdown"></a>');
+                    $emaildropdown = $('<a class="vis-attachhistory-email-dropdown fa fa-ellipsis-v" tabindex=""></a>');
                 }
 
                 if (isMail == true) {
-                    $titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-email.png');
+                    //$titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-email.png');
+                    $titleIcon.removeClass('vis vis-letter').addClass('vis vis-email');
                     $emaildropdown.show();
                 }
                 else if (isLetter == true) {
-                    $titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-letter.png');
+                    //$titleIcon.prop("src", VIS.Application.contextUrl + 'Areas/vis/Images/history-letter.png');
+                    $titleIcon.removeClass('vis vis-email').addClass('vis vis-letter');
                     $emaildropdown.hide();
                 }
 
@@ -2207,7 +2211,7 @@
                 if (attachInfo != undefined && attachInfo.length > 0) {
                     $ulAttach.empty();
                     for (var k = 0; k < attachInfo.length; k++) {
-                        $ulAttach.append('<li><a  data-IDs="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a><span class="vis-attachhistory-attach-download"><img src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-download.png" alt="email"></span></li>');
+                        $ulAttach.append('<li><span class="vis-attachhistory-attach-download"><i class="fa fa-long-arrow-down"></i></span><a  data-IDs="' + attachInfo[k].ID + '">' + VIS.Utility.encodeText(attachInfo[k].Name) + '</a></li>');
                     }
                     $($ulAttach.parent()).show();
                 }
@@ -2279,19 +2283,19 @@
                 if ($txtAreaAppoint == undefined || $txtAreaAppoint == null) {
                     $txtAreaAppoint = $('<input type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input>');
                 }
-                if (VIS.Application.isRTL) {
-                    $bpzoomIcon = $('<img style="float:left;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
-                }
-                else {
-                    $bpzoomIcon = $('<img style="float:right;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
-                }
+                //if (VIS.Application.isRTL) {
+                //    $bpzoomIcon = $('<img style="float:left;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
+                //}
+                //else {
+                    $bpzoomIcon = $('<i class=" vis vis-find" data-ids="' + zoomID + '" >');
+                //}
                 $visattachhistoryrightcontentForAppoint = $('<div class="vis-attachhistory-right-content">');
 
                 $visattachhistorygriddataForAppoint = $('<div class="vis-attachhistory-grid-data" >');
 
                 var div1 = $('<div style="float:left;width:100%" ></div>');
 
-                div1.append($('<div class="vis-attachhistory-right-row2">').append($('<h6>' + VIS.Msg.getMsg("Title") + ' <img src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-appointment.png"  alt="email"></h6>').append($bpzoomIcon)).append($subjectApp));
+                div1.append($('<div class="vis-attachhistory-right-row2">').append($('<h6>' + VIS.Msg.getMsg("Title") + ' <i class="vis vis-appointment"></i></h6>').append($bpzoomIcon)).append($subjectApp));
 
                 if (zoomID == 0) {
                     $bpzoomIcon.hide();
@@ -2343,9 +2347,9 @@
 
                 resltGrdforAppoint = $('<div class="vis-attachhistory-bottom"></div>');
 
-                hisCommentforAppoint = $('<div class="vis-attachhistory-comments"></div>');
+                hisCommentforAppoint = $('<div class="vis-attachhistory-comments vis-feedMessage"></div>');
 
-                hisCommentforAppoint.append($txtAreaAppoint).append('<span class="vis-attachhistory-comment-icon"></span>');
+                hisCommentforAppoint.append($txtAreaAppoint).append('<span class="vis-attachhistory-comment-icon vis vis-sms"></span>');
 
                 resltGrdforAppoint.append(($('<div class="vis-attachhistory-right-row" style="margin-top:0px">').append(hisCommentforAppoint).append('<p class="vis-attachhistory-view-comments">' + VIS.Msg.getMsg('ViewMoreComments') + '</p>')));
 
@@ -2503,13 +2507,13 @@
 
         function updateComments(str, result) {
 
-            str += '   <div class="vis-attachhistory-comment-data"><div class="vis-attachhistory-comment-detail">';
+            str += '   <div class="vis-attachhistory-comment-data"><div class="vis-attachhistory-comment-detail vis-feedDetails-cmnt">';
 
             if (result.UserImage != "NoRecordFound" && result.UserImage != "FileDoesn'tExist" && result.UserImage != null) {
                 str += '<img  class="userAvatar-Feeds"  src="' + result.UserImage + '?' + new Date() + '">';
             }
             else {
-                str += '<img  class="userAvatar-Feeds" src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/home/defaultUser46X46.png ">';
+                str += '<i class="fa fa-user userAvatar-Feeds"></i>';
             }
             str += '<div class="vis-attachhistory-comment-text">';
 
@@ -2613,7 +2617,7 @@
                 name = $(target).text();
                 ID = $(target).data('ids');
             }
-            else if ($(target).is('img')) {
+            else if ($(target).is('i')) {
                 name = $($(target).parent()).siblings().text();
                 ID = $($(target).parent()).siblings().data('ids');
             }

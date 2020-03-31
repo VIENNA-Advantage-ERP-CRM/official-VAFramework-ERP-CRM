@@ -27,40 +27,35 @@
 	border-bottom:2px solid #1aa0ed;
 }*/
 
-.vis-advancedSearch-contentWrap
-{
+.vis-advancedSearch-contentWrap {
     width: 100%;
-    height: 95%;
-}
-
-.vis-advancedSearchContentArea
-{
-   
-    width: 80%;
     height: 100%;
 }
-
-.vis-advancedSearchContentArea-up
-{
-    height: 40%;
+.vis-advancedSearchContentArea {
+    width: calc(100% - 200px);
+    height: 100%;
+    padding-right: 10px;
 }
-
-.vis-advancedSearchContentArea-down
-{
-    height: 50%;
+.vis-advancedSearchContentArea-up {
+    /*min-height: 80px;*/
 }
-
-.vis-advancedSearchContentArea-button
-{
-    height: 10%;
-}
-
-
-
-.vis-advancedSearch-RecentRecords
-{
-    width: 20%;
+.vis-advancedSearchContentArea-down {
+    height: calc(100% - 100px);
     float: left;
+    width: 100%;
+}
+.vis-advancedSearchHorigontal:last-child {
+    margin-right: 0;
+}
+.vis-advancedSearchContentArea-button {
+    /*height: 10%;*/
+}
+.vis-advancedSearch-RecentRecords {
+    width: 200px;
+    float: left;
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-left: 10px;
+    height: 100%;
 }
 
 .vis-advanedSearch-InputsWrap {
@@ -74,35 +69,34 @@
     float: left;
     margin-right: 10px;
 }
-.vis-advancedSearchHorigontal{
-    width: auto;
+.vis-advancedSearchHorigontal {
+    width: 14%;
+    display: flex;
+    position: relative;
+}
+.vis-advancedSearchContentArea input[type="checkbox"] {
+    margin-top: 0 !important;
 }
 .vis-advancedSearchInput {
-    width: auto;
-    /* float: left; */
-    padding-right: 10px;
+    width: 42%;
+     padding-right: 10px;
     margin-right: 0;
     flex-basis: 27%;
     align-items: center;
-}
-
-html[dir="rtl"] .vis-advancedSearchInput
-{
-    float:right;
-    margin-right:0px;
-    margin-left: 10px;
+    position: relative;
 }
 
 .vis-advancedSearchInput-op {
     /*width: 11%;*/
     flex-basis: 12%;
 }
-
-.vis-advancedSearchInput-v
-{
-    /*width: 25%;*/
+.vis-advancedSearchInput-v {
+    width: 29%;
+    flex: 1;
 }
-
+.vis-advancedSearchInput-v textarea {
+    min-height: 65px !important;
+}
 .vis-advancedSearchHorigontal-colspan2
 {
     width: 38%;
@@ -115,33 +109,39 @@ html[dir="rtl"] .vis-advancedSearchInput
     /*width: 13%;*/
     margin-right: 5px;
 }
-
 .vis-advancedSearchInput1 {
-    width: 20.55%;
+    width: 27%;
     float: left;
     /* margin-top: 5px; */
     display: flex;
     align-items: center;
 }
-
-.vis-advancedSearchHorigontal > label
-{
+.vis-advancedSearchHorigontal input {
+    flex: 1;
+    position:relative;
+}
+.vis-advancedSearchHorigontal > label{
     /*width: 16%;*/
-    margin-top: 6px;
-    margin-right: 10px;
+    padding-right: 5px;
 }
 
-.vis-advancedSearchInput > label, .vis-advancedSearchInput1 > label, .vis-advancedSearchHorigontal > label
-{
+.vis-advancedSearchInput > label, .vis-advancedSearchHorigontal > label {
     font-size: 12px;
-    color: #535353;
     font-weight: 400;
     float: left;
-    width: 100%;
     margin-bottom: 0;
+    position: absolute;
+    top: -8px;
+    left: 5px;
+    background: linear-gradient(#fff 51%, transparent 50%);
+    padding: 0 5px;
 }
-.vis-advancedSearchInput input[type="checkbox"] + label{
+.vis-advancedSearchInput input[type="checkbox"] + label {
     margin-bottom: 0;
+    position: relative;
+    top: auto;
+    left: auto;
+    background: transparent;
 }
 
 html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedSearchInput1 > label, html[dir="rtl"] .vis-advancedSearchHorigontal > label
@@ -154,23 +154,23 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 }*/
 
 .vis-advancedSearchInput1 > label {
-    /*margin-left: 10px;*/    
-    /* margin-top: 2px; */
+    font-size: 12px;
+    font-weight: 400;
+    float: left;
     margin-bottom: 0;
 }
+
 .vis-advanedSearch-InputsWrap.vis-advancedSearchMrgin {
-    margin-top: 5px;
+    /*margin-top: 5px;*/
     float: left;
 }
 /*.advancedSearchMrgin{ margin-left:20%;}*/
 .vis-advancedSearchInput > input, .vis-advancedSearchInput > select {
-    border: 1px solid #ccc;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
     padding: 5px;
     width: 100%;
-    color: #848484;
-    font-size: 12px;
-    border-radius: 0;
-    height: 30px;
+     font-size: 12px;
+     border-radius: 0;
     display: inline-flex;
     outline: none;
     float: left;
@@ -182,29 +182,25 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
         box-shadow: none;
     }
 
-.vis-advancedSearchHorigontal > select
-{
+.vis-advancedSearchHorigontal > select {
     width: 55%;
     float: left;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
     padding: 5px;
-    color: #848484;
+    /*color: #848484;*/
     font-size: 12px;
 }
 
 .vis-advancedSearchInput > select {
-    padding: 6px;
+    /*padding: 6px;
     min-height: 30px;
     line-height: inherit !important;
-    /*margin-bottom: 20px;*/
-    /*padding: 1px !important;*/
-
-    /*down arrow*/
+   
     background: transparent;
     background-image: linear-gradient(45deg, transparent 50%, rgba(var(--v-c-primary),1) 50%), linear-gradient(135deg, rgba(var(--v-c-primary),1) 50%, transparent 50%);
     background-position: calc(100% - 15px), calc(100% - 10px);
     background-size: 5px 4px, 5px 4px, 1px 1.5em;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
 }
 
 .vis-advancedSearchInput > button {
@@ -233,15 +229,14 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     width: 31px;
     float: left;
     /*margin-left: -7px;*/
-    margin-right: 10px;
+    /*margin-right: 10px;*/
 }
 
-    .vis-advancedSearch-Icons > ul, .vis-advancedSearch-calender-Icon > ul
-    {
+    .vis-advancedSearch-Icons > ul, .vis-advancedSearch-calender-Icon > ul {
         list-style: none;
         margin: 0;
         padding: 0;
-        margin-top: 17px;
+        margin-top: 0;
     }
 
         .vis-advancedSearch-Icons > ul > li
@@ -310,10 +305,8 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     background-image: url('../Images/adv-save-icon.png');
     margin-left: 7px;
 }
-
-.vis-advancedSearchTableWrap
-{
-    width: 98%;
+.vis-advancedSearchTableWrap {
+    width: 100%;
     float: left;
     height: 100%;
     overflow: auto;
@@ -346,23 +339,21 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 	height:173px;
 	overflow-y:scroll;
 }*/
-.vis-advancedSearchTableHead
-{
-    background: #e9eef0;
+.vis-advancedSearchTableHead {
+    background: rgba(var(--v-c-secondary), 1);
 }
-
-    .vis-advancedSearchTableHead > th, .vis-advancedSearchTableRow > td
-    {
-        text-align: center;
-        font-size: 14px;
-        font-weight: normal;
-        color: #494949;
-        padding: 10px 0;
-    }
-
-.vis-advancedSearchTableBody
-{
-    background: #f8fafa;
+.vis-advancedSearchTableHead > th, .vis-advancedSearchTableRow > td {
+    text-align: center !important;
+    font-size: 12px;
+    font-weight: normal;
+    /*color: #494949;*/
+    padding: 10px 0;
+}
+.vis-advancedSearchTableHead > th {
+    font-weight: 600;
+}
+.vis-advancedSearchTableBody {
+    background: rgba(var(--v-c-secondary), .4);
 }
 
 .vis-advancedTableIcon
@@ -397,66 +388,54 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     float: left;
     width: 100%;
 }
-
-    .vis-RecentRecords-Heading > h4
-    {
-        color: #535353;
-        font-size: 13px;
-        margin-top: 0;
-        padding: 0;
-        font-weight: 500;
-    }
-
-.vis-RecentRecords-listWrap
-{
-    border: 1px solid #eee;
+.vis-RecentRecords-Heading > h4 {
+    /* color: #535353; */
+    font-size: 13px;
+    margin-top: 0;
+    padding: 0;
+    /* font-weight: 500; */
+}
+.vis-RecentRecords-listWrap {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
     float: left;
-    width: 90%;
-    padding: 10px;
-    height: 374px;
+    width: 100%;
+    padding: 0px;
+    height: calc(100% - 52px);
     overflow-y: auto;
 }
-
-    .vis-RecentRecords-listWrap > ul
-    {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        margin-top: 0;
-    }
-
-        .vis-RecentRecords-listWrap > ul > li
-        {
-            color: #848484;
-            line-height: 23px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-            .vis-RecentRecords-listWrap > ul > li:hover
-            {
-                background-color: lightblue;
-            }
-
-
+.vis-RecentRecords-listWrap > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 0;
+}
+.vis-RecentRecords-listWrap > ul > li {
+    /* color: #848484; */
+    /* line-height: 23px; */
+    font-size: 12px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+.vis-RecentRecords-listWrap > ul > li:hover {
+    background-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+}
 .vis-advancedSearchFooter
 {
     float: right;
-    height: 5%;
+    /*height: 5%;*/
     /*position:absolute;*/
 }
-
-    .vis-advancedSearchFooter > p
-    {
-        float: right;
-        margin-right: 15px;
-        color: #535353;
-        font-size: 12px;
-    }
+.vis-advancedSearchFooter > p {
+    /* float: right; */
+    margin: 10px 0 0 0;
+    /* color: #535353; */
+    font-size: 12px;
+}
 
 .vis-advcedfooterBtn
 {
-    margin-top: 20px;
+    margin-top: 9px;
     float: left;
     width: 100%;
 }
@@ -471,7 +450,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 
 .vis-form-group
 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .vis-advancedSearchbusy
@@ -484,8 +463,38 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     display: flex;
     height: 30px;
     align-items: center;
+    top: auto;
 }
 
 .vis-advancedSearchInput label.vis-ec-col-lblchkbox input[type="checkbox"] {
     margin-left: 0;
+}
+.vis-advanedSearch-AddFilterWrap label {
+    margin-bottom: 0;
+    font-weight: normal;
+    text-decoration: underline;
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 1rem;
+}
+.vis-as-topfieldswrap {
+    flex: 1;
+    margin-top: 10px;
+}
+
+.vis-advancedSearchContentArea-up .vis-advanedSearch-InputsWrap:nth-child(2) {
+    margin-top: 5px;
+}
+
+.vis-advanedSearch-AddFilterWrap {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.vis-as-backbtn button {
+    display: none;
+}
+
+.vis-advancedSearch-AddFilter {
+cursor:pointer;
 }

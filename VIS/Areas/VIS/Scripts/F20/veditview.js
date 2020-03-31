@@ -14,10 +14,10 @@
 
         var _curParent = null;
 
-        var col0 = { rSpan: 1, cSpan: 0, cSpace: 0 ,orgRSpan:1};
-        var col1 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1};
+        var col0 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1 };
+        var col1 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1 };
         var col2 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1 };
-        var col3 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1};
+        var col3 = { rSpan: 1, cSpan: 0, cSpace: 0, orgRSpan: 1 };
 
         /** Map of group name to list of components in group. */
         //control = field array
@@ -78,36 +78,36 @@
             }
         };
 
-        function adjustRowSpanForSameLine(colIndex){
-           // if(colIndex)
+        function adjustRowSpanForSameLine(colIndex) {
+            // if(colIndex)
 
         }
 
         function adjustRowSpan(colIndex) {
 
             if (col0.rSpan > 1) { //skip column 
-                if (col0.set && colIndex ==1)  { //special case
+                if (col0.set && colIndex == 1 &&  col0.cSpan < 4) { //special case
                     col0.set = false;
                 }
-                else 
+                else
                     --col0.rSpan;
 
                 reset(col0);
             }
             if (col1.rSpan > 1) { //skip column 
-                if (colIndex == 2  && col1.set) { //special case
+                if (colIndex == 2 && col1.set &&  col1.cSpan < 3) { //special case
                     col1.set = false;
                 }
-                else 
-                --col1.rSpan;
+                else
+                    --col1.rSpan;
                 reset(col1);
             }
             if (col2.rSpan > 1) { //skip column 
-                if (colIndex == 3 && col2.set) { //special case
+                if (colIndex == 3 && col2.set && col2.cSpan <2) { //special case
                     col2.set = false;
                 }
-                else 
-                --col2.rSpan;
+                else
+                    --col2.rSpan;
                 reset(col2);
             }
             if (col3.rSpan > 1) { //skip column 
@@ -132,7 +132,7 @@
                 addRow();
                 columnIndex = 0;
             }
-           
+
 
             if (columnIndex == 0) {
                 if (isLongFiled) {
@@ -266,7 +266,7 @@
                     columnIndex += colSpan - 1;
                     if (rowSpan > 1) {
                         col2.rSpan = rowSpan + 1;
-                        col2.set =  true;
+                        col2.set = true;
                         col2.cSpan = colSpan;
                         col2.cSpace = cellSpace;
                         $td2.css("grid-row", "span " + rowSpan);
@@ -299,12 +299,16 @@
                         $td3.css("grid-row", "span " + rowSpan);
                     }
                 }
+                return;
             }
 
             //if all col index are skipped
             if (!$td0 && !$td1 && !$td2 && !$td3) {
                 //columnIndex = 0;
                 adjustLayout(mField, isNewRow);
+            }
+            else if (!isLongFiled && columnIndex > 3) {
+                adjustLayout(mField, true);
             }
         };
 
@@ -328,24 +332,52 @@
             //}
         };
 
-
+       
 
         function onGroupClick(e) {
             e.stopPropagation();
-            var o = $(this);
-            var name = o.data("name");
-            var dis = o.data("display");
-
+            var divGroup = $(this);
+            var target = $(e.target);
+            var name = divGroup.data("name");
+            var dis = divGroup.data("display");
+            var viewMore = $(divGroup.find('.vis-ev-col-fg-more')[0]);
             //console.log(name);
             //console.log(dis);
             var show = false;
-            if (dis === "show") {
-                o.data("display", "hide");
-                $(o.children()[2]).addClass("vis-ev-col-fg-rotate");
-            } else {
-                o.data("display", "show");
+            var showGroupFieldDefault = false;
+
+
+            if (target.is('span')) {
+                if (dis !== "show") {// If group is vlosed and user click on show more then no processing.
+                    return;
+                }
                 show = true;
-                $(o.children()[2]).removeClass("vis-ev-col-fg-rotate");
+                if (divGroup.data("showmore") == 'Y') {
+                    showGroupFieldDefault = true;
+                    divGroup.data("showmore", "N");
+                    viewMore.text(VIS.Msg.getMsg("ShowLess"));
+                }
+                else {
+                    divGroup.data("showmore", "Y");
+                    viewMore.text(VIS.Msg.getMsg("ShowMore"));
+                }
+            }
+            else {
+                if (divGroup.data("showmore") == 'N') {
+                    showGroupFieldDefault = true;
+                }
+
+                if (dis === "show") {
+                    divGroup.data("display", "hide");
+                    viewMore.hide();
+                    $(divGroup.children()[2]).addClass("vis-ev-col-fg-rotate");
+                } else {
+
+                    divGroup.data("display", "show");
+                    viewMore.show();
+                    show = true;
+                    $(divGroup.children()[2]).removeClass("vis-ev-col-fg-rotate");
+                }
             }
 
             var list = groupToCompsMap[name];
@@ -358,7 +390,7 @@
                     ctrls[j].tag = show;
                     ctrls[j].setVisible(show && field.getIsDisplayed(true));
                 }
-                if (show && field.getIsDisplayed(true))
+                if (show && field.getIsDisplayed(true) && (field.getIsFieldgroupDefault() || showGroupFieldDefault))
                     fieldToCompParentMap[field.getColumnName()].show();
                 else
                     fieldToCompParentMap[field.getColumnName()].hide();
@@ -377,11 +409,13 @@
             //setColumns(columnIndex);
             // clearRowSpan();
             addRow();
+            reset();
             initCols(true);
-            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-name="' + fieldGroup + '" data-display="hide">' +
-                '<span class="vis-ev-col-fg-hdr">' + fieldGroup + ' </span> ' +
-                '<span class="vis-ev-col-fg-more" style="display:none"><i class="fa fa-ellipsis-h"></i></span>' +
-                '<i class= "fa fa-angle-up  vis-ev-col-fg-rotate">' +
+            //<i class="fa fa-ellipsis-h"></i>
+            var gDiv = $('<div class="vis-ev-col-fieldgroup" data-showmore="Y" data-name="' + fieldGroup + '" data-display="show">' +
+                '<span class="vis-ev-col-fg-hdr"  >' + fieldGroup + ' </span> ' +
+                '<span class="vis-ev-col-fg-more">' + VIS.Msg.getMsg("ShowMore") + '</span>' +
+                '<i class= "fa fa-angle-up">' +
                 '</span>' +
                 '</div>');
 
@@ -437,7 +471,9 @@
                     groupToCompsMap[oldFieldGroup] = fieldList;
                 }
                 fieldList.push(mField);
-                fieldToCompParentMap[mField.getColumnName()].hide();
+                if (!mField.getIsFieldgroupDefault()) {
+                    fieldToCompParentMap[mField.getColumnName()].hide();
+                }
             }
         };
 
@@ -646,7 +682,7 @@
             if (mField.getFontClass() != '')
                 btns.push('<i class="' + mField.getFontClass() + '"></i>');
             else
-                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mFiled.getImageName() + '"></img>');
+                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName() + '"></img>');
             btns.push('</span></div>');
             ctrl.append(btns.join(' '));
 
@@ -673,11 +709,12 @@
                 ctrlP.append(editor.getControl());
         }
 
-        
 
 
-        ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
-            "<i class='vis vis-info' aria-hidden='true'></i></span'>");
+        if (mField.getDisplayType() != VIS.DisplayType.Label) { // exclude Label display type
+            ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
+                "<i class='vis vis-info' aria-hidden='true'></i></span'>");
+        }
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
         ctrl.append(ctrlP);

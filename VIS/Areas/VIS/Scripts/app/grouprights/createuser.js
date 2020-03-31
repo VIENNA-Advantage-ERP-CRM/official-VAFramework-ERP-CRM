@@ -205,7 +205,7 @@
                 success: function (result) {
                     var data = JSON.parse(result);
 
-                    var $divRoles = $('<div style="height:230px;overflow:auto;margin-bottom:10px">');
+                    var $divRoles = $('<div style="height:212px;overflow:auto;margin-bottom:10px">');
 
                     $divRoles.append(roletheModTmp(data));
                     $divRoleGroup.append($divRoles);
@@ -269,7 +269,7 @@
             //$root.find('.vis-group-assignContainer').css({ "visibility": "visible", "margin-top": "-10px", "overflow": "auto", "float": "left", "height": "284px" });
             $root.find('.vis-group-assignContainer').css({ "visibility": "visible" });
             // $root.height('390px');
-            $rootChild.height('369px');
+            $rootChild.height('400px');
             // $btnOrgAccess.show();
         };
 
@@ -288,7 +288,7 @@
             $rootChild.find('.vis-group-roleContainer').css("display", "inherit");
 
             $rootChild.append($divRoleGroup);
-            $rootChild.height('385px');
+            $rootChild.height('403px');
 
 
         };
@@ -400,6 +400,9 @@
             ch.setContent($root);
 
             //ch.setHeight(115);
+            ch.setPosition({
+                my: "center bottom-3",
+            });
             ch.setWidth(550);
             ch.setTitle(VIS.Msg.getMsg("VIS_CreateUser"));
             ch.setModal(true);

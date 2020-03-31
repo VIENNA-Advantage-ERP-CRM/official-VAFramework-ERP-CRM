@@ -443,14 +443,6 @@ namespace VAdvantage.Model
         /// <returns>new status (Complete, In Progress, Invalid, Waiting ..)</returns>
         public String CompleteIt()
         {
-
-            //// To check weather future date records are available in Transaction window
-            //_processMsg = MInOut.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Movement_ID(), Get_Trx());
-            //if (!string.IsNullOrEmpty(_processMsg))
-            //{
-            //    return DocActionVariables.STATUS_INVALID;
-            //}
-
             // is used to check Container applicable into system
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
@@ -736,6 +728,14 @@ namespace VAdvantage.Model
 
             // JID_1290: Set the document number from completede document sequence after completed (if needed)
             SetCompletedDocumentNo();
+
+            // To check weather future date records are available in Transaction window
+            // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
+            _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Movement_ID(), Get_Trx());
+            if (!string.IsNullOrEmpty(_processMsg))
+            {
+                return DocActionVariables.STATUS_INVALID;
+            }
 
             // check column name new 12 jan 0 vikas
             int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));

@@ -58,7 +58,7 @@
         var sideDivWidth = 260;
         var minSideWidth = 50;
         //window with-(sidediv with_margin from left+ space)
-        var selectDivWidth = $(window).width() - (sideDivWidth + 20 + 5);
+        var selectDivWidth = $(window).width() - (sideDivWidth + 20);
         var selectDivFullWidth = $(window).width() - (20 + minSideWidth);
         var selectDivToggelWidth = selectDivWidth + sideDivWidth + 5;
         var sideDivHeight = $(window).height() - 210;
@@ -76,19 +76,17 @@
             var lblSelectid = "lblSelect_" + $self.windowNo;
 
             // JID_1110: Clear option required on Business partner and Docuemnt No. parameter.
-            var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
-            var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
-            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
-                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
-            btnClearOrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
-                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
+            //var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
+            //var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
+            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px;"><i class="fa fa-arrow-left" tabindex="-1" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
+            btnClearOrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px;"><i class="fa fa-arrow-left" tabindex="-1" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
 
-            $self.topDiv = $("<div id='" + topDivId + "' style='float: left; width: 100%; height: 45px; margin-bottom: 2px;margin-left: 0px;'>" +
-                       "<div id='" + btnSpaceDivId + "' style='width: 260px; height: 45px;float: left;padding-left: 11px; padding-top: 11px;; background-color: #F1F1F1;'>" +
-                       "<button id='" + btnSpaceId + "' style='border: 0px;background-color: transparent; padding: 0px;' >" +
-                       "<img src='" + src + "' /></button></div>" +
+            $self.topDiv = $("<div id='" + topDivId + "' class='vis-archive-l-s-head vis-frm-ls-top' style='padding: 0;'>" +
+                "<div id='" + btnSpaceDivId + "' class='vis-l-s-headwrp'>" +
+                       "<button id='" + btnSpaceId + "'  class='vis-archive-sb-t-button'>" +
+                       "<i class='vis vis-arrow-left'></i></button></div>" +
                        "<div id='" + spnSelectid + "'style='display: inline-block;  padding-left: 15px;margin-right: 15px;' >" +
-                       "<label id='" + lblSelectid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 28px;color: #19A0ED;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Select") + "</label></div>" +
+                       "<label id='" + lblSelectid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 28px;color: rgba(var(--v-c-primary), 1);'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Select") + "</label></div>" +
                        "<div id='" + spnGenerateid + "' style='display: inline-block; width: 160px;'>" +
                        "<label id='" + lblGenerateid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 17px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Generate") + "</label></div></div>");
 
@@ -98,43 +96,45 @@
             this.lblGenrate = $self.topDiv.find("#" + lblGenerateid);
             this.lblSelect = $self.topDiv.find("#" + lblSelectid);
 
-            $self.sideDiv = $("<div id='" + sideDivId + "' style='float: left; margin-left: 0px; background-color: #F1F1F1;'>");
+            $self.sideDiv = $("<div id='" + sideDivId + "' class='vis-archive-l-s-content'>");
             $self.sideDiv.css("width", sideDivWidth);
-            $self.sideDiv.css("height", sideDivHeight);
+            //$self.sideDiv.css("height", sideDivHeight);
+            $self.sideDiv.css("height", "calc(100% - 103px)");
 
 
-            $self.div = $("<div style='float: left; width: 100%;' id='" + parameterDivId + "'>");
+
+            $self.div = $("<div class='vis-archive-l-s-content-inner' id='" + parameterDivId + "'>");
             $self.sideDiv.append($self.div);
 
             var tble = $("<table style='width: 100%;'>");
 
             var tr = $("<tr>");
-            var td = $("<td style='padding: 4px 15px 0px;'>");
+            var td = $("<td style='padding: 0px 10px 0px;'>");
             $self.div.append(tble);
             tble.append(tr);
             tr.append(td);
             td.append($self.lblWarehouse.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 8px;'>");
+            td = $("<td style='padding: 0px 10px 8px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.cmbWarehouse.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
 
             td.append($self.lblBPartner.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 8px;'>");
+            td = $("<td style='padding: 0px 10px 8px;'>");
             tble.append(tr);
             tr.append(td);
 
             // var ctrl = $("<div style='float: left; width: 100%;' class='VIS_Pref_slide-show pp'>");
             //ctrl.removeClass("VIS_Pref_slide-show pp");
-            td.append($self.vSearchBPartner.getControl().css('width', '176px')).append($self.vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
+            td.append($self.vSearchBPartner.getControl().css('width', '176px')).append($self.vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px'))
             .append(btnClearBP);
 
 
@@ -144,13 +144,13 @@
             // JID_1138: Document no. rename as Sales order no.
             var OrderNo = VIS.Msg.translate(VIS.Env.getCtx(), "SalesOrder_No")
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(OrderNo);
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.vSearchOrder.getControl(0).css('width', '176px')).append($self.vSearchOrder.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
@@ -167,29 +167,28 @@
             var gridSelectDivId = "gridSelectDiv_" + $self.windowNo;
             var gridGenerateDivId = "gridGenerateDiv_" + $self.windowNo;
 
-            $self.gridSelectDiv = $("<div id='" + gridSelectDivId + "' style='float: right; margin-right: 15px;border: 1px solid darkgray;'>");
-            $self.gridSelectDiv.css("width", selectDivWidth);
-            $self.gridSelectDiv.css("height", sideDivHeight);
+            $self.gridSelectDiv = $("<div id='" + gridSelectDivId + "' class='vis-frm-grid-outerwrp'>");
+            //$self.gridSelectDiv.css("width", selectDivWidth);
+            //$self.gridSelectDiv.css("height", sideDivHeight);
 
-            $self.gridGenerateDiv = $("<div id='" + gridGenerateDivId + "' style='height: 85%; float: right; display: none; background-color: #F1F1F1; margin-left: 15px;;margin-right: 15px;'>");
+            $self.gridGenerateDiv = $("<div id='" + gridGenerateDivId + "' style='height: 85%; float: right; display: none; background-color: rgba(var(--v-c-secondary), .8); margin-left: 15px;margin-right: 15px;'>");
             $self.gridGenerateDiv.css("width", $(window).width() - 30);
 
             var name = "btnOk_" + $self.windowNo;
-            $self.okBtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px; margin-top: 1px; float: right; margin-right: 15px ;width: 70px;height: 38px;' type='button' value='Ok'>");
+            $self.okBtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='margin-top: 0px;width: 70px;height: 38px;' type='button' value='Ok'>");
 
             //name = "btnCancel_" + $self.windowNo;
             //$self.cancelBtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='margin-bottom: 0px; margin-top: 6px; float: right;margin-right: 4px;' type='button' value='Cancel'>");
             debugger;
             name = "btnRefresh_" + $self.windowNo;
-            var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
-            $self.btnRefresh = $("<button id='" + name + "' style='margin-bottom: 1px; margin-top: 0px; float: left; margin-left: 15px; height: 38px;' class='VIS_Pref_btn-2'>" +
-                       "<img src='" + src + "'></button>");
+            //var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
+            $self.btnRefresh = $("<button id='" + name + "' style='margin-top: 0px;' class='VIS_Pref_btn-2'><i class='vis vis-refresh'></i></button>");
 
             var discriptionDivId = "discriptionDiv_" + $self.windowNo;
-            $self.bottumDiv = $("<div style='width: 100%; height: 50px; float: left; margin-bottom: 0px;margin-top: 5px;'>");
-            var mdg = $("<div id='" + discriptionDivId + "' style='width: 69%; float: left; margin-bottom: 0px;  padding-top: 8px;padding-left: 10px; text-align: left;'>");
+            $self.bottumDiv = $("<div class='vis-info-btmcnt-wrap vis-p-t-10'>");
+            var mdg = $("<div id='" + discriptionDivId + "' style='flex: 1;padding: 0 10px;'>");
             mdg.append($self.lblStatusInfo.getControl().addClass("VIS_Pref_Label_Font"));
-            var buttonDiv = $("<div style='width: 175px; float: right; text-align: right; margin-bottom: 0px;'>");
+            var buttonDiv = $("<div>");
             //buttonDiv.append($self.cancelBtn);
             buttonDiv.append($self.okBtn);
 
@@ -508,8 +507,8 @@
             //$self.btnToggel.attr('disabled', 'disabled');
             $self.btnToggel.hide();
 
-            lblSelect.css("font-size", "17px").css("color", "#333333");
-            lblGenrate.css("font-size", "28px").css("color", "#19A0ED");
+            lblSelect.css("font-size", "17px").css("color", "rgba(var(--v-c-on-secondary), 1)");
+            lblGenrate.css("font-size", "28px").css("color", "rgba(var(--v-c-primary), 1)");
         }
 
         this.vetoablechange = function (evt) {
@@ -518,6 +517,27 @@
             $self.okBtn.removeAttr('disabled');
             executeQuery();
         };
+        //size chnage 
+        this.sizeChanged = function (h, w) {
+            selectDivWidth = w - (sideDivWidth + 20);
+            selectDivFullWidth = w - (20 + minSideWidth);
+            if (toggleside == true) {
+                $self.btnSpaceDiv.animate({ width: minSideWidth }, "slow");
+                $self.sideDiv.animate({ width: minSideWidth }, "slow");
+                $self.div.css("display", "none");
+                $self.gridSelectDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
+                    $self.dGrid.resize();
+                });
+            }
+            else {
+                $self.btnSpaceDiv.animate({ width: sideDivWidth }, "slow");
+                $self.gridSelectDiv.animate({ width: selectDivWidth }, "slow");
+                $self.div.css("display", "block");
+                $self.sideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
+                    $self.dGrid.resize();
+                });
+            }
+        }
 
         this.Initialize = function () {
             fillPicks();
@@ -637,8 +657,8 @@
                     //$self.btnToggel.attr('disabled', 'disabled');
                     $self.btnToggel.hide();
 
-                    lblSelect.css("font-size", "17px").css("color", "#333333");
-                    lblGenrate.css("font-size", "28px").css("color", "#19A0ED");
+                    lblSelect.css("font-size", "17px").css("color", "rgba(var(--v-c-on-secondary), 1)");
+                    lblGenrate.css("font-size", "28px").css("color", "rgba(var(--v-c-primary), 1)");
                 });
 
             if (this.spnSelect != null)
@@ -656,8 +676,8 @@
                         //$self.btnToggel.removeAttr('disabled');
                         $self.btnToggel.show();
 
-                        lblSelect.css("font-size", "28px").css("color", "#19A0ED");
-                        lblGenrate.css("font-size", "17px").css("color", "#333333");
+                        lblSelect.css("font-size", "28px").css("color", "rgba(var(--v-c-primary), 1)");
+                        lblGenrate.css("font-size", "17px").css("color", "rgba(var(--v-c-on-secondary), 1)");
                     }
                 });
 

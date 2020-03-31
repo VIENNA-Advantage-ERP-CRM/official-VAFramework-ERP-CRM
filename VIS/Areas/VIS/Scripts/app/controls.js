@@ -495,7 +495,7 @@
                 ctrl = image;
             }
             else {
-                var $ctrl = new VLabel(mField.getHelp(), columnName, false, true);
+                var $ctrl = new VSpan(mField.getHelp(), columnName, false, true);
                 ctrl = $ctrl;
             }
 
@@ -923,7 +923,6 @@
      */
     function VLabel(value, name, isMandatory, isADControl) {
         value = value != null ? value.replace("[&]", "") : "";
-
         var strFor = ' for="' + name + '"';
         if (isADControl)
             strFor = '';
@@ -947,7 +946,45 @@
 
     VIS.Utility.inheritPrototype(VLabel, IControl); //Inherit
 
-    VLabel.prototype.setValue = function (newValue, isHTML) {
+
+    // END VLabel 
+
+    //2.  VSPAN
+
+    /**
+     *  VSpan with Mnemonics interpretation
+     *  VSpan against model field control like (textbox, combobox etc)
+     *  @param value  The text to be displayed by the VSpan.
+     *  @param name  name of control to bind VSpan with
+     */
+    function VSpan(value, name, isMandatory, isADControl) {
+        value = value != null ? value.replace("[&]", "") : "";
+
+        var strFor = ' for="' + name + '"';
+        if (isADControl)
+            strFor = '';
+
+        var $ctrl = $('<span ' + strFor + '></span>');
+
+        IControl.call(this, $ctrl, VIS.DisplayType.Label, true, isADControl ? name : "lbl" + name);
+        if (isMandatory) {
+            $ctrl.text(value).append("<sup>*</sup>");
+        }
+        else {
+            $ctrl.text(value);
+        }
+
+        this.disposeComponent = function () {
+            $ctrl = null;
+            self = null;
+        }
+    };
+
+
+    VIS.Utility.inheritPrototype(VSpan, IControl); //Inherit
+
+    VSpan.prototype.setValue = function (newValue, isHTML) {
+
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             this.ctrl.text(newValue);
@@ -957,8 +994,7 @@
         }
     };
 
-
-    VLabel.prototype.getValue = function () {
+    VSpan.prototype.getValue = function () {
         if (this.value != null) {
             return this.ctrl.text().toString();
         }
@@ -968,7 +1004,9 @@
     };
 
 
-    // END VLabel 
+    // END VSpan 
+
+
 
 
 
@@ -1901,17 +1939,24 @@
     function VDate(columnName, isMandatory, isReadOnly, isUpdateable, displayType, title) {
 
         var type = 'date';
+        var max = '9999-12-31';
 
         if (displayType == VIS.DisplayType.Time) {
-            type = 'time'
+            type = 'time';
+            max = '';
         }
         if (displayType == VIS.DisplayType.DateTime) {
-            type = 'datetime-local'
+            type = 'datetime-local';
+            max += 'T24:00:00';
         }
 
         var $ctrl = $('<input>', {
-            'type': type, name: columnName
+            'type': type, name: columnName,
         });
+
+        if (max != '') {
+            $ctrl.attr('max', max);
+        }
 
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
@@ -2635,7 +2680,7 @@
                 //	//log.finest("ZoomQuery=" + (_lookup.getZoomQuery()==null ? "" : _lookup.getZoomQuery().getWhereClause())
                 //		+ ", Validation=" + _lookup.getValidation());
                 if (WhereClause.indexOf('@') != -1) {
-                    var validated = VIS.Env.parseContext(ctx, _Lookup.getWindowNo(), WhereClause, false, true);
+                    var validated = VIS.Env.parseContext(ctx, _Lookup.getWindowNo(), _Lookup.getTabNo(), WhereClause, false, true);
                     if (validated.length == 0) {
                         ////log.severe(_columnName + " - Cannot Parse=" + whereClause);
                     }
@@ -3717,7 +3762,11 @@
             if (self.isReadOnly) {
                 return;
             }
-            var obj = new VIS.LocationForm(self.value);
+            // passed new parameter for Maintain Versions in case of Location Control
+            var maintainVers = null;
+            if (self.mField && self.mField.vo)
+                maintainVers = self.mField.vo.IsMaintainVersions;
+            var obj = new VIS.LocationForm(self.value, maintainVers);
             obj.load();
             obj.showDialog();
             obj.onClose = function (location, change) {
@@ -4553,16 +4602,17 @@
         var $img = $("<img >");
         var $icon = $("<i>");
         var $txt = $("<span>").text("-");
+        var $spanIcon = $('<span class="vis vis-edit vis-img-ctrl-icon">')
         var $ctrl = null;
         var dimension = "Thumb500x375";
 
-        $ctrl = $('<button >', { type: 'button', name: columnName, class: 'vis-ev-col-img-ctrl',tabIndex:'-1' });
+        $ctrl = $('<button >', { type: 'button', name: columnName, class: 'vis-ev-col-img-ctrl', tabIndex: '-1' });
         $txt.css("color", "blue");
 
 
 
 
-        $ctrl.append($img).append($icon).append($txt);
+        $ctrl.append($spanIcon).append($img).append($icon).append($txt);
 
         IControl.call(this, $ctrl, VIS.DisplayType.Button, isReadOnly, columnName, mandatoryField);
 
@@ -4576,7 +4626,7 @@
 
         var self = this; //self pointer
 
-        $ctrl.on(VIS.Events.onClick, function (e) { //click handler
+        $spanIcon.on(VIS.Events.onClick, function (e) { //click handler
             e.stopPropagation();
             if (!self.isReadOnly) {
                 //self.invokeActionPerformed({ source: self });
@@ -5704,7 +5754,7 @@
 
             var text = $ctrl.val().trim();
 
-            var validated = VIS.Env.parseContext(VIS.Env.getCtx(), windowNo, self.lookup.info.validationCode, false, true);
+            var validated = VIS.Env.parseContext(VIS.Env.getCtx(), windowNo, self.lookup.getTabNo(), self.lookup.info.validationCode, false, true);
 
             if (!text || mustOpen) {
                 self.openForm(0, 0, text, validated);
@@ -5872,5 +5922,3 @@
     VIS.Controls.VProductContainer = VProductContainer;
     /* END */
 }(jQuery, VIS));
-
-

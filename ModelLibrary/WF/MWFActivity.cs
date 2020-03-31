@@ -54,6 +54,12 @@ namespace VAdvantage.WF
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MWFActivity).FullName);
 
+        /** List of users for Notices	*/
+        private List<int> _noticeUsers = new List<int>();
+
+        // Last Workflow Activity ID
+        private int _lastActivity = 0;
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -628,7 +634,7 @@ namespace VAdvantage.WF
         /// <param name="ownDocument">the document is owned by AD_User_ID</param>
         /// <returns>AD_User_ID - if -1 no Approver</returns>
         public int GetApprovalUser(int AD_User_ID, int C_Currency_ID, Decimal amount,
-            int AD_Org_ID, bool ownDocument)
+            int AD_Org_ID, bool ownDocument, bool FetchLastApprover)
         {
             //	Nothing to approve
             if (Math.Sign(amount) == 0)
@@ -643,8 +649,15 @@ namespace VAdvantage.WF
             {
                 if (user.Equals(oldUser))
                 {
-                    log.Info("Loop - " + user.GetName());
-                    return -1;
+                    log.Info("Loop - " + user.GetName() + " ==>> User and Old User are same");
+                    // change here to set Approver as the User that is fetched at the end
+
+                    // In case if fetchlastapprover is true else return -1
+                    if (FetchLastApprover)
+                        return user.GetAD_User_ID();
+                    else
+                        return -1;
+
                 }
                 oldUser = user;
                 log.Fine("User=" + user.GetName());
@@ -1014,6 +1027,11 @@ namespace VAdvantage.WF
                     GetAD_Table_ID(), GetRecord_ID());
                 pi.SetAD_User_ID(GetAD_User_ID());
                 pi.SetAD_Client_ID(GetAD_Client_ID());
+
+                // set window ID in processinfo if found in Workflow Process
+                if (Util.GetValueOfInt(_process.GetAD_Window_ID()) > 0)
+                    pi.SetAD_Window_ID(_process.GetAD_Window_ID());
+
                 pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
                 return process.ProcessIt(pi, trx);
             }
@@ -1036,16 +1054,20 @@ namespace VAdvantage.WF
                 // {
                 _emails = new List<String>();
                 SendEMail(action);
-                StringBuilder sbEmail = new StringBuilder();
-                for (int i = 0; i < _emails.Count; i++)
-                {
-                    if (i == 0)
-                        sbEmail.Append(_emails[i]);
-                    else
-                        sbEmail.Append(", " + _emails[i]);
-                }
+                //StringBuilder sbEmail = new StringBuilder();
+                //for (int i = 0; i < _emails.Count; i++)
+                //{
+                //    if (i == 0)
+                //        sbEmail.Append(_emails[i]);
+                //    else
+                //        sbEmail.Append(", " + _emails[i]);
+                //}
 
-                SetTextMsg(sbEmail.ToString() + "  " + SaveActionLog(sbEmail.ToString(), Get_Trx()));
+                //SetTextMsg(sbEmail.ToString() + "  " + SaveActionLog(sbEmail.ToString(), Get_Trx()));
+
+                // set text msg from activity
+                SetTextMsg(GetActivityMsg());
+
                 //  }
                 //  else
                 //  {
@@ -1104,18 +1126,18 @@ namespace VAdvantage.WF
                         int nextAD_User_ID = GetApprovalUser(startAD_User_ID,
                             doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
                             doc.GetAD_Org_ID(),
-                            startAD_User_ID == doc.GetDoc_User_ID());	//	own doc
+                            startAD_User_ID == doc.GetDoc_User_ID(), true);	//	own doc
                         //	same user = approved
                         autoApproval = startAD_User_ID == nextAD_User_ID;
                         if (!autoApproval)
                             SetAD_User_ID(nextAD_User_ID);
-                        //Lakhwinder
-                        if (GetAD_User_ID() == 0)
-                        {
-                            nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + p_ctx.GetAD_User_ID()));
-                            SetAD_User_ID(nextAD_User_ID);
 
-                        }
+                        //Lakhwinder
+                        //if (GetAD_User_ID() == 0)
+                        //{
+                        //    nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + p_ctx.GetAD_User_ID()));
+                        //    SetAD_User_ID(nextAD_User_ID);
+
                     }
                     else	//	fixed Approver
                     {
@@ -1277,15 +1299,17 @@ namespace VAdvantage.WF
                 {
                     _emails = new List<String>();
                     SendFaxEMail();
-                    StringBuilder sbEmail = new StringBuilder();
-                    for (int i = 0; i < _emails.Count; i++)
-                    {
-                        if (i == 0)
-                            sbEmail.Append(_emails[i]);
-                        else
-                            sbEmail.Append(", " + _emails[i]);
-                    }
-                    SetTextMsg(sbEmail.ToString());
+                    //StringBuilder sbEmail = new StringBuilder();
+                    //for (int i = 0; i < _emails.Count; i++)
+                    //{
+                    //    if (i == 0)
+                    //        sbEmail.Append(_emails[i]);
+                    //    else
+                    //        sbEmail.Append(", " + _emails[i]);
+                    //}
+                    //SetTextMsg(sbEmail.ToString());
+                    // set text msg in activity
+                    SetTextMsg(GetActivityMsg());
                 }
                 else
                 {
@@ -1298,6 +1322,9 @@ namespace VAdvantage.WF
                     String message = mailtext.GetMailText(true)
                     + "\n-----\n" + GetNodeHelp();
                     String to = GetNode().GetEMail();
+
+                    // create/update message based on the setting on node
+                    message = GetMailMessage(message);
 
                     //client.SendEMail(to,GetNode().GetName(), subject, message, null);
                     client.SendEMail(to, GetNode().GetName(), subject, message, null);
@@ -1318,15 +1345,18 @@ namespace VAdvantage.WF
                 // {
                 _emails = new List<String>();
                 SendEMail(action);
-                StringBuilder sbEmail = new StringBuilder();
-                for (int i = 0; i < _emails.Count; i++)
-                {
-                    if (i == 0)
-                        sbEmail.Append(_emails[i]);
-                    else
-                        sbEmail.Append(", " + _emails[i]);
-                }
-                SetTextMsg(sbEmail.ToString() + "  " + SaveActionLog(sbEmail.ToString(), Get_TrxName()));
+                //StringBuilder sbEmail = new StringBuilder();
+                //for (int i = 0; i < _emails.Count; i++)
+                //{
+                //    if (i == 0)
+                //        sbEmail.Append(_emails[i]);
+                //    else
+                //        sbEmail.Append(", " + _emails[i]);
+                //}
+                //SetTextMsg(sbEmail.ToString() + "  " + SaveActionLog(sbEmail.ToString(), Get_TrxName()));
+                // set text msg in activity
+                SetTextMsg(GetActivityMsg());
+
                 // }
                 // else
                 // {
@@ -1356,15 +1386,17 @@ namespace VAdvantage.WF
                 {
                     _emails = new List<String>();
                     SendFaxEMail();
-                    StringBuilder sbEmail1 = new StringBuilder();
-                    for (int i = 0; i < _emails.Count; i++)
-                    {
-                        if (i == 0)
-                            sbEmail1.Append(_emails[i]);
-                        else
-                            sbEmail1.Append(", " + _emails[i]);
-                    }
-                    SetTextMsg(sbEmail1.ToString());
+                    //StringBuilder sbEmail1 = new StringBuilder();
+                    //for (int i = 0; i < _emails.Count; i++)
+                    //{
+                    //    if (i == 0)
+                    //        sbEmail1.Append(_emails[i]);
+                    //    else
+                    //        sbEmail1.Append(", " + _emails[i]);
+                    //}
+                    //SetTextMsg(sbEmail1.ToString());
+                    // set text msg in activity
+                    SetTextMsg(GetActivityMsg());
                 }
                 else
                 {
@@ -1461,6 +1493,101 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //
             //
             throw new ArgumentException("Invalid Action (Not Implemented) =" + action);
+        }
+
+        /// <summary>
+        /// Function to get message and append Last Node message 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public string GetMailMessage(string message)
+        {
+            List<int> NodesProc = new List<int>();
+            // check applied to send previous node message based on the setting on Node
+            if (_node.IsNotifyPrevTsnMsg() && GetLastActivity() > 0)
+            {
+                MWFActivity lastAct = new MWFActivity(GetCtx(), GetLastActivity(), Get_TrxName());
+                string lastActMsg = lastAct.GetTextMsg();
+                if (lastActMsg != "")
+                    message += "\n \n " + lastActMsg;
+                NodesProc.Add(lastAct.GetAD_WF_Node_ID());
+            }
+
+            string NodeIDs = Util.GetValueOfString(_node.GetNotifyNode_ID());
+            if (NodeIDs != "")
+            {
+                string[] nodes = NodeIDs.Split(',');
+                if (nodes.Length > 0)
+                {
+                    DataSet dsWFAct = DB.ExecuteDataset("SELECT TextMsg, AD_WF_Activity_ID, AD_WF_Node_ID FROM AD_WF_Activity WHERE AD_WF_Process_ID = " + GetAD_WF_Process_ID(), null, Get_TrxName());
+                    if (dsWFAct != null && dsWFAct.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (string nID in nodes)
+                        {
+                            int curNodeID = Util.GetValueOfInt(nID);
+                            if (!NodesProc.Contains(curNodeID))
+                            {
+                                DataRow[] dr = dsWFAct.Tables[0].Select(" AD_WF_Node_ID = " + curNodeID);
+                                if (dr != null && dr.Length > 0)
+                                {
+                                    for (int r = 0; r < dr.Length; r++)
+                                    {
+                                        if (Util.GetValueOfString(dr[r]["TextMsg"]).Trim() != "")
+                                            message += "\n \n " + Util.GetValueOfString(dr[r]["TextMsg"]);
+                                    }
+                                    NodesProc.Add(curNodeID);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return message;
+        }
+
+        /// <summary>
+        /// Fetch Activity msg to be set on Workflow Activity
+        /// </summary>
+        /// <returns></returns>
+        private string GetActivityMsg()
+        {
+            StringBuilder sbMsg = new StringBuilder("");
+
+            StringBuilder sbEmail1 = new StringBuilder();
+            for (int i = 0; i < _emails.Count; i++)
+            {
+                if (i == 0)
+                    sbEmail1.Append(_emails[i]);
+                else
+                    sbEmail1.Append(", " + _emails[i]);
+            }
+            if (sbEmail1.ToString() != "")
+                sbMsg.Append(Msg.GetMsg(GetCtx(), "SentTo") + " : " + sbEmail1.ToString() + "  " + SaveActionLog(sbEmail1.ToString(), Get_TrxName()));
+            else
+                sbMsg.Append(SaveActionLog(sbEmail1.ToString(), Get_TrxName()));
+
+            if (_noticeUsers.Count > 0)
+            {
+                string userIDs = String.Join(",", _noticeUsers);
+                if (userIDs != null && userIDs.ToString().Trim() != "")
+                {
+                    StringBuilder sbUNames = new StringBuilder("");
+                    DataSet dsUserNames = DB.ExecuteDataset("SELECT Name FROM AD_User WHERE AD_User_ID IN (" + userIDs + ")", null, Get_TrxName());
+                    if (dsUserNames != null && dsUserNames.Tables[0].Rows.Count > 0)
+                    {
+                        for (int u = 0; u < dsUserNames.Tables[0].Rows.Count; u++)
+                        {
+                            if (u == 0)
+                                sbUNames.Append(dsUserNames.Tables[0].Rows[u]["Name"]);
+                            else
+                                sbUNames.Append(", " + dsUserNames.Tables[0].Rows[u]["Name"]);
+                        }
+                        sbMsg.Append("\n" + Msg.GetMsg(GetCtx(), "NoticeTo") + " : " + sbUNames.ToString());
+                    }
+                }
+            }
+
+            return sbMsg.ToString();
         }
 
         volatile IReportEngine re = null;
@@ -1838,6 +1965,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                             + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID()
                             + " - Should=" + value + ", Is=" + dbValueNew);
             }
+
+            // if name of the column is "IsApproved" (Set in Env Class) and column value is true
+            if (column.GetColumnName().ToUpper().Equals(Env.ApproveColName.ToUpper()) && value.Equals("Y"))
+                UpdateVersions();
+
             //	Info
             String msg = GetNode().GetAttributeName() + "=" + value;
             if (textMsg != null && textMsg.Length > 0)
@@ -1845,6 +1977,276 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             SetTextMsg(msg);
             _newValue = value;
             return true;
+        }
+
+        /// <summary>
+        /// Update Versions in all tabs from current window
+        /// </summary>
+        /// <returns></returns>
+        public string UpdateVersions()
+        {
+            // Get Tab Information like MaintainVerOnApproval, TabLevel, SeqNo etc.
+            DataSet dsCurTab = DB.ExecuteDataset("SELECT MaintainVerOnApproval, AD_Tab_ID, TabLevel, SeqNo FROM AD_Tab WHERE AD_Window_ID = " + GetAD_Window_ID() + " AND AD_Table_ID = " + GetAD_Table_ID(), null, Get_TrxName());
+            if (dsCurTab != null && dsCurTab.Tables[0].Rows.Count > 0)
+            {
+                string maintainVerOnApp = Util.GetValueOfString(dsCurTab.Tables[0].Rows[0]["MaintainVerOnApproval"]);
+                int tabLevel = Util.GetValueOfInt(dsCurTab.Tables[0].Rows[0]["TabLevel"]);
+                int AD_Tab_ID = Util.GetValueOfInt(dsCurTab.Tables[0].Rows[0]["AD_Tab_ID"]);
+                int SeqNo = Util.GetValueOfInt(dsCurTab.Tables[0].Rows[0]["SeqNo"]);
+                Dictionary<string, string> keyIDs = new Dictionary<string, string>();
+
+                // Check if Table linked with tab has MaintainVersions Column and 
+                // on tab MaintainVerOnApproval is marked as true and Tab Level is 0
+                if (CheckMaintainVerCol(GetAD_Table_ID()) && maintainVerOnApp == "Y" && tabLevel == 0)
+                {
+                    MTable tbl = new MTable(GetCtx(), GetAD_Table_ID(), Get_TrxName());
+                    // Get Key Column Name of First Tab
+                    string KeyColName = tbl.GetTableName() + "_ID";
+                    // Get ID of kEy column name for first tab
+                    int keyColID = _po.Get_ID();
+
+                    // Insert data into version table against first tab
+                    bool Success = InsertVersionData(_po, tbl, keyIDs);
+                    // proceed only if data saved in version tab of parent table
+                    if (Success)
+                    {
+                        StringBuilder sbPLCols = new StringBuilder("");
+                        // Get all tabs in window except first tab (as data is already inserted into version table for first tab) order by seq number
+                        int[] allTabs = MTab.GetAllIDs("AD_Tab", "AD_Window_ID = " + GetAD_Window_ID() + " AND SeqNo > " + SeqNo + " ORDER BY SeqNo", Get_TrxName());
+                        // Loop through all tabs
+                        for (int i = 0; i < allTabs.Length; i++)
+                        {
+                            MTab tb = new MTab(GetCtx(), Util.GetValueOfInt(allTabs[i]), Get_TrxName());
+                            sbPLCols.Clear();
+
+                            // Check MaintainVersions column in current tab and setting of MaintainVerOnApproval column on tab
+                            // then insert data in version table against current tab
+                            if (CheckMaintainVerCol(tb.GetAD_Table_ID()) && tb.IsMaintainVerOnApproval())
+                            {
+                                int tabTableID = tb.GetAD_Table_ID();
+                                int linkColumnID = tb.GetAD_Column_ID();
+                                // if link column is not defined on tab, then check linking of tabs based on Parent Link Column
+                                // in columns of Table linked with Tab
+                                if (linkColumnID <= 0)
+                                {
+                                    // get all parent link columns from table
+                                    DataSet dsKeyCols = DB.ExecuteDataset("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + tabTableID + " AND IsParent = 'Y' AND IsActive ='Y'");
+                                    if (dsKeyCols != null && dsKeyCols.Tables[0].Rows.Count > 0)
+                                    {
+                                        // check if table has only one Parent Link Column
+                                        if (dsKeyCols.Tables[0].Rows.Count == 1)
+                                            linkColumnID = Util.GetValueOfInt(dsKeyCols.Tables[0].Rows[0]["AD_Column_ID"]);
+                                        else
+                                        {
+                                            // create comma separated string of columns marked as Parent Link Column
+                                            if (dsKeyCols != null && dsKeyCols.Tables[0].Rows.Count > 0)
+                                            {
+                                                for (int k = 0; k < dsKeyCols.Tables[0].Rows.Count; k++)
+                                                {
+                                                    if (k == 0)
+                                                        sbPLCols.Append(dsKeyCols.Tables[0].Rows[k]["AD_Column_ID"]);
+                                                    else
+                                                        sbPLCols.Append("," + dsKeyCols.Tables[0].Rows[k]["AD_Column_ID"]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                tbl = new MTable(GetCtx(), tabTableID, Get_TrxName());
+                                string ChildLinkCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + linkColumnID, null, null));
+                                // case if this tab is child tab of First tab itself
+                                if (ChildLinkCol == KeyColName)
+                                    InsertTabData(tbl, keyIDs, ChildLinkCol, Util.GetValueOfString(keyColID));
+                                else
+                                {
+                                    // check if Link column found in current loop
+                                    if (linkColumnID > 0)
+                                    {
+                                        ChildLinkCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + linkColumnID, null, null));
+                                        if (keyIDs.ContainsKey(ChildLinkCol))
+                                            InsertTabData(tbl, keyIDs, ChildLinkCol, keyIDs[ChildLinkCol]);
+                                    }
+                                    else
+                                    {
+                                        // if multiple parent link columns found
+                                        if (sbPLCols.ToString().Trim() != "")
+                                        {
+                                            DataSet dsColNames = DB.ExecuteDataset("SELECT ColumnName FROM AD_Column WHERE AD_Column_ID IN (" + sbPLCols + ")", null, Get_TrxName());
+                                            if (dsColNames != null && dsColNames.Tables[0].Rows.Count > 0)
+                                            {
+                                                string cName = "";
+                                                for (int c = 0; c < dsColNames.Tables[0].Rows.Count; c++)
+                                                {
+                                                    if (keyIDs.ContainsKey(Util.GetValueOfString(dsColNames.Tables[0].Rows[c]["ColumnName"])))
+                                                    {
+                                                        cName = Util.GetValueOfString(dsColNames.Tables[0].Rows[c]["ColumnName"]);
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (cName.Trim() != "")
+                                                    InsertTabData(tbl, keyIDs, cName, keyIDs[cName]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// insert data in tabs of current window against parent passed in parameters
+        /// </summary>
+        /// <param name="tbl"></param>
+        /// <param name="keyIDs"></param>
+        /// <param name="ColName"></param>
+        /// <param name="Cols"></param>
+        /// <returns></returns>
+        public bool InsertTabData(MTable tbl, Dictionary<string, string> keyIDs, string ColName, string Cols)
+        {
+            DataSet dsTabData = DB.ExecuteDataset("SELECT * FROM " + tbl.GetTableName() + " WHERE " + ColName + " IN (" + Cols + ")");
+            if (dsTabData != null && dsTabData.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < dsTabData.Tables[0].Rows.Count; i++)
+                {
+                    PO oldPO = tbl.GetPO(GetCtx(), dsTabData.Tables[0].Rows[i], Get_TrxName());
+                    if (oldPO != null)
+                        InsertVersionData(oldPO, tbl, keyIDs);
+                    else
+                        log.Info("Error in creating PO against table for Version");
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Get Table name against table ID passed in parameter
+        /// </summary>
+        /// <param name="AD_Table_ID"></param>
+        /// <returns>TableName (string)</returns>
+        public string GetTableName(int AD_Table_ID)
+        {
+            return Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+        }
+
+        /// <summary>
+        /// Insert data in version tab 
+        /// </summary>
+        /// <param name="oldPO"></param>
+        /// <param name="tbl"></param>
+        /// <param name="keyIDs"></param>
+        /// <returns></returns>
+        private bool InsertVersionData(PO oldPO, MTable tbl, Dictionary<string, string> keyIDs)
+        {
+            string TableName = tbl.GetTableName();
+            string[] keyCols = oldPO.Get_KeyColumns();
+
+            MColumn[] cols = tbl.GetColumns(true);
+
+            PO poNew = MTable.GetPO(GetCtx(), TableName + "_Ver", 0, Get_TrxName());
+
+            for (int i = 0; i < cols.Length; i++)
+            {
+                string columnName = cols[i].GetColumnName();
+                // skip column if column name is either "Created" or "CreatedBy"
+                if (columnName.Trim().ToLower() == "created" || columnName.Trim().ToLower() == "createdby")
+                    continue;
+                if (oldPO.Get_ColumnIndex(columnName) < 0)
+                    continue;
+                poNew.Set_ValueNoCheck(columnName, oldPO.Get_Value(columnName));
+            }
+
+            poNew.Set_Value("VersionValidFrom", oldPO.Get_Value("Created"));
+            poNew.Set_Value("ProcessedVersion", true);
+            poNew.Set_Value("IsVersionApproved", true);
+
+            int VerRec = 1;
+            int curMaxVer = 0;
+            // Get Max Record version saved in Version Record field of Version table
+            if (keyCols.Length == 1)
+            {
+                curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + TableName + "_Ver WHERE " + TableName + "_ID = " + oldPO.Get_ID()));
+            }
+            else
+            {
+                StringBuilder whClause = new StringBuilder("");
+                for (int i = 0; i < keyCols.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        if (oldPO.Get_Value(keyCols[i]) != null)
+                            whClause.Append(keyCols[i] + " = " + oldPO.Get_Value(keyCols[i]));
+                        else
+                            whClause.Append(" NVL(" + keyCols[i] + ",0) = 0");
+                    }
+                    else
+                    {
+                        if (oldPO.Get_Value(keyCols[i]) != null)
+                            whClause.Append(" AND " + keyCols[i] + " = " + oldPO.Get_Value(keyCols[i]));
+                        else
+                            whClause.Append(" AND NVL(" + keyCols[i] + ",0) = 0");
+                    }
+                }
+                curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT  MAX(NVL(RecordVersion,0)) + 1 FROM " + TableName + "_Ver WHERE " + whClause));
+            }
+
+            if (curMaxVer > 0)
+                VerRec = curMaxVer;
+            poNew.Set_Value("RecordVersion", VerRec);
+
+            if (!poNew.Save())
+            {
+                ValueNamePair vnp = VLogger.RetrieveError();
+                StringBuilder errorMsg = new StringBuilder("");
+                if (vnp != null)
+                {
+                    errorMsg.Append(Util.GetValueOfString(vnp.GetName()));
+                    if (errorMsg.ToString() == "")
+                        errorMsg.Append(vnp.GetValue());
+                }
+                if (errorMsg.ToString() == "")
+                    errorMsg.Append("Error in saving Version Data in table :: " + TableName + "_Ver");
+
+                log.SaveError("VersionError", errorMsg.ToString());
+                return false;
+            }
+            else
+            {
+                if (tbl.IsSingleKey())
+                {
+                    if (keyIDs.ContainsKey(TableName + "_ID"))
+                    {
+                        string val = keyIDs[TableName + "_ID"];
+                        keyIDs[TableName + "_ID"] = val + ", " + oldPO.Get_ID();
+                    }
+                    else
+                        keyIDs[TableName + "_ID"] = oldPO.Get_ID().ToString();
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// check if current table has Maintain Version column then return true else false
+        /// </summary>
+        /// <param name="AD_Table_ID"></param>
+        /// <returns>true/false</returns>
+        public bool CheckMaintainVerCol(int AD_Table_ID)
+        {
+            int countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            if (countVerCol > 0)
+                return true;
+
+            countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            if (countVerCol > 0)
+                return true;
+            return false;
         }
 
         /// <summary>
@@ -1916,7 +2318,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                             int nextAD_User_ID = GetApprovalUser(startAD_User_ID,
                                 doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
                                 doc.GetAD_Org_ID(),
-                                startAD_User_ID == doc.GetDoc_User_ID());	//	own doc
+                                startAD_User_ID == doc.GetDoc_User_ID(), false);	//	own doc
                             //	No Approver
                             if (nextAD_User_ID <= 0)
                             {
@@ -1995,7 +2397,8 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
 
             if (textMsg != null)
-                textMsg += " - " + GetNode().GetAttributeName() + " Froward To:" + AD_User_ID;
+                // textMsg += " - " + GetNode().GetAttributeName() + " Froward To:" + AD_User_ID;
+                textMsg += " - " + GetNode().GetAttributeName() + " " + Msg.GetMsg(GetCtx(), "ForwardTo") + " : " + user.GetName();
 
             SetTextMsg(textMsg);
             Save();
@@ -2581,6 +2984,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private void SendEMail(MClient client, int AD_User_ID, String email, String subject,
             String message, FileInfo pdf, bool isHTML, int AD_Table_ID, int record_ID, string action, byte[] bArray = null)
         {
+            // create/update message based on the setting on node
+            message = GetMailMessage(message);
+
             if (AD_User_ID != 0)
             {
                 MUser user = MUser.Get(GetCtx(), AD_User_ID);
@@ -2776,7 +3182,28 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             note.SetDescription("");
             note.SetRecord(Table_ID, Get_ID());		//	point to this
             note.SetAD_Message_ID(859);//Workflow
-            note.Save(Get_TrxName());
+            if (note.Save(Get_TrxName()))
+            {
+                // add user ID to the Notice User list to whom notices are sent
+                if (!_noticeUsers.Contains(AD_User_ID))
+                    _noticeUsers.Add(AD_User_ID);
+            }
+            else
+            {
+                ValueNamePair vnp = VLogger.RetrieveError();
+                string msg = "";
+                if (vnp != null)
+                {
+                    msg = vnp.GetName();
+                    if (msg.Trim() == "")
+                        msg = vnp.GetValue();
+                }
+
+                if (msg.Trim() == "")
+                    msg = "Error in saving note :  " + subject + " - " + message;
+
+                log.SaveError(msg, subject + " - " + message);
+            }
         }
 
         /// <summary>
@@ -3002,6 +3429,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private void SendFaxEMail(MClient client, int AD_User_ID, String email, String subject,
             String message, FileInfo pdf, bool isHTML)
         {
+            // create/update message based on the setting on node
+            message = GetMailMessage(message);
+
             if (AD_User_ID != 0)
             {
                 MUser user = MUser.Get(GetCtx(), AD_User_ID);
@@ -3506,7 +3936,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM AD_TextTemplate WHERE AD_TextTemplate_ID = " + node.GetAD_TextTemplate_ID()));
                 sb.Append(CommonFunctions.Parse(mailtext, po));
-                sb.Replace("<br>", "●");
+                //sb.Replace("<br>", "●");
             }
             else
             {
@@ -3565,6 +3995,23 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 }
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Get Last workflow Activity ID
+        /// </summary>
+        /// <returns></returns>
+        public int GetLastActivity()
+        {
+            return _lastActivity;
+        }
+        /// <summary>
+        /// Set Workflow Activity ID in Last Activity
+        /// </summary>
+        /// <param name="AD_WF_Activity_ID"></param>
+        public void SetLastActivity(int AD_WF_Activity_ID)
+        {
+            _lastActivity = AD_WF_Activity_ID;
         }
     }
 }

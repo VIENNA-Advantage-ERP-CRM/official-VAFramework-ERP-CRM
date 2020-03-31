@@ -458,8 +458,8 @@ namespace VAdvantage.Model
                         //    return DocActionVariables.STATUS_INVALID;
                         //}
                         MInvoice invoice = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
-                        MCurrency currency = new MCurrency(GetCtx(), invoice.GetC_Currency_ID(), null);
-                        MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                        MCurrency currency = MCurrency.Get(GetCtx(), invoice.GetC_Currency_ID());
+                        MDocType doctype = MDocType.Get(GetCtx(), invoice.GetC_DocType_ID());
                         StringBuilder _sql = new StringBuilder();
                         varianceAmount = 0;
 
@@ -488,21 +488,28 @@ namespace VAdvantage.Model
                         if (line.GetC_CashLine_ID() > 0)
                             cashline = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), Get_Trx());
 
+                        // in case of GL Allocation if GL_JournalLine_ID is available on Allocation Line
+                        MJournalLine journalline = null;
+                        if (Util.GetValueOfInt(line.Get_Value("GL_JournalLine_ID")) > 0)
+                        {
+                            journalline = new MJournalLine(GetCtx(), Util.GetValueOfInt(line.Get_Value("GL_JournalLine_ID")), Get_Trx());
+                        }
+
                         decimal currencymultiplyRate = 1;
                         if (payment != null && payment.GetC_Payment_ID() != 0)
                         {
-                            // new function called to get currency multiply rate by Vivek on 02/02/2018
-                            currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline);
+                            // to get Multiply Rate 
+                            currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline, journalline);
                         }
                         else if (cashline != null && cashline.GetC_CashLine_ID() != 0)
                         {
-                            // new function called to get currency multiply rate by Vivek on 02/02/2018
-                            currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline);
+                            // to get Multiply Rate 
+                            currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline, journalline);
                         }
                         // When allocation is against invoice - invoice and payment - payment
                         else
                         {
-                            currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline);
+                            currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline, journalline);
                         }
 
 
@@ -530,6 +537,7 @@ namespace VAdvantage.Model
                         decimal multiplyRate = 0;
                         if (BaseCurrency != invoice.GetC_Currency_ID())
                         {
+                            // get Conversion on the basis of Allocation Date Account because Paid Amount need to be convert on DateAcct of Allocation
                             multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
                             paySch.SetVA009_PaidAmnt(Decimal.Round(paySch.GetVA009_PaidAmntInvce() * multiplyRate, currency.GetStdPrecision()));
                         }
@@ -1029,34 +1037,95 @@ namespace VAdvantage.Model
         /// <param name="invoice"></param>
         /// <param name="payment"></param>
         /// <param name="cashline"></param>
-        /// <param name="C_Currency_ID"></param>
+        /// <param name="journalline"></param>
         /// <returns></returns>
-        private decimal GetCurrencyMultiplyRate(MInvoice invoice, MPayment payment, MCashLine cashline)
+        private decimal GetCurrencyMultiplyRate(MInvoice invoice, MPayment payment, MCashLine cashline, MJournalLine journalline)
         {
             decimal currencymultiplyRate = 1;
             StringBuilder _sql = new StringBuilder();
-            MCash cash = null;
+            MCash cash = null; MJournal journal = null;
+            int currencyTo_ID = 0, C_ConversionType_ID = 0, AD_Client_ID = 0, AD_Org_ID = 0;
+            DateTime? DateAcct = null;
             if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
             {
-                if (payment == null && cashline == null)
+                // when we allocate invoice with invoice 
+                if (payment == null && cashline == null && journalline == null) // Invoice to Invoice
                 {
-                    // when we allocate invoice with invoice 
-                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
                 }
                 else
                 {
-                    // in case of cash journal, make object of cash
+                    //In case of Journal
+                    if (journalline != null)
+                    {
+
+                        if (journalline != null && invoice != null) // journal to invoice
+                        {
+                            DateAcct = GetDateAcct();
+                            C_ConversionType_ID = GetC_ConversionType_ID();
+                            currencyTo_ID = invoice.GetC_Currency_ID();
+                            AD_Client_ID = invoice.GetAD_Client_ID();
+                            AD_Org_ID = invoice.GetAD_Org_ID();
+                        }
+                        else if (journalline != null && payment != null) //Journal to payment
+                        {
+                            DateAcct = GetDateAcct();
+                            C_ConversionType_ID = GetC_ConversionType_ID();
+                            currencyTo_ID = payment.GetC_Currency_ID();
+                            AD_Client_ID = payment.GetAD_Client_ID();
+                            AD_Org_ID = payment.GetAD_Org_ID();
+                        }
+                        else if (journalline != null && cashline != null) // journal to cash
+                        {
+                            //cash = new MCash(cashline.GetCtx(), cashline.GetC_Cash_ID(), cashline.Get_Trx());
+                            DateAcct = GetDateAcct();
+                            C_ConversionType_ID = GetC_ConversionType_ID();
+                            currencyTo_ID = cash.GetC_Currency_ID();
+                            AD_Client_ID = cash.GetAD_Client_ID();
+                            AD_Org_ID = cash.GetAD_Org_ID();
+                        }
+                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+                    }
+
+                    // in case of cash journal
                     if (cashline != null)
                     {
-                        cash = new MCash(cashline.GetCtx(), cashline.GetC_Cash_ID(), cashline.Get_Trx());
+                        if (cashline != null && invoice != null) // Cash to invoice
+                        {
+                            DateAcct = GetDateAcct();
+                            C_ConversionType_ID = GetC_ConversionType_ID();
+                            currencyTo_ID = invoice.GetC_Currency_ID();
+                            AD_Client_ID = invoice.GetAD_Client_ID();
+                            AD_Org_ID = invoice.GetAD_Org_ID();
+                        }
+                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
                     }
-                    // pick conversion rate based on either Payment account date or cash journal account date
-                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment != null ? payment.GetDateAcct() : cash.GetDateAcct(), payment != null ? payment.GetC_ConversionType_ID() : cashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+
+                    // in case of Payment
+                    if (payment != null)
+                    {
+                        if (payment != null && invoice != null) // payment to invoice
+                        {
+                            DateAcct = GetDateAcct();
+                            C_ConversionType_ID = GetC_ConversionType_ID();
+                            currencyTo_ID = invoice.GetC_Currency_ID();
+                            AD_Client_ID = invoice.GetAD_Client_ID();
+                            AD_Org_ID = invoice.GetAD_Org_ID();
+                        }
+                        else if (payment != null && payment != null) //payment to payment
+                        {
+                            DateAcct = GetDateAcct();
+                            C_ConversionType_ID = GetC_ConversionType_ID();
+                            currencyTo_ID = payment.GetC_Currency_ID();
+                            AD_Client_ID = payment.GetAD_Client_ID();
+                            AD_Org_ID = payment.GetAD_Org_ID();
+                        }
+                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+                    }
                 }
             }
             return currencymultiplyRate;
         }
-
 
         private int C_InvoicePaySch_ID = 0;
         /// <summary>

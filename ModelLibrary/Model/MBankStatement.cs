@@ -489,11 +489,8 @@ namespace VAdvantage.Model
             //Changes by SUkhwinder on 20 April, if all lines are not matched then dont allow complete.
             foreach (MBankStatementLine line in lines)
             {
-                if (line.GetC_Payment_ID() > 0 || line.GetC_Charge_ID() > 0)
-                {
-
-                }
-                else
+                // if Transaction amount exist but no payment reference or Charge amount exist with no Charge then give message for Unmatched lines
+                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0) || (line.GetChargeAmt() != Env.ZERO && line.GetC_Charge_ID() == 0))
                 {
                     m_processMsg = Msg.GetMsg(Env.GetCtx(), "LinesNotMatchedYet");
                     return DocActionVariables.STATUS_INVALID;

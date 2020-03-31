@@ -597,19 +597,21 @@
                 var divContent = $("<div class='vis-feedDetails'>");
 
 
-                var para = $("<p>");
+                var para = $("<pre>");
                 if (data[item].DocumentNameValue == undefined || data[item].DocumentNameValue == '') {
 
                     // Get Workflow Activity details from selected Text Template
-                    var summary = VIS.Utility.encodeText(data[item].Summary).split("●");
-                    if (summary != null && summary.length > 0) {
-                        for (var k = 0; k < summary.length; k++) {
-                            para.append(summary[k]);
-                            if (k < summary.length - 1) {
-                                para.append("<br>");
-                            }
-                        }
-                    }
+
+                    //var summary = VIS.Utility.encodeText(data[item].Summary).split("●");
+                    //if (summary != null && summary.length > 0) {
+                    //    for (var k = 0; k < summary.length; k++) {
+                    //        para.append(summary[k]);
+                    //        if (k < summary.length - 1) {
+                    //            para.append("<br>");
+                    //        }
+                    //    }
+                    //}
+                    para.append(VIS.Utility.encodeText(data[item].Summary));
                 }
                 else {
                     para.append(VIS.Utility.encodeText(data[item].DocumentNameValue + " - " + data[item].Summary));
@@ -941,22 +943,27 @@
             // var li2 = $("<li>");
             // if  any checkbox is checked, then don't show summary in middle panel.
             if (selectedItems.length <= 1) {
-                var p2 = $("<p>");
+                var p2 = $("<pre>");
                 p2.css('margin-top', '10px');
+                p2.css('margin-bottom', '0px');
+                p2.css('font-size', '14px');
+                p2.css('font-family', 'NoirPro-Regular');
                 p2.append(VIS.Msg.getMsg('Summary'));
                 p2.append($("<br>"));
 
                 // Get Workflow Activity details from selected Text Template
-                var summary = VIS.Utility.encodeText(fulldata[index].Summary).split("●");
-                if (summary != null && summary.length > 0) {
-                    for (var k = 0; k < summary.length; k++) {
-                        p2.append(summary[k]);
-                        if (k < summary.length - 1) {
-                            p2.append("<br>");
-                        }
-                    }
-                }
-                //p2.append(VIS.Utility.encodeText(fulldata[index].Summary));
+
+                //var summary = VIS.Utility.encodeText(fulldata[index].Summary).split("●");
+                //if (summary != null && summary.length > 0) {
+                //    for (var k = 0; k < summary.length; k++) {
+                //        p2.append(summary[k]);
+                //        if (k < summary.length - 1) {
+                //            p2.append("<br>");
+                //        }
+                //    }
+                //}
+
+                p2.append(VIS.Utility.encodeText(fulldata[index].Summary));
                 li1.append(p2);
             }
             //ul.append(li2);
@@ -1276,6 +1283,8 @@
                                 activitIDs = fulldata[index].AD_WF_Activity_ID;
                             }
 
+                            // set window ID of activity
+                            windowID = fulldata[index].AD_Window_ID;
 
                             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/ApproveIt",
                                 { "activityID": activitIDs, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer, "AD_Window_ID": windowID }, function apprvoIt(info) {

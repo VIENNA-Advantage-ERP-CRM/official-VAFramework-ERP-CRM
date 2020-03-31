@@ -83,7 +83,8 @@ namespace VAdvantage.Model
 
             if (DisplayType.IsLookup(_vo.displayType))
             {
-                MLookup ml = new MLookup(_vo.GetCtx(), _vo.windowNo, _vo.displayType);
+                MLookup ml = new MLookup(_vo.GetCtx(), _vo.windowNo,_vo.tabNo, _vo.displayType);
+                ml.SetColumnName(_vo.ColumnName.ToLower());
                 if (_vo.lookupInfo == null)
                 {
                     _vo.lookupInfo = VLookUpFactory.GetLookUpInfo(ml, _vo.AD_Column_ID,
@@ -102,6 +103,10 @@ namespace VAdvantage.Model
                     ml.SetDisplayType(DisplayType.Search);
                 }
                 //
+                if (_vo.lookupInfo == null)
+                {
+                    throw new Exception(Msg.GetMsg(_vo.GetCtx(), "Error")+ " " + _vo.Header);
+                }
                 _vo.lookupInfo.isKey = _vo.IsKey;
                 _lookup = ml.Initialize(_vo.lookupInfo);
             }

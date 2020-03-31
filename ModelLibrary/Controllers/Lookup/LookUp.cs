@@ -42,6 +42,8 @@ namespace VAdvantage.Model
         private Ctx _ctx;
         /**	Window No				*/
         public int _WindowNo;
+        /**	Tab No				*/
+        public int _TabNo;
         /**	Display Type			*/
         public int _displayType;
         /** Disable Validation		*/
@@ -61,7 +63,7 @@ namespace VAdvantage.Model
         //logger
         protected VLogger log = null;
 
-
+        public string _columnName="";
 
         #endregion
 
@@ -81,6 +83,17 @@ namespace VAdvantage.Model
             SetDisplayType(displayType);
         }
 
+        public Lookup(Ctx ctx, int windowNo, int tabNo, int displayType)
+        {
+            if (log == null)
+            {
+                log = VLogger.GetVLogger(this.GetType().FullName);
+            }
+            SetContext(ctx, windowNo);
+            SetDisplayType(displayType);
+            SetTabNo(tabNo);
+        }
+
         /// <summary>
         ///Set Ctx
         /// </summary>
@@ -90,6 +103,16 @@ namespace VAdvantage.Model
         {
             _ctx = ctx;
             _WindowNo = windowNo;
+        }
+
+        public void SetTabNo(int tabNo)
+        {
+            _TabNo = tabNo;
+        }
+
+        public void SetColumnName(string colName)
+        {
+            _columnName = colName;
         }
 
         /// <summary>

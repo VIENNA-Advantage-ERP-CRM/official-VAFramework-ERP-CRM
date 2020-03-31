@@ -126,20 +126,21 @@
             return result;
         };
         function deleteWRecords(data) {
-
-            var result = null;
-            $.ajax({
-                url: windowDeleteUrl,
-                type: "POST",
-                datatype: "json",
-                contentType: "application/json; charset=utf-8",
-                async: false,
-                data: JSON.stringify(data)
-            }).done(function (json) {
-                result = json;
-                //return result;
+            return new Promise(function (resolve, reject) {
+                var result = null;
+                $.ajax({
+                    url: windowDeleteUrl,
+                    type: "POST",
+                    datatype: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data)
+                }).done(function (json) {
+                    result = json;
+                    resolve(result);
+                    //return result;
+                })
+                return result;
             })
-            return result;
         };
 
         function getWindowRecords(sqlIn, fields, rowCount, SQL_Count, AD_Table_ID, callback) {
@@ -154,10 +155,14 @@
                 data: JSON.stringify(data)
             }).done(function (jString) {
                 if (callback) {
+                    var retObj = JSON.parse(jString);
                     var dataSet = null;
-                    if (jString)
-                        dataSet = new VIS.DB.DataSet().toJson(jString);
-                    callback(dataSet);
+                    var lookupDirect = null;
+                    if (retObj) {
+                        dataSet = new VIS.DB.DataSet().toJson(retObj.Tables);
+                        lookupDirect = retObj.LookupDirect;
+                    }
+                    callback(dataSet, lookupDirect);
                 }
             })
         };

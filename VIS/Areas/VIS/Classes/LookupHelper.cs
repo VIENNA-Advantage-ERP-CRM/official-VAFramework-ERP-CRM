@@ -55,7 +55,7 @@ namespace VIS.Classes
                 // if user uncheck the save in db checkbox
                 mimg.SetBinaryData(null);
             }
-            mimg.SetImageURL("Images");
+            mimg.SetImageURL(mimg.ImageFormat);
             //else
             //{
             //    mimg.SetImageURL("Images");//Image Saved in File System so instead of byteArray image Url will be set

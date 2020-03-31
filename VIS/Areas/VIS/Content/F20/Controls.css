@@ -42,6 +42,7 @@
 .vis-input-wrap label + button.vis-ev-col-img-ctrl {
     min-height: 115px;
     height: calc(100% - 21px);
+    cursor:default;
 }
 .vis-input-wrap button.vis-ev-col-img-ctrl img {
     max-width: 100%;
@@ -79,6 +80,8 @@
 .vis-control-wrap {
     flex: 1;
     position: relative;
+    z-index: 1;
+    width: 100%;
 }
 .vis-input-wrap input {
     display: block;
@@ -165,7 +168,7 @@ select.vis-ev-col-mandatory {
 
 
 .vis-input-wrap input:focus ~ label, .vis-input-wrap input:not(:placeholder-shown) ~ label, .vis-input-wrap textarea:not(:placeholder-shown) ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap textarea:focus ~ label, .vis-input-wrap select ~ label {
-    top: -9px;
+    top: -8px;
     font-size: 12px;
     background: rgba(var(--v-c-common), 1);
     padding: 0 0.4rem;
@@ -274,15 +277,16 @@ select.vis-ev-col-mandatory {
     cursor: not-allowed;
 }
 select.vis-ev-col-readonly ~ label,
-input.vis-ev-col-readonly:not(:placeholder-shown) ~ label{
-    background: linear-gradient(0deg, rgba(var(--v-c-secondary),.5), rgba(var(--v-c-common), 1)); /*Dynamic color*/
+input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
+    background: linear-gradient(#fff 50%, transparent 50%); /*Dynamic color*/
 }
 
 
 /*mandatory*/
 .vis-ev-col-mandatory {
     color: inherit !important;
-    background-color: lightpink !important;
+    background-color: rgba(var(--v-c-mandatory), .2);
+    /*border: 1px solid rgba(var(--v-c-mandatory), 1) !important;*/
 }
 
 .vis-input-wrap .vis-ev-col-mandatory {
@@ -325,9 +329,9 @@ label.vis-ec-col-lblchkbox {
     position: relative;
     pointer-events: auto;
     left: 0;
-    display: inline-flex;
-    
+    display: inline-flex;    
     align-items: center;
+    font-weight: normal;
 }
 
 .vis-ev-col label.vis-ec-col-lblchkbox {
@@ -339,9 +343,7 @@ label.vis-ec-col-lblchkbox {
     width: auto;
     min-height: 0;
     min-width: 0px;
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-bottom: 0;
+    margin: 0 4px;
 }
 
         .vis-ec-col-lblchkbox input[type=checkbox]:focus {
@@ -413,6 +415,16 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     display: inline-flex;
     justify-content: center;
     width:36px;
+}
+
+.vis-img-ctrl-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(var(--v-c-on-secondary), .2);
+    padding: 10px;
+    border-bottom-left-radius: .25rem;
+    cursor:pointer;
 }
 
 

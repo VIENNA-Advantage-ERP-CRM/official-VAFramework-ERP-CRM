@@ -365,6 +365,11 @@ namespace VAdvantage.Model
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
+        /** Set Check No Auto Controlled.
+        @param ChkNoAutoControl Check Number Auto Controlled */
+        public void SetChkNoAutoControl(Boolean ChkNoAutoControl) { Set_Value("ChkNoAutoControl", ChkNoAutoControl); }/** Get Check No Auto Controlled.
+        @return Check Number Auto Controlled */
+        public Boolean IsChkNoAutoControl() { Object oo = Get_Value("ChkNoAutoControl"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
     }
 
 }

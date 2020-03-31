@@ -373,10 +373,16 @@
             return VIS.context;
         };
 
+        function parseContext(ctx, windowNo, tabNo, value, onlyWindow, ignoreUnparsable) {
 
+            if (typeof (tabNo) != "number") {
+                ignoreUnparsable = onlyWindow;
+                onlyWindow = value;
+                value = tabNo;
+                tabNo = 0;
+            }
 
-        function parseContext(ctx, WindowNo, value, onlyWindow, ignoreUnparsable) {
-            if (value == null || value.Length == 0)
+            if (value == null || value.length == 0)
                 return "";
 
             var token = "";;
@@ -401,39 +407,11 @@
                 token = value.substring(0, j);
 
                 if (token.contains(".")) {
-                    ctxInfo = ctx.getWindowContext(WindowNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
-                    //if (token.toUpper().contains("TODATE()"))
-                    // {
-                    //   if (!string.IsNullOrEmpty(ctxInfo))
-                    // {
-                    //   if (getValue.Contains("=") && !getValue.Contains("<=") && !getValue.Contains(">="))
-                    // {
-                    //   string dt2 = DB.TO_DATE(Convert.ToDateTime(ctxInfo).AddHours(24), false); ;
-                    // string dt1 = DB.TO_DATE(Convert.ToDateTime(ctxInfo), false);
-                    // ctxInfo = " BETWEEN " + dt1 + " AND " + dt2 + "";
-
-                    // string backUP = outStr.ToString().Trim().Substring(0, outStr.ToString().Trim().Length - 1);
-                    // outStr.Clear();
-                    // outStr.Append(backUP);
-
-                    //}
-                    // else
-                    // {
-                    //    ctxInfo = DB.TO_DATE(Convert.ToDateTime(ctxInfo), true);
-                    // }
-                    // }
-                    //}
-                    // else if (token.ToUpper().Contains("TODATETIME()"))
-                    // {
-                    //   if (!string.IsNullOrEmpty(ctxInfo))
-                    //   {
-                    //     ctxInfo = DB.TO_DATE(Convert.ToDateTime(ctxInfo), false);
-                    // }
-                    // }
+                    token = token.substring(0, token.indexOf("."));
+                   //txInfo = ctx.getWindowContext(WindowNo, tabNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
                 }
-                else {
-                    ctxInfo = ctx.getWindowContext(WindowNo, token, onlyWindow);	// get context
-                }
+                
+                ctxInfo = ctx.getWindowContext(windowNo, tabNo, token, onlyWindow);	// get context
 
                 if (ctxInfo.length == 0 && (token.startsWith("#") || token.startsWith("$")))
                     ctxInfo = ctx.getContext(token);	// get global context
@@ -711,7 +689,8 @@
             SHOW_CLIENT_ONLY: 1,
             SHOW_ORG_ONLY: 2,
             HIDE_CLIENT_ORG: 3,
-            NULLString: NULLString
+            NULLString: NULLString,
+            approveCol: "IsApproved"
         }
     }();
     // ******************** END ENV *********************//
@@ -787,19 +766,19 @@
             var ulPopup = $("<ul class='vis-apanel-rb-ul'>");
             if (typeof options[VIS.Actions.zoom] !== "undefined")
                 ulPopup.append($("<li data-action='" + VIS.Actions.zoom + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
-                    "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
+                    "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
             if (options[VIS.Actions.preference])
-                ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog' /><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog'></i><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));
             if (options[VIS.Actions.refresh])
-                ulPopup.append($("<li data-action='" + VIS.Actions.refresh + "'><i data-action='" + VIS.Actions.refresh + "' class='vis vis-refresh' /><span data-action='" + VIS.Actions.refresh + "'>" + VIS.Msg.getMsg("Requery") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.refresh + "'><i data-action='" + VIS.Actions.refresh + "' class='vis vis-refresh'></i><span data-action='" + VIS.Actions.refresh + "'>" + VIS.Msg.getMsg("Requery") + "</span></li>"));
             if (options[VIS.Actions.add])
-                ulPopup.append($("<li data-action='" + VIS.Actions.add + "'><i data-action='" + VIS.Actions.add + "' class='vis vis-addbp' /><span data-action='" + VIS.Actions.add + "'>" + VIS.Msg.getMsg("Add") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.add + "'><i data-action='" + VIS.Actions.add + "' class='vis vis-addbp'></i><span data-action='" + VIS.Actions.add + "'>" + VIS.Msg.getMsg("Add") + "</span></li>"));
             if (options[VIS.Actions.update])
-                ulPopup.append($("<li data-action='" + VIS.Actions.update + "'><i data-action='" + VIS.Actions.update + "' class='vis vis-updatebp' /><span data-action='" + VIS.Actions.update + "'>" + VIS.Msg.getMsg("Update") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.update + "'><i data-action='" + VIS.Actions.update + "' class='vis vis-updatebp'></i><span data-action='" + VIS.Actions.update + "'>" + VIS.Msg.getMsg("Update") + "</span></li>"));
             if (options[VIS.Actions.remove])
-                ulPopup.append($("<li data-action='" + VIS.Actions.remove + "'><i data-action='" + VIS.Actions.remove + "' class='fa fa-arrow-left' /><span data-action='" + VIS.Actions.remove + "'>" + VIS.Msg.getMsg("Clear") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.remove + "'><i data-action='" + VIS.Actions.remove + "' class='fa fa-arrow-left'></i><span data-action='" + VIS.Actions.remove + "'>" + VIS.Msg.getMsg("Clear") + "</span></li>"));
             if (options[VIS.Actions.contact])
-                ulPopup.append($("<li data-action='" + VIS.Actions.contact + "'><i data-action='" + VIS.Actions.contact + "' class='fa fa-user' /><span data-action='" + VIS.Actions.contact + "'>" + VIS.Msg.getMsg("Contact") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.contact + "'><i data-action='" + VIS.Actions.contact + "' class='fa fa-user'></i><span data-action='" + VIS.Actions.contact + "'>" + VIS.Msg.getMsg("Contact") + "</span></li>"));
             return ulPopup;
         };
 
@@ -1658,8 +1637,9 @@
     };
 
     DataSet.prototype.toJson = function (jsonString) {
-
-        var tables = JSON.parse(jsonString);
+        var tables = jsonString;
+        if(typeof(jsonString) == "string")
+            tables = JSON.parse(jsonString);
 
         tables = $.isArray(tables) ? tables : [tables];
 
@@ -1700,6 +1680,7 @@
         this.rows = []; // rows of column
         this.totalRecord = 0; // total record 
         this.columnsName = [];
+        
     };
 
     DataTable.prototype.toJson = function (js) {

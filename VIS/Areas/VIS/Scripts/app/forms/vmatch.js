@@ -73,8 +73,8 @@
         var sideDivWidth = 260;
         var minSideWidth = 50;
         //window with-(sidediv with_margin from left+ space)
-        var selectDivWidth = $(window).width() - (sideDivWidth + 30);
-        var selectDivFullWidth = $(window).width() - (30 + minSideWidth);
+        var selectDivWidth = $(window).width() - (sideDivWidth);
+        var selectDivFullWidth = $(window).width() - (minSideWidth);
         var selectDivHeight = $(window).height() - 240;
 
         var _AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
@@ -118,26 +118,24 @@
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
 
             // JID_1250: Clear option required on Business partner and Product parameter.
-            var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
-            var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
-            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
-                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
-            btnClearPrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2" style="width: 30px; height: 29px; padding: 0px; border-color: #BBBBBB;"><img tabindex="-1" src="'
-                + imgInfo + '" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></button>');
+            //var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
+            //var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
+            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px;"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
+            btnClearPrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px; "><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
 
             //Top Div
-            $self.topDiv = $("<div id='" + "topDiv_" + $self.windowNo + "' style='float: left; width: 100%; height: 45px; margin-bottom: 2px;margin-left: 0px;'>" +
-                       "<div id='" + "btnSpaceDiv_" + $self.windowNo + "' style='width: 260px; height: 45px;float: left;padding-left: 11px; padding-top: 11px;; background-color: #F1F1F1;'>" +
-                       "<button id='" + "btnToggelDiv_" + $self.windowNo + "' style='border: 0px;background-color: transparent; padding: 0px;' >" +
-                       "<img src='" + src + "' /></button></div></div>");
+            $self.topDiv = $("<div id='" + "topDiv_" + $self.windowNo + "'  class='vis-archive-l-s-head vis-frm-ls-top' style='padding: 0;'>" +
+                "<div id='" + "btnSpaceDiv_" + $self.windowNo + "' class='vis-l-s-headwrp'>" +
+                       "<button id='" + "btnToggelDiv_" + $self.windowNo + "' class='vis-archive-sb-t-button' >" +
+                       "<i class='vis vis-arrow-left'></i></button></div></div>");
 
-            var invoicecol = $("<div style='float: left;  margin-right: 15px;padding-top: 10px;'>");//width: 100%;
-            invoicecol.append($self.lblInvoice.getControl().css("display", "inline-block").css("font-size", "24px").css("margin-left", "15px").css("color", "#19A0ED").addClass("VIS_Pref_Label_Font"));
+            var invoicecol = $("<div class='vis-frm-contenthead'>");//width: 100%;
+            invoicecol.append($self.lblInvoice.getControl().addClass("VIS_Pref_Label_Font"));
             invoicecol.append(chkSameBPartnerDiv);
             invoicecol.append(chkSameProductDiv);
             invoicecol.append(chkSameQtyDiv);
-            invoicecol.css("width", selectDivWidth);
-            invoicecol.css("height", "45px");
+            //invoicecol.css("width", selectDivWidth);
+            //invoicecol.css("height", "45px");
             $self.topDiv.append(invoicecol);
             $self.invoiceTopDiv = invoicecol;
 
@@ -145,11 +143,11 @@
             $self.btnSpaceDiv = $self.topDiv.find("#" + "btnSpaceDiv_" + $self.windowNo);
 
             //Left side Div designing
-            $self.sideDiv = $("<div id='" + "sideDiv_" + $self.windowNo + "' style='float: left; margin-left: 0px;background-color: #F1F1F1; '>");//background-color: #F1F1F1;
+            $self.sideDiv = $("<div id='" + "sideDiv_" + $self.windowNo + "' class='vis-archive-l-s-content vis-mi-ls-wrp'>");//background-color: #F1F1F1;
             $self.sideDiv.css("width", sideDivWidth);
-            $self.sideDiv.css("height", selectDivHeight - 3);
+            //$self.sideDiv.css("height", selectDivHeight - 3);
 
-            $self.div = $("<div style='float: left;overflow-y: scroll;height: 100%;' id='" + "parameterDiv_" + $self.windowNo + "'>");
+            $self.div = $("<div class='vis-archive-l-s-content-inner' id='" + "parameterDiv_" + $self.windowNo + "'>");
 
             $self.sideDiv.append($self.div);
 
@@ -158,7 +156,7 @@
 
             //line1
             var tr = $("<tr>");
-            var td = $("<td style='padding: 4px 15px 2px;'>");
+            var td = $("<td style='padding: 0px 10px 0px;'>");
             $self.div.append(tble);
             tble.append(tr);
             tr.append(td);
@@ -166,99 +164,99 @@
 
             //line2
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.cmbMatchFrom.getControl().css("display", "inline-block").css("width", "236px").css("height", "32px"));
 
             //line3
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.lblMatchTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
             //line4
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.cmbMatchTo.getControl().css("display", "inline-block").css("width", "236px").css("height", "32px"));
 
             //line5
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.lblMatchMode.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line6
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.cmbMatchMode.getControl().css("display", "inline-block").css("width", "236px").css("height", "32px"));
 
             //line7
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.lblBPartner.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line8
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
-            td.append($self.onlyVendor.getControl().css('width', '176px')).append($self.onlyVendor.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
+            td.append($self.onlyVendor.getControl().css('width', '176px')).append($self.onlyVendor.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px'))
             .append(btnClearBP);
 
             //line9
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.lblProduct.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line10
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
-            td.append($self.onlyProduct.getControl().css('width', '176px')).append($self.onlyProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'))
+            td.append($self.onlyProduct.getControl().css('width', '176px')).append($self.onlyProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px'))
             .append(btnClearPrd);
 
             //line11
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.lblDateFrom.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line12
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.dtpFrom);
 
             //line13
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.lblDateTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line14
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 10px;'>");
             tble.append(tr);
             tr.append(td);
             td.append($self.dtpTo);
 
             //line15
             tr = $("<tr>");
-            td = $("<td style='padding: 10px 15px 0px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(chkIsReturnTrxDiv);
@@ -272,19 +270,19 @@
 
 
             //Right side Div designing
-            $self.divForGrid = $("<div id='" + "divForGrid_" + $self.windowNo + "' style='float: left;margin-left: 15px;margin-right: 15px'>");//border: 1px solid darkgray;
-            $self.divForGrid.css("width", selectDivWidth);
-            $self.divForGrid.css("height", selectDivHeight - 3);
+            $self.divForGrid = $("<div id='" + "divForGrid_" + $self.windowNo + "' class='vis-mi-main-contntwrp'>");//border: 1px solid darkgray;
+            //$self.divForGrid.css("width", selectDivWidth);
+            //$self.divForGrid.css("height", selectDivHeight - 3);
 
             //Invoice Div
-            $self.gridInvoiceDiv = $("<div id='" + "gridInvoiceDiv_" + $self.windowNo + "' style='width: 100%;float: left; '>");
-            $self.gridInvoiceDiv.css("height", "47%");
+            $self.gridInvoiceDiv = $("<div id='" + "gridInvoiceDiv_" + $self.windowNo + "' style='width: 100%;flex: 1; '>");
+            //$self.gridInvoiceDiv.css("height", "47%");
 
             //var invoicelable = $("<div style='float: left; width: 100%; padding-left: 15px;margin-top: 0px;'>");
-            //invoicelable.append($self.lblInvoice.getControl().css("display", "inline-block").css("color", "#19A0ED").addClass("VIS_Pref_Label_Font"));
+            //invoicelable.append($self.lblInvoice.getControl().css("display", "inline-block").css("color", "rgba(var(--v-c-primary), 1)").addClass("VIS_Pref_Label_Font"));
             //$self.gridInvoiceDiv.append(invoicelable);
 
-            $self.invoicegrd = $("<div style='float: left; width: 100%;height: 99%;'>");
+            $self.invoicegrd = $("<div style='float: left; width: 100%;height: 100%;'>");
             $self.gridInvoiceDiv.append($self.invoicegrd);
 
             //var invoicecol = $("<div style='float: left; width: 100%; padding-left: 15px;margin-top: 5px;'>");
@@ -294,14 +292,14 @@
             //$self.gridInvoiceDiv.append(invoicecol);
 
             //Recipt Div
-            $self.gridReciptDiv = $("<div id='" + "gridReciptDiv_" + $self.windowNo + "' style='width: 100%;float: left;'>");
-            $self.gridReciptDiv.css("height", "46%");
+            $self.gridReciptDiv = $("<div id='" + "gridReciptDiv_" + $self.windowNo + "' style='width: 100%;flex: 1;'>");
+            //$self.gridReciptDiv.css("height", "46%");
 
             var recipt = $("<div style='float: left; width: 100%; margin-top: 0px;'>");
-            recipt.append($self.lblReceipt.getControl().css("display", "inline-block").css("font-size", "24px").css("color", "#19A0ED").addClass("VIS_Pref_Label_Font"));
+            recipt.append($self.lblReceipt.getControl().css("display", "inline-block").css("font-size", "24px").css("color", "rgba(var(--v-c-primary), 1)").addClass("VIS_Pref_Label_Font"));
             // $self.gridReciptDiv.append(recipt);
 
-            $self.reciptgrd = $("<div style='float: left; width: 100%;height: 99%;'>");
+            $self.reciptgrd = $("<div style='float: left; width: 100%;height: 100%;'>");
             $self.gridReciptDiv.append($self.reciptgrd);
 
             //var reciptcol = $("<div style='float: left; width: 100%; padding-left: 15px;margin-top: 5px;'>");
@@ -328,14 +326,14 @@
 
 
             //Bottum Div
-            var reciptcol = $("<div style='float: left; width: 60%; margin-left: 185px;margin-top: 3px;'>");
+            var reciptcol = $("<div class='vis-info-btnfileds-wrap'>");
 
-            var divMatched = $("<div style='float: left;width: 33%;'>");
+            var divMatched = $("<div style='float: left;width: 33.3%;'>");
             divMatched.append($self.lblMatched.getControl().css("display", "block").addClass("VIS_Pref_Label_Font"));
             divMatched.append($self.txtMatched.getControl().css("width", "100%"));
             reciptcol.append(divMatched);
 
-            var divMatching = $("<div style='float: left; padding-left: 15px;margin-top: 0px;width: 33%;'>");
+            var divMatching = $("<div style='float: left; padding-left: 15px;margin-top: 0px;width: 33.3%;'>");
             divMatching.append($self.lblMatchedTo.getControl().css("display", "block").addClass("VIS_Pref_Label_Font"));
             divMatching.append($self.txtMatchedTo.getControl().css("width", "100%"));
             reciptcol.append(divMatching);
@@ -345,9 +343,11 @@
             divdiffrence.append($self.txtDifference.getControl().css("width", "100%"));
             reciptcol.append(divdiffrence);
 
-            $self.bottumButtonDiv = $("<div style='float: left;margin-top: 5px; width:100%'>");
-            $self.bottumButtonDiv.css("height", 55);
-            $self.bottumButtonDiv.append($self.btnSearch);
+            $self.bottumButtonDiv = $("<div class='vis-info-btmcnt-wrap'>");
+            $self.searchBtnWrap = $("<div class='vis-info-searchbtn-wrap'>");
+            //$self.bottumButtonDiv.css("height", 55);
+            $self.bottumButtonDiv.append($self.searchBtnWrap);
+            $self.searchBtnWrap.append($self.btnSearch);
             $self.bottumButtonDiv.append(reciptcol);
             $self.bottumButtonDiv.append($self.btnProcess);
 
@@ -355,8 +355,8 @@
 
 
 
-            $self.bottumDiv = $("<div style='float: left;background-color: #F1F1F1; width:100%'>");
-            $self.bottumDiv.css("height", 30);
+            $self.bottumDiv = $("<div class='vis-mi-bot-div'>");
+            //$self.bottumDiv.css("height", 30);
 
             $self.bottumDiv.append($self.lblStatusInfo.getControl().addClass("VIS_Pref_Label_Font"));
             $self.bottumDiv.append($self.lblStatusCount.getControl().css("float", "right").addClass("VIS_Pref_Label_Font"));
@@ -372,8 +372,8 @@
         function initDesign() {
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
             //Date controls initialization
-            $self.dtpFrom = $("<input id='" + "dateFrom_" + $self.windowNo + "' type='date' name='DateOrdered' style='display: inline-block;line-height: 23px;width:236px'>");
-            $self.dtpTo = $("<input id='" + "dateTo_" + $self.windowNo + "' type='date' name='DateOrdered' style='display: inline-block;line-height: 23px;width:236px'>");
+            $self.dtpFrom = $("<input id='" + "dateFrom_" + $self.windowNo + "' type='date' name='DateOrdered' style='display: inline-block;height: 30px;width:236px'>");
+            $self.dtpTo = $("<input id='" + "dateTo_" + $self.windowNo + "' type='date' name='DateOrdered' style='display: inline-block;height: 30px;width:236px'>");
 
             //chkbox controls initialization
             this.chkIsReturnTrxDiv = $("<div>");
@@ -382,38 +382,38 @@
 
             this.chkIsReturnTrxDiv.append($self.chkIsReturnTrx);
 
-            this.chkSameBPartnerDiv = $("<div style='float: right; margin-right: 15px;'>");
+            this.chkSameBPartnerDiv = $("<div style='padding: 0 10px;'>");
 
-            if (VIS.Application.isRTL) {
-                this.chkSameBPartnerDiv = $("<div style='float: left; margin-right: 15px;margin-left: 15px;'>");
-            }
+            //if (VIS.Application.isRTL) {
+            //    this.chkSameBPartnerDiv = $("<div style='float: left; margin-right: 15px;margin-left: 15px;'>");
+            //}
 
             $self.chkSameBPartner = $("<input id='" + "chkSameBPartner_" + $self.windowNo + "' type='checkbox' class='VIS_Pref_automatic'>" +
                "<span><label id='" + "lblSameBPartner_" + $self.windowNo + "' class='VIS_Pref_Label_Font'>Same BPartner</label></span>");
 
             this.chkSameBPartnerDiv.append($self.chkSameBPartner);
 
-            this.chkSameProductDiv = $("<div style='float: right; margin-right: 15px;' >");
-            if (VIS.Application.isRTL) {
-                this.chkSameProductDiv = $("<div style='float: left; margin-right: 15px;'>");
-            }
+            this.chkSameProductDiv = $("<div style='padding: 0 10px;' >");
+            //if (VIS.Application.isRTL) {
+            //    this.chkSameProductDiv = $("<div style='float: left; margin-right: 15px;'>");
+            //}
             $self.chkSameProduct = $("<input id='" + "chkSameProduct_" + $self.windowNo + "' type='checkbox' class='VIS_Pref_automatic'>" +
                "<span><label id='" + "lblSameProduct_" + $self.windowNo + "' class='VIS_Pref_Label_Font'>Same Product</label></span>");
 
             this.chkSameProductDiv.append($self.chkSameProduct);
 
-            this.chkSameQtyDiv = $("<div style='float: right; margin-right: 15px;' >");
-            if (VIS.Application.isRTL) {
-                this.chkSameQtyDiv = $("<div style='float: left; margin-right: 15px;'>");
-            }
+            this.chkSameQtyDiv = $("<div style='padding: 0 10px;' >");
+            //if (VIS.Application.isRTL) {
+            //    this.chkSameQtyDiv = $("<div style='float: left; margin-right: 15px;'>");
+            //}
             $self.chkSameQty = $("<input id='" + "chkSameQty_" + $self.windowNo + "' type='checkbox' class='VIS_Pref_automatic'>" +
                "<span><label id='" + "lblSameQty_" + $self.windowNo + "' class='VIS_Pref_Label_Font'>Same Quantity</label></span>");
 
             this.chkSameQtyDiv.append($self.chkSameQty);
 
             //Button controls initialization
-            $self.btnSearch = $("<input id='" + "btnSearch_" + $self.windowNo + "' class='VIS_Pref_pass-btn' style='margin-top: 10px;margin-left: 15px;  float: left;' type='button' value='Search'>");
-            $self.btnProcess = $("<Button id='" + "btnProcess_" + $self.windowNo + "' style='margin-top: 10px; float: right;margin-right: 15px;' class='VIS_Pref_btn-2'>"+ VIS.Msg.getMsg("Match") +"</Button>");
+            $self.btnSearch = $("<input id='" + "btnSearch_" + $self.windowNo + "' class='VIS_Pref_btn-2' style='margin-top: 0px;' type='button' value='Search'>");
+            $self.btnProcess = $("<Button id='" + "btnProcess_" + $self.windowNo + "' style='margin-top: 0px;' class='VIS_Pref_btn-2'>"+ VIS.Msg.getMsg("Match") +"</Button>");
 
 
             $self.lblInvoice.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Invoice"));

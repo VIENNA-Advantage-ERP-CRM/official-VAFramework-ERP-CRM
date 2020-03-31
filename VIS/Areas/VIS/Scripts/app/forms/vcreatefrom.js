@@ -38,8 +38,8 @@
         this.$busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
 
         this.topDiv = $("<div style='float: left; width: 100%;'>");
-        this.middelDiv = $("<div style='height: 60%;float: left; width: 99.5%;border: 1px solid;'>");
-        this.bottomDiv = $("<div style='height: 40px; width: 100%; float: left ;margin-top: 10px;'>");
+        this.middelDiv = $("<div class='vis-crtfrm-datawrp'>");
+        this.bottomDiv = $("<div class='vis-ctrfrm-btnwrp'>");
         this.divPaging = $('<div>');
         this.record_ID = 0;
         this.windowNo = mTab.getWindowNo();
@@ -49,10 +49,10 @@
 
 
         var name = "btnOk_" + this.windowNo;
-        this.Okbtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='margin-bottom:0px;margin-top:0px ;float:right; margin-right:10px' type='button' value='" + VIS.Msg.getMsg("OK") + "'>");
+        this.Okbtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' type='button' value='" + VIS.Msg.getMsg("OK") + "'>");
 
         name = "btnCancel_" + this.windowNo;
-        this.cancelbtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='margin-bottom:0px;margin-top:0px; margin-right: 3px; float:right' type='button' value='" + VIS.Msg.getMsg("Cancel") + "'>");
+        this.cancelbtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' type='button' value='" + VIS.Msg.getMsg("Cancel") + "'>");
 
         name = "btnDelete_" + this.windowNo;
         var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/uncheck-icon.png";
@@ -65,14 +65,14 @@
                    "<img src='" + src + "'></button>");
 
         name = "btnApply_" + this.windowNo;
-        this.Applybtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='margin-bottom:0px;margin-top:0px;display: none; margin-right: 10px; float:right' type='button' value='" + VIS.Msg.getMsg("Apply") + "'>");
+        this.Applybtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='display: none;' type='button' value='" + VIS.Msg.getMsg("Apply") + "'>");
 
         //check Arebic Calture
-        if (VIS.Application.isRTL) {
-            this.Okbtn.css("margin-right", "-132px");
-            this.Applybtn.css("margin-right", "-365px");
-            this.cancelbtn.css("margin-right", "55px");
-        }
+        //if (VIS.Application.isRTL) {
+        //    this.Okbtn.css("margin-right", "-132px");
+        //    this.Applybtn.css("margin-right", "-365px");
+        //    this.cancelbtn.css("margin-right", "55px");
+        //}
 
 
         this.lblBankAccount = new VIS.Controls.VLabel();
@@ -190,19 +190,19 @@
         };
 
         this.createPageSettings = function () {
-            this.ulPaging = $('<ul style="float:right;margin-top:10px" class="vis-statusbar-ul">');
+            this.ulPaging = $('<ul class="vis-statusbar-ul">');
 
-            this.liFirstPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="First Page" style="opacity: 0.6;"></div></li>');
+            this.liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="First Page" style="opacity: 0.6;"></i></div></li>');
 
-            this.liPrevPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="Page Up" style="opacity: 0.6;"></div></li>');
+            this.liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="Page Up" style="opacity: 0.6;"></i></div></li>');
 
-            this.cmbPage = $('<select style = "width:50px;">');
+            this.cmbPage = $('<select>');
 
             this.liCurrPage = $('<li>').append(this.cmbPage);
 
-            this.liNextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" title="Page Down" style="opacity: 0.6;"></div></li>');
+            this.liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" title="Page Down" style="opacity: 0.6;"></i></div></li>');
 
-            this.liLastPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="Last Page" style="opacity: 0.6;"></div></li>');
+            this.liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" title="Last Page" style="opacity: 0.6;"></i></div></li>');
 
 
             this.ulPaging.append(this.liFirstPage).append(this.liPrevPage).append(this.liCurrPage).append(this.liNextPage).append(this.liLastPage);
@@ -1166,65 +1166,65 @@
 
         //First Column
         /*******************************/
-        var col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px;'>");
-        var label = $("<div style='float: left; margin-right: 5px; width: 30%; text-align: right'>");
+        var col = $("<div class='VIS_Pref_dd'>");
+        var label = $("<div class='vis-pref-ctrl-lblwrp'>");
 
-        if (VIS.Application.isRTL) {
-            label = $("<div style='float: right; margin-right: 5px; width: 100%; text-align: left'>");
-        }
+        //if (VIS.Application.isRTL) {
+        //    label = $("<div style='float: right; margin-right: 5px; width: 100%; text-align: left'>");
+        //}
 
         var lableCtrl = $("<h5 style='width: 100%'>");
-        var ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+        var ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
         this.topDiv.append(line);
         line.append(col);
         col.append(label);
         label.append(lableCtrl);
-        if (VIS.Application.isRTL) {
-            //Bank Account Control
-            if (this.cmbBankAccount != null) {
-                lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
-            }
-                //Bank Account Control
-            else {
-                if (this.DocumentNoRef != null) {
-                    lableCtrl.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
-                    ctrl.removeClass("VIS_Pref_slide-show pp");
-                    col.append(ctrl);
-                    ctrl.append(this.DocumentNoRef.getControl().css('width', '100%'));
-                }
-            }
-        }
-        else {
+        //if (VIS.Application.isRTL) {
+        //    //Bank Account Control
+        //    if (this.cmbBankAccount != null) {
+        //        lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
+        //        col.append(ctrl);
+        //        ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
+        //    }
+        //        //Bank Account Control
+        //    else {
+        //        if (this.DocumentNoRef != null) {
+        //            lableCtrl.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
+        //            ctrl.removeClass("VIS_Pref_slide-show pp");
+        //            col.append(ctrl);
+        //            ctrl.append(this.DocumentNoRef.getControl().css('width', '100%'));
+        //        }
+        //    }
+        //}
+        //else {
             // To append Business Partner Control.. 
             if (this.vBPartner != null) {
                 lableCtrl.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
                 if (this.cmbBankAccount != null) {
-                    ctrl.append(this.vBPartner.getControl().css('width', '78%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-                    ctrl.append(this.vBPartner.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
+                    ctrl.append(this.vBPartner.getBtn(1));
                 }
                 else {
-                    ctrl.append(this.vBPartner.getControl().css('width', '88%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
                 }
             }
             //End Business Partner Control
-        }
+        //}
         //End First Column
         /*******************************/
 
         //Second Column
         /*******************************/
-        col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        label = $("<div style='float: left; margin-right: 5px; width: 30%; text-align: right'>");
-        if (VIS.Application.isRTL) {
-            label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        }
+        col = $("<div class='VIS_Pref_dd'>");
+        label = $("<div class='vis-pref-ctrl-lblwrp'>");
+        //if (VIS.Application.isRTL) {
+        //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+        //}
         lableCtrl = $("<h5 style='width: 100%'>");
-        ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show'>");
+        ctrl = $("<div class='VIS_Pref_slide-show vis-pref-ctrlwrap'>");
 
         line.append(col);
         col.append(label);
@@ -1237,11 +1237,11 @@
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
                 if (this.cmbBankAccount != null) {
-                    ctrl.append(this.vBPartner.getControl().css('width', '78%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-                    ctrl.append(this.vBPartner.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
+                    ctrl.append(this.vBPartner.getBtn(1));
                 }
                 else {
-                    ctrl.append(this.vBPartner.getControl().css('width', '88%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
                 }
             }
         }
@@ -1269,22 +1269,22 @@
         /*******************************/
         line = $("<div class='VIS_Pref_show'>");
         if (this.Amount != null) {
-            col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px; width:35%'>");
-            ctrl = $("<div style='float: left; width: 58%;' class='VIS_Pref_slide-show pp'>");
+            col = $("<div class='VIS_Pref_dd'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 40%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
-            }
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
+            //}
         }
         else {
-            col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px;'>");
-            ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+            col = $("<div class='VIS_Pref_dd'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-            }
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            //}
         }
         lableCtrl = $("<h5 style='width: 100%'>");
 
@@ -1299,7 +1299,7 @@
                 lableCtrl.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.Date.getControl().css('width', '100%'));
+                ctrl.append(this.Date.getControl());
             }
         }
         else {
@@ -1307,7 +1307,7 @@
                 lableCtrl.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.DocumentNo.getControl().css('width', '100%'));
+                ctrl.append(this.DocumentNo.getControl());
             }
         }
 
@@ -1316,28 +1316,28 @@
             if (this.cmbInvoice != null) {
                 lableCtrl.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.cmbInvoice.getControl().css('width', '100%'));
+                ctrl.append(this.cmbInvoice.getControl());
             }
             if (this.cmbShipment != null) {
                 lableCtrl.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.cmbShipment.getControl().css('width', '100%'));
+                ctrl.append(this.cmbShipment.getControl());
             }
         } else {
 
             if (this.cmbOrder != null) {
                 lableCtrl.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.cmbOrder.getControl().css('width', '100%'));
+                ctrl.append(this.cmbOrder.getControl());
             }
         }
 
         // Amount Control
         if (this.Amount != null) {
-            col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px; width:30%'>");
-            label = $("<div style='float: left; margin-right: 5px;width: 40%; text-align: right'>");
+            col = $("<div class='VIS_Pref_dd'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
             lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div style='float: left; width: 58%;' class='VIS_Pref_slide-show pp'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
             line.append(col);
             col.append(label);
             label.append(lableCtrl);
@@ -1345,27 +1345,27 @@
             lableCtrl.append(this.lblAmount.getControl().addClass('VIS_Pref_Label_Font'));
             ctrl.removeClass("VIS_Pref_slide-show pp");
             col.append(ctrl);
-            ctrl.append(this.Amount.getControl().css('width', '100%'));
+            ctrl.append(this.Amount.getControl());
         }
 
         // Reset Column size
         if (this.Amount != null) {
-            col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px; width:35%'>");
-            ctrl = $("<div style='float: left; width: 58%;' class='VIS_Pref_slide-show pp'>");
+            col = $("<div class='VIS_Pref_dd'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 40%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
-            }
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
+            //}
         }
         else {
-            col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
+            col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-            }
-            ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            //}
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
         }
         lableCtrl = $("<h5 style='width: 100%'>");
 
@@ -1379,19 +1379,19 @@
             if (this.cmbOrder != null) {
                 lableCtrl.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.cmbOrder.getControl().css('width', '100%'));
+                ctrl.append(this.cmbOrder.getControl());
             }
 
         } else {
             if (this.cmbInvoice != null) {
                 lableCtrl.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.cmbInvoice.getControl().css('width', '100%'));
+                ctrl.append(this.cmbInvoice.getControl());
             }
             if (this.cmbShipment != null) {
                 lableCtrl.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.cmbShipment.getControl().css('width', '100%'));
+                ctrl.append(this.cmbShipment.getControl());
             }
         }
 
@@ -1401,7 +1401,7 @@
                 lableCtrl.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.DocumentNo.getControl().css('width', '100%'));
+                ctrl.append(this.DocumentNo.getControl());
             }
         }
         else {
@@ -1409,7 +1409,7 @@
                 lableCtrl.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.Date.getControl().css('width', '100%'));
+                ctrl.append(this.Date.getControl());
             }
         }
 
@@ -1422,13 +1422,13 @@
             this.middelDiv.css('height', '52%');
 
             line = $("<div class='VIS_Pref_show'>");
-            col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-            label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-            }
+            col = $("<div class='VIS_Pref_dd'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            //}
             lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
 
             this.topDiv.append(line);
@@ -1448,7 +1448,7 @@
                             this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
                         }
                     }
-                    ctrl.append(this.cmbContainer.getControl().attr("disabled", true).css('width', '90%').css('float', 'left').css('background', '#f5f5f5')).append(this.ContainerTree);
+                    ctrl.append(this.cmbContainer.getControl().attr("disabled", true)).append(this.ContainerTree);
                 }
             }
             else {
@@ -1457,18 +1457,18 @@
                     lableCtrl.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
                     ctrl.removeClass("VIS_Pref_slide-show pp");
                     col.append(ctrl);
-                    ctrl.append(this.locatorField.getControl().css('width', '88%')).append(this.locatorField.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                    ctrl.append(this.locatorField.getControl()).append(this.locatorField.getBtn(0));
                 }
             }
 
 
-            col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-            label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-            }
+            col = $("<div class='VIS_Pref_dd'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            //}
             lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
             line.append(col);
             col.append(label);
@@ -1479,7 +1479,7 @@
                     lableCtrl.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
                     ctrl.removeClass("VIS_Pref_slide-show pp");
                     col.append(ctrl);
-                    ctrl.append(this.locatorField.getControl().css('width', '88%')).append(this.locatorField.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                    ctrl.append(this.locatorField.getControl()).append(this.locatorField.getBtn(0));
                 }
             }
             else {
@@ -1494,7 +1494,7 @@
                             this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
                         }
                     }
-                    ctrl.append(this.cmbContainer.getControl().attr("disabled", true).css('width', '88%').css('float', 'left').css('background', '#f5f5f5')).append(this.ContainerTree);
+                    ctrl.append(this.cmbContainer.getControl().attr("disabled", true)).append(this.ContainerTree);
                 }
             }
         }
@@ -1508,22 +1508,22 @@
 
         // Reset Size
         if (this.CheckNo != null) {
-            col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px; width:35%'>");
+            col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 40%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
-            }
-            ctrl = $("<div style='float: left; width: 58%;' class='VIS_Pref_slide-show pp'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
+            //}
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
         }
         else {
-            col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
+            col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-            }
-            ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            //}
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
         }
         lableCtrl = $("<h5 style='width: 100%'>");
 
@@ -1539,7 +1539,7 @@
                 lableCtrl.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.AuthCode.getControl().css('width', '100%'));
+                ctrl.append(this.AuthCode.getControl());
             }
         }
         else {
@@ -1547,7 +1547,7 @@
                 lableCtrl.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.DepositSlip.getControl().css('width', '100%'));
+                ctrl.append(this.DepositSlip.getControl());
             }
         }
 
@@ -1557,24 +1557,24 @@
                 lableCtrl.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.vProduct.getControl().css('width', '78%')).append(this.vProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-                ctrl.append(this.vProduct.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                ctrl.append(this.vProduct.getControl()).append(this.vProduct.getBtn(0));
+                ctrl.append(this.vProduct.getBtn(1));
             }
         }
         else {
             if (this.deliveryDate != null) {
                 lableCtrl.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.deliveryDate.getControl().css('width', '100%'));
+                ctrl.append(this.deliveryDate.getControl());
             }
         }
 
         // Check No Control
         if (this.CheckNo != null) {
-            col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px; width:30%'>");
-            label = $("<div style='float: left; margin-right: 5px;width: 40%; text-align: right'>");
+            col = $("<div class='VIS_Pref_dd'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
             lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div style='float: left; width: 58%;' class='VIS_Pref_slide-show pp'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
             line.append(col);
             col.append(label);
             label.append(lableCtrl);
@@ -1582,27 +1582,27 @@
             lableCtrl.append(this.lblCheckNo.getControl().addClass('VIS_Pref_Label_Font'));
             ctrl.removeClass("VIS_Pref_slide-show pp");
             col.append(ctrl);
-            ctrl.append(this.CheckNo.getControl().css('width', '100%'));
+            ctrl.append(this.CheckNo.getControl());
         }
 
         // Reset Column Size
         if (this.CheckNo != null) {
-            col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px; width:35%'>");
+            col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 40%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
-            }
-            ctrl = $("<div style='float: left; width: 58%;' class='VIS_Pref_slide-show pp'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
+            //}
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
         }
         else {
-            col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
+            col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-            }
-            ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            //}
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
         }
         lableCtrl = $("<h5 style='width: 100%'>");
 
@@ -1615,7 +1615,7 @@
             if (this.deliveryDate != null) {
                 lableCtrl.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
                 col.append(ctrl);
-                ctrl.append(this.deliveryDate.getControl().css('width', '100%'));
+                ctrl.append(this.deliveryDate.getControl());
             }
         }
         else {
@@ -1623,8 +1623,8 @@
                 lableCtrl.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.vProduct.getControl().css('width', '78%')).append(this.vProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-                ctrl.append(this.vProduct.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                ctrl.append(this.vProduct.getControl()).append(this.vProduct.getBtn(0));
+                ctrl.append(this.vProduct.getBtn(1));
             }
         }
 
@@ -1634,7 +1634,7 @@
                 lableCtrl.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.DepositSlip.getControl().css('width', '100%'));
+                ctrl.append(this.DepositSlip.getControl());
             }
         }
         else {
@@ -1642,7 +1642,7 @@
                 lableCtrl.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
                 ctrl.removeClass("VIS_Pref_slide-show pp");
                 col.append(ctrl);
-                ctrl.append(this.AuthCode.getControl().css('width', '100%'));
+                ctrl.append(this.AuthCode.getControl());
             }
         }
         //End Forth Row
@@ -1654,13 +1654,13 @@
         //if (window.BTR001) {
         if (this.relatedToOrg != null) {
             line = $("<div class='VIS_Pref_show'>");
-            col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-            label = $("<div style='float: left; margin-right: 5px;width: 100%; text-align: left'>");
-            if (VIS.Application.isRTL) {
-                label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-            }
+            col = $("<div class='VIS_Pref_dd'>");
+            label = $("<div class=''>");
+            //if (VIS.Application.isRTL) {
+            //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
+            //}
             lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
+            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
 
             this.topDiv.append(line);
@@ -1669,7 +1669,7 @@
             label.append(lableCtrl);
 
             //if (window.DTD001) {
-            lableCtrl.append(this.relatedToOrg.getControl().css('width', '100%'));
+            lableCtrl.append(this.relatedToOrg.getControl());
         }
         //End Fifth Row
         /******************************/

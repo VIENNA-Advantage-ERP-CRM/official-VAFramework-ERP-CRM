@@ -553,14 +553,6 @@ namespace VAdvantage.Model
         /// <returns>new status (Complete, In Progress, Invalid, Waiting ..)</returns>
         public String CompleteIt()
         {
-
-            //// To check weather future date records are available in Transaction window
-            //_processMsg = MInOut.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Inventory_ID(), Get_Trx());
-            //if (!string.IsNullOrEmpty(_processMsg))
-            //{
-            //    return DocActionVariables.STATUS_INVALID;
-            //}
-
             // is used to check Container applicable into system
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
@@ -872,6 +864,14 @@ namespace VAdvantage.Model
             // JID_1290: Set the document number from completede document sequence after completed (if needed)
             SetCompletedDocumentNo();
 
+            // To check weather future date records are available in Transaction window
+            // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
+            _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Inventory_ID(), Get_Trx());
+            if (!string.IsNullOrEmpty(_processMsg))
+            {
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             //	Implicit Approval
             if (!IsApproved())
                 ApproveIt();
@@ -1069,7 +1069,7 @@ namespace VAdvantage.Model
                             trx = new MTransaction(GetCtx(), line.GetAD_Org_ID(),
                                 MTransaction.MOVEMENTTYPE_InventoryIn,
                                     line.GetM_Locator_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
-                                //qtyDiff, GetMovementDate(), Get_TrxName());
+                                     //qtyDiff, GetMovementDate(), Get_TrxName());
                                      (ma.GetMovementQty() < 0 ? Decimal.Negate(ma.GetMovementQty()) : ma.GetMovementQty()), GetMovementDate(), Get_TrxName());
                             trx.SetM_InventoryLine_ID(line.GetM_InventoryLine_ID());
                             //trx.SetCurrentQty(trxQty + qtyDiff);
@@ -1348,7 +1348,7 @@ namespace VAdvantage.Model
                                         _processMsg = Msg.GetMsg(GetCtx(), "ReqLineNotSaved");
                                         return DocActionVariables.STATUS_INVALID;
                                     }
-                                #endregion
+                                    #endregion
                                 }
                             }
 
@@ -1688,14 +1688,16 @@ namespace VAdvantage.Model
                         {
                             // get price from m_cost (Current Cost Price)
                             currentCostPrice = 0;
+                            //if (IsInternalUse() || (!IsInternalUse() && Decimal.Subtract(line.GetQtyCount(), line.GetQtyBook()) < 0))
+                            //{
                             currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
                                 line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                            //line.SetCurrentCostPrice(currentCostPrice);
-                            //if (!line.Save(Get_Trx()))
+                            //}
+                            //else if (!IsInternalUse())
                             //{
-                            //    ValueNamePair pp = VLogger.RetrieveError();
-                            //    log.Info("Error found for Physical Inventory Line for this Line ID = " + line.GetM_InventoryLine_ID() +
-                            //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                            //    // in Case of physical Inventory, when we increase stock - get price of costing method, which is defined into cost combination
+                            //    currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                            //      line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
                             //}
                             DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
                                                 WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
@@ -1721,16 +1723,16 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                //if (line.GetCurrentCostPrice() == 0)
+                                //if (quantity < 0)
                                 //{
-                                //    // get price from m_cost (Current Cost Price)
-                                //    currentCostPrice = 0;
                                 currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
                                 line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                //    line.SetCurrentCostPrice(currentCostPrice);
                                 //}
-                                //line.SetIsCostImmediate(true);
-                                //line.Save();
+                                //else
+                                //{
+                                //    currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                //    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                                //}
                                 DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 
                                                 WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
                             }
@@ -1753,8 +1755,6 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                //line.SetIsCostImmediate(true);
-                                //line.Save();
                                 currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
                                 DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 

@@ -65,7 +65,7 @@
             $root = $("<table style='width:100%;height:100%'><tr><td style='height:100%'><div class='vis-css-treewindow' ></td></tr>" +
                      "<tr><td style='text-align:center'><div class='vis-tree-search'><div class='input-group'>" +
                         "<input type='text' class='form-control ui-autocomplete-input' placeholder='Search'>" +
-                        "  <span class='input-group-append'><button class='input-group-text'><a href='#' class='glyphicon glyphicon-search'></a></button></span>" +
+                        "  <span class='input-group-append'><button class='input-group-text'><a href='#' class='vis vis-search'></a></button></span>" +
                     "</div></div></td></tr></table>");
 
             //$root = $("<div class='vis-height-full' >");
