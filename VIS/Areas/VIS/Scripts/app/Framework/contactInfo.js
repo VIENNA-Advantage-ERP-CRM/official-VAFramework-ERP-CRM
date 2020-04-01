@@ -25,7 +25,7 @@
 
             }
         }
-        
+
         ad_userID = userID;
 
         windowNo = winNo;
@@ -42,7 +42,7 @@
                 $(".vis-apanel-busy").css("visibility", "hidden");
                 return;
             }
-            
+
             window.setTimeout(function () {
                 contactInfoDialog = new VIS.ChildDialog();
 
@@ -71,7 +71,7 @@
 
                     success: function (data) {
                         var result = JSON.parse(data);
-                        
+
 
                         var category = "";
                         if (result[0].Customer != "") {
@@ -191,7 +191,7 @@
                             }
                         }
                         $sliderBpID.empty();
-                        
+
                         $sliderBpID.append(result[0].BPartnerID);
                         $slideruserTableID.append(result[0].TableID);
                         $slideruBPGroupID.empty();
@@ -223,7 +223,7 @@
                         }
                         $slideraddress.empty();
                         $divContactDetails.empty();
-                        $divContactDetails.append("<p style='word-break: break-all;'> " + VIS.Msg.getMsg("ContactDetails") + " <a href='javascript:void(0)'> <img style='margin-bottom:3px' id='showAddressOnGoogleMap_" + windowNo + "' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/ToLink20.png'> </a></p> ");
+                        $divContactDetails.append("<p style='word-break: break-all;'> " + VIS.Msg.getMsg("ContactDetails") + " <a href='javascript:void(0)'> <i id='showAddressOnGoogleMap_" + windowNo + "' class='vis vis-location'></i> </a></p> ");
                         for (var i = 0; i < result.length; i++) {
                             if (result[i].FirstName != "") {
 
@@ -255,12 +255,12 @@
                             if (result[i].PhoneNo != "" && result[i].PhoneNo != null) {
                                 isContactDetails = true;
                                 if (windowWidth <= 1024) {
-                                    $divContactDetails.append("<a href='tel:" + result[i].PhoneNo + "'><p id='phone_" + windowNo + "' style='word-break: break-all'><span class='wsp-caller'><img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/caller.png'></span>" + result[i].PhoneNo + "</p></a>");
+                                    $divContactDetails.append("<a href='tel:" + result[i].PhoneNo + "'><p id='phone_" + windowNo + "' style='word-break: break-all'><span class='wsp-caller'><i class='fa fa-phone'></i></span>" + result[i].PhoneNo + "</p></a>");
                                 }
 
                                 else {
 
-                                    $divContactDetails.append("<p id='phone_" + windowNo + "' style='word-break: break-all'><span class='wsp-caller'><img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/caller.png'></span>" + result[i].PhoneNo + "</p>");
+                                    $divContactDetails.append("<p id='phone_" + windowNo + "' style='word-break: break-all'><span class='wsp-caller'><i class='fa fa-phone'></i></span>" + result[i].PhoneNo + "</p>");
                                 }
                             }
 
@@ -268,7 +268,7 @@
                         $slideruserEmail.empty();
                         if (result[0].Email != "" && result[0].Email != null) {
                             isContactDetails = true;
-                            $divContactDetails.append("<p id='userEmail_" + windowNo + "' style='word-break: break-all;display: inline-flex;margin-top: 0;'> <span class='wsp-caller'><img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/sms.png'></span>" + result[0].Email + "</p>");
+                            $divContactDetails.append("<p id='userEmail_" + windowNo + "' style='word-break: break-all;display: inline-flex;margin-top: 0;'> <span class='wsp-caller'><i class='vis vis-email'></i></span>" + result[0].Email + "</p>");
                         }
                         if (!isContactDetails) {
 
@@ -359,7 +359,7 @@
                             });
                         }
                         $(".ui-dialog-content").on("click", function (e) {
-                            
+
                             $("#w2ui-overlay").hide();
                             e.stopPropagation();
                         });
@@ -395,7 +395,7 @@
 
                         //};
                         //img.src = $sliderbigUserImage.attr('src');
-                        
+
                         //for (var i = 0; i < $(".vis-awindow").length; i++) {
                         //    if ($(".vis-awindow").eq(i).css("display") == "table") {
                         //        var $seletectWindow = $(".vis-awindow").eq(i);
@@ -457,7 +457,7 @@
                                 $editContact.w2overlay($createorderroot.clone(true), { css: { height: '300px' } });
                                 $createorderroot.css("top", "395px");
                                 $editOption.load();
-                               
+
 
 
 
@@ -520,7 +520,7 @@
 
 
                         $email.on("click", function (e) {
-                            
+
                             $email.find("p").css("background-color", "#e0e0e0");
                             $(".vis-apanel-busy").css("visibility", "visible");
                             $(".vis-apanel-busy").css("z-index", "999999999999");
@@ -631,7 +631,7 @@
                         });
 
                         $appointment.on("click", function (e) {
-                            
+
                             e.stopPropagation();
                             $appointment.find("p").css("background-color", "#e0e0e0");
 
@@ -673,7 +673,7 @@
                             }, 500);
                         });
                         $fileUpload.on("change", function () {
-                            
+
 
                             //$isBusy.show();
                             $(".vis-apanel-busy").css("visibility", "visible");
@@ -699,7 +699,7 @@
                             xhr.setRequestHeader("Pragma", "no-cache");
                             xhr.send(fd);
                             xhr.addEventListener("load", function (event) {
-                                
+
                                 var dd = event.target.response;
                                 var res = JSON.parse(dd);
                                 image = JSON.parse(res);
@@ -810,12 +810,12 @@
                         });
                         $showAddressOnGoogleMap = $divContactDetails.find("#showAddressOnGoogleMap_" + windowNo);
                         $showAddressOnGoogleMap.on("click",
-                          function () {
-                              
-                              var urlAddress = $divContactDetails.find("#address_" + windowNo).text() + $divContactDetails.find("#country_" + windowNo).text();
-                              var url = "http://local.google.com/maps?q=" + urlAddress;
-                              window.open(url);
-                          });
+                            function () {
+
+                                var urlAddress = $divContactDetails.find("#address_" + windowNo).text() + $divContactDetails.find("#country_" + windowNo).text();
+                                var url = "http://local.google.com/maps?q=" + urlAddress;
+                                window.open(url);
+                            });
 
                         function OpenWindow(url, isEdit, e) {
                             e.stopPropagation();
@@ -825,7 +825,7 @@
                                 url: url,
                                 dataType: "json",
                                 success: function (data) {
-                                    
+
                                     var dd = JSON.parse(data);
                                     var zoomQuery = new VIS.Query();
                                     if (isEdit) {
@@ -861,7 +861,7 @@
                             });
                         };
                         function dispose() {
-                            
+
                             $addBPartner.off("click");
                             $activity.off("click");
                             $appointment.off("click");
@@ -901,154 +901,154 @@
         maxSize = 10;
         //$contactInfoRoot = $("<td id='contactInfo_" + windowNo + "' style='position:absolute;z-index:9999999'> <div id='mainUserInfoDiv_" + windowNo + "' class='wsp-view_profile_container sliderdiv' style='margin-top: -2px; width: 601.6px; display: block; right: 0px;'>" +
         $contactInfoRoot = $(" <div id='mainUserInfoDiv_" + windowNo + "'>" +
-//"<div id='WSP_dots_" + windowNo + "' class='wsp-dots' ></div>" +
-//" <div id='divUserInfo_" + windowNo + "' style='overflow: hidden;'><div class='wsp-view_left_part'>" +
-"<div class='wsp-view_left_part' style='float:left;width: 45%;padding-left: 10px;padding-right: 10px'>" +
-"<input type='hidden' value='0' id='userID_" + windowNo + "'></input>" +
-" <p id='hduserName_" + windowNo + "' style='display: none;'></p>" +
-"  <p id='userName_" + windowNo + "' class='wsp-view_profile_name'></p> <a id='dotImg_" + windowNo + "' href='javascript:void(0)' style='display: none;'></a>" +
-"<div id='popUpDiv_" + windowNo + "' style='display: none;'></div>" +
+            //"<div id='WSP_dots_" + windowNo + "' class='wsp-dots' ></div>" +
+            //" <div id='divUserInfo_" + windowNo + "' style='overflow: hidden;'><div class='wsp-view_left_part'>" +
+            "<div class='wsp-view_left_part' style='float:left;width: 45%;padding-left: 10px;padding-right: 10px'>" +
+            "<input type='hidden' value='0' id='userID_" + windowNo + "'></input>" +
+            " <p id='hduserName_" + windowNo + "' style='display: none;'></p>" +
+            "  <p id='userName_" + windowNo + "' class='wsp-view_profile_name'></p> <a id='dotImg_" + windowNo + "' href='javascript:void(0)' style='display: none;'></a>" +
+            "<div id='popUpDiv_" + windowNo + "' style='display: none;'></div>" +
 
 
 
-"<input type='hidden' value='0' id='BPID_" + windowNo + "'></input>" +
-"<input type='hidden' value='0' id='BPGroupID_" + windowNo + "'></input>" +
-"<input type='hidden' value='' id='userTableID_" + windowNo + "'>" +
-"<p id='companyName_" + windowNo + "' class='wsp-view_profile_possession'></p>" +
-"<p class='wsp-view_profile_possession' style='border-bottom: 1px solid #DFDFDF; padding-bottom: 20px;' id='pContactTypeCategory_" + windowNo + "'></p>" +
+            "<input type='hidden' value='0' id='BPID_" + windowNo + "'></input>" +
+            "<input type='hidden' value='0' id='BPGroupID_" + windowNo + "'></input>" +
+            "<input type='hidden' value='' id='userTableID_" + windowNo + "'>" +
+            "<p id='companyName_" + windowNo + "' class='wsp-view_profile_possession'></p>" +
+            "<p class='wsp-view_profile_possession' style='border-bottom: 1px solid rgba(var(--v-c-secondary), 1); padding-bottom: 10px;' id='pContactTypeCategory_" + windowNo + "'></p>" +
 
-"<div class='wsp-profile_big_img_mobile'>" +
+            "<div class='wsp-profile_big_img_mobile'>" +
 
-"<span id='editMobileImage_" + windowNo + "' class='mobilespan' style='width:24px;float:right;'>" +
-"<input type='file' id='wsp-fileinput_" + windowNo + "' class='wsp-file-input' value='Add Pic' style='opacity: 0; width: 7%; margin-top: -6px; float: left; z-index: 999; position: absolute; cursor: pointer;'>" +
-"<img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/Edit-icon.png' style='z-index: 100; position: absolute;'>" +
-"</span>" +
-"<img id='mobileImg_" + windowNo + "' width='100%' alt='Image is not available' src='Areas/VIS/Images/home/User.png'>" +
-
-
-"</div>" +
-
-"<div id='divTeam_" + windowNo + "' class='wsp-view_team'></div>" +
-
-"<div id='divContactDetails_" + windowNo + "' class='wsp-view_team'></div>" +
-
-"<div id='divcompanyDetails_" + windowNo + "' class='wsp-view_team'></div>" +
-
-"<div id='divRole_" + windowNo + "' class='wsp-view_team'></div>" +
+            "<span id='editMobileImage_" + windowNo + "' class='mobilespan' style='width:24px;float:right;'>" +
+            "<input type='file' id='wsp-fileinput_" + windowNo + "' class='wsp-file-input' value='Add Pic' style='opacity: 0; width: 7%; margin-top: -6px; float: left; z-index: 999; position: absolute; cursor: pointer;'>" +
+            "<img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/Edit-icon.png' style='z-index: 100; position: absolute;'>" +
+            "</span>" +
+            "<img id='mobileImg_" + windowNo + "' width='100%' alt='Image is not available' src='Areas/VIS/Images/home/User.png'>" +
 
 
-"</div>" +
+            "</div>" +
 
-"<div class='wsp-view_right_part'  style='float:left;width: 55%;' id='WSP_view_right_part_" + windowNo + "'>" +
+            "<div id='divTeam_" + windowNo + "' class='wsp-view_team'></div>" +
 
-"<div id='userBigImg_" + windowNo + "' class='wsp-profile_big_img' style='width: 322px;'>" +
+            "<div id='divContactDetails_" + windowNo + "' class='wsp-view_team'></div>" +
 
-"<div class='image-upload' style='float: right; position: absolute; z-index: 999; width: 100%'>" +
-" <label for='file-input' class='wsp-file-label'>" +
-"<span class='wsp-change-picture-ico'></span>" +
-"</label>" +
+            "<div id='divcompanyDetails_" + windowNo + "' class='wsp-view_team'></div>" +
 
-"<input type='file' id='wsp-file-input_" + windowNo + "' class='wsp-file-input' value='Add Pic' style='opacity: 0; width: 30%; margin-top: 0px; float: right; z-index: 999; position: absolute; right: 0px; cursor: pointer;'>" +
-
-"</div>" +
-
-"<div class='wsp-bigimg'>" +
-
-" <img id='bigUserImage_" + windowNo + "' alt='Image is not available' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/User.png'>" +
-"</div>" +
-"</div>" +
-
-"<div class='wsp-action'>" +
-"<table id='actionTable_" + windowNo + "' class='wsp-tableRightContent'>" +
-"<tbody><tr style='height:30px'>" +
-" <td class='tdactionlist'><a id='edit_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
-" <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/edit_2.png'></span>" +
-" <p>Edit </p>" +
-" </a>" +
-" </td>" +
-
-" <td class='tdactionlist'>" +
-
-" <a id='sendSMS_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
-" <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/send_sms.png'></span>" +
-" <p>" +
-" Send Sms" +
-" </p>" +
-" </a>" +
-" </td>" +
-" </tr>" +
-
-"  <tr style='height:30px'>" +
-"       <td class='tdactionlist'><a id='email_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon email_icon'>" +
-"           <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/message.png'></span>" +
-"           <p>Email </p>" +
-"       </a>" +
+            "<div id='divRole_" + windowNo + "' class='wsp-view_team'></div>" +
 
 
-"       </td>" +
+            "</div>" +
 
-"       <td class='tdactionlist'><a id='appointment_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
-"           <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/appointment.png'></span>" +
+            "<div class='wsp-view_right_part'  style='float:left;width: 55%;' id='WSP_view_right_part_" + windowNo + "'>" +
 
-"           <p>Appointment </p>" +
-"       </a>" +
+            "<div id='userBigImg_" + windowNo + "' class='wsp-profile_big_img' style='width: 322px;'>" +
 
-"       </td>" +
+            "<div class='image-upload' style='float: right; position: absolute; z-index: 999; width: 100%'>" +
+            " <label for='file-input' class='wsp-file-label'>" +
+            "<i class='vis vis-pencil'></i>" +
+            "</label>" +
 
-"   </tr>" +
+            "<input type='file' id='wsp-file-input_" + windowNo + "' class='wsp-file-input' value='Add Pic' style='opacity: 0; width: 30%; margin-top: 0px; float: right; z-index: 999; position: absolute; right: 0px; cursor: pointer;'>" +
 
-"   <tr style='height:30px'>" +
+            "</div>" +
 
-"       <td class='tdactionlist'><a id='activity_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
-"            <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/activity.png'></span>" +
-"           <p>Activity</p>" +
-"       </a>" +
-"       </td>" +
+            "<div class='wsp-bigimg'>" +
 
-"        <td class='tdactionlist'><a id='createOrder_" + windowNo + "' href='javascript:void(0)' class='wsp-tableaction'><span class='wsp-left_icon'>" +
-"           <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/create_order.png'></span>" +
-"           <p>Create Order</p>" +
-"       </a>" +
+            " <i id='bigUserImage_" + windowNo + "' class='fa fa-user'></i>" +
+            "</div>" +
+            "</div>" +
 
-"        </td>" +
+            "<div class='wsp-action'>" +
+            "<table id='actionTable_" + windowNo + "' class='wsp-tableRightContent'>" +
+            "<tbody><tr style='height:30px'>" +
+            " <td class='tdactionlist'><a id='edit_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            " <i class='vis vis-edit'></i></span>" +
+            " <p>Edit </p>" +
+            " </a>" +
+            " </td>" +
 
-"    </tr>" +
+            " <td class='tdactionlist'>" +
 
-"   <tr style='height:30px'>" +
-"       <td class='tdactionlist'><a id='BPInfo_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
-"           <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/bp_info.png'></span>" +
-"           <p>BP Info</p>" +
-"       </a>" +
+            " <a id='sendSMS_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            " <i class='vis vis-sms'></i></span>" +
+            " <p>" +
+            " Send Sms" +
+            " </p>" +
+            " </a>" +
+            " </td>" +
+            " </tr>" +
 
-"        </td>" +
+            "  <tr style='height:30px'>" +
+            "       <td class='tdactionlist'><a id='email_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon email_icon'>" +
+            "           <i class='vis vis-email'></i></span>" +
+            "           <p>Email </p>" +
+            "       </a>" +
 
-"        <td class='tdactionlist'><a id='addBPartner_" + windowNo + "' href='javascript:void(0)' class='wsp-tableaction'><span class='wsp-left_icon'>" +
-"           <img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/addBPartner.png'></span>" +
-"           <p style=''>Add BPartner </p>" +
-"       </a>" +
 
-"       </td>" +
-"   </tr>" +
+            "       </td>" +
 
-" <tr style='height:30px'>" +
-                "<td class='tdactionlist'><a id='History_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
-                    "<img src='/Areas/WSP/Images/History24.png'></span>" +
-                    "<p>"+VIS.Msg.getMsg('History')+"</p>" +
-                "</a>" +
+            "       <td class='tdactionlist'><a id='appointment_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            "           <i class='vis vis-appointment'></i></span>" +
 
-                "</td>" +
+            "           <p>Appointment </p>" +
+            "       </a>" +
+
+            "       </td>" +
+
+            "   </tr>" +
+
+            "   <tr style='height:30px'>" +
+
+            "       <td class='tdactionlist'><a id='activity_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            "            <i class='vis vis-cog'></i></span>" +
+            "           <p>Activity</p>" +
+            "       </a>" +
+            "       </td>" +
+
+            "        <td class='tdactionlist'><a id='createOrder_" + windowNo + "' href='javascript:void(0)' class='wsp-tableaction'><span class='wsp-left_icon'>" +
+            "           <i class='vis vis-createdocument'></i></span>" +
+            "           <p>Create Order</p>" +
+            "       </a>" +
+
+            "        </td>" +
+
+            "    </tr>" +
+
+            "   <tr style='height:30px'>" +
+            "       <td class='tdactionlist'><a id='BPInfo_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            "           <i class='vis vis-info'></i></span>" +
+            "           <p>BP Info</p>" +
+            "       </a>" +
+
+            "        </td>" +
+
+            "        <td class='tdactionlist'><a id='addBPartner_" + windowNo + "' href='javascript:void(0)' class='wsp-tableaction'><span class='wsp-left_icon'>" +
+            "           <i class='vis vis-addbp'></i></span>" +
+            "           <p style=''>Add BPartner </p>" +
+            "       </a>" +
+
+            "       </td>" +
+            "   </tr>" +
+
+            " <tr style='height:30px'>" +
+            "<td class='tdactionlist'><a id='History_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            "<i class='vis vis-history'></span>" +
+            "<p>" + VIS.Msg.getMsg('History') + "</p>" +
+            "</a>" +
+
+            "</td>" +
 
             "</tr>" +
 
 
-"   <tr>" +
+            "   <tr>" +
 
-"   </tr>" +
-"</tbody></table>" +
-"</div>" +
+            "   </tr>" +
+            "</tbody></table>" +
+            "</div>" +
 
 
-"<div id='divBirthday_" + windowNo + "' class='wsp-birthday_container' style='display: none;'></div></div></div>");
+            "<div id='divBirthday_" + windowNo + "' class='wsp-birthday_container' style='display: none;'></div></div></div>");
 
 
 
