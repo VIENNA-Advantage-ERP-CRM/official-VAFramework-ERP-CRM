@@ -201,7 +201,7 @@ namespace VIS.Models
 
             sql.Append(" (il.QtyInvoiced <> nvl(mi.Qty,0) AND mi.C_InvoiceLine_ID IS NOT NULL And Mp.Iscostadjustmentonlost = 'N') "
                      + " OR (NVL(Mi.Qty,0) = 0 AND Mi.C_Invoiceline_Id IS NOT NULL AND Mp.Iscostadjustmentonlost = 'Y') "
-                     + " OR mi.C_InvoiceLine_ID IS NULL ) GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
+                     + " OR mi.C_InvoiceLine_ID IS NULL ) t GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
                      + " HAVING QtyInvoiced > SUM(nvl(Qty,0))) ORDER BY i.DateInvoiced, i.DocumentNo");
 
             DataSet ds = DB.ExecuteDataset(sql.ToString());

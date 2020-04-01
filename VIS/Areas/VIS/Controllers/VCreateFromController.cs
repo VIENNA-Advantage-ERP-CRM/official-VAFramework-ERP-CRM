@@ -718,7 +718,7 @@ namespace VIS.Controllers
                 }
             }
 
-            sql.Append(") "
+            sql.Append(") t"
                    + " WHERE (   "
                    + "   CASE    "
                    + "     WHEN Iscostadjustmentonlost = 'N' "
