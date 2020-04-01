@@ -4667,7 +4667,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-app-aform-root .input-group-text, 
 .vis-info-l-s-wrap button.input-group-text {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
-    background-color: 1px solid rgba(var(--v-c-secondary), 1);
+    background-color: rgba(var(--v-c-secondary), 1);
 }
 .vis-app-aform-root label {
     font-weight: normal;
