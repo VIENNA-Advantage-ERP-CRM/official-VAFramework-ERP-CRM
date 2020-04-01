@@ -1152,7 +1152,13 @@ input[type="checkbox"].vis-tm-chkbox {
     font-size: 3rem;
     color: rgba(var(--v-c-primary), 1);
 }
-.vis-file-label {
+.vis-image-upload {
+    float: right;
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+}
+.vis-fileupload-label {
     cursor: pointer;
     float: right;
     padding: 5px 5px 0;

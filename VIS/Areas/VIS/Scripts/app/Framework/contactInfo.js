@@ -943,8 +943,8 @@
 
             "<div id='userBigImg_" + windowNo + "' class='vis-profile_big_img' style='width: 322px;'>" +
 
-            "<div class='image-upload' style='float: right; position: absolute; z-index: 999; width: 100%'>" +
-            " <label for='file-input' class='vis-file-label'>" +
+            "<div class='vis-image-upload'>" +
+            " <label for='file-input' class='vis-fileupload-label'>" +
             "<i class='vis vis-pencil'></i>" +
             "</label>" +
 
