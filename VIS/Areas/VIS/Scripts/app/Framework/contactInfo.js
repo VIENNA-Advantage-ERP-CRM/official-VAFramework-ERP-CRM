@@ -255,12 +255,12 @@
                             if (result[i].PhoneNo != "" && result[i].PhoneNo != null) {
                                 isContactDetails = true;
                                 if (windowWidth <= 1024) {
-                                    $divContactDetails.append("<a href='tel:" + result[i].PhoneNo + "'><p id='phone_" + windowNo + "' style='word-break: break-all'><span class='wsp-caller'><i class='fa fa-phone'></i></span>" + result[i].PhoneNo + "</p></a>");
+                                    $divContactDetails.append("<a href='tel:" + result[i].PhoneNo + "'><p id='phone_" + windowNo + "' style='word-break: break-all'><span class='vis-caller'><i class='fa fa-phone'></i></span>" + result[i].PhoneNo + "</p></a>");
                                 }
 
                                 else {
 
-                                    $divContactDetails.append("<p id='phone_" + windowNo + "' style='word-break: break-all'><span class='wsp-caller'><i class='fa fa-phone'></i></span>" + result[i].PhoneNo + "</p>");
+                                    $divContactDetails.append("<p id='phone_" + windowNo + "' style='word-break: break-all'><span class='vis-caller'><i class='fa fa-phone'></i></span>" + result[i].PhoneNo + "</p>");
                                 }
                             }
 
@@ -268,7 +268,7 @@
                         $slideruserEmail.empty();
                         if (result[0].Email != "" && result[0].Email != null) {
                             isContactDetails = true;
-                            $divContactDetails.append("<p id='userEmail_" + windowNo + "' style='word-break: break-all;display: inline-flex;margin-top: 0;'> <span class='wsp-caller'><i class='vis vis-email'></i></span>" + result[0].Email + "</p>");
+                            $divContactDetails.append("<p id='userEmail_" + windowNo + "' style='word-break: break-all;display: inline-flex;margin-top: 0;'> <span class='vis-caller'><i class='vis vis-email'></i></span>" + result[0].Email + "</p>");
                         }
                         if (!isContactDetails) {
 
@@ -326,11 +326,11 @@
 
 
                             $sliderdivBirthday.css("border", "1px solid #1886BF");
-                            var $birthdayDiv = $("<div class='wsp-birthdat_text'>");
+                            var $birthdayDiv = $("<div class='vis-birthdat_text'>");
                             if (userD == currentDate) {
-                                $birthdayDiv.append("<p> " + VIS.Msg.getMsg("Today") + " " + VIS.Msg.getMsg("is") + " <span class='wsp-birthday_text_highlight'>" + result[0].FirstName + "</span> " + VIS.Msg.getMsg("Birthday") + "</p>");
+                                $birthdayDiv.append("<p> " + VIS.Msg.getMsg("Today") + " " + VIS.Msg.getMsg("is") + " <span class='vis-birthday_text_highlight'>" + result[0].FirstName + "</span> " + VIS.Msg.getMsg("Birthday") + "</p>");
                             }
-                            $birthdayDiv.append("<p>" + result[0].FirstName + " " + VIS.Msg.getMsg("Birthday") + " " + VIS.Msg.getMsg("on") + "  <span class='wsp-birthday_text_highlight'>" + result[0].Birthday + "</span></p> </div>");
+                            $birthdayDiv.append("<p>" + result[0].FirstName + " " + VIS.Msg.getMsg("Birthday") + " " + VIS.Msg.getMsg("on") + "  <span class='vis-birthday_text_highlight'>" + result[0].Birthday + "</span></p> </div>");
                             $sliderdivBirthday.append($birthdayDiv);
                         }
                         else {
@@ -899,14 +899,14 @@
         animateTime = 800;
         kbSize = 1048576;
         maxSize = 10;
-        //$contactInfoRoot = $("<td id='contactInfo_" + windowNo + "' style='position:absolute;z-index:9999999'> <div id='mainUserInfoDiv_" + windowNo + "' class='wsp-view_profile_container sliderdiv' style='margin-top: -2px; width: 601.6px; display: block; right: 0px;'>" +
+        //$contactInfoRoot = $("<td id='contactInfo_" + windowNo + "' style='position:absolute;z-index:9999999'> <div id='mainUserInfoDiv_" + windowNo + "' class='vis-view_profile_container sliderdiv' style='margin-top: -2px; width: 601.6px; display: block; right: 0px;'>" +
         $contactInfoRoot = $(" <div id='mainUserInfoDiv_" + windowNo + "'>" +
-            //"<div id='WSP_dots_" + windowNo + "' class='wsp-dots' ></div>" +
-            //" <div id='divUserInfo_" + windowNo + "' style='overflow: hidden;'><div class='wsp-view_left_part'>" +
-            "<div class='wsp-view_left_part' style='float:left;width: 45%;padding-left: 10px;padding-right: 10px'>" +
+            //"<div id='WSP_dots_" + windowNo + "' class='vis-dots' ></div>" +
+            //" <div id='divUserInfo_" + windowNo + "' style='overflow: hidden;'><div class='vis-view_left_part'>" +
+            "<div class='vis-view_left_part'>" +
             "<input type='hidden' value='0' id='userID_" + windowNo + "'></input>" +
             " <p id='hduserName_" + windowNo + "' style='display: none;'></p>" +
-            "  <p id='userName_" + windowNo + "' class='wsp-view_profile_name'></p> <a id='dotImg_" + windowNo + "' href='javascript:void(0)' style='display: none;'></a>" +
+            "  <p id='userName_" + windowNo + "' class='vis-view_profile_name'></p> <a id='dotImg_" + windowNo + "' href='javascript:void(0)' style='display: none;'></a>" +
             "<div id='popUpDiv_" + windowNo + "' style='display: none;'></div>" +
 
 
@@ -914,13 +914,13 @@
             "<input type='hidden' value='0' id='BPID_" + windowNo + "'></input>" +
             "<input type='hidden' value='0' id='BPGroupID_" + windowNo + "'></input>" +
             "<input type='hidden' value='' id='userTableID_" + windowNo + "'>" +
-            "<p id='companyName_" + windowNo + "' class='wsp-view_profile_possession'></p>" +
-            "<p class='wsp-view_profile_possession' style='border-bottom: 1px solid rgba(var(--v-c-secondary), 1); padding-bottom: 10px;' id='pContactTypeCategory_" + windowNo + "'></p>" +
+            "<p id='companyName_" + windowNo + "' class='vis-view_profile_possession'></p>" +
+            "<p class='vis-view_profile_possession' style='border-bottom: 1px solid rgba(var(--v-c-secondary), 1); padding-bottom: 10px;' id='pContactTypeCategory_" + windowNo + "'></p>" +
 
-            "<div class='wsp-profile_big_img_mobile'>" +
+            "<div class='vis-profile_big_img_mobile'>" +
 
             "<span id='editMobileImage_" + windowNo + "' class='mobilespan' style='width:24px;float:right;'>" +
-            "<input type='file' id='wsp-fileinput_" + windowNo + "' class='wsp-file-input' value='Add Pic' style='opacity: 0; width: 7%; margin-top: -6px; float: left; z-index: 999; position: absolute; cursor: pointer;'>" +
+            "<input type='file' id='vis-fileinput_" + windowNo + "' class='vis-file-input' value='Add Pic' style='opacity: 0; width: 7%; margin-top: -6px; float: left; z-index: 999; position: absolute; cursor: pointer;'>" +
             "<img src='" + VIS.Application.contextUrl + "Areas/WSP/Images/Edit-icon.png' style='z-index: 100; position: absolute;'>" +
             "</span>" +
             "<img id='mobileImg_" + windowNo + "' width='100%' alt='Image is not available' src='Areas/VIS/Images/home/User.png'>" +
@@ -928,48 +928,48 @@
 
             "</div>" +
 
-            "<div id='divTeam_" + windowNo + "' class='wsp-view_team'></div>" +
+            "<div id='divTeam_" + windowNo + "' class='vis-view_team'></div>" +
 
-            "<div id='divContactDetails_" + windowNo + "' class='wsp-view_team'></div>" +
+            "<div id='divContactDetails_" + windowNo + "' class='vis-view_team'></div>" +
 
-            "<div id='divcompanyDetails_" + windowNo + "' class='wsp-view_team'></div>" +
+            "<div id='divcompanyDetails_" + windowNo + "' class='vis-view_team'></div>" +
 
-            "<div id='divRole_" + windowNo + "' class='wsp-view_team'></div>" +
+            "<div id='divRole_" + windowNo + "' class='vis-view_team'></div>" +
 
 
             "</div>" +
 
-            "<div class='wsp-view_right_part'  style='float:left;width: 55%;' id='WSP_view_right_part_" + windowNo + "'>" +
+            "<div class='vis-view_right_part'  style='float:left;width: 55%;' id='WSP_view_right_part_" + windowNo + "'>" +
 
-            "<div id='userBigImg_" + windowNo + "' class='wsp-profile_big_img' style='width: 322px;'>" +
+            "<div id='userBigImg_" + windowNo + "' class='vis-profile_big_img' style='width: 322px;'>" +
 
             "<div class='image-upload' style='float: right; position: absolute; z-index: 999; width: 100%'>" +
-            " <label for='file-input' class='wsp-file-label'>" +
+            " <label for='file-input' class='vis-file-label'>" +
             "<i class='vis vis-pencil'></i>" +
             "</label>" +
 
-            "<input type='file' id='wsp-file-input_" + windowNo + "' class='wsp-file-input' value='Add Pic' style='opacity: 0; width: 30%; margin-top: 0px; float: right; z-index: 999; position: absolute; right: 0px; cursor: pointer;'>" +
+            "<input type='file' id='vis-file-input_" + windowNo + "' class='vis-file-input' value='Add Pic' style='opacity: 0; width: 30%; margin-top: 0px; float: right; z-index: 999; position: absolute; right: 0px; cursor: pointer;'>" +
 
             "</div>" +
 
-            "<div class='wsp-bigimg'>" +
+            "<div class='vis-bigimg'>" +
 
-            " <i id='bigUserImage_" + windowNo + "' class='fa fa-user'></i>" +
+            " <i id='bigUserImage_" + windowNo + "' class='vis vis-user'></i>" +
             "</div>" +
             "</div>" +
 
-            "<div class='wsp-action'>" +
-            "<table id='actionTable_" + windowNo + "' class='wsp-tableRightContent'>" +
+            "<div class='vis-actionswrp'>" +
+            "<table id='actionTable_" + windowNo + "' class='vis-tableRightContent'>" +
             "<tbody><tr style='height:30px'>" +
-            " <td class='tdactionlist'><a id='edit_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            " <td class='vis-tdactionlist'><a id='edit_" + windowNo + "' class='vis-tableaction' href='javascript:void(0)'><span class='vis-left_icon'>" +
             " <i class='vis vis-edit'></i></span>" +
             " <p>Edit </p>" +
             " </a>" +
             " </td>" +
 
-            " <td class='tdactionlist'>" +
+            " <td class='vis-tdactionlist'>" +
 
-            " <a id='sendSMS_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            " <a id='sendSMS_" + windowNo + "' class='vis-tableaction' href='javascript:void(0)'><span class='vis-left_icon'>" +
             " <i class='vis vis-sms'></i></span>" +
             " <p>" +
             " Send Sms" +
@@ -979,7 +979,7 @@
             " </tr>" +
 
             "  <tr style='height:30px'>" +
-            "       <td class='tdactionlist'><a id='email_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon email_icon'>" +
+            "       <td class='vis-tdactionlist'><a id='email_" + windowNo + "' class='vis-tableaction' href='javascript:void(0)'><span class='vis-left_icon email_icon'>" +
             "           <i class='vis vis-email'></i></span>" +
             "           <p>Email </p>" +
             "       </a>" +
@@ -987,7 +987,7 @@
 
             "       </td>" +
 
-            "       <td class='tdactionlist'><a id='appointment_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            "       <td class='vis-tdactionlist'><a id='appointment_" + windowNo + "' class='vis-tableaction' href='javascript:void(0)'><span class='vis-left_icon'>" +
             "           <i class='vis vis-appointment'></i></span>" +
 
             "           <p>Appointment </p>" +
@@ -999,13 +999,13 @@
 
             "   <tr style='height:30px'>" +
 
-            "       <td class='tdactionlist'><a id='activity_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            "       <td class='vis-tdactionlist'><a id='activity_" + windowNo + "' class='vis-tableaction' href='javascript:void(0)'><span class='vis-left_icon'>" +
             "            <i class='vis vis-cog'></i></span>" +
             "           <p>Activity</p>" +
             "       </a>" +
             "       </td>" +
 
-            "        <td class='tdactionlist'><a id='createOrder_" + windowNo + "' href='javascript:void(0)' class='wsp-tableaction'><span class='wsp-left_icon'>" +
+            "        <td class='vis-tdactionlist'><a id='createOrder_" + windowNo + "' href='javascript:void(0)' class='vis-tableaction'><span class='vis-left_icon'>" +
             "           <i class='vis vis-createdocument'></i></span>" +
             "           <p>Create Order</p>" +
             "       </a>" +
@@ -1015,14 +1015,14 @@
             "    </tr>" +
 
             "   <tr style='height:30px'>" +
-            "       <td class='tdactionlist'><a id='BPInfo_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
+            "       <td class='vis-tdactionlist'><a id='BPInfo_" + windowNo + "' class='vis-tableaction' href='javascript:void(0)'><span class='vis-left_icon'>" +
             "           <i class='vis vis-info'></i></span>" +
             "           <p>BP Info</p>" +
             "       </a>" +
 
             "        </td>" +
 
-            "        <td class='tdactionlist'><a id='addBPartner_" + windowNo + "' href='javascript:void(0)' class='wsp-tableaction'><span class='wsp-left_icon'>" +
+            "        <td class='vis-tdactionlist'><a id='addBPartner_" + windowNo + "' href='javascript:void(0)' class='vis-tableaction'><span class='vis-left_icon'>" +
             "           <i class='vis vis-addbp'></i></span>" +
             "           <p style=''>Add BPartner </p>" +
             "       </a>" +
@@ -1031,8 +1031,8 @@
             "   </tr>" +
 
             " <tr style='height:30px'>" +
-            "<td class='tdactionlist'><a id='History_" + windowNo + "' class='wsp-tableaction' href='javascript:void(0)'><span class='wsp-left_icon'>" +
-            "<i class='vis vis-history'></span>" +
+            "<td class='vis-tdactionlist'><a id='History_" + windowNo + "' class='vis-tableaction' href='javascript:void(0)'><span class='vis-left_icon'>" +
+            "<i class='vis vis-history'></i></span>" +
             "<p>" + VIS.Msg.getMsg('History') + "</p>" +
             "</a>" +
 
@@ -1048,7 +1048,7 @@
             "</div>" +
 
 
-            "<div id='divBirthday_" + windowNo + "' class='wsp-birthday_container' style='display: none;'></div></div></div>");
+            "<div id='divBirthday_" + windowNo + "' class='vis-birthday_container' style='display: none;'></div></div></div>");
 
 
 
