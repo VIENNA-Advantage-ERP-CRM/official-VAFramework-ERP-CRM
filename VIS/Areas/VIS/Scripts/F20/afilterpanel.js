@@ -124,6 +124,7 @@
                     }
 
                     crt.setReadOnly(false);
+                    crt.setMandatory(false);
                     this.ctrlObjects[field.getColumnName()] = crt;
 
 
@@ -575,7 +576,7 @@
                     "GetObscureType", false);// VAdvantage.Controls.VTextBox.TextType.Text, DisplayType.String);
             }
             if (crt != null) {
-                //crt.SetIsMandatory(false);
+                crt.setMandatory(false);
                 crt.setReadOnly(false);
                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
                     crt.hideButton(false);
