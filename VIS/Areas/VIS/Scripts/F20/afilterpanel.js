@@ -156,6 +156,7 @@
 
                         label = VIS.VControlFactory.getLabel(field); //get label
                         crt.addVetoableChangeListener(this);
+                        label.getControl().find('sup').hide();
                         inputWrap.append(crt.getControl());
                         if (label)
                             inputWrap.append(label.getControl());
