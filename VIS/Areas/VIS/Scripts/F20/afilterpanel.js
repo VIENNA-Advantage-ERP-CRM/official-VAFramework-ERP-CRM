@@ -1124,7 +1124,7 @@
         var field = this.getTargetMField(columnName);
         var columnSQL = field.getColumnSQL(); //
 
-        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.EQUAL) {
+        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.prototype.EQUAL) {
             optr = VIS.Query.prototype.LIKE;
             value += '%';
         }
