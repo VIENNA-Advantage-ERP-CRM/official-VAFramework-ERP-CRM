@@ -593,9 +593,10 @@ div.VIS_Pref_slide-show.pp {
     /*font-family: helvetica;*/
     font-size: 14px;
     margin-bottom: 0 !important;
+}
+.VIS_Pref_menu .VIS_Pref_Label_Font {
     flex: 1;
 }
-
 
 a.VIS_Pref_tooltip {
     outline: none;

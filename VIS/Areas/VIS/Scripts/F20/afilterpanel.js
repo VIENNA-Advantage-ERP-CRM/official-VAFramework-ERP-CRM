@@ -124,6 +124,7 @@
                     }
 
                     crt.setReadOnly(false);
+                    crt.setMandatory(false);
                     this.ctrlObjects[field.getColumnName()] = crt;
 
 
@@ -155,6 +156,7 @@
 
                         label = VIS.VControlFactory.getLabel(field); //get label
                         crt.addVetoableChangeListener(this);
+                        label.getControl().find('sup').hide();
                         inputWrap.append(crt.getControl());
                         if (label)
                             inputWrap.append(label.getControl());
@@ -333,13 +335,23 @@
                     fields.append(htm.join(''));
                 }
             }
-           
-                for (i = 0; i < selItems.length; i++) {
-                    fields.append(selItems[i]);
-                }
+
+            for (i = 0; i < selItems.length; i++) {
+                fields.append(selItems[i]);
+            }
 
             selItems = [];
             selIds = [];
+        };
+
+        this.hardRefreshFilterPanel = function () {
+            divStatic.find('.vis-fp-lst-searchrcrds').remove();
+            divStatic.find('.vis-fp-currntrcrdswrap').remove();
+            divDynFilters.find('.vis-fp-currntrcrds').remove();
+            dsAdvanceData = [];
+            cmbColumns.val(-1);
+            cmbOp.val(-1);
+            setControlNullValue(false);
         };
 
         this.getFilterClause = function () {
@@ -575,7 +587,7 @@
                     "GetObscureType", false);// VAdvantage.Controls.VTextBox.TextType.Text, DisplayType.String);
             }
             if (crt != null) {
-                //crt.SetIsMandatory(false);
+                crt.setMandatory(false);
                 crt.setReadOnly(false);
                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
                     crt.hideButton(false);
@@ -918,6 +930,15 @@
             var tabWhere = this.curTab.getWhereClause();
             tabWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), tabWhere, false);
 
+            var linkWhere = this.curTab.getLinkWhereClause();
+
+            if (linkWhere && linkWhere.length > 0) {
+                if (whereClause != "")
+                    whereClause += " AND " + linkWhere;
+                else
+                    whereClause += " " + linkWhere;
+            }
+
             if (tabWhere && tabWhere.length > 0) {
                 if (whereClause != "")
                     whereClause += " AND " + tabWhere;
@@ -951,7 +972,13 @@
         }
     };
 
-    FilterPanel.prototype.refreshFilterOptions = function (colName) {
+    FilterPanel.prototype.refreshFilterOptions = function (colName, hardRefresh) {
+        if (hardRefresh) {
+            this.hardRefreshFilterPanel();
+        }
+        if (!this.selectionfields)
+            return;
+
         for (var i = 0; i < this.selectionfields.length; i++) {
             if (this.selectionfields[i].getShowFilterOption()) {
                 var field = this.selectionfields[i];
@@ -1124,7 +1151,7 @@
         var field = this.getTargetMField(columnName);
         var columnSQL = field.getColumnSQL(); //
 
-        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.EQUAL) {
+        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.prototype.EQUAL) {
             optr = VIS.Query.prototype.LIKE;
             value += '%';
         }
