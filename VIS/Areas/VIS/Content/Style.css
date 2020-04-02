@@ -291,34 +291,6 @@
 	background:url(../Images/right-shift-arrow.png);
 	background-repeat:no-repeat;
 }
-@media (max-width:840px){
-	body {
-    margin: 0;
-    color: #5d5d5d;
-    width: 100%;
-    margin: auto;
-}
-}
-@media (max-width:679px){
-	.btn-close {
-width: 8%;
-background: url('../Images/close.png');
-background-color: #616364;
-float: right;
-background-repeat: no-repeat;
-padding-top: 25px;
-padding-bottom: 20px;
-cursor: pointer;
-background-position: center;
-}
-.vis-attach-tittle {
-width: 92%;
-background: #3892DA;
-padding: 10px 0px 10px 0px;
-float: left;
-padding-left: 1%;
-}
-}
 
 .vis-Att-ui-effects-transfer
 {
@@ -1128,6 +1100,101 @@ input[type="checkbox"].vis-tm-chkbox {
     background:yellow;
 }*/
 /*---------------*/
+/*contactinfo form homepage*/
+.vis-view_left_part {
+    float: left;
+    width: 45%;
+    padding-left: 10px;
+    padding-right: 10px
+}
+.vis-view_left_part .vis-view_profile_name {
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 16px;
+    margin: 0px;
+    font-weight: 600;
+}
+.vis-view_left_part .vis-view_profile_possession {
+    color: rgba(var(--v-c-on-secondary), .8);
+    font-size: 12px;
+    font-style: italic;
+    margin: 3px 0px;
+}
+.vis-view_left_part .vis-view_team p:first-child {
+    color: rgba(var(--v-c-primary), 1);
+}
+.vis-view_left_part .vis-view_team p {
+    font-size: 12px;
+    color: rgba(var(--v-c-on-secondary), .8);
+    margin: 4px 0px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+}
+.vis-profile_big_img {
+    width: 320px;
+    background: rgba(var(--v-c-secondary), 1);
+    height: 240px;
+    position: relative;
+}
+.vis-profile_big_img > div > img {
+        width:auto;
+        height:auto;
+        overflow:hidden;
+    }
+.vis-bigimg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+}
+.vis-bigimg i {
+    font-size: 3rem;
+    color: rgba(var(--v-c-primary), 1);
+}
+.vis-image-upload {
+    float: right;
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+}
+.vis-fileupload-label {
+    cursor: pointer;
+    float: right;
+    padding: 5px 5px 0;
+}
+.vis-tableRightContent {
+    width: 100%;
+    margin-top: 20px;
+    word-break: break-all;
+}
+.vis-tdactionlist {
+    width: 50%;
+}
+.vis-tableaction {
+    font-size: 12px;
+    font-weight: 400;
+    float: left;
+    display: flex;
+}
+.vis-view_right_part .vis-action .vis-left_icon {
+    float: left;
+}
+.vis-tdactionlist p {
+    float: left;
+    margin-left: 5px;
+}
+.vis-profile_big_img_mobile {
+    display: none;
+}
+.vis-view_team a i {
+    font-size: 1rem;
+}
+.vis-view_team span {
+    padding-right: 5px;
+}
+/*contactinfo form homepage END*/
+
 @media (max-width: 1024px) {
     .VIS-TM-textdivTreedata {
         width: 65%;

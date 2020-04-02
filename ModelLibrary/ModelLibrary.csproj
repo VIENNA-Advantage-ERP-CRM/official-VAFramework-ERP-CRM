@@ -430,6 +430,7 @@
     <Compile Include="ModelAD\X_CM_Subscribe.cs" />
     <Compile Include="Model\MAccountGroupBatch.cs" />
     <Compile Include="Model\MAssignAcctSchema.cs" />
+    <Compile Include="Model\MBankAccountDoc.cs" />
     <Compile Include="Model\MBankAccountLine.cs" />
     <Compile Include="Model\MCostDetail.cs" />
     <Compile Include="Model\MCostElement.cs" />
@@ -997,6 +998,7 @@
     <Compile Include="Model\MWebProject.cs" />
     <Compile Include="Model\MWebProjectDomain.cs" />
     <Compile Include="Model\MWikiToken.cs" />
+    <Compile Include="Model\MWithholding.cs" />
     <Compile Include="Model\MYear.cs" />
     <Compile Include="Model\NaturalAccountMap.cs" />
     <Compile Include="Model\PaymentProcessor.cs" />
@@ -1691,6 +1693,7 @@
     <Compile Include="Process\CreateInviteeList.cs" />
     <Compile Include="Process\CreatePendingTranslations.cs" />
     <Compile Include="Process\CreateReleaseDocFromBO.cs" />
+    <Compile Include="Process\CreateRFQFromRequisition.cs" />
     <Compile Include="Process\CreateSalesContract.cs" />
     <Compile Include="Process\CreateTargetList.cs" />
     <Compile Include="Process\CreateTaxLines.cs" />

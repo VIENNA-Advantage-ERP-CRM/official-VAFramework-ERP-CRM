@@ -112,6 +112,8 @@
                         field = fieldorg;
                     }
 
+                    this.selectionfields[i] = field;
+
                     if (field.getIsKey()) {
                         crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
                             field.getColumnName());
@@ -915,6 +917,15 @@
 
             var tabWhere = this.curTab.getWhereClause();
             tabWhere = VIS.Env.parseContext(VIS.Env.getCtx(), this.winNo, this.curTab.getTabNo(), tabWhere, false);
+
+            var linkWhere = this.curTab.getLinkWhereClause();
+
+            if (linkWhere && linkWhere.length > 0) {
+                if (whereClause != "")
+                    whereClause += " AND " + linkWhere;
+                else
+                    whereClause += " " + linkWhere;
+            }
 
             if (tabWhere && tabWhere.length > 0) {
                 if (whereClause != "")
