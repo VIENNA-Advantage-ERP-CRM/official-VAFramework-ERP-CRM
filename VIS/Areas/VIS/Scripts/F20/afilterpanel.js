@@ -124,6 +124,7 @@
                     }
 
                     crt.setReadOnly(false);
+                    crt.setMandatory(false);
                     this.ctrlObjects[field.getColumnName()] = crt;
 
 
@@ -155,6 +156,7 @@
 
                         label = VIS.VControlFactory.getLabel(field); //get label
                         crt.addVetoableChangeListener(this);
+                        label.getControl().find('sup').hide();
                         inputWrap.append(crt.getControl());
                         if (label)
                             inputWrap.append(label.getControl());
@@ -575,7 +577,7 @@
                     "GetObscureType", false);// VAdvantage.Controls.VTextBox.TextType.Text, DisplayType.String);
             }
             if (crt != null) {
-                //crt.SetIsMandatory(false);
+                crt.setMandatory(false);
                 crt.setReadOnly(false);
                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
                     crt.hideButton(false);
@@ -1133,7 +1135,7 @@
         var field = this.getTargetMField(columnName);
         var columnSQL = field.getColumnSQL(); //
 
-        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.EQUAL) {
+        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.prototype.EQUAL) {
             optr = VIS.Query.prototype.LIKE;
             value += '%';
         }
