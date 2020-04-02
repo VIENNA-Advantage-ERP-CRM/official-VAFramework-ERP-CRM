@@ -481,6 +481,12 @@
         }
     };
 
+    VIS.GridController.prototype.refreshFilterPanelData = function () {
+        if (this.aFilterPanel) {//&& $(this.vTabPanel.getRoot()).is(':visible')) 
+            this.aFilterPanel.refreshFilterOptions("", true);
+        }
+    };
+
 
     /** initGrid
       * - Map table to model

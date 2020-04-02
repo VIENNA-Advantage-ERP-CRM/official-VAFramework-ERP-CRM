@@ -335,13 +335,23 @@
                     fields.append(htm.join(''));
                 }
             }
-           
-                for (i = 0; i < selItems.length; i++) {
-                    fields.append(selItems[i]);
-                }
+
+            for (i = 0; i < selItems.length; i++) {
+                fields.append(selItems[i]);
+            }
 
             selItems = [];
             selIds = [];
+        };
+
+        this.hardRefreshFilterPanel = function () {
+            divStatic.find('.vis-fp-lst-searchrcrds').remove();
+            divStatic.find('.vis-fp-currntrcrdswrap').remove();
+            divDynFilters.find('.vis-fp-currntrcrds').remove();
+            dsAdvanceData = [];
+            cmbColumns.val(-1);
+            cmbOp.val(-1);
+            setControlNullValue(false);
         };
 
         this.getFilterClause = function () {
@@ -962,7 +972,13 @@
         }
     };
 
-    FilterPanel.prototype.refreshFilterOptions = function (colName) {
+    FilterPanel.prototype.refreshFilterOptions = function (colName, hardRefresh) {
+        if (hardRefresh) {
+            this.hardRefreshFilterPanel();
+        }
+        if (!this.selectionfields)
+            return;
+
         for (var i = 0; i < this.selectionfields.length; i++) {
             if (this.selectionfields[i].getShowFilterOption()) {
                 var field = this.selectionfields[i];
