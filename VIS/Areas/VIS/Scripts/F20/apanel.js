@@ -644,11 +644,14 @@
             }
         };
 
-        this.showFilterPanel = function (show) {
+        this.showFilterPanel = function (back) {
             //$fltrPanel.empty();
             if (this.curGC) {
                 $fltrPnlBody.append(this.curGC.getFilterPanel());
                 this.curGC.initFilterUI();
+                if (!back) {
+                    this.curGC.refreshFilterPanelData();
+                }
             }
             else {
                 $fltrPanel.hide();
@@ -2754,7 +2757,7 @@
         //else {
         //    this.setTabPanelIcons();
         this.showTabPanel(this.curTab.getHasPanel());
-        this.showFilterPanel();
+        this.showFilterPanel(back);
 
         //}
 
