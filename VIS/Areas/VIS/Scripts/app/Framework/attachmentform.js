@@ -266,10 +266,10 @@
 
 
         //ProgressBar
-        var divReadOnly = $("<div style='width: 100%;height: 100%;background:black;opacity: .1;display:none; position:absolute;'>");//table-cell
+        var divReadOnly = $("<div style='width: 100%;height: 100%;background:black;opacity: .1;display:none; position:absolute;top:0;left:0'>");//table-cell
         divContainer.append(divReadOnly);
 
-        var divpContainer = $("<div style='width: 100%;height: 100%;background:transparent;text-align: center;display:none ;vertical-align: middle;position:absolute;'>");//table-cell
+        var divpContainer = $("<div style='width: 100%;height: 100%;background:transparent;text-align: center;display:none ;vertical-align: middle;position:absolute;top:0;left:0'>");//table-cell
         divContainer.append(divpContainer);
 
         var divProgress = null;
@@ -991,7 +991,7 @@
                                 }
                                 else {
                                     // debugger;
-                                    var divFInfo = self.parent().parent().parent();
+                                    var divFInfo = self.parent().parent();
                                     divFInfo.css("display", "none");
 
                                     divFInfo.empty();
