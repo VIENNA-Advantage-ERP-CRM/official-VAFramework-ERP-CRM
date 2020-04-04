@@ -2727,6 +2727,25 @@ namespace VAdvantage.Model
                 }
             }
 
+            // set withholding tax amount
+            if (IsPrepayment() && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
+            {
+                // check withholding applicable on Business Partner 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_ID) FROM C_BPartner WHERE NVL(C_Withholding_ID , 0) > 0 
+                        AND C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx()));
+
+                // Applicable, but withholding not selected on record
+                if (count > 0 && GetC_Withholding_ID() == 0)
+                {
+                    SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
+                    return DocActionVariables.STATUS_INVALID;
+                }
+                else if (count > 0 || GetC_Withholding_ID() > 0)
+                {
+                    SetWithholdingAmount();
+                }
+            }
+
             _justPrepared = true;
             if (!DOCACTION_Complete.Equals(GetDocAction()))
                 SetDocAction(DOCACTION_Complete);
@@ -2771,25 +2790,6 @@ namespace VAdvantage.Model
 
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
-
-            // set withholding tax amount
-            if (IsPrepayment() && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
-            {
-                // check withholding applicable on Business Partner 
-                int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_ID) FROM C_BPartner WHERE NVL(C_Withholding_ID , 0) > 0 
-                        AND C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx()));
-
-                // Applicable, but withholding not selected on record
-                if (count > 0 && GetC_Withholding_ID() == 0)
-                {
-                    SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
-                    return DocActionVariables.STATUS_INVALID;
-                }
-                else if (count > 0)
-                {
-                    SetWithholdingAmount();
-                }
-            }
 
             // Amit for VA009 27-10-2015
             int countPaymentAllocateRecords = 0;
