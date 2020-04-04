@@ -301,7 +301,12 @@
             });
 
             $vbtnSearch.on("click", function (e) {
-                searchbyParameters();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    searchbyParameters();
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
             });
 
             //added for gl-allocation
@@ -2616,7 +2621,7 @@
 
                 }
                 //check weather someone clicked on select column checkbox in grid
-                if ((selectColIndex == event.column || event.column == null) && !(element[0].SelectRow == undefined)) {
+                if ((selectColIndex == event.column || event.column == null) && ((element[0] != undefined) && !(element[0].SelectRow == undefined))) {
                     $gridInvoice.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount);
                 }
                 tableChanged(event.recid, event.column, true, false);
@@ -2715,7 +2720,7 @@
 
                 }
                 //check weather someone clicked on select column checkbox in grid
-                if ((selectColIndex == event.column || event.column == null) && !(element[0].SelectRow == undefined)) {
+                if ((selectColIndex == event.column || event.column == null) && ((element[0] != undefined) && !(element[0].SelectRow == undefined))) {
                     $gridPayment.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt);
                 }
                 tableChanged(event.recid, event.column, false, false);
@@ -2811,7 +2816,7 @@
                     }
                 }
                 //check weather someone clicked on select column checkbox in grid
-                if ((selectColIndex == event.column || event.column == null) && !(element[0].SelectRow == undefined)) {
+                if ((selectColIndex == event.column || event.column == null) && ((element[0] != undefined) && !(element[0].SelectRow == undefined))) {
                     //$gridCashline.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).Amount);
                     $gridCashline.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).ConvertedAmount);
                 }
