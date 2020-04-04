@@ -2129,6 +2129,12 @@ namespace VAdvantage.Model
                 }
             }
 
+            // set withholding tax amount
+            if (Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() > 0)
+            {
+                SetWithholdingAmount();
+            }
+
             //	Add up Amounts
             _justPrepared = true;
             if (!DOCACTION_Complete.Equals(GetDocAction()))
@@ -2412,12 +2418,6 @@ namespace VAdvantage.Model
 
                 // JID_1290: Set the document number from completed document sequence after completed (if needed)
                 SetCompletedDocumentNo();
-
-                // set withholding tax amount
-                if (Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() > 0)
-                {
-                    SetWithholdingAmount();
-                }
 
                 //	Implicit Approval
                 if (!IsApproved())
