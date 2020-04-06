@@ -18,17 +18,25 @@
         
         this.deletable = false;
         this.maintTblVer = mtnTblVer;
-        this.defaultCols = [
-            Approved = VIS.Msg.translate(VIS.Env.getCtx(), "IsVersionApproved"),
-            Version = VIS.Msg.translate(VIS.Env.getCtx(), "RecordVersion"),
+
+        this.defaultColsIniPos = [
+            Version = VIS.Msg.getMsg("VIS_RecordVersion"),
             ValidFrom = VIS.Msg.translate(VIS.Env.getCtx(), "VersionValidFrom"),
+            Approved = VIS.Msg.getMsg("VIS_IsVersionApproved"),
+        ];
+
+        this.defaultColEleIniPos = [
+            Version = "RECORDVERSION",
+            ValidFrom = "VERSIONVALIDFROM",
+            Approved = "ISVERSIONAPPROVED"
+        ];
+
+        this.defaultCols = [
             VersionLog = VIS.Msg.translate(VIS.Env.getCtx(), "VersionLog"),
             Delete = VIS.Msg.getMsg("Action")
         ];
+
         this.defaultColElements = [
-            Approved = "ISVERSIONAPPROVED",
-            Version = "RECORDVERSION",
-            ValidFrom = "VERSIONVALIDFROM",
             VersionLog = "VERSIONLOG",
             Delete = "ACTION"
         ];
@@ -58,17 +66,21 @@
 
         // check if records can be deleted from Version table
         var del = VIS.dataContext.getJSONRecord("Common/CheckTableDeletable", this._tblName + "_Ver");
-        var diaWidth = "35%";
+        var diaWidth = "40%";
         // if Records are deleteable from Version Table then set width and Deleteable property to true
         // based on which Delete Icon will be displayed in the popup
         if (del == "Y") {
             this.deletable = true;
-            diaWidth = "40%";
+            // diaWidth = "40%";
         }
 
         var gpDia = new VIS.ChildDialog();
         var masVerUI = this.getMasterVersionUI(dr);
         gpDia.setContent(masVerUI);
+
+        if (this.gridCols.length > 8)
+            diaWidth = "70%";
+
         gpDia.setWidth(diaWidth);
         // Set title of Master Version Dialog
         gpDia.setTitle(VIS.Msg.getMsg("MasterDataVersioning"));
@@ -252,7 +264,7 @@
 
     MasterDataVersion.prototype.getGrid = function (dr) {
         // create UI for Master Data Version Popup
-        this.htmlUI.push('<div class= "vis-mas-ver-gridSection">');
+        this.htmlUI.push('<div class= "vis-mas-ver-gridSection" style="min-height: 300px;">');
         this.htmlUI.push('<table>');
         var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/delete10.png";
         this.htmlUI.push('<thead class="vis-mas-ver-gridData">');
@@ -322,6 +334,10 @@
                                 var dateCol = Globalize.format(new Date(recRow[colName] + "Z"), 't');
                                 this.htmlUI.push('<td dtDate="' + new Date(recRow[colName]) + '">' + dateCol + '</td>');
                             }
+                            else if (colName == 'RECORDVERSION')
+                            {
+                                this.htmlUI.push('<td style="text-align: center">' + VIS.Utility.encodeText(recRow[colName]) + '</td>');
+                            }
                             else
                                 this.htmlUI.push('<td>' + VIS.Utility.encodeText(recRow[colName]) + '</td>');
                         }
@@ -350,6 +366,9 @@
         var hdrUI = new Array();
         hdrUI.push('<tr style="border-bottom: 2px #b5b3b3 solid;">');
         if (this.gFields && this.gFields.length > 0) {
+
+            this.createVerColsHdrs(hdrUI, this.defaultColsIniPos, this.defaultColEleIniPos);
+
             for (var i = 0; i < this.gFields.length; i++) {
                 var field = this.gFields[i];
                 if ((field.vo.IsMaintainVersions || this.maintTblVer) && (this.exclCols.indexOf(field.vo.ColumnName) < 0)) {
@@ -360,25 +379,45 @@
                         hdrUI.push('<th>' + VIS.Utility.encodeText(field.vo.Header) + '</th>');
                 }
             }
-            for (var v = 0; v < this.defaultCols.length; v++) {
-                this.gridCols.push(this.defaultColElements[v]);
 
-                // column header for Action (delete), based on setting on AD_Table for Version table
-                if (this.defaultColElements[v] == "ACTION") {
-                    if (this.deletable) {
-                        hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
-                    }
-                }
-                else if (this.defaultColElements[v] == "ISVERSIONAPPROVED") {
-                    hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
-                }
-                else
-                    hdrUI.push('<th>' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
+            this.createVerColsHdrs(hdrUI, this.defaultCols, this.defaultColElements);
 
-            }
+            //for (var v = 0; v < this.defaultCols.length; v++) {
+            //    this.gridCols.push(this.defaultColElements[v]);
+
+            //    // column header for Action (delete), based on setting on AD_Table for Version table
+            //    if (this.defaultColElements[v] == "ACTION") {
+            //        if (this.deletable) {
+            //            hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
+            //        }
+            //    }
+            //    else if (this.defaultColElements[v] == "ISVERSIONAPPROVED") {
+            //        hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
+            //    }
+            //    else
+            //        hdrUI.push('<th>' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
+            //}
         }
         hdrUI.push('</tr>');
         return hdrUI.join(' ');
+    };
+
+    MasterDataVersion.prototype.createVerColsHdrs = function (hUI, defCols, defColEle) {
+        for (var v = 0; v < defCols.length; v++) {
+            this.gridCols.push(defColEle[v]);
+
+            // column header for Action (delete), based on setting on AD_Table for Version table
+            if (defColEle[v] == "ACTION") {
+                if (this.deletable) {
+                    hUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(defCols[v]) + '</th>');
+                }
+            }
+            else if ((defColEle[v] == "ISVERSIONAPPROVED") || (defColEle[v] == "RECORDVERSION")) {
+                hUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(defCols[v]) + '</th>');
+            }
+            else
+                hUI.push('<th>' + VIS.Utility.encodeText(defCols[v]) + '</th>');
+        }
     };
 
     MasterDataVersion.prototype.getDateString = function () {
