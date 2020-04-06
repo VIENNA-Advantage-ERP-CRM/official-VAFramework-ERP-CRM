@@ -1138,43 +1138,50 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public string GetChecknumber(int payMethod_ID, int BankAccount_ID, Trx trx)
         {
-            string retval = string.Empty;
-            IDbConnection dbConnection = null;
-            if (trx == null)
-            {
-                return string.Empty; ;
-            }
-            try
-            {
-                dbConnection = trx.GetConnection();
-                if (dbConnection != null)
-                {
-                    // execute procedure for updating cost of components
-                    OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = (OracleConnection)dbConnection;
-                    cmd.CommandText = "GETCHECKNO";
-                    cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
-                    cmd.BindByName = true;
-                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());
-                    retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
-                    if (retval == "0") // If Record Found
-                    {
-                        retval = string.Empty;
-                    }
+            string retval = Util.GetValueOfString(DB.ExecuteScalar("SELECT GETCHECKNOFUNC(" + BankAccount_ID + ", " + payMethod_ID + ") AS checkno FROM Dual", null, trx));
 
-                }
-
-                return retval.ToString();
-
-            }
-            catch (Exception e)
+            if (retval == "0") // If Record Found
             {
-                log.SaveError("Error:GetCheckNumber", e.Message);
-                return retval;
+                retval = string.Empty;
             }
+            return retval.ToString();
+
+            //IDbConnection dbConnection = null;
+            //if (trx == null)
+            //{
+            //    return string.Empty; ;
+            //}
+            //try
+            //{
+            //    dbConnection = trx.GetConnection();
+            //    if (dbConnection != null)
+            //    {
+            //        // execute procedure for updating cost of components
+            //        OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+            //        cmd.CommandType = CommandType.StoredProcedure;
+            //        cmd.Connection = (OracleConnection)dbConnection;
+            //        cmd.CommandText = "GETCHECKNO";
+            //        cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
+            //        cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
+            //        cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
+            //        cmd.BindByName = true;
+            //        retval = Util.GetValueOfString(cmd.ExecuteNonQuery());
+            //        retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
+            //        if (retval == "0") // If Record Found
+            //        {
+            //            retval = string.Empty;
+            //        }
+
+            //    }
+
+            //    return retval.ToString();
+
+            //}
+            //catch (Exception e)
+            //{
+            //    log.SaveError("Error:GetCheckNumber", e.Message);
+            //    return retval;
+            //}
 
 
         }
