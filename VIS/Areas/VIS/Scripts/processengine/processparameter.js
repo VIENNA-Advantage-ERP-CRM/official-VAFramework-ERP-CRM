@@ -89,8 +89,8 @@
         this.addFields = function (c1, c2) {
             if (c1) {
                 var control = c1.getControl();
-                if (splitUI)
-                    //control.css('color', 'white');
+                // if (splitUI)
+                //control.css('color', 'white');
                 $td1.append(control);
             }
             if (c2) {
@@ -104,17 +104,17 @@
                 //$td3.append(c2.getControl());
                 if (c2.getBtnCount() > 0) {
 
-                    if (splitUI) {
-                        if (controll.attr('type') == "date") {
-                            controll.css({ 'width': '100%' });
-                        }
-                        else {
-                            //c2.getControl().css({ 'width': 'calc(100% - 36px)' });
-                        }
-                        //c2.getControl().height("26px");
+                    //if (splitUI) {
+                    if (controll.attr('type') == "date") {
+                        controll.css({ 'width': '100%' });
                     }
-                    else {
-                    }
+                    //else {
+                    //    //c2.getControl().css({ 'width': 'calc(100% - 36px)' });
+                    //}
+                    //c2.getControl().height("26px");
+                    //}
+                    //else {
+                    //}
 
                     var btn = c2.getBtn(0);
                     // $td3.append(btn);
@@ -137,12 +137,12 @@
 
                 }
                 else {
-                    if (splitUI) {
-                        if (controll.attr('type') == "date") {
-                            controll.css({ 'width': '100%' });
-                        }
-                        //c2.getControl().height("26px");
+                    // if (splitUI) {
+                    if (controll.attr('type') == "date") {
+                        controll.css({ 'width': '100%' });
                     }
+                    //c2.getControl().height("26px");
+                    //  }
                 }
             }
         };
