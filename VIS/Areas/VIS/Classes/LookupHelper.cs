@@ -99,7 +99,8 @@ namespace VIS.Classes
                 mimg.SetBinaryData(buffer);
                 //mimg.SetImageURL(string.Empty);
             }
-            mimg.SetImageURL("Images/Thumb100x100");
+            //mimg.SetImageURL("Images/Thumb100x100");
+            mimg.SetImageURL(mimg.ImageFormat);
             //else
             //{
             //    //mimg.SetImageURL(HostingEnvironment.MapPath(@"~/Images/100by100"));//Image Saved in File System so instead of byteArray image Url will be set
