@@ -466,7 +466,7 @@ div.VIS_Pref_slide-show.pp {
 .VIS_Pref_btn-2, .VIS_Pref_Savebtn {
     padding: 10px 12px;
     background: rgba(var(--v-c-primary), 1);
-    color: rgba(var(--v-c-on-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1) !important;
     font-size: 14px;
     border: 0px;
     float: right;
