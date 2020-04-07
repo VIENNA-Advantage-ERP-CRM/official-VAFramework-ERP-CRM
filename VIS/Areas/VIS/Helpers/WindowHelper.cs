@@ -887,6 +887,7 @@ namespace VIS.Helpers
                 try
                 {
                     trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
+                    ctx.SetContext("VerifyVersionRecord", "Y");
                     int parentWinID = inn.AD_WIndow_ID;
                     PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
                     //	No Persistent Object
@@ -928,6 +929,7 @@ namespace VIS.Helpers
                 }
                 finally
                 {
+                    ctx.SetContext("VerifyVersionRecord", "N");
                     if (trxMas != null)
                     {
                         trxMas.Rollback();
