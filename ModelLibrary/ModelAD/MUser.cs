@@ -603,7 +603,7 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             log.SaveInfo("Aftersave start", Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
-            if (Util.GetValueOfBool(GetCtx().GetContext("VerifyVersionRecord")))
+            if (Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")) == "Y")
             {
                 return success;
             }
