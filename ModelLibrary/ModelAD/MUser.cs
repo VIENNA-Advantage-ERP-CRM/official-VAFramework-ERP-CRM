@@ -602,6 +602,11 @@ namespace VAdvantage.Model
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            log.SaveInfo("Aftersave start", Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
+            if (Util.GetValueOfBool(GetCtx().GetContext("VerifyVersionRecord")))
+            {
+                return success;
+            }
             log.SaveError("Aftersave start", "");
             UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetAD_User_ID(), GetName(), GetAD_Client_ID(), 0, IsLoginUser(), false);
             // Following Work is For Creating and Updating Yellowfin User if Yellowfin Module exists...................
