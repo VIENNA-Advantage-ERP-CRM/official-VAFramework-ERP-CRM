@@ -577,7 +577,7 @@ namespace VAdvantage.Model
                 // For From Container
                 string sqlContainerExistence = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( NotMatched, ' , '),',') NotMatched FROM
                       (SELECT NotMatched, ROW_NUMBER () OVER (ORDER BY NotMatched ) RN, COUNT (*) OVER () CNT  FROM
-                        (SELECT UNIQUE 
+                        (SELECT DISTINCT 
                         CASE  WHEN p.m_warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
                               WHEN p.M_Locator_ID <> il.M_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
                         FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
@@ -595,7 +595,7 @@ namespace VAdvantage.Model
                 // To Container
                 sqlContainerExistence = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( NotMatched, ' , '),',') NotMatched FROM
                       (SELECT NotMatched, ROW_NUMBER () OVER (ORDER BY NotMatched ) RN, COUNT (*) OVER () CNT  FROM
-                        (SELECT UNIQUE 
+                        (SELECT DISTINCT 
                         CASE  WHEN p.m_warehouse_id <> l.M_Warehouse_ID  THEN pr.Name || '_' || il.line
                               WHEN p.M_Locator_ID <> il.M_LocatorTo_ID THEN pr.Name || '_' || il.line  END AS NotMatched
                         FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
@@ -809,7 +809,7 @@ namespace VAdvantage.Model
                 // Update Last Inventory date on To Container in case of full container
                 sqlContainer.Append("UPDATE M_ProductContainer SET DateLastInventory = " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                     @" WHERE M_ProductContainer_ID IN 
-                                (SELECT UNIQUE NVL(Ref_M_ProductContainerTo_ID, 0) FROM M_MovementLine WHERE IsActive = 'Y' 
+                                (SELECT DISTINCT NVL(Ref_M_ProductContainerTo_ID, 0) FROM M_MovementLine WHERE IsActive = 'Y' 
                                   AND MoveFullContainer = 'Y' AND M_Movement_ID =  " + GetM_Movement_ID() + ") ");
                 DB.ExecuteQuery(sqlContainer.ToString(), null, Get_Trx());
 
@@ -2156,7 +2156,7 @@ namespace VAdvantage.Model
             List<ParentChildContainer> listParentChildContainer = new List<ParentChildContainer>();
             ParentChildContainer parentChildContainer = null;
             // Get all UNIQUE movement line 
-            DataSet dsMovementLine = DB.ExecuteDataset(@"SELECT UNIQUE ml.TargetContainer_ID AS ParentContainer, m.M_Warehouse_ID AS ToWarehouse,
+            DataSet dsMovementLine = DB.ExecuteDataset(@"SELECT DISTINCT ml.TargetContainer_ID AS ParentContainer, m.M_Warehouse_ID AS ToWarehouse,
                                                ml.M_LocatorTo_ID AS ToLocator,  ml.Ref_M_ProductContainerTo_ID AS ToContainer  
                                              FROM M_Movementline ml INNER JOIN M_Movement m ON ml.M_Movement_ID = m.M_Movement_ID 
                                              WHERE ml.MoveFullContainer = 'Y' AND ml.IsActive = 'Y' AND ml.M_Movement_ID = " + movementId, null, Get_Trx());

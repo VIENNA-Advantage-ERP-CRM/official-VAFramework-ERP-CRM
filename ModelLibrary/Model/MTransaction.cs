@@ -431,42 +431,51 @@ namespace VAdvantage.Model
         /// <writer>Manjot, Amit</writer>
         public static string CheckFutureDateRecord(DateTime? MovementDate, string TableName, int Record_ID, Trx trx)
         {
-            int retval = 0;
-            IDbConnection dbConnection = trx.GetConnection();
-            if (dbConnection != null)
+            int retval = Util.GetValueOfInt(DB.ExecuteScalar("SELECT CheckFutureDateRecordFunc(" + GlobalVariable.TO_DATE(MovementDate, true) + ", '" + TableName.ToUpper()
+                                                            + "', " + Record_ID + ") AS Records FROM Dual", null, trx));
+            if (retval > 0) // If Record Found
             {
-                // execute procedure for updating cost of components
-                OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Connection = (OracleConnection)dbConnection;
-                cmd.CommandText = "CheckFutureDateRecord";
-                cmd.Parameters.Add("p_movementdate", OracleDbType.Date, MovementDate, ParameterDirection.Input);
-                cmd.Parameters.Add("p_TableName", OracleDbType.Varchar2, TableName.ToUpper(), ParameterDirection.Input);
-                cmd.Parameters.Add("p_Record_ID", OracleDbType.Int32, Record_ID, ParameterDirection.Input);
-                cmd.Parameters.Add("results", OracleDbType.Int32, 4, ParameterDirection.Output);
-                cmd.BindByName = true;
-                try
-                {
-                    retval = cmd.ExecuteNonQuery();
-                    retval = Util.GetValueOfInt(cmd.Parameters[3].Value.ToString());
-                    if (retval > 0) // If Record Found
-                    {
-                        return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
-                    }
-                    else
-                    {// if no future date record found on MTransaction
-                        return string.Empty;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // If any exception comes then we will not complete the record
-                    log.Severe("Exception: {0} " + ex.Message);
-                    return ex.Message;
-                }
+                return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
             }
-            log.Severe("Connection Closed");
-            return Msg.GetMsg(Env.GetCtx(), "NoDBConnection");
+            else
+            {// if no future date record found on MTransaction
+                return string.Empty;
+            }
+            //IDbConnection dbConnection = trx.GetConnection();
+            //if (dbConnection != null)
+            //{
+            //    // execute procedure for updating cost of components
+            //    OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+            //    cmd.CommandType = CommandType.StoredProcedure;
+            //    cmd.Connection = (OracleConnection)dbConnection;
+            //    cmd.CommandText = "CheckFutureDateRecord";
+            //    cmd.Parameters.Add("p_movementdate", OracleDbType.Date, MovementDate, ParameterDirection.Input);
+            //    cmd.Parameters.Add("p_TableName", OracleDbType.Varchar2, TableName.ToUpper(), ParameterDirection.Input);
+            //    cmd.Parameters.Add("p_Record_ID", OracleDbType.Int32, Record_ID, ParameterDirection.Input);
+            //    cmd.Parameters.Add("results", OracleDbType.Int32, 4, ParameterDirection.Output);
+            //    cmd.BindByName = true;
+            //    try
+            //    {
+            //        retval = cmd.ExecuteNonQuery();
+            //        retval = Util.GetValueOfInt(cmd.Parameters[3].Value.ToString());
+            //        if (retval > 0) // If Record Found
+            //        {
+            //            return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
+            //        }
+            //        else
+            //        {// if no future date record found on MTransaction
+            //            return string.Empty;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // If any exception comes then we will not complete the record
+            //        log.Severe("Exception: {0} " + ex.Message);
+            //        return ex.Message;
+            //    }
+            //}
+            //log.Severe("Connection Closed");
+            //return Msg.GetMsg(Env.GetCtx(), "NoDBConnection");
         }
 
         public void UpdateStockSummary()

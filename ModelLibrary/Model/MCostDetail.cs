@@ -266,7 +266,7 @@ namespace VAdvantage.Model
             // get Cost element id of selected costing method
             if (costingMethod != "C")
             {
-                costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT UNIQUE M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
+                costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
                             AND CostingMethod = '" + costingMethod + "' AND AD_Client_ID = " + product.GetAD_Client_ID()));
             }
             else if (costingMethod == "C") // costing method on cost combination - Element line

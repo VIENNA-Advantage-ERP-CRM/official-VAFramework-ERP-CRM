@@ -187,7 +187,7 @@ namespace VIS.Classes
 
             queryList.VIS_47 = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID=@Param";
 
-            queryList.VIS_48 = "SELECT UNIQUE M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID=@Param";
+            queryList.VIS_48 = "SELECT DISTINCT M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID=@Param";
 
             queryList.VIS_49 = "SELECT  DiscountType FROM M_DiscountSchema WHERE M_DiscountSchema_ID=@Param1 AND IsActive='Y' AND AD_Client_ID=@Param2";
 

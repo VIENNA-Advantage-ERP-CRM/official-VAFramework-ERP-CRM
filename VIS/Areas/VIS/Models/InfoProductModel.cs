@@ -202,7 +202,7 @@ namespace VIS.Models
                 sqlWhere = MRole.GetDefault(ctx).AddAccessSQL(sqlWhere, tableName,
                                 MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 //DataSet data = DBase.DB.ExecuteDataset(sql, null, null);
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sqlWhere + " )", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sqlWhere + " ) t", null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
@@ -218,8 +218,8 @@ namespace VIS.Models
                         LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)
                         , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, w.M_Warehouse_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
                 sqlPaging = MRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-                sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, rownum AS row_num FROM 
-                        (" + sqlPaging + @") prd) WHERE row_num BETWEEN " + startPage + " AND " + endPage +
+                sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, row_number() over (order by prd.M_Product_ID) AS row_num FROM 
+                        (" + sqlPaging + @") prd) t WHERE row_num BETWEEN " + startPage + " AND " + endPage +
                         @") pp ON pp.M_Product_ID = p.M_Product_ID AND pp.M_AttriButeSetInstance_ID = NVL(pr.M_AttriButeSetInstance_ID,0) AND pp.C_UOM_ID = NVL(pr.C_UOM_ID,0) 
                         AND pp.M_Warehouse_ID = w.M_Warehouse_ID AND pp.M_PriceList_Version_ID = NVL(pr.M_PriceList_Version_ID,0)";
                 sql += sqlPaging + where;
@@ -1700,7 +1700,7 @@ namespace VIS.Models
         {
             StringBuilder query = new StringBuilder();
             decimal amountAfterBreak = amount;
-            query.Append(@"SELECT UNIQUE M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
+            query.Append(@"SELECT DISTINCT M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
             int productCategoryId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
             bool isCalulate = false;
 
