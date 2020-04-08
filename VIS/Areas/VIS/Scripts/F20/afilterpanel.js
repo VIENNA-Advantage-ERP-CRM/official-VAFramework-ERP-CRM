@@ -20,7 +20,7 @@
             '                     <i class="vis vis-arrow-up"></i>                             ' +
             '                 </a>                                                             ' +
             '             </div>                                                               ' +
-            '             <div id="collapseOne_' + winNo + '"" class="collapse show" data-parent="#accordion_' + winNo + '">' +
+            '             <div id="collapseOne_' + winNo + '"" class="collapse" data-parent="#accordion_' + winNo + '" >' +
             '                 <div class="card-body">                                          ' +
             '                     <div class="input-group vis-input-wrap">                     ' +
             '                         <div class="vis-control-wrap">                           ' +
@@ -483,7 +483,7 @@
         });
 
         bodyDiv.on("mouseover", function () {
-            if ((divStaticInner.height() > (divStatic.parent().height() - 340)) && (divStaticInner.height() + 15) >= divStatic.height()) {
+            if ((divStaticInner.height() > (divStatic.parent().height() - 540)) && (divStaticInner.height() + 15) >= divStatic.height()) {
                 btnViewAll.css('visibility', 'visible');
             }
             else {
@@ -1153,7 +1153,7 @@
 
         if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.prototype.EQUAL) {
             optr = VIS.Query.prototype.LIKE;
-            value += '%';
+            value = '%' + value + '%';
         }
 
         var whereCondition = '';
