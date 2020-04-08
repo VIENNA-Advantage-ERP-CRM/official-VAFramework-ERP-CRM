@@ -483,7 +483,9 @@
         });
 
         bodyDiv.on("mouseover", function () {
+
             if ((divStaticInner.height() > (divStatic.parent().height() - 60)) && (divStaticInner.height() + 15) >= divStatic.height()) {
+
                 btnViewAll.css('visibility', 'visible');
             }
             else {
