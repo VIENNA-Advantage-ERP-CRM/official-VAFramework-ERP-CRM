@@ -2727,8 +2727,11 @@ namespace VAdvantage.Model
                 }
             }
 
-            // set withholding tax amount
-            if (IsPrepayment() && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
+            /* set withholding tax amount
+             * While calculating the withholding amount, the system has to check whether the withholding amount 
+             * is zero or not equal to zero. If it's not equal to zero then the system will not calculate the withholding amount.
+             * After confirmation with Surya  / Ashish By Amit */
+            if (IsPrepayment() && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0 && GetWithholdingAmt() == 0)
             {
                 // check withholding applicable on Business Partner 
                 int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_ID) FROM C_BPartner WHERE NVL(C_Withholding_ID , 0) > 0 
