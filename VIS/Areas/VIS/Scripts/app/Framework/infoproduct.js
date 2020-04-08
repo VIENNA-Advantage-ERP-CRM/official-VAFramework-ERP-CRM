@@ -1866,6 +1866,10 @@
                         closeText: VIS.Msg.getMsg("close"),
                         close: onClosing
                     });
+                    if (validationCode != null && validationCode.length > 0) {
+                        validation = VIS.Env.parseContext(VIS.Env.getCtx(), WindowNo, validationCode, false, false);
+                    }
+
                     displayData(true, cmbPage.val());
                 }
             });
