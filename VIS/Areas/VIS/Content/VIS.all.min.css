@@ -1,4 +1,4 @@
-﻿/*** version 1.0.14.0***/
+﻿/*** version 1.0.15.0***/
 
 html, body {
     height: 100%;
@@ -5567,7 +5567,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 
 .vis-mas-ver-gridSection tbody {
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
     display: block;
     min-height: 125px;
@@ -5909,7 +5909,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
         flex: 1;
     }
 
-.vis-app-aform-root input:not([type="button"]),
+.vis-app-aform-root input,
 .vis-app-aform-root select,
 .VIS_Pref_content input:not([type="button"]) {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
@@ -5921,7 +5921,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
         min-height: 30px;
     }
 
-        .vis-app-aform-root input:not([type="button"]):focus,
+        .vis-app-aform-root input:focus,
         .vis-app-aform-root select:focus {
             border: 1px solid rgba(var(--v-c-primary), 1);
         }
@@ -6599,7 +6599,7 @@ div.VIS_Pref_slide-show.pp {
 .VIS_Pref_btn-2, .VIS_Pref_Savebtn {
     padding: 10px 12px;
     background: rgba(var(--v-c-primary), 1);
-    color: rgba(var(--v-c-on-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1) !important;
     font-size: 14px;
     border: 0px;
     float: right;

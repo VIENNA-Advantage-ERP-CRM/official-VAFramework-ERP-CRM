@@ -1914,7 +1914,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 
 .vis-fp-static-ctrlwrp {
     padding: 5px 10px 0px;
-    max-height: calc(100% - 340px);
+    max-height: calc(100% - 60px);
     overflow: hidden;
 }
 .vis-fp-static-ctrlwrp:hover{
@@ -1976,7 +1976,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 .vis-fp-currntrcrds {
     background: rgba(var(--v-c-secondary), .7);
     border-radius: .6rem;
-    padding: 3px 7px;
+    padding: 3px 0 3px 7px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1988,10 +1988,13 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 }
 .vis-fp-currntrcrds span {
     flex: 1;
+    color: rgba(var(--v-c-primary), 1);
 }
 .vis-fp-currntrcrds i {
     font-size: .6rem;
     cursor: pointer;
+    padding: 5px 7px;
+    color: rgba(var(--v-c-primary), 1);
 }
 .vis-fp-currntrcrds:hover {
     background: rgba(var(--v-c-primary), .1);

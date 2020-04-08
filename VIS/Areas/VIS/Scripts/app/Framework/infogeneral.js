@@ -405,6 +405,9 @@
                 close: onClosing,
                 closeText: VIS.Msg.getMsg("close")
             });
+            if (validationCode != null && validationCode != undefined && validationCode.length > 0) {
+                validationCode = VIS.Env.parseContext(VIS.Env.getCtx(), WindowNo, validationCode, false, false);
+            }
             displayData(true, cmbPage.val());
 
 
