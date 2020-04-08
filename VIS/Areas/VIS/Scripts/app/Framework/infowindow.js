@@ -700,7 +700,9 @@
                 closeText: VIS.Msg.getMsg("close"),
                 close: onClosing
             });
-
+            if (validationCode != null && validationCode != undefined && validationCode.length > 0) {
+                validationCode = VIS.Env.parseContext(VIS.Env.getCtx(), windowNo, validationCode, false, false);
+            }
             displayData(true, cmbPage.val());
         };
 
