@@ -124,6 +124,7 @@
         var $spnAdvSearch = null;
         var $btnClose = null;
         var $spnTitle = null;
+        var $spanSetting = null;
         /***END Tab panel**/
 
         var tabItems = [], tabLIObj = {};
@@ -191,12 +192,17 @@
             //Filter Panel
             $btnFilter = $root.find("span.vis-ad-w-p-tb-rc-action");
             $fltrPanel = $root.find('.vis-ad-w-p-filterpnl').hide();
-
+            $spanSetting = $root.find('.vis-ad-w-p-setting');
             $fltrPnlBody = $fltrPanel.find('.vis-fp-bodywrap');
             $fltrPanel.find('.vis-fp-header h4').text(VIS.Msg.getMsg("Filter"));
             $btnFPClose = $fltrPanel.find('.vis-fp-header .vis-mark');
 
+            setToolTipMessages();
+        };
 
+         var setToolTipMessages = function () {
+            $btnFilter.attr('title', VIS.Msg.getMsg('FilterRecord'));
+             $spanSetting.attr('title', VIS.Msg.getMsg('Settings'));
         };
 
         this.createSearchAutoComplete = function (text) {
@@ -301,6 +307,8 @@
                 $divTabControl.addClass("vis-ad-w-p-t-c-mob");
             }
             self.vTabbedPane.finishLayout(VIS.Application.isMobile);
+
+            setToolTipMessages();
         };
         /* Tool bar */
 

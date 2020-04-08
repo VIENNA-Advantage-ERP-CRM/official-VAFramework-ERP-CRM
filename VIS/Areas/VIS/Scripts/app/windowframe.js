@@ -4333,7 +4333,7 @@
 
         VIS.ADialog.confirm("DeleteRecord?", true, "", "Confirm", function (result) {
             if (result) {
-                thisPanel.curGC.dataDelete();
+                thisPanel.curGC.dataDeleteAsync();
             }
         });
 
@@ -7311,6 +7311,22 @@
         this.refreshTabPanelData(this.gTab.getRecord_ID());
         this.dynamicDisplay(-1);
         return retValue;
+    };
+
+    VIS.GridController.prototype.dataDeleteAsync = function () {
+        //var retValue = this.gTab.dataDeleteAsync(this.vTable.getSelection(true));
+        //this.refreshTabPanelData(this.gTab.getRecord_ID());
+        //this.dynamicDisplay(-1);
+        //return retValue;
+        this.aPanel.setBusy(true);
+        var that = this;
+        that.gTab.getTableModel().dataDeleteAsync(that.vTable.getSelection(true), that.gTab.currentRow).then(function (info) {
+            that.gTab.setCurrentRow(that.gTab.currentRow, true);
+            that.refreshTabPanelData(that.gTab.getRecord_ID());
+            that.dynamicDisplay(-1);
+            that.aPanel.setBusy(false);
+        });
+
     };
 
     /**

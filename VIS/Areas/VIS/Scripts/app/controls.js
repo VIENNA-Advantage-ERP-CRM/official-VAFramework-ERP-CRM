@@ -5369,21 +5369,22 @@
         };
 
         this.setReadOnly = function (readOnly) {
-            if (!isMandatory) {
-                readOnly = true;
-                $ctrl.css("background-color", "#f8f8f8");
-            }
-            else if (isMandatory && self.value) {
-                readOnly = true;
-                $ctrl.css("background-color", "#f8f8f8");
-            }
-            this.isReadOnly = readOnly;
-            $ctrl.prop('disabled', readOnly ? true : false);
-            if (readOnly) {
-                $btnAmtDiv.css("opacity", .7);
-            } else {
-                $btnAmtDiv.css("opacity", 1);
-            }
+            //if (!isMandatory) {
+            //    //readOnly = true;
+            //    $ctrl.css("background-color", "#f8f8f8");
+            //}
+            //else if (isMandatory && self.value) {
+            //    //readOnly = true;
+            //    $ctrl.css("background-color", "#f8f8f8");
+            //}
+            //this.isReadOnly = readOnly;
+            //$ctrl.prop('disabled', readOnly ? true : false);
+            //if (readOnly) {
+            //    $btnAmtDiv.css("opacity", .7);
+            //} else {
+            //    $btnAmtDiv.css("opacity", 1);
+            //}
+            $ctrl.css("background-color", "#f8f8f8");
             this.setBackground(readOnly);
         };
 
