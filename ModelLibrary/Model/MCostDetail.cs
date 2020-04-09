@@ -271,12 +271,12 @@ namespace VAdvantage.Model
             }
             else if (costingMethod == "C") // costing method on cost combination - Element line
             {
-                string sql = @"SELECT  cel.m_ref_costelement
+                string sql = @"SELECT  cel.M_Ref_CostElement
                                     FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID  = cel.M_CostElement_ID
                                     WHERE ce.AD_Client_ID   =" + product.GetAD_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.M_CostElement_ID = " + costElementId + @"
-                                    AND m_ref_costelement  IN   (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  )
+                                    AND  CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  )
                                     ORDER BY ce.M_CostElement_ID";
                 costElementId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             }
@@ -3827,7 +3827,7 @@ namespace VAdvantage.Model
 
             // Get Cost element of Cost Combination type
             sql = @"SELECT ce.M_CostElement_ID ,  ce.Name ,  cel.lineno ,  cel.m_ref_costelement , 
-                      (SELECT CASE  WHEN costingmethod IS NOT NULL THEN 1  ELSE 0 END  FROM m_costelement WHERE m_costelement_id = cel.m_ref_costelement ) AS iscostMethod 
+                      (SELECT CASE  WHEN costingmethod IS NOT NULL THEN 1  ELSE 0 END  FROM m_costelement WHERE m_costelement_id = CAST(cel.M_Ref_CostElement AS INTEGER) ) AS iscostMethod 
                             FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID = cel.M_CostElement_ID "
                           + "WHERE ce.AD_Client_ID=" + GetAD_Client_ID()
                           + " AND ce.IsActive='Y' AND ce.CostElementType='C' AND cel.IsActive='Y' ";
