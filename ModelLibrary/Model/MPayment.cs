@@ -6,22 +6,20 @@
  * Veena Pandey     23-June-2009 
  ******************************************************/
 
+using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
-//using System.Linq;
-using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+//using System.Linq;
+using System.Text;
 using VAdvantage.Classes;
-using VAdvantage.Utility;
 using VAdvantage.DataBase;
-using VAdvantage.Common;
-using System.Windows.Forms;
-using VAdvantage.Process;
 using VAdvantage.Logging;
+using VAdvantage.Process;
 using VAdvantage.ProcessEngine;
-using Oracle.ManagedDataAccess.Client;
+using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
@@ -903,7 +901,7 @@ namespace VAdvantage.Model
                 {
                     if (string.IsNullOrEmpty(GetCheckNo()))
                     {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_PayMetAndPayTermSame"));
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
                 }
