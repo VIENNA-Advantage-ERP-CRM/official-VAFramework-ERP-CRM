@@ -903,6 +903,7 @@ namespace VAdvantage.Model
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
+
                     }
                 }
                 // when post dated check module is not installed then system check Cheque date can not be greater than Current Date
