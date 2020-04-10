@@ -235,16 +235,30 @@ namespace VAdvantage.DBPort
             if (retValue.IndexOf("AND ROWNUM=1") > 1)
             {
                 int rownum = retValue.IndexOf("AND ROWNUM=1");
-                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                int indAnd = rownum + 12;
+                string rnumStr = retValue.Substring(indAnd);
+                if (rnumStr.Contains("AND"))
                 {
-                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=1", "");
-                    return convert + retValue + " LIMIT 1";
+                    indAnd = rnumStr.IndexOf("AND");
                 }
                 else
                 {
-                    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=1", " LIMIT 1");
-                    return convert + retValue;
+                    indAnd = rnumStr.Length;
                 }
+
+                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT 1" + rnumStr.Substring(0, indAnd);
+                //int rownum = retValue.IndexOf("AND ROWNUM=1");
+                //if (retValue.Substring(0, rownum).Contains("WHERE"))
+                //{
+                //    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=1", "");
+                //    return convert + retValue + " LIMIT 1";
+                //}
+                //else
+                //{
+                //    retValue = Utility.Util.Replace(retValue, "AND ROWNUM=1", " LIMIT 1");
+                //    return convert + retValue;
+                //}
 
             }
             else if (retValue.IndexOf("AND ROWNUM= 1") > 1)
@@ -293,16 +307,19 @@ namespace VAdvantage.DBPort
             else if (retValue.IndexOf("ROWNUM=1") > 1)
             {
                 int rownum = retValue.IndexOf("ROWNUM=1");
-                if (retValue.Substring(0, rownum).Contains("WHERE"))
+                int indAnd = rownum + 8;
+                string rnumStr = retValue.Substring(indAnd);                
+
+                if (rnumStr.Contains("AND"))
                 {
-                    retValue = Utility.Util.Replace(retValue, "ROWNUM=1", "");
-                    return convert + retValue + " LIMIT 1";
+                    indAnd = rnumStr.IndexOf("AND");
                 }
                 else
                 {
-                    retValue = Utility.Util.Replace(retValue, "ROWNUM=1 ", " LIMIT 1");
-                    return convert + retValue;
+                    indAnd = rnumStr.Length;
                 }
+                retValue = Utility.Util.Replace(retValue.Substring(0, rownum), "WHERE", "") + rnumStr.Substring(indAnd);
+                return convert + retValue + " LIMIT 1";
             }
 
             else if (retValue.IndexOf("AND ROWNUM=-1") > 1)
