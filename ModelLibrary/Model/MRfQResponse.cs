@@ -229,7 +229,7 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// 	Send RfQ
+        /// 	Send RfQ, mail subject and body from mail template 
         /// </summary>
         /// <returns>true if RfQ is sent per email.</returns>
         public bool SendRfQ()
@@ -237,28 +237,33 @@ namespace VAdvantage.Model
             try
             {
                 MUser to = MUser.Get(GetCtx(), GetAD_User_ID());
+                MClient client = MClient.Get(GetCtx());
+                MMailText mtext = new MMailText(GetCtx(), GetRfQ().GetR_MailText_ID(), Get_TrxName());
+
                 if (to.Get_ID() == 0 || to.GetEMail() == null || to.GetEMail().Length == 0)
                 {
                     log.Log(Level.SEVERE, "No User or no EMail - " + to);
                     return false;
                 }
-                MClient client = MClient.Get(GetCtx());
-                //
-                String message = GetDescription();
-                if (message == null || message.Length == 0)
+
+                // Check if mail template is set for RfQ window, if not then get from RfQ Topic window.
+                if (mtext.GetR_MailText_ID() == 0)
                 {
-                    message = GetHelp();
+                    MRfQTopic mRfQTopic = new MRfQTopic(GetCtx(), GetRfQ().GetC_RfQ_Topic_ID(), Get_TrxName());
+                    if (mRfQTopic.GetC_RfQ_Topic_ID() > 0)
+                    {
+                        mtext = new MMailText(GetCtx(), mRfQTopic.GetR_MailText_ID(), Get_TrxName());
+                    }
                 }
-                else if (GetHelp() != null)
-                {
-                    message += "\n" + GetHelp();
-                }
-                if (message == null)
-                {
-                    message = GetName();
-                }
-                //
-                EMail email = client.CreateEMail(to.GetEMail(), to.GetName(), "RfQ: " + GetName(), message);
+
+                //Replace the email template constants with tables values.
+                StringBuilder message = new StringBuilder();
+                mtext.SetPO(GetRfQ(), true);
+                message.Append(mtext.GetMailText(true).Equals(string.Empty) ? "** No Email Body" : mtext.GetMailText(true));
+
+                String subject = mtext.GetMailHeader().Equals(string.Empty) ? "** No Subject" : mtext.GetMailHeader(); ;
+
+                EMail email = client.CreateEMail(to.GetEMail(), to.GetName(), subject, message.ToString());
                 if (email == null)
                 {
                     return false;
@@ -352,7 +357,7 @@ namespace VAdvantage.Model
                             continue;
                         }
                         Decimal? amt = qty.GetNetAmt();
-                        if ( Env.ZERO.CompareTo(amt) < 0)
+                        if (Env.ZERO.CompareTo(amt) < 0)
                         {
                             validAmt = true;
                             break;

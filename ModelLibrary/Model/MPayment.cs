@@ -903,7 +903,7 @@ namespace VAdvantage.Model
                 {
                     if (string.IsNullOrEmpty(GetCheckNo()))
                     {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_PayMetAndPayTermSame"));
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
                 }
