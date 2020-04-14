@@ -5268,7 +5268,7 @@ namespace VAdvantage.Model
         private int GetExpectedLandedCostId(MLandedCost lc, int C_OrderLine_ID)
         {
             int C_ExpectedCost_ID = 0;
-            String sql = @"Select Unique C_Expectedcost.C_ExpectedCost_ID From C_Expectedcost 
+            String sql = @"Select Distinct C_Expectedcost.C_ExpectedCost_ID From C_Expectedcost 
                             INNER JOIN C_Expectedcostdistribution ON C_Expectedcost.C_Expectedcost_Id = C_Expectedcostdistribution.C_Expectedcost_Id
                             WHERE C_Expectedcost.M_Costelement_Id = " + lc.GetM_CostElement_ID() + @"
                             AND C_Expectedcostdistribution.C_OrderLine_ID = " + C_OrderLine_ID;
