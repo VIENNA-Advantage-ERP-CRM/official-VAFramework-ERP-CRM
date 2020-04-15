@@ -50,6 +50,8 @@ namespace VIS.Models
 
         public bool ResetPwd { get; set; }
 
+        public bool TwoFA { get; set; }
+
     }
 
     /// <summary>
