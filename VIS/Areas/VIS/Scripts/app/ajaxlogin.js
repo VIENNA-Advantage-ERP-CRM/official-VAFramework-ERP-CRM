@@ -66,7 +66,10 @@
                     }
                     else if (json.ctx && json.ctx.ResetPwd)
                     {
-                        showLoginStep1();
+                        showLoginResetPwd();
+                    }
+                    else if (json.ctx && json.ctx.TwoFA) {
+                        showLogin2FA();
                     }
                     else if (json.success) {
                         window.location = json.redirect || location.href;
@@ -109,9 +112,16 @@
         $("#login2Panel").find("ul").empty();
     };
 
-    var showLoginStep1 = function () {
+    var showLoginResetPwd = function () {
         $('#login-form-1').hide();
+        $('#login-form-3').hide();
         $('#login-form-2').show();
+    };
+
+    var showLogin2FA = function () {
+        $('#login-form-1').hide();
+        $('#login-form-2').hide();
+        $('#login-form-3').show();
     };
 
     var showLogin = function (e) {

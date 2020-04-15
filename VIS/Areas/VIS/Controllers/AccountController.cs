@@ -26,9 +26,6 @@ namespace VIS.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult JsonLogin(LoginModel model, string returnUrl)
         {
-
-
-
             if (ModelState.IsValid)
             {
                 VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
