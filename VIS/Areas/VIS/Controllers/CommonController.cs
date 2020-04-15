@@ -881,6 +881,14 @@ namespace VIS.Controllers
                         item.M_InOut_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
                         item.C_Invoice_ID_K = 0;
                     }
+
+                    //Product search key added
+                    if (data.Tables[0].Rows[i]["m_product_id"] != null && Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) > 0)
+                    {
+                        qry = "SELECT Value FROM M_PRODUCT WHERE M_PRODUCT_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]);
+                        item.M_Product_SearchKey = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                    }
+
                     item.QuantityPending = item.QuantityEntered;
                     item.C_UOM_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_uom_id"]);
                     item.M_Product_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]);
@@ -2084,6 +2092,8 @@ namespace VIS.Controllers
             public bool IsAdvance { get; set; }
             public int C_InvoicePaymentTerm_ID { get; set; }
             public bool IsInvoicePTAdvance { get; set; }
+            public string M_Product_SearchKey { get; set; }
+            
         }
 
         public class PageSetting
