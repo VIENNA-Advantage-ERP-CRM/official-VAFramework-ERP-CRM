@@ -726,6 +726,8 @@ namespace VIS.Controllers
                     item.C_UOM_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["uom"]);
                     item.M_Product_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["product"]);
                     item.M_AttributeSetInstance_ID = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
+                    //Product search key added
+                    item.M_Product_SearchKey= Util.GetValueOfString(data.Tables[0].Rows[i]["productsearchkey"]); 
 
                     //
                     if (data.Tables[0].Columns.Contains("C_PaymentTerm_ID"))
@@ -880,7 +882,8 @@ namespace VIS.Controllers
                         item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
                         item.M_InOut_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
                         item.C_Invoice_ID_K = 0;
-                    }
+                    }                 
+
                     item.QuantityPending = item.QuantityEntered;
                     item.C_UOM_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_uom_id"]);
                     item.M_Product_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]);
@@ -2084,6 +2087,7 @@ namespace VIS.Controllers
             public bool IsAdvance { get; set; }
             public int C_InvoicePaymentTerm_ID { get; set; }
             public bool IsInvoicePTAdvance { get; set; }
+            public string M_Product_SearchKey { get; set; }
         }
 
         public class PageSetting
@@ -3420,7 +3424,7 @@ namespace VIS.Controllers
             DataRow dr = null;
             if (dsRec != null && dsRec.Tables[0].Rows.Count > 0)
                 dr = dsRec.Tables[0].Rows[0];
-           
+
             StringBuilder sbColName = new StringBuilder("");
             StringBuilder sbColValue = new StringBuilder("");
             for (int i = 0; i < dsColumns.Tables[0].Rows.Count; i++)
