@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Web;
+using VAdvantage.Classes;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
@@ -17,6 +18,8 @@ namespace VIS.Helpers
     /// </summary>
     public class LoginHelper
     {
+        /**	Cache					*/
+        private static CCache<string, int> cache = new CCache<string, int>("LoginHelper", 30, 60);
         /// <summary>
         /// return is credential provide by user is right or not
         /// </summary>
@@ -53,11 +56,14 @@ namespace VIS.Helpers
                 isLDAP = true;
                 // if not authenticated, use AD_User as backup
             }
+            GetSysConfigForlogin();
+            int fCount = cache["FailedLoginCount"];
+            int pwdValidity = cache["PwdValidUpto"];
 
 
 
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
-               .Append(" u.ConnectionProfile, u.Password ")	//	4,5
+               .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn ")	//	4,5
                .Append("FROM AD_User u")
                .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
@@ -104,10 +110,22 @@ namespace VIS.Helpers
             if (!dr.Read())		//	no record found
             {
                 dr.Close();
+                param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+                DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
                 return false;
             }
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
+            if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
+            {
+                throw new Exception("MaxFailedLoginAttempts");
+            }
+            DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
+
+            if (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)
+            {
+                model.Login1Model.ResetPwd = true;
+            }
 
             roles = new List<KeyNamePair>(); //roles
 
@@ -130,6 +148,8 @@ namespace VIS.Helpers
 
             dr.Close();
             model.Login1Model.AD_User_ID = AD_User_ID;
+
+
 
 
             IDataReader drLogin = null;
@@ -211,6 +231,27 @@ namespace VIS.Helpers
                 }
             }
             return true;
+        }
+
+        private static void GetSysConfigForlogin()
+        {
+            int fCount = cache["FailedLoginCount"];
+            if (fCount == 0)
+            {
+                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('','') ");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        cache[ds.Tables[0].Rows[i]["Name"].ToString()] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["Value"]);
+                    }
+                }
+                else
+                {
+                    cache["FailedLoginCount"] = 5;
+                    cache["PwdValidUpto"] = 3;
+                }
+            }
         }
 
         /// <summary>
