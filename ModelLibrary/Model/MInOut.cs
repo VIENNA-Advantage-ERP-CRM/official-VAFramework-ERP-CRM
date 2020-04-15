@@ -5526,7 +5526,7 @@ namespace VAdvantage.Model
                           WHERE il.M_InOutLine_ID = (SELECT M_InOutLine_ID FROM M_InOutLine mil WHERE mil.M_InOut_ID = " + M_Inout_ID + @"
                           AND mil.M_InOutLine_ID = il.M_InOutLine_ID) AND il.IsActive = 'Y' AND i.DocStatus NOT IN ('RE' , 'VO')
                           UNION ALL
-                          SELECT COUNT(o.C_Order_ID) AS Result FROM C_Order o WHERE o.Orig_InOut_ID = " + M_Inout_ID + @" AND o.DocStatus NOT IN ('RE' , 'VO')) linkedDocumentAgainst ";
+                          SELECT COUNT(o.C_Order_ID) AS Result FROM C_Order o WHERE o.Orig_InOut_ID = " + M_Inout_ID + @" AND o.DocStatus NOT IN ('RE' , 'VO')) t";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
             {
                 return false;

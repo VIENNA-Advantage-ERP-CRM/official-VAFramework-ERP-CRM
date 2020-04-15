@@ -115,12 +115,11 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder(
                 @"WITH mt AS (SELECT m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, SUM(CurrentQty) AS CurrentQty FROM
-                (SELECT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, SUM(t.CurrentQty) keep (dense_rank last
-                ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
+                (SELECT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID 
+                ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
                 WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
                 @" AND t.AD_Client_ID = " + _inventory.GetAD_Client_ID() + " AND l.AD_Org_ID = " + _inventory.GetAD_Org_ID() +
-                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @" GROUP BY t.M_Product_ID,l.M_Warehouse_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID) 
-                GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID )
+                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @") t GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID )
                 SELECT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID, mt.currentqty AS Qty, s.QtyOnHand, p.M_AttributeSet_ID FROM M_Product p 
                 INNER JOIN M_Storage s ON (s.M_Product_ID=p.M_Product_ID) INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) 
                 JOIN mt ON (mt.M_Product_ID = s.M_Product_ID AND mt.M_Locator_ID = s.M_Locator_ID AND mt.M_AttriButeSetInstance_ID = NVL(s.M_AttriButeSetInstance_ID,0))
@@ -129,13 +128,12 @@ namespace VAdvantage.Process
             else
             {
                 sql = new StringBuilder(@"WITH mt AS (SELECT m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, SUM(CurrentQty) AS CurrentQty, M_ProductContainer_ID
-                      FROM (SELECT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, NVL(t.M_ProductContainer_ID , 0) AS M_ProductContainer_ID,
-                          SUM(t.containercurrentqty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty
-                        FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
-                         WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
+                FROM (SELECT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, NVL(t.M_ProductContainer_ID , 0) AS M_ProductContainer_ID,
+                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
+                FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
+                WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
                 @" AND t.AD_Client_ID = " + _inventory.GetAD_Client_ID() + " AND l.AD_Org_ID = " + _inventory.GetAD_Org_ID() +
-                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @" GROUP BY t.M_Product_ID,l.M_Warehouse_ID, t.M_Locator_ID,t.M_ProductContainer_ID, t.M_AttributeSetInstance_ID) 
-                GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, M_ProductContainer_ID ) 
+                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @") t GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, M_ProductContainer_ID ) 
                 SELECT DISTINCT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID, mt.currentqty AS Qty, mt.M_ProductContainer_ID, p.M_AttributeSet_ID FROM M_Product p 
                 INNER JOIN M_ContainerStorage s ON (s.M_Product_ID=p.M_Product_ID) INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) 
                 JOIN mt ON (mt.M_Product_ID = s.M_Product_ID AND mt.M_Locator_ID = s.M_Locator_ID AND mt.M_AttriButeSetInstance_ID = NVL(s.M_AttriButeSetInstance_ID,0) AND mt.M_ProductContainer_ID = NVL(s.M_ProductContainer_ID , 0))
@@ -187,7 +185,7 @@ namespace VAdvantage.Process
                 sql.Append(" AND mt.currentqty " + _qtyRange + " 0");
             }
 
-            int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_Product_ID) FROM ( " + sql.ToString() + " )", null, null));
+            int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_Product_ID) FROM ( " + sql.ToString() + " ) t", null, null));
             int pageSize = 500;
             int TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
             StringBuilder insertSql = new StringBuilder();
