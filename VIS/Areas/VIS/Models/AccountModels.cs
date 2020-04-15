@@ -48,6 +48,8 @@ namespace VIS.Models
 
        public int AD_User_ID { get; set; }
 
+        public bool ResetPwd { get; set; }
+
     }
 
     /// <summary>

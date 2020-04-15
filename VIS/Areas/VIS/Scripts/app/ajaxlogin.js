@@ -64,6 +64,10 @@
                         $imgbusy1.css('display', 'none');
 
                     }
+                    else if (json.ctx && json.ctx.ResetPwd)
+                    {
+                        showLoginStep1();
+                    }
                     else if (json.success) {
                         window.location = json.redirect || location.href;
                         localStorage.setItem("vis_login_langCode", $cmbLang.val());
@@ -103,6 +107,11 @@
         $cmbOrg.empty();
         $cmbWarehouse.empty();
         $("#login2Panel").find("ul").empty();
+    };
+
+    var showLoginStep1 = function () {
+        $('#login-form-1').hide();
+        $('#login-form-2').show();
     };
 
     var showLogin = function (e) {
@@ -321,4 +330,5 @@
 
 (function () {
     $("#login2Panel").hide();
+    $('#login-form-2').hide();
 })();

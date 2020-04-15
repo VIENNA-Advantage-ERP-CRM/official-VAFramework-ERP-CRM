@@ -11,7 +11,7 @@
                 <img src="~/Areas/VIS/Images/login/lock.png" alt="">
             </div>
 
-            <div class="login-form">
+            <div id="login-form-1" class="login-form">
 
                 <div class="input-row">
                     <label class="input-icon">
@@ -91,6 +91,24 @@ new SelectList(ViewBag.Languages,"Key","Name"),       new { id = "cmbLang" })
                 </div>
                 <!-- end of input-row -->
                 @Html.ValidationSummary()
+            </div>
+
+            <div id="login-form-2">
+                <div class="input-row">
+                    <label class="input-icon">
+                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                    </label>
+                    <input data-val="true" data-val-required="UserPwdError" id="txtPwd" name="Login1Model.Password" type="password" placeholder="Old Password">
+                    <span class="field-validation-valid" data-valmsg-for="Login1Model.Password" data-valmsg-replace="true"></span>
+                </div>
+                <div class="input-row">
+                    <label class="input-icon">
+                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                    </label>
+                    <input data-val="true" data-val-required="UserPwdError" id="txtPwd" name="Login1Model.Password" type="password" placeholder="New Password">
+                    <span class="field-validation-valid" data-valmsg-for="Login1Model.Password" data-valmsg-replace="true"></span>
+                </div>
+                <a>Skip</a>
             </div>
             <!-- end of login-form -->
         </div>

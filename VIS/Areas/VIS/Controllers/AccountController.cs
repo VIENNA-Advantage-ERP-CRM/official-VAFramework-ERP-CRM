@@ -39,6 +39,10 @@ namespace VIS.Controllers
                     // LoginModel loginModel = null;
                     if (LoginHelper.Login(model, out  roles))
                     {
+                        if (model.Login1Model.ResetPwd)
+                        {
+                            return Json(new { step2 = false, redirect = returnUrl, role = roles, ctx = model.Login1Model });
+                        }
                         if (model.Login2Model != null)
                         {
                             //loginModel.Login1Model = model.Login1Model;
