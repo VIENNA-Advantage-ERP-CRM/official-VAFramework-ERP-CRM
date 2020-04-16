@@ -4,7 +4,7 @@
 {
     @Html.AntiForgeryToken()
 
-    
+
     <div class="login-wrap">
         <div class="login-content">
             <div class="lock">
@@ -89,48 +89,54 @@ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
                 </div>
                 <input name="Login1Model.RememberMe" type="hidden" value="false">
                 <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
-                <div class="login-button">
-                    <input class="btn-login" id="btnLogin1" type="submit" value="Log in" />
-                </div>
-                <!-- end of input-row -->
-                @Html.ValidationSummary()
+
             </div>
 
-            <div id="login-form-2">
+            <div id="login-form-2" class="login-form">
                 <div class="input-row">
                     <label class="input-icon">
                         <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
-                    <input data-val="true" data-val-required="UserPwdError" id="txtPwd" name="Login1Model.Password" type="password" placeholder="Old Password">
-                    <span class="field-validation-valid" data-valmsg-for="Login1Model.Password" data-valmsg-replace="true"></span>
+                    @Html.PasswordFor(m => m.Login1Model.OldPassword, new { id = "txtOldPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.OldPassword)
                 </div>
                 <div class="input-row">
                     <label class="input-icon">
                         <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
-                    <input data-val="true" data-val-required="UserPwdError" id="txtPwd" name="Login1Model.Password" type="password" placeholder="New Password">
-                    <span class="field-validation-valid" data-valmsg-for="Login1Model.Password" data-valmsg-replace="true"></span>
+                    @Html.PasswordFor(m => m.Login1Model.NewPassword, new { id = "txtNewPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.NewPassword)
                 </div>
-                <a>Skip</a>
+                @Html.HiddenFor(m => m.Login1Model.ResetPwd, new { id = "ResetPwd" })
+                @Html.HiddenFor(m => m.Login1Model.TwoFA, new { id = "TwoFA" })
             </div>
 
-            <div id="login-form-3">
+            <div id="login-form-3" class="login-form">
                 <div class="input-row">
                     <label class="input-icon">
                         <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
-                    <input data-val="true" data-val-required="UserPwdError" id="txtPwd" name="Login1Model.Password" type="password" placeholder="Old Password">
-                    <span class="field-validation-valid" data-valmsg-for="Login1Model.Password" data-valmsg-replace="true"></span>
+                    @Html.PasswordFor(m => m.Login1Model.OldPassword, new { id = "txtOldPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.OldPassword)
                 </div>
                 <div class="input-row">
                     <label class="input-icon">
                         <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
-                    <input data-val="true" data-val-required="UserPwdError" id="txtPwd" name="Login1Model.Password" type="password" placeholder="New Password">
-                    <span class="field-validation-valid" data-valmsg-for="Login1Model.Password" data-valmsg-replace="true"></span>
+                    @Html.PasswordFor(m => m.Login1Model.NewPassword, new { id = "txtNewPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.NewPassword)
                 </div>
-                <a>Skip</a>
+                @Html.HiddenFor(m => m.Login1Model.ResetPwd, new { id = "ResetPwd" })
+                @Html.HiddenFor(m => m.Login1Model.TwoFA, new { id = "TwoFA" })
             </div>
+
+
+            <div class="login-button">
+                <input class="btn-login" id="btnLogin1" type="submit" value="Log in" />
+            </div>
+            <!-- end of input-row -->
+            @Html.ValidationSummary()
+
             <!-- end of login-form -->
         </div>
         <!-- end of login-content -->
@@ -141,7 +147,7 @@ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
 
     </div>
     <!-- end of login-wrap -->
-    
+
 }
 
 

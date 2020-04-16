@@ -12,6 +12,7 @@ using VIS.Filters;
 using VAdvantage.Utility;
 using System.ComponentModel;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace VIS.Controllers
 {
@@ -33,21 +34,36 @@ namespace VIS.Controllers
                 try
                 {
                     List<KeyNamePair> roles = null;
-                    // LoginModel loginModel = null;
-                    if (LoginHelper.Login(model, out  roles))
+                    roles = (List<KeyNamePair>)TempData["roles"];
+                    model.Login2Model=(Login2Model) TempData["Login2Model"];
+                    if (model.Login1Model.ResetPwd)
                     {
-                        if (model.Login1Model.ResetPwd)
+                        //Rst Pwd Functioanility here.
+                        model.Login1Model.ResetPwd = false;
+                        return Login(model, returnUrl, roles);
+                    }
+                    else if (model.Login1Model.TwoFA)
+                    {
+
+                        // Two Here.
+                        model.Login1Model.TwoFA = false;
+                        return Login(model, returnUrl, roles);
+                    }
+                    // LoginModel loginModel = null;
+
+                    // Pehla client toh new pwd and old pwd le k aane. ohde lai model vihc ropert bna k client side te set karvana pena.
+                    // and Baki ResetPwd and TwoFA nu hidden field vich rakhna pena.
+
+
+                    if (LoginHelper.Login(model, out roles))
+                    {
+                        TempData["roles"] = roles;
+                        TempData["Login2Model"] = model.Login2Model;
+                        if (model.Login1Model.ResetPwd || model.Login1Model.TwoFA)
                         {
-                            return Json(new { step2 = false, redirect = returnUrl, role = roles, ctx = model.Login1Model });
+                            return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
                         }
-                        if (model.Login2Model != null)
-                        {
-                            //loginModel.Login1Model = model.Login1Model;
-                            return JsonLogin2(model, "");
-                        }
-                        //System.Threading.Thread.Sleep(10000);
-                        //FormsAuthentication.SetAuthCookie(model.Login1Model.UserName, false);
-                        return Json(new { step2 = true, redirect = returnUrl, role = roles, ctx = model.Login1Model });
+                        return Login(model, returnUrl, roles);
                     }
                     else
                     {
@@ -62,6 +78,18 @@ namespace VIS.Controllers
 
             // If we got this far, something failed
             return Json(new { errors = GetErrorsFromModelState() });
+        }
+        [NonAction]
+        private JsonResult Login(LoginModel model, string returnUrl, List<KeyNamePair> roles)
+        {
+            if (model.Login2Model != null)
+            {
+                //loginModel.Login1Model = model.Login1Model;
+                return JsonLogin2(model, "");
+            }
+            //System.Threading.Thread.Sleep(10000);
+            //FormsAuthentication.SetAuthCookie(model.Login1Model.UserName, false);
+            return Json(new { step2 = true, redirect = returnUrl, role = roles, ctx = model.Login1Model });
         }
 
         [AllowAnonymous]

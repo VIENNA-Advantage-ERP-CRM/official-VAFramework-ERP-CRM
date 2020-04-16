@@ -29,10 +29,9 @@ namespace VIS.Helpers
         /// <returns>true if athenicated</returns>
         public static bool Login(LoginModel model, out List<KeyNamePair> roles)
         {
-            roles = null;
             // loginModel = null;
             //bool isMatch = false;
-
+            roles = null;
             SecureEngine.Encrypt("t"); //Initialize 
 
             //	Cannot use encrypted password
@@ -127,7 +126,7 @@ namespace VIS.Helpers
                 model.Login1Model.ResetPwd = true;
             }
 
-            roles = new List<KeyNamePair>(); //roles
+           roles = new List<KeyNamePair>(); //roles
 
             List<int> usersRoles = new List<int>();
 
@@ -148,9 +147,6 @@ namespace VIS.Helpers
 
             dr.Close();
             model.Login1Model.AD_User_ID = AD_User_ID;
-
-
-
 
             IDataReader drLogin = null;
 
