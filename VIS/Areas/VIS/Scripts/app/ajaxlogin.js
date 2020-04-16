@@ -59,17 +59,16 @@
                         $btnLogin1.prop('disabled', false);
                         $btnLogin2.prop('disabled', false);
                         $backButton.prop('disabled', false);
-                        // $imgbusy2.hide();
-                        //  $imgbusy1.hide();
                         $imgbusy1.css('display', 'none');
-
                     }
                     else if (json.ctx && json.ctx.ResetPwd)
                     {
                         showLoginResetPwd();
+                        $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
                     else if (json.ctx && json.ctx.TwoFA) {
                         showLogin2FA();
+                        $('#TwoFA').val(json.ctx.TwoFA);
                     }
                     else if (json.success) {
                         window.location = json.redirect || location.href;
@@ -116,12 +115,14 @@
         $('#login-form-1').hide();
         $('#login-form-3').hide();
         $('#login-form-2').show();
+        $btnLogin1.prop('disabled', false);
     };
 
     var showLogin2FA = function () {
         $('#login-form-1').hide();
         $('#login-form-2').hide();
         $('#login-form-3').show();
+        $btnLogin1.prop('disabled', false);
     };
 
     var showLogin = function (e) {
@@ -341,4 +342,5 @@
 (function () {
     $("#login2Panel").hide();
     $('#login-form-2').hide();
+    $('#login-form-3').hide();
 })();
