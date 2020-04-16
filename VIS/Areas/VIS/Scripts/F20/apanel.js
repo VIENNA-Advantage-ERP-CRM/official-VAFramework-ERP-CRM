@@ -2079,7 +2079,7 @@
         var curWindowNo = this.curWindowNo;
 
         //	Record_ID - Language Handling
-        if (record_ID == -1 && gTab.getKeyColumnName().equals("AD_Language"))
+        if (record_ID == -1 && curTab.getKeyColumnName().equals("AD_Language"))
             record_ID = ctx.getContextAsInt(curWindowNo, "AD_Language_ID");
         //	Record_ID - Change Log ID
         if (record_ID == -1

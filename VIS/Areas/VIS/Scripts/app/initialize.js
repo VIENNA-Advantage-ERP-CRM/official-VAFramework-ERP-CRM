@@ -52,6 +52,13 @@
             //Set Page Size of Window
             VIS.Env.setWINDOW_PAGE_SIZE(VIS.Ini.getLocalStorage(VIS.IniConstants.WIN_PAGESIZE));
             //_ctx.SetPrintNativeDigits(VAdvantage.DataBase.Ini.IsPrintNativeDigits() ? "Y" : "N");
+
+           //Set current date 
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            var date = $('#vis_userDate').find('span');
+            date.text(" "+ new Date().toLocaleDateString(V.context.getAD_Language().replace("_", "-"), options));
+            //date.text(new Date().toLocaleDateString('de-DE', options));
+            //V.context.getAD_Language().replace("_", "-");
         }
         return {
             init: init
