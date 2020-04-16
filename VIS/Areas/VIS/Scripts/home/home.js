@@ -977,7 +977,7 @@
                                             + "<div class='vis-feedTitleBar'>"
                                             + "<h3> " + data.lstFollowups[cnt].WinName + ' : ' + data.lstFollowups[cnt].Identifier + " </h3>"
                                             + "<div class='vis-feedTitleBar-buttons'>"
-                                             + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "'><i class='vis vis-find'></i></a></li>"
+                                        + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "'  class='vis vis-find'></a></li>"
                                             + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='fa fa-rss'></a></li></ul>"
                                             + " </div></div>"
 
@@ -1225,12 +1225,17 @@
                             }
 
                             str += "<div class='vis-activityContainer'>"
-                                   + "<div class='vis-feedTitleBar'>"
-                                   + "<h3>#" + data[s].DocumentNo + "</h3>"
-                                   + "<div class='vis-feedTitleBar-buttons'>"
-                                   + "<ul>"
-                                   + "<li style='color:#999999; padding-top:10px; font-size:14px;'>" + data[s].Name + "</li>"
-                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'><i class='vis vis-find'></i></a></li>"
+                                + "<div class='vis-feedTitleBar'>"
+                                + "<h3>#" + data[s].DocumentNo + "</h3>"
+                                + "<div class='vis-feedTitleBar-buttons'>"
+                                + "<ul>";
+
+                            if (data[s].Name && data[s].Name.length>0) {
+                               str+= "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
+                            }
+
+                            + "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
+                                str+="<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'><i class='vis vis-find'></i></a></li>"
                                    + "</ul>"
                                    + "</div>"
                                    + "</div>"
@@ -1323,8 +1328,8 @@
                                 divtitle_ = "<pre>"
                                     + "<strong  id='snoticetitle_" + data[s].AD_Note_ID + "'  style='color:#666666;' >" + VIS.Utility.encodeText(data[s].Title) + "...</strong>"
                                     + "<strong id='snoticedesc_" + data[s].AD_Note_ID + "' style='display:none; color:#666666;'>" + VIS.Utility.encodeText(data[s].Description) + "...</strong> "
-                                    + "<span id='snoticemore_" + data[s].AD_Note_ID + "' data-vishomercrd='more' style='color:gray; float:right;'>" + VIS.Msg.getMsg("more") + "</span>"
-                                    + "<span id='snoticeless_" + data[s].AD_Note_ID + "' data-vishomercrd='less' style='display:none; color:gray; float:right;'>" + VIS.Msg.getMsg("less") + "</span>"
+                                    + "<span id='snoticemore_" + data[s].AD_Note_ID + "' data-vishomercrd='more' style='color:rgba(var(--v-c-primary), 1); float:right;height:20px'>" + VIS.Msg.getMsg("more") + "</span>"
+                                    + "<span id='snoticeless_" + data[s].AD_Note_ID + "' data-vishomercrd='less' style='display:none; color:rgba(var(--v-c-primary), 1); float:right;height:20pxvis-feedTitleBar'>" + VIS.Msg.getMsg("less") + "</span>"
                                     + "</pre>";
                             }
 
