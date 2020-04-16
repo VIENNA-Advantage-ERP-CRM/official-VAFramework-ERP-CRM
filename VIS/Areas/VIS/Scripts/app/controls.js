@@ -5459,6 +5459,7 @@
             //} else {
             //    $btnAmtDiv.css("opacity", 1);
             //}
+            this.isReadOnly = readOnly;
             $ctrl.css("background-color", "#f8f8f8");
             this.setBackground(readOnly);
         };
@@ -5506,9 +5507,9 @@
 
         $btnAmtDiv.on(VIS.Events.onClick, function (e) {
             e.stopPropagation();
-            //if (self.isReadOnly) {
-            //    return;
-            //}
+            if (self.isReadOnly) {
+                return;
+            }
 
             self.actionText();
             //var obj = new VIS.LocationForm(self.value);
