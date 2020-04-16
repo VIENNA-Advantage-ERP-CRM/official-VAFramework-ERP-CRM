@@ -4074,7 +4074,8 @@
         var AD_Org_ID = co[1];
         var createError = true;
         if (!VIS.MRole.canUpdate(AD_Client_ID, AD_Org_ID, this.AD_Table_ID, 0, createError)) {
-            this.fireDataStatusEEvent("cant-update");//CLogger.retrieveError());
+           // this.fireDataStatusEEvent("cant-update","",true);//CLogger.retrieveError());
+            this.fireDataStatusEEvent("AccessTableNoUpdate", "", true);//CLogger.retrieveError());
             this.dataIgnore();
             return this.SAVE_ACCESS;
         }

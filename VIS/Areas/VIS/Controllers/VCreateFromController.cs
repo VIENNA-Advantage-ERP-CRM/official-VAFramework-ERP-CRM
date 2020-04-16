@@ -64,7 +64,7 @@ namespace VIS.Controllers
                         + "(l.QtyOrdered-SUM(COALESCE(m.Qty,0))) * "
                         + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ) as QTYENTER,"
                         + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"
-                        + " COALESCE(l.M_Product_ID,0) as M_PRODUCT_ID ,COALESCE(p.Name,c.Name) as PRODUCT,"
+                        + " COALESCE(l.M_Product_ID,0) as M_PRODUCT_ID ,COALESCE(p.Name,c.Name) as PRODUCT,COALESCE(p.Value,c.Value) as PRODUCTSEARCHKEY,"
                         + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                         + " ins.description , "
                         + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW ,l.IsDropShip AS IsDropShip "
@@ -101,7 +101,7 @@ namespace VIS.Controllers
             sql += " AND l.DTD001_Org_ID = " + adOrgIDSs
                 + " GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                 + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                + "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description, l.IsDropShip, o.C_PaymentTerm_ID , t.Name "
+                + "l.M_Product_ID,COALESCE(p.Name,c.Name),COALESCE(p.Value,c.Value),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description, l.IsDropShip, o.C_PaymentTerm_ID , t.Name "
                 + "ORDER BY l.Line";
 
             string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
@@ -151,7 +151,7 @@ namespace VIS.Controllers
                + "ROUND((l.QtyOrdered-SUM(COALESCE(m.Qty,0))) * "
                + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ), uom.stdprecision) as QTYENTER,"
                + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"
-               + " COALESCE(l.M_Product_ID,0) as M_PRODUCT_ID ,p.Name as PRODUCT,"
+               + " COALESCE(l.M_Product_ID,0) as M_PRODUCT_ID ,p.Name as PRODUCT, p.Value as PRODUCTSEARCHKEY,"
                + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                + " ins.description , "
                + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, uom.stdprecision AS StdPrecision  , l.IsDropShip AS  IsDropShip"
@@ -199,7 +199,7 @@ namespace VIS.Controllers
             }
             sql.Append(" GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                     + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                        + "l.M_Product_ID,p.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description,  uom.stdprecision,l.IsDropShip, o.C_PaymentTerm_ID , t.Name  "); //Arpit on  20th Sept,2017"	            
+                        + "l.M_Product_ID,p.Name,p.Value, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description,  uom.stdprecision,l.IsDropShip, o.C_PaymentTerm_ID , t.Name  "); //Arpit on  20th Sept,2017"	            
 
             // Show Orderline with Charge also, based on the setting for Non Item type on Tenant.
             if (forInvoicees || isAllownonItem)
@@ -210,7 +210,7 @@ namespace VIS.Controllers
                   + "round((l.QtyOrdered-SUM(COALESCE(m.QtyInvoiced,0))) * "
                   + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ),uom.stdprecision) as QTYENTER,"	//	added by bharat
                   + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//	3..4
-                  + " 0 as M_PRODUCT_ID , c.Name as PRODUCT,"	//	5..6
+                  + " 0 as M_PRODUCT_ID , c.Name as PRODUCT, c.Value as PRODUCTSEARCHKEY,"	//	5..6
                   + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                   + " ins.description , "
                   + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, uom.stdprecision AS StdPrecision   , l.IsDropShip AS  IsDropShip"			//	7..8 //              
@@ -241,7 +241,7 @@ namespace VIS.Controllers
 
                 sql.Append(" GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                       + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                      + "l.M_Product_ID,c.Name, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
+                      + "l.M_Product_ID,c.Name,c.Value,l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
             }
             // JID_1287: Line number sequence to be maintained when we create lines from the reference of other documents.
             string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0 ORDER BY LINE";
@@ -457,7 +457,7 @@ namespace VIS.Controllers
              + "ROUND((l.MovementQty-SUM(COALESCE(mi.QtyInvoiced,0))) * "					//	1  
              + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END )," + precision + ") as QTYENTER,"	//	2
              + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM," // 3..4
-             + " l.M_Product_ID,p.Name as Product, l.M_InOutLine_ID,l.Line," // 5..8
+             + " l.M_Product_ID,p.Name as Product,p.Value as PRODUCTSEARCHKEY, l.M_InOutLine_ID,l.Line," // 5..8
              + " l.C_OrderLine_ID, " // 9
              + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
              + " ins.description , o.C_PaymentTerm_ID , pt.Name AS PaymentTermName "
@@ -482,7 +482,7 @@ namespace VIS.Controllers
                 sql += mProductIDD + " ";
             }
             sql += " GROUP BY l.MovementQty, l.QtyEntered," + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                + "l.M_Product_ID,p.Name, l.M_InOutLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description , o.C_PaymentTerm_ID , pt.Name ";
+                + "l.M_Product_ID,p.Name,p.Value, l.M_InOutLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description , o.C_PaymentTerm_ID , pt.Name ";
 
             if (isBaseLanguages.ToUpper().Contains("C_UOM_TRL"))
             {
@@ -614,7 +614,7 @@ namespace VIS.Controllers
                         + " ROUND((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
                         + " (CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QTYENTER,"	//	2
                         + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//  3..4
-                        + " l.M_Product_ID,p.Name as PRODUCT, l.C_InvoiceLine_ID,l.Line,"      //  5..8
+                        + " l.M_Product_ID,p.Name as PRODUCT,p.Value as PRODUCTSEARCHKEY, l.C_InvoiceLine_ID,l.Line,"      //  5..8
                         + " l.C_OrderLine_ID,"                   					//  9
                         + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
                         + " ins.description, "
@@ -660,7 +660,7 @@ namespace VIS.Controllers
                 sql.Append(mProductIDs);
             }
             sql.Append(" GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description, "
+                + " l.M_Product_ID,p.Name, p.Value, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description, "
                 + " p.IsCostAdjustmentOnLost, "
                 + " L.Qtyinvoiced , o.C_PaymentTerm_ID , pt.Name ");
 
@@ -682,7 +682,7 @@ namespace VIS.Controllers
                   + "round((l.QtyInvoiced-SUM(COALESCE(m.QtyDelivered,0))) * "
                   + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),uom.stdprecision) as QTYENTER,"	//	added by bharat
                   + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//	3..4
-                  + " 0 as M_PRODUCT_ID, c.Name as PRODUCT, l.C_InvoiceLine_ID,l.Line,"	//	5..6
+                  + " 0 as M_PRODUCT_ID, c.Name as PRODUCT,c.Value as PRODUCTSEARCHKEY, l.C_InvoiceLine_ID,l.Line,"	//	5..6
                   + " l.C_OrderLine_ID, l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
                   + " ins.description , "
                   + " 'N' AS Iscostadjustmentonlost, 0 As Miqty, 0 as qtyInv"			//	7..8 //              
@@ -706,7 +706,7 @@ namespace VIS.Controllers
                 sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Invoice_ID=" + cInvoiceID + " AND C.C_Charge_ID>0 ");
 
                 sql.Append(" GROUP BY l.QtyInvoiced, l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                      + "l.M_Product_ID,c.Name, l.C_InvoiceLine_ID, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, i.C_PaymentTerm_ID , t.Name");
+                      + "l.M_Product_ID,c.Name, c.Value, l.C_InvoiceLine_ID, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, i.C_PaymentTerm_ID , t.Name");
 
                 if (isBaseLangss.ToUpper().Contains("C_UOM_TRL"))
                 {
