@@ -48,7 +48,7 @@
         <p id="vis_cloud_daysleft"></p>
     </div>
     <ul class="vis-app-hdr-r">
-        <li id="vis_userDate"><i class="fa fa-calendar"></i> @DateTime.Now.ToString("D", new System.Globalization.CultureInfo(ViewBag.culture.ToString().Replace("_", "-")))</li>
+        <li id="vis_userDate"><i class="fa fa-calendar"></i><span>@DateTime.Now.ToString("D", new System.Globalization.CultureInfo(ViewBag.culture.ToString().Replace("_", "-")))</span> </li>
         <li id="vis_theme" style="display:none">
             <div class="dropdown">
                 <span class="dropdown-toggle vis-app-hdr-r-theme" data-toggle="dropdown">

@@ -751,10 +751,16 @@
             }
         };
 
-        $btnFilter.on("click", function (e) {
+        this.startFilterPanel = function () {
             $fltrPanel.show();
-            self.refresh();
+            this.refresh();
+        };
+
+        $btnFilter.on("click", function (e) {
+            self.startFilterPanel();
         });
+
+
         $btnFPClose.on("click", function (e) {
             $fltrPanel.hide();
             self.refresh();
@@ -1291,6 +1297,9 @@
                     break;
                 case 88:      // X for close
                     this.$parentWindow.dispose();
+                    break;
+                case 79:
+                    this.startFilterPanel();
                     break;
                 case 33:
                     if (evt.ctrlKey) {
@@ -2070,7 +2079,7 @@
         var curWindowNo = this.curWindowNo;
 
         //	Record_ID - Language Handling
-        if (record_ID == -1 && gTab.getKeyColumnName().equals("AD_Language"))
+        if (record_ID == -1 && curTab.getKeyColumnName().equals("AD_Language"))
             record_ID = ctx.getContextAsInt(curWindowNo, "AD_Language_ID");
         //	Record_ID - Change Log ID
         if (record_ID == -1

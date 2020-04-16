@@ -602,18 +602,18 @@ namespace VAdvantage.Model
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            log.SaveInfo("Aftersave start", Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
+            log.Info("Aftersave start :: " + Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
             if (Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")) == "Y")
             {
                 return success;
             }
-            log.SaveError("Aftersave start", "");
+            // log.SaveError("Aftersave start", "");
             UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetAD_User_ID(), GetName(), GetAD_Client_ID(), 0, IsLoginUser(), false);
             // Following Work is For Creating and Updating Yellowfin User if Yellowfin Module exists...................
             #region
             if (success)
             {
-                log.SaveError("Aftersave success", "");
+                log.Info("Aftersave success" +  "Success :: " + success);
                 // For Saving YellowFin user.......................
                 object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where IsActive='Y' AND prefix='VA037_'");
                 if (ModuleId != null && ModuleId != DBNull.Value)
