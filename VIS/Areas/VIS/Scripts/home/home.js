@@ -1235,7 +1235,7 @@
                             }
 
                             + "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
-                                str+="<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'><i class='vis vis-find'></i></a></li>"
+                            str += "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'  class='vis vis-find'></a></li>"
                                    + "</ul>"
                                    + "</div>"
                                    + "</div>"
