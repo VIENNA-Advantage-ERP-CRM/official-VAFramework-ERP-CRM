@@ -762,23 +762,9 @@ namespace VAdvantage.Model
 
                     if (!string.IsNullOrEmpty(mInOutLinesConfirm))
                     {
-                        string productsNoActualValue = Util.GetValueOfString(DB.ExecuteScalar("SELECT SUBSTR( Sys_Connect_By_Path ( Name, ','),2) AS Product                        " +
-                                                                                              "   FROM                                                                              " +
-                                                                                              "       (SELECT Name,                                                                 " +
-                                                                                              "       Row_Number () Over (Order By Name ) Rn,                                       " +
-                                                                                              "       COUNT (*) OVER () cnt                                                         " +
-                                                                                              "       FROM (                                                                        " +
-                                                                                              "       (SELECT DISTINCT Prod.Name AS Name                                            " +
-                                                                                              "       FROM Va010_Shipconfparameters Shp                                             " +
-                                                                                              "       INNER JOIN M_Product Prod                                                     " +
-                                                                                              "       ON prod.m_product_id                  = shp.m_product_id                      " +
-                                                                                              "       WHERE ( NVL(Shp.Va010_Actualvalue,0)) = 0       AND Shp.Isactive = 'Y'        " +
-                                                                                              "       AND Shp.M_Inoutlineconfirm_Id        IN (" + mInOutLinesConfirm + ")          " +
-                                                                                              "       ) )                                                                           " +
-                                                                                              "       )                                                                             " +
-                                                                                              "   WHERE rn        = cnt                                                             " +
-                                                                                              "       START WITH rn = 1                                                             " +
-                                                                                              "       CONNECT BY Rn = Prior Rn + 1"));
+                        string qry = "SELECT DISTINCT Prod.Name AS Name FROM Va010_Shipconfparameters Shp INNER JOIN M_Product Prod ON prod.m_product_id = shp.m_product_id " +
+                                    "WHERE (NVL(Shp.Va010_Actualvalue,0)) = 0 AND Shp.Isactive = 'Y' AND Shp.M_Inoutlineconfirm_Id IN (" + mInOutLinesConfirm + ")";
+                        string productsNoActualValue = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + qry + "') FROM DUAL"));
                         if (!string.IsNullOrEmpty(productsNoActualValue))
                         {
                             //_processMsg = productsNoActualValue + " is/are not verified with all the Quality Parameters." +
