@@ -1989,13 +1989,11 @@ namespace VAdvantage.Model
                         if (check)
                         {
                             sql.Clear();
-                            sql.Append("SELECT SUBSTR (SYS_CONNECT_BY_PATH (value , ', '), 2) CSV FROM (SELECT value , ROW_NUMBER () OVER (ORDER BY value ) rn, COUNT (*) over () CNT FROM "
-                                 + " (SELECT DISTINCT value FROM m_locator WHERE M_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + "))) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
+                            sql.Append("SELECT concatenate_listofdata('SELECT DISTINCT Value FROM m_locator WHERE M_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + ")') FROM DUAL");
                             string loc = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                             sql.Clear();
-                            sql.Append("SELECT SUBSTR (SYS_CONNECT_BY_PATH (Name , ', '), 2) CSV FROM (SELECT Name , ROW_NUMBER () OVER (ORDER BY Name ) rn, COUNT (*) over () CNT FROM "
-                                + " M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ") ) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
+                            sql.Append("SELECT concatenate_listofdata('SELECT DISTINCT Name FROM M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ")') FROM DUAL");
                             string prod = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                             _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
@@ -2089,17 +2087,16 @@ namespace VAdvantage.Model
                 // if container avialble on line is belongs to same warehouse and locator
                 // if not then not to complete this record
                 sql.Clear();
-                sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( NotMatched, ' , '),',') NotMatched FROM
-                      (SELECT NotMatched, ROW_NUMBER () OVER (ORDER BY NotMatched ) RN, COUNT (*) OVER () CNT  FROM
+                sql.Append(@"SELECT NotMatched FROM
                         (SELECT DISTINCT 
                         CASE  WHEN p.m_warehouse_id <> i.m_warehouse_id  THEN pr.Name || '_' || il.line
                               WHEN p.m_locator_id <> il.m_locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
                         FROM m_inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
                         INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
                         INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.m_inout_id = " + GetM_InOut_ID() + @" AND ROWNUM <= 100 )  WHERE notmatched IS NOT NULL ) 
-                        WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
-                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                        WHERE il.M_ProductContainer_ID > 0 AND i.m_inout_id = " + GetM_InOut_ID() + @" AND ROWNUM <= 100 ) t WHERE notmatched IS NOT NULL");
+                sql.Replace("'", "''");
+                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.ToString() + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
                     SetProcessMsg(Msg.GetMsg(GetCtx(), "VIS_ContainerNotFound") + containerNotMatched);
@@ -2111,9 +2108,7 @@ namespace VAdvantage.Model
                 // If User try to complete the Transactions if Movement Date is lesser than Last MovementDate on Product Container
                 // then we need to stop that transaction to Complete.
                 sql.Clear();
-                sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( name, ' , '),',') name FROM
-                          (SELECT Name , ROW_NUMBER () OVER (ORDER BY name ) RN, COUNT (*) OVER () CNT FROM
-                            (SELECT
+                sql.Append(@"SELECT Name FROM (SELECT
                               (SELECT NAME FROM M_ProductContainer WHERE M_ProductContainer_ID =IL.M_PRODUCTCONTAINER_ID ) AS Name ,
                               CASE WHEN IL.M_PRODUCTCONTAINER_ID > 0 
                               AND (SELECT DATELASTINVENTORY  FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)<=I.MOVEMENTDATE
@@ -2122,11 +2117,10 @@ namespace VAdvantage.Model
                                 AND (SELECT DATELASTINVENTORY FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)>I.MOVEMENTDATE
                                 THEN 0
                                 ELSE 1 END AS COUNT
-                                 FROM M_InOut I INNER JOIN M_InOutLINE IL ON I.M_InOut_ID = IL.M_InOut_ID
-                                  WHERE I.M_InOut_ID =" + GetM_InOut_ID() + @" AND ROWNUM        <= 100 )
-                              WHERE COUNT = 0 )
-                           WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
-                string misMatch = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                                FROM M_InOut I INNER JOIN M_InOutLINE IL ON I.M_InOut_ID = IL.M_InOut_ID
+                                WHERE I.M_InOut_ID =" + GetM_InOut_ID() + @" AND ROWNUM <= 100) t WHERE COUNT = 0");
+                sql.Replace("'", "''");
+                string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.ToString() + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
                     SetProcessMsg(misMatch + Msg.GetMsg(GetCtx(), "VIS_ContainerNotAvailable"));

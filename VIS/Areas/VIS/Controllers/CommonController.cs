@@ -903,7 +903,7 @@ namespace VIS.Controllers
             AccountData _iData = new AccountData();
             try
             {
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sql + " )", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sql + " ) t", null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
