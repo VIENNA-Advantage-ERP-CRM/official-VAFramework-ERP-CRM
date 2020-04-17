@@ -34,31 +34,39 @@ namespace VIS.Controllers
                 try
                 {
                     List<KeyNamePair> roles = null;
-                    roles = (List<KeyNamePair>)TempData["roles"];
-                    model.Login2Model=(Login2Model) TempData["Login2Model"];
-                    if (model.Login1Model.ResetPwd)
+                    roles = (List<KeyNamePair>)TempData.Peek("roles");
+                    model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
+                    bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
+                    bool TwoFA = Util.GetValueOfBool(TempData.Peek("TwoFA"));
+                    bool proceedToLogin2 = false;
+                    if (resetPwd)
                     {
-                        //Rst Pwd Functioanility here.
-                        model.Login1Model.ResetPwd = false;
-                        return Login(model, returnUrl, roles);
+                        bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.OldPassword, model.Login1Model.NewPassword, model.Login1Model.AD_User_ID);
+                        if (isUpdated)
+                        {
+                            proceedToLogin2 = true;
+                        }
                     }
-                    else if (model.Login1Model.TwoFA)
+
+                    if (TwoFA)
                     {
 
                         // Two Here.
-                        model.Login1Model.TwoFA = false;
-                        return Login(model, returnUrl, roles);
+                        proceedToLogin2 = true;
                     }
+
+                    if (proceedToLogin2)
+                        return Login(model, returnUrl, roles);
+
                     // LoginModel loginModel = null;
-
-                    // Pehla client toh new pwd and old pwd le k aane. ohde lai model vihc ropert bna k client side te set karvana pena.
-                    // and Baki ResetPwd and TwoFA nu hidden field vich rakhna pena.
-
 
                     if (LoginHelper.Login(model, out roles))
                     {
                         TempData["roles"] = roles;
                         TempData["Login2Model"] = model.Login2Model;
+                        TempData["ResetPwd"] = model.Login1Model.ResetPwd;
+                        TempData["TwoFA"] = model.Login1Model.TwoFA;
+
                         if (model.Login1Model.ResetPwd || model.Login1Model.TwoFA)
                         {
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
@@ -79,6 +87,11 @@ namespace VIS.Controllers
             // If we got this far, something failed
             return Json(new { errors = GetErrorsFromModelState() });
         }
+        private void createTempData()
+        {
+
+        }
+
         [NonAction]
         private JsonResult Login(LoginModel model, string returnUrl, List<KeyNamePair> roles)
         {

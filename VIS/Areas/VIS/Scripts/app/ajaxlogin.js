@@ -32,10 +32,34 @@
 
     var formSubmitHandler = function (e) {
         var $form = $(this);
+        if ($('#login-form-2').is(':visible')) {
+            var newPwd = $('#txtNewPwd').val();
+            var newCPwd = $('#txtCNewPwd').val();
+
+            if (newPwd != newCPwd) {
+                e.preventDefault();
+                displayErrors($form, ["PwdNotMatch"]);
+
+                return false;
+            }
+
+            //strong password regular expression
+
+            if (!validatePassword(newPwd)) {
+                e.preventDefault();
+                displayErrors($form, ["mustMactCriteria"]);
+                return false;
+            }
+
+
+        }
         displayErrors($form, "");
         $btnLogin1.prop('disabled', true);
         $btnLogin2.prop('disabled', true);
         $backButton.prop('disabled', true);
+
+
+
         // $imgbusy1.show();
         $imgbusy1.css('display', 'block');
         // We check if jQuery.validator exists on the form
@@ -61,8 +85,7 @@
                         $backButton.prop('disabled', false);
                         $imgbusy1.css('display', 'none');
                     }
-                    else if (json.ctx && json.ctx.ResetPwd)
-                    {
+                    else if (json.ctx && json.ctx.ResetPwd) {
                         showLoginResetPwd();
                         $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
@@ -99,6 +122,25 @@
 
         // Prevent the normal behavior since we opened the dialog
         e.preventDefault();
+    };
+
+    var validatePassword = function () {
+        var regex = new Array();
+        regex.push("[a-z](?!.*?[^\na-z0-9]{2}).*?[a-z0-9]$");
+        regex.push("[A-Z]"); //Uppercase Alphabet.
+        regex.push("[a-z]"); //Lowercase Alphabet.
+        regex.push("[0-9]"); //Digit.
+        regex.push("[$@$!%*#?&]"); //Special Character.
+
+        var passed = 0;
+
+        //Validate for each Regular Expression.
+        for (var i = 0; i < regex.length; i++) {
+            if (!new RegExp(regex[i]).test(password)) {
+                return false;
+            }
+        }
+
     };
 
     function showLogin2() {

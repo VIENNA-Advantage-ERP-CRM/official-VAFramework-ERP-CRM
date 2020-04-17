@@ -18,6 +18,7 @@ namespace VIS.Helpers
     /// </summary>
     public class LoginHelper
     {
+        private static List<string> powerUsers = new List<string>() { "SuperUser", "System" };
         /**	Cache					*/
         private static CCache<string, int> cache = new CCache<string, int>("LoginHelper", 30, 60);
         /// <summary>
@@ -109,12 +110,16 @@ namespace VIS.Helpers
             if (!dr.Read())		//	no record found
             {
                 dr.Close();
-                param[0] = new SqlParameter("@username", model.Login1Model.UserName);
-                DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
+                if (powerUsers.IndexOf(model.Login1Model.UserName) == -1)
+                {
+                    param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+                    DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
+                }
                 return false;
             }
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
+
             if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
             {
                 throw new Exception("MaxFailedLoginAttempts");
@@ -126,7 +131,7 @@ namespace VIS.Helpers
                 model.Login1Model.ResetPwd = true;
             }
 
-           roles = new List<KeyNamePair>(); //roles
+            roles = new List<KeyNamePair>(); //roles
 
             List<int> usersRoles = new List<int>();
 
@@ -248,6 +253,24 @@ namespace VIS.Helpers
                     cache["PwdValidUpto"] = 3;
                 }
             }
+        }
+
+        public static bool UpdatePassword(string oldPwd, string newPwd, int AD_User_ID)
+        {
+            if (DB.ExecuteScalar("SELECT IsEncrypted from AD_Column WHERE AD_Column_ID=" + 417).ToString().Equals("Y"))
+                newPwd = SecureEngine.Encrypt(newPwd);
+
+            int pwdValidity = cache["PwdValidUpto"];
+            string newpwdExpireDate = GlobalVariable.TO_DATE(DateTime.Now.AddMonths(pwdValidity), true);
+
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("@oldpwd", oldPwd);
+            string sql = "UPDATE AD_User set Updated=Sysdate,UpdatedBy="+AD_User_ID+",PasswordExpireOn='"+newpwdExpireDate+"',password='" + newPwd + "' WHERE password='@oldpwd' AND AD_User_ID=" + AD_User_ID;
+            int count = DB.ExecuteQuery(sql, param);
+            if (count > 0)
+                return true;
+            return false;
+
         }
 
         /// <summary>
