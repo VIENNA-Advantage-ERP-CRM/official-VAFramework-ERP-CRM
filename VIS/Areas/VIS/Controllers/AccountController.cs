@@ -41,7 +41,7 @@ namespace VIS.Controllers
                     bool proceedToLogin2 = false;
                     if (resetPwd)
                     {
-                        bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.OldPassword, model.Login1Model.NewPassword, model.Login1Model.AD_User_ID);
+                        bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.NewPassword, model.Login1Model.AD_User_ID);
                         if (isUpdated)
                         {
                             proceedToLogin2 = true;

@@ -255,7 +255,7 @@ namespace VIS.Helpers
             }
         }
 
-        public static bool UpdatePassword(string oldPwd, string newPwd, int AD_User_ID)
+        public static bool UpdatePassword(string newPwd, int AD_User_ID)
         {
             if (DB.ExecuteScalar("SELECT IsEncrypted from AD_Column WHERE AD_Column_ID=" + 417).ToString().Equals("Y"))
                 newPwd = SecureEngine.Encrypt(newPwd);
@@ -263,10 +263,8 @@ namespace VIS.Helpers
             int pwdValidity = cache["PwdValidUpto"];
             string newpwdExpireDate = GlobalVariable.TO_DATE(DateTime.Now.AddMonths(pwdValidity), true);
 
-            SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@oldpwd", oldPwd);
-            string sql = "UPDATE AD_User set Updated=Sysdate,UpdatedBy="+AD_User_ID+",PasswordExpireOn='"+newpwdExpireDate+"',password='" + newPwd + "' WHERE password='@oldpwd' AND AD_User_ID=" + AD_User_ID;
-            int count = DB.ExecuteQuery(sql, param);
+            string sql = "UPDATE AD_User set Updated=Sysdate,UpdatedBy="+AD_User_ID+",PasswordExpireOn='"+newpwdExpireDate+"',password='" + newPwd + "' WHERE AD_User_ID=" + AD_User_ID;
+            int count = DB.ExecuteQuery(sql);
             if (count > 0)
                 return true;
             return false;
