@@ -122,7 +122,7 @@
             //    txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly>");
             //}
             //else {
-                txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly>");
+            txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly>");
             //}
 
             txtTotal = $("<input type='text' readonly='true' tabindex='15'>");
@@ -2099,8 +2099,8 @@
                 return false;
             }
 
-            generateControl.css({ "width": "65.7%" });
-            modalGenerateControl.css({ "width": "65.7%", "margin-right": "9px" });
+            generateControl.css({ "width": "67.1%" });
+            modalGenerateControl.css({ "width": "67.1%", "margin-right": "9px" });
             divAmount.css("width", "26.5%");
             //divbutton.css("width", "6%");
             modalDivAmount.css("width", "26.5%");
@@ -2147,6 +2147,16 @@
 
             if (cmbDimensionType.val() == "AC") {
                 dGrid.showColumn("C_BPartner");
+                divAccountElementVal.css("width", "49%");
+                divBPartner.css("width", "48%").css("margin-left", '9px');
+                divAmount.css("width", "25%");
+                modalDivAmount.css("width", "25%");
+            }
+            else {
+                divAccountElementVal.css("width", "51%");
+                divBPartner.css("width", "49%").css("margin-left", '');
+                divAmount.css("width", "26.5%");
+                modalDivAmount.css("width", "26.5%");
             }
 
             modalLblElement = $("<label>");
@@ -2187,6 +2197,16 @@
             modalLblBPartner.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"));
             modalDivBPartner = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns'>");
             modalDivBPartner.css("width", "49%");
+            if (cmbDimensionType.val() == "AC") {
+                modalDivAccountElementVal.css("width", "49%");
+                modalDivBPartner.css("width", "48%").css("margin-left", '9px');
+                modalDivAmount.css("width", "25%");
+            }
+            else {
+                modalDivAccountElementVal.css("width", "51%");
+                modalDivBPartner.css("width", "49%");
+                modalDivAmount.css("width", "26.5%");
+            }
             modalDivBPartner.append(modalLblBPartner).append(modalCmbBPartner).append(modalTxtb.getBtn(0));//.append(modalTxtb.getBtn(1));
             modalGenerateControl.append(modalDivBPartner);
         };
@@ -2271,11 +2291,11 @@
             grdCols.push({ field: "DimensionValueAmount", caption: "Dimension Value Amount", size: "30%", min: 216 });
             grdCols.push({
                 field: "Edit", caption: "", size: "5%", resizable: false,
-                render: function () { return '<a href="#" tabindex="8"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/Edit_sub16.png" alt="Edit record" title="Edit record" style="opacity: 1;"></div></a>'; }
+                render: function () { return '<a  tabindex="8"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/Edit_sub16.png" alt="Edit record" title="Edit record" style="opacity: 1;cursor:pointer"></div></a>'; }
             });
             grdCols.push({
                 field: "Delete", caption: "", size: "5%", resizable: false,
-                render: function () { return '<a id="a1" href="#" tabindex="14"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/delete10.png" alt="Delete record" title="Delete record" style="opacity: 1;"></div></a>'; }
+                render: function () { return '<a id="a1" tabindex="14"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/delete10.png" alt="Delete record" title="Delete record" style="opacity: 1;cursor:pointer"></div></a>'; }
             });
             grdCols.push({ field: "lineAmountID", caption: "lineAmountID", hidden: true, resizable: false, min: 0, max: 0 });
             grdCols.push({ field: "CalculateDimValAmt", caption: "CalculateDimValAmt", hidden: true, resizable: false, min: 0, max: 0 });
@@ -2363,11 +2383,11 @@
         function editRecord(LineID, Amount, gridRecordID) {
             busyDiv("visible");
             var tempData = [];
-            modalDiv.css("display", "block");
+            modalDiv.css("display", "table");
             //divbutton.css("width", "15.5%");
             if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                 // divAmount.css("width", "17.5%");
-                modalDivAmount.css({ "width": "13%", "padding-right": "0" });
+                modalDivAmount.css({ "width": "11%", "padding-right": "0" });
             }
             else {
                 divAmount.css("width", "33.3%");
@@ -2565,7 +2585,7 @@
         var displayDialog = function () {
 
             ch.setContent(root);
-            ch.setHeight(535);
+            //ch.setHeight(445);
             ch.setWidth(750);
             ch.setTitle(VIS.Msg.getMsg("AmountDimension"));
             ch.setModal(true);
