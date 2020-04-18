@@ -115,6 +115,8 @@ namespace VAdvantage.WF
 		    GetPO();
             if (_po != null)
             {
+                // Set transaction organization on workflow process
+                SetAD_Org_ID(_po.GetAD_Org_ID());
                 _po.Lock();
             }
 	    }

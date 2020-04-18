@@ -116,6 +116,8 @@ namespace VAdvantage.WF
             SetAD_WF_Node_ID(AD_WF_Node_ID);
 
             SetSummary(GetSummary());
+            // Set transaction organization on workflow activities
+            SetAD_Org_ID(process.GetAD_Org_ID());
 
             //	Node Priority & End Duration
             MWFNode node = MWFNode.Get(GetCtx(), AD_WF_Node_ID);
