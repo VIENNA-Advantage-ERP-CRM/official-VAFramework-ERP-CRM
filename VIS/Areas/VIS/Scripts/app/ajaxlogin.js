@@ -39,12 +39,17 @@
             if (newPwd != newCPwd) {
                 e.preventDefault();
                 displayErrors($form, ["PwdNotMatch"]);
+                return false;
+            }
 
+
+            if (newPwd == $('#txtPwd').val()) {
+                e.preventDefault();
+                displayErrors($form, ["oldNewSame"]);
                 return false;
             }
 
             //strong password regular expression
-
             if (!validatePassword(newPwd)) {
                 e.preventDefault();
                 displayErrors($form, ["mustMactCriteria"]);
