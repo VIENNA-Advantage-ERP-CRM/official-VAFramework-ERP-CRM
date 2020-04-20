@@ -9,7 +9,8 @@
         var modal = true;
         var removeClose = false;
         var resize = true;
-        var position = { at: "center center", of: window };
+        // my: "center top", at: "center top+75", of: "#mycontainer
+        var position = { at: "center top+250", of: window };
 
         this.onOkClick = null;
         this.onCancelClick = null;
