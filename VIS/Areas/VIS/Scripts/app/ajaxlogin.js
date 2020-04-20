@@ -124,21 +124,14 @@
         e.preventDefault();
     };
 
-    var validatePassword = function () {
-        var regex = new Array();
-        regex.push("[a-z](?!.*?[^\na-z0-9]{2}).*?[a-z0-9]$");
-        regex.push("[A-Z]"); //Uppercase Alphabet.
-        regex.push("[a-z]"); //Lowercase Alphabet.
-        regex.push("[0-9]"); //Digit.
-        regex.push("[$@$!%*#?&]"); //Special Character.
+    var validatePassword = function (password) {
+        var regex = /^[a-zA-Z]+[A-Za-z\d$@$!%*#?&]{4,}$/;// Start with Alphabet, minimum 4 length
+       //@$!%*#?& allowed only
 
         var passed = 0;
 
-        //Validate for each Regular Expression.
-        for (var i = 0; i < regex.length; i++) {
-            if (!new RegExp(regex[i]).test(password)) {
+       if(!regex.test(password)) {
                 return false;
-            }
         }
 
     };
