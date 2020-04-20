@@ -1243,7 +1243,7 @@ li.vis-page-item-select {
     grid-column: 1/1;
     overflow-y: auto;
     min-height: 17px;
-    max-height: 100%;
+    max-height: 29px;
 }
 
 .vis-ad-w-p-s-statusdb {

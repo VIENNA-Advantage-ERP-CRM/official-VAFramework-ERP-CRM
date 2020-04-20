@@ -139,7 +139,8 @@ namespace VIS.Helpers
                               AND r.responsibletype !='H'
                               ) )
                            ";
-
+                // Applied Role access on workflow Activities
+                strQuery = MRole.GetDefault(ctx).AddAccessSQL(strQuery, "a", true, true);
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
                 int nWorkFlow = 0;

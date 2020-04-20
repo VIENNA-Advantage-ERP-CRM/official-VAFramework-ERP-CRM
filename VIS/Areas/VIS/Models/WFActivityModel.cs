@@ -165,7 +165,8 @@ WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VA
             // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             if (whereClause.Length > 7)
             {
-                sql += @" )  MyTable ";
+                // Applied Role access on workflow Activities
+                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
 
                 sql += fromClause;
                 sql += whereClause;
@@ -180,6 +181,8 @@ WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VA
             else
             {
                 sql += "  ORDER BY Priority DESC, Created DESC";
+                // Applied Role access on workflow Activities
+                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true);
             }
 
             //temp ORDER BY Created desc,a.Priority DESC
@@ -312,7 +315,8 @@ WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VA
                               ) )";
                     if (whereClause.Length > 7)
                     {
-                        sql += @" )  MyTable ";
+                        // Applied Role access on workflow Activities
+                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
 
                         sql += fromClause;
                         sql += whereClause;
@@ -325,7 +329,8 @@ WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VA
                     }
                     else
                     {
-                        sql += "  ) ";
+                        // Applied Role access on workflow Activities
+                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) ";
                     }
 
                     info.count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
