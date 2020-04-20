@@ -10,7 +10,7 @@
         var removeClose = false;
         var resize = true;
         // my: "center top", at: "center top+75", of: "#mycontainer
-        var position = { at: "center top+250", of: window };
+        var position = { at: "center center", of: window };
 
         this.onOkClick = null;
         this.onCancelClick = null;
