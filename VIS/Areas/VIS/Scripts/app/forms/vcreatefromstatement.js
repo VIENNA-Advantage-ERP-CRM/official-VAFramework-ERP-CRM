@@ -12,7 +12,7 @@
         baseObj.jbInit();
         baseObj.initOK = true;
 
-        baseObj.middelDiv.css("height", "67%");
+        baseObj.middelDiv.css("height", "61%");
 
 
         function dynInit() {

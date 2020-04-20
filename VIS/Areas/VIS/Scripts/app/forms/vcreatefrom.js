@@ -1768,7 +1768,7 @@
                     }
                 }
                 VIS.VCreateFromStatement.prototype.saveStatment();
-                $self.middelDiv.css("height", "67%");
+                $self.middelDiv.css("height", "61%");
             }
             else {
                 if ($self.dGrid != null && C_Order_ID != null) {
@@ -1888,7 +1888,7 @@
                     }
                 }
                 VIS.VCreateFromStatement.prototype.saveStatment();
-                $self.middelDiv.css("height", "67%");
+                $self.middelDiv.css("height", "61%");
             }
             else {
                 if ($self.dGrid != null && C_Order_ID != null) {

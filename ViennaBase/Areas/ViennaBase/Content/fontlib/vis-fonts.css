@@ -731,3 +731,31 @@
 .vis-zoomacross:before {
     content: "\e9a0";
 }
+
+.vis-clear-filter:before {
+    content: "\e9b0";
+}
+.vis-add-chart:before {
+    content: "\e9ac";
+}
+
+.vis-add-kpi:before {
+    content: "\e9ad";
+}
+
+.vis-add-view:before {
+    content: "\e9ae";
+}
+
+.vis-line-chart:before {
+    content: "\e9af";
+}
+
+
+.vis-gmail-contacts-import:before {
+    content: "\e9aa";
+}
+
+.vis-gmail-settings:before {
+    content: "\e9ab";
+}
