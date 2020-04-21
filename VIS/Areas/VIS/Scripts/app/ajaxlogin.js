@@ -38,21 +38,14 @@
 
             if (newPwd != newCPwd) {
                 e.preventDefault();
-                displayErrors($form, ["PwdNotMatch"]);
-                return false;
-            }
-
-
-            if (newPwd == $('#txtPwd').val()) {
-                e.preventDefault();
-                displayErrors($form, ["oldNewSame"]);
+                displayErrors($form, ["BothPwdNotMatch"]);
                 return false;
             }
 
             //strong password regular expression
             if (!validatePassword(newPwd)) {
                 e.preventDefault();
-                displayErrors($form, ["mustMactCriteria"]);
+                displayErrors($form, ["mustMatchCriteria"]);
                 return false;
             }
 
@@ -130,15 +123,16 @@
     };
 
     var validatePassword = function (password) {
-        var regex = /^[a-zA-Z]+[A-Za-z\d$@$!%*#?&]{4,}$/;// Start with Alphabet, minimum 4 length
+        var regex = /^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$/;// Start with Alphabet, minimum 4 length
        //@$!%*#?& allowed only
 
         var passed = 0;
 
        if(!regex.test(password)) {
-                return false;
-        }
 
+           return false;
+        }
+        return true;
     };
 
     function showLogin2() {

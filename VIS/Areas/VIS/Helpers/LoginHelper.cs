@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using VAdvantage.Classes;
 using VAdvantage.DataBase;
@@ -18,9 +19,9 @@ namespace VIS.Helpers
     /// </summary>
     public class LoginHelper
     {
-        private static List<string> powerUsers = new List<string>() { "SuperUser", "System" };
+
         /**	Cache					*/
-        private static CCache<string, int> cache = new CCache<string, int>("LoginHelper", 30, 60);
+        private static CCache<string, object> cache = new CCache<string, object>("LoginHelper", 30, 60);
         /// <summary>
         /// return is credential provide by user is right or not
         /// </summary>
@@ -49,81 +50,114 @@ namespace VIS.Helpers
             if (system != null && system.IsLDAP())
             {
                 authenticated = system.IsLDAP(model.Login1Model.UserName, model.Login1Model.Password);
-                if (authenticated)
-                {
-                    model.Login1Model.Password = null;
-                }
+                //if (authenticated)
+                //{
+                //    model.Login1Model.Password = null;
+                //}
                 isLDAP = true;
                 // if not authenticated, use AD_User as backup
             }
             GetSysConfigForlogin();
-            int fCount = cache["FailedLoginCount"];
-            int pwdValidity = cache["PwdValidUpto"];
+            int fCount = Util.GetValueOfInt(cache["Failed_Login_Count"]);
+            SqlParameter[] param = new SqlParameter[1];
+            if (!authenticated)
+            {
+                string sqlEnc = "select isencrypted from ad_column where ad_table_id=(select ad_table_id from ad_table where tablename='AD_User') and columnname='Password'";
+                char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
+                if (isEncrypted == 'Y' && model.Login1Model.Password != null)
+                {
+                    model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
+                }
+                
+                param[0] = new SqlParameter("@username", model.Login1Model.UserName);
 
 
+                DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
+                if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
+                {
+                    if (!dsUserInfo.Tables[0].Rows[0]["IsLoginUser"].ToString().Equals("Y"))
+                    {
+                        throw new Exception("NotLoginUser");
+                    }
+                    if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserName) ||
+                        !dsUserInfo.Tables[0].Rows[0]["Password"].Equals(model.Login1Model.Password))
+                    {
+                        if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
+                        {
+                            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+                            DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
+
+                            if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]) + 1)
+                            {
+                                throw new Exception("MaxFailedLoginAttempts");
+                            }
+                        }
+
+                        throw new Exception("UserPwdError");
+                    }
+                    else {
+                        if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]))
+                        {
+                            throw new Exception("MaxFailedLoginAttempts");
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception("UserNotFound");
+                }
+            }
 
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
-               .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn ")	//	4,5
+               .Append(" u.ConnectionProfile, u.PasswordExpireOn ")	//	4,5
                .Append("FROM AD_User u")
                .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
-            //.Append("WHERE COALESCE(u.LDAPUser,u.Name)=@username")		//	#1
             if (isLDAP && authenticated)
             {
                 sql.Append(" WHERE (COALESCE(u.LDAPUser,u.Value)=@username)");
             }
-            else if (isLDAP && !authenticated && model.Login1Model.Password == null)// If user not authenicated using LDAP, then if LDAP user is available
-            {
-                sql.Append(" WHERE (u.LDAPUser=@username OR u.Name=@username OR u.Value=@username)");
-            }
+            //else if (isLDAP && !authenticated && model.Login1Model.Password == null)// If user not authenicated using LDAP, then if LDAP user is available
+            //{
+            //    sql.Append(" WHERE (u.LDAPUser=@username OR u.Value=@username)");
+            //}
             else
             {
-                sql.Append(" WHERE (u.Name=@username OR u.Value=@username)");
+                sql.Append(" WHERE (u.Value=@username)");
             }
 
             sql.Append(" AND u.IsActive='Y' ")
              .Append(" AND u.IsLoginUser='Y' ")
              .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
              .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
-            string sqlEnc = "select isencrypted from ad_column where ad_table_id=(select ad_table_id from ad_table where tablename='AD_User') and columnname='Password'";
-            char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
-            if (model.Login1Model.Password != null)
-            {
-                if (isEncrypted == 'Y')
-                {
-                    sql.Append(" AND (u.Password='" + SecureEngine.Encrypt(model.Login1Model.Password) + "')");	//  #2/3
-                }
-                else
-                {
-                    sql.Append(" AND (u.Password='" + model.Login1Model.Password + "')");	//  #2/3
-                }
-            }
+
+            //if (model.Login1Model.Password != null)
+            //{
+            //    sql.Append(" AND (u.Password='" + model.Login1Model.Password + "')");	//  #2/3
+            //}
             sql.Append(" ORDER BY r.Name");
             IDataReader dr = null;
             //try
             //{
-            SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+            //SqlParameter[] param = new SqlParameter[1];
+            //param[0] = new SqlParameter("@username", model.Login1Model.UserName);
             //	execute a query
             dr = DB.ExecuteReader(sql.ToString(), param);
 
             if (!dr.Read())		//	no record found
             {
                 dr.Close();
-                if (powerUsers.IndexOf(model.Login1Model.UserName) == -1)
-                {
-                    param[0] = new SqlParameter("@username", model.Login1Model.UserName);
-                    DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
-                }
-                return false;
+                //if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
+                //{
+                //    param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+                //    DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
+                //}
+                throw new Exception("RoleNotDefined");
             }
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 
-            if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
-            {
-                throw new Exception("MaxFailedLoginAttempts");
-            }
+
             DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
 
             if (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)
@@ -236,23 +270,50 @@ namespace VIS.Helpers
 
         private static void GetSysConfigForlogin()
         {
-            int fCount = cache["FailedLoginCount"];
-            if (fCount == 0)
+            if (cache.Count == 0)
             {
-                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('','') ");
+                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('Failed_Login_Count','Password_Valid_Upto') ");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        cache[ds.Tables[0].Rows[i]["Name"].ToString()] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["Value"]);
+                        cache[ds.Tables[0].Rows[i]["Name"].ToString()] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Value"]);
                     }
                 }
                 else
                 {
-                    cache["FailedLoginCount"] = 5;
-                    cache["PwdValidUpto"] = 3;
+                    cache["Failed_Login_Count"] = 5;
+                    cache["Password_Valid_Upto"] = 3;
                 }
+
+                cache["SuperUserVal"] = DB.ExecuteScalar("SELECT value from AD_User where AD_User_ID=100").ToString();
+
             }
+        }
+
+        public static string ValidatePassword(string oldPassword, string NewPassword, string ConfirmNewPasseword)
+        {
+            if (!NewPassword.Equals(ConfirmNewPasseword))
+            {
+                return "BothPwdNotMatch";
+            }
+            if (oldPassword.Equals(NewPassword))
+            {
+                return "oldNewSamePwd";
+            }
+             string regex = @"(^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$)";// Start with Alphabet, minimum 4 length
+                                                                                         //@$!%*#?& allowed only
+            Regex re = new Regex(regex);
+
+            // The IsMatch method is used to validate 
+            // a string or to ensure that a string 
+            // conforms to a particular pattern. 
+            if (!re.IsMatch(NewPassword))
+            {
+                return "mustMatchCriteria";
+            }
+
+            return "";
         }
 
         public static bool UpdatePassword(string newPwd, int AD_User_ID)
@@ -260,10 +321,10 @@ namespace VIS.Helpers
             if (DB.ExecuteScalar("SELECT IsEncrypted from AD_Column WHERE AD_Column_ID=" + 417).ToString().Equals("Y"))
                 newPwd = SecureEngine.Encrypt(newPwd);
 
-            int pwdValidity = cache["PwdValidUpto"];
+            int pwdValidity = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
             string newpwdExpireDate = GlobalVariable.TO_DATE(DateTime.Now.AddMonths(pwdValidity), true);
 
-            string sql = "UPDATE AD_User set Updated=Sysdate,UpdatedBy="+AD_User_ID+",PasswordExpireOn='"+newpwdExpireDate+"',password='" + newPwd + "' WHERE AD_User_ID=" + AD_User_ID;
+            string sql = "UPDATE AD_User set Updated=Sysdate,UpdatedBy=" + AD_User_ID + ",PasswordExpireOn=" + newpwdExpireDate + ",password='" + newPwd + "' WHERE AD_User_ID=" + AD_User_ID;
             int count = DB.ExecuteQuery(sql);
             if (count > 0)
                 return true;

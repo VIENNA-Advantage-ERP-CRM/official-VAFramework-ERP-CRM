@@ -34,13 +34,22 @@ namespace VIS.Controllers
                 try
                 {
                     List<KeyNamePair> roles = null;
-                    roles = (List<KeyNamePair>)TempData.Peek("roles");
+                    roles = (List<KeyNamePair>)TempData["roles"];
                     model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
                     bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
                     bool TwoFA = Util.GetValueOfBool(TempData.Peek("TwoFA"));
+                    model.Login1Model.AD_User_ID = Util.GetValueOfInt(TempData.Peek("AD_User_ID"));
+                    string password = Util.GetValueOfString(TempData.Peek("Password"));
                     bool proceedToLogin2 = false;
                     if (resetPwd)
                     {
+                        string validated = LoginHelper.ValidatePassword(password, model.Login1Model.NewPassword, model.Login1Model.ConfirmNewPassword);
+                        if (validated.Length > 0)
+                        {
+                            ModelState.AddModelError("", validated);
+                            // If we got this far, something failed
+                            return Json(new { errors = GetErrorsFromModelState() });
+                        }
                         bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.NewPassword, model.Login1Model.AD_User_ID);
                         if (isUpdated)
                         {
@@ -66,7 +75,9 @@ namespace VIS.Controllers
                         TempData["Login2Model"] = model.Login2Model;
                         TempData["ResetPwd"] = model.Login1Model.ResetPwd;
                         TempData["TwoFA"] = model.Login1Model.TwoFA;
-
+                        TempData["AD_User_ID"] = model.Login1Model.AD_User_ID;
+                        TempData["Password"] = model.Login1Model.Password;
+                        //model.Login1Model.Password = null;
                         if (model.Login1Model.ResetPwd || model.Login1Model.TwoFA)
                         {
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
