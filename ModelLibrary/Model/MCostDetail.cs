@@ -4003,10 +4003,10 @@ namespace VAdvantage.Model
         {
             // is used to get current qty of defined costing method on Product category or Accounting schema
             Decimal Qty = MCost.GetproductCostAndQtyMaterial(cd.GetAD_Client_ID(), AD_Org_ID, product.GetM_Product_ID(), M_ASI_ID, cd.Get_Trx(), M_Warehouse_ID, true);
-            if (Qty == 0)
-            {
-                return true;
-            }
+            //if (Qty == 0)
+            //{
+            //    return true;
+            //}
 
             bool isReversed = false;
             if (windowName.Equals("Inventory Move"))
@@ -4042,13 +4042,24 @@ namespace VAdvantage.Model
                              (windowName.Equals("Inventory Move") && ((cd.GetQty() > 0 && !isReversed) || (cd.GetQty() < 0 && isReversed)))
                              ))
                     {
-                        // not to distribute cost in thiscase 
+                        // not to distribute cost in this case, but when qty become ZERO, than set current cost as ZERO
+                        if (windowName.Equals("Physical Inventory") && cost.GetCurrentQty().Equals(0))
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
                     }
                     else
                     {
-                        currentCost = Decimal.Round(Decimal.Divide(
-                                                     Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), Qty),
-                                                     acctSchema.GetCostingPrecision());
+                        if (!Qty.Equals(0))
+                        {
+                            currentCost = Decimal.Round(Decimal.Divide(
+                                                         Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), Qty),
+                                                         acctSchema.GetCostingPrecision());
+                        }
+                        else
+                        {
+                            currentCost = 0;
+                        }
                         cost.SetCurrentCostPrice(currentCost);
                     }
                     cost.SetCurrentQty(Qty);
