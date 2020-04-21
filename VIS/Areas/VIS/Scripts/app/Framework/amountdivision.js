@@ -244,6 +244,9 @@
             contentDiv.append(ctrlDiv).append(divGrid).append(divTotal).append(btnOk);
             root.append(contentDiv).append(bsyDiv);
 
+            if (isReadOnly) {
+                contentDiv.addClass('VIS-AMTD-ReadOnly');
+            }
 
             //Accounting Schema Change function...............
             cmbAcctSchema.on("change", function () {
