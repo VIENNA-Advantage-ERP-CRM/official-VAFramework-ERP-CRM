@@ -5507,9 +5507,9 @@
 
         $btnAmtDiv.on(VIS.Events.onClick, function (e) {
             e.stopPropagation();
-            if (self.isReadOnly) {
-                return;
-            }
+            //if (self.isReadOnly) {
+            //    return;
+            //}
 
             self.actionText();
             //var obj = new VIS.LocationForm(self.value);
@@ -5534,7 +5534,7 @@
             }
 
             self.oldValue = self.value;
-            var obj = new VIS.AmountDivision(self.value, orgID, dValue, isReadOnly);
+            var obj = new VIS.AmountDivision(self.value, orgID, dValue, self.isReadOnly);
             obj.onClosing = function (rid) {
                 if (rid > 0) {
                     self.oldValue = 0;

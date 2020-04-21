@@ -3650,6 +3650,10 @@ html[dir="rtl"] .vis-cvd-editbtn {
     /*margin-bottom: 10px;*/
 }
 
+.VIS-AMTD-ReadOnly .VIS-AMTD-formWrap, .VIS-AMTD-ReadOnly .VIS-AMTD-Grid tr, .VIS-AMTD-ReadOnly .VIS-AMTD-StatusContainer, .VIS-AMTD-ReadOnly .VIS-AMTD-formData, .VIS-AMTD-ReadOnly.VIS-AMTD-MainContent input {
+    pointer-events: none;
+}
+
 .VIS-AMTD-formData {
     float: left;
     width: 33.3%;
