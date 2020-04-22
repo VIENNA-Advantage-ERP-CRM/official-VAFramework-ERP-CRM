@@ -43,7 +43,8 @@ namespace VAdvantage.Model
                 // when we mark container as False, then it must be blank.
                 if (Is_ValueChanged("M_Locator_ID") || Is_ValueChanged("Ref_M_Container_ID") || (Is_ValueChanged("IsActive") && !IsActive()))
                 {
-                    string _sql = @"SELECT (SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID)) AS CurrentQty
+                    string _sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
                              FROM m_transaction t " +
                                      @" INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
                             WHERE t.AD_Client_ID = " + GetAD_Client_ID()

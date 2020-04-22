@@ -615,7 +615,7 @@ namespace VAdvantage.Model
                 {
                     MAcctSchemaElement elem = elements[i];
                     String et = elem.GetElementType();
-                    if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("Account_ID") > 0)
+                    if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("Account_ID") >= 0)
                         Account_ID = Util.GetValueOfInt(Get_Value("Account_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("C_SubAcct_ID") > 0)
                         C_SubAcct_ID = Util.GetValueOfInt(Get_Value("C_SubAcct_ID"));
@@ -714,7 +714,7 @@ namespace VAdvantage.Model
         {
             //	Update Journal Total
             String sql = "UPDATE GL_Journal j"
-                + " SET (TotalDr, TotalCr) = (SELECT COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0)" //jz ", "
+                + " SET (TotalDr, TotalCr) = (SELECT SUM(AmtAcctDr), SUM(AmtAcctCr)" //jz ", "
                     + " FROM GL_JournalLine jl WHERE jl.IsActive='Y' AND j.GL_Journal_ID=jl.GL_Journal_ID) "
                 + "WHERE GL_Journal_ID=" + GetGL_Journal_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -735,7 +735,7 @@ namespace VAdvantage.Model
 
             //	Update Batch Total
             sql = "UPDATE GL_JournalBatch jb"
-                + " SET (TotalDr, TotalCr) = (SELECT COALESCE(SUM(TotalDr),0), COALESCE(SUM(TotalCr),0)" //jz hard coded ", "
+                + " SET (TotalDr, TotalCr) = (SELECT SUM(TotalDr), SUM(TotalCr)" //jz hard coded ", "
                     + " FROM GL_Journal j WHERE jb.GL_JournalBatch_ID=j.GL_JournalBatch_ID) "
                 + "WHERE GL_JournalBatch_ID="
                     + "(SELECT DISTINCT GL_JournalBatch_ID FROM GL_Journal WHERE GL_Journal_ID="
