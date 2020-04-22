@@ -2136,6 +2136,9 @@
             ch = new VIS.ChildDialog();
             ch.setTitle(title);
             ch.setContent($root);
+            ch.setPosition({
+                my: "center bottom-3",
+            });
             ch.close = function () {
                 dispose();
             }
