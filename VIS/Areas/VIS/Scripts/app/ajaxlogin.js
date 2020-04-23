@@ -33,8 +33,8 @@
     var formSubmitHandler = function (e) {
         var $form = $(this);
         if ($('#login-form-2').is(':visible')) {
-            var newPwd = $('#txtNewPwd').val();
-            var newCPwd = $('#txtCNewPwd').val();
+            var newPwd = $newPwd.val();
+            var newCPwd = $newCPwd.val();
 
             if (newPwd != newCPwd) {
                 e.preventDefault();
@@ -284,6 +284,8 @@
         // $lblLang.text(Globalize.localize("Language"));
         $txtUser.attr("placeholder", Globalize.localize("User"));
         $txtPwd.attr("placeholder", Globalize.localize("Password"));
+        $newPwd.attr("placeholder", Globalize.localize("NewPassword"));
+        $newCPwd.attr("placeholder", Globalize.localize("NewCPassword"));
 
         $btnLogin1.val(Globalize.localize("Login"));
         $lblRemember.text(Globalize.localize("RememberMe"));
@@ -312,6 +314,8 @@
 
     var $txtUser = $("#loginName");
     var $txtPwd = $("#txtPwd");
+    var $newPwd = $('#txtNewPwd');
+    var $newCPwd = $('#txtCNewPwd');
     //var $lblUser = $('label[for="Login1Model_UserName"]');
     //var $lblPwd = $('label[for="Login1Model_Password"]');
     //var $lblLang = $('label[for="Login1Model_LoginLanguage"]');

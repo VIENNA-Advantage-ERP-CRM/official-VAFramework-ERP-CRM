@@ -222,30 +222,6 @@ namespace VIS.Helpers
 
 
                         bool deleteRecord = false;
-                        //1 firt check  - Check role exist
-                        //if (usersRoles.Contains(Util.GetValueOfInt(drLogin[0])))
-                        //{
-                        //    //check for Org Access Setting
-                        //    bool isUseUserOrgAccess = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsUseUserOrgAccess FROM AD_ROLE WHERE AD_ROLE_ID = " + drLogin[0].ToString())) == "Y";
-                        //    if (isUseUserOrgAccess) //User User Org
-                        //    {
-                        //        if (Convert.ToInt32(DB.ExecuteScalar("SELECT Count(1) FROM AD_User_OrgAccess WHERE AD_User_ID = " + AD_User_ID + " AND AD_ORG_ID= " + drLogin[2].ToString() + " AND IsActive='Y'")) < 1)
-                        //        {
-                        //            deleteRecord = true;
-                        //        }
-                        //    }
-                        //    else //User Role Org Access
-                        //    {
-                        //        if (Convert.ToInt32(DB.ExecuteScalar("SELECT Count(1) FROM AD_Role_OrgAccess WHERE AD_Role_ID = " + drLogin[0] + " AND AD_ORG_ID= " + drLogin[2].ToString() + " AND IsActive='Y'")) < 1)
-                        //        {
-                        //            deleteRecord = true;
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    deleteRecord = true;
-                        //}
 
                         //Delete Login Setting 
                         if (deleteRecord)
