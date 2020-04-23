@@ -194,27 +194,61 @@ namespace VIS.Models
                 warehouse = m_locator.GetM_Warehouse_ID();
             }
             List<TreeContainer> keyVal = new List<TreeContainer>();
-            string sql = @"SELECT value ,   '.'   || LPAD (' ', LEVEL * 1)   || Name AS Name,
+            string sql = "";
+            if (DatabaseType.IsOracle)
+            {
+                sql = @"SELECT value ,   '.'   || LPAD (' ', LEVEL * 1)   || Name AS Name,
                             LEVEL ,   name   || '_'   || value AS ContainerName , m_productcontainer_id
                          FROM m_productcontainer WHERE IsActive = 'Y'";
-            if (warehouse > 0)
-            {
-                sql += " AND m_warehouse_id = " + warehouse;
+                if (warehouse > 0)
+                {
+                    sql += " AND m_warehouse_id = " + warehouse;
+                }
+                if (locator > 0)
+                {
+                    sql += "  AND M_Locator_ID = " + locator;
+                }
+                if (container > 0)
+                {
+                    sql += " AND M_ProductContainer_ID != " + container;
+                }
+                if (!String.IsNullOrEmpty(validation))
+                {
+                    sql += " AND " + validation;
+                }
+                sql += "  START WITH NVL(ref_m_container_id,0) =0  CONNECT BY NVL(ref_m_container_id,0) = PRIOR m_productcontainer_id";
+                sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
             }
-            if (locator > 0)
+            else if (DatabaseType.IsPostgre)
             {
-                sql += "  AND M_Locator_ID = " + locator;
+                sql = @"WITH RECURSIVE GetContainerAsTree AS (                                                                                                                                                          
+                        SELECT value, name , 1 AS level, name || '_' || value as ContainerName,M_ProductContainer_ID, Ref_M_Container_ID , 
+                                AD_Client_ID , AD_Org_ID , M_Warehouse_ID , M_Locator_ID , IsActive 
+                          FROM   M_ProductContainer Where Ref_M_Container_ID is null AND isactive = 'Y'
+                        UNION ALL
+                        SELECT e.value , e.name, c.level + 1 ,   e.name || '_' || e.value as ContainerName, e.M_ProductContainer_ID,e.Ref_M_Container_ID ,
+                               e.AD_Client_ID , e.AD_Org_ID , e.M_Warehouse_ID , e.M_Locator_ID , e.IsActive 
+                            FROM   GetContainerAsTree c
+                        JOIN M_ProductContainer e ON e.Ref_M_Container_ID = c.M_ProductContainer_ID  )                                                                                                                                                                                     
+                        SELECT *
+                        FROM   GetContainerAsTree M_ProductContainer WHERE IsActive = 'Y'";
+                if (warehouse > 0)
+                {
+                    sql += "  AND m_warehouse_id = " + warehouse;
+                }
+                if (locator > 0)
+                {
+                    sql += "  AND M_Locator_ID = " + locator;
+                }
+                if (container > 0)
+                {
+                    sql += " AND M_ProductContainer_ID != " + container;
+                }
+                if (!String.IsNullOrEmpty(validation))
+                {
+                    sql += " AND " + validation;
+                }
             }
-            if (container > 0)
-            {
-                sql += " AND M_ProductContainer_ID != " + container;
-            }
-            if (!String.IsNullOrEmpty(validation))
-            {
-                sql += " AND " + validation;
-            }
-            sql += "  START WITH NVL(ref_m_container_id,0) =0  CONNECT BY NVL(ref_m_container_id,0) = PRIOR m_productcontainer_id";
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -250,8 +284,8 @@ namespace VIS.Models
             List<MoveContainer> moveContainer = new List<MoveContainer>();
 
             string sql = @"SELECT * FROM (
-                            SELECT p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
-                            SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS ContainerCurrentQty,  
+                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
+                            getcontainercurrentQty(t.M_PRODUCT_ID ,NVL(t.M_ATTRIBUTESETINSTANCE_ID ,0), NVL(t.M_ProductContainer_ID , 0) ) AS ContainerCurrentQty,  
                             (SELECT DESCRIPTION FROM M_ATTRIBUTESETINSTANCE WHERE NVL(M_ATTRIBUTESETINSTANCE_ID, 0) = t.M_ATTRIBUTESETINSTANCE_ID) AS ASI
                             FROM M_Transaction t
                             INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
@@ -260,17 +294,17 @@ namespace VIS.Models
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
                                AND t.AD_Client_ID  = " + _ctx.GetAD_Client_ID() +
-                //AND t.AD_Org_ID  = " + AD_Org_ID +
-                            @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
-                          )t WHERE ContainerCurrentQty <> 0 ";
+                          //AND t.AD_Org_ID  = " + AD_Org_ID +
+                          //@" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
+                          @" )t WHERE ContainerCurrentQty <> 0 ";
 
 
             // count record for paging
             if (page == 1)
             {
                 string sql1 = @"SELECT COUNT(*) FROM (
-                            SELECT p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
-                            SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS ContainerCurrentQty,  
+                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
+                            getcontainercurrentQty(t.M_PRODUCT_ID ,NVL(t.M_ATTRIBUTESETINSTANCE_ID , 0), NVL(t.M_ProductContainer_ID , 0) ) AS ContainerCurrentQty,  
                             (SELECT DESCRIPTION FROM M_ATTRIBUTESETINSTANCE WHERE NVL(M_ATTRIBUTESETINSTANCE_ID, 0) = t.M_ATTRIBUTESETINSTANCE_ID) AS ASI
                             FROM M_Transaction t
                             INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
@@ -279,9 +313,9 @@ namespace VIS.Models
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
                                AND t.AD_Client_ID  = " + _ctx.GetAD_Client_ID() +
-                    //AND t.AD_Org_ID  = " + AD_Org_ID +
-                            @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
-                          )t WHERE ContainerCurrentQty <> 0 ";
+                          //AND t.AD_Org_ID  = " + AD_Org_ID +
+                          // @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
+                          @" )t WHERE ContainerCurrentQty <> 0 ";
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql1, null, null));
             }
 
@@ -468,19 +502,54 @@ namespace VIS.Models
             MMovement movement = new MMovement(_ctx, movementId, trx);
             string childContainerId = null;
             StringBuilder error = new StringBuilder();
+            bool ispostgerSql = DatabaseType.IsPostgre;
+            string sql = "";
+            string pathContainer = "";
 
             // Get Path upto selected container
-            string sql = @"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
+            if (ispostgerSql)
+            {
+                sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
+                        SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
+                        FROM    M_ProductContainer
+                        WHERE   Ref_M_Container_ID is null
+                        UNION ALL
+                        SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
+                        FROM    M_ProductContainer p
+                                INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID
+                    )
+                    SELECT   ARRAY_TO_STRING(name_path, '->')
+                    FROM    pops  where m_productcontainer_id = " + fromContainerId;
+            }
+            else
+            {
+                sql = @"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
                             FROM m_productcontainer 
                            WHERE m_productcontainer_id = " + fromContainerId + @"
                             START WITH ref_m_container_id IS NULL CONNECT BY prior m_productcontainer_id = ref_m_container_id
                            ORDER BY tree ";
-            string pathContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, trx));
+            }
+            pathContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, trx));
 
             // child records with Parent Id
             if (!isMoveFullContainerQty)
             {
-                sql = @"SELECT tree, m_productcontainer_id FROM
+                if (ispostgerSql)
+                {
+                    sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
+                                SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
+                                FROM    M_ProductContainer
+                                WHERE   Ref_M_Container_ID is null
+                                UNION ALL
+                                SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
+                                FROM    M_ProductContainer p
+                                        INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID )
+                            SELECT  M_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
+                            FROM    pops  where ARRAY_TO_STRING(name_path, '->') like '" + pathContainer + "%'";
+                }
+                else
+                {
+                    sql = @"SELECT tree, m_productcontainer_id FROM
                             (SELECT sys_connect_by_path(m_productcontainer_id,'->') tree , m_productcontainer_id
                              FROM m_productcontainer
                              START WITH ref_m_container_id IS NULL
@@ -488,6 +557,7 @@ namespace VIS.Models
                              ORDER BY tree  
                              )
                            WHERE tree LIKE ('" + pathContainer + "%') ";
+                }
                 DataSet ds = DB.ExecuteDataset(sql, null, trx);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -527,8 +597,8 @@ namespace VIS.Models
 
             // Get All records of Parent Container and child container
             sql = @"SELECT * FROM (
-                            SELECT p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
-                            SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS ContainerCurrentQty
+                            SELECT Distinct p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
+                            getcontainercurrentQty(t.M_PRODUCT_ID ,t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID ) AS ContainerCurrentQty
                             FROM M_Transaction t
                             INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
                             INNER JOIN C_UOM u ON u.C_UOM_ID = p.C_UOM_ID
@@ -536,7 +606,6 @@ namespace VIS.Models
                            @" ) AND t.MovementDate <=" + GlobalVariable.TO_DATE(movement.GetMovementDate(), true) + @" 
                                AND t.M_Locator_ID  = " + fromLocatorId + @"
                                AND t.AD_Client_ID  = " + movement.GetAD_Client_ID() + @"
-                            GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
                           ) t WHERE ContainerCurrentQty <> 0 ";
             DataSet dsRecords = DB.ExecuteDataset(sql, null, trx);
             if (dsRecords != null && dsRecords.Tables.Count > 0 && dsRecords.Tables[0].Rows.Count > 0)
@@ -649,12 +718,30 @@ namespace VIS.Models
         public bool IsContainerMoved(int movementId, string pathUptoFromContainer, string allChildIncludeParentFromContainer, int toContainerId, Trx trx)
         {
             // Get Path upto selected To container
-            string pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
+            string pathUptoToContainer = "";
+            if (DatabaseType.IsPostgre)
+            {
+                String sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
+                        SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
+                        FROM    M_ProductContainer
+                        WHERE   Ref_M_Container_ID is null
+                        UNION ALL
+                        SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
+                        FROM    M_ProductContainer p
+                                INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID
+                    )
+                        SELECT  M_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
+                        FROM    pops  where m_productcontainer_id = " + toContainerId;
+                pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, trx));
+            }
+            else
+            {
+                pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
                             FROM m_productcontainer 
                            WHERE m_productcontainer_id = " + toContainerId + @"
                             START WITH ref_m_container_id IS NULL CONNECT BY prior m_productcontainer_id = ref_m_container_id
                            ORDER BY tree ", null, trx));
-
+            }
             DataSet dsTragetContainer = DB.ExecuteDataset(@"SELECT UNIQUE targetcontainer_id FROM M_MovementLine 
                                         WHERE MoveFullContainer='Y' AND IsActive = 'Y' AND M_Movement_ID = " + movementId, null, trx);
             if (dsTragetContainer != null && dsTragetContainer.Tables.Count > 0 && dsTragetContainer.Tables[0].Rows.Count > 0)

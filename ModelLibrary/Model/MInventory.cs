@@ -681,7 +681,7 @@ namespace VAdvantage.Model
                     {
                         sql = "SELECT ord.DocumentNo || '_' || ol.Line AS Name FROM "
                          + " M_RequisitionLine ol INNER JOIN M_Requisition ord ON ol.M_Requisition_ID = ord.M_Requisition_ID WHERE M_RequisitionLine_ID IN (" + delReq.ToString().Trim().Trim(',') + ")";                        
-                        sql.Replace("'", "''");
+                        sql = sql.Replace("'", "''");
                         string req = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql + "') FROM DUAL", null, Get_Trx()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "RequisitionAlreadyDone") + ": " + req;
@@ -704,8 +704,8 @@ namespace VAdvantage.Model
                         FROM M_Inventory i INNER JOIN M_Inventoryline il ON i.M_Inventory_ID = il.M_Inventory_ID
                         INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
                         INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Inventory_ID = " + GetM_Inventory_ID() + @" AND ROWNUM <= 100 ) t WHERE notmatched IS NOT NULL";
-                sql.Replace("'", "''");
+                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Inventory_ID = " + GetM_Inventory_ID() + @"  ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100";
+                sql = sql.Replace("'", "''");
                 string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
@@ -728,8 +728,8 @@ namespace VAdvantage.Model
                                     THEN 0
                                     ELSE 1 END AS COUNT
                                 FROM M_INVENTORY I INNER JOIN M_INVENTORYLINE IL ON I.M_INVENTORY_ID = IL.M_INVENTORY_ID
-                                WHERE I.M_INVENTORY_ID =" + GetM_Inventory_ID() + @" AND ROWNUM <= 100 ) t WHERE COUNT = 0");
-                sql.Replace("'", "''");
+                                WHERE I.M_INVENTORY_ID =" + GetM_Inventory_ID() + @"  ) t WHERE COUNT = 0 AND ROWNUM <= 100");
+                sql = _qry.ToString().Replace("'", "''");
                 string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.ToString() + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
@@ -2960,6 +2960,8 @@ namespace VAdvantage.Model
                 CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
                 rLine.SetM_Inventory_ID(reversal.GetM_Inventory_ID());
                 rLine.SetParent(reversal);
+                //set container reference(not a copy record)
+                rLine.SetM_ProductContainer_ID(oLine.GetM_ProductContainer_ID());
                 //
                 rLine.SetQtyBook(oLine.GetQtyCount());		//	switch
                 rLine.SetQtyCount(oLine.GetQtyBook());
