@@ -274,7 +274,7 @@ namespace VIS.Models
                         if (WarehouseToID > 0)
                             sqlWhere.Append(" AND M_Warehouse_ID = " + WarehouseToID);
                     }
-                    sql += " AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE AD_Client_ID IN " + ctx.GetAD_Client_ID() + " AND IsActive = 'Y' AND DocStatus IN ('CO') "
+                    sql += " AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND IsActive = 'Y' AND DocStatus IN ('CO') "
                         + sqlWhere.ToString() + ")";
                 }
                 else if (!isCart && windowID == 168)  // JID_1030: on physical inventory system does not check that the locator is of selected warehouse on Physiacl inventory header or not.

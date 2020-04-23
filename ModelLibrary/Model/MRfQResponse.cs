@@ -261,7 +261,7 @@ namespace VAdvantage.Model
                 mtext.SetPO(GetRfQ(), true);
                 message.Append(mtext.GetMailText(true).Equals(string.Empty) ? "** No Email Body" : mtext.GetMailText(true));
 
-                String subject = mtext.GetMailHeader().Equals(string.Empty) ? "** No Subject" : mtext.GetMailHeader(); ;
+                String subject = String.IsNullOrEmpty(mtext.GetMailHeader()) ? "** No Subject" : mtext.GetMailHeader(); ;
 
                 EMail email = client.CreateEMail(to.GetEMail(), to.GetName(), subject, message.ToString());
                 if (email == null)
