@@ -55,13 +55,18 @@ namespace VIS.Helpers
                 //    model.Login1Model.Password = null;
                 //}
                 isLDAP = true;
-                // if not authenticated, use AD_User as backup
             }
+            //Save Failed Login Count and Password validty in cache
             GetSysConfigForlogin();
+
+
             int fCount = Util.GetValueOfInt(cache["Failed_Login_Count"]);
             int passwordValidUpto = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
             SqlParameter[] param = new SqlParameter[1];
-            if (!authenticated)
+            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+
+            //if authenticated by LDAP or password is null(Means request from home page)
+            if (!authenticated && model.Login1Model.Password!=null)
             {
                 string sqlEnc = "select isencrypted from ad_column where ad_table_id=(select ad_table_id from ad_table where tablename='AD_User') and columnname='Password'";
                 char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
@@ -70,7 +75,7 @@ namespace VIS.Helpers
                     model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
                 }
 
-                param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+               
 
 
                 DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
@@ -80,9 +85,11 @@ namespace VIS.Helpers
                     {
                         throw new Exception("NotLoginUser");
                     }
+                    //if username or password is not matching
                     if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserName) ||
                         !dsUserInfo.Tables[0].Rows[0]["Password"].Equals(model.Login1Model.Password))
                     {
+                        //if current user is Not superuser, then increase failed login count
                         if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
                         {
                             param[0] = new SqlParameter("@username", model.Login1Model.UserName);
@@ -96,7 +103,7 @@ namespace VIS.Helpers
 
                         throw new Exception("UserPwdError");
                     }
-                    else
+                    else// if username and password matched, then check if account is locked or not
                     {
                         if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]))
                         {
@@ -104,7 +111,7 @@ namespace VIS.Helpers
                         }
                     }
                 }
-                else
+                else// if no data found
                 {
                     throw new Exception("UserNotFound");
                 }
@@ -146,7 +153,7 @@ namespace VIS.Helpers
             //	execute a query
             dr = DB.ExecuteReader(sql.ToString(), param);
 
-            if (!dr.Read())		//	no record found
+            if (!dr.Read())		//	no record found, then return msaage that role not found.
             {
                 dr.Close();
                 //if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
@@ -157,13 +164,13 @@ namespace VIS.Helpers
                 throw new Exception("RoleNotDefined");
             }
 
+            // if user logged in successfully, then set failed login count to 0
             DB.ExecuteQuery("UPDATE AD_User set FailedLoginCount=0 where Value=@username", param);
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 
-
+            //check if password is expired or never reset.  then force user to reset
             DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
-
             if (passwordValidUpto > 0 && (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0))
             {
                 model.Login1Model.ResetPwd = true;
@@ -274,8 +281,14 @@ namespace VIS.Helpers
 
         private static void GetSysConfigForlogin()
         {
+            //if nothing found in cache, then add
             if (cache.Count == 0)
             {
+                //Set default Values
+                cache["Failed_Login_Count"] = 5;
+                cache["Password_Valid_Upto"] = 3;
+
+                //then check setting in System Config, if found, then will replace default values.
                 DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('Failed_Login_Count','Password_Valid_Upto') ");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -284,12 +297,8 @@ namespace VIS.Helpers
                         cache[ds.Tables[0].Rows[i]["Name"].ToString()] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Value"]);
                     }
                 }
-                else
-                {
-                    cache["Failed_Login_Count"] = 5;
-                    cache["Password_Valid_Upto"] = 3;
-                }
 
+                //Save SuperUser's key in cache
                 cache["SuperUserVal"] = DB.ExecuteScalar("SELECT value from AD_User where AD_User_ID=100").ToString();
 
             }
@@ -297,7 +306,8 @@ namespace VIS.Helpers
 
         public static string ValidatePassword(string oldPassword, string NewPassword, string ConfirmNewPasseword)
         {
-            if (!NewPassword.Equals(ConfirmNewPasseword))
+
+            if (NewPassword ==null || !NewPassword.Equals(ConfirmNewPasseword))
             {
                 return "BothPwdNotMatch";
             }
@@ -322,6 +332,7 @@ namespace VIS.Helpers
 
         public static bool UpdatePassword(string newPwd, int AD_User_ID)
         {
+            //Check if User's pwd is to be encrypted or not
             if (DB.ExecuteScalar("SELECT IsEncrypted from AD_Column WHERE AD_Column_ID=" + 417).ToString().Equals("Y"))
                 newPwd = SecureEngine.Encrypt(newPwd);
 
