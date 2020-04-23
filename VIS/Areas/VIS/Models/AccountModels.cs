@@ -60,7 +60,21 @@ namespace VIS.Models
 
         public bool ResetPwd { get; set; }
 
-        public bool TwoFA { get; set; }
+        public bool Is2FAEnabled { get; set; }
+
+        public string TokenKey2FA { get; set; }
+
+        public string QRCodeURL { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "OTP 2FA")]
+        public string OTP2FA { get; set; }
+
+        public bool QRFirstTime { get; set; }
+
+        public string OTPError { get; set; }
+
+        public String Login1DataOTP { get; set; }
     }
 
     /// <summary>

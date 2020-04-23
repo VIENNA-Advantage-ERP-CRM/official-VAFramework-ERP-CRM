@@ -61,15 +61,24 @@
                         $backButton.prop('disabled', false);
                         $imgbusy1.css('display', 'none');
                     }
-                    else if (json.ctx && json.ctx.ResetPwd)
-                    {
-                        showLoginResetPwd();
-                        $('#ResetPwd').val(json.ctx.ResetPwd);
-                    }
-                    else if (json.ctx && json.ctx.TwoFA) {
+                    else if (json.ctx && json.ctx.Is2FAEnabled) {
                         showLogin2FA();
-                        $('#TwoFA').val(json.ctx.TwoFA);
+                        var txtOTP = $('#txt2FAOTP');
+                        $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
+                        if (json.ctx.QRFirstTime)
+                            $("#vis-loginqrcode").css("display", "block");                        
+                        $('#TwoFA').val(json.ctx.Is2FAEnabled);
+                        if (json.ctx.OTPError != "")
+                            displayErrors($form, [json.ctx.OTPError]);
+                        txtOTP.val("");
+                        $('#login3Data').val(JSON.stringify(json.ctx));
+                        txtOTP.focus();
+                        $imgbusy1.css('display', 'none');
                     }
+                    //else if (json.ctx && json.ctx.ResetPwd) {
+                    //    showLoginResetPwd();
+                    //    $('#ResetPwd').val(json.ctx.ResetPwd);
+                    //}
                     else if (json.success) {
                         window.location = json.redirect || location.href;
                         localStorage.setItem("vis_login_langCode", $cmbLang.val());

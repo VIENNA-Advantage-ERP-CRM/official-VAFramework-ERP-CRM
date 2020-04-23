@@ -33,21 +33,33 @@ namespace VIS.Controllers
 
                 try
                 {
+                    model.Login1Model.OTPError = "";
                     List<KeyNamePair> roles = null;
                     roles = (List<KeyNamePair>)TempData["roles"];
-                    model.Login2Model=(Login2Model) TempData["Login2Model"];
-                    if (model.Login1Model.ResetPwd)
+                    model.Login2Model = (Login2Model)TempData["Login2Model"];
+                    //if (model.Login1Model.ResetPwd)
+                    //{
+                    //    //Rst Pwd Functioanility here.
+                    //    model.Login1Model.ResetPwd = false;
+                    //    return Login(model, returnUrl, roles);
+                    //}
+                    //else if (model.Login1Model.Is2FAEnabled)
+                    if (model.Login1Model.Is2FAEnabled)
                     {
-                        //Rst Pwd Functioanility here.
-                        model.Login1Model.ResetPwd = false;
-                        return Login(model, returnUrl, roles);
-                    }
-                    else if (model.Login1Model.TwoFA)
-                    {
-
-                        // Two Here.
-                        model.Login1Model.TwoFA = false;
-                        return Login(model, returnUrl, roles);
+                        var otp = model.Login1Model.OTP2FA;
+                        model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
+                        model.Login1Model.OTP2FA = otp;
+                        bool valOTP = LoginHelper.Validate2FAOTP(model);
+                        if (valOTP)
+                        {
+                            // Two Here.
+                            model.Login1Model.Is2FAEnabled = false;
+                            return Login(model, returnUrl, roles);
+                        }
+                        else
+                            model.Login1Model.OTPError = "Wrong OTP Entered";
+                        //else
+                        // return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
                     }
                     // LoginModel loginModel = null;
 
@@ -57,9 +69,10 @@ namespace VIS.Controllers
 
                     if (LoginHelper.Login(model, out roles))
                     {
+                        // ViewBag.QRCodeURL = model.Login1Model.QRCodeURL;
                         TempData["roles"] = roles;
                         TempData["Login2Model"] = model.Login2Model;
-                        if (model.Login1Model.ResetPwd || model.Login1Model.TwoFA)
+                        if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
                         {
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
                         }
@@ -106,7 +119,6 @@ namespace VIS.Controllers
                     model.Login1Model = JsonHelper.Deserialize(model.Login2Model.Login1Data, typeof(Login1Model)) as Login1Model;
                     saveSetting = true;
                 }
-
 
                 LoginContext lCtx = LoginHelper.GetLoginContext(model);
 
