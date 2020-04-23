@@ -59,6 +59,7 @@ namespace VIS.Helpers
             }
             GetSysConfigForlogin();
             int fCount = Util.GetValueOfInt(cache["Failed_Login_Count"]);
+            int passwordValidUpto = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
             SqlParameter[] param = new SqlParameter[1];
             if (!authenticated)
             {
@@ -68,7 +69,7 @@ namespace VIS.Helpers
                 {
                     model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
                 }
-                
+
                 param[0] = new SqlParameter("@username", model.Login1Model.UserName);
 
 
@@ -85,7 +86,7 @@ namespace VIS.Helpers
                         if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
                         {
                             param[0] = new SqlParameter("@username", model.Login1Model.UserName);
-                            DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
+                            int count = DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value=@username ", param);
 
                             if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]) + 1)
                             {
@@ -95,7 +96,8 @@ namespace VIS.Helpers
 
                         throw new Exception("UserPwdError");
                     }
-                    else {
+                    else
+                    {
                         if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]))
                         {
                             throw new Exception("MaxFailedLoginAttempts");
@@ -155,12 +157,14 @@ namespace VIS.Helpers
                 throw new Exception("RoleNotDefined");
             }
 
+            DB.ExecuteQuery("UPDATE AD_User set FailedLoginCount=0 where Value=@username", param);
+
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 
 
             DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
 
-            if (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)
+            if (passwordValidUpto > 0 && (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0))
             {
                 model.Login1Model.ResetPwd = true;
             }
@@ -301,8 +305,8 @@ namespace VIS.Helpers
             {
                 return "oldNewSamePwd";
             }
-             string regex = @"(^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$)";// Start with Alphabet, minimum 4 length
-                                                                                         //@$!%*#?& allowed only
+            string regex = @"(^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$)";// Start with Alphabet, minimum 4 length
+                                                                                        //@$!%*#?& allowed only
             Regex re = new Regex(regex);
 
             // The IsMatch method is used to validate 

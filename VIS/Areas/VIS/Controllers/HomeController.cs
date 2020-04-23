@@ -166,6 +166,11 @@ namespace VIS.Controllers
                     var OrgList = new List<KeyNamePair>();
                     var WareHouseList = new List<KeyNamePair>();
 
+                    if (string.IsNullOrEmpty(model.Login1Model.Password) && TempData["Password"]!=null)
+                    {
+                        model.Login1Model.Password =SecureEngine.Decrypt(TempData["Password"]).ToString();
+                    }
+
                     LoginHelper.Login(model, out RoleList);
 
                     //string diableMenu = ctx.GetContext("#DisableMenu");
