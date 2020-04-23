@@ -195,6 +195,7 @@ namespace VIS.Models
             }
             List<TreeContainer> keyVal = new List<TreeContainer>();
             string sql = "";
+            DataSet ds = null;
             if (DatabaseType.IsOracle)
             {
                 sql = @"SELECT value ,   '.'   || LPAD (' ', LEVEL * 1)   || Name AS Name,
@@ -218,38 +219,13 @@ namespace VIS.Models
                 }
                 sql += "  START WITH NVL(ref_m_container_id,0) =0  CONNECT BY NVL(ref_m_container_id,0) = PRIOR m_productcontainer_id";
                 sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
+                ds = DB.ExecuteDataset(sql);
             }
             else if (DatabaseType.IsPostgre)
             {
-                sql = @"WITH RECURSIVE GetContainerAsTree AS (                                                                                                                                                          
-                        SELECT value, name , 1 AS level, name || '_' || value as ContainerName,M_ProductContainer_ID, Ref_M_Container_ID , 
-                                AD_Client_ID , AD_Org_ID , M_Warehouse_ID , M_Locator_ID , IsActive 
-                          FROM   M_ProductContainer Where Ref_M_Container_ID is null AND isactive = 'Y'
-                        UNION ALL
-                        SELECT e.value , e.name, c.level + 1 ,   e.name || '_' || e.value as ContainerName, e.M_ProductContainer_ID,e.Ref_M_Container_ID ,
-                               e.AD_Client_ID , e.AD_Org_ID , e.M_Warehouse_ID , e.M_Locator_ID , e.IsActive 
-                            FROM   GetContainerAsTree c
-                        JOIN M_ProductContainer e ON e.Ref_M_Container_ID = c.M_ProductContainer_ID  )                                                                                                                                                                                     
-                        SELECT *
-                        FROM   GetContainerAsTree M_ProductContainer WHERE IsActive = 'Y'";
-                if (warehouse > 0)
-                {
-                    sql += "  AND m_warehouse_id = " + warehouse;
-                }
-                if (locator > 0)
-                {
-                    sql += "  AND M_Locator_ID = " + locator;
-                }
-                if (container > 0)
-                {
-                    sql += " AND M_ProductContainer_ID != " + container;
-                }
-                if (!String.IsNullOrEmpty(validation))
-                {
-                    sql += " AND " + validation;
-                }
+                ds = GetContainerAsTreeForPostgre(warehouse, locator, container, validation);
+
             }
-            DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -266,6 +242,80 @@ namespace VIS.Models
                 ds.Dispose();
             }
             return keyVal;
+        }
+
+        /// <summary>
+        /// Get Product Container as tree in Postgre
+        /// Enable Extenstion as tablefunc
+        /// </summary>
+        /// <param name="warehouse">warehouse id</param>
+        /// <param name="locator">locator id</param>
+        /// <param name="container">container id</param>
+        /// <param name="validation">validation</param>
+        /// <returns>Product Container Tree</returns>
+        private DataSet GetContainerAsTreeForPostgre(int warehouse, int locator, int container, string validation)
+        {
+            DataSet finalContainer = null;
+            // Get List of parent Container
+            String sql = "SELECT M_ProductContainer_ID FROM M_ProductContainer WHERE Ref_M_Container_ID IS NULL AND IsActive = 'Y' ";
+            if (warehouse > 0)
+            {
+                sql += "  AND m_warehouse_id = " + warehouse;
+            }
+            if (locator > 0)
+            {
+                sql += "  AND M_Locator_ID = " + locator;
+            }
+            if (container > 0)
+            {
+                sql += " AND M_ProductContainer_ID != " + container;
+            }
+            if (!String.IsNullOrEmpty(validation))
+            {
+                sql += " AND " + validation;
+            }
+            DataSet ds = DB.ExecuteDataset(sql, null, null);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                // loop parent Container, 
+                DataSet childContainer = null;
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    int parentId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]);
+                    sql = @"select (select tt.value from m_productcontainer tt where tt.M_ProductContainer_ID = t.M_ProductContainer_ID) as value,
+                                   (select tt.name from m_productcontainer tt where tt.M_ProductContainer_ID = t.M_ProductContainer_ID) as Name , 
+                                   t.LEVEL + 1 AS LEVEL, 
+                                   (select tt.name   || '_'   || tt.value from m_productcontainer tt where tt.M_ProductContainer_ID = t.M_ProductContainer_ID) as ContainerName
+                                  , t.M_ProductContainer_ID
+                            FROM connectby('M_ProductContainer', 'M_ProductContainer_ID', 'Ref_M_Container_ID', " + parentId + @"::text,0)
+                            AS t(M_ProductContainer_ID int , Ref_M_Container_ID int, level int)  
+                             JOIN M_ProductContainer pt on pt.M_ProductContainer_ID =" + parentId;
+                    childContainer = DB.ExecuteDataset(sql, null, null);
+                    if (childContainer != null && childContainer.Tables.Count > 0 && childContainer.Tables[0].Rows.Count > 0)
+                    {
+                        for (int j = 0; j < childContainer.Tables[0].Rows.Count; j++)
+                        {
+                            if (finalContainer == null)
+                            {
+                                finalContainer = childContainer.Copy();
+                                break;
+                            }
+                            else
+                            {
+                                DataRow dr = childContainer.Tables[0].Rows[j];
+                                finalContainer.Tables[0].ImportRow(dr);
+                                finalContainer.AcceptChanges();
+                            }
+                        }
+                    }
+                }
+            }
+            if (finalContainer == null)
+            {
+                // Copy or clone of Parent container 
+                finalContainer = ds.Copy();
+            }
+            return finalContainer;
         }
 
         /// <summary>
