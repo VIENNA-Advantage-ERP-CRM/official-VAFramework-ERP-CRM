@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Web.Security;
-
+using VAdvantage.Model;
 using VAdvantage.Utility;
 
 ////// <summary>
@@ -42,12 +42,37 @@ namespace VIS.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
-         [Required]
+
+        [Required]
         [Display(Name = "LoginLanguage")]
         public string LoginLanguage { get; set; }
 
-       public int AD_User_ID { get; set; }
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm New Password")]
+        public string ConfirmNewPassword { get; set; }
 
+        [DataType(DataType.Password)]
+        [Display(Name = "New Password")]
+        public string NewPassword { get; set; }
+
+
+        public int AD_User_ID { get; set; }
+
+        public bool ResetPwd { get; set; }
+
+        public bool Is2FAEnabled { get; set; }
+
+        public string TokenKey2FA { get; set; }
+
+        public string QRCodeURL { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "OTP 2FA")]
+        public string OTP2FA { get; set; }
+
+        public bool QRFirstTime { get; set; }
+
+        public String Login1DataOTP { get; set; }
     }
 
     /// <summary>
@@ -66,10 +91,10 @@ namespace VIS.Models
         [Range(0, int.MaxValue, ErrorMessage = "SelectRole")]
         [Required(ErrorMessage = "SelectRole")]
         public String Role { get; set; }
-        
+
         public String RoleName { get; set; }
 
-      
+
 
         [Display(Name = "Client")]
         [Range(0, int.MaxValue, ErrorMessage = "SelectClient")]
@@ -103,9 +128,9 @@ namespace VIS.Models
         }
 
 
-        
+
         [Display(Name = "WareHouse")]
-        
+
         public string Warehouse { get; set; }
         public String WarehouseName { get; set; }
 
@@ -114,7 +139,7 @@ namespace VIS.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime Date { get; set; }
-        
+
         public String Login1Data { get; set; }
         public string LoginLanguage { get; set; }
     }
@@ -133,7 +158,7 @@ namespace VIS.Models
         }
     }
 
-    
+
     public class ExternalLogin
     {
         public string Provider { get; set; }
@@ -148,7 +173,7 @@ namespace VIS.Models
         {
             string retUrl = "";
             ModelLibrary.CloudService.ServiceSoapClient cloud = null;
-          
+
             try
             {
                 cloud = VAdvantage.Classes.ServerEndPoint.GetCloudClient();
@@ -157,7 +182,7 @@ namespace VIS.Models
                 {
                     //Response.Redirect("http://demo.viennaadvantage.com",true);
                     retUrl = GenerateUrl(url);
-                    return retUrl ;
+                    return retUrl;
                 }
             }
             catch
@@ -182,11 +207,11 @@ namespace VIS.Models
                     if (retUrl != "True")
                     {
 
-                         return retUrl;
+                        return retUrl;
                     }
                     else
                     {
-                        retUrl  =  GenerateUrl(url);
+                        retUrl = GenerateUrl(url);
                     }
                 }
                 catch

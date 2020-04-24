@@ -32,10 +32,32 @@
 
     var formSubmitHandler = function (e) {
         var $form = $(this);
+        if ($('#login-form-2').is(':visible')) {
+            var newPwd = $newPwd.val();
+            var newCPwd = $newCPwd.val();
+
+            if (newPwd != newCPwd) {
+                e.preventDefault();
+                displayErrors($form, ["BothPwdNotMatch"]);
+                return false;
+            }
+
+            //strong password regular expression
+            if (!validatePassword(newPwd)) {
+                e.preventDefault();
+                displayErrors($form, ["mustMatchCriteria"]);
+                return false;
+            }
+
+
+        }
         displayErrors($form, "");
         $btnLogin1.prop('disabled', true);
         $btnLogin2.prop('disabled', true);
         $backButton.prop('disabled', true);
+
+
+
         // $imgbusy1.show();
         $imgbusy1.css('display', 'block');
         // We check if jQuery.validator exists on the form
@@ -59,10 +81,23 @@
                         $btnLogin1.prop('disabled', false);
                         $btnLogin2.prop('disabled', false);
                         $backButton.prop('disabled', false);
-                        // $imgbusy2.hide();
-                        //  $imgbusy1.hide();
                         $imgbusy1.css('display', 'none');
-
+                    }
+                    else if (json.ctx && json.ctx.ResetPwd) {
+                        showLoginResetPwd();
+                        $('#ResetPwd').val(json.ctx.ResetPwd);
+                    }
+                    else if (json.ctx && json.ctx.Is2FAEnabled) {
+                        showLogin2FA();
+                        var txtOTP = $('#txt2FAOTP');
+                        $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
+                        if (json.ctx.QRFirstTime)
+                            $("#vis-loginqrcode").css("display", "block");                        
+                        //$('#TwoFA').val(json.ctx.Is2FAEnabled);
+                        txtOTP.val("");
+                        $('#login3Data').val(JSON.stringify(json.ctx));
+                        txtOTP.focus();
+                        $imgbusy1.css('display', 'none');
                     }
                     else if (json.success) {
                         window.location = json.redirect || location.href;
@@ -95,6 +130,19 @@
         e.preventDefault();
     };
 
+    var validatePassword = function (password) {
+        var regex = /^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$/;// Start with Alphabet, minimum 4 length
+       //@$!%*#?& allowed only
+
+        var passed = 0;
+
+       if(!regex.test(password)) {
+
+           return false;
+        }
+        return true;
+    };
+
     function showLogin2() {
         $("#loginPanel").hide();//"slide", function () {
         $("#login2Panel").show();//"slide", function () {
@@ -103,6 +151,21 @@
         $cmbOrg.empty();
         $cmbWarehouse.empty();
         $("#login2Panel").find("ul").empty();
+    };
+
+    var showLoginResetPwd = function () {
+        $('#login-form-1').hide();
+        $('#login-form-3').hide();
+        $('#login-form-2').show(); 
+        $btnLogin1.prop('disabled', false);
+        $newPwd.focus();
+    };
+
+    var showLogin2FA = function () {
+        $('#login-form-1').hide();
+        $('#login-form-2').hide();
+        $('#login-form-3').show();
+        $btnLogin1.prop('disabled', false);
     };
 
     var showLogin = function (e) {
@@ -230,6 +293,8 @@
         // $lblLang.text(Globalize.localize("Language"));
         $txtUser.attr("placeholder", Globalize.localize("User"));
         $txtPwd.attr("placeholder", Globalize.localize("Password"));
+        $newPwd.attr("placeholder", Globalize.localize("NewPassword"));
+        $newCPwd.attr("placeholder", Globalize.localize("NewCPassword"));
 
         $btnLogin1.val(Globalize.localize("Login"));
         $lblRemember.text(Globalize.localize("RememberMe"));
@@ -258,6 +323,8 @@
 
     var $txtUser = $("#loginName");
     var $txtPwd = $("#txtPwd");
+    var $newPwd = $('#txtNewPwd');
+    var $newCPwd = $('#txtCNewPwd');
     //var $lblUser = $('label[for="Login1Model_UserName"]');
     //var $lblPwd = $('label[for="Login1Model_Password"]');
     //var $lblLang = $('label[for="Login1Model_LoginLanguage"]');
@@ -321,4 +388,6 @@
 
 (function () {
     $("#login2Panel").hide();
+    $('#login-form-2').hide();
+    $('#login-form-3').hide();
 })();

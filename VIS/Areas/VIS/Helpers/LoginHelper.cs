@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Google.Authenticator;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
+using VAdvantage.Classes;
+using VAdvantage.Common;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
@@ -17,6 +21,9 @@ namespace VIS.Helpers
     /// </summary>
     public class LoginHelper
     {
+
+        /**	Cache					*/
+        private static CCache<string, object> cache = new CCache<string, object>("LoginHelper", 30, 60);
         /// <summary>
         /// return is credential provide by user is right or not
         /// </summary>
@@ -26,10 +33,9 @@ namespace VIS.Helpers
         /// <returns>true if athenicated</returns>
         public static bool Login(LoginModel model, out List<KeyNamePair> roles)
         {
-            roles = null;
             // loginModel = null;
             //bool isMatch = false;
-
+            roles = null;
             SecureEngine.Encrypt("t"); //Initialize 
 
             //	Cannot use encrypted password
@@ -46,73 +52,161 @@ namespace VIS.Helpers
             if (system != null && system.IsLDAP())
             {
                 authenticated = system.IsLDAP(model.Login1Model.UserName, model.Login1Model.Password);
-                if (authenticated)
-                {
-                    model.Login1Model.Password = null;
-                }
+                //if (authenticated)
+                //{
+                //    model.Login1Model.Password = null;
+                //}
                 isLDAP = true;
-                // if not authenticated, use AD_User as backup
+            }
+            //Save Failed Login Count and Password validty in cache
+            GetSysConfigForlogin();
+
+
+            int fCount = Util.GetValueOfInt(cache[Common.Failed_Login_Count_Key]);
+            int passwordValidUpto = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+
+            //if authenticated by LDAP or password is null(Means request from home page)
+            if (!authenticated && model.Login1Model.Password != null)
+            {
+                string sqlEnc = "select isencrypted from ad_column where ad_table_id=(select ad_table_id from ad_table where tablename='AD_User') and columnname='Password'";
+                char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
+                if (isEncrypted == 'Y' && model.Login1Model.Password != null)
+                {
+                    model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
+                }
+
+                DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
+                if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
+                {
+                    if (!dsUserInfo.Tables[0].Rows[0]["IsLoginUser"].ToString().Equals("Y"))
+                    {
+                        throw new Exception("NotLoginUser");
+                    }
+                    //if username or password is not matching
+                    if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserName) ||
+                        !dsUserInfo.Tables[0].Rows[0]["Password"].Equals(model.Login1Model.Password))
+                    {
+                        //if current user is Not superuser, then increase failed login count
+                        if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
+                        {
+                            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+                            int count = DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value=@username ", param);
+
+                            if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]) + 1)
+                            {
+                                throw new Exception("MaxFailedLoginAttempts");
+                            }
+                        }
+
+                        throw new Exception("UserPwdError");
+                    }
+                    else// if username and password matched, then check if account is locked or not
+                    {
+                        if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]))
+                        {
+                            throw new Exception("MaxFailedLoginAttempts");
+                        }
+                    }
+                }
+                else// if no data found
+                {
+                    throw new Exception("UserNotFound");
+                }
             }
 
-
-
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
-               .Append(" u.ConnectionProfile, u.Password ")	//	4,5
+               // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
+               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
                .Append("FROM AD_User u")
                .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
-            //.Append("WHERE COALESCE(u.LDAPUser,u.Name)=@username")		//	#1
             if (isLDAP && authenticated)
             {
                 sql.Append(" WHERE (COALESCE(u.LDAPUser,u.Value)=@username)");
             }
-            else if (isLDAP && !authenticated && model.Login1Model.Password == null)// If user not authenicated using LDAP, then if LDAP user is available
-            {
-                sql.Append(" WHERE (u.LDAPUser=@username OR u.Name=@username OR u.Value=@username)");
-            }
+            //else if (isLDAP && !authenticated && model.Login1Model.Password == null)// If user not authenicated using LDAP, then if LDAP user is available
+            //{
+            //    sql.Append(" WHERE (u.LDAPUser=@username OR u.Value=@username)");
+            //}
             else
             {
-                sql.Append(" WHERE (u.Name=@username OR u.Value=@username)");
+                sql.Append(" WHERE (u.Value=@username)");
             }
 
             sql.Append(" AND u.IsActive='Y' ")
              .Append(" AND u.IsLoginUser='Y' ")
              .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
              .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
-            string sqlEnc = "select isencrypted from ad_column where ad_table_id=(select ad_table_id from ad_table where tablename='AD_User') and columnname='Password'";
-            char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
-            if (model.Login1Model.Password != null)
-            {
-                if (isEncrypted == 'Y')
-                {
-                    sql.Append(" AND (u.Password='" + SecureEngine.Encrypt(model.Login1Model.Password) + "')");	//  #2/3
-                }
-                else
-                {
-                    sql.Append(" AND (u.Password='" + model.Login1Model.Password + "')");	//  #2/3
-                }
-            }
+
+            //if (model.Login1Model.Password != null)
+            //{
+            //    sql.Append(" AND (u.Password='" + model.Login1Model.Password + "')");	//  #2/3
+            //}
             sql.Append(" ORDER BY r.Name");
             IDataReader dr = null;
             //try
             //{
-            SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+            //SqlParameter[] param = new SqlParameter[1];
+            //param[0] = new SqlParameter("@username", model.Login1Model.UserName);
             //	execute a query
             dr = DB.ExecuteReader(sql.ToString(), param);
 
-            if (!dr.Read())		//	no record found
+            if (!dr.Read())		//	no record found, then return msaage that role not found.
             {
                 dr.Close();
-                return false;
+                //if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
+                //{
+                //    param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+                //    DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
+                //}
+                throw new Exception("RoleNotDefined");
             }
 
+            // if user logged in successfully, then set failed login count to 0
+            DB.ExecuteQuery("UPDATE AD_User set FailedLoginCount=0 where Value=@username", param);
+
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
+
+            String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
+            bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
+            if (enable2FA)
+            {
+                model.Login1Model.QRFirstTime = false;
+                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+                SetupCode setupInfo = null;
+                string userSKey = Util.GetValueOfString(dr["Value"]);
+                if (Token2FAKey.Trim() == "")
+                {
+                    string dbUser = "";
+                    if (DatabaseType.IsOracle)
+                        dbUser = VConnection.Get().Db_uid.ToUpper();
+                    else
+                        dbUser = VConnection.Get().Db_name;
+                    Token2FAKey = dbUser + userSKey;
+                    model.Login1Model.QRFirstTime = true;
+                }
+                setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 200, 200);
+                model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
+            }
+
+            model.Login1Model.Is2FAEnabled = enable2FA;
+            model.Login1Model.TokenKey2FA = Token2FAKey;
+
+            if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
+            {
+                throw new Exception("MaxFailedLoginAttempts");
+            }
+            DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
+            if (passwordValidUpto > 0 && (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0))
+            {
+                model.Login1Model.ResetPwd = true;
+            }
 
             roles = new List<KeyNamePair>(); //roles
 
             List<int> usersRoles = new List<int>();
-
 
             do	//	read all roles
             {
@@ -130,7 +224,6 @@ namespace VIS.Helpers
 
             dr.Close();
             model.Login1Model.AD_User_ID = AD_User_ID;
-
 
             IDataReader drLogin = null;
 
@@ -156,30 +249,6 @@ namespace VIS.Helpers
 
 
                         bool deleteRecord = false;
-                        //1 firt check  - Check role exist
-                        //if (usersRoles.Contains(Util.GetValueOfInt(drLogin[0])))
-                        //{
-                        //    //check for Org Access Setting
-                        //    bool isUseUserOrgAccess = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsUseUserOrgAccess FROM AD_ROLE WHERE AD_ROLE_ID = " + drLogin[0].ToString())) == "Y";
-                        //    if (isUseUserOrgAccess) //User User Org
-                        //    {
-                        //        if (Convert.ToInt32(DB.ExecuteScalar("SELECT Count(1) FROM AD_User_OrgAccess WHERE AD_User_ID = " + AD_User_ID + " AND AD_ORG_ID= " + drLogin[2].ToString() + " AND IsActive='Y'")) < 1)
-                        //        {
-                        //            deleteRecord = true;
-                        //        }
-                        //    }
-                        //    else //User Role Org Access
-                        //    {
-                        //        if (Convert.ToInt32(DB.ExecuteScalar("SELECT Count(1) FROM AD_Role_OrgAccess WHERE AD_Role_ID = " + drLogin[0] + " AND AD_ORG_ID= " + drLogin[2].ToString() + " AND IsActive='Y'")) < 1)
-                        //        {
-                        //            deleteRecord = true;
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    deleteRecord = true;
-                        //}
 
                         //Delete Login Setting 
                         if (deleteRecord)
@@ -211,6 +280,43 @@ namespace VIS.Helpers
                 }
             }
             return true;
+        }
+
+        private static void GetSysConfigForlogin()
+        {
+            //if nothing found in cache, then add
+            if (cache.Count == 0)
+            {
+                //Set default Values
+                cache[Common.Failed_Login_Count_Key] = Common.GetFailed_Login_Count;
+                cache[Common.Password_Valid_Upto_Key] = Common.GetPassword_Valid_Upto;
+
+                //then check setting in System Config, if found, then will replace default values.
+                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('Failed_Login_Count','Password_Valid_Upto') ");
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        cache[ds.Tables[0].Rows[i]["Name"].ToString()] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Value"]);
+                    }
+                }
+
+                //Save SuperUser's key in cache
+                cache["SuperUserVal"] = DB.ExecuteScalar("SELECT value from AD_User where AD_User_ID=100").ToString();
+
+            }
+        }
+
+        public static string ValidatePassword(string oldPassword, string NewPassword, string ConfirmNewPasseword)
+        {
+            return Common.ValidatePassword(oldPassword, NewPassword, ConfirmNewPasseword);
+        }
+
+        public static bool UpdatePassword(string newPwd, int AD_User_ID)
+        {
+            int pwdValidity = Util.GetValueOfInt(cache[Common.Password_Valid_Upto_Key]);
+            return Common.UpdatePasswordAndValidity(newPwd, AD_User_ID, AD_User_ID, pwdValidity, null);
+
         }
 
         /// <summary>
@@ -344,6 +450,15 @@ namespace VIS.Helpers
             //	No Orgs
             return list;
         }   //  getOrgs
+
+        public static void SetSysConfigInContext(Ctx ctx)
+        {
+            if (cache.Count > 0)
+            {
+                ctx.SetContext(Common.Failed_Login_Count_Key, cache[Common.Failed_Login_Count_Key].ToString());
+                ctx.SetContext(Common.Password_Valid_Upto_Key, cache[Common.Password_Valid_Upto_Key].ToString());
+            }
+        }
 
 
         private static void GetOrgsAddSummary(List<KeyNamePair> list, int Summary_Org_ID, String Summary_Name, MRole role, Ctx ctx)
@@ -550,6 +665,30 @@ namespace VIS.Helpers
 
 
 
+        }
+
+        public static bool Validate2FAOTP(LoginModel model)
+        {
+            bool isValid = false;
+            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Is2FAEnabled FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
+            if (dsUser != null && dsUser.Tables[0].Rows.Count > 0)
+            {
+                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+                string dbUser = "";
+                if (DatabaseType.IsOracle)
+                    dbUser = VConnection.Get().Db_uid.ToUpper();
+                else
+                    dbUser = VConnection.Get().Db_name;
+
+                string Token2FAKey = dbUser + dsUser.Tables[0].Rows[0]["Value"];
+                isValid = tfa.ValidateTwoFactorPIN(Token2FAKey, model.Login1Model.OTP2FA);
+                if (isValid && Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]).Trim() == "")
+                {
+                    int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_USER SET TokenKey2FA = '" + Token2FAKey + @"' WHERE 
+                                    AD_USER_ID = " + model.Login1Model.AD_User_ID));
+                }
+            }
+            return isValid;
         }
     }
 }
