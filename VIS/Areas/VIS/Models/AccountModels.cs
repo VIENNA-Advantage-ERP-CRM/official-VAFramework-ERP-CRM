@@ -72,8 +72,6 @@ namespace VIS.Models
 
         public bool QRFirstTime { get; set; }
 
-        public string OTPError { get; set; }
-
         public String Login1DataOTP { get; set; }
     }
 

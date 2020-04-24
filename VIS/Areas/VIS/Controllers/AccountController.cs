@@ -33,7 +33,6 @@ namespace VIS.Controllers
 
                 try
                 {
-                    model.Login1Model.OTPError = "";
                     List<KeyNamePair> roles = null;
 
                     // On rest pwd OR two FA or stpe 2, get values from temp data.
@@ -70,6 +69,13 @@ namespace VIS.Controllers
                         {
                             proceedToLogin2 = 2;
                         }
+                        if (Is2FAEnabled)
+                        {
+                            model.Login1Model.Is2FAEnabled = Is2FAEnabled;
+                            model.Login1Model.ResetPwd = false;
+                            TempData.Remove("ResetPwd");
+                            return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
+                        }
                     }
                     else if (resetPwd)
                     {
@@ -88,17 +94,23 @@ namespace VIS.Controllers
 
                     if (Is2FAEnabled && proceedToLogin2 != 1)
                     {
-                        var otp = model.Login1Model.OTP2FA;
-                        model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
-                        model.Login1Model.OTP2FA = otp;
-                        bool valOTP = LoginHelper.Validate2FAOTP(model);
-                        if (valOTP)
+                        if (model.Login1Model.Login1DataOTP != null)
                         {
-                            proceedToLogin2 = 2;
-                            model.Login1Model.Is2FAEnabled = false;
+                            var otp = model.Login1Model.OTP2FA;
+                            model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
+                            model.Login1Model.OTP2FA = otp;
+                            bool valOTP = LoginHelper.Validate2FAOTP(model);
+                            if (valOTP)
+                            {
+                                proceedToLogin2 = 2;
+                                model.Login1Model.Is2FAEnabled = false;
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "WrongOTP");
+                                return Json(new { errors = GetErrorsFromModelState() });
+                            }
                         }
-                        else
-                            model.Login1Model.OTPError = "WrongOTP";
                     }
 
                     if (proceedToLogin2 == 2)
