@@ -97,18 +97,17 @@
                     <label class="input-icon">
                         <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
-                    @Html.PasswordFor(m => m.Login1Model.OldPassword, new { id = "txtOldPwd", })
-                    @Html.ValidationMessageFor(m => m.Login1Model.OldPassword)
+                    @Html.PasswordFor(m => m.Login1Model.NewPassword, new { id = "txtNewPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.NewPassword)
                 </div>
                 <div class="input-row">
                     <label class="input-icon">
                         <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
-                    @Html.PasswordFor(m => m.Login1Model.NewPassword, new { id = "txtNewPwd", })
-                    @Html.ValidationMessageFor(m => m.Login1Model.NewPassword)
+                    @Html.PasswordFor(m => m.Login1Model.ConfirmNewPassword, new { id = "txtCNewPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.ConfirmNewPassword)
                 </div>
-                @Html.HiddenFor(m => m.Login1Model.ResetPwd, new { id = "ResetPwd" })
-                @*@Html.HiddenFor(m => m.Login1Model.Is2FAEnabled, new { id = "TwoFA" })*@
+             
             </div>
 
             <div id="login-form-3" class="login-form">

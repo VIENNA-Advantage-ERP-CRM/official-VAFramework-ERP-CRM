@@ -35,8 +35,48 @@ namespace VIS.Controllers
                 {
                     model.Login1Model.OTPError = "";
                     List<KeyNamePair> roles = null;
+
+                    // On rest pwd OR two FA or stpe 2, get values from temp data.
                     roles = (List<KeyNamePair>)TempData["roles"];
-                    model.Login2Model = (Login2Model)TempData["Login2Model"];
+                    model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
+                    bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
+                    bool TwoFA = Util.GetValueOfBool(TempData.Peek("TwoFA"));
+                    model.Login1Model.AD_User_ID = Util.GetValueOfInt(TempData.Peek("AD_User_ID"));
+
+                    string password = Util.GetValueOfString(TempData.Peek("Password"));
+                    if (!string.IsNullOrEmpty(model.Login1Model.Password))
+                    {
+                        password = model.Login1Model.Password;
+                    }
+                    //If value 0, then step1
+                    // If value 2, then final login
+                    //if value 1, then attemp login 1.
+                    int proceedToLogin2 = 0;// First Login
+
+                    // if user refresh page  while On reset pwd page, the system show login 1 page.
+                    // In this case, reset pwd is true (picked from tempdata) but newpwd is null. 
+                    //So user must try to login 1(processdToLogin = 1)
+                    if (resetPwd && model.Login1Model.NewPassword != null)
+                    {
+                        string validated = LoginHelper.ValidatePassword(password, model.Login1Model.NewPassword, model.Login1Model.ConfirmNewPassword);
+                        if (validated.Length > 0)
+                        {
+                            ModelState.AddModelError("", validated);
+                            // If we got this far, something failed
+                            return Json(new { errors = GetErrorsFromModelState() });
+                        }
+                        bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.NewPassword, model.Login1Model.AD_User_ID);
+                        if (isUpdated)
+                        {
+                            proceedToLogin2 = 2;
+                        }
+                    }
+                    else if (resetPwd) { 
+                        // Pehla client toh new pwd and old pwd le k aane. ohde lai model vihc ropert bna k client side te set karvana pena.
+                        // and Baki ResetPwd and TwoFA nu hidden field vich rakhna pena.
+                        model.Login1Model.Password = password;
+                    proceedToLogin2 = 1;
+                }
                     //if (model.Login1Model.ResetPwd)
                     //{
                     //    //Rst Pwd Functioanility here.
@@ -44,7 +84,7 @@ namespace VIS.Controllers
                     //    return Login(model, returnUrl, roles);
                     //}
                     //else if (model.Login1Model.Is2FAEnabled)
-                    if (model.Login1Model.Is2FAEnabled)
+                if (model.Login1Model.Is2FAEnabled)
                     {
                         var otp = model.Login1Model.OTP2FA;
                         model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
@@ -63,16 +103,32 @@ namespace VIS.Controllers
                     }
                     // LoginModel loginModel = null;
 
-                    // Pehla client toh new pwd and old pwd le k aane. ohde lai model vihc ropert bna k client side te set karvana pena.
-                    // and Baki ResetPwd and TwoFA nu hidden field vich rakhna pena.
+                    
 
+                    if (proceedToLogin2 != 1 && TwoFA)
+                    {
 
+                        // Two Here.
+                        proceedToLogin2 = 2;
+                    }
+
+                    if (proceedToLogin2 == 2)
+                        return Login(model, returnUrl, roles);
+
+                    //Pwd is assigned to tempdata, bcoz if user's passsword setting is encrypted, then code encrypt the pwd to use in query.
+                    //But original pwd entered by user is required in reset pwd setup.. to match with new pwd.
+                    TempData["Password"] = model.Login1Model.Password;
                     if (LoginHelper.Login(model, out roles))
                     {
                         // ViewBag.QRCodeURL = model.Login1Model.QRCodeURL;
                         TempData["roles"] = roles;
                         TempData["Login2Model"] = model.Login2Model;
-                        if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
+                        TempData["ResetPwd"] = model.Login1Model.ResetPwd;
+                        TempData["TwoFA"] = model.Login1Model.TwoFA;
+                        TempData["AD_User_ID"] = model.Login1Model.AD_User_ID;
+                        
+                        //model.Login1Model.Password = null;
+                        if (model.Login1Model.ResetPwd || model.Login1Model.TwoFA)
                         {
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
                         }
@@ -97,7 +153,8 @@ namespace VIS.Controllers
         {
             if (model.Login2Model != null)
             {
-                //loginModel.Login1Model = model.Login1Model;
+                //If everything is allright, then clear tempdata
+                TempData.Clear();
                 return JsonLogin2(model, "");
             }
             //System.Threading.Thread.Sleep(10000);

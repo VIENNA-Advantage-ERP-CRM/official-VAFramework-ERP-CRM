@@ -48,8 +48,8 @@ namespace VIS.Models
         public string LoginLanguage { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Old Password")]
-        public string OldPassword { get; set; }
+        [Display(Name = "Confirm New Password")]
+        public string ConfirmNewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "New Password")]
