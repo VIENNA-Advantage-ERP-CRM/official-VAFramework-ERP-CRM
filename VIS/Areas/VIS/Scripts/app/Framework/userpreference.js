@@ -1083,10 +1083,11 @@
                 VIS.dataContext.getJSONData(url, null, getThemeCompleted);
             };
 
-            function getThemeCompleted(data) {
+            function getThemeCompleted(lst) {
                 var html = [];
-                if (data) {
-                    for (var i = 0, j = data.length; i < j; i++) {
+                if (lst) {
+                    for (var i = 0, j = lst.length; i < j; i++) {
+                        var data = lst[i];
                         html.push('<li>');
                         html.push('<div class="vis-theme-rec" data-color="')
                         html.push(data.PColor);
@@ -1097,10 +1098,10 @@
                         html.push('|');
                         html.push(data.OnSColor);
                         html.push('" data-id="' + data.Id+'" >');
-                        html.push('<span class="vis-theme-color" style="rgba(' + data.PColor + ',1)"></span>');
-                        html.push('<span class="vis-theme-color" style="rgba(' + data.OnPColor + ',1)"></span>');
-                        html.push('<span class="vis-theme-color" style="rgba(' + data.SColor + ',1)"></span>');
-                        html.push('<span class="vis-theme-color" style="rgba(' + data.OnSColor + ',1)"></span>');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.PColor + ',1)"></span>');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.OnPColor + ',1)"></span>');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.SColor + ',1)"></span>');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.OnSColor + ',1)"></span>');
                         html.push('</div>');
                         html.push('</li>');
                     }
