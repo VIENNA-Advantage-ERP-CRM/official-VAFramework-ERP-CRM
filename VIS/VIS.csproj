@@ -78,6 +78,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Tasks.v1.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Authenticator">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Authenticator.dll</HintPath>
+    </Reference>
     <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Client.dll</HintPath>

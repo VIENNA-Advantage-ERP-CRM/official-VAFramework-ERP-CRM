@@ -1523,17 +1523,18 @@ namespace VIS.Controllers
 
             if(ds != null && ds.Tables.Count >0)
             {
-                dynamic obj = new ExpandoObject();
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
+                    dynamic obj = new ExpandoObject();
                     obj.Id = Util.GetValueOfString(dr["AD_Theme_ID"]);
                     obj.PColor = Util.GetValueOfString(dr["PrimaryColor"]);
-                    obj.OnPcolor = Util.GetValueOfString(dr["OnPrimaryColor"]);
+                    obj.OnPColor = Util.GetValueOfString(dr["OnPrimaryColor"]);
                     obj.SColor = Util.GetValueOfString(dr["SecondaryColor"]);
                     obj.OnSColor = Util.GetValueOfString(dr["OnSecondaryColor"]);
                     obj.IsDefault = Util.GetValueOfString(dr["IsDefault"]);
+                    retObj.Add(obj);
                 }
-                retObj.Add(obj);
+                
             }
             return retObj;
         }
