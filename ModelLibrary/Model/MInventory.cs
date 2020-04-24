@@ -785,7 +785,7 @@ namespace VAdvantage.Model
                     ds = DB.ExecuteDataset(sql, null, Get_Trx());
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        updateSql.Append("BEGIN ");
+                        //updateSql.Append("BEGIN ");
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             int line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i][0]);
@@ -802,7 +802,7 @@ namespace VAdvantage.Model
                             }
                         }
                         ds.Dispose();
-                        updateSql.Append(" END;");
+                        //updateSql.Append(" END;");
                         int cnt = DB.ExecuteQuery(updateSql.ToString(), null, null);
                         if (cnt > 0)
                         {
@@ -1959,7 +1959,7 @@ namespace VAdvantage.Model
             string sql = @"UPDATE M_InventoryLine SET QtyBook = " + currentQty + ",QtyCount = " + QtyCount + ",OpeningStock = " + currentQty + ",AsOnDateCount = " + AsOnDateCount +
                 ",DifferenceQty = " + DiffQty + " WHERE M_InventoryLine_ID = " + M_InventoryLine_ID;
 
-            string updateQry = " BEGIN execute immediate('" + sql.Replace("'", "''") + "'); exception when others then null; END;";
+            string updateQry = " SELECT ExecuteImmediate('" + sql.Replace("'", "''") + "') FROM DUAL;";
             return updateQry;
         }
 
