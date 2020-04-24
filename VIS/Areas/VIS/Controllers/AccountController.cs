@@ -79,18 +79,9 @@ namespace VIS.Controllers
                     }
                     else if (resetPwd)
                     {
-                        // Pehla client toh new pwd and old pwd le k aane. ohde lai model vihc ropert bna k client side te set karvana pena.
-                        // and Baki ResetPwd and TwoFA nu hidden field vich rakhna pena.
                         model.Login1Model.Password = password;
                         proceedToLogin2 = 1;
                     }
-                    //if (model.Login1Model.ResetPwd)
-                    //{
-                    //    //Rst Pwd Functioanility here.
-                    //    model.Login1Model.ResetPwd = false;
-                    //    return Login(model, returnUrl, roles);
-                    //}
-                    //else if (model.Login1Model.Is2FAEnabled)
 
                     if (Is2FAEnabled && proceedToLogin2 != 1)
                     {

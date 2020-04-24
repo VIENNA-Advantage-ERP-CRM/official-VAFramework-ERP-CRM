@@ -94,10 +94,20 @@ namespace VAdvantage.Process
 
             else if (!p_CurrentPassword.Equals(current.GetPassword()))
                 throw new ArgumentException("@OldPasswordNoMatch@");
+
+            string validatePwd = Common.Common.ValidatePassword(null, p_NewPassword, p_NewPassword);
+            if(validatePwd.Length>0)
+                throw new ArgumentException("validatePwd");
+
             log.Log(Level.SEVERE, "UserPassword Change Log Step Password Change=>" + Convert.ToString(p_AD_User_ID));
             String originalPwd = p_NewPassword;
 
-            String sql = "UPDATE AD_User SET Updated=SYSDATE, UpdatedBy=" + GetAD_User_ID();
+            String sql = "UPDATE AD_User SET Updated=SYSDATE,FailedloginCount=0, UpdatedBy=" + GetAD_User_ID();
+
+            int passwordValidity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
+
+            Common.Common.UpdatePasswordAndValidity(p_NewPassword, p_AD_User_ID, GetAD_User_ID(), -1, GetCtx());
+
             if (!string.IsNullOrEmpty(p_NewPassword))
             {
                 MColumn column = MColumn.Get(GetCtx(), 417); // Password Column 
@@ -127,7 +137,7 @@ namespace VAdvantage.Process
                         var BIUser = Dll.GetType("VA037.BIProcess.BIUsers");
                         var objBIUser = Activator.CreateInstance(BIUser);
                         var ChangeBIPassword = BIUser.GetMethod("ChangeBIPassword");
-                        bool value = (bool)ChangeBIPassword.Invoke(objBIUser, new object[] {GetCtx(), GetAD_Client_ID(), Convert.ToString(user.GetVA037_BIUserName()), originalPwd });
+                        bool value = (bool)ChangeBIPassword.Invoke(objBIUser, new object[] { GetCtx(), GetAD_Client_ID(), Convert.ToString(user.GetVA037_BIUserName()), originalPwd });
                         if (value)
                         {
                             //user.SetPassword(p_NewPassword);
@@ -138,14 +148,14 @@ namespace VAdvantage.Process
                         else
                         {
                             error = true;
-                           // return "@Error@";
+                            // return "@Error@";
                         }
                     }
                     else
                     {
                         error = false;
                         user.SetPassword(originalPwd);
-                       // return "OK";
+                        // return "OK";
                     }
                 }
                 ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VA039_' and IsActive = 'Y'"); // is active check by vinay bhatt
@@ -158,29 +168,29 @@ namespace VAdvantage.Process
                         var JasperUser = Dll.GetType("VA039.Classes.Users");
                         var objJasperUser = Activator.CreateInstance(JasperUser);
                         var BICreateUser = JasperUser.GetMethod("ModifyUserPassword");
-                        object[] args = new object[] { GetCtx(),originalPwd};
+                        object[] args = new object[] { GetCtx(), originalPwd };
                         bool value = (bool)BICreateUser.Invoke(objJasperUser, args);
                         if (value)
                         {
                             error = false;
                             user.SetPassword(originalPwd);
-                           
+
                             //return "@Error@";
                         }
                         else
                         {
                             error = true;
                             goto PasswordError;
-                           // return "OK";
+                            // return "OK";
                         }
                     }
-                   
+
                 }
                 else
                 {
                     error = false;
                     user.SetPassword(originalPwd);
-                   // return "OK";
+                    // return "OK";
                 }
             PasswordError:
                 if (error)
@@ -190,7 +200,7 @@ namespace VAdvantage.Process
                 else
                 {
                     return "OK";
-                    
+
                 }
             }
             else

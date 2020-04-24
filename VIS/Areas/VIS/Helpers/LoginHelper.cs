@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using VAdvantage.Classes;
+using VAdvantage.Common;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
@@ -61,13 +62,13 @@ namespace VIS.Helpers
             GetSysConfigForlogin();
 
 
-            int fCount = Util.GetValueOfInt(cache["Failed_Login_Count"]);
+            int fCount = Util.GetValueOfInt(cache[Common.Failed_Login_Count_Key]);
             int passwordValidUpto = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@username", model.Login1Model.UserName);
 
             //if authenticated by LDAP or password is null(Means request from home page)
-            if (!authenticated && model.Login1Model.Password!=null)
+            if (!authenticated && model.Login1Model.Password != null)
             {
                 string sqlEnc = "select isencrypted from ad_column where ad_table_id=(select ad_table_id from ad_table where tablename='AD_User') and columnname='Password'";
                 char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
@@ -287,8 +288,8 @@ namespace VIS.Helpers
             if (cache.Count == 0)
             {
                 //Set default Values
-                cache["Failed_Login_Count"] = 5;
-                cache["Password_Valid_Upto"] = 3;
+                cache[Common.Failed_Login_Count_Key] = Common.GetFailed_Login_Count;
+                cache[Common.Password_Valid_Upto_Key] = Common.GetPassword_Valid_Upto;
 
                 //then check setting in System Config, if found, then will replace default values.
                 DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('Failed_Login_Count','Password_Valid_Upto') ");
@@ -308,44 +309,13 @@ namespace VIS.Helpers
 
         public static string ValidatePassword(string oldPassword, string NewPassword, string ConfirmNewPasseword)
         {
-
-            if (NewPassword ==null || !NewPassword.Equals(ConfirmNewPasseword))
-            {
-                return "BothPwdNotMatch";
-            }
-            if (oldPassword.Equals(NewPassword))
-            {
-                return "oldNewSamePwd";
-            }
-            string regex = @"(^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$)";// Start with Alphabet, minimum 4 length
-                                                                                        //@$!%*#?& allowed only
-            Regex re = new Regex(regex);
-
-            // The IsMatch method is used to validate 
-            // a string or to ensure that a string 
-            // conforms to a particular pattern. 
-            if (!re.IsMatch(NewPassword))
-            {
-                return "mustMatchCriteria";
-            }
-
-            return "";
+            return Common.ValidatePassword(oldPassword, NewPassword, ConfirmNewPasseword);
         }
 
         public static bool UpdatePassword(string newPwd, int AD_User_ID)
         {
-            //Check if User's pwd is to be encrypted or not
-            if (DB.ExecuteScalar("SELECT IsEncrypted from AD_Column WHERE AD_Column_ID=" + 417).ToString().Equals("Y"))
-                newPwd = SecureEngine.Encrypt(newPwd);
-
-            int pwdValidity = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
-            string newpwdExpireDate = GlobalVariable.TO_DATE(DateTime.Now.AddMonths(pwdValidity), true);
-
-            string sql = "UPDATE AD_User set Updated=Sysdate,UpdatedBy=" + AD_User_ID + ",PasswordExpireOn=" + newpwdExpireDate + ",password='" + newPwd + "' WHERE AD_User_ID=" + AD_User_ID;
-            int count = DB.ExecuteQuery(sql);
-            if (count > 0)
-                return true;
-            return false;
+            int pwdValidity = Util.GetValueOfInt(cache[Common.Password_Valid_Upto_Key]);
+            return Common.UpdatePasswordAndValidity(newPwd, AD_User_ID, AD_User_ID, pwdValidity, null);
 
         }
 
@@ -480,6 +450,15 @@ namespace VIS.Helpers
             //	No Orgs
             return list;
         }   //  getOrgs
+
+        public static void SetSysConfigInContext(Ctx ctx)
+        {
+            if (cache.Count > 0)
+            {
+                ctx.SetContext(Common.Failed_Login_Count_Key, cache[Common.Failed_Login_Count_Key].ToString());
+                ctx.SetContext(Common.Password_Valid_Upto_Key, cache[Common.Password_Valid_Upto_Key].ToString());
+            }
+        }
 
 
         private static void GetOrgsAddSummary(List<KeyNamePair> list, int Summary_Org_ID, String Summary_Name, MRole role, Ctx ctx)
