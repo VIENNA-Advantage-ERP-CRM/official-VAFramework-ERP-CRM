@@ -93,7 +93,7 @@
                         $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
                         if (json.ctx.QRFirstTime)
                             $("#vis-loginqrcode").css("display", "block");                        
-                        $('#TwoFA').val(json.ctx.Is2FAEnabled);
+                        //$('#TwoFA').val(json.ctx.Is2FAEnabled);
                         if (json.ctx.OTPError != "")
                             displayErrors($form, [json.ctx.OTPError]);
                         txtOTP.val("");

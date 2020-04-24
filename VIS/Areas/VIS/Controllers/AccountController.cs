@@ -40,7 +40,7 @@ namespace VIS.Controllers
                     roles = (List<KeyNamePair>)TempData["roles"];
                     model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
                     bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
-                    bool TwoFA = Util.GetValueOfBool(TempData.Peek("TwoFA"));
+                    bool Is2FAEnabled = Util.GetValueOfBool(TempData.Peek("Is2FAEnabled"));
                     model.Login1Model.AD_User_ID = Util.GetValueOfInt(TempData.Peek("AD_User_ID"));
 
                     string password = Util.GetValueOfString(TempData.Peek("Password"));
@@ -71,12 +71,13 @@ namespace VIS.Controllers
                             proceedToLogin2 = 2;
                         }
                     }
-                    else if (resetPwd) { 
+                    else if (resetPwd)
+                    {
                         // Pehla client toh new pwd and old pwd le k aane. ohde lai model vihc ropert bna k client side te set karvana pena.
                         // and Baki ResetPwd and TwoFA nu hidden field vich rakhna pena.
                         model.Login1Model.Password = password;
-                    proceedToLogin2 = 1;
-                }
+                        proceedToLogin2 = 1;
+                    }
                     //if (model.Login1Model.ResetPwd)
                     //{
                     //    //Rst Pwd Functioanility here.
@@ -84,7 +85,8 @@ namespace VIS.Controllers
                     //    return Login(model, returnUrl, roles);
                     //}
                     //else if (model.Login1Model.Is2FAEnabled)
-                if (model.Login1Model.Is2FAEnabled)
+
+                    if (Is2FAEnabled && proceedToLogin2 != 1)
                     {
                         var otp = model.Login1Model.OTP2FA;
                         model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
@@ -92,24 +94,11 @@ namespace VIS.Controllers
                         bool valOTP = LoginHelper.Validate2FAOTP(model);
                         if (valOTP)
                         {
-                            // Two Here.
+                            proceedToLogin2 = 2;
                             model.Login1Model.Is2FAEnabled = false;
-                            return Login(model, returnUrl, roles);
                         }
                         else
-                            model.Login1Model.OTPError = "Wrong OTP Entered";
-                        //else
-                        // return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
-                    }
-                    // LoginModel loginModel = null;
-
-                    
-
-                    if (proceedToLogin2 != 1 && TwoFA)
-                    {
-
-                        // Two Here.
-                        proceedToLogin2 = 2;
+                            model.Login1Model.OTPError = "WrongOTP";
                     }
 
                     if (proceedToLogin2 == 2)
@@ -124,11 +113,11 @@ namespace VIS.Controllers
                         TempData["roles"] = roles;
                         TempData["Login2Model"] = model.Login2Model;
                         TempData["ResetPwd"] = model.Login1Model.ResetPwd;
-                        TempData["TwoFA"] = model.Login1Model.TwoFA;
+                        TempData["Is2FAEnabled"] = model.Login1Model.Is2FAEnabled;
                         TempData["AD_User_ID"] = model.Login1Model.AD_User_ID;
-                        
+
                         //model.Login1Model.Password = null;
-                        if (model.Login1Model.ResetPwd || model.Login1Model.TwoFA)
+                        if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
                         {
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
                         }

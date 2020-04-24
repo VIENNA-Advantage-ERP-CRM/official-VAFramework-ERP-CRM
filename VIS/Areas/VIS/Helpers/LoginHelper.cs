@@ -76,9 +76,6 @@ namespace VIS.Helpers
                     model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
                 }
 
-               
-
-
                 DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
                 if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
                 {
@@ -120,7 +117,7 @@ namespace VIS.Helpers
 
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
                // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
-               .Append(" u.ConnectionProfile, u.Password, '' AS FailedLoginCount, '' AS PasswordExpireOn, 'N' AS Is2FAEnabled, '' AS TokenKey2FA, u.Value ")	//	4,5
+               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
                .Append("FROM AD_User u")
                .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");

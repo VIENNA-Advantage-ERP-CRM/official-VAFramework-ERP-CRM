@@ -122,8 +122,6 @@
                     @Html.PasswordFor(m => m.Login1Model.OTP2FA, new { id = "txt2FAOTP", })
                     @Html.ValidationMessageFor(m => m.Login1Model.OTP2FA)
                 </div>
-                @*@Html.HiddenFor(m => m.Login1Model.ResetPwd, new { id = "ResetPwd" })*@
-                @Html.HiddenFor(m => m.Login1Model.Is2FAEnabled, new { id = "TwoFA" })
                 @Html.HiddenFor(m => m.Login1Model.Login1DataOTP, new { id = "login3Data" })
                 <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
             </div>
