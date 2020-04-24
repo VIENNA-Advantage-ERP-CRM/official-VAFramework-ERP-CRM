@@ -917,7 +917,6 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 
-
         public JsonResult InsertUpdateDefaultSearch(int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)
         {
             Ctx _ctx = Session["ctx"] as Ctx;
@@ -926,7 +925,6 @@ namespace VIS.Controllers
             wHelper.InsertUpdateDefaultSearch(_ctx, AD_Tab_ID, AD_Table_ID, AD_User_ID, AD_UserQuery_ID);
             return Json("", JsonRequestBehavior.AllowGet);
         }
-
 
         public ActionResult GetTreeNodePath(int nodeID, int treeID)
         {
@@ -945,37 +943,7 @@ namespace VIS.Controllers
             Ctx ctx = Session["ctx"] as Ctx;
             return Json(JsonConvert.SerializeObject(ProcessHelper.GetReportFileTypes(ctx, AD_Process_ID)), JsonRequestBehavior.AllowGet);
         }
-
-        [NonAction]
-        public static void AddMessageForToastr(string key, string value)
-        {
-            lock (_object)
-            {
-                toastrMessage[key] = value;
-            }
-        }
-
-        public ContentResult MsgForToastr()
-        {
-            Ctx ctx = Session["ctx"] as Ctx;
-            string sessionID = ctx.GetAD_Session_ID().ToString();
-            JavaScriptSerializer ser = new JavaScriptSerializer();
-            string serializedObject = null;
-            IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
-            if (newDic != null && newDic.Count() > 0)
-            {
-                for (int i = 0; i < newDic.Count();)
-                {
-                    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
-                    toastrMessage.Remove(keyVal.Key);
-                    serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
-                    return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
-                }
-            }
-            JavaScriptSerializer se1r = new JavaScriptSerializer();
-            serializedObject = se1r.Serialize(new { item = 1, message = "" });
-            return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
-        }
+        
         /// <summary>
         /// Method to get parent tab records ID.
         /// </summary>
@@ -1062,8 +1030,6 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 
-
-
         /// <summary>
         /// Controller function to fetch Version details
         /// </summary>
@@ -1079,6 +1045,51 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Get Themes list 
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetThemes()
+        {
+            CommonModel cm = new CommonModel();
+            var retRes = cm.GetThemes();
+            return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
+        }
+
+
+        #region Toaster notification
+        [NonAction]
+        public static void AddMessageForToastr(string key, string value)
+        {
+            lock (_object)
+            {
+                toastrMessage[key] = value;
+            }
+        }
+
+        public ContentResult MsgForToastr()
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            string sessionID = ctx.GetAD_Session_ID().ToString();
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            string serializedObject = null;
+            IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+            if (newDic != null && newDic.Count() > 0)
+            {
+                for (int i = 0; i < newDic.Count();)
+                {
+                    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
+                    toastrMessage.Remove(keyVal.Key);
+                    serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
+                    return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
+                }
+            }
+            JavaScriptSerializer se1r = new JavaScriptSerializer();
+            serializedObject = se1r.Serialize(new { item = 1, message = "" });
+            return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
+        }
+        #endregion
+
     }
 
     public class FilterDataContract
@@ -1087,8 +1098,6 @@ namespace VIS.Controllers
         public string Name { get; set; }
         public int Count { get; set; }
     }
-
-
 
     /// <summary>
     /// handle Tree Creation Request for AD_Window
