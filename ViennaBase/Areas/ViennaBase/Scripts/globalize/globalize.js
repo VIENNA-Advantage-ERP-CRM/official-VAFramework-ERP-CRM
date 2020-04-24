@@ -328,13 +328,14 @@
             "RememberMe":"RememberMe",
             "FillMandatoryFields":"Fill Mandatory Fields",
             "BothPwdNotMatch": "Both passwords must match.",
-            "mustMatchCriteria": "Password must have at least 1 upper case character, 1 lower case character, one special character(@$!%*?&) and one digit. Password must start with character.",
+            "mustMatchCriteria": "Minimum length for password is 5. Password must have at least 1 upper case character, 1 lower case character, one special character(@$!%*?&) and one digit. Password must start with character.",
             "NotLoginUser": "Username is not login user.",
             "MaxFailedLoginAttempts": "User account is locked. Maximum failed login attempts exceeds the defined limit.",
             "UserNotFound": "Username is incorrect.", 
             "RoleNotDefined": "Role not found for login user",
-            "oldNewSamePwd":"old password and new password must be different."
-
+            "oldNewSamePwd":"old password and new password must be different.",
+            "NewPassword": "New Password",
+            "NewCPassword":"Confirm New Password"
 
 
         }

@@ -121,8 +121,9 @@
     var showLoginResetPwd = function () {
         $('#login-form-1').hide();
         $('#login-form-3').hide();
-        $('#login-form-2').show();
+        $('#login-form-2').show(); 
         $btnLogin1.prop('disabled', false);
+        $newPwd.focus();
     };
 
     var showLogin2FA = function () {
