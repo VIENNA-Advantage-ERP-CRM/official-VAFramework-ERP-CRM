@@ -169,30 +169,33 @@ namespace VIS.Helpers
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 
-            String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
-            bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
-            if (enable2FA)
+            if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
             {
-                model.Login1Model.QRFirstTime = false;
-                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                SetupCode setupInfo = null;
-                string userSKey = Util.GetValueOfString(dr["Value"]);
-                if (Token2FAKey.Trim() == "")
+                String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
+                bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
+                if (enable2FA)
                 {
-                    string dbUser = "";
-                    if (DatabaseType.IsOracle)
-                        dbUser = VConnection.Get().Db_uid.ToUpper();
-                    else
-                        dbUser = VConnection.Get().Db_name;
-                    Token2FAKey = dbUser + userSKey;
-                    model.Login1Model.QRFirstTime = true;
+                    model.Login1Model.QRFirstTime = false;
+                    TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+                    SetupCode setupInfo = null;
+                    string userSKey = Util.GetValueOfString(dr["Value"]);
+                    if (Token2FAKey.Trim() == "")
+                    {
+                        string dbUser = "";
+                        if (DatabaseType.IsOracle)
+                            dbUser = VConnection.Get().Db_uid.ToUpper();
+                        else
+                            dbUser = VConnection.Get().Db_name;
+                        Token2FAKey = dbUser + userSKey;
+                        model.Login1Model.QRFirstTime = true;
+                    }
+                    setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 200, 200);
+                    model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
-                setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 200, 200);
-                model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
-            }
 
-            model.Login1Model.Is2FAEnabled = enable2FA;
-            model.Login1Model.TokenKey2FA = Token2FAKey;
+                model.Login1Model.Is2FAEnabled = enable2FA;
+                model.Login1Model.TokenKey2FA = Token2FAKey;
+            }
 
             if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
             {
