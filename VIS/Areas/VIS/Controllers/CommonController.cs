@@ -1510,6 +1510,35 @@ namespace VIS.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Get Theme list
+        /// </summary>
+        /// <returns>dynamic list</returns>
+        internal List<dynamic> GetThemes()
+        {
+            List<dynamic> retObj = new List<dynamic>();
+            string qry = " SELECT PrimaryColor, OnPrimaryColor, SecondaryColor, OnSecondaryColor " +
+                                " , IsDefault, AD_Theme_ID  FROM AD_Theme WHERE IsActive='Y'";
+            DataSet ds = DB.ExecuteDataset(qry);
+
+            if(ds != null && ds.Tables.Count >0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    dynamic obj = new ExpandoObject();
+                    obj.Id = Util.GetValueOfString(dr["AD_Theme_ID"]);
+                    obj.PColor = Util.GetValueOfString(dr["PrimaryColor"]);
+                    obj.OnPColor = Util.GetValueOfString(dr["OnPrimaryColor"]);
+                    obj.SColor = Util.GetValueOfString(dr["SecondaryColor"]);
+                    obj.OnSColor = Util.GetValueOfString(dr["OnSecondaryColor"]);
+                    obj.IsDefault = Util.GetValueOfString(dr["IsDefault"]);
+                    retObj.Add(obj);
+                }
+                
+            }
+            return retObj;
+        }
+
         public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID)
         {
             MOrder _order = null;

@@ -170,7 +170,7 @@ select.vis-ev-col-mandatory {
 .vis-input-wrap input:focus ~ label, .vis-input-wrap input:not(:placeholder-shown) ~ label, .vis-input-wrap textarea:not(:placeholder-shown) ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap textarea:focus ~ label, .vis-input-wrap select ~ label {
     top: -8px;
     font-size: 12px;
-    background: rgba(var(--v-c-common), 1);
+    background: linear-gradient(#fff 50%, transparent 50%);
     padding: 0 0.4rem;
     height: auto;
     left: 5px;
