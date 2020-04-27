@@ -33,7 +33,8 @@ namespace VIS.Models
     {
         [Required(ErrorMessage = "UserPwdError")]
         [Display(Name = "User name")]
-        public string UserName { get; set; }
+        public string UserValue { get; set; }
+        public string DisplayName { get; set; }
 
         [Required(ErrorMessage = "UserPwdError")]
         [DataType(DataType.Password)]

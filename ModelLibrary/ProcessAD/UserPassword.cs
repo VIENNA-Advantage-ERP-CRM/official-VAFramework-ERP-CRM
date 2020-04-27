@@ -96,17 +96,22 @@ namespace VAdvantage.Process
                 throw new ArgumentException("@OldPasswordNoMatch@");
 
             string validatePwd = Common.Common.ValidatePassword(null, p_NewPassword, p_NewPassword);
-            if(validatePwd.Length>0)
+            if (validatePwd.Length > 0)
                 throw new ArgumentException("validatePwd");
 
             log.Log(Level.SEVERE, "UserPassword Change Log Step Password Change=>" + Convert.ToString(p_AD_User_ID));
             String originalPwd = p_NewPassword;
 
             String sql = "UPDATE AD_User SET Updated=SYSDATE,FailedloginCount=0, UpdatedBy=" + GetAD_User_ID();
-
-            int passwordValidity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
-
-            Common.Common.UpdatePasswordAndValidity(p_NewPassword, p_AD_User_ID, GetAD_User_ID(), -1, GetCtx());
+            if (user.GetAD_User_ID() == current.GetAD_User_ID())
+            {
+                Common.Common.UpdatePasswordAndValidity(p_NewPassword, p_AD_User_ID, GetAD_User_ID(), -1, GetCtx());
+            }
+            else
+            {
+                sql += ",  PasswordExpireOn = null";
+            }
+           
 
             if (!string.IsNullOrEmpty(p_NewPassword))
             {
