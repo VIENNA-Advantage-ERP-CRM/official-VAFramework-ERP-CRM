@@ -18,8 +18,8 @@
                         <img src="~/Areas/VIS/Images/login/user-ico.png" alt="icon">
                     </label>
                     @*<input type="text" name="user" placeholder="User Name">*@
-                    @Html.TextBoxFor(m => m.Login1Model.UserName, new { autofocus = "autofocus", id = "loginName", })
-                    @Html.ValidationMessageFor(m => m.Login1Model.UserName)
+                    @Html.TextBoxFor(m => m.Login1Model.UserValue, new { autofocus = "autofocus", id = "loginName", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.UserValue)
                 </div>
                 <!-- end of input-row -->
 
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <input name="Login1Model.RememberMe" type="hidden" value="false">
-                <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
+                
 
             </div>
 
@@ -129,6 +129,7 @@
 
 
             <div class="login-button">
+                <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
                 <input class="btn-login" id="btnLogin1" type="submit" value="Log in" />
             </div>
             <!-- end of input-row -->
