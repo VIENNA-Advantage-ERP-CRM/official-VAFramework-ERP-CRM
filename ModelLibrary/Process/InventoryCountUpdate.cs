@@ -83,6 +83,7 @@ namespace VAdvantage.Process
                         + "FROM M_InventoryLine "
                         + "WHERE M_Inventory_ID=" + _m_Inventory_ID
                         + " GROUP BY M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID "
+                        + (isContainerApplicable ? " , M_ProductContainer_ID" : "")
                         + "HAVING COUNT(*) > 1)";
             }
             else
@@ -94,6 +95,7 @@ namespace VAdvantage.Process
                         + "FROM M_InventoryLine "
                         + "WHERE M_Inventory_ID=" + _m_Inventory_ID
                         + " GROUP BY M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID "
+                        + (isContainerApplicable ? " , M_ProductContainer_ID" : "")
                         + "HAVING COUNT(*) > 1)";
             }
             int multiple = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
