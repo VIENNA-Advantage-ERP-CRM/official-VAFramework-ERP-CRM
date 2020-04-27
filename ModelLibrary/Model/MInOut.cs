@@ -982,6 +982,8 @@ namespace VAdvantage.Model
                     }
                     // to set OrderLine in case of reversal if it is available 
                     line.SetC_OrderLine_ID(fromLine.GetC_OrderLine_ID());
+                    //set container reference(if, not a copy record)
+                    line.SetM_ProductContainer_ID(fromLine.GetM_ProductContainer_ID());
                 }
                 line.SetProcessed(false);
                 if (line.Save(Get_TrxName()))
@@ -2094,8 +2096,8 @@ namespace VAdvantage.Model
                         FROM m_inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
                         INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
                         INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.m_inout_id = " + GetM_InOut_ID() + @" AND ROWNUM <= 100 ) t WHERE notmatched IS NOT NULL");
-                sql.Replace("'", "''");
+                        WHERE il.M_ProductContainer_ID > 0 AND i.m_inout_id = " + GetM_InOut_ID() + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ");//
+                sql = sql.Replace("'", "''");
                 string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.ToString() + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
@@ -2118,9 +2120,9 @@ namespace VAdvantage.Model
                                 THEN 0
                                 ELSE 1 END AS COUNT
                                 FROM M_InOut I INNER JOIN M_InOutLINE IL ON I.M_InOut_ID = IL.M_InOut_ID
-                                WHERE I.M_InOut_ID =" + GetM_InOut_ID() + @" AND ROWNUM <= 100) t WHERE COUNT = 0");
-                sql.Replace("'", "''");
-                string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.ToString() + "') FROM DUAL", null, Get_Trx()));
+                                WHERE I.M_InOut_ID =" + GetM_InOut_ID() + @" ) t WHERE COUNT = 0 AND ROWNUM <= 100");
+                
+                string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.Replace("'", "''").ToString() + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
                     SetProcessMsg(misMatch + Msg.GetMsg(GetCtx(), "VIS_ContainerNotAvailable"));
@@ -4527,7 +4529,7 @@ namespace VAdvantage.Model
         private Decimal? GetContainerQtyFromTransaction(MInOutLine line, DateTime? movementDate)
         {
             Decimal result = 0;
-            string sql = @"SELECT SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty                           FROM M_Transaction t
+            string sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty                           FROM M_Transaction t
                            WHERE t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                            AND t.AD_Client_ID                       = " + line.GetAD_Client_ID() + @"
                            AND t.M_Locator_ID                       = " + line.GetM_Locator_ID() + @"
@@ -5271,7 +5273,6 @@ namespace VAdvantage.Model
                 {
                     rLine.SetIsFutureCostCalculated(false);
                 }
-
                 if (!rLine.Save(Get_TrxName()))
                 {
                     pp = VLogger.RetrieveError();
