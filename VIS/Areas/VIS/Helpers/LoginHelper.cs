@@ -169,7 +169,7 @@ namespace VIS.Helpers
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 
-            if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
+            if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
             {
                 String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
                 bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
