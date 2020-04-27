@@ -51,7 +51,7 @@ namespace VIS.Helpers
 
             if (system != null && system.IsLDAP())
             {
-                authenticated = system.IsLDAP(model.Login1Model.UserName, model.Login1Model.Password);
+                authenticated = system.IsLDAP(model.Login1Model.UserValue, model.Login1Model.Password);
                 //if (authenticated)
                 //{
                 //    model.Login1Model.Password = null;
@@ -65,7 +65,7 @@ namespace VIS.Helpers
             int fCount = Util.GetValueOfInt(cache[Common.Failed_Login_Count_Key]);
             int passwordValidUpto = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+            param[0] = new SqlParameter("@username", model.Login1Model.UserValue);
 
             //if authenticated by LDAP or password is null(Means request from home page)
             if (!authenticated && model.Login1Model.Password != null)
@@ -85,13 +85,13 @@ namespace VIS.Helpers
                         throw new Exception("NotLoginUser");
                     }
                     //if username or password is not matching
-                    if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserName) ||
+                    if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserValue) ||
                         !dsUserInfo.Tables[0].Rows[0]["Password"].Equals(model.Login1Model.Password))
                     {
                         //if current user is Not superuser, then increase failed login count
-                        if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
+                        if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
                         {
-                            param[0] = new SqlParameter("@username", model.Login1Model.UserName);
+                            param[0] = new SqlParameter("@username", model.Login1Model.UserValue);
                             int count = DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value=@username ", param);
 
                             if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]) + 1)
@@ -118,7 +118,7 @@ namespace VIS.Helpers
 
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
                // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
-               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
+               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value,u.Name as username ")	//	4,5
                .Append("FROM AD_User u")
                .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
@@ -169,30 +169,33 @@ namespace VIS.Helpers
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 
-            String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
-            bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
-            if (enable2FA)
+            if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
             {
-                model.Login1Model.QRFirstTime = false;
-                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                SetupCode setupInfo = null;
-                string userSKey = Util.GetValueOfString(dr["Value"]);
-                if (Token2FAKey.Trim() == "")
+                String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
+                bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
+                if (enable2FA)
                 {
-                    string dbUser = "";
-                    if (DatabaseType.IsOracle)
-                        dbUser = VConnection.Get().Db_uid.ToUpper();
-                    else
-                        dbUser = VConnection.Get().Db_name;
-                    Token2FAKey = dbUser + userSKey;
-                    model.Login1Model.QRFirstTime = true;
+                    model.Login1Model.QRFirstTime = false;
+                    TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+                    SetupCode setupInfo = null;
+                    string userSKey = Util.GetValueOfString(dr["Value"]);
+                    if (Token2FAKey.Trim() == "")
+                    {
+                        string dbUser = "";
+                        if (DatabaseType.IsOracle)
+                            dbUser = VConnection.Get().Db_uid.ToUpper();
+                        else
+                            dbUser = VConnection.Get().Db_name;
+                        Token2FAKey = dbUser + userSKey;
+                        model.Login1Model.QRFirstTime = true;
+                    }
+                    setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 200, 200);
+                    model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
-                setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 200, 200);
-                model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
-            }
 
-            model.Login1Model.Is2FAEnabled = enable2FA;
-            model.Login1Model.TokenKey2FA = Token2FAKey;
+                model.Login1Model.Is2FAEnabled = enable2FA;
+                model.Login1Model.TokenKey2FA = Token2FAKey;
+            }
 
             if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
             {
@@ -207,6 +210,7 @@ namespace VIS.Helpers
             roles = new List<KeyNamePair>(); //roles
 
             List<int> usersRoles = new List<int>();
+            string username = "";
 
             do	//	read all roles
             {
@@ -215,7 +219,7 @@ namespace VIS.Helpers
 
                 String Name = dr[2].ToString();
                 KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
-
+                username = Util.GetValueOfString(dr["username"].ToString());
                 roles.Add(p);
 
                 usersRoles.Add(AD_Role_ID);
@@ -224,6 +228,7 @@ namespace VIS.Helpers
 
             dr.Close();
             model.Login1Model.AD_User_ID = AD_User_ID;
+            model.Login1Model.DisplayName = username;
 
             IDataReader drLogin = null;
 
@@ -571,7 +576,8 @@ namespace VIS.Helpers
         {
             LoginContext ctx = new LoginContext();
             ctx.SetContext("##AD_User_ID", model.Login1Model.AD_User_ID.ToString());
-            ctx.SetContext("##AD_User_Name", model.Login1Model.UserName);
+            ctx.SetContext("##AD_User_Value", model.Login1Model.UserValue);
+            ctx.SetContext("##AD_User_Name", model.Login1Model.DisplayName);
             ctx.SetContext("#AD_Language", model.Login1Model.LoginLanguage);
 
             ctx.SetContext("#AD_Role_ID", model.Login2Model.Role);
@@ -617,6 +623,11 @@ namespace VIS.Helpers
             LoginContext ctx = new LoginContext();
             ctx.SetContext("##AD_User_ID", ctxLogIn.GetAD_User_ID().ToString());
             ctx.SetContext("##AD_User_Name", ctxLogIn.GetContext("##AD_User_Name"));
+
+
+            ctx.SetContext("##AD_User_Value", model.Login1Model.UserValue);
+            ctx.SetContext("##AD_User_Name", model.Login1Model.DisplayName);
+
             //ctx.SetContext("#AD_Language", ctxLogIn.GetContext("#AD_Language"));
             ctx.SetContext("#AD_Language", model.Login2Model.LoginLanguage);
 

@@ -84,19 +84,20 @@
                         $imgbusy1.css('display', 'none');
                     }
                     else if (json.ctx && json.ctx.ResetPwd) {
+                        $imgbusy1.css('display', 'none');
                         showLoginResetPwd();
                         $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
                     else if (json.ctx && json.ctx.Is2FAEnabled) {
                         showLogin2FA();
-                        var txtOTP = $('#txt2FAOTP');
+                        //var txtOTP = $('#txt2FAOTP');
                         $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
                         if (json.ctx.QRFirstTime)
                             $("#vis-loginqrcode").css("display", "block");                        
                         //$('#TwoFA').val(json.ctx.Is2FAEnabled);
-                        txtOTP.val("");
+                        $otpTwoFA.val("");
                         $('#login3Data').val(JSON.stringify(json.ctx));
-                        txtOTP.focus();
+                        $otpTwoFA.focus();
                         $imgbusy1.css('display', 'none');
                     }
                     else if (json.success) {
@@ -296,10 +297,11 @@
         $newPwd.attr("placeholder", Globalize.localize("NewPassword"));
         $newCPwd.attr("placeholder", Globalize.localize("NewCPassword"));
 
+
         $btnLogin1.val(Globalize.localize("Login"));
         $lblRemember.text(Globalize.localize("RememberMe"));
 
-
+        $otpTwoFA.attr("placeholder", Globalize.localize("EnterOTP"));
 
         $lblRole.text(Globalize.localize("Role"));
         $lblClient.text(Globalize.localize("Client"));
@@ -325,6 +327,7 @@
     var $txtPwd = $("#txtPwd");
     var $newPwd = $('#txtNewPwd');
     var $newCPwd = $('#txtCNewPwd');
+    var $otpTwoFA = $('#txt2FAOTP');
     //var $lblUser = $('label[for="Login1Model_UserName"]');
     //var $lblPwd = $('label[for="Login1Model_Password"]');
     //var $lblLang = $('label[for="Login1Model_LoginLanguage"]');
