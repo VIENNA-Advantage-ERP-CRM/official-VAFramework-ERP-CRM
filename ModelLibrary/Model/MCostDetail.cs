@@ -4003,10 +4003,16 @@ namespace VAdvantage.Model
         {
             // is used to get current qty of defined costing method on Product category or Accounting schema
             Decimal Qty = MCost.GetproductCostAndQtyMaterial(cd.GetAD_Client_ID(), AD_Org_ID, product.GetM_Product_ID(), M_ASI_ID, cd.Get_Trx(), M_Warehouse_ID, true);
-            //if (Qty == 0)
-            //{
-            //    return true;
-            //}
+            if (Qty == 0 && cd.GetM_CostElement_ID() > 0)
+            {
+                // check, is this kind of Custome or Freight (bypass)
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(M_CostElement_ID) FROM M_CostElement WHERE M_CostElement_ID = " + cd.GetM_CostElement_ID() +
+                           @" AND CostElementType = '" + X_M_CostElement.COSTELEMENTTYPE_Material + "' AND CostingMethod IS NULL"));
+                if (count > 0)
+                {
+                    return true;
+                }
+            }
 
             bool isReversed = false;
             if (windowName.Equals("Inventory Move"))
@@ -4028,7 +4034,7 @@ namespace VAdvantage.Model
                     cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Convert.ToInt32(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
                     if ((cd.GetQty() < 0 ||
                         windowName.Equals("Internal Use Inventory") ||
-                        windowName.Equals("Physical Inventory") || 
+                        windowName.Equals("Physical Inventory") ||
                         windowName.Equals("Return To Vendor") ||
                         windowName.Equals("Shipment") ||
                         windowName.Equals("Production Execution") ||
@@ -4055,12 +4061,9 @@ namespace VAdvantage.Model
                             currentCost = Decimal.Round(Decimal.Divide(
                                                          Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), Qty),
                                                          acctSchema.GetCostingPrecision());
+
+                            cost.SetCurrentCostPrice(currentCost);
                         }
-                        else
-                        {
-                            currentCost = 0;
-                        }
-                        cost.SetCurrentCostPrice(currentCost);
                     }
                     cost.SetCurrentQty(Qty);
                     if (!cost.Save(cd.Get_Trx()))

@@ -349,7 +349,7 @@ namespace VAdvantage.Model
                 // when we reverse record, and movement line having MoveFullContainer = true
                 // system will check qty on transaction must be same as qty on movement line
                 // if not matched, then we can not allow to user for its reverse, he need to make a new Movement for move container
-                string sql = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( PName, ' , '),',') PName FROM 
+                string sql = @"SELECT PName FROM 
                                                (SELECT PName, ROW_NUMBER () OVER (ORDER BY PName ) RN, COUNT (*) OVER () CNT FROM 
                                                (
                                                 SELECT p.Name || '_' || asi.description || '_' || ml.line  AS PName 
@@ -358,7 +358,8 @@ namespace VAdvantage.Model
                                                 LEFT JOIN m_attributesetinstance asi ON NVL(asi.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
                                                  WHERE ml.MoveFullContainer ='Y' AND m.M_Movement_ID =" + GetM_Movement_ID() + @"
                                                     AND abs(ml.movementqty) <>
-                                                     NVL((SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty
+                                                     NVL((SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                                                          t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
                                                      FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
                                                       WHERE t.MovementDate <= (Select MAX(movementdate) from m_transaction where 
                                                             AD_Client_ID = m.AD_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
@@ -369,9 +370,10 @@ namespace VAdvantage.Model
                                                        AND t.M_Product_ID                     = ml.M_Product_ID
                                                        AND NVL(t.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
                                                        AND NVL(t.M_ProductContainer_ID, 0)    = NVL(ml.M_ProductContainer_ID, 0)  ), 0) 
-                                                       AND ROWNUM <= 100 )
-                                               ) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ";
-                string productName = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                                                        ) final 
+                                               ) final_ WHERE PName is not null AND ROWNUM <= 100 ";
+                sql = sql.Replace("'", "''");
+                string productName = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql + "') FROM DUAL", null, Get_Trx()));
                 if (!string.IsNullOrEmpty(productName))
                 {
                     // Qty Alraedy consumed from Container for Product are : 
@@ -478,7 +480,8 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                sql = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
+                                sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
                                    " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
@@ -502,7 +505,8 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                sql = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
+                                sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                  " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
                                  " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
@@ -556,7 +560,7 @@ namespace VAdvantage.Model
                     {
                         sql = "SELECT ord.DocumentNo || '_' || ol.Line AS Name FROM "
                          + " M_RequisitionLine ol INNER JOIN M_Requisition ord ON ol.M_Requisition_ID = ord.M_Requisition_ID WHERE M_RequisitionLine_ID IN (" + delReq.ToString().Trim().Trim(',') + ")";
-                        sql.Replace("'", "''");
+                        sql = sql.Replace("'", "''");
                         string req = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql + "') FROM DUAL", null, Get_Trx()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "RequisitionAlreadyDone") + ": " + req;
@@ -581,8 +585,8 @@ namespace VAdvantage.Model
                         FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
                         INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
                         INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Movement_ID = " + GetM_Movement_ID() + @" AND ROWNUM <= 100 ) t WHERE notmatched IS NOT NULL";                
-                sqlContainerExistence.Replace("'", "''");
+                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Movement_ID = " + GetM_Movement_ID() + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ";
+                sqlContainerExistence = sqlContainerExistence.Replace("'", "''");
                 string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sqlContainerExistence + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
@@ -599,8 +603,8 @@ namespace VAdvantage.Model
                         INNER JOIN M_Locator l ON l.M_Locator_ID = il.M_LocatorTo_ID
                         INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
                         INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.Ref_M_ProductContainerTo_ID
-                        WHERE il.Ref_M_ProductContainerTo_ID > 0 AND i.M_Movement_ID = " + GetM_Movement_ID() + @" AND ROWNUM <= 100 ) t WHERE notmatched IS NOT NULL";
-                sqlContainerExistence.Replace("'", "''");
+                        WHERE il.Ref_M_ProductContainerTo_ID > 0 AND i.M_Movement_ID = " + GetM_Movement_ID() + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ";
+                sqlContainerExistence = sqlContainerExistence.Replace("'", "''");
                 containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sqlContainerExistence + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
@@ -662,10 +666,10 @@ namespace VAdvantage.Model
                                  INNER JOIN M_MOVEMENTLINE ML
                                  ON M.M_MOVEMENT_ID    =ML.M_MOVEMENT_ID
                                  WHERE M.M_MOVEMENT_ID =" + GetM_Movement_ID()
-                                     + @" AND ROWNUM <= 100
-                                 ) t WHERE (PCFROM = 0 OR PCTO = 0)";
-                _qry.Replace("'", "''");
-                string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + _qry + "') FROM DUAL", null, Get_Trx()));
+                                     + @" 
+                                 ) t WHERE (PCFROM = 0 OR PCTO = 0)  AND ROWNUM <= 100";
+                
+                string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + _qry.Replace("'", "''") + "') FROM DUAL", null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
                     SetProcessMsg(misMatch + Msg.GetMsg(GetCtx(), "VIS_ContainerNotAvailable"));
@@ -2011,7 +2015,7 @@ namespace VAdvantage.Model
             //                                       AND NVL(t.M_ProductContainer_ID, 0)    =  NVL(ml.M_ProductContainer_ID, 0)  ), 0) 
             //                                       AND ROWNUM <= 100 )
             //                               ) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ";
-            string sql = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( PName, ' , '),',') PName FROM
+            string sql = @"SELECT  PName FROM
                              (SELECT PName, ROW_NUMBER () OVER (ORDER BY PName ) RN, COUNT (*) OVER () CNT FROM (
                                SELECT ttt.PName , tt.CurrentQty, ttt.CurrentQty 
                                   FROM (SELECT '' AS PName, m_movementline_id, (ContainerCurrentQty) CurrentQty FROM (SELECT ml.m_movementline_id,
@@ -2023,7 +2027,7 @@ namespace VAdvantage.Model
                                 AND t.M_Product_ID = ml.M_Product_ID
                                 AND NVL (t.M_AttributeSetInstance_ID, 0) = NVL (ml.M_AttributeSetInstance_ID, 0)
                                 AND NVL (t.M_ProductContainer_ID, 0) = NVL (ml.M_ProductContainer_ID, 0))
-                                WHERE ml.M_Movement_ID = " + movement_Id + @" ) WHERE RN_ = 1 ) tt
+                                WHERE ml.M_Movement_ID = " + movement_Id + @" ) tt_ WHERE RN_ = 1 ) tt
                              INNER JOIN 
                               (SELECT p.Name || '_' || asi.description || '_'  || ml.line AS PName, ml.m_movementline_id ,  ml.movementqty AS CurrentQty
                                FROM m_movementline ml INNER JOIN m_movement m  ON m.m_movement_id = ml.m_movement_id
@@ -2031,8 +2035,10 @@ namespace VAdvantage.Model
                                LEFT JOIN m_attributesetinstance asi ON NVL (asi.M_AttributeSetInstance_ID, 0) = NVL (ml.M_AttributeSetInstance_ID, 0)
                                WHERE ml.MoveFullContainer = 'Y'
                                AND m.M_Movement_ID   = " + movement_Id + @" ) ttt ON tt.m_movementline_id = ttt.m_movementline_id
-                               WHERE tt.CurrentQty <> ttt.CurrentQty AND ROWNUM <= 100) ) 
-                           WHERE RN  = CNT START WITH RN = 1   CONNECT BY RN = PRIOR RN + 1";
+                               WHERE tt.CurrentQty <> ttt.CurrentQty ) final  ) final_ WHERE PName IS NOT NULL AND ROWNUM <= 100";
+                          // WHERE RN  = CNT START WITH RN = 1   CONNECT BY RN = PRIOR RN + 1";
+            sql = sql.Replace("'", "''");
+            sql = "SELECT concatenate_listofdata('" + sql + "') FROM DUAL";
             log.Info(sql);
             string productName = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
             if (!string.IsNullOrEmpty(productName))
@@ -2072,10 +2078,10 @@ namespace VAdvantage.Model
             // get data from Transaction
             string sql = @"SELECT M_PRODUCT_ID, M_ATTRIBUTESETINSTANCE_ID, M_ProductContainer_ID, ContainerCurrentQty, Name FROM (
                             SELECT M_PRODUCT_ID, M_ATTRIBUTESETINSTANCE_ID,  M_ProductContainer_ID, ContainerCurrentQty, Name FROM 
-                            (SELECT t.M_PRODUCT_ID, NVL(t.M_ATTRIBUTESETINSTANCE_ID, 0) AS M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID ,
-                              SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS ContainerCurrentQty , p.Name
+                            (SELECT DISTINCT t.M_PRODUCT_ID, NVL(t.M_ATTRIBUTESETINSTANCE_ID, 0) AS M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID ,
+                              First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS ContainerCurrentQty , p.Name
                                FROM M_Transaction t INNER JOIN M_Product p ON p.M_Product_ID   = t.M_Product_ID WHERE t.IsActive = 'Y' AND M_ProductContainer_ID IN 
-                               (" + childContainer + @" ) GROUP BY t.M_PRODUCT_ID, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID, p.Name )t WHERE ContainerCurrentQty <> 0 
+                               (" + childContainer + @" ) )t WHERE ContainerCurrentQty <> 0 
                           UNION ALL
                             SELECT m.m_product_id, NVL(m.m_attributesetinstance_id, 0) AS m_attributesetinstance_id,
                               m.M_ProductContainer_ID, m.movementqty AS ContainerCurrentQty , p.Name
@@ -2145,6 +2151,7 @@ namespace VAdvantage.Model
         {
             List<ParentChildContainer> listParentChildContainer = new List<ParentChildContainer>();
             ParentChildContainer parentChildContainer = null;
+            bool ispostgerSql = DatabaseType.IsPostgre;
             // Get all UNIQUE movement line 
             DataSet dsMovementLine = DB.ExecuteDataset(@"SELECT DISTINCT ml.TargetContainer_ID AS ParentContainer, m.M_Warehouse_ID AS ToWarehouse,
                                                ml.M_LocatorTo_ID AS ToLocator,  ml.Ref_M_ProductContainerTo_ID AS ToContainer  
@@ -2157,15 +2164,52 @@ namespace VAdvantage.Model
                 {
                     parentChildContainer = new ParentChildContainer();
                     childContainerId.Clear();
+                    string pathContainer = "";
+                    String sql = "";
                     // Get path upto "Target Container" (top most parent to "target container")
-                    string pathContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
+                    if (ispostgerSql)
+                    {
+                        sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
+                        SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
+                        FROM    M_ProductContainer
+                        WHERE   Ref_M_Container_ID is null
+                        UNION ALL
+                        SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
+                        FROM    M_ProductContainer p
+                                INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID
+                    )
+                        SELECT    ARRAY_TO_STRING(name_path, '->')
+                        FROM    pops  where m_productcontainer_id = " + Util.GetValueOfInt(dsMovementLine.Tables[0].Rows[i]["ParentContainer"]);
+                        pathContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                    }
+                    else
+                    {
+                        pathContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
                                             FROM m_productcontainer 
                                            WHERE m_productcontainer_id = " + Util.GetValueOfInt(dsMovementLine.Tables[0].Rows[i]["ParentContainer"]) + @"
                                             START WITH ref_m_container_id IS NULL CONNECT BY prior m_productcontainer_id = ref_m_container_id
                                            ORDER BY tree", null, Get_Trx()));
+                    }
 
                     #region get All child of Target Container including target container reference
-                    DataSet dsChildContainer = DB.ExecuteDataset(@"SELECT tree, m_productcontainer_id FROM
+                    DataSet dsChildContainer = null;
+                    if (ispostgerSql)
+                    {
+                        sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
+                                SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
+                                FROM    M_ProductContainer
+                                WHERE   Ref_M_Container_ID is null
+                                UNION ALL
+                                SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
+                                FROM    M_ProductContainer p
+                                        INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID )
+                            SELECT  M_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
+                            FROM    pops  where ARRAY_TO_STRING(name_path, '->') like '" + pathContainer + "%'";
+                        dsChildContainer = DB.ExecuteDataset(sql, null, Get_Trx());
+                    }
+                    else
+                    {
+                        dsChildContainer = DB.ExecuteDataset(@"SELECT tree, m_productcontainer_id FROM
                                                         (SELECT sys_connect_by_path(m_productcontainer_id,'->') tree , m_productcontainer_id
                                                          FROM m_productcontainer
                                                          START WITH ref_m_container_id IS NULL
@@ -2173,6 +2217,7 @@ namespace VAdvantage.Model
                                                          ORDER BY tree  
                                                          )
                                                      WHERE tree LIKE ('" + pathContainer + "%') ", null, Get_Trx());
+                    }
                     if (dsChildContainer != null && dsChildContainer.Tables.Count > 0 && dsChildContainer.Tables[0].Rows.Count > 0)
                     {
                         for (int j = 0; j < dsChildContainer.Tables[0].Rows.Count; j++)
@@ -2900,8 +2945,8 @@ namespace VAdvantage.Model
         private Decimal? GetContainerQtyFromTransaction(MMovementLine line, DateTime? movementDate, int locatorId, int containerId)
         {
             Decimal result = 0;
-            string sql = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last
-                            ORDER BY t.MovementDate, t.M_Transaction_ID) AS ContainerCurrentQty
+            string sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty
                            FROM M_Transaction t
                            WHERE t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                            AND t.AD_Client_ID                       = " + line.GetAD_Client_ID() + @"

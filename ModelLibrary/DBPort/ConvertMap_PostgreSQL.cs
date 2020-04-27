@@ -61,7 +61,7 @@ namespace VAdvantage.DBPort
             s_pg.Add("\\bgetDate\\b\\(\\)", "CURRENT_TIMESTAMP");   //  alternative: NOW()
             //end vpj-cd e-evolution 03/11/2005 PostgreSQL
             s_pg.Add("\\bNVL\\b", "COALESCE");
-            s_pg.Add("\\bTO_DATE\\b", "TO_TIMESTAMP");
+            //s_pg.Add("\\bTO_DATE\\b", "TO_TIMESTAMP");
             //
             s_pg.Add("\\bDBMS_OUTPUT.PUT_LINE\\b", "RAISE NOTICE");
             s_pg.Add("\\bTO_NCHAR\\b", "");
