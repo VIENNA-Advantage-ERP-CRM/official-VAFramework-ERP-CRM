@@ -335,8 +335,9 @@
             "RoleNotDefined": "Role not found for login user",
             "oldNewSamePwd":"old password and new password must be different.",
             "NewPassword": "New Password",
-            "NewCPassword":"Confirm New Password"
-
+            "NewCPassword":"Confirm New Password",
+            "EnterOTP": "Enter OTP",
+            "WrongOTP": "Wrong OTP Entered"
 
         }
     };
