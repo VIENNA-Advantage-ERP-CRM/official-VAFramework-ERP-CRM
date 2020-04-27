@@ -36,7 +36,7 @@ namespace VIS.Controllers
                     List<KeyNamePair> roles = null;
 
                     // On rest pwd OR two FA or stpe 2, get values from temp data.
-                    roles = (List<KeyNamePair>)TempData["roles"];
+                    roles = (List<KeyNamePair>)TempData.Peek("roles");
                     model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
                     bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
                     bool Is2FAEnabled = Util.GetValueOfBool(TempData.Peek("Is2FAEnabled"));
@@ -172,13 +172,13 @@ namespace VIS.Controllers
                 LoginContext lCtx = LoginHelper.GetLoginContext(model);
 
 
-                if (!string.IsNullOrEmpty(model.Login1Model.UserName))
+                if (!string.IsNullOrEmpty(model.Login1Model.UserValue))
                 {
                     Response.Cookies.Clear();
 
                     DateTime expiryDate = DateTime.Now.AddDays(30);
 
-                    HttpCookie authCookie = FormsAuthentication.GetAuthCookie(model.Login1Model.UserName, model.Login1Model.RememberMe);
+                    HttpCookie authCookie = FormsAuthentication.GetAuthCookie(model.Login1Model.UserValue, model.Login1Model.RememberMe);
 
                     if (model.Login1Model.RememberMe)
                     {

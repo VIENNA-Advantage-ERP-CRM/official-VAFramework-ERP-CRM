@@ -84,6 +84,7 @@
                         $imgbusy1.css('display', 'none');
                     }
                     else if (json.ctx && json.ctx.ResetPwd) {
+                        $imgbusy1.css('display', 'none');
                         showLoginResetPwd();
                         $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
