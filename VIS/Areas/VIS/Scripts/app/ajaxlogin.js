@@ -90,11 +90,14 @@
                     }
                     else if (json.ctx && json.ctx.Is2FAEnabled) {
                         showLogin2FA();
-                        //var txtOTP = $('#txt2FAOTP');
                         $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
                         if (json.ctx.QRFirstTime)
-                            $("#vis-loginqrcode").css("display", "block");                        
-                        //$('#TwoFA').val(json.ctx.Is2FAEnabled);
+                            $(".vis-loginQRSec").css("display", "block");
+                        else {
+                            var loginQRLbl = $(".vis-loginQRLabel");
+                            loginQRLbl.css("margin-top", "15px");
+                            loginQRLbl.css("margin-bottom", "40px");
+                        }
                         $otpTwoFA.val("");
                         $('#login3Data').val(JSON.stringify(json.ctx));
                         $otpTwoFA.focus();
@@ -302,6 +305,8 @@
         $lblRemember.text(Globalize.localize("RememberMe"));
 
         $otpTwoFA.attr("placeholder", Globalize.localize("EnterOTP"));
+        $lblScanQRCode.text(Globalize.localize("ScanQRCode"));
+        $lblEnterVerCode.text(Globalize.localize("EnterVerCode"));
 
         $lblRole.text(Globalize.localize("Role"));
         $lblClient.text(Globalize.localize("Client"));
@@ -328,6 +333,8 @@
     var $newPwd = $('#txtNewPwd');
     var $newCPwd = $('#txtCNewPwd');
     var $otpTwoFA = $('#txt2FAOTP');
+    var $lblScanQRCode = $('#lblScanQRCode');
+    var $lblEnterVerCode = $('#lblEnterVerCode');
     //var $lblUser = $('label[for="Login1Model_UserName"]');
     //var $lblPwd = $('label[for="Login1Model_Password"]');
     //var $lblLang = $('label[for="Login1Model_LoginLanguage"]');
