@@ -95,14 +95,14 @@ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
             <div id="login-form-2" class="login-form">
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
                     @Html.PasswordFor(m => m.Login1Model.NewPassword, new { id = "txtNewPwd", })
                     @Html.ValidationMessageFor(m => m.Login1Model.NewPassword)
                 </div>
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
                     @Html.PasswordFor(m => m.Login1Model.ConfirmNewPassword, new { id = "txtCNewPwd", })
                     @Html.ValidationMessageFor(m => m.Login1Model.ConfirmNewPassword)
@@ -120,7 +120,7 @@ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
                 <div class="vis-loginQRLabel" style="font-size: 15px;"> <label id="lblEnterVerCode"></label></div>
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                        <img src="~/Areas/VIS/Images/login/mob-ico.png" alt="icon">
                     </label>
 
                     @Html.PasswordFor(m => m.Login1Model.OTP2FA, new { id = "txt2FAOTP", })
