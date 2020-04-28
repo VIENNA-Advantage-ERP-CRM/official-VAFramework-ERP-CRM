@@ -72,7 +72,7 @@
                          new SelectListItem() {Text = "العربية (Saudi Arabia)",  Value="ar_SA"},
                            new SelectListItem() {Text = "繁體中文 (Chinese Taiwan)",  Value="zh_TW"},
             }*@
-     new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
+new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
                     </div>
                 </div>
                 <!-- end of input-row -->
@@ -88,37 +88,41 @@
                     </div>
                 </div>
                 <input name="Login1Model.RememberMe" type="hidden" value="false">
-                
+
 
             </div>
 
             <div id="login-form-2" class="login-form">
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
                     @Html.PasswordFor(m => m.Login1Model.NewPassword, new { id = "txtNewPwd", })
                     @Html.ValidationMessageFor(m => m.Login1Model.NewPassword)
                 </div>
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon">
                     </label>
                     @Html.PasswordFor(m => m.Login1Model.ConfirmNewPassword, new { id = "txtCNewPwd", })
                     @Html.ValidationMessageFor(m => m.Login1Model.ConfirmNewPassword)
                 </div>
-             
+
             </div>
 
             <div id="login-form-3" class="login-form">
-
-                <div id="vis-loginqrcode" class="vis-clsloginqr" style="width: 100%; text-align: center; display: none;">
-                    <img id="QRCdeimg" src="" alt="QR CODE HERE" />
+                <div class="vis-loginQRSec">
+                    <div class="vis-loginQRLabel"><label id="lblScanQRCode"></label></div>
+                    <div id="vis-loginqrcode" class="vis-clsloginqr">
+                        <img id="QRCdeimg" src="" alt="QR CODE HERE" />
+                    </div>
                 </div>
-                <div class="input-row" style="margin-top: 50px;">
+                <div class="vis-loginQRLabel" style="font-size: 15px;"> <label id="lblEnterVerCode"></label></div>
+                <div class="input-row">
                     <label class="input-icon">
-                        <img src="/VAdvantageHtml55/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                        <img src="~/Areas/VIS/Images/login/mob-ico.png" alt="icon">
                     </label>
+
                     @Html.PasswordFor(m => m.Login1Model.OTP2FA, new { id = "txt2FAOTP", })
                     @Html.ValidationMessageFor(m => m.Login1Model.OTP2FA)
                 </div>

@@ -1655,6 +1655,20 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("CardID");
         }
+
+        /** Set BI Password.
+@param VA037_BIPassword BI Password */
+        public void SetVA037_BIPassword(String VA037_BIPassword) { if (VA037_BIPassword != null && VA037_BIPassword.Length > 100) { log.Warning("Length > 100 - truncated"); VA037_BIPassword = VA037_BIPassword.Substring(0, 100); } Set_Value("VA037_BIPassword", VA037_BIPassword); }/** Get BI Password.
+@return BI Password */
+        public String GetVA037_BIPassword() { return (String)Get_Value("VA037_BIPassword"); }
+
+
+        /** Set Jasper Password.
+@param VA039_JasperPwd Jasper Password */
+public void SetVA039_JasperPwd(String VA039_JasperPwd) { if (VA039_JasperPwd != null && VA039_JasperPwd.Length > 100) { log.Warning("Length > 100 - truncated"); VA039_JasperPwd = VA039_JasperPwd.Substring(0, 100); } Set_Value("VA039_JasperPwd", VA039_JasperPwd); }/** Get Jasper Password.
+@return Jasper Password */
+        public String GetVA039_JasperPwd() { return (String)Get_Value("VA039_JasperPwd"); }
+
     }
 
 }
