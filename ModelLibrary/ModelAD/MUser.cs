@@ -353,7 +353,7 @@ namespace VAdvantage.Model
             SqlParameter[] param = new SqlParameter[4];
             param[0] = new SqlParameter("@userid", GetAD_User_ID());
 
-            param[1] = new SqlParameter("@orgid", AD_Org_ID); 
+            param[1] = new SqlParameter("@orgid", AD_Org_ID);
 
             param[2] = new SqlParameter("@userid1", GetAD_User_ID());
             param[3] = new SqlParameter("@orgid1", AD_Org_ID);
@@ -518,7 +518,7 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (newRecord || (Is_ValueChanged("VA037_BIUserName") || Is_ValueChanged("Password") || Is_ValueChanged("Name") || Is_ValueChanged("LastName") || Is_ValueChanged("VA037_YellowfinRoles_ID") || Is_ValueChanged("EMail") || Is_ValueChanged("VA037_BIUser") || Is_ValueChanged("VA037_IsLinkExistingUser")))
+            if (newRecord || (Is_ValueChanged("VA037_BIUserName") || Is_ValueChanged("VA037_BIPassword") || Is_ValueChanged("Name") || Is_ValueChanged("LastName") || Is_ValueChanged("VA037_YellowfinRoles_ID") || Is_ValueChanged("EMail") || Is_ValueChanged("VA037_BIUser") || Is_ValueChanged("VA037_IsLinkExistingUser")))
             {
                 updateYellowFinUser = true;
             }
@@ -595,6 +595,16 @@ namespace VAdvantage.Model
                 log.SaveError("Warning", Msg.GetMsg(GetCtx(), "UserCannotUpdate", true));
                 return false;
             }
+            if (Is_ValueChanged("Password"))
+            {
+                string oldPwd = Util.GetValueOfString(Get_ValueOld("Password"));
+                string validated = Common.Common.ValidatePassword(oldPwd, GetPassword(), GetPassword());
+                if (validated.Length > 0)
+                {
+                    log.SaveError("Error", Msg.GetMsg(GetCtx(), validated, true));
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -602,18 +612,19 @@ namespace VAdvantage.Model
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            log.Info("Aftersave start :: " + Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
+            log.Info("Aftersave start" + Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
+
             if (Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")) == "Y")
             {
                 return success;
             }
-            // log.SaveError("Aftersave start", "");
+            log.Info("Aftersave start" + "");
             UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetAD_User_ID(), GetName(), GetAD_Client_ID(), 0, IsLoginUser(), false);
             // Following Work is For Creating and Updating Yellowfin User if Yellowfin Module exists...................
             #region
             if (success)
             {
-                log.Info("Aftersave success" +  "Success :: " + success);
+                log.SaveError("Aftersave success", "");
                 // For Saving YellowFin user.......................
                 object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where IsActive='Y' AND prefix='VA037_'");
                 if (ModuleId != null && ModuleId != DBNull.Value)
