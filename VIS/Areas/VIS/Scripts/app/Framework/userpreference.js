@@ -114,6 +114,8 @@
         var drpTheme = null;
         var ulTheme = null;
 
+        var btnTheme = null;
+
         var $root = $("<div class='vis-forms-container'>");
         var $busyDiv = $("<div class='vis-apanel-busy'>")
         var windowNo = VIS.Env.getWindowNo();
@@ -125,10 +127,11 @@
             //this.log.log(VIS.Logging.Level.INFO, "INFO");
             //this.log.log(VIS.Logging.Level.WARNING, "WARNING");
             //this.log.log(VIS.Logging.Level.OFF, "OFF");
+            $busyDiv[0].style.visibility = 'visible';
 
             $root.load(VIS.Application.contextUrl + 'UserPreference/Index/?windowno=' + windowNo + '&adUserId=' + VIS.context.getAD_User_ID(), function (event) {
 
-                $busyDiv[0].style.visibility = 'visible';
+              
 
                 $self.init($root);
                 var divget = $root.find("#content_" + windowNo);
@@ -249,6 +252,9 @@
             $cmdOrg = root.find("#cmbOrg_" + windowNo);
             $cmdOrg.on("change", function () { loadWH() });
             $cmdWareHouse = root.find("#cmbWareHouse_" + windowNo);
+
+            $btnTheme = root.find("#btnTheme_"+windowNo)
+
             defaultLogin = {};
             loadDefault();
             //loadRoles();
@@ -580,7 +586,10 @@
                     VIS.themeMgr.applyTheme(clr);
             });
 
-
+            $btnTheme.on("click", function () {
+                var thme = new VIS.ThemeCnfgtor();
+                thme.show();
+            });
 
 
             //Error get error list on click
