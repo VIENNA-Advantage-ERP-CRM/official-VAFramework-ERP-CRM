@@ -780,7 +780,7 @@ namespace VIS.Models
                         FROM    M_ProductContainer p
                                 INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID
                     )
-                        SELECT  M_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
+                        SELECT    ARRAY_TO_STRING(name_path, '->')
                         FROM    pops  where m_productcontainer_id = " + toContainerId;
                 pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, trx));
             }
@@ -792,7 +792,7 @@ namespace VIS.Models
                             START WITH ref_m_container_id IS NULL CONNECT BY prior m_productcontainer_id = ref_m_container_id
                            ORDER BY tree ", null, trx));
             }
-            DataSet dsTragetContainer = DB.ExecuteDataset(@"SELECT UNIQUE targetcontainer_id FROM M_MovementLine 
+            DataSet dsTragetContainer = DB.ExecuteDataset(@"SELECT DISTINCT targetcontainer_id FROM M_MovementLine 
                                         WHERE MoveFullContainer='Y' AND IsActive = 'Y' AND M_Movement_ID = " + movementId, null, trx);
             if (dsTragetContainer != null && dsTragetContainer.Tables.Count > 0 && dsTragetContainer.Tables[0].Rows.Count > 0)
             {

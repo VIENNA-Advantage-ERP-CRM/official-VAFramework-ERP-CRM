@@ -2086,7 +2086,7 @@ namespace VAdvantage.Model
                             SELECT m.m_product_id, NVL(m.m_attributesetinstance_id, 0) AS m_attributesetinstance_id,
                               m.M_ProductContainer_ID, m.movementqty AS ContainerCurrentQty , p.Name
                               FROM m_movementline m INNER JOIN M_Product p ON p.M_Product_ID  = m.M_Product_ID
-                              WHERE m_movement_id   = " + movementId + @" AND movefullcontainer = 'Y' )
+                              WHERE m_movement_id   = " + movementId + @" AND movefullcontainer = 'Y' ) final
                              GROUP BY M_PRODUCT_ID, M_ATTRIBUTESETINSTANCE_ID, M_ProductContainer_ID, ContainerCurrentQty, Name HAVING COUNT(1) = 1	";
             log.Info(sql);
             ds = DB.ExecuteDataset(sql, null, Get_Trx());
