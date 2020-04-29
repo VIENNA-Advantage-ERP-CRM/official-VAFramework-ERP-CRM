@@ -648,7 +648,7 @@ namespace VIS.Models
             // Get All records of Parent Container and child container
             sql = @"SELECT * FROM (
                             SELECT Distinct p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
-                            First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty
+                            First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty
                             FROM M_Transaction t
                             INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
                             INNER JOIN C_UOM u ON u.C_UOM_ID = p.C_UOM_ID
