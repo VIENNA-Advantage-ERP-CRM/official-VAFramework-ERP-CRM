@@ -865,6 +865,7 @@
     <Compile Include="Areas\VIS\DataContracts\FormData.cs" />
     <Compile Include="Areas\VIS\DataContracts\ProcessData.cs" />
     <Compile Include="Areas\VIS\DataContracts\SqlParams.cs" />
+    <Compile Include="Areas\VIS\DataContracts\ThemeData.cs" />
     <Compile Include="Areas\VIS\DataContracts\WindowData.cs" />
     <Compile Include="Areas\VIS\DBase\DB.cs" />
     <Compile Include="Areas\VIS\Filters\AjaxAuthorizeAttribute.cs" />
@@ -956,6 +957,7 @@
     <Compile Include="Areas\VIS\Models\SmsModel.cs" />
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
     <Compile Include="Areas\VIS\Models\TabPanels\BiPanelModel.cs" />
+    <Compile Include="Areas\VIS\Models\ThemeModel.cs" />
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
     <Compile Include="Areas\VIS\Models\ValuePreferenceModel.cs" />

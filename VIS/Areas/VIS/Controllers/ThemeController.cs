@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using VAdvantage.Utility;
+using VIS.Models;
 
 namespace VIS.Controllers
 {
@@ -11,15 +12,8 @@ namespace VIS.Controllers
         {
 
             ViewBag.WindowNumber = windowNo;
-            //UserPreferenceModel obj = new UsrPreferenceModel();
-            if (Session["Ctx"] != null)
-            {
-                var ctx = Session["ctx"] as Ctx;
-                //obj = obj.GetUserSettings(ctx, Convert.ToInt32(adUserId));
-                ViewBag.lang = ctx.GetAD_Language();
-            }
-
-            return PartialView(null);
+          
+            return PartialView(ThemeModel.GetThemeData());
 
         }
     }
