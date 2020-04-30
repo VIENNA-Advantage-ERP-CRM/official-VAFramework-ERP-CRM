@@ -8,10 +8,15 @@
         var windowNo = VIS.Env.getWindowNo();
 
         var $divTheme = null;
+        var $divCtrl = null;
+        var $divthSave = null;
+        var $ulTheme = null;
+
         var $clrPrimary = null;
         var $clrOnPrinmary = null;
         var $clrSecondary = null;
         var $clrOnSecondary = null;
+        var $txtName = null;
 
         var $self = this;
 
@@ -21,36 +26,35 @@
             document.documentElement.style.setProperty("--v-c-th-on-primary", "255, 255, 255");
             document.documentElement.style.setProperty("--v-c-th-secondary", "238, 238, 238");
             document.documentElement.style.setProperty("--v-c-th-on-secondary", "51, 51, 51");
-               
+
+            setBusy(true);
             $root.load(VIS.Application.contextUrl + 'Theme/ThemeCnfgtr/?windowNo=' + windowNo, function (event) {
-
-                $busyDiv[0].style.visibility = 'visible';
-
-                $self.init();
-                //var divget = $root.find("#content_" + windowNo);
-                //if (divget != null) {
-                    // divget.tabs();
-                    //divget.tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
-                    //divget.find("li").removeClass("ui-corner-top").addClass("ui-corner-left");
-                //}
-                //remove image
-                $busyDiv[0].style.visibility = 'hidden';
+                init();
+              
+                fillThemeList();
             });
         };
 
-        this.init = function () {
+        function init() {
 
             $divTheme = $root.find("#divTheme_" + windowNo);
             $divCtrl = $root.find(".vis-thed-clrpickerouterwrap");
 
-            $clrPrimary = $divCtrl.find('input[name="primary"');
-            $clrOnPrinmary = $divCtrl.find('input[name="onprimary"');
-            $clrSecondary = $divCtrl.find('input[name="secondary"');
-            $clrOnSecondary = $divCtrl.find('input[name="onsecondary"');
+            $divthSave = $root.find(".vis-thed-botsavesec");
+
+            $clrPrimary = $divCtrl.find('input[name="primary"]');
+            $clrOnPrinmary = $divCtrl.find('input[name="onprimary"]');
+            $clrSecondary = $divCtrl.find('input[name="secondary"]');
+            $clrOnSecondary = $divCtrl.find('input[name="onsecondary"]');
+
+            $txtName = $divthSave.find("input");
+
+            $ulTheme = $root.find(".vis-thed-savedlistwrap");
+
             
             // all element s
 
-                $divCtrl.find('input').on('change', function (e) {
+            $divCtrl.find('input').on('change', function (e) {
                 var val = null;
                 if (this.name == "primary") {
                     document.documentElement.style.setProperty('--v-c-th-primary', hexToRgbComma(this.value));
@@ -65,12 +69,100 @@
                     document.documentElement.style.setProperty('--v-c-th-on-secondary', hexToRgbComma(this.value));
                 }
             });
+
+            $divthSave.find('a').on('click', function (e) {
+                if ($txtName.val().trim() == "") {
+                    VIS.ADialog.error("EnterName");
+                    return;
+                }
+                var $btn = $(this);
+                var isDef = $btn.data('action') == "sandd";
+                setBusy(true);
+                saveThemeData(hexToRgbComma($clrPrimary.val()), hexToRgbComma($clrOnPrinmary.val()),
+                    hexToRgbComma($clrSecondary.val()), hexToRgbComma($clrOnSecondary.val()), isDef, $txtName.val());
+            });
+
+            $ulTheme.on("click", "LI", function (e) {
+                setBusy(true);
+                var id = $(e.currentTarget).data("id");
+                if (e.target.className.indexOf('vis-delete') > -1) {
+                    VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/Delete', { id: id }, function (data) {
+                        fillThemeList();
+                    });
+                }
+                else {
+                    VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/SetDefault', { id: id }, function (data) {
+                        fillThemeList();
+                    });
+                }
+            });
         };
+
+        function setBusy(isBusy) {
+            if (isBusy)
+                $busyDiv[0].style.visibility = 'visible';
+            else 
+                $busyDiv[0].style.visibility = 'hidden';
+        };
+
+        function saveThemeData(pri,onpri,sec,onsec,isdef,name) {
+            var data = {};
+            data.Primary = pri;
+            data.OnPrimary = onpri;
+            data.Seconadary = sec;
+            data.OnSecondary = onsec;
+            data.IsDefault = isdef;
+            data.Name = name;
+            setBusy(true);
+            VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/Save', data, saveThemeDataCmplted);
+                
+        }
+
+        function saveThemeDataCmplted(ret) {
+            if (ret > 0) {
+                fillThemeList();
+            }
+            else {
+                setBusy(false);
+            }
+        }
+
+        function fillThemeList() {
+            setBusy(true);
+            $ulTheme.empty();
+            VIS.dataContext.getJSONData(VIS.Application.contextUrl + 'Theme/GetList', {id:0} , function (data) {
+
+                var htm = [];
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+
+                    htm.push('<li class="vis-thed-savedlistitem');
+                    if (item.IsDefault)
+                        htm.push(' vis-thed-selectedlistitem');
+                    htm.push('" data-id="'+item.Id+'">');
+                    htm.push('<div class="vis-theme-rec" style="width:80px">');
+                    htm.push('<span class="vis-theme-color" style="background-color:rgba('+item.Primary+',1)"></span>');
+                    htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.OnPrimary +',1)"></span>');
+                    htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.Seconadary + ',1)"></span>');
+                    htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.OnSecondary + ',1)"></span>');
+                    htm.push('</div>');
+                   
+                    htm.push('<a class="vis-thed-themename">' + item.Name + '</a>');
+                   
+                    if (item.IsDefault)
+                        htm.push('<i class="vis vis-markx"></i>');
+                    htm.push('<span style="margin:0 3px 0 3px" class="vis vis-delete"></span>');
+                    htm.push('</li>');
+                }
+                $ulTheme.append(htm.join(' '));
+                setBusy(false);
+            });
+        }
 
         function componentToHex(c) {
             var hex = c.toString(16);
             return hex.length == 1 ? "0" + hex : hex;
-        }
+        };
 
         function rgbToHex(r, g, b) {
             return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);

@@ -36,7 +36,6 @@
             root.style.setProperty('--v-c-on-secondary', clrs[3]);
         }
 
-
         return {
             init: init,
             applyTheme: applyTheme
