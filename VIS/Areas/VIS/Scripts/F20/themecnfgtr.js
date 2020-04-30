@@ -22,10 +22,7 @@
 
         function load() {
 
-            document.documentElement.style.setProperty("--v-c-th-primary", "0, 152, 247");
-            document.documentElement.style.setProperty("--v-c-th-on-primary", "255, 255, 255");
-            document.documentElement.style.setProperty("--v-c-th-secondary", "238, 238, 238");
-            document.documentElement.style.setProperty("--v-c-th-on-secondary", "51, 51, 51");
+            setThemeColor("0, 152, 247", "255, 255, 255", "238, 238, 238", "51, 51, 51");
 
             setBusy(true);
             $root.load(VIS.Application.contextUrl + 'Theme/ThemeCnfgtr/?windowNo=' + windowNo, function (event) {
@@ -34,6 +31,13 @@
                 fillThemeList();
             });
         };
+
+        function setThemeColor(p, onP, s, onS) {
+            document.documentElement.style.setProperty("--v-c-th-primary", p);
+            document.documentElement.style.setProperty("--v-c-th-on-primary", onP);
+            document.documentElement.style.setProperty("--v-c-th-secondary", s);
+            document.documentElement.style.setProperty("--v-c-th-on-secondary", onS);
+        }
 
         function init() {
 
@@ -149,10 +153,18 @@
                    
                     htm.push('<a class="vis-thed-themename">' + item.Name + '</a>');
                    
-                    if (item.IsDefault)
+                    if (item.IsDefault) 
                         htm.push('<i class="vis vis-markx"></i>');
                     htm.push('<span style="margin:0 3px 0 3px" class="vis vis-delete"></span>');
                     htm.push('</li>');
+
+                    if (item.IsDefault) {
+                        $clrPrimary.val(regbCommaToHex(item.Primary));
+                        $clrOnPrinmary.val(regbCommaToHex(item.OnPrimary));
+                        $clrSecondary.val(regbCommaToHex(item.Seconadary));
+                        $clrOnSecondary.val(regbCommaToHex(item.OnSecondary));
+                        setThemeColor(item.Primary, item.OnPrimary, item.Seconadary, item.OnSecondar);
+                    }
                 }
                 $ulTheme.append(htm.join(' '));
                 setBusy(false);
@@ -164,8 +176,17 @@
             return hex.length == 1 ? "0" + hex : hex;
         };
 
-        function rgbToHex(r, g, b) {
-            return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        //function rgbToHex(r, g, b) {
+        //    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        //}
+        function rgbToHex(red, green, blue) {
+            var rgb = blue | (green << 8) | (red << 16);
+            return '#' + (0x1000000 + rgb).toString(16).slice(1)
+        }
+
+        function regbCommaToHex(rgb) {
+            var rgb = rgb.split(',');
+            return rgbToHex(rgb[0], rgb[1], rgb[2]);
         }
 
         function hexToRgbComma(hex) {

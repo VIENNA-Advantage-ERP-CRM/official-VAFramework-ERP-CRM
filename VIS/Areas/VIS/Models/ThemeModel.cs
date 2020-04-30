@@ -57,16 +57,16 @@ namespace VIS.Models
                return -1;
         }
 
-        internal bool SetDefalutTheme(int id)
+        internal bool SetDefaultTheme(int id)
         {
-            DBase.DB.ExecuteQuery("UPDATE AD_Theme SET IsDefault='N", null, null);
+            DBase.DB.ExecuteQuery("UPDATE AD_Theme SET IsDefault='N'", null, null);
             DBase.DB.ExecuteQuery("UPDATE AD_Theme SET IsDefault='Y' WHERE AD_Theme_ID = " + id, null, null);
             return true;
         }
 
         internal bool Delete(int id)
         {
-            DBase.DB.ExecuteQuery("DELETE FROM AD_Theme WHERE AD_Theme_ID = " + id,null,null);
+            DBase.DB.ExecuteQuery("DELETE FROM AD_Theme WHERE AD_Theme_ID = " + id, null, null);
             return true;
         }
     }

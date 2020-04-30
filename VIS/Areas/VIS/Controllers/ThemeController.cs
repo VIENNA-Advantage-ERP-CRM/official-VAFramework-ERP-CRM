@@ -43,7 +43,7 @@ namespace VIS.Controllers
         public ActionResult SetDefault(int id)
         {
             ThemeModel tm = new ThemeModel();
-            return Json(tm.SetDefalutTheme(id));
+            return Json(tm.SetDefaultTheme(id));
         }
     }
 }
