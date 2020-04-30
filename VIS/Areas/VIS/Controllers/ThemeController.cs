@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using VAdvantage.Utility;
+using VIS.DataContracts;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -10,11 +11,39 @@ namespace VIS.Controllers
     {
         public ActionResult ThemeCnfgtr(int windowNo)
         {
-
             ViewBag.WindowNumber = windowNo;
-          
-            return PartialView(ThemeModel.GetThemeData());
+            if (Session["Ctx"] != null)
+            {
+                var ctx = Session["ctx"] as Ctx;
+                ViewBag.lang = ctx.GetAD_Language();
+            }
+            return PartialView();
+        }
+        [HttpPost]
+        public ActionResult GetList()
+        {
+            return Json(ThemeModel.GetThemeData());
+        }
 
+        [HttpPost]
+        public ActionResult Save(ThemeData thd)
+        {
+            ThemeModel tm = new ThemeModel();
+            return Json(tm.SaveTheme(thd));
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            ThemeModel tm = new ThemeModel();
+            return Json(tm.Delete(id));
+        }
+
+        [HttpPost]
+        public ActionResult SetDefault(int id)
+        {
+            ThemeModel tm = new ThemeModel();
+            return Json(tm.SetDefalutTheme(id));
         }
     }
 }

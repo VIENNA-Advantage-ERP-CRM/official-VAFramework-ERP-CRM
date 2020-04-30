@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 
 using System.Web;
+using VAdvantage.Model;
 using VAdvantage.Utility;
 using VIS.DataContracts;
 
@@ -33,6 +34,40 @@ namespace VIS.Models
                 }
             }
             return tml;
+        }
+
+        internal int SaveTheme(ThemeData thd)
+        {
+            if(thd.IsDefault)
+            {
+                DBase.DB.ExecuteQuery("UPDATE AD_Theme SET IsDefault='N'",null,null);
+            }
+
+            X_AD_Theme xtheme = new X_AD_Theme(new Ctx(), 0, null);
+            xtheme.SetName(thd.Name);
+            xtheme.SetIsDefault(thd.IsDefault);
+            xtheme.SetIsActive(true);
+            xtheme.SetPrimaryColor(thd.Primary);
+            xtheme.SetOnPrimaryColor(thd.OnPrimary);
+            xtheme.SetSecondaryColor(thd.Seconadary);
+            xtheme.SetOnSecondaryColor(thd.OnSecondary);
+            if (xtheme.Save())
+                return xtheme.Get_ID();
+            else 
+               return -1;
+        }
+
+        internal bool SetDefalutTheme(int id)
+        {
+            DBase.DB.ExecuteQuery("UPDATE AD_Theme SET IsDefault='N", null, null);
+            DBase.DB.ExecuteQuery("UPDATE AD_Theme SET IsDefault='Y' WHERE AD_Theme_ID = " + id, null, null);
+            return true;
+        }
+
+        internal bool Delete(int id)
+        {
+            DBase.DB.ExecuteQuery("DELETE FROM AD_Theme WHERE AD_Theme_ID = " + id,null,null);
+            return true;
         }
     }
 }

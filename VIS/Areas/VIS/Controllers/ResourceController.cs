@@ -187,8 +187,8 @@ namespace VIS.Controllers
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    thms = ds.Tables[0].Rows[0]["PrimaryColor"] + "|" + ds.Tables[0].Rows[0]["PrimaryOnColor"] + "|" + ds.Tables[0].Rows[0]["SecondaryColor"]
-                        + "|" + ds.Tables[0].Rows[0]["SecondaryOnColor"];
+                    thms = ds.Tables[0].Rows[0]["PrimaryColor"] + "|" + ds.Tables[0].Rows[0]["OnPrimaryColor"] + "|" + ds.Tables[0].Rows[0]["SecondaryColor"]
+                        + "|" + ds.Tables[0].Rows[0]["OnSecondaryColor"];
                 }
 
             }
