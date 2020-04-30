@@ -5,6 +5,8 @@ using System.Data;
 using Oracle.ManagedDataAccess.Client;
 using System.Linq;
 using System.Text;
+using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace VAdvantage.DataBase
 {
@@ -251,5 +253,75 @@ namespace VAdvantage.DataBase
             return m_sequence_id;
         }
 
+        /// <summary>
+        /// Execute Procedure
+        /// </summary>
+        /// <param name="sql">Procedure Name</param>
+        /// <param name="arrParam">Sql Parameters</param>
+        /// <returns>Sql Parameters containing result</returns>
+        public SqlParameter[] ExecuteProcedure(string sql, DbParameter[] arrParam, DbTransaction transaction)
+        {
+            string dbConn = DB.GetConnectionString();
+            OracleConnection conn = new OracleConnection(dbConn);
+            OracleCommand cmd = new OracleCommand();
+            int result;
+            int countOut = 0;
+            SqlParameter[] ret = null;
+            try
+            {
+                cmd.Connection = conn;
+                cmd.CommandText = sql;
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                if (transaction != null)
+                {
+                    cmd.Transaction = (OracleTransaction)transaction;
+                }
+
+                if (arrParam != null)
+                {
+                    foreach (DbParameter p in arrParam)
+                    {
+                        if (p.Direction == ParameterDirection.Output)
+                        {
+                            countOut++;
+                        }
+                        cmd.Parameters.Add(p);
+                    }
+                }
+
+                //Open connection and execute insert query.
+                conn.Open();
+                result = cmd.ExecuteNonQuery();
+                if (result == -1)
+                {
+                    ret = new SqlParameter[countOut];
+                    countOut = 0;
+                    if (arrParam != null && arrParam.Length > 0)
+                    {
+                        for (int i = 0; i < arrParam.Length; i++)
+                        {
+                            if (arrParam[i].Direction == ParameterDirection.Output)
+                            {
+                                ret[countOut] = new SqlParameter(arrParam[i].ParameterName, arrParam[i].Value);
+                                countOut++;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                conn.Close();
+                cmd.Parameters.Clear();
+                VAdvantage.Logging.VLogger.Get().Severe(e.Message + " [Procedure]" + sql);
+            }
+            finally
+            {
+                conn.Close();
+                cmd.Parameters.Clear();
+            }
+            return ret;
+        }
     }
 }

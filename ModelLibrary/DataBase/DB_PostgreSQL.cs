@@ -9,6 +9,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,30 +19,30 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.DataBase
 {
-    public class DB_PostgreSQL  :ViennaDatabase
+    public class DB_PostgreSQL : ViennaDatabase
     {
-       /// <summary>
-       /// PostgreSQL Database
-       /// </summary>
-	public DB_PostgreSQL()
-	{
-	}   
+        /// <summary>
+        /// PostgreSQL Database
+        /// </summary>
+        public DB_PostgreSQL()
+        {
+        }
 
-	/** Default Port            */
-	public static int         DEFAULT_PORT = 5432;
-	
-	/** Statement Converter     */
-	private ConvertSQL  m_convert = new ConvertSQL_PostgreSQL();
+        /** Default Port            */
+        public static int DEFAULT_PORT = 5432;
+
+        /** Statement Converter     */
+        private ConvertSQL m_convert = new ConvertSQL_PostgreSQL();
 
         /** Cached Database Name	*/
-	private String			m_dbName = null;
-        
-    private String				m_userName = null;
-    
-	/**	Logger			*/
-	private static VLogger			log	= VLogger.GetVLogger (typeof(DB_PostgreSQL).FullName);
+        private String m_dbName = null;
 
-        public static String NATIVE_MARKER = "NATIVE_"+DatabaseType.DB_POSTGRESQL+"_KEYWORK";
+        private String m_userName = null;
+
+        /**	Logger			*/
+        private static VLogger log = VLogger.GetVLogger(typeof(DB_PostgreSQL).FullName);
+
+        public static String NATIVE_MARKER = "NATIVE_" + DatabaseType.DB_POSTGRESQL + "_KEYWORK";
 
         private string connectionString = null;
         private System.Data.IDbConnection con = null;
@@ -50,28 +52,28 @@ namespace VAdvantage.DataBase
         /// </summary>
         /// <param name="oraStatement">oracle statement</param>
         /// <returns>converted Statement from oracle statement</returns>
-        public  String ConvertStatement1(String oraStatement)
+        public String ConvertStatement1(String oraStatement)
         {
             String[] retValue = m_convert.Convert(oraStatement);
-		
-		if (retValue.Length == 0 )
-			return  oraStatement;
-		
-      
-		if (retValue.Length != 1)
-			
-			{
-			log.Log(Level.SEVERE, ("DB_PostgreSQL.convertStatement - Convert Command Number=" + retValue.Length
-				+ " (" + oraStatement + ") - " + m_convert.GetConversionError()));
-			throw new ArgumentException
-				("DB_PostgreSQL.convertStatement - Convert Command Number=" + retValue.Length
-					+ " (" + oraStatement + ") - " + m_convert.GetConversionError());
-			}
-		
-    	
-		return retValue[0];
 
-                                 
+            if (retValue.Length == 0)
+                return oraStatement;
+
+
+            if (retValue.Length != 1)
+
+            {
+                log.Log(Level.SEVERE, ("DB_PostgreSQL.convertStatement - Convert Command Number=" + retValue.Length
+                    + " (" + oraStatement + ") - " + m_convert.GetConversionError()));
+                throw new ArgumentException
+                    ("DB_PostgreSQL.convertStatement - Convert Command Number=" + retValue.Length
+                        + " (" + oraStatement + ") - " + m_convert.GetConversionError());
+            }
+
+
+            return retValue[0];
+
+
 
         }   //  convertStatement
 
@@ -245,12 +247,12 @@ namespace VAdvantage.DataBase
         }
 
 
-       /// <summary>
-       /// Create SQL TO Date String from Timestamp
-       /// </summary>
-       /// <param name="time">time Date to be converted</param>
-       /// <param name="dayOnly">dayOnly true if time set to 00:00:00</param>
-       /// <returns>TO_DATE('2001-01-30 18:10:20',''YYYY-MM-DD HH24:MI:SS')</returns>
+        /// <summary>
+        /// Create SQL TO Date String from Timestamp
+        /// </summary>
+        /// <param name="time">time Date to be converted</param>
+        /// <param name="dayOnly">dayOnly true if time set to 00:00:00</param>
+        /// <returns>TO_DATE('2001-01-30 18:10:20',''YYYY-MM-DD HH24:MI:SS')</returns>
         public String TO_DATE(DateTime? time, bool dayOnly)
         {
 
@@ -357,7 +359,7 @@ namespace VAdvantage.DataBase
             if (con == null)
             {
                 con = new NpgsqlConnection(connectionString);
-                
+
             }
             return con;
         }
@@ -377,7 +379,7 @@ namespace VAdvantage.DataBase
                 connection.Open();
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
                 adapter.SelectCommand = new NpgsqlCommand(sql);
-               // adapter.SelectCommand.CommandTimeout = 500;
+                // adapter.SelectCommand.CommandTimeout = 500;
                 adapter.SelectCommand.Connection = (NpgsqlConnection)connection;
                 ds = new DataSet();
 
@@ -407,6 +409,89 @@ namespace VAdvantage.DataBase
                 connection.Close();
             }
             return ds;
+        }
+
+        /// <summary>
+        /// Execute Procedure
+        /// </summary>
+        /// <param name="sql">Procedure Name</param>
+        /// <param name="arrParam">Sql Parameters</param>
+        /// <returns>Sql Parameters containing result</returns>
+        public SqlParameter[] ExecuteProcedure(string sql, DbParameter[] arrParam, DbTransaction transaction)
+        {
+            string dbConn = DB.GetConnectionString();
+            NpgsqlConnection conn = new NpgsqlConnection(dbConn);
+            NpgsqlCommand cmd = new NpgsqlCommand();
+            int result;
+            int countOut = 0;
+            NpgsqlDataReader pgreader = null;
+            SqlParameter[] ret = null;
+            try
+            {
+                cmd.Connection = conn;
+                cmd.CommandText = sql;
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                if (transaction != null)
+                {
+                    cmd.Transaction = (NpgsqlTransaction)transaction;
+                }
+
+                if (arrParam != null)
+                {
+                    foreach (DbParameter p in arrParam)
+                    {
+                        if (p.Direction == ParameterDirection.Output)
+                        {
+                            countOut++;
+                            continue;
+                        }
+                        cmd.Parameters.Add(p);
+                    }
+                }
+
+                //Open connection and execute insert query.
+                conn.Open();
+                pgreader = cmd.ExecuteReader();
+
+                ret = new SqlParameter[countOut];
+                countOut = 0;
+
+                while (pgreader.Read())
+                {                    
+                    if (arrParam != null && arrParam.Length > 0)
+                    {
+                        for (int i = 0; i < arrParam.Length; i++)
+                        {
+                            if (arrParam[i].Direction == ParameterDirection.Output)
+                            {
+                                ret[countOut] = new SqlParameter(arrParam[i].ParameterName, pgreader.GetValue(countOut));
+                                countOut++;
+                            }
+                        }
+                    }
+                }                
+            }
+            catch (Exception e)
+            {
+                if (pgreader != null)
+                {
+                    pgreader.Close();
+                }
+                conn.Close();
+                cmd.Parameters.Clear();
+                VAdvantage.Logging.VLogger.Get().Severe(e.Message + " [Procedure]" + sql);
+            }
+            finally
+            {
+                if (pgreader != null)
+                {
+                    pgreader.Close();
+                }
+                conn.Close();
+                cmd.Parameters.Clear();
+            }
+            return ret;           
         }
     }
 }

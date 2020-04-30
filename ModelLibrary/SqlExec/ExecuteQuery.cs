@@ -20,6 +20,7 @@ using System.Collections;
 //using System.Data.OracleClient;
 using VAdvantage.DataBase;
 using Oracle.ManagedDataAccess.Client;
+using System.Data.Common;
 
 namespace VAdvantage.SqlExec
 {
@@ -46,7 +47,7 @@ namespace VAdvantage.SqlExec
             else if (DatabaseType.IsOracle)
                 return Oracle.OracleHelper.ExecuteDataset(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql));
 
-                
+
             return PostgreSql.PostgreHelper.ExecuteDataset(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql));
         }
 
@@ -93,11 +94,11 @@ namespace VAdvantage.SqlExec
         {
             if (DatabaseType.IsMySql)
                 return PostgreSql.PostgreHelper.ExecuteScalar(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql)).ToString();
-            else if(DatabaseType.IsMSSql)
+            else if (DatabaseType.IsMSSql)
                 return MSSql.SqlHelper.ExecuteScalar(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql)).ToString();
-            else if(DatabaseType.IsMySql)
+            else if (DatabaseType.IsMySql)
                 return MySql.MySqlHelper.ExecuteScalar(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql)).ToString();
-            else if(DatabaseType.IsOracle)
+            else if (DatabaseType.IsOracle)
                 return Oracle.OracleHelper.ExecuteScalar(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql)).ToString();
 
             return PostgreSql.PostgreHelper.ExecuteScalar(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql)).ToString();
@@ -285,6 +286,33 @@ namespace VAdvantage.SqlExec
         }
         #endregion
 
+
+        #region Execute Procedure
+
+        /// <summary>
+        /// Executes the Procedure and returns the data in the form of Sql Parameteres
+        /// </summary>
+        /// <param name="sql">SQL Query which is to be executed</param>
+        /// <param name="arrParam">Parameters to be passed in SQL Query</param>
+        /// <returns>Executed SQL Query in the form of Scalar</returns>
+        public static SqlParameter[] ExecuteProcedure(string sql, SqlParameter[] arrParam)
+        {
+            DbParameter[] param = null;
+            if (DatabaseType.IsPostgre)
+            {
+                param = GetPostgreParameter(arrParam);                
+            }
+           
+            else if (DatabaseType.IsOracle)
+            {
+                param = GetOracleParameter(arrParam);                
+            }
+
+            return DB.GetDatabase().ExecuteProcedure(sql, param, null);
+        }
+
+        #endregion
+
         #region Process and Convert SQLParameter
         /// <summary>
         /// Creates the MySqlParameter class from passed in SQLParameter
@@ -327,6 +355,17 @@ namespace VAdvantage.SqlExec
                 //string str = arrParam[i].SqlDbType.ToString();
                 //string strVal = to_date(arrParam[i].Value.ToString(), "mm/dd/yyyy");
                 param[i] = new OracleParameter(arrParam[i].ParameterName, arrParam[i].Value);
+                param[i].DbType = arrParam[i].DbType;
+
+                if ((arrParam[i].Direction == ParameterDirection.InputOutput) && (arrParam[i].Value == null))
+                {
+                    param[i].Value = DBNull.Value;
+                }
+
+                if (arrParam[i].Direction == ParameterDirection.Output)
+                {                    
+                    param[i].Direction = arrParam[i].Direction;
+                }
             }
             return param;   //return the parameter
         }
@@ -347,8 +386,19 @@ namespace VAdvantage.SqlExec
             {
                 //set one by one all the values to the NpgsqlParameter
                 //replace @ with ? for use in Postgre SQL
-               // param[i] = new NpgsqlParameter(arrParam[i].ParameterName, String.IsNullOrEmpty(arrParam[i].Value.ToString()) ? "-1" : arrParam[i].Value);
+                // param[i] = new NpgsqlParameter(arrParam[i].ParameterName, String.IsNullOrEmpty(arrParam[i].Value.ToString()) ? "-1" : arrParam[i].Value);
                 param[i] = new NpgsqlParameter(arrParam[i].ParameterName, arrParam[i].Value);
+                param[i].DbType = arrParam[i].DbType;
+
+                if ((arrParam[i].Direction == ParameterDirection.InputOutput) && (arrParam[i].Value == null))
+                {
+                    param[i].Value = DBNull.Value;
+                }
+
+                if (arrParam[i].Direction == ParameterDirection.Output)
+                {                    
+                    param[i].Direction = arrParam[i].Direction;
+                }
             }
             return param;   //return the parameter
         }
@@ -362,11 +412,11 @@ namespace VAdvantage.SqlExec
         ///// <returns>Executed SQL Query in the form of Scalar</returns>
         //static OracleTransaction trans = null;
         //static NpgsqlTransaction transPostgre = null;
-        
+
         //public static string ExecuteNonQuery(string sql, bool isTrans, bool isAutoComiit)
         //{
 
-            
+
         //    if (DatabaseType.IsPostgre)
         //    {
         //        //return PostgreSql.PostgreHelper.ExecuteNonQuery(DB.GetConnectionString(), CommandType.Text, DB.ConvertSqlQuery(sql)).ToString();
@@ -375,7 +425,7 @@ namespace VAdvantage.SqlExec
         //            NpgsqlConnection conn = new NpgsqlConnection(DB.GetConnectionString());
         //            if (conn.State != ConnectionState.Open)
         //            {
-                        
+
         //                conn.Open();
         //            }
 
@@ -389,9 +439,9 @@ namespace VAdvantage.SqlExec
         //                transPostgre.Commit();
         //                conn.Close();
         //            }
-                   
+
         //            return "1";
-                    
+
         //        }
         //        catch (Exception ex)
         //        {
@@ -426,7 +476,7 @@ namespace VAdvantage.SqlExec
         //                trans.Commit();
         //                //conn.Close();
         //            }
-                    
+
         //            return "1";
         //        }
         //        catch (Exception ex)
@@ -530,7 +580,7 @@ namespace VAdvantage.SqlExec
         }
 
 
-        
+
         /// <summary>
         /// Execute query with passing transaction
         /// </summary>
@@ -780,7 +830,7 @@ namespace VAdvantage.SqlExec
         //    else if(DatabaseType.IsMSSql)
         //    {
         //        SqlConnection sqlcon = new SqlConnection(DB.GetConnectionString());
-                
+
         //        sqlcon.Open();
         //        SqlTransaction mssqlTrx = sqlcon.BeginTransaction(IsolationLevel.ReadCommitted);
 
@@ -815,8 +865,8 @@ namespace VAdvantage.SqlExec
                 string[] restrictions = new string[2];
                 restrictions[1] = tableName.ToUpper();
                 conn.Open();
-              dt = conn.GetSchema("Columns",restrictions);
-              // dt = conn.GetSchema();
+                dt = conn.GetSchema("Columns", restrictions);
+                // dt = conn.GetSchema();
                 conn.Close();
                 return dt;
             }
@@ -841,7 +891,7 @@ namespace VAdvantage.SqlExec
                 MySqlConnection mysqlcon = new MySqlConnection(DB.GetConnectionString());
                 string[] restrictions = new string[4];
                 restrictions[2] = tableName;
-               // dt = mysqlcon.GetSchema("Columns", restrictions);
+                // dt = mysqlcon.GetSchema("Columns", restrictions);
                 return dt;
             }
 

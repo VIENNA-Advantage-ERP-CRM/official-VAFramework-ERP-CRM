@@ -31,7 +31,7 @@ namespace VAdvantage.DataBase
 
         private static readonly object _trxLock = new object();
         private static readonly object _trxCloseLock = new object();
-        
+
         /** Logger					*/
         private VLogger log = null;
         bool useSameTrxForDocNo = true;
@@ -66,7 +66,7 @@ namespace VAdvantage.DataBase
                 OracleCommand cmd1 = new OracleCommand();
                 PrepareCommandForOracle(cmd1, (OracleConnection)_conn, (OracleTransaction)_trx, CommandType.Text, sql, param);
 
-               
+
                 try
                 {
                     retval = cmd1.ExecuteNonQuery();
@@ -274,6 +274,17 @@ namespace VAdvantage.DataBase
                 //string str = arrParam[i].SqlDbType.ToString();
                 //string strVal = to_date(arrParam[i].Value.ToString(), "mm/dd/yyyy");
                 param[i] = new OracleParameter(arrParam[i].ParameterName, arrParam[i].Value);
+                param[i].DbType = arrParam[i].DbType;
+
+                if ((arrParam[i].Direction == ParameterDirection.InputOutput) && (arrParam[i].Value == null))
+                {
+                    param[i].Value = DBNull.Value;
+                }
+
+                if (arrParam[i].Direction == ParameterDirection.Output)
+                {
+                    param[i].Direction = arrParam[i].Direction;
+                }
             }
             return param;   //return the parameter
         }
@@ -297,6 +308,17 @@ namespace VAdvantage.DataBase
                 //replace @ with ? for use in Postgre SQL
                 // param[i] = new NpgsqlParameter(arrParam[i].ParameterName, String.IsNullOrEmpty(arrParam[i].Value.ToString()) ? "-1" : arrParam[i].Value);
                 param[i] = new NpgsqlParameter(arrParam[i].ParameterName, arrParam[i].Value);
+                param[i].DbType = arrParam[i].DbType;
+
+                if ((arrParam[i].Direction == ParameterDirection.InputOutput) && (arrParam[i].Value == null))
+                {
+                    param[i].Value = DBNull.Value;
+                }
+
+                if (arrParam[i].Direction == ParameterDirection.Output)
+                {
+                    param[i].Direction = arrParam[i].Direction;
+                }
             }
             return param;   //return the parameter
         }
@@ -478,7 +500,7 @@ namespace VAdvantage.DataBase
         /// <returns>Transaction or null</returns>
         /// 
         [Obsolete("Get is deprecated, please use GetTrx instead.")]
-       // [MethodImpl(MethodImplOptions.Synchronized)]
+        // [MethodImpl(MethodImplOptions.Synchronized)]
         public static Trx Get(String trxName, bool createNew)
         {
             lock (_trxLock)
@@ -516,7 +538,7 @@ namespace VAdvantage.DataBase
             }
         }
 
-      //  [MethodImpl(MethodImplOptions.Synchronized)]
+        //  [MethodImpl(MethodImplOptions.Synchronized)]
         public static Trx Get(String trxName)
         {
             lock (_trxLock)
@@ -1190,6 +1212,36 @@ namespace VAdvantage.DataBase
 
         #endregion
 
+        #region Execute Procedure
+        /// <summary>
+        /// Execute Procedure
+        /// </summary>
+        /// <param name="sql">sql query to be executed</param>
+        /// <param name="arrparam">parameters to be passed to the query</param>
+        /// <param name="trx">optional transaction name</param>
+        /// <returns>Scalar value in object type. -1 if error occured</returns>
+        public SqlParameter[] ExecuteProcedure(string sql, SqlParameter[] arrparam, Trx trx)
+        {
+            if ((trx == null))
+                return SqlExec.ExecuteQuery.ExecuteProcedure(sql, arrparam);
+
+            if (!IsActive())
+                Start();
+
+            DbParameter[] param = null;
+            if (DatabaseType.IsOracle)
+            {
+                param = GetOracleParameter(arrparam);
+            }
+            else if (DatabaseType.IsPostgre)
+            {
+                param = GetPostgreParameter(arrparam);
+            }
+
+            return DB.GetDatabase().ExecuteProcedure(sql, param, (DbTransaction)_trx);
+        }
+
+        #endregion
     }
 #pragma warning restore 612, 618
 }
