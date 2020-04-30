@@ -5282,8 +5282,8 @@ namespace VAdvantage.Model
                         _processMsg = "Could not create Ship Reversal Line";
                     return false;
                 }
-                //	We need to copy MA
-                MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
+                //	We need to copy MA (bcz want to copy of material policy line from the actual record)
+                MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), rLine.GetReversalDoc_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
                 {
                     MInOutLineMA ma = new MInOutLineMA(rLine, mas[j].GetM_AttributeSetInstance_ID(), Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
