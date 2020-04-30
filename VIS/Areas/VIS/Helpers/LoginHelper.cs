@@ -625,8 +625,7 @@ namespace VIS.Helpers
             ctx.SetContext("##AD_User_Name", ctxLogIn.GetContext("##AD_User_Name"));
 
 
-            ctx.SetContext("##AD_User_Value", model.Login1Model.UserValue);
-            ctx.SetContext("##AD_User_Name", model.Login1Model.DisplayName);
+            ctx.SetContext("##AD_User_Value", ctxLogIn.GetContext("##AD_User_Value"));
 
             //ctx.SetContext("#AD_Language", ctxLogIn.GetContext("#AD_Language"));
             ctx.SetContext("#AD_Language", model.Login2Model.LoginLanguage);
