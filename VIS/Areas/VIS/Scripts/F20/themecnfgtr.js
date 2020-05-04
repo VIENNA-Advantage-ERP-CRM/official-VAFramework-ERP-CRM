@@ -227,7 +227,7 @@
             $root.append($busyDiv);
             $root.dialog({
                 modal: false,
-                title: VIS.Msg.getMsg("Theme"),
+                title: VIS.Msg.getMsg("ThemeConfig"),
                 width: w,
                 height: h,
                 position: { at: "center top", of: window },
@@ -250,6 +250,9 @@
 
         this.dispose = function () {
 
+            $root.remove();
+            $root = null;
+            $self = null;
         };
     }
 
