@@ -273,6 +273,52 @@ namespace VAdvantage.DataBase
                 //replace @ with ? for use in Oracle
                 //string str = arrParam[i].SqlDbType.ToString();
                 //string strVal = to_date(arrParam[i].Value.ToString(), "mm/dd/yyyy");
+                param[i] = new OracleParameter(arrParam[i].ParameterName, arrParam[i].Value);                
+            }
+            return param;   //return the parameter
+        }
+
+
+        /// <summary>
+        /// Creates the NpgsqlParameter class from passed in SQLParameter
+        /// </summary>
+        /// <param name="arrParam">Array of SQLParameter</param>
+        /// <returns>NpgsqlParameter</returns>
+        public NpgsqlParameter[] GetPostgreParameter(SqlParameter[] arrParam)
+        {
+            if (arrParam == null)
+                return null;
+
+            //create and instance of NpgsqlParameter and initialize the length with the length of arrParam
+            NpgsqlParameter[] param = new NpgsqlParameter[arrParam.Length];
+            for (int i = 0; i <= arrParam.Length - 1; i++)
+            {
+                //set one by one all the values to the NpgsqlParameter
+                //replace @ with ? for use in Postgre SQL
+                // param[i] = new NpgsqlParameter(arrParam[i].ParameterName, String.IsNullOrEmpty(arrParam[i].Value.ToString()) ? "-1" : arrParam[i].Value);
+                param[i] = new NpgsqlParameter(arrParam[i].ParameterName, arrParam[i].Value);                
+            }
+            return param;   //return the parameter
+        }
+
+        /// <summary>
+        /// Get OracleParameters Class from passed SqlParameters
+        /// </summary>
+        /// <param name="arrParam">Array of SQLParameter</param>
+        /// <returns>OracleParameters</returns>
+        public OracleParameter[] GetOracleProcedureParameter(SqlParameter[] arrParam)
+        {
+            if (arrParam == null)
+                return null;
+            //create and instance of OracleParameter and initialize the length with the length of arrParam
+            OracleParameter[] param = new OracleParameter[arrParam.Length];
+            //loop through all the values of arrParam
+            for (int i = 0; i <= arrParam.Length - 1; i++)
+            {
+                //set one by one all the values to the OracleParameter
+                //replace @ with ? for use in Oracle
+                //string str = arrParam[i].SqlDbType.ToString();
+                //string strVal = to_date(arrParam[i].Value.ToString(), "mm/dd/yyyy");
                 param[i] = new OracleParameter(arrParam[i].ParameterName, arrParam[i].Value);
                 param[i].DbType = arrParam[i].DbType;
 
@@ -295,7 +341,7 @@ namespace VAdvantage.DataBase
         /// </summary>
         /// <param name="arrParam">Array of SQLParameter</param>
         /// <returns>NpgsqlParameter</returns>
-        public NpgsqlParameter[] GetPostgreParameter(SqlParameter[] arrParam)
+        public NpgsqlParameter[] GetPostgreProcedureParameter(SqlParameter[] arrParam)
         {
             if (arrParam == null)
                 return null;
@@ -1231,11 +1277,11 @@ namespace VAdvantage.DataBase
             DbParameter[] param = null;
             if (DatabaseType.IsOracle)
             {
-                param = GetOracleParameter(arrparam);
+                param = GetOracleProcedureParameter(arrparam);
             }
             else if (DatabaseType.IsPostgre)
             {
-                param = GetPostgreParameter(arrparam);
+                param = GetPostgreProcedureParameter(arrparam);
             }
 
             return DB.GetDatabase().ExecuteProcedure(sql, param, (DbTransaction)_trx);
