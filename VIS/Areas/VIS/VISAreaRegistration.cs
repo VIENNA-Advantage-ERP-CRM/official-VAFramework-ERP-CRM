@@ -215,7 +215,7 @@ namespace VIS
 
             style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
-            //style.Include("~/Areas/VIS/Content/VIS.all.min.css");
+            //style.Include("~/Areas/VIS/Content/VIS.all.min.css")s;
 
 
             //modScript.Include("~/Areas/VIS/Scripts/VIS.all.min.js");

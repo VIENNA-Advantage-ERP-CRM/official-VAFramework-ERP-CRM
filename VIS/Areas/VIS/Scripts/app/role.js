@@ -46,10 +46,10 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
         retValue = this.getIsRecordAccess(AD_Table_ID, Record_ID, false);
 
     if (!retValue && createError) {
-        //log.saveWarning("AccessTableNoUpdate", "AD_Client_ID="
-        //        + AD_Client_ID + ", AD_Org_ID=" + AD_Org_ID
-        //        + ", UserLevel=" + userLevel + " => missing="
-        //        + whatMissing);
+        VIS.MRole.log.warning("AccessTableNoUpdate => AD_Client_ID="
+                + AD_Client_ID + ", AD_Org_ID=" + AD_Org_ID
+                + ", UserLevel=" + userLevel + " => missing="
+                + whatMissing);
         //log.warning(toString());
     }
     return retValue;
@@ -180,10 +180,10 @@ VIS.MRole.canView = function (strAccesLevel) {
         return retValue;
     }
     //  Notification
-    //log.SaveWarning("AccessTableNoView",
-    //    "Required=" + strAccesLevel + "("
-    //    + GetTableLevelString(Env.GetAD_Language(ctx), strAccesLevel)
-    //    + ") != UserLevel=" + userLevel);
+    VIS.MRole.log.warning("AccessTableNoView",
+        "Required=" + strAccesLevel + "("
+        
+        + ") != UserLevel=" + userLevel);
     //log.Info(ToString());
     return retValue;
 };//can view

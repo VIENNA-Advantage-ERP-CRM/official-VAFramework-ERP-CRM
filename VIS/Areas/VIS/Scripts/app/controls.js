@@ -3347,12 +3347,16 @@
 
         var displayType = controlDisplayType;
         var length = fieldLength;
+        
         //Init Control
         var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
         this.format = VIS.DisplayType.GetNumberFormat(displayType);
+
+        // Define Formatter type
+        //this.dotFormatter = VIS.Env.isDecimalPoint();
 
         if (isReadOnly || !isUpdateable) {
             this.setReadOnly(true);
@@ -3363,13 +3367,20 @@
 
         var self = this; //self pointer
 
+        // Assign Value
+        this.dotFormatter = VIS.Env.isDecimalPoint();
+
+        // For testing purpose
+        //this.dotFormatter = true;
+        
         //On key down event
         $ctrl.on("keydown", function (event) {
+
             if (event.keyCode == 189 || event.keyCode == 109 || event.keyCode == 173) { // dash (-)
                 if (event.keyCode == 189 && this.value.length == 0) {
                     return true;
                 }
-                this.value = Number(this.value * -1);
+                //this.value = Number(this.value * -1);
                 setTimeout(function () {
                     $ctrl.trigger("change");
                 }, 100);
@@ -3407,9 +3418,13 @@
             // if (window.navigator.language != undefined) {
             //    var culture = new VIS.CultureSeparator();
             // var isDotSeparator = VIS.Env.isDecimalPoint();// culture.isDecimalSeparatorDot(window.navigator.language);
-            // Not . decimal separator
 
-            if (!VIS.Env.isDecimalPoint()) {
+            // Not . decimal separator
+            //console.log(event.keyCode, " >keyCode ", VIS.Env.isDecimalPoint());
+
+            //if (!VIS.Env.isDecimalPoint()) {
+            if (!self.dotFormatter) {
+               
                 if (event.keyCode == 190 || event.keyCode == 110) {
                     return false;
                 }
@@ -3417,6 +3432,7 @@
             // . separator
             else {
                 if (event.keyCode == 188) {
+                    // for ","
                     return false;
                 }
             }
@@ -3427,6 +3443,10 @@
                 if (this.value.indexOf('.') > -1) {
                     this.value = this.value.replace('.', '');
                 }
+                // For mulpile , separator
+                else if (this.value.indexOf(',') > -1) {
+                    this.value = this.value.replace(',', '');
+                }
 
 
                 if (this.value.length >= length) {
@@ -3434,6 +3454,35 @@
                 }
                 return true;
             }
+
+            // Select All (CTRL + A)
+            // console.log(event.ctrlKey, " >> ", event.keyCode)
+            if (event.ctrlKey && event.keyCode == 65) {
+                if (this.value.length > 0) {
+                    event.stopPropagation();
+                    $ctrl.select();
+                    return true;
+                }
+            // Copy (CTRL +C)
+            } else if (event.ctrlKey && event.keyCode == 67) {
+                if (this.value.length > 0) {
+                    event.stopPropagation();
+                    return true;
+                }
+            // Paster (CTRL+V)
+            } else if (event.ctrlKey && event.keyCode == 86) {
+                setTimeout(function () {
+                    event.stopPropagation();
+                    var _value = event.target.value;
+                    event.target.value = _value ? self.format.GetConvertedString(_value, self.dotFormatter) : '';
+                }, 10);
+                return true;
+            // CUT (CTRL+X)
+            } else if (event.ctrlKey && event.keyCode == 88) {
+                event.stopPropagation();
+                return true;
+            }
+
             /* Check Only for . and , */
             //if (event.keyCode == 188) {
             //   return false;
@@ -3441,12 +3490,18 @@
             //else {
             return false;
             //}
-        });
+        }); 
 
 
         //If user click in amount control, select all amount present in control
         $ctrl.on("focus", function (e) {
             e.stopPropagation();
+            // Change Amount Display Type
+            var _value = e.target.value;
+            $ctrl.attr("type", "text");
+
+            e.target.value = _value ? self.format.GetConvertedString(_value, self.dotFormatter) : '';
+
             if (VIS.DisplayType.Amount == displayType) {
                 $ctrl.select();
             }
@@ -3457,9 +3512,10 @@
         $ctrl.on("change", function (e) {
             e.stopPropagation();
             // var newVal = $ctrl.val();
-            //alert(self.getValue());
+
             var newVal = self.getValue();
             this.value = newVal;
+
             if (newVal !== self.oldValue) {
                 var evt = { newValue: newVal, propertyName: self.getName() };
                 self.fireValueChanged(evt);
@@ -3467,9 +3523,21 @@
             }
         });
 
+        $ctrl.on("blur", function (e) {
+            e.stopPropagation();
+            $ctrl.attr("type", "text");
+
+            var _value = self.format.GetConvertedString($ctrl.val(), self.dotFormatter);
+
+            var _val = self.format.GetFormatAmount(_value, "formatOnly", self.dotFormatter);
+            $ctrl.val(_val);
+
+        });
+
         this.disposeComponent = function () {
             $ctrl.off("keydown"); //u bind event
             $ctrl.off("change"); //u bind event
+
             $ctrl = null;
             self = null;
             this.format.dispose();
@@ -3485,14 +3553,22 @@
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             newValue = this.format.GetFormatedValue(newValue);
-            //console.log(newValue);
-            this.ctrl.val(newValue);
-            //this.setBackground("white");
+
+            // this.ctrl.val(newValue);
+            // this.setBackground("white");
+            
+            this.ctrl.attr("type", "text");
+            var _value = this.format.GetFormatAmount(newValue, "init", this.dotFormatter);
+
+            this.ctrl.val(_value);
         }
     };
 
     VAmountTextBox.prototype.getValue = function () {
         var val = this.$super.getValue.call(this);
+
+        val = this.format.GetConvertedNumber(val, this.dotFormatter);
+
         if (isNaN(val) || val === null) {
             return null;
         }
@@ -3515,7 +3591,6 @@
             this.ctrl.attr("min", minValue);
         }
     };
-
 
     /***END VAmountTextBox***/
 
@@ -5384,6 +5459,7 @@
             //} else {
             //    $btnAmtDiv.css("opacity", 1);
             //}
+            this.isReadOnly = readOnly;
             $ctrl.css("background-color", "#f8f8f8");
             this.setBackground(readOnly);
         };
@@ -5458,7 +5534,7 @@
             }
 
             self.oldValue = self.value;
-            var obj = new VIS.AmountDivision(self.value, orgID, dValue, isReadOnly);
+            var obj = new VIS.AmountDivision(self.value, orgID, dValue, self.isReadOnly);
             obj.onClosing = function (rid) {
                 if (rid > 0) {
                     self.oldValue = 0;
