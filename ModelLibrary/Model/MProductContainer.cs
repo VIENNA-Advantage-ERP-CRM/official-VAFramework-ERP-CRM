@@ -270,8 +270,8 @@ namespace VAdvantage.Model
                 sql += "WHERE l.M_Locator_ID = " + M_Locator_ID;
             else
                 sql += "WHERE l.M_Warehouse_ID= " + M_Warehouse_ID;
-            if (M_ProductContainer_ID > 0)
-                sql += " AND s.M_ProductContainer_ID = " + M_ProductContainer_ID;
+            //if (M_ProductContainer_ID > 0)
+                sql += " AND NVL(s.M_ProductContainer_ID , 0) = " + M_ProductContainer_ID;
             sql += " AND s.M_Product_ID=" + M_Product_ID + " AND s.Qty < 0 ";
             // PT-225, PT-224 : get record specific attribte wise which is to be selected on document
             if (M_AttributeSetInstance_ID > 0)

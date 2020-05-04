@@ -1946,7 +1946,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) keep OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                                         INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                             " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + iol.GetM_Locator_ID() +
                                             " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
@@ -5282,8 +5282,8 @@ namespace VAdvantage.Model
                         _processMsg = "Could not create Ship Reversal Line";
                     return false;
                 }
-                //	We need to copy MA
-                MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
+                //	We need to copy MA (bcz want to copy of material policy line from the actual record)
+                MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), rLine.GetReversalDoc_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
                 {
                     MInOutLineMA ma = new MInOutLineMA(rLine, mas[j].GetM_AttributeSetInstance_ID(), Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());

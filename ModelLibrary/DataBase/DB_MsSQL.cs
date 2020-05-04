@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -79,6 +81,11 @@ namespace VAdvantage.DataBase
 
 
         public System.Data.DataSet ExecuteDatasetPaging(string sql, int page, int pageSize, int increment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SqlParameter[] ExecuteProcedure(string sql, DbParameter[] param, DbTransaction transaction)
         {
             throw new NotImplementedException();
         }

@@ -2079,14 +2079,14 @@ namespace VAdvantage.Model
             string sql = @"SELECT M_PRODUCT_ID, M_ATTRIBUTESETINSTANCE_ID, M_ProductContainer_ID, ContainerCurrentQty, Name FROM (
                             SELECT M_PRODUCT_ID, M_ATTRIBUTESETINSTANCE_ID,  M_ProductContainer_ID, ContainerCurrentQty, Name FROM 
                             (SELECT DISTINCT t.M_PRODUCT_ID, NVL(t.M_ATTRIBUTESETINSTANCE_ID, 0) AS M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID ,
-                              First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS ContainerCurrentQty , p.Name
+                              First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID , t.M_ProductContainer_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS ContainerCurrentQty , p.Name
                                FROM M_Transaction t INNER JOIN M_Product p ON p.M_Product_ID   = t.M_Product_ID WHERE t.IsActive = 'Y' AND M_ProductContainer_ID IN 
                                (" + childContainer + @" ) )t WHERE ContainerCurrentQty <> 0 
                           UNION ALL
                             SELECT m.m_product_id, NVL(m.m_attributesetinstance_id, 0) AS m_attributesetinstance_id,
                               m.M_ProductContainer_ID, m.movementqty AS ContainerCurrentQty , p.Name
                               FROM m_movementline m INNER JOIN M_Product p ON p.M_Product_ID  = m.M_Product_ID
-                              WHERE m_movement_id   = " + movementId + @" AND movefullcontainer = 'Y' )
+                              WHERE m_movement_id   = " + movementId + @" AND movefullcontainer = 'Y' ) final
                              GROUP BY M_PRODUCT_ID, M_ATTRIBUTESETINSTANCE_ID, M_ProductContainer_ID, ContainerCurrentQty, Name HAVING COUNT(1) = 1	";
             log.Info(sql);
             ds = DB.ExecuteDataset(sql, null, Get_Trx());
