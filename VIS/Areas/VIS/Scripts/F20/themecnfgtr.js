@@ -90,8 +90,16 @@
                 setBusy(true);
                 var id = $(e.currentTarget).data("id");
                 if (e.target.className.indexOf('vis-delete') > -1) {
-                    VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/Delete', { id: id }, function (data) {
-                        fillThemeList();
+
+                    VIS.ADialog.confirm("DeleteRecord?",true, "","Confirm", function (ret) {
+                        if (ret)
+                            VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/Delete', { id: id }, function (data) {
+                                fillThemeList();
+
+                            });
+                        else
+                            setBusy(false);
+                           
                     });
                 }
                 else {

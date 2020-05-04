@@ -45,5 +45,20 @@ namespace VIS.Controllers
             ThemeModel tm = new ThemeModel();
             return Json(tm.SetDefaultTheme(id));
         }
+
+
+        [HttpPost]
+        public ActionResult SaveForUser(int id,int uid)
+        {
+            ThemeModel tm = new ThemeModel();
+            return Json(tm.UpdateForUser(id, uid));
+        }
+
+        [HttpPost]
+        public ActionResult UpdateForClient(int id, int cid)
+        {
+            ThemeModel tm = new ThemeModel();
+            return Json(tm.UpdateForClient(id, cid));
+        }
     }
 }

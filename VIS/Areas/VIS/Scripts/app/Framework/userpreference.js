@@ -581,14 +581,23 @@
 
            // drpTheme.on()
             drpTheme.on("click", "div.vis-theme-rec", function (e) {
-                var clr = $(e.currentTarget).data("color");
-                if (VIS.themeMgr)
+                var $tgt = $(e.currentTarget);
+                var clr = $tgt.data("color");
+                var id = Number($tgt.data("id"));
+
+                                if (VIS.themeMgr)
                     VIS.themeMgr.applyTheme(clr);
+                //save theme 
+                VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/SaveForUser', { id: id, uid: VIS.context.getAD_User_ID() }, function (e) {
+
+                });
+                
             });
 
             $btnTheme.on("click", function () {
                 var thme = new VIS.ThemeCnfgtor();
                 thme.show();
+
             });
 
 
