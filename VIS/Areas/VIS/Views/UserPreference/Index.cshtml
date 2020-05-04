@@ -383,10 +383,12 @@
                             </label>
                         </span>
                     </a>
-
+                    @if (ViewBag.IsAdmin)
+                    {
                     <div class="vis-prefthemeconfigbtnwrap">
-                        <span id="@("btnTheme_" + ViewBag.WindowNumber)" class="vis-prefthemeconfigbtn"><i class="vis vis-cog"></i>Theme Config</span>
+                        <span id="@("btnTheme_" + ViewBag.WindowNumber)" class="vis-prefthemeconfigbtn"><i class="vis vis-cog"></i>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "VIS_ThemeCnfig")</span>
                     </div>
+                    }
 
                 @*<br>*@
                 <div class="VIS_Pref_sett-1" style="display: none">
