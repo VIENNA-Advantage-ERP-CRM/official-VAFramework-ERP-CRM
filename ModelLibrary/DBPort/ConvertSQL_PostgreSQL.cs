@@ -219,6 +219,39 @@ namespace VAdvantage.DBPort
                     + Utility.Util.Replace(subselect, " WHERE ROWNUM=-1 AND",
                     " WHERE ");
                 }
+                else if (subselect.IndexOf("AND ROWNUM <=") > 1)
+                {
+                    int rownum = subselect.IndexOf("AND ROWNUM <=");
+                    int indAnd = rownum + 13;
+                    string rnumStr = subselect.Substring(indAnd);
+                    if (rnumStr.Contains("AND"))
+                    {
+                        indAnd = rnumStr.IndexOf("AND");
+                    }
+                    else
+                    {
+                        indAnd = rnumStr.Length;
+                    }
+
+                    subselect = subselect.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                    convert = convert + subselect + " LIMIT " + rnumStr.Substring(0, indAnd);
+                }
+                else if (subselect.IndexOf("ROWNUM <=") > 1)
+                {
+                    int rownum = subselect.IndexOf("ROWNUM <=");
+                    int indAnd = rownum + 9;
+                    string rnumStr = subselect.Substring(indAnd);
+                    if (rnumStr.Contains("AND"))
+                    {
+                        indAnd = rnumStr.IndexOf("AND");
+                    }
+                    else
+                    {
+                        indAnd = rnumStr.Length;
+                    }
+                    subselect = Utility.Util.Replace(subselect.Substring(0, rownum), "WHERE", "") + rnumStr.Substring(indAnd);
+                    convert = convert + subselect + " LIMIT " + rnumStr.Substring(0, indAnd);
+                }
                 else
                 {
                     convert = convert + subselect;
@@ -489,7 +522,7 @@ namespace VAdvantage.DBPort
             }
             else if (retValue.IndexOf("AND ROWNUM <=") > 1)
             {
-                int rownum = retValue.IndexOf("AND ROWNUM <");
+                int rownum = retValue.IndexOf("AND ROWNUM <=");
                 int indAnd = rownum + 13;
                 string rnumStr = retValue.Substring(indAnd);
                 if (rnumStr.Contains("AND"))
@@ -536,8 +569,10 @@ namespace VAdvantage.DBPort
                 {
                     indAnd = rnumStr.Length;
                 }
-                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+
+                retValue = Utility.Util.Replace(retValue.Substring(0, rownum), "WHERE", "") + rnumStr.Substring(indAnd);
                 return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
+                
             }
             else if (retValue.IndexOf("ROWNUM <") > 1)
             {
