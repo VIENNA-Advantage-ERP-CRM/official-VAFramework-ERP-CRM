@@ -143,7 +143,7 @@ namespace VIS.Controllers
                     ctx.SetContext(VAdvantage.Utility.Env.LANGUAGE, l.GetAD_Language());
                     ctx.SetContext(VAdvantage.Utility.Env.ISRIGHTTOLEFT, VAdvantage.Utility.Env.IsRightToLeft(loginLang) ? "Y" : "N");
                     new VAdvantage.Login.LoginProcess(ctx).LoadSysConfig();
-
+                    LoginHelper.SetSysConfigInContext(ctx);
 
                     ViewBag.culture = ctx.GetAD_Language();
                     ViewBag.direction = ctx.GetIsRightToLeft() ? "rtl" : "ltr";
@@ -152,7 +152,8 @@ namespace VIS.Controllers
                     model = new LoginModel();
                     model.Login1Model = new Login1Model();
                     model.Login2Model = new Login2Model();
-                    model.Login1Model.UserName = User.Identity.Name;
+                    model.Login1Model.UserValue =ctx.GetContext("##AD_User_Value");
+                    model.Login1Model.DisplayName = ctx.GetContext("##AD_User_Name");
                     model.Login1Model.LoginLanguage = ctx.GetAD_Language();
 
                     model.Login2Model.Role = ctx.GetAD_Role_ID().ToString();
@@ -184,6 +185,7 @@ namespace VIS.Controllers
                         hm = objHomeHelp.getLoginUserInfo(ctx, 32, 32);
                         ViewBag.UserPic = hm.UsrImage;
                     }
+                    ViewBag.DisplayName = model.Login1Model.DisplayName;
 
                     if (!disableMenu) // if menu is not disabled, only then load menu.
                     {

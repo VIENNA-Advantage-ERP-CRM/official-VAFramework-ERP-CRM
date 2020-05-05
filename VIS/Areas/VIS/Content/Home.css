@@ -1045,7 +1045,7 @@ html[dir="rtl"] .userAvatar-Feeds {
     margin: 0;
     width: 100%;
     font-family: 'NoirPro-Regular' !important;
-    /*white-space: normal*/
+    white-space: pre-line;
 }
 
     .vis-feedDetails pre strong {

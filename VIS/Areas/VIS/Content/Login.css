@@ -1,4 +1,4 @@
-/*html, body
+﻿/*html, body
 {
     height: 100%;
     margin: 0;
@@ -448,6 +448,23 @@ input::-webkit-input-placeholder {
     border:none;
     padding:5px;
     font-size:20px;
+}
+
+.vis-loginQRSec {
+    margin-bottom: 15px;
+    display: none;
+}
+
+.vis-loginQRLabel {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 17px;
+    color: #fff;
+}
+
+.vis-clsloginqr {
+    width: 100%;
+    text-align: center;
 }
 
 

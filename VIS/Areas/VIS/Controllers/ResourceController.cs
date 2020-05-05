@@ -65,6 +65,7 @@ namespace VIS.Controllers
                          .Append(", isRTL:").Append(ctx.GetIsRightToLeft() ? "1" : "0")
                          .Append(", isBasicDB:").Append(ctx.GetIsBasicDB() ? "1" : "0")
                          .Append(", isSSL:").Append((Request.Url.Scheme != Uri.UriSchemeHttps ? "0" : "1")) //TODO
+                         .Append(", theme:").Append("'").Append(GetThemeInfo(ctx)).Append("'") //TODO
                          .Append("},");
 
                 sb.Append("I18N: { }, context: { }");
@@ -161,6 +162,39 @@ namespace VIS.Controllers
 
             //return JsonHelper.Serialize(_ctx.GetMap());
         }
+
+        internal string GetThemeInfo(Ctx _ctx)
+        {
+            string thms = "";
+
+            //1 first user and client 
+
+            string qry = "SELECT COALESCE(u.AD_Theme_ID,c.AD_Theme_ID) FROM AD_User u INNER JOIN AD_Client c ON c.AD_Client_ID = u.AD_Client_ID " +
+                         " WHERE u.AD_User_ID ="+_ctx.GetAD_User_ID();
+
+            int id = Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry,null,null));
+
+            if (id < 1)
+            {
+                //2 get System default
+                id = Util.GetValueOfInt(DBase.DB.ExecuteScalar("SELECT AD_Theme_ID FROM AD_Theme WHERE IsDefault = 'Y' ORDER By Updated DESC", null, null));
+            }
+
+            if (id > 0)
+            {
+                System.Data.DataSet ds = DBase.DB.ExecuteDataset("SELECT SecondaryColor, OnSecondaryColor, PrimaryColor, OnPrimaryColor " +
+                                                        " FROM AD_Theme WHERE AD_Theme_ID = " + id, null);
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    thms = ds.Tables[0].Rows[0]["PrimaryColor"] + "|" + ds.Tables[0].Rows[0]["OnPrimaryColor"] + "|" + ds.Tables[0].Rows[0]["SecondaryColor"]
+                        + "|" + ds.Tables[0].Rows[0]["OnSecondaryColor"];
+                }
+
+            }
+            return thms;
+        }
+
 
     }
 

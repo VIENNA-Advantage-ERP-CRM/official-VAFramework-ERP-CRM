@@ -112,6 +112,10 @@
         var defaultLogin = null;
         //*********************************
         var drpTheme = null;
+        var ulTheme = null;
+
+        var btnTheme = null;
+
         var $root = $("<div class='vis-forms-container'>");
         var $busyDiv = $("<div class='vis-apanel-busy'>")
         var windowNo = VIS.Env.getWindowNo();
@@ -123,10 +127,11 @@
             //this.log.log(VIS.Logging.Level.INFO, "INFO");
             //this.log.log(VIS.Logging.Level.WARNING, "WARNING");
             //this.log.log(VIS.Logging.Level.OFF, "OFF");
+            $busyDiv[0].style.visibility = 'visible';
 
             $root.load(VIS.Application.contextUrl + 'UserPreference/Index/?windowno=' + windowNo + '&adUserId=' + VIS.context.getAD_User_ID(), function (event) {
 
-                $busyDiv[0].style.visibility = 'visible';
+              
 
                 $self.init($root);
                 var divget = $root.find("#content_" + windowNo);
@@ -247,9 +252,13 @@
             $cmdOrg = root.find("#cmbOrg_" + windowNo);
             $cmdOrg.on("change", function () { loadWH() });
             $cmdWareHouse = root.find("#cmbWareHouse_" + windowNo);
+
+            $btnTheme = root.find("#btnTheme_"+windowNo)
+
             defaultLogin = {};
             loadDefault();
-            loadRoles();
+            //loadRoles();
+            getThemes();
             //*********************************
 
 
@@ -368,8 +377,8 @@
             imgThemetext.text(VIS.Msg.getMsg("SelectTheme"));
 
             drpTheme = root.find("#vis_pref_theme" + windowNo);
-
-
+            ulTheme = drpTheme.find('ul');
+                
             var vlblPageSize = root.find("#vlblPageSize_" + windowNo);
             vlblPageSize.text(VIS.Msg.getMsg("Pagesize"));
 
@@ -572,12 +581,24 @@
 
            // drpTheme.on()
             drpTheme.on("click", "div.vis-theme-rec", function (e) {
-                var clr = $(e.currentTarget).data("color");
-                if (VIS.themeMgr)
+                var $tgt = $(e.currentTarget);
+                var clr = $tgt.data("color");
+                var id = Number($tgt.data("id"));
+
+                                if (VIS.themeMgr)
                     VIS.themeMgr.applyTheme(clr);
+                //save theme 
+                VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/SaveForUser', { id: id, uid: VIS.context.getAD_User_ID() }, function (e) {
+
+                });
+                
             });
 
+            $btnTheme.on("click", function () {
+                var thme = new VIS.ThemeCnfgtor();
+                thme.show();
 
+            });
 
 
             //Error get error list on click
@@ -1074,6 +1095,38 @@
 
             };
 
+            function getThemes() {
+
+                var url = VIS.Application.contextUrl + "JsonData/GetThemes";
+                VIS.dataContext.getJSONData(url, null, getThemeCompleted);
+            };
+
+            function getThemeCompleted(lst) {
+                var html = [];
+                if (lst) {
+                    for (var i = 0, j = lst.length; i < j; i++) {
+                        var data = lst[i];
+                        html.push('<li>');
+                        html.push('<div class="vis-theme-rec" data-color="')
+                        html.push(data.PColor);
+                        html.push('|');
+                        html.push(data.OnPColor);
+                        html.push('|');
+                        html.push(data.SColor);
+                        html.push('|');
+                        html.push(data.OnSColor);
+                        html.push('" data-id="' + data.Id+'" >');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.PColor + ',1)"></span>');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.OnPColor + ',1)"></span>');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.SColor + ',1)"></span>');
+                        html.push('<span class="vis-theme-color" style="background-color:rgba(' + data.OnSColor + ',1)"></span>');
+                        html.push('</div>');
+                        html.push('</li>');
+                    }
+                    ulTheme.append(html.join(''));
+                }
+            };
+
             function getSavedCalendarDetail() {
 
                 $.ajax({
@@ -1250,10 +1303,12 @@
             // This function is used to get saved credientials 
             //************************************
             function getsaveddetail() {
+                if (!window.WSP)
+                    return;
                 var url = VIS.Application.contextUrl + "WSP/ContactSettings/GetSavedDetail";
                 $.ajax({
                     type: "GET",
-                    async: false,
+                    async: true,
                     url: url,
                     dataType: "json",
                     success: function (data) {
@@ -1285,10 +1340,12 @@
             //*********************
             var role = null;
             function getrole() {
+                if (!window.WSP)
+                    return;
                 var url = VIS.Application.contextUrl + "WSP/ContactSettings/GetRole";
                 $.ajax({
                     type: "GET",
-                    async: false,
+                    async: true,
                     url: url,
                     dataType: "json",
 
@@ -1510,7 +1567,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "UserPreference/GetDefaultLogin",
                 dataType: "json",
-                async: false,
+                //async: false,
                 data: { AD_User_ID: VIS.context.getAD_User_ID() },
                 success: function (data) {
                     var di = JSON.parse(data);
@@ -1518,6 +1575,7 @@
                     defaultLogin.AD_Client_ID = di.AD_Client_ID;
                     defaultLogin.AD_Org_ID = di.AD_Org_ID;
                     defaultLogin.M_Warehouse_ID = di.M_Warehouse_ID;
+                    loadRoles();
                 }
             });
         };
