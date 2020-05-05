@@ -4,7 +4,7 @@
 
         var $root = $("<div class='vis-forms-container'>");
         var $busyDiv = $("<div class='vis-apanel-busy'>");
-        
+
         var windowNo = VIS.Env.getWindowNo();
 
         var $divTheme = null;
@@ -27,7 +27,7 @@
             setBusy(true);
             $root.load(VIS.Application.contextUrl + 'Theme/ThemeCnfgtr/?windowNo=' + windowNo, function (event) {
                 init();
-              
+
                 fillThemeList();
             });
         };
@@ -55,7 +55,7 @@
 
             $ulTheme = $root.find(".vis-thed-savedlistwrap");
 
-            
+
             // all element s
 
             $divCtrl.find('input').on('change', function (e) {
@@ -91,7 +91,7 @@
                 var id = $(e.currentTarget).data("id");
                 if (e.target.className.indexOf('vis-delete') > -1) {
 
-                    VIS.ADialog.confirm("DeleteRecord?",true, "","Confirm", function (ret) {
+                    VIS.ADialog.confirm("DeleteRecord?", true, "", "Confirm", function (ret) {
                         if (ret)
                             VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/Delete', { id: id }, function (data) {
                                 fillThemeList();
@@ -99,7 +99,7 @@
                             });
                         else
                             setBusy(false);
-                           
+
                     });
                 }
                 else {
@@ -113,11 +113,11 @@
         function setBusy(isBusy) {
             if (isBusy)
                 $busyDiv[0].style.visibility = 'visible';
-            else 
+            else
                 $busyDiv[0].style.visibility = 'hidden';
         };
 
-        function saveThemeData(pri,onpri,sec,onsec,isdef,name) {
+        function saveThemeData(pri, onpri, sec, onsec, isdef, name) {
             var data = {};
             data.Primary = pri;
             data.OnPrimary = onpri;
@@ -127,7 +127,7 @@
             data.Name = name;
             setBusy(true);
             VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/Save', data, saveThemeDataCmplted);
-                
+
         }
 
         function saveThemeDataCmplted(ret) {
@@ -142,7 +142,7 @@
         function fillThemeList() {
             setBusy(true);
             $ulTheme.empty();
-            VIS.dataContext.getJSONData(VIS.Application.contextUrl + 'Theme/GetList', {id:0} , function (data) {
+            VIS.dataContext.getJSONData(VIS.Application.contextUrl + 'Theme/GetList', { id: 0 }, function (data) {
 
                 var htm = [];
                 for (var i = 0; i < data.length; i++) {
@@ -151,17 +151,17 @@
                     htm.push('<li class="vis-thed-savedlistitem');
                     if (item.IsDefault)
                         htm.push(' vis-thed-selectedlistitem');
-                    htm.push('" data-id="'+item.Id+'">');
+                    htm.push('" data-id="' + item.Id + '">');
                     htm.push('<div class="vis-theme-rec" style="width:80px">');
-                    htm.push('<span class="vis-theme-color" style="background-color:rgba('+item.Primary+',1)"></span>');
-                    htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.OnPrimary +',1)"></span>');
+                    htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.Primary + ',1)"></span>');
+                    htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.OnPrimary + ',1)"></span>');
                     htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.Seconadary + ',1)"></span>');
                     htm.push('<span class="vis-theme-color" style="background-color:rgba(' + item.OnSecondary + ',1)"></span>');
                     htm.push('</div>');
-                   
+
                     htm.push('<a class="vis-thed-themename">' + item.Name + '</a>');
-                   
-                    if (item.IsDefault) 
+
+                    if (item.IsDefault)
                         htm.push('<i class="vis vis-markx"></i>');
                     htm.push('<span style="margin:0 3px 0 3px" class="vis vis-delete"></span>');
                     htm.push('</li>');
@@ -221,26 +221,26 @@
 
         function showDialog() {
             var w = $(window).width() - 150;
-            var h = $(window).height() - 40;
+            var h = $(window).height()-10;
             $busyDiv.height(h);
             $busyDiv.width(w);
             $root.append($busyDiv);
-            $root.dialog({
-                modal: false,
-                title: VIS.Msg.getMsg("ThemeConfig"),
-                width: w,
-                height: h,
-                position: { at: "center top", of: window },
-                close: function () {
-                    $self.dispose();
 
-                    $root.dialog("destroy");
-
-                    $("#ui-datepicker-div").remove()
-                    $root = null;
-                    $self = null;
-                }
-            });
+            var ch = new VIS.ChildDialog();
+            ch.setContent($root);
+            ch.setWidth(w);
+            ch.setHeight(h);
+            ch.setTitle(VIS.Msg.getMsg("ThemeConfig"));
+            ch.setModal(true);
+            //Disposing Everything on Close
+            ch.onClose = function () {
+                $self.dispose();
+                $("#ui-datepicker-div").remove()
+                $root = null;
+                $self = null;
+            };
+            ch.show();
+            ch.hideButtons();
         };
 
         this.show = function () {
