@@ -519,6 +519,8 @@
 
         initializeComponent();
 
+        InitInfo(M_Warehouse_ID, M_PriceList_ID);
+
         //var winQry = "SELECT AD_Window_ID FROM AD_Tab WHERE AD_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "AD_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry));
 
@@ -637,7 +639,7 @@
 
         bindEvent();
         //M_Warehouse_ID = VIS.context.getContextAsInt("#M_Warehouse_ID");
-        InitInfo(M_Warehouse_ID, M_PriceList_ID);
+        //InitInfo(M_Warehouse_ID, M_PriceList_ID);
 
         function InitInfo(M_Warehouse_ID, M_PriceList_ID) {
             pattrLookup = new VIS.MPAttributeLookup(VIS.context, WindowNo);
