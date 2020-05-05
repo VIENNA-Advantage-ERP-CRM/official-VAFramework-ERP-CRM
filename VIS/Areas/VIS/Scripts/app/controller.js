@@ -3223,7 +3223,7 @@
                 minValue = field.getMinValue();
                 if ($.isNumeric(maxValue) && $.isNumeric(minValue)) {
                     if (field.getValue() > field.getMaxValue() || field.getValue() < field.getMinValue()) {
-                        VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_MustBetween") + " " + field.getMinValue() + " " + VIS.Msg.getMsg("VIS_And") + field.getMaxValue());
+                        VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_MustBetween") + " " + field.getMinValue() + " " + VIS.Msg.getMsg("VIS_And") + " " + field.getMaxValue());
                         return false;
                     }
                 }
@@ -4870,7 +4870,7 @@
             }
             else if (hasProcessedRecord.length > 0) //Single Record
             {
-                this.fireDataStatusEEvent("CannotDeleteTrx", "", true);
+                localthis.fireDataStatusEEvent("CannotDeleteTrx", "", true);
                 resolve(false);
                 return;
             }

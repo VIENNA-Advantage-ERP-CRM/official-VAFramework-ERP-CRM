@@ -35,6 +35,7 @@ namespace VIS.Controllers
             StringBuilder sb = new StringBuilder();
 
             Ctx ctx = Session["ctx"] as Ctx;
+            ctx.SetContext("#IsAdmin", MUser.Get(ctx).IsAdministrator() ? "Y" : "N");
 
             if (ctx == null) // handle null value , sometime session is expired
             {
