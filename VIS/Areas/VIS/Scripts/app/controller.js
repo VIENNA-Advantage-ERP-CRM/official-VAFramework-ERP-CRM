@@ -4870,7 +4870,7 @@
             }
             else if (hasProcessedRecord.length > 0) //Single Record
             {
-                this.fireDataStatusEEvent("CannotDeleteTrx", "", true);
+                localthis.fireDataStatusEEvent("CannotDeleteTrx", "", true);
                 resolve(false);
                 return;
             }
