@@ -103,16 +103,16 @@
         function initializeComponent() {
             SubGridCol = [];
             SubGridCol.push({ field: 'WareHouse', caption: VIS.Msg.getMsg('Warehouse'), size: '150px' },
-                                { field: 'Variant', caption: VIS.Msg.getMsg('Variant'), size: '150px' },
-                                { field: 'Quantity', caption: VIS.Msg.getMsg('Quantity'), size: '100px', editable: { type: 'float' }, render: 'number:1' },
-                                { field: 'Available', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyAvailable'), size: '100px' },
-                                { field: 'OnHand', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOnHand'), size: '100px' },
-                                { field: 'Reserved', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyReserved'), size: '100px' },
-                                { field: 'Ordered', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOrdered'), size: '100px' },
-                                { field: 'M_Warehouse_ID', caption: 'WareHouse ID', size: '150px', hidden: true },
-                                { field: 'M_AttributeSetInstance_ID', caption: 'M_AttributeSetInstance_ID', size: '150px', hidden: true },
-                                { field: 'M_Product_ID', caption: 'M_Product_ID', size: '150px', hidden: true },
-                                { field: 'ParentRec_ID', caption: 'Parent recid', size: '150px', hidden: true });
+                { field: 'Variant', caption: VIS.Msg.getMsg('Variant'), size: '150px' },
+                { field: 'Quantity', caption: VIS.Msg.getMsg('Quantity'), size: '100px', editable: { type: 'float' }, render: 'number:1' },
+                { field: 'Available', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyAvailable'), size: '100px' },
+                { field: 'OnHand', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOnHand'), size: '100px' },
+                { field: 'Reserved', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyReserved'), size: '100px' },
+                { field: 'Ordered', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOrdered'), size: '100px' },
+                { field: 'M_Warehouse_ID', caption: 'WareHouse ID', size: '150px', hidden: true },
+                { field: 'M_AttributeSetInstance_ID', caption: 'M_AttributeSetInstance_ID', size: '150px', hidden: true },
+                { field: 'M_Product_ID', caption: 'M_Product_ID', size: '150px', hidden: true },
+                { field: 'ParentRec_ID', caption: 'Parent recid', size: '150px', hidden: true });
 
             inforoot.css("width", "100%");
             inforoot.css("height", "100%");
@@ -138,11 +138,11 @@
             //    btnsec = $("<div style='display: inline-block;float: right;width:99%;height:auto;margin-top: 2px;'>");
             //}
             //else {
-                searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0'>");
-                searchSec = $("<div class='vis-info-l-s-content'>");
-                searchTab.append(searchSec);
-                datasec = $("<div class='vis-info-datasec'>");
-                btnsec = $("<div class='vis-info-btnsec'>");
+            searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0'>");
+            searchSec = $("<div class='vis-info-l-s-content'>");
+            searchTab.append(searchSec);
+            datasec = $("<div class='vis-info-datasec'>");
+            btnsec = $("<div class='vis-info-btnsec'>");
             //}
             //searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;overflow:auto;'>");
             //searchSec = $("<div style='background-color: rgb(241, 241, 241)'>");
@@ -428,14 +428,14 @@
             //    btnShowCart = $("<button class='VIS_Pref_btn-2'style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/opencart.png'>"));
             //}
             //else {
-                divbtnsec = $("<div class='vis-info-ls-btnswrap'>");
-                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
-                btnAddCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-cart-plus'></i>"));
-                btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled>").append($("<i class='fa fa-list-ul'></i>"));
-                btnScanFile = $("<button class='VIS_Pref_btn-2'>").append($("<i class='vis vis-scanner'>"));
-                btnShowCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-shopping-cart'></i>"));
-                //btnShowSaved.prop('disabled', true);
+            divbtnsec = $("<div class='vis-info-ls-btnswrap'>");
+            btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+            btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+            btnAddCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-cart-plus'></i>"));
+            btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled>").append($("<i class='fa fa-list-ul'></i>"));
+            btnScanFile = $("<button class='VIS_Pref_btn-2'>").append($("<i class='vis vis-scanner'>"));
+            btnShowCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-shopping-cart'></i>"));
+            //btnShowSaved.prop('disabled', true);
             //}
 
             //divbtnRight.append(btnCancel);
@@ -466,14 +466,14 @@
             //    divbtnRight.append(btnRequery);
             //}
             //else {
-                divbtnRight.append(btnCancel);
-                divbtnRight.append(btnOK);
-                divbtnRight.append(btnShowSaved);
-                divbtnRight.append(btnAddCart);
-                divbtnsec.append(btnScanFile);
-                divbtnsec.append(btnShowCart);
-                searchTab.append(divbtnsec);
-                divbtnLeft.append(btnRequery);
+            divbtnRight.append(btnCancel);
+            divbtnRight.append(btnOK);
+            divbtnRight.append(btnShowSaved);
+            divbtnRight.append(btnAddCart);
+            divbtnsec.append(btnScanFile);
+            divbtnsec.append(btnShowCart);
+            searchTab.append(divbtnsec);
+            divbtnLeft.append(btnRequery);
             //}
 
             // divbtnLeft.append(btnRequery);
@@ -675,7 +675,8 @@
             //VIS.DB.executeReader(sql.toString(), null, GetWarehouseCallBack);
             // Added by Bharat on 31 May 2017 to remove client side queries
             try {
-                VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetWarehouse", "", GetWarehouseCallBack);
+                var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetWarehouse", null, null);
+                GetWarehouseCallBack(dr);
             }
             catch (e) {
                 console.log(e);
@@ -756,7 +757,8 @@
 
             // Added by Bharat on 31 May 2017 to remove client side queries
             try {
-                VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceList", { "PriceList": PriceList }, PriceListCallBack);
+                var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceList", { "PriceList": PriceList }, null);
+                PriceListCallBack(dr);
             }
             catch (e) {
                 console.log(e);
@@ -1148,18 +1150,18 @@
             if (prodID.length > 0) {
                 for (var i = 0; i < prodID.length; i++) {
                     savedProduct.push(
-                       {
-                           SrNo: i,
-                           Product: prodName[i],
-                           Value: value[i],
-                           QtyEntered: qty[i],
-                           UOM_ID: uomID[i],
-                           UOM: uom[i],
-                           M_Product_ID1: prodID[i],
-                           Attribute: Attribute[i],
-                           AttributeName: AttributeName[i],
-                           RefNo: ReferenceNo[i]
-                       }
+                        {
+                            SrNo: i,
+                            Product: prodName[i],
+                            Value: value[i],
+                            QtyEntered: qty[i],
+                            UOM_ID: uomID[i],
+                            UOM: uom[i],
+                            M_Product_ID1: prodID[i],
+                            Attribute: Attribute[i],
+                            AttributeName: AttributeName[i],
+                            RefNo: ReferenceNo[i]
+                        }
                     );
                 }
                 BindGridSavedProducts();
@@ -1278,19 +1280,19 @@
                     else if (event.column == 6 && dGrid.records.length > 0) {
                         bsyDiv[0].style.visibility = "visible";
                         savedProduct.push(
-                        {
-                            SrNo: savedProduct.length,
-                            Product: savedProduct[event.recid - 1].Product,
-                            Value: savedProduct[event.recid - 1].Value,
-                            QtyEntered: savedProduct[event.recid - 1].QtyEntered,
-                            UOM_ID: savedProduct[event.recid - 1].UOM_ID,
-                            UOM: savedProduct[event.recid - 1].UOM,
-                            M_Product_ID1: savedProduct[event.recid - 1].M_Product_ID1,
-                            Attribute: "",
-                            AttributeName: "",
-                            RefNo: savedProduct[event.recid - 1].RefNo
-                        }
-                       );
+                            {
+                                SrNo: savedProduct.length,
+                                Product: savedProduct[event.recid - 1].Product,
+                                Value: savedProduct[event.recid - 1].Value,
+                                QtyEntered: savedProduct[event.recid - 1].QtyEntered,
+                                UOM_ID: savedProduct[event.recid - 1].UOM_ID,
+                                UOM: savedProduct[event.recid - 1].UOM,
+                                M_Product_ID1: savedProduct[event.recid - 1].M_Product_ID1,
+                                Attribute: "",
+                                AttributeName: "",
+                                RefNo: savedProduct[event.recid - 1].RefNo
+                            }
+                        );
                         infoLines[infoLines.length] = {
                             _prodQty: savedProduct[savedProduct.length - 1].QtyEntered,
                             _prdID: savedProduct[savedProduct.length - 1].M_Product_ID1,
@@ -1402,44 +1404,44 @@
                             }
                             else {
                                 selectedItems.push(
-                                        {
-                                            _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
-                                            _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
-                                            _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _value: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
-                                            _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
-                                            _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
-                                            _windowNo: WindowNo,
-                                            _RefNo: "",
-                                            _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
-                                            _AttributeName: "",
-                                            _Locator_ID: 0,
-                                            _IsLotSerial: "N",
-                                            _countID: 0
-                                        }
-                                    )
+                                    {
+                                        _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
+                                        _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                        _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
+                                        _value: w2ui[grdname].records[selection[i] - 1].NAME,
+                                        _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                        _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
+                                        _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                        _windowNo: WindowNo,
+                                        _RefNo: "",
+                                        _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                        _AttributeName: "",
+                                        _Locator_ID: 0,
+                                        _IsLotSerial: "N",
+                                        _countID: 0
+                                    }
+                                )
                             }
                         }
                         else {
                             selectedItems.push(
-                                        {
-                                            _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
-                                            _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
-                                            _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _value: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
-                                            _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
-                                            _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
-                                            _windowNo: WindowNo,
-                                            _RefNo: "",
-                                            _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
-                                            _AttributeName: "",
-                                            _Locator_ID: 0,
-                                            _IsLotSerial: "N",
-                                            _countID: 0
-                                        }
-                                    )
+                                {
+                                    _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
+                                    _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                    _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
+                                    _value: w2ui[grdname].records[selection[i] - 1].NAME,
+                                    _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                    _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
+                                    _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                    _windowNo: WindowNo,
+                                    _RefNo: "",
+                                    _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                    _AttributeName: "",
+                                    _Locator_ID: 0,
+                                    _IsLotSerial: "N",
+                                    _countID: 0
+                                }
+                            )
                         }
                     }
                 }
@@ -1460,9 +1462,9 @@
             }
             disposeComponent();
 
-           // var msg = VIS.Msg.getMsg("RecordsSavedPlzRequery");
+            // var msg = VIS.Msg.getMsg("RecordsSavedPlzRequery");
             var msg = VIS.Msg.getMsg("RecSaved");
-            
+
             if (!success) {
                 if (count > 0) {
                     msg = count + " " + VIS.Msg.getMsg("RecordsNotSaved");
@@ -2105,18 +2107,18 @@
                         }
                     }
                 }
-                    //	YesNo
-                    //else if (displayType == VIS.DisplayType.YesNo) {
+                //	YesNo
+                //else if (displayType == VIS.DisplayType.YesNo) {
 
-                    //    oColumn.render = function (record, index, colIndex) {
+                //    oColumn.render = function (record, index, colIndex) {
 
-                    //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
+                //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
 
-                    //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
-                    //    }
-                    //}
+                //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
+                //    }
+                //}
 
-                    //Date /////////
+                //Date /////////
                 else if (VIS.DisplayType.IsDate(displayType)) {
                     oColumn.render = function (record, index, colIndex) {
 
@@ -2416,23 +2418,23 @@
                             }
                             else {
                                 infoLines.push(
-                                {
-                                    _prodQty: qty,
-                                    _prdID: multiValues[item].M_PRODUCT_ID,
-                                    _prdName: multiValues[item].NAME,
-                                    _value: multiValues[item].VALUE,
-                                    _uom: multiValues[item].C_UOM_ID,
-                                    _uomName: multiValues[item].UOM,
-                                    _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
-                                    _windowNo: WindowNo,
-                                    _RefNo: "",
-                                    _Attribute: multiValues[item].M_AttributeSetInstance_ID,
-                                    _AttributeName: "",
-                                    _Locator_ID: 0,
-                                    _IsLotSerial: "N",
-                                    _countID: 0
-                                }
-                            )
+                                    {
+                                        _prodQty: qty,
+                                        _prdID: multiValues[item].M_PRODUCT_ID,
+                                        _prdName: multiValues[item].NAME,
+                                        _value: multiValues[item].VALUE,
+                                        _uom: multiValues[item].C_UOM_ID,
+                                        _uomName: multiValues[item].UOM,
+                                        _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                        _windowNo: WindowNo,
+                                        _RefNo: "",
+                                        _Attribute: multiValues[item].M_AttributeSetInstance_ID,
+                                        _AttributeName: "",
+                                        _Locator_ID: 0,
+                                        _IsLotSerial: "N",
+                                        _countID: 0
+                                    }
+                                )
                             }
                         }
                         else {
