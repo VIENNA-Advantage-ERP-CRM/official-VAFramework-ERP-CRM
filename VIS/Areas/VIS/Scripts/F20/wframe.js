@@ -1113,7 +1113,9 @@
                 var s = (cp - 1) * ps;
                 var e = s + ps;
                 if (e > tr) e = tr;
-
+                if (tr == 0) {
+                    s -= 1;
+                }
                 var text = showText + " " + (s + 1) + "-" + e + " " + ofText + " " + dse.getTotalRecords();
 
                 $spanPageResult.text(text);

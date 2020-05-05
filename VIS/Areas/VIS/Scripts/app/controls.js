@@ -3222,6 +3222,9 @@
                 evt = null;
             }
         }
+        else if (newValue == null) {
+            this.ctrl.val("");
+        }
     };
 
     VTextBoxButton.prototype.getValue = function () {

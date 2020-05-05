@@ -77,12 +77,16 @@
     -webkit-appearance: none;
     appearance: none;
 }
+
 .vis-control-wrap {
     flex: 1;
     position: relative;
     z-index: 1;
     width: 100%;
+    display: flex;
+    align-items: center;
 }
+
 .vis-input-wrap input {
     display: block;
     background-clip: padding-box;
@@ -136,9 +140,10 @@ select.vis-ev-col-mandatory {
     align-items: center;
     display: flex;
 }
+
 .vis-input-wrap textarea ~ label {
-    align-items: flex-start;
-    top: 6px;
+    display: inline-block;
+    padding-top: 5px;
 }
 
 .vis-input-wrap input:focus, .vis-input-wrap select:focus, .vis-input-wrap textarea:focus, .vis-control-wrap > button:focus {
@@ -306,10 +311,11 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     top: 0;
     display: flex;
     align-items: center;
-    bottom: 0;
-    color: rgba(var(--v-c-mandatory),1);
+   
     display: none;
+    height: 34px;
 }
+
 .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
     right: 30px;
 }
@@ -362,17 +368,14 @@ label.vis-ec-col-lblchkbox {
 }*/
     /*END mendatory*/
 
-
 /* control info icon*/
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: 10px;
+    top: auto;
     cursor: pointer;
     outline: none;
     z-index: 5;
-    /*bottom: 0;*/
-    display: flex;
     align-items: center;
 }
 
