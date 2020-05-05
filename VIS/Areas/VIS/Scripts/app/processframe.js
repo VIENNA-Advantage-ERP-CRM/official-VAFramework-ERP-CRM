@@ -88,7 +88,7 @@
             $root = $("<div style='position:relative;width:100%'>");
             $busyDiv = $("<div class='vis-apanel-busy'>");
             $table = $("<table  class='vis-process-table'>");
-            $btnOK = $("<button class='vis-button-ok'>").text(VIS.Msg.getMsg("OK"));
+            $btnOK = $("<button class='vis-button-ok' tabindex=0>").text(VIS.Msg.getMsg("OK"));
             $btnClose = $("<button class='vis-button-close'>").text(VIS.Msg.getMsg("Close"));
             $busyDiv.css('top', '0px');
             $btnOK.hide();
@@ -304,6 +304,8 @@
                 $btnOK.removeClass('');
                 $btnOK.addClass('vis-process-ok-btn VIS_Pref_btn-2');
                 $btnOK.show();
+                window.setTimeout(function () { $btnOK.focus();},100)
+                
             }
             else
                 $btnOK.hide();

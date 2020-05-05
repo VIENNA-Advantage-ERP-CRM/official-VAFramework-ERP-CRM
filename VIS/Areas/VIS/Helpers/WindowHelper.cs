@@ -891,6 +891,7 @@ namespace VIS.Helpers
                     int parentWinID = inn.AD_WIndow_ID;
                     PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
                     //	No Persistent Object
+                    
                     if (poMas == null)
                     {
                         throw new NullReferenceException("No Persistent Obj");
@@ -1171,7 +1172,7 @@ namespace VIS.Helpers
                 if (field.IsVirtualColumn)
                     continue;
                 String columnName = field.ColumnName;
-                
+
                 //bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
 
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -1789,7 +1790,7 @@ namespace VIS.Helpers
             var lookupDirect = new Dictionary<string, Dictionary<object, string>>();
 
             List<JTable> outO = new List<JTable>();
-            
+
             JTable obj = null;
 
             MSession session = MSession.Get(ctx, true);
@@ -1900,13 +1901,13 @@ namespace VIS.Helpers
 
             return retVal;
         }
-/// <summary>
-/// Set Tree Record sql in if query is for on demnad tree records
-/// </summary>
-/// <param name="ctx"></param>
-/// <param name="AD_Table_ID"></param>
-/// <param name="sqlIn"></param>
-        private void SetTreeRecordSql(Ctx ctx , int AD_Table_ID, SqlParamsIn sqlIn)
+        /// <summary>
+        /// Set Tree Record sql in if query is for on demnad tree records
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="AD_Table_ID"></param>
+        /// <param name="sqlIn"></param>
+        private void SetTreeRecordSql(Ctx ctx, int AD_Table_ID, SqlParamsIn sqlIn)
         {
             string tableName = MTable.GetTableName(ctx, AD_Table_ID);
             MTree tree = new MTree(ctx, sqlIn.tree_id, null);
