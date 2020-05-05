@@ -1303,10 +1303,12 @@
             // This function is used to get saved credientials 
             //************************************
             function getsaveddetail() {
+                if (!window.WSP)
+                    return;
                 var url = VIS.Application.contextUrl + "WSP/ContactSettings/GetSavedDetail";
                 $.ajax({
                     type: "GET",
-                    async: false,
+                    async: true,
                     url: url,
                     dataType: "json",
                     success: function (data) {
@@ -1338,10 +1340,12 @@
             //*********************
             var role = null;
             function getrole() {
+                if (!window.WSP)
+                    return;
                 var url = VIS.Application.contextUrl + "WSP/ContactSettings/GetRole";
                 $.ajax({
                     type: "GET",
-                    async: false,
+                    async: true,
                     url: url,
                     dataType: "json",
 
