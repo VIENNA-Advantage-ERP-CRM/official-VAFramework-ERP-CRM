@@ -12,8 +12,8 @@
     margin-top: 0;
 }
 
-.vis-ev-full-h{
-    height:100%;
+.vis-ev-full-h {
+    height: 100%;
 }
 
 
@@ -25,12 +25,15 @@
     background-color: transparent;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+
 .vis-ev-col input:not([type=button]), .vis-ev-col textarea {
     padding: 5px 10px 5px 30px;
 }
+
 .vis-ev-col select {
     padding: 5px 30px 5px 30px !important;
 }
+
 .vis-input-wrap button.vis-ev-col-img-ctrl {
     min-height: 136px;
     padding: 0;
@@ -42,8 +45,9 @@
 .vis-input-wrap label + button.vis-ev-col-img-ctrl {
     min-height: 115px;
     height: calc(100% - 21px);
-    cursor:default;
+    cursor: default;
 }
+
 .vis-input-wrap button.vis-ev-col-img-ctrl img {
     max-width: 100%;
     max-height: 100%;
@@ -69,14 +73,13 @@
 .vis-input-wrap {
     position: relative;
     margin-bottom: 15px;
-   
 }
 
-.vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
-    height: 35px;
-    -webkit-appearance: none;
-    appearance: none;
-}
+    .vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
+        height: 35px;
+        -webkit-appearance: none;
+        appearance: none;
+    }
 
 .vis-control-wrap {
     flex: 1;
@@ -96,6 +99,7 @@
     width: 100%;
     font-size: 14px;
 }
+
 .vis-input-wrap textarea {
     height: 100%;
 }
@@ -150,22 +154,25 @@ select.vis-ev-col-mandatory {
     outline: none;
     box-shadow: none;
 }
+
 .vis-input-wrap input:focus, .vis-input-wrap select:focus, .vis-input-wrap textarea:focus {
     border: 1px solid rgba(var(--v-c-primary), 1);
 }
 
-    .vis-input-wrap *[data-hasBtn] {
-        border-top-right-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
-    }
+.vis-input-wrap *[data-hasBtn] {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
 .vis-input-wrap .input-group-prepend + .vis-control-wrap * {
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
 }
 
-    .vis-input-wrap *[data-hasBtn]:focus{
-        border-right: 1px solid rgba(var(--v-c-secondary),1);
-    }
+.vis-input-wrap *[data-hasBtn]:focus {
+    border-right: 1px solid rgba(var(--v-c-secondary),1);
+}
+
 .vis-input-wrap .input-group-prepend + .vis-control-wrap *:focus {
     border-left: 1px solid rgba(var(--v-c-secondary),1);
 }
@@ -196,6 +203,7 @@ select.vis-ev-col-mandatory {
     border: 1px solid rgba(var(--v-c-primary),1);
     border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
+
 .input-group:focus-within .input-group-append:not(:last-child) .input-group-text {
     border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
@@ -225,6 +233,7 @@ select.vis-ev-col-mandatory {
 .input-group-text i {
     color: rgba(var(--v-c-on-secondary), 1);
 }
+
 .input-group-prepend .input-group-text i {
     color: rgba(var(--v-c-primary), 1);
 }
@@ -232,6 +241,7 @@ select.vis-ev-col-mandatory {
 .input-group-text img {
     max-width: 100%;
 }
+
 .vis-control-wrap > label:first-child {
     position: relative;
     height: auto;
@@ -253,25 +263,27 @@ select.vis-ev-col-mandatory {
     display: flex;
     cursor: pointer;
 }
-.vis-ev-col-fieldgroup * {
-    background: rgba(var(--v-c-on-secondary), 0.07);
-}
 
-.vis-ev-col-fieldgroup :first-child {
-    padding: 5px 10px;
-}
+    .vis-ev-col-fieldgroup * {
+        background: rgba(var(--v-c-on-secondary), 0.07);
+    }
 
-.vis-ev-col-fieldgroup :last-child {
-    padding-right: 10px;
-}
-.vis-ev-col-fieldgroup i {
-    font-size: 1.5rem;
-    color: rgba(var(--v-c-primary), 1);
-    /*padding: 0 10px;*/
-}
+    .vis-ev-col-fieldgroup :first-child {
+        padding: 5px 10px;
+    }
+
+    .vis-ev-col-fieldgroup :last-child {
+        padding-right: 10px;
+    }
+
+    .vis-ev-col-fieldgroup i {
+        font-size: 1.5rem;
+        color: rgba(var(--v-c-primary), 1);
+        /*padding: 0 10px;*/
+    }
 
 .vis-ev-col-fg-rotate {
-    transform:rotateX(180deg);
+    transform: rotateX(180deg);
 }
 /* field group css END*/
 /****** Style Inputs Control END*****/
@@ -281,6 +293,7 @@ select.vis-ev-col-mandatory {
     background: rgba(var(--v-c-on-secondary),.04) !important;
     cursor: not-allowed;
 }
+
 select.vis-ev-col-readonly ~ label,
 input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     background: linear-gradient(#fff 50%, transparent 50%); /*Dynamic color*/
@@ -298,12 +311,12 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     color: rgba(var(--v-c-mandatory),1);
     background-color: inherit !important;
 }
-/*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
+    /*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
     border: 1px solid #ec3f3f;
 }*/
-.vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
-    color: rgba(var(--v-c-mandatory),1) !important;
-}
+    .vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
+        color: rgba(var(--v-c-mandatory),1) !important;
+    }
 
 .vis-ev-col-msign {
     position: absolute;
@@ -311,7 +324,7 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     top: 0;
     display: flex;
     align-items: center;
-   
+    color: rgba(var(--v-c-mandatory),1);
     display: none;
     height: 34px;
 }
@@ -319,8 +332,9 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
 .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
     right: 30px;
 }
+
 .vis-ev-col-msign i {
-    color:inherit;
+    color: inherit;
 }
 
 .vis-input-wrap .vis-ev-col-mandatory ~ span {
@@ -335,7 +349,7 @@ label.vis-ec-col-lblchkbox {
     position: relative;
     pointer-events: auto;
     left: 0;
-    display: inline-flex;    
+    display: inline-flex;
     align-items: center;
     font-weight: normal;
 }
@@ -352,21 +366,21 @@ label.vis-ec-col-lblchkbox {
     margin: 0 4px;
 }
 
-        .vis-ec-col-lblchkbox input[type=checkbox]:focus {
-            outline: auto;
-            outline-color: rgba(var(--v-c-primary), 1);
-        }
+    .vis-ec-col-lblchkbox input[type=checkbox]:focus {
+        outline: auto;
+        outline-color: rgba(var(--v-c-primary), 1);
+    }
 
 .vis-ev-col input:-webkit-autofill {
     -webkit-box-shadow: inset 0 0 0px 9999px rgba(var(--v-c-common), 0.7);
 }
 
 
-    /*.vis-ev-col-mandatory .input-group-text {
+/*.vis-ev-col-mandatory .input-group-text {
     border: 1px solid #ec3f3f;
     border-left: 1px solid var(--input-border);
 }*/
-    /*END mendatory*/
+/*END mendatory*/
 
 /* control info icon*/
 .vis-ev-ctrlinfowrap {
@@ -376,6 +390,7 @@ label.vis-ec-col-lblchkbox {
     cursor: pointer;
     outline: none;
     z-index: 5;
+    display: flex;
     align-items: center;
 }
 
@@ -395,6 +410,7 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
 .vis-input-wrap button + .vis-ev-ctrlinfowrap {
     /*display: none;*/
 }
+
 .vis-input-wrap label + button + .vis-ev-ctrlinfowrap {
     margin-top: 21px;
 }
@@ -417,7 +433,7 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
 .input-group-text {
     display: inline-flex;
     justify-content: center;
-    width:36px;
+    width: 36px;
 }
 
 .vis-img-ctrl-icon {
@@ -427,11 +443,11 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     background: rgba(var(--v-c-on-secondary), .2);
     padding: 10px;
     border-bottom-left-radius: .25rem;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 
 
-    /***************************** Control Prop End ****************************************/
+/***************************** Control Prop End ****************************************/
 
 
