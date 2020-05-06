@@ -841,7 +841,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
             {
-                _processMsg = "@PeriodClosed@";
+                m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
             }
 
