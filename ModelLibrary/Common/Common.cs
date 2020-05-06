@@ -486,7 +486,14 @@ namespace VAdvantage.Common
             return false;
 
         }
-
+        /// <summary>
+        /// Validate Password to check if meet all requirements.
+        /// if saving new passwqord, then oldpassword value must be null in parameters.
+        /// </summary>
+        /// <param name="oldPassword"></param>
+        /// <param name="NewPassword"></param>
+        /// <param name="ConfirmNewPasseword"></param>
+        /// <returns></returns>
         public static string ValidatePassword(string oldPassword, string NewPassword, string ConfirmNewPasseword)
         {
 

@@ -534,6 +534,14 @@ namespace VAdvantage.Model
                 SetValue(base.GetValue());
                 if (newRecord)
                 {
+                    string pwd = GetPassword();
+                    pwd= Common.Common.ValidatePassword(null, pwd, pwd);
+                    if (pwd.Length > 0)
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), pwd, true));
+                        return false;
+                    }
+
                     int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
                     if (validity > 0)
                     {
