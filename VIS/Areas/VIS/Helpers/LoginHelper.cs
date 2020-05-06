@@ -70,7 +70,7 @@ namespace VIS.Helpers
             //if authenticated by LDAP or password is null(Means request from home page)
             if (!authenticated && model.Login1Model.Password != null)
             {
-                string sqlEnc = "select isencrypted from ad_column where ad_table_id=(select ad_table_id from ad_table where tablename='AD_User') and columnname='Password'";
+                string sqlEnc = "SELECT isencrypted FROM ad_column WHERE ad_table_id=(SELECT ad_table_id FROM ad_table WHERE tablename='AD_User') AND columnname='Password'";
                 char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
                 if (isEncrypted == 'Y' && model.Login1Model.Password != null)
                 {
@@ -165,7 +165,7 @@ namespace VIS.Helpers
             }
 
             // if user logged in successfully, then set failed login count to 0
-            DB.ExecuteQuery("UPDATE AD_User set FailedLoginCount=0 where Value=@username", param);
+            DB.ExecuteQuery("UPDATE AD_User SET FailedLoginCount=0 WHERE Value=@username", param);
 
             int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 

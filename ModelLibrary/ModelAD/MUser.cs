@@ -534,6 +534,20 @@ namespace VAdvantage.Model
                 SetValue(base.GetValue());
                 if (newRecord)
                 {
+                    string pwd = GetPassword();
+                    pwd= Common.Common.ValidatePassword(null, pwd, pwd);
+                    if (pwd.Length > 0)
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), pwd, true));
+                        return false;
+                    }
+
+                    int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
+                    if (validity > 0)
+                    {
+                       base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
+                    }
+
                     int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE lower(Value) = lower('" + GetValue() + "')"));
                     if (count > 0)
                     {
@@ -624,7 +638,7 @@ namespace VAdvantage.Model
             #region
             if (success)
             {
-                log.SaveError("Aftersave success", "");
+                log.Info("Aftersave success");
                 // For Saving YellowFin user.......................
                 object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where IsActive='Y' AND prefix='VA037_'");
                 if (ModuleId != null && ModuleId != DBNull.Value)
