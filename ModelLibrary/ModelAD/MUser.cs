@@ -624,7 +624,7 @@ namespace VAdvantage.Model
             #region
             if (success)
             {
-                log.SaveError("Aftersave success", "");
+                log.Info("Aftersave success");
                 // For Saving YellowFin user.......................
                 object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where IsActive='Y' AND prefix='VA037_'");
                 if (ModuleId != null && ModuleId != DBNull.Value)
