@@ -365,8 +365,6 @@
                                 </i>
                             </span>
                             <ul class="dropdown-menu">
-
-                                
                             </ul>
                         </div>
 
@@ -385,11 +383,11 @@
                     </a>
                     @if (ViewBag.IsAdmin)
                     {
-                    <div class="vis-prefthemeconfigbtnwrap">
-                        <span id="@("btnTheme_" + ViewBag.WindowNumber)" class="vis-prefthemeconfigbtn"><i class="vis vis-cog"></i>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ThemeConfig")</span>
-                    </div>
+                        <div class="vis-prefthemeconfigbtnwrap">
+                            <span id="@("btnTheme_" + ViewBag.WindowNumber)" class="vis-prefthemeconfigbtn"><i class="vis vis-cog"></i>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ThemeConfig")</span>
+                        </div>
                     }
-
+                </div>
                 @*<br>*@
                 <div class="VIS_Pref_sett-1" style="display: none">
                     <div style="float: left; margin-right: -12px">
