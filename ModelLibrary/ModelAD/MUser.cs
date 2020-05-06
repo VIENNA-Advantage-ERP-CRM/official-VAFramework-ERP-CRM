@@ -534,6 +534,12 @@ namespace VAdvantage.Model
                 SetValue(base.GetValue());
                 if (newRecord)
                 {
+                    int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
+                    if (validity > 0)
+                    {
+                       base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
+                    }
+
                     int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE lower(Value) = lower('" + GetValue() + "')"));
                     if (count > 0)
                     {
