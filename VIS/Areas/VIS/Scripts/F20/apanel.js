@@ -2028,6 +2028,7 @@
 
         if (curCtrller.curTab) {
             curTabNo = curCtrller.curTab.getTabNo();
+            // resolved issue for zoom from notification button
             AD_Table_ID = ctx.getTabRecordContext(aPanel.curWindowNo, curTabNo, "AD_Table_ID", false);
             Record_ID = ctx.getTabRecordContext(aPanel.curWindowNo, curTabNo, "Record_ID", false);
 
