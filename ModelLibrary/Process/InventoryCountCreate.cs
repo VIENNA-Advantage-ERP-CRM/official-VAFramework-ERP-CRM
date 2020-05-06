@@ -228,36 +228,39 @@ namespace VAdvantage.Process
                     {
                         for (int pageNo = 1; pageNo <= TotalPage; pageNo++)
                         {
-                            insertSql.Clear();
+                            //insertSql.Clear();
                             ds = DB.GetDatabase().ExecuteDatasetPaging(sql.ToString(), pageNo, pageSize, 0);
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
                             {
                                 sqlQry = "SELECT COALESCE(MAX(Line),0) AS DefaultValue FROM M_InventoryLine WHERE M_Inventory_ID=" + _m_Inventory_ID;
                                 int lineNo = DB.GetSQLValue(Get_Trx(), sqlQry);
-                                insertSql.Append("BEGIN ");
-                                for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
-                                {
-                                    decimal currentQty = 0;
-                                    int container_ID = 0;
-                                    int M_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
-                                    int M_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
-                                    int M_AttributeSetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
-                                    int M_AttributeSet_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
-                                    if (isContainerApplicable)
-                                    {
-                                        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["M_ProductContainer_ID"]);
-                                    }
-                                    currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
-                                    lineNo = lineNo + 10;
-                                    string insertQry = InsertInventoryLine(M_Locator_ID, M_Product_ID, lineNo, M_AttributeSetInstance_ID, currentQty, M_AttributeSet_ID, container_ID);
-                                    if (insertQry != "")
-                                    {
-                                        insertSql.Append(insertQry);
-                                    }
-                                }
+                                //insertSql.Append("BEGIN ");
+                                //for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
+                                //{
+                                //    decimal currentQty = 0;
+                                //    int container_ID = 0;
+                                //    int M_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
+                                //    int M_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
+                                //    int M_AttributeSetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
+                                //    int M_AttributeSet_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
+                                //    if (isContainerApplicable)
+                                //    {
+                                //        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["M_ProductContainer_ID"]);
+                                //    }
+                                //    currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
+                                //    lineNo = lineNo + 10;
+                                //    string insertQry = InsertInventoryLine(M_Locator_ID, M_Product_ID, lineNo, M_AttributeSetInstance_ID, currentQty, M_AttributeSet_ID, container_ID);
+                                //    if (insertQry != "")
+                                //    {
+                                //        insertSql.Append(insertQry);
+                                //    }
+                                //}
+                                //ds.Dispose();
+                                //insertSql.Append(" END;");
+
+                                string insertQry = DBFunctionCollection.InsertInventoryLine(GetCtx(), _inventory, ds, lineNo, isContainerApplicable, Get_Trx());
                                 ds.Dispose();
-                                insertSql.Append(" END;");
-                                int no = DB.ExecuteQuery(insertSql.ToString(), null, Get_Trx());
+                                int no = DB.ExecuteQuery(insertQry, null, Get_Trx());
                             }
                         }
                     }

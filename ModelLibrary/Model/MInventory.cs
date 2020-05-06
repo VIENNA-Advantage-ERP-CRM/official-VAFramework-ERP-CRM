@@ -786,24 +786,29 @@ namespace VAdvantage.Model
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         //updateSql.Append("BEGIN ");
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        {
-                            int line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i][0]);
-                            int locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i][1]);
-                            int product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i][2]);
-                            string AdjustType = Util.GetValueOfString(ds.Tables[0].Rows[i][4]);
-                            decimal AsonDateCount = Util.GetValueOfDecimal(ds.Tables[0].Rows[i][5]);
-                            decimal DiffQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i][6]);
-                            decimal currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i][7]);
-                            string updateQry = UpdateInventoryLine(line_ID, product_ID, locator_ID, currentQty, AdjustType, AsonDateCount, DiffQty);
-                            if (updateQry != "")
-                            {
-                                updateSql.Append(updateQry);
-                            }
-                        }
-                        ds.Dispose();
+                        //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        //{
+                        //    int line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i][0]);
+                        //    int locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i][1]);
+                        //    int product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i][2]);
+                        //    string AdjustType = Util.GetValueOfString(ds.Tables[0].Rows[i][4]);
+                        //    decimal AsonDateCount = Util.GetValueOfDecimal(ds.Tables[0].Rows[i][5]);
+                        //    decimal DiffQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i][6]);
+                        //    decimal currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i][7]);
+                        //    string updateQry = UpdateInventoryLine(line_ID, product_ID, locator_ID, currentQty, AdjustType, AsonDateCount, DiffQty);
+                        //    if (updateQry != "")
+                        //    {
+                        //        updateSql.Append(updateQry);
+                        //    }
+                        //}
+                        //ds.Dispose();
                         //updateSql.Append(" END;");
-                        int cnt = DB.ExecuteQuery(updateSql.ToString(), null, null);
+                        //int cnt = DB.ExecuteQuery(updateSql.ToString(), null, null);
+
+                        string updateQry = DBFunctionCollection.UpdateInventoryLine(GetCtx(), ds, Get_Trx());
+                        ds.Dispose();
+                        int cnt = DB.ExecuteQuery(updateQry, null, Get_Trx());
+
                         if (cnt > 0)
                         {
                             MInventory inventory = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
