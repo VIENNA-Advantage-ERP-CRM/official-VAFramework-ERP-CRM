@@ -1669,6 +1669,21 @@ public void SetVA039_JasperPwd(String VA039_JasperPwd) { if (VA039_JasperPwd != 
 @return Jasper Password */
         public String GetVA039_JasperPwd() { return (String)Get_Value("VA039_JasperPwd"); }
 
+
+        /** Set Password Expire On.
+@param PasswordExpireOn Password Expire On */
+        public void SetPasswordExpireOn(DateTime? PasswordExpireOn) { Set_Value("PasswordExpireOn", (DateTime?)PasswordExpireOn); }/** Get Password Expire On.
+@return Password Expire On */
+        public DateTime? GetPasswordExpireOn() { return (DateTime?)Get_Value("PasswordExpireOn"); }
+
+        /** Set Failed Login Count.
+@param FailedLoginCount Failed Login Count */
+        public void SetFailedLoginCount(int FailedLoginCount) { Set_Value("FailedLoginCount", FailedLoginCount); }/** Get Failed Login Count.
+@return Failed Login Count */
+        public int GetFailedLoginCount() { Object ii = Get_Value("FailedLoginCount"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+
     }
+
 
 }

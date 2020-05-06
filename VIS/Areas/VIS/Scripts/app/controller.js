@@ -6475,7 +6475,12 @@
 
         }
         else if (newValue == 'undefined' || newValue == null) {
-            ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, null);
+            if (!this.getIsParentTabField()) {
+                ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, null);
+            }
+            else if (this.gridTab)
+                ctx.setTabRecordContext(_vo.windowNo, _vo.tabNo, _vo.ColumnName,
+                    null);
         }
         else if (typeof newValue == typeof Boolean || _vo.displayType == DisplayType.YesNo) {
 

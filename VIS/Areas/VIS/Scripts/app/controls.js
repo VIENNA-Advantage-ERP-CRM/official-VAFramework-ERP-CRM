@@ -1879,6 +1879,14 @@
         this.inserting = false;
     };
 
+    VComboBox.prototype.getValue = function () {
+        var val = this.ctrl.val();
+        if (val == "-1") {
+            return null;
+        }
+        return val;
+    };
+
     /**
      *  recrete options of control
      *  @param data  object array
