@@ -948,22 +948,22 @@ namespace VAdvantage.Model
                 value = "noname";
             //
             String result = CleanValue(value);
-            if (result.Length > 8)
-            {
-                String first = GetName(value, true);
-                String last = GetName(value, false);
-                if (last.Length > 0)
-                {
-                    String temp = last;
-                    if (first.Length > 0)
-                        temp = first.Substring(0, 1) + last;
-                    result = CleanValue(temp);
-                }
-                else
-                    result = CleanValue(first);
-            }
-            if (result.Length > 40)
-                result = result.Substring(0, 40);
+            //if (result.Length > 8)
+            //{
+            //    String first = GetName(value, true);
+            //    String last = GetName(value, false);
+            //    if (last.Length > 0)
+            //    {
+            //        String temp = last;
+            //        if (first.Length > 0)
+            //            temp = first.Substring(0, 1) + last;
+            //        result = CleanValue(temp);
+            //    }
+            //    else
+            //        result = CleanValue(first);
+            //}
+            if (result.Length > 60)
+                result = result.Substring(0, 60);
             base.SetValue(result);
         }
 
@@ -979,9 +979,9 @@ namespace VAdvantage.Model
             for (int i = 0; i < chars.Length; i++)
             {
                 char ch = chars[i];
-                ch = Char.ToLower(ch);
+                //ch = Char.ToLower(ch);
                 if ((ch >= '0' && ch <= '9')		//	digits
-                    || (ch >= 'a' && ch <= 'z'))	//	characters
+                    || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))	//	characters
                     sb.Append(ch);
             }
             return sb.ToString();

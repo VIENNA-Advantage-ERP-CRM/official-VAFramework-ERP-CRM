@@ -814,8 +814,12 @@
                 },
                 template: "<div class='treechild'  data-getparentnode='#= item.getparentnode #'       data-IsSummary='#= item.IsSummary #' data-TableName='#= item.TableName #' data-NodeID='#= item.NodeID #'   data-TreeParentID='#= item.TreeParentID #' data-ParentID='#= item.ParentID #'  >" +
 
+                    //"<div class='imgdivTree' style='float:left;margin-top:3px'>" +
+                    //"<img src='" + VIS.Application.contextUrl + "#= item.ImageSource #' style='height:20px' >" +
+                    //"</div>" +
+
                                 "<div class='imgdivTree'>" +
-                                    "<i class='fa fa-folder-o'></i>" +
+                                    "<i class='fa fa-folder-o' data-imgsrc='#= item.ImageSource #'></i>" +
                                  "</div>" +
 
                                 //"<div class='textdivTree VIS-TM-textdivTreedata' style='float:left;margin:3px 5px 0 10px'>" +
@@ -1750,14 +1754,14 @@
                             var checkBox = $('<input class="VIS-tm-checkbox" type="checkbox" />');
                             if (res[i]["issummary"] == "Y") {
                                 continue;
-                                summImage = "<i class='fa fa-folder-o summNonsumImage'></i>";
+                                summImage = "<i class='fa fa-folder-o summNonsumImage' data='Images/folder.png'></i>";
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-NodePID='" + res[i]["NodeParentID"] + "' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
 
                                 $ulMid.append($('<li class="VIS-tm-topMLi">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                             }
                             else {
-                                nonSummImage = "<i class='vis vis-m-window summNonsumImage '></i>";
+                                nonSummImage = "<i class='vis vis-m-window summNonsumImage' data='Images/mWindow.png'></i>";
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(nonSummImage).append($("<li class='VIS-tm-MLi' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                                 //$ulMid.append($('<li class="VIS-tm-topMLi" style="cursor:default;padding:5px 0px">').append(checkBox).append(nonSummImage).append($("<li class='VIS-tm-MLi'  data-NodePID='" + res[i]["NodeParentID"] + "'  data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
 
@@ -1856,7 +1860,7 @@
                     $squenceDailog.addClass("vis-tm-delete");
                 }
             }, 500);
-            $mData.height(leftMianDataDiv.height() - ($treeBackDiv.height() + 60 + $mTopHeader.height()));
+            $mData.height(leftMianDataDiv.height() - ($treeBackDiv.height() + 20 + $mTopHeader.height()));
         };
 
 
@@ -2337,11 +2341,11 @@
                             if (res[i]["issummary"] == 'Y') {
                                 if (res[i]["disabled"] == true) {
                                     checkBox = $('<input class="vis-tm-chkbox" disabled type="checkbox" />');
-                                    summImage = "<i class='" + res[i]["classopacity"] + " fa fa-folder-o summNonsumImage '></i>";
+                                    summImage = "<i class='" + res[i]["classopacity"] + " fa fa-folder-o summNonsumImage' data-imgsrc='Images/summary.png'></i>";
                                 }
                                 else {
                                     checkBox = $('<input  class="vis-tm-chkbox" type="checkbox" />');
-                                    summImage = "<i class='vis vis-m-window summNonsumImage '></i>";
+                                    summImage = "<i class='vis vis-m-window summNonsumImage' data-imgsrc='Images/folder.png'></i>";
                                 }
 
 
@@ -2351,11 +2355,11 @@
                             else {
                                 if (res[i]["disabled"] == true) {
                                     checkBox = $('<input  class="vis-tm-chkbox"  disabled type="checkbox" />');
-                                    nonSummImage = "<i class='" + res[i]["classopacity"] + " vis vis-m-window summNonsumImage '></i>";
+                                    nonSummImage = "<i class='" + res[i]["classopacity"] + " vis vis-m-window summNonsumImage' data-imgsrc='Images/nonSummary.png'></i>";
                                 }
                                 else {
                                     checkBox = $('<input  class="vis-tm-chkbox" type="checkbox" />');
-                                    nonSummImage = "<i class='vis vis-m-window summNonsumImage '></i>";
+                                    nonSummImage = "<i class='vis vis-m-window summNonsumImage' data-imgsrc='Images/mWindow.png'></i>";
                                 }
 
 
@@ -2574,7 +2578,7 @@
                             var IDPush = $(upperLi.find("li")[j]).attr("id")
                             dragMenuNodeIDArray.push(IDPush);
 
-                            var imgSrc = $(upperLi[j]).find("img").attr("src");
+                            var imgSrc = $(upperLi[j]).find("i").data("imgsrc");
                             var finalImg = imgSrc.substr(imgSrc.lastIndexOf("/") + 1);
 
 
@@ -3112,21 +3116,21 @@
                                 //{
 
 
-                                var src = $(getIDFromContainer.find("li li")[y]).parent().parent().find("img").attr("src");
+                                var src = $(getIDFromContainer.find("li li")[y]).parent().parent().find("i").data("imgsrc");
                                 src = src.substring(src.lastIndexOf("/") + 1);
                                 var summImage = null;
                                 if (src == "nonSummary.png") {
-                                    summImage = "<img class='summNonsumImage' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/mWindow.png'></img>";
+                                    summImage = "<i class='summNonsumImage vis vis-m-window'  data-imgsrc='Images/mWindow.png'></i>";
                                 }
                                 else if (src == "summary.png") {
-                                    summImage = "<i class='vis vis-m-window summNonsumImage '></i>";
+                                    summImage = "<i class='fa fa-folder-o summNonsumImage' data-imgsrc='Images/folder.png'></i>";
                                 }
                                 else if (src == "folder.png") {
-                                    summImage = "<i class='vis vis-m-window summNonsumImage '></i>";
+                                    summImage = "<i class='fa fa-folder-o summNonsumImage' data-imgsrc='Images/folder.png'></i>";
                                     continue;
                                 }
                                 if (src == "mWindow.png") {
-                                    summImage = "<img class='summNonsumImage' style='float:left;margin-right:10px;margin-top:3px'  src='" + VIS.Application.contextUrl + "Areas/VIS/Images/mWindow.png'></img>";
+                                    summImage = "<i class='summNonsumImage vis vis-m-window' data-imgsrc='Images/mWindow.png'></i>";
                                 }
 
 
@@ -3155,7 +3159,7 @@
                             var getNodeIDForIcon = $($($ulRight.find("li"))).find("li[data-id='" + $(getIDFromContainer.find(".vis-tm-textli")[k]).attr("data-id") + "']").parent().parent();
                             getNodeIDForIcon.find("input").prop("disabled", "true");
                             getNodeIDForIcon.find("input").prop("checked", false);
-                            getNodeIDForIcon.find("img").addClass("vis-tm-opacity");
+                            getNodeIDForIcon.find("i").addClass("vis-tm-opacity");
                             getNodeIDForIcon.find(".vis-tm-textli").addClass("vis-tm-opacity");
                             getNodeIDForIcon.find("input").css("cursor", "not-allowed");
 
@@ -4467,11 +4471,11 @@
                             var checkBox = $('<input class="VIS-tm-checkbox" type="checkbox" />');
                             if (res[i]["issummary"] == "Y") {
                                 // continue;
-                                summImage = "<i class='fa fa-folder-o summNonsumImage'></i>";
+                                summImage = "<i class='fa fa-folder-o summNonsumImage' data-imgsrc='Images/folder.png'></i>";
                                 $ulSeq.append($('<li class="VIS-tm-topMLi">').append(checkBox).append(summImage).append($("<li class='VIS-tm-MLi' data-NodePID='" + res[i]["NodeParentID"] + "' data-id='" + res[i]["parentID"] + "' data-issummary='" + res[i]["issummary"] + "' id='" + res[i]["parentID"] + "'   >" + VIS.Utility.encodeText(res[i]["name"]) + "</li>")));
                             }
                             else {
-                                nonSummImage = "<i class='vis vis-m-window summNonsumImage '></i>";
+                                nonSummImage = "<i class='vis vis-m-window summNonsumImage' data-imgsrc='Images/mWindow.png'></i>";
                                 var li = $('<li class="VIS-tm-topMLi" >');
                                 li.append(checkBox);
                                 li.append(nonSummImage);
@@ -4898,7 +4902,7 @@
 
                             var getLi = $ulRight.find("li").find("li[data-id='" + dragMenunodearr[i] + "']").parent().parent();
                             getLi.find("input").prop("disabled", false);
-                            getLi.find("img").removeClass("vis-tm-opacity");
+                            getLi.find("i").removeClass("vis-tm-opacity");
                             getLi.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                             getLi.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                             getLi.find("input").css("cursor", "pointer");
@@ -4974,7 +4978,7 @@
                                         var getLiFromRight = $($($ulRight.find("li"))).find("li[data-id='" + selectedItem + "']").parent().parent();
                                         getLiFromRight.find("input").prop("disabled", false);
                                         getLiFromRight.removeClass("vis-tm-menuselectedcolor");
-                                        getLiFromRight.find("img").removeClass("vis-tm-opacity");
+                                        getLiFromRight.find("i").removeClass("vis-tm-opacity");
                                         getLiFromRight.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                                         getLiFromRight.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                                         getLiFromRight.find("input").css("cursor", "pointer");
@@ -5022,7 +5026,7 @@
                                 //var getLi = $ulRight.find("li").find("li[data-id='" + GetPIDforItems + "']").parent().parent();
                                 var getLi = $ulRight.find("li").find("li[data-id='" + getIDFromChildLevel + "']").parent().parent();
                                 getLi.find("input").prop("disabled", false);
-                                getLi.find("img").removeClass("vis-tm-opacity");
+                                getLi.find("i").removeClass("vis-tm-opacity");
                                 getLi.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                                 getLi.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                                 getLi.find("input").css("cursor", "pointer");
@@ -5087,7 +5091,7 @@
                                             var getLiFromRight = $($($ulRight.find("li"))).find("li[data-id='" + selectedItem + "']").parent().parent();
                                             getLiFromRight.find("input").prop("disabled", false);
                                             getLiFromRight.removeClass("vis-tm-menuselectedcolor");
-                                            getLiFromRight.find("img").removeClass("vis-tm-opacity");
+                                            getLiFromRight.find("i").removeClass("vis-tm-opacity");
                                             getLiFromRight.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                                             getLiFromRight.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                                             getLiFromRight.find("input").css("cursor", "pointer");
@@ -5465,7 +5469,7 @@
 
                             var getLi = $ulRight.find("li").find("li[data-id='" + delNodId + "']").parent().parent();
                             getLi.find("input").prop("disabled", false);
-                            getLi.find("img").removeClass("vis-tm-opacity");
+                            getLi.find("i").removeClass("vis-tm-opacity");
                             getLi.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                             getLi.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                             getLi.find("input").css("cursor", "pointer");
@@ -5594,7 +5598,7 @@
                                     // var getLi = $ulRight.find("li").find("li[id='" + sqlqryNodeID + "']").parent().parent();
                                     var getLi = $ulRight.find("li").find("li[data-id='" + sqlqryNodeID + "']").parent().parent();
                                     getLi.find("input").prop("disabled", false);
-                                    getLi.find("img").removeClass("vis-tm-opacity");
+                                    getLi.find("i").removeClass("vis-tm-opacity");
                                     getLi.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                                     getLi.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                                     getLi.find("input").css("cursor", "pointer");
@@ -7033,7 +7037,7 @@
 
                                     var getLi = $ulRight.find("li").find("li[data-id='" + selectedItemArray + "']").parent().parent();
                                     getLi.find("input").prop("disabled", false);
-                                    getLi.find("img").removeClass("vis-tm-opacity");
+                                    getLi.find("i").removeClass("vis-tm-opacity");
                                     getLi.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                                     getLi.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                                     getLi.find("input").css("cursor", "pointer");
@@ -7161,7 +7165,7 @@
 
                                         var chkenable = $ulRight.find("li").find("li[data-id='" + selectedItem + "']").parent().parent();
                                         chkenable.find("input").prop("disabled", false);
-                                        chkenable.find("img").removeClass("vis-tm-opacity");
+                                        chkenable.find("i").removeClass("vis-tm-opacity");
                                         chkenable.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                                         chkenable.find("span").removeClass("VIS-Tm-glyphiconglyphicon-link");
                                         chkenable.find("input").css("cursor", "pointer");
@@ -7267,7 +7271,7 @@
 
                             var getLi = $ulRight.find("li").find("li[data-id='" + selectedItemArray + "']").parent().parent();
                             getLi.find("input").prop("disabled", false);
-                            getLi.find("img").removeClass("vis-tm-opacity");
+                            getLi.find("i").removeClass("vis-tm-opacity");
 
                             //if (getLi.hasClass("vis-tm-menuselectedcolor")) {
                             //    getLi.find("input").prop("checked", true);
@@ -7356,7 +7360,7 @@
 
                                 var chkenable = $ulRight.find("li").find("li[data-id='" + selectedItem + "']").parent().parent();
                                 chkenable.find("input").prop("disabled", false);
-                                chkenable.find("img").removeClass("vis-tm-opacity");
+                                chkenable.find("i").removeClass("vis-tm-opacity");
                                 chkenable.find(".vis-tm-textli").removeClass("vis-tm-opacity");
                                 chkenable.removeClass("vis-tm-menuselectedcolor");
                                 //$rightMenuDemand.val();
