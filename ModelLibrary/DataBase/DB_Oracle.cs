@@ -271,7 +271,7 @@ namespace VAdvantage.DataBase
                 string dbConn = DB.GetConnectionString();
                 conn = new OracleConnection(dbConn);
             }
-            
+
             OracleCommand cmd = new OracleCommand();
             int result;
             int countOut = 0;
@@ -300,7 +300,10 @@ namespace VAdvantage.DataBase
                 }
 
                 //Open connection and execute insert query.
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 result = cmd.ExecuteNonQuery();
                 if (result == -1)
                 {

@@ -460,7 +460,10 @@ namespace VAdvantage.DataBase
                 }
 
                 //Open connection and execute insert query.
-                conn.Open();
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
                 pgreader = cmd.ExecuteReader();
 
                 ret = new SqlParameter[countOut];
