@@ -2027,7 +2027,8 @@ namespace VAdvantage.Model
                     {
                         if (payterm.IsVA009_Advance())
                         {
-                            _processMsg = Msg.GetMsg(GetCtx(), "PaymentTermIsInValid");
+                            // JID_0383: if payment term is selected as advnace. System should give error "Please do the advance payment".
+                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_SelectAdvancePayment");
                             return DocActionVariables.STATUS_INVALID;
                         }
                         else if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID())) > 0)
