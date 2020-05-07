@@ -80,9 +80,13 @@ namespace VIS.Helpers
                 DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
                 if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
                 {
-                    if (!dsUserInfo.Tables[0].Rows[0]["IsLoginUser"].ToString().Equals("Y"))
+                    // skipped Login user check for SuperUser (100)
+                    if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
                     {
-                        throw new Exception("NotLoginUser");
+                        if (!dsUserInfo.Tables[0].Rows[0]["IsLoginUser"].ToString().Equals("Y"))
+                        {
+                            throw new Exception("NotLoginUser");
+                        }
                     }
                     //if username or password is not matching
                     if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserValue) ||
@@ -135,10 +139,12 @@ namespace VIS.Helpers
                 sql.Append(" WHERE (u.Value=@username)");
             }
 
-            sql.Append(" AND u.IsActive='Y' ")
-             .Append(" AND u.IsLoginUser='Y' ")
-             .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
-             .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
+            sql.Append(" AND u.IsActive='Y' ");
+            // allowed SuperUser to login if it's not login user // no need to check Login user for SuperUser
+            if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
+                sql.Append(" AND u.IsLoginUser='Y' ");
+            sql.Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
+            .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
 
             //if (model.Login1Model.Password != null)
             //{
