@@ -1284,7 +1284,7 @@ namespace VAdvantage.DataBase
                 param = GetPostgreProcedureParameter(arrparam);
             }
 
-            return DB.GetDatabase().ExecuteProcedure(sql, param, (DbTransaction)_trx);
+            return DB.GetDatabase().ExecuteProcedure(_conn, sql, param, (DbTransaction)_trx);
         }
 
         #endregion

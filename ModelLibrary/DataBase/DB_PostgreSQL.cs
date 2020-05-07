@@ -417,10 +417,19 @@ namespace VAdvantage.DataBase
         /// <param name="sql">Procedure Name</param>
         /// <param name="arrParam">Sql Parameters</param>
         /// <returns>Sql Parameters containing result</returns>
-        public SqlParameter[] ExecuteProcedure(string sql, DbParameter[] arrParam, DbTransaction transaction)
+        public SqlParameter[] ExecuteProcedure(IDbConnection _conn, string sql, DbParameter[] arrParam, DbTransaction transaction)
         {
-            string dbConn = DB.GetConnectionString();
-            NpgsqlConnection conn = new NpgsqlConnection(dbConn);
+            NpgsqlConnection conn;
+            if (_conn != null)
+            {
+                conn = (NpgsqlConnection)_conn;
+            }
+            else
+            {
+                string dbConn = DB.GetConnectionString();
+                conn = new NpgsqlConnection(dbConn);
+            }
+
             NpgsqlCommand cmd = new NpgsqlCommand();
             int result;
             int countOut = 0;

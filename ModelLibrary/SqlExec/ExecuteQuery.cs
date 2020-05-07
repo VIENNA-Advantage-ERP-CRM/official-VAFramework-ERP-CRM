@@ -300,15 +300,15 @@ namespace VAdvantage.SqlExec
             DbParameter[] param = null;
             if (DatabaseType.IsPostgre)
             {
-                param = GetPostgreProcedureParameter(arrParam);                
-            }
-           
-            else if (DatabaseType.IsOracle)
-            {
-                param = GetOracleProcedureParameter(arrParam);                
+                param = GetPostgreProcedureParameter(arrParam);
             }
 
-            return DB.GetDatabase().ExecuteProcedure(sql, param, null);
+            else if (DatabaseType.IsOracle)
+            {
+                param = GetOracleProcedureParameter(arrParam);
+            }
+
+            return DB.GetDatabase().ExecuteProcedure(null, sql, param, null);
         }
 
         #endregion
@@ -354,7 +354,7 @@ namespace VAdvantage.SqlExec
                 //replace @ with ? for use in Oracle
                 //string str = arrParam[i].SqlDbType.ToString();
                 //string strVal = to_date(arrParam[i].Value.ToString(), "mm/dd/yyyy");
-                param[i] = new OracleParameter(arrParam[i].ParameterName, arrParam[i].Value);                
+                param[i] = new OracleParameter(arrParam[i].ParameterName, arrParam[i].Value);
             }
             return param;   //return the parameter
         }
@@ -376,7 +376,7 @@ namespace VAdvantage.SqlExec
                 //set one by one all the values to the NpgsqlParameter
                 //replace @ with ? for use in Postgre SQL
                 // param[i] = new NpgsqlParameter(arrParam[i].ParameterName, String.IsNullOrEmpty(arrParam[i].Value.ToString()) ? "-1" : arrParam[i].Value);
-                param[i] = new NpgsqlParameter(arrParam[i].ParameterName, arrParam[i].Value);                
+                param[i] = new NpgsqlParameter(arrParam[i].ParameterName, arrParam[i].Value);
             }
             return param;   //return the parameter
         }

@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -92,7 +93,7 @@ namespace VAdvantage.DataBase
             throw new NotImplementedException();
         }
 
-        public SqlParameter[] ExecuteProcedure(string sql, DbParameter[] param, DbTransaction transaction)
+        public SqlParameter[] ExecuteProcedure(IDbConnection _conn, string sql, DbParameter[] param, DbTransaction transaction)
         {
             throw new NotImplementedException();
         }

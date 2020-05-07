@@ -172,7 +172,7 @@ namespace VAdvantage.DataBase
 
         DataSet ExecuteDatasetPaging(string sql, int page, int pageSize, int increment);
 
-        SqlParameter[] ExecuteProcedure(string sql, DbParameter[] param, DbTransaction trx);
+        SqlParameter[] ExecuteProcedure(IDbConnection conn, string sql, DbParameter[] param, DbTransaction trx);
 
         ///** Create User commands					*/
         // static int CMD_CREATE_USER = 0;

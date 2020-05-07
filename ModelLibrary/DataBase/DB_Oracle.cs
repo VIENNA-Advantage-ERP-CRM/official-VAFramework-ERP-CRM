@@ -259,10 +259,19 @@ namespace VAdvantage.DataBase
         /// <param name="sql">Procedure Name</param>
         /// <param name="arrParam">Sql Parameters</param>
         /// <returns>Sql Parameters containing result</returns>
-        public SqlParameter[] ExecuteProcedure(string sql, DbParameter[] arrParam, DbTransaction transaction)
+        public SqlParameter[] ExecuteProcedure(IDbConnection _conn, string sql, DbParameter[] arrParam, DbTransaction transaction)
         {
-            string dbConn = DB.GetConnectionString();
-            OracleConnection conn = new OracleConnection(dbConn);
+            OracleConnection conn;
+            if (_conn != null)
+            {
+                conn = (OracleConnection)_conn;
+            }
+            else
+            {
+                string dbConn = DB.GetConnectionString();
+                conn = new OracleConnection(dbConn);
+            }
+            
             OracleCommand cmd = new OracleCommand();
             int result;
             int countOut = 0;
