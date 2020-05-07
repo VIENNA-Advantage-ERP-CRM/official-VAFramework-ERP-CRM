@@ -133,6 +133,7 @@
         function saveThemeDataCmplted(ret) {
             if (ret > 0) {
                 fillThemeList();
+                $txtName.val("");
             }
             else {
                 setBusy(false);
