@@ -505,7 +505,7 @@ namespace VAdvantage.Common
             {
                 return "oldNewSamePwd";
             }
-            string regex = @"(^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$)";// Start with Alphabet, minimum 4 length
+            string regex = @"(^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[a-zA-Z][A-Za-z\d@$!%*?&]{4,}$)";// Start with Alphabet, minimum 4 length
                                                                                         //@$!%*#?& allowed only
             Regex re = new Regex(regex);
 
