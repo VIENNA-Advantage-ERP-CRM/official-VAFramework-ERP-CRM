@@ -172,7 +172,7 @@
                         $clrOnPrinmary.val(regbCommaToHex(item.OnPrimary));
                         $clrSecondary.val(regbCommaToHex(item.Seconadary));
                         $clrOnSecondary.val(regbCommaToHex(item.OnSecondary));
-                        setThemeColor(item.Primary, item.OnPrimary, item.Seconadary, item.OnSecondar);
+                        setThemeColor(item.Primary, item.OnPrimary, item.Seconadary, item.OnSecondary);
                     }
                 }
                 $ulTheme.append(htm.join(' '));
