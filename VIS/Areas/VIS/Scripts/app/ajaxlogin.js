@@ -135,7 +135,7 @@
     };
 
     var validatePassword = function (password) {
-        var regex = /^[a-zA-Z]+(?=.*[@$!%*?&])(?=.*\d)[A-Za-z\d@$!%*?&]{4,}$/;// Start with Alphabet, minimum 4 length
+        var regex = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[a-zA-Z][A-Za-z\d@$!%*?&]{4,}$/;// Start with Alphabet, minimum 4 length
        //@$!%*#?& allowed only
 
         var passed = 0;
