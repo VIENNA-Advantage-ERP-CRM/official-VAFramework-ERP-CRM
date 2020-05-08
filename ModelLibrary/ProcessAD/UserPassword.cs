@@ -97,7 +97,7 @@ namespace VAdvantage.Process
 
             string validatePwd = Common.Common.ValidatePassword(null, p_NewPassword, p_NewPassword);
             if (validatePwd.Length > 0)
-                throw new ArgumentException("validatePwd");
+                throw new ArgumentException(Msg.GetMsg(GetCtx(), validatePwd));
 
             log.Log(Level.SEVERE, "UserPassword Change Log Step Password Change=>" + Convert.ToString(p_AD_User_ID));
             String originalPwd = p_NewPassword;
