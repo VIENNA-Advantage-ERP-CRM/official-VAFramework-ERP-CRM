@@ -134,10 +134,11 @@ namespace ViennaAdvantage.Process
             }
 
             // When record contain more than single order and order having different Payment term or Price List then not to generate invoices
-            if (ship.GetC_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  c_order.m_pricelist_id) +  count(distinct c_order.c_paymentterm_id) as recordcount
-                            FROM m_inoutline INNER JOIN c_orderline ON m_inoutline.c_orderline_id = c_orderline.c_orderline_id 
+            // JID_0976 - For conversion Type
+            if (ship.GetC_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  c_order.m_pricelist_id) +  count(distinct c_order.c_paymentterm_id) + count(distinct COALESCE( c_order.C_ConversionType_ID , " + MConversionType.GetDefault(GetAD_Client_ID()) + @"))  as recordcount
+                            FROM m_inoutline INNER JOIN c_orderline ON m_inoutline.c_orderline_id = c_orderline.c_orderline_id
                             INNER JOIN c_order ON c_order.c_order_id = c_orderline.c_order_id
-                            WHERE m_inoutline.m_inout_id  = " + _M_InOut_ID + @"  GROUP BY   m_inoutline.m_inout_id ", null, Get_Trx())) > 2)
+                            WHERE m_inoutline.m_inout_id = " + _M_InOut_ID + @"  GROUP BY   m_inoutline.m_inout_id ", null, Get_Trx())) > 3)
             {
                 if (ship.IsSOTrx())
                 {

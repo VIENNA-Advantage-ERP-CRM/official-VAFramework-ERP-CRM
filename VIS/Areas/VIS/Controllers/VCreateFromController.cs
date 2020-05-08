@@ -25,12 +25,13 @@ namespace VIS.Controllers
         /// <param name="IsDrop">Drop Shipment</param>
         /// <param name="IsSOTrx">Sales Transaction</param>
         /// <param name="forInvoices">For Invoice</param>
+        ///  <param name="recordID">C_Invoice_ID</param>
         /// <returns>List of Orders in Json Format</returns>
-        public JsonResult VCreateGetOrders(string displays, string columns, int C_BPartner_IDs, bool isReturnTrxs, int OrgIds, bool IsDrop, bool IsSOTrx, bool forInvoices)
+        public JsonResult VCreateGetOrders(string displays, string columns, int C_BPartner_IDs, bool isReturnTrxs, int OrgIds, bool IsDrop, bool IsSOTrx, bool forInvoices , int recordID)
         {
             var ctx = Session["ctx"] as Ctx;
             VCreateFromModel obj = new VCreateFromModel();
-            var value = obj.VCreateGetOrders(ctx, displays, columns, C_BPartner_IDs, isReturnTrxs, OrgIds, IsDrop, IsSOTrx, forInvoices);
+            var value = obj.VCreateGetOrders(ctx, displays, columns, C_BPartner_IDs, isReturnTrxs, OrgIds, IsDrop, IsSOTrx, forInvoices , recordID);
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
 

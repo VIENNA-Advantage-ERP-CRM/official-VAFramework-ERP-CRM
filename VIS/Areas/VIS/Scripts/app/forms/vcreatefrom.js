@@ -672,7 +672,8 @@
         // Added by Vivek on 09/10/2017 advised by Pradeep
         var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsDropShip"));
         var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"));
-
+        //JID_0976
+        var recordId = VIS.context.getWindowContextAsInt(this.windowNo, "C_Invoice_ID", true);
         //var pairs = [];
         $.ajax({
             url: VIS.Application.contextUrl + "VCreateFrom/VCreateGetOrders",
@@ -686,7 +687,8 @@
                 OrgIds: OrgId,
                 IsDrop: _isdrop,
                 IsSOTrx: _isSoTrx,
-                forInvoices: forInvoice
+                forInvoices: forInvoice,
+                recordID: recordId,
             },
             success: function (datas) {
                 var ress = datas.result;
