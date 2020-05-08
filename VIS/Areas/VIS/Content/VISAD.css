@@ -25,9 +25,6 @@
     margin-top: 6px;
     float: left;
 }
-
-
-
 .VIS-winSearch-NonDefaultIcon {
     font-size: 11px;
     color: #B9E1F7;
@@ -4822,3 +4819,7 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 
 
 /********************** Validate Table Columns **********************/
+.vis-themedropdown li {
+    display: flex;
+    justify-content: center;
+}
