@@ -59,6 +59,7 @@ namespace VIS.DataContracts
         public bool IsKey { get; set; }
         public bool IsEncryptedColumn { get; set; }
         public bool IsParentColumn { get; set; }
+        public string Name { get; set; }
     }
 
     public class SaveRecordOut

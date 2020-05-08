@@ -639,11 +639,7 @@ namespace VIS.Helpers
                             error = true;
                             message = ERROR + field.ColumnName + "= " + ((dataRowOld != null && dataRowOld[colNameLower] != null) ? dataRowOld[colNameLower] : "null").ToString()
                                     + " != DB: " + rowDataDB[colNameLower] + " -> " + dataRow[colNameLower];
-                            //log.fine(is);
-                            //	Object o1 = m_rowData[col];
-                            //	Object o2 = rowDataDB[col];
-                            //boolean eq = o1.equals(o2);
-                            //	log.fine((o1 == o2) + "  " + eq);
+                            
                         }
                     }	//	DataChanged
 
@@ -683,10 +679,7 @@ namespace VIS.Helpers
                 {
                     if (manualUpdate)
                         CreateUpdateSqlReset();
-                    //else
-                    //  rs.cancelRowUpdates();
-                    //rs.close();
-                    // ShowInfoMessage("SaveErrorDataChanged", "");
+                   
 
                     outData.IsError = true;
                     outData.FireEEvent = true;
@@ -718,7 +711,7 @@ namespace VIS.Helpers
                     }
                     else
                     {
-                        //	rs.insertRow();
+                       
                     }
                 }
                 else
@@ -855,6 +848,36 @@ namespace VIS.Helpers
             dynamic versionInfo = new System.Dynamic.ExpandoObject();
             Trx trx = null;
             bool hasDocValWF = false;
+
+
+            //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
+            if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) !="")
+            {
+                //Check value in DB 
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'")) > 0)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+                }
+            };
+
+            if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
+            {
+                //Check value in DB 
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE DocumentNo='" + rowData["documentno"] + "'")) > 0)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("documentno")].Name, IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+                }
+            };
+
+
 
             // check if Maintain versions property is true / else skip
             if (inn.MaintainVersions)

@@ -4397,8 +4397,8 @@
                         IsKey: field.getIsKey(),
                         ColumnSQL: field.getColumnSQL(true),
                         IsEncryptedColumn: field.getIsEncryptedColumn(),
-                        IsParentColumn: field.getIsParentColumn()
-
+                        IsParentColumn: field.getIsParentColumn(),
+                        Name: field.getHeader()
                     });
                 }
                 return this.gFieldData;
