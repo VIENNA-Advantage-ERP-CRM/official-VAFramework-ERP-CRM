@@ -75,7 +75,7 @@ namespace VAdvantage.Process
                 throw new ArgumentException("@UserCannotUpdate@");
 
             // SuperUser and System passwords can only be updated by themselves
-            if (user.IsSystemAdministrator() && p_AD_User_ID != GetAD_User_ID())
+            if (user.IsSystemAdministrator() && p_AD_User_ID != GetAD_User_ID() && GetAD_User_ID() != 100)
                 throw new ArgumentException("@UserCannotUpdate@");
 
             log.Log(Level.SEVERE, "UserPassword Change Log Step Check for valid user=>" + Convert.ToString(p_AD_User_ID));
@@ -97,7 +97,7 @@ namespace VAdvantage.Process
 
             string validatePwd = Common.Common.ValidatePassword(null, p_NewPassword, p_NewPassword);
             if (validatePwd.Length > 0)
-                throw new ArgumentException("validatePwd");
+                throw new ArgumentException(Msg.GetMsg(GetCtx(), validatePwd));
 
             log.Log(Level.SEVERE, "UserPassword Change Log Step Password Change=>" + Convert.ToString(p_AD_User_ID));
             String originalPwd = p_NewPassword;
@@ -111,7 +111,7 @@ namespace VAdvantage.Process
             {
                 sql += ",  PasswordExpireOn = null";
             }
-           
+
 
             if (!string.IsNullOrEmpty(p_NewPassword))
             {

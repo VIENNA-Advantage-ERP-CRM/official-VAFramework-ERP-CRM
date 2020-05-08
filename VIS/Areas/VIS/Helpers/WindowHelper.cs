@@ -851,10 +851,11 @@ namespace VIS.Helpers
 
 
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
-            if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) !="")
+            if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
             {
                 //Check value in DB 
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'")) > 0)
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'"));
+                if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
                 {
                     outt.IsError = true;
                     outt.FireEEvent = true;
@@ -866,8 +867,9 @@ namespace VIS.Helpers
 
             if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
             {
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'"));
                 //Check value in DB 
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE DocumentNo='" + rowData["documentno"] + "'")) > 0)
+                if ((count > 0 && inserting) || (count > 1 && !inserting))
                 {
                     outt.IsError = true;
                     outt.FireEEvent = true;

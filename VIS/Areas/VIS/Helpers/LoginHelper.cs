@@ -195,7 +195,7 @@ namespace VIS.Helpers
                         Token2FAKey = dbUser + userSKey;
                         model.Login1Model.QRFirstTime = true;
                     }
-                    setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 200, 200);
+                    setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 150, 150);
                     model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
 
