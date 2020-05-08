@@ -205,7 +205,7 @@
 
 			<div class="vis-thed-clrpickerouterwrap">
 				<fieldset>
-    				<legend>Choose your colors</legend>
+                    <legend>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ChoseColor")</legend>
     				<div class="vis-thed-clrpickerwrap">
     					<div class="vis-thed-clrpickersec">
     						<div class="vis-thed-clrpickerlistitem">
@@ -213,7 +213,7 @@
     								<input type="color" name="primary" value="#0093fc">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-    								<p>Primary<i class="vis vis-info"></i></p>
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Primary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Primary", false)</i></p>
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
 
@@ -222,7 +222,7 @@
     								<input type="color" name="onprimary" value="#ffffff">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-    								<p>On Primary<i class="vis vis-info"></i></p>
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnPrimary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnPrimary",false)</i></p>
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
     					</div><!-- vis-thed-clrpickersec -->
@@ -233,7 +233,7 @@
     								<input type="color" name="secondary" value="#eeeeee">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-    								<p>Secondary<i class="vis vis-info"></i></p>
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Secondary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Secondary", false)</i></p>
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
 
@@ -242,7 +242,7 @@
     								<input type="color" name="onsecondary" value="#333333">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-    								<p>On Secondary<i class="vis vis-info"></i></p>
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnSecondary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnSecondary", false)</i></p>
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
     					</div><!-- vis-thed-clrpickersec -->
@@ -253,51 +253,22 @@
 			<div class="vis-thed-botsavesec">
 				<div class="vis-input-wrap vis-thed-themenameinput">
 					<input type="text" name="" >
-					<label>Name For Theme</label>
+                    <label>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "EnterName")</label>
 				</div><!-- vis-thed-themenameinput -->
 				<div class="vis-thed-btnswrap">
-					<a class="btn vis-thed-btn">Save</a>
-					<a class="btn vis-thed-btn">Save & Apply</a>
+                    <a class="btn vis-thed-btn">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SaveTheme")</a>
+                    <a class="btn vis-thed-btn">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SaveAndDefault")</a>
 				</div>
 			</div><!-- vis-thed-botsavesec -->
 		</div><!-- vis-thed-contentsec -->
 
 		<div class="vis-thed-sidebarwrap">
 			<div class="vis-thed-sidebarheadsec">
-				<h5>Saved Themes</h5>
+                <h5>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SavedTheme")</h5>
 			</div><!-- vis-thed-sidebarheadsec -->
 			<div class="vis-thed-savedlistouterwrap">
 				<ul class="vis-thed-savedlistwrap">
-					<li class="vis-thed-savedlistitem vis-thed-selectedlistitem">
-						<span class="vis-thed-colorbox" style="background: #0098f7"></span>
-						<a class="vis-thed-themename">Defualt Theme</a>
-						<i class="vis vis-markx"></i>
-					</li><!-- vis-thed-savedlistitem -->
-					<li class="vis-thed-savedlistitem">
-						<span class="vis-thed-colorbox" style="background: #40f117"></span>
-						<a class="vis-thed-themename">Theme Name 1</a>
-						<i class="vis vis-markx"></i>
-					</li><!-- vis-thed-savedlistitem -->
-					<li class="vis-thed-savedlistitem">
-						<span class="vis-thed-colorbox" style="background: #dd2d04"></span>
-						<a class="vis-thed-themename">Theme Name 1</a>
-						<i class="vis vis-markx"></i>
-					</li><!-- vis-thed-savedlistitem -->
-					<li class="vis-thed-savedlistitem">
-						<span class="vis-thed-colorbox" style="background: #ff6600"></span>
-						<a class="vis-thed-themename">Theme Name 1</a>
-						<i class="vis vis-markx"></i>
-					</li><!-- vis-thed-savedlistitem -->
-					<li class="vis-thed-savedlistitem">
-						<span class="vis-thed-colorbox" style="background: #8e0ada"></span>
-						<a class="vis-thed-themename">Theme Name 1</a>
-						<i class="vis vis-markx"></i>
-					</li><!-- vis-thed-savedlistitem -->
-					<li class="vis-thed-savedlistitem">
-						<span class="vis-thed-colorbox" style="background: #e70751"></span>
-						<a class="vis-thed-themename">Theme Name 1</a>
-						<i class="vis vis-markx"></i>
-					</li><!-- vis-thed-savedlistitem -->
+					
 				</ul><!-- vis-thed-savedlistwrap -->
 			</div><!-- vis-thed-savedlistouterwrap -->
 		</div><!-- vis-thed-sidebarwrap -->
