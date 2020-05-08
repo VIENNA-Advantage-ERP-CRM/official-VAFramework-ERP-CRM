@@ -12839,8 +12839,8 @@
             /**** Start Amit For Tax Type Module ****/
             var taxRule = "";
             var sql = "";
-            //var paramString = "";
-            var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", (mTab.getValue("M_Product_ID")).toString() +
+            // JID_1449: Tax is not working in case of charge on invoice line
+            var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_Product_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")));
             var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
 
