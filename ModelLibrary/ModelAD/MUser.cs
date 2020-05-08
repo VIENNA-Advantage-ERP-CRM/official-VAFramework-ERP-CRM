@@ -534,19 +534,9 @@ namespace VAdvantage.Model
                 SetValue(base.GetValue());
                 if (newRecord)
                 {
-                    string pwd = GetPassword();
-                    pwd= Common.Common.ValidatePassword(null, pwd, pwd);
-                    if (pwd.Length > 0)
-                    {
-                        log.SaveError("", Msg.GetMsg(GetCtx(), pwd, true));
-                        return false;
-                    }
 
-                    int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
-                    if (validity > 0)
-                    {
-                       base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
-                    }
+
+
 
                     int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE lower(Value) = lower('" + GetValue() + "')"));
                     if (count > 0)
@@ -611,12 +601,24 @@ namespace VAdvantage.Model
             }
             if (Is_ValueChanged("Password"))
             {
+                string pwd = GetPassword();
                 string oldPwd = Util.GetValueOfString(Get_ValueOld("Password"));
-                string validated = Common.Common.ValidatePassword(oldPwd, GetPassword(), GetPassword());
-                if (validated.Length > 0)
+                if (pwd != null || !newRecord)
                 {
-                    log.SaveError("Error", Msg.GetMsg(GetCtx(), validated, true));
-                    return false;
+                    string validated = Common.Common.ValidatePassword(oldPwd, pwd, pwd);
+                    if (validated.Length > 0)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), validated, true));
+                        return false;
+                    }
+                }
+                if (!newRecord)
+                {
+                    int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
+                    if (validity > 0)
+                    {
+                        base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
+                    }
                 }
             }
             return true;
@@ -948,22 +950,22 @@ namespace VAdvantage.Model
                 value = "noname";
             //
             String result = CleanValue(value);
-            //if (result.Length > 8)
-            //{
-            //    String first = GetName(value, true);
-            //    String last = GetName(value, false);
-            //    if (last.Length > 0)
-            //    {
-            //        String temp = last;
-            //        if (first.Length > 0)
-            //            temp = first.Substring(0, 1) + last;
-            //        result = CleanValue(temp);
-            //    }
-            //    else
-            //        result = CleanValue(first);
-            //}
-            if (result.Length > 60)
-                result = result.Substring(0, 60);
+            if (result.Length > 8)
+            {
+                String first = GetName(value, true);
+                String last = GetName(value, false);
+                if (last.Length > 0)
+                {
+                    String temp = last;
+                    if (first.Length > 0)
+                        temp = first.Substring(0, 1) + last;
+                    result = CleanValue(temp);
+                }
+                else
+                    result = CleanValue(first);
+            }
+            if (result.Length > 40)
+                result = result.Substring(0, 40);
             base.SetValue(result);
         }
 
@@ -979,9 +981,9 @@ namespace VAdvantage.Model
             for (int i = 0; i < chars.Length; i++)
             {
                 char ch = chars[i];
-                //ch = Char.ToLower(ch);
+                ch = Char.ToLower(ch);
                 if ((ch >= '0' && ch <= '9')		//	digits
-                    || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))	//	characters
+                    || (ch >= 'a' && ch <= 'z'))	//	characters
                     sb.Append(ch);
             }
             return sb.ToString();
