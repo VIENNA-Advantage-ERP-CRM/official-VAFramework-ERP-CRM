@@ -470,7 +470,7 @@ namespace VAdvantage.DataBase
                 countOut = 0;
 
                 while (pgreader.Read())
-                {                    
+                {
                     if (arrParam != null && arrParam.Length > 0)
                     {
                         for (int i = 0; i < arrParam.Length; i++)
@@ -482,7 +482,7 @@ namespace VAdvantage.DataBase
                             }
                         }
                     }
-                }                
+                }
             }
             catch (Exception e)
             {
@@ -490,7 +490,8 @@ namespace VAdvantage.DataBase
                 {
                     pgreader.Close();
                 }
-                conn.Close();
+                if (_conn == null)
+                    conn.Close();
                 cmd.Parameters.Clear();
                 VAdvantage.Logging.VLogger.Get().Severe(e.Message + " [Procedure]" + sql);
             }
@@ -500,10 +501,11 @@ namespace VAdvantage.DataBase
                 {
                     pgreader.Close();
                 }
-                conn.Close();
+                if (_conn == null)
+                    conn.Close();
                 cmd.Parameters.Clear();
             }
-            return ret;           
+            return ret;
         }
     }
 }

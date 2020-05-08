@@ -324,13 +324,15 @@ namespace VAdvantage.DataBase
             }
             catch (Exception e)
             {
-                conn.Close();
+                if (_conn == null)
+                    conn.Close();
                 cmd.Parameters.Clear();
                 VAdvantage.Logging.VLogger.Get().Severe(e.Message + " [Procedure]" + sql);
             }
             finally
             {
-                conn.Close();
+                if (_conn == null)
+                    conn.Close();
                 cmd.Parameters.Clear();
             }
             return ret;
