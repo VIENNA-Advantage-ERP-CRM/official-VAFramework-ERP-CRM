@@ -349,31 +349,8 @@ namespace VAdvantage.Model
                 // when we reverse record, and movement line having MoveFullContainer = true
                 // system will check qty on transaction must be same as qty on movement line
                 // if not matched, then we can not allow to user for its reverse, he need to make a new Movement for move container
-                string sql = @"SELECT PName FROM 
-                                               (SELECT PName, ROW_NUMBER () OVER (ORDER BY PName ) RN, COUNT (*) OVER () CNT FROM 
-                                               (
-                                                SELECT p.Name || '_' || asi.description || '_' || ml.line  AS PName 
-                                                FROM m_movementline ml INNER JOIN m_movement m ON m.m_movement_id = ml.m_movement_id
-                                                INNER JOIN m_product p ON p.m_product_id = ml.m_product_id
-                                                LEFT JOIN m_attributesetinstance asi ON NVL(asi.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                                                 WHERE ml.MoveFullContainer ='Y' AND m.M_Movement_ID =" + GetM_Movement_ID() + @"
-                                                    AND abs(ml.movementqty) <>
-                                                     NVL((SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
-                                                          t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
-                                                     FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                                                      WHERE t.MovementDate <= (Select MAX(movementdate) from m_transaction where 
-                                                            AD_Client_ID = m.AD_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
-                                                            AND M_Product_ID = ml.M_Product_ID AND NVL(M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                                                            AND NVL(M_ProductContainer_ID, 0) = NVL(ml.M_ProductContainer_ID, 0) )
-                                                       AND t.AD_Client_ID                     = m.AD_Client_ID
-                                                       AND t.M_Locator_ID                     = ml.M_LocatorTo_ID
-                                                       AND t.M_Product_ID                     = ml.M_Product_ID
-                                                       AND NVL(t.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                                                       AND NVL(t.M_ProductContainer_ID, 0)    = NVL(ml.M_ProductContainer_ID, 0)  ), 0) 
-                                                        ) final 
-                                               ) final_ WHERE PName is not null AND ROWNUM <= 100 ";
-                sql = sql.Replace("'", "''");
-                string productName = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql + "') FROM DUAL", null, Get_Trx()));
+                string sql = DBFunctionCollection.CheckContainerQty(GetM_Movement_ID());
+                string productName = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (!string.IsNullOrEmpty(productName))
                 {
                     // Qty Alraedy consumed from Container for Product are : 
@@ -526,10 +503,10 @@ namespace VAdvantage.Model
 
                     if (check)
                     {
-                        sql = "SELECT concatenate_listofdata('SELECT DISTINCT Value FROM m_locator WHERE M_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + ")') FROM DUAL";
+                        sql = DBFunctionCollection.ConcatinateListOfLocators(locators.ToString());
                         string loc = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
 
-                        sql = "SELECT concatenate_listofdata('SELECT DISTINCT Name FROM M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ")') FROM DUAL";
+                        sql = DBFunctionCollection.ConcatinateListOfProducts(products.ToString());
                         string prod = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
@@ -558,10 +535,8 @@ namespace VAdvantage.Model
 
                     if (delivered)
                     {
-                        sql = "SELECT ord.DocumentNo || '_' || ol.Line AS Name FROM "
-                         + " M_RequisitionLine ol INNER JOIN M_Requisition ord ON ol.M_Requisition_ID = ord.M_Requisition_ID WHERE M_RequisitionLine_ID IN (" + delReq.ToString().Trim().Trim(',') + ")";
-                        sql = sql.Replace("'", "''");
-                        string req = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql + "') FROM DUAL", null, Get_Trx()));
+                        sql = DBFunctionCollection.ConcatnatedListOfRequisition(delReq.ToString());
+                        string req = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "RequisitionAlreadyDone") + ": " + req;
                         return DocActionVariables.STATUS_DRAFTED;
@@ -578,16 +553,8 @@ namespace VAdvantage.Model
                 // if not then not to complete this record
 
                 // For From Container
-                string sqlContainerExistence = @"SELECT NotMatched FROM
-                        (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
-                              WHEN p.M_Locator_ID <> il.M_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Movement_ID = " + GetM_Movement_ID() + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ";
-                sqlContainerExistence = sqlContainerExistence.Replace("'", "''");
-                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sqlContainerExistence + "') FROM DUAL", null, Get_Trx()));
+                string sqlContainerExistence = DBFunctionCollection.MovementContainerNotMatched(GetM_Movement_ID()); ;
+                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sqlContainerExistence, null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
                     SetProcessMsg(Msg.GetMsg(GetCtx(), "VIS_ContainerNotFound") + containerNotMatched);
@@ -595,17 +562,8 @@ namespace VAdvantage.Model
                 }
 
                 // To Container
-                sqlContainerExistence = @"SELECT NotMatched FROM                      
-                        (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> l.M_Warehouse_ID  THEN pr.Name || '_' || il.line
-                              WHEN p.M_Locator_ID <> il.M_LocatorTo_ID THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
-                        INNER JOIN M_Locator l ON l.M_Locator_ID = il.M_LocatorTo_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.Ref_M_ProductContainerTo_ID
-                        WHERE il.Ref_M_ProductContainerTo_ID > 0 AND i.M_Movement_ID = " + GetM_Movement_ID() + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ";
-                sqlContainerExistence = sqlContainerExistence.Replace("'", "''");
-                containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sqlContainerExistence + "') FROM DUAL", null, Get_Trx()));
+                sqlContainerExistence = DBFunctionCollection.MovementContainerToNotMatched(GetM_Movement_ID());
+                containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sqlContainerExistence, null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
                     SetProcessMsg(Msg.GetMsg(GetCtx(), "VIS_ContainerNotFoundTo") + containerNotMatched);
@@ -616,60 +574,9 @@ namespace VAdvantage.Model
                 //If User try to complete the Transactions if Movement Date is lesser than Last MovementDate on Product Container then we need to stop that transaction to Complete.
                 #region Check MovementDate and Last Inventory Date Neha 31 Aug,2018
 
-                string _qry = @"SELECT CASE
-                                   WHEN PCFROM =0
-                                   AND PCTO=0
-                                   THEN TRIM(NAME)
-                                   || ' '
-                                   ||TRIM(NAMETO)
-                                   WHEN PCFROM=0
-                                   THEN TRIM(NAME)
-                                   WHEN PCTO=0
-                                   THEN TRIM(NAMETO)
-                                   ELSE NULL
-                                 END AS PCNAME 
-                               FROM
-                                 (SELECT
-                                   (SELECT NAME
-                                   FROM M_PRODUCTCONTAINER
-                                   WHERE M_PRODUCTCONTAINER_ID =ML.M_PRODUCTCONTAINER_ID
-                                   ) AS NAME ,
-                                   (SELECT NAME
-                                   FROM M_PRODUCTCONTAINER
-                                   WHERE M_PRODUCTCONTAINER_ID =ML.REF_M_PRODUCTCONTAINERTO_ID
-                                   ) AS NAMETO ,
-                                   CASE
-                                     WHEN ML.M_PRODUCTCONTAINER_ID>0
-                                     THEN
-                                       CASE
-                                         WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY'))
-                                           FROM M_PRODUCTCONTAINER
-                                           WHERE M_PRODUCTCONTAINER_ID=ML.M_PRODUCTCONTAINER_ID ) <=M.MOVEMENTDATE
-                                         THEN 1
-                                         ELSE 0
-                                       END
-                                     ELSE 1
-                                   END AS PCFROM ,
-                                   CASE
-                                     WHEN ML.REF_M_PRODUCTCONTAINERTO_ID>0
-                                     THEN
-                                       CASE
-                                         WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY'))
-                                           FROM M_PRODUCTCONTAINER
-                                           WHERE M_PRODUCTCONTAINER_ID=ML.REF_M_PRODUCTCONTAINERTO_ID ) <=M.MOVEMENTDATE
-                                         THEN 1
-                                         ELSE 0
-                                       END
-                                     ELSE 1
-                                   END AS PCTO
-                                 FROM M_MOVEMENT M
-                                 INNER JOIN M_MOVEMENTLINE ML
-                                 ON M.M_MOVEMENT_ID    =ML.M_MOVEMENT_ID
-                                 WHERE M.M_MOVEMENT_ID =" + GetM_Movement_ID()
-                                     + @" 
-                                 ) t WHERE (PCFROM = 0 OR PCTO = 0)  AND ROWNUM <= 100";
-                
-                string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + _qry.Replace("'", "''") + "') FROM DUAL", null, Get_Trx()));
+                string _qry = DBFunctionCollection.MovementContainerNotAvailable(GetM_Movement_ID());
+
+                string misMatch = Util.GetValueOfString(DB.ExecuteScalar(_qry, null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
                     SetProcessMsg(misMatch + Msg.GetMsg(GetCtx(), "VIS_ContainerNotAvailable"));
@@ -2015,30 +1922,8 @@ namespace VAdvantage.Model
             //                                       AND NVL(t.M_ProductContainer_ID, 0)    =  NVL(ml.M_ProductContainer_ID, 0)  ), 0) 
             //                                       AND ROWNUM <= 100 )
             //                               ) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ";
-            string sql = @"SELECT  PName FROM
-                             (SELECT PName, ROW_NUMBER () OVER (ORDER BY PName ) RN, COUNT (*) OVER () CNT FROM (
-                               SELECT ttt.PName , tt.CurrentQty, ttt.CurrentQty 
-                                  FROM (SELECT '' AS PName, m_movementline_id, (ContainerCurrentQty) CurrentQty FROM (SELECT ml.m_movementline_id,
-                                  t.ContainerCurrentQty, t.MovementDate,  t.M_Transaction_ID,
-                                  row_number() OVER (PARTITION BY ml.m_movementline_id ORDER BY t.M_Transaction_ID DESC, t.MovementDate DESC) RN_
-                                FROM m_transaction T INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                                INNER JOIN M_movementLine ml ON ( t.AD_Client_ID = ml.AD_Client_ID
-                                AND t.M_Locator_ID = ml.M_Locator_ID
-                                AND t.M_Product_ID = ml.M_Product_ID
-                                AND NVL (t.M_AttributeSetInstance_ID, 0) = NVL (ml.M_AttributeSetInstance_ID, 0)
-                                AND NVL (t.M_ProductContainer_ID, 0) = NVL (ml.M_ProductContainer_ID, 0))
-                                WHERE ml.M_Movement_ID = " + movement_Id + @" ) tt_ WHERE RN_ = 1 ) tt
-                             INNER JOIN 
-                              (SELECT p.Name || '_' || asi.description || '_'  || ml.line AS PName, ml.m_movementline_id ,  ml.movementqty AS CurrentQty
-                               FROM m_movementline ml INNER JOIN m_movement m  ON m.m_movement_id = ml.m_movement_id
-                               INNER JOIN m_product p ON p.m_product_id = ml.m_product_id
-                               LEFT JOIN m_attributesetinstance asi ON NVL (asi.M_AttributeSetInstance_ID, 0) = NVL (ml.M_AttributeSetInstance_ID, 0)
-                               WHERE ml.MoveFullContainer = 'Y'
-                               AND m.M_Movement_ID   = " + movement_Id + @" ) ttt ON tt.m_movementline_id = ttt.m_movementline_id
-                               WHERE tt.CurrentQty <> ttt.CurrentQty ) final  ) final_ WHERE PName IS NOT NULL AND ROWNUM <= 100";
-                          // WHERE RN  = CNT START WITH RN = 1   CONNECT BY RN = PRIOR RN + 1";
-            sql = sql.Replace("'", "''");
-            sql = "SELECT concatenate_listofdata('" + sql + "') FROM DUAL";
+
+            string sql = DBFunctionCollection.CheckMoveContainer(GetM_Movement_ID());            
             log.Info(sql);
             string productName = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
             if (!string.IsNullOrEmpty(productName))

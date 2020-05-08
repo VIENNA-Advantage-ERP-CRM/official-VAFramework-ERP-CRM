@@ -575,7 +575,7 @@ namespace VAdvantage.Model
 
 
             #region[Change By Sukhwinder on 11th October,2017 To Check if VA Material Quality Control Module exists or not, and then check if actual value at Quality Control tab exists or not]
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
+            if (Env.IsModuleInstalled("VA010_"))
             {
                 try
                 {
@@ -589,9 +589,8 @@ namespace VAdvantage.Model
 
                     if (!string.IsNullOrEmpty(mMovementLinesConfirm))
                     {
-                        string qry = "SELECT DISTINCT Prod.Name AS Name FROM VA010_MoveConfParameters Shp INNER JOIN M_Product Prod ON prod.m_product_id = shp.m_product_id " +
-                                    "WHERE (NVL(Shp.Va010_Actualvalue,0)) = 0 AND Shp.Isactive = 'Y' AND Shp.M_MovementLineConfirm_ID IN (" + mMovementLinesConfirm + ")";
-                        string productsNoActualValue = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + qry + "') FROM DUAL"));
+                        string qry = DBFunctionCollection.MoveConfirmNoActualValue(mMovementLinesConfirm);
+                        string productsNoActualValue = Util.GetValueOfString(DB.ExecuteScalar(qry));
                         if (!string.IsNullOrEmpty(productsNoActualValue))
                         {
                             //_processMsg = productsNoActualValue + " is/are not verified with all the Quality Parameters." +
@@ -769,9 +768,9 @@ namespace VAdvantage.Model
                 }
 
                 log.Info("createDifferenceDoc - Difference=" + confirm.GetDifferenceQty());
-                
-                MInventoryLine line = new MInventoryLine(_inventoryFrom, mLine.GetM_Locator_ID(), mLine.GetM_Product_ID(), 
-                        mLine.GetM_AttributeSetInstance_ID(), confirm.GetDifferenceQty(), Env.ZERO);                
+
+                MInventoryLine line = new MInventoryLine(_inventoryFrom, mLine.GetM_Locator_ID(), mLine.GetM_Product_ID(),
+                        mLine.GetM_AttributeSetInstance_ID(), confirm.GetDifferenceQty(), Env.ZERO);
 
                 //Added By amit 11-jun-2015 
                 //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
@@ -862,7 +861,7 @@ namespace VAdvantage.Model
                     mLine.GetM_LocatorTo_ID(), mLine.GetM_Product_ID(), mLine.GetM_AttributeSetInstance_ID(),
                     confirm.GetScrappedQty(), Env.ZERO);
                 line.SetDescription(Msg.Translate(GetCtx(), "ScrappedQty"));
-                
+
                 //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
                 line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
                 line.Set_Value("QtyEntered", confirm.GetDifferenceQty());

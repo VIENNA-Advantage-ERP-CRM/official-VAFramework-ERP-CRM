@@ -1991,11 +1991,11 @@ namespace VAdvantage.Model
                         if (check)
                         {
                             sql.Clear();
-                            sql.Append("SELECT concatenate_listofdata('SELECT DISTINCT Value FROM m_locator WHERE M_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + ")') FROM DUAL");
+                            sql.Append(DBFunctionCollection.ConcatinateListOfLocators(locators.ToString()));
                             string loc = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                             sql.Clear();
-                            sql.Append("SELECT concatenate_listofdata('SELECT DISTINCT Name FROM M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ")') FROM DUAL");
+                            sql.Append(DBFunctionCollection.ConcatinateListOfProducts(products.ToString()));
                             string prod = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                             _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
@@ -2089,16 +2089,8 @@ namespace VAdvantage.Model
                 // if container avialble on line is belongs to same warehouse and locator
                 // if not then not to complete this record
                 sql.Clear();
-                sql.Append(@"SELECT NotMatched FROM
-                        (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> i.m_warehouse_id  THEN pr.Name || '_' || il.line
-                              WHEN p.m_locator_id <> il.m_locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM m_inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.m_inout_id = " + GetM_InOut_ID() + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ");//
-                sql = sql.Replace("'", "''");
-                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.ToString() + "') FROM DUAL", null, Get_Trx()));
+                sql.Append(DBFunctionCollection.MInOutContainerNotMatched(GetM_InOut_ID()));
+                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
                     SetProcessMsg(Msg.GetMsg(GetCtx(), "VIS_ContainerNotFound") + containerNotMatched);
@@ -2110,19 +2102,8 @@ namespace VAdvantage.Model
                 // If User try to complete the Transactions if Movement Date is lesser than Last MovementDate on Product Container
                 // then we need to stop that transaction to Complete.
                 sql.Clear();
-                sql.Append(@"SELECT Name FROM (SELECT
-                              (SELECT NAME FROM M_ProductContainer WHERE M_ProductContainer_ID =IL.M_PRODUCTCONTAINER_ID ) AS Name ,
-                              CASE WHEN IL.M_PRODUCTCONTAINER_ID > 0 
-                              AND (SELECT DATELASTINVENTORY  FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)<=I.MOVEMENTDATE
-                                THEN 1
-                                WHEN IL.M_PRODUCTCONTAINER_ID > 0
-                                AND (SELECT DATELASTINVENTORY FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)>I.MOVEMENTDATE
-                                THEN 0
-                                ELSE 1 END AS COUNT
-                                FROM M_InOut I INNER JOIN M_InOutLINE IL ON I.M_InOut_ID = IL.M_InOut_ID
-                                WHERE I.M_InOut_ID =" + GetM_InOut_ID() + @" ) t WHERE COUNT = 0 AND ROWNUM <= 100");
-                
-                string misMatch = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + sql.Replace("'", "''").ToString() + "') FROM DUAL", null, Get_Trx()));
+                sql.Append(DBFunctionCollection.MInOutContainerNotAvailable(GetM_InOut_ID()));                
+                string misMatch = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
                     SetProcessMsg(misMatch + Msg.GetMsg(GetCtx(), "VIS_ContainerNotAvailable"));

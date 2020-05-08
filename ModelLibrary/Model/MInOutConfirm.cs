@@ -748,7 +748,7 @@ namespace VAdvantage.Model
 
 
             #region[Change By Sukhwinder on 10th October,2017 To Check if VA Material Quality Control Module exists or not, and then check if actual value at Quality Control tab exists or not]
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
+            if (Env.IsModuleInstalled("VA010_"))
             {
                 try
                 {
@@ -762,9 +762,8 @@ namespace VAdvantage.Model
 
                     if (!string.IsNullOrEmpty(mInOutLinesConfirm))
                     {
-                        string qry = "SELECT DISTINCT Prod.Name AS Name FROM Va010_Shipconfparameters Shp INNER JOIN M_Product Prod ON prod.m_product_id = shp.m_product_id " +
-                                    "WHERE (NVL(Shp.Va010_Actualvalue,0)) = 0 AND Shp.Isactive = 'Y' AND Shp.M_Inoutlineconfirm_Id IN (" + mInOutLinesConfirm + ")";
-                        string productsNoActualValue = Util.GetValueOfString(DB.ExecuteScalar("SELECT concatenate_listofdata('" + qry + "') FROM DUAL"));
+                        string qry = DBFunctionCollection.ShipConfirmNoActualValue(mInOutLinesConfirm);
+                        string productsNoActualValue = Util.GetValueOfString(DB.ExecuteScalar(qry, null, Get_TrxName()));
                         if (!string.IsNullOrEmpty(productsNoActualValue))
                         {
                             //_processMsg = productsNoActualValue + " is/are not verified with all the Quality Parameters." +
