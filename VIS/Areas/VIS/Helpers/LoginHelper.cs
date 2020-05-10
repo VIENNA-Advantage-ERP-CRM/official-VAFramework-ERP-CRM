@@ -187,13 +187,14 @@ namespace VIS.Helpers
                     string userSKey = Util.GetValueOfString(dr["Value"]);
                     if (Token2FAKey.Trim() == "")
                     {
+                        model.Login1Model.QRFirstTime = true;
                         string dbUser = "";
                         if (DatabaseType.IsOracle)
                             dbUser = VConnection.Get().Db_uid.ToUpper();
                         else
                             dbUser = VConnection.Get().Db_name;
-                        Token2FAKey = dbUser + userSKey;
-                        model.Login1Model.QRFirstTime = true;
+
+                        Token2FAKey = dbUser + userSKey + HttpContext.Current.Request.Url.Host;
                     }
                     setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 150, 150);
                     model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
@@ -683,6 +684,11 @@ namespace VIS.Helpers
 
         }
 
+        /// <summary>
+        /// Validate OTP from Google Authenticator
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>true/false</returns>
         public static bool Validate2FAOTP(LoginModel model)
         {
             bool isValid = false;
@@ -695,8 +701,7 @@ namespace VIS.Helpers
                     dbUser = VConnection.Get().Db_uid.ToUpper();
                 else
                     dbUser = VConnection.Get().Db_name;
-
-                string Token2FAKey = dbUser + dsUser.Tables[0].Rows[0]["Value"];
+                string Token2FAKey = dbUser + dsUser.Tables[0].Rows[0]["Value"] + HttpContext.Current.Request.Url.Host;
                 isValid = tfa.ValidateTwoFactorPIN(Token2FAKey, model.Login1Model.OTP2FA);
                 if (isValid && Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]).Trim() == "")
                 {
