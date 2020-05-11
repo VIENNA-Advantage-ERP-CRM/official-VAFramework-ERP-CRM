@@ -41,6 +41,9 @@ namespace VIS.Controllers
                     bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
                     bool Is2FAEnabled = Util.GetValueOfBool(TempData.Peek("Is2FAEnabled"));
                     model.Login1Model.AD_User_ID = Util.GetValueOfInt(TempData.Peek("AD_User_ID"));
+                    model.Login1Model.QRFirstTime = Util.GetValueOfBool(TempData.Peek("QRFirstTime"));
+                    model.Login1Model.TokenKey2FA = Util.GetValueOfString(TempData.Peek("TokenKey2FA"));
+                    model.Login1Model.QRCodeURL = Util.GetValueOfString(TempData.Peek("QRCodeURL"));
 
                     string password = Util.GetValueOfString(TempData.Peek("Password"));
                     if (!string.IsNullOrEmpty(model.Login1Model.Password))
@@ -118,7 +121,9 @@ namespace VIS.Controllers
                         TempData["ResetPwd"] = model.Login1Model.ResetPwd;
                         TempData["Is2FAEnabled"] = model.Login1Model.Is2FAEnabled;
                         TempData["AD_User_ID"] = model.Login1Model.AD_User_ID;
-
+                        TempData["QRFirstTime"] = model.Login1Model.QRFirstTime;
+                        TempData["TokenKey2FA"] = model.Login1Model.TokenKey2FA;
+                        TempData["QRCodeURL"] = model.Login1Model.QRCodeURL;
                         //model.Login1Model.Password = null;
                         if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
                         {
