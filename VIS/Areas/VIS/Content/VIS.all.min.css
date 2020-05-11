@@ -1,4 +1,4 @@
-﻿/*** version 1.0.15.1***/
+﻿/*** version 1.0.17.0***/
 
 html, body {
     height: 100%;
@@ -4870,6 +4870,10 @@ html[dir="rtl"] .vis-cvd-editbtn {
     width: 100%;
     float: left;
     /*margin-bottom: 10px;*/
+}
+
+.VIS-AMTD-ReadOnly .VIS-AMTD-formWrap, .VIS-AMTD-ReadOnly .VIS-AMTD-Grid tr, .VIS-AMTD-ReadOnly .VIS-AMTD-StatusContainer, .VIS-AMTD-ReadOnly .VIS-AMTD-formData, .VIS-AMTD-ReadOnly.VIS-AMTD-MainContent input {
+    pointer-events: none;
 }
 
 .VIS-AMTD-formData {
@@ -16654,7 +16658,7 @@ li.vis-page-item-select {
     grid-column: 1/1;
     overflow-y: auto;
     min-height: 17px;
-    max-height: 100%;
+    max-height: 29px;
 }
 
 .vis-ad-w-p-s-statusdb {
