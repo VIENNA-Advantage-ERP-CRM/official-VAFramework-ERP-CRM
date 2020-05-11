@@ -665,6 +665,15 @@ namespace VAdvantage.Model
             else
             {
                 fillDimensionsFromCombination();
+                // setting null in business partner and product search control because if set 0 then it shows <0> in controls.-Mohit-11 May 2020
+                if (Util.GetValueOfInt(Get_Value("C_BPartner_ID")) == 0)
+                {
+                    Set_Value("C_BPartner_ID", null);
+                }
+                if (Util.GetValueOfInt(Get_Value("M_Product_ID")) == 0)
+                {
+                    Set_Value("M_Product_ID", null);
+                }
             }
             return true;
         }
