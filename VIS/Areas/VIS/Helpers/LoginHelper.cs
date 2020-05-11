@@ -63,7 +63,7 @@ namespace VIS.Helpers
 
 
             int fCount = Util.GetValueOfInt(cache[Common.Failed_Login_Count_Key]);
-            int passwordValidUpto = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
+            int passwordValidUpto = Util.GetValueOfInt(cache[Common.Password_Valid_Upto_Key]);
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@username", model.Login1Model.UserValue);
 
@@ -204,10 +204,10 @@ namespace VIS.Helpers
                 model.Login1Model.TokenKey2FA = Token2FAKey;
             }
 
-            if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
-            {
-                throw new Exception("MaxFailedLoginAttempts");
-            }
+            //if (fCount >0 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
+            //{
+            //    throw new Exception("MaxFailedLoginAttempts");
+            //}
             DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
             if (passwordValidUpto > 0 && (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0))
             {
@@ -304,7 +304,7 @@ namespace VIS.Helpers
                 cache[Common.Password_Valid_Upto_Key] = Common.GetPassword_Valid_Upto;
 
                 //then check setting in System Config, if found, then will replace default values.
-                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('Failed_Login_Count','Password_Valid_Upto') ");
+                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('FAILED_LOGIN_COUNT','PASSWORD_VALID_UPTO') ");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
