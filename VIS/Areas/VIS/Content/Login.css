@@ -358,7 +358,6 @@ html, body {
     width: calc(100% - 30px);
     outline: none;
 }
-
 .input-row > input[type=date] {
     font-size:16px;
     line-height:22px;
@@ -398,39 +397,31 @@ input::-webkit-input-placeholder {
     cursor: pointer;
     border: none;
 }
-
 .language {
-    width: 93%;
+    width: calc(100% - 30px);
     /*height: 17px;
    overflow: hidden;*/
     overflow: -moz-hidden-unscrollable;
     background: url(../Images/login/combo-arrow.png) no-repeat right;
     display: inline-block;
     position: relative;
-    padding-right:12px;
+    padding-right: 12px;
 }
-
-    .language > select {
-        background: transparent;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        width: 100%;
-        font-size: 18px;
-        border: 0;
-        /*height: 17px;
-   position: absolute;*/
-        color: #fff;
-        outline: none;
-        /*left: 0;
-   top: 0;*/
-    }
-
-        .language > select > option {
-            background: rgba(255,255,255,.2);
-            color: #333;
-            border: none;
-        }
-
+.language > select {
+    background: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    font-size: 18px;
+    border: 0;
+    color: #fff;
+    outline: none;
+}
+.language > select > option {
+    background: rgba(255,255,255,.2);
+    color: #333;
+    border: none;
+}
 .validation-summary-errors {
     color: white;
     
@@ -515,7 +506,7 @@ input::-webkit-input-placeholder {
     }
 
     .language {
-        width: 90%;
+        /*width: 90%;*/
     }
 }
 
@@ -529,7 +520,7 @@ input::-webkit-input-placeholder {
     }
 
     .language {
-        width: 89%;
+        /*width: 89%;*/
     }
 
     .input-row > input {
@@ -551,7 +542,7 @@ input::-webkit-input-placeholder {
     }
 
     .language {
-        width: 85%;
+        /*width: 85%;*/
     }
 
     .input-row > input {
