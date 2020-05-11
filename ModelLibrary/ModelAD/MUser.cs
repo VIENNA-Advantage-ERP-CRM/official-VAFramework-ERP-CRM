@@ -615,10 +615,7 @@ namespace VAdvantage.Model
                 if (!newRecord)
                 {
                     int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
-                    if (validity > 0)
-                    {
-                        base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
-                    }
+                    base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
                 }
             }
             return true;

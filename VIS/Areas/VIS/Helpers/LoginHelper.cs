@@ -215,7 +215,7 @@ namespace VIS.Helpers
             //    throw new Exception("MaxFailedLoginAttempts");
             //}
             DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
-            if (passwordValidUpto > 0 && (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0))
+            if (pwdExpireDate == null || (passwordValidUpto > 0 && ( DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)))
             {
                 model.Login1Model.ResetPwd = true;
             }
