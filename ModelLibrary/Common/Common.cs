@@ -20,8 +20,8 @@ namespace VAdvantage.Common
         static public bool ISTENATRUNNINGFORERP = false;
         public static string NONBUSINESSDAY = "@DateIsInNonBusinessDay@";
 
-        public static string Password_Valid_Upto_Key = "Password_Valid_Upto";
-        public static string Failed_Login_Count_Key = "Failed_Login_Count";
+        public static string Password_Valid_Upto_Key = "PASSWORD_VALID_UPTO";
+        public static string Failed_Login_Count_Key = "FAILED_LOGIN_COUNT";
 
         public static int GetPassword_Valid_Upto
         {
@@ -505,7 +505,7 @@ namespace VAdvantage.Common
             {
                 return "oldNewSamePwd";
             }
-            string regex = @"(^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[a-zA-Z][A-Za-z\d@$!%*?&]{4,}$)";// Start with Alphabet, minimum 4 length
+            string regex = @"(^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[a-zA-Z][A-Za-z\d@$!%*?& ]{4,}$)";// Start with Alphabet, minimum 4 length
                                                                                         //@$!%*#?& allowed only
             Regex re = new Regex(regex);
 

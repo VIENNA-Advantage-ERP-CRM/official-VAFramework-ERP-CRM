@@ -205,7 +205,9 @@
 
 			<div class="vis-thed-clrpickerouterwrap">
 				<fieldset>
-                    <legend>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ChoseColor")</legend>
+
+                    <legend>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "ChoseColor",true)</legend>
+
     				<div class="vis-thed-clrpickerwrap">
     					<div class="vis-thed-clrpickersec">
     						<div class="vis-thed-clrpickerlistitem">
@@ -213,7 +215,9 @@
     								<input type="color" name="primary" value="#0093fc">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Primary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Primary", false)</i></p>
+
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Primary",true)<i class="vis vis-info" style="display:none">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Primary", false)</i></p>
+
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
 
@@ -222,7 +226,9 @@
     								<input type="color" name="onprimary" value="#ffffff">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnPrimary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnPrimary",false)</i></p>
+
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnPrimary",true)<i class="vis vis-info" style="display:none">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnPrimary",false)</i></p>
+
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
     					</div><!-- vis-thed-clrpickersec -->
@@ -233,7 +239,9 @@
     								<input type="color" name="secondary" value="#eeeeee">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Secondary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Secondary", false)</i></p>
+
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Secondary",true)<i class="vis vis-info" style="display:none">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "Secondary", false)</i></p>
+
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
 
@@ -242,7 +250,9 @@
     								<input type="color" name="onsecondary" value="#333333">
     							</div><!-- vis-thed-clrpickerbox -->
     							<div class="vis-thed-clrname">
-                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnSecondary")<i class="vis vis-info">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnSecondary", false)</i></p>
+
+                                    <p>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnSecondary",true)<i class="vis vis-info" style="display:none">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "OnSecondary", false)</i></p>
+
     							</div><!-- vis-thed-clrname -->
     						</div><!-- vis-thed-clrpickerlistitem -->
     					</div><!-- vis-thed-clrpickersec -->
@@ -256,15 +266,19 @@
                     <label>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "EnterName")</label>
 				</div><!-- vis-thed-themenameinput -->
 				<div class="vis-thed-btnswrap">
-                    <a class="btn vis-thed-btn">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SaveTheme")</a>
-                    <a class="btn vis-thed-btn">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SaveAndDefault")</a>
+
+                    <a class="btn vis-thed-btn">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SaveTheme",true)</a>
+                    <a class="btn vis-thed-btn">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SaveAndDefault",true)</a>
+
 				</div>
 			</div><!-- vis-thed-botsavesec -->
 		</div><!-- vis-thed-contentsec -->
 
 		<div class="vis-thed-sidebarwrap">
 			<div class="vis-thed-sidebarheadsec">
-                <h5>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SavedTheme")</h5>
+
+                <h5>@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "SavedTheme",true)</h5>
+
 			</div><!-- vis-thed-sidebarheadsec -->
 			<div class="vis-thed-savedlistouterwrap">
 				<ul class="vis-thed-savedlistwrap">
