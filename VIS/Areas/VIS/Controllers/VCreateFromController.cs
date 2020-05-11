@@ -25,12 +25,13 @@ namespace VIS.Controllers
         /// <param name="IsDrop">Drop Shipment</param>
         /// <param name="IsSOTrx">Sales Transaction</param>
         /// <param name="forInvoices">For Invoice</param>
+        ///  <param name="recordID">C_Invoice_ID</param>
         /// <returns>List of Orders in Json Format</returns>
-        public JsonResult VCreateGetOrders(string displays, string columns, int C_BPartner_IDs, bool isReturnTrxs, int OrgIds, bool IsDrop, bool IsSOTrx, bool forInvoices)
+        public JsonResult VCreateGetOrders(string displays, string columns, int C_BPartner_IDs, bool isReturnTrxs, int OrgIds, bool IsDrop, bool IsSOTrx, bool forInvoices , int recordID)
         {
             var ctx = Session["ctx"] as Ctx;
             VCreateFromModel obj = new VCreateFromModel();
-            var value = obj.VCreateGetOrders(ctx, displays, columns, C_BPartner_IDs, isReturnTrxs, OrgIds, IsDrop, IsSOTrx, forInvoices);
+            var value = obj.VCreateGetOrders(ctx, displays, columns, C_BPartner_IDs, isReturnTrxs, OrgIds, IsDrop, IsSOTrx, forInvoices , recordID);
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
 
@@ -145,16 +146,27 @@ namespace VIS.Controllers
             var ctx = Session["ctx"] as Ctx;
             bool isAllownonItem = Util.GetValueOfString(ctx.GetContext("$AllowNonItem")).Equals("Y");
 
+            // JID_1720 : when login with other than base language then data not coming in create line form
+            string precision = "";
+            if (isBaseLangess.ToUpper().Contains("C_UOM_TRL"))
+            {
+                precision = " uom1.stdprecision ";
+            }
+            else
+            {
+                precision = " uom.stdprecision ";
+            }
+
             StringBuilder sql = new StringBuilder("SELECT "
                + "ROUND((l.QtyOrdered-SUM(COALESCE(m.Qty,0))) * "
-               + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ), uom.stdprecision) as QUANTITY,"
+               + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ), " + precision + ") as QUANTITY,"
                + "ROUND((l.QtyOrdered-SUM(COALESCE(m.Qty,0))) * "
-               + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ), uom.stdprecision) as QTYENTER,"
+               + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ), " + precision + ") as QTYENTER,"
                + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"
                + " COALESCE(l.M_Product_ID,0) as M_PRODUCT_ID ,p.Name as PRODUCT, p.Value as PRODUCTSEARCHKEY,"
                + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                + " ins.description , "
-               + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, uom.stdprecision AS StdPrecision  , l.IsDropShip AS  IsDropShip"
+               + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, " + precision + " AS StdPrecision  , l.IsDropShip AS  IsDropShip"
                + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
                // JID_1414 - not to consider or pick In-Active Record
                + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
@@ -199,21 +211,21 @@ namespace VIS.Controllers
             }
             sql.Append(" GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                     + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                        + "l.M_Product_ID,p.Name,p.Value, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description,  uom.stdprecision,l.IsDropShip, o.C_PaymentTerm_ID , t.Name  "); //Arpit on  20th Sept,2017"	            
+                        + "l.M_Product_ID,p.Name,p.Value, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description,  " + precision + ",l.IsDropShip, o.C_PaymentTerm_ID , t.Name  "); //Arpit on  20th Sept,2017"	            
 
             // Show Orderline with Charge also, based on the setting for Non Item type on Tenant.
             if (forInvoicees || isAllownonItem)
             {
                 sql.Append("UNION SELECT "
                   + "round((l.QtyOrdered-SUM(COALESCE(m.QtyInvoiced,0))) * "					//	1               
-                  + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ),uom.stdprecision) as QUANTITY,"	//	2
+                  + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END )," + precision + ") as QUANTITY,"	//	2
                   + "round((l.QtyOrdered-SUM(COALESCE(m.QtyInvoiced,0))) * "
-                  + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END ),uom.stdprecision) as QTYENTER,"	//	added by bharat
+                  + "(CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END )," + precision + ") as QTYENTER,"	//	added by bharat
                   + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//	3..4
                   + " 0 as M_PRODUCT_ID , c.Name as PRODUCT, c.Value as PRODUCTSEARCHKEY,"	//	5..6
                   + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID ,"
                   + " ins.description , "
-                  + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, uom.stdprecision AS StdPrecision   , l.IsDropShip AS  IsDropShip"			//	7..8 //              
+                  + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW, " + precision + " AS StdPrecision   , l.IsDropShip AS  IsDropShip"			//	7..8 //              
                   + " , o.C_PaymentTerm_ID , t.Name AS PaymentTermName "
                   // JID_1414 - not to consider or pick In-Active Record
                   + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
@@ -241,7 +253,7 @@ namespace VIS.Controllers
 
                 sql.Append(" GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
                       + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                      + "l.M_Product_ID,c.Name,c.Value,l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, uom.stdprecision, l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
+                      + "l.M_Product_ID,c.Name,c.Value,l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, " + precision + ", l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
             }
             // JID_1287: Line number sequence to be maintained when we create lines from the reference of other documents.
             string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0 ORDER BY LINE";
@@ -701,7 +713,7 @@ namespace VIS.Controllers
                   + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = i.C_PaymentTerm_ID)"
                   + " LEFT OUTER JOIN C_OrderLine m ON(m.C_OrderLine_ID = l.C_OrderLine_ID) AND m.C_OrderLine_ID IS NOT NULL LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
 
-                
+
 
                 sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Invoice_ID=" + cInvoiceID + " AND C.C_Charge_ID>0 ");
 

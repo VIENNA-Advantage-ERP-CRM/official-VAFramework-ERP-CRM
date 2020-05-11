@@ -539,6 +539,8 @@ namespace VAdvantage.Model
                         {
                             return false;
                         }
+                        // set currency type from invoice
+                        SetC_ConversionType_ID(invoice.GetC_ConversionType_ID());
                         // Change By Mohit Asked By Amardeep Sir 02/03/2016
                         SetPOReference(invoice.GetPOReference());
                         // Changes Done by Bharat on 20 June 2017 to not allow more than Schedule Amount.
@@ -571,6 +573,8 @@ namespace VAdvantage.Model
                         }
                         // Change By Mohit Asked By Amardeep Sir 02/03/2016
                         SetPOReference(order.GetPOReference());
+                        // set conversion type from order
+                        SetC_ConversionType_ID(order.GetC_ConversionType_ID());
                     }
                 }
 

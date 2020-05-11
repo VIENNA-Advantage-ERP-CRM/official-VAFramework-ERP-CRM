@@ -1342,9 +1342,9 @@ namespace VAdvantage.Model
             }
 
 
-            // If lines are available and user is changing the pricelist on header than we have to restrict it because
-            // those lines are saved as privious pricelist prices or Payment term.. standard sheet issue no : SI_0344 / JID_0564 by Manjot
-            if (!newRecord && Is_ValueChanged("M_PriceList_ID"))
+            // If lines are available and user is changing the pricelist/conversiontype on header than we have to restrict it because
+            // those lines are saved as privious pricelist prices or Payment term.. standard sheet issue no : SI_0344 / JID_0564 / JID_1536_1 by Manjot
+            if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("C_ConversionType_ID")))
             {
                 MInvoiceLine[] lines = GetLines(true);
 

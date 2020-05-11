@@ -24,13 +24,31 @@ namespace VIS.Models
         /// <param name="DropShip">Drop Shipment</param>
         /// <param name="IsSOTrx">Sales Transaction</param>
         /// <param name="forInvoices">For Invoice</param>
+        /// <param name="InvoiceID">C_Invoice_ID</param>
         /// <returns>List<VCreateFromGetCOrder>, List of Orders</returns>
 
-        public List<VCreateFromGetCOrder> VCreateGetOrders(Ctx ctx, string display, string column, int C_BPartner_ID, bool isReturnTrx, int OrgId, bool DropShip, bool IsSOTrx, bool forInvoices)
+        public List<VCreateFromGetCOrder> VCreateGetOrders(Ctx ctx, string display, string column, int C_BPartner_ID, bool isReturnTrx, int OrgId, bool DropShip, bool IsSOTrx, bool forInvoices, int InvoiceID)
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             var dis = display;
             MClient tenant = MClient.Get(ctx);
+
+            // JID_0976
+            string whereCondition = "";
+            if (InvoiceID > 0)
+            {
+                DataSet dsInvoice = DB.ExecuteDataset(@"SELECT C_Currency_ID  ,
+                CASE WHEN NVL(C_ConversionType_ID , 0) != 0  THEN C_ConversionType_ID ELSE 
+                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.AD_Client_ID IN (0 , C_Invoice.AD_Client_ID )
+                AND C_ConversionType.AD_Org_ID      IN (0 , C_Invoice.AD_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
+                M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + InvoiceID);
+                if (dsInvoice != null && dsInvoice.Tables.Count > 0 && dsInvoice.Tables[0].Rows.Count > 0)
+                {
+                    whereCondition = " AND o.C_Currency_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["C_Currency_ID"]) +
+                        " AND o.C_ConversionType_ID = " + Util.GetValueOfInt(dsInvoice.Tables[0].Rows[0]["C_ConversionType_ID"]) +
+                        " AND o.M_PriceList_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["M_PriceList_ID"]);
+                }
+            }
             //Added O.ISSALESQUOTATION='N' in where condition(Sales quotation will not display in Order dropdown)
             StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
                 + "' AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION='N' AND o.DocStatus IN ('CL','CO') ");
@@ -38,6 +56,11 @@ namespace VIS.Models
             if (OrgId > 0)
             {
                 sql.Append("AND o.AD_Org_ID = " + OrgId);
+            }
+
+            if (!String.IsNullOrEmpty(whereCondition))
+            {
+                sql.Append(whereCondition);
             }
 
             // when create lines fom open from M_Inout then pick records from match po having m_inoutline is not null 

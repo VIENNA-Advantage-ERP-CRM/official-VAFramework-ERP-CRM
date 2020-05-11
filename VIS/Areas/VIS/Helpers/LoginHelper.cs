@@ -63,7 +63,7 @@ namespace VIS.Helpers
 
 
             int fCount = Util.GetValueOfInt(cache[Common.Failed_Login_Count_Key]);
-            int passwordValidUpto = Util.GetValueOfInt(cache["Password_Valid_Upto"]);
+            int passwordValidUpto = Util.GetValueOfInt(cache[Common.Password_Valid_Upto_Key]);
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@username", model.Login1Model.UserValue);
 
@@ -122,7 +122,7 @@ namespace VIS.Helpers
 
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
                // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
-               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value,u.Name as username ")	//	4,5
+               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value, u.Name as username, u.Created ")	//	4,5
                .Append("FROM AD_User u")
                .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
@@ -185,28 +185,35 @@ namespace VIS.Helpers
                     TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
                     SetupCode setupInfo = null;
                     string userSKey = Util.GetValueOfString(dr["Value"]);
+                    int ADUserID = Util.GetValueOfInt(dr["AD_User_ID"]);
+                    // if token key don't exist for user, then create new
                     if (Token2FAKey.Trim() == "")
                     {
-                        string dbUser = "";
-                        if (DatabaseType.IsOracle)
-                            dbUser = VConnection.Get().Db_uid.ToUpper();
-                        else
-                            dbUser = VConnection.Get().Db_name;
-                        Token2FAKey = dbUser + userSKey;
                         model.Login1Model.QRFirstTime = true;
+                        Token2FAKey = userSKey;
+                        // get Random Number
+                        model.Login1Model.TokenKey2FA = GetRndNum();
+                        // create Token key based on Value, UserID and Random Number
+                        Token2FAKey = userSKey + ADUserID.ToString() + model.Login1Model.TokenKey2FA;
                     }
+                    else
+                    {
+                        // Decrypt token key saved in database
+                        string decKey = SecureEngine.Decrypt(Token2FAKey);
+                        Token2FAKey = userSKey + ADUserID.ToString() + decKey;
+                    }
+
                     setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 150, 150);
                     model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
 
                 model.Login1Model.Is2FAEnabled = enable2FA;
-                model.Login1Model.TokenKey2FA = Token2FAKey;
             }
 
-            if (fCount != -1 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
-            {
-                throw new Exception("MaxFailedLoginAttempts");
-            }
+            //if (fCount >0 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
+            //{
+            //    throw new Exception("MaxFailedLoginAttempts");
+            //}
             DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
             if (passwordValidUpto > 0 && (pwdExpireDate == null || DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0))
             {
@@ -303,7 +310,7 @@ namespace VIS.Helpers
                 cache[Common.Password_Valid_Upto_Key] = Common.GetPassword_Valid_Upto;
 
                 //then check setting in System Config, if found, then will replace default values.
-                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('Failed_Login_Count','Password_Valid_Upto') ");
+                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('FAILED_LOGIN_COUNT','PASSWORD_VALID_UPTO') ");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -328,6 +335,21 @@ namespace VIS.Helpers
             int pwdValidity = Util.GetValueOfInt(cache[Common.Password_Valid_Upto_Key]);
             return Common.UpdatePasswordAndValidity(newPwd, AD_User_ID, AD_User_ID, pwdValidity, null);
 
+        }
+
+        /// <summary>
+        /// Generate Random number of 16 characters and return
+        /// </summary>
+        /// <returns></returns>
+        public static string GetRndNum()
+        {
+            Random RNG = new Random();
+            StringBuilder builder = new StringBuilder();
+            while (builder.Length < 16)
+            {
+                builder.Append(RNG.Next(10).ToString());
+            }
+            return builder.ToString();
         }
 
         /// <summary>
@@ -683,24 +705,34 @@ namespace VIS.Helpers
 
         }
 
+        /// <summary>`
+        /// Validate OTP from Google Authenticator
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>true/false</returns>
         public static bool Validate2FAOTP(LoginModel model)
         {
             bool isValid = false;
-            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Is2FAEnabled FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
+            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Created, Is2FAEnabled, AD_User_ID FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
             if (dsUser != null && dsUser.Tables[0].Rows.Count > 0)
             {
                 TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                string dbUser = "";
-                if (DatabaseType.IsOracle)
-                    dbUser = VConnection.Get().Db_uid.ToUpper();
-                else
-                    dbUser = VConnection.Get().Db_name;
+                string Token2FAKey = Util.GetValueOfString(dsUser.Tables[0].Rows[0]["Value"]);
+                int ADUserID = Util.GetValueOfInt(dsUser.Tables[0].Rows[0]["AD_User_ID"]);
+                if (model.Login1Model.TokenKey2FA != null && model.Login1Model.TokenKey2FA != "")
+                    Token2FAKey = Token2FAKey.ToString() + ADUserID.ToString() + model.Login1Model.TokenKey2FA;
+                else if (Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]) != "")
+                {
+                    string decKey = Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]);
+                    decKey = SecureEngine.Decrypt(decKey);
+                    Token2FAKey = Token2FAKey.ToString() + ADUserID.ToString() + decKey;
+                }
 
-                string Token2FAKey = dbUser + dsUser.Tables[0].Rows[0]["Value"];
                 isValid = tfa.ValidateTwoFactorPIN(Token2FAKey, model.Login1Model.OTP2FA);
                 if (isValid && Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]).Trim() == "")
                 {
-                    int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_USER SET TokenKey2FA = '" + Token2FAKey + @"' WHERE 
+                    string encKey = SecureEngine.Encrypt(model.Login1Model.TokenKey2FA);
+                    int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_USER SET TokenKey2FA = '" + encKey + @"' WHERE 
                                     AD_USER_ID = " + model.Login1Model.AD_User_ID));
                 }
             }
