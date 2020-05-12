@@ -453,11 +453,6 @@ namespace VAdvantage.Common
         /// <returns></returns>
         public static bool UpdatePasswordAndValidity(string newPwd, int AD_User_ID, int UpdatedBy, int passwordValidity = -1, Ctx ctx = null)
         {
-            if (passwordValidity == 0)
-            {
-                return true;
-            }
-
             //If validity is unknow but context  available, then get from context
             if (passwordValidity == -1 && ctx != null)
             {
