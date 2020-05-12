@@ -3331,6 +3331,14 @@ namespace VAdvantage.Model
             try
             {
                 log.Fine("New=" + newRecord);
+
+                // JID_1624,JID_1625: If product or charge not selected, then show message "Please select Product or Charge".
+                if (GetM_Product_ID() == 0 && GetC_Charge_ID() == 0)
+                {
+                    log.SaveError("VIS_NOProductOrCharge", "");
+                    return false;
+                }
+
                 //	Charge
                 if (GetC_Charge_ID() != 0)
                 {
