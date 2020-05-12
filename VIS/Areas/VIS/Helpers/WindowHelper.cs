@@ -867,7 +867,7 @@ namespace VIS.Helpers
 
             if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
             {
-                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'"));
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE DocumentNo='" + rowData["documentno"] + "'"));
                 //Check value in DB 
                 if ((count > 0 && inserting) || (count > 1 && !inserting))
                 {
