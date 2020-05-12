@@ -231,6 +231,8 @@ namespace ViennaAdvantageServer.Process
                 inv.SetC_DocTypeTarget_ID(C_DocType_ID);
                 inv.SetC_BPartner_Location_ID(cont.GetBill_Location_ID());
                 inv.SetC_Currency_ID(cont.GetC_Currency_ID());
+                //JID_1536_3 - set conversion type from contract to invoice
+                inv.SetC_ConversionType_ID(cont.GetC_ConversionType_ID());
                 inv.SetC_PaymentTerm_ID(cont.GetC_PaymentTerm_ID());
                 inv.SetC_Campaign_ID(cont.GetC_Campaign_ID());
                 inv.SetIsSOTrx(true);
