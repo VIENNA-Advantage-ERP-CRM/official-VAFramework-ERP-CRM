@@ -163,7 +163,7 @@
                 if (_tStr != null && _tStr.length > 1) {
                     return "";
                 } else {
-                    return String(String(num).replace(/[^0-9.]+/g, ""));
+                    return String(String(num).replace(/[^0-9.-]+/g, ""));
                 }
             } else {
                 //return String(String(num).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ","));
@@ -172,7 +172,7 @@
                 if (_tStr != null && _tStr.length > 1) {
                     return "";
                 } else {
-                    return String(String(num).replace(/[^0-9,]+/g, "").replace(/[,]+/g, ","));
+                    return String(String(num).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ","));
                 }
             }
         }
@@ -201,38 +201,40 @@
                 var inputFrac = inputSplit[1].replace(/[\D\s\,_\-]+/g, "");
             }
             // Format the number string on thousand separator using the regex
-            var inputPrime = inputSplit[0].replace(/[\D\s\._\-]+/g, "");
+            var inputPrime = inputSplit[0].replace(/[\s\._]+/g, "");
             inputPrime = inputPrime ? parseInt(inputPrime, 10) : 0;
             if (inputFrac != undefined) {
                 if (_typeFormat == "init" || _typeFormat == "formatOnly") {
                     if (dotFormatter) {
                         // en-US
-                        return (inputPrime === 0) ? "" : (inputPrime.toLocaleString(language) + "." + inputFrac);
+                        //return (inputPrime === 0) ? "" : (inputPrime.toLocaleString(language) + "." + inputFrac);
+                        return inputPrime.toLocaleString(language) + "." + inputFrac;
                     } else {
                         // de-DE
-                        return (inputPrime === 0) ? "" : (inputPrime.toLocaleString(language) + "," + inputFrac);
+                        //return (inputPrime === 0) ? "" : (inputPrime.toLocaleString(language) + "," + inputFrac);
+                        return inputPrime.toLocaleString(language) + "," + inputFrac;
                     }
                 } else {
                     if (dotFormatter) {
-                        return (inputPrime === 0) ? "" : (inputPrime + "." + inputFrac);
+                        return inputPrime + "." + inputFrac;
                     } else {
-                        return (inputPrime === 0) ? "" : (inputPrime + "," + inputFrac);
+                        return inputPrime + "," + inputFrac;
                     }
                 }
             } else {
                 if (_typeFormat == "init" || _typeFormat == "formatOnly") {
                     if (dotFormatter) {
                         // en-US
-                        return (inputPrime === 0) ? "" : inputPrime.toLocaleString(language);
+                        return inputPrime.toLocaleString(language);
                     } else {
                         // de-DE
-                        return (inputPrime === 0) ? "" : inputPrime.toLocaleString(language);
+                        return  inputPrime.toLocaleString(language);
                     }
                 } else {
                     if (dotFormatter) {
-                        return (inputPrime === 0) ? "" : inputPrime;
+                        return  inputPrime;
                     } else {
-                        return (inputPrime === 0) ? "" : inputPrime;
+                        return  inputPrime;
                     }
                 }
             }

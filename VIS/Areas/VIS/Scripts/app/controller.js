@@ -3223,7 +3223,7 @@
                 minValue = field.getMinValue();
                 if ($.isNumeric(maxValue) && $.isNumeric(minValue)) {
                     if (field.getValue() > field.getMaxValue() || field.getValue() < field.getMinValue()) {
-                        VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_MustBetween") + " " + field.getMinValue() + " " + VIS.Msg.getMsg("VIS_And") + field.getMaxValue());
+                        VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_MustBetween") + " " + field.getMinValue() + " " + VIS.Msg.getMsg("VIS_And") + " " + field.getMaxValue());
                         return false;
                     }
                 }
@@ -4397,8 +4397,8 @@
                         IsKey: field.getIsKey(),
                         ColumnSQL: field.getColumnSQL(true),
                         IsEncryptedColumn: field.getIsEncryptedColumn(),
-                        IsParentColumn: field.getIsParentColumn()
-
+                        IsParentColumn: field.getIsParentColumn(),
+                        Name: field.getHeader()
                     });
                 }
                 return this.gFieldData;
@@ -4870,7 +4870,7 @@
             }
             else if (hasProcessedRecord.length > 0) //Single Record
             {
-                this.fireDataStatusEEvent("CannotDeleteTrx", "", true);
+                localthis.fireDataStatusEEvent("CannotDeleteTrx", "", true);
                 resolve(false);
                 return;
             }
@@ -6475,7 +6475,12 @@
 
         }
         else if (newValue == 'undefined' || newValue == null) {
-            ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, null);
+            if (!this.getIsParentTabField()) {
+                ctx.setWindowContext(_vo.windowNo, _vo.ColumnName, null);
+            }
+            else if (this.gridTab)
+                ctx.setTabRecordContext(_vo.windowNo, _vo.tabNo, _vo.ColumnName,
+                    null);
         }
         else if (typeof newValue == typeof Boolean || _vo.displayType == DisplayType.YesNo) {
 

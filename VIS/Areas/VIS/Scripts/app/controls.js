@@ -1879,6 +1879,14 @@
         this.inserting = false;
     };
 
+    VComboBox.prototype.getValue = function () {
+        var val = this.ctrl.val();
+        if (val == "-1") {
+            return null;
+        }
+        return val;
+    };
+
     /**
      *  recrete options of control
      *  @param data  object array
@@ -3222,6 +3230,9 @@
                 evt = null;
             }
         }
+        else if (newValue == null) {
+            this.ctrl.val("");
+        }
     };
 
     VTextBoxButton.prototype.getValue = function () {
@@ -3380,7 +3391,12 @@
                 if (event.keyCode == 189 && this.value.length == 0) {
                     return true;
                 }
-                //this.value = Number(this.value * -1);
+
+
+
+                var val = self.format.GetConvertedNumber(this.value, self.dotFormatter);
+                
+                this.value = Number(val) * -1;
                 setTimeout(function () {
                     $ctrl.trigger("change");
                 }, 100);
@@ -3500,8 +3516,9 @@
             var _value = e.target.value;
             $ctrl.attr("type", "text");
 
+            
             e.target.value = _value ? self.format.GetConvertedString(_value, self.dotFormatter) : '';
-
+            
             if (VIS.DisplayType.Amount == displayType) {
                 $ctrl.select();
             }

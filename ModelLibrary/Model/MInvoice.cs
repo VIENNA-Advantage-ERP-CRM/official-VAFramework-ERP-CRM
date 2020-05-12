@@ -1342,9 +1342,9 @@ namespace VAdvantage.Model
             }
 
 
-            // If lines are available and user is changing the pricelist on header than we have to restrict it because
-            // those lines are saved as privious pricelist prices or Payment term.. standard sheet issue no : SI_0344 / JID_0564 by Manjot
-            if (!newRecord && Is_ValueChanged("M_PriceList_ID"))
+            // If lines are available and user is changing the pricelist/conversiontype on header than we have to restrict it because
+            // those lines are saved as privious pricelist prices or Payment term.. standard sheet issue no : SI_0344 / JID_0564 / JID_1536_1 by Manjot
+            if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("C_ConversionType_ID")))
             {
                 MInvoiceLine[] lines = GetLines(true);
 
@@ -2027,7 +2027,8 @@ namespace VAdvantage.Model
                     {
                         if (payterm.IsVA009_Advance())
                         {
-                            _processMsg = Msg.GetMsg(GetCtx(), "PaymentTermIsInValid");
+                            // JID_0383: if payment term is selected as advnace. System should give error "Please do the advance payment".
+                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_SelectAdvancePayment");
                             return DocActionVariables.STATUS_INVALID;
                         }
                         else if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID())) > 0)

@@ -639,11 +639,7 @@ namespace VIS.Helpers
                             error = true;
                             message = ERROR + field.ColumnName + "= " + ((dataRowOld != null && dataRowOld[colNameLower] != null) ? dataRowOld[colNameLower] : "null").ToString()
                                     + " != DB: " + rowDataDB[colNameLower] + " -> " + dataRow[colNameLower];
-                            //log.fine(is);
-                            //	Object o1 = m_rowData[col];
-                            //	Object o2 = rowDataDB[col];
-                            //boolean eq = o1.equals(o2);
-                            //	log.fine((o1 == o2) + "  " + eq);
+                            
                         }
                     }	//	DataChanged
 
@@ -683,10 +679,7 @@ namespace VIS.Helpers
                 {
                     if (manualUpdate)
                         CreateUpdateSqlReset();
-                    //else
-                    //  rs.cancelRowUpdates();
-                    //rs.close();
-                    // ShowInfoMessage("SaveErrorDataChanged", "");
+                   
 
                     outData.IsError = true;
                     outData.FireEEvent = true;
@@ -718,7 +711,7 @@ namespace VIS.Helpers
                     }
                     else
                     {
-                        //	rs.insertRow();
+                       
                     }
                 }
                 else
@@ -856,6 +849,38 @@ namespace VIS.Helpers
             Trx trx = null;
             bool hasDocValWF = false;
 
+
+            //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
+            if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
+            {
+                //Check value in DB 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'"));
+                if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+                }
+            };
+
+            if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
+            {
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'"));
+                //Check value in DB 
+                if ((count > 0 && inserting) || (count > 1 && !inserting))
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("documentno")].Name, IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+                }
+            };
+
+
+
             // check if Maintain versions property is true / else skip
             if (inn.MaintainVersions)
             {
@@ -891,6 +916,7 @@ namespace VIS.Helpers
                     int parentWinID = inn.AD_WIndow_ID;
                     PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
                     //	No Persistent Object
+                    
                     if (poMas == null)
                     {
                         throw new NullReferenceException("No Persistent Obj");
@@ -1171,7 +1197,7 @@ namespace VIS.Helpers
                 if (field.IsVirtualColumn)
                     continue;
                 String columnName = field.ColumnName;
-                
+
                 //bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
 
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -1789,7 +1815,7 @@ namespace VIS.Helpers
             var lookupDirect = new Dictionary<string, Dictionary<object, string>>();
 
             List<JTable> outO = new List<JTable>();
-            
+
             JTable obj = null;
 
             MSession session = MSession.Get(ctx, true);
@@ -1900,13 +1926,13 @@ namespace VIS.Helpers
 
             return retVal;
         }
-/// <summary>
-/// Set Tree Record sql in if query is for on demnad tree records
-/// </summary>
-/// <param name="ctx"></param>
-/// <param name="AD_Table_ID"></param>
-/// <param name="sqlIn"></param>
-        private void SetTreeRecordSql(Ctx ctx , int AD_Table_ID, SqlParamsIn sqlIn)
+        /// <summary>
+        /// Set Tree Record sql in if query is for on demnad tree records
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="AD_Table_ID"></param>
+        /// <param name="sqlIn"></param>
+        private void SetTreeRecordSql(Ctx ctx, int AD_Table_ID, SqlParamsIn sqlIn)
         {
             string tableName = MTable.GetTableName(ctx, AD_Table_ID);
             MTree tree = new MTree(ctx, sqlIn.tree_id, null);

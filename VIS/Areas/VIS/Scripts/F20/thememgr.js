@@ -15,9 +15,15 @@
                 applyTheme(clr);
             });
 
-            var def = li.find("div.vis-theme-rec");
-            if (def.length > 0) {
-                applyTheme($(def[0]).data("color"));
+            //Get Saved or deafult theme 
+            if (VIS.Application.theme && VIS.Application.theme != "") {
+                applyTheme(VIS.Application.theme);
+            }
+            else {
+                var def = li.find("div.vis-theme-rec");
+                if (def.length > 0) {
+                    applyTheme($(def[0]).data("color"));
+                }
             }
         }
 
@@ -29,7 +35,6 @@
             root.style.setProperty('--v-c-secondary', clrs[2]);
             root.style.setProperty('--v-c-on-secondary', clrs[3]);
         }
-
 
         return {
             init: init,

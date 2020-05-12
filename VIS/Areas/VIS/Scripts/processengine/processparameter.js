@@ -330,6 +330,7 @@
                     vEditor.setReadOnlyTextbox(false);
                     vEditor.getControl().css("width", "100%");
                 }
+                
 
             }
             //  GridField => VEditor - New Field value to be updated to editor
@@ -338,6 +339,9 @@
 
             this.vEditors.push(vEditor);                   //  add to Editors
             this.addFields(label, vEditor);
+            if (i == 0 && vEditor) {
+                vEditor.setDefaultFocus(true);
+            }
 
             if (mField.getIsRange()) {
                 this.addLine(); // add new line

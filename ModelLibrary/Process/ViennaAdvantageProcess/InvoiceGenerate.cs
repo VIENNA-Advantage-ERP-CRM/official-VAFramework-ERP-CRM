@@ -57,6 +57,8 @@ namespace ViennaAdvantage.Process
         private MBPartner _bp = null;
         //StringBuilder
         private StringBuilder _msg = new StringBuilder();
+        // default conversion type
+        private int defaultConversionType = 0;
         #endregion
 
         /**
@@ -125,10 +127,11 @@ namespace ViennaAdvantage.Process
          */
         protected override String DoIt()
         {
+            defaultConversionType = MConversionType.GetDefault(GetAD_Client_ID());
             log.Info("Selection=" + _Selection + ", DateInvoiced=" + _DateInvoiced
                 + ", AD_Org_ID=" + _AD_Org_ID + ", C_BPartner_ID=" + _C_BPartner_ID
                 + ", C_Order_ID=" + _C_Order_ID + ",  VAdvantage.Process.DocAction=" + _docAction
-                + ", Consolidate=" + _ConsolidateDocument);
+                + ", Consolidate=" + _ConsolidateDocument + ", Default Conversion Type = " + defaultConversionType);
             //
             String sql = null;
 
@@ -160,7 +163,7 @@ namespace ViennaAdvantage.Process
             // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
             sql += " AND EXISTS (SELECT * FROM C_OrderLine ol "
                     + "WHERE o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
-                + "ORDER BY AD_Org_ID, C_BPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
+                + "ORDER BY AD_Org_ID, C_BPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, C_ConversionType_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
 
             //sql += " AND EXISTS (SELECT * FROM C_OrderLine ol INNER JOIN c_order ord "
             //      + "  ON (ord.c_order_id = ol.c_order_id) WHERE ord.C_Order_ID  =ol.C_Order_ID "
@@ -264,7 +267,7 @@ namespace ViennaAdvantage.Process
                     //}
                 }
                 // Credit Limit End
-
+                
                 //	New Invoice Location
                 // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
                 if (!_ConsolidateDocument
@@ -272,7 +275,10 @@ namespace ViennaAdvantage.Process
                     && (_invoice.GetC_BPartner_Location_ID() != order.GetBill_Location_ID()
                         || _invoice.GetC_PaymentTerm_ID() != order.GetC_PaymentTerm_ID()
                         || _invoice.GetM_PriceList_ID() != order.GetM_PriceList_ID()
-                        || _invoice.GetAD_Org_ID() != order.GetAD_Org_ID())))
+                        || _invoice.GetAD_Org_ID() != order.GetAD_Org_ID()
+                        || ((_invoice.GetC_ConversionType_ID() != 0 ? _invoice.GetC_ConversionType_ID() : defaultConversionType)
+                             != (order.GetC_ConversionType_ID() != 0 ? order.GetC_ConversionType_ID() : defaultConversionType))
+                       )))
                 {
                     CompleteInvoice();
                 }

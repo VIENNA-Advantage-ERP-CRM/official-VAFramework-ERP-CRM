@@ -4,27 +4,29 @@
 {
     @Html.AntiForgeryToken()
 
-    
+
     <div class="login-wrap">
         <div class="login-content">
             <div class="lock">
                 <img src="~/Areas/VIS/Images/login/lock.png" alt="">
             </div>
 
-            <div class="login-form">
+            <div id="login-form-1" class="login-form">
 
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="~/Areas/VIS/Images/login/user-ico.png" alt="icon"></label>
+                        <img src="~/Areas/VIS/Images/login/user-ico.png" alt="icon">
+                    </label>
                     @*<input type="text" name="user" placeholder="User Name">*@
-                    @Html.TextBoxFor(m => m.Login1Model.UserName, new { autofocus = "autofocus", id = "loginName", })
-                    @Html.ValidationMessageFor(m => m.Login1Model.UserName)
+                    @Html.TextBoxFor(m => m.Login1Model.UserValue, new { autofocus = "autofocus", id = "loginName", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.UserValue)
                 </div>
                 <!-- end of input-row -->
 
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon"></label>
+                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                    </label>
                     @Html.PasswordFor(m => m.Login1Model.Password, new { id = "txtPwd", })
                     @Html.ValidationMessageFor(m => m.Login1Model.Password)
                     @*<input type="password" name="pass" placeholder="Password">*@
@@ -33,43 +35,44 @@
 
                 <div class="input-row">
                     <label class="input-icon">
-                        <img src="~/Areas/VIS/Images/login/lang-ico.png" alt="icon"></label>
+                        <img src="~/Areas/VIS/Images/login/lang-ico.png" alt="icon">
+                    </label>
                     <div class="language">
                         @Html.DropDownListFor(m => m.Login1Model.LoginLanguage,@*new[]
-        {
-                   new SelectListItem() {Text = "English", Value="en_US"},
-                   new SelectListItem() {Text = "\u0411\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 (BG)", Value="bg_BG"},
-                   new SelectListItem() {Text = "Catal\u00e0", Value="ca_ES"},
-                   new SelectListItem() {Text = "Dansk", Value="da_DK"},
-                   new SelectListItem() {Text = "Deutsch",  Value="de_DE"},
-                   new SelectListItem() {Text = "English(AU)", Value="en_AU"},
-                   new SelectListItem() {Text = "English(UK)", Value="en_GB"},
-                   new SelectListItem() {Text = "Finnish", Value="fi_FI"},
-                   new SelectListItem() {Text = "Italiano",  Value="it_IT"},
-                   new SelectListItem() {Text = "\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR)",  Value="ar_TN"},
-                   new SelectListItem() {Text = "العربية (Iraq)",  Value="ar_IQ"},
-                   new SelectListItem() {Text = "Espa\u00f1ol",  Value="es_ES"},
-                        new SelectListItem() {Text = "Espa\u00f1ol (UY)",  Value="es_UY"},
-                   new SelectListItem() {Text = "Fran\u00e7ais",  Value="fr_FR"},
-                   new SelectListItem() {Text = "Hrvatski",  Value="hr_HR"},
-                   new SelectListItem() {Text = "Indonesia Bahasa",  Value="id_ID"},
-                   new SelectListItem() {Text = "Malay",  Value="ms_BN"},
-                   new SelectListItem() {Text = "Norsk",  Value="nb_NO"},
-                   new SelectListItem() {Text = "Portuguese (BR)",  Value="pt_BR"},
-                   new SelectListItem() {Text = "Rom\u00e2n\u0103",  Value="ro_RO"},
-                   new SelectListItem() {Text = "Farsi",  Value="fa_IR"},
-                   new SelectListItem() {Text = "Polski",  Value="pl_PL"},
-                   new SelectListItem() {Text = "Slovenski",  Value="sl_SI"},
-                   new SelectListItem() {Text = "\u0420\u0443\u0441\u0441\u043a\u0438\u0439 (Russian)",  Value="ru_RU"},
-                   new SelectListItem() {Text = "Nederlands",  Value="nl_NL"},
-                   new SelectListItem() {Text = "Svenska",  Value="sv_SE"},
-                   new SelectListItem() {Text = "کوردی (Kurdi)",  Value="ar_KU"},
-                     new SelectListItem() {Text = "\u7b80\u4f53\u4e2d\u6587 (CN)",  Value="zh_CN"},
-                     new SelectListItem() {Text = "\u7b80\u4f53\u4e2d\u6587 (Hongkong)",  Value="zh_HK"},
-                     new SelectListItem() {Text = "العربية (Saudi Arabia)",  Value="ar_SA"},
-                       new SelectListItem() {Text = "繁體中文 (Chinese Taiwan)",  Value="zh_TW"},
-        }*@
-new SelectList(ViewBag.Languages,"Key","Name"),       new { id = "cmbLang" })
+            {
+                       new SelectListItem() {Text = "English", Value="en_US"},
+                       new SelectListItem() {Text = "\u0411\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 (BG)", Value="bg_BG"},
+                       new SelectListItem() {Text = "Catal\u00e0", Value="ca_ES"},
+                       new SelectListItem() {Text = "Dansk", Value="da_DK"},
+                       new SelectListItem() {Text = "Deutsch",  Value="de_DE"},
+                       new SelectListItem() {Text = "English(AU)", Value="en_AU"},
+                       new SelectListItem() {Text = "English(UK)", Value="en_GB"},
+                       new SelectListItem() {Text = "Finnish", Value="fi_FI"},
+                       new SelectListItem() {Text = "Italiano",  Value="it_IT"},
+                       new SelectListItem() {Text = "\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR)",  Value="ar_TN"},
+                       new SelectListItem() {Text = "العربية (Iraq)",  Value="ar_IQ"},
+                       new SelectListItem() {Text = "Espa\u00f1ol",  Value="es_ES"},
+                            new SelectListItem() {Text = "Espa\u00f1ol (UY)",  Value="es_UY"},
+                       new SelectListItem() {Text = "Fran\u00e7ais",  Value="fr_FR"},
+                       new SelectListItem() {Text = "Hrvatski",  Value="hr_HR"},
+                       new SelectListItem() {Text = "Indonesia Bahasa",  Value="id_ID"},
+                       new SelectListItem() {Text = "Malay",  Value="ms_BN"},
+                       new SelectListItem() {Text = "Norsk",  Value="nb_NO"},
+                       new SelectListItem() {Text = "Portuguese (BR)",  Value="pt_BR"},
+                       new SelectListItem() {Text = "Rom\u00e2n\u0103",  Value="ro_RO"},
+                       new SelectListItem() {Text = "Farsi",  Value="fa_IR"},
+                       new SelectListItem() {Text = "Polski",  Value="pl_PL"},
+                       new SelectListItem() {Text = "Slovenski",  Value="sl_SI"},
+                       new SelectListItem() {Text = "\u0420\u0443\u0441\u0441\u043a\u0438\u0439 (Russian)",  Value="ru_RU"},
+                       new SelectListItem() {Text = "Nederlands",  Value="nl_NL"},
+                       new SelectListItem() {Text = "Svenska",  Value="sv_SE"},
+                       new SelectListItem() {Text = "کوردی (Kurdi)",  Value="ar_KU"},
+                         new SelectListItem() {Text = "\u7b80\u4f53\u4e2d\u6587 (CN)",  Value="zh_CN"},
+                         new SelectListItem() {Text = "\u7b80\u4f53\u4e2d\u6587 (Hongkong)",  Value="zh_HK"},
+                         new SelectListItem() {Text = "العربية (Saudi Arabia)",  Value="ar_SA"},
+                           new SelectListItem() {Text = "繁體中文 (Chinese Taiwan)",  Value="zh_TW"},
+            }*@
+new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
                     </div>
                 </div>
                 <!-- end of input-row -->
@@ -85,13 +88,57 @@ new SelectList(ViewBag.Languages,"Key","Name"),       new { id = "cmbLang" })
                     </div>
                 </div>
                 <input name="Login1Model.RememberMe" type="hidden" value="false">
-                <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
-                <div class="login-button">
-                    <input class="btn-login" id="btnLogin1" type="submit" value="Log in" />
-                </div>
-                <!-- end of input-row -->
-                @Html.ValidationSummary()
+
+
             </div>
+
+            <div id="login-form-2" class="login-form">
+                <div class="input-row">
+                    <label class="input-icon">
+                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                    </label>
+                    @Html.PasswordFor(m => m.Login1Model.NewPassword, new { id = "txtNewPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.NewPassword)
+                </div>
+                <div class="input-row">
+                    <label class="input-icon">
+                        <img src="~/Areas/VIS/Images/login/pass-ico.png" alt="icon">
+                    </label>
+                    @Html.PasswordFor(m => m.Login1Model.ConfirmNewPassword, new { id = "txtCNewPwd", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.ConfirmNewPassword)
+                </div>
+
+            </div>
+
+            <div id="login-form-3" class="login-form">
+                <div class="vis-loginQRSec">
+                    <div class="vis-loginQRLabel"><label id="lblScanQRCode"></label></div>
+                    <div id="vis-loginqrcode" class="vis-clsloginqr">
+                        <img id="QRCdeimg" src="" alt="QR CODE HERE" />
+                    </div>
+                </div>
+                <div class="vis-loginQRLabel" style="font-size: 15px;"> <label id="lblEnterVerCode"></label></div>
+                <div class="input-row">
+                    <label class="input-icon">
+                        <img src="~/Areas/VIS/Images/login/mob-ico.png" alt="icon">
+                    </label>
+
+                    @Html.PasswordFor(m => m.Login1Model.OTP2FA, new { id = "txt2FAOTP", })
+                    @Html.ValidationMessageFor(m => m.Login1Model.OTP2FA)
+                </div>
+                @Html.HiddenFor(m => m.Login1Model.Login1DataOTP, new { id = "login3Data" })
+                <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
+            </div>
+
+
+            <div class="login-button">
+                <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
+                <input class="btn-login" id="btnLogin1" type="submit" value="Log in" />
+            </div>
+            <!-- end of input-row -->
+            @*@Html.HiddenFor(m => m.Login2Model.Login1Data, new { id = "login1Data" })*@
+            @Html.ValidationSummary()
+
             <!-- end of login-form -->
         </div>
         <!-- end of login-content -->
@@ -102,7 +149,7 @@ new SelectList(ViewBag.Languages,"Key","Name"),       new { id = "cmbLang" })
 
     </div>
     <!-- end of login-wrap -->
-    
+
 }
 
 

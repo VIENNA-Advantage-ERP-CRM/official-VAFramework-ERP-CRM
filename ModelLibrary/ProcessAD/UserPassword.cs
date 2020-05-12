@@ -75,7 +75,7 @@ namespace VAdvantage.Process
                 throw new ArgumentException("@UserCannotUpdate@");
 
             // SuperUser and System passwords can only be updated by themselves
-            if (user.IsSystemAdministrator() && p_AD_User_ID != GetAD_User_ID())
+            if (user.IsSystemAdministrator() && p_AD_User_ID != GetAD_User_ID() && GetAD_User_ID() != 100)
                 throw new ArgumentException("@UserCannotUpdate@");
 
             log.Log(Level.SEVERE, "UserPassword Change Log Step Check for valid user=>" + Convert.ToString(p_AD_User_ID));
@@ -94,10 +94,25 @@ namespace VAdvantage.Process
 
             else if (!p_CurrentPassword.Equals(current.GetPassword()))
                 throw new ArgumentException("@OldPasswordNoMatch@");
+
+            string validatePwd = Common.Common.ValidatePassword(null, p_NewPassword, p_NewPassword);
+            if (validatePwd.Length > 0)
+                throw new ArgumentException(Msg.GetMsg(GetCtx(), validatePwd));
+
             log.Log(Level.SEVERE, "UserPassword Change Log Step Password Change=>" + Convert.ToString(p_AD_User_ID));
             String originalPwd = p_NewPassword;
 
-            String sql = "UPDATE AD_User SET Updated=SYSDATE, UpdatedBy=" + GetAD_User_ID();
+            String sql = "UPDATE AD_User SET Updated=SYSDATE,FailedloginCount=0, UpdatedBy=" + GetAD_User_ID();
+            if (user.GetAD_User_ID() == current.GetAD_User_ID())
+            {
+                Common.Common.UpdatePasswordAndValidity(p_NewPassword, p_AD_User_ID, GetAD_User_ID(), -1, GetCtx());
+            }
+            else
+            {
+                sql += ",  PasswordExpireOn = null";
+            }
+
+
             if (!string.IsNullOrEmpty(p_NewPassword))
             {
                 MColumn column = MColumn.Get(GetCtx(), 417); // Password Column 
@@ -116,82 +131,7 @@ namespace VAdvantage.Process
             int iRes = DB.ExecuteQuery(sql, null, Get_Trx());
             if (iRes > 0)
             {
-                bool error = false;
-                //Check for yellowFin user password change if BI user is true..................
-                object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VA037_' and IsActive = 'Y'"); // is active check by vinay bhatt on 18 oct 2018
-                if (ModuleId != null && ModuleId != DBNull.Value)
-                {
-                    if (user.IsVA037_BIUser())
-                    {
-                        var Dll = Assembly.Load("VA037");
-                        var BIUser = Dll.GetType("VA037.BIProcess.BIUsers");
-                        var objBIUser = Activator.CreateInstance(BIUser);
-                        var ChangeBIPassword = BIUser.GetMethod("ChangeBIPassword");
-                        bool value = (bool)ChangeBIPassword.Invoke(objBIUser, new object[] {GetCtx(), GetAD_Client_ID(), Convert.ToString(user.GetVA037_BIUserName()), originalPwd });
-                        if (value)
-                        {
-                            //user.SetPassword(p_NewPassword);
-                            error = false;
-                            user.SetPassword(originalPwd);
-                            //return "OK";
-                        }
-                        else
-                        {
-                            error = true;
-                           // return "@Error@";
-                        }
-                    }
-                    else
-                    {
-                        error = false;
-                        user.SetPassword(originalPwd);
-                       // return "OK";
-                    }
-                }
-                ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VA039_' and IsActive = 'Y'"); // is active check by vinay bhatt
-                if (ModuleId != null && ModuleId != DBNull.Value)
-                {
-                    MUser obj = new MUser(GetCtx(), p_AD_User_ID, null);
-                    if (obj.IsVA039_IsJasperUser() == true)
-                    {
-                        var Dll = Assembly.Load("VA039");
-                        var JasperUser = Dll.GetType("VA039.Classes.Users");
-                        var objJasperUser = Activator.CreateInstance(JasperUser);
-                        var BICreateUser = JasperUser.GetMethod("ModifyUserPassword");
-                        object[] args = new object[] { GetCtx(),originalPwd};
-                        bool value = (bool)BICreateUser.Invoke(objJasperUser, args);
-                        if (value)
-                        {
-                            error = false;
-                            user.SetPassword(originalPwd);
-                           
-                            //return "@Error@";
-                        }
-                        else
-                        {
-                            error = true;
-                            goto PasswordError;
-                           // return "OK";
-                        }
-                    }
-                   
-                }
-                else
-                {
-                    error = false;
-                    user.SetPassword(originalPwd);
-                   // return "OK";
-                }
-            PasswordError:
-                if (error)
-                {
-                    return "@Error@";
-                }
-                else
-                {
-                    return "OK";
-                    
-                }
+                return "@OK@";
             }
             else
                 return "@Error@";

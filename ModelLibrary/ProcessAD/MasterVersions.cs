@@ -138,6 +138,7 @@ namespace VAdvantage.Process
                     tblVer.SetIsDeleteable(false);
                     tblVer.SetDescription("Table for maintaining versions of " + tableName);
                     tblVer.SetHelp("Table for maintaining versions of " + tableName);
+                    tblVer.SetIsMaintainVersions(false);
                     //tblVer.SetAD_Window_ID(Ver_AD_Window_ID);
                     if (!tblVer.Save())
                     {

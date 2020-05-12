@@ -2028,8 +2028,12 @@
 
         if (curCtrller.curTab) {
             curTabNo = curCtrller.curTab.getTabNo();
-            AD_Table_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "AD_Table_ID");
-            Record_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "Record_ID");
+            // resolved issue for zoom from notification button
+            AD_Table_ID = ctx.getTabRecordContext(aPanel.curWindowNo, curTabNo, "AD_Table_ID", false);
+            Record_ID = ctx.getTabRecordContext(aPanel.curWindowNo, curTabNo, "Record_ID", false);
+
+            //AD_Table_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "AD_Table_ID");
+            //Record_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "Record_ID");
         }
         if (AD_Table_ID < 0)
             AD_Table_ID = ctx.getContextAsInt(aPanel.curWindowNo, "AD_Table_ID");

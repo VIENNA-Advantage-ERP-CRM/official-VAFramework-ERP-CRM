@@ -78,6 +78,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.Tasks.v1.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Authenticator">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Authenticator.dll</HintPath>
+    </Reference>
     <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ViennaAdvantageWeb\Dll\Google.GData.Client.dll</HintPath>
@@ -178,6 +181,7 @@
     <Content Include="Areas\VIS\Content\F20\Media.css" />
     <Content Include="Areas\VIS\Content\F20\site-rtl.css" />
     <Content Include="Areas\VIS\Content\F20\Site.css" />
+    <Content Include="Areas\VIS\Content\F20\Themecnfgtr.css" />
     <Content Include="Areas\VIS\Content\F20\Window.css" />
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
@@ -727,6 +731,7 @@
     <Content Include="Areas\VIS\Scripts\F20\atabpanel.js" />
     <Content Include="Areas\VIS\Scripts\F20\aviewcontroller.js" />
     <Content Include="Areas\VIS\Scripts\F20\atabbedpanemgr.js" />
+    <Content Include="Areas\VIS\Scripts\F20\themecnfgtr.js" />
     <Content Include="Areas\VIS\Scripts\F20\thememgr.js" />
     <Content Include="Areas\VIS\Scripts\F20\vcardview.js" />
     <Content Include="Areas\VIS\Scripts\F20\veditview.js" />
@@ -842,6 +847,7 @@
     <Compile Include="Areas\VIS\Controllers\SmsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
     <Compile Include="Areas\VIS\Controllers\TabPanel\BiPanelController.cs" />
+    <Compile Include="Areas\VIS\Controllers\ThemeController.cs" />
     <Compile Include="Areas\VIS\Controllers\TreeMaintenanceController.cs" />
     <Compile Include="Areas\VIS\Controllers\UserPreferenceController.cs" />
     <Compile Include="Areas\VIS\Controllers\ValuePreferenceController.cs" />
@@ -859,6 +865,7 @@
     <Compile Include="Areas\VIS\DataContracts\FormData.cs" />
     <Compile Include="Areas\VIS\DataContracts\ProcessData.cs" />
     <Compile Include="Areas\VIS\DataContracts\SqlParams.cs" />
+    <Compile Include="Areas\VIS\DataContracts\ThemeData.cs" />
     <Compile Include="Areas\VIS\DataContracts\WindowData.cs" />
     <Compile Include="Areas\VIS\DBase\DB.cs" />
     <Compile Include="Areas\VIS\Filters\AjaxAuthorizeAttribute.cs" />
@@ -950,6 +957,7 @@
     <Compile Include="Areas\VIS\Models\SmsModel.cs" />
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
     <Compile Include="Areas\VIS\Models\TabPanels\BiPanelModel.cs" />
+    <Compile Include="Areas\VIS\Models\ThemeModel.cs" />
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
     <Compile Include="Areas\VIS\Models\ValuePreferenceModel.cs" />
@@ -982,6 +990,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Areas\VIS\Views\Theme\ThemeCnfgtr.cshtml" />
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
     <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
     <Content Include="packages.config" />
