@@ -139,7 +139,21 @@ Globalize.addCultureInfo( "zh-TW", "default", {
 	    "LoadingPreference": "載入預設",
 	    "Completed": "完成",
 	    //new
-	    "RememberMe": "記得我",
+        "RememberMe": "記得我",
+        "FillMandatoryFields": "填寫必填字段",
+        "BothPwdNotMatch": "兩個密碼必須匹配.",
+        "mustMatchCriteria": "密碼的最小長度為5。密碼必須至少包含1個大寫字符，1個小寫字符，一個特殊字符（@ $！％*？＆）和一位數字。 密碼必須以字符開頭。",
+        "NotLoginUser": "用戶無法登錄系統",
+        "MaxFailedLoginAttempts": "用戶帳戶已鎖定。 失敗的最大登錄嘗試次數超過了定義的限制。 請與管理員聯繫。",
+        "UserNotFound": "用戶名錯誤。",
+        "RoleNotDefined": "沒有為此用戶定義角色",
+        "oldNewSamePwd": "舊密碼和新密碼必須不同。",
+        "NewPassword": "新密碼",
+        "NewCPassword": "確認新密碼",
+        "EnterOTP": "輸入一次性密碼",
+        "WrongOTP": "輸入的OTP錯誤",
+        "ScanQRCode": "掃描與谷歌身份驗證碼",
+        "EnterVerCode": "輸入您的移動應用程序生成的OTP"
 	}
 });
 
