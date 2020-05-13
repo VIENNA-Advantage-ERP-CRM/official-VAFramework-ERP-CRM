@@ -211,7 +211,7 @@ namespace VIS.Models
             {
                 sql += " VA009_PaymentMethod_ID,";
             }
-            sql += " C_BPartner_ID, C_Currency_ID, GrandTotal, C_Bpartner_Location_ID"
+            sql += " C_BPartner_ID, C_Currency_ID, GrandTotal, C_Bpartner_Location_ID , C_ConversionType_ID"
                 + " FROM C_Order WHERE C_Order_ID = " + C_Order_ID;
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -226,6 +226,7 @@ namespace VIS.Models
                 retDic["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
                 retDic["GrandTotal"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["GrandTotal"]);
                 retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
+                retDic["C_ConversionType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
             }
             return retDic;
         }

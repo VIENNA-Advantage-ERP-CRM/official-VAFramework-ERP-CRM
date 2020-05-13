@@ -5554,7 +5554,7 @@
             //}
         }
         catch (err) {
-            this.setCalloutActive(false);            
+            this.setCalloutActive(false);
             this.log.log(Level.SEVERE, "BankStmt_DateAcct", err);
             return err.toString();
         }
@@ -16652,7 +16652,7 @@
     VIS.Utility.inheritPrototype(CalloutTax, VIS.CalloutEngine); //inherit prototype
     CalloutTax.prototype.Tax = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
-        if (value == null || value == 0 ||value.toString() == "") {
+        if (value == null || value == 0 || value.toString() == "") {
             return "";
         }
         var C_Tax_ID = 0;
@@ -16688,7 +16688,7 @@
             }
             else {
                 mTab.setValue("GrandTotal", LineNetAmt);
-            }           
+            }
         }
         else {
             // JID_0872: Grand Total is not calculating right
@@ -18365,57 +18365,37 @@
         //  Payment Date
         var ts = mTab.getValue("DateTrx");
         if (ts == null) {
-            //ts = DateTime.Now.Date; //new DateTime(CommonFunctions.CurrentTimeMillis());
             ts = new Date();
         }
-        //
-        //var sql = "SELECT C_BPartner_ID,C_Currency_ID, GrandTotal "
-        //    + "FROM C_Order WHERE C_Order_ID=@param1"; 	// #1
-
-        var sql = "";
-        var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
-        if (_CountVA009 > 0) {
-            sql = "SELECT VA009_PaymentMethod_ID,C_BPartner_ID,C_Currency_ID, GrandTotal,C_Bpartner_Location_Id "
-                + "FROM C_Order WHERE C_Order_ID=@param1";  // #1
-        }
-        else {
-            sql = "SELECT C_BPartner_ID,C_Currency_ID, GrandTotal,C_Bpartner_Location_Id "
-                + "FROM C_Order WHERE C_Order_ID=@param1";  // #1
-        }
-
+        //JID_1536_4 - set conversion Type on order selection
+        var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA009_");
+        var paramString = DataPrefix["VA009_"] + "," + C_Order_ID.toString();
         var dr = null;
-        var param = [];
-        //SqlParameter[] param = new SqlParameter[1];
         try {
-            param[0] = new VIS.DB.SqlParam("@param1", C_Order_ID);
-            dr = VIS.DB.executeReader(sql, param, null);
-
-            if (dr.read()) {
-                mTab.setValue("C_BPartner_ID", Util.getValueOfInt(dr.get("c_bpartner_id")));//.getInt(1)));
-                mTab.setValue("C_Bpartner_Location_Id", Util.getValueOfInt(dr.get("c_bpartner_location_id")));
-                var C_Currency_ID = Util.getValueOfInt(dr.get("c_currency_id"));//.getInt(2);					//	Set Order Currency
-                mTab.setValue("C_Currency_ID", C_Currency_ID);
+            dr = VIS.dataContext.getJSONRecord("MPayment/GetOrderData", paramString);
+            if (dr != null) {
+                mTab.setValue("C_BPartner_ID", Util.getValueOfInt(dr["C_BPartner_ID"]));
+                mTab.setValue("C_Bpartner_Location_Id", Util.getValueOfInt(dr["C_BPartner_Location_ID"]));
+                mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr["C_Currency_ID"]));
+                mTab.setValue("C_ConversionType_ID", Util.getValueOfInt(dr["C_ConversionType_ID"]));
                 //
-                var grandTotal = Util.getValueOfDecimal(dr.get("grandtotal"));//.getBigDecimal(3);		//	Set Pay Amount
+                var grandTotal = Util.getValueOfDecimal(dr["GrandTotal"]);
                 if (grandTotal == null) {
                     grandTotal = VIS.Env.ZERO;
                 }
-                if (_CountVA009 > 0) {
-                    var PaymentMethod = Util.getValueOfInt(dr.get("va009_paymentmethod_id"));
+                if (DataPrefix["VA009_"]) {
+                    var PaymentMethod = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
                     mTab.setValue("VA009_PaymentMethod_ID", PaymentMethod);
                 }
                 mTab.setValue("PayAmt", grandTotal);
             }
-            dr.close();
         }
         catch (err) {
             if (dr != null) {
-                dr.close();
                 dr = null;
             }
             this.log.log(Level.SEVERE, sql, err);
             this.setCalloutActive(false);
-            //return e.getLocalizedMessage();
             return err.message;
         }
 
@@ -19607,7 +19587,7 @@
     CalloutOrderContract.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
 
-        if (value == null || value == 0 ||value.toString() == "") {
+        if (value == null || value == 0 || value.toString() == "") {
             return "";
         }
         try {  ///
