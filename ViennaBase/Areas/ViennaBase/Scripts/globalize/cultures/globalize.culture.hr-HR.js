@@ -121,7 +121,21 @@ Globalize.addCultureInfo( "hr-HR", "default", {
 	    "VerifyUserLanguage": "Provjera korisnika i jezik",
 	    "LoadingPreference": "Učitavanje sučelja",
 	    "Completed": "dovršen",
-	    "RememberMe": "Zapamti me",
+        "RememberMe": "Zapamti me",
+        "FillMandatoryFields": "Ispunite obavezna polja",
+        "BothPwdNotMatch": "Obje lozinke moraju se podudarati.",
+        "mustMatchCriteria": "Minimalna duljina lozinke je 5. Lozinka mora imati najmanje 1 znak s velikim slovom, 1 znak malih slova, jedan poseban znak (@ $!% *? &) I jednu znamenku. Lozinka mora početi s znakom.",
+        "NotLoginUser": "Korisnik se ne može prijaviti u sustav",
+        "MaxFailedLoginAttempts": "Korisnički račun je zaključan. Maksimalni neuspjeli pokušaji prijave premašuju definiranu granicu. Molimo kontaktirajte administratora.",
+        "UserNotFound": "Korisničko ime nije ispravno.",
+        "RoleNotDefined": "Za ovog korisnika nije definirana uloga",
+        "oldNewSamePwd": "stara i nova lozinka moraju se razlikovati.",
+        "NewPassword": "Nova lozinka",
+        "NewCPassword": "Potvrdi novu lozinku",
+        "EnterOTP": "Unesite OTP",
+        "WrongOTP": "Pogrešno ušao OTP",
+        "ScanQRCode": "Skenirajte kôd pomoću Google Autentifikatora",
+        "EnterVerCode": "Unesite OTP generiran od strane vaše mobilne aplikacije"
 	}
 });
 

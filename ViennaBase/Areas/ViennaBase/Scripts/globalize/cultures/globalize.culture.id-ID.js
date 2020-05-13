@@ -115,7 +115,21 @@ Globalize.addCultureInfo( "id-ID", "default", {
     "VerifyUserLanguage": "Verifikasi Bahasa Pengguna",
     "LoadingPreference": "Loading Preference",
     "Completed": "selesai",
-    "RememberMe": "Ingat Saya",
+        "RememberMe": "Ingat Saya",
+        "FillMandatoryFields": "Isi Bidang Wajib",
+        "BothPwdNotMatch": "Kedua kata sandi harus cocok.",
+        "mustMatchCriteria": "Panjang minimum untuk kata sandi adalah 5. Kata sandi harus memiliki setidaknya 1 karakter huruf besar, 1 karakter huruf kecil, satu karakter khusus (@ $!% *? &) Dan satu digit. Kata sandi harus dimulai dengan karakter.",
+        "NotLoginUser": "Pengguna tidak dapat masuk ke sistem",
+        "MaxFailedLoginAttempts": "Akun pengguna terkunci. Upaya login gagal maksimum melebihi batas yang ditentukan. Silakan hubungi administrator.",
+        "UserNotFound": "Nama pengguna salah.",
+        "RoleNotDefined": "Tidak ada peran yang ditentukan untuk pengguna ini",
+        "oldNewSamePwd": "kata sandi lama dan kata sandi baru harus berbeda.",
+        "NewPassword": "kata sandi baru",
+        "NewCPassword": "Konfirmasi password baru",
+        "EnterOTP": "Masukkan OTP",
+        "WrongOTP": "Salah OTP Dimasukkan",
+        "ScanQRCode": "Pindai kodenya dengan Google Authenticator",
+        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi seluler Anda"
 	}
 });
 

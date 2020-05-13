@@ -124,7 +124,21 @@
     "VerifyUserLanguage": "Weryfikacja użytkownika i język",
     "LoadingPreference": "Ładowanie Preference",
     "Completed": "zakończony",
-    "RememberMe": "Zapamiętaj mnie",
+            "RememberMe": "Zapamiętaj mnie",
+            "FillMandatoryFields": "Wypełnij pola obowiązkowe",
+            "BothPwdNotMatch": "Oba hasła muszą się zgadzać.",
+            "mustMatchCriteria": "Minimalna długość hasła to 5. Hasło musi zawierać co najmniej 1 wielką literę, 1 małą literę, jeden znak specjalny (@ $!% *? &) I jedną cyfrę. Hasło musi zaczynać się od znaku.",
+            "NotLoginUser": "Użytkownik nie może zalogować się do systemu",
+            "MaxFailedLoginAttempts": "Konto użytkownika jest zablokowane. Maksymalna liczba nieudanych prób logowania przekracza zdefiniowany limit. Skontaktuj się z administratorem.",
+            "UserNotFound": "Nazwa użytkownika jest niepoprawna.",
+            "RoleNotDefined": "Nie zdefiniowano roli dla tego użytkownika",
+            "oldNewSamePwd": "stare hasło i nowe hasło muszą być inne.",
+            "NewPassword": "nowe hasło",
+            "NewCPassword": "Potwierdź nowe hasło",
+            "EnterOTP": "Wpisz OTP",
+            "WrongOTP": "Wprowadzono nieprawidłowy kod OTP",
+            "ScanQRCode": "Zeskanuj kod za pomocą Google Authenticator",
+            "EnterVerCode": "Wpisz OTP wygenerowane przez aplikację mobilną"
 }
 });
 
