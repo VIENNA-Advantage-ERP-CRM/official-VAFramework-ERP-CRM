@@ -35,7 +35,7 @@ namespace VIS.Controllers
             StringBuilder sb = new StringBuilder();
 
             Ctx ctx = Session["ctx"] as Ctx;
-            ctx.SetContext("#IsAdmin", MUser.Get(ctx).IsAdministrator() ? "Y" : "N");
+           
 
             if (ctx == null) // handle null value , sometime session is expired
             {
@@ -156,6 +156,8 @@ namespace VIS.Controllers
                 _ctx.SetContext("#SalesRep_ID", _ctx.GetAD_User_ID());
             if (_ctx.GetAD_Role_ID() == 0)	//	User is a Sys Admin
                 _ctx.SetContext("#SysAdmin", "Y");
+
+            _ctx.SetContext("#IsAdmin", VAdvantage.Model.MRole.GetDefault(_ctx, false).IsAdministrator() ? "Y" : "N");
 
             // m_ctx.SetContext("#User_Level", dr[0].ToString());  
             process.LoadPreferences(_ctx.GetContext("#Date"), "");
