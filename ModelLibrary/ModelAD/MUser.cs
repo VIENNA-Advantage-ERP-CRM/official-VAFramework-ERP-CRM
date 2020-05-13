@@ -531,10 +531,8 @@ namespace VAdvantage.Model
                 SetEMailVerifyDate(null);
             if (newRecord || base.GetValue() == null || Is_ValueChanged("Value"))
             {
-                if (Util.GetValueOfString(GetValue()) == "")
-                {
-                    SetValue(base.GetValue());
-                }
+
+                SetValue(base.GetValue());
                 if (newRecord)
                 {
 
