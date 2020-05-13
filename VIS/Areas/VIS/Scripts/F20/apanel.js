@@ -1916,7 +1916,8 @@
         else if (tis.aUploadDocument && tis.aUploadDocument.getAction() === action) {
 
             if (window.VADMS) {
-                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID());
+                // New parameter add for upload document dialoag to sent current window name and tab name
+                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
 
             }
             else {
