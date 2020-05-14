@@ -117,7 +117,21 @@ Globalize.addCultureInfo( "fi-FI", "default", {
     "VerifyUserLanguage": "Tarkista Käyttäjä Kieli",
     "LoadingPreference": "Ladataan etusija",
     "Completed": "valmistunut",
-    "RememberMe": "Muista minut",
+        "RememberMe": "Muista minut",
+        "FillMandatoryFields": "Täytä pakolliset kentät",
+        "BothPwdNotMatch": "Molempien salasanojen on vastattava toisiaan.",
+        "mustMatchCriteria": "Salasanan vähimmäispituus on 5. Salasanassa on oltava vähintään yksi iso kirjain, 1 pieni kirjain, yksi erikoismerkki (@ $!% *? &) Ja yksi numero. Salasanan on alkaa merkillä.",
+        "NotLoginUser": "Käyttäjä ei voi kirjautua järjestelmään",
+        "MaxFailedLoginAttempts": "Käyttäjätili on lukittu. Suurimmat epäonnistuneet kirjautumisyritykset ylittävät määritellyn rajan. Ota yhteyttä järjestelmänvalvojaan.",
+        "UserNotFound": "Käyttäjätunnus on väärä.",
+        "RoleNotDefined": "Tälle käyttäjälle ei määritetty roolia",
+        "oldNewSamePwd": "vanhan ja uuden salasanan on oltava erilaiset.",
+        "NewPassword": "uusi salasana",
+        "NewCPassword": "Vahvista uusi salasana",
+        "EnterOTP": "Syötä OTP",
+        "WrongOTP": "Väärä OTP kirjoitettu",
+        "ScanQRCode": "Skannaa koodi Google Authenticatorilla",
+        "EnterVerCode": "Kirjoita mobiilisovelluksesi luoma OTP",
 	}
 });
 

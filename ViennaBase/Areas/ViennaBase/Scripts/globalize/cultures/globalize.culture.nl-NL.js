@@ -117,7 +117,20 @@ Globalize.addCultureInfo( "nl-NL", "default", {
     "LoadingPreference": "Voorkeur laden",
     "Completed": "aanvullen",
     "RememberMe": "Onthoud Me",
-
+        "FillMandatoryFields": "Vul verplichte velden in",
+        "BothPwdNotMatch": "Beide wachtwoorden moeten overeenkomen.",
+        "mustMatchCriteria": "Minimale lengte voor wachtwoord is 5. Wachtwoord moet minimaal 1 hoofdletter, 1 kleine letter, 1 speciaal teken (@ $!% *? &) En één cijfer bevatten. Wachtwoord moet beginnen met karakter.",
+        "NotLoginUser": "Gebruiker kan niet inloggen op het systeem",
+        "MaxFailedLoginAttempts": "Gebruikersaccount is vergrendeld. Het maximale aantal mislukte inlogpogingen overschrijdt de gedefinieerde limiet. Neem contact op met de beheerder.",
+        "UserNotFound": "Gebruikersnaam is onjuist.",
+        "RoleNotDefined": "Geen rol gedefinieerd voor deze gebruiker",
+        "oldNewSamePwd": "oud wachtwoord en nieuw wachtwoord moeten verschillend zijn.",
+        "NewPassword": "nieuw paswoord",
+        "NewCPassword": "Bevestig nieuw wachtwoord",
+        "EnterOTP": "Voer OTP in",
+        "WrongOTP": "Verkeerde OTP ingevoerd",
+        "ScanQRCode": "Scan de code met Google Authenticator",
+        "EnterVerCode": "Voer OTP in die is gegenereerd door uw mobiele applicatie"
 	}
 
 });

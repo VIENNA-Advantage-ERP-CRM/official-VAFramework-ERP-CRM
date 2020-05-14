@@ -496,7 +496,21 @@ Globalize.addCultureInfo( "ar-IQ", "default", {
     "LoadingPreference": "تحميل",
     "Completed": "الانتهاء",
     "DefaultLoginLanguage": "ar_IQ",
-    "RememberMe": "حفظ كلمة المرور",
+        "RememberMe": "حفظ كلمة المرور",
+        "FillMandatoryFields": "املأ الحقول الإلزامية",
+        "BothPwdNotMatch": "يجب أن تتطابق كلمتا المرور",
+        "mustMatchCriteria": "الحد الأدنى لطول كلمة المرور هو 5. يجب أن تحتوي كلمة المرور على حرف واحد كبير على الأقل وحرف صغير واحد وحرف خاص واحد (@ $!٪ *؟ &) ورقم واحد. يجب أن تبدأ كلمة المرور بحرف",
+        "NotLoginUser": "لا يمكن للمستخدم تسجيل الدخول إلى النظام",
+        "MaxFailedLoginAttempts": "حساب المستخدم مقفل. تجاوزت محاولات تسجيل الدخول الفاشلة الحد المحدد. يرجى الاتصال بالمسؤول.",
+        "UserNotFound": "اسم المستخدم غير صحيح.",
+        "RoleNotDefined": "لم يتم تحديد دور لهذا المستخدم",
+        "oldNewSamePwd": "يجب أن تكون كلمة المرور القديمة وكلمة المرور الجديدة مختلفة.",
+        "NewPassword": "كلمة السر الجديدة",
+        "NewCPassword": "تأكيد كلمة المرور الجديدة",
+        "EnterOTP": "أدخل OTP",
+        "WrongOTP": "تم إدخال خطأ OTP",
+        "ScanQRCode": "امسح الرمز ضوئيًا باستخدام Google Authenticator",
+        "EnterVerCode": "أدخل كلمة المرور لمرة واحدة التي تم إنشاؤها بواسطة تطبيق الهاتف المحمول الخاص بك",
     }
 });
 

@@ -1,3 +1,4 @@
+
 /*
  * Globalize Culture es-ES
  *
@@ -119,6 +120,20 @@
             "LoadingPreference": "Carga de Preferencia",
             "Completed": "terminado",
             "RememberMe": "Acuérdate De Mí",
+            "FillMandatoryFields": "Complete Campos Requeridos",
+            "BothPwdNotMatch": "Ambas contraseñas deben coincidir.",
+            "mustMatchCriteria": "La longitud mínima para la contraseña es 5. La contraseña debe tener al menos 1 carácter en mayúscula, 1 carácter en minúscula, un carácter especial (@ $!% *? &) Y un dígito. La contraseña debe comenzar con el carácter.",
+            "NotLoginUser": "El usuario no puede iniciar sesión en el sistema",
+            "MaxFailedLoginAttempts": "La cuenta de usuario está bloqueada. Los intentos de inicio de sesión fallidos máximos exceden el límite definido. Por favor, póngase en contacto con el administrador.",
+            "UserNotFound": "El nombre de usuario es incorrecto.",
+            "RoleNotDefined": "Ningún rol definido para este usuario",
+            "oldNewSamePwd": "la contraseña anterior y la nueva deben ser diferentes.",
+            "NewPassword": "Nueva contraseña",
+            "NewCPassword": "Confirmar nueva contraseña",
+            "EnterOTP": "Ingrese OTP",
+            "WrongOTP": "OTP incorrecto ingresado",
+            "ScanQRCode": "Escanee el código con Google Authenticator",
+            "EnterVerCode": "Ingrese la OTP generada por su aplicación móvil",
         }
 
     });
