@@ -117,7 +117,21 @@ Globalize.addCultureInfo( "da-DK", "default", {
     "VerifyUserLanguage": "Kontrol bruger og sprog",
     "LoadingPreference": "Ilægning Preference",
     "Completed": "Afsluttet",
-    "RememberMe": "Husk mig",
+        "RememberMe": "Husk mig",
+        "FillMandatoryFields": "Udfyld obligatoriske felter",
+        "BothPwdNotMatch": "Begge adgangskoder skal matche.",
+        "mustMatchCriteria": "Minimumslængde for adgangskode er 5. Adgangskode skal have mindst 1 store bogstaver, 1 små bogstaver, et specialtegn (@ $!% *? &) Og et ciffer. Adgangskode skal starte med tegn.",
+        "NotLoginUser": "Brugeren kan ikke logge ind på systemet",
+        "MaxFailedLoginAttempts": "Brugerkonti er låst. Maksimum mislykkede loginforsøg overstiger den definerede grænse. Kontakt venligst til administrator.",
+        "UserNotFound": "Brugernavn er forkert.",
+        "RoleNotDefined": "Ingen rolle defineret for denne bruger",
+        "oldNewSamePwd": "den gamle adgangskode og den nye adgangskode skal være forskellige.",
+        "NewPassword": "nyt kodeord",
+        "NewCPassword": "Bekræft ny adgangskode",
+        "EnterOTP": "Indtast OTP",
+        "WrongOTP": "Forkert OTP indtastet",
+        "ScanQRCode": "Scan koden med Google Authenticator",
+        "EnterVerCode": "Indtast OTP genereret af din mobilapplikation",
 	}
 });
 

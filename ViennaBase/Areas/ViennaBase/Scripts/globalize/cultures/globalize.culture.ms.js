@@ -61,7 +61,93 @@ Globalize.addCultureInfo( "ms", "default", {
 				Y: "MMMM yyyy"
 			}
 		}
-	}
+    },
+
+    // For localized strings
+    messages: {
+        "Connection": "Sambungan",
+        "Defaults": "Defaults",
+        "Login": "Lalai",
+        "File": "Fail",
+        "Exit": "Keluar",
+        "Help": "Tolonglah",
+        "About": "Mengenai",
+        "Host": "Pelayan",
+        "Database": "Pangkalan data",
+        "User": "ID Pengguna",
+        "EnterUser": "Masukkan ID Pengguna Aplikasi",
+        "Password": "Kata Laluan",
+        "EnterPassword": "Masukkan Kata Laluan Aplikasi",
+        "Language": "Bahasa",
+        "SelectLanguage": "Pilih bahasa anda",
+        "Role": "Peranan",
+        "Client": "Pelanggan",
+        "Organization": "Pertubuhan",
+        "Date": "Tarikh",
+        "Warehouse": "Gudang",
+        "Printer": "Mesin pencetak",
+        "Connected": "Bersambung",
+        "NotConnected": "Tidak Bersambung",
+        "DatabaseNotFound": "Pangkalan data tidak dijumpai",
+        "UserPwdError": "Pengguna tidak sepadan dengan kata laluan",
+        "RoleNotFound": "Peranan tidak dijumpai / lengkap",
+        "Authorized": "Dibenar",
+        "Ok": "Okey",
+        "Cancel": "Batal",
+        "VersionConflict": "Konflik Versi:",
+        "VersionInfo": "Pelayan <> Pelanggan",
+        "PleaseUpgrade": "Sila muat turun Versi baru dari Pelayan",
+        "Configure": "Konfigurasikan Aplikasi",
+        "GetDefaultPort": "Dapatkan Default Port untuk pangkalan data",
+        "DatabaseName": "Nama Pangkalan Data",
+        "DatabaseType": "Jenis Pangkalan Data",
+        "TestConnection": "Sambungan Ujian",
+        "Success": "Kejayaan",
+        "Failed": "Gagal",
+        "AppsType": "Jenis Permohonan",
+        "AppsHost": "Host Permohonan",
+        "AppsPort": "Port Aplikasi",
+        "TestApps": "Pelayan Aplikasi Uji",
+        "CConnectionDialog": "Sambungan VAdvantage",
+        "ServerNotActive": "Permohonan Ujian",
+        "ConnectionError": "Sambungan VAdvantage",
+        "GoodMorning": "Selamat Pagi",
+        "GoodAfternoon": "Selamat petang",
+        "GoodEvening": "Selamat petang",
+
+        //New Resource
+
+
+
+        "Back": "Belakang",
+        "SelectRole": "Pilih Peranan",
+        "SelectOrg": "Pilih Organisasi",
+        "SelectClient": "Pilih Pelanggan",
+        "SelectWarehouse": "Pilih Gudang",
+        "SelectDate": "Pilih Tarikh",
+
+        "VerifyUserLanguage": "Mengesahkan pengguna dan bahasa",
+        "LoadingPreference": "Memuatkan Keutamaan",
+        "Completed": "Selesai",
+        //new
+        "RememberMe": "Ingatlah Aku",
+        "FillMandatoryFields": "Isi Bidang Wajib",
+        "BothPwdNotMatch": "Kedua-dua kata laluan mesti sepadan.",
+        "mustMatchCriteria": "Panjang minimum untuk kata laluan adalah 5. Kata laluan mesti mempunyai sekurang-kurangnya 1 huruf besar, 1 watak huruf kecil, satu watak khas (@ $!% *? &) Dan satu digit. Kata laluan mesti bermula dengan watak.",
+        "NotLoginUser": "Pengguna tidak boleh masuk ke dalam sistem",
+        "MaxFailedLoginAttempts": "Akaun pengguna dikunci. Percubaan masuk yang gagal maksimum melebihi had yang ditentukan. Sila hubungi pentadbir.",
+        "UserNotFound": "Nama pengguna tidak betul.",
+        "RoleNotDefined": "Tiada peranan yang ditentukan untuk pengguna ini",
+        "oldNewSamePwd": "kata laluan lama dan kata laluan baru mesti berbeza.",
+        "NewPassword": "Kata laluan baharu",
+        "NewCPassword": "Sahkan Kata Laluan Baru",
+        "EnterOTP": "Masukkan OTP",
+        "WrongOTP": "OTP Salah Dimasukkan",
+        "ScanQRCode": "Imbas kod dengan Google Authenticator",
+        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi mudah alih anda"
+
+    }
+};
 });
 
 }( this ));

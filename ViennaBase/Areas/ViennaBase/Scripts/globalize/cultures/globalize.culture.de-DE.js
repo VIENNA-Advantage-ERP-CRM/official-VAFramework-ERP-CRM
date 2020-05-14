@@ -125,7 +125,20 @@
             "Completed": "Sie werden angemeldet",
             //new
             "RememberMe": "Merken",
-            "FillMandatoryFields": "Fill Mandatory Fields",
+            "FillMandatoryFields": "Pflichtfelder ausfüllen",
+            "BothPwdNotMatch": "Beide Passwörter müssen übereinstimmen.",
+            "mustMatchCriteria": "Die Mindestlänge für das Passwort beträgt 5. Das Passwort muss mindestens 1 Großbuchstabe, 1 Kleinbuchstabe, ein Sonderzeichen (@ $!% *? &) Und eine Ziffer enthalten. Das Passwort muss mit dem Zeichen beginnen.",
+            "NotLoginUser": "Benutzer kann sich nicht beim System anmelden",
+            "MaxFailedLoginAttempts": "Benutzerkonto ist gesperrt. Die maximale Anzahl fehlgeschlagener Anmeldeversuche überschreitet das definierte Limit. Bitte wenden Sie sich an den Administrator.",
+            "UserNotFound": "Benutzername ist falsch.",
+            "RoleNotDefined": "Für diesen Benutzer ist keine Rolle definiert",
+            "oldNewSamePwd": "Altes und neues Passwort müssen unterschiedlich sein.",
+            "NewPassword": "Neues Kennwort",
+            "NewCPassword": "Bestätige neues Passwort",
+            "EnterOTP": "Geben Sie OTP ein",
+            "WrongOTP": "Falsches OTP eingegeben",
+            "ScanQRCode": "Scannen Sie den Code mit Google Authenticator",
+            "EnterVerCode": "Geben Sie das von Ihrer mobilen Anwendung generierte OTP ein",
         }
 
     });

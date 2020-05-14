@@ -119,6 +119,20 @@
             "LoadingPreference": "Chargement Orientation",
             "Completed": "terminé",
             "RememberMe": "Souviens-Toi De Moi",
+            "FillMandatoryFields": "Remplissez les champs obligatoires",
+            "BothPwdNotMatch": "Les deux mots de passe doivent correspondre.",
+            "mustMatchCriteria": "La longueur minimale du mot de passe est de 5. Le mot de passe doit avoir au moins 1 caractère majuscule, 1 caractère minuscule, un caractère spécial (@ $!% *? &) Et un chiffre. Le mot de passe doit commencer par un caractère.",
+            "NotLoginUser": "L'utilisateur ne peut pas se connecter au système",
+            "MaxFailedLoginAttempts": "Le compte utilisateur est verrouillé. Le nombre maximal de tentatives de connexion ayant échoué dépasse la limite définie. Veuillez contacter l'administrateur.",
+            "UserNotFound": "Le nom d'utilisateur est incorrect.",
+            "RoleNotDefined": "Aucun rôle défini pour cet utilisateur",
+            "oldNewSamePwd": "l'ancien mot de passe et le nouveau mot de passe doivent être différents.",
+            "NewPassword": "nouveau mot de passe",
+            "NewCPassword": "Confirmer le nouveau mot de passe",
+            "EnterOTP": "Entrez OTP",
+            "WrongOTP": "OTP incorrect entré",
+            "ScanQRCode": "Scannez le code avec Google Authenticator",
+            "EnterVerCode": "Entrez OTP généré par votre application mobile",
         }
 });
 
