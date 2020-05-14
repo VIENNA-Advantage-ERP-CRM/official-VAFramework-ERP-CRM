@@ -118,7 +118,21 @@ Globalize.addCultureInfo( "pt-BR", "default", {
     "VerifyUserLanguage": "Verificando usuário e linguagem",
     "LoadingPreference": "Carregando Preferências",
     "Completed": "concluído",
-    "RememberMe": "Lembre De Mim",
+        "RememberMe": "Lembre De Mim",
+        "FillMandatoryFields": "Preencher campos obrigatórios",
+        "BothPwdNotMatch": "As duas senhas devem corresponder.",
+        "mustMatchCriteria": "O tamanho mínimo da senha é 5. A senha deve ter pelo menos 1 caractere maiúsculo, 1 minúsculo, um caractere especial (@ $!% *? &) E um dígito. A senha deve começar com o caractere.",
+        "NotLoginUser": "O usuário não pode fazer login no sistema",
+        "MaxFailedLoginAttempts": "A conta do usuário está bloqueada. O número máximo de tentativas com falha no login excede o limite definido. Entre em contato com o administrador.",
+        "UserNotFound": "Nome de usuário incorreto.",
+        "RoleNotDefined": "Nenhuma função definida para este usuário",
+        "oldNewSamePwd": "senha antiga e nova senha devem ser diferentes.",
+        "NewPassword": "Nova senha",
+        "NewCPassword": "Confirme a nova senha",
+        "EnterOTP": "Digite OTP",
+        "WrongOTP": "OTP incorreto digitado",
+        "ScanQRCode": "Digitalize o código com o Google Authenticator",
+        "EnterVerCode": "Digite o OTP gerado pelo seu aplicativo móvel"
 	}
 });
 

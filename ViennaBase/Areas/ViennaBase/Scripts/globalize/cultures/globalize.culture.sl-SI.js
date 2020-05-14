@@ -119,7 +119,21 @@ Globalize.addCultureInfo( "sl-SI", "default", {
     "VerifyUserLanguage": "Preverjanje uporabnika in jezik",
     "LoadingPreference": "Nalaganje preference",
     "Completed": "Zaključen",
-    "RememberMe": "Zapomni si me",
+        "RememberMe": "Zapomni si me",
+        "FillMandatoryFields": "Izpolnite obvezna polja",
+        "BothPwdNotMatch": "Obe gesli se morata ujemati.",
+        "mustMatchCriteria": "Najmanjša dolžina gesla je 5. Geslo mora imeti vsaj 1 črko, 1 črko, en poseben znak (@ $!% *? &) In eno številko. Geslo se mora začeti z znakom.",
+        "NotLoginUser": "Uporabnik se ne more prijaviti v sistem",
+        "MaxFailedLoginAttempts": "Uporabniški račun je zaklenjen. Največji neuspeli poskusi prijave presegajo določeno mejo. Obrnite se na skrbnika.",
+        "UserNotFound": "Uporabniško ime ni pravilno.",
+        "RoleNotDefined": "Za tega uporabnika ni določena nobena vloga",
+        "oldNewSamePwd": "Staro in novo geslo morata biti različna.",
+        "NewPassword": "novo geslo",
+        "NewCPassword": "Potrdite novo geslo",
+        "EnterOTP": "Vnesite OTP",
+        "WrongOTP": "Vpisan napačen OTP",
+        "ScanQRCode": "Optično preglejte kodo Google Authenticator",
+        "EnterVerCode": "Vnesite OTP, ki ga ustvari vaša mobilna aplikacija"
 	}
 });
 

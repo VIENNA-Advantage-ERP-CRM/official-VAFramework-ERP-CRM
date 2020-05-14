@@ -118,7 +118,21 @@ Globalize.addCultureInfo( "sv-SE", "default", {
     "VerifyUserLanguage": "Verifiera användare och språk",
     "LoadingPreference": "Laddar preferens",
     "Completed": "Avslutade",
-    "RememberMe": "Kom ihåg mig",
+        "RememberMe": "Kom ihåg mig",
+        "FillMandatoryFields": "Fyll obligatoriska fält",
+        "BothPwdNotMatch": "Båda lösenorden måste matcha.",
+        "mustMatchCriteria": "Minsta längd för lösenord är 5. Lösenord måste ha minst 1 versaler, 1 gemener, ett specialtecken (@ $!% *? &) Och en siffra. Lösenord måste börja med tecken.",
+        "NotLoginUser": "Användaren kan inte logga in på systemet",
+        "MaxFailedLoginAttempts": "Användarkontot är låst. Maximala misslyckade inloggningsförsök överskrider den definierade gränsen. Vänligen kontakta till administratören.",
+        "UserNotFound": "Användarnamn är felaktigt.",
+        "RoleNotDefined": "Ingen roll definierad för den här användaren",
+        "oldNewSamePwd": "gamla lösenord och nytt lösenord måste vara annorlunda.",
+        "NewPassword": "nytt lösenord",
+        "NewCPassword": "Bekräfta nytt lösenord",
+        "EnterOTP": "Ange OTP",
+        "WrongOTP": "Fel OTP anges",
+        "ScanQRCode": "Skanna koden med Google Authenticator",
+        "EnterVerCode": "Ange OTP genererad av din mobilapplikation"
 	}
 });
 

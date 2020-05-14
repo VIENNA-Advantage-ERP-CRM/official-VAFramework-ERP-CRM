@@ -121,6 +121,20 @@ Globalize.addCultureInfo( "sq-AL", "default", {
         "Completed": "i përfunduar",
         //new
         "RememberMe": "Më kujto",
+        "FillMandatoryFields": "Plotësoni fushat e detyrueshme",
+        "BothPwdNotMatch": "Të dy fjalëkalimet duhet të përputhen.",
+        "mustMatchCriteria": "Gjatësia minimale për fjalëkalim është 5. Fjalëkalimi duhet të ketë së paku 1 karakter të çështjes së sipërme, 1 karakter të çështjes më të ulët, një karakter të veçantë (@ $!% *? &) Dhe një shifër. Fjalëkalimi duhet të fillojë me karakter.",
+        "NotLoginUser": "Përdoruesi nuk mund të identifikohet në sistem",
+        "MaxFailedLoginAttempts": "Llogaria e përdoruesit është e bllokuar. Përpjekjet maksimale të dështimit të hyrjes tejkalojnë kufirin e përcaktuar. Ju lutemi kontaktoni administratorin.",
+        "UserNotFound": "Emri i përdoruesit është i pasaktë.",
+        "RoleNotDefined": "Asnjë rol i përcaktuar për këtë përdorues",
+        "oldNewSamePwd": "fjalëkalimi i vjetër dhe fjalëkalimi i ri duhet të jenë të ndryshëm.",
+        "NewPassword": "Fjalëkalim i ri",
+        "NewCPassword": "Konfirmoni fjalëkalimin e ri",
+        "EnterOTP": "Hyni në OTP",
+        "WrongOTP": "Hyrë e gabuar OTP",
+        "ScanQRCode": "Skanoni kodin me Google Authenticator",
+        "EnterVerCode": "Vendosni OTP të gjeneruar nga aplikacioni juaj celular"
 
     }
 });

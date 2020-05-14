@@ -117,7 +117,21 @@ Globalize.addCultureInfo( "nb-NO", "default", {
     "VerifyUserLanguage": "Kontroller språk for",
     "LoadingPreference": "Lasting preferanse",
     "Completed": "fullkommen",
-    "RememberMe": "Husk meg",
+        "RememberMe": "Husk meg",
+        "FillMandatoryFields": "Fyll obligatoriske felt",
+        "BothPwdNotMatch": "Begge passordene må samsvare.",
+        "mustMatchCriteria": "Minimum lengde for passord er 5. Passord må ha minst 1 store bokstaver, 1 små bokstaver, ett spesialtegn (@ $!% *? &) Og ett siffer. Passord må starte med tegn.",
+        "NotLoginUser": "Bruker kan ikke logge inn på systemet",
+        "MaxFailedLoginAttempts": "Brukerkontoen er låst. Maksimum mislykkede påloggingsforsøk overstiger den definerte grensen. Ta kontakt med administrator.",
+        "UserNotFound": "Brukernavn er feil.",
+        "RoleNotDefined": "Ingen rolle er definert for denne brukeren",
+        "oldNewSamePwd": "gammelt passord og nytt passord må være annerledes.",
+        "NewPassword": "Nytt passord",
+        "NewCPassword": "Bekrefte nytt passord",
+        "EnterOTP": "Skriv inn OTP",
+        "WrongOTP": "Feil OTP angitt",
+        "ScanQRCode": "Skann koden med Google Authenticator",
+        "EnterVerCode": "Skriv inn OTP generert av mobilapplikasjonen din"
 	}
 });
 
