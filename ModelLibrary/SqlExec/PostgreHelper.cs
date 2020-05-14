@@ -209,7 +209,7 @@ namespace VAdvantage.SqlExec.PostgreSql
             return retval;
         }
 
-        private static int ExecuteNonQuery(NpgsqlConnection connection, CommandType commandType, string commandText, params NpgsqlParameter[] commandParameters)
+        public static int ExecuteNonQuery(NpgsqlConnection connection, CommandType commandType, string commandText, params NpgsqlParameter[] commandParameters)
         {
             if (commandParameters != null)
             {
