@@ -501,10 +501,21 @@ namespace VAdvantage.Acct
                     description.Append(" #").Append(_docLine.GetLine());
                     description.Append(" (").Append(_doc.GetDescription()).Append(")");
                 }
+                else
+                {
+                    // if on header - description not defined then post document No and line as description
+                    description.Append(_doc.GetDocumentNo());
+                    description.Append(" #").Append(_docLine.GetLine());
+                }
             }
             else if (_doc.GetDescription() != null && _doc.GetDescription().Length > 0)
             {
                 description.Append(" (").Append(_doc.GetDescription()).Append(")");
+            }
+            else
+            {
+                // if on header - description not defined then post document No as description
+                description.Append(_doc.GetDocumentNo());
             }
             SetDescription(description.ToString());
             //	Journal Info
