@@ -2959,6 +2959,7 @@ namespace VAdvantage.Model
                     // Set Orignal Document Reference
                     rLine.SetReversalDoc_ID(oLine.GetM_InventoryLine_ID());
                 }
+                rLine.SetActualReqReserved(oLine.GetActualReqReserved());
                 if (!rLine.Save())
                 {
                     pp = VLogger.RetrieveError();
