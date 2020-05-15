@@ -4391,7 +4391,7 @@ namespace VAdvantage.Model
                             {
                                 #region In Case of -- WR (WareHouse Order) / WP (POS Order)
                                 // when qty avialble on warehouse is less than qty ordered, at that time we can create shipment in Drafetd stage, to be completed mnually
-                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv());
+                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
 
                                 // when OnHand qty is less than qtyOrdered then not to create shipment (need to be rollback)
                                 if (!String.IsNullOrEmpty(_processMsg) && OnHandQty < oLine.GetQtyOrdered())
@@ -4419,7 +4419,7 @@ namespace VAdvantage.Model
                             {
                                 #region In Case of -- Credit Order / PePay Order / WareHouse Order / POS Order
 
-                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv());
+                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
                                 if (!String.IsNullOrEmpty(_processMsg))
                                 {
                                     return null;
@@ -4447,7 +4447,7 @@ namespace VAdvantage.Model
                         else
                         {
                             #region when disallow is FALSE
-                            _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv());
+                            _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
                             if (!String.IsNullOrEmpty(_processMsg))
                             {
                                 return null;
@@ -4536,19 +4536,25 @@ namespace VAdvantage.Model
         /// <param name="oLine"></param>
         /// <param name="M_Locator_ID"></param>
         /// <param name="Qty"></param>
+        /// <param name="oproduct"></param>
         /// <returns></returns>
-        private String CreateShipmentLineContainer(MInOut inout, MInOutLine ioLine, MOrderLine oLine, int M_Locator_ID, Decimal Qty, bool disalowNegativeInventory)
+        private String CreateShipmentLineContainer(MInOut inout, MInOutLine ioLine, MOrderLine oLine, int M_Locator_ID, Decimal Qty, bool disalowNegativeInventory, MProduct oproduct)
         {
             String pMsg = null;
-            MProductCategory productCategory = MProductCategory.GetOfProduct(GetCtx(), oLine.GetM_Product_ID());
             List<RecordContainer> shipLine = new List<RecordContainer>();
-            RecordContainer recordContainer = null;
-            bool existingRecord = false;
-            String sql = "";
-            if (isContainerApplicable)
+
+            // s
+            if (oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item && Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
             {
-                // Pick data from Container Storage based on Material Policy
-                sql = @"SELECT s.M_AttributeSetInstance_ID ,s.M_ProductContainer_ID, s.Qty
+                MProductCategory productCategory = MProductCategory.GetOfProduct(GetCtx(), oLine.GetM_Product_ID());
+
+                RecordContainer recordContainer = null;
+                bool existingRecord = false;
+                String sql = "";
+                if (isContainerApplicable)
+                {
+                    // Pick data from Container Storage based on Material Policy
+                    sql = @"SELECT s.M_AttributeSetInstance_ID ,s.M_ProductContainer_ID, s.Qty
                            FROM M_ContainerStorage s 
                            LEFT OUTER JOIN M_AttributeSetInstance asi ON (s.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)
                            WHERE NOT EXISTS (SELECT * FROM M_ProductContainer p WHERE isactive = 'N' AND p.M_ProductContainer_ID = NVL(s.M_ProductContainer_ID , 0)) 
@@ -4557,122 +4563,123 @@ namespace VAdvantage.Model
                            AND s.M_Locator_ID = " + M_Locator_ID + @" 
                            AND s.M_Product_ID=" + oLine.GetM_Product_ID() + @"
                            AND s.Qty > 0 ";
-                if (oLine.GetM_AttributeSetInstance_ID() != 0)
-                {
-                    sql += " AND NVL(s.M_AttributeSetInstance_ID , 0)=" + oLine.GetM_AttributeSetInstance_ID();
+                    if (oLine.GetM_AttributeSetInstance_ID() != 0)
+                    {
+                        sql += " AND NVL(s.M_AttributeSetInstance_ID , 0)=" + oLine.GetM_AttributeSetInstance_ID();
+                    }
+                    if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_LiFo)
+                        sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate DESC, s.M_ContainerStorage_ID DESC";
+                    else if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_FiFo)
+                        sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate ASC , s.M_ContainerStorage_ID ASC";
                 }
-                if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_LiFo)
-                    sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate DESC, s.M_ContainerStorage_ID DESC";
-                else if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_FiFo)
-                    sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate ASC , s.M_ContainerStorage_ID ASC";
-            }
-            else
-            {
-                sql = @"SELECT s.M_AttributeSetInstance_ID ,0 AS M_ProductContainer_ID, s.QtyOnHand AS Qty
+                else
+                {
+                    sql = @"SELECT s.M_AttributeSetInstance_ID ,0 AS M_ProductContainer_ID, s.QtyOnHand AS Qty
                         FROM M_Storage s WHERE s.M_Locator_ID = " + M_Locator_ID + @" 
                            AND s.M_Product_ID=" + oLine.GetM_Product_ID() + @"
                            AND s.QtyOnHand > 0 ";
-                if (oLine.GetM_AttributeSetInstance_ID() != 0)
-                {
-                    sql += " AND NVL(s.M_AttributeSetInstance_ID , 0)=" + oLine.GetM_AttributeSetInstance_ID();
-                }
-            }
-            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
-                int containerASI = 0;
-                int containerId = 0;
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    existingRecord = false;
-                    if (i > 0)
+                    if (oLine.GetM_AttributeSetInstance_ID() != 0)
                     {
-                        #region  Find existing record based on respective parameter
-                        if (shipLine.Count > 0)
+                        sql += " AND NVL(s.M_AttributeSetInstance_ID , 0)=" + oLine.GetM_AttributeSetInstance_ID();
+                    }
+                }
+                DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    int containerASI = 0;
+                    int containerId = 0;
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        existingRecord = false;
+                        if (i > 0)
                         {
-                            // Find existing record based on respective parameter
-                            RecordContainer iRecord = null;
-                            containerASI = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
-                            containerId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]);
-
-                            if (shipLine.Exists(x => (x.M_Locator_ID == M_Locator_ID) &&
-                                                     (x.M_Product_ID == oLine.GetM_Product_ID()) &&
-                                                     (x.M_ASI_ID == containerASI) &&
-                                                     (x.M_ProductContainer_ID == containerId)
-                                                ))
+                            #region  Find existing record based on respective parameter
+                            if (shipLine.Count > 0)
                             {
-                                iRecord = shipLine.Find(x => (x.M_Locator_ID == M_Locator_ID) &&
-                                                             (x.M_Product_ID == oLine.GetM_Product_ID()) &&
-                                                             (x.M_ASI_ID == containerASI) &&
-                                                             (x.M_ProductContainer_ID == containerId)
-                                                       );
-                                if (iRecord != null)
+                                // Find existing record based on respective parameter
+                                RecordContainer iRecord = null;
+                                containerASI = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                containerId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]);
+
+                                if (shipLine.Exists(x => (x.M_Locator_ID == M_Locator_ID) &&
+                                                         (x.M_Product_ID == oLine.GetM_Product_ID()) &&
+                                                         (x.M_ASI_ID == containerASI) &&
+                                                         (x.M_ProductContainer_ID == containerId)
+                                                    ))
                                 {
-                                    // create object of existing record
-                                    existingRecord = true;
-                                    ioLine = new VAdvantage.Model.MInOutLine(GetCtx(), iRecord.M_InoutLine_ID, Get_Trx());
+                                    iRecord = shipLine.Find(x => (x.M_Locator_ID == M_Locator_ID) &&
+                                                                 (x.M_Product_ID == oLine.GetM_Product_ID()) &&
+                                                                 (x.M_ASI_ID == containerASI) &&
+                                                                 (x.M_ProductContainer_ID == containerId)
+                                                           );
+                                    if (iRecord != null)
+                                    {
+                                        // create object of existing record
+                                        existingRecord = true;
+                                        ioLine = new VAdvantage.Model.MInOutLine(GetCtx(), iRecord.M_InoutLine_ID, Get_Trx());
+                                    }
                                 }
                             }
+                            #endregion
                         }
-                        #endregion
-                    }
 
-                    if (!existingRecord && i != 0)
-                    {
-                        // Create new object of shipline
-                        ioLine = new MInOutLine(inout);
-                    }
-
-                    Decimal containerQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Qty"]);
-                    Decimal lineCreatedQty = (Decimal.Subtract(Qty, containerQty) >= 0 ? ((i + 1) != ds.Tables[0].Rows.Count ? containerQty : Qty) : Qty);
-                    if (!existingRecord)
-                    {
-                        ioLine.SetOrderLine(oLine, M_Locator_ID, lineCreatedQty);
-                        ioLine.SetM_ProductContainer_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]));
-                    }
-                    ioLine.SetQty(Decimal.Add(ioLine.GetQtyEntered(), lineCreatedQty));
-                    if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
-                    {
-                        ioLine.SetQtyEntered(Decimal.Multiply(lineCreatedQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
-                    }
-                    ioLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
-                    if (!ioLine.Save(Get_TrxName()))
-                    {
-                        ValueNamePair pp = VLogger.RetrieveError();
-                        if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
-                            pMsg = "Could not create Shipment Line. " + pp.GetName();
-                        else
-                            pMsg = "Could not create Shipment Line";
-                        return pMsg;
-                    }
-                    else
-                    {
-                        #region  created list - for updating on same record
-                        // created list - for updating on same record
-                        if (!shipLine.Exists(x => (x.M_Locator_ID == ioLine.GetM_Locator_ID()) &&
-                                                 (x.M_Product_ID == ioLine.GetM_Product_ID()) &&
-                                                 (x.M_ASI_ID == ioLine.GetM_AttributeSetInstance_ID()) &&
-                                                 (x.M_ProductContainer_ID == ioLine.GetM_ProductContainer_ID())
-                                                 ))
+                        if (!existingRecord && i != 0)
                         {
-                            recordContainer = new RecordContainer();
-                            recordContainer.M_InoutLine_ID = ioLine.GetM_InOutLine_ID();
-                            recordContainer.M_Locator_ID = ioLine.GetM_Locator_ID();
-                            recordContainer.M_Product_ID = ioLine.GetM_Product_ID();
-                            recordContainer.M_ASI_ID = ioLine.GetM_AttributeSetInstance_ID();
-                            recordContainer.M_ProductContainer_ID = ioLine.GetM_ProductContainer_ID();
-                            shipLine.Add(recordContainer);
+                            // Create new object of shipline
+                            ioLine = new MInOutLine(inout);
                         }
-                        #endregion
 
-                        // Qty Represent "Remaining Qty" whose shipline line to be created
-                        Qty -= lineCreatedQty;
-                        if (Qty <= 0)
-                            break;
+                        Decimal containerQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Qty"]);
+                        Decimal lineCreatedQty = (Decimal.Subtract(Qty, containerQty) >= 0 ? ((i + 1) != ds.Tables[0].Rows.Count ? containerQty : Qty) : Qty);
+                        if (!existingRecord)
+                        {
+                            ioLine.SetOrderLine(oLine, M_Locator_ID, lineCreatedQty);
+                            ioLine.SetM_ProductContainer_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]));
+                        }
+                        ioLine.SetQty(Decimal.Add(ioLine.GetQtyEntered(), lineCreatedQty));
+                        if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                        {
+                            ioLine.SetQtyEntered(Decimal.Multiply(lineCreatedQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                        }
+                        ioLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                        if (!ioLine.Save(Get_TrxName()))
+                        {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                                pMsg = "Could not create Shipment Line. " + pp.GetName();
+                            else
+                                pMsg = "Could not create Shipment Line";
+                            return pMsg;
+                        }
+                        else
+                        {
+                            #region  created list - for updating on same record
+                            // created list - for updating on same record
+                            if (!shipLine.Exists(x => (x.M_Locator_ID == ioLine.GetM_Locator_ID()) &&
+                                                     (x.M_Product_ID == ioLine.GetM_Product_ID()) &&
+                                                     (x.M_ASI_ID == ioLine.GetM_AttributeSetInstance_ID()) &&
+                                                     (x.M_ProductContainer_ID == ioLine.GetM_ProductContainer_ID())
+                                                     ))
+                            {
+                                recordContainer = new RecordContainer();
+                                recordContainer.M_InoutLine_ID = ioLine.GetM_InOutLine_ID();
+                                recordContainer.M_Locator_ID = ioLine.GetM_Locator_ID();
+                                recordContainer.M_Product_ID = ioLine.GetM_Product_ID();
+                                recordContainer.M_ASI_ID = ioLine.GetM_AttributeSetInstance_ID();
+                                recordContainer.M_ProductContainer_ID = ioLine.GetM_ProductContainer_ID();
+                                shipLine.Add(recordContainer);
+                            }
+                            #endregion
+
+                            // Qty Represent "Remaining Qty" whose shipline line to be created
+                            Qty -= lineCreatedQty;
+                            if (Qty <= 0)
+                                break;
+                        }
                     }
                 }
+                ds.Dispose();
             }
-            ds.Dispose();
 
             // When Disallow Negative Inventory is FALSE - then create new line with remainning qty
             if (Qty != 0)
