@@ -4543,7 +4543,7 @@ namespace VAdvantage.Model
             String pMsg = null;
             List<RecordContainer> shipLine = new List<RecordContainer>();
 
-            // s
+            // JID_1746: Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
             if (oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item && Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
             {
                 MProductCategory productCategory = MProductCategory.GetOfProduct(GetCtx(), oLine.GetM_Product_ID());
