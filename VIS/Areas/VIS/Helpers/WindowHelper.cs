@@ -853,31 +853,40 @@ namespace VIS.Helpers
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
             if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
             {
-                //Check value in DB 
-                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] + "'"));
-                if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+                int  valIndex = rowData.Keys.ToList().IndexOf("value");
+
+                if (!m_fields[valIndex].IsVirtualColumn)
                 {
-                    outt.IsError = true;
-                    outt.FireEEvent = true;
-                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
-                    outt.Status = GridTable.SAVE_ERROR;
-                    return;
+
+                    //Check value in DB 
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
+                        + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
+
+                    if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+                    {
+                        outt.IsError = true;
+                        outt.FireEEvent = true;
+                        outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
+                        outt.Status = GridTable.SAVE_ERROR;
+                        return;
+
+                    }
                 }
             };
 
-            if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
-            {
-                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE DocumentNo='" + rowData["documentno"] + "'"));
-                //Check value in DB 
-                if ((count > 0 && inserting) || (count > 1 && !inserting))
-                {
-                    outt.IsError = true;
-                    outt.FireEEvent = true;
-                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("documentno")].Name, IsError = true };
-                    outt.Status = GridTable.SAVE_ERROR;
-                    return;
-                }
-            };
+            //if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
+            //{
+            //    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(1) FROM " + inn.TableName + " WHERE DocumentNo='" + rowData["documentno"] + "'"));
+            //    //Check value in DB 
+            //    if ((count > 0 && inserting) || (count > 1 && !inserting))
+            //    {
+            //        outt.IsError = true;
+            //        outt.FireEEvent = true;
+            //        outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("documentno")].Name, IsError = true };
+            //        outt.Status = GridTable.SAVE_ERROR;
+            //        return;
+            //    }
+            //};
 
 
 
