@@ -102,6 +102,9 @@ namespace VAdvantage.Acct
                     // -- Date
                     docLine.SetDateAcct(journal.GetDateAcct());
                     //	--	Organization of Line was set to Org of Account
+
+                    // Set Description
+                    docLine.SetDescription(line.GetDescription());
                     list.Add(docLine);
                 }
                 else
@@ -158,6 +161,9 @@ namespace VAdvantage.Acct
 
                             // -- User Dimension
                             docLine = SetUserDimension(lDim, docLine);
+
+                            // Set Description
+                            docLine.SetDescription(line.GetDescription());
 
                             //	--	Organization of Line was set to Org of Account
                             list.Add(docLine);
