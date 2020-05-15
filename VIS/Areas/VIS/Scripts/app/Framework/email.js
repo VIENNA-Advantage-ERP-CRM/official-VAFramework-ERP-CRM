@@ -1270,7 +1270,7 @@
                 dLAContent.children(0).append(dAWrap);
 
                 var dTop = $("<div class='vis-attach-file-top'>");
-                var btnRemove = $("<a class='vis-file-close-ico'>");
+                var btnRemove = $("<a class='vis-file-close-ico'><i class='vis vis-mark'></i></a>");
                 dTop.append(btnRemove);
                 dAWrap.append(dTop);
                 dLAContent.show();

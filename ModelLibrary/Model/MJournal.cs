@@ -838,26 +838,9 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             }
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
-            //	Get Period
-            MPeriod period = MPeriod.Get(GetCtx(), GetDateAcct());
-            if (period == null)
+            //	Std Period open?
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
             {
-                log.Warning("No Period for " + GetDateAcct());
-                m_processMsg = "@PeriodNotFound@";
-                return DocActionVariables.STATUS_INVALID;
-            }
-            //	Standard Period
-            if (period.GetC_Period_ID() != GetC_Period_ID()
-                && period.IsStandardPeriod())
-            {
-                m_processMsg = "@PeriodNotValid@";
-                return DocActionVariables.STATUS_INVALID;
-            }
-            Boolean open = period.IsOpen(dt.GetDocBaseType());
-            if (!open)
-            {
-                log.Warning(period.GetName()
-                    + ": Not open for " + dt.GetDocBaseType() + " (" + GetDateAcct() + ")");
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
             }

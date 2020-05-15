@@ -418,6 +418,31 @@
             return result;
         };
 
+        function postJSONData(actionUrl, data, callback) {
+            var asyc = callback ? true : false;
+            var result = null;
+            $.ajax({
+                url: actionUrl,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                async: asyc,
+                data: JSON.stringify(data)
+            }).done(function (jString) {
+
+                if (jString) {
+                    result = jString;
+                    if (typeof jString === "string") {
+                        result = JSON.parse(jString);
+                    }
+                }
+                if (asyc) {
+                    callback(result);
+                }
+            })
+            return result;
+        };
+
         function getChatRecords(data, callback) {
             $.ajax({
                 url: VIS.Application.contextUrl + 'Chat/LoadChat',
@@ -542,7 +567,8 @@
             saveChat: saveChat,
 
             getTreeAsString: getTreeAsString,
-            getCardViewInfo: getCardViewInfo
+            getCardViewInfo: getCardViewInfo,
+            postJSONData: postJSONData
         };
         return dc;
     }();

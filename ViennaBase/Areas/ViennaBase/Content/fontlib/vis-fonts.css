@@ -20,6 +20,7 @@
     src: url('../fonts/NoirPro-SemiBold.ttf') format('truetype');
     font-weight: 600;
 }
+
 @font-face {
     font-family: 'NoirPro-Regular';
     src: url('../fonts/NoirPro-Bold.ttf') format('truetype');
@@ -38,6 +39,7 @@
     font-style: normal;
     font-display: block;
 }
+
 .vis {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'vis-fonts' !important;
@@ -50,6 +52,90 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.vis-scandoc:before {
+    content: "\e9be";
+}
+
+.vis-checkin-file:before {
+    content: "\e9b1";
+}
+
+.vis-checkout-file:before {
+    content: "\e9b2";
+}
+
+.vis-download:before {
+    content: "\e9b3";
+}
+
+.vis-file-down:before {
+    content: "\e9b4";
+}
+
+.vis-folder-globe:before {
+    content: "\e9b5";
+}
+
+.vis-folder-info:before {
+    content: "\e9b6";
+}
+
+.vis-folder-share:before {
+    content: "\e9b7";
+}
+
+.vis-forword-doc:before {
+    content: "\e9b8";
+}
+
+.vis-move-doc:before {
+    content: "\e9b9";
+}
+
+.vis-scanapp:before {
+    content: "\e9ba";
+}
+
+.vis-undo-checkout:before {
+    content: "\e9bb";
+}
+
+.vis-upload:before {
+    content: "\e9bc";
+}
+
+.vis-upload-history:before {
+    content: "\e9bd";
+}
+
+.vis-clear-filter:before {
+    content: "\e9b0";
+}
+
+.vis-add-chart:before {
+    content: "\e9ac";
+}
+
+.vis-add-kpi:before {
+    content: "\e9ad";
+}
+
+.vis-add-view:before {
+    content: "\e9ae";
+}
+
+.vis-line-chart:before {
+    content: "\e9af";
+}
+
+.vis-gmail-contacts-import:before {
+    content: "\e9aa";
+}
+
+.vis-gmail-settings:before {
+    content: "\e9ab";
 }
 
 .vis-account:before {
@@ -730,32 +816,4 @@
 
 .vis-zoomacross:before {
     content: "\e9a0";
-}
-
-.vis-clear-filter:before {
-    content: "\e9b0";
-}
-.vis-add-chart:before {
-    content: "\e9ac";
-}
-
-.vis-add-kpi:before {
-    content: "\e9ad";
-}
-
-.vis-add-view:before {
-    content: "\e9ae";
-}
-
-.vis-line-chart:before {
-    content: "\e9af";
-}
-
-
-.vis-gmail-contacts-import:before {
-    content: "\e9aa";
-}
-
-.vis-gmail-settings:before {
-    content: "\e9ab";
 }

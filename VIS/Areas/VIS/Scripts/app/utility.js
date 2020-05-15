@@ -145,6 +145,101 @@
             return o;
         };
 
+        this.GetConvertedNumber = function (val, dotFormatter) {
+            if (dotFormatter) {
+                return Number(String(val).replace(/[^0-9.-]+/g, ""));
+            } else {
+                return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
+            }
+        }
+
+        // Function to convert String To Number in 1000 Format
+        this.GetConvertedString = function (num, dotFormatter) {
+            var _tStr = "";
+            if (dotFormatter) {
+                //return String(String(num).replace(/[^0-9.-]+/g, ""));
+
+                _tStr = num.match(/[.]+/g);
+                if (_tStr != null && _tStr.length > 1) {
+                    return "";
+                } else {
+                    return String(String(num).replace(/[^0-9.-]+/g, ""));
+                }
+            } else {
+                //return String(String(num).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ","));
+
+                _tStr = num.match(/[,]+/g);
+                if (_tStr != null && _tStr.length > 1) {
+                    return "";
+                } else {
+                    return String(String(num).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ","));
+                }
+            }
+        }
+
+        //For to Format value as 1000 separator [, or .]
+        this.GetFormatAmount = function (_value, _typeFormat, dotFormatter) {
+            var language = window.navigator.language;
+
+            // For testing purpose
+            //language = "en-US";
+
+            var input = String(_value);
+            var inputSplit = "";
+
+            if (_typeFormat == "init") {
+                inputSplit = input.split(".");
+            } else if (_typeFormat == "blur" || _typeFormat == "formatOnly") {
+                if (dotFormatter) {
+                    inputSplit = input.split(".");
+                } else {
+                    inputSplit = input.split(",");
+                }
+            }
+
+            if (inputSplit[1] != undefined) {
+                var inputFrac = inputSplit[1].replace(/[\D\s\,_\-]+/g, "");
+            }
+            // Format the number string on thousand separator using the regex
+            var inputPrime = inputSplit[0].replace(/[\s\._]+/g, "");
+            inputPrime = inputPrime ? parseInt(inputPrime, 10) : 0;
+            if (inputFrac != undefined) {
+                if (_typeFormat == "init" || _typeFormat == "formatOnly") {
+                    if (dotFormatter) {
+                        // en-US
+                        //return (inputPrime === 0) ? "" : (inputPrime.toLocaleString(language) + "." + inputFrac);
+                        return inputPrime.toLocaleString(language) + "." + inputFrac;
+                    } else {
+                        // de-DE
+                        //return (inputPrime === 0) ? "" : (inputPrime.toLocaleString(language) + "," + inputFrac);
+                        return inputPrime.toLocaleString(language) + "," + inputFrac;
+                    }
+                } else {
+                    if (dotFormatter) {
+                        return inputPrime + "." + inputFrac;
+                    } else {
+                        return inputPrime + "," + inputFrac;
+                    }
+                }
+            } else {
+                if (_typeFormat == "init" || _typeFormat == "formatOnly") {
+                    if (dotFormatter) {
+                        // en-US
+                        return inputPrime.toLocaleString(language);
+                    } else {
+                        // de-DE
+                        return  inputPrime.toLocaleString(language);
+                    }
+                } else {
+                    if (dotFormatter) {
+                        return  inputPrime;
+                    } else {
+                        return  inputPrime;
+                    }
+                }
+            }
+        }
+
         this.getMinFractionDigit = function () {
             return minFractionDigit;
         }
@@ -156,6 +251,9 @@
         /* privilized function */
         this.dispose = function () {
             this.GetFormatedValue = null;
+            this.GetConvertedNumber = null;
+            this.GetConvertedString = null;
+            this.GetFormatAmount = null;
             SetIntDigit = null;
         };
 

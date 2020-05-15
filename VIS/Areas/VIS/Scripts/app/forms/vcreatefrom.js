@@ -672,7 +672,8 @@
         // Added by Vivek on 09/10/2017 advised by Pradeep
         var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsDropShip"));
         var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"));
-
+        //JID_0976
+        var recordId = VIS.context.getWindowContextAsInt(this.windowNo, "C_Invoice_ID", true);
         //var pairs = [];
         $.ajax({
             url: VIS.Application.contextUrl + "VCreateFrom/VCreateGetOrders",
@@ -686,7 +687,8 @@
                 OrgIds: OrgId,
                 IsDrop: _isdrop,
                 IsSOTrx: _isSoTrx,
-                forInvoices: forInvoice
+                forInvoices: forInvoice,
+                recordID: recordId,
             },
             success: function (datas) {
                 var ress = datas.result;
@@ -2459,7 +2461,8 @@
                 isBaseLanges = " LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)";
             }
             else {
-                isBaseLanges = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "')";
+                // JID_1720
+                isBaseLanges = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "') INNER JOIN C_UOM uom1 ON uom1.C_UOM_ID = uom.C_UOM_ID ";
             }
             if (M_Product_ID > 0) {
                 MProductIDs = " AND l.M_Product_ID=" + M_Product_ID;
@@ -3061,6 +3064,8 @@
             this.arrListColumns.push({ field: "QuantityPending", caption: VIS.Msg.getMsg("Quantity"), sortable: false, size: '150px', render: 'number:4', hidden: true });
             this.arrListColumns.push({ field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'float' }, render: 'number:4', sortable: false, size: '150px', hidden: false });
             this.arrListColumns.push({ field: "C_UOM_ID", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: false });
+            //Add product search key column in Grid 
+            this.arrListColumns.push({ field: "M_Product_SearchKey", caption: VIS.Msg.getMsg("ProductSearchKey"), sortable: false, size: '150px', hidden: false });
             //Set sortable: true for Product Name in Grid // Pratap : 06/08/2016
             this.arrListColumns.push({ field: "M_Product_ID", caption: VIS.Msg.getMsg("ProductName"), sortable: true, size: '150px', hidden: false });
             this.arrListColumns.push({

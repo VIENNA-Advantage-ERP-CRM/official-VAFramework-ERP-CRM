@@ -353,7 +353,7 @@ namespace VAdvantage.Model
             SqlParameter[] param = new SqlParameter[4];
             param[0] = new SqlParameter("@userid", GetAD_User_ID());
 
-            param[1] = new SqlParameter("@orgid", AD_Org_ID); 
+            param[1] = new SqlParameter("@orgid", AD_Org_ID);
 
             param[2] = new SqlParameter("@userid1", GetAD_User_ID());
             param[3] = new SqlParameter("@orgid1", AD_Org_ID);
@@ -518,7 +518,7 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (newRecord || (Is_ValueChanged("VA037_BIUserName") || Is_ValueChanged("Password") || Is_ValueChanged("Name") || Is_ValueChanged("LastName") || Is_ValueChanged("VA037_YellowfinRoles_ID") || Is_ValueChanged("EMail") || Is_ValueChanged("VA037_BIUser") || Is_ValueChanged("VA037_IsLinkExistingUser")))
+            if (newRecord || (Is_ValueChanged("VA037_BIUserName") || Is_ValueChanged("VA037_BIPassword") || Is_ValueChanged("Name") || Is_ValueChanged("LastName") || Is_ValueChanged("VA037_YellowfinRoles_ID") || Is_ValueChanged("EMail") || Is_ValueChanged("VA037_BIUser") || Is_ValueChanged("VA037_IsLinkExistingUser")))
             {
                 updateYellowFinUser = true;
             }
@@ -531,9 +531,14 @@ namespace VAdvantage.Model
                 SetEMailVerifyDate(null);
             if (newRecord || base.GetValue() == null || Is_ValueChanged("Value"))
             {
+
                 SetValue(base.GetValue());
                 if (newRecord)
                 {
+
+
+
+
                     int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE lower(Value) = lower('" + GetValue() + "')"));
                     if (count > 0)
                     {
@@ -595,6 +600,25 @@ namespace VAdvantage.Model
                 log.SaveError("Warning", Msg.GetMsg(GetCtx(), "UserCannotUpdate", true));
                 return false;
             }
+            if (Is_ValueChanged("Password"))
+            {
+                string pwd = GetPassword();
+                string oldPwd = Util.GetValueOfString(Get_ValueOld("Password"));
+                if (pwd != null || !newRecord)
+                {
+                    string validated = Common.Common.ValidatePassword(oldPwd, pwd, pwd);
+                    if (validated.Length > 0)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), validated, true));
+                        return false;
+                    }
+                }
+                if (!newRecord)
+                {
+                    int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
+                    base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
+                }
+            }
             return true;
         }
 
@@ -602,18 +626,19 @@ namespace VAdvantage.Model
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            log.Info("Aftersave start :: " + Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
+            log.Info("Aftersave start" + Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")));
+
             if (Util.GetValueOfString(GetCtx().GetContext("VerifyVersionRecord")) == "Y")
             {
                 return success;
             }
-            // log.SaveError("Aftersave start", "");
+            log.Info("Aftersave start" + "");
             UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetAD_User_ID(), GetName(), GetAD_Client_ID(), 0, IsLoginUser(), false);
             // Following Work is For Creating and Updating Yellowfin User if Yellowfin Module exists...................
             #region
             if (success)
             {
-                log.Info("Aftersave success" +  "Success :: " + success);
+                log.Info("Aftersave success");
                 // For Saving YellowFin user.......................
                 object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where IsActive='Y' AND prefix='VA037_'");
                 if (ModuleId != null && ModuleId != DBNull.Value)
@@ -923,22 +948,22 @@ namespace VAdvantage.Model
                 value = "noname";
             //
             String result = CleanValue(value);
-            if (result.Length > 8)
-            {
-                String first = GetName(value, true);
-                String last = GetName(value, false);
-                if (last.Length > 0)
-                {
-                    String temp = last;
-                    if (first.Length > 0)
-                        temp = first.Substring(0, 1) + last;
-                    result = CleanValue(temp);
-                }
-                else
-                    result = CleanValue(first);
-            }
-            if (result.Length > 40)
-                result = result.Substring(0, 40);
+            //if (result.Length > 8)
+            //{
+            //    String first = GetName(value, true);
+            //    String last = GetName(value, false);
+            //    if (last.Length > 0)
+            //    {
+            //        String temp = last;
+            //        if (first.Length > 0)
+            //            temp = first.Substring(0, 1) + last;
+            //        result = CleanValue(temp);
+            //    }
+            //    else
+            //        result = CleanValue(first);
+            //}
+            if (result.Length > 60)
+                result = result.Substring(0, 60);
             base.SetValue(result);
         }
 
@@ -954,9 +979,9 @@ namespace VAdvantage.Model
             for (int i = 0; i < chars.Length; i++)
             {
                 char ch = chars[i];
-                ch = Char.ToLower(ch);
+                //ch = Char.ToLower(ch);
                 if ((ch >= '0' && ch <= '9')		//	digits
-                    || (ch >= 'a' && ch <= 'z'))	//	characters
+                    || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))	//	characters
                     sb.Append(ch);
             }
             return sb.ToString();

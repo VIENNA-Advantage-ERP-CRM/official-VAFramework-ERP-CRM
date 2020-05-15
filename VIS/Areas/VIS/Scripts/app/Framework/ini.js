@@ -66,7 +66,7 @@
             var obj = {};
             for (var i = 0; i < iniarray.length; i++) {
                 if (iniarray[i] == "AutoNew") {
-                    VIS.context.setContext(iniarray[i], VIS.Ini.getLocalStorage(iniarray[i]) == null ? "Y" : VIS.Ini.getLocalStorage(iniarray[i]));
+                    VIS.context.setContext(iniarray[i], VIS.Ini.getLocalStorage(iniarray[i]) == null ? "N" : VIS.Ini.getLocalStorage(iniarray[i]));
                 }
                 else {
                     VIS.context.setContext('#' + iniarray[i], VIS.Ini.getLocalStorage(iniarray[i]));

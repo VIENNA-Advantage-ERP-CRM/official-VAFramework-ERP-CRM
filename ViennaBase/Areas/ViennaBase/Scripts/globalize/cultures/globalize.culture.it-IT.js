@@ -124,7 +124,20 @@
 
             //new
             "RememberMe": "Ricordati Di Me",
-            "FillMandatoryFields": "Fill Mandatory Fields",
+            "FillMandatoryFields": "Compila campi obbligatori",
+            "BothPwdNotMatch": "Entrambe le password devono corrispondere.",
+            "mustMatchCriteria": "La lunghezza minima per la password è 5. La password deve contenere almeno 1 carattere maiuscolo, 1 carattere minuscolo, un carattere speciale (@ $!% *? &) E una cifra. La password deve iniziare con un carattere.",
+            "NotLoginUser": "L'utente non può accedere al sistema",
+            "MaxFailedLoginAttempts": "L'account utente è bloccato. Il numero massimo di tentativi di accesso non riusciti supera il limite definito. Si prega di contattare l'amministratore.",
+            "UserNotFound": "Il nome utente non è corretto.",
+            "RoleNotDefined": "Nessun ruolo definito per questo utente",
+            "oldNewSamePwd": "la vecchia password e la nuova password devono essere diverse.",
+            "NewPassword": "nuova password",
+            "NewCPassword": "Conferma la nuova password",
+            "EnterOTP": "Inserisci OTP",
+            "WrongOTP": "OTP errato inserito",
+            "ScanQRCode": "Scansiona il codice con Google Authenticator",
+            "EnterVerCode": "Inserisci OTP generato dalla tua applicazione mobile"
         }
     });
 

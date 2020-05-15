@@ -664,7 +664,8 @@ namespace VAdvantage.Model
             }
             else
             {
-                fillDimensionsFromCombination();
+                fillDimensionsFromCombination();                
+               
             }
             return true;
         }
@@ -679,10 +680,17 @@ namespace VAdvantage.Model
                     Set_Value("Account_ID", combi.GetAccount_ID() > 0 ? combi.GetAccount_ID() : 0);
                 if (Get_ColumnIndex("C_SubAcct_ID") > 0)
                     Set_Value("C_SubAcct_ID", combi.GetC_SubAcct_ID() > 0 ? combi.GetC_SubAcct_ID() : 0);
+                // setting null in business partner and product search control because if set 0 then it shows <0> in controls.-Mohit-11 May 2020
                 if (Get_ColumnIndex("M_Product_ID") > 0)
-                    Set_Value("M_Product_ID", combi.GetM_Product_ID() > 0 ? combi.GetM_Product_ID() : 0);
+                {
+                    if (combi.GetM_Product_ID() > 0)
+                        Set_Value("M_Product_ID", combi.GetM_Product_ID());
+                }
                 if (Get_ColumnIndex("C_BPartner_ID") > 0)
-                    Set_Value("C_BPartner_ID", combi.GetC_BPartner_ID() > 0 ? combi.GetC_BPartner_ID() : 0);
+                {
+                    if (combi.GetC_BPartner_ID() > 0)
+                        Set_Value("C_BPartner_ID", combi.GetC_BPartner_ID());
+                }
                 if (Get_ColumnIndex("AD_OrgTrx_ID") > 0)
                     Set_Value("AD_OrgTrx_ID", combi.GetAD_OrgTrx_ID() > 0 ? combi.GetAD_OrgTrx_ID() : 0);
                 if (Get_ColumnIndex("AD_Org_ID") > 0)

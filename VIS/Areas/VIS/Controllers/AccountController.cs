@@ -12,6 +12,7 @@ using VIS.Filters;
 using VAdvantage.Utility;
 using System.ComponentModel;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace VIS.Controllers
 {
@@ -26,9 +27,6 @@ namespace VIS.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult JsonLogin(LoginModel model, string returnUrl)
         {
-
-
-
             if (ModelState.IsValid)
             {
                 VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
@@ -36,17 +34,102 @@ namespace VIS.Controllers
                 try
                 {
                     List<KeyNamePair> roles = null;
-                    // LoginModel loginModel = null;
-                    if (LoginHelper.Login(model, out  roles))
+
+                    // On rest pwd OR two FA or stpe 2, get values from temp data.
+                    roles = (List<KeyNamePair>)TempData.Peek("roles");
+                    model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
+                    bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
+                    bool Is2FAEnabled = Util.GetValueOfBool(TempData.Peek("Is2FAEnabled"));
+                    model.Login1Model.AD_User_ID = Util.GetValueOfInt(TempData.Peek("AD_User_ID"));
+                    model.Login1Model.QRFirstTime = Util.GetValueOfBool(TempData.Peek("QRFirstTime"));
+                    model.Login1Model.TokenKey2FA = Util.GetValueOfString(TempData.Peek("TokenKey2FA"));
+                    model.Login1Model.QRCodeURL = Util.GetValueOfString(TempData.Peek("QRCodeURL"));
+
+                    string password = Util.GetValueOfString(TempData.Peek("Password"));
+                    if (!string.IsNullOrEmpty(model.Login1Model.Password))
                     {
-                        if (model.Login2Model != null)
+                        password = model.Login1Model.Password;
+                    }
+                    //If value 0, then step1
+                    // If value 2, then final login
+                    //if value 1, then attemp login 1.
+                    int proceedToLogin2 = 0;// First Login
+
+                    // if user refresh page  while On reset pwd page, the system show login 1 page.
+                    // In this case, reset pwd is true (picked from tempdata) but newpwd is null. 
+                    //So user must try to login 1(processdToLogin = 1)
+                    if (resetPwd && model.Login1Model.NewPassword != null)
+                    {
+                        string validated = LoginHelper.ValidatePassword(password, model.Login1Model.NewPassword, model.Login1Model.ConfirmNewPassword);
+                        if (validated.Length > 0)
                         {
-                            //loginModel.Login1Model = model.Login1Model;
-                            return JsonLogin2(model, "");
+                            ModelState.AddModelError("", validated);
+                            // If we got this far, something failed
+                            return Json(new { errors = GetErrorsFromModelState() });
                         }
-                        //System.Threading.Thread.Sleep(10000);
-                        //FormsAuthentication.SetAuthCookie(model.Login1Model.UserName, false);
-                        return Json(new { step2 = true, redirect = returnUrl, role = roles, ctx = model.Login1Model });
+                        bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.NewPassword, model.Login1Model.AD_User_ID);
+                        if (isUpdated)
+                        {
+                            proceedToLogin2 = 2;
+                        }
+                        if (Is2FAEnabled)
+                        {
+                            model.Login1Model.Is2FAEnabled = Is2FAEnabled;
+                            model.Login1Model.ResetPwd = false;
+                            TempData.Remove("ResetPwd");
+                            return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
+                        }
+                    }
+                    else if (resetPwd)
+                    {
+                        model.Login1Model.Password = password;
+                        proceedToLogin2 = 1;
+                    }
+
+                    if (Is2FAEnabled && proceedToLogin2 != 1)
+                    {
+                        if (model.Login1Model.Login1DataOTP != null)
+                        {
+                            var otp = model.Login1Model.OTP2FA;
+                            model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
+                            model.Login1Model.OTP2FA = otp;
+                            bool valOTP = LoginHelper.Validate2FAOTP(model);
+                            if (valOTP)
+                            {
+                                proceedToLogin2 = 2;
+                                model.Login1Model.Is2FAEnabled = false;
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "WrongOTP");
+                                return Json(new { errors = GetErrorsFromModelState() });
+                            }
+                        }
+                    }
+
+                    if (proceedToLogin2 == 2)
+                        return Login(model, returnUrl, roles);
+
+                    //Pwd is assigned to tempdata, bcoz if user's passsword setting is encrypted, then code encrypt the pwd to use in query.
+                    //But original pwd entered by user is required in reset pwd setup.. to match with new pwd.
+                    TempData["Password"] = model.Login1Model.Password;
+                    if (LoginHelper.Login(model, out roles))
+                    {
+                        // ViewBag.QRCodeURL = model.Login1Model.QRCodeURL;
+                        TempData["roles"] = roles;
+                        TempData["Login2Model"] = model.Login2Model;
+                        TempData["ResetPwd"] = model.Login1Model.ResetPwd;
+                        TempData["Is2FAEnabled"] = model.Login1Model.Is2FAEnabled;
+                        TempData["AD_User_ID"] = model.Login1Model.AD_User_ID;
+                        TempData["QRFirstTime"] = model.Login1Model.QRFirstTime;
+                        TempData["TokenKey2FA"] = model.Login1Model.TokenKey2FA;
+                        TempData["QRCodeURL"] = model.Login1Model.QRCodeURL;
+                        //model.Login1Model.Password = null;
+                        if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
+                        {
+                            return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
+                        }
+                        return Login(model, returnUrl, roles);
                     }
                     else
                     {
@@ -61,6 +144,19 @@ namespace VIS.Controllers
 
             // If we got this far, something failed
             return Json(new { errors = GetErrorsFromModelState() });
+        }
+        [NonAction]
+        private JsonResult Login(LoginModel model, string returnUrl, List<KeyNamePair> roles)
+        {
+            if (model.Login2Model != null)
+            {
+                //If everything is allright, then clear tempdata
+                TempData.Clear();
+                return JsonLogin2(model, "");
+            }
+            //System.Threading.Thread.Sleep(10000);
+            //FormsAuthentication.SetAuthCookie(model.Login1Model.UserName, false);
+            return Json(new { step2 = true, redirect = returnUrl, role = roles, ctx = model.Login1Model });
         }
 
         [AllowAnonymous]
@@ -78,17 +174,16 @@ namespace VIS.Controllers
                     saveSetting = true;
                 }
 
-
                 LoginContext lCtx = LoginHelper.GetLoginContext(model);
 
 
-                if (!string.IsNullOrEmpty(model.Login1Model.UserName))
+                if (!string.IsNullOrEmpty(model.Login1Model.UserValue))
                 {
                     Response.Cookies.Clear();
 
                     DateTime expiryDate = DateTime.Now.AddDays(30);
 
-                    HttpCookie authCookie = FormsAuthentication.GetAuthCookie(model.Login1Model.UserName, model.Login1Model.RememberMe);
+                    HttpCookie authCookie = FormsAuthentication.GetAuthCookie(model.Login1Model.UserValue, model.Login1Model.RememberMe);
 
                     if (model.Login1Model.RememberMe)
                     {

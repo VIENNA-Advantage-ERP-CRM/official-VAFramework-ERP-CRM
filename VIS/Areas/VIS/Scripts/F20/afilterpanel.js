@@ -483,7 +483,9 @@
         });
 
         bodyDiv.on("mouseover", function () {
+
             if ((divStaticInner.height() > (divStatic.parent().height() - 60)) && (divStaticInner.height() + 15) >= divStatic.height()) {
+
                 btnViewAll.css('visibility', 'visible');
             }
             else {
@@ -758,7 +760,7 @@
             // set operator name
             var opName = cmbOp.val();
 
-            if (cmbOp[0].selectedIndex > -1)
+            if (opName == null || opName == undefined)
                 opName = cmbOp.find("option:selected").text();;;// vcmbOperator.Text;//silverlight comment
             // set operator (sign)
             var opValue = cmbOp.val();
@@ -1151,7 +1153,7 @@
         var field = this.getTargetMField(columnName);
         var columnSQL = field.getColumnSQL(); //
 
-        if (VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.prototype.EQUAL) {
+        if ( value!=null && value.length>0 && VIS.DisplayType.IsText(field.getDisplayType()) && optr == VIS.Query.prototype.EQUAL) {
             optr = VIS.Query.prototype.LIKE;
             value = '%' + value + '%';
         }
@@ -1159,7 +1161,7 @@
         var whereCondition = '';
 
         var parsedValue = null;
-        if (value != null && value.toString().trim().startsWith("adddays") || value.toString().trim().startsWith("@")) {
+        if (value != null && (value.toString().trim().startsWith("adddays") || value.toString().trim().startsWith("@"))) {
             ;
         }
         else {

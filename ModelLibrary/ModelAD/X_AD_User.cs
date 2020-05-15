@@ -1655,6 +1655,35 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("CardID");
         }
+
+        /** Set BI Password.
+@param VA037_BIPassword BI Password */
+        public void SetVA037_BIPassword(String VA037_BIPassword) { if (VA037_BIPassword != null && VA037_BIPassword.Length > 100) { log.Warning("Length > 100 - truncated"); VA037_BIPassword = VA037_BIPassword.Substring(0, 100); } Set_Value("VA037_BIPassword", VA037_BIPassword); }/** Get BI Password.
+@return BI Password */
+        public String GetVA037_BIPassword() { return (String)Get_Value("VA037_BIPassword"); }
+
+
+        /** Set Jasper Password.
+@param VA039_JasperPwd Jasper Password */
+public void SetVA039_JasperPwd(String VA039_JasperPwd) { if (VA039_JasperPwd != null && VA039_JasperPwd.Length > 100) { log.Warning("Length > 100 - truncated"); VA039_JasperPwd = VA039_JasperPwd.Substring(0, 100); } Set_Value("VA039_JasperPwd", VA039_JasperPwd); }/** Get Jasper Password.
+@return Jasper Password */
+        public String GetVA039_JasperPwd() { return (String)Get_Value("VA039_JasperPwd"); }
+
+
+        /** Set Password Expire On.
+@param PasswordExpireOn Password Expire On */
+        public void SetPasswordExpireOn(DateTime? PasswordExpireOn) { Set_Value("PasswordExpireOn", (DateTime?)PasswordExpireOn); }/** Get Password Expire On.
+@return Password Expire On */
+        public DateTime? GetPasswordExpireOn() { return (DateTime?)Get_Value("PasswordExpireOn"); }
+
+        /** Set Failed Login Count.
+@param FailedLoginCount Failed Login Count */
+        public void SetFailedLoginCount(int FailedLoginCount) { Set_Value("FailedLoginCount", FailedLoginCount); }/** Get Failed Login Count.
+@return Failed Login Count */
+        public int GetFailedLoginCount() { Object ii = Get_Value("FailedLoginCount"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+
     }
+
 
 }

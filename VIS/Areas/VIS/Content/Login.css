@@ -1,4 +1,4 @@
-/*html, body
+﻿/*html, body
 {
     height: 100%;
     margin: 0;
@@ -287,22 +287,29 @@ html, body {
     height: 100%;
     float: left;
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 2rem;
 }
-
+.loginConatiner {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
 .vienna-logo {
     position: fixed;
     right: 20px;
     bottom: 20px;
 }
-
 .login-content {
     /*width: 527px;
 	height: 448px;
 	margin: 12% auto 0 auto;
 	background-image: url(../img/form-bg.png);*/
-    /*width: 30%;*/
+    width: 30%;
     max-width: 484px;
-    margin: 9% auto 0 auto;
+    /*margin: 9% auto 0 auto;*/
     border-radius: 5px;
     background-color: rgba(255,253,235,.1);
     border: 2px solid rgba(255,255,255,.2);
@@ -346,12 +353,11 @@ html, body {
 .input-row > input {
     font-size: 18px;
     border: medium none;
-    background: none repeat scroll 0% 0% transparent;
+    background: transparent;
     color: #FFF;
-    width: 93%;
+    width: calc(100% - 30px);
     outline: none;
 }
-
 .input-row > input[type=date] {
     font-size:16px;
     line-height:22px;
@@ -391,39 +397,31 @@ input::-webkit-input-placeholder {
     cursor: pointer;
     border: none;
 }
-
 .language {
-    width: 93%;
+    width: calc(100% - 30px);
     /*height: 17px;
    overflow: hidden;*/
     overflow: -moz-hidden-unscrollable;
     background: url(../Images/login/combo-arrow.png) no-repeat right;
     display: inline-block;
     position: relative;
-    padding-right:12px;
+    padding-right: 12px;
 }
-
-    .language > select {
-        background: transparent;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        width: 100%;
-        font-size: 18px;
-        border: 0;
-        /*height: 17px;
-   position: absolute;*/
-        color: #fff;
-        outline: none;
-        /*left: 0;
-   top: 0;*/
-    }
-
-        .language > select > option {
-            background: rgba(255,255,255,.2);
-            color: #333;
-            border: none;
-        }
-
+.language > select {
+    background: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    font-size: 18px;
+    border: 0;
+    color: #fff;
+    outline: none;
+}
+.language > select > option {
+    background: rgba(255,255,255,.2);
+    color: #333;
+    border: none;
+}
 .validation-summary-errors {
     color: white;
     
@@ -450,6 +448,23 @@ input::-webkit-input-placeholder {
     font-size:20px;
 }
 
+.vis-loginQRSec {
+    margin-bottom: 15px;
+    display: none;
+}
+
+.vis-loginQRLabel {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 17px;
+    color: #fff;
+}
+
+.vis-clsloginqr {
+    width: 100%;
+    text-align: center;
+}
+
 
 @media (max-width: 1366px) {
     .login-content {
@@ -457,7 +472,7 @@ input::-webkit-input-placeholder {
     }
 
     .language, .input-row > input {
-        width: 92%;
+        /*width: 92%;*/
     }
 }
 
@@ -467,23 +482,23 @@ input::-webkit-input-placeholder {
     }
 
     .input-row > input {
-        width: 85%;
+        /*width: 85%;*/
     }
 }
 
 @media (max-width: 1024px) {
     .login-content {
-        margin-top: 10%;
+        /*margin-top: 10%;*/
     }
 
     .input-row, .remember, .login-button {
-        margin: 0px 30px 30px;
+        /*margin: 0px 30px 30px;*/
     }
 }
 
 @media (max-width: 999px) {
     .login-content {
-        margin-top: 25%;
+        /*margin-top: 25%;*/
     }
 
     .login-content {
@@ -491,7 +506,7 @@ input::-webkit-input-placeholder {
     }
 
     .language {
-        width: 90%;
+        /*width: 90%;*/
     }
 }
 
@@ -505,11 +520,11 @@ input::-webkit-input-placeholder {
     }
 
     .language {
-        width: 89%;
+        /*width: 89%;*/
     }
 
     .input-row > input {
-        width: 88%;
+        /*width: 88%;*/
     }
     .vienna-logo {
             right: 10px;
@@ -527,11 +542,11 @@ input::-webkit-input-placeholder {
     }
 
     .language {
-        width: 85%;
+        /*width: 85%;*/
     }
 
     .input-row > input {
-        width: 84%;
+        /*width: 84%;*/
     }
 
     /*.vienna-logo {
