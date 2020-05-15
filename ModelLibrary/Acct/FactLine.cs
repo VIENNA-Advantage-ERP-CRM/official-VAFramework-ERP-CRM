@@ -486,16 +486,19 @@ namespace VAdvantage.Acct
                 SetC_Tax_ID(_docLine.GetC_Tax_ID());
             }
             //	Description
-            StringBuilder description = new StringBuilder(_doc.GetDocumentNo());
+            StringBuilder description = new StringBuilder();
             if (_docLine != null)
             {
-                description.Append(" #").Append(_docLine.GetLine());
+                //description.Append(" #").Append(_docLine.GetLine());
                 if (_docLine.GetDescription() != null)
                 {
-                    description.Append(" (").Append(_docLine.GetDescription()).Append(")");
+                    //description.Append(" (").Append(_docLine.GetDescription()).Append(")");
+                    description.Append(_docLine.GetDescription());
                 }
                 else if (_doc.GetDescription() != null && _doc.GetDescription().Length > 0)
                 {
+                    description.Append(_doc.GetDocumentNo());
+                    description.Append(" #").Append(_docLine.GetLine());
                     description.Append(" (").Append(_doc.GetDescription()).Append(")");
                 }
             }
