@@ -108,7 +108,8 @@ namespace VAdvantage.Acct
         private int _AD_OrgTrx_ID = -1;
         // Organization
         private int _AD_Org_ID = -1;
-
+        // Desription
+        private String _Description = String.Empty;
         #endregion
 
 
@@ -894,12 +895,32 @@ namespace VAdvantage.Acct
         /// <returns>doc line description</returns>
         public String GetDescription()
         {
-            int index = _po.Get_ColumnIndex("Description");
-            if (index != -1)
+            //int index = _po.Get_ColumnIndex("Description");
+            //if (index != -1)
+            //{
+            //    return (String)_po.Get_Value(index);
+            //}
+            if (!String.IsNullOrEmpty(_Description))
             {
-                return (String)_po.Get_Value(index);
+                return _Description;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Set Description
+        /// </summary>
+        /// <param name="Description">description</param>
+        public void SetDescription(String Description)
+        {
+            if (GetDescription() != null && !String.IsNullOrEmpty(Description))
+            {
+                _Description += (" | " + Description);
+            }
+            else if (!String.IsNullOrEmpty(Description))
+            {
+                _Description = Description;
+            }
         }
 
         /// <summary>
