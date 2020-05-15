@@ -54,6 +54,10 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-scandoc:before {
+    content: "\e9be";
+}
+
 .vis-checkin-file:before {
     content: "\e9b1";
 }
