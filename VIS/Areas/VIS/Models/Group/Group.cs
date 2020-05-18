@@ -951,9 +951,11 @@ namespace VIS.Models
         /// <param name="userLevel"></param>
         /// <param name="OrgID"></param>
         /// <returns></returns>
-        public bool AddNewRole(string Name, string userLevel, List<int> OrgID)
+        public String AddNewRole(string Name, string userLevel, List<int> OrgID)
         {
-            var retValue = false;
+            
+            string info ="";
+            string msg;
             int AD_Role_Table_ID = Convert.ToInt32(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName='AD_Role'", null, null));
 
             try
@@ -968,7 +970,7 @@ namespace VIS.Models
                 DataSet ds = DB.ExecuteDataset(sql);                    // Get Default Values
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
-                    return false;
+                    return VAdvantage.Utility.Msg.GetMsg(ctx, "DefaultValueNotFound");
                 }
 
                 MRole role = new MRole(ctx, 0, null);
@@ -1001,24 +1003,37 @@ namespace VIS.Models
                             roles.SetIsReadOnly(false);
                             roles.Save();
                         }
-                        retValue = true;
+                        
                     }
-                    else
+                    
+                }
+                else
+                {
+                    ValueNamePair ppE = VAdvantage.Logging.VLogger.RetrieveError();
+
+                    if (ppE != null)
                     {
-                        retValue = true;
+                        msg = ppE.GetValue();
+                        info = ppE.GetName();
                     }
                 }
+
+
+
+                return info;
             }
-            catch
+            catch(Exception ex)
             {
-                retValue = false;
+
+                return ex.Message;
             }
 
 
             //rr.Set_Value(
 
 
-            return retValue;
+           
+                
         }
 
         /// <summary>
