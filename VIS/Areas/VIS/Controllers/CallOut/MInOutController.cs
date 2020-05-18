@@ -159,5 +159,22 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get Default Locator ID
+        /// </summary>
+        /// <param name="fields">Warehouse ID</param>
+        /// <returns>Default Locator ID</returns>
+        /// <writer>Amit</writer>
+        public JsonResult GetDefaultLocatorID(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                retJSON = JsonConvert.SerializeObject(MWarehouse.Get(ctx, Util.GetValueOfInt(fields)).GetDefaultM_Locator_ID());
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }
