@@ -3391,6 +3391,7 @@ namespace VAdvantage.Model
                     // Set Original Line reference
                     rLine.SetReversalDoc_ID(oLine.GetM_MovementLine_ID());
                 }
+                rLine.SetActualReqReserved(oLine.GetActualReqReserved());
                 if (!rLine.Save())
                 {
                     pp = VLogger.RetrieveError();
