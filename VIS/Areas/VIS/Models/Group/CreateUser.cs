@@ -46,7 +46,6 @@ namespace VIS.Models
         {
             string msg;
             string info= "";
-            bool retValue = false;
             MUser user = new MUser(ctx, 0, null);
             user.SetName(Name);
             user.SetIsLoginUser(true);
@@ -83,7 +82,7 @@ namespace VIS.Models
                     }
                 }
 
-                retValue = true;
+               
             }
             else
             {

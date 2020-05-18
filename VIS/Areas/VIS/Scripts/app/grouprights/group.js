@@ -179,7 +179,7 @@
                       '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_RoleSaved") + '</h7>' +
 
                       '<div class="vis-group-top-right">' +
-                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("Add New")+'" ></i></button>' +
+                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew")+'" ></i></button>' +
                 '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                       '</div>' +
                       '<div class="vis-group-content-headDown"><span><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
@@ -210,7 +210,7 @@
                          '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_GroupSaved") + '</h7>' +
                        '<div class="vis-group-top-right">' +
                            '<div class="vis-group-top-right">' +
-                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("Add New") +'"></i></button>' +
+                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew") +'"></i></button>' +
                 '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                            '</div>' +
                        '</div>' +
