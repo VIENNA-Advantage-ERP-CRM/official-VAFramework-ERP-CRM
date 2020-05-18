@@ -639,7 +639,7 @@ namespace VIS.Helpers
                             error = true;
                             message = ERROR + field.ColumnName + "= " + ((dataRowOld != null && dataRowOld[colNameLower] != null) ? dataRowOld[colNameLower] : "null").ToString()
                                     + " != DB: " + rowDataDB[colNameLower] + " -> " + dataRow[colNameLower];
-                            
+
                         }
                     }	//	DataChanged
 
@@ -679,7 +679,7 @@ namespace VIS.Helpers
                 {
                     if (manualUpdate)
                         CreateUpdateSqlReset();
-                   
+
 
                     outData.IsError = true;
                     outData.FireEEvent = true;
@@ -711,7 +711,7 @@ namespace VIS.Helpers
                     }
                     else
                     {
-                       
+
                     }
                 }
                 else
@@ -853,13 +853,14 @@ namespace VIS.Helpers
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
             if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
             {
-                int  valIndex = rowData.Keys.ToList().IndexOf("value");
+                int valIndex = rowData.Keys.ToList().IndexOf("value");
 
-                if (!m_fields[valIndex].IsVirtualColumn)
+                if (!m_fields[valIndex].IsVirtualColumn &&
+                    (!inn.TableName.StartsWith("AD_", StringComparison.OrdinalIgnoreCase) || (inn.TableName.ToUpper().IndexOf("AD_ORG") > -1)))
                 {
 
                     //Check value in DB 
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"]
                         + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
 
                     if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
@@ -925,7 +926,7 @@ namespace VIS.Helpers
                     int parentWinID = inn.AD_WIndow_ID;
                     PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
                     //	No Persistent Object
-                    
+
                     if (poMas == null)
                     {
                         throw new NullReferenceException("No Persistent Obj");
