@@ -317,12 +317,15 @@
                     success: function (result) {
                         var data = JSON.parse(result);
                         $bsyDiv[0].style.visibility = "hidden";
-                        if (data == false) {
-                            VIS.ADialog.error("VIS_ErrorSavingUser");
+                        if (data.length > 0) {
+                            VIS.ADialog.error(data);
                         }
-                        else {
+                        else 
+                        {
+                            VIS.ADialog.info("Record saved successfully")
                             ch.close();
                         }
+                           
                     },
                     error: function () {
                         $bsyDiv[0].style.visibility = "hidden";
