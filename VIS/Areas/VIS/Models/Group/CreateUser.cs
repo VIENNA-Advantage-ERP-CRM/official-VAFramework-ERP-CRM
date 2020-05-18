@@ -42,8 +42,10 @@ namespace VIS.Models
         /// <param name="mobile"></param>
         /// <param name="OrgID"></param>
         /// <returns></returns>
-        public bool SaveNewUser(string Name, string Email, string Value, string password, string mobile, List<int> OrgID)
+        public String SaveNewUser(string Name, string Email, string Value, string password, string mobile, List<int> OrgID)
         {
+            string msg;
+            string info= "";
             bool retValue = false;
             MUser user = new MUser(ctx, 0, null);
             user.SetName(Name);
@@ -83,7 +85,20 @@ namespace VIS.Models
 
                 retValue = true;
             }
-            return retValue;
+            else
+            {
+                ValueNamePair ppE = VAdvantage.Logging.VLogger.RetrieveError();
+
+                if (ppE != null)
+                {
+                    msg = ppE.GetValue();
+                    info = ppE.GetName();
+                }
+            }
+
+                
+
+                return  info;
 
         }
 
