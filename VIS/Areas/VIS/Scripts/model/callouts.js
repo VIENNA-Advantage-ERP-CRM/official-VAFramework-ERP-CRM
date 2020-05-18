@@ -17649,28 +17649,33 @@
         }
         this.setCalloutActive(true);
         try {
-            var M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
-            var M_Warehouse_ID = ctx.getContextAsInt(windowNo, "M_Warehouse_ID");
-            //var M_Locator_ID = ctx.getContextAsInt(windowNo, "M_Locator_ID");
-            var M_Locator_ID = VIS.DB.executeScalar("SELECT MIN(M_Locator_ID) FROM M_Locator WHERE IsActive = 'Y' AND M_Warehouse_ID = " + M_Warehouse_ID);
-            ctx.setContext(windowNo, "M_Locator_ID", M_Locator_ID);
-            this.log.fine("M_Product_ID=" + M_Product_ID
-                + ", M_ASI_ID=" + M_ASI_ID
-                + " - M_Warehouse_ID=" + M_Warehouse_ID
-                + ", M_Locator_ID=" + M_Locator_ID);
-            //	Check Selection
-            var M_AttributeSetInstance_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID");
-            if (M_ASI_ID == M_AttributeSetInstance_ID) {
-                var selectedM_Locator_ID = ctx.getContextAsInt(windowNo, "M_Locator_ID");
-                if (selectedM_Locator_ID != 0) {
-                    this.log.fine("Selected M_Locator_ID=" + selectedM_Locator_ID);
-                    mTab.setValue("M_Locator_ID", selectedM_Locator_ID);
+            //POST 1509/JID_1752 :: when we changes ASI, system changing locator refernce with small ID, which is not reqiure
+            if (Util.getValueOfInt(mTab.getValue("M_Locator_ID")) == 0) {
+                var M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
+                var M_Warehouse_ID = ctx.getContextAsInt(windowNo, "M_Warehouse_ID");
+
+                var param = M_Warehouse_ID.toString();
+                var M_Locator_ID = VIS.dataContext.getJSONRecord("MInOut/GetDefaultLocatorID", param);
+                //var M_Locator_ID = VIS.DB.executeScalar("SELECT MIN(M_Locator_ID) FROM M_Locator WHERE IsActive = 'Y' AND M_Warehouse_ID = " + M_Warehouse_ID);
+                ctx.setContext(windowNo, "M_Locator_ID", M_Locator_ID);
+                this.log.fine("M_Product_ID=" + M_Product_ID
+                    + ", M_ASI_ID=" + M_ASI_ID
+                    + " - M_Warehouse_ID=" + M_Warehouse_ID
+                    + ", M_Locator_ID=" + M_Locator_ID);
+                //	Check Selection
+                var M_AttributeSetInstance_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID");
+                if (M_ASI_ID == M_AttributeSetInstance_ID) {
+                    var selectedM_Locator_ID = ctx.getContextAsInt(windowNo, "M_Locator_ID");
+                    if (selectedM_Locator_ID != 0) {
+                        this.log.fine("Selected M_Locator_ID=" + selectedM_Locator_ID);
+                        mTab.setValue("M_Locator_ID", selectedM_Locator_ID);
+                    }
                 }
             }
         }
         catch (errx) {
             this.setCalloutActive(false);
-            this.log.severe(ex.toString());
+            this.log.severe(errx.toString());
         }
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
