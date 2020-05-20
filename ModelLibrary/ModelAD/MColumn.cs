@@ -343,20 +343,21 @@ namespace VAdvantage.Model
                 if (DatabaseType.IsOracle)
                 {
                     sqlBase1.Append(" MODIFY " + columnName + " ");
+
+                    StringBuilder sqlNull = new StringBuilder(sqlBase1.ToString());
+                    if (IsMandatory())
+                        sqlNull.Append(" NOT NULL");
+                    else
+                        sqlNull.Append(" NULL");
+
+                    return sqlNull.ToString();
                 }
                 else if (DatabaseType.IsPostgre)
                 {
-                    sqlBase1.Append(" ALTER " + columnName + " SET ");
+                    //sqlBase1.Append(" ALTER " + columnName + " SET ");
+                    sqlBase1.Append(" ALTER COLUMN " + columnName + " " + (IsMandatory() ? " SET " : " DROP ") + " NOT NULL");
+                    return sqlBase1.ToString();
                 }
-
-
-                StringBuilder sqlNull = new StringBuilder(sqlBase1.ToString());
-                if (IsMandatory())
-                    sqlNull.Append(" NOT NULL");
-                else
-                    sqlNull.Append(" NULL");
-                //sql.Append("; ").Append(sqlNull);
-                return sqlNull.ToString();
             }
             return "";
         }
