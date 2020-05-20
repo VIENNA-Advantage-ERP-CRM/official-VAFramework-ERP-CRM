@@ -836,8 +836,9 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM C_InvoiceLine WHERE C_Invoice_ID= " + GetC_Invoice_ID();
             if (whereClause != null)
                 sql += whereClause;
-            //sql += " ORDER BY Line";
-            sql += " ORDER BY M_Product_ID DESC "; // for picking all charge line first, than product
+            sql += " ORDER BY Line";
+            // commented - bcz freight is distributed based on avoalbel qty
+            //sql += " ORDER BY M_Product_ID DESC "; // for picking all charge line first, than product
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());

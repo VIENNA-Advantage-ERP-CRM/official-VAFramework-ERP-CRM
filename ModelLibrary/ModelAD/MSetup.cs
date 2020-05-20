@@ -3146,7 +3146,7 @@ namespace VAdvantage.Model
 
                 // Blanket Sales Order
                 CreateDocType("Blanket Sales Order", "Blanket Order",
-                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, MDocType.DOCSUBTYPESO_BlanketOrder, DT_R, 0,
+                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, null, DT_R, 0,
                     71000, GL_None, MDocType.POSTINGCODE_BLANKETSALESORDER);
 
                 // Release Purchase Order
@@ -3156,7 +3156,7 @@ namespace VAdvantage.Model
 
                 // Blanket Purchase Order
                 CreateDocType("Blanket Purchase Order", "Blanket Order",
-                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, MDocType.DOCSUBTYPESO_BlanketOrder, DT_R, 0,
+                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, null, DT_R, 0,
                     710000, GL_None, MDocType.POSTINGCODE_BLANKETPURCHASESORDER);
 
                 int DT = CreateDocType("POS Order", "Order Confirmation",

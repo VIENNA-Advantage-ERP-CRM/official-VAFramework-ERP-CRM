@@ -209,7 +209,7 @@ namespace VAdvantage.SqlExec.PostgreSql
             return retval;
         }
 
-        private static int ExecuteNonQuery(NpgsqlConnection connection, CommandType commandType, string commandText, params NpgsqlParameter[] commandParameters)
+        public static int ExecuteNonQuery(NpgsqlConnection connection, CommandType commandType, string commandText, params NpgsqlParameter[] commandParameters)
         {
             if (commandParameters != null)
             {
@@ -223,20 +223,22 @@ namespace VAdvantage.SqlExec.PostgreSql
             PrepareCommand(cmd, connection, (NpgsqlTransaction)null, commandType, commandText, commandParameters);
 
             //finally, execute the command.
-            int retval = -1;
+            int retval = 0;
             try
             {
                 retval = cmd.ExecuteNonQuery();
                 if (retval == -1) //The number of rows affected if known; -1 otherwise.
-                    retval = 0;
+                    retval = 1;
             }
             catch (Exception e)
             {
-                VAdvantage.Logging.VLogger.Get().Severe(e.Message + " [Query NQTrx]" + commandText);
+                connection.Close();
+                cmd.Parameters.Clear();
+                retval = -1;
+                throw e;
             }
 
             // detach the NpgsqlParameters from the command object, so they can be used again.
-            cmd.Parameters.Clear();
             return retval;
         }
 

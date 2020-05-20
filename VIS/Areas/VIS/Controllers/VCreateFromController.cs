@@ -256,7 +256,7 @@ namespace VIS.Controllers
                       + "l.M_Product_ID,c.Name,c.Value,l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, " + precision + ", l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
             }
             // JID_1287: Line number sequence to be maintained when we create lines from the reference of other documents.
-            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0 ORDER BY LINE";
+            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") t WHERE QUANTITY > 0 ORDER BY LINE";
 
             return sqlNew;
         }
@@ -396,7 +396,7 @@ namespace VIS.Controllers
                                                                                                                                                                                //+ "l.M_Product_ID,COALESCE(p.Name,c.Name), l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description "
                 + "ORDER BY l.Line";
 
-            string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
+            string sqlNew = "SELECT * FROM (" + sql + ") t WHERE QUANTITY > 0";
 
             return sqlNew;
         }
@@ -730,7 +730,7 @@ namespace VIS.Controllers
                 }
             }
 
-            sql.Append(") "
+            sql.Append(") t"
                    + " WHERE (   "
                    + "   CASE    "
                    + "     WHEN Iscostadjustmentonlost = 'N' "
