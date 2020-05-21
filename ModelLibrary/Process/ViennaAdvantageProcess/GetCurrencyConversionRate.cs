@@ -240,7 +240,9 @@ namespace ViennaAdvantage.Process
                                                     {
                                                         if (rates.data[j].currency_code == myCurrency.ToUpper())
                                                         {
-                                                            exchangeRate = rates.data[i].rate["selling_rate"];
+                                                            // calculate middle rate from selling_rate and buying_rate.
+                                                            exchangeRate = (rates.data[i].rate["selling_rate"] + rates.data[i].rate["buying_rate"]) / 2;
+                                                            exchangeRate = Decimal.Round(exchangeRate, 4, MidpointRounding.AwayFromZero);
                                                             break;
                                                         }
                                                     }
