@@ -46,7 +46,7 @@
         var middeldiv = $("<div id='" + "middeldiv_" + windowNo + "' style='float: left; width: 100%; height: 79%;'>");
         var bottomdiv = $("<div id='" + "bottomdiv_" + windowNo + "' style='float: left; width: 100%; height: 14%;'>");
 
-
+        var disableSearch = false;
         if (VIS.Application.isRTL) {
             topdiv.css("text-align", "left");
             btnOk.css("margin-right", "-130px");
@@ -279,10 +279,13 @@
                 },
             });
             //Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607
-            if (SerNo)
-                $self.dGrid.search('all', SerNo);
-            else if (lotNo)
-                $self.dGrid.search('all', lotNo);
+            // 
+            if (!disableSearch) {
+                if (SerNo)
+                    $self.dGrid.search('all', SerNo);
+                else if (lotNo)
+                    $self.dGrid.search('all', lotNo);
+            }
             //$self.dGrid.hideColumn('M_Locator_ID');
         }
 
@@ -331,6 +334,7 @@
 
             if (chkShowAll != null) {
                 chkShowAll.change(function () {
+                    disableSearch = true;
                     refresh();
                 });
             }
