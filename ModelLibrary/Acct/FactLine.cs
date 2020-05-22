@@ -481,6 +481,15 @@ namespace VAdvantage.Acct
             {
                 SetC_Period_ID(_doc.GetC_Period_ID());
             }
+            // Set Line Table ID
+            if (_docLine != null && _docLine.GetLineTable_ID() > 0 && Get_ColumnIndex("LineTable_ID") > -1)
+            {
+                Set_Value("LineTable_ID", _docLine.GetLineTable_ID());
+            }
+            else if (Get_ColumnIndex("LineTable_ID") > -1)
+            {
+                Set_Value("LineTable_ID", _doc.Get_Table_ID());
+            }
             if (_docLine != null)
             {
                 SetC_Tax_ID(_docLine.GetC_Tax_ID());

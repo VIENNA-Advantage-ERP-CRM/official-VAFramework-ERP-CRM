@@ -61,6 +61,11 @@ namespace ModelLibrary.Acct
                 MIncomeTaxLines line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 //docLine.SetAmount(line.GetIncomeTaxAmount());           
+
+                // set primary key value 
+                docLine.SetPrimaryKeyValue(line.GetC_IncomeTaxLines_ID());
+                // set GL journal line table ID
+                docLine.SetLineTable_ID(line.Get_Table_ID());
                 //
                 list.Add(docLine);
             }
