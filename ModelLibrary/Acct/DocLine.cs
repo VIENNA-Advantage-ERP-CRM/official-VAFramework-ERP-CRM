@@ -110,6 +110,10 @@ namespace VAdvantage.Acct
         private int _AD_Org_ID = -1;
         // Desription
         private String _Description = String.Empty;
+        // Line ID
+        private int _primaryKeyValue = 0;
+        // Line Table ID Reference 
+        private int _LineTable_ID = -1;
         #endregion
 
 
@@ -188,6 +192,48 @@ namespace VAdvantage.Acct
         public void SetC_ConversionType_ID(int C_ConversionType_ID)
         {
             _C_ConversionType_ID = C_ConversionType_ID;
+        }
+
+        /// <summary>
+        /// Get Line Table ID
+        /// </summary>
+        /// <returns>LineTable_ID</returns>
+        public int GetLineTable_ID()
+        {
+            if (_LineTable_ID == -1)
+            {
+                _LineTable_ID = _doc.Get_Table_ID();
+            }
+            return _LineTable_ID;
+        }
+
+        /// <summary>
+        /// Set LineTable_ID
+        /// </summary>
+        /// <param name="LineTable_ID"></param>
+        public void SetLineTable_ID(int LineTable_ID)
+        {
+            _LineTable_ID = LineTable_ID;
+        }
+
+        /// <summary>
+        /// set primary value on line
+        /// </summary>
+        /// <param name="id"></param>
+        public void SetPrimaryKeyValue(int id)
+        {
+            _primaryKeyValue = id;
+        }
+
+        /// <summary>
+        /// get Value of key
+        /// </summary>
+        public int GetPrimaryKeyValue
+        {
+            get
+            {
+                return _primaryKeyValue;
+            }
         }
 
         /// <summary>

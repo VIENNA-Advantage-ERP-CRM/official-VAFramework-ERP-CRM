@@ -62,6 +62,11 @@ namespace ModelLibrary.Acct
                 DocLine docLine = new DocLine(line, this);
                 docLine.SetAmount(line.GetAccountDebit(), line.GetAccountCredit());
                 //docLine.SetConvertedAmt(line.GetC_AcctSchema_ID(), line.GetAccountDebit(), line.GetAccountCredit());
+
+                // set primary key value 
+                docLine.SetPrimaryKeyValue(line.GetC_ProfitLossLines_ID());
+                // set GL journal line table ID
+                docLine.SetLineTable_ID(line.Get_Table_ID());
                 //
                 list.Add(docLine);
             }
