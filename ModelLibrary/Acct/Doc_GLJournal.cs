@@ -105,6 +105,11 @@ namespace VAdvantage.Acct
 
                     // Set Description
                     docLine.SetDescription(line.GetDescription());
+                    // set primary key value 
+                    docLine.SetPrimaryKeyValue(line.GetGL_JournalLine_ID());
+                    // set GL journal line table ID
+                    docLine.SetLineTable_ID(line.Get_Table_ID());
+
                     list.Add(docLine);
                 }
                 else
@@ -164,6 +169,10 @@ namespace VAdvantage.Acct
 
                             // Set Description
                             docLine.SetDescription(line.GetDescription());
+                            // set primary key value 
+                            docLine.SetPrimaryKeyValue(line.GetGL_JournalLine_ID());
+                            // set GL journal line table ID
+                            docLine.SetLineTable_ID(line.Get_Table_ID());
 
                             //	--	Organization of Line was set to Org of Account
                             list.Add(docLine);
