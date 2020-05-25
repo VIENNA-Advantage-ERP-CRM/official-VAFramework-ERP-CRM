@@ -851,28 +851,28 @@ namespace VIS.Helpers
 
 
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
-            if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
-            {
-                int  valIndex = rowData.Keys.ToList().IndexOf("value");
+            //if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
+            //{
+            //    int  valIndex = rowData.Keys.ToList().IndexOf("value");
 
-                if (!m_fields[valIndex].IsVirtualColumn)
-                {
+            //    if (!m_fields[valIndex].IsVirtualColumn)
+            //    {
 
-                    //Check value in DB 
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
-                        + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
+            //        //Check value in DB 
+            //        int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
+            //            + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
 
-                    if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
-                    {
-                        outt.IsError = true;
-                        outt.FireEEvent = true;
-                        outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
-                        outt.Status = GridTable.SAVE_ERROR;
-                        return;
+            //        if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+            //        {
+            //            outt.IsError = true;
+            //            outt.FireEEvent = true;
+            //            outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
+            //            outt.Status = GridTable.SAVE_ERROR;
+            //            return;
 
-                    }
-                }
-            };
+            //        }
+            //    }
+            //};
 
             //if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
             //{
