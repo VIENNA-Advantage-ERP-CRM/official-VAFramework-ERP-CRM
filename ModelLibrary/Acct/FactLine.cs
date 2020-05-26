@@ -481,27 +481,50 @@ namespace VAdvantage.Acct
             {
                 SetC_Period_ID(_doc.GetC_Period_ID());
             }
+            // Set Line Table ID
+            if (_docLine != null && _docLine.GetLineTable_ID() > 0 && Get_ColumnIndex("LineTable_ID") > -1)
+            {
+                Set_Value("LineTable_ID", _docLine.GetLineTable_ID());
+            }
+            else if (Get_ColumnIndex("LineTable_ID") > -1)
+            {
+                Set_Value("LineTable_ID", _doc.Get_Table_ID());
+            }
             if (_docLine != null)
             {
                 SetC_Tax_ID(_docLine.GetC_Tax_ID());
             }
             //	Description
-            StringBuilder description = new StringBuilder(_doc.GetDocumentNo());
+            StringBuilder description = new StringBuilder();
             if (_docLine != null)
             {
-                description.Append(" #").Append(_docLine.GetLine());
+                //description.Append(" #").Append(_docLine.GetLine());
                 if (_docLine.GetDescription() != null)
                 {
-                    description.Append(" (").Append(_docLine.GetDescription()).Append(")");
+                    //description.Append(" (").Append(_docLine.GetDescription()).Append(")");
+                    description.Append(_docLine.GetDescription());
                 }
                 else if (_doc.GetDescription() != null && _doc.GetDescription().Length > 0)
                 {
+                    description.Append(_doc.GetDocumentNo());
+                    description.Append(" #").Append(_docLine.GetLine());
                     description.Append(" (").Append(_doc.GetDescription()).Append(")");
+                }
+                else
+                {
+                    // if on header - description not defined then post document No and line as description
+                    description.Append(_doc.GetDocumentNo());
+                    description.Append(" #").Append(_docLine.GetLine());
                 }
             }
             else if (_doc.GetDescription() != null && _doc.GetDescription().Length > 0)
             {
                 description.Append(" (").Append(_doc.GetDescription()).Append(")");
+            }
+            else
+            {
+                // if on header - description not defined then post document No as description
+                description.Append(_doc.GetDocumentNo());
             }
             SetDescription(description.ToString());
             //	Journal Info
