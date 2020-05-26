@@ -128,6 +128,15 @@ namespace VIS.Controllers
 
                     }
                     ctx = new Ctx(lCtx.ctxMap); //cretae new context
+
+                    /* fix for User Value Null value */
+
+                    if (string.IsNullOrEmpty(ctx.GetContext("##AD_User_Value")))
+                    {
+                       return  new AccountController().LogOff();
+                        
+                    }
+
                     if (key != "")
                     {
                         ctx.SetSecureKey(key);
