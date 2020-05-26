@@ -1,4 +1,4 @@
-﻿/*** version 1.0.18.0***/
+﻿/*** version 1.0.18.1***/
 
 html, body {
     height: 100%;
@@ -7236,7 +7236,7 @@ html[dir="rtl"] .input-group-addon {
 
 .vis-pref-ctrl-lblwrp {
     padding-right: 10px;
-    width: 30%;
+    width: 35%;
     text-align: right;
 }
 
@@ -7244,6 +7244,7 @@ html[dir="rtl"] .input-group-addon {
     flex: 1;
     display: flex;
     padding: 0;
+    align-items: baseline;
 }
 
     .vis-pref-ctrlwrap input:not([type="checkbox"]):not([type="button"]),
@@ -19371,9 +19372,6 @@ html[dir="rtl"] .vis-process-left-sidebar {
     border-right: none;
 }
 /*rtl css End here*/
-
-
-
 
 
 
