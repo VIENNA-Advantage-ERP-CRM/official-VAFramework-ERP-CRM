@@ -615,7 +615,7 @@ namespace VAdvantage.Model
                 }
                 if (!newRecord)
                 {
-                    int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
+                    int validity = GetCtx().GetContextAsInt("#"+Common.Common.Password_Valid_Upto_Key);
                     base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
                 }
             }
