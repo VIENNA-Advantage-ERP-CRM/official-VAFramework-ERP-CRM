@@ -981,7 +981,7 @@ namespace VAdvantage.Model
                 char ch = chars[i];
                 //ch = Char.ToLower(ch);
                 if ((ch >= '0' && ch <= '9')		//	digits
-                    || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))	//	characters
+                    || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '.')	//	characters
                     sb.Append(ch);
             }
             return sb.ToString();

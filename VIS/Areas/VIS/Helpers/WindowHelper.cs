@@ -639,7 +639,7 @@ namespace VIS.Helpers
                             error = true;
                             message = ERROR + field.ColumnName + "= " + ((dataRowOld != null && dataRowOld[colNameLower] != null) ? dataRowOld[colNameLower] : "null").ToString()
                                     + " != DB: " + rowDataDB[colNameLower] + " -> " + dataRow[colNameLower];
-                            
+
                         }
                     }	//	DataChanged
 
@@ -679,7 +679,7 @@ namespace VIS.Helpers
                 {
                     if (manualUpdate)
                         CreateUpdateSqlReset();
-                   
+
 
                     outData.IsError = true;
                     outData.FireEEvent = true;
@@ -711,7 +711,7 @@ namespace VIS.Helpers
                     }
                     else
                     {
-                       
+
                     }
                 }
                 else
@@ -851,28 +851,31 @@ namespace VIS.Helpers
 
 
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
-            if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
-            {
-                int  valIndex = rowData.Keys.ToList().IndexOf("value");
 
-                if (!m_fields[valIndex].IsVirtualColumn)
-                {
 
-                    //Check value in DB 
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
-                        + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
+            //if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
+            //{
+            //    int  valIndex = rowData.Keys.ToList().IndexOf("value");
 
-                    if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
-                    {
-                        outt.IsError = true;
-                        outt.FireEEvent = true;
-                        outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
-                        outt.Status = GridTable.SAVE_ERROR;
-                        return;
+            //    if (!m_fields[valIndex].IsVirtualColumn)
+            //    {
 
-                    }
-                }
-            };
+            //        //Check value in DB 
+            //        int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
+            //            + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
+
+            //        if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+            //        {
+            //            outt.IsError = true;
+            //            outt.FireEEvent = true;
+            //            outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = m_fields[rowData.Keys.ToList().IndexOf("value")].Name, IsError = true };
+            //            outt.Status = GridTable.SAVE_ERROR;
+            //            return;
+
+
+            //        }
+            //    }
+            //};
 
             //if (rowData.ContainsKey("documentno") && Util.GetValueOfString(rowData["documentno"]) != "")
             //{
@@ -925,12 +928,13 @@ namespace VIS.Helpers
                     int parentWinID = inn.AD_WIndow_ID;
                     PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
                     //	No Persistent Object
-                    
+
                     if (poMas == null)
                     {
                         throw new NullReferenceException("No Persistent Obj");
                     }
-                    SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false);
+                    if (!SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false))
+                        return;
                     if (!poMas.Save(trxMas))
                     {
                         String msg = "SaveError";
@@ -994,10 +998,12 @@ namespace VIS.Helpers
                 hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
                 po.SetAD_Window_ID(Ver_Window_ID);
-                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey);
+                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey))
+                    return;
             }
             else
-                SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey);
+                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey))
+                    return;
 
             if (!po.Save())
             {
@@ -1188,7 +1194,7 @@ namespace VIS.Helpers
         /// <param name="Record_ID"></param>
         /// <param name="HasDocValWF"></param>
         /// <param name="VersionRecord"></param>
-        private void SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey)
+        private bool SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey)
         {
             var rowData = inn.RowData; // new 
             var _rowData = inn.OldRowData;
@@ -1257,7 +1263,7 @@ namespace VIS.Helpers
                         outt.FireEEvent = true;
                         outt.EventParam = new EventParamOut() { Msg = "ValidationError", Info = columnName, IsError = true };
                         outt.Status = GridTable.SAVE_ERROR;
-                        return;
+                        return false;
                     }
                     // check in case of version record, if there are multiple Parent Link Columns
                     if (VersionRecord && field.IsParentColumn && !parentLinkCols.Contains(columnName))
@@ -1306,7 +1312,7 @@ namespace VIS.Helpers
                             outt.FireEEvent = true;
                             outt.EventParam = new EventParamOut() { Msg = "ValidationError", Info = columnName, IsError = true };
                             outt.Status = GridTable.SAVE_ERROR;
-                            return;
+                            return false;
                         }
                     }
                     //	Original != DB
@@ -1325,7 +1331,7 @@ namespace VIS.Helpers
                         outt.FireEEvent = true;
                         outt.EventParam = new EventParamOut() { Msg = "SaveErrorDataChanged", Info = columnName, IsError = true };
                         outt.Status = GridTable.SAVE_ERROR;
-                        return;
+                        return false;
                     }
                 }
             }
@@ -1419,6 +1425,7 @@ namespace VIS.Helpers
                     po.Set_Value("IsVersionApproved", false);
                 }
             }
+            return true;
             // Lokesh Chauhan // Master Data Versioning
         }
 

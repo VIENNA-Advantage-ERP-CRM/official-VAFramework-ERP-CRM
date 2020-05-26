@@ -108,6 +108,12 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dll\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="Dll\Mono.Security.dll" />
+    <Content Include="Dll\MySql.Data.dll" />
+    <Content Include="Dll\Npgsql.dll" />
+    <Content Include="Dll\PdfSharp.dll" />
+    <Content Include="Dll\SecureEngineUtility.dll" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\1000097.jpg" />
