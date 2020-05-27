@@ -13542,7 +13542,7 @@
             //End
 
             if (Util.scale(lineNetAmt) > StdPrecision) {
-                lineNetAmt = lineNetAmt.toFixed(StdPrecision);// MidpointRounding.AwayFromZero);
+                lineNetAmt = Util.getValueOfDecimal(lineNetAmt.toFixed(StdPrecision));// MidpointRounding.AwayFromZero);
             }
             this.log.info("amt = LineNetAmt=" + lineNetAmt);
             mTab.setValue("LineNetAmt", lineNetAmt);
@@ -14014,7 +14014,7 @@
                 var QtyInvoiced1 = null;
 
                 if (QtyInvoiced != null) {
-                    QtyInvoiced1 = QtyInvoiced.toFixed(precision);//, MidpointRounding.AwayFromZero);
+                    QtyInvoiced1 = Util.getValueOfDecimal(QtyInvoiced.toFixed(precision));//, MidpointRounding.AwayFromZero);
                 }
 
                 //if (QtyEntered.Value.compareTo(QtyEntered1.Value) != 0)
@@ -17477,8 +17477,8 @@
                 qtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                 paramString = C_UOM_To_ID.toString();
                 precision = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramString);
-                var QtyEntered1 = qtyEntered.toFixed(precision);//, MidpointRounding.AwayFromZero);
-                if (qtyEntered.toString().compareTo(QtyEntered1) != 0) {
+                var QtyEntered1 = Util.getValueOfDecimal(qtyEntered.toFixed(precision));//, MidpointRounding.AwayFromZero);
+                if (qtyEntered.compareTo(QtyEntered1) != 0) {
                     this.log.fine("Corrected qtyEntered Scale UOM=" + C_UOM_To_ID
                         + "; qtyEntered=" + qtyEntered + "->" + QtyEntered1);
                     qtyEntered = QtyEntered1;
@@ -17514,7 +17514,7 @@
                 precision = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramString);
 
                 // JID_0681: If we copy the MR lines using copy from button system is only copy the Qty only before decimal.
-                var QtyEntered1 = qtyEntered.toFixed(precision);
+                var QtyEntered1 = Util.getValueOfDecimal(qtyEntered.toFixed(precision));
                 if (qtyEntered.compareTo(QtyEntered1) != 0) {
                     this.log.fine("Corrected qtyEntered Scale UOM=" + C_UOM_To_ID
                         + "; qtyEntered=" + qtyEntered + "->" + QtyEntered1);
@@ -17547,7 +17547,7 @@
                 precision = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramString);
 
                 // JID_0681: If we copy the MR lines using copy from button system is only copy the Qty only before decimal.
-                var MovementQty1 = movementQty.toFixed(precision);
+                var MovementQty1 = Util.getValueOfDecimal(movementQty.toFixed(precision));
                 if (movementQty.compareTo(MovementQty1) != 0) {
                     this.log.fine("Corrected movementQty "
                         + movementQty + "->" + MovementQty1);
