@@ -1454,6 +1454,31 @@
     MLocatorLookup.prototype.getColumnName = function () {
         return "M_Locator.M_Locator_ID";
     };
+
+    /**
+    * Get Zoom
+    * 
+    * @return Zoom AD_Window_ID
+    */
+    MLocatorLookup.prototype.getZoomWindow = function () {
+        if (arguments.length == 0) {
+            return this.info.zoomWindow;
+        }
+        var query = arguments[0];
+
+        /*
+    * Handle cases where you have multiple windows for a single table. So
+    * far it is just the tables that have a PO Window defined. For eg.,
+    * Order, Invoice and Shipments This will need to be expanded to add
+    * more tables if they have multiple windows.
+    */
+
+        var AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID("M_Locator",
+            this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
+        return AD_Window_ID;
+    }; // getZoomWindow
+
+
     MLocatorLookup.prototype.dispose = function () {
         this.disposeLocal();
         this.$super.dispose.call(this);
