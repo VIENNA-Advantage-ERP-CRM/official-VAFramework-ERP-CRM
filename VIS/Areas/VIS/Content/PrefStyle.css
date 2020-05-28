@@ -1075,7 +1075,7 @@ html[dir="rtl"] .input-group-addon {
     flex: 1;
     display: flex;
     padding: 0;
-    align-items:baseline;
+    align-items: baseline;
 }
 .vis-pref-ctrlwrap input:not([type="checkbox"]):not([type="button"]),
 .vis-pref-ctrlwrap select{
