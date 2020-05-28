@@ -240,7 +240,7 @@ namespace ViennaAdvantage.Process
                                                     {
                                                         if (rates.data[j].currency_code == myCurrency.ToUpper())
                                                         {
-                                                            exchangeRate = rates.data[i].rate["selling_rate"];
+                                                            exchangeRate = rates.data[j].rate["middle_rate"];
                                                             break;
                                                         }
                                                     }
@@ -456,7 +456,7 @@ namespace ViennaAdvantage.Process
             }
             else if (url.ToLower().Contains("api.bnm.gov.my"))
             {
-                string newUrl = @"https://api.bnm.gov.my/public/exchange-rate";
+                string newUrl = @"https://api.bnm.gov.my/public/exchange-rate?session=1200";
 
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 
