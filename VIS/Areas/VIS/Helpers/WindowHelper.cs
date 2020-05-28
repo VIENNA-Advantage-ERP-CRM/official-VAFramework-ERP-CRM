@@ -852,6 +852,7 @@ namespace VIS.Helpers
 
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
 
+
             //if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
             //{
             //    int  valIndex = rowData.Keys.ToList().IndexOf("value");
@@ -862,7 +863,6 @@ namespace VIS.Helpers
             //        //Check value in DB 
             //        int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
             //            + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
-
 
             //        if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
             //        {

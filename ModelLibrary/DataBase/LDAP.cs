@@ -31,8 +31,9 @@ namespace VAdvantage.DataBase
             DirectoryEntry entry = new DirectoryEntry(ldapURL, userName, password);
             try
             {
+                entry.AuthenticationType = AuthenticationTypes.Secure;
                 DirectorySearcher ds = new DirectorySearcher(entry);
-                ds.Filter = "(&(objectClass=user)(cn=" + userName + "))";
+                log.Warning("LDAP INFO: Step 1: " + userName);
                 SearchResult result = ds.FindOne();
                 if (null == result)
                 {
