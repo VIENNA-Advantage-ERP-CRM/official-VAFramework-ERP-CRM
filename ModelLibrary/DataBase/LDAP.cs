@@ -46,6 +46,10 @@ namespace VAdvantage.DataBase
                 }
                 else
                 {
+                    if (VAdvantage.Utility.SecureEngine.IsEncrypted(adminPwd))
+                    {
+                        adminPwd = VAdvantage.Utility.SecureEngine.Decrypt(adminPwd);
+                    }
                     entry = new DirectoryEntry(ldapURL, adminUser, adminPwd, AuthenticationTypes.Secure | AuthenticationTypes.Signing | AuthenticationTypes.Sealing);
                     SearchResult result = null;
                     //Bind to the native AdsObject to force authentication.
