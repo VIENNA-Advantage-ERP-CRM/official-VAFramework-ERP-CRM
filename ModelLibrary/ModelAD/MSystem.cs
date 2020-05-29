@@ -40,7 +40,7 @@ namespace VAdvantage.Model
         /// <returns>System</returns>
         public static MSystem Get(Ctx ctx)
         {
-            _system= (MSystem)cache[101];
+            _system = (MSystem)cache[101];
 
             if (_system == null)
             {
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
         /// <returns>true if ldap authenticated</returns>
         public bool IsLDAP(String userName, String password)
         {
-            return LDAP.Validate(GetLDAPHost(), GetLDAPDomain(), userName, password);
+            return LDAP.Validate(GetLDAPHost(), GetLDAPDomain(), userName, password, GetLDAPAdminUser(), GetLDAPAdminPwd());
             //return false;
         }
 
@@ -615,5 +615,5 @@ namespace VAdvantage.Model
 
     }
 
-  
+
 }
