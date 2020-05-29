@@ -34,7 +34,7 @@ namespace VAdvantage.DataBase
 
                 if (string.IsNullOrEmpty(adminUser))
                 {
-                    entry = new DirectoryEntry(ldapURL, userName, password, AuthenticationTypes.Secure | AuthenticationTypes.Sealing);
+                    entry = new DirectoryEntry(ldapURL, userName, password, AuthenticationTypes.Secure | AuthenticationTypes.Signing | AuthenticationTypes.Sealing);
                     DirectorySearcher ds = new DirectorySearcher(entry);
                     log.Warning("LDAP INFO: Step 1: " + userName);
                     SearchResult result = ds.FindOne();
