@@ -420,7 +420,7 @@
                 '<div class="vis-group-user-right">' +
                     '<ul>' +
                         '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"  title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
-                        '<li><span class="vis-group-user-ico vis-group-info fa fa-info"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                '<li><span class="vis-group-user-ico vis-group-info fa fa-info" title= "' + VIS.Msg.getMsg("InfoWindow") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                     '</ul>                           ' +
                 '</div>' +
             '</div>' +
