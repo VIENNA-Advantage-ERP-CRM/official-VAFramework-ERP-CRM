@@ -1068,6 +1068,19 @@
                     busyDiv("hidden");
                     return false;
                 }
+                    // Handle the cases of Negative and Positive amount on Amount dimension control
+                else if (parseFloat(txtAmount.val()) > 0 && parseFloat(txtTotalAmount.val()) < 0) {
+                    VIS.ADialog.warn("VIS_NegativeAmount");
+                    txtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
+                else if (parseFloat(txtAmount.val()) < 0 && parseFloat(txtTotalAmount.val()) > 0) {
+                    VIS.ADialog.warn("VIS_PositiveAmount");
+                    txtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
                 else if (!validateDynamicControl()) {
                     busyDiv("hidden");
                     return false;
@@ -1086,6 +1099,19 @@
                 else if (Math.abs(parseFloat(modalTxtAmount.val())) > Math.abs(parseFloat(txtTotalAmount.val()))) {
                     VIS.ADialog.warn("LineTotalNotGrater");
                     modalTxtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
+                    // Handle the cases of Negative and Positive amount on Amount dimension control
+                else if (parseFloat(modalTxtAmount.val()) > 0 && parseFloat(txtTotalAmount.val()) < 0) {
+                    VIS.ADialog.warn("VIS_NegativeAmount");
+                    txtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
+                else if (parseFloat(modalTxtAmount.val()) < 0 && parseFloat(txtTotalAmount.val()) > 0) {
+                    VIS.ADialog.warn("VIS_PositiveAmount");
+                    txtAmount.focus();
                     busyDiv("hidden");
                     return false;
                 }

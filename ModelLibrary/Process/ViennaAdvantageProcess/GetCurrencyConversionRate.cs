@@ -240,9 +240,12 @@ namespace ViennaAdvantage.Process
                                                     {
                                                         if (rates.data[j].currency_code == myCurrency.ToUpper())
                                                         {
-                                                            // calculate middle rate from selling_rate and buying_rate.
-                                                            exchangeRate = (rates.data[i].rate["selling_rate"] + rates.data[i].rate["buying_rate"]) / 2;
-                                                            exchangeRate = Decimal.Round(exchangeRate, 4, MidpointRounding.AwayFromZero);
+                                                            int unit = Util.GetValueOfInt(rates.data[j].unit);
+                                                            exchangeRate = rates.data[j].rate["middle_rate"];
+                                                            if (unit > 1)
+                                                            {
+                                                                exchangeRate /= unit;
+                                                            }
                                                             break;
                                                         }
                                                     }
@@ -458,7 +461,7 @@ namespace ViennaAdvantage.Process
             }
             else if (url.ToLower().Contains("api.bnm.gov.my"))
             {
-                string newUrl = @"https://api.bnm.gov.my/public/exchange-rate";
+                string newUrl = @"https://api.bnm.gov.my/public/exchange-rate?session=1200";
 
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 
