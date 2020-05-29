@@ -17317,7 +17317,8 @@
                     var paramString = dr["Orig_InOutLine_ID"];
                     var line = VIS.dataContext.getJSONRecord("MInOutLine/GetMInOutLine", paramString);
 
-                    mTab.setValue("M_Locator_ID", line["M_Locator_ID"]);
+                    // JID_1656: locator sholud select manually
+                    //mTab.setValue("M_Locator_ID", line["M_Locator_ID"]);
                 }
                 if (Util.getValueOfString(dr["IsDropShip"]) == "Y") {
                     mTab.setValue("IsDropShip", true);
