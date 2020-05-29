@@ -613,9 +613,9 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
-                if (!newRecord)
+                if (!newRecord && GetCtx().GetAD_User_ID() == GetAD_User_ID())
                 {
-                    int validity = GetCtx().GetContextAsInt(Common.Common.Password_Valid_Upto_Key);
+                    int validity = GetCtx().GetContextAsInt("#"+Common.Common.Password_Valid_Upto_Key);
                     base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
                 }
             }

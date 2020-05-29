@@ -137,12 +137,14 @@
                 data: { name: roleName, userLevel: usrLEvel, orgID: JSON.stringify(orgAccesses) },
                 success: function (result) {
                     var data = JSON.parse(result);
-                    if (data == false) {
-                        VIS.ADialog.error("VIS_ErrorSavingRole");
+                    if (data.length > 0) {
+                        VIS.ADialog.error(data);
                     }
                     else {
+                        VIS.ADialog.info("Record saved successfully")
                         ch.close();
                     }
+
                     $bsyDiv[0].style.visibility = "hidden";
                 },
                 error: function () {
