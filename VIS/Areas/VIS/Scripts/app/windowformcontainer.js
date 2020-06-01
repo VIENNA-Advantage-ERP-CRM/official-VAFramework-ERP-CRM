@@ -24,6 +24,18 @@
             return windowNo;
         };
 
+        this.getAD_Table_ID = function () {
+            return curTab.getAD_Table_ID();
+        }
+
+        this.getAD_Window_ID = function () {
+            return curTab.getAD_Window_ID();
+        }
+
+        this.getRecord_ID = function () {
+            return curTab.getRecord_ID();
+        }
+
         this.getContentGrid = function () { return $contentGrid; };
 
         this.close = function () {
