@@ -1923,7 +1923,7 @@ namespace VAdvantage.Model
             //                                       AND ROWNUM <= 100 )
             //                               ) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ";
 
-            string sql = DBFunctionCollection.CheckMoveContainer(GetM_Movement_ID());            
+            string sql = DBFunctionCollection.CheckMoveContainer(GetM_Movement_ID());
             log.Info(sql);
             string productName = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
             if (!string.IsNullOrEmpty(productName))
