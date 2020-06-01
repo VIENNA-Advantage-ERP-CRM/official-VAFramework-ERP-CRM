@@ -11665,24 +11665,32 @@
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
                     paramStr = M_Product_ID.toString().concat(',').concat(C_UOM_To_ID.toString()).concat(',').concat(QtyEntered.toString());
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                    QtyOrdered = pc;
+                    QtyOrdered = pc
 
-                    var conversion = false
-                    if (QtyOrdered != null) {
-                        conversion = QtyEntered != QtyOrdered;
-                    }
-                    if (QtyOrdered == null) {
-                        conversion = false;
-                        QtyOrdered = 1;
-                    }
-                    if (conversion) {
-                        QtyOrdered;
-                    }
-                    else {
 
-                        QtyOrdered = QtyOrdered * QtyEntered;
+                    //handle issue while conversion on Physical Inventory
+                    //var conversion = false
+
+                    if (QtyOrdered == null) {                        
+                        QtyOrdered = QtyEntered;
                     }
 
+                    //if (QtyOrdered != null) {
+                    //    conversion = QtyEntered != QtyOrdered;
+                    //}
+
+                    //if (QtyOrdered == null) {
+                    //    conversion = false;
+                    //    QtyOrdered = QtyEntered;
+                    //}
+
+                    //if (conversion) {
+                    //    QtyOrdered;
+                    //}
+                    //else {
+
+                    //    QtyOrdered = QtyOrdered * QtyEntered;
+                    //}
 
                 }
 
@@ -11721,8 +11729,6 @@
                         + " -> " + conversion
                         + " QtyOrdered=" + QtyOrdered);
                     ctx.setContext(windowNo, "UOMConversion", conversion ? "Y" : "N");
-
-                    QtyOrdered;
                 }
 
                 if (mTab.getValue("AdjustmentType").toString() == "D") {
@@ -11752,23 +11758,27 @@
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     QtyOrdered = pc;
 
-                    var conversion = false
-                    if (QtyOrdered != null) {
-                        conversion = QtyEntered != QtyOrdered;
-                    }
-                    if (QtyOrdered == null) {
-                        conversion = false;
-                        QtyOrdered = 1;
-                    }
-                    if (conversion) {
-                        mTab.setValue("QtyInternalUse", QtyOrdered);
-                    }
-                    else {
+                    //handle issue while conversion on Physical Inventory
+                    if (QtyOrdered == null)
+                        QtyOrdered = QtyEntered;
 
-                        mTab.setValue("QtyInternalUse", (QtyOrdered * QtyEntered));
-                    }
+                    mTab.setValue("QtyInternalUse", QtyOrdered);
 
+                    //var conversion = false
+                    //if (QtyOrdered != null) {
+                    //    conversion = QtyEntered != QtyOrdered;
+                    //}
+                    //if (QtyOrdered == null) {
+                    //    conversion = false;
+                    //    QtyOrdered = 1;
+                    //}
+                    //if (conversion) {
+                    //    mTab.setValue("QtyInternalUse", QtyOrdered);
+                    //}
+                    //else {
 
+                    //    mTab.setValue("QtyInternalUse", (QtyOrdered * QtyEntered));
+                    //}
                 }
 
                 else if (mField.getColumnName() == "QtyEntered") {
