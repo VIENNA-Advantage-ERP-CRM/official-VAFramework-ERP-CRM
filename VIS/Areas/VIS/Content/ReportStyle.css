@@ -257,7 +257,8 @@ ul.vis-toppaging li:nth-child(3) {
         margin-top: 0 !important;
     }
 .VAPOS-ReportHeadRap ul li a {width: 22px;height: 25px;}
-.vis-report-header input[type="checkbox"],
-.vis-report-header input[type="checkbox"]:checked:before {
+.vis-report-header input[type="checkbox"], 
+.vis-report-header input[type="checkbox"]:checked:before, 
+.vis-report-header input[type="checkbox"]:not(:checked) {
     border-color: rgba(var(--v-c-on-primary), 1);
 }
