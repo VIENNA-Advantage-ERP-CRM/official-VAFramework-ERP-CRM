@@ -454,6 +454,7 @@ input[type="radio"] {
     height: 12px;
     background-color: transparent;
     outline: none;
+    cursor: pointer;
 }
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
