@@ -215,7 +215,7 @@ namespace VIS.Helpers
             //    throw new Exception("MaxFailedLoginAttempts");
             //}
             DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
-            if (pwdExpireDate == null || (passwordValidUpto > 0 && ( DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)))
+            if (pwdExpireDate == null || (passwordValidUpto > 0 && (DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)))
             {
                 model.Login1Model.ResetPwd = true;
             }
@@ -488,8 +488,8 @@ namespace VIS.Helpers
         {
             if (cache.Count > 0)
             {
-                ctx.SetContext(Common.Failed_Login_Count_Key, cache[Common.Failed_Login_Count_Key].ToString());
-                ctx.SetContext(Common.Password_Valid_Upto_Key, cache[Common.Password_Valid_Upto_Key].ToString());
+                ctx.SetContext("#" + Common.Failed_Login_Count_Key, cache[Common.Failed_Login_Count_Key].ToString());
+                ctx.SetContext("#" + Common.Password_Valid_Upto_Key, cache[Common.Password_Valid_Upto_Key].ToString());
             }
         }
 

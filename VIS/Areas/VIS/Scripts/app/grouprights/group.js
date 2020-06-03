@@ -179,8 +179,8 @@
                       '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_RoleSaved") + '</h7>' +
 
                       '<div class="vis-group-top-right">' +
-                          '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus"></i></button>' +
-                          '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save"></i></button>' +
+                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew")+'" ></i></button>' +
+                '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                       '</div>' +
                       '<div class="vis-group-content-headDown"><span><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
                       '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button></span></div>' +
@@ -190,7 +190,7 @@
             $btnSaveRoles = $middlePanel.find('.vis-group-save-btn');
             $btnCreateRole = $middlePanel.find('.vis-group-add-btn');
             $searchRole = $middlePanel.find('.vis-group-SearchText');
-            $searchRoleBtn = $middlePanel.find('.vis-group-ass-btnse');
+            $searchRoleBtn = $middlePanel.find('.vis-group-ass-btns');
             /**end of content-head**/
 
             $divRoleGroup = $('<div class="vis-group-role-container">');
@@ -210,8 +210,8 @@
                          '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_GroupSaved") + '</h7>' +
                        '<div class="vis-group-top-right">' +
                            '<div class="vis-group-top-right">' +
-                           '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus"></i></button>' +
-                          '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save"></i></button>' +
+                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew") +'"></i></button>' +
+                '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                            '</div>' +
                        '</div>' +
 
@@ -225,7 +225,7 @@
                        '<div class="vis-group-clear-both"></div>' +
                    '</div>');
             $searchGroup = $rightPanel.find('.vis-group-SearchText');
-            $searchGroupBtn = $rightPanel.find('.vis-group-ass-btnse');
+            $searchGroupBtn = $rightPanel.find('.vis-group-ass-btns');
             $btnCreateGroup = $rightPanel.find('.vis-group-add-btn');
             $btnSaveGroup = $rightPanel.find('.vis-group-save-btn');
 
@@ -288,7 +288,9 @@
                                 '{{/if}}' +
                             '</div>' +
                                         '<div class="vis-group-user-text">' +
-                                            '{{#if IsActive }}' +
+                '{{#if IsActive }}' +
+        
+    
                             	            '<p style="font-weight: bold">{{Username}}</p>' +
                                             '{{else}}' +
                                             '<p>{{Username}}</p>' +
@@ -299,18 +301,18 @@
 
                         '<div class="vis-group-user-right">' +
                         	'<ul>' +
-                            	'<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
+                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '{{#if IsActive }}' +
                                         '{{#if IsUpdate}}' +
-                                            '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                            '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" title="'+VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                                            '<li><span disabled class="vis-group-user-ico vis-group-activeUser vis vis-user" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                '<li><span disabled class="vis-group-user-ico vis-group-activeUser vis vis-user" title="' + VIS.Msg.getMsg("Active") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                             '{{/if}}' +
                                  '{{else}}' +
                                         '{{#if IsUpdate}}' +
-                                        '<li><span class="vis-group-user-ico vis-group-inactiveUser vis vis-user"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                                '<li><span class="vis-group-user-ico vis-group-inactiveUser vis vis-user" title="' + VIS.Msg.getMsg("InActive") +'"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                                        '<li><span disabled class="vis-group-user-ico vis-group-inactiveUser vis vis-user"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                                                '<li><span disabled class="vis-group-user-ico vis-group-inactiveUser vis vis-user" title="' + VIS.Msg.getMsg("InActive") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                          '{{/if}}' +
                                  '{{/if}}' +
                             '</ul>' +
@@ -387,7 +389,7 @@
                         '</div>' +
                             '<div class="vis-group-user-right">' +
                         	'<ul>' +
-                            	'<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"  data-UID="{{AD_Role_ID}}-{{roleWindowID}}"></span></li>' +
+                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Role_ID}}-{{roleWindowID}}"></span></li>' +
                             '</ul>' +
                             '</div>' +
                 '</div>' +
@@ -417,7 +419,7 @@
                 '</div>' +
                 '<div class="vis-group-user-right">' +
                     '<ul>' +
-                        '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                        '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"  title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                         '<li><span class="vis-group-user-ico vis-group-info fa fa-info"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                     '</ul>                           ' +
                 '</div>' +
@@ -994,6 +996,11 @@
                     if (data < 1) {
                         VIS.ADialog.error("VIS_UserNotUpdated");
                     }
+                    if (activate) {
+                        target.prop("title", VIS.Msg.getMsg("Active"));
+                    }
+                    else
+                        target.prop("title", VIS.Msg.getMsg("InActive"));
                     $bsyDiv[0].style.visibility = "hidden";
                 },
                 error: function () {
