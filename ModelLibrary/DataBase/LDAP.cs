@@ -16,7 +16,8 @@ namespace VAdvantage.DataBase
 
         public static bool Validate(String ldapURL, String domain, String userName, String password, string adminUser, string adminPwd)
         {
-
+            if (String.IsNullOrEmpty(password))
+                return false;
             //LdapConnection
             // ldapURL = @"LDAP://192.168.0.1:389/OU=pfsense,DC=viennasolutions2013,DC=local";
             if (ldapURL.EndsWith("/"))
@@ -33,6 +34,7 @@ namespace VAdvantage.DataBase
             {
 
                 if (string.IsNullOrEmpty(adminUser))
+
                 {
                     entry = new DirectoryEntry(ldapURL, userName, password, AuthenticationTypes.Secure | AuthenticationTypes.Signing | AuthenticationTypes.Sealing);
                     DirectorySearcher ds = new DirectorySearcher(entry);
@@ -46,6 +48,7 @@ namespace VAdvantage.DataBase
                 }
                 else
                 {
+                    log.Info("Using LDAP Admin user Credentials");
                     if (VAdvantage.Utility.SecureEngine.IsEncrypted(adminPwd))
                     {
                         adminPwd = VAdvantage.Utility.SecureEngine.Decrypt(adminPwd);
@@ -58,8 +61,8 @@ namespace VAdvantage.DataBase
                         object obj = entry.NativeObject;
                         DirectorySearcher search = new DirectorySearcher(entry);
                         search.Filter = "(SAMAccountName=" + userName + ")";
-
                         result = search.FindOne();
+                        log.Info("LDAP Admin user Credentials and user verified");
                     }
                     catch (Exception e)
                     {
@@ -76,7 +79,7 @@ namespace VAdvantage.DataBase
                     else if (result != null)
                     {
                         string guidfromAdmin = BitConverter.ToString((byte[])result.Properties["objectguid"][0]);
-
+                        log.Info("LDAP checking user's credentials");
                         entry = new DirectoryEntry(ldapURL, userName, password, AuthenticationTypes.Secure | AuthenticationTypes.Signing | AuthenticationTypes.Sealing);
                         DirectorySearcher search1 = new DirectorySearcher(entry);
 
@@ -89,7 +92,7 @@ namespace VAdvantage.DataBase
                             return false;
                         }
                         string guid = BitConverter.ToString((byte[])result.Properties["objectguid"][0]);
-
+                        log.Info("LDAP checking user's credentials Worked");
                         if (guidfromAdmin.Equals(guid))
                         {
                             return true;
@@ -102,6 +105,7 @@ namespace VAdvantage.DataBase
 
                     }
                 }
+
 
 
             }
