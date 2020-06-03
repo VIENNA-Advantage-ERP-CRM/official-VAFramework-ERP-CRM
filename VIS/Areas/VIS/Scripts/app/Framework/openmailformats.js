@@ -101,7 +101,7 @@
             }
             ch.setWidth(850);
             if (isEmail) {
-                ch.setTitle(VIS.Msg.getMsg("EmailFormat"));
+                ch.setTitle(VIS.Msg.getMsg("EmailFormats"));
             }
             else {
                 ch.setTitle(VIS.Msg.getMsg("LetterFormat"));
