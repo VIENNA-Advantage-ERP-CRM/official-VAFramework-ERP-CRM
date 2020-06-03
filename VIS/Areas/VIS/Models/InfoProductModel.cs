@@ -998,6 +998,9 @@ namespace VIS.Models
                                 po.Set_Value("M_ProductContainer_ID", ContainerID);
                             po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
 
+                            // JID_1700: when saving Product from Cart, UOM Conversion was not working 
+                            po.Set_Value("AdjustmentType", MInventoryLine.ADJUSTMENTTYPE_AsOnDateCount);
+
                             if (WindowID == Util.GetValueOfInt(Windows.PhysicalInventory))
                             {
                                 Decimal? qtyBook = 0;

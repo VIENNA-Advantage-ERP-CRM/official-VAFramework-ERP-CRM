@@ -1756,6 +1756,12 @@
                 if ($self.dGrid != null) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
+                        //JID_ 1743 if Account Date is not selected showing message
+                        if ($self.dGrid.get(selection[item])["Date"] == "") {
+                            VIS.ADialog.error("VIS_PLAccountDate")
+                            return false;
+                        }
+
                         var obj = $.grep($self.multiValues, function (n, i) {
                             return n.C_Payment_ID_K == $self.dGrid.get(selection[item])["C_Payment_ID_K"]
                         });
@@ -1769,6 +1775,7 @@
                         }
                     }
                 }
+
                 VIS.VCreateFromStatement.prototype.saveStatment();
                 $self.middelDiv.css("height", "61%");
             }
@@ -1876,6 +1883,12 @@
                 if ($self.dGrid != null) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
+                        //JID_ 1743 if Account Date is not selected showing message
+                        if ($self.dGrid.get(selection[item])["Date"] == "") {
+                            VIS.ADialog.error("VIS_PLAccountDate")
+                            return false;
+                        }
+
                         var obj = $.grep($self.multiValues, function (n, i) {
                             return n.C_Payment_ID_K == $self.dGrid.get(selection[item])["C_Payment_ID_K"]
                         });

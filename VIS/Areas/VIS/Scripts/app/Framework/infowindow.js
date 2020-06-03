@@ -872,6 +872,14 @@
                 var appendAND = false;
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
+
+                    //JID_0905:  In Case of Date Range, if From Date is not selected then check if To Date is selected
+                    if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date && srchCtrls[i].IsRange) {
+                        if (srchValue == null) {
+                            srchValue = srchCtrls[i].CtrlTo.getValue();
+                        }
+                    }
+
                     // Consider checkbox value only in case of true value
                     if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
                         continue;
@@ -904,7 +912,13 @@
                             fromValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
 
                             if (srchCtrls[i].IsRange) {
-                                date = new Date(srchCtrls[i].CtrlTo.getValue());
+                                // JID_0905: If To Date is empty, then select system date
+                                if (srchCtrls[i].CtrlTo.getValue() == null) {
+                                    date = new Date();
+                                }
+                                else {
+                                    date = new Date(srchCtrls[i].CtrlTo.getValue());
+                                }
                                 toValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
                                 whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
                             }
