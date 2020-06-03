@@ -444,6 +444,7 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     border-bottom-left-radius: .25rem;
     cursor: pointer;
 }
+
 /*checkbox and radio css*/
 input[type="checkbox"],
 input[type="radio"] {
@@ -454,7 +455,6 @@ input[type="radio"] {
     background-color: transparent;
     outline: none;
 }
-
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
     border: 1px solid rgba(var(--v-c-primary), 1);

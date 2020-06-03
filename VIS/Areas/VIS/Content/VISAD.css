@@ -984,16 +984,16 @@
 .vis-gc-vpanel-table select,
 .vis-gc-vpanel-table textarea,
 .vis-gc-vpanel-table button {
-    border-style: solid;
+    /*border-style: solid;
     border-width: 1px;
-    border-color: darkgray;
+    border-color: darkgray;*/
     position: relative;
     width: 100%;
     min-width: 100%;
     min-height: 26px;
     line-height: inherit !important;
     margin-bottom: 10px;
-    padding: 1px !important;
+        
 }
 
 .vis-gc-vpanel-table button {
