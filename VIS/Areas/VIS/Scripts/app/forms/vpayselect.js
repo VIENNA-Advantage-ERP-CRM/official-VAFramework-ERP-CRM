@@ -108,7 +108,7 @@
                              + " <input type='number' id='VIS_txtPaymentAmount_" + $self.windowNo + "' disabled MaxLength='50'></input>"
                              + " </div>" // div paymentAmount ends here 
                              + " <div class='vis-paymentselect-field'>"  // div onlyDueInvoice starts here
-                             + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "' style='height: auto;width: auto; float: none;'></input>"
+                             + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "'></input>"
                              + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("OnlyDue") + " </label>"
                              + " </div>"  // div onlyDueInvoice starts here
                              + " <div class='vis-paymentselect-field'>"  // div lblSHowDetail starts here                            
