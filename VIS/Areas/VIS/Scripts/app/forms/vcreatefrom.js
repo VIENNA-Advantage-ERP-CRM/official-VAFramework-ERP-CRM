@@ -3213,6 +3213,13 @@
                     AddEditedLine("M_AttributeSetInstance_ID", e.index, e.value_new);
                 }
             }
+            // JID_1743: Need to make the Account date as editable on Create lines from Bank Statement.
+            else if ($self.dGrid.columns[e.column].field == "Date") {
+                $self.dGrid.records[e.index]["Date"] = e.value_new;
+                if ($self.dGrid.records[e.index]["Date"] != "") {
+                    AddEditedLine("Date", e.index, e.value_new);
+                }
+            }
         });
         // Change By Mohit 30/06/2016
         function AddEditedLine(column, index, new_value) {

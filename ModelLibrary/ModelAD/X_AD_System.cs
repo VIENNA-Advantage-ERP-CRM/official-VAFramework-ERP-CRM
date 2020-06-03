@@ -725,6 +725,19 @@ public String GetVersion()
 {
 return (String)Get_Value("Version");
 }
-}
+
+
+
+        /** Set LDAP Admin Pwd.
+@param LDAPAdminPwd LDAP Admin Pwd */
+        public void SetLDAPAdminPwd(String LDAPAdminPwd) { if (LDAPAdminPwd != null && LDAPAdminPwd.Length > 50) { log.Warning("Length > 50 - truncated"); LDAPAdminPwd = LDAPAdminPwd.Substring(0, 50); } Set_Value("LDAPAdminPwd", LDAPAdminPwd); }/** Get LDAP Admin Pwd.
+@return LDAP Admin Pwd */
+        public String GetLDAPAdminPwd() { return (String)Get_Value("LDAPAdminPwd"); }/** Set LDAP Admin User.
+@param LDAPAdminUser LDAP Admin User */
+        public void SetLDAPAdminUser(String LDAPAdminUser) { if (LDAPAdminUser != null && LDAPAdminUser.Length > 100) { log.Warning("Length > 100 - truncated"); LDAPAdminUser = LDAPAdminUser.Substring(0, 100); } Set_Value("LDAPAdminUser", LDAPAdminUser); }/** Get LDAP Admin User.
+@return LDAP Admin User */
+        public String GetLDAPAdminUser() { return (String)Get_Value("LDAPAdminUser"); }
+
+    }
 
 }

@@ -456,7 +456,7 @@ namespace VAdvantage.Common
             //If validity is unknow but context  available, then get from context
             if (passwordValidity == -1 && ctx != null)
             {
-                passwordValidity = ctx.GetContextAsInt(Common.Password_Valid_Upto_Key);
+                passwordValidity = ctx.GetContextAsInt("#" + Common.Password_Valid_Upto_Key);
             }
 
             else if (passwordValidity == -1 && ctx == null)// if validity and context, both are unknown, the go with static values
@@ -501,7 +501,7 @@ namespace VAdvantage.Common
                 return "oldNewSamePwd";
             }
             string regex = @"(^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[a-zA-Z][A-Za-z\d@$!%*?& ]{4,}$)";// Start with Alphabet, minimum 4 length
-                                                                                        //@$!%*#?& allowed only
+                                                                                                                    //@$!%*#?& allowed only
             Regex re = new Regex(regex);
 
             // The IsMatch method is used to validate 

@@ -1068,13 +1068,14 @@ html[dir="rtl"] .input-group-addon {
 
 .vis-pref-ctrl-lblwrp {
     padding-right: 10px;
-    width: 30%;
+    width: 35%;
     text-align: right;
 }
 .vis-pref-ctrlwrap {
     flex: 1;
     display: flex;
     padding: 0;
+    align-items: baseline;
 }
 .vis-pref-ctrlwrap input:not([type="checkbox"]):not([type="button"]),
 .vis-pref-ctrlwrap select{

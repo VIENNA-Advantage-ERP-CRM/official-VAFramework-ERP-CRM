@@ -108,7 +108,12 @@ namespace VAdvantage.Acct
         private int _AD_OrgTrx_ID = -1;
         // Organization
         private int _AD_Org_ID = -1;
-
+        // Desription
+        private String _Description = String.Empty;
+        // Line ID
+        private int _primaryKeyValue = 0;
+        // Line Table ID Reference 
+        private int _LineTable_ID = -1;
         #endregion
 
 
@@ -187,6 +192,48 @@ namespace VAdvantage.Acct
         public void SetC_ConversionType_ID(int C_ConversionType_ID)
         {
             _C_ConversionType_ID = C_ConversionType_ID;
+        }
+
+        /// <summary>
+        /// Get Line Table ID
+        /// </summary>
+        /// <returns>LineTable_ID</returns>
+        public int GetLineTable_ID()
+        {
+            if (_LineTable_ID == -1)
+            {
+                _LineTable_ID = _doc.Get_Table_ID();
+            }
+            return _LineTable_ID;
+        }
+
+        /// <summary>
+        /// Set LineTable_ID
+        /// </summary>
+        /// <param name="LineTable_ID"></param>
+        public void SetLineTable_ID(int LineTable_ID)
+        {
+            _LineTable_ID = LineTable_ID;
+        }
+
+        /// <summary>
+        /// set primary value on line
+        /// </summary>
+        /// <param name="id"></param>
+        public void SetPrimaryKeyValue(int id)
+        {
+            _primaryKeyValue = id;
+        }
+
+        /// <summary>
+        /// get Value of key
+        /// </summary>
+        public int GetPrimaryKeyValue
+        {
+            get
+            {
+                return _primaryKeyValue;
+            }
         }
 
         /// <summary>
@@ -894,12 +941,32 @@ namespace VAdvantage.Acct
         /// <returns>doc line description</returns>
         public String GetDescription()
         {
-            int index = _po.Get_ColumnIndex("Description");
-            if (index != -1)
+            //int index = _po.Get_ColumnIndex("Description");
+            //if (index != -1)
+            //{
+            //    return (String)_po.Get_Value(index);
+            //}
+            if (!String.IsNullOrEmpty(_Description))
             {
-                return (String)_po.Get_Value(index);
+                return _Description;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Set Description
+        /// </summary>
+        /// <param name="Description">description</param>
+        public void SetDescription(String Description)
+        {
+            if (GetDescription() != null && !String.IsNullOrEmpty(Description))
+            {
+                _Description += (" | " + Description);
+            }
+            else if (!String.IsNullOrEmpty(Description))
+            {
+                _Description = Description;
+            }
         }
 
         /// <summary>

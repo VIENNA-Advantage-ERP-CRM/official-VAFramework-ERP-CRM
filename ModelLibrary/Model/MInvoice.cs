@@ -4825,6 +4825,9 @@ namespace VAdvantage.Model
             try
             {
                 reversal.SetIsFutureCostCalculated(false);
+
+                // JID_1737: On Invoice at the time of reversal, Account date was setting incorrect.
+                reversal.SetDateAcct(GetDateAcct());
             }
             catch (Exception) { }
 

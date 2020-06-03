@@ -771,21 +771,25 @@
 
             //Validate Numeric Content on KeyPress..............
             txtTotalAmount.on("keypress", function (e) {
-                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 46) {
+                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
                     return true;
                 }
                 else { return false; }
 
             });
+
+            // changes done to allow negative value also
             txtAmount.on("keypress", function (e) {
-                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 46) {
+                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
                     return true;
                 }
                 else { return false; }
 
             });
+
+            // changes done to allow negative value also
             modalTxtAmount.on("keypress", function (e) {
-                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 46) {
+                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
                     return true;
                 }
                 else { return false; }
@@ -876,7 +880,8 @@
             });
             btnOk.on("click", function () {
                 busyDiv("visible");
-                if (parseFloat(txtTotal.val()) > parseFloat(txtTotalAmount.val())) {
+                // handle the cases of negative amount.
+                if (Math.abs(parseFloat(txtTotal.val())) > Math.abs(parseFloat(txtTotalAmount.val()))) {
                     VIS.ADialog.warn("LineTotalNotGrater");
                     txtTotalAmount.focus();
                     busyDiv("hidden");
@@ -1001,7 +1006,8 @@
             if (C_DimAmt_ID != 0) {
                 var maxAmount = VIS.DB.executeScalar("select amount from c_dimAmt where c_dimamt_id=" + C_DimAmt_ID + "");
 
-                if (parseFloat(defaultVal) > 0) {
+                // handle the cases of negative amount.
+                if (Math.abs(parseFloat(defaultVal)) > 0) {
                     txtTotalAmount.val(defaultVal);
                 }
                 else {
@@ -1055,9 +1061,22 @@
                     txtAmount.focus();
                     busyDiv("hidden");
                     return false;
-                }
-                else if (parseFloat(txtAmount.val()) > parseFloat(txtTotalAmount.val())) {
+                }   // handle the cases of negative amount.
+                else if (Math.abs(parseFloat(txtAmount.val())) > Math.abs(parseFloat(txtTotalAmount.val()))) {
                     VIS.ADialog.warn("LineTotalNotGrater");
+                    txtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
+                    // Handle the cases of Negative and Positive amount on Amount dimension control
+                else if (parseFloat(txtAmount.val()) > 0 && parseFloat(txtTotalAmount.val()) < 0) {
+                    VIS.ADialog.warn("VIS_NegativeAmount");
+                    txtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
+                else if (parseFloat(txtAmount.val()) < 0 && parseFloat(txtTotalAmount.val()) > 0) {
+                    VIS.ADialog.warn("VIS_PositiveAmount");
                     txtAmount.focus();
                     busyDiv("hidden");
                     return false;
@@ -1076,10 +1095,23 @@
                     modalTxtAmount.focus();
                     busyDiv("hidden");
                     return false;
-                }
-                else if (parseFloat(modalTxtAmount.val()) > parseFloat(txtTotalAmount.val())) {
+                }   // handle the cases of negative amount.
+                else if (Math.abs(parseFloat(modalTxtAmount.val())) > Math.abs(parseFloat(txtTotalAmount.val()))) {
                     VIS.ADialog.warn("LineTotalNotGrater");
                     modalTxtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
+                    // Handle the cases of Negative and Positive amount on Amount dimension control
+                else if (parseFloat(modalTxtAmount.val()) > 0 && parseFloat(txtTotalAmount.val()) < 0) {
+                    VIS.ADialog.warn("VIS_NegativeAmount");
+                    txtAmount.focus();
+                    busyDiv("hidden");
+                    return false;
+                }
+                else if (parseFloat(modalTxtAmount.val()) < 0 && parseFloat(txtTotalAmount.val()) > 0) {
+                    VIS.ADialog.warn("VIS_PositiveAmount");
+                    txtAmount.focus();
                     busyDiv("hidden");
                     return false;
                 }
@@ -1612,7 +1644,9 @@
                 chkDuplicate = VIS.DB.executeScalar(sql);
                 if (chkDuplicate == null) {
                     var tempLineAmount = VIS.DB.executeScalar("select amount from c_dimamtline where c_dimamtline_id in (" + DimensionLineID + ") and rownum=1");
-                    if (((parseFloat(txtTotal.val()) + parseFloat(Amount)) - parseFloat(tempLineAmount)) <= parseFloat(txtTotalAmount.val())) {//Dimension Line Sum Must Equal to Total Amout..............
+
+                    // handle the cases of negative amount.
+                    if (Math.abs((parseFloat(txtTotal.val()) + parseFloat(Amount)) - parseFloat(tempLineAmount)) <= Math.abs(parseFloat(txtTotalAmount.val()))) {//Dimension Line Sum Must Equal to Total Amout..............
                         insertDimensionAmountLine(C_DimAmt_ID, txtTotalAmount.val(), Amount, arrAcctSchemaID, DimensionType, DimensionTypeVal, DimensionName, DimensionNameVal, ElementID, oldDimensionNameValue, C_BPartner_ID, BpartnerName, oldBPartnerID, function () {
                             afterSave();
                         });
@@ -1632,8 +1666,8 @@
 
             }
             else {
-                //This Function Work When Inserting Dimension Value in Array......................
-                if ((parseFloat(txtTotal.val()) + parseFloat(Amount)) <= parseFloat(txtTotalAmount.val())) {//Dimension Line Sum Must Equal to Total Amout..............
+                //This Function Work When Inserting Dimension Value in Array......................  // handle the cases of negative amount.
+                if (Math.abs(parseFloat(txtTotal.val()) + parseFloat(Amount)) <= Math.abs(parseFloat(txtTotalAmount.val()))) {//Dimension Line Sum Must Equal to Total Amout..............
 
                     var sql = "select nvl(cline.c_dimamtline_id,0) as DimLineID from c_dimamt cd inner join c_dimamtaccttype cact on cd.c_dimamt_id=cact.c_dimamt_id " +
                         " inner join c_dimamtline cline on cd.c_Dimamt_id=cline.c_dimamt_id and cact.c_dimamtaccttype_id=cline.c_dimamtaccttype_id " +
