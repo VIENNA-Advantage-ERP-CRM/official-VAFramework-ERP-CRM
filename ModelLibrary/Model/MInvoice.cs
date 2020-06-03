@@ -4955,7 +4955,9 @@ namespace VAdvantage.Model
             reversal.SetDocStatus(DOCSTATUS_Reversed);
             reversal.SetDocAction(DOCACTION_None);
             reversal.Save(Get_TrxName());
-            _processMsg = reversal.GetDocumentNo();
+
+            //JID_0889: show on void full message Reversal Document created
+            _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo();
             //
             AddDescription("(" + reversal.GetDocumentNo() + "<-)");
             // Set reversal document reference

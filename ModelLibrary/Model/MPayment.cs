@@ -5028,7 +5028,8 @@ namespace VAdvantage.Model
             // Changes done by Vivek Kumar on 26/06/2017 assigned by Mandeep sir
             //	Create automatic Allocation
 
-            StringBuilder Info = new StringBuilder(reversal.GetDocumentNo());
+            //JID_0889: show on void full message Reversal Document created
+            StringBuilder Info = new StringBuilder(Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo());
             int Alline_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT al.c_allocationline_id FROM c_allocationline al "
                                                                 + " INNER JOIN c_allocationhdr alhdr ON alhdr.c_allocationhdr_ID=al.c_allocationhdr_ID WHERE al.c_payment_ID         =" + GetC_Payment_ID()
                                                                 + " and alhdr.docstatus in ('CO','CL')"));
