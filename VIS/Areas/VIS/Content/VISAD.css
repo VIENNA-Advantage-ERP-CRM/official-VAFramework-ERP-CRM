@@ -984,16 +984,16 @@
 .vis-gc-vpanel-table select,
 .vis-gc-vpanel-table textarea,
 .vis-gc-vpanel-table button {
-    border-style: solid;
+    /*border-style: solid;
     border-width: 1px;
-    border-color: darkgray;
+    border-color: darkgray;*/
     position: relative;
     width: 100%;
     min-width: 100%;
     min-height: 26px;
     line-height: inherit !important;
     margin-bottom: 10px;
-    padding: 1px !important;
+        
 }
 
 .vis-gc-vpanel-table button {
@@ -4658,7 +4658,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     color: rgba(var(--v-c-on-secondary), 1);
     outline: none;
 }
-.vis-app-aform-root input:not([type="button"]):not([type="checkbox"]), .vis-app-aform-root select {
+.vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), .vis-app-aform-root select {
     min-height: 30px;
 }
 .vis-app-aform-root input:focus, 
@@ -4823,3 +4823,74 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     display: flex;
     justify-content: center;
 }
+
+
+
+/*busy indicator css for vis*/
+.vis-busyindicatorouterwrap {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 999; 
+    left: 0;
+}
+.vis-busyindicatorinnerwrap {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.vis-busyindicatordiv {
+    border: 4px solid rgba(var(--v-c-secondary), 1);
+    border-radius: 50%;
+    border-top: 4px solid rgba(var( --v-c-primary), 1);
+    width: 40px;
+    height: 40px;
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+    display: flex;
+}
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/*overwrite kendo classes*/
+.k-treeview .k-in {
+    display: inline-flex;
+    align-items: center;    
+    color: rgba(var(--v-c-on-secondary), 1);
+    background-image: none;
+    box-shadow: none;
+    cursor: pointer;
+}
+.k-treeview .k-in p {
+    padding-left: 6px;
+    margin: 0;
+    display: inline;
+}
+.k-state-hover, .k-state-hover:hover, .k-splitbar-horizontal-hover:hover, .k-splitbar-vertical-hover:hover, .k-list > .k-state-hover, .k-scheduler .k-scheduler-toolbar ul li.k-state-hover, .k-pager-wrap .k-link:hover, .k-dropdown .k-state-focused, .k-imagebrowser-dropzone, .k-mobile-list .k-item > .k-link:active, .k-mobile-list .k-item > .k-label:active, .k-mobile-list .k-edit-label.k-check:active, .k-mobile-list .k-recur-view .k-check:active {
+    background: rgba(var(--v-c-on-secondary), .1) !important;
+    color: rgba(var(--v-c-primary), 1) !important;
+    background-image: none;
+}
+
+.k-state-selected, .k-state-selected:link, .k-state-selected:visited, .k-list > .k-state-selected, .k-list > .k-state-highlight, .k-panel > .k-state-selected, .k-ghost-splitbar-vertical, .k-ghost-splitbar-horizontal, .k-draghandle.k-state-selected:hover, .k-scheduler .k-scheduler-toolbar .k-state-selected, .k-scheduler .k-today.k-state-selected, .k-marquee-color {
+    color: rgba(var(--v-c-on-primary), 1) !important;
+    background-color: rgba(var(--v-c-primary), 1) !important;
+    border-color: inherit;
+}
+
+.k-state-focused.k-state-selected, .k-list > .k-state-focused.k-state-selected, .k-listview > .k-state-focused.k-state-selected, td.k-state-focused.k-state-selected {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+

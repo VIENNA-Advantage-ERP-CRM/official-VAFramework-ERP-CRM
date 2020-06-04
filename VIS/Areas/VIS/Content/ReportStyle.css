@@ -4,11 +4,10 @@
     display: flex;
     flex-direction: column;
 }
-
 .vis-report-header h3 {
     margin: 0;
-    font-size: 22px;
-    font-family: helvetica;
+    font-size: 1rem;
+    /* font-family: helvetica; */
     font-weight: 400;
     color: rgba(var(--v-c-on-primary), 1);
     flex: 1;
@@ -258,3 +257,9 @@ ul.vis-toppaging li:nth-child(3) {
         margin-top: 0 !important;
     }
 .VAPOS-ReportHeadRap ul li a {width: 22px;height: 25px;}
+.vis-report-header input[type="checkbox"],
+.vis-report-header input[type="checkbox"]:checked:before,
+.vis-report-header input[type="checkbox"]:not(:checked),
+.vis-report-header input[type="checkbox"]:checked {
+    border-color: rgba(var(--v-c-on-primary), 1);
+}
