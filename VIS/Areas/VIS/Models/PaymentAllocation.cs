@@ -1933,64 +1933,83 @@ namespace VIS.Models
             MCurrency objCurrency = MCurrency.Get(ctx, _C_Currency_ID);
 
             //Changed DateInvoiced to DateAcct because we have to convert currency on Account Date Not on Invoiced Date 
-            string sqlInvoice = "SELECT 'false' as SELECTROW , TO_CHAR(i.DateInvoiced,'YYYY-MM-DD')  as DATE1  ,  i.DocumentNo    AS DOCUMENTNO  , i.C_Invoice_ID AS CINVOICEID,"
-                                + @"  c.ISO_Code AS ISO_CODE , 
-                                     CASE
-                                      WHEN NVL(i.C_CONVERSIONTYPE_ID , 0) !=0 THEN i.C_CONVERSIONTYPE_ID
-                                      WHEN (GetConversionType(i.AD_Client_ID) != 0 ) THEN GetConversionType(i.AD_Client_ID)
-                                      ELSE (GetConversionType(0)) END AS C_CONVERSIONTYPE_ID,
-                                    CASE 
-                                      WHEN NVL(i.C_CONVERSIONTYPE_ID , 0) !=0 THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = i.C_CONVERSIONTYPE_ID )
-                                      WHEN (GetConversionType(i.AD_Client_ID) != 0 ) THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = GetConversionType(i.AD_Client_ID))
-                                      ELSE (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID =(GetConversionType(0)) ) END AS CONVERSIONNAME   ,ROUND((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)  *i.MultiplierAP), " + objCurrency.GetStdPrecision() + ") AS CURRENCY    ,"
-                                + "ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)  *i.MultiplierAP,i.C_Currency_ID ," + _C_Currency_ID + ", " + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID ,i.AD_Client_ID ,i.AD_Org_ID ), " + objCurrency.GetStdPrecision() + ") AS CONVERTED  ,"
-                                + " ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID)                                         *i.MultiplierAP , " + objCurrency.GetStdPrecision() + ") AS AMOUNT,"
-                                + "  ROUND((currencyConvert(invoiceDiscount(i.C_Invoice_ID ," + date + ",C_InvoicePaySchedule_ID),i.C_Currency_ID ," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + " ,i.C_ConversionType_ID ,i.AD_Client_ID ,i.AD_Org_ID )*i.Multiplier*i.MultiplierAP) , " + objCurrency.GetStdPrecision() + ") AS DISCOUNT ,"
-                                + "  i.MultiplierAP ,i.docbasetype  ,0 as WRITEOFF ,0 as APPLIEDAMT ,TO_CHAR(i.DATEACCT ,'YYYY-MM-DD') as DATEACCT, i.C_InvoicePaySchedule_ID,(select TO_CHAR(Ip.Duedate,'YYYY-MM-DD') from C_InvoicePaySchedule ip where C_InvoicePaySchedule_ID=i.C_InvoicePaySchedule_ID) Scheduledate "
-                                //  + ", dc.name AS DocTypeName "
-                                + " , i.AD_Org_ID , o.Name "
-                                + " FROM C_Invoice_v i"		//  corrected for CM/Split
-                                + " INNER JOIN AD_Org o ON o.AD_Org_ID = i.AD_Org_ID "
-                                + " INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) "
-                                // + " INNER JOIN C_DOCTYPE DC ON (i.C_DOCTYPE_ID =DC.C_DOCTYPE_ID)"
-                                + " WHERE i.IsPaid='N' AND i.Processed='Y'"
-                                + " AND i.C_BPartner_ID=" + _C_BPartner_ID;                                            //  #5
+            //Query Replaced with new optimized query
+            StringBuilder sqlInvoice = new StringBuilder(@" WITH Invoice AS ( SELECT 'false' as SELECTROW, 
+            TO_CHAR(i.DateInvoiced, 'YYYY-MM-DD') as DATE1, i.DocumentNo AS DOCUMENTNO, 
+            i.C_Invoice_ID AS CINVOICEID, c.ISO_Code AS ISO_CODE, i.C_CONVERSIONTYPE_ID, i.AD_Client_ID, 
+            i.AD_Org_ID, i.C_Currency_ID, i.MultiplierAP, i.docbasetype, 0 as WRITEOFF, 0 as APPLIEDAMT, 
+            i.DATEACCT, i.C_InvoicePaySchedule_ID, i.C_Invoice_ID, o.Name  FROM	C_Invoice_v i 
+            INNER JOIN AD_Org o ON o.AD_Org_ID = i.AD_Org_ID INNER JOIN C_Currency 
+            c ON (i.C_Currency_ID = c.C_Currency_ID) WHERE 		i.IsPaid= 'N' AND i.Processed = 'Y' AND 
+            i.C_BPartner_ID = " + _C_BPartner_ID);
+
+            #region Commented because we optimize the query
+            //"SELECT 'false' as SELECTROW , TO_CHAR(i.DateInvoiced,'YYYY-MM-DD')  as DATE1  ,  i.DocumentNo    AS DOCUMENTNO  , i.C_Invoice_ID AS CINVOICEID,"
+            //                    + @"  c.ISO_Code AS ISO_CODE , 
+            //                         CASE
+            //                          WHEN NVL(i.C_CONVERSIONTYPE_ID , 0) !=0 THEN i.C_CONVERSIONTYPE_ID
+            //                          WHEN (GetConversionType(i.AD_Client_ID) != 0 ) THEN GetConversionType(i.AD_Client_ID)
+            //                          ELSE (GetConversionType(0)) END AS C_CONVERSIONTYPE_ID,
+            //                        CASE 
+            //                          WHEN NVL(i.C_CONVERSIONTYPE_ID , 0) !=0 THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = i.C_CONVERSIONTYPE_ID )
+            //                          WHEN (GetConversionType(i.AD_Client_ID) != 0 ) THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = GetConversionType(i.AD_Client_ID))
+            //                          ELSE (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID =(GetConversionType(0)) ) END AS CONVERSIONNAME   ,ROUND((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)  *i.MultiplierAP), " + objCurrency.GetStdPrecision() + ") AS CURRENCY    ,"
+            //                    + "ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)  *i.MultiplierAP,i.C_Currency_ID ," + _C_Currency_ID + ", " + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID ,i.AD_Client_ID ,i.AD_Org_ID ), " + objCurrency.GetStdPrecision() + ") AS CONVERTED  ,"
+            //                    + " ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID)                                         *i.MultiplierAP , " + objCurrency.GetStdPrecision() + ") AS AMOUNT,"
+            //                    + "  ROUND((currencyConvert(invoiceDiscount(i.C_Invoice_ID ," + date + ",C_InvoicePaySchedule_ID),i.C_Currency_ID ," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + " ,i.C_ConversionType_ID ,i.AD_Client_ID ,i.AD_Org_ID )*i.Multiplier*i.MultiplierAP) , " + objCurrency.GetStdPrecision() + ") AS DISCOUNT ,"
+            //                    + "  i.MultiplierAP ,i.docbasetype  ,0 as WRITEOFF ,0 as APPLIEDAMT ,TO_CHAR(i.DATEACCT ,'YYYY-MM-DD') as DATEACCT, i.C_InvoicePaySchedule_ID,(select TO_CHAR(Ip.Duedate,'YYYY-MM-DD') from C_InvoicePaySchedule ip where C_InvoicePaySchedule_ID=i.C_InvoicePaySchedule_ID) Scheduledate "
+            //                    //  + ", dc.name AS DocTypeName "
+            //                    + " , i.AD_Org_ID , o.Name "
+            //                    + " FROM C_Invoice_v i"		//  corrected for CM/Split
+            //                    + " INNER JOIN AD_Org o ON o.AD_Org_ID = i.AD_Org_ID "
+            //                    + " INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) "
+            //                    // + " INNER JOIN C_DOCTYPE DC ON (i.C_DOCTYPE_ID =DC.C_DOCTYPE_ID)"
+            //                    + " WHERE i.IsPaid='N' AND i.Processed='Y'"
+            //                    + " AND i.C_BPartner_ID=" + _C_BPartner_ID;                                            //  #5
+            #endregion
+
             if (!chk)
             {
-                sqlInvoice += " AND i.C_Currency_ID=" + _C_Currency_ID;                                   //  #6
+                sqlInvoice.Append( " AND i.C_Currency_ID=" + _C_Currency_ID);                                   //  #6
             }
-            sqlInvoice += " AND (currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + ",i.DATEACCT,i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID) *i.MultiplierAP ) <> 0 ";
+
+            //sqlInvoice += " AND (currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + ",i.DATEACCT,i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID) *i.MultiplierAP ) <> 0 ";
 
 
             //------Filter data on the basis of new parameters
             if (!String.IsNullOrEmpty(docNo))
             {
-                sqlInvoice += "AND Upper(i.documentno) LIKE Upper('%" + docNo + "%')";
+                sqlInvoice.Append("AND Upper(i.documentno) LIKE Upper('%" + docNo + "%')");
             }
             if (c_docType_ID > 0)
             {
-                sqlInvoice += " AND I.C_DOCTYPETARGET_ID=" + c_docType_ID;
+                sqlInvoice.Append(" AND I.C_DOCTYPETARGET_ID=" + c_docType_ID);
             }
             if (fromDate != null)
             {
                 if (toDate != null)
                 {
-                    sqlInvoice += " AND I.DATEINVOICED BETWEEN " + GlobalVariable.TO_DATE(fromDate, true) + " AND " + GlobalVariable.TO_DATE(toDate, true);
+                    sqlInvoice.Append(" AND I.DATEINVOICED BETWEEN " + GlobalVariable.TO_DATE(fromDate, true) + " AND " + GlobalVariable.TO_DATE(toDate, true));
                 }
                 else
                 {
-                    sqlInvoice += " AND I.DATEINVOICED >= " + GlobalVariable.TO_DATE(fromDate, true);
+                    sqlInvoice.Append(" AND I.DATEINVOICED >= " + GlobalVariable.TO_DATE(fromDate, true));
                 }
             }
             if (fromDate == null && toDate != null)
             {
-                sqlInvoice += " AND I.DATEINVOICED <=" + GlobalVariable.TO_DATE(toDate, true);
+                sqlInvoice.Append(" AND I.DATEINVOICED <=" + GlobalVariable.TO_DATE(toDate, true));
             }
             //to get invoice schedules against related business partner
             if (!string.IsNullOrEmpty(relatedBpids))
-                sqlInvoice += "   OR I.C_BPartner_ID IN ( " + relatedBpids + " ) ";
+                sqlInvoice.Append("   OR I.C_BPartner_ID IN ( " + relatedBpids + " ) ");
             //--------------------------------------
-            sqlInvoice = MRole.GetDefault(ctx).AddAccessSQL(sqlInvoice, "i", true, false);
+            string sqlnew = string.Empty;
+            sqlnew = MRole.GetDefault(ctx).AddAccessSQL(sqlInvoice.ToString(), "i", true, false);
+            sqlInvoice.Clear();
+            sqlInvoice.Append(sqlnew);
+            sqlnew = null;
+            sqlInvoice.Append(" ), OpenInvoice AS ( SELECT 	SELECTROW,Name, DATE1, DOCUMENTNO, CINVOICEID, ISO_CODE, T1.C_CONVERSIONTYPE_ID, AD_Client_ID, AD_Org_ID, T1.C_Currency_ID, T1.MultiplierAP, docbasetype, WRITEOFF, APPLIEDAMT, DATEACCT, T1.C_InvoicePaySchedule_ID, T1.C_Invoice_ID, INVOICEOPEN_NEW(T2.C_Invoice_ID, T2.C_InvoicePaySchedule_ID, T2.C_Currency_ID, T2.C_CONVERSIONTYPE_ID, T2.GRANDTOTAL, T2.MULTIPLIERAP, T2.MULTIPLIER, T2.ModCount) invoiceOpen FROM	Invoice T1 INNER JOIN c_invoice_v_NEW T2 ON (T1.C_Invoice_ID = T2.C_Invoice_ID AND NVL(T1.C_InvoicePaySchedule_ID, 0) = NVL (T2.C_InvoicePaySchedule_ID, 0)) ) ");
             List<VIS_InvoiceData> payData = new List<VIS_InvoiceData>();
 
             // count record for paging
@@ -2004,16 +2023,18 @@ namespace VIS.Models
                     sql += " AND i.C_Currency_ID=" + _C_Currency_ID;
                 }
                 //to get invoice schedules against related business partner
-                if (!string.IsNullOrEmpty(relatedBpids))
-                    sqlInvoice += "   OR i.C_BPartner_ID IN ( " + relatedBpids + " ) ";
+                //if (!string.IsNullOrEmpty(relatedBpids))
+                //    sqlInvoice.Append("   OR i.C_BPartner_ID IN ( " + relatedBpids + " ) ");
 
                 sql += " AND (currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + ",i.DateInvoiced,i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID) *i.MultiplierAP ) <> 0 ";
                 sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "i", true, false);
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             }
 
+            sqlInvoice.Append(" SELECT 	SELECTROW, Name,  DATE1, DOCUMENTNO, CINVOICEID, ISO_CODE, CASE 	WHEN NVL(C_CONVERSIONTYPE_ID, 0) !=0 THEN C_CONVERSIONTYPE_ID WHEN GetConversionType(AD_Client_ID) != 0 THEN GetConversionType(AD_Client_ID) ELSE 	GetConversionType(0) END AS C_CONVERSIONTYPE_ID, CASE 	WHEN NVL(C_CONVERSIONTYPE_ID, 0) !=0 THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = Result.C_CONVERSIONTYPE_ID ) WHEN GetConversionType(AD_Client_ID) != 0 THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = GetConversionType(Result.AD_Client_ID)) ELSE 	(SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = GetConversionType(0)) END AS CONVERSIONNAME, (invoiceOpen * MultiplierAP) AS CURRENCY, currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + ", DATEACCT, C_ConversionType_ID, AD_Client_ID, AD_Org_ID) AS CONVERTED, currencyConvert(invoiceOpen, C_Currency_ID," + _C_Currency_ID + ", DATEACCT, C_ConversionType_ID, AD_Client_ID, AD_Org_ID) * MultiplierAP AS AMOUNT, (currencyConvert(invoiceDiscount(C_Invoice_ID, " + date + ", C_InvoicePaySchedule_ID), C_Currency_ID, " + _C_Currency_ID + ", DATEACCT, C_ConversionType_ID, AD_Client_ID, AD_Org_ID) * MultiplierAP) AS DISCOUNT, MultiplierAP, docbasetype, WRITEOFF, APPLIEDAMT, DATEACCT, C_InvoicePaySchedule_ID, (select TO_CHAR(Ip.Duedate,'YYYY-MM-DD') from C_InvoicePaySchedule ip where C_InvoicePaySchedule_ID = Result.C_InvoicePaySchedule_ID) Scheduledate, AD_Org_ID FROM	OpenInvoice Result WHERE 	currencyConvert(invoiceOpen, C_Currency_ID, " + _C_Currency_ID + ", DATEACCT, C_ConversionType_ID, AD_Client_ID, AD_Org_ID) * MultiplierAP <> 0");
+
             //IDataReader dr = DB.ExecuteReader(sqlInvoice);
-            DataSet dr = VIS.DBase.DB.ExecuteDatasetPaging(sqlInvoice, page, size);
+            DataSet dr = VIS.DBase.DB.ExecuteDatasetPaging(sqlInvoice.ToString(), page, size);
             if (dr != null && dr.Tables.Count > 0 && dr.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < dr.Tables[0].Rows.Count; i++)
