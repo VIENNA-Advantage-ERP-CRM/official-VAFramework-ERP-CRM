@@ -2578,8 +2578,21 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+                        var displayType= _curtab.getField(columnName).getDisplayType()
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+                       
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
+
+                        //toLocaleDateString
+                        //toLocaleTimeString
                     }
                     else {
                         fieldValue = rowsSource[i][columnName.toLower()];
@@ -2607,8 +2620,19 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+                        var displayType = _curtab.getField(columnName).getDisplayType();
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
+
                     }
                     else {
                         if (_curGC.singleRow == true && rowsSource.length == 0) {
@@ -2642,8 +2666,20 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+
+                        var displayType = _curtab.getField(columnName).getDisplayType();
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
+
                     }
                     else {
                         fieldValue = rowsSource[i][columnName.toLower()];
@@ -2680,8 +2716,19 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+
+                        var displayType = _curtab.getField(columnName).getDisplayType()
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
                     }
                     else {
                         if (_curGC.singleRow == true && rowsSource.length == 0) {

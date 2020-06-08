@@ -1950,7 +1950,7 @@
             this.getField(i).setError(false);
         }
         this.gridTable.setDisableNotification(false);
-        this.gridTable.fireDataStatusIEvent(copy ? "UpdateCopied" : "Inserted", "");
+        this.gridTable.fireDataStatusIEvent(copy ? "UpdateCopied" : "Insertdata", "");
         return retValue;
 
     }; // dataNew
