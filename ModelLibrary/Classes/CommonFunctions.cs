@@ -912,6 +912,12 @@ namespace VAdvantage.Classes
             {
                 return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
             }
+
+            // Show Amount according to browser culture
+            if (column.GetAD_Reference_ID() == DisplayType.Amount || column.GetAD_Reference_ID() == DisplayType.CostPrice)
+            {
+                return DisplayType.GetNumberFormat(column.GetAD_Reference_ID()).GetFormatAmount(value, po.GetCtx().GetContext("#ClientLanguage"));
+            }
             return value.ToString();
         }
     }
