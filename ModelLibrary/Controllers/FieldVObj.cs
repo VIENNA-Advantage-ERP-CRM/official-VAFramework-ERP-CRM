@@ -266,6 +266,7 @@ namespace VAdvantage.Controller
         public bool FieldGroupDefault = false;
         public bool ShowFilterOption = false;
 
+        public bool IsUnique = false;
 
 
         /// <summary>

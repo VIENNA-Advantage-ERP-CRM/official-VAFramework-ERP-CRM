@@ -4213,7 +4213,8 @@
             AD_Org_ID: AD_Org_ID,
             SelectSQL: VIS.secureEngine.encrypt(this.SQL_Select),
             AD_WIndow_ID: m_fields[0].getAD_Window_ID(), // vinay bhatt window id
-            MaintainVersions: false
+            MaintainVersions: false,
+            UnqFields: this.gFieldUnique
             //ImmediateSave: true,
             //ValidFrom: new Date().toISOString(),
         };
@@ -4388,6 +4389,7 @@
                 return this.gFieldData;
             else {
                 this.gFieldData = [];
+                this.gFieldUnique = [];
                 for (var i = 0; i < size; i++) {
                     var field = m_fields[i];
                     this.gFieldData.push({
@@ -4398,8 +4400,12 @@
                         ColumnSQL: field.getColumnSQL(true),
                         IsEncryptedColumn: field.getIsEncryptedColumn(),
                         IsParentColumn: field.getIsParentColumn(),
-                        Name: field.getHeader()
+                        Name: field.getHeader(),
+                        IsUnique: field.getIsUnique()
                     });
+                    if (field.getIsUnique() && !field.getIsVirtualColumn()) {
+                        this.gFieldUnique.push(field.getColumnName());
+                    }
                 }
                 return this.gFieldData;
             }
@@ -5179,6 +5185,7 @@
         this.gridFields = null;
         this.gFieldLessData = null;
         this.gFieldData = null;
+        this.gFieldUnique = null;
     };
 
     GridTable.prototype.maintainVersionFieldChanged = function (rowData, oldRowData) {
@@ -6659,6 +6666,10 @@
     //
     GridField.prototype.getShowFilterOption = function () {
         return this.vo.ShowFilterOption;
+    };
+
+    GridField.prototype.getIsUnique = function () {
+        return this.vo.IsUnique;
     };
 
     /**

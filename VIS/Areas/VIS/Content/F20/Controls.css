@@ -360,10 +360,9 @@ label.vis-ec-col-lblchkbox {
 }
 
 .vis-ec-col-lblchkbox input[type=checkbox] {
-    /*width: auto;*/
-    min-height: 0;
-    min-width: 0px;
     margin: 0 4px;
+    padding: 0;
+    border-radius: .15rem;
 }
 .vis-ec-col-lblchkbox input[type=checkbox]:focus {
     /* outline: auto; */

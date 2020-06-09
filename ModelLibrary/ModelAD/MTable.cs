@@ -148,6 +148,7 @@ namespace VAdvantage.Model
             bool hasParents = false;
             bool firstColumn = true;
             StringBuilder constraints = new StringBuilder();
+            StringBuilder unqConstraints = new StringBuilder();
             GetColumns(requery);
             for (int i = 0; i < m_columns.Length; i++)
             {
@@ -174,6 +175,17 @@ namespace VAdvantage.Model
                 }
                 if (column.IsParent())
                     hasParents = true;
+
+                if (column.IsUnique())
+                {
+                    if (unqConstraints.Length == 0)
+                    {
+                        unqConstraints.Append(", CONSTRAINT UK").Append(GetAD_Table_ID())
+                        .Append(" UNIQUE (").Append(column.GetColumnName()); 
+                    }
+                    else
+                        unqConstraints.Append(",").Append(column.GetColumnName());
+                }
             }
             //	Multi Column PK 
             if (!hasPK && hasParents)
@@ -191,9 +203,14 @@ namespace VAdvantage.Model
                 sb.Append(", CONSTRAINT PK").Append(GetAD_Table_ID())
                     .Append(" PRIMARY KEY (").Append(cols).Append(")");
             }
+            if (unqConstraints.Length > 0)
+            {
+                unqConstraints.Append(")");
+            }
 
-            sb.Append(constraints)
-                .Append(")");
+            sb.Append(constraints);
+            sb.Append(unqConstraints);
+            sb.Append(")");
             return sb.ToString();
         }	//	getSQLCreate
 
