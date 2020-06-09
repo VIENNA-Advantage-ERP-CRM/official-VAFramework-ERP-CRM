@@ -839,6 +839,7 @@ namespace VIS.Helpers
             string SQL_Select = inn.SelectSQL;
             bool inserting = inn.Inserting;
             bool compareDB = inn.CompareDB;
+            List<String> UnqFields = inn.UnqFields;
 
             // Table ID of the table where record need to be Inserted/Updated
             int InsAD_Table_ID = AD_Table_ID;
@@ -852,10 +853,61 @@ namespace VIS.Helpers
 
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
 
+            if (UnqFields != null && UnqFields.Count > 0)
+            {
 
-            //if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
-            //{
-            //    int  valIndex = rowData.Keys.ToList().IndexOf("value");
+                StringBuilder sb = new StringBuilder("");
+
+
+                foreach (string str in UnqFields)
+                {
+
+                    bool isText = DisplayType.IsText(m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())].DisplayType);
+
+                    if (sb.Length == 0)
+                    {
+                        sb.Append(" SELECT COUNT(1) FROM ");
+                        sb.Append(inn.TableName).Append(" WHERE ");
+                        sb.Append(str).Append(" = ");
+                        if (isText)
+                        {
+                            sb.Append("'").Append(rowData[str.ToLower()]).Append("'");
+                        }
+                        else
+                        {
+                            sb.Append(rowData[str.ToLower()]);
+                        }
+                    }
+                    else
+                    {
+                        sb.Append(" AND ");
+                        sb.Append(str).Append(" = ");
+                        if (isText)
+                        {
+                            sb.Append("'").Append(rowData[str.ToLower()]).Append("'");
+                        }
+                        else
+                        {
+                            sb.Append(rowData[str.ToLower()]);
+                        }
+                    }
+                }
+
+                //Check value in DB 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString()));
+                sb = null;
+                if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = string.Join(",", UnqFields) , IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+
+                }
+            }
+        
+
 
             //    if (!m_fields[valIndex].IsVirtualColumn)
             //    {
