@@ -262,8 +262,8 @@ namespace VAdvantage.DataBase
             if (time == null)
             {
                 if (dayOnly)
-                    return "current_date()";
-                return "current_date()";
+                    return "current_date";
+                return "current_date";
             }
 
             dateString = new StringBuilder("TO_DATE('");
