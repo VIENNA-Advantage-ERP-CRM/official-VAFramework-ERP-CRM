@@ -190,7 +190,7 @@ namespace VAdvantage.Classes
 
                 return nextSeqID;
             }
-            catch 
+            catch
             {
                 return 0;
             }
@@ -255,7 +255,7 @@ namespace VAdvantage.Classes
             return Utility.Util.GetValueOfInt(ExecuteQuery.ExecuteScalar(sqlQuery).ToString());
         }
 
-      
+
 
         //public static void InsertError(string strExName, string strExMessage)
         //{
@@ -283,7 +283,7 @@ namespace VAdvantage.Classes
             return int.Parse(ExecuteQuery.ExecuteScalar(strQuery));
         }
 
-       
+
         /// <summary>
         /// Get Root Node
         /// </summary>
@@ -347,14 +347,14 @@ namespace VAdvantage.Classes
         /// Set The cursors
         /// </summary>
         /// <param name="curType"></param>
-       
+
 
         /// <summary>
         /// to set shortcut key of menu items
         /// </summary>
         /// <param name="objMenuStrip">object of menustrip</param>
         /// <returns></returns>
-      
+
 
 
         ///// <summary>
@@ -528,8 +528,8 @@ namespace VAdvantage.Classes
 
         //}
 
-   
-   
+
+
 
 
         public static System.Drawing.Color GetBackGroundColor(bool value)
@@ -764,7 +764,7 @@ namespace VAdvantage.Classes
         {
             if (po == null || text.IndexOf("@") == -1)
                 return text;
-            
+
             String inStr = text;
             String token;
             StringBuilder outStr = new StringBuilder();
@@ -911,6 +911,11 @@ namespace VAdvantage.Classes
             if (column.GetAD_Reference_ID() == DisplayType.Date)
             {
                 return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
+            }
+
+            if (column.GetAD_Reference_ID() == DisplayType.Amount || column.GetAD_Reference_ID() == DisplayType.CostPrice)
+            {                
+                return DisplayType.GetNumberFormat(column.GetAD_Reference_ID()).GetFormatAmount(value, po.GetCtx().GetContext("#ClientLanguage"));
             }
             return value.ToString();
         }

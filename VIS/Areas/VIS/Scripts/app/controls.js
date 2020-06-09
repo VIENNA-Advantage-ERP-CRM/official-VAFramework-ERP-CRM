@@ -5421,6 +5421,9 @@
         var self = this;
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory); //call base function
 
+        this.format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+        this.dotFormatter = VIS.Env.isDecimalPoint();
+
         if (isReadOnly || !isUpdateable) {
             this.setReadOnly(true);
         }
@@ -5622,7 +5625,8 @@
             }
             //this.ctrl.val(this.lastDisplay);
             if (this.lastDisplay) {
-                this.ctrl.val(VIS.Utility.decodeText(this.lastDisplay));
+                var _value = this.format.GetFormatedValue(this.lastDisplay);
+                this.ctrl.val(this.format.GetFormatAmount(_value, "init", this.dotFormatter));
             }
             this.settingValue = true;
 

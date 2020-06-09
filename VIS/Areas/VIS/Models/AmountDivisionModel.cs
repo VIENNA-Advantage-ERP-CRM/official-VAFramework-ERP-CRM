@@ -61,6 +61,8 @@ namespace VIS.Models
         {
             public int Key { get; set; }
             public string Value { get; set; }
+
+            public int Precision { get; set; }
         }
         public List<ListAccountingSchema> GetAccountingSchema(Ctx ctx, int OrgID)
         {
@@ -70,8 +72,9 @@ namespace VIS.Models
             string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
             if (ObjectName != "")
             {
-                Sql = "SELECT DISTINCT C_AcctSchema.Name,C_AcctSchema.c_acctschema_id FROM C_AcctSchema C_AcctSchema INNER JOIN FRPT_AssignedOrg FRPT_AssignedOrg ON FRPT_AssignedOrg.Ad_Client_ID=C_AcctSchema.Ad_Client_ID " +
-                    " AND FRPT_AssignedOrg.C_Acctschema_ID=C_AcctSchema.c_acctschema_id WHERE  C_AcctSchema.isactive='Y' AND C_AcctSchema.costing='N' AND";
+                Sql = "SELECT DISTINCT C_AcctSchema.Name,C_AcctSchema.c_acctschema_id, c.StdPrecision FROM C_AcctSchema C_AcctSchema INNER JOIN FRPT_AssignedOrg FRPT_AssignedOrg ON FRPT_AssignedOrg.Ad_Client_ID=C_AcctSchema.Ad_Client_ID " +
+                    " AND FRPT_AssignedOrg.C_Acctschema_ID=C_AcctSchema.c_acctschema_id INNER JOIN C_Currency c ON C_AcctSchema.C_Currency_ID = c.C_Currency_ID " +
+                    " WHERE  C_AcctSchema.isactive='Y' AND C_AcctSchema.costing='N' AND";
                 if (OrgID != 0)
                 {
                     Sql += "(FRPT_AssignedOrg.AD_Org_ID=" + OrgID + " OR FRPT_AssignedOrg.AD_Org_ID=0)";
@@ -83,7 +86,7 @@ namespace VIS.Models
             }
             else
             {
-                Sql = "SELECT distinct Name,c_acctschema_id FROM C_AcctSchema WHERE isactive='Y' AND Costing='N'";
+                Sql = "SELECT distinct C_AcctSchema.Name, C_AcctSchema.c_acctschema_id, c.StdPrecision FROM C_AcctSchema INNER JOIN C_Currency c ON C_AcctSchema.C_Currency_ID = c.C_Currency_ID WHERE C_AcctSchema.isactive='Y' AND C_AcctSchema.Costing='N'";
             }
 
             Sql = MRole.GetDefault(ctx).AddAccessSQL(Sql, "C_AcctSchema", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RW);
@@ -96,6 +99,7 @@ namespace VIS.Models
                     ListAccountingSchema objAcctSchema = new ListAccountingSchema();
                     objAcctSchema.Key = Convert.ToInt32(dsAcctSchema.Tables[0].Rows[i][1]);
                     objAcctSchema.Value = Convert.ToString(dsAcctSchema.Tables[0].Rows[i][0]);
+                    objAcctSchema.Precision = Util.GetValueOfInt(dsAcctSchema.Tables[0].Rows[i][2]);
                     listAcctSchema.Add(objAcctSchema);
                 }
             }
@@ -676,12 +680,14 @@ namespace VIS.Models
                             if (ds.Tables[0].Rows[i]["amount"] != DBNull.Value)
                             {
 
-                                obj.DimensionValueAmount = DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatedValue(Convert.ToDecimal(ds.Tables[0].Rows[i]["amount"]));
+                                //obj.DimensionValueAmount = DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatedValue(Convert.ToDecimal(ds.Tables[0].Rows[i]["amount"]));
+                                obj.DimensionValueAmount = Util.GetValueOfString(ds.Tables[0].Rows[i]["amount"]);
                                 obj.CalculateDimValAmt = Convert.ToDecimal(ds.Tables[0].Rows[i]["amount"]);
                             }
                             else
                             {
-                                obj.DimensionValueAmount = DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatedValue(0);
+                                //obj.DimensionValueAmount = DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatedValue(0);
+                                obj.DimensionValueAmount = Util.GetValueOfString(0);
                                 obj.CalculateDimValAmt = 0;
                             }
                             obj.DimensionName = Convert.ToString(ds.Tables[0].Rows[i]["DimensionName"]);
