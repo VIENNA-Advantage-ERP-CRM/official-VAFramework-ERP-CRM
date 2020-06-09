@@ -2334,7 +2334,7 @@
             grdCols.push({
                 field: "DimensionValueAmount", caption: "Dimension Value Amount", size: "30%", min: 216,
                 render: function (record, index, col_index) {
-                    var val = VIS.Utility.Util.getValueOfDecimal(record["DimensionValueAmount"]).toFixed(Precision);
+                    var val = VIS.Utility.Util.getValueOfDecimal(record["DimensionValueAmount"]);
                     return (val).toLocaleString();
                 }
             });
