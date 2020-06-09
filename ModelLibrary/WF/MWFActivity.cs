@@ -2670,14 +2670,18 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             subject += ": " + text.GetMailHeader();
 
             String message = text.GetMailText(true);
-            if (isPOAsDocAction)
+            // Check applied if template is linked, then no need to append extra information
+            if (message == "")
             {
-                message += "\n-----\n" + doc.GetDocumentInfo()
-                 + "\n" + doc.GetSummary();
-            }
-            else
-            {
-                message += "\n-----\n" + GetNodeHelp();
+                if (isPOAsDocAction)
+                {
+                    message += "\n-----\n" + doc.GetDocumentInfo()
+                     + "\n" + doc.GetSummary();
+                }
+                else
+                {
+                    message += "\n-----\n" + GetNodeHelp();
+                }
             }
 
             FileInfo pdf = null;
@@ -2992,6 +2996,12 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             if (AD_User_ID != 0)
             {
                 MUser user = MUser.Get(GetCtx(), AD_User_ID);
+
+                MRole[] rl = user.GetRoles(GetAD_Org_ID());
+                // check applied if user has Org Access then only proceed to send
+                // mail or notice
+                if (rl.Length <= 0)
+                    return;
 
                 //Notice
                 if (action != null && action.Equals(MWFNode.ACTION_EMailPlusFaxEMail) &&
