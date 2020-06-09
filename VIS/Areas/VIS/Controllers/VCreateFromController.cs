@@ -105,7 +105,7 @@ namespace VIS.Controllers
                 + "l.M_Product_ID,COALESCE(p.Name,c.Name),COALESCE(p.Value,c.Value),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description, l.IsDropShip, o.C_PaymentTerm_ID , t.Name "
                 + "ORDER BY l.Line";
 
-            string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
+            string sqlNew = "SELECT * FROM (" + sql + ") t WHERE QUANTITY > 0";
 
             return sqlNew;
         }
