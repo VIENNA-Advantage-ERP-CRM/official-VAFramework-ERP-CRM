@@ -152,8 +152,8 @@
 
             /***** end of content-head *****/
 
-            $leftPanel.append('<div class="vis-group-content-headDown"><button class="vis-group-add-btn vis-group-ass-btns"><i class="vis vis-plus"></i></button>' +
-                '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
+            $leftPanel.append('<div class="vis-group-content-headDown"><button class="vis-group-add-btn vis-group-ass-btns"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew") +'" ></i></button>' +
+                '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search" title="' + VIS.Msg.getMsg("Search") +'"></i></button>' +
                  //   '<input class="vis-group-importUser" type="button" title="' + VIS.Msg.getMsg("VIS_Importuser") + '"><div class="vis-group-clear-both"></div> </div>');
                     '<div class="vis-group-clear-both"></div> </div>');
             $searchUser = $leftPanel.find('.vis-group-SearchText');
@@ -183,7 +183,7 @@
                 '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                       '</div>' +
                       '<div class="vis-group-content-headDown"><span><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button></span></div>' +
+                '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search" title="' + VIS.Msg.getMsg("Search") +'"></i></button></span></div>' +
                       '<div class="vis-group-clear-both"></div>' +
                   '</div>');
 
@@ -218,7 +218,7 @@
                        '<div class="vis-group-content-headDown"><span>' +
 
                        '<input class="vis-group-SearchText"  value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
+                '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search" title="' + VIS.Msg.getMsg("Search") +'"></i></button>' +
                        '</span>' +
                        '</div>' +
 
@@ -304,7 +304,7 @@
                 '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '{{#if IsActive }}' +
                                         '{{#if IsUpdate}}' +
-                                            '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" title="'+VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" title="' + VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
                 '<li><span disabled class="vis-group-user-ico vis-group-activeUser vis vis-user" title="' + VIS.Msg.getMsg("Active") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                             '{{/if}}' +
