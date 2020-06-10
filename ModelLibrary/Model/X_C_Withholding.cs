@@ -38,8 +38,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_Withholding() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27866464672807L;/** Last Updated Timestamp 3/16/2020 11:45:56 AM */
-        public static long updatedMS = 1584339356018L;/** AD_Table_ID=304 */
+        static long serialVersionUID = 27873565290047L;/** Last Updated Timestamp 6/6/2020 10:39:33 AM */
+        public static long updatedMS = 1591439973258L;/** AD_Table_ID=304 */
         public static int Table_ID; // =304;
                                     /** TableName=C_Withholding */
         public static String Table_Name = "C_Withholding";
@@ -68,13 +68,40 @@ namespace VAdvantage.Model
                 Set_Value("Beneficiary_ID", Beneficiary_ID);
         }/** Get Beneficiary.
 @return Business Partner to whom payment is made */
-        public int GetBeneficiary_ID() { Object ii = Get_Value("Beneficiary_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment Term.
+        public int GetBeneficiary_ID() { Object ii = Get_Value("Beneficiary_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Country.
+@param C_Country_ID Country  */
+        public void SetC_Country_ID(int C_Country_ID)
+        {
+            if (C_Country_ID <= 0) Set_Value("C_Country_ID", null);
+            else
+                Set_Value("C_Country_ID", C_Country_ID);
+        }/** Get Country.
+@return Country  */
+        public int GetC_Country_ID() { Object ii = Get_Value("C_Country_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment Term.
 @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
         public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID) { if (C_PaymentTerm_ID < 1) throw new ArgumentException("C_PaymentTerm_ID is mandatory."); Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID); }/** Get Payment Term.
 @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID() { Object ii = Get_Value("C_PaymentTerm_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Withholding.
+        public int GetC_PaymentTerm_ID() { Object ii = Get_Value("C_PaymentTerm_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Region.
+@param C_Region_ID Identifies a geographical Region */
+        public void SetC_Region_ID(int C_Region_ID)
+        {
+            if (C_Region_ID <= 0) Set_Value("C_Region_ID", null);
+            else
+                Set_Value("C_Region_ID", C_Region_ID);
+        }/** Get Region.
+@return Identifies a geographical Region */
+        public int GetC_Region_ID() { Object ii = Get_Value("C_Region_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Withholding Category.
+@param C_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
+        public void SetC_WithholdingCategory_ID(int C_WithholdingCategory_ID)
+        {
+            if (C_WithholdingCategory_ID <= 0) Set_Value("C_WithholdingCategory_ID", null);
+            else
+                Set_Value("C_WithholdingCategory_ID", C_WithholdingCategory_ID);
+        }/** Get Withholding Category.
+@return This field represents the withholding category linked with respective withholding tax. */
+        public int GetC_WithholdingCategory_ID() { Object ii = Get_Value("C_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Withholding Tax.
 @param C_Withholding_ID Withholding type defined */
-        public void SetC_Withholding_ID(int C_Withholding_ID) { if (C_Withholding_ID < 1) throw new ArgumentException("C_Withholding_ID is mandatory."); Set_ValueNoCheck("C_Withholding_ID", C_Withholding_ID); }/** Get Withholding.
+        public void SetC_Withholding_ID(int C_Withholding_ID) { if (C_Withholding_ID < 1) throw new ArgumentException("C_Withholding_ID is mandatory."); Set_ValueNoCheck("C_Withholding_ID", C_Withholding_ID); }/** Get Withholding Tax.
 @return Withholding type defined */
         public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
 @param Description Optional short description of the record */
@@ -91,11 +118,12 @@ namespace VAdvantage.Model
         public Decimal GetFixAmt() { Object bd = Get_Value("FixAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
         /** InvCalculation AD_Reference_ID=1000226 */
         public static int INVCALCULATION_AD_Reference_ID = 1000226;/** Grand Total = G */
-        public static String INVCALCULATION_GrandTotal = "G";/** Sub Total = N */
-        public static String INVCALCULATION_SubTotal = "N";/** Payment Amount = P */
+        public static String INVCALCULATION_GrandTotal = "G";/** Line Net Amount = N */
+        public static String INVCALCULATION_LineNetAmount = "N";/** Payment Amount = P */
         public static String INVCALCULATION_PaymentAmount = "P";/** Tax Amount = T */
-        public static String INVCALCULATION_TaxAmount = "T";/** Is test a valid value.
-@param test testvalue
+        public static String INVCALCULATION_TaxAmount = "T";/** Is test a valid value.*/
+        
+       /** @param test testvalue
 @returns true if valid **/
         public bool IsInvCalculationValid(String test) { return test == null || test.Equals("G") || test.Equals("N") || test.Equals("P") || test.Equals("T"); }/** Set Calculation on.
 @param InvCalculation Calculation on */
@@ -155,8 +183,8 @@ namespace VAdvantage.Model
         public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetName()); }
         /** PayCalculation AD_Reference_ID=1000226 */
         public static int PAYCALCULATION_AD_Reference_ID = 1000226;/** Grand Total = G */
-        public static String PAYCALCULATION_GrandTotal = "G";/** Sub Total = N */
-        public static String PAYCALCULATION_SubTotal = "N";/** Payment Amount = P */
+        public static String PAYCALCULATION_GrandTotal = "G";/** Line Net Amount = N */
+        public static String PAYCALCULATION_LineNetAmount = "N";/** Payment Amount = P */
         public static String PAYCALCULATION_PaymentAmount = "P";/** Tax Amount = T */
         public static String PAYCALCULATION_TaxAmount = "T";/** Is test a valid value.
 @param test testvalue
@@ -187,5 +215,21 @@ namespace VAdvantage.Model
         public void SetThresholdmin(Decimal? Thresholdmin) { Set_Value("Thresholdmin", (Decimal?)Thresholdmin); }/** Get Threshold min.
 @return Minimum gross amount for withholding calculation */
         public Decimal GetThresholdmin() { Object bd = Get_Value("Thresholdmin"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** TransactionType AD_Reference_ID=1000227 */
+        public static int TRANSACTIONTYPE_AD_Reference_ID = 1000227;/** Purchase = P */
+        public static String TRANSACTIONTYPE_Purchase = "P";/** Sale = S */
+        public static String TRANSACTIONTYPE_Sale = "S";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsTransactionTypeValid(String test) { return test == null || test.Equals("P") || test.Equals("S"); }/** Set Transaction Type.
+@param TransactionType This field represents that existing withholding tax applicable on which type of transaction. */
+        public void SetTransactionType(String TransactionType)
+        {
+            if (!IsTransactionTypeValid(TransactionType))
+                throw new ArgumentException("TransactionType Invalid value - " + TransactionType + " - Reference_ID=1000227 - P - S"); if (TransactionType != null && TransactionType.Length > 1) { log.Warning("Length > 1 - truncated"); TransactionType = TransactionType.Substring(0, 1); }
+            Set_Value("TransactionType", TransactionType);
+        }/** Get Transaction Type.
+@return This field represents that existing withholding tax applicable on which type of transaction. */
+        public String GetTransactionType() { return (String)Get_Value("TransactionType"); }
     }
 }

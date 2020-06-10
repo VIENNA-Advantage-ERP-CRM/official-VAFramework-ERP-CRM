@@ -40,24 +40,65 @@ namespace VAdvantage.Model
         {
 
         }
-
+/// <summary>
+/// Before save logic 
+/// </summary>
+/// <param name="newRecord">Is New Record</param>
+/// <returns>true if success</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            // Applicable on Invoice = false, then clear values
-            if (!IsApplicableonInv())
+            // validate unique record on the basis of this filteration of parameters  
+
+            string sql = @"SELECT COUNT(C_Withholding_ID) FROM C_Withholding WHERE TransactionType='" + GetTransactionType() + "'AND C_WithholdingCategory_ID= " +
+                GetC_WithholdingCategory_ID() + " AND c_country_ID =" + GetC_Country_ID() + " AND C_region_ID=" + GetC_Region_ID();
+
+            if (!newRecord)
             {
-                SetInvCalculation(null);
-                SetInvPercentage(0);
+                sql += " AND C_withholding_ID != " + GetC_Withholding_ID();
             }
 
-            // Applicable on Payment = false, then clear values
-            if (!IsApplicableonPay())
+            if (IsApplicableonPay())
             {
-                SetPayCalculation(null);
-                SetPayPercentage(0);
+                sql += " AND PayPercentage= " + GetPayPercentage();
             }
+
+            if (IsApplicableonInv())
+            {
+                sql += " AND invpercentage= " + GetInvPercentage();
+            }
+
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(sql,null,Get_Trx()));
+
+            if (count > 0 )
+            {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "MoreScheduleAmount"));
+
+                return false;
+            }
+
+           
+            // Applicable on Invoice = false, then clear values
+            if (!IsApplicableonInv())
+                {
+                    SetInvCalculation(null);
+                    SetInvPercentage(0);
+
+                }
+
+
+                // Applicable on Payment = false, then clear values
+                if (!IsApplicableonPay())
+                {
+                    SetPayCalculation(null);
+                    SetPayPercentage(0);
+                }
+
             return true;
         }
+           
+               
+            
+            
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
