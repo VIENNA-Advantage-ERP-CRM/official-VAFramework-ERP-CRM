@@ -475,7 +475,8 @@ namespace VAdvantage.Model
                             }
                             //End
                         }
-                        else if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
+                        //(JID_1365)shubham add code below line after && 
+                        else if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
                         {
                             // SI_0657: consider Attribute also
                             storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
