@@ -1169,7 +1169,9 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                 reverse.SetDocAction(DOCACTION_None);
                 reverse.Save(Get_TrxName());
             }
-            //
+
+            //JID_0889: show on void full message Reversal Document created
+            _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reverse.GetDocumentNo();
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
             return reverse;

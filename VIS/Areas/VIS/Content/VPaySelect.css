@@ -54,14 +54,17 @@
     background: rgba(var(--v-c-on-secondary),.04) !important;
     cursor: not-allowed;
 }
-.vis-paymentselect-field select, .vis-paymentselect-field input:not([type="submit"]), .vis-paymentPrint-field select, .vis-paymentPrint-field input:not([type="submit"]) {
+.vis-paymentselect-field select, 
+.vis-paymentselect-field input:not([type="submit"]):not([type="checkbox"]), 
+.vis-paymentPrint-field select, 
+.vis-paymentPrint-field input:not([type="submit"]) {
     width: 100%;
     float: left;
-    /*color: rgba(var(--v-c-on-secondary), 1);*/
+    /* color: rgba(var(--v-c-on-secondary), 1); */
     height: 30px;
     flex: 1;
     background-color: var(--white);
-    /*outline: none;*/
+    /* outline: none; */
 }
 
 .vis-paymentselect-field input[type="checkbox"] {

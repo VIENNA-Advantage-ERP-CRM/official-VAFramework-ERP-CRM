@@ -1756,6 +1756,12 @@
                 if ($self.dGrid != null) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
+                        //JID_ 1743 if Account Date is not selected showing message
+                        if ($self.dGrid.get(selection[item])["Date"] == "") {
+                            VIS.ADialog.error("VIS_PLAccountDate")
+                            return false;
+                        }
+
                         var obj = $.grep($self.multiValues, function (n, i) {
                             return n.C_Payment_ID_K == $self.dGrid.get(selection[item])["C_Payment_ID_K"]
                         });
@@ -1769,6 +1775,7 @@
                         }
                     }
                 }
+
                 VIS.VCreateFromStatement.prototype.saveStatment();
                 $self.middelDiv.css("height", "61%");
             }
@@ -1876,6 +1883,12 @@
                 if ($self.dGrid != null) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
+                        //JID_ 1743 if Account Date is not selected showing message
+                        if ($self.dGrid.get(selection[item])["Date"] == "") {
+                            VIS.ADialog.error("VIS_PLAccountDate")
+                            return false;
+                        }
+
                         var obj = $.grep($self.multiValues, function (n, i) {
                             return n.C_Payment_ID_K == $self.dGrid.get(selection[item])["C_Payment_ID_K"]
                         });
@@ -3211,6 +3224,13 @@
                 $self.dGrid.records[e.index]["M_AttributeSetInstance_ID"] = e.value_new;
                 if (C_Order_ID > 0 || C_Invoice_ID > 0) {
                     AddEditedLine("M_AttributeSetInstance_ID", e.index, e.value_new);
+                }
+            }
+            // JID_1743: Need to make the Account date as editable on Create lines from Bank Statement.
+            else if ($self.dGrid.columns[e.column].field == "Date") {
+                $self.dGrid.records[e.index]["Date"] = e.value_new;
+                if ($self.dGrid.records[e.index]["Date"] != "") {
+                    AddEditedLine("Date", e.index, e.value_new);
                 }
             }
         });

@@ -905,6 +905,11 @@
                                     line[dataObj.Columns[j]] = date.toDateString();
                             }
                         }
+                        else if (row[j] != null && typeof (row[j]) == "number" &&
+                            (VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctCr") == dataObj.Columns[j] ||
+                                VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctDr") == dataObj.Columns[j])) {
+                            line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
+                        }
                         else {
                             line[dataObj.Columns[j]] = row[j];
                         }

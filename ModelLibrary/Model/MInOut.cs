@@ -373,8 +373,9 @@ namespace VAdvantage.Model
                     to.SetMovementType(isSOTrx ? MOVEMENTTYPE_CustomerReturns : MOVEMENTTYPE_VendorReturns);
                 }
             }
-            //
-            to.SetDateOrdered(dateDoc);
+
+            // JID_0799: Order date should be original order date.
+            to.SetDateOrdered(from.GetDateOrdered());
             to.SetDateAcct(dateDoc);
             to.SetMovementDate(dateDoc);
             to.SetDatePrinted(null);
@@ -982,6 +983,8 @@ namespace VAdvantage.Model
                     }
                     // to set OrderLine in case of reversal if it is available 
                     line.SetC_OrderLine_ID(fromLine.GetC_OrderLine_ID());
+                    //set container reference(if, not a copy record)
+                    line.SetM_ProductContainer_ID(fromLine.GetM_ProductContainer_ID());
                 }
                 line.SetProcessed(false);
                 if (line.Save(Get_TrxName()))
@@ -5289,8 +5292,8 @@ namespace VAdvantage.Model
                         _processMsg = "Could not create Ship Reversal Line";
                     return false;
                 }
-                //	We need to copy MA
-                MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
+                //	We need to copy MA (bcz want to copy of material policy line from the actual record)
+                MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), rLine.GetReversalDoc_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
                 {
                     MInOutLineMA ma = new MInOutLineMA(rLine, mas[j].GetM_AttributeSetInstance_ID(), Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
@@ -5388,7 +5391,8 @@ namespace VAdvantage.Model
             //End here
             AddDescription("(" + reversal.GetDocumentNo() + "<-)");
 
-            _processMsg = reversal.GetDocumentNo();
+            //JID_0889: show on void full message Reversal Document created
+            _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo();
             SetProcessed(true);
 
             SetDocStatus(DOCSTATUS_Reversed);		//	 may come from void

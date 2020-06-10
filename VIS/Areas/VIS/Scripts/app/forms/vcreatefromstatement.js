@@ -86,7 +86,7 @@
     VCreateFromStatement.prototype.getTableFieldVOs = function () {
         var baseObj = this.$super;
         baseObj.arrListColumns = [];
-        baseObj.arrListColumns.push({ field: "Date", caption: VIS.Msg.getMsg("DateAcct"), sortable: true, size: '100px', hidden: false, render: 'date' });
+        baseObj.arrListColumns.push({ field: "Date", caption: VIS.Msg.getMsg("DateAcct"), sortable: true, size: '100px', hidden: false, editable: { type: 'date' }, render: 'date' });
         baseObj.arrListColumns.push({ field: "C_Payment_ID", caption: VIS.Msg.getMsg("Payment"), sortable: true, size: '100px', hidden: false });
         baseObj.arrListColumns.push({ field: "C_Currency_ID", caption: VIS.Msg.getMsg("Currency"), sortable: true, size: '80px', hidden: false });
 
@@ -100,8 +100,20 @@
         baseObj.arrListColumns.push({ field: "AuthCode", caption: VIS.Msg.getMsg("AuthCode"), sortable: true, size: '100px', hidden: false });
         baseObj.arrListColumns.push({ field: "CheckNo", caption: VIS.Msg.getMsg("CheckNo"), sortable: true, size: '80px', hidden: false });
         //
-        baseObj.arrListColumns.push({ field: "Amount", caption: VIS.Msg.getMsg("Amount"), sortable: true, size: '80px', hidden: false });
-        baseObj.arrListColumns.push({ field: "ConvertedAmount", caption: VIS.Msg.getMsg("ConvertedAmount"), sortable: true, size: '80px', hidden: false });
+        baseObj.arrListColumns.push({
+            field: "Amount", caption: VIS.Msg.getMsg("Amount"), sortable: true, size: '80px', hidden: false,
+            render: function (record, index, col_index) {
+                var val = VIS.Utility.Util.getValueOfDecimal(record["Amount"]);
+                return (val).toLocaleString();
+            }
+        });
+        baseObj.arrListColumns.push({
+            field: "ConvertedAmount", caption: VIS.Msg.getMsg("ConvertedAmount"), sortable: true, size: '80px', hidden: false,
+            render: function (record, index, col_index) {
+                var val = VIS.Utility.Util.getValueOfDecimal(record["ConvertedAmount"]);
+                return (val).toLocaleString();
+            }
+        });
         baseObj.arrListColumns.push({ field: "Description", caption: VIS.Msg.getMsg("Description"), sortable: true, size: '250px', hidden: false });
         baseObj.arrListColumns.push({ field: "C_BPartner_ID", caption: VIS.Msg.getMsg("BusinessPartner"), sortable: true, size: '150px', hidden: false });
         baseObj.arrListColumns.push({ field: "Type", caption: VIS.Msg.getMsg("Type"), sortable: true, size: '80px', hidden: true });

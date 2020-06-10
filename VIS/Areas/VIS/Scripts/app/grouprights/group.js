@@ -304,7 +304,9 @@
                 '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '{{#if IsActive }}' +
                                         '{{#if IsUpdate}}' +
+
                 '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" title="' + VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+
                                         '{{else}}' +
                 '<li><span disabled class="vis-group-user-ico vis-group-activeUser vis vis-user" title="' + VIS.Msg.getMsg("Active") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                             '{{/if}}' +
@@ -420,7 +422,9 @@
                 '<div class="vis-group-user-right">' +
                     '<ul>' +
                         '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"  title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+
                 '<li><span class="vis-group-user-ico vis-group-info fa fa-info" title= "' + VIS.Msg.getMsg("InfoWindow") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+
                     '</ul>                           ' +
                 '</div>' +
             '</div>' +

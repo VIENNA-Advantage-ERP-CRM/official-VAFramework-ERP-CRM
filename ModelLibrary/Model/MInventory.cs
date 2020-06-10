@@ -2967,6 +2967,8 @@ namespace VAdvantage.Model
                 CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
                 rLine.SetM_Inventory_ID(reversal.GetM_Inventory_ID());
                 rLine.SetParent(reversal);
+                //set container reference(not a copy record)
+                rLine.SetM_ProductContainer_ID(oLine.GetM_ProductContainer_ID());
                 //
                 rLine.SetQtyBook(oLine.GetQtyCount());		//	switch
                 rLine.SetQtyCount(oLine.GetQtyBook());
@@ -2979,6 +2981,7 @@ namespace VAdvantage.Model
                     // Set Orignal Document Reference
                     rLine.SetReversalDoc_ID(oLine.GetM_InventoryLine_ID());
                 }
+                rLine.SetActualReqReserved(oLine.GetActualReqReserved());
                 if (!rLine.Save())
                 {
                     pp = VLogger.RetrieveError();
@@ -3030,7 +3033,9 @@ namespace VAdvantage.Model
             reversal.SetDocStatus(DOCSTATUS_Reversed);
             reversal.SetDocAction(DOCACTION_None);
             reversal.Save();
-            _processMsg = reversal.GetDocumentNo();
+
+            //JID_0889: show on void full message Reversal Document created
+            _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo();
 
             //	Update Reversed (this)
             AddDescription("(" + reversal.GetDocumentNo() + "<-)");
