@@ -8,6 +8,7 @@
 **********************************************************/
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -24,7 +25,8 @@ namespace VAdvantage.Classes
 
         public int MaxIntDigit
         {
-            get {
+            get
+            {
                 return _maxIntDigit;
             }
             set
@@ -97,10 +99,10 @@ namespace VAdvantage.Classes
                     if (Int64.Parse(finalStr) > Int32.MaxValue)
                         return (object)Int32.MaxValue;
                     return (object)Convert.ToInt32(orgStr.Substring(0, _maxIntDigit));
-                    
+
                 }
             }
-            
+
             return val;
         }
 
@@ -116,6 +118,28 @@ namespace VAdvantage.Classes
         {
             object o = SetIntDigit(val);
             return string.Format(GetFormat(), o);
+        }
+
+        /// <summary>
+        /// Get Formated Amount based on Client Culture
+        /// </summary>
+        /// <param name="amount">Amount</param>
+        /// <param name="lang">Client Culture</param>
+        /// <returns>Formated Amount as String</returns>
+        public string GetFormatAmount(object amount, string lang)
+        {
+            string _number;
+            CultureInfo culture;
+            try
+            {
+                culture = new CultureInfo(lang);
+                _number = VAdvantage.Utility.Util.GetValueOfDouble(amount).ToString("N", culture);
+                return _number;
+            }
+            catch (Exception e)
+            {
+                return amount.ToString();
+            }
         }
     }
 }

@@ -95,6 +95,8 @@
         var lblMaxAmount = null;
         var divMaxAmount = null;
         var format = null;
+        this.dotFormatter = VIS.Env.isDecimalPoint();
+        var Precision = VIS.Env.getCtx().getContextAsInt("#StdPrecision");
         var Amount = null;
         var cmbValue = null;
         var acctValue = null;
@@ -115,17 +117,18 @@
             cmbAcctSchema = $("<select tabindex='2'>");
             cmbDimensionType = $("<select tabindex='3'>");
             cmbElement = $("<select>");
-            txtAmount = $("<input type='number' min='0' tabindex='6'>");
-            modalTxtAmount = $("<input type='number' min='0' tabindex='11'>");
+
+            txtAmount = new VIS.Controls.VAmountTextBox("Amount", false, false, true, 50, 100, VIS.DisplayType.Amount, VIS.Msg.getMsg("Amount")); //$("<input type='number' min='0' tabindex='6'>");
+            modalTxtAmount = new VIS.Controls.VAmountTextBox("ModalAmount", false, false, true, 50, 100, VIS.DisplayType.Amount, VIS.Msg.getMsg("Amount")); //$("<input type='number' min='0' tabindex='11'>");
 
             //if (isReadOnly) {
             //    txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly>");
             //}
             //else {
-            txtTotalAmount = $("<input type='number' min='0' tabindex='1' readonly>");
+            txtTotalAmount = new VIS.Controls.VAmountTextBox("TotalAmount", false, true, true, 50, 100, VIS.DisplayType.Amount, VIS.Msg.getMsg("Amount"));  //$("<input type='number' min='0' tabindex='1' readonly>");
             //}
 
-            txtTotal = $("<input type='text' readonly='true' tabindex='15'>");
+            txtTotal = new VIS.Controls.VAmountTextBox("Total", false, true, true, 50, 100, VIS.DisplayType.Amount, VIS.Msg.getMsg("Amount"));     //$("<input type='text' readonly='true' tabindex='15'>");
             btnAdd = $("<a style='cursor:pointer;' tabindex='7'>");
             btnNew = $("<a>");
             modalBtnAdd = $("<a style='cursor:pointer;' tabindex='12'>");
@@ -219,11 +222,11 @@
             var divDimType = $("<div class='VIS-AMTD-formData'>");
             divDimType.append(lblDimensionType).append(cmbDimensionType);
             var divTotalAmount = $("<div class='VIS-AMTD-formData'>");
-            divTotalAmount.append(lblTotalAmount).append(txtTotalAmount);
+            divTotalAmount.append(lblTotalAmount).append(txtTotalAmount.getControl());
             divAmount = $("<div class='VIS-AMTD-formData VIS-AMTD-amountTxt'>");
-            divAmount.append(lblAmount).append(txtAmount);
+            divAmount.append(lblAmount).append(txtAmount.getControl());
             modalDivAmount = $("<div class='VIS-AMTD-formData VIS-AMTD-amountTxt'>");
-            modalDivAmount.append(modalLblAmount).append(modalTxtAmount);
+            modalDivAmount.append(modalLblAmount).append(modalTxtAmount.getControl());
             divbutton = $("<div class='VIS-AMTD-formBtns'>");
             var divButton1 = $("<div>");
             divButton1.append(btnAdd);//.append(btnNew);
@@ -237,7 +240,7 @@
             modalDiv.append(modalDivConent);
             divGrid.append(datasec).append(modalDiv).append(divStatusContainer);
             //datasec.append(modalDiv);
-            divTotal.append(lblTotal).append(txtTotal);
+            divTotal.append(lblTotal).append(txtTotal.getControl());
             divMaxAmount = $("<div style='color:green;font-size:small'>");
             divMaxAmount.append(lblMaxAmount);
             ctrlDiv.append(divMaxAmount).append(divTotalAmount).append(divAcctSchema).append(divDimType).append(generateControl).append(divAmount).append(divbutton);
@@ -256,7 +259,6 @@
                     tempCheck = false;
                     //This Check Work if Accounting Shema is "All" in this ..
                     //Remove All Dimension against different Accounting Schema if exists.
-
 
                     getDimensionLine(allAcctSchemaID, null, function (acctSchemaData) {
 
@@ -285,7 +287,7 @@
 
                                         acctValue = cmbAcctSchema.find("option:selected").val();
                                         recid = 0;
-                                        txtAmount.val("0");
+                                        txtAmount.setValue(0);
                                         checkValUpdate = false;
                                         btnNew.css("display", "none");
                                         //divbutton.css("width", "6%");
@@ -294,7 +296,7 @@
                                         }
                                         else { divAmount.css("width", "33.3%"); }
                                         btnAdd.empty().append(VIS.Msg.getMsg("Add"));
-                                        txtTotal.val(0);
+                                        txtTotal.setValue(0);
                                         loadSchemaValue(false);
                                         // busyDiv("hidden");
                                     });
@@ -312,9 +314,9 @@
                     loadSchemaValue(tempCheck);
                     busyDiv("hidden");
                 });
-
-
+                Precision = cmbAcctSchema.find('option:selected').attr('precision');
             });
+
             function loadSchemaValue(tempCheck) {
                 if (tempCheck) {
                     acctValue = cmbAcctSchema.find("option:selected").val();
@@ -337,7 +339,7 @@
                             cmbDimensionType.val(acctSchemaData[0].DimensionTypeVal);
                             getControl(cmbDimensionType.val());
 
-                            txtAmount.val("");
+                            txtAmount.setValue(0);
                             checkValUpdate = false;
                             btnAdd.empty().append(VIS.Msg.getMsg("Add"));
                             if ((cmbAcctSchema.val() != -1) && (cmbDimensionType.val() != 0)) {
@@ -418,7 +420,7 @@
                                 getControl(cmbDimensionType.val());
                                 cmbValue = cmbDimensionType.find("option:selected").val();
                                 //recid = 0;
-                                txtAmount.val("0");
+                                txtAmount.setValue(0);
                                 checkValUpdate = false;
                                 btnNew.css("display", "none");
                                 //divbutton.css("width", "6%");
@@ -435,7 +437,7 @@
 
                                     loadData(temp);
                                     getMaxDimensionAmount();
-                                    txtTotal.val(0);
+                                    txtTotal.setValue(0);
                                 });
 
                                 busyDiv("hidden");
@@ -475,58 +477,58 @@
                         var dimTypeVal = cmbDimensionType.find("option:selected").val();
                         //Add Data against particular Dimension Type Value......................
                         if (dimTypeVal == "AC") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, txtb.getValue(), cmbBPartner.val());
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, txtb.getValue(), cmbBPartner.val());
                             cmbElement.val("-1");
                             txtAcctElementValue.setValue("-1");
                         }//Account
                         else if (dimTypeVal == "AY") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbActivity.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbActivity.find("option:selected").val(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbActivity.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbActivity.find("option:selected").val(), -1, 0, 0, "");
                             cmbActivity.val(-1);
                         }//Activity
                         else if (dimTypeVal == "BP") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbBPartner.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtb.getValue(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbBPartner.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtb.getValue(), -1, 0, 0, "");
                             cmbBPartner.val("");
                             txtb.setValue("-1");
                         }//BPartner
                         else if (dimTypeVal == "LF" || dimTypeVal == "LT") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), locAddress.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtLoc.getValue(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), locAddress.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtLoc.getValue(), -1, 0, 0, "");
                             locAddress.val("");
                             txtLoc.setValue("-1");
                         }//Location From//Location To
                         else if (dimTypeVal == "MC") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbCampaign.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbCampaign.find("option:selected").val(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbCampaign.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbCampaign.find("option:selected").val(), -1, 0, 0, "");
                             cmbCampaign.val(-1);
                         }//Campaign
                         else if (dimTypeVal == "OO" || dimTypeVal == "OT") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbOrg.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbOrg.find("option:selected").val(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbOrg.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbOrg.find("option:selected").val(), -1, 0, 0, "");
                             cmbOrg.val("-1");
                         }//Organization//Org Trx
                         else if (dimTypeVal == "PJ") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProject.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProj.getValue(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProject.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProj.getValue(), -1, 0, 0, "");
                             txtProject.val("");
                             txtProj.setValue("-1");
                         }//Project
                         else if (dimTypeVal == "PR") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProduct.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProd.getValue(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProduct.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProd.getValue(), -1, 0, 0, "");
                             txtProduct.val("");
                             txtProd.setValue("-1");
                         }//Product
                         else if (dimTypeVal == "SA") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, 0, 0, "");
                         }//Sub Account
                         else if (dimTypeVal == "SR") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbSalesRegion.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbSalesRegion.find("option:selected").val(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbSalesRegion.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbSalesRegion.find("option:selected").val(), -1, 0, 0, "");
                             cmbSalesRegion.val("-1");
                         }//Sales Region
                         else if (dimTypeVal == "U1" || dimTypeVal == "U2") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, 0, "");
                             cmbElement.val("-1");
                             txtAccountElement.val("");
                             txtAcctElementValue.setValue("-1");
                         }//User List 1//User List 2
                         else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
                             dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbUserElement.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbUserElement.find("option:selected").val(), -1, 0, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbUserElement.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbUserElement.find("option:selected").val(), -1, 0, 0, "");
                             cmbUserElement.val(-1);
                         }//User Element 1 to User Element 9
 
@@ -544,60 +546,60 @@
                     var dimTypeVal = cmbDimensionType.find("option:selected").val();
                     //Add Data against particular Dimension Type Value......................
                     if (dimTypeVal == "AC") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, txtb.getValue(), cmbBPartner.val());
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, txtb.getValue(), cmbBPartner.val());
                         cmbElement.val("-1");
                         txtAcctElementValue.setValue("-1");
                         cmbBPartner.val("");
                         txtb.setValue("-1");
                     }//Account
                     else if (dimTypeVal == "AY") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbActivity.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbActivity.find("option:selected").val(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbActivity.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbActivity.find("option:selected").val(), -1, 0, 0, "");
                         cmbActivity.val(-1);
                     }//Activity
                     else if (dimTypeVal == "BP") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbBPartner.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtb.getValue(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbBPartner.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtb.getValue(), -1, 0, 0, "");
                         cmbBPartner.val("");
                         txtb.setValue("-1");
                     }//BPartner
                     else if (dimTypeVal == "LF" || dimTypeVal == "LT") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), locAddress.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtLoc.getValue(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), locAddress.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtLoc.getValue(), -1, 0, 0, "");
                         locAddress.val("");
                         txtLoc.setValue("-1");
                     }//Location From//Location To
                     else if (dimTypeVal == "MC") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbCampaign.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbCampaign.find("option:selected").val(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbCampaign.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbCampaign.find("option:selected").val(), -1, 0, 0, "");
                         cmbCampaign.val(-1);
                     }//Campaign
                     else if (dimTypeVal == "OO" || dimTypeVal == "OT") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbOrg.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbOrg.find("option:selected").val(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbOrg.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbOrg.find("option:selected").val(), -1, 0, 0, "");
                         cmbOrg.val("-1");
                     }//Organization//Org Trx
                     else if (dimTypeVal == "PJ") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProject.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProj.getValue(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProject.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProj.getValue(), -1, 0, 0, "");
                         txtProject.val("");
                         txtProj.setValue("-1");
                     }//Project
                     else if (dimTypeVal == "PR") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProduct.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProd.getValue(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtProduct.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtProd.getValue(), -1, 0, 0, "");
                         txtProduct.val("");
                         txtProd.setValue("-1");
                     }//Product
                     else if (dimTypeVal == "SA") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, 0, 0, "");
                     }//Sub Account
                     else if (dimTypeVal == "SR") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbSalesRegion.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbSalesRegion.find("option:selected").val(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbSalesRegion.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbSalesRegion.find("option:selected").val(), -1, 0, 0, "");
                         cmbSalesRegion.val("-1");
                     }//Sales Region
                     else if (dimTypeVal == "U1" || dimTypeVal == "U2") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), txtAccountElement.val(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), txtAcctElementValue.getValue(), C_Element_ID, 0, 0, "");
                         cmbElement.val("-1");
                         txtAccountElement.val("");
                         txtAcctElementValue.setValue("-1");
                     }//User List 1//User List 2
                     else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
                         dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbUserElement.find("option:selected").text(), txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbUserElement.find("option:selected").val(), -1, 0, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), cmbUserElement.find("option:selected").text(), txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), cmbUserElement.find("option:selected").val(), -1, 0, 0, "");
                         cmbUserElement.val(-1);
                     }//User Element 1 to User Element 9
 
@@ -613,7 +615,7 @@
             btnNew.on("click", function () {
                 busyDiv("visible");
                 getControl(cmbDimensionType.val());
-                txtAmount.val("");
+                txtAmount.setValue(0);
                 checkValUpdate = false;
                 btnNew.css("display", "none");
                 //divbutton.css("width", "6%");
@@ -636,60 +638,60 @@
                         var dimTypeVal = cmbDimensionType.find("option:selected").val();
                         //Add Data against particular Dimension Type Value......................
                         if (dimTypeVal == "AC") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, modalTxtb.getValue(), modalCmbBPartner.val());
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, modalTxtb.getValue(), modalCmbBPartner.val());
                             modalCmbElement.val("-1");
                             modalTxtAcctElementValue.setValue("-1");
                             modalCmbBPartner.val("");
                             modalTxtb.setValue("-1");
                         }//Account
                         else if (dimTypeVal == "AY") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbActivity.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbActivity.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbActivity.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbActivity.find("option:selected").val(), -1, dimensionLineID, 0, "");
                             modalCmbActivity.val(-1);
                         }//Activity
                         else if (dimTypeVal == "BP") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbBPartner.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtb.getValue(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbBPartner.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtb.getValue(), -1, dimensionLineID, 0, "");
                             modalCmbBPartner.val("");
                             modalTxtb.setValue("-1");
                         }//BPartner
                         else if (dimTypeVal == "LF" || dimTypeVal == "LT") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalLocAddress.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtLoc.getValue(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalLocAddress.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtLoc.getValue(), -1, dimensionLineID, 0, "");
                             modalLocAddress.val("");
                             modalTxtLoc.setValue("-1");
                         }//Location From//Location To
                         else if (dimTypeVal == "MC") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbCampaign.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbCampaign.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbCampaign.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbCampaign.find("option:selected").val(), -1, dimensionLineID, 0, "");
                             modalCmbCampaign.val(-1);
                         }//Campaign
                         else if (dimTypeVal == "OO" || dimTypeVal == "OT") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbOrg.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbOrg.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbOrg.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbOrg.find("option:selected").val(), -1, dimensionLineID, 0, "");
                             modalCmbOrg.val("-1");
                         }//Organization//Org Trx
                         else if (dimTypeVal == "PJ") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProject.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProj.getValue(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProject.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProj.getValue(), -1, dimensionLineID, 0, "");
                             modalTxtProject.val("");
                             modalTxtProj.setValue("-1");
                         }//Project
                         else if (dimTypeVal == "PR") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProduct.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProd.getValue(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProduct.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProd.getValue(), -1, dimensionLineID, 0, "");
                             modalTxtProduct.val("");
                             modalTxtProd.setValue("-1");
                         }//Product
                         else if (dimTypeVal == "SA") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, dimensionLineID, 0, "");
                         }//Sub Account
                         else if (dimTypeVal == "SR") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbSalesRegion.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbSalesRegion.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbSalesRegion.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbSalesRegion.find("option:selected").val(), -1, dimensionLineID, 0, "");
                             modalCmbSalesRegion.val("-1");
                         }//Sales Region
                         else if (dimTypeVal == "U1" || dimTypeVal == "U2") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, 0, "");
                             modalCmbElement.val("-1");
                             modalTxtAccountElement.val("");
                             modalTxtAcctElementValue.setValue("-1");
                         }//User List 1//User List 2
                         else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
                             dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
-                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbUserElement.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbUserElement.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbUserElement.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbUserElement.find("option:selected").val(), -1, dimensionLineID, 0, "");
                             modalCmbUserElement.val(-1);
                         }//User Element 1 to User Element 9
 
@@ -706,60 +708,60 @@
                     var dimTypeVal = cmbDimensionType.find("option:selected").val();
                     //Add Data against particular Dimension Type Value......................
                     if (dimTypeVal == "AC") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, modalTxtb.getValue(), modalCmbBPartner.val());
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, modalTxtb.getValue(), modalCmbBPartner.val());
                         modalCmbElement.val("-1");
                         modalTxtAcctElementValue.setValue("-1");
                         modalCmbBPartner.val("");
                         modalTxtb.setValue("-1");
                     }//Account
                     else if (dimTypeVal == "AY") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbActivity.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbActivity.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbActivity.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbActivity.find("option:selected").val(), -1, dimensionLineID, 0, "");
                         modalCmbActivity.val(-1);
                     }//Activity
                     else if (dimTypeVal == "BP") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbBPartner.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtb.getValue(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbBPartner.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtb.getValue(), -1, dimensionLineID, 0, "");
                         modalCmbBPartner.val("");
                         modalTxtb.setValue("-1");
                     }//BPartner
                     else if (dimTypeVal == "LF" || dimTypeVal == "LT") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalLocAddress.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtLoc.getValue(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalLocAddress.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtLoc.getValue(), -1, dimensionLineID, 0, "");
                         modalLocAddress.val("");
                         modalTxtLoc.setValue("-1");
                     }//Location From//Location To
                     else if (dimTypeVal == "MC") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbCampaign.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbCampaign.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbCampaign.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbCampaign.find("option:selected").val(), -1, dimensionLineID, 0, "");
                         modalCmbCampaign.val(-1);
                     }//Campaign
                     else if (dimTypeVal == "OO" || dimTypeVal == "OT") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbOrg.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbOrg.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbOrg.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbOrg.find("option:selected").val(), -1, dimensionLineID, 0, "");
                         modalCmbOrg.val("-1");
                     }//Organization//Org Trx
                     else if (dimTypeVal == "PJ") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProject.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProj.getValue(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProject.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProj.getValue(), -1, dimensionLineID, 0, "");
                         modalTxtProject.val("");
                         modalTxtProj.setValue("-1");
                     }//Project
                     else if (dimTypeVal == "PR") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProduct.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProd.getValue(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtProduct.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtProd.getValue(), -1, dimensionLineID, 0, "");
                         modalTxtProduct.val("");
                         modalTxtProd.setValue("-1");
                     }//Product
                     else if (dimTypeVal == "SA") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), "", txtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), "", -1, dimensionLineID, 0, "");
                     }//Sub Account
                     else if (dimTypeVal == "SR") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbSalesRegion.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbSalesRegion.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbSalesRegion.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbSalesRegion.find("option:selected").val(), -1, dimensionLineID, 0, "");
                         modalCmbSalesRegion.val("-1");
                     }//Sales Region
                     else if (dimTypeVal == "U1" || dimTypeVal == "U2") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalTxtAccountElement.val(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalTxtAcctElementValue.getValue(), C_Element_ID, dimensionLineID, 0, "");
                         modalCmbElement.val("-1");
                         modalTxtAccountElement.val("");
                         modalTxtAcctElementValue.setValue("-1");
                     }//User List 1//User List 2
                     else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
                         dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
-                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbUserElement.find("option:selected").text(), modalTxtAmount.val(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbUserElement.find("option:selected").val(), -1, dimensionLineID, 0, "");
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), modalCmbUserElement.find("option:selected").text(), modalTxtAmount.getValue(), recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), modalCmbUserElement.find("option:selected").val(), -1, dimensionLineID, 0, "");
                         modalCmbUserElement.val(-1);
                     }//User Element 1 to User Element 9
 
@@ -770,31 +772,31 @@
             });
 
             //Validate Numeric Content on KeyPress..............
-            txtTotalAmount.on("keypress", function (e) {
-                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
-                    return true;
-                }
-                else { return false; }
+            //txtTotalAmount.getControl().on("keypress", function (e) {
+            //    if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
+            //        return true;
+            //    }
+            //    else { return false; }
 
-            });
-
-            // changes done to allow negative value also
-            txtAmount.on("keypress", function (e) {
-                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
-                    return true;
-                }
-                else { return false; }
-
-            });
+            //});
 
             // changes done to allow negative value also
-            modalTxtAmount.on("keypress", function (e) {
-                if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
-                    return true;
-                }
-                else { return false; }
+            //txtAmount.getControl().on("keypress", function (e) {
+            //    if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
+            //        return true;
+            //    }
+            //    else { return false; }
 
-            });
+            //});
+
+            // changes done to allow negative value also
+            //modalTxtAmount.getControl().on("keypress", function (e) {
+            //    if ((e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 45 || e.keyCode == 46) {
+            //        return true;
+            //    }
+            //    else { return false; }
+
+            //});
             modalBtnNew.on("click", function () {
                 checkValUpdate = false;
                 modalDiv.css("display", "none");
@@ -881,13 +883,13 @@
             btnOk.on("click", function () {
                 busyDiv("visible");
                 // handle the cases of negative amount.
-                if (Math.abs(parseFloat(txtTotal.val())) > Math.abs(parseFloat(txtTotalAmount.val()))) {
+                if (Math.abs(parseFloat(txtTotal.getValue())) > Math.abs(parseFloat(txtTotalAmount.getValue()))) {
                     VIS.ADialog.warn("LineTotalNotGrater");
-                    txtTotalAmount.focus();
+                    txtTotalAmount.getControl().focus();
                     busyDiv("hidden");
                 }
                 else {
-                    if (txtTotalAmount.val() != "" && txtTotalAmount.val() != 0) {
+                    if (txtTotalAmount.getValue() != "" && txtTotalAmount.getValue() != 0) {
                         arrAcctSchemaID = [];
                         if (cmbAcctSchema.val() == 0) {
                             arrAcctSchemaID = allAcctSchemaID;
@@ -895,7 +897,7 @@
                         else {
                             arrAcctSchemaID[0] = cmbAcctSchema.val();
                         }
-                        insertDimensionAmountLine(C_DimAmt_ID, txtTotalAmount.val(), -1, arrAcctSchemaID, "", "", "", -1, -1, -1, 0, "", 0, function () {
+                        insertDimensionAmountLine(C_DimAmt_ID, txtTotalAmount.getValue(), -1, arrAcctSchemaID, "", "", "", -1, -1, -1, 0, "", 0, function () {
                             self.onClosing(C_DimAmt_ID);
                             ch.close();
                         });
@@ -944,9 +946,9 @@
         //Validate Control For valid Input............
         function onValidateOk() {
             if ((cmbAcctSchema.val() == "" || cmbAcctSchema.val() == -1) && (cmbDimensionType.val() == null || cmbDimensionType.val() == 0)) {
-                if (txtTotalAmount.val() == "" && txtTotalAmount.val().trim().length == 0) {
+                if (txtTotalAmount.getValue() == "" && txtTotalAmount.getValue().trim().length == 0) {
                     VIS.ADialog.warn("ValidateTotalAmount");
-                    txtTotalAmount.focus();
+                    txtTotalAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }
@@ -1008,18 +1010,18 @@
 
                 // handle the cases of negative amount.
                 if (Math.abs(parseFloat(defaultVal)) > 0) {
-                    txtTotalAmount.val(defaultVal);
+                    txtTotalAmount.setValue(defaultVal);
                 }
                 else {
-                    txtTotalAmount.val(maxAmount);
+                    txtTotalAmount.setValue(maxAmount);
                 }
             }
             else {
                 if (defaultVal) {
-                    txtTotalAmount.val(defaultVal);
+                    txtTotalAmount.setValue(defaultVal);
                 }
                 else {
-                    txtTotalAmount.val("");
+                    txtTotalAmount.setValue(0);
                 }
             }
             if (lblMaxAmount.html() == "") {
@@ -1031,9 +1033,9 @@
 
         function validateControl() {
 
-            if (txtTotalAmount.val() == "" && txtTotalAmount.val().trim().length == 0) {
+            if (txtTotalAmount.getValue() == "" && txtTotalAmount.getValue().trim().length == 0) {
                 VIS.ADialog.warn("ValidateTotalAmount");
-                txtTotalAmount.focus();
+                txtTotalAmount.getControl().focus();
                 busyDiv("hidden");
                 return false;
             }
@@ -1049,35 +1051,35 @@
                 busyDiv("hidden");
                 return false;
             }
-            else if (txtTotalAmount.val() == "" && txtTotalAmount.val().trim().length == 0) {
+            else if (txtTotalAmount.getValue() == "" && txtTotalAmount.getValue().trim().length == 0) {
                 VIS.ADialog.warn("ValidateTotalAmount");
-                txtTotalAmount.focus();
+                txtTotalAmount.getControl().focus();
                 busyDiv("hidden");
                 return false;
             }
             if (!checkValUpdate) {
-                if (txtAmount.val() == "" && txtAmount.val().trim().length == 0) {
+                if (txtAmount.getValue() == "" && txtAmount.getValue().trim().length == 0) {
                     VIS.ADialog.warn("ValidateAmount");
-                    txtAmount.focus();
+                    txtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }   // handle the cases of negative amount.
-                else if (Math.abs(parseFloat(txtAmount.val())) > Math.abs(parseFloat(txtTotalAmount.val()))) {
+                else if (Math.abs(parseFloat(txtAmount.getValue())) > Math.abs(parseFloat(txtTotalAmount.getValue()))) {
                     VIS.ADialog.warn("LineTotalNotGrater");
-                    txtAmount.focus();
+                    txtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }
-                    // Handle the cases of Negative and Positive amount on Amount dimension control
-                else if (parseFloat(txtAmount.val()) > 0 && parseFloat(txtTotalAmount.val()) < 0) {
+                // Handle the cases of Negative and Positive amount on Amount dimension control
+                else if (parseFloat(txtAmount.getValue()) > 0 && parseFloat(txtTotalAmount.getValue()) < 0) {
                     VIS.ADialog.warn("VIS_NegativeAmount");
-                    txtAmount.focus();
+                    txtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }
-                else if (parseFloat(txtAmount.val()) < 0 && parseFloat(txtTotalAmount.val()) > 0) {
+                else if (parseFloat(txtAmount.getValue()) < 0 && parseFloat(txtTotalAmount.getValue()) > 0) {
                     VIS.ADialog.warn("VIS_PositiveAmount");
-                    txtAmount.focus();
+                    txtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }
@@ -1090,28 +1092,28 @@
             }
 
             else if (checkValUpdate) {
-                if (modalTxtAmount.val() == "" && modalTxtAmount.val().trim().length == 0) {
+                if (modalTxtAmount.getValue() == "" && modalTxtAmount.getValue().trim().length == 0) {
                     VIS.ADialog.warn("ValidateAmount");
-                    modalTxtAmount.focus();
+                    modalTxtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }   // handle the cases of negative amount.
-                else if (Math.abs(parseFloat(modalTxtAmount.val())) > Math.abs(parseFloat(txtTotalAmount.val()))) {
+                else if (Math.abs(parseFloat(modalTxtAmount.getValue())) > Math.abs(parseFloat(txtTotalAmount.getValue()))) {
                     VIS.ADialog.warn("LineTotalNotGrater");
-                    modalTxtAmount.focus();
+                    modalTxtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }
-                    // Handle the cases of Negative and Positive amount on Amount dimension control
-                else if (parseFloat(modalTxtAmount.val()) > 0 && parseFloat(txtTotalAmount.val()) < 0) {
+                // Handle the cases of Negative and Positive amount on Amount dimension control
+                else if (parseFloat(modalTxtAmount.getValue()) > 0 && parseFloat(txtTotalAmount.getValue()) < 0) {
                     VIS.ADialog.warn("VIS_NegativeAmount");
-                    txtAmount.focus();
+                    txtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }
-                else if (parseFloat(modalTxtAmount.val()) < 0 && parseFloat(txtTotalAmount.val()) > 0) {
+                else if (parseFloat(modalTxtAmount.getValue()) < 0 && parseFloat(txtTotalAmount.getValue()) > 0) {
                     VIS.ADialog.warn("VIS_PositiveAmount");
-                    txtAmount.focus();
+                    txtAmount.getControl().focus();
                     busyDiv("hidden");
                     return false;
                 }
@@ -1487,23 +1489,23 @@
                                     getControl(cmbDimensionType.val());
                                     cmbValue = result[0].DimensionTypeVal;
                                     acctValue = result[0].AcctSchema;
-                                    txtTotal.val(format.GetFormatedValue(result[0].TotalLineAmount));
+                                    txtTotal.setValue(format.GetFormatedValue(result[0].TotalLineAmount));
                                 });
                             }
                             if (!onDataLoad) {
                                 cmbValue = result[0].DimensionTypeVal;
                                 acctValue = result[0].AcctSchema;
-                                txtTotal.val(format.GetFormatedValue(result[0].TotalLineAmount));
+                                txtTotal.setValue(format.GetFormatedValue(result[0].TotalLineAmount));
                             }
                         }
                         else {
                             cmbStausRecordCount.empty().append('<option value="1">1</option>');
-                            txtTotal.val(format.GetFormatedValue(0));
+                            txtTotal.setValue(format.GetFormatedValue(0));
                         }
                         //Show Default Value against first occuring Accounting Schema..............
 
                         recid = result.length;
-                        txtAmount.val("");
+                        txtAmount.setValue(0);
                         checkValUpdate = false;
                         btnAdd.empty().append(VIS.Msg.getMsg("Add"));
                         storeData = result;
@@ -1565,13 +1567,14 @@
                             // alert("Record saved successfully");
                             var g = w2ui[LineGridName].records.length;
                             if (elementTypeID == "AC") {
+                                // format.GetFormatAmount(lineAmount, "init", this.dotFormatter)
                                 w2ui[LineGridName].add({ recid: g + 1, DimensionType: elementType, DimensionName: dimensionName, C_BPartner: bpartnerName, DimensionValueAmount: lineAmount, lineAmountID: result[1], CalculateDimValAmt: lineAmount, C_BPartner_ID: C_BPartner_ID });
                             }
                             else {
                                 w2ui[LineGridName].add({ recid: g + 1, DimensionType: elementType, DimensionName: dimensionName, DimensionValueAmount: lineAmount, lineAmountID: result[1], CalculateDimValAmt: lineAmount });
                             }
-                            var temp = format.GetFormatedValue(parseFloat(txtTotal.val()) + parseFloat(lineAmount));
-                            txtTotal.val(temp);
+                            var temp = format.GetFormatedValue((parseFloat(txtTotal.getValue()) + parseFloat(lineAmount)).toFixed(Precision));
+                            txtTotal.setValue(temp);
                         }
                         else {
                             VIS.ADialog.info("UpdatedDimLine");
@@ -1582,8 +1585,8 @@
                                 w2ui[LineGridName].set(recid, { C_BPartner: bpartnerName });
                                 w2ui[LineGridName].set(recid, { C_BPartner_ID: C_BPartner_ID });
                             }
-                            var temp = format.GetFormatedValue(parseFloat(parseFloat(txtTotal.val()) - parseFloat(oldAmount)) + parseFloat(lineAmount));
-                            txtTotal.val(temp);
+                            var temp = format.GetFormatedValue((parseFloat(parseFloat(txtTotal.getValue()) - parseFloat(oldAmount)) + parseFloat(lineAmount)).toFixed(Precision));
+                            txtTotal.setValue(temp);
                         }
                         busyDiv("hidden");
                     }
@@ -1608,7 +1611,7 @@
         }
         //This Function Store Dimension Data in storeDimensionData Array.........................
         function addDimensionAmount(DimensionType, DimensionName, Amount, recid, AccountSchemaVal, DimensionTypeVal, DimensionNameVal, ElementID, DimensionLineID, C_BPartner_ID, BpartnerName) {
-            Amount = format.GetFormatedValue(Amount);
+            Amount = format.GetFormatedValue(Amount.toFixed(Precision));
             var chkDuplicate = "";
             arrAcctSchemaID = [];
             if (AccountSchemaVal == 0) {
@@ -1646,18 +1649,18 @@
                     var tempLineAmount = VIS.DB.executeScalar("select amount from c_dimamtline where c_dimamtline_id in (" + DimensionLineID + ") and rownum=1");
 
                     // handle the cases of negative amount.
-                    if (Math.abs((parseFloat(txtTotal.val()) + parseFloat(Amount)) - parseFloat(tempLineAmount)) <= Math.abs(parseFloat(txtTotalAmount.val()))) {//Dimension Line Sum Must Equal to Total Amout..............
-                        insertDimensionAmountLine(C_DimAmt_ID, txtTotalAmount.val(), Amount, arrAcctSchemaID, DimensionType, DimensionTypeVal, DimensionName, DimensionNameVal, ElementID, oldDimensionNameValue, C_BPartner_ID, BpartnerName, oldBPartnerID, function () {
+                    if (Math.abs((parseFloat(txtTotal.getValue()) + parseFloat(Amount)) - parseFloat(tempLineAmount)) <= Math.abs(parseFloat(txtTotalAmount.getValue()))) {//Dimension Line Sum Must Equal to Total Amout..............
+                        insertDimensionAmountLine(C_DimAmt_ID, txtTotalAmount.getValue(), Amount, arrAcctSchemaID, DimensionType, DimensionTypeVal, DimensionName, DimensionNameVal, ElementID, oldDimensionNameValue, C_BPartner_ID, BpartnerName, oldBPartnerID, function () {
                             afterSave();
                         });
                     }
-                    else { VIS.ADialog.warn("LineTotalNotGrater"); modalTxtAmount.val(""); modalTxtAmount.focus(); afterSave(); }
+                    else { VIS.ADialog.warn("LineTotalNotGrater"); modalTxtAmount.setValue(0); modalTxtAmount.getControl().focus(); afterSave(); }
 
 
                 }
                 else {
                     VIS.ADialog.warn("NameExists");
-                    modalTxtAmount.val("");
+                    modalTxtAmount.setValue(0);
                     busyDiv("hidden");
                     return false;
                 }
@@ -1667,7 +1670,7 @@
             }
             else {
                 //This Function Work When Inserting Dimension Value in Array......................  // handle the cases of negative amount.
-                if (Math.abs(parseFloat(txtTotal.val()) + parseFloat(Amount)) <= Math.abs(parseFloat(txtTotalAmount.val()))) {//Dimension Line Sum Must Equal to Total Amout..............
+                if (Math.abs(parseFloat(txtTotal.getValue()) + parseFloat(Amount)) <= Math.abs(parseFloat(txtTotalAmount.getValue()))) {//Dimension Line Sum Must Equal to Total Amout..............
 
                     var sql = "select nvl(cline.c_dimamtline_id,0) as DimLineID from c_dimamt cd inner join c_dimamtaccttype cact on cd.c_dimamt_id=cact.c_dimamt_id " +
                         " inner join c_dimamtline cline on cd.c_Dimamt_id=cline.c_dimamt_id and cact.c_dimamtaccttype_id=cline.c_dimamtaccttype_id " +
@@ -1693,20 +1696,20 @@
                     chkDuplicate = VIS.DB.executeScalar(sql);
 
                     if (chkDuplicate == null) {
-                        insertDimensionAmountLine(C_DimAmt_ID, txtTotalAmount.val(), Amount, arrAcctSchemaID, DimensionType, DimensionTypeVal, DimensionName, DimensionNameVal, ElementID, 0, C_BPartner_ID, BpartnerName, 0, function () {
+                        insertDimensionAmountLine(C_DimAmt_ID, txtTotalAmount.getValue(), Amount, arrAcctSchemaID, DimensionType, DimensionTypeVal, DimensionName, DimensionNameVal, ElementID, 0, C_BPartner_ID, BpartnerName, 0, function () {
                             afterSave();
                         });
                     }
                     else {
                         VIS.ADialog.warn("NameExists");
                         recid = recid - 1;
-                        txtAmount.val("");
+                        txtAmount.setValue(0);
                         busyDiv("hidden");
                         return false;
                     }
 
                 }
-                else { VIS.ADialog.warn("LineTotalNotGrater"); txtAmount.val(""); txtAmount.focus(); recid = recid - 1; afterSave(); }
+                else { VIS.ADialog.warn("LineTotalNotGrater"); txtAmount.setValue(0); txtAmount.getControl().focus(); recid = recid - 1; afterSave(); }
             }
 
 
@@ -1714,7 +1717,7 @@
 
         };
         function afterSave() {
-            txtAmount.val("");
+            txtAmount.setValue(0);
             checkValUpdate = false;
             btnNew.css("display", "none");
             modalDiv.css("display", "none");
@@ -1725,6 +1728,10 @@
             else { divAmount.css("width", "33.3%"); }
             btnAdd.empty().append(VIS.Msg.getMsg("Add"));
         }
+
+        this.vetoablechange = function (evt) {
+            txtAmount.setValue(evt.newValue);
+        };
         //Calculate Dimension Line Amount....................
         function calculateGrossAmount(data) {
             var grossAmount = 0;
@@ -1733,7 +1740,7 @@
                     grossAmount += parseFloat((data[i])["CalculateDimValAmt"]);
                 }
             }
-            txtTotal.val(grossAmount);
+            txtTotal.setValue(grossAmount);
         };
 
         // Unbind Dynamic generated Control...............
@@ -1785,7 +1792,6 @@
                     return;
                 },
                 success: function (data) {
-
                     var Sql = "";
                     var DefaultValue = VIS.DB.executeScalar("select c_acctschema1_id from ad_clientinfo where ad_client_ID=" + VIS.Env.getCtx().getAD_Client_ID() + "");
                     var defaultCheck = false;
@@ -1798,13 +1804,13 @@
                     cmbAcctSchema.empty().append('<option selected="selected" value="-1">Please select</option>');
                     for (var i = 0; i < res.length; i++) {
                         if (i == 0) {
-                            cmbAcctSchema.append('<option value="0">ALL</option>');
+                            cmbAcctSchema.append('<option precision="' + Precision + '" value="0">ALL</option>');
                         }
                         if (DefaultValue == res[i]['Key']) {
                             defaultCheck = true;
                         }
 
-                        cmbAcctSchema.append($("<option></option>").val(res[i]['Key']).html(res[i]['Value']));
+                        cmbAcctSchema.append($('<option precision="' + res[i]['Precision'] + '"></option>').val(res[i]['Key']).html(res[i]['Value']));
                         allAcctSchemaID.push(res[i]['Key']);
                     }
 
@@ -2325,7 +2331,13 @@
             grdCols.push({ field: "DimensionType", caption: "Dimension Type", size: "30%", min: 217 });
             grdCols.push({ field: "DimensionName", caption: "Dimension Name", size: "30%", min: 217 });
             grdCols.push({ field: "C_BPartner", caption: "Business Partner", size: "30%", min: 217, hidden: true });
-            grdCols.push({ field: "DimensionValueAmount", caption: "Dimension Value Amount", size: "30%", min: 216 });
+            grdCols.push({
+                field: "DimensionValueAmount", caption: "Dimension Value Amount", size: "30%", min: 216,
+                render: function (record, index, col_index) {
+                    var val = VIS.Utility.Util.getValueOfDecimal(record["DimensionValueAmount"]);
+                    return (val).toLocaleString();
+                }
+            });
             grdCols.push({
                 field: "Edit", caption: "", size: "5%", resizable: false,
                 render: function () { return '<a  tabindex="8"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/Edit_sub16.png" alt="Edit record" title="Edit record" style="opacity: 1;cursor:pointer"></div></a>'; }
@@ -2407,9 +2419,10 @@
                     var amount = VIS.DB.executeScalar(sql);
                     VIS.DB.executeQuery("update c_dimamtaccttype set totaldimlineamout=" + amount + " where c_dimamt_id=" + C_DimAmt_ID + " and c_acctSchema_id=" + arrAcctSchemaID[0] + "");
                     w2ui[LineGridName].select(gridRecordID);
+                    console.log("selected Rows : " + w2ui[LineGridName].getSelection().length);
                     w2ui[LineGridName].delete(true);
-                    var temp = parseFloat(txtTotal.val()) - parseFloat(Amount);
-                    txtTotal.val(temp);
+                    var temp = parseFloat((txtTotal.getValue() - parseFloat(Amount)).toFixed(Precision));
+                    txtTotal.setValue(temp);
                     getMaxDimensionAmount();
                     busyDiv("hidden");
                 }
@@ -2450,7 +2463,7 @@
                         var dimensionValue = cmbDimensionType.val();
                         DimensionNameVal = tempData[0].DimensionNameVal;
                         oldDimensionNameValue = tempData[0].DimensionNameVal;
-                        modalTxtAmount.val(tempData[0].CalculateDimValAmt);
+                        modalTxtAmount.setValue(tempData[0].CalculateDimValAmt);
                         oldAmount = tempData[0].CalculateDimValAmt;
                         oldBPartnerID = tempData[0].C_BPartner_ID;
                         if (cmbDimensionType.val() == "AC") {
@@ -2579,6 +2592,7 @@
             displayDialog();
             ch.getRoot();
             busyDiv("visible");
+            txtAmount.addVetoableChangeListener(this);
             getAccountingSchema(AD_Org_ID, function () {
 
                 getDimensionLine(allAcctSchemaID, true, function (tempData) {
@@ -2620,7 +2634,6 @@
         initializeComponent();
 
         var displayDialog = function () {
-
             ch.setContent(root);
             //ch.setHeight(445);
             ch.setWidth(750);

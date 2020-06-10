@@ -76,6 +76,8 @@
 
             obj['#TimezoneOffset'] = new Date().getTimezoneOffset().toString();
 
+            // Set Client Culture into the session.
+            obj['#ClientLanguage'] = window.navigator.language;
             VIS.dataContext.updateClientCtx(obj);
         };
 
