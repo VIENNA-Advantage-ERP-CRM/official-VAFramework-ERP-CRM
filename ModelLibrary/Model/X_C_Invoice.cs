@@ -1570,6 +1570,19 @@ namespace VAdvantage.Model
         /// <returns>Withholding Amt</returns>
         public Decimal GetWithholdingAmt() { Object bd = Get_Value("WithholdingAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
+        /** Set Grand Total after Withholding.
+@param GrandTotalAfterWithholding This field represents the total amount after deduction of withholding amount. */
+        public void SetGrandTotalAfterWithholding(Decimal? GrandTotalAfterWithholding) { Set_Value("GrandTotalAfterWithholding", (Decimal?)GrandTotalAfterWithholding); }/** Get Grand Total after Withholding.
+@return This field represents the total amount after deduction of withholding amount. */
+        public Decimal GetGrandTotalAfterWithholding() { Object bd = Get_Value("GrandTotalAfterWithholding"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** Set Backup Withholding Amount.
+@param BackupWithholdingAmount Backup Withholding Amount */
+        public void SetBackupWithholdingAmount(Decimal? BackupWithholdingAmount) { Set_Value("BackupWithholdingAmount", (Decimal?)BackupWithholdingAmount); }/** Get Backup Withholding Amount.
+@return Backup Withholding Amount */
+        public Decimal GetBackupWithholdingAmount() { Object bd = Get_Value("BackupWithholdingAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+
     }
 
 }

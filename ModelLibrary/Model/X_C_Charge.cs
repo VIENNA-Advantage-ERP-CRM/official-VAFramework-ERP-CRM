@@ -377,6 +377,19 @@ namespace VAdvantage.Model
         {
             return new KeyNamePair(Get_ID(), GetName());
         }
+
+        /** Set Withholding Category.
+@param C_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
+        public void SetC_WithholdingCategory_ID(int C_WithholdingCategory_ID)
+        {
+            if (C_WithholdingCategory_ID <= 0) Set_Value("C_WithholdingCategory_ID", null);
+            else
+                Set_Value("C_WithholdingCategory_ID", C_WithholdingCategory_ID);
+        }/** Get Withholding Category.
+@return This field represents the withholding category linked with respective withholding tax. */
+        public int GetC_WithholdingCategory_ID() { Object ii = Get_Value("C_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+
     }
 
 }
