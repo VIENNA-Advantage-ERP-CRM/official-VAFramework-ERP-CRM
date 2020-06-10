@@ -475,7 +475,7 @@ namespace VAdvantage.Model
                             }
                             //End
                         }
-                        //shubham add code below line after && 
+                        //(JID_1365)shubham add code below line after && 
                         else if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
                         {
                             // SI_0657: consider Attribute also
