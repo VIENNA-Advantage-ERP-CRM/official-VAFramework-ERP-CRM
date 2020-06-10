@@ -462,7 +462,7 @@ namespace VAdvantage.Model
         {
             Set_Value("Discount", (Decimal?)ED004_DiscntPrcnt);
         }
-         
+
 
         /** Set Discount Percent%.
        @param VA025_DiscntPrcnt Discount in percent */
@@ -1107,6 +1107,25 @@ namespace VAdvantage.Model
         public void SetAmountAfterApplyDiscount(Decimal? AmountAfterApplyDiscount) { Set_Value("AmountAfterApplyDiscount", (Decimal?)AmountAfterApplyDiscount); }
         /** Get Discount Amount after Total Discount.@return It is the Total amount deducted with respect to Line amount based on the calculation of Overall Discount on the Grand Total. */
         public Decimal GetAmountAfterApplyDiscount() { Object bd = Get_Value("AmountAfterApplyDiscount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** Set Withholding Tax.
+@param C_Withholding_ID Withholding type defined */
+        public void SetC_Withholding_ID(int C_Withholding_ID)
+        {
+            if (C_Withholding_ID <= 0) Set_Value("C_Withholding_ID", null);
+            else
+                Set_Value("C_Withholding_ID", C_Withholding_ID);
+        }/** Get Withholding Tax.
+@return Withholding type defined */
+        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Withholding Amount.
+@param WithholdingAmt This field represents the calculated withholding amount */
+        public void SetWithholdingAmt(Decimal? WithholdingAmt) { Set_Value("WithholdingAmt", (Decimal?)WithholdingAmt); }/** Get Withholding Amount.
+@return This field represents the calculated withholding amount */
+        public Decimal GetWithholdingAmt() { Object bd = Get_Value("WithholdingAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+
     }
 
 }

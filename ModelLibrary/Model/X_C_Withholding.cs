@@ -187,5 +187,57 @@ namespace VAdvantage.Model
         public void SetThresholdmin(Decimal? Thresholdmin) { Set_Value("Thresholdmin", (Decimal?)Thresholdmin); }/** Get Threshold min.
 @return Minimum gross amount for withholding calculation */
         public Decimal GetThresholdmin() { Object bd = Get_Value("Thresholdmin"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** TransactionType AD_Reference_ID=1000227 */
+        public static int TRANSACTIONTYPE_AD_Reference_ID = 1000227;/** Purchase = P */
+        public static String TRANSACTIONTYPE_Purchase = "P";/** Sale = S */
+        public static String TRANSACTIONTYPE_Sale = "S";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsTransactionTypeValid(String test) { return test == null || test.Equals("P") || test.Equals("S"); }/** Set Transaction Type.
+@param TransactionType This field represents that existing withholding tax applicable on which type of transaction. */
+        public void SetTransactionType(String TransactionType)
+        {
+            if (!IsTransactionTypeValid(TransactionType))
+                throw new ArgumentException("TransactionType Invalid value - " + TransactionType + " - Reference_ID=1000227 - P - S"); if (TransactionType != null && TransactionType.Length > 1) { log.Warning("Length > 1 - truncated"); TransactionType = TransactionType.Substring(0, 1); }
+            Set_Value("TransactionType", TransactionType);
+        }/** Get Transaction Type.
+@return This field represents that existing withholding tax applicable on which type of transaction. */
+        public String GetTransactionType() { return (String)Get_Value("TransactionType"); }
+
+        /** Set Withholding Category.
+@param C_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
+        public void SetC_WithholdingCategory_ID(int C_WithholdingCategory_ID)
+        {
+            if (C_WithholdingCategory_ID <= 0) Set_Value("C_WithholdingCategory_ID", null);
+            else
+                Set_Value("C_WithholdingCategory_ID", C_WithholdingCategory_ID);
+        }/** Get Withholding Category.
+@return This field represents the withholding category linked with respective withholding tax. */
+        public int GetC_WithholdingCategory_ID() { Object ii = Get_Value("C_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Country.
+@param C_Country_ID Country  */
+        public void SetC_Country_ID(int C_Country_ID)
+        {
+            if (C_Country_ID <= 0) Set_Value("C_Country_ID", null);
+            else
+                Set_Value("C_Country_ID", C_Country_ID);
+        }/** Get Country.
+@return Country  */
+        public int GetC_Country_ID() { Object ii = Get_Value("C_Country_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Region.
+@param C_Region_ID Identifies a geographical Region */
+        public void SetC_Region_ID(int C_Region_ID)
+        {
+            if (C_Region_ID <= 0) Set_Value("C_Region_ID", null);
+            else
+                Set_Value("C_Region_ID", C_Region_ID);
+        }/** Get Region.
+@return Identifies a geographical Region */
+        public int GetC_Region_ID() { Object ii = Get_Value("C_Region_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+
     }
 }

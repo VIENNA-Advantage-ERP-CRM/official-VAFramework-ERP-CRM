@@ -3348,6 +3348,8 @@ namespace VAdvantage.Model
 
                 MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
 
+
+
                 // when invoice having advance payment term, and lines already are created with order reference then user are not allowed to create manual line
                 // not to check this condition when record is in completed / closed / reversed / voided stage
                 if (Env.IsModuleInstalled("VA009_") && !inv.IsProcessing() &&
@@ -3772,6 +3774,12 @@ namespace VAdvantage.Model
                     }
                 }
 
+                // Calculate Withholding Tax
+                if (newRecord || !inv.IsProcessing())
+                {
+                    CalculateWithholding(inv.GetC_BPartner_ID(), inv.GetC_BPartner_Location_ID(), inv.IsSOTrx());
+                }
+
                 // Reset Amount Dimension if Line Amount is different
                 if (!newRecord && Is_ValueChanged("LineNetAmt"))
                 {
@@ -4004,6 +4012,7 @@ namespace VAdvantage.Model
                     + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
                     + (resetAmtDim ? ", AmtDimSubTotal = null " : "")       // reset Amount Dimension if Sub Total Amount is different
                     + (resetTotalAmtDim ? ", AmtDimGrandTotal = null " : "")     // reset Amount Dimension if Grand Total Amount is different
+                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
                 + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
@@ -4014,11 +4023,13 @@ namespace VAdvantage.Model
             if (IsTaxIncluded())
                 sql = "UPDATE C_Invoice i "
                     + "SET GrandTotal=TotalLines "
+                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - WithholdingAmt - BackupWithholdingAmount)" : "")
                     + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             else
                 sql = "UPDATE C_Invoice i "
                     + "SET GrandTotal=TotalLines+"
                         + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
+                        + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - WithholdingAmt - BackupWithholdingAmount)" : "")
                         + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
@@ -4048,6 +4059,81 @@ namespace VAdvantage.Model
                 log.Fine("Hold Payment Updated as TRUE -> #" + no);
                 if (no <= 0)
                     return false;
+            }
+            return true;
+        }
+
+
+        private bool CalculateWithholding(int C_Bpartner_ID, int C_BPartner_Location_ID, bool issotrx)
+        {
+            Decimal withholdingAmt = 0.0M;
+            String sql = @"SELECT C_BPartner.IsApplicableonAPInvoice, C_BPartner.IsApplicableonAPPayment, C_BPartner.IsApplicableonARInvoice,
+                            C_BPartner.IsApplicableonARReceipt,  
+                            C_Location.C_Country_ID , C_Location.C_Region_ID";
+            if (GetM_Product_ID() > 0)
+            {
+                sql += " , (SELECT C_WithholdingCategory_ID FROM M_Product WHERE M_Product_ID = " + GetM_Product_ID() + ") AS C_WithholdingCategory_ID ";
+            }
+            else
+            {
+                sql += " , (SELECT C_WithholdingCategory_ID FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID() + ") AS C_WithholdingCategory_ID ";
+            }
+            sql += @" FROM C_BPartner INNER JOIN C_Bpartner_Location ON 
+                     C_Bpartner.C_Bpartner_ID = C_Bpartner_Location.C_Bpartner_ID 
+                     INNER JOIN C_Location ON C_Bpartner_Location.C_Location_ID = C_Location.C_Location_ID  WHERE 
+                     C_BPartner.C_Bpartner_ID = " + C_Bpartner_ID + @" AND C_Bpartner_Location.C_BPartner_Location_ID = " + C_BPartner_Location_ID;
+            DataSet ds = DB.ExecuteDataset(sql, null, null);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                // check Withholding applicable on vendor/customer
+                if ((!issotrx && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPInvoice"]).Equals("Y")) ||
+                    (issotrx && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARInvoice"]).Equals("Y")))
+                {
+                    sql = "SELECT  C_Withholding_ID , InvCalculation, InvPercentage FROM C_Withholding " +
+                          " WHERE C_WithholdingCategory_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_WithholdingCategory_ID"]) +
+                          " AND TransactionType = '" + (issotrx ? X_C_Withholding.TRANSACTIONTYPE_Sale : X_C_Withholding.TRANSACTIONTYPE_Purchase) + "' " +
+                          " AND IsApplicableonInv='Y' AND AD_Client_ID = " + GetAD_Client_ID() +
+                          " AND AD_Org_ID IN (0 , " + GetAD_Org_ID() + ")";
+                    if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) > 0)
+                    {
+                        sql += " AND NVL(C_Region_ID, 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) + ")";
+                    }
+                    if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) > 0)
+                    {
+                        sql += " AND NVL(C_Country_ID , 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) + ")";
+                    }
+                    if (GetC_Withholding_ID() > 0)
+                    {
+                        sql += " AND C_Withholding_ID = " + GetC_Withholding_ID();
+                    }
+                    sql += " ORDER BY InvCalculation ASC , NVL(C_Region_ID , 0) DESC , NVL(C_Country_ID , 0) DESC"; // priority to LineNetAmt, Region, Country
+                    ds = DB.ExecuteDataset(sql, null, null);
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        // get amount on which we have to derive withholding tax amount
+                        if (Util.GetValueOfString(ds.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_SubTotal))
+                        {
+                            // get lineNetAmount
+                            withholdingAmt = GetLineNetAmt();
+                        }
+                        else if (Util.GetValueOfString(ds.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_TaxAmount))
+                        {
+                            // get tax amount from Invoice tax
+                            withholdingAmt = GetTaxAmt();
+                        }
+
+                        _log.Info("Invoice withholding detail, Invoice ID = " + GetC_Invoice_ID() + " , Amount on distribute = " + withholdingAmt +
+                         " , Invoice Withhold Percentage " + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["InvPercentage"]));
+
+                        // derive formula
+                        withholdingAmt = Decimal.Divide(
+                                         Decimal.Multiply(withholdingAmt, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["InvPercentage"]))
+                                         , 100);
+
+                        SetWithholdingAmt(Decimal.Round(withholdingAmt, GetPrecision()));
+                        SetC_Withholding_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"]));
+                    }
+                }
             }
             return true;
         }

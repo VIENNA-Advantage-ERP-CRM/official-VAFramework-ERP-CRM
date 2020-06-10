@@ -1024,5 +1024,30 @@ SetTrxType (null);// S
         /// </summary>
         /// <returns>Withholding Amt</returns>
         public Decimal GetWithholdingAmt() { Object bd = Get_Value("WithholdingAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** Set Payment Amount.
+@param PaymentAmount This field represents the payment amount after deduction with withholding amount. */
+        public void SetPaymentAmount(Decimal? PaymentAmount) { Set_Value("PaymentAmount", (Decimal?)PaymentAmount); }/** Get Payment Amount.
+@return This field represents the payment amount after deduction with withholding amount. */
+        public Decimal GetPaymentAmount() { Object bd = Get_Value("PaymentAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** Set Backup Withholding Amount.
+@param BackupWithholdingAmount Backup Withholding Amount */
+        public void SetBackupWithholdingAmount(Decimal? BackupWithholdingAmount) { Set_Value("BackupWithholdingAmount", (Decimal?)BackupWithholdingAmount); }/** Get Backup Withholding Amount.
+@return Backup Withholding Amount */
+        public Decimal GetBackupWithholdingAmount() { Object bd = Get_Value("BackupWithholdingAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** BackupWithholding_ID AD_Reference_ID=1000228 */
+        public static int BACKUPWITHHOLDING_ID_AD_Reference_ID = 1000228;/** Set Backup Withholding.
+@param BackupWithholding_ID Backup Withholding */
+        public void SetBackupWithholding_ID(int BackupWithholding_ID)
+        {
+            if (BackupWithholding_ID <= 0) Set_Value("BackupWithholding_ID", null);
+            else
+                Set_Value("BackupWithholding_ID", BackupWithholding_ID);
+        }/** Get Backup Withholding.
+@return Backup Withholding */
+        public int GetBackupWithholding_ID() { Object ii = Get_Value("BackupWithholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+
     }
 }
