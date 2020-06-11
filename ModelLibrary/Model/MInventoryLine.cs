@@ -325,6 +325,12 @@ namespace VAdvantage.Model
             if (newRecord || Is_ValueChanged("QtyInternalUse"))
                 SetQtyInternalUse(GetQtyInternalUse());
 
+            //JID_0680 set quantity according to precision
+            if (Is_ValueChanged("C_UOM_ID"))
+            {
+                Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("C_UOM_ID")))));
+            }
+
             // change to set Converted Quantity in Internal Use Qty and AsonDateQty and difference qty if there is differnce in UOM of Base Product and UOM Selected on line
             if (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID"))
             {

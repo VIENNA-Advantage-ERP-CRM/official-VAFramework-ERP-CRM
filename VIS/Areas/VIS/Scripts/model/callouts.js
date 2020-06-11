@@ -11673,6 +11673,18 @@
                     var C_UOM_To_ID = Util.getValueOfInt(value);
                     QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
+
+                    //JID_0680 set quantity acc to percision
+                    paramStr = C_UOM_To_ID.toString().concat(","); //1
+                    var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+                    var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);
+                    if (QtyEntered != QtyEntered1) {
+                        this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                            + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                        QtyEntered = QtyEntered1;
+                        mTab.setValue("QtyEntered", QtyEntered);
+                    }
+
                     paramStr = M_Product_ID.toString().concat(',').concat(C_UOM_To_ID.toString()).concat(',').concat(QtyEntered.toString());
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     QtyOrdered = pc;
@@ -11758,6 +11770,18 @@
                     var C_UOM_To_ID = Util.getValueOfInt(value);
                     QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
+
+                    //JID_0680 set quantity acc to percision
+                    paramStr = C_UOM_To_ID.toString().concat(","); //1
+                    var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+                    var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);
+                    if (QtyEntered != QtyEntered1) {
+                        this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                            + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                        QtyEntered = QtyEntered1;
+                        mTab.setValue("QtyEntered", QtyEntered);
+                    }
+
                     paramStr = M_Product_ID.toString().concat(',').concat(C_UOM_To_ID.toString()).concat(',').concat(QtyEntered.toString());
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     QtyOrdered = pc;
