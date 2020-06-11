@@ -86,7 +86,13 @@
     VCreateFromStatement.prototype.getTableFieldVOs = function () {
         var baseObj = this.$super;
         baseObj.arrListColumns = [];
-        baseObj.arrListColumns.push({ field: "Date", caption: VIS.Msg.getMsg("DateAcct"), sortable: true, size: '100px', hidden: false, editable: { type: 'date' }, render: 'date' });
+        baseObj.arrListColumns.push({
+            field: "Date", caption: VIS.Msg.getMsg("DateAcct"), sortable: true, size: '100px', hidden: false, editable: { type: 'date' },
+            render: function (record, index, col_index) {
+                var val = record["Date"];
+                return new Date(val).toLocaleDateString();
+            }
+        });
         baseObj.arrListColumns.push({ field: "C_Payment_ID", caption: VIS.Msg.getMsg("Payment"), sortable: true, size: '100px', hidden: false });
         baseObj.arrListColumns.push({ field: "C_Currency_ID", caption: VIS.Msg.getMsg("Currency"), sortable: true, size: '80px', hidden: false });
 
