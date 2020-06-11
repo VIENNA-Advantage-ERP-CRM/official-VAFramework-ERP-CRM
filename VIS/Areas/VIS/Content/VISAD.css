@@ -4828,6 +4828,8 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 }
 .vis-icon-menuclose {
     order: 7;
+    display: flex;
+    cursor: pointer;
 }
 
 
