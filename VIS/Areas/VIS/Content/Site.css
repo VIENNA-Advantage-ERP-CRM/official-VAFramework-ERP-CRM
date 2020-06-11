@@ -410,7 +410,7 @@ html[dir="rtl"] .vis-menufavitm
      float: right; 
 }
 .vis-icon-menuclose {
-    font-size: 1.4rem;
+    font-size: .875rem;
 }
 .vis-icon-menuclose, .vis-icon-menuclose:hover {
     /* width: 40px; */

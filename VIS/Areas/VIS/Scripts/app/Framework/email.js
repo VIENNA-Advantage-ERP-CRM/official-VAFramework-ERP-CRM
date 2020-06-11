@@ -180,7 +180,7 @@
             var $btncloseChart = null;
             var pheader;
             if (isEmail == true) {
-                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="fa fa-times"></i></a>');
+                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="vis vis-cross"></i></a>');
                 if (callingFromOutsideofWindow) {
                     pheader = $('<p>' + VIS.Msg.getMsg("EMail") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
                 }
@@ -191,7 +191,7 @@
 
             }
             else {
-                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="fa fa-times"></i></a>');
+                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="vis vis-cross"></i></a>');
                 if (callingFromOutsideofWindow) {
                     pheader = $('<p>' + VIS.Msg.getMsg("Letter") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
                 }

@@ -67,7 +67,7 @@
         };
 
         this.initializeComponent = function () {
-            var $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="fa fa-times"></i></a>');
+            var $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="vis vis-cross"></i></a>');
             var pheader = '';
             if (callingFromOutsideofWindow) {
                 pheader = $('<p>' + VIS.Msg.getMsg("Sms") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
