@@ -67,7 +67,7 @@
         };
 
         this.initializeComponent = function () {
-            var $btncloseChart = $('<a href="javascript:void(0)"  class="vis-mainMenuIcons vis-icon-menuclose"></a>');
+            var $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="fa fa-times"></i></a>');
             var pheader = '';
             if (callingFromOutsideofWindow) {
                 pheader = $('<p>' + VIS.Msg.getMsg("Sms") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
@@ -103,7 +103,7 @@
             html += '         <input type="text"  id="' + self.windowNo + '_emailMoblie"  placeholder="' + VIS.Msg.getMsg("EnterMobileNumber") + '">';
             html += '</div>';
             html += '  </div>';
-            html += '  </div><div class="vis-sms-textarea-div" style="width: 100%; float: left; border: 1px solid rgb(204, 204, 204);">';
+            html += '  </div><div class="vis-sms-textarea-div" style="width: 100%; float: left;">';
             html += ' <textarea  ondrop="return false;" id="' + self.windowNo + '_vis-sms-textarea" style="width: 100%; height:100%;resize:none" placeholder="' + VIS.Msg.getMsg("WriteMsgHere") + '"></textarea></div>';
             html += ' <div class="vis-sms-leftFooter">';
             html += '<div ><p class="vis-sms-counter" id=' + self.windowNo + '_acCount></p> <p  class="vis-sms-counter"   id=' + self.windowNo + '_oper></p> <p  class="vis-sms-counter"   id=' + self.windowNo + '_maxCount >160</p> </div>';

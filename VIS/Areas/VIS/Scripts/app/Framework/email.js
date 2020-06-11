@@ -180,7 +180,7 @@
             var $btncloseChart = null;
             var pheader;
             if (isEmail == true) {
-                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-mainMenuIcons vis-icon-menuclose"></a>');
+                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="fa fa-times"></i></a>');
                 if (callingFromOutsideofWindow) {
                     pheader = $('<p>' + VIS.Msg.getMsg("EMail") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
                 }
@@ -191,7 +191,7 @@
 
             }
             else {
-                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-mainMenuIcons vis-icon-menuclose"></a>');
+                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="fa fa-times"></i></a>');
                 if (callingFromOutsideofWindow) {
                     pheader = $('<p>' + VIS.Msg.getMsg("Letter") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
                 }
@@ -982,9 +982,9 @@
 
             $AttacmentOption.css('width', 'auto');
             $AttacmentOption.css('height', '100%');
-            var li = "<li style='margin-top:15px;margin-left:10px;margin-right:13px;font-size: 15px' class='vis-filesystem' value='0'>" + VIS.Msg.getMsg("FileSystem") + "</li> ";
+            var li = "<li class='vis-filesystem' value='0'>" + VIS.Msg.getMsg("FileSystem") + "</li> ";
             if (window.VADMS) {
-                li += "<li style='margin-top:15px;margin-left:10px;margin-right:13px;font-size: 15px' class='vis-dms' value='1'>" + VIS.Msg.getMsg("DMS") + "</li>"
+                li += "<li class='vis-dms' value='1'>" + VIS.Msg.getMsg("DMS") + "</li>"
             }
             $AttacmentOption.append(li);
             $root.append($AttacmentOption);
