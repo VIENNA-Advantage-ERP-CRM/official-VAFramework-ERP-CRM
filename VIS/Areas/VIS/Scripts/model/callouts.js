@@ -11762,7 +11762,7 @@
                     QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
 
-                    //JID_0680 set quantity acc to percision
+                    //JID_0680 set quantity according to percision
                     paramStr = C_UOM_To_ID.toString().concat(","); //1
                     var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
                     var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);

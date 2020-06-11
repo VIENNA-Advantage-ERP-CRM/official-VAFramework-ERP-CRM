@@ -326,7 +326,7 @@ namespace VAdvantage.Model
             if (newRecord || Is_ValueChanged("QtyInternalUse"))
                 SetQtyInternalUse(GetQtyInternalUse());
 
-            //JID_0680 set quantity according to precision on UOM
+            //JID_0680 set quantity according to precision
             if (Is_ValueChanged("C_UOM_ID"))
             {
                 Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("C_UOM_ID")))));
