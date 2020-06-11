@@ -1,9 +1,4 @@
 ﻿/****** Style Inputs Control STRAT*****/
-:root {
-    --button-bg: #eee;
-    --input-border: #ddd;
-}
-
 .vis-ev-col * {
     padding: 0px;
     font-weight: normal;
@@ -86,8 +81,8 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    display: flex;
-    align-items: center;
+    /*display: flex;
+    align-items: center;*/
 }
 
 .vis-input-wrap input {
@@ -384,7 +379,7 @@ label.vis-ec-col-lblchkbox {
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: auto;
+    top: 11px;
     cursor: pointer;
     outline: none;
     z-index: 5;
@@ -454,11 +449,17 @@ input[type="radio"] {
     background-color: transparent;
     outline: none;
     cursor: pointer;
+    min-width: 12px;
+    min-height: 12px;
 }
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
-    border: 1px solid rgba(var(--v-c-primary), 1);
+    /*border: 1px solid rgba(var(--v-c-primary), 1);*/
     position: relative;
+}
+input[type="checkbox"]:focus, 
+input[type="radio"]:focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
 input[type="checkbox"]:checked:before,
 input[type="radio"]:checked:before {

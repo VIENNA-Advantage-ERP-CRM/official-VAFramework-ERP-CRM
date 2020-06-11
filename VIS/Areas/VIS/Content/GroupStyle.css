@@ -261,11 +261,10 @@ input.vis-group-search-icon {
 .vis-group-user-profile, .vis-group-user-img {
     float: left;
 }
-
 .vis-group-pro-width {
-    width: calc(100% - 60px);
+    /* width: calc(100% - 60px); */
+    flex: 1;
 }
-
 .vis-group-user-text {
     float: left;
     padding: 0px 10px 0px;
@@ -274,35 +273,30 @@ input.vis-group-search-icon {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
-    .vis-group-user-text > p {
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 14px;
-        margin: 0;
-    }
-
-    .vis-group-user-text > span {
-        color: rgba(var(--v-c-on-secondary), .6);
-        font-size: 12px;
-        margin: 0;
-    }
-
+.vis-group-user-text > p {
+    color: rgba(var(--v-c-on-secondary), 1);
+    font-size: 14px;
+    margin: 0;
+}
+.vis-group-user-text > span {
+    color: rgba(var(--v-c-on-secondary), .6);
+    font-size: 12px;
+    margin: 0;
+}
 .vis-group-user-right {
     float: right;
 }
-
-    .vis-group-user-right > ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-    }
-
-        .vis-group-user-right > ul > li {
-            float: right;
-        }
-
+.vis-group-user-right > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.vis-group-user-right > ul > li {
+    float: right;
+}
 .vis-group-user-ico {
     /*width: 16px;
     height: 16px;*/
@@ -344,6 +338,7 @@ input.vis-group-search-icon {
     color: rgba(var(--v-c-on-secondary), .6);
     font-size: 12px;
     margin-bottom: 0;
+    padding-right: 5px;
 }
 
 .vis-group-user-wrap:hover, .vis-group-selected-op {
