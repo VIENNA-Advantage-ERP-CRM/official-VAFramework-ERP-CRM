@@ -11659,12 +11659,12 @@
             //physical inventory call
             if (mTab.getValue("IsInternalUse") == false || mTab.getValue("IsInternalUse") == null) {
                 if (mField.getColumnName() == "C_UOM_ID") {
-                    alert(mTab.getValue("IsInternalUse"));
+                    
                     var C_UOM_To_ID = Util.getValueOfInt(value);
                     QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
 
-                    // 11/6/2020 set quantity acc to precision
+                    //JID_0680 set quantity acc to percision
                     paramStr = C_UOM_To_ID.toString().concat(","); //1
                     var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
                     var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);
@@ -11755,14 +11755,14 @@
             }
             // Internal use inventory call
             else if (mTab.getValue("IsInternalUse") == true) {
-               // alert(mTab.getValue("IsInternalUse"));
+              
                 if (mField.getColumnName() == "C_UOM_ID") {
 
                     var C_UOM_To_ID = Util.getValueOfInt(value);
                     QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
 
-                    //
+                    //JID_0680 set quantity acc to percision
                     paramStr = C_UOM_To_ID.toString().concat(","); //1
                     var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
                     var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);
@@ -11772,7 +11772,7 @@
                         QtyEntered = QtyEntered1;
                         mTab.setValue("QtyEntered", QtyEntered);
                     }
-
+                   
                     paramStr = M_Product_ID.toString().concat(',').concat(C_UOM_To_ID.toString()).concat(',').concat(QtyEntered.toString());
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     QtyOrdered = pc;

@@ -279,6 +279,7 @@ namespace VAdvantage.Model
         /// <returns>true if can be saved</returns>
         protected override bool BeforeSave(bool newRecord)
         {
+                 
             // chck pallet Functionality applicable or not
             bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
@@ -324,6 +325,12 @@ namespace VAdvantage.Model
             // SI_0644.1 : Enforce UOM Precision - Rounding Quantities
             if (newRecord || Is_ValueChanged("QtyInternalUse"))
                 SetQtyInternalUse(GetQtyInternalUse());
+
+            //JID_0680 set quantity according to precision on UOM
+            if (Is_ValueChanged("C_UOM_ID"))
+            {
+                Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("C_UOM_ID")))));
+            }
 
             // change to set Converted Quantity in Internal Use Qty and AsonDateQty and difference qty if there is differnce in UOM of Base Product and UOM Selected on line
             if (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID"))
@@ -533,6 +540,8 @@ namespace VAdvantage.Model
                     catch { }
                 }
             }
+
+           
 
             return true;
         }
