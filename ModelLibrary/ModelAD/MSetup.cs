@@ -3551,6 +3551,13 @@ namespace VAdvantage.Model
                 else
                     log.Log(Level.SEVERE, "Tax NOT inserted");
 
+                sqlCmd.Clear();
+                sqlCmd.Append("UPDATE C_TaxCategory SET C_Tax_ID=" + tax.GetC_Tax_ID() + " WHERE C_TaxCategory_ID=" + C_TaxCategory_ID);
+                no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                if (no != 1)
+                    log.Log(Level.SEVERE, "TaxCategory NOT Updated With Default Tax");
+
+
                 //	Create Product
                 product = new MProduct(m_ctx, 0, m_trx);
                 product.SetValue(defaultName);
