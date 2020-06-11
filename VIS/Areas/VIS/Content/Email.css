@@ -96,23 +96,17 @@ html[dir="rtl"] .vis-email-leftDiv
 {
     width: 100%;
 }
-
-.vis-email-ul
-{
-    list-style-type: none;
+.vis-email-ul {
+    /*list-style-type: none;*/
 }
-
-
-
-.vis-list-li-bcc
-{
-    white-space: nowrap;
+.vis-list-li-bcc {
+    /* white-space: nowrap; */
 }
-
 label.vis-chcklist-label {
     font-size: 12px;
     font-weight: normal;
     margin-bottom: 0;
+    line-height: 1.5rem;
 }
 
 
@@ -277,19 +271,21 @@ html[dir="rtl"] .vis-Email-leftWrap
 {
     float: right;
     /*width:12%;*/
-    color: #535353;
+    /*color: #535353;*/
     font-size: 12px;
     margin-top: 5px;
 }
-
-    .vis-Email-CcBcc:hover, .vis-EmailAttachment:hover
-    {
-        text-decoration: none;
-        cursor: pointer;
-        color: #535353;
-    }
-
-.vis-form-data > input, .vis-form-data-extra > input, .vis-form-data-sub > input {
+.vis-Email-CcBcc:hover, .vis-EmailAttachment:hover {
+    text-decoration: none;
+    cursor: pointer;
+    /*color: #535353;*/
+}
+.vis-form-data > input,
+.vis-form-data-extra > input,
+.vis-form-data-sub > input,
+.vis-sms-form-data > input, 
+.vis-sms-form-data-extra > input, 
+.vis-sms-form-data-sub > input {
     width: 100%;
     float: left;
     border: none;
@@ -298,13 +294,17 @@ html[dir="rtl"] .vis-Email-leftWrap
     font-size: 20px;
     font-weight: lighter;
     color: rgba(var(--v-c-on-secondary), 1);
+    outline: none;
 }
-
-    .vis-form-data > input:focus, .vis-form-data-extra > input:focus {
-        border: none;
-        border-bottom: 1px solid rgba(var(--v-c-primary), 1);
-    }
-
+.vis-form-data > input:focus, 
+.vis-form-data-extra > input:focus, 
+.vis-form-data-sub input:focus, 
+.vis-sms-form-data > input:focus, 
+.vis-sms-form-data-extra > input:focus, 
+.vis-sms-form-data-sub input:focus {
+    /* border: none; */
+    border-bottom: 1px solid rgba(var(--v-c-primary), 1);
+}
 .vis-Email-leftFooter {
     width: auto;
     float: left;
@@ -312,21 +312,18 @@ html[dir="rtl"] .vis-Email-leftWrap
     display: flex;
     align-items: center;
 }
-
-html[dir="rtl"] .vis-Email-leftFooter
+/*html[dir="rtl"] .vis-Email-leftFooter
 {
     float: right;
+}*/
+.vis-Email-leftFooter > input {
+    /* float: left; */
 }
 
-.vis-Email-leftFooter > input
-{
-    float: left;
-}
-
-html[dir="rtl"] .vis-Email-leftFooter > input
+/*html[dir="rtl"] .vis-Email-leftFooter > input
 {
     float: right;
-}
+}*/
 
 .vis-Email-leftFooter > label {
     font-weight: normal;
@@ -337,11 +334,11 @@ html[dir="rtl"] .vis-Email-leftFooter > input
     margin-bottom: 0;
 }
 
-html[dir="rtl"] .vis-Email-leftFooter > label
+/*html[dir="rtl"] .vis-Email-leftFooter > label
 {
     margin-right: 10px;
     margin-left: 0px;
-}
+}*/
 
 /*.Email-divider{
 	width:1px;
@@ -350,25 +347,13 @@ html[dir="rtl"] .vis-Email-leftFooter > label
 	background:url('../img/Email/divider.png');	
 	 margin-left:20px;
 }*/
-.vis-Email-rytWrap
-{
+.vis-Email-rytWrap {
     float: left;
     width: 325px;
-    border-left: 1px solid #ccc;
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .2);
     padding-left: 20px;
     margin-left: 20px;
     height: 100%;
-}
-
-html[dir="rtl"] .vis-Email-rytWrap
-{
-    float: right;
-    border-right: 1px solid #ccc;
-    padding-right: 20px;
-    margin-right: 20px;
-    padding-left: 0px;
-    margin-left: 0px;
-    border-left: 0px;
 }
 
 .vis-Email-rytContent
@@ -385,26 +370,23 @@ html[dir="rtl"] .vis-Email-rytWrap
     width: 100%;
     margin-bottom: 10px;
 }
-
-    .vis-form-rytData > label {
-        width: 100%;
-        float: left;
-        font-size: 12px;
-        /*color: #535353;*/
-        font-weight: normal;
-        margin-bottom: 0;
-    }
-
-    .vis-form-rytData > input {
-        float: left;
-        width: 100%;
-        border: 1px solid rgba(var(--v-c-on-secondary), .2);
-    }
-
-        .vis-form-rytData > input:focus
-        {
-            border: 1px solid #ccc;
-        }
+.vis-form-rytData > label {
+    width: 100%;
+    float: left;
+    font-size: 12px;
+    /* color: #535353; */
+    font-weight: normal;
+    margin-bottom: 0;
+}
+.vis-form-rytData > input {
+    float: left;
+    width: 100%;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    outline: none;
+}
+.vis-form-rytData > input:focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
 
 .vis-Email-rytBcc
 {
@@ -430,27 +412,22 @@ html[dir="rtl"] .vis-Email-rytWrap
     width: 100%;
     overflow: auto;
 }
-
-    .vis-Email-BccList > ul
-    {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-        .vis-Email-BccList > ul > li {
-            /*color: #535353;*/
-            font-size: 12px;
-            line-height: 30px;
-            display: flex;
-            align-items: center;
-        }
-
-            .vis-Email-BccList > ul > li input
-            {
-                margin-right: 10px;
-            }
-
+.vis-Email-BccList > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.vis-Email-BccList > ul > li {
+    /* color: #535353; */
+    font-size: 12px;
+    line-height: 30px;
+    display: flex;
+    margin-bottom: 5px;
+}
+.vis-Email-BccList > ul > li input {
+    margin-right: 10px;
+    margin-top: 5px;
+}
 
 /* Add By Param On date 22-sep-2015*/
     .vis-DMSAttachDoc
@@ -544,12 +521,12 @@ html[dir="rtl"] .vis-Email-rytWrap
     padding: 0 10px;
 }
 .vis-email-sendbtn {
-    background: rgba(var(--v-c-on-secondary), .5);
+    /* background: rgba(var(--v-c-on-secondary), .5); */
     margin-right: 0;
     width: 42px;
     justify-content: center;
+    order: 6;
 }
-
 
 /*@media(max-width:1024px){
 	.Email-ContentWrap{
@@ -571,6 +548,8 @@ html[dir="rtl"] .vis-Email-rytWrap
  .vis-Email-textarea-div table tr:nth-child(2) td {
         height: 100%;
         display: block;
-    }
-
+}
+.vis-sms-textarea-div textarea:focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
 /*----------------------------end by designer--------------------------------*/
