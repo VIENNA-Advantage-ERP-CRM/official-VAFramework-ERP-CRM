@@ -3777,7 +3777,11 @@ namespace VAdvantage.Model
                 // Calculate Withholding Tax
                 if (newRecord || !inv.IsProcessing())
                 {
-                    CalculateWithholding(inv.GetC_BPartner_ID(), inv.GetC_BPartner_Location_ID(), inv.IsSOTrx());
+                    if (!CalculateWithholding(inv.GetC_BPartner_ID(), inv.GetC_BPartner_Location_ID(), inv.IsSOTrx()))
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
+                        return false;
+                    }
                 }
 
                 // Reset Amount Dimension if Line Amount is different
@@ -4063,7 +4067,13 @@ namespace VAdvantage.Model
             return true;
         }
 
-
+        /// <summary>
+        /// This function is used to calculate withholding cost
+        /// </summary>
+        /// <param name="C_Bpartner_ID">Buisness partner refrence</param>
+        /// <param name="C_BPartner_Location_ID">business partner location</param>
+        /// <param name="issotrx">transaction type</param>
+        /// <returns>success</returns>
         private bool CalculateWithholding(int C_Bpartner_ID, int C_BPartner_Location_ID, bool issotrx)
         {
             Decimal withholdingAmt = 0.0M;
@@ -4133,6 +4143,24 @@ namespace VAdvantage.Model
                         SetWithholdingAmt(Decimal.Round(withholdingAmt, GetPrecision()));
                         SetC_Withholding_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"]));
                     }
+                    else
+                    {
+                        // when exact data not found 
+                        SetWithholdingAmt(0);
+                        // when withholdinf define by user manual or already set
+                        if (GetC_Withholding_ID() > 0)
+                        {
+                            //SetC_Withholding_ID(0);
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    // when withholding not applicable on Business Partner
+                    SetWithholdingAmt(0);
+                    //SetC_Withholding_ID(0);
+                    return false;
                 }
             }
             return true;
