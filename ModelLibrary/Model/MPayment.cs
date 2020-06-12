@@ -4843,6 +4843,7 @@ namespace VAdvantage.Model
         bool ChekVoidIt = false;
         public Boolean VoidIt()
         {
+           
             // if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
             //  {
             ChekVoidIt = true;
@@ -4946,8 +4947,17 @@ namespace VAdvantage.Model
         /// @return true if success
         /// </summary>
         /// <returns></returns>
+       
         public Boolean ReverseCorrectIt()
         {
+            //added by shubham (JID_1472) To check payment is reconciled or not
+            if (IsReconciled())
+            {
+
+                _processMsg = Msg.GetMsg(GetCtx(), "PaymentAlreadyReconciled");
+                return false;
+               
+            }
             //if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
             //{
             log.Info(ToString());

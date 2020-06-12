@@ -465,6 +465,15 @@ namespace VAdvantage.Model
         /// <returns>new status (Complete, In Progress, Invalid, Waiting ..)</returns>
         public String CompleteIt()
         {
+            //added by shubham (JID_1472) To check payment is complete or close
+            int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from c_bankstatementline WHERE c_bankstatement_id =" + GetC_BankAccount_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')",null, Get_Trx()));
+                if(docStatus != 0)
+                {
+                    m_processMsg = Msg.GetMsg(GetCtx(), "notallowtocompletepayment");
+                    return DocActionVariables.STATUS_INVALID;
+                    
+                }              
+            //shubham
             //	Re-Check
             if (!m_justPrepared)
             {
