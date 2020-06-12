@@ -4858,7 +4858,7 @@ namespace VAdvantage.Model
             if (IsReconciled())
             {
 
-                _processMsg = Msg.GetMsg(GetCtx(), "paymentcannotreconciled");
+                _processMsg = Msg.GetMsg(GetCtx(), "PaymentAlreadyReconciled");
                 return false;
                
             }
