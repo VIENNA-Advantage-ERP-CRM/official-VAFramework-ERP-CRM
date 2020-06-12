@@ -1730,7 +1730,12 @@
         }
 
         this.vetoablechange = function (evt) {
-            txtAmount.setValue(evt.newValue);
+            if (evt.propertyName == "Amount") {
+                txtAmount.setValue(evt.newValue);
+            }
+            else if (evt.propertyName == "ModalAmount") {
+                modalTxtAmount.setValue(evt.newValue);
+            }
         };
         //Calculate Dimension Line Amount....................
         function calculateGrossAmount(data) {
@@ -2593,6 +2598,7 @@
             ch.getRoot();
             busyDiv("visible");
             txtAmount.addVetoableChangeListener(this);
+            modalTxtAmount.addVetoableChangeListener(this);
             getAccountingSchema(AD_Org_ID, function () {
 
                 getDimensionLine(allAcctSchemaID, true, function (tempData) {
