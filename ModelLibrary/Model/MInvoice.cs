@@ -2402,6 +2402,7 @@ namespace VAdvantage.Model
         /// <returns>return new status (Complete, In Progress, Invalid, Waiting ..)</returns>
         public String CompleteIt()
         {
+
             string timeEstimation = " start at  " + DateTime.Now.ToUniversalTime() + " - ";
             log.Warning("TStart time of invoice completion : " + DateTime.Now.ToUniversalTime());
             try
@@ -4756,6 +4757,15 @@ namespace VAdvantage.Model
         /// <returns>return true if success</returns>
         public bool ReverseCorrectIt()
         {
+            //added by shubham JID_1501 to check payment shedule or not during void_
+            if (Env.IsModuleInstalled("VA009_"){
+                int checkpayshedule = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(c_invoicepayschedule_ID) FROM C_invoicepayschedule WHERE c_invoice_ID=" + GetC_Invoice_ID() + " AND VA009_ISpaid='Y'"));
+                if (checkpayshedule != 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
+                     return false;
+                }
+            }
             log.Info(ToString());
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
