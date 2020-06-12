@@ -272,7 +272,7 @@
                 $('#vis_userDate').show();
             }
 
-                /* ipad landscape and small display screen size */
+            /* ipad landscape and small display screen size */
             else if (windowWidth >= 1000 && windowWidth <= 1024) {
                 if ($('#workflowActivity').css('display') == 'none') {
                     var screenResolution = windowWidth / 2;
@@ -312,7 +312,7 @@
                 $('#vis_userDate').show();
             }
 
-                /* ipad portrait, other tablets, fablets and mobile display screen size */
+            /* ipad portrait, other tablets, fablets and mobile display screen size */
             else if (windowWidth < 1000) {
                 if ($('#workflowActivity').css('display') == 'none') {
                     var screenResolution = windowWidth * divCount;
@@ -624,11 +624,11 @@
                             var n_rcrd = arrn[3];
 
                             var zoomQuery = new VIS.Query();
-                            zoomQuery.addRestriction(n_table + "_ID", VIS.Query.prototype.EQUAL, n_id);
+                            zoomQuery.addRestriction(n_table + "_ID", VIS.Query.prototype.EQUAL, VIS.Utility.Util.getValueOfInt(n_id));
                             VIS.viewManager.startWindow(n_win, zoomQuery);
 
                         }
-                            //for notice view/zoom
+                        //for notice view/zoom
                         else if (datarcrd === "liview") {
                             var vid = evnt.target.firstChild.id;
                             var arrn = vid.toString().split('|');
@@ -640,16 +640,16 @@
                             var n_rcrd = arrn[3];
 
                             var zoomQuery = new VIS.Query();
-                            zoomQuery.addRestriction(n_table + "_ID", VIS.Query.prototype.EQUAL, n_id);
+                            zoomQuery.addRestriction(n_table + "_ID", VIS.Query.prototype.EQUAL, VIS.Utility.Util.getValueOfInt(n_id));
                             VIS.viewManager.startWindow(n_win, zoomQuery);
 
                         }
-                            //for notice approve
+                        //for notice approve
                         else if (datarcrd === "approve") {
                             var vid = evnt.target.id;
                             ApproveNotice(vid, true);
                         }
-                            //for notice approve
+                        //for notice approve
                         else if (datarcrd === "liapprove") {
                             var vid = evnt.target.firstChild.id;
                             ApproveNotice(vid, true);
@@ -664,7 +664,7 @@
                             var winID = arrn[2];
 
                             var zoomQuery = new VIS.Query();
-                            zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, recID);
+                            zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, VIS.Utility.Util.getValueOfInt(recID));
                             VIS.viewManager.startWindow(winID, zoomQuery);
                         }//
                         else if (datarcrd === "lispecial1") {
@@ -677,7 +677,7 @@
                             var winID = arrn[2];
 
                             var zoomQuery = new VIS.Query();
-                            zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, recID);
+                            zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, VIS.Utility.Util.getValueOfInt(recID));
                             VIS.viewManager.startWindow(winID, zoomQuery);
                         }
 
@@ -695,12 +695,12 @@
                             var r_win = arrn[2];
 
                             var zoomQuery = new VIS.Query();
-                            zoomQuery.addRestriction(r_table + "_ID", VIS.Query.prototype.EQUAL, r_id);
+                            zoomQuery.addRestriction(r_table + "_ID", VIS.Query.prototype.EQUAL, VIS.Utility.Util.getValueOfInt(r_id));
                             VIS.viewManager.startWindow(r_win, zoomQuery);
 
 
                         }
-                            //for request view/zoom
+                        //for request view/zoom
                         else if (datarcrd === "liview") {
                             var vid = evnt.target.firstChild.id;
                             var arrn = vid.toString().split('|');
@@ -710,7 +710,7 @@
                             var r_win = arrn[2];
 
                             var zoomQuery = new VIS.Query();
-                            zoomQuery.addRestriction(r_table + "_ID", VIS.Query.prototype.EQUAL, r_id);
+                            zoomQuery.addRestriction(r_table + "_ID", VIS.Query.prototype.EQUAL, VIS.Utility.Util.getValueOfInt(r_id));
                             VIS.viewManager.startWindow(r_win, zoomQuery);
 
                         }
@@ -835,7 +835,7 @@
                         FllupsID = evnt.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
                         var arr = FllupsID.toString().split('-');
                         var zoomQuery = new VIS.Query();
-                        zoomQuery.addRestriction(arr[5] + "_ID", VIS.Query.prototype.EQUAL, arr[1]);
+                        zoomQuery.addRestriction(arr[5] + "_ID", VIS.Query.prototype.EQUAL, VIS.Utility.Util.getValueOfInt(arr[1]));
                         VIS.viewManager.startWindow(arr[4], zoomQuery);
                     }
 
@@ -974,18 +974,18 @@
                                     }
 
                                     str += "<div id=" + divfllupsID + " data-fll='divfllups' class='vis-feedContainer'>"
-                                            + "<div class='vis-feedTitleBar'>"
-                                            + "<h3> " + data.lstFollowups[cnt].WinName + ' : ' + data.lstFollowups[cnt].Identifier + " </h3>"
-                                            + "<div class='vis-feedTitleBar-buttons'>"
+                                        + "<div class='vis-feedTitleBar'>"
+                                        + "<h3> " + data.lstFollowups[cnt].WinName + ' : ' + data.lstFollowups[cnt].Identifier + " </h3>"
+                                        + "<div class='vis-feedTitleBar-buttons'>"
                                         + "<ul><li> <a href='javascript:void(0)'  data-fll='azoomfllups'  title='" + VIS.Msg.getMsg("ViewFollowups") + "'  class='vis vis-find'></a></li>"
-                                            + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='fa fa-rss'></a></li></ul>"
-                                            + " </div></div>"
+                                        + "<li> <a href='javascript:void(0)'  data-fll='asubscribefllups'  title='" + VIS.Msg.getMsg("UnsubscribeFollowups") + "' class='fa fa-rss'></a></li></ul>"
+                                        + " </div></div>"
 
-                                            + "<div id='divfllcmntdata" + data.lstFollowups[cnt].ChatID + "' data-fll='fll-cmnt' class='vis-feedDetails'>"
-                                            + "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
-                                            + uimg
-                                            + "<p>"
-                                            + " <strong data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'>";
+                                        + "<div id='divfllcmntdata" + data.lstFollowups[cnt].ChatID + "' data-fll='fll-cmnt' class='vis-feedDetails'>"
+                                        + "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
+                                        + uimg
+                                        + "<p>"
+                                        + " <strong data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'>";
                                     if (data.lstFollowups[cnt].AD_User_ID == VIS.Env.getCtx().getAD_User_ID()) {
                                         str += VIS.Msg.getMsg("Me") + " </strong> <br />"
                                     }
@@ -994,19 +994,19 @@
                                     }
 
                                     str += VIS.Utility.encodeText(data.lstFollowups[cnt].ChatData)
-                                    + "</p>"
-                                    + "<p class='vis-feedDateTime'>" + dbdate + "</p>"
-                                    + "</div></div>"
+                                        + "</p>"
+                                        + "<p class='vis-feedDateTime'>" + dbdate + "</p>"
+                                        + "</div></div>"
 
-                                    + "<a id='divfllvm_" + data.lstFollowups[cnt].ChatID + "'  data-fll='viewmorefllupscmnt' href='javascript:void(0)' class='vis-viewMoreComments'><span class='vis-feedIcons vis-icon-viewMoreComments'></span>" + VIS.Msg.getMsg("ViewMoreComments") + "...</a>"
-                                    + "<a id='divfllvl_" + data.lstFollowups[cnt].ChatID + "' style='display:none;'  data-fll='viewlessfllupscmnt' href='javascript:void(0)' class='vis-viewMoreComments'><span class='vis-feedIcons vis-icon-viewMoreComments'></span>" + VIS.Msg.getMsg("ViewLessComments") + "...</a>"
-                                    + " <div class='clearfix'></div> "
+                                        + "<a id='divfllvm_" + data.lstFollowups[cnt].ChatID + "'  data-fll='viewmorefllupscmnt' href='javascript:void(0)' class='vis-viewMoreComments'><span class='vis-feedIcons vis-icon-viewMoreComments'></span>" + VIS.Msg.getMsg("ViewMoreComments") + "...</a>"
+                                        + "<a id='divfllvl_" + data.lstFollowups[cnt].ChatID + "' style='display:none;'  data-fll='viewlessfllupscmnt' href='javascript:void(0)' class='vis-viewMoreComments'><span class='vis-feedIcons vis-icon-viewMoreComments'></span>" + VIS.Msg.getMsg("ViewLessComments") + "...</a>"
+                                        + " <div class='clearfix'></div> "
 
-                                    + "<div id=" + data.lstFollowups[cnt].ChatID + " class='vis-feedMessage'>"
-                                    + " <input id='txtFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='txtcmntfll' placeholder='" + VIS.Msg.getMsg('TypeMessage') + "' type='text' value='' />"
-                                    + " <span  id='btnFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='btncmntfll' title='" + VIS.Msg.getMsg('PostMessage') + "'  class='vis vis-sms' ></span>"
-                                    + " <div class='clearfix'></div> "
-                                    + "</div></div> ";
+                                        + "<div id=" + data.lstFollowups[cnt].ChatID + " class='vis-feedMessage'>"
+                                        + " <input id='txtFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='txtcmntfll' placeholder='" + VIS.Msg.getMsg('TypeMessage') + "' type='text' value='' />"
+                                        + " <span  id='btnFllCmnt" + data.lstFollowups[cnt].ChatID + "' data-fll='btncmntfll' title='" + VIS.Msg.getMsg('PostMessage') + "'  class='vis vis-sms' ></span>"
+                                        + " <div class='clearfix'></div> "
+                                        + "</div></div> ";
                                     cnt++;
                                 }
                                 FllUpsMain.append(str);
@@ -1082,8 +1082,8 @@
                                 }
 
                                 str += VIS.Utility.encodeText(data.lstFollowups[cnt].ChatData)
-                                  + "</p>"
-                                  + "<p class='vis-feedDateTime'>" + dbdate + "</p></div>";
+                                    + "</p>"
+                                    + "<p class='vis-feedDateTime'>" + dbdate + "</p></div>";
                                 cnt++;
                             }
 
@@ -1127,12 +1127,12 @@
                                 uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
                             }
                             var str = "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
-                                 + uimg
-                                 + "<p>"
-                                 + " <strong  data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'>" + VIS.Msg.getMsg("Me") + "</strong><br />"
-                                 + VIS.Utility.encodeText(cmntTxt)
-                                 + "</p>"
-                                 + "<p class='vis-feedDateTime'>" + cdate + "</p></div>";
+                                + uimg
+                                + "<p>"
+                                + " <strong  data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'>" + VIS.Msg.getMsg("Me") + "</strong><br />"
+                                + VIS.Utility.encodeText(cmntTxt)
+                                + "</p>"
+                                + "<p class='vis-feedDateTime'>" + cdate + "</p></div>";
                             FllupsData.append(str);
 
                         },
@@ -1230,30 +1230,30 @@
                                 + "<div class='vis-feedTitleBar-buttons'>"
                                 + "<ul>";
 
-                            if (data[s].Name && data[s].Name.length>0) {
-                               str+= "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
+                            if (data[s].Name && data[s].Name.length > 0) {
+                                str += "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
                             }
 
                             + "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
                             str += "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'  class='vis vis-find'></a></li>"
-                                   + "</ul>"
-                                   + "</div>"
-                                   + "</div>"
+                                + "</ul>"
+                                + "</div>"
+                                + "</div>"
 
-                                   + "<div  class='vis-feedDetails vis-pt-0 vis-pl-0'>"
-                                   + "<div class='vis-table-request'>"
-                                   + "<ul>"
-                                   + "<li><span>" + VIS.Msg.getMsg('Priority') + ":</span><br>" + data[s].Priority + "</li>"
-                                   + "<li><span>" + VIS.Msg.getMsg('Status') + ":</span><br>" + data[s].Status + "</li>"
-                                   + "<li><span>" + VIS.Msg.getMsg('NextActionDate') + ":</span><br>" + NextActionDate + "</li>"
-                                   + "</ul>"
-                                   + "</div>"
-                                   + "<p class='vis-maintain-customer-p'>"
-                                   + "<strong>" + VIS.Utility.encodeText(casetype) + " </strong><br />"
-                                   + "<span>" + VIS.Msg.getMsg('Message') + ":</span><br>" + VIS.Utility.encodeText(summary) + "</p>"
-                                   + "<p class='vis-feedDateTime'  style=' width: 69%; margin-right: 10px;'>" + CreatedDate + "</p>"
-                           + "</div>"
-                           + "</div>"
+                                + "<div  class='vis-feedDetails vis-pt-0 vis-pl-0'>"
+                                + "<div class='vis-table-request'>"
+                                + "<ul>"
+                                + "<li><span>" + VIS.Msg.getMsg('Priority') + ":</span><br>" + data[s].Priority + "</li>"
+                                + "<li><span>" + VIS.Msg.getMsg('Status') + ":</span><br>" + data[s].Status + "</li>"
+                                + "<li><span>" + VIS.Msg.getMsg('NextActionDate') + ":</span><br>" + NextActionDate + "</li>"
+                                + "</ul>"
+                                + "</div>"
+                                + "<p class='vis-maintain-customer-p'>"
+                                + "<strong>" + VIS.Utility.encodeText(casetype) + " </strong><br />"
+                                + "<span>" + VIS.Msg.getMsg('Message') + ":</span><br>" + VIS.Utility.encodeText(summary) + "</p>"
+                                + "<p class='vis-feedDateTime'  style=' width: 69%; margin-right: 10px;'>" + CreatedDate + "</p>"
+                                + "</div>"
+                                + "</div>"
                         }
 
                     }
@@ -1334,7 +1334,7 @@
                             }
 
                             str += "<div data-vishomercrd='view-recrd-cntainer' id='divrecdcntnr_" + data[s].AD_Note_ID + "' class='vis-activityContainer'>"
-                                       + " <div class='vis-feedTitleBar'>";
+                                + " <div class='vis-feedTitleBar'>";
 
                             if (data[s].SpecialTable) {
                                 str += "<h3>" + VIS.Utility.encodeText(data[s].MsgType) + "</h3>";
@@ -1344,8 +1344,8 @@
                             }
 
 
-                                           str+= " <div class='vis-feedTitleBar-buttons'>"
-                                              + "  <ul>";
+                            str += " <div class='vis-feedTitleBar-buttons'>"
+                                + "  <ul>";
                             //if (data[s].SpecialTable)
                             //{
                             //    str += "<li data-vishomercrd='lispecial'><a data-vishomercrd='lispecial1' href='javascript:void(0)' id='" + data[s].Record_ID + "|" + data[s].ProcessTableName + "|" + data[s].ProcessWindowID + "' data-vishomercrd='SpecialTable' title='" + VIS.Msg.getMsg("ShowNotice") + "' class='vis-processZoomIcon vis-icon-check'> title='" + VIS.Msg.getMsg("ShowNotice") + "'</a></li>"
@@ -1354,14 +1354,14 @@
                             // Renaming of Approve highlight to Acknowledge under notification
                             str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Acknowledge") + "' class='vis vis-markx'></a></li>"
                                 + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
-                           + "</ul>"
-                         + "  </div>"
-                        + "</div>"
-                      + "<div data-vishomercrd='more-details' id=" + data[s].AD_Note_ID + " class='vis-feedDetails'>"
-                          + divtitle_
-         + " <p class='vis-feedDateTime'>" + VIS.Utility.encodeText(dbdate) + "</p>"
-       + " </div>"
-     + " </div>"
+                                + "</ul>"
+                                + "  </div>"
+                                + "</div>"
+                                + "<div data-vishomercrd='more-details' id=" + data[s].AD_Note_ID + " class='vis-feedDetails'>"
+                                + divtitle_
+                                + " <p class='vis-feedDateTime'>" + VIS.Utility.encodeText(dbdate) + "</p>"
+                                + " </div>"
+                                + " </div>"
 
                         }
                     }
