@@ -4747,14 +4747,15 @@ namespace VAdvantage.Model
         public bool ReverseCorrectIt()
         {
             //added by shubham JID_1501 to check payment shedule or not during void_
-            if (Env.IsModuleInstalled("VA009_"){
-                int checkpayshedule = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(c_invoicepayschedule_ID) FROM C_invoicepayschedule WHERE c_invoice_ID=" + GetC_Invoice_ID() + " AND VA009_ISpaid='Y'",null, Get_Trx()));
+            if (Env.IsModuleInstalled("VA009_")){
+                int checkpayshedule = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(c_invoicepayschedule_ID) FROM C_invoicepayschedule WHERE c_invoice_ID=" + GetC_Invoice_ID() + " AND VA009_ISpaid='Y'", null, Get_Trx()));
                 if (checkpayshedule != 0)
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
-                     return false;
+                    return false;
                 }
             }
+        
             log.Info(ToString());
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
