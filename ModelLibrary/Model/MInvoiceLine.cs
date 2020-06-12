@@ -4159,8 +4159,12 @@ namespace VAdvantage.Model
                 {
                     // when withholding not applicable on Business Partner
                     SetWithholdingAmt(0);
-                    //SetC_Withholding_ID(0);
-                    return false;
+                    // when withholdinf define by user manual or already set, but not applicable on invoice
+                    if (GetC_Withholding_ID() > 0)
+                    {
+                        //SetC_Withholding_ID(0);
+                        return false;
+                    }
                 }
             }
             return true;
