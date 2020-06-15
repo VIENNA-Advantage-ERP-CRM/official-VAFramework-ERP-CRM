@@ -4108,6 +4108,10 @@ namespace VAdvantage.Model
                     {
                         sql += " AND NVL(C_Region_ID, 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) + ")";
                     }
+                    else
+                    {
+                        sql += " AND NVL(C_Region_ID, 0) IN (0) ";
+                    }
                     if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) > 0)
                     {
                         sql += " AND NVL(C_Country_ID , 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) + ")";
