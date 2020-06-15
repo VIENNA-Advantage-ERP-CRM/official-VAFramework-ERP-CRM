@@ -2222,6 +2222,7 @@ namespace VAdvantage.Model
 
                 //	Lines
                 Decimal totalLines = Env.ZERO;
+                Decimal totalWithholdingAmt = Env.ZERO;
                 List<int> taxList = new List<int>();
                 MInvoiceLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
@@ -2262,6 +2263,10 @@ namespace VAdvantage.Model
                         }
                     }
                     totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
+                    if (Get_ColumnIndex("WithholdingAmt") > 0)
+                    {
+                        totalWithholdingAmt = Decimal.Add(totalWithholdingAmt, line.GetWithholdingAmt());
+                    }
                 }
 
                 //	Taxes
@@ -2351,6 +2356,11 @@ namespace VAdvantage.Model
                 //
                 SetTotalLines(totalLines);
                 SetGrandTotal(grandTotal);
+                if (Get_ColumnIndex("WithholdingAmt") > 0)
+                {
+                    base.SetWithholdingAmt(totalWithholdingAmt);
+                    SetGrandTotalAfterWithholding(grandTotal - totalWithholdingAmt);
+                }
             }
             catch (Exception)
             {

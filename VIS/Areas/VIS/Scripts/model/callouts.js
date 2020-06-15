@@ -4366,7 +4366,7 @@
                 ctx.setContext(windowNo, "InvTotalAmt", null);
                 if (mTab.getTableName() == "C_Payment") {
                     mTab.setValue("PayAmt", null);              // For Payment window
-                    mTab.setValue("PaymentAmount", null);    
+                    mTab.setValue("PaymentAmount", null);
                 }
                 else {
                     mTab.setValue("Amount", null);             // For Cash Journal Line 
@@ -4389,7 +4389,7 @@
                     }
                     else {
                         mTab.setValue("PayAmt", Util.getValueOfDecimal(data["DueAmt"]));                    // For Payment window
-                        mTab.setValue("PaymentAmount", Util.getValueOfDecimal(data["DueAmt"]));  
+                        mTab.setValue("PaymentAmount", Util.getValueOfDecimal(data["DueAmt"]));
                     }
                 }
                 else {
@@ -4431,7 +4431,7 @@
                 ctx.setContext(windowNo, "InvTotalAmt", null);
                 if (mTab.getTableName() == "C_Payment") {
                     mTab.setValue("PayAmt", null);              // For Payment window
-                    mTab.setValue("PaymentAmount", null); 
+                    mTab.setValue("PaymentAmount", null);
                 }
                 else {
                     mTab.setValue("Amount", null);             // For Cash Journal Line 
@@ -4451,7 +4451,7 @@
                     }
                     else {
                         mTab.setValue("PayAmt", Amt);                    // For Payment window
-                        mTab.setValue("PaymentAmount", Amt); 
+                        mTab.setValue("PaymentAmount", Amt);
                     }
                 }
                 else {
@@ -18429,8 +18429,8 @@
                     var PaymentMethod = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
                     mTab.setValue("VA009_PaymentMethod_ID", PaymentMethod);
                 }
-                mTab.setValue("PayAmt", grandTotal);
                 mTab.setValue("PaymentAmount", grandTotal);
+                mTab.setValue("PayAmt", grandTotal);
             }
         }
         catch (err) {
@@ -19061,6 +19061,23 @@
                 }
             }
             this.setCalloutActive(false);
+        }
+        else {
+            this.setCalloutActive(true);
+            try {
+                // for independent BP / Charge / order id > 0 while order schedule id not defined
+                if ((Util.getValueOfInt(mTab.getValue("C_Order_ID")) > 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0) ||
+                    (Util.getValueOfInt(mTab.getValue("C_Order_ID")) == 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0 &&
+                        Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_InvoicePaySchedule_ID")) == 0)) {
+                    mTab.setValue("PayAmt", Util.getValueOfDecimal(mTab.getValue("PaymentAmount")));
+                }
+                this.setCalloutActive(false);
+            }
+            catch (err) {
+                this.setCalloutActive(false);
+                this.log.log(Level.SEVERE, sql, err);
+                return err;
+            }
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
