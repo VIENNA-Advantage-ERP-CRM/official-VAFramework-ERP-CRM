@@ -24,6 +24,7 @@ using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
 using VAdvantage.ProcessEngine;
+using VAdvantage.Model;
 
 namespace ViennaAdvantage.Process
 {
@@ -104,8 +105,9 @@ namespace ViennaAdvantage.Process
             {
                 throw new Exception("Order Closed");
             }
-            VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc,
-                dt.GetC_DocType_ID(), false, true, null);		//	copy ASI
+            //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
+            VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetC_DocType_ID(), false, true, null,
+                dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);		//	copy ASI 
             newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
             int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
             newOrder.Set_Value("IsSalesQuotation", false);
