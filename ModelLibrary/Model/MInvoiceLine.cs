@@ -4100,7 +4100,7 @@ namespace VAdvantage.Model
                     (issotrx && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARInvoice"]).Equals("Y")))
                 {
                     sql = "SELECT  C_Withholding_ID , InvCalculation, InvPercentage FROM C_Withholding " +
-                          " WHERE C_WithholdingCategory_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_WithholdingCategory_ID"]) +
+                          " WHERE IsActive = 'Y' AND C_WithholdingCategory_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_WithholdingCategory_ID"]) +
                           " AND TransactionType = '" + (issotrx ? X_C_Withholding.TRANSACTIONTYPE_Sale : X_C_Withholding.TRANSACTIONTYPE_Purchase) + "' " +
                           " AND IsApplicableonInv='Y' AND AD_Client_ID = " + GetAD_Client_ID() +
                           " AND AD_Org_ID IN (0 , " + GetAD_Org_ID() + ")";
