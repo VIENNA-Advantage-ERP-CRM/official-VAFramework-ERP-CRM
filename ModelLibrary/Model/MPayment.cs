@@ -2748,8 +2748,12 @@ namespace VAdvantage.Model
              * After confirmation with Surya  / Ashish By Amit */
             if (GetReversalDoc_ID() == 0 && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
             {
-                string sql = @"SELECT IsApplicableonARReceipt , C_Withholding_ID ,IsApplicableonAPPayment , AP_WithholdingTax_ID  "
-                              + " FROM C_Bpartner WHERE C_BPartner_ID = " + GetC_BPartner_ID();
+                string sql = @"SELECT C_BPartner.IsApplicableonARReceipt, C_BPartner.IsApplicableonAPPayment, C_BPartner.C_Withholding_ID,
+                            C_BPartner.AP_WithholdingTax_ID,  C_Location.C_Country_ID , C_Location.C_Region_ID   "
+                              + @" FROM C_Bpartner INNER JOIN C_Bpartner_Location ON 
+                                 C_Bpartner.C_Bpartner_ID = C_Bpartner_Location.C_Bpartner_ID
+                                 INNER JOIN C_Location ON C_Bpartner_Location.C_Location_ID = C_Location.C_Location_ID  WHERE
+                                 C_BPartner.C_Bpartner_ID = " + GetC_BPartner_ID() + @" AND C_Bpartner_Location.C_BPartner_Location_ID = " + GetC_BPartner_Location_ID();
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2769,9 +2773,11 @@ namespace VAdvantage.Model
                         if (GetWithholdingAmt() == 0)
                         {
                             if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
-                                : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false))
+                                : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false , 
+                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) ,
+                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"])))
                             {
-                                SetProcessMsg(Msg.GetMsg(GetCtx(), "WHNotDefineForPayment"));
+                                SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                                 return DocActionVariables.STATUS_INVALID;
                             }
                         }
@@ -2779,7 +2785,9 @@ namespace VAdvantage.Model
                         // calculate backup withholding amount
                         if (GetBackupWithholding_ID() > 0 && GetBackupWithholdingAmount() == 0)
                         {
-                            CalculateWithholdingAmount(GetBackupWithholding_ID(), true);
+                            CalculateWithholdingAmount(GetBackupWithholding_ID(), true,
+                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
+                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]));
                         }
                     }
                     else
@@ -3478,14 +3486,27 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="withholding_ID">withholding reference</param>
         /// <param name="isBackupWithholding">is calculation going on for backup withholding</param>
-        private bool CalculateWithholdingAmount(int withholding_ID, bool isBackupWithholding)
+        private bool CalculateWithholdingAmount(int withholding_ID, bool isBackupWithholding, int Region_ID, int Country_ID)
         {
             Decimal withholdingAmt = 0;
-
-            DataSet dsWithholding = DB.ExecuteDataset(@"SELECT IsApplicableonPay, PayCalculation , PayPercentage 
-                                        FROM C_Withholding WHERE IsApplicableonPay = 'Y' AND C_Withholding_ID = " + withholding_ID
-                                        + " AND TransactionType = '" + (IsReceipt() ? X_C_Withholding.TRANSACTIONTYPE_Sale
-                                        : X_C_Withholding.TRANSACTIONTYPE_Purchase) + "'", null, Get_Trx());
+            String sql = @"SELECT IsApplicableonPay, PayCalculation , PayPercentage 
+                                        FROM C_Withholding WHERE IsActive = 'Y' AND IsApplicableonPay = 'Y' AND C_Withholding_ID = "
+                                         + (!isBackupWithholding && GetC_Withholding_ID() > 0 ? GetC_Withholding_ID() : withholding_ID)
+                                         + " AND TransactionType = '" + (IsReceipt() ? X_C_Withholding.TRANSACTIONTYPE_Sale
+                                         : X_C_Withholding.TRANSACTIONTYPE_Purchase) + "'";
+            if (Region_ID > 0)
+            {
+                sql += " AND NVL(C_Region_ID, 0) IN (0 ,  " + Region_ID + ")";
+            }
+            else
+            {
+                sql += " AND NVL(C_Region_ID, 0) IN (0) ";
+            }
+            if (Country_ID > 0)
+            {
+                sql += " AND NVL(C_Country_ID , 0) IN (0 ,  " + Country_ID + ")";
+            }
+            DataSet dsWithholding = DB.ExecuteDataset(sql, null, Get_Trx());
             if (dsWithholding != null && dsWithholding.Tables.Count > 0 && dsWithholding.Tables[0].Rows.Count > 0)
             {
                 // check on withholding - "Applicable on Payment" or not
