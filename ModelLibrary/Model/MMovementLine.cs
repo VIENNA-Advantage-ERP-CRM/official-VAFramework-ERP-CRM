@@ -486,6 +486,23 @@ namespace VAdvantage.Model
                                     return false;
                                 }
                             }
+
+                            //JID_1422: Check No Of Attributes Are Equal To Quantity Or Less Than
+
+                            int Count = CountAttributes(GetDTD001_AttributeNumber());
+                            if (Count != GetQtyEntered())
+                            {
+                                if (Count > GetQtyEntered())
+                                {
+                                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtGreater"));
+                                    return false;
+                                }
+                                else
+                                {
+                                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtLess"));
+                                    return false;
+                                }
+                            }
                         }
                         else
                         {
@@ -503,20 +520,20 @@ namespace VAdvantage.Model
 
                                 //Check No Of Attributes Are Equal To Quantity Or Less Than
 
-                                int Count = CountAttributes(GetDTD001_AttributeNumber());
-                                if (Count != GetMovementQty())
-                                {
-                                    if (Count > GetMovementQty())
-                                    {
-                                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtGreater"));
-                                        return false;
-                                    }
-                                    else
-                                    {
-                                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtLess"));
-                                        return false;
-                                    }
-                                }
+                                //int Count = CountAttributes(GetDTD001_AttributeNumber());
+                                //if (Count != GetMovementQty())
+                                //{
+                                //    if (Count > GetMovementQty())
+                                //    {
+                                //        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtGreater"));
+                                //        return false;
+                                //    }
+                                //    else
+                                //    {
+                                //        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtLess"));
+                                //        return false;
+                                //    }
+                                //}
                             }
 
                         }

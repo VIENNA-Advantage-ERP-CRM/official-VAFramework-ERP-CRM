@@ -56,6 +56,27 @@ namespace VAdvantage.Model
                 SetPayCalculation(null);
                 SetPayPercentage(0);
             }
+
+            // validate unique record on the basis of this filteration of parameters
+            string sql = @"SELECT COUNT(C_Withholding_ID) FROM C_Withholding WHERE TransactionType='" + GetTransactionType() + "'AND C_WithholdingCategory_ID= " +
+                GetC_WithholdingCategory_ID() + " AND c_country_ID =" + GetC_Country_ID() + " AND C_region_ID=" + GetC_Region_ID();
+            if (!newRecord)
+            {
+                sql += " AND C_withholding_ID != " + GetC_Withholding_ID();
+            }
+            if (IsApplicableonPay())
+            {
+                sql += " AND PayPercentage= " + GetPayPercentage();
+            }
+            if (IsApplicableonInv())
+            {
+                sql += " AND invpercentage= " + GetInvPercentage();
+            }
+            if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+            {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "WithholdingAlreadyExist"));
+                return false;
+            }
             return true;
         }
 

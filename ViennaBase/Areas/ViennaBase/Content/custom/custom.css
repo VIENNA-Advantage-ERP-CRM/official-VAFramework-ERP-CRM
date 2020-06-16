@@ -230,7 +230,10 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     font-family: var(--v-c-font-family) !important;
     font-size: 1em;
 }
-
+.ui-widget-content {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    color: inherit;
+}
     .ui-widget input:not([type="checkbox"]), .ui-widget select, .ui-widget textarea, .ui-widget button {
         font-family: var(--v-c-font-family);
         outline: none;

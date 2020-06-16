@@ -1838,6 +1838,16 @@ namespace VAdvantage.Model
         /** Get Cost Adjustment on Lost.@return Cost Adjustment on Lost */
         public Boolean IsCostAdjustmentOnLost() { Object oo = Get_Value("IsCostAdjustmentOnLost"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
+        /** Set Withholding Category.
+@param C_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
+        public void SetC_WithholdingCategory_ID(int C_WithholdingCategory_ID)
+        {
+            if (C_WithholdingCategory_ID <= 0) Set_Value("C_WithholdingCategory_ID", null);
+            else
+                Set_Value("C_WithholdingCategory_ID", C_WithholdingCategory_ID);
+        }/** Get Withholding Category.
+@return This field represents the withholding category linked with respective withholding tax. */
+        public int GetC_WithholdingCategory_ID() { Object ii = Get_Value("C_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

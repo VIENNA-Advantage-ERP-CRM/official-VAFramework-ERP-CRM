@@ -1730,7 +1730,12 @@
         }
 
         this.vetoablechange = function (evt) {
-            txtAmount.setValue(evt.newValue);
+            if (evt.propertyName == "Amount") {
+                txtAmount.setValue(evt.newValue);
+            }
+            else if (evt.propertyName == "ModalAmount") {
+                modalTxtAmount.setValue(evt.newValue);
+            }
         };
         //Calculate Dimension Line Amount....................
         function calculateGrossAmount(data) {
@@ -1791,7 +1796,7 @@
                     alert(VIS.Msg.getMsg('ErrorWhileGettingData'));
                     return;
                 },
-                success: function (data) {
+                success: function (data) {                    
                     var Sql = "";
                     var DefaultValue = VIS.DB.executeScalar("select c_acctschema1_id from ad_clientinfo where ad_client_ID=" + VIS.Env.getCtx().getAD_Client_ID() + "");
                     var defaultCheck = false;
@@ -2419,7 +2424,7 @@
                     var amount = VIS.DB.executeScalar(sql);
                     VIS.DB.executeQuery("update c_dimamtaccttype set totaldimlineamout=" + amount + " where c_dimamt_id=" + C_DimAmt_ID + " and c_acctSchema_id=" + arrAcctSchemaID[0] + "");
                     w2ui[LineGridName].select(gridRecordID);
-                    console.log("selected Rows : " + w2ui[LineGridName].getSelection().length);
+                    console.log("selected Rows : "  + w2ui[LineGridName].getSelection().length);
                     w2ui[LineGridName].delete(true);
                     var temp = parseFloat((txtTotal.getValue() - parseFloat(Amount)).toFixed(Precision));
                     txtTotal.setValue(temp);
@@ -2593,6 +2598,7 @@
             ch.getRoot();
             busyDiv("visible");
             txtAmount.addVetoableChangeListener(this);
+            modalTxtAmount.addVetoableChangeListener(this);
             getAccountingSchema(AD_Org_ID, function () {
 
                 getDimensionLine(allAcctSchemaID, true, function (tempData) {

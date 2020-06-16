@@ -4366,6 +4366,7 @@
                 ctx.setContext(windowNo, "InvTotalAmt", null);
                 if (mTab.getTableName() == "C_Payment") {
                     mTab.setValue("PayAmt", null);              // For Payment window
+                    mTab.setValue("PaymentAmount", null);
                 }
                 else {
                     mTab.setValue("Amount", null);             // For Cash Journal Line 
@@ -4382,10 +4383,14 @@
             if (data != null) {
                 if (mTab.getTableName() == "C_Payment") {
                     var IsReturnTrx = data["IsReturnTrx"];
-                    if (IsReturnTrx == "Y")
+                    if (IsReturnTrx == "Y") {
                         mTab.setValue("PayAmt", Util.getValueOfDecimal(data["DueAmt"]) * -1);
-                    else
+                        mTab.setValue("PaymentAmount", Util.getValueOfDecimal(data["DueAmt"]) * -1);
+                    }
+                    else {
                         mTab.setValue("PayAmt", Util.getValueOfDecimal(data["DueAmt"]));                    // For Payment window
+                        mTab.setValue("PaymentAmount", Util.getValueOfDecimal(data["DueAmt"]));
+                    }
                 }
                 else {
                     mTab.setValue("Amount", Util.getValueOfDecimal(data["DueAmt"]));                    // For Cash Journal Line 
@@ -4426,6 +4431,7 @@
                 ctx.setContext(windowNo, "InvTotalAmt", null);
                 if (mTab.getTableName() == "C_Payment") {
                     mTab.setValue("PayAmt", null);              // For Payment window
+                    mTab.setValue("PaymentAmount", null);
                 }
                 else {
                     mTab.setValue("Amount", null);             // For Cash Journal Line 
@@ -4439,10 +4445,14 @@
             if (dr != null) {
                 var Amt = dr["DueAmt"];
                 if (mTab.getTableName() == "C_Payment") {
-                    if (dr["IsReturnTrx"] == "Y")
+                    if (dr["IsReturnTrx"] == "Y") {
                         mTab.setValue("PayAmt", Amt * -1);
-                    else
+                        mTab.setValue("PaymentAmount", Amt * -1);
+                    }
+                    else {
                         mTab.setValue("PayAmt", Amt);                    // For Payment window
+                        mTab.setValue("PaymentAmount", Amt);
+                    }
                 }
                 else {
                     mTab.setValue("Amount", Amt);                    // For Cash Journal Line 
@@ -11663,6 +11673,18 @@
                     var C_UOM_To_ID = Util.getValueOfInt(value);
                     QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
+
+                    //JID_0680 set quantity acc to percision
+                    paramStr = C_UOM_To_ID.toString().concat(","); //1
+                    var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+                    var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);
+                    if (QtyEntered != QtyEntered1) {
+                        this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                            + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                        QtyEntered = QtyEntered1;
+                        mTab.setValue("QtyEntered", QtyEntered);
+                    }
+
                     paramStr = M_Product_ID.toString().concat(',').concat(C_UOM_To_ID.toString()).concat(',').concat(QtyEntered.toString());
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     QtyOrdered = pc;
@@ -11748,6 +11770,18 @@
                     var C_UOM_To_ID = Util.getValueOfInt(value);
                     QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
+
+                    //JID_0680 set quantity acc to percision
+                    paramStr = C_UOM_To_ID.toString().concat(","); //1
+                    var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+                    var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);
+                    if (QtyEntered != QtyEntered1) {
+                        this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                            + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                        QtyEntered = QtyEntered1;
+                        mTab.setValue("QtyEntered", QtyEntered);
+                    }
+
                     paramStr = M_Product_ID.toString().concat(',').concat(C_UOM_To_ID.toString()).concat(',').concat(QtyEntered.toString());
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     QtyOrdered = pc;
@@ -12192,7 +12226,7 @@
                         mTab.setValue("IsDiscountPrinted", "N");
                     }
                     // set withholding tax defined on vendor/customer
-                    mTab.setValue("C_Withholding_ID", Util.getValueOfInt(dr.get("C_Withholding_ID")));
+                    //mTab.setValue("C_Withholding_ID", Util.getValueOfInt(dr.get("C_Withholding_ID")));
                 }
                 dr.close();
             }
@@ -17317,7 +17351,8 @@
                     var paramString = dr["Orig_InOutLine_ID"];
                     var line = VIS.dataContext.getJSONRecord("MInOutLine/GetMInOutLine", paramString);
 
-                    mTab.setValue("M_Locator_ID", line["M_Locator_ID"]);
+                    // JID_1656: locator sholud select manually
+                    //mTab.setValue("M_Locator_ID", line["M_Locator_ID"]);
                 }
                 if (Util.getValueOfString(dr["IsDropShip"]) == "Y") {
                     mTab.setValue("IsDropShip", true);
@@ -18093,6 +18128,7 @@
                 }
                 mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
                 mTab.setValue("PayAmt", dueAmount);
+                mTab.setValue("PaymentAmount", dueAmount);
                 _chk = 1;
                 var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA009_");
                 if (DataPrefix["VA009_"]) {
@@ -18244,6 +18280,7 @@
                 if (_chk == 0)//Pratap
                 {
                     mTab.setValue("PayAmt", (invoiceOpen - discountAmt));
+                    mTab.setValue("PaymentAmount", (invoiceOpen - discountAmt));
                 }
                 mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);//Pratap
                 mTab.setValue("DiscountAmt", discountAmt);
@@ -18392,6 +18429,7 @@
                     var PaymentMethod = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
                     mTab.setValue("VA009_PaymentMethod_ID", PaymentMethod);
                 }
+                mTab.setValue("PaymentAmount", grandTotal);
                 mTab.setValue("PayAmt", grandTotal);
             }
         }
@@ -18789,6 +18827,9 @@
                 + ", C_Currency_ID=" + C_Currency_Invoice_ID);
 
             //	Get Info from Tab
+            if (colName == "PaymentAmount") {
+                mTab.setValue("PayAmt", mTab.getValue("PaymentAmount"))
+            }
             var payAmt = Util.getValueOfDecimal(mTab.getValue("PayAmt") == null ? VIS.Env.ZERO : mTab.getValue("PayAmt"));
             var writeOffAmt = Util.getValueOfDecimal(mTab.getValue("WriteOffAmt") == null ? VIS.Env.ZERO : mTab.getValue("WriteOffAmt"));
             var overUnderAmt = Util.getValueOfDecimal((mTab.getValue("OverUnderAmt") == null ? VIS.Env.ZERO : mTab.getValue("OverUnderAmt")));
@@ -18797,6 +18838,10 @@
                 if (payAmt > 0) {
                     payAmt = payAmt * -1;
                     mTab.setValue("PayAmt", payAmt);
+                    mTab.setValue("PaymentAmount", payAmt);
+                }
+                else {
+                    mTab.setValue("PaymentAmount", payAmt);
                 }
                 if (enteredDiscountAmt > 0) {
                     enteredDiscountAmt = enteredDiscountAmt * -1;
@@ -18820,6 +18865,10 @@
                 if (payAmt < 0) {
                     payAmt = payAmt * -1;
                     mTab.setValue("PayAmt", payAmt);
+                    mTab.setValue("PaymentAmount", payAmt);
+                }
+                else {
+                    mTab.setValue("PaymentAmount", payAmt);
                 }
                 if (enteredDiscountAmt < 0) {
                     enteredDiscountAmt = enteredDiscountAmt * -1;
@@ -18914,6 +18963,7 @@
                 discountAmt = enteredDiscountAmt;
                 payAmt = (((invoiceOpenAmt - discountAmt) - writeOffAmt) - overUnderAmt);
                 mTab.setValue("PayAmt", Util.getValueOfDecimal(payAmt.toFixed(precision)));
+                mTab.setValue("PaymentAmount", Util.getValueOfDecimal(payAmt.toFixed(precision)));
             }
 
             //	No Invoice - Set Discount, Witeoff, Under/Over to 0
@@ -18929,7 +18979,7 @@
                 }
             }
             //  PayAmt - calculate write off
-            else if (colName == "PayAmt") {
+            else if (colName == "PayAmt" || colName == "PaymentAmount") {
                 if (enteredDiscountAmt != 0)
                     discountAmt = enteredDiscountAmt;
                 overUnderAmt = (((invoiceOpenAmt - payAmt) - discountAmt) - writeOffAmt);
@@ -18952,9 +19002,11 @@
                     overUnderAmt = (((invoiceOpenAmt - payAmt) - discountAmt) - writeOffAmt);
                     if (checkPrecision) {
                         mTab.setValue("PayAmt", Util.getValueOfDecimal(payAmt.toFixed(precision)));
+                        mTab.setValue("PaymentAmount", Util.getValueOfDecimal(payAmt.toFixed(precision)));
                     }
                     else {
                         mTab.setValue("PayAmt", payAmt);
+                        mTab.setValue("PaymentAmount", payAmt);
                     }
                 }
                 if (checkPrecision) {
@@ -18992,12 +19044,14 @@
                 }
                 if (checkPrecision) {
                     mTab.setValue("PayAmt", Util.getValueOfDecimal(payAmt.toFixed(precision)));
+                    mTab.setValue("PaymentAmount", Util.getValueOfDecimal(payAmt.toFixed(precision)));
                     mTab.setValue("DiscountAmt", Util.getValueOfDecimal(discountAmt.toFixed(precision)));
                     mTab.setValue("WriteOffAmt", Util.getValueOfDecimal(writeOffAmt.toFixed(precision)));
                     mTab.setValue("OverUnderAmt", Util.getValueOfDecimal(overUnderAmt.toFixed(precision)));
                 }
                 else {
                     mTab.setValue("PayAmt", payAmt);
+                    mTab.setValue("PaymentAmount", payAmt);
                     mTab.setValue("DiscountAmt", discountAmt);
                     mTab.setValue("WriteOffAmt", writeOffAmt);
                     mTab.setValue("OverUnderAmt", overUnderAmt);
@@ -19007,6 +19061,23 @@
                 }
             }
             this.setCalloutActive(false);
+        }
+        else {
+            this.setCalloutActive(true);
+            try {
+                // for independent BP / Charge / order id > 0 while order schedule id not defined
+                if ((Util.getValueOfInt(mTab.getValue("C_Order_ID")) > 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0) ||
+                    (Util.getValueOfInt(mTab.getValue("C_Order_ID")) == 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0 &&
+                        Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_InvoicePaySchedule_ID")) == 0)) {
+                    mTab.setValue("PayAmt", Util.getValueOfDecimal(mTab.getValue("PaymentAmount")));
+                }
+                this.setCalloutActive(false);
+            }
+            catch (err) {
+                this.setCalloutActive(false);
+                this.log.log(Level.SEVERE, sql, err);
+                return err;
+            }
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";

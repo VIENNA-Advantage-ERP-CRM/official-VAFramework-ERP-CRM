@@ -373,8 +373,9 @@ namespace VAdvantage.Model
                     to.SetMovementType(isSOTrx ? MOVEMENTTYPE_CustomerReturns : MOVEMENTTYPE_VendorReturns);
                 }
             }
-            //
-            to.SetDateOrdered(dateDoc);
+
+            // JID_0799: Order date should be original order date.
+            to.SetDateOrdered(from.GetDateOrdered());
             to.SetDateAcct(dateDoc);
             to.SetMovementDate(dateDoc);
             to.SetDatePrinted(null);
@@ -5390,7 +5391,8 @@ namespace VAdvantage.Model
             //End here
             AddDescription("(" + reversal.GetDocumentNo() + "<-)");
 
-            _processMsg = reversal.GetDocumentNo();
+            //JID_0889: show on void full message Reversal Document created
+            _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo();
             SetProcessed(true);
 
             SetDocStatus(DOCSTATUS_Reversed);		//	 may come from void

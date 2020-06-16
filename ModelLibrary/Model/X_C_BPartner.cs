@@ -2899,6 +2899,35 @@ namespace VAdvantage.Model
         /// </summary>
         /// <returns>Withholding type defined</returns>
         public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Withholding applicable on AP Invoice.
+@param IsApplicableonAPInvoice This field represents that withholding tax to be calculated on the AP Invoices. */
+        public void SetIsApplicableonAPInvoice(Boolean IsApplicableonAPInvoice) { Set_Value("IsApplicableonAPInvoice", IsApplicableonAPInvoice); }/** Get Withholding applicable on AP Invoice.
+@return This field represents that withholding tax to be calculated on the AP Invoices. */
+        public Boolean IsApplicableonAPInvoice() { Object oo = Get_Value("IsApplicableonAPInvoice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Withholding applicable on AP Payment.
+@param IsApplicableonAPPayment This field represents that withholding tax to be calculated on the AP Payment */
+        public void SetIsApplicableonAPPayment(Boolean IsApplicableonAPPayment) { Set_Value("IsApplicableonAPPayment", IsApplicableonAPPayment); }/** Get Withholding applicable on AP Payment.
+@return This field represents that withholding tax to be calculated on the AP Payment */
+        public Boolean IsApplicableonAPPayment() { Object oo = Get_Value("IsApplicableonAPPayment"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Withholding applicable on AR Invoice.
+@param IsApplicableonARInvoice This field represents that withholding tax to be calculated on the AR Invoices. */
+        public void SetIsApplicableonARInvoice(Boolean IsApplicableonARInvoice) { Set_Value("IsApplicableonARInvoice", IsApplicableonARInvoice); }/** Get Withholding applicable on AR Invoice.
+@return This field represents that withholding tax to be calculated on the AR Invoices. */
+        public Boolean IsApplicableonARInvoice() { Object oo = Get_Value("IsApplicableonARInvoice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Withholding applicable on AR Receipt.
+@param IsApplicableonARReceipt This field represents that withholding tax to be calculated on the AR Receipt. */
+        public void SetIsApplicableonARReceipt(Boolean IsApplicableonARReceipt) { Set_Value("IsApplicableonARReceipt", IsApplicableonARReceipt); }/** Get Withholding applicable on AR Receipt.
+@return This field represents that withholding tax to be calculated on the AR Receipt. */
+        public Boolean IsApplicableonARReceipt() { Object oo = Get_Value("IsApplicableonARReceipt"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+        /** AP_WithholdingTax_ID AD_Reference_ID=1000228 */
+        public static int AP_WITHHOLDINGTAX_ID_AD_Reference_ID = 1000228;/** Set AP Withholding Tax.
+@param AP_WithholdingTax_ID AP Withholding Tax */
+        public void SetAP_WithholdingTax_ID(int AP_WithholdingTax_ID)
+        {
+            if (AP_WithholdingTax_ID <= 0) Set_Value("AP_WithholdingTax_ID", null);
+            else
+                Set_Value("AP_WithholdingTax_ID", AP_WithholdingTax_ID);
+        }/** Get AP Withholding Tax.
+@return AP Withholding Tax */
+        public int GetAP_WithholdingTax_ID() { Object ii = Get_Value("AP_WithholdingTax_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

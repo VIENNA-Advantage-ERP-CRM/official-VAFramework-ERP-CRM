@@ -154,6 +154,7 @@
     <Compile Include="Classes\AttachmentHelper.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\CCache.cs" />
+    <Compile Include="Classes\CleanUp.cs" />
     <Compile Include="Classes\CommonFunction.cs" />
     <Compile Include="Classes\CommonFunctions.cs" />
     <Compile Include="Classes\ContactsInfo.cs" />
