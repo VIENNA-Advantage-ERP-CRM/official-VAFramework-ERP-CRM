@@ -6,7 +6,7 @@
         var ctx = VIS.Env.getCtx();
         var $self = this;
         var $root = $('<div class="vis-allocate-root vis-forms-container">');
-        var $row1 = $('<div class="vis-leftpanel-wrapper vis-pad-0">');
+        var $row1 = $('<div class="vis-leftpanel-wrapper vis-pad-0 vis-leftsidebarouterwrap">');
         //set height of filters div and Process Button div
         var $innerRow = $('<div class="vis-leftpanel-inn-wrap">');
         var rowContiner = $('<div class="vis-allocation-rightContainer">');
@@ -233,7 +233,7 @@
             createRow5();
             rowContiner.append($row2).append($row3).append($row4).append($row5).append($row6);
             //---Set Business Partner Mandatory---Neha
-            $vSearchBPartner.getControl().css("background-color", SetMandatory(true));
+            $vSearchBPartner.getControl().next().css("color", SetMandatory(true));
             //---Resize the Parameter div and Display and hide Payment and Cash div----Neha-----
             $row1.resizable({
                 handles: 'e',
@@ -469,9 +469,9 @@
 
             $cmbOrg.on("change", function (e) {
                 if (parseInt($cmbOrg.val()) > 0)
-                    $cmbOrg.css("background-color", SetMandatory(false));
+                    $cmbOrg.next().css("color", SetMandatory(false));
                 else
-                    $cmbOrg.css("background-color", SetMandatory(true));
+                    $cmbOrg.next().css("color", SetMandatory(true));
 
             });
             $conversionDate.on("change", function (e) {
@@ -504,10 +504,10 @@
             $allocationFrom.on("change", function (e) {
 
                 if ($allocationFrom.val() == 0) {
-                    $allocationFrom.css("background-color", SetMandatory(true));
+                    $allocationFrom.next().css("color", SetMandatory(true));
                 }
                 else
-                    $allocationFrom.css("background-color", SetMandatory(false));
+                    $allocationFrom.next().css("color", SetMandatory(false));
                 //if allocation from is change then we have to clear the selection of invoices
                 clearInvoiceArrays(e);
 
@@ -532,17 +532,17 @@
                     $allocationTo.find("option[value=G]").show();
                 }
                 $allocationTo.val(0);
-                $allocationTo.css("background-color", SetMandatory(true));
+                $allocationTo.next().css("color", SetMandatory(true));
                 loadGrids($allocationFrom.val());
                 displayGrids($allocationFrom.val(), $allocationTo.val())
             });
 
             $allocationTo.on("change", function (e) {
                 if ($allocationTo.val() == 0) {
-                    $allocationTo.css("background-color", SetMandatory(true));
+                    $allocationTo.next().css("color", SetMandatory(true));
                 }
                 else
-                    $allocationTo.css("background-color", SetMandatory(false));
+                    $allocationTo.next().css("color", SetMandatory(false));
                 //if allocation from is change then we have to clear the selection of invoices
                 clearInvoiceArrays(e);
 
@@ -835,9 +835,9 @@
         // Set Mandatory and non mandatory---Neha
         function SetMandatory(Value) {
             if (Value)
-                return '#FFB6C1';
+                return 'rgba(var(--v-c-mandatory),1)';
             else
-                return 'White';
+                return 'rgba(var(--v-c-on-secondary), 1)';
         };
 
         //-------Load Document Type Grid-----------Neha------------
@@ -972,28 +972,55 @@
 
         function createRow1() {
             var $divBp = $('<div class="vis-allocation-leftControls">');
-            $divBp.append('<span class="vis-allocation-inputLabels">' + VIS.translatedTexts.C_BPartner_ID + '</span>').append($vSearchBPartner.getControl().addClass("vis-allocation-bpartner")).append($vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+            var $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            var $Leftformfieldbtnwrap = $('<div class="input-group-append">');
+            $divBp.append($Leftformfieldwrp);
+            $Leftformfieldwrp.append($Leftformfieldctrlwrp);
+            $Leftformfieldwrp.append($Leftformfieldbtnwrap);
+            $Leftformfieldctrlwrp.append($vSearchBPartner.getControl().addClass("vis-allocation-bpartner").attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.C_BPartner_ID + '</label>');
+            $Leftformfieldbtnwrap.append($vSearchBPartner.getBtn(0));
+
             var $divCu = $('<div class="vis-allocation-leftControls">');
-            $divCu.append('<span class="vis-allocation-inputLabels">' + VIS.translatedTexts.C_Currency_ID + '</span>').append($cmbCurrency);
+            var $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            $divCu.append($Leftformfieldwrp);
+            $Leftformfieldwrp.append($Leftformfieldctrlwrp);
+            $Leftformfieldctrlwrp.append($cmbCurrency).append('<label>' + VIS.translatedTexts.C_Currency_ID + '</label>');
             $innerRow.append($divBp).append($divCu);
 
             //added for sequence of multicurrency checkbox
             var $multiCurr = $('<div class="vis-allocation-leftControls">'
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                + '<label class="vis-ec-col-lblchkbox">'
                 + '<input name="vchkMultiCurrency" class="vis-allocation-multicheckbox" type="checkbox">'
-                + '<label>' + VIS.Msg.getMsg("MultiCurrency") + '</label>'
-                + '</div>'
+                + VIS.Msg.getMsg("MultiCurrency")
+                + '</label>'
+                + '</div></div></div>'
                 + '<div class="vis-allocation-leftControls" id = VIS_cnvrDateDiv_' + $self.windowNo + ' >'
-                + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("ConversionDate") + '</span>'
-                + '<input  class="vis-allocation-date" style="display:block;" id=VIS_cmbConversionDate_' + $self.windowNo + ' type="date"></input>'
-                + '</div>');
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                + '<input  class="vis-allocation-date" style="display:block;" id=VIS_cmbConversionDate_' + $self.windowNo + ' type="date">'
+                + '<label title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("ConversionDate") + '</label>'
+                + '</div></div></div>');
             $innerRow.append($multiCurr);
             //end
 
             //added for enhancement of new combo regarding allocation from and to
             var $divallocFrom = $('<div class="vis-allocation-leftControls">');
-            $divallocFrom.append('<span class="vis-allocation-inputLabels"> ' + VIS.Msg.getMsg("AllocationFrom") + '</span>').append($allocationFrom);
+            var $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            $divallocFrom.append($Leftformfieldwrp);
+            $Leftformfieldwrp.append($Leftformfieldctrlwrp);
+            $Leftformfieldctrlwrp.append($allocationFrom).append('<label> ' + VIS.Msg.getMsg("AllocationFrom") + '</label>');
+
             var $divallocTo = $('<div class="vis-allocation-leftControls">');
-            $divallocTo.append('<span class="vis-allocation-inputLabels"> ' + VIS.Msg.getMsg("AllocationTo") + '</span>').append($allocationTo);
+            var $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            $divallocTo.append($Leftformfieldwrp);
+            $Leftformfieldwrp.append($Leftformfieldctrlwrp);
+            $Leftformfieldctrlwrp.append($allocationTo).append('<label> ' + VIS.Msg.getMsg("AllocationTo") + '</label>');
             $innerRow.append($divallocFrom).append($divallocTo);
             //end
 
@@ -1035,12 +1062,16 @@
                 + '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" style="height: 0px;">'
                 + '<div class="panel-body" style=" overflow: auto; height: 140px !important; ">'
                 + '<div class="vis-allocation-leftControls">'
-                + '<span class="vis-allocation-inputLabels">' + VIS.Utility.encodeText(VIS.Msg.getMsg("Document_No")) + '</span>'
-                + ' <input class="vis-allocation-docNo" type="textbox"></input>'
-                + '</div>'
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                + ' <input class="vis-allocation-docNo" type="textbox">'
+                + '<label>' + VIS.Utility.encodeText(VIS.Msg.getMsg("Document_No")) + '</label>'
+                + '</div></div></div>'
                 + '<div class="vis-allocation-leftControls vis-allocation-cmbdoctype">'
-                + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("DocType") + '</span>'
-                + '</div>'
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                //+ '<label>' + VIS.Msg.getMsg("DocType") + '</label>'
+                + '</div></div></div>'
                 + '</div>'
                 + '</div>'
                 + '</div>'
@@ -1048,16 +1079,20 @@
                 + '</div>'
                 + '</div>');
             $innerRow.append($rowOne);
-            $rowOne.find(".vis-allocation-cmbdoctype").append($cmbDocType);
+            $rowOne.find(".vis-allocation-cmbdoctype .vis-control-wrap").append($cmbDocType).append('<label>' + VIS.Msg.getMsg("DocType") + '</label>');
             $rowOne.find(".panel-body").append('<div class="vis-allocation-leftControls">'
-                + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_FromDate") + '</span>'
-                + '<input  class="vis-allocation-fromDate"  type="date"></input>'
-                + '</div>'
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                + '<input  class="vis-allocation-fromDate"  type="date">'
+                + '<label>' + VIS.Msg.getMsg("VIS_FromDate") + '</label>'
+                + '</div></div></div>'
                 + '<div class="vis-allocation-leftControls">'
-                + '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("VIS_ToDate") + '</span>'
-                + '<input  class="vis-allocation-toDate"  type="date"></input>'
-                + '</div>');
-            $divBp.find(".vis-allocation-bpartner").css('width', 'calc(100% - 30px)');
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                + '<input  class="vis-allocation-toDate"  type="date">'
+                + '<label>' + VIS.Msg.getMsg("VIS_ToDate") + '</label>'
+                + '</div></div></div>');
+            //$divBp.find(".vis-allocation-bpartner").css('width', 'calc(100% - 30px)');
             //-----------Neha-----------------
             $vchkMultiCurrency = $innerRow.find('.vis-allocation-multicheckbox');
             $vchkAllocation = $innerRow.find('.vis-allocation-cashbox');
@@ -1083,14 +1118,18 @@
                 + '</span>');
 
             $resultDiv.append('<div class="vis-allocation-leftControls">'
-                + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("TransactionDate") + '</span>'
-                + '<input  class="vis-allocation-date" disabled  id=VIS_cmbDate_' + $self.windowNo + ' type="date"></input>'
-                + '</div>');
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                + '<input  class="vis-allocation-date" disabled  id=VIS_cmbDate_' + $self.windowNo + ' type="date">'
+                + '<label title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("TransactionDate") + '</label>'
+                + '</div></div></div>');
             $resultDiv.append('<div class="vis-allocation-leftControls">'
-                + '<span class="vis-allocation-inputLabels" title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("DateAcct") + '</span>'
-                + '<input  class="vis-allocation-date" disabled id=VIS_cmbAcctDate_' + $self.windowNo + ' type="date"></input>'
-                + '</div>');
-            $resultDiv.append('<div class="vis-allocation-leftControls"> <span class="vis-allocation-inputLabels" title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_Org_ID + '</span> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select>');
+                + '<div class="input-group vis-input-wrap">'
+                + '<div class="vis-control-wrap">'
+                + '<input  class="vis-allocation-date" disabled id=VIS_cmbAcctDate_' + $self.windowNo + ' type="date">'
+                + '<label title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("DateAcct") + '</label>'
+                + '</div></div></div>');
+            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_Org_ID + '</label>');
 
             $innerRow.append($resultDiv);
             $date = $innerRow.find('#VIS_cmbDate_' + $self.windowNo);
@@ -1153,7 +1192,7 @@
                     var result = JSON.parse(data);
                     if (result) {
                         $cmbOrg.empty();
-                        $cmbOrg.css("background-color", SetMandatory(true));
+                        $cmbOrg.next().css("color", SetMandatory(true));
                         $cmbOrg.append("<option value=0></option>");
                         for (var i = 0; i < result.length; i++) {
                             OrgName = VIS.Utility.Util.getValueOfString(result[i].Name);
@@ -1166,7 +1205,7 @@
                     }
                     if (VIS.context.getContextAsInt("#AD_Org_ID") > 0) {
                         $cmbOrg.val(VIS.context.getContextAsInt("#AD_Org_ID"));
-                        $cmbOrg.css("background-color", SetMandatory(false));
+                        $cmbOrg.next().css("color", SetMandatory(false));
                     }
                     else
                         $cmbOrg.prop('selectedIndex', 0);
@@ -1181,7 +1220,7 @@
         Create busyIndicator
         */
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='vis-apanel-busy' style='height:96%; width:98%;'></div>");
+            $bsyDiv = $("<div class='vis-busyindicatorouterwrap'><div class='vis-busyindicatorinnerwrap'><i class='vis-busyindicatordiv'></i></div></div>");
             $bsyDiv[0].style.visibility = "hidden";
             $root.append($bsyDiv);
         };
@@ -1196,7 +1235,7 @@
                 return;
             }
             // If BP is selected then  set mandatory false---Neha
-            $vSearchBPartner.getControl().css("background-color", SetMandatory(false));
+            $vSearchBPartner.getControl().next().css("color", SetMandatory(false));
             $bsyDiv[0].style.visibility = "visible";
             // initialize Pageno as 1 when we change BP
             pageNoInvoice = 1, gridPgnoInvoice = 1, invoiceRecord = 0;
@@ -3713,7 +3752,7 @@
                 _C_BPartner_ID = value;
                 if (_C_BPartner_ID > 0) {
                     // If BP is selected then  set mandatory false---Neha
-                    $vSearchBPartner.getControl().css("background-color", SetMandatory(false));
+                    $vSearchBPartner.getControl().next().css("color", SetMandatory(false));
                 }
                 //////loadBPartner();
             }

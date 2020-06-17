@@ -117,7 +117,7 @@
         var btnTheme = null;
 
         var $root = $("<div class='vis-forms-container'>");
-        var $busyDiv = $("<div class='vis-apanel-busy'>")
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>')
         var windowNo = VIS.Env.getWindowNo();
         this.log = VIS.Logging.VLogger.getVLogger("UserPreference");
 

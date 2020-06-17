@@ -253,11 +253,11 @@
             btnsec.append(divPaging);
             btnsec.append(divbtnRight);
             //Busy Indicator
-            bsyDiv = $("<div class='vis-apanel-busy'>");
-            bsyDiv.css("width", "98%");
-            bsyDiv.css("height", "97%");
-            bsyDiv.css('text-align', 'center');
-            bsyDiv.css("position", "absolute");
+            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //bsyDiv.css("width", "98%");
+            //bsyDiv.css("height", "97%");
+            //bsyDiv.css('text-align', 'center');
+            //bsyDiv.css("position", "absolute");
             bsyDiv[0].style.visibility = "visible";
             chkDelCart = btnsec.find("#chkDelCart_" + windowNo);
 

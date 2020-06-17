@@ -73,7 +73,7 @@
             Create busyIndicator
         */
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='vis-apanel-busy' style='height:96%; width:98%;'></div>");
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             $bsyDiv[0].style.visibility = "hidden";
             $root.append($bsyDiv);
         }
@@ -105,7 +105,7 @@
         function rootClick(e) {
             var target = $(e.target);
             // In Case of Role...
-            if (!target.hasClass("vis-group-roless") && target.parents(".vis-group-roless").length == 0 && !target.hasClass('vis-group-ass-btns vis-group-save-btn') && roleChanged.length > 0) {
+            if (!target.hasClass("vis-group-roless") && target.parents(".vis-group-roless").length == 0 && !target.hasClass('vis-group-save-btn') && roleChanged.length > 0) {
 
 
                 VIS.ADialog.confirm('VIS_SaveRole', true, "", "Confirm", function (result) {
@@ -123,7 +123,7 @@
             }
 
                 // In Case of Group
-            else if (!target.hasClass("vis-group-groupss") && target.parents(".vis-group-groupss").length == 0 && !target.hasClass('vis-group-ass-btns vis-group-save-btn') && groupChanged.length > 0) {
+            else if (!target.hasClass("vis-group-groupss") && target.parents(".vis-group-groupss").length == 0 && !target.hasClass('vis-group-save-btn') && groupChanged.length > 0) {
                 // if (VIS.ADialog.ask('VIS_SaveGroup')) {
 
                 VIS.ADialog.confirm('VIS_SaveRole', true, "", "Confirm", function (result) {
@@ -146,16 +146,16 @@
         */
         function leftPanel() {
             $bsyDiv[0].style.visibility = "visible";
-            $leftPanel.append('<div class="vis-group-content-head"><h4 class="vis-group-content-tittle"><i class="vis vis-addbp"></i>' + VIS.Msg.getMsg("VIS_CreateInviteUser") + '</h4>' +
-                  '<span class=" vis-group-pointer vis-group-head-right">' + VIS.Msg.getMsg("SortBy") + '</span><div class="vis-group-clear-both"></div></div>');
+            $leftPanel.append('<div class="vis-group-content-head"><h4 class="vis-group-content-tittle">' + VIS.Msg.getMsg("VIS_CreateInviteUser") + '</h4>' +
+                '<span class=" vis-group-pointer vis-group-head-right">' + VIS.Msg.getMsg("SortBy") + '</span><button class="vis-group-add-btn vis-groupbtn"><i class="vis vis-addbp"></i></button></div>');
             $btnSortUsers = $leftPanel.find('.vis-group-head-right');
 
             /***** end of content-head *****/
 
-            $leftPanel.append('<div class="vis-group-content-headDown"><button class="vis-group-add-btn vis-group-ass-btns"><i class="vis vis-plus"></i></button>' +
-                '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
+            $leftPanel.append('<div class="vis-group-searchwrp"><div class="vis-group-content-headDown">' +
+                '<input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg("Search") + '" type="text"><button class="vis-groupbtn vis-group-search-icon"><i class="vis vis-search"></i></button>' +
                  //   '<input class="vis-group-importUser" type="button" title="' + VIS.Msg.getMsg("VIS_Importuser") + '"><div class="vis-group-clear-both"></div> </div>');
-                    '<div class="vis-group-clear-both"></div> </div>');
+                    '</div></div>');
             $searchUser = $leftPanel.find('.vis-group-SearchText');
             $searchUserBtn = $leftPanel.find('.vis-group-search-icon');
             // $btnImportUser = $leftPanel.find('.vis-group-importUser');
@@ -163,7 +163,7 @@
 
 
             /*****  end of content-headDown  *****/
-            $divUserGroup = $('<div class="vis-group-users-container">').append('<div class="vis-group-bordertop"></div>');
+            $divUserGroup = $('<div class="vis-group-users-container">');
             $divUserGroup.height($($root.parent()).height() - 95);
             $leftPanel.append($divUserGroup);
 
@@ -175,17 +175,17 @@
         */
         function middlePanel() {
             $middlePanel.append(' <div class="vis-group-content-head">' +
-                      '<h4 class="vis-group-content-tittle vis-group-role"><i class="vis vis-task"></i>' + VIS.Msg.getMsg("Role") + '</h4>' +
+                      '<h4 class="vis-group-content-tittle vis-group-role">' + VIS.Msg.getMsg("Role") + '</h4>' +
                       '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_RoleSaved") + '</h7>' +
 
                       '<div class="vis-group-top-right">' +
-                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew")+'" ></i></button>' +
-                '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
+                '<button class="vis-groupbtn vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew")+'" ></i></button>' +
+                '<button class="vis-groupbtn vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                       '</div>' +
-                      '<div class="vis-group-content-headDown"><span><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button></span></div>' +
-                      '<div class="vis-group-clear-both"></div>' +
-                  '</div>');
+                  '</div>' +
+                  '<div class="vis-group-searchwrp"><div class="vis-group-content-headDown"><input class="vis-group-SearchText" value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
+                '<button class="vis-groupbtn vis-group-search-icon"><i class="vis vis-search"></i></button></div></div>' 
+                );
 
             $btnSaveRoles = $middlePanel.find('.vis-group-save-btn');
             $btnCreateRole = $middlePanel.find('.vis-group-add-btn');
@@ -194,8 +194,11 @@
             /**end of content-head**/
 
             $divRoleGroup = $('<div class="vis-group-role-container">');
-            $divRoleGroup.append('<div class="vis-group-bordertop"></div>');
+            $divGroupDataContainer = $('<div class="vis-group-DataContainer">');
+            
             $middlePanel.append($divRoleGroup);
+            $divRoleGroup.append($divGroupDataContainer);
+
             $divRoleGroup.height($($root.parent()).height() - 95);
             roleTemplate();
 
@@ -206,33 +209,32 @@
         */
         function rightPanel() {
             $rightPanel.append('<div class="vis-group-content-head">' +
-                       '<h4 class="vis-group-content-tittle vis-group-rights"><i class="vis vis-users"></i>' + VIS.Msg.getMsg("VIS_Groups") + '</h4>' +
+                       '<h4 class="vis-group-content-tittle vis-group-rights">' + VIS.Msg.getMsg("VIS_Groups") + '</h4>' +
                          '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_GroupSaved") + '</h7>' +
                        '<div class="vis-group-top-right">' +
                            '<div class="vis-group-top-right">' +
-                '<button class="vis-group-ass-btns vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew") +'"></i></button>' +
-                '<button class="vis-group-ass-btns vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
+                '<button class="vis-groupbtn vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew") +'"></i></button>' +
+                '<button class="vis-groupbtn vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                            '</div>' +
                        '</div>' +
+                '</div>' +
 
-                       '<div class="vis-group-content-headDown"><span>' +
+                '<div class="vis-group-searchwrp"><div class="vis-group-content-headDown">' +
 
-                       '<input class="vis-group-SearchText"  value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
-                      '<button class="vis-group-ass-btns vis-group-search-icon"><i class="vis vis-search"></i></button>' +
-                       '</span>' +
-                       '</div>' +
-
-                       '<div class="vis-group-clear-both"></div>' +
-                   '</div>');
+                '<input class="vis-group-SearchText"  value="" placeholder="' + VIS.Msg.getMsg('Search') + '" type="text">' +
+                '<button class="vis-groupbtn vis-group-search-icon"><i class="vis vis-search"></i></button>' +
+                '</div></div>'
+                );
             $searchGroup = $rightPanel.find('.vis-group-SearchText');
             $searchGroupBtn = $rightPanel.find('.vis-group-ass-btns');
             $btnCreateGroup = $rightPanel.find('.vis-group-add-btn');
             $btnSaveGroup = $rightPanel.find('.vis-group-save-btn');
 
 
-            $divGroupsGroup = $('<div class="vis-group-role-container">').append('<div class="vis-group-bordertop"></div>');
-
+            $divGroupsGroup = $('<div class="vis-group-role-container">');
+            $divGroupDataContainer = $('<div class="vis-group-DataContainer">');
             $rightPanel.append($divGroupsGroup);
+            $divGroupsGroup.append($divGroupDataContainer);
             $divGroupsGroup.height($($root.parent()).height() - 95);
             groupTemplate();
 
@@ -296,12 +298,13 @@
                                             '<p>{{Username}}</p>' +
                                              '{{/if}}' +
                                             '<span>{{Email}}</span>' +
+                            '<p>{{Country}}</p>' +
                                         '</div>' +
                         '</div>' +
 
                         '<div class="vis-group-user-right">' +
-                        	'<ul>' +
-                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
+                        	'<ul class="vis-flex-directionCol">' +
+                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="padding-bottom: 10px;" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '{{#if IsActive }}' +
                                         '{{#if IsUpdate}}' +
                                             '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" title="'+VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
@@ -316,7 +319,6 @@
                                          '{{/if}}' +
                                  '{{/if}}' +
                             '</ul>' +
-                            '<p>{{Country}}</p>' +
                         '</div>' +
             '</div>' +
 
@@ -419,7 +421,7 @@
                 '</div>' +
                 '<div class="vis-group-user-right">' +
                     '<ul>' +
-                        '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit"  title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                        '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="margin-right: 10px" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                         '<li><span class="vis-group-user-ico vis-group-info fa fa-info"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                     '</ul>                           ' +
                 '</div>' +

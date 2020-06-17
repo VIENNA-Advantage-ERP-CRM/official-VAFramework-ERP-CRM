@@ -59,18 +59,18 @@
     padding-right: 12px;
 }
 
-.vis-intial-form-data > label, .vis-intial-form-dataCombo > label{
-	font-size:14px;
-	/*color:#666;
+.vis-input-wrap.vis-intial-form-data label, .vis-input-wrap.vis-intial-form-dataCombo label {
+    /*font-size:14px;*/
+    /*color:#666;
 	font-weight:normal;*/
-	width:100%;
-	float:left;	
+    /*width:100%;
+	float:left;*/
     /*margin-bottom: 2px;*/
-   
+    left: 10px;
 }
-.vis-intial-form-data > input, .vis-intial-form-dataCombo > select{
-	float:left;
-	width:100%;	
+.vis-intial-form-data input, .vis-intial-form-dataCombo select{
+	/*float:left;
+	width:100%;*/	
 	/*border:1px solid #ccc;*/
 	border-radius:3px;
 	padding:5px 10px;
@@ -208,4 +208,7 @@ html[dir="rtl"] .vis-initial-form-checkbox > label {
 }
 .vis-its-ryt-panel .vis-initial-btn {
     float: right;
+}
+.initial-client-form .VIS_Pref_change-pass {
+    margin-bottom: 20px;
 }

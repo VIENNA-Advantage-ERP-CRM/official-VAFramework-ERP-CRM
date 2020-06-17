@@ -50,7 +50,7 @@
         this.txtDifference = new VIS.Controls.VTextBox("", false, true, false);
 
         this.$root = $("<div style='width: 100%; height: 100%; background-color: white;'>");
-        this.$busyDiv = $("<div id='testBesy' style='height: 100%;' class='vis-apanel-busy'>");
+        this.$busyDiv = $("<div id='testBesy' class='vis-busyindicatorouterwrap'><div class='vis-busyindicatorinnerwrap'><i class='vis-busyindicatordiv'></i></div></div>");
 
         this.sideDiv = null;
         this.gridSelectDiv = null;
@@ -120,8 +120,8 @@
             // JID_1250: Clear option required on Business partner and Product parameter.
             //var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
             //var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
-            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px;"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
-            btnClearPrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px; "><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
+            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
+            btnClearPrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
 
             //Top Div
             $self.topDiv = $("<div id='" + "topDiv_" + $self.windowNo + "'  class='vis-archive-l-s-head vis-frm-ls-top' style='padding: 0;'>" +
@@ -143,7 +143,7 @@
             $self.btnSpaceDiv = $self.topDiv.find("#" + "btnSpaceDiv_" + $self.windowNo);
 
             //Left side Div designing
-            $self.sideDiv = $("<div id='" + "sideDiv_" + $self.windowNo + "' class='vis-archive-l-s-content vis-mi-ls-wrp'>");//background-color: #F1F1F1;
+            $self.sideDiv = $("<div id='" + "sideDiv_" + $self.windowNo + "' class='vis-archive-l-s-content vis-mi-ls-wrp vis-leftsidebarouterwrap'>");//background-color: #F1F1F1;
             $self.sideDiv.css("width", sideDivWidth);
             //$self.sideDiv.css("height", selectDivHeight - 3);
 
@@ -155,104 +155,145 @@
             var tble = $("<table style='width: 100%;height: 100%;'>");
 
             //line1
-            var tr = $("<tr>");
-            var td = $("<td style='padding: 0px 10px 0px;'>");
+            //var tr = $("<tr>");
+            //var td = $("<td style='padding: 0px 10px 0px;'>");
             $self.div.append(tble);
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblMatchFrom.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblMatchFrom.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line2
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 10px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.cmbMatchFrom.getControl().css("display", "inline-block").css("width", "236px").css("height", "32px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.cmbMatchFrom.getControl());
+            Leftformfieldctrlwrp.append($self.lblMatchFrom.getControl().addClass("VIS_Pref_Label_Font"));
 
             //line3
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblMatchTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblMatchTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
             //line4
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.cmbMatchTo.getControl().css("display", "inline-block").css("width", "236px").css("height", "32px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.cmbMatchTo.getControl());
+            Leftformfieldctrlwrp.append($self.lblMatchTo.getControl().addClass("VIS_Pref_Label_Font"));
 
             //line5
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblMatchMode.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblMatchMode.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line6
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.cmbMatchMode.getControl().css("display", "inline-block").css("width", "236px").css("height", "32px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.cmbMatchMode.getControl());
+            Leftformfieldctrlwrp.append($self.lblMatchMode.getControl().addClass("VIS_Pref_Label_Font"));
 
             //line7
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblBPartner.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblBPartner.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line8
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            var Leftformfieldbtnwrap = $('<div class="input-group-append">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.onlyVendor.getControl().css('width', '176px')).append($self.onlyVendor.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px'))
-            .append(btnClearBP);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.onlyVendor.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            Leftformfieldctrlwrp.append($self.lblBPartner.getControl().addClass("VIS_Pref_Label_Font"));
+            Leftformfieldbtnwrap.append($self.onlyVendor.getBtn(0));
+            Leftformfieldbtnwrap.append(btnClearBP);
+            Leftformfieldwrp.append(Leftformfieldbtnwrap);
 
             //line9
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblProduct.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblProduct.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line10
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            var Leftformfieldbtnwrap = $('<div class="input-group-append">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.onlyProduct.getControl().css('width', '176px')).append($self.onlyProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px'))
-            .append(btnClearPrd);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.onlyProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            Leftformfieldctrlwrp.append($self.lblProduct.getControl().addClass("VIS_Pref_Label_Font"));
+            Leftformfieldbtnwrap.append($self.onlyProduct.getBtn(0));
+            Leftformfieldbtnwrap.append(btnClearPrd);
+            Leftformfieldwrp.append(Leftformfieldbtnwrap);
 
             //line11
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblDateFrom.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblDateFrom.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line12
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.dtpFrom);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.dtpFrom);
+            Leftformfieldctrlwrp.append($self.lblDateFrom.getControl().addClass("VIS_Pref_Label_Font"));
 
             //line13
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblDateTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblDateTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line14
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.dtpTo);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.dtpTo);
+            Leftformfieldctrlwrp.append($self.lblDateTo.getControl().addClass("VIS_Pref_Label_Font"));
 
             //line15
             tr = $("<tr>");
@@ -328,19 +369,31 @@
             //Bottum Div
             var reciptcol = $("<div class='vis-info-btnfileds-wrap'>");
 
-            var divMatched = $("<div style='float: left;width: 33.3%;'>");
-            divMatched.append($self.lblMatched.getControl().css("display", "block").addClass("VIS_Pref_Label_Font"));
-            divMatched.append($self.txtMatched.getControl().css("width", "100%"));
+            var divMatched = $("<div class='vis-info-botdatafield'>");
+            var $divMatchedInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divMatchedCtrlwrap = $("<div class='vis-control-wrap'>");
+            divMatched.append($divMatchedInputwrap);
+            $divMatchedInputwrap.append($divMatchedCtrlwrap);
+            $divMatchedCtrlwrap.append($self.txtMatched.getControl());
+            $divMatchedCtrlwrap.append($self.lblMatched.getControl().addClass("VIS_Pref_Label_Font"));
             reciptcol.append(divMatched);
 
-            var divMatching = $("<div style='float: left; padding-left: 15px;margin-top: 0px;width: 33.3%;'>");
-            divMatching.append($self.lblMatchedTo.getControl().css("display", "block").addClass("VIS_Pref_Label_Font"));
-            divMatching.append($self.txtMatchedTo.getControl().css("width", "100%"));
+            var divMatching = $("<div class='vis-info-botdatafield' style='padding-left: 15px;'>");
+            var $divMatchingInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divMatchingCtrlwrap = $("<div class='vis-control-wrap'>");
+            divMatching.append($divMatchingInputwrap);
+            $divMatchingInputwrap.append($divMatchingCtrlwrap);
+            $divMatchingCtrlwrap.append($self.txtMatchedTo.getControl());
+            $divMatchingCtrlwrap.append($self.lblMatchedTo.getControl().addClass("VIS_Pref_Label_Font"));
             reciptcol.append(divMatching);
 
-            var divdiffrence = $("<div style='float: left; padding-left: 15px;margin-top: 0px;width: 33.3%; '>");
-            divdiffrence.append($self.lblDifference.getControl().css("display", "block").addClass("VIS_Pref_Label_Font"));
-            divdiffrence.append($self.txtDifference.getControl().css("width", "100%"));
+            var divdiffrence = $("<div class='vis-info-botdatafield' style='padding-left: 15px;'>");
+            var $divdiffrenceInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divdiffrenceCtrlwrap = $("<div class='vis-control-wrap'>");
+            divdiffrence.append($divdiffrenceInputwrap);
+            $divdiffrenceInputwrap.append($divdiffrenceCtrlwrap);
+            $divdiffrenceCtrlwrap.append($self.txtDifference.getControl());
+            $divdiffrenceCtrlwrap.append($self.lblDifference.getControl().addClass("VIS_Pref_Label_Font"));
             reciptcol.append(divdiffrence);
 
             $self.bottumButtonDiv = $("<div class='vis-info-btmcnt-wrap'>");
@@ -372,8 +425,8 @@
         function initDesign() {
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
             //Date controls initialization
-            $self.dtpFrom = $("<input id='" + "dateFrom_" + $self.windowNo + "' type='date' name='DateOrdered' style='display: inline-block;height: 30px;width:236px'>");
-            $self.dtpTo = $("<input id='" + "dateTo_" + $self.windowNo + "' type='date' name='DateOrdered' style='display: inline-block;height: 30px;width:236px'>");
+            $self.dtpFrom = $("<input id='" + "dateFrom_" + $self.windowNo + "' type='date' name='DateOrdered'>");
+            $self.dtpTo = $("<input id='" + "dateTo_" + $self.windowNo + "' type='date' name='DateOrdered'>");
 
             //chkbox controls initialization
             this.chkIsReturnTrxDiv = $("<div>");
@@ -382,7 +435,7 @@
 
             this.chkIsReturnTrxDiv.append($self.chkIsReturnTrx);
 
-            this.chkSameBPartnerDiv = $("<div style='padding: 0 10px;'>");
+            this.chkSameBPartnerDiv = $("<div class='vis-matchpoTopcheckwrap'>");
 
             //if (VIS.Application.isRTL) {
             //    this.chkSameBPartnerDiv = $("<div style='float: left; margin-right: 15px;margin-left: 15px;'>");
@@ -393,7 +446,7 @@
 
             this.chkSameBPartnerDiv.append($self.chkSameBPartner);
 
-            this.chkSameProductDiv = $("<div style='padding: 0 10px;' >");
+            this.chkSameProductDiv = $("<div class='vis-matchpoTopcheckwrap'>");
             //if (VIS.Application.isRTL) {
             //    this.chkSameProductDiv = $("<div style='float: left; margin-right: 15px;'>");
             //}
@@ -402,7 +455,7 @@
 
             this.chkSameProductDiv.append($self.chkSameProduct);
 
-            this.chkSameQtyDiv = $("<div style='padding: 0 10px;' >");
+            this.chkSameQtyDiv = $("<div class='vis-matchpoTopcheckwrap'>");
             //if (VIS.Application.isRTL) {
             //    this.chkSameQtyDiv = $("<div style='float: left; margin-right: 15px;'>");
             //}

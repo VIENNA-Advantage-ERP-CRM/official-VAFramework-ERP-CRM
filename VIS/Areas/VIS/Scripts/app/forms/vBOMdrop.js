@@ -68,27 +68,37 @@
         function customDesign() {
             var height = ($(window).height()) * (92 / 100);
             $divContainer = $("<div class='vis-mainContainer'>");
-            var designPInfo = " <div class='vis-pSelectInfo'>"  // div pSelectInfo starts here
+            var designPInfo = " <div class='vis-pSelectInfo vis-leftsidebarouterwrap'>"  // div pSelectInfo starts here
                              +"<div class='vis-pSelectInner'>"
                              + " <div class='vis-paymentselect-field'>"  // div Product starts here
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID") + " </label>"
+                             +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbProduct_" + $self.windowNo + "'></select>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID") + " </label>"
+                             +"</div></div>"
                              + " </div>" // div Product ends here 
                              + " <div class='vis-paymentselect-field'>"  // div Invoice starts here
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Invoice_ID") + " </label>"
+                             +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbinvoice_" + $self.windowNo + "'></select>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Invoice_ID") + " </label>"
+                             +"</div></div>"
                              + " </div>" // div Invoice ends here 
                              + " <div class='vis-paymentselect-field'>"  // div Order starts here
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Order_ID") + " </label>"
+                             +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbOrder_" + $self.windowNo + "'></select>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Order_ID") + " </label>"
+                             +"</div></div>"
                              + " </div>" // div Order ends here 
                              + " <div class='vis-paymentselect-field'>"  // div Project/Opportunity starts here
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Project_ID") + " </label>"
+                             +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbOpportunity_" + $self.windowNo + "'></select>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Project_ID") + " </label>"
+                             +"</div></div>"
                              + " </div>" // div Project/Opportunity ends here                             
                              + " <div class='vis-paymentselect-field'>"  // div Quantity starts here
+                             +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                             + " <input type='number' id='VIS_txtQuantity_" + $self.windowNo + "' min='0' MaxLength='50'>"
                              + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Qty") + "</label>"
-                             + " <input type='number' id='VIS_txtQuantity_" + $self.windowNo + "' min='0' MaxLength='50'></input>"
+                             +"</div></div>"
                              + " </div>" // div Quantity ends here 
                              + " </div>"// div vis-pSelectInner ends here
                              + " <div class='vis-paymentselect-field'>"  // div btnRefresh starts here
