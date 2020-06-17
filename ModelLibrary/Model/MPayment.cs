@@ -2773,8 +2773,8 @@ namespace VAdvantage.Model
                         if (GetWithholdingAmt() == 0)
                         {
                             if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
-                                : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false , 
-                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) ,
+                                : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false,
+                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
                                 Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"])))
                             {
                                 SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
@@ -3532,7 +3532,10 @@ namespace VAdvantage.Model
                     else
                     {
                         SetWithholdingAmt(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID())));
-                        SetC_Withholding_ID(withholding_ID);
+                        if (GetC_Withholding_ID() <= 0)
+                        {
+                            SetC_Withholding_ID(withholding_ID);
+                        }
                     }
                 }
             }
@@ -4864,7 +4867,7 @@ namespace VAdvantage.Model
         bool ChekVoidIt = false;
         public Boolean VoidIt()
         {
-           
+
             // if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
             //  {
             ChekVoidIt = true;
@@ -4968,7 +4971,7 @@ namespace VAdvantage.Model
         /// @return true if success
         /// </summary>
         /// <returns></returns>
-       
+
         public Boolean ReverseCorrectIt()
         {
             //added by shubham (JID_1472) To check payment is reconciled or not
@@ -4977,7 +4980,7 @@ namespace VAdvantage.Model
 
                 _processMsg = Msg.GetMsg(GetCtx(), "PaymentAlreadyReconciled");
                 return false;
-               
+
             }
             //if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
             //{
