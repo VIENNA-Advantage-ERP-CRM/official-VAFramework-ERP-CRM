@@ -78,18 +78,18 @@
                 <div class="vis-Email-rytContent">
                     <div class="vis-Email-rytForm">
                         <div class="vis-form-rytData">
+                            <input id="@(ViewBag.windowNo + "_emailTo")" type="text" name="to">
                             <label for="to">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "To")</label>
-                            <input id="@(ViewBag.windowNo + "_emailTo")"  type="text" name="to">
                         </div>
 
                         <div class="vis-form-rytData">
+                            <input id="@(ViewBag.windowNo + "_eamilCc")" type="text" name="cc">
                             <label for="cc">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Cc")</label>
-                            <input id="@(ViewBag.windowNo + "_eamilCc")"  type="text" name="cc">
                         </div>
 
                         <div class="vis-form-rytData">
+                            <input id="@(ViewBag.windowNo + "_emailBcc")" type="text" name="bcc">
                             <label for="bcc">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Bcc")</label>
-                            <input id="@(ViewBag.windowNo + "_emailBcc")"  type="text" name="bcc">
                         </div>
                     </div>
                     <!-- end of Email-rytForm -->
