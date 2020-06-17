@@ -330,7 +330,7 @@ WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VA
                     else
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) ";
+                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) MyTable";
                     }
 
                     info.count = Util.GetValueOfInt(DB.ExecuteScalar(sql));

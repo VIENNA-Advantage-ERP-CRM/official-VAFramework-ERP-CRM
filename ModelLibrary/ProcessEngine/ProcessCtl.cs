@@ -20,7 +20,7 @@ using VAdvantage.Classes;
 using System.ComponentModel;
 using System.IO;
 using VAdvantage.Model;
-
+using Npgsql;
 
 namespace VAdvantage.ProcessEngine
 {
@@ -84,7 +84,46 @@ namespace VAdvantage.ProcessEngine
         {
             if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
             {
-                return false;
+                NpgsqlConnection conn1 = null;
+                try
+                {
+                    NpgsqlCommand comm = new NpgsqlCommand();
+                conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
+                conn1.Open();
+                comm.Connection = conn1;
+                comm.CommandText = procedureName;
+                comm.CommandType = CommandType.StoredProcedure;
+                NpgsqlCommandBuilder.DeriveParameters(comm);
+                NpgsqlParameter[] param = new NpgsqlParameter[1];
+
+                foreach (NpgsqlParameter orp in comm.Parameters)
+                {
+                    param[0] = new NpgsqlParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
+                }
+
+                //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+                int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
+                conn1.Close();
+                if (res < 0)
+                {
+                    ProcessInfoUtil.SetParameterFromDB(_pi, _ctx);
+                    return StartDBProcess(procedureName, _pi.GetParameter());
+                }
+                }
+                catch (Exception e)
+                {
+                    if (conn1 != null)
+                        conn1.Close();
+                    //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+                    _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
+                    _pi.SetError(true);
+                    return false;
+
+                }
+                //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+                return true;
+                //DB.ExecuteProcedure(procedureName, null, null);
+                //return false;
             }
 
             //  execute on this thread/connection
@@ -138,7 +177,105 @@ namespace VAdvantage.ProcessEngine
 
             if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
             {
-                return false;
+                NpgsqlConnection conn1 = null;
+                try
+                {
+                    NpgsqlCommand comm = new NpgsqlCommand();
+                    conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
+                    conn1.Open();
+                    comm.Connection = conn1;
+                    comm.CommandText = procedureName;
+                    comm.CommandType = CommandType.StoredProcedure;
+                    NpgsqlCommandBuilder.DeriveParameters(comm);
+                    NpgsqlParameter[] param = new NpgsqlParameter[comm.Parameters.Count];
+                    int i = 0;
+                    StringBuilder orclParams = new StringBuilder();
+                    bool isDateTo = false;
+                    foreach (NpgsqlParameter orp in comm.Parameters)
+                    {
+                        if (isDateTo)
+                        {
+                            isDateTo = false;
+                            continue;
+                        }
+                        Object paramvalue = list[i].GetParameter();
+                        if (paramvalue != null)
+                        {
+                            if (orp.DbType == System.Data.DbType.DateTime)
+                            {
+                                if (paramvalue.ToString().Length > 0)
+                                {
+                                    paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+                                }
+                                param[i] = new NpgsqlParameter(orp.ParameterName, paramvalue);
+                                if (list[i].GetParameter_To() != null && list[i].GetParameter_To().ToString().Length > 0)
+                                {
+                                    paramvalue = list[i].GetParameter_To();
+                                    paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+                                    param[i + 1] = new NpgsqlParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+                                    i++;
+                                    isDateTo = true;
+                                    continue;
+                                }
+                                else
+                                {
+                                    if (comm.Parameters.Count > (i + 1))
+                                    {
+                                        if (comm.Parameters[i + 1].ParameterName.Equals(comm.Parameters[i].ParameterName + "_TO", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            param[i + 1] = new NpgsqlParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+                                            isDateTo = true;
+                                            continue;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (orp.DbType == System.Data.DbType.VarNumeric)
+                            {
+                                if (paramvalue.ToString().Length > 0)
+                                {
+                                    //continue;
+                                }
+                                else
+                                    paramvalue = 0;
+                            }
+                            else
+                            {
+                                if (paramvalue.ToString().Length > 0)
+                                {
+                                    paramvalue = GlobalVariable.TO_STRING(paramvalue.ToString());
+                                }
+                            }
+
+                        }
+                        param[i] = new NpgsqlParameter(orp.ParameterName, paramvalue);
+                        //orclParams.Append(orp.ParameterName).Append(": ").Append(_curTab.GetValue(list[i]));
+                        //if (i < comm.Parameters.Count - 1)
+                        //    orclParams.Append(", ");
+                        i++;
+                    }
+
+                    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+                    int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
+                    conn1.Close();                    
+                    if (res < 0)
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (conn1 != null)
+                        conn1.Close();
+                    //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+                    _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
+                    _pi.SetError(true);
+                    return false;
+
+                }
+                //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+                return true;
+                //return false;
             }
 
             //  execute on this thread/connection

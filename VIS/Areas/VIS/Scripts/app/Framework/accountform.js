@@ -992,74 +992,74 @@
                 }
                 //	Org (mandatory)
                 if (f_AD_Org_ID != null && f_AD_Org_ID.getValue() != null)// && !isNull(f_AD_Org_ID.getValue()))
-                    localquery.addRestriction("AD_Org_ID", localquery.EQUAL, f_AD_Org_ID.getValue());
+                    localquery.addRestriction("AD_Org_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_AD_Org_ID.getValue()));
                 //	Account (mandatory)
                 if (f_Account_ID != null && !isNull(f_Account_ID.getValue()))
-                    localquery.addRestriction("Account_ID", localquery.EQUAL, f_Account_ID.getValue());
+                    localquery.addRestriction("Account_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_Account_ID.getValue()));
 
                 if (f_SubAcct_ID != null && !isNull(f_SubAcct_ID.getValue()))
-                    localquery.addRestriction("C_SubAcct_ID", localquery.EQUAL, f_SubAcct_ID.getValue());
+                    localquery.addRestriction("C_SubAcct_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_SubAcct_ID.getValue()));
 
                 //	Product
                 if (f_M_Product_ID != null && !isNull(f_M_Product_ID.getValue()))
-                    localquery.addRestriction("M_Product_ID", localquery.EQUAL, f_M_Product_ID.getValue());
+                    localquery.addRestriction("M_Product_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_M_Product_ID.getValue()));
                 //	BPartner
                 if (f_C_BPartner_ID != null && !isNull(f_C_BPartner_ID.getValue()))
-                    localquery.addRestriction("C_BPartner_ID", localquery.EQUAL, f_C_BPartner_ID.getValue());
+                    localquery.addRestriction("C_BPartner_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_BPartner_ID.getValue()));
                 //	Campaign
                 if (f_C_Campaign_ID != null && !isNull(f_C_Campaign_ID.getValue()))
-                    localquery.addRestriction("C_Campaign_ID", localquery.EQUAL, f_C_Campaign_ID.getValue());
+                    localquery.addRestriction("C_Campaign_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_Campaign_ID.getValue()));
                 //	Loc From
                 if (f_C_LocFrom_ID != null && !isNull(f_C_LocFrom_ID.getValue()))
-                    localquery.addRestriction("C_LocFrom_ID", localquery.EQUAL, f_C_LocFrom_ID.getValue());
+                    localquery.addRestriction("C_LocFrom_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_LocFrom_ID.getValue()));
                 //	Loc To
                 if (f_C_LocTo_ID != null && !isNull(f_C_LocTo_ID.getValue()))
-                    localquery.addRestriction("C_LocTo_ID", localquery.EQUAL, f_C_LocTo_ID.getValue());
+                    localquery.addRestriction("C_LocTo_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_LocTo_ID.getValue()));
                 //	Project
                 if (f_C_Project_ID != null && !isNull(f_C_Project_ID.getValue()))
-                    localquery.addRestriction("C_Project_ID", localquery.EQUAL, f_C_Project_ID.getValue());
+                    localquery.addRestriction("C_Project_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_Project_ID.getValue()));
                 //	SRegion
                 if (f_C_SalesRegion_ID != null && !isNull(f_C_SalesRegion_ID.getValue()))
-                    localquery.addRestriction("C_SalesRegion_ID", localquery.EQUAL, f_C_SalesRegion_ID.getValue());
+                    localquery.addRestriction("C_SalesRegion_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_SalesRegion_ID.getValue()));
                 //	Org Trx
                 if (f_AD_OrgTrx_ID != null && !isNull(f_AD_OrgTrx_ID.getValue()))
-                    localquery.addRestriction("AD_OrgTrx_ID", localquery.EQUAL, f_AD_OrgTrx_ID.getValue());
+                    localquery.addRestriction("AD_OrgTrx_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_AD_OrgTrx_ID.getValue()));
                 //	Activity
                 if (f_C_Activity_ID != null && !isNull(f_C_Activity_ID.getValue()))
-                    localquery.addRestriction("C_Activity_ID", localquery.EQUAL, f_C_Activity_ID.getValue());
+                    localquery.addRestriction("C_Activity_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_Activity_ID.getValue()));
                 //	User 1
                 if (f_User1_ID != null && !isNull(f_User1_ID.getValue()))
-                    localquery.addRestriction("User1_ID", localquery.EQUAL, f_User1_ID.getValue());
+                    localquery.addRestriction("User1_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_User1_ID.getValue()));
                 //	User 2
                 if (f_User2_ID != null && !isNull(f_User2_ID.getValue()))
-                    localquery.addRestriction("User2_ID", localquery.EQUAL, f_User2_ID.getValue());
+                    localquery.addRestriction("User2_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_User2_ID.getValue()));
                 //	User Element 1
                 if (f_UserElement1_ID != null && !isNull(f_UserElement1_ID.getValue()))
-                    localquery.addRestriction("UserElement1_ID", localquery.EQUAL, f_UserElement1_ID.getValue());
+                    localquery.addRestriction("UserElement1_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement1_ID.getValue()));
                 //	User Element 2
                 if (f_UserElement2_ID != null && !isNull(f_UserElement2_ID.getValue()))
-                    localquery.addRestriction("UserElement2_ID", localquery.EQUAL, f_UserElement2_ID.getValue());
+                    localquery.addRestriction("UserElement2_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement2_ID.getValue()));
                 //	User Element 3
                 if (f_UserElement3_ID != null && !isNull(f_UserElement3_ID.getValue()))
-                    localquery.addRestriction("UserElement3_ID", localquery.EQUAL, f_UserElement3_ID.getValue());
+                    localquery.addRestriction("UserElement3_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement3_ID.getValue()));
                 //	User Element 4
                 if (f_UserElement4_ID != null && !isNull(f_UserElement4_ID.getValue()))
-                    localquery.addRestriction("UserElement4_ID", localquery.EQUAL, f_UserElement4_ID.getValue());
+                    localquery.addRestriction("UserElement4_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement4_ID.getValue()));
                 //	User Element 5
                 if (f_UserElement5_ID != null && !isNull(f_UserElement5_ID.getValue()))
-                    localquery.addRestriction("UserElement5_ID", localquery.EQUAL, f_UserElement5_ID.getValue());
+                    localquery.addRestriction("UserElement5_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement5_ID.getValue()));
                 //	User Element 6
                 if (f_UserElement6_ID != null && !isNull(f_UserElement6_ID.getValue()))
-                    localquery.addRestriction("UserElement6_ID", localquery.EQUAL, f_UserElement6_ID.getValue());
+                    localquery.addRestriction("UserElement6_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement6_ID.getValue()));
                 //	User Element 7
                 if (f_UserElement7_ID != null && !isNull(f_UserElement7_ID.getValue()))
-                    localquery.addRestriction("UserElement7_ID", localquery.EQUAL, f_UserElement7_ID.getValue());
+                    localquery.addRestriction("UserElement7_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement7_ID.getValue()));
                 //	User Element 8
                 if (f_UserElement8_ID != null && !isNull(f_UserElement8_ID.getValue()))
-                    localquery.addRestriction("UserElement8_ID", localquery.EQUAL, f_UserElement8_ID.getValue());
+                    localquery.addRestriction("UserElement8_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement8_ID.getValue()));
                 //	User Element 9
                 if (f_UserElement9_ID != null && !isNull(f_UserElement9_ID.getValue()))
-                    localquery.addRestriction("UserElement9_ID", localquery.EQUAL, f_UserElement9_ID.getValue());
+                    localquery.addRestriction("UserElement9_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_UserElement9_ID.getValue()));
                 //	Query
                 _mTab.setQuery(localquery);
                 gridController.query(0, 0, false);
@@ -1617,7 +1617,7 @@
 
                     var param = [];
                     param[0] = new VIS.DB.SqlParam("@C_ValidCombination_ID", C_ValidCombination_ID);
-                    param[0] = new VIS.DB.SqlParam("@C_AcctSchema_ID", C_AcctSchema_ID);
+                    param[1] = new VIS.DB.SqlParam("@C_AcctSchema_ID", C_AcctSchema_ID);
 
                     dr = executeReader(sql, param);
 

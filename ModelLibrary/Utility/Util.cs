@@ -515,6 +515,14 @@ namespace VAdvantage.Utility
                     return true;
 
             }
+
+            if (o1 is Decimal || o2 is Decimal)
+            {
+                Decimal d1 = Util.GetValueOfDecimal(o1);
+                Decimal d2 = Util.GetValueOfDecimal(o2);
+                return d1.Equals(d2);
+            }
+
             return o1.Equals(o2) || o1.ToString() == o2.ToString();
         }
 

@@ -605,7 +605,7 @@ namespace VAdvantage.Model
                     if (costingMethod == "C")
                     {
                         costingMethod = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT costingmethod FROM M_CostElement WHERE M_CostElement_ID IN 
-                                        (SELECT m_ref_costelement FROM M_CostElementLine WHERE M_CostElement_ID=" + pc.GetM_CostElement_ID() + @" )
+                                        (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM M_CostElementLine WHERE M_CostElement_ID=" + pc.GetM_CostElement_ID() + @" )
                                         AND CostingMethod IS NOT NULL", null, trxName));
                     }
                 }
@@ -620,7 +620,7 @@ namespace VAdvantage.Model
                         if (costingMethod == "C")
                         {
                             costingMethod = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT costingmethod FROM M_CostElement WHERE M_CostElement_ID IN 
-                                        (SELECT m_ref_costelement FROM M_CostElementLine WHERE M_CostElement_ID=" + actSchema.GetM_CostElement_ID() + @" )
+                                        (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM M_CostElementLine WHERE M_CostElement_ID=" + actSchema.GetM_CostElement_ID() + @" )
                                         AND CostingMethod IS NOT NULL", null, trxName));
                         }
                     }

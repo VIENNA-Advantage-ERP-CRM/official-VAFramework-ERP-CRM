@@ -11687,24 +11687,32 @@
 
                     paramStr = M_Product_ID.toString().concat(',').concat(C_UOM_To_ID.toString()).concat(',').concat(QtyEntered.toString());
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                    QtyOrdered = pc;
+                    QtyOrdered = pc
 
-                    var conversion = false
-                    if (QtyOrdered != null) {
-                        conversion = QtyEntered != QtyOrdered;
-                    }
-                    if (QtyOrdered == null) {
-                        conversion = false;
-                        QtyOrdered = 1;
-                    }
-                    if (conversion) {
-                        QtyOrdered;
-                    }
-                    else {
 
-                        QtyOrdered = QtyOrdered * QtyEntered;
+                    //handle issue while conversion on Physical Inventory
+                    //var conversion = false
+
+                    if (QtyOrdered == null) {                        
+                        QtyOrdered = QtyEntered;
                     }
 
+                    //if (QtyOrdered != null) {
+                    //    conversion = QtyEntered != QtyOrdered;
+                    //}
+
+                    //if (QtyOrdered == null) {
+                    //    conversion = false;
+                    //    QtyOrdered = QtyEntered;
+                    //}
+
+                    //if (conversion) {
+                    //    QtyOrdered;
+                    //}
+                    //else {
+
+                    //    QtyOrdered = QtyOrdered * QtyEntered;
+                    //}
 
                 }
 
@@ -11743,8 +11751,6 @@
                         + " -> " + conversion
                         + " QtyOrdered=" + QtyOrdered);
                     ctx.setContext(windowNo, "UOMConversion", conversion ? "Y" : "N");
-
-                    QtyOrdered;
                 }
 
                 if (mTab.getValue("AdjustmentType").toString() == "D") {
@@ -11786,23 +11792,27 @@
                     var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     QtyOrdered = pc;
 
-                    var conversion = false
-                    if (QtyOrdered != null) {
-                        conversion = QtyEntered != QtyOrdered;
-                    }
-                    if (QtyOrdered == null) {
-                        conversion = false;
-                        QtyOrdered = 1;
-                    }
-                    if (conversion) {
-                        mTab.setValue("QtyInternalUse", QtyOrdered);
-                    }
-                    else {
+                    //handle issue while conversion on Physical Inventory
+                    if (QtyOrdered == null)
+                        QtyOrdered = QtyEntered;
 
-                        mTab.setValue("QtyInternalUse", (QtyOrdered * QtyEntered));
-                    }
+                    mTab.setValue("QtyInternalUse", QtyOrdered);
 
+                    //var conversion = false
+                    //if (QtyOrdered != null) {
+                    //    conversion = QtyEntered != QtyOrdered;
+                    //}
+                    //if (QtyOrdered == null) {
+                    //    conversion = false;
+                    //    QtyOrdered = 1;
+                    //}
+                    //if (conversion) {
+                    //    mTab.setValue("QtyInternalUse", QtyOrdered);
+                    //}
+                    //else {
 
+                    //    mTab.setValue("QtyInternalUse", (QtyOrdered * QtyEntered));
+                    //}
                 }
 
                 else if (mField.getColumnName() == "QtyEntered") {
@@ -13576,7 +13586,7 @@
             //End
 
             if (Util.scale(lineNetAmt) > StdPrecision) {
-                lineNetAmt = lineNetAmt.toFixed(StdPrecision);// MidpointRounding.AwayFromZero);
+                lineNetAmt = Util.getValueOfDecimal(lineNetAmt.toFixed(StdPrecision));// MidpointRounding.AwayFromZero);
             }
             this.log.info("amt = LineNetAmt=" + lineNetAmt);
             mTab.setValue("LineNetAmt", lineNetAmt);
@@ -14048,7 +14058,7 @@
                 var QtyInvoiced1 = null;
 
                 if (QtyInvoiced != null) {
-                    QtyInvoiced1 = QtyInvoiced.toFixed(precision);//, MidpointRounding.AwayFromZero);
+                    QtyInvoiced1 = Util.getValueOfDecimal(QtyInvoiced.toFixed(precision));//, MidpointRounding.AwayFromZero);
                 }
 
                 //if (QtyEntered.Value.compareTo(QtyEntered1.Value) != 0)
@@ -17512,8 +17522,8 @@
                 qtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                 paramString = C_UOM_To_ID.toString();
                 precision = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramString);
-                var QtyEntered1 = qtyEntered.toFixed(precision);//, MidpointRounding.AwayFromZero);
-                if (qtyEntered.toString().compareTo(QtyEntered1) != 0) {
+                var QtyEntered1 = Util.getValueOfDecimal(qtyEntered.toFixed(precision));//, MidpointRounding.AwayFromZero);
+                if (qtyEntered.compareTo(QtyEntered1) != 0) {
                     this.log.fine("Corrected qtyEntered Scale UOM=" + C_UOM_To_ID
                         + "; qtyEntered=" + qtyEntered + "->" + QtyEntered1);
                     qtyEntered = QtyEntered1;
@@ -17549,7 +17559,7 @@
                 precision = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramString);
 
                 // JID_0681: If we copy the MR lines using copy from button system is only copy the Qty only before decimal.
-                var QtyEntered1 = qtyEntered.toFixed(precision);
+                var QtyEntered1 = Util.getValueOfDecimal(qtyEntered.toFixed(precision));
                 if (qtyEntered.compareTo(QtyEntered1) != 0) {
                     this.log.fine("Corrected qtyEntered Scale UOM=" + C_UOM_To_ID
                         + "; qtyEntered=" + qtyEntered + "->" + QtyEntered1);
@@ -17582,7 +17592,7 @@
                 precision = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramString);
 
                 // JID_0681: If we copy the MR lines using copy from button system is only copy the Qty only before decimal.
-                var MovementQty1 = movementQty.toFixed(precision);
+                var MovementQty1 = Util.getValueOfDecimal(movementQty.toFixed(precision));
                 if (movementQty.compareTo(MovementQty1) != 0) {
                     this.log.fine("Corrected movementQty "
                         + movementQty + "->" + MovementQty1);

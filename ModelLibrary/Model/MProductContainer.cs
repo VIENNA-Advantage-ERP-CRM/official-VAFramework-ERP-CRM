@@ -43,7 +43,8 @@ namespace VAdvantage.Model
                 // when we mark container as False, then it must be blank.
                 if (Is_ValueChanged("M_Locator_ID") || Is_ValueChanged("Ref_M_Container_ID") || (Is_ValueChanged("IsActive") && !IsActive()))
                 {
-                    string _sql = @"SELECT (SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID)) AS CurrentQty
+                    string _sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
                              FROM m_transaction t " +
                                      @" INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
                             WHERE t.AD_Client_ID = " + GetAD_Client_ID()
@@ -269,8 +270,8 @@ namespace VAdvantage.Model
                 sql += "WHERE l.M_Locator_ID = " + M_Locator_ID;
             else
                 sql += "WHERE l.M_Warehouse_ID= " + M_Warehouse_ID;
-            if (M_ProductContainer_ID > 0)
-                sql += " AND s.M_ProductContainer_ID = " + M_ProductContainer_ID;
+            //if (M_ProductContainer_ID > 0)
+                sql += " AND NVL(s.M_ProductContainer_ID , 0) = " + M_ProductContainer_ID;
             sql += " AND s.M_Product_ID=" + M_Product_ID + " AND s.Qty < 0 ";
             // PT-225, PT-224 : get record specific attribte wise which is to be selected on document
             if (M_AttributeSetInstance_ID > 0)

@@ -519,6 +519,8 @@
 
         initializeComponent();
 
+        InitInfo(M_Warehouse_ID, M_PriceList_ID);
+
         //var winQry = "SELECT AD_Window_ID FROM AD_Tab WHERE AD_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "AD_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry));
 
@@ -637,7 +639,7 @@
 
         bindEvent();
         //M_Warehouse_ID = VIS.context.getContextAsInt("#M_Warehouse_ID");
-        InitInfo(M_Warehouse_ID, M_PriceList_ID);
+        //InitInfo(M_Warehouse_ID, M_PriceList_ID);
 
         function InitInfo(M_Warehouse_ID, M_PriceList_ID) {
             pattrLookup = new VIS.MPAttributeLookup(VIS.context, WindowNo);
@@ -673,7 +675,8 @@
             //VIS.DB.executeReader(sql.toString(), null, GetWarehouseCallBack);
             // Added by Bharat on 31 May 2017 to remove client side queries
             try {
-                VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetWarehouse", "", GetWarehouseCallBack);
+                var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetWarehouse", null, null);
+                GetWarehouseCallBack(dr);
             }
             catch (e) {
                 console.log(e);
@@ -754,7 +757,8 @@
 
             // Added by Bharat on 31 May 2017 to remove client side queries
             try {
-                VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceList", { "PriceList": PriceList }, PriceListCallBack);
+                var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceList", { "PriceList": PriceList }, null);
+                PriceListCallBack(dr);
             }
             catch (e) {
                 console.log(e);
@@ -2177,7 +2181,7 @@
                 var row = {};
                 for (var item in dynData) {
                     //grdCol[item] = { field: dynData[item].ColumnName, sortable: true, attr: 'align=center' };
-                    row[dynData[item].ColumnName] = dynData[item].Values[j];
+                    row[dynData[item].ColumnName.toUpperCase()] = dynData[item].Values[j];
                 }
                 row['M_AttributeSetInstance_ID'] = 0;
                 row['recid'] = j + 1;

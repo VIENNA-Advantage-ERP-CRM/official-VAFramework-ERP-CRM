@@ -237,6 +237,7 @@
     <Compile Include="CRM\Process\TransferOwnerShip.cs" />
     <Compile Include="CRM\Process\UpdateVersion.cs" />
     <Compile Include="CrystalReport\CrystalReportEngine.cs" />
+    <Compile Include="DataBase\DBFunctionCollection.cs" />
     <Compile Include="DataBase\DB_MsSQL.cs" />
     <Compile Include="DataBase\LDAP.cs" />
     <Compile Include="DBPort\ConvertSQL.cs" />

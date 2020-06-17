@@ -1153,45 +1153,26 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public string GetChecknumber(int payMethod_ID, int BankAccount_ID, Trx trx)
         {
-            string retval = string.Empty;
-            IDbConnection dbConnection = null;
-            if (trx == null)
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("P_BANKACCOUNTID", BankAccount_ID);
+            param[0].SqlDbType = SqlDbType.Int;
+            param[0].Direction = ParameterDirection.Input;
+
+            param[1] = new SqlParameter("p_PAYMETHODID", payMethod_ID);
+            param[1].SqlDbType = SqlDbType.Int;
+            param[1].Direction = ParameterDirection.Input;
+
+            param[2] = new SqlParameter("p_result", 0);
+            param[2].SqlDbType = SqlDbType.Int;
+            param[2].Direction = ParameterDirection.Output;
+
+            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);            
+
+            if (param != null && param.Length > 0) // If Record Found
             {
-                return string.Empty; ;
+                return param[0].Value.ToString();
             }
-            try
-            {
-                dbConnection = trx.GetConnection();
-                if (dbConnection != null)
-                {
-                    // execute procedure for updating cost of components
-                    OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = (OracleConnection)dbConnection;
-                    cmd.CommandText = "GETCHECKNO";
-                    cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
-                    cmd.BindByName = true;
-                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());
-                    retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
-                    if (retval == "0") // If Record Found
-                    {
-                        retval = string.Empty;
-                    }
-
-                }
-
-                return retval.ToString();
-
-            }
-            catch (Exception e)
-            {
-                log.SaveError("Error:GetCheckNumber", e.Message);
-                return retval;
-            }
-
-
+            return string.Empty;
         }
 
         /**
@@ -5069,7 +5050,7 @@ namespace VAdvantage.Model
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
-                string sql = "SELECT UNIQUE C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
+                string sql = "SELECT DISTINCT C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
                 DataSet ds = new DataSet();
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)

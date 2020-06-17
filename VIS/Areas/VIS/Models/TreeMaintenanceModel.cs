@@ -84,27 +84,24 @@ namespace VIS.Models
 
                 if (searchtext != "")
                 {
-                    qryPaging = @"SELECT * FROM (
+                    qryPaging = @"SELECT * FROM 
                      
-                         SELECT " + TableName + @"_ID, description,issummary,Name, rownum r__
-                         FROM
-                              ( SELECT *  FROM " + TableName + @"  WHERE UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND IsActive='Y' ORDER BY upper(name) ) 
+                              ( SELECT " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num  FROM " + TableName + @"  WHERE UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND IsActive='Y' ORDER BY upper(name) ) 
                             
-                            WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
-                        )
-                        WHERE r__ >= (((" + pageNo + @"-1) * " + pageLength + @") + 1)";
+                           x WHERE row_num BETWEEN (((" + pageNo + @"-1) * " + pageLength + @") + 1)
+
+                        AND ((" + pageNo + @" * " + pageLength + @") + 1 ) ";
+
                 }
                 else
                 {
-                    qryPaging = @"SELECT * FROM (
+                    qryPaging = @"SELECT * FROM 
                      
-                         SELECT " + TableName + @"_ID, description,issummary,Name, rownum r__
-                         FROM
-                              ( SELECT *  FROM " + TableName + @" WHERE IsActive='Y' ORDER BY upper(name) ) 
+                       ( SELECT " +TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + @" WHERE IsActive='Y' ORDER BY upper(name) ) 
                             
-                            WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
-                        )
-                        WHERE r__ >= (((" + pageNo + @"-1) * " + pageLength + @") + 1)";
+                           x WHERE row_num BETWEEN (((" + pageNo + @"-1) * " + pageLength + @") + 1)  
+
+                     AND  ((" + pageNo + @" * " + pageLength + @") + 1 )";
                 }
 
                 DataSet ds = new DataSet();
@@ -212,38 +209,33 @@ namespace VIS.Models
 
                 if (searchtext != "")
                 {
-                    unlinkdata = "SELECT * FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name))";
+                    unlinkdata = "SELECT " + TableName + @"_ID, description,issummary,Name, ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name))";
 
                     // unlinkdata = "SELECT * FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " ) ORDER BY upper(name))";
                     executeqry = @"SELECT * FROM (
                      
-                         SELECT " + TableName + @"_ID, description,issummary,Name, rownum r__
-                         FROM
-                              ( " + unlinkdata + @" 
+                              ( " + unlinkdata + @" )
                             
-                            WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
-                        )
-                        WHERE r__ >= (((" + pageNo + @"-1) * " + pageLength + @") + 1)";
+                           x WHERE row_num BETWEEN (((" + pageNo + @"-1) * " + pageLength + @") + 1)
+                        
+                        AND ((" + pageNo + @" * " + pageLength + @") + 1 )";
                 }
                 else
                 {
-                    unlinkdata = "SELECT * FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name)";
+                    unlinkdata = "SELECT  " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name)";
 
 
                     //unlinkdata = "SELECT * FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " ) ORDER BY upper(name)";
-                    executeqry = @"SELECT * FROM (
-                     
-                         SELECT " + TableName + @"_ID, description,issummary,Name, rownum r__
-                         FROM
-                              ( " + unlinkdata + @"  )
+                    executeqry = @"SELECT * FROM 
+                                      ( " + unlinkdata + @"  )
                             
-                            WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
-                        )
-                        WHERE r__ >= (((" + pageNo + @"-1) * " + pageLength + @") + 1)";
+                         x   WHERE row_num BETWEEN (((" + pageNo + @"-1) * " + pageLength + @") + 1)            
+                        
+                        AND  ((" + pageNo + @" * " + pageLength + @") + 1 )";
                 }
-
+                DataSet dst = new DataSet();
                 executeqry = MRole.GetDefault(_ctx).AddAccessSQL(executeqry, TableName, true, false);
-                DataSet dst = DB.ExecuteDataset(executeqry, null, null);
+                 dst = DB.ExecuteDataset(executeqry, null, null);
 
 
                 if (dst != null && dst.Tables[0].Rows.Count > 0)
@@ -278,29 +270,26 @@ namespace VIS.Models
 
                 if (searchtext != "")
                 {
-                    unlinkdata = "SELECT * FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name))";
-                    executeqry = @"SELECT * FROM (
+                    unlinkdata = "SELECT " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name))";
+                    executeqry = @"SELECT * FROM 
                      
-                         SELECT " + TableName + @"_ID, description,issummary,Name, rownum r__
-                         FROM
-                              ( " + unlinkdata + @" 
+                              ( " + unlinkdata + @" )
                             
-                            WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
-                        )
-                        WHERE r__ >= (((" + pageNo + @"-1) * " + pageLength + @") + 1)";
+                           x WHERE row_num BETWEEN (((" + pageNo + @"-1) * " + pageLength + @") + 1)
+
+                        AND ((" + pageNo + @" * " + pageLength + @") + 1 ) ";
+
                 }
                 else
                 {
-                    unlinkdata = "SELECT * FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID  IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name)";
-                    executeqry = @"SELECT * FROM (
-                     
-                         SELECT " + TableName + @"_ID, description,issummary,Name, rownum r__
-                         FROM
-                              ( " + unlinkdata + @"  )
+                    unlinkdata = "SELECT  " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID  IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name)";
+
+                    executeqry = @"SELECT * FROM 
+                                      ( " + unlinkdata + @"  )
                             
-                            WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
-                        )
-                        WHERE r__ >= (((" + pageNo + @"-1) * " + pageLength + @") + 1)";
+                           x WHERE row_num BETWEEN (((" + pageNo + @"-1) * " + pageLength + @") + 1)            
+                        
+                        AND  ((" + pageNo + @" * " + pageLength + @") + 1 )";
                 }
 
                 executeqry = MRole.GetDefault(_ctx).AddAccessSQL(executeqry, TableName, true, false);
