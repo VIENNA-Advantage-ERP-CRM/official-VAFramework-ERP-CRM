@@ -90,11 +90,19 @@ namespace VIS.Models
 
             if (Env.IsModuleInstalled("VADMS_"))
             {
+                // Check if table id and record id in current activity has any document binded in VADMS_WindowDocLink table, or current table is VADMS_MetaData
                 dmsCheck = @",
 (SELECT 
 Name || VADMS_FileType || '_' || Value 
 FROM VADMS_Document 
-WHERE VADMS_Document_ID = (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VADMS_MetaData_ID = a.Record_ID)) AS DocumentNameValue
+WHERE VADMS_Document_ID = 
+(SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VADMS_MetaData_ID = a.Record_ID AND 
+(
+(SELECT VADMS_WindowDocLink_ID FROM VADMS_WindowDocLink WHERE AD_Table_ID = a.AD_Table_ID AND Record_ID = a.Record_ID) > 0 
+OR
+(SELECT TableName FROM AD_Table WHERE AD_Table_ID = a.AD_Table_ID) = 'VADMS_MetaData'
+))
+) AS DocumentNameValue
 ";
             }
 
