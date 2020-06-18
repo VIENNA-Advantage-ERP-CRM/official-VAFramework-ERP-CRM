@@ -208,9 +208,9 @@
             //$self.lblStatusInfo.getControl().text(VIS.Msg.getMsg("InvGenerateSel", false, false));
             $self.lblStatusInfo.getControl().text(VIS.Msg.getMsg("VIS_OrderGenShip", false, false));
         }
-        debugger;
+        //debugger;
         function fillPicks() {
-            debugger;
+            //debugger;
             //var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2223, VIS.DisplayType.TableDir);
 
             // JID_0782: InActive warehouse should not be available to select at Generate Shipment Manual form
@@ -239,7 +239,18 @@
                 $self.arrListColumns.push({ field: "C_DocType_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_DocType_ID"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "DocumentNo", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DocumentNo"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "C_BPartner_ID", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '16%', min: 150, hidden: false });
-                $self.arrListColumns.push({ field: "DateOrdered", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DateOrdered"), sortable: true, size: '16%', min: 150, hidden: false, render: 'date' });
+                $self.arrListColumns.push({
+                    field: "DateOrdered", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DateOrdered"), sortable: true, size: '16%', min: 150, hidden: false, render: function (record, index, col_index) {
+                        var val;
+                        if (record.changes == undefined || record.changes.DateOrdered == undefined) {
+                            val = record["DateOrdered"];
+                        }
+                        else {
+                            val = record.changes.DateOrdered;
+                        }
+                        return new Date(val).toLocaleDateString();
+                    }
+                });
                 //$self.arrListColumns.push({ field: "TotalLines", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "TotalLines"), sortable: true, size: '20%', min: 150, hidden: false });
 
                 $self.arrListColumns.push({ field: "C_Order_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_UOM_ID"), sortable: true, size: '150px', hidden: true });
