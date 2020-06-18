@@ -241,12 +241,12 @@ namespace ViennaAdvantage.Process
                                                         if (rates.data[j].currency_code == myCurrency.ToUpper())
                                                         {
                                                             int unit = Util.GetValueOfInt(rates.data[j].unit);
-                                                            exchangeRate = rates.data[j].rate["middle_rate"];
-                                                            if (unit > 1)
+                                                            exchangeRate = Util.GetValueOfDecimal(rates.data[j].rate["middle_rate"]);
+                                                            if (exchangeRate > 0 && unit > 1)
                                                             {
                                                                 exchangeRate /= unit;
-                                                            }
-                                                            break;
+                                                                break;
+                                                            }                                                            
                                                         }
                                                     }
                                                 }
