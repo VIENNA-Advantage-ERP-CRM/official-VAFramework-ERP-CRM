@@ -240,18 +240,61 @@
             catch(err)
             {
             }
-            if (arrListColumns.length == 0) {                
+            if (arrListColumns.length == 0) {
+                //debugger;
                 arrListColumns.push({ field: "SELECT", caption: VIS.Msg.getMsg("SELECT"), sortable: true, size: '100px',hidden:true });
                 arrListColumns.push({ field: "C_INVOICE_ID", caption: VIS.Msg.getMsg("Invoice"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "DUEDATE", caption: VIS.Msg.getMsg("DueDate"), sortable: true, size: '100px' });
+                arrListColumns.push({ field: "DUEDATE", caption: VIS.Msg.getMsg("DueDate"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val;
+                        if (record.changes == undefined || record.changes.DUEDATE == undefined) {
+                            val = record["DUEDATE"];
+                        }
+                        else {
+                            val = record.changes.DUEDATE;
+                        }
+                        return new Date(val).toLocaleDateString();
+                    }
+                });
                 arrListColumns.push({ field: "BUSINESSPARTNER", caption: VIS.Msg.getMsg("BusinessPartner"), sortable: true, size: '100px' });
                 arrListColumns.push({ field: "DOCUMENTNO", caption: VIS.Msg.getMsg("Document_No"), sortable: true, size: '100px' });
                 arrListColumns.push({ field: "CURRENCY", caption: VIS.Msg.getMsg("Currency"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "GRANDTOTAL", caption: VIS.Msg.getMsg("GrandTotal"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "DISCOUNTAMOUNT", caption: VIS.Msg.getMsg("DiscountAmt"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "DISCOUNTDATE", caption: VIS.Msg.getMsg("DiscountDate"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "AMOUNTDUE", caption: VIS.Msg.getMsg("AmountDue"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "PAYMENTAMOUNT", caption: VIS.Msg.getMsg("PaymentAmount"), sortable: true, size: '100px' });
+                arrListColumns.push({ field: "GRANDTOTAL", caption: VIS.Msg.getMsg("GrandTotal"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["GRANDTOTAL"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
+                arrListColumns.push({ field: "DISCOUNTAMOUNT", caption: VIS.Msg.getMsg("DiscountAmt"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["DISCOUNTAMOUNT"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
+                arrListColumns.push({ field: "DISCOUNTDATE", caption: VIS.Msg.getMsg("DiscountDate"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val;
+                        if (record.changes == undefined || record.changes.DISCOUNTDATE == undefined) {
+                            val = record["DISCOUNTDATE"];
+                        }
+                        else {
+                            val = record.changes.DISCOUNTDATE;
+                        }
+                        return new Date(val).toLocaleDateString();
+                    }
+                });
+                arrListColumns.push({ field: "AMOUNTDUE", caption: VIS.Msg.getMsg("AmountDue"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["AMOUNTDUE"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
+                arrListColumns.push({ field: "PAYMENTAMOUNT", caption: VIS.Msg.getMsg("PaymentAmount"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["PAYMENTAMOUNT"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
             }
           
             dGrid=$divGridPSelect.w2grid({
