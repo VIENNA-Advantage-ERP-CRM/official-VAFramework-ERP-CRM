@@ -533,8 +533,16 @@ namespace VAdvantage.Model
                         // set Backup Withholding amount and withholding Amount
                         if (payment != null && payment.GetC_Payment_ID() != 0 && line.Get_ColumnIndex("WithholdingAmt") > 0)
                         {
-                            paySch.SetWithholdingAmt(Decimal.Round(Decimal.Multiply(line.GetWithholdingAmt(), currencymultiplyRate), currency.GetStdPrecision()));
-                            paySch.SetBackupWithholdingAmount(Decimal.Round(Decimal.Multiply(line.GetBackupWithholdingAmount(), currencymultiplyRate), currency.GetStdPrecision()));
+                            if (doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) || doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE))
+                            {
+                                paySch.SetWithholdingAmt(Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetWithholdingAmt()), currencymultiplyRate), currency.GetStdPrecision()));
+                                paySch.SetBackupWithholdingAmount(Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetBackupWithholdingAmount()), currencymultiplyRate), currency.GetStdPrecision()));
+                            }
+                            else
+                            {
+                                paySch.SetWithholdingAmt(Decimal.Round(Decimal.Multiply(line.GetWithholdingAmt(), currencymultiplyRate), currency.GetStdPrecision()));
+                                paySch.SetBackupWithholdingAmount(Decimal.Round(Decimal.Multiply(line.GetBackupWithholdingAmount(), currencymultiplyRate), currency.GetStdPrecision()));
+                            }
                         }
                         #endregion
 
@@ -567,8 +575,11 @@ namespace VAdvantage.Model
 
                         // when paid amount against invoice = due amount on schedule then make invoice schedule as Paid 
                         //or wjem last record and due amount = variance amount + paid invoice amount
-                        if ((paySch.GetVA009_PaidAmntInvce() >= paySch.GetDueAmt()) ||
-                            (countUnPaidSchedule == 0 && line.GetOverUnderAmt() == 0 && Decimal.Add(paySch.GetVA009_PaidAmntInvce(), paySch.GetVA009_Variance()) == paySch.GetDueAmt()))
+                        if (((paySch.GetVA009_PaidAmntInvce() +
+                            (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (paySch.GetWithholdingAmt() + paySch.GetBackupWithholdingAmount()) : 0)) >= paySch.GetDueAmt()) ||
+                            (countUnPaidSchedule == 0 && line.GetOverUnderAmt() == 0 &&
+                            Decimal.Add(paySch.GetVA009_PaidAmntInvce(), paySch.GetVA009_Variance()) +
+                            (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (paySch.GetWithholdingAmt() + paySch.GetBackupWithholdingAmount()) : 0) == paySch.GetDueAmt()))
                         {
                             paySch.SetVA009_IsPaid(true);
                         }
