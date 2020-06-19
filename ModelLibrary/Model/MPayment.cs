@@ -2615,8 +2615,6 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Prepare);
             return true;
         }
-
-        string _msg = "";
         /**
          *	Prepare Document
          * 	@return new status (In Progress or Invalid) 
@@ -2627,13 +2625,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-            //if (_processMsg == null)
-            //{
-            //    MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-            //    _processMsg = order.GetProcessMsg();
-
-            //}
-
+   
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
@@ -2649,7 +2641,6 @@ namespace VAdvantage.Model
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
             }
-
 
             //	Unsuccessful Online Payment
             if (IsOnline() && !IsApproved())
@@ -2683,7 +2674,6 @@ namespace VAdvantage.Model
 
                     order.Save(Get_Trx());
 
-
                     /******************Commented By Lakhwinder
                      * //// Payment was Not Completed Against Prepay Order//////////*
                     //	Set Invoice
@@ -2703,8 +2693,6 @@ namespace VAdvantage.Model
                 //	WaitingPayment
             }
           
-           
-
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
             {
@@ -2840,8 +2828,6 @@ namespace VAdvantage.Model
          */
         public String  CompleteIt()
         {
-
-            
             //	Re-Check
             if (!_justPrepared)
             {
@@ -2849,9 +2835,6 @@ namespace VAdvantage.Model
                 if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                     return status;
             }
-
-          
-
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
 
@@ -3434,16 +3417,17 @@ namespace VAdvantage.Model
                 }
             }
 
-
             if (!UpdateUnMatchedBalanceForAccount())
             {
                 return DocActionVariables.STATUS_INVALID;
             }
-
-            
-            _processMsg = GetCtx().GetContext("prepayOrder");
-            GetCtx().SetContext("prepayOrder", "");
-
+           
+            //JID_0880 Show message on completion of Payment
+            if (GetCtx().GetContext("prepayOrder") != null)
+            {
+                _processMsg += ","+ GetCtx().GetContext("prepayOrder");
+                GetCtx().SetContext("prepayOrder", "");
+            }
 
             return DocActionVariables.STATUS_COMPLETED;
         }

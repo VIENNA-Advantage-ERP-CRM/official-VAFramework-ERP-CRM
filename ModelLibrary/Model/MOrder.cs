@@ -3683,9 +3683,6 @@ namespace VAdvantage.Model
                             return DocActionVariables.STATUS_INVALID;
                         Info.Append("Successfully created:@M_InOut_ID@ & doc no.: ").Append(shipment.GetDocumentNo());
                         _processMsg= Info.ToString();
-                       
-
-
                         if (shipment.GetDocStatus() == "DR")
                         {
                             if (String.IsNullOrEmpty(_processMsg))
@@ -3721,11 +3718,8 @@ namespace VAdvantage.Model
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
-                       
                         _processMsg += Info.ToString();
                        
-
-
                         String msg = invoice.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
                             Info.Append(" (").Append(msg).Append(")");
@@ -5517,8 +5511,6 @@ namespace VAdvantage.Model
             return _processMsg;
         }
 
-        
-
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
@@ -5623,8 +5615,6 @@ namespace VAdvantage.Model
         {
             return null;
         }
-
-
 
         public void SetProcessMsg(string processMsg)
         {
