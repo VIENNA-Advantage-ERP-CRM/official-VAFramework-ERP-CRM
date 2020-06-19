@@ -344,6 +344,20 @@ public void SetM_CostAllocation_ID (int M_CostAllocation_ID){if (M_CostAllocatio
 Set_Value ("M_CostAllocation_ID", M_CostAllocation_ID);}/** Get Cost Allocation.
 @return Cost Allocation */
 public int GetM_CostAllocation_ID() {Object ii = Get_Value("M_CostAllocation_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-}
+
+        /** Set Backup Withholding Amount.
+@param BackupWithholdingAmount Backup Withholding Amount */
+        public void SetBackupWithholdingAmount(Decimal? BackupWithholdingAmount) { Set_Value("BackupWithholdingAmount", (Decimal?)BackupWithholdingAmount); }/** Get Backup Withholding Amount.
+@return Backup Withholding Amount */
+        public Decimal GetBackupWithholdingAmount() { Object bd = Get_Value("BackupWithholdingAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** Set Withholding Amount.
+@param WithholdingAmt This field represents the calculated withholding amount */
+        public void SetWithholdingAmt(Decimal? WithholdingAmt) { Set_Value("WithholdingAmt", (Decimal?)WithholdingAmt); }/** Get Withholding Amount.
+@return This field represents the calculated withholding amount */
+        public Decimal GetWithholdingAmt() { Object bd = Get_Value("WithholdingAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+
+    }
 
 }

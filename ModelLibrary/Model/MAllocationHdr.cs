@@ -530,7 +530,12 @@ namespace VAdvantage.Model
                             //paySch.SetVA009_Variance(Decimal.Negate(paySch.GetVA009_Variance()));
                         }
 
-
+                        // set Backup Withholding amount and withholding Amount
+                        if (payment != null && payment.GetC_Payment_ID() != 0 && line.Get_ColumnIndex("WithholdingAmt") > 0)
+                        {
+                            paySch.SetWithholdingAmt(Decimal.Multiply(line.GetWithholdingAmt(), currencymultiplyRate));
+                            paySch.SetBackupWithholdingAmount(Decimal.Multiply(line.GetBackupWithholdingAmount(), currencymultiplyRate));
+                        }
                         #endregion
 
                         #region set Base Paid Amount
@@ -659,6 +664,11 @@ namespace VAdvantage.Model
                             newPaySch.SetVA009_ExecutionStatus("A");
                             newPaySch.SetIsValid(true);
                             newPaySch.SetVA009_IsPaid(false);
+                            if (newPaySch.Get_ColumnIndex("WithholdingAmt") > 0)
+                            {
+                                newPaySch.SetBackupWithholdingAmount(0);
+                                newPaySch.SetWithholdingAmt(0);
+                            }
                             if (decimal.Subtract(line.GetOverUnderAmt(), paySch.GetVA009_Variance()) > 0)
                             {
                                 //during AR Invoice / AP Credit Memo
@@ -673,9 +683,9 @@ namespace VAdvantage.Model
                             //checking amount is match or not - if not then balance with the same du amount
                             decimal matchedAmount = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(NVL(DUEAMT, 0)) FROM C_InvoicePaySchedule WHERE ISACTIVE = 'Y' AND C_INVOICE_ID = " + invoice.GetC_Invoice_ID(), null, Get_Trx()));
                             matchedAmount += newPaySch.GetDueAmt();
-                            if (matchedAmount != (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() :  invoice.GetGrandTotal()))
+                            if (matchedAmount != (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()))
                             {
-                                newPaySch.SetDueAmt(Decimal.Add(newPaySch.GetDueAmt(), 
+                                newPaySch.SetDueAmt(Decimal.Add(newPaySch.GetDueAmt(),
                                     (Decimal.Subtract((invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()), matchedAmount))));
                             }
 
@@ -1148,11 +1158,17 @@ namespace VAdvantage.Model
             {
                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "API")
                 {
-                    varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt() + line.GetOverUnderAmt()), currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
+                    varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() +
+                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
+                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        , currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
                 }
                 else
                 {
-                    varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt() + line.GetOverUnderAmt()), currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
+                    varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() +
+                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
+                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        , currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
                 }
                 if (_isDuplicate)
                 {
@@ -1164,7 +1180,10 @@ namespace VAdvantage.Model
                 // set varaince when there is no other schedule
                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "API")
                 {
-                    if ((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt() + line.GetOverUnderAmt()), currencymultiplyRate)) < paySch.GetDueAmt())
+                    if ((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() +
+                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
+                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        , currencymultiplyRate)) < paySch.GetDueAmt())
                     {
                         paySch.SetVA009_Variance(Decimal.Negate(varianceAmount));
                     }
@@ -1175,7 +1194,10 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    if (Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt() + line.GetOverUnderAmt()), currencymultiplyRate) < paySch.GetDueAmt())
+                    if (Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() +
+                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
+                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        , currencymultiplyRate) < paySch.GetDueAmt())
                     {
                         paySch.SetVA009_Variance(Decimal.Negate(varianceAmount));
                     }
@@ -1195,12 +1217,15 @@ namespace VAdvantage.Model
                     if (_isDuplicate)
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Add(Decimal.Multiply
-                            (Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), PaidAmt), currency.GetStdPrecision()));
+                            (Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() +
+                            line.GetDiscountAmt())
+                            , currencymultiplyRate), PaidAmt), currency.GetStdPrecision()));
                     }
                     else
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Multiply
-                            (Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), currency.GetStdPrecision()));
+                            (Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                            , currencymultiplyRate), currency.GetStdPrecision()));
                     }
                 }
                 else
@@ -1210,12 +1235,14 @@ namespace VAdvantage.Model
                     if (_isDuplicate)
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Add(
-                           Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), PaidAmt), currency.GetStdPrecision()));
+                           Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                           , currencymultiplyRate), PaidAmt), currency.GetStdPrecision()));
                     }
                     else
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(
-                            Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), currency.GetStdPrecision()));
+                            Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                            , currencymultiplyRate), currency.GetStdPrecision()));
                     }
 
                     // varaince must be 0 when we have other schedule to be paid
@@ -1230,12 +1257,14 @@ namespace VAdvantage.Model
                     if (_isDuplicate)
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Add(Decimal.Subtract(
-                               Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), varianceAmount), PaidAmt), currency.GetStdPrecision()));
+                               Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                               , currencymultiplyRate), varianceAmount), PaidAmt), currency.GetStdPrecision()));
                     }
                     else
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Subtract(
-                               Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), varianceAmount), currency.GetStdPrecision()));
+                               Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                               , currencymultiplyRate), varianceAmount), currency.GetStdPrecision()));
                     }
                 }
                 else
@@ -1243,14 +1272,15 @@ namespace VAdvantage.Model
                     if (_isDuplicate)
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Add(Decimal.Subtract(
-                                Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate)
+                                Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                                , currencymultiplyRate)
                                     , varianceAmount), PaidAmt), currency.GetStdPrecision()));
                     }
                     else
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Subtract(
-                                Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate)
-                                    , varianceAmount), currency.GetStdPrecision()));
+                                Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                                , currencymultiplyRate), varianceAmount), currency.GetStdPrecision()));
                     }
                     // varaince must be 0 when we have other schedule to be paid
                     paySch.SetVA009_Variance(0);
@@ -1265,12 +1295,14 @@ namespace VAdvantage.Model
                     if (_isDuplicate)
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Add(Decimal.Add(ShiftVarianceOnOther,
-                            Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), currency.GetStdPrecision())), PaidAmt));
+                            Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                            , currencymultiplyRate), currency.GetStdPrecision())), PaidAmt));
                     }
                     else
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Add(ShiftVarianceOnOther,
-                            Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), currency.GetStdPrecision())));
+                            Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                            , currencymultiplyRate), currency.GetStdPrecision())));
                     }
                 }
                 else
@@ -1278,17 +1310,24 @@ namespace VAdvantage.Model
                     if (_isDuplicate)
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Add(Decimal.Add(ShiftVarianceOnOther,
-                            Decimal.Round(Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), currency.GetStdPrecision())), PaidAmt));
+                            Decimal.Round(Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                            , currencymultiplyRate), currency.GetStdPrecision())), PaidAmt));
                     }
                     else
                     {
                         paySch.SetVA009_PaidAmntInvce(Decimal.Add(ShiftVarianceOnOther,
-                         Decimal.Round(Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt()), currencymultiplyRate), currency.GetStdPrecision())));
+                         Decimal.Round(Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() + line.GetDiscountAmt())
+                         , currencymultiplyRate), currency.GetStdPrecision())));
                     }
                 }
                 // variance = Paid Invoice amount - Due Amount 
                 //paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetVA009_PaidAmntInvce(), paySch.GetDueAmt()));
-                paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetDueAmt(), paySch.GetVA009_PaidAmntInvce()));
+                paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetDueAmt(), Decimal.Add(paySch.GetVA009_PaidAmntInvce(),
+                    (line.Get_ColumnIndex("WithholdingAmt") > 0 ?
+                    ((doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) ||
+                    doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE)) ?
+                    Decimal.Negate(line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) :
+                    (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount())) : 0))));
             }
             if (C_InvoicePaySch_ID != paySch.GetC_InvoicePaySchedule_ID())
             {
