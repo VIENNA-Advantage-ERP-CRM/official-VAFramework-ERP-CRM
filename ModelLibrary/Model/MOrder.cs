@@ -5037,6 +5037,9 @@ namespace VAdvantage.Model
                     line.SetQtyLostSales(old);
                     line.SetQty(Env.ZERO);
                     line.SetLineNetAmt(Env.ZERO);
+
+                    // Remove Reference of Requisition from PO line after Void.
+                    line.Set_Value("M_RequisitionLine_ID", 0);
                     line.Save(Get_TrxName());
                 }
             }
