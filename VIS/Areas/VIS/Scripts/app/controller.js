@@ -1701,9 +1701,12 @@
                     success = false;
                 }
                 else {
+                    var value = "";
+                    if (this.vo.tabNo > 0)
+                        var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc, true);
+                    else
+                        var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc);
 
-                    var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc, true);
-                    //	Same link value?
                     if (refresh) {
                         refresh = this.linkValue.equals(value);
                         queryDetailAll = !refresh;
@@ -1858,7 +1861,7 @@
                 var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc, true);
 
                 lc = this.getTableName() + "." + lc;
-                
+
                 //	Check validity
                 if (value.length == 0) {
                     //log.Warning("No value for link column " + lc);
@@ -4074,7 +4077,7 @@
         var AD_Org_ID = co[1];
         var createError = true;
         if (!VIS.MRole.canUpdate(AD_Client_ID, AD_Org_ID, this.AD_Table_ID, 0, createError)) {
-           // this.fireDataStatusEEvent("cant-update","",true);//CLogger.retrieveError());
+            // this.fireDataStatusEEvent("cant-update","",true);//CLogger.retrieveError());
             this.fireDataStatusEEvent("AccessTableNoUpdate", "", true);//CLogger.retrieveError());
             this.dataIgnore();
             return this.SAVE_ACCESS;
