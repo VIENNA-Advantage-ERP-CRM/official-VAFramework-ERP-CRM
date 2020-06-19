@@ -4526,7 +4526,7 @@ namespace VAdvantage.Model
 
                 if (Get_ColumnIndex("BackupWithholding_ID") > 0 && (GetC_Withholding_ID() > 0 || GetBackupWithholding_ID() > 0) && ds != null)
                 {
-                    dr = ds.Tables[0].Select("C_PaymentAllocate_ID = ", Util.GetValueOfString(pa.GetC_PaymentAllocate_ID()));
+                    dr = ds.Tables[0].Select("C_PAYMENTALLOCATE_ID = " + Util.GetValueOfString(pa.GetC_PaymentAllocate_ID()));
                 }
 
                 MAllocationLine aLine = null;
