@@ -2616,7 +2616,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-
+        string _msg = "";
         /**
          *	Prepare Document
          * 	@return new status (In Progress or Invalid) 
@@ -2627,6 +2627,12 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
+            //if (_processMsg == null)
+            //{
+            //    MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+            //    _processMsg = order.GetProcessMsg();
+
+            //}
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
@@ -2670,7 +2676,11 @@ namespace VAdvantage.Model
                         // if order not completed - then payment also not completed (Prepay Order)
                         throw new Exception("Failed when processing document - " + order.GetProcessMsg());
                     }
-                    _processMsg = order.GetProcessMsg();
+
+                    //JID_0880 Show message on completion of Payment
+                    _processMsg =  order.GetProcessMsg();
+                    GetCtx().SetContext("prepayOrder", _processMsg);
+
                     order.Save(Get_Trx());
 
 
@@ -2689,8 +2699,11 @@ namespace VAdvantage.Model
                     }
                     */
                     ////////////////////////
-                }	//	WaitingPayment
+                }
+                //	WaitingPayment
             }
+          
+           
 
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
@@ -2825,8 +2838,10 @@ namespace VAdvantage.Model
          * 	Complete Document
          * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
          */
-        public String CompleteIt()
+        public String  CompleteIt()
         {
+
+            
             //	Re-Check
             if (!_justPrepared)
             {
@@ -2834,6 +2849,8 @@ namespace VAdvantage.Model
                 if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                     return status;
             }
+
+          
 
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
@@ -3422,6 +3439,11 @@ namespace VAdvantage.Model
             {
                 return DocActionVariables.STATUS_INVALID;
             }
+
+            
+            _processMsg = GetCtx().GetContext("prepayOrder");
+            GetCtx().SetContext("prepayOrder", "");
+
 
             return DocActionVariables.STATUS_COMPLETED;
         }
