@@ -90,7 +90,7 @@
                              + "</div></div> </div>" // div bankAccount ends here 
                              + " <div class='vis-paymentselect-field'>"  // div currentBalance starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrentBal_" + $self.windowNo + "' MaxLength='50'>"
+                             + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrentBal_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
                              + " <label>" + VIS.Msg.getMsg("CurrentBalance") + " </label>"
                              + "</div></div>  </div>" // div currentBalance ends here 
                              + " <div class='vis-paymentselect-field'>"  // div businessPartner starts here
@@ -100,7 +100,7 @@
                              + "</div></div>  </div>" // div businessPartner ends here                             
                              + " <div class='vis-paymentselect-field'>"  // div paymentDate starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input  id='VIS_cmbPayDate_" + $self.windowNo + "'type='date'>"
+                             + " <input  id='VIS_cmbPayDate_" + $self.windowNo + "'type='date' data-placeholder='' placeholder=' '>"
                              + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "PayDate") + " </label>"
                              + "</div></div>  </div>" // div paymentDate ends here 
                              + " <div class='vis-paymentselect-field'>"  // div paymentMethod starts here
@@ -110,11 +110,11 @@
                              + "</div></div>  </div>" // div paymentMethod ends here 
                              + " <div class='vis-paymentselect-field'>"  // div paymentAmount starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                + " <input type='number' id='VIS_txtPaymentAmount_" + $self.windowNo + "' disabled MaxLength='50'>"
+                + " <input type='number' id='VIS_txtPaymentAmount_" + $self.windowNo + "' disabled MaxLength='50' data-placeholder='' placeholder=' '>"
                 + " <label>" + VIS.Msg.getMsg("PaymentAmount") + " </label>"
                              + "</div></div>  </div>" // div paymentAmount ends here 
                              + " <div class='vis-paymentselect-field'>"  // div onlyDueInvoice starts here
-                             + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "'>"
+                + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "' data-placeholder='' placeholder=' '>"
                              + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("OnlyDue") + " </label>"
                              + "  </div>"  // div onlyDueInvoice starts here
                              + " <div class='vis-paymentselect-field'>"  // div lblSHowDetail starts here                          

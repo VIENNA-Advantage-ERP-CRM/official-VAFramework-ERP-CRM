@@ -2792,10 +2792,11 @@ findImg {
 .vis-cardviewCondition{
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
-.vis-cardviewmainsecondchildinner{
+.vis-cardviewmainsecondchildinner {
     height: 171px;
     overflow: auto;
     float: left;
+    width: 100%;
 }
 .vis-cardviewCondition {
     width: calc(100% - 140px);
@@ -4664,6 +4665,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 .vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), .vis-app-aform-root select {
     min-height: 30px;
+        padding: 5px 10px;
 }
 .vis-app-aform-root input:focus, 
 .vis-app-aform-root select:focus{

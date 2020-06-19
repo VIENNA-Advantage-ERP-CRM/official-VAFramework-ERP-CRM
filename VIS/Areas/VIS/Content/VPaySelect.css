@@ -58,11 +58,11 @@
 .vis-paymentselect-field input:not([type="submit"]):not([type="checkbox"]), 
 .vis-paymentPrint-field select, 
 .vis-paymentPrint-field input:not([type="submit"]) {
-    width: 100%;
-    float: left;
+    /*width: 100%;
+    float: left;*/
     /* color: rgba(var(--v-c-on-secondary), 1); */
     /*height: 30px;*/
-    flex: 1;
+    /*flex: 1;*/
     /*background-color: var(--white);*/
     /* outline: none; */
 }
@@ -158,6 +158,9 @@
 }
 .vis-leftsidebarouterwrap .vis-paymentselect-field:first-child {
     margin-top: 6px;
+}
+.vis-paymentPrint-field .vis-input-wrap input + label {
+    left: 10px;
 }
 
 @media (max-width: 1024px)

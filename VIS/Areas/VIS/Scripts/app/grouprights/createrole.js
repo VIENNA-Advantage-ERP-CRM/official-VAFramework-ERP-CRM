@@ -22,15 +22,15 @@
 
 
             var script = '<div class="vis-group-assinRole-content">' +
-        	'<div class="vis-group-assinRole-data">' +
-            	'<label>' + VIS.Msg.getMsg("Role") + '</label><input tabindex="1" maxlength="60" class="vis-group-role-text vis-group-mandatory" type="text">' +
-            '</div>' +
-            '<div class="vis-group-assinRole-data">' +
-            	'<label>' + VIS.Msg.getMsg("VIS_UserLevel") + '</label>' +
+        	'<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<input tabindex="1" maxlength="60" data-placeholder="" placeholder=" " class="vis-group-role-text vis-ev-col-mandatory" type="text"><label>' + VIS.Msg.getMsg("Role") + '</label>' +
+            '</div></div></div>' +
+            '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
                 '<select  tabindex="2"  class="vis-group-role-select" >' +
 
                 '</select>' +
-            '</div>' +
+                '<label>' + VIS.Msg.getMsg("VIS_UserLevel") + '</label>' +
+            '</div></div></div>' +
             '<div class="vis-group-assinRole-data">' +
                 '<a style="float:left"  tabindex="3"  class="vis-group-btn vis-group-orgAccess vis-group-pointer vis-group-grayBtn">' + VIS.Msg.getMsg("VIS_OrgAccess") + '</a>' +
                 '<a  tabindex="4"  class="vis-group-btn vis-group-Save vis-group-pointer vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg("Save") + '</a>' +

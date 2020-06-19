@@ -228,9 +228,7 @@
                     var td = $("<td class='vis-gc-vpanel-table-td1'>");
                     var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
                     var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
-                    var Leftformfieldbtnwrap = $('<div class="input-group-append">');
-
-                    
+                    var Leftformfieldbtnwrap = $('<div class="input-group-append">');                    
 
                     tr = $("<tr>");
                     tableSArea.append(tr);
@@ -333,6 +331,10 @@
                     }
 
                     var tdctrl = $("<td>");
+                    
+
+                    
+
                     //tr.append(tdctrl);
                     var count = ctrl.getBtnCount();
                     if (count == 2) {
@@ -392,16 +394,22 @@
 
                     if (schema[item].IsRange) {
                         srchCtrl.IsRange = true;
-                        tr = $("<tr>");
-                        tableSArea.append(tr);
+                        //tr = $("<tr>");
+                        var Leftformfieldwrpto = $('<div class="input-group vis-input-wrap">');
+                        var Leftformfieldctrlwrpto = $('<div class="vis-control-wrap">');
+                        var Leftformfieldbtnwrapto = $('<div class="input-group-append">');
+                        //tableSArea.append(tr);
 
-                        tr.append((new VIS.Controls.VLabel(VIS.Msg.getMsg("To"), schema[item].ColumnName)).getControl());
+                        
                         tr = $("<tr>");
                         tableSArea.append(tr);
 
                         ctrl = getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name);
                         srchCtrl.CtrlTo = ctrl;
                         var tdctrlTo = $("<td>");
+                        tr.append(tdctrlTo);
+                        tdctrlTo.append(Leftformfieldwrpto);
+                        Leftformfieldwrpto.append(Leftformfieldctrlwrpto);
                         var count = ctrl.getBtnCount();
                         if (count == 2) {
                             //var div = $("<div class='d-flex vis-info-ctrlwrap'>");
@@ -410,15 +418,15 @@
                                 ctrl.getControl();
                             }
                             
-                            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                            Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
                                 var ctrlBtn = ctrl.getBtn(0);
                                 if (ctrlBtn != null) {
-                                    Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                                    Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
                                     ctrl.getControl().attr('data-hasbtn', ' ');
                                 }
                                 ctrlBtn = ctrl.getBtn(1);
                                 if (ctrlBtn != null) {
-                                    Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                                    Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
                                     ctrl.getControl().attr('data-hasbtn', ' ');
                                 }
                                 count = -1;
@@ -426,7 +434,7 @@
                             //}
                             //td.append(div);
                             //Leftformfieldwrp.append(Leftformfieldctrlwrp);
-                            Leftformfieldwrp.append(Leftformfieldbtnwrap);
+                            Leftformfieldwrpto.append(Leftformfieldbtnwrapto);
 
                         }
                         else {
@@ -440,9 +448,10 @@
                             else {
                                 ctrl.getControl();
                             }
-                            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' ')); 
+                            Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' ')); 
 
                         }
+                        Leftformfieldctrlwrpto.append((new VIS.Controls.VLabel(VIS.Msg.getMsg("To"), schema[item].ColumnName)).getControl());
 
 
                         //tr.append(tdctrlTo);
@@ -503,41 +512,7 @@
                 height: 487,
                 resizable: false,
                 title: info.WindowName,
-                modal: true
-
-                //,
-                //buttons: [
-                //     {
-                //         text: refreshtxt,
-                //         click: function () {
-
-                //             bsyDiv[0].style.visibility = 'visible';
-                //             displayData(true);
-
-                //         },
-                //         style: "float:left;margin:0px;margin-right:5px;margin-bottom:-5px"
-                //         //class: "VIS_Pref_pass-btn"
-                //     },
-                //     {
-                //         text: Oktxt,
-                //         click: function () {
-                //             btnOKClick();
-                //         },
-                //         style: "margin:0px;margin-right:5px;margin-bottom:-5px"
-                //         //class: "VIS_Pref_pass-btn"
-                //     },
-                //     {
-                //         text: canceltxt,
-                //         click: function () {
-                //             disposeComponent();
-                //             inforoot.dialog("close");
-                //             inforoot = null;
-                //         },
-                //         style: "margin:0px;margin-right:5px;margin-bottom:-5px"
-                //         //class: "VIS_Pref_pass-btn"
-                //     }
-                //]
-                ,
+                modal: true,
                 closeText: VIS.Msg.getMsg("close"),
                 close: onClosing
             });

@@ -237,7 +237,7 @@ input.vis-group-search-icon {
 .vis-group-users-container, .vis-group-role-container {
     overflow-y: auto;
     overflow-x: hidden;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .vis-group-users-container {
@@ -250,32 +250,38 @@ input.vis-group-search-icon {
 
 .vis-group-bordertop {
     width: 100%;
-    border-top: 1px solid rgba(var(--v-c-on-secondary), .25);
+    border-top: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
-
 .vis-group-user-wrap {
-    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .25);
-    padding-top: 10px;
-    padding-bottom: 10px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding: 10px 15px;
+    /* padding-bottom: 10px; */
     float: left;
     width: 100%;
     display: flex;
+    margin-bottom: 10px;
+    cursor: pointer;
+    align-items: center;
 }
-
 .vis-group-user-profile, .vis-group-user-img {
-    float: left;
+    /*float: left;*/
 }
 .vis-group-pro-width {
     /* width: calc(100% - 60px); */
     flex: 1;
+    display: flex;
 }
 .vis-group-user-text {
-    float: left;
-    padding: 0px 10px 0px;
-    width: calc(100% - 46px);
+    /* float: left; */
+    padding: 0px 10px 0px 15px;
+    /* width: calc(100% - 46px); */
+    flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .vis-group-user-text > p {
     color: rgba(var(--v-c-on-secondary), 1);
@@ -346,36 +352,31 @@ input.vis-group-search-icon {
 }
 
 .vis-group-user-wrap:hover, .vis-group-selected-op {
-    border-top: 1px solid rgba(var(--v-c-primary), 1);
-    border-bottom: 1px solid rgba(var(--v-c-primary), 1);
-    margin-top: -1px;
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
-
-    .vis-group-user-wrap:hover .vis-group-user-text > span, .vis-group-user-wrap:hover .vis-group-user-right > p, .vis-group-user-wrap:hover .vis-group-user-text > p, .vis-group-user-wrap:hover .vis-group-user-profile > label {
-        color: rgba(var(--v-c-primary), 1);
-    }
-
-    .vis-group-user-wrap:hover .vis-group-edit, .vis-group-selected-op .vis-group-edit, .vis-group-user-wrap:hover .vis-group-info {
-        /*background: url(../Images/group-edit-hover.png);*/
-        color: rgba(var(--v-c-on-secondary), 1);
-    }
-
+.vis-group-user-wrap:hover .vis-group-user-text > span, .vis-group-user-wrap:hover .vis-group-user-right > p, .vis-group-user-wrap:hover .vis-group-user-text > p, .vis-group-user-wrap:hover .vis-group-user-profile > label {
+    color: rgba(var(--v-c-primary), 1);
+}
+.vis-group-user-wrap:hover .vis-group-edit, .vis-group-selected-op .vis-group-edit, .vis-group-user-wrap:hover .vis-group-info {
+    /* background: url(../Images/group-edit-hover.png); */
+    color: rgba(var(--v-c-on-secondary), 1);
+}
     .vis-group-user-wrap:hover .vis-group-info {
         /*background: url(../Images/group-info-hover.png) center no-repeat;*/
     }
 
-    .vis-group-selected-op .vis-group-user-text > p, .vis-group-selected-op .vis-group-user-text > span, .vis-group-selected-op .vis-group-user-right > p, .vis-group-selected-op .vis-group-user-profile > label {
-        color: rgba(var(--v-c-primary), 1);
-    }
-
+.vis-group-selected-op .vis-group-user-text > p, .vis-group-selected-op .vis-group-user-text > span, .vis-group-selected-op .vis-group-user-right > p, .vis-group-selected-op .vis-group-user-profile > label {
+    color: rgba(var(--v-c-primary), 1);
+}
 .vis-group-selected-opbackground {
-    background-color: rgba(var(--v-c-secondary), .6);
+    /*background-color: rgba(var(--v-c-secondary), .6);*/
 }
-
 .vis-group-role-pad {
-    padding: 22px 0;
+    /* padding: 22px 0; */
+    min-height: 68px;
+    display: flex;
+    align-items: center;
 }
-
 .vis-group-user-profile > input[type=checkbox] {
     float: left;
     margin-right: 10px;
@@ -464,34 +465,33 @@ input.vis-group-search-icon {
     border-bottom: 2px solid #1AA0ED;*/
 }
 
-.vis-group-assinRole-data {
+/*.vis-group-assinRole-data {
     width: 100%;
     float: left;
     margin-bottom: 10px;
     position: relative;
+}*/
+.vis-group-assinRole-data .vis-input-wrap input + label {
+    /*width: 100%;*/
+    /*font-weight: normal;*/
+    /*color: rgba(var(--v-c-on-secondary), 1);*/
+    /*font-size: 14px;*/
+    /*margin-bottom: 0px;*/
+    left: 10px;
 }
-
-    .vis-group-assinRole-data > label {
-        width: 100%;
-        font-weight: normal;
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 14px;
-        margin-bottom: 0px;
-    }
-    .vis-group-assinRole-data > input[type="text"],
-    .vis-group-assinRole-data > input[type="password"],
-    .vis-group-assinRole-data > select,
-    .vis-group-form-data > input[type="text"], 
-    .vis-group-form-data > input[type="password"] {
-        border: 1px solid rgba(var(--v-c-on-secondary), .25);
-        padding: 5px;
-        width: 100%;
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 13px;
-        resize: none;
-        outline: none;
-    }
-
+.vis-group-assinRole-data > input[type="text"], 
+.vis-group-assinRole-data > input[type="password"], 
+.vis-group-assinRole-data > select, 
+.vis-group-form-data > input[type="text"], 
+.vis-group-form-data > input[type="password"] {
+    border: 1px solid rgba(var(--v-c-on-secondary), .25);
+    padding: 5px;
+    width: 100%;
+    color: rgba(var(--v-c-on-secondary), 1);
+    font-size: 13px;
+    resize: none;
+    outline: none;
+}
 .vis-group-blueBtn {
     background: rgba(var(--v-c-primary), 1);
     border-radius: 0px;
@@ -528,16 +528,6 @@ input.vis-group-search-icon {
         float: left;
         margin-right: 10px;
     }
-
-    .vis-group-assinRole-data > label {
-        width: 100%;
-        font-weight: normal;
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 14px;
-        margin-bottom: 0px;
-    }
-
-    
 
 .vis-group-mandatory {
     background-color: lightpink !important;
@@ -679,9 +669,6 @@ input.vis-group-search-icon {
     color: rgba(var(--v-c-on-primary), 1);
     font-size: 13px;
 }
-
-
-
 .vis-group-SaveMessage {
     display: compact;
     display: none;
@@ -702,6 +689,7 @@ input.vis-group-search-icon {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding-left: 10px;
 }
 .vis-group-groupss .vis-group-user-profile {
     width: calc(100% - 44px);
@@ -719,10 +707,10 @@ input.vis-group-search-icon {
 }
 .vis-group-user-right li:nth-child(2) .vis-group-user-ico,
 .vis-group-roless .vis-group-user-ico {
-    margin-right: 5px;
+    /*margin-right: 5px;*/
 }
 .vis-group-user-right li:nth-child(2) .vis-group-user-ico {
-    margin-left: 5px;
+    /*margin-left: 5px;*/
 }
 .vis-group-content-head {
     display: flex;
@@ -744,6 +732,27 @@ input.vis-group-search-icon {
     margin-left: 10px;
 }
 
+.vis-group-user-img.vis-chatimgwrap {
+    border-radius: 50%;
+}
+.vis-group-user-wrap input[type="checkbox"], 
+.vis-group-user-wrap input[type="radio"] {
+    width: 20px;
+    height: 20px;
+}
+.vis-group-user-wrap input[type="checkbox"]:checked:before {
+    width: 7px;
+    height: 12px;
+    bottom: 3px;
+    border-width: 0 3px 3px 0;
+}
+.vis-group-user-wrap input[type="radio"]:checked:before {
+    width: 8px;
+    height: 8px;
+}
+.vis-group-user-wrap input[type="radio"] {
+    margin-right: 12px;
+}
 /*******************************************/
 
 
@@ -772,62 +781,3 @@ input.vis-group-search-icon {
         /*width: 88%;*/
     }
 }
-
-/*@media (max-width: 1024px) {
-    .vis-group-left-wrap {
-        width: 40% !important;
-        text-align: center;
-        padding: 20px;
-    }
-
-       
-    .vis-group-form-wrap {
-        border-left: none;
-    }
-}
-
-@media (max-width: 999px) {
- 
-    .vis-group-form-wrap {
-        width: 90%;
-    }
-    
-    .vis-group-left-wrap {
-        width: 95%;
-        text-align: center;
-    }
-    .vis-group-form-wrap {
-        width: 100%;
-    }
-        .vis-group-left-wrap > img {
-            width: 100%;
-        }
-}*/
-
-
-
-
-/*@media (max-width: 999px){
-	.vis-group-form-wrap{
-		width: 90%;	
-	}
-	.vis-group-left-wrap{ width: 95%; text-align: center;}
-	.vis-group-left-wrap > img{
-		width: 100%;
-	}
-     .vis-group-form-wrap {
-        border-left: none;
-    }
-}*/
-/*@media (min-width:1024px){
-    .vis-group-form-wrap{
-		width: 45%;	
-	}
-	.vis-group-left-wrap{ width: 45%; text-align: center; padding: 20px;}
-	.vis-group-left-wrap > img{
-		width: 100%;
-	}
-}*/
-
-
-

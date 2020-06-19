@@ -18,6 +18,9 @@
         var $btnCreateRole = null;
         var $btnSaveRoles = null;
         var $divRoleGroup = null;
+        var $divGroupDataContainer = null;
+        var $divRoleDataContainer = null;
+        var $divRightGroupDataContainer = null;
         var $bsyDiv = null;
         var $searchRole = null;
         var $searchRoleBtn = null;
@@ -164,8 +167,10 @@
 
             /*****  end of content-headDown  *****/
             $divUserGroup = $('<div class="vis-group-users-container">');
+            $divGroupDataContainer = $('<div class="vis-group-DataContainer">');
             $divUserGroup.height($($root.parent()).height() - 95);
             $leftPanel.append($divUserGroup);
+            $divUserGroup.append($divGroupDataContainer);
 
             createUsersList();
         };
@@ -179,7 +184,7 @@
                       '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_RoleSaved") + '</h7>' +
 
                       '<div class="vis-group-top-right">' +
-                '<button class="vis-groupbtn vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew")+'" ></i></button>' +
+                '<button class="vis-groupbtn vis-group-add-btn"><i class="vis vis-new" title="' + VIS.Msg.getMsg("AddNew")+'" ></i></button>' +
                 '<button class="vis-groupbtn vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                       '</div>' +
                   '</div>' +
@@ -194,10 +199,10 @@
             /**end of content-head**/
 
             $divRoleGroup = $('<div class="vis-group-role-container">');
-            $divGroupDataContainer = $('<div class="vis-group-DataContainer">');
+            $divRoleDataContainer = $('<div class="vis-group-DataContainer">');
             
             $middlePanel.append($divRoleGroup);
-            $divRoleGroup.append($divGroupDataContainer);
+            $divRoleGroup.append($divRoleDataContainer);
 
             $divRoleGroup.height($($root.parent()).height() - 95);
             roleTemplate();
@@ -213,7 +218,7 @@
                          '<h7 class="vis-group-SaveMessage">' + VIS.Msg.getMsg("VIS_GroupSaved") + '</h7>' +
                        '<div class="vis-group-top-right">' +
                            '<div class="vis-group-top-right">' +
-                '<button class="vis-groupbtn vis-group-add-btn"><i class="vis vis-plus" title="' + VIS.Msg.getMsg("AddNew") +'"></i></button>' +
+                '<button class="vis-groupbtn vis-group-add-btn"><i class="vis vis-new" title="' + VIS.Msg.getMsg("AddNew") +'"></i></button>' +
                 '<button class="vis-groupbtn vis-group-save-btn"><i class="vis vis-save" title="' + VIS.Msg.getMsg("Save") +'"></i></button>' +
                            '</div>' +
                        '</div>' +
@@ -232,9 +237,9 @@
 
 
             $divGroupsGroup = $('<div class="vis-group-role-container">');
-            $divGroupDataContainer = $('<div class="vis-group-DataContainer">');
+            $divRightGroupDataContainer = $('<div class="vis-group-DataContainer">');
             $rightPanel.append($divGroupsGroup);
-            $divGroupsGroup.append($divGroupDataContainer);
+            $divGroupsGroup.append($divRightGroupDataContainer);
             $divGroupsGroup.height($($root.parent()).height() - 95);
             groupTemplate();
 
@@ -281,6 +286,7 @@
             var script = ' <script type="text/x-handlebars-template">' +
                  '{{#each this}}' +
             '<div class="vis-group-user-wrap"  data-UID="{{AD_UserID}}">' +
+                '<input type="radio" class="vis-GroupUserRadio">' +
              '<div class="vis-group-user-profile vis-group-pro-width">' +
                         	'<div style=" height:46px;width:46px" class="vis-group-user-img vis-chatimgwrap">' +
                             '{{#if UserImage}}' +
@@ -422,7 +428,7 @@
                 '<div class="vis-group-user-right">' +
                     '<ul>' +
                         '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="margin-right: 10px" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
-                        '<li><span class="vis-group-user-ico vis-group-info fa fa-info"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                        '<li><span class="vis-group-user-ico vis-group-info vis vis-info"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                     '</ul>                           ' +
                 '</div>' +
             '</div>' +
@@ -493,14 +499,14 @@
                 data: ({ searchText: $searchUser.val(), sortBy: sortby, pageNo: pageNo, pageSize: PAGESIZE }),
                 success: function (result) {
                     var data = JSON.parse(result);
-                    $divUserGroup.find('.vis-group-user-wrap').remove();
-                    $divUserGroup.append(usertheModTmp(data));
-                    $divUserGroup.off("click");
-                    $divUserGroup.on("click", userContaierClick);
+                    $divGroupDataContainer.find('.vis-group-user-wrap').remove();
+                    $divGroupDataContainer.append(usertheModTmp(data));
+                    $divGroupDataContainer.off("click");
+                    $divGroupDataContainer.on("click", userContaierClick);
 
                     // To Show First User sleected By Default
-                    if ($($divUserGroup.children('.vis-group-user-wrap')).length > 0) {
-                        $($divUserGroup.children('.vis-group-user-wrap')[0]).trigger('click');
+                    if ($($divGroupDataContainer.children('.vis-group-user-wrap')).length > 0) {
+                        $($divGroupDataContainer.children('.vis-group-user-wrap')[0]).trigger('click');
                     }
                     pageNo++;
 
@@ -527,7 +533,7 @@
                     success: function (result) {
                         pageNo++;
                         var data = JSON.parse(result);
-                        $divUserGroup.append(usertheModTmp(data));
+                        $divGroupDataContainer.append(usertheModTmp(data));
                         $bsyDiv[0].style.visibility = "hidden";
                     },
                     error: function () {
@@ -588,16 +594,21 @@
 
             var target = $(e.target);
 
-            $($($divUserGroup.children('.vis-group-selected-op'))[0]).removeClass('vis-group-selected-op vis-group-selected-opbackground');
+            $($($divGroupDataContainer.children('.vis-group-selected-op'))[0]).removeClass('vis-group-selected-op vis-group-selected-opbackground');
+
+            $($divGroupDataContainer).find('.vis-GroupUserRadio').prop('checked', false);
 
             if (target.hasClass('vis-group-user-wrap')) {
                 target.addClass('vis-group-selected-op vis-group-selected-opbackground');
                 userID = target.data("uid");
+                $($(target).find('.vis-GroupUserRadio')[0]).prop('checked', true);
             }
             else {
                 if ($(target.parents('.vis-group-user-wrap')).length > 0) {     // length will be 0 if user's search result single or more record and there is some blank space... on click blank space nothing should be happened.
                     $(target.parents('.vis-group-user-wrap')).addClass('vis-group-selected-op vis-group-selected-opbackground');
                     userID = $(target.parents().find('.vis-group-selected-op')).data("uid");
+                    $($($(target).parents('.vis-group-user-wrap')[0]).find('.vis-GroupUserRadio')[0]).prop('checked', true);
+
                 }
                 else {
                     return;
@@ -659,14 +670,14 @@
                 data: ({ AD_User_ID: userID, name: name }),
                 success: function (result) {
                     var data = JSON.parse(result);
-                    $divRoleGroup.find('.vis-group-user-wrap').remove();
-                    $divRoleGroup.append(roletheModTmp(data));
-                    $divRoleGroup.off("click");
-                    $divRoleGroup.on("click", roleContaierClick);
+                    $divRoleDataContainer.find('.vis-group-user-wrap').remove();
+                    $divRoleDataContainer.append(roletheModTmp(data));
+                    $divRoleDataContainer.off("click");
+                    $divRoleDataContainer.on("click", roleContaierClick);
 
                     // To Show First Role sleected By Default
-                    if ($($divRoleGroup.children('.vis-group-user-wrap')).length > 0) {
-                        $($($divRoleGroup).children('.vis-group-user-wrap')[0]).trigger('click');
+                    if ($($divRoleDataContainer.children('.vis-group-user-wrap')).length > 0) {
+                        $($($divRoleDataContainer).children('.vis-group-user-wrap')[0]).trigger('click');
                     }
 
                     roleAssigned = [];
@@ -676,8 +687,8 @@
                         roleAssigned.push({ AD_Role_ID: data[i].AD_Role_ID, IsAssignedToUser: data[i].IsAssignedToUser })
                     }
 
-                    $($divRoleGroup.find('input')).off("click");
-                    $($divRoleGroup.find('input')).on("click", roleCheckboxClick);
+                    $($divRoleDataContainer.find('input')).off("click");
+                    $($divRoleDataContainer.find('input')).on("click", roleCheckboxClick);
                     $bsyDiv[0].style.visibility = "hidden";
                 },
                 error: function () {
@@ -700,14 +711,14 @@
                 success: function (result) {
                     var data = JSON.parse(result);
 
-                    $divGroupsGroup.find('.vis-group-user-wrap').remove();
-                    $divGroupsGroup.append(grouptheModTmp(data));
-                    $divGroupsGroup.off("click");
-                    $divGroupsGroup.on("click", groupContaierClick);
+                    $divRightGroupDataContainer.find('.vis-group-user-wrap').remove();
+                    $divRightGroupDataContainer.append(grouptheModTmp(data));
+                    $divRightGroupDataContainer.off("click");
+                    $divRightGroupDataContainer.on("click", groupContaierClick);
 
                     // To Show First Group sleected By Default
-                    if ($($divGroupsGroup.children('.vis-group-user-wrap')).length > 0) {
-                        $($($divGroupsGroup).children('.vis-group-user-wrap')[0]).trigger('click');
+                    if ($($divRightGroupDataContainer.children('.vis-group-user-wrap')).length > 0) {
+                        $($($divRightGroupDataContainer).children('.vis-group-user-wrap')[0]).trigger('click');
                     }
 
                     groupAssigned = [];
@@ -721,8 +732,8 @@
                         groupAssigned.push({ AD_Group_ID: data[i].AD_Group_ID, IsAssignedToUser: data[i].IsAssignedToUser })
                     }
 
-                    $($divGroupsGroup.find('input')).off("click");
-                    $($divGroupsGroup.find('input')).on("click", groupCheckboxClick);
+                    $($divRightGroupDataContainer.find('input')).off("click");
+                    $($divRightGroupDataContainer.find('input')).on("click", groupCheckboxClick);
 
                 },
                 error: function () {
@@ -751,7 +762,7 @@
             }
 
             var target = $(e.target);
-            $($($divRoleGroup.children('.vis-group-selected-op'))[0]).removeClass('vis-group-selected-op vis-group-selected-opbackground');
+            $($($divRoleDataContainer.children('.vis-group-selected-op'))[0]).removeClass('vis-group-selected-op vis-group-selected-opbackground');
 
             if (target.hasClass('vis-group-user-wrap')) {
                 target.addClass('vis-group-selected-op vis-group-selected-opbackground');
@@ -786,7 +797,7 @@
         function groupContaierClick(e) {
             groupContainerClicked = true;
             var target = $(e.target);
-            $($($divGroupsGroup.children('.vis-group-selected-op'))[0]).removeClass('vis-group-selected-op');
+            $($($divRightGroupDataContainer.children('.vis-group-selected-op'))[0]).removeClass('vis-group-selected-op');
             if (target.hasClass('vis-group-user-wrap')) {
                 target.addClass('vis-group-selected-op');
                 groupID = target.data("uid");

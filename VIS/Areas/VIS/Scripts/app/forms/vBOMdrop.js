@@ -96,7 +96,7 @@
                              + " </div>" // div Project/Opportunity ends here                             
                              + " <div class='vis-paymentselect-field'>"  // div Quantity starts here
                              +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input type='number' id='VIS_txtQuantity_" + $self.windowNo + "' min='0' MaxLength='50'>"
+                             + " <input data-placeholder='' placeholder=' ' type='number' id='VIS_txtQuantity_" + $self.windowNo + "' min='0' MaxLength='50'>"
                              + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Qty") + "</label>"
                              +"</div></div>"
                              + " </div>" // div Quantity ends here 

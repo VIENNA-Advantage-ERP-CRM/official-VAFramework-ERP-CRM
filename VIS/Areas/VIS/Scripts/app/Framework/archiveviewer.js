@@ -230,8 +230,8 @@
             tr.append(td);
             td.append(Leftformfieldwrp);
             Leftformfieldwrp.append(Leftformfieldctrlwrp);
-            Leftformfieldctrlwrp.append(txtNameQ.getControl());
-            Leftformfieldctrlwrp.append(lblNameQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(txtNameQ.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(lblNameQ.getControl().addClass("VIS_Pref_Label_Font"));
 
             //tr = $("<tr>");
             //td = $("<td style='padding: 0px 10px 0px;'>");
@@ -247,7 +247,7 @@
             tr.append(td);
             td.append(Leftformfieldwrp);
             Leftformfieldwrp.append(Leftformfieldctrlwrp);
-            Leftformfieldctrlwrp.append(txtDescriptionQ.getControl());
+            Leftformfieldctrlwrp.append(txtDescriptionQ.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
             Leftformfieldctrlwrp.append(lblDescriptionQ.getControl().addClass("VIS_Pref_Label_Font"));
 
             //tr = $("<tr>");
@@ -264,7 +264,7 @@
             tr.append(td);
             td.append(Leftformfieldwrp);
             Leftformfieldwrp.append(Leftformfieldctrlwrp);
-            Leftformfieldctrlwrp.append(txtCommentQ.getControl());
+            Leftformfieldctrlwrp.append(txtCommentQ.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
             Leftformfieldctrlwrp.append(lblCommentQ.getControl().addClass("VIS_Pref_Label_Font"));
 
             //tr = $("<tr>");
@@ -299,7 +299,7 @@
             td.append(Leftformfieldwrp);
             Leftformfieldwrp.append(Leftformfieldctrlwrp);
             Leftformfieldctrlwrp.append(dtpCreatedFromQ);
-            Leftformfieldctrlwrp.append(lblCreatedOnQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(lblCreatedOnQ.getControl().addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;'>");

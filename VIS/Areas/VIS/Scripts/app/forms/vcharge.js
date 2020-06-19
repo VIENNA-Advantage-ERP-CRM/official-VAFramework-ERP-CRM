@@ -110,7 +110,7 @@
             tr.append(td);
             td.append(Leftformfieldwrp);
             Leftformfieldwrp.append(Leftformfieldctrlwrp);
-            Leftformfieldctrlwrp.append(txtSearchKey.getControl());
+            Leftformfieldctrlwrp.append(txtSearchKey.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
             Leftformfieldctrlwrp.append(lblSearchKey.getControl().addClass("VIS_Pref_Label_Font"));
 
             //tr = $("<tr>");
@@ -127,7 +127,7 @@
             tr.append(td);
             td.append(Leftformfieldwrp);
             Leftformfieldwrp.append(Leftformfieldctrlwrp);
-            Leftformfieldctrlwrp.append(txtName.getControl());
+            Leftformfieldctrlwrp.append(txtName.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
             Leftformfieldctrlwrp.append(lblName.getControl().addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
