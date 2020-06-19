@@ -3180,70 +3180,48 @@ namespace VAdvantage.Model
             //Credit Limit
             if (GetC_InvoicePaySchedule_ID() != 0)
             {
-                MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_Trx());
-                paySch.SetC_Payment_ID(GetC_Payment_ID());
+                // commeted - bcz of rework -- already handled in View Allocation Completion
+                //MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_Trx());
+                //paySch.SetC_Payment_ID(GetC_Payment_ID());
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
-                    MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
-                    paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
-                    if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
-                    {
-                        if (((-1 * (Get_ColumnIndex("PaymentAmount") > 0 ? GetPaymentAmount() : GetPayAmt())) + (-1 * GetDiscountAmt()) + (-1 * GetWriteOffAmt())) < paySch.GetDueAmt())
-                        {
-                            paySch.SetVA009_IsPaid(false);
-                        }
-                        else
-                        {
-                            paySch.SetVA009_IsPaid(true);
-                        }
-                    }
-                    else
-                    {
-                        if (((Get_ColumnIndex("PaymentAmount") > 0 ? GetPaymentAmount() : GetPayAmt()) + GetDiscountAmt() + GetWriteOffAmt()) < paySch.GetDueAmt())
-                        {
-                            paySch.SetVA009_IsPaid(false);
-                        }
-                        else
-                        {
-                            paySch.SetVA009_IsPaid(true);
-                        }
-                    }
-                    paySch.Save(Get_Trx());
+                    //MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
+                    //MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                    //paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
+                    //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
+                    //{
+                    //    if (((-1 * (Get_ColumnIndex("PaymentAmount") > 0 ? GetPaymentAmount() : GetPayAmt())) + (-1 * GetDiscountAmt()) + (-1 * GetWriteOffAmt())) < paySch.GetDueAmt())
+                    //    {
+                    //        paySch.SetVA009_IsPaid(false);
+                    //    }
+                    //    else
+                    //    {
+                    //        paySch.SetVA009_IsPaid(true);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (((Get_ColumnIndex("PaymentAmount") > 0 ? GetPaymentAmount() : GetPayAmt()) + GetDiscountAmt() + GetWriteOffAmt()) < paySch.GetDueAmt())
+                    //    {
+                    //        paySch.SetVA009_IsPaid(false);
+                    //    }
+                    //    else
+                    //    {
+                    //        paySch.SetVA009_IsPaid(true);
+                    //    }
+                    //}
+                    //paySch.Save(Get_Trx());
 
                     if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(GetC_Invoice_ID()), null, Get_Trx())) == 0)
                     {
-                        //MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                        //inv.SetIsPaid(true);
-                        //inv.Save(Get_Trx());
                         DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                     }
                     else
                     {
-                        //MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                        //inv.SetIsPaid(false);
-                        //inv.Save(Get_Trx());
                         DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'N' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                     }
-
-                    //DataSet ds = DB.ExecuteDataset("SELEct va009_ispaid from c_invoicepayschedule where c_invoice_id=" + GetC_Invoice_ID() + " Group by va009_ispaid ", null, null);
-                    //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0].Rows.Count < 2)
-                    //{
-                    //    if (Util.GetValueOfString(ds.Tables[0].Rows[0]["va009_ispaid"]) == "Y")
-                    //    {
-                    //        MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                    //        inv.SetIsPaid(true);
-                    //        inv.Save(Get_Trx());
-                    //    }
-                    //    else
-                    //    {
-                    //        MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                    //        inv.SetIsPaid(false);
-                    //        inv.Save(Get_Trx());
-                    //    }
-                    //}
                 }
-                paySch.Save();
+                //paySch.Save(Get_Trx());
 
             }
             else if (Env.IsModuleInstalled("VA009_") && GetVA009_OrderPaySchedule_ID() != 0)
@@ -3305,48 +3283,43 @@ namespace VAdvantage.Model
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]), Get_Trx());
-                        paySch.SetC_Payment_ID(GetC_Payment_ID());
-                        MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
-                        MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
-                        if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
-                        {
-                            if (((-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"])) + (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"])) +
-                                (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"]))) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
-                            {
-                                paySch.SetVA009_IsPaid(false);
-                            }
-                            else
-                            {
-                                paySch.SetVA009_IsPaid(true);
-                            }
-                        }
-                        else
-                        {
-                            if ((Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"]) + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"]) +
-                                Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"])) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
-                            {
-                                paySch.SetVA009_IsPaid(false);
-                            }
-                            else
-                            {
-                                paySch.SetVA009_IsPaid(true);
-                            }
-                        }
-                        paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
-                        paySch.Save(Get_Trx());
+                        // commeted - bcz of rework -- already handled in View Allocation Completion
+                        //MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]), Get_Trx());
+                        //paySch.SetC_Payment_ID(GetC_Payment_ID());
+                        //MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
+                        //MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                        //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
+                        //{
+                        //    if (((-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"])) + (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"])) +
+                        //        (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"]))) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
+                        //    {
+                        //        paySch.SetVA009_IsPaid(false);
+                        //    }
+                        //    else
+                        //    {
+                        //        paySch.SetVA009_IsPaid(true);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    if ((Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"]) + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"]) +
+                        //        Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"])) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
+                        //    {
+                        //        paySch.SetVA009_IsPaid(false);
+                        //    }
+                        //    else
+                        //    {
+                        //        paySch.SetVA009_IsPaid(true);
+                        //    }
+                        //}
+                        //paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
+                        //paySch.Save(Get_Trx());
                         if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Invoice_ID"]), null, Get_Trx())) == 0)
                         {
-                            //MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                            //inv.SetIsPaid(true);
-                            //inv.Save(Get_Trx());
                             DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                         }
                         else
                         {
-                            //MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                            //inv.SetIsPaid(false);
-                            //inv.Save(Get_Trx());
                             DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'N' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                         }
                     }
