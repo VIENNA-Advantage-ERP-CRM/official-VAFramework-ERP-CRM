@@ -168,7 +168,7 @@
         //Load Data on Form Load
         //******************
         function LoadPaymentRuleInfo() {
-            debugger;
+            //debugger;
             $.ajax({
                 url: VIS.Application.contextUrl + "VPayPrint/LoadPaymentRuleInfo",
                 async: false,
@@ -225,7 +225,7 @@
                 if (data.PSelectInfo != null || data.PSelectInfo.length > 0) {
                     $txtBankAccount.val(data.PSelectInfo[0].BankAccount);
                     $txtCheckNo.val(data.PSelectInfo[0].CheckNo);
-                    $txtCurrentBalance.val(data.PSelectInfo[0].CurrentBalance);
+                    $txtCurrentBalance.val(parseFloat(data.PSelectInfo[0].CurrentBalance).toLocaleString());
                     $txtCurreny.val(data.PSelectInfo[0].Currency);
                     $txtNoOfPayments.val(data.PSelectInfo[0].NoOfPayments);
                     C_BankAccount_ID = data.PSelectInfo[0].BankAccount_ID;
