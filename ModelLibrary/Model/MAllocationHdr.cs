@@ -533,8 +533,8 @@ namespace VAdvantage.Model
                         // set Backup Withholding amount and withholding Amount
                         if (payment != null && payment.GetC_Payment_ID() != 0 && line.Get_ColumnIndex("WithholdingAmt") > 0)
                         {
-                            paySch.SetWithholdingAmt(Decimal.Multiply(line.GetWithholdingAmt(), currencymultiplyRate));
-                            paySch.SetBackupWithholdingAmount(Decimal.Multiply(line.GetBackupWithholdingAmount(), currencymultiplyRate));
+                            paySch.SetWithholdingAmt(Decimal.Round(Decimal.Multiply(line.GetWithholdingAmt(), currencymultiplyRate), currency.GetStdPrecision()));
+                            paySch.SetBackupWithholdingAmount(Decimal.Round(Decimal.Multiply(line.GetBackupWithholdingAmount(), currencymultiplyRate), currency.GetStdPrecision()));
                         }
                         #endregion
 
@@ -1323,11 +1323,11 @@ namespace VAdvantage.Model
                 // variance = Paid Invoice amount - Due Amount 
                 //paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetVA009_PaidAmntInvce(), paySch.GetDueAmt()));
                 paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetDueAmt(), Decimal.Add(paySch.GetVA009_PaidAmntInvce(),
-                    (line.Get_ColumnIndex("WithholdingAmt") > 0 ?
+                    Decimal.Round(Decimal.Multiply((line.Get_ColumnIndex("WithholdingAmt") > 0 ?
                     ((doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) ||
                     doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE)) ?
                     Decimal.Negate(line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) :
-                    (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount())) : 0))));
+                    (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount())) : 0), currencymultiplyRate), currency.GetStdPrecision()))));
             }
             if (C_InvoicePaySch_ID != paySch.GetC_InvoicePaySchedule_ID())
             {
