@@ -332,15 +332,15 @@
                     </a>
                 </div>
 
-                <div class="VIS_Pref_sett-1">
+                <div class="VIS_Pref_sett-1" style="display:none">
                     <div class="VIS-Lavel-float">
                         <h5 style="width: 100%">
-                            <label class="VIS_Pref_Label_Font" id="@("vlblDateText_" + ViewBag.WindowNumber)">Date</label>
+                            <label class="VIS_Pref_Label_Font" id="@("vlblDateText_" + ViewBag.WindowNumber)" >Date</label>
                         </h5>
                     </div>
 
-                    <input type="date" style=" height: 34px;" id="@("dt_Date_" + ViewBag.WindowNumber)" />
-                    <a href="#" class="VIS_Pref_tooltip">
+                    <input type="date" style=" height: 34px;display:none" id="@("dt_Date_" + ViewBag.WindowNumber)" />
+                    <a  style="display:none" href="#" class="VIS_Pref_tooltip">
                         <i class="VIS_Pref_img-i vis vis-info"></i>
                         <span>
                             <i class="fa fa-caret-left VIS_Pref_callout"></i><label id="@("imgDateText_" + ViewBag.WindowNumber)" class="VIS_Pref_Label_Font">
