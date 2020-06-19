@@ -2596,8 +2596,6 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Prepare);
             return true;
         }
-
-
         /**
          *	Prepare Document
          * 	@return new status (In Progress or Invalid) 
@@ -2608,7 +2606,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-
+   
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
@@ -2624,7 +2622,6 @@ namespace VAdvantage.Model
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
             }
-
 
             //	Unsuccessful Online Payment
             if (IsOnline() && !IsApproved())
@@ -2651,9 +2648,12 @@ namespace VAdvantage.Model
                         // if order not completed - then payment also not completed (Prepay Order)
                         throw new Exception("Failed when processing document - " + order.GetProcessMsg());
                     }
-                    _processMsg = order.GetProcessMsg();
-                    order.Save(Get_Trx());
 
+                    //JID_0880 Show message on completion of Payment
+                    _processMsg =  order.GetProcessMsg();
+                    GetCtx().SetContext("prepayOrder", _processMsg);
+
+                    order.Save(Get_Trx());
 
                     /******************Commented By Lakhwinder
                      * //// Payment was Not Completed Against Prepay Order//////////*
@@ -2670,9 +2670,10 @@ namespace VAdvantage.Model
                     }
                     */
                     ////////////////////////
-                }	//	WaitingPayment
+                }
+                //	WaitingPayment
             }
-
+          
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
             {
@@ -2814,7 +2815,7 @@ namespace VAdvantage.Model
          * 	Complete Document
          * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
          */
-        public String CompleteIt()
+        public String  CompleteIt()
         {
             //	Re-Check
             if (!_justPrepared)
@@ -2823,7 +2824,6 @@ namespace VAdvantage.Model
                 if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                     return status;
             }
-
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
 
@@ -3406,10 +3406,16 @@ namespace VAdvantage.Model
                 }
             }
 
-
             if (!UpdateUnMatchedBalanceForAccount())
             {
                 return DocActionVariables.STATUS_INVALID;
+            }
+           
+            //JID_0880 Show message on completion of Payment
+            if (GetCtx().GetContext("prepayOrder") != null)
+            {
+                _processMsg += ","+ GetCtx().GetContext("prepayOrder");
+                GetCtx().SetContext("prepayOrder", "");
             }
 
             return DocActionVariables.STATUS_COMPLETED;

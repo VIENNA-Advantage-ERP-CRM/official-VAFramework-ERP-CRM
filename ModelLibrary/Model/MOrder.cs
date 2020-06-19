@@ -39,6 +39,7 @@ namespace VAdvantage.Model
         #region Variables
         /**	Process Message 			*/
         private String _processMsg = null;
+        
         /**	Order Lines					*/
         private MOrderLine[] _lines = null;
         /**	Tax Lines					*/
@@ -2784,7 +2785,11 @@ namespace VAdvantage.Model
                     _processMsg = Msg.GetMsg(GetCtx(), "Order/ShipmentNotCompleted");
                     return DocActionVariables.STATUS_INVALID;
                 }
+
             }
+
+
+
 
             //	Lines
             if (ExplodeBOM())
@@ -3677,6 +3682,7 @@ namespace VAdvantage.Model
                         if (shipment == null)
                             return DocActionVariables.STATUS_INVALID;
                         Info.Append("Successfully created:@M_InOut_ID@ & doc no.: ").Append(shipment.GetDocumentNo());
+                        _processMsg= Info.ToString();
                         if (shipment.GetDocStatus() == "DR")
                         {
                             if (String.IsNullOrEmpty(_processMsg))
@@ -3686,6 +3692,7 @@ namespace VAdvantage.Model
                             shipment.SetProcessMsg(_processMsg);
                             // Info.Append(" " + _processMsg);
                         }
+
 
                         String msg = shipment.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
@@ -3711,6 +3718,8 @@ namespace VAdvantage.Model
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
+                        _processMsg += Info.ToString();
+                       
                         String msg = invoice.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
                             Info.Append(" (").Append(msg).Append(")");
@@ -3793,7 +3802,7 @@ namespace VAdvantage.Model
                 _processMsg = Info.ToString();
                 //
                 SetDocAction(DOCACTION_Close);
-                //Changes by abhishek suggested by lokesh on 7/1/2016
+               //Changes by abhishek suggested by lokesh on 7/1/2016
                 //try
                 //{
                 //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from AD_ModuleInfo Where Prefix='VAPOS_'"));
@@ -3862,6 +3871,8 @@ namespace VAdvantage.Model
                 _processMsg = GetProcessMsg();
                 return DocActionVariables.STATUS_INVALID;
             }
+
+           
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -5604,8 +5615,6 @@ namespace VAdvantage.Model
         {
             return null;
         }
-
-
 
         public void SetProcessMsg(string processMsg)
         {

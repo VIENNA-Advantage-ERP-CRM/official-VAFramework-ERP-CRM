@@ -591,6 +591,13 @@ namespace VAdvantage.Model
                     log.Warning("Cannot change line with generated Invoice");
                     return false;
                 }
+
+               //JID_0615_1 prevent saving record if conversion not found
+                if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0 ) { 
+                    log.SaveError(Msg.GetMsg(GetCtx(), "NoConversion"), "");
+                    return false;
+                };
+                
             }
 
             // during saving a new record, system will check same invoice schedule reference exist on same cash line or not
