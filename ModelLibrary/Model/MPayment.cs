@@ -4532,7 +4532,9 @@ namespace VAdvantage.Model
                 MAllocationLine aLine = null;
                 if (IsReceipt())
                 {
-                    aLine = new MAllocationLine(alloc, pa.GetAmount(),
+                    aLine = new MAllocationLine(alloc, (pa.GetAmount() -
+                        (Get_ColumnIndex("WithholdingAmt") > 0 ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
+                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
                         pa.GetDiscountAmt(), pa.GetWriteOffAmt(), pa.GetOverUnderAmt());
                     if (dr != null)
                     {
@@ -4542,7 +4544,9 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    aLine = new MAllocationLine(alloc, Decimal.Negate(pa.GetAmount()),
+                    aLine = new MAllocationLine(alloc, Decimal.Negate((pa.GetAmount()) -
+                        (Get_ColumnIndex("WithholdingAmt") > 0 ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
+                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
                         Decimal.Negate(pa.GetDiscountAmt()), Decimal.Negate(pa.GetWriteOffAmt()), Decimal.Negate(pa.GetOverUnderAmt()));
                     if (dr != null)
                     {
