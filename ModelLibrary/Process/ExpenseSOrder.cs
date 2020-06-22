@@ -144,7 +144,7 @@ namespace VAdvantage.Process
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-                if (dt.Rows.Count > 0)
+                if (dt !=null && dt.Rows.Count > 0)
                 {
                     foreach (DataRow dr in dt.Rows)             //	********* Expense Line Loop
                     {
@@ -387,7 +387,10 @@ namespace VAdvantage.Process
             AddLog(_order.Get_ID(), _order.GetDateOrdered(), _order.GetGrandTotal(), _order.GetDocumentNo());
             _order = null;
         }   //	completeOrder
-        // to get the payment method if no payment method found on the business partner
+        /// <summary>
+        /// to get the payment method if no payment method found on the business partner
+        /// </summary>
+        /// <returns>returns payment meyhod ID</returns>
         public int GetPaymentMethod(){
             //get organisation default 
             string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
@@ -396,7 +399,10 @@ namespace VAdvantage.Process
             dynamic pri = DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
             return Convert.ToInt32(pri);
         }
-        // to get the payment method if no payment term found on the business partner
+        /// <summary>
+        ///   to get the payment method if no payment term found on the business partner
+        /// </summary>
+        /// <returns> returns payment term ID</returns>
         public int GetPaymentTerm(){
             string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, C_PaymentTerm_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
