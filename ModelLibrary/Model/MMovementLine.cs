@@ -494,12 +494,12 @@ namespace VAdvantage.Model
                             {
                                 if (Count > GetQtyEntered())
                                 {
-                                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtGreater"));
+                                    log.SaveError("DTD001_MovementAttrbtGreater", "");
                                     return false;
                                 }
                                 else
                                 {
-                                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtLess"));
+                                    log.SaveError("DTD001_MovementAttrbtLess", "");
                                     return false;
                                 }
                             }
