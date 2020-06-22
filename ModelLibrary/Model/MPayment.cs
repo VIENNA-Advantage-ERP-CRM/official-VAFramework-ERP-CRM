@@ -55,6 +55,8 @@ namespace VAdvantage.Model
 
         private bool autoCheck = false;
 
+        public bool _isWithholdingFromPaymentAllocate = false;
+
         // used for locking query - checking schedule is paid or not on completion
         // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
         static readonly object objLock = new object();
@@ -1046,9 +1048,14 @@ namespace VAdvantage.Model
                 {
                     SetPaymentAmount(GetPayAmt());
                 }
+                if (!IsProcessing() && !_isWithholdingFromPaymentAllocate && !VerifyAndCalculateWithholding(false))
+                {
+                    log.SaveError("Error", GetProcessMsg());
+                    return false;
+                }
                 if (Is_ValueChanged("BackupWithholdingAmount") || Is_ValueChanged("WithholdingAmt"))
                 {
-                    SetPayAmt(Decimal.Subtract(GetPayAmt(), Decimal.Add(GetBackupWithholdingAmount(), GetWithholdingAmt())));
+                    SetPayAmt(Decimal.Subtract(GetPaymentAmount(), Decimal.Add(GetBackupWithholdingAmount(), GetWithholdingAmt())));
                 }
             }
 
@@ -2748,56 +2755,9 @@ namespace VAdvantage.Model
              * After confirmation with Surya  / Ashish By Amit */
             if (GetReversalDoc_ID() == 0 && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
             {
-                string sql = @"SELECT C_BPartner.IsApplicableonARReceipt, C_BPartner.IsApplicableonAPPayment, C_BPartner.C_Withholding_ID,
-                            C_BPartner.AP_WithholdingTax_ID,  C_Location.C_Country_ID , C_Location.C_Region_ID   "
-                              + @" FROM C_Bpartner INNER JOIN C_Bpartner_Location ON 
-                                 C_Bpartner.C_Bpartner_ID = C_Bpartner_Location.C_Bpartner_ID
-                                 INNER JOIN C_Location ON C_Bpartner_Location.C_Location_ID = C_Location.C_Location_ID  WHERE
-                                 C_BPartner.C_Bpartner_ID = " + GetC_BPartner_ID() + @" AND C_Bpartner_Location.C_BPartner_Location_ID = " + GetC_BPartner_Location_ID();
-                DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                if (!VerifyAndCalculateWithholding(false))
                 {
-                    // Applicable, but withholding not selected on Business partner record
-                    if (((IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARReceipt"]).Equals("Y") &&
-                                       Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"]) == 0) ||
-                        (!IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPPayment"]).Equals("Y") &&
-                                       Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]) == 0)) && GetC_Withholding_ID() == 0)
-                    {
-                        SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
-                        return DocActionVariables.STATUS_INVALID;
-                    }
-                    else if ((IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARReceipt"]).Equals("Y")) ||
-                        (!IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPPayment"]).Equals("Y")))
-                    {
-                        // calculate withholding amount
-                        if (GetWithholdingAmt() == 0)
-                        {
-                            if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
-                                : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false,
-                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"])))
-                            {
-                                SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
-                                return DocActionVariables.STATUS_INVALID;
-                            }
-                        }
-
-                        // calculate backup withholding amount
-                        if (GetBackupWithholding_ID() > 0 && GetBackupWithholdingAmount() == 0)
-                        {
-                            CalculateWithholdingAmount(GetBackupWithholding_ID(), true,
-                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]));
-                        }
-                    }
-                    else
-                    {
-                        // when not applicable then set reference and amount as ZERO
-                        SetBackupWithholding_ID(0);
-                        SetC_Withholding_ID(0);
-                        SetWithholdingAmt(0);
-                        SetBackupWithholdingAmount(0);
-                    }
+                    return DocActionVariables.STATUS_INVALID;
                 }
             }
 
@@ -3430,11 +3390,84 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// This function is used to verify and calculate withholdng
+        /// <param name="IsPaymentAllocate">withholding calculate from payment allocate or not</param>
+        /// </summary>
+        /// <returns>false,when not calculated</returns>
+        public bool VerifyAndCalculateWithholding(bool IsPaymentAllocate)
+        {
+            string sql = @"SELECT C_BPartner.IsApplicableonARReceipt, C_BPartner.IsApplicableonAPPayment, C_BPartner.C_Withholding_ID,
+                            C_BPartner.AP_WithholdingTax_ID,  C_Location.C_Country_ID , C_Location.C_Region_ID   "
+                             + @" FROM C_Bpartner INNER JOIN C_Bpartner_Location ON 
+                                 C_Bpartner.C_Bpartner_ID = C_Bpartner_Location.C_Bpartner_ID
+                                 INNER JOIN C_Location ON C_Bpartner_Location.C_Location_ID = C_Location.C_Location_ID  WHERE
+                                 C_BPartner.C_Bpartner_ID = " + GetC_BPartner_ID() + @" AND C_Bpartner_Location.C_BPartner_Location_ID = " + GetC_BPartner_Location_ID();
+            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                // Applicable, but withholding not selected on Business partner record
+                if (((IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARReceipt"]).Equals("Y") &&
+                                   Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"]) == 0) ||
+                    (!IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPPayment"]).Equals("Y") &&
+                                   Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]) == 0)) && GetC_Withholding_ID() == 0)
+                {
+                    SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
+                    return false;
+                }
+                else if ((IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARReceipt"]).Equals("Y")) ||
+                    (!IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPPayment"]).Equals("Y")))
+                {
+                    // calculate withholding amount
+                    //if (GetWithholdingAmt() == 0)
+                    //{
+                    if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
+                        : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false,
+                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
+                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                    {
+                        SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
+                        return false;
+                    }
+                    //}
+
+                    // calculate backup withholding amount
+                    if (GetBackupWithholding_ID() > 0)//&& GetBackupWithholdingAmount() == 0
+                    {
+                        if (!CalculateWithholdingAmount(GetBackupWithholding_ID(), true,
+                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
+                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                        {
+                            SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        SetBackupWithholdingAmount(0);
+                    }
+                }
+                else
+                {
+                    // when not applicable then set reference and amount as ZERO
+                    SetBackupWithholding_ID(0);
+                    SetC_Withholding_ID(0);
+                    SetWithholdingAmt(0);
+                    SetBackupWithholdingAmount(0);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Set Withholding Tax Amount / Backup withholding Tax Amount
         /// </summary>
         /// <param name="withholding_ID">withholding reference</param>
         /// <param name="isBackupWithholding">is calculation going on for backup withholding</param>
-        private bool CalculateWithholdingAmount(int withholding_ID, bool isBackupWithholding, int Region_ID, int Country_ID)
+        /// <param name="Region_ID">busines partnet region</param>
+        /// <param name="Country_ID">business partner country</param>
+        /// <param name="IsPaymentAllocate">withholding calculate from Payment Allocate or not</param>
+        /// <returns></returns>
+        private bool CalculateWithholdingAmount(int withholding_ID, bool isBackupWithholding, int Region_ID, int Country_ID, bool IsPaymentAllocate)
         {
             Decimal withholdingAmt = 0;
             String sql = @"SELECT IsApplicableonPay, PayCalculation , PayPercentage 
@@ -3463,7 +3496,16 @@ namespace VAdvantage.Model
                     // get amount on which we have to derive withholding tax amount
                     if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["PayCalculation"]).Equals(X_C_Withholding.INVCALCULATION_PaymentAmount))
                     {
-                        withholdingAmt = GetPaymentAmount();
+                        if (IsPaymentAllocate)
+                        {
+                            withholdingAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT COALESCE(SUM(PaymentAmount),0) - COALESCE(SUM(TaxAmount),0) 
+                                                FROM C_Payment WHERE C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx()));
+                            SetPaymentAmount(withholdingAmt);
+                        }
+                        else
+                        {
+                            withholdingAmt = GetPaymentAmount() - GetTaxAmount();
+                        }
                     }
 
                     _log.Info("Payment withholding detail, Payment Document No = " + GetDocumentNo() + " , Amount on distribute = " + withholdingAmt +
