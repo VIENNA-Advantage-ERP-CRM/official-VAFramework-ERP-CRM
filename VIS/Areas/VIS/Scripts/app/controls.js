@@ -750,6 +750,18 @@
      */
     IControl.prototype.fireValueChanged = function (evt, force) {
 
+        if (this.isReadOnly) {
+            //if (this.valSetting) {
+            //    this.valSetting = false;
+            //    return;
+            //}
+            var oldVal = this.oldValue;
+            this.oldValue = "";
+           // this.valSetting = true;
+            this.setValue(oldVal);
+            return;
+        }
+
         if (this.editingGrid && (this.gridPos.dialog || force)) {
             window.setTimeout(function (self) {
 
@@ -2228,11 +2240,14 @@
             //    }
 
             //else 
-            if ((event.keyCode == 13 || event.keyCode == 9) && !event.shiftKey) {//will work on press of Tab key OR Enter Key
+            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey) {//will work on press of Tab key OR Enter Key
                 if (self.actionText()) {
                     event.stopPropagation();
                     event.preventDefault();
                 }
+            }
+            else if ((event.keyCode == 46 || event.keyCode == 8) && $ctrl.val().trim() != '') {
+                self.setValue(null, true, true);
             }
 
         });
