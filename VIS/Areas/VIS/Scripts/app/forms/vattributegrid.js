@@ -40,7 +40,7 @@
         this.log = VIS.Logging.VLogger.getVLogger("VAttributeGrid");
 
         var $root = $("<div class='vis-forms-container' style='width: 100%; height: 100%; background-color: white; '>");
-        var $busyDiv = $("<div class='vis-apanel-busy' style='width:100%;height:100%;z-index: 1'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var leftsideDiv = null;
         var rightSideGridDiv = null;
@@ -77,7 +77,7 @@
                       "</div>");
 
             //left side parameter div
-            paradiv = $("<div class='vis-archive-l-s-content' id='parameterDiv_" + $self.windowNo + "'>");
+            paradiv = $("<div class='vis-archive-l-s-content vis-leftsidebarouterwrap' id='parameterDiv_" + $self.windowNo + "'>");
             leftsideDiv.append(topLeftDiv).append(paradiv);
 
             //Refresh
@@ -87,55 +87,76 @@
             btnOk = $("<input id='btnOk_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' style='min-width: 70px;' type='button' value='" + VIS.Msg.getMsg("OK", false, false) + "'>");
 
 
-            var tble = $("<table style='width: 100%;'>");
-            var tr = $("<tr>");
-            var td = $("<td style='padding: 0px 10px 0px;'>");
+            var tble = $("<table style='width: 100%;'>"); 
+            //var tr = $("<tr>");
+            //var td = $("<td style='padding: 0px 10px 0px;'>");
             paradiv.append(tble);
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblA1.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblA1.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 10px 10px 0px'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            
             tble.append(tr);
             tr.append(td);
-            td.append(cmbA1.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(cmbA1.getControl().css("display", "inline-block"));
+            Leftformfieldctrlwrp.append(lblA1.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblA2.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(cmbA2.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblPriceList.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(cmbPrice.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblA2.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(lblWareHouse.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(cmbA2.getControl().css("display", "inline-block"));
+            Leftformfieldctrlwrp.append(lblA2.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblPriceList.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(cmbWH.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(cmbPrice.getControl().css("display", "inline-block"));
+            Leftformfieldctrlwrp.append(lblPriceList.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblWareHouse.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+
+            tr = $("<tr>");
+            td = $("<td style='padding: 0px 10px 0px'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            tble.append(tr);
+            tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(cmbWH.getControl().css("display", "inline-block"));
+            Leftformfieldctrlwrp.append(lblWareHouse.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             bottumDiv = $("<div class='vis-frm-bot-btn-wrp'>");
             var buttonDiv = $("<div class='vis-frm-bot-btn-wrp'>");

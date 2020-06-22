@@ -48,7 +48,8 @@ html[dir="rtl"] .vis-rad-actionBtn,
 html[dir="rtl"] .vis-rad-recordData,
 html[dir="rtl"] .vis-paymentselect-field,
 html[dir="rtl"] .vis-paymentPrint-field,
-html[dir="rtl"] .vis-sms-leftDiv {
+html[dir="rtl"] .vis-sms-leftDiv,
+html[dir="rtl"] .vis-Email-leftFooter {
     float: right;
 }
 
@@ -148,7 +149,8 @@ html[dir="rtl"] .vis-apanel-rb-ul span,
 html[dir="rtl"] .vis-group-head-right:after,
 html[dir="rtl"] .VIS-Tm-btnicon:last-child,
 html[dir="rtl"] .vis-allocation-rightContainer p + input[type="checkbox"],
-html[dir="rtl"] .vis-CardView button {
+html[dir="rtl"] .vis-CardView button,
+html[dir="rtl"] .vis-Email-leftFooter > label {
     margin-left: 0;
     margin-right: 5px;
 }
@@ -173,7 +175,8 @@ html[dir="rtl"] .VIS_Pref_btn-2.vis-frm-button,
 html[dir="rtl"] .vis-ctrfrm-btnwrp input,
 html[dir="rtl"] .btns > input[type=button],
 html[dir="rtl"] .VIS-Tm-unlinkforbottmo,
-html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link {
+html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
+html[dir="rtl"] span.vis-ad-w-p-tb-rc-action {
     margin-left: 0;
     margin-right: 10px;
 }
@@ -276,7 +279,9 @@ html[dir="rtl"] .vis-input-wrap label {
     right: 30px;
     left: auto;
 }
-html[dir="rtl"] .vis-ev-col input:not([type=button]), html[dir="rtl"] .vis-ev-col textarea, html[dir="rtl"] .vis-control-wrap > button {
+html[dir="rtl"] .vis-ev-col input:not([type=button]):not([type="checkbox"]), 
+html[dir="rtl"] .vis-ev-col textarea, 
+html[dir="rtl"] .vis-control-wrap > button {
     padding: 5px 30px 5px 10px;
 }
 html[dir="rtl"] label.vis-ec-col-lblchkbox{
@@ -512,6 +517,16 @@ html[dir="rtl"] .vis-tm-b-s-ryt input[type="checkbox"] {
 html[dir="rtl"] .vis-process-left-sidebar {
     border-left: 1px solid rgba(var(--v-c-on-secondary), .1);
     border-right: none;
+}
+
+html[dir="rtl"] .vis-Email-rytWrap {
+    /* float: right; */
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-right: 20px;
+    /* margin-right: 20px; */
+    padding-left: 0px;
+    margin-left: 0px;
+    border-left: 0px;
 }
 /*rtl css End here*/
 

@@ -21,7 +21,7 @@
         var toggleside = false;
 
         var $root = $("<div class='vis-forms-container' style='width: 100%; height: 100%; background-color: white;'>");
-        var $busyDiv = $("<div class='vis-apanel-busy'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap" style="visibility: hidden"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var arrListColumns = [];
         var dGrid = null;
@@ -91,8 +91,8 @@
 
         function initializeComponent() {
 
-            chkReportQ = $("<input id='" + "chkReportQ_" + $self.windowNo + "' type='checkbox' style='margin-left: 0px;' class='VIS_Pref_automatic'>" +
-           "<span><label id='" + "lblReportQ_" + $self.windowNo + "' class='VIS_Pref_Label_Font'>SelectDoc</label></span>");
+            chkReportQ = $("<label id='" + "lblReportQ_" + $self.windowNo + "' class='vis-ec-col-lblchkbox'><input id='" + "chkReportQ_" + $self.windowNo + "' type='checkbox' style='margin-left: 0px;' class='VIS_Pref_automatic'>" +
+           "SelectDoc</label>");
 
             lblBPartnerQ = new VIS.Controls.VLabel();
             lblProcessQ = new VIS.Controls.VLabel();
@@ -151,7 +151,7 @@
 
             this.btnToggal = topLeftDiv.find("#btnToggal_" + $self.windowNo);
 
-            topleftparaDiv = $("<div class='vis-archive-l-s-content' id='" + "topleftparaDiv_" + $self.windowNo + "'>");
+            topleftparaDiv = $("<div class='vis-archive-l-s-content vis-leftsidebarouterwrap' id='" + "topleftparaDiv_" + $self.windowNo + "'>");
             //topleftparaDiv.css("height", sideDivHeight);
 
             topleftInnerParaDiv = $("<div  class='vis-archive-l-s-content-inner' id='" + "topleftInnerParaDiv_" + $self.windowNo + "'>");
@@ -162,105 +162,154 @@
             var tble = $("<table>");
 
             var tr = $("<tr>");
-            var td = $("<td style='padding: 0px 10px 2px;'>");
+            var td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
 
             topleftInnerParaDiv.append(tble);
             tble.append(tr);
             tr.append(td);
-            td.append(chkReportQ);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(chkReportQ);
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblProcessQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font")).append(lblBPartnerQ.getControl().addClass("VIS-Search-hide").css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //lblProcessQ.getControl().hide();
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            var Leftformfieldbtnwrap = $('<div class="input-group-append">');
             tble.append(tr);
             tr.append(td);
-            td.append(lblProcessQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font")).append(lblBPartnerQ.getControl().addClass("VIS-Search-hide").css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldwrp.append(Leftformfieldbtnwrap);
+            Leftformfieldctrlwrp.append(vSearchBPartnerQ.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' ').addClass("VIS-Search-hide"));
+            Leftformfieldbtnwrap.append(vSearchBPartnerQ.getBtn(0).addClass("VIS-Search-hide"));
+            Leftformfieldctrlwrp.append(lblBPartnerQ.getControl().addClass("VIS-Search-hide").addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(cmbProcess.getControl());
+            Leftformfieldctrlwrp.append(lblProcessQ.getControl().addClass("VIS_Pref_Label_Font"));
             lblProcessQ.getControl().hide();
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 12px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(cmbProcess.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px")).append(vSearchBPartnerQ.getControl().addClass("VIS-Search-hide").css('width', '206px')).append(vSearchBPartnerQ.getBtn(0).addClass("VIS-Search-hide").css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
             cmbProcess.getControl().hide();
 
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 2px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblTableQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblTableQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(cmbTableQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(cmbTableQ.getControl());
+            Leftformfieldctrlwrp.append(lblTableQ.getControl().addClass("VIS_Pref_Label_Font"));
 
 
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 2px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblNameQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(txtNameQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 4px 12px 2px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblDescriptionQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 12px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(txtDescriptionQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 2px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblCommentQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 2px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblNameQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(txtCommentQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtNameQ.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(lblNameQ.getControl().addClass("VIS_Pref_Label_Font"));
 
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 2px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblCreatedByQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(cmbCreatedByQ.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 2px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblCreatedOnQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblDescriptionQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(dtpCreatedFromQ.css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtDescriptionQ.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(lblDescriptionQ.getControl().addClass("VIS_Pref_Label_Font"));
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblCommentQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 2px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(dtpCreatedToQ.css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtCommentQ.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(lblCommentQ.getControl().addClass("VIS_Pref_Label_Font"));
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblCreatedByQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+
+            tr = $("<tr>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            tble.append(tr);
+            tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(cmbCreatedByQ.getControl());
+            Leftformfieldctrlwrp.append(lblCreatedByQ.getControl().addClass("VIS_Pref_Label_Font"));
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 2px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblCreatedOnQ.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+
+            tr = $("<tr>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            tble.append(tr);
+            tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(dtpCreatedFromQ);
+            Leftformfieldctrlwrp.append(lblCreatedOnQ.getControl().addClass("VIS_Pref_Label_Font"));
+
+            tr = $("<tr>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            tble.append(tr);
+            tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(dtpCreatedToQ);
 
             //Bottom Ok Button for search
             leftBottomDiv = $("<div class='vis-frm-bot-btn-wrp' id='" + "leftBottomDiv_" + $self.windowNo + "'>");
@@ -298,59 +347,86 @@
             td.append(btnPre).append(lblRecordsCount.getControl().css("display", "inline-block").css("margin-top", "20px").css("margin-right", "10px").css("margin-left", "10px").addClass("VIS_Pref_Label_Font")).append(btnNext);
             lblRecordsCount.getControl().css("display", "none");
 
-            tr = $("<tr>");
-            td = $("<td colspan='2' class='VIS-archive-table-padding' >");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblCreatedBy.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr = $("<tr>");
+            //td = $("<td colspan='2' class='VIS-archive-table-padding' >");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblCreatedBy.getControl().addClass("VIS_Pref_Label_Font"));
 
-            td = $("<td colspan='2' class='VIS-archive-table-padding'>");
-            tr.append(td);
-            td.append(lblCreatedOn.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            tr = $("<tr>");
-            td = $("<td colspan='2' class='VIS-archive-table-padding'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(txtCreatedBy.getControl().css("display", "inline-block").css("width", "100%").addClass("VIS_Pref_Label_Font"));
-
-            td = $("<td colspan='2' class='VIS-archive-table-padding'>");
-            tr.append(td);
-            td.append(dtpCreatedOn.css("display", "inline-block").css("width", "100%").addClass("VIS_Pref_Label_Font"));
-
-
-            tr = $("<tr>");
-            td = $("<td colspan='2' class='VIS-archive-table-padding' >");
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblName.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            td = $("<td colspan='2' class='VIS-archive-table-padding'>");
-            tr.append(td);
-            td.append(lblDescription.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //td = $("<td colspan='2' class='VIS-archive-table-padding'>");
+            //tr.append(td);
+            //td.append(lblCreatedOn.getControl().addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td colspan='2' class='VIS-archive-table-padding'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(txtName.getControl().css("display", "inline-block").css("width", "100%").addClass("VIS_Pref_Label_Font"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtCreatedBy.getControl().attr('data-placeholder', '').attr('placeholder', ' ').addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(lblCreatedBy.getControl().addClass("VIS_Pref_Label_Font"));
 
             td = $("<td colspan='2' class='VIS-archive-table-padding'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            tble.append(tr);
             tr.append(td);
-            td.append(txtDescription.getControl().css("display", "inline-block").css("width", "100%").addClass("VIS_Pref_Label_Font"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(dtpCreatedOn.addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(lblCreatedOn.getControl().addClass("VIS_Pref_Label_Font"));
 
+
+            //tr = $("<tr>");
+            //td = $("<td colspan='2' class='VIS-archive-table-padding' >");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblName.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+
+            //td = $("<td colspan='2' class='VIS-archive-table-padding'>");
+            //tr.append(td);
+            //td.append(lblDescription.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td colspan='2' class='VIS-archive-table-padding'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(lblComment.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtName.getControl().attr('data-placeholder', '').attr('placeholder', ' ').addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(lblName.getControl().addClass("VIS_Pref_Label_Font"));
+            
+            td = $("<td colspan='2' class='VIS-archive-table-padding'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            tble.append(tr);
+            tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtDescription.getControl().attr('data-placeholder', '').attr('placeholder', ' ').addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(lblDescription.getControl().addClass("VIS_Pref_Label_Font"));
+
+
+            //tr = $("<tr>");
+            //td = $("<td colspan='2' class='VIS-archive-table-padding'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblComment.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td colspan='4' class='VIS-archive-table-padding'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(txtComment.getControl().css("display", "inline-block").css("width", "100%").css("height", "60px").addClass("VIS_Pref_Label_Font"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtComment.getControl().attr('data-placeholder', '').attr('placeholder', ' ').addClass("VIS_Pref_Label_Font"));
+            Leftformfieldctrlwrp.append(lblComment.getControl().addClass("VIS_Pref_Label_Font"));
 
             //topRightDiv.append(rightTopDiv).append(rightBottomDiv);
 

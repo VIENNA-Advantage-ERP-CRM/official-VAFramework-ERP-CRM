@@ -355,6 +355,11 @@ namespace VAdvantage.Controller
                     {
                         vo.ShowFilterOption = "Y".Equals(dr[i].ToString());
                     }
+                    else if (columnName.Equals("IsUnique", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.IsUnique = "Y".Equals(dr[i].ToString());
+                    }
+
                 }
                 if (vo.Header == null)
                     vo.Header = vo.ColumnName;
@@ -847,6 +852,7 @@ namespace VAdvantage.Controller
             clone.LineBreak = LineBreak;
             clone.FieldGroupDefault = FieldGroupDefault;
             clone.ShowFilterOption = ShowFilterOption;
+            clone.IsUnique = IsUnique;
             return clone;
         }
 

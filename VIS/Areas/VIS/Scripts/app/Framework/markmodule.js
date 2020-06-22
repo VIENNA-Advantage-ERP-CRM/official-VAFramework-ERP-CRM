@@ -32,12 +32,12 @@
         var initializeComponent = function () {
 
             root = $("<div>");
-            bsyDiv = $("<div class='vis-apanel-busy' style='width:96%;height:97%;text-align:center;position:absolute;'>");
+            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             bsyDiv[0].style.visibility = "visible";
             root.append(bsyDiv);
 
             contentDiv = $("<div>");
-            divMlist = $("<div style='height: 388px;width: 100%;background: aliceblue;overflow:auto;'>");
+            divMlist = $("<div class='vis-markmodulemainwrap'>");
             contentDiv.append(divMlist);
             divButtons = $('<div>');
             contentDiv.append(divButtons);

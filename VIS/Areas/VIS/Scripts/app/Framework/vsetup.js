@@ -38,7 +38,7 @@
         subRoot.append(divRight);
         divRight.append(divRightInner);
         divRightInner.append($('<h3>').append(VIS.Msg.getMsg('Result')));
-        var $busyDiv = $("<div class='vis-apanel-busy' style='height:100%'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         var windowNo = VIS.Env.getWindowNo();
 
         var txtTenant = null;
@@ -74,53 +74,68 @@
             //dTForm.append($("<div Style='margin-left:15px;margin-top:15px'>").append($("<label>").append(VIS.Msg.getMsg('TenantHeaderComment'))));
             dTForm.append($("<h3 class='VIS_Pref_change-pass'>").append($("<label class='VIS_Pref_Label_Font'>").append(VIS.Msg.getMsg("TenantHeaderComment"))));
 
-            var dTenant = $("<div class='vis-intial-form-data'>");
-            dTenant.append($('<label>').append(VIS.Msg.translate(VIS.context, "AD_Client_ID")));
+            var dTenant = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
+            var dTenantInner = $("<div class='vis-control-wrap'></div>");
             txtTenant = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('Tenant') + '">');
-            dTenant.append(txtTenant);            
+            dTenant.append(dTenantInner);
+            dTenantInner.append(txtTenant);
+            dTenantInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "AD_Client_ID")));         
             dTForm.append(dTenant);
 
-            var dOrg = $("<div class='vis-intial-form-data' >");
-            dOrg.append($('<label>').append(VIS.Msg.translate(VIS.context, "AD_Org_ID")));
+            var dOrg = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
+            var dOrgInner = $("<div class='vis-control-wrap'></div>");
             txtOrg = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('Org') + '">');
-            dOrg.append(txtOrg);            
+            dOrg.append(dOrgInner);
+            dOrgInner.append(txtOrg);
+            dOrgInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "AD_Org_ID")));          
             dTForm.append(dOrg);
 
-            var dUTenant = $("<div class='vis-intial-form-data'>");
-            dUTenant.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @AD_Client_ID@")));
+            var dUTenant = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
+            var dUTenantInner = $("<div class='vis-control-wrap'></div>");
             txtUTenant = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('TenantAdmin') + '">');
-            dUTenant.append(txtUTenant);            
+            dUTenant.append(dUTenantInner);
+            dUTenantInner.append(txtUTenant);
+            dUTenantInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @AD_Client_ID@")));           
             dTForm.append(dUTenant);
 
-            var dUOrg = $("<div class='vis-intial-form-data' >");
-            dUOrg.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @AD_Org_ID@")));
+            var dUOrg = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
+            var dUOrgInner = $("<div class='vis-control-wrap'></div>");
             txtUOrg = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('TenantUser') + '">');
-            dUOrg.append(txtUOrg);            
+            dUOrg.append(dUOrgInner);
+            dUOrgInner.append(txtUOrg);
+            dUOrgInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @AD_Org_ID@")));          
             dTForm.append(dUOrg);
 
 
-            var dCurr = $("<div class='vis-intial-form-dataCombo'>");
-            dCurr.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Currency_ID")));
+            var dCurr = $("<div class='input-group vis-input-wrap vis-intial-form-dataCombo'>");
+            var dCurrInner = $("<div class='vis-control-wrap'></div>");            
             cmbCurr = $('<select placeholder="Currency">');
-            dCurr.append(cmbCurr);
+            dCurr.append(dCurrInner);
+            dCurrInner.append(cmbCurr);
+            dCurrInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Currency_ID")));
             dTForm.append(dCurr);
 
-            var dCou = $("<div class='vis-intial-form-dataCombo'>");
-            dCou.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Country_ID")));
+            var dCou = $("<div class='input-group vis-input-wrap vis-intial-form-dataCombo'>");
+            var dCouInner = $("<div class='vis-control-wrap'></div>"); 
             cmbCou = $('<select placeholder="Country">');
-            dCou.append(cmbCou);
+            dCou.append(dCouInner);
+            dCouInner.append(cmbCou);
+            dCouInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Country_ID")));
             dTForm.append(dCou);
 
-            var dCity = $("<div class='vis-intial-form-dataCombo'>");
-            dCity.append($('<label>').append(VIS.Msg.translate(VIS.context, "City")));
+            var dCity = $("<div class='input-group vis-input-wrap vis-intial-form-dataCombo'>");
+            var dCityInner = $("<div class='vis-control-wrap'></div>"); 
             txtCity = $('<input type="text" placeholder="' + VIS.Msg.getMsg('City') + '" style="width:100%;">');
-            dCity.append(txtCity);
+            dCity.append(dCityInner);
+            dCityInner.append(txtCity);
+            dCityInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "City")));
             dTForm.append(dCity);
 
-            var dReg = $("<div class='vis-intial-form-dataCombo' >");
-            dReg.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Region_ID")));
+            var dReg = $("<div class='input-group vis-input-wrap vis-intial-form-dataCombo' >");
+            var dRegInner = $("<div class='vis-control-wrap'></div>"); 
             cmbReg = $('<select placeholder="Region">');
-            dReg.append(cmbReg);
+            dRegInner.append(cmbReg);
+            dRegInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Region_ID")));
             dTForm.append(dReg);
 
             //var ulCase = $('<ul  class="initial-client-form-list">');

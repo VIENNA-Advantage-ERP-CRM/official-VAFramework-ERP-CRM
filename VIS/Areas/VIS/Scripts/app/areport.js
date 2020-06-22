@@ -1289,7 +1289,7 @@
         var contentPane = $("<div Style='width:" + width + "px; max-height: " + (height - 50) + "px;' class='vis-report-a-r-container'>");
         var subContentPane = $("<div Style='width:" + width + "px;'>");
         contentPane.append(subContentPane);
-        var bsyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        var bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         setBusy(true);
         contentPane.append(bsyDiv);
         if (!(isPrint)) {

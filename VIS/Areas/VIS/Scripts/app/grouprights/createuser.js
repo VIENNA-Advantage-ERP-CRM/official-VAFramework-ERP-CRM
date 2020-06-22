@@ -45,10 +45,10 @@
 
             $root = $('<div>');
 
-            var str = '  <div style="overflow:hidden" class="vis-group-assinRole-content"><div class="vis-group-assinRole-data">' +
-            	'<label>' + VIS.Msg.getMsg('EMail') + '</label><input  tabindex="1" class="vis-group-email" type="text" name="Name"></div>' +
+            var str = '  <div style="overflow:hidden" class="vis-group-assinRole-content"><div class="vis-group-assinRole-data" style=" margin-top: 5px; margin-bottom: 0; "><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<input  tabindex="1" class="vis-group-email" type="text" name="Name" data-placeholder="" placeholder=" "><label>' + VIS.Msg.getMsg('EMail') + '</label></div></div></div>' +
 
-            '<div style="width:auto;float:right;margin-top:5px" class="vis-group-assinRole-data">' +
+            '<div style="width:auto;float:right;" class="vis-group-assinRole-data">' +
               //'<a style="float:left" class="vis-group-btn vis-group-orgAcess vis-group-grayBtn">' + VIS.Msg.getMsg('VIS_OrgAccess') + '</a>' +
                                ' <a tabindex="2" class="vis-group-btn vis-group-pointer vis-group-create vis-group-grayBtn" style="float: left;">' + VIS.Msg.getMsg('Create') + '</a>' +
                '<a tabindex="3" class="vis-group-btn vis-group-pointer vis-group-invite vis-group-blueBtn" style="float: right;">' + VIS.Msg.getMsg('VIS_Invite') + '</a>' +
@@ -62,26 +62,26 @@
       '</div>';
 
             createContainer = $('<div class="vis-group-assignContainer" style="visibility:hidden">' +
-         '<div class="vis-group-assinRole-data">' +
-              '<label>' + VIS.Msg.getMsg('Name') + '</label>' +
-             '<input  tabindex="4" type="text" maxlength="60"  class="vis-group-name vis-group-mandatory"  name="Name">' +
-          '</div>' +
+         '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<input  tabindex="4" type="text" maxlength="60" data-placeholder="" placeholder=" " class="vis-group-name vis-group-mandatory"  name="Name">' +
+                '<label>' + VIS.Msg.getMsg('Name') + '</label>' +
+          '</div></div></div>' +
 
 
-          '<div class="vis-group-assinRole-data">' +
+          '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+             '<input tabindex="5" type="text" maxlength="80" data-placeholder="" placeholder=" " class="vis-group-uid"  name="Name">' +
               '<label>' + VIS.Msg.getMsg('VIS_UserID') + '</label>' +
-             '<input tabindex="5" type="text" maxlength="80"  class="vis-group-uid"  name="Name">' +
-          '</div>' +
+          '</div></div></div>' +
 
-          '<div class="vis-group-assinRole-data">' +
+          '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+             '<input tabindex="6" type="password" maxlength="250" data-placeholder="" placeholder=" " class="vis-group-pwd"  name="Name">' +
               '<label>' + VIS.Msg.getMsg('Password') + '</label>' +
-             '<input tabindex="6" type="password" maxlength="250"  class="vis-group-pwd"  name="Name">' +
-          '</div>' +
+          '</div></div></div>' +
 
-          '<div class="vis-group-assinRole-data">' +
+          '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+             '<input tabindex="7" type="text"  maxlength="50" data-placeholder="" placeholder=" " class="vis-group-mobile"  name="Name">' +
               '<label>' + VIS.Msg.getMsg('Mobile') + '</label>' +
-             '<input tabindex="7" type="text"  maxlength="50" class="vis-group-mobile"  name="Name">' +
-          '</div>' +
+          '</div></div></div>' +
                         '<a tabindex="8" class="vis-group-btn vis-group-Save vis-group-pointer vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg('Save') + '</a>' +
 
                         '</div>');

@@ -1,9 +1,4 @@
 ﻿/****** Style Inputs Control STRAT*****/
-:root {
-    --button-bg: #eee;
-    --input-border: #ddd;
-}
-
 .vis-ev-col * {
     padding: 0px;
     font-weight: normal;
@@ -17,7 +12,8 @@
 }
 
 
-.vis-ev-col input:not([type=button]):not([type="checkbox"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+.vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
@@ -75,20 +71,18 @@
     position: relative;
     margin-bottom: 15px;
 }
-
-    .vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
-        height: 35px;
-        -webkit-appearance: none;
-        appearance: none;
-    }
-
+.vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
+    height: 35px;
+    -webkit-appearance: none;
+    appearance: none;
+}
 .vis-control-wrap {
     flex: 1;
     position: relative;
     z-index: 1;
     width: 100%;
-    display: flex;
-    align-items: center;
+    /*display: flex;
+    align-items: center;*/
 }
 
 .vis-input-wrap input {
@@ -178,10 +172,13 @@ select.vis-ev-col-mandatory {
     border-left: 1px solid rgba(var(--v-c-secondary),1);
 }
 
-
-
-.vis-input-wrap input:focus ~ label, .vis-input-wrap input:not(:placeholder-shown) ~ label, .vis-input-wrap textarea:not(:placeholder-shown) ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap textarea:focus ~ label, .vis-input-wrap select ~ label {
-    top: -8px;
+.vis-input-wrap input:focus ~ label, 
+.vis-input-wrap input:not(:placeholder-shown) ~ label, 
+.vis-input-wrap textarea:not(:placeholder-shown) ~ label, 
+.vis-input-wrap select:focus ~ label, 
+.vis-input-wrap textarea:focus ~ label, 
+.vis-input-wrap select ~ label {
+    top: -7px;
     font-size: 12px;
     background: linear-gradient(#fff 50%, transparent 50%);
     padding: 0 0.4rem;
@@ -190,11 +187,13 @@ select.vis-ev-col-mandatory {
     opacity: 1;
     color: rgba(var(--v-c-on-secondary), 1);
 }
-
-    .vis-input-wrap input:focus ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap input:focus ~ label sup, .vis-input-wrap select:focus ~ label sup, .vis-input-wrap textarea:focus ~ label {
-        color: rgba(var(--v-c-primary),1);
-    }
-
+.vis-input-wrap input:focus ~ label, 
+.vis-input-wrap select:focus ~ label, 
+.vis-input-wrap input:focus ~ label sup, 
+.vis-input-wrap select:focus ~ label sup, 
+.vis-input-wrap textarea:focus ~ label {
+    color: rgba(var(--v-c-primary),1);
+}
 .input-group:focus-within .input-group-append .input-group-text {
     border: 1px solid rgba(var(--v-c-primary),1);
     border-left: 1px solid rgba(var(--v-c-on-secondary), .2);
@@ -264,24 +263,20 @@ select.vis-ev-col-mandatory {
     display: flex;
     cursor: pointer;
 }
-
-    .vis-ev-col-fieldgroup * {
-        background: rgba(var(--v-c-on-secondary), 0.07);
-    }
-
-    .vis-ev-col-fieldgroup :first-child {
-        padding: 5px 10px;
-    }
-
-    .vis-ev-col-fieldgroup :last-child {
-        padding-right: 10px;
-    }
-
-    .vis-ev-col-fieldgroup i {
-        font-size: 1.5rem;
-        color: rgba(var(--v-c-primary), 1);
-        /*padding: 0 10px;*/
-    }
+.vis-ev-col-fieldgroup * {
+    background: rgba(var(--v-c-on-secondary), .07);
+}
+.vis-ev-col-fieldgroup :first-child {
+    padding: 5px 10px;
+}
+.vis-ev-col-fieldgroup :last-child {
+    padding-right: 10px;
+}
+.vis-ev-col-fieldgroup i {
+    font-size: 1.5rem;
+    color: rgba(var(--v-c-primary), 1);
+    /* padding: 0 10px; */
+}
 
 .vis-ev-col-fg-rotate {
     transform: rotateX(180deg);
@@ -315,10 +310,11 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     /*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
     border: 1px solid #ec3f3f;
 }*/
-    .vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
-        color: rgba(var(--v-c-mandatory),1) !important;
-    }
-
+.vis-input-wrap .vis-ev-col-mandatory ~ label, 
+.vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, 
+.vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
+    color: rgba(var(--v-c-mandatory),1) !important;
+}
 .vis-ev-col-msign {
     position: absolute;
     right: 10px;
@@ -353,18 +349,19 @@ label.vis-ec-col-lblchkbox {
     display: inline-flex;
     align-items: center;
     font-weight: normal;
-}
-
-.vis-ev-col label.vis-ec-col-lblchkbox {
     color: rgba(var(--v-c-on-secondary), 1);
     align-items: center;
 }
 
+/*.vis-ev-col label.vis-ec-col-lblchkbox {
+    color: rgba(var(--v-c-on-secondary), 1);
+    align-items: center;
+}*/
+
 .vis-ec-col-lblchkbox input[type=checkbox] {
-    /*width: auto;*/
-    min-height: 0;
-    min-width: 0px;
     margin: 0 4px;
+    padding: 0;
+    border-radius: .15rem;
 }
 .vis-ec-col-lblchkbox input[type=checkbox]:focus {
     /* outline: auto; */
@@ -386,7 +383,7 @@ label.vis-ec-col-lblchkbox {
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: auto;
+    top: 11px;
     cursor: pointer;
     outline: none;
     z-index: 5;
@@ -401,7 +398,8 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     display: inline-flex;
 }
 
-.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap, .vis-input-wrap button.vis-ev-col-img-ctrl ~ .vis-ev-ctrlinfowrap {
+.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap, 
+.vis-input-wrap button.vis-ev-col-img-ctrl ~ .vis-ev-ctrlinfowrap {
     top: 9px;
     align-items: flex-start;
     bottom: auto;
@@ -456,11 +454,17 @@ input[type="radio"] {
     background-color: transparent;
     outline: none;
     cursor: pointer;
+    min-width: 12px;
+    min-height: 12px;
 }
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
-    border: 1px solid rgba(var(--v-c-primary), 1);
+    /*border: 1px solid rgba(var(--v-c-primary), 1);*/
     position: relative;
+}
+input[type="checkbox"]:focus, 
+input[type="radio"]:focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
 input[type="checkbox"]:checked:before,
 input[type="radio"]:checked:before {
