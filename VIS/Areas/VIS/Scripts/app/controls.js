@@ -3373,7 +3373,7 @@
 
         var displayType = controlDisplayType;
         var length = fieldLength;
-        
+
         //Init Control
         var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
         //Call base class
@@ -3398,7 +3398,7 @@
 
         // For testing purpose
         //this.dotFormatter = true;
-        
+
         //On key down event
         $ctrl.on("keydown", function (event) {
 
@@ -3410,7 +3410,7 @@
 
 
                 var val = self.format.GetConvertedNumber(this.value, self.dotFormatter);
-                
+
                 this.value = Number(val) * -1;
                 setTimeout(function () {
                     $ctrl.trigger("change");
@@ -3455,7 +3455,7 @@
 
             //if (!VIS.Env.isDecimalPoint()) {
             if (!self.dotFormatter) {
-               
+
                 if (event.keyCode == 190 || event.keyCode == 110) {
                     return false;
                 }
@@ -3494,13 +3494,13 @@
                     $ctrl.select();
                     return true;
                 }
-            // Copy (CTRL +C)
+                // Copy (CTRL +C)
             } else if (event.ctrlKey && event.keyCode == 67) {
                 if (this.value.length > 0) {
                     event.stopPropagation();
                     return true;
                 }
-            // Paster (CTRL+V)
+                // Paster (CTRL+V)
             } else if (event.ctrlKey && event.keyCode == 86) {
                 setTimeout(function () {
                     event.stopPropagation();
@@ -3508,7 +3508,7 @@
                     event.target.value = _value ? self.format.GetConvertedString(_value, self.dotFormatter) : '';
                 }, 10);
                 return true;
-            // CUT (CTRL+X)
+                // CUT (CTRL+X)
             } else if (event.ctrlKey && event.keyCode == 88) {
                 event.stopPropagation();
                 return true;
@@ -3521,7 +3521,7 @@
             //else {
             return false;
             //}
-        }); 
+        });
 
 
         //If user click in amount control, select all amount present in control
@@ -3531,9 +3531,9 @@
             var _value = e.target.value;
             $ctrl.attr("type", "text");
 
-            
+
             e.target.value = _value ? self.format.GetConvertedString(_value, self.dotFormatter) : '';
-            
+
             if (VIS.DisplayType.Amount == displayType) {
                 $ctrl.select();
             }
@@ -3588,7 +3588,7 @@
 
             // this.ctrl.val(newValue);
             // this.setBackground("white");
-            
+
             this.ctrl.attr("type", "text");
             var _value = this.format.GetFormatAmount(newValue, "init", this.dotFormatter);
 

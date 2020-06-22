@@ -11,7 +11,9 @@
     height: 100%;
 }
 
+
 .vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
@@ -20,7 +22,8 @@
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.vis-ev-col input:not([type=button]), .vis-ev-col textarea {
+.vis-ev-col input:not([type=button]):not([type="checkbox"]), 
+.vis-ev-col textarea{
     padding: 5px 10px 5px 30px;
 }
 
