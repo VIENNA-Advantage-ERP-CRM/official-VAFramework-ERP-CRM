@@ -127,6 +127,7 @@ ul.vis-toppaging li:nth-child(3) {
 }
 .vis-icon-menuclose .vis-cross {
     color: rgba(var(--v-c-on-secondary), 1);
+    font-size: .875rem;
 }
 
 .vis-savecsv-ico{

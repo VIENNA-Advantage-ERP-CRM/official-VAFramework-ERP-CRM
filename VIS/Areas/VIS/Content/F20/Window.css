@@ -44,7 +44,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.4rem;
+    font-size: .875rem;
     cursor: pointer;
     color: rgb(var(--v-c-on-secondary), 1);
 }

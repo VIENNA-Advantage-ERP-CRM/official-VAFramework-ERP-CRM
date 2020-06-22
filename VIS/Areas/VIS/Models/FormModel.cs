@@ -130,7 +130,7 @@ namespace VIS.Models
                 {
                     beginIndex = variable.IndexOf(".") + 1;
                     //variable = variable.Substring(beginIndex, endIndex);
-                    len = endIndex - beginIndex;
+                    len = variable.Length - beginIndex;
                     variable = variable.Substring(beginIndex, len);
                 }
 
@@ -160,8 +160,14 @@ namespace VIS.Models
                 return false;
 
             //  while we have variables
-            while (s.IndexOf("=") != -1)
+            // while (s.IndexOf("=") != -1)
+            string[] varibles = s.Split(' ');
+
+            for(int o=0;o< varibles.Length;o++)
             {
+                s = varibles[o];
+                if (s.IndexOf("=") == -1)
+                    continue;
                 int endIndex = s.IndexOf("=");
                 int beginIndex = s.LastIndexOf(' ', endIndex);
 
@@ -172,7 +178,8 @@ namespace VIS.Models
 
                 if (variable.IndexOf(".") != -1)
                 {
-                    beginIndex = variable.IndexOf(".");
+                    beginIndex = variable.IndexOf(".") + 1;
+                    endIndex = variable.Length - beginIndex;
                     variable = variable.Substring(beginIndex, endIndex);
                 }
 
@@ -184,14 +191,18 @@ namespace VIS.Models
                         break;
                     }
                 }
-
-                s = s.Substring(endIndex + 1);
+               
                 beginIndex = 0;
-                endIndex = s.IndexOf(' ');
+                
+
+                beginIndex = s.IndexOf('=') + 1;
+                endIndex = s.Length - beginIndex;
+                //endIndex = endIndex - beginIndex;
                 if (endIndex == -1)
                     operand2 = s.Substring(beginIndex);
                 else
                     operand2 = s.Substring(beginIndex, endIndex);
+
 
                 /* //log.fine("operand1:"+operand1+ 
                         " operator1:"+ operator1 +
@@ -1078,7 +1089,7 @@ namespace VIS.Models
                + " AND p.DocStatus IN ('CO','CL','RE','VO') AND p.PayAmt<>0"
                + " AND p.C_BankAccount_ID=@C_BankAccount_ID"                              	//  #2
                + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
-                //	Voided Bank Statements have 0 StmtAmt
+                   //	Voided Bank Statements have 0 StmtAmt
                    + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
             var countVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
             if (countVA012 > 0)
@@ -1139,7 +1150,7 @@ namespace VIS.Models
 
                     string sqlElements = "";
                     string sqlMsgs = "";
-                    System.Data.SqlClient.SqlParameter[] param = null; 
+                    System.Data.SqlClient.SqlParameter[] param = null;
 
                     // check if we have to check base Language (i.e. English) else other language to fetch data from translations
                     if (Env.IsBaseLanguage(_ctx, "AD_Element"))

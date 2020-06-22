@@ -507,8 +507,8 @@
     };
 
     VIS.Query.prototype.copyRestrictions = function (arrRes) {
-       // for (var i = 0, j = arrRes; i < j; i++)
-            this.list =this.list.concat(arrRes);
+        // for (var i = 0, j = arrRes; i < j; i++)
+        this.list = this.list.concat(arrRes);
     };
 
     VIS.Query.prototype.addRangeRestriction = function () {
@@ -813,10 +813,10 @@
         if (code != null && typeof code == "Boolean") {
             Code = (new Boolean(code) == true) ? "Y" : "N";
         }
-            //else if (code != null && code.GetType() == typeof(KeyNamePair))
-            //  Code = ((KeyNamePair)code).GetKey();
-            //else if (code != null && code.GetType() == typeof(ValueNamePair))
-            //  Code = ((ValueNamePair)code).GetValue();
+        //else if (code != null && code.GetType() == typeof(KeyNamePair))
+        //  Code = ((KeyNamePair)code).GetKey();
+        //else if (code != null && code.GetType() == typeof(ValueNamePair))
+        //  Code = ((ValueNamePair)code).GetValue();
         else
             Code = code;
         ///	clean code
@@ -958,8 +958,8 @@
             //	We have a Function in the ColumnName
             if (pos != -1 && end != -1)
                 sb += this.columnName.substring(0, pos)
-                     + tableName + "." + this.columnName.substring(pos, (pos + (end - pos)))
-                     + this.columnName.substring(end);
+                    + tableName + "." + this.columnName.substring(pos, (pos + (end - pos)))
+                    + this.columnName.substring(end);
             else
                 sb += tableName + "." + this.columnName;
         }
@@ -981,7 +981,7 @@
                 sb += " IS NOT NULL ";
         }
         else {
-            sb += this.operator;
+            sb += this.operator + " ";
             if (VIS.Query.prototype.IN.equals(this.operator) || VIS.Query.prototype.NOT_IN.equals(this.operator)) {
                 sb += "(";
             }
@@ -1705,7 +1705,7 @@
 
                 //Check if record exists in target table
                 sql1 = "SELECT count(*) FROM " + targetTableName + " WHERE "
-                            + targetWhereClause;
+                    + targetWhereClause;
                 if (whereClause != null && whereClause.length != 0)
                     sql1 += " AND " + VIS.Evaluator.replaceVariables(whereClause, VIS.Env.getCtx(), null);
 
@@ -1726,7 +1726,7 @@
                 if (columns.length == 0)
                     sql1 += "count(*) ";
                 sql1 += " FROM " + targetTableName + " WHERE "
-                        + targetWhereClause;
+                    + targetWhereClause;
             }
 
 
@@ -1734,7 +1734,7 @@
 
             var columnValues = [];
             try {
-               
+
 
                 var dr = null;
                 $.ajax({
@@ -1748,7 +1748,7 @@
                 });
 
 
-              //  dr = executeReader(sql1, null, null, true);
+                //  dr = executeReader(sql1, null, null, true);
 
 
 
@@ -1940,7 +1940,7 @@
     };
 
     function CCache(tableName, initialCapacity, expireMinutes,
-			 resetAll, type, tableName2) {
+        resetAll, type, tableName2) {
 
         /** The Cache		**/
         this.m_cacheK = [];
@@ -2128,14 +2128,14 @@
                 }
 
                 this.tokens.push(
-					!this.doBuild ? src :
-					this.doBuild(src, real, this.tkn)
-				);
+                    !this.doBuild ? src :
+                        this.doBuild(src, real, this.tkn)
+                );
             }
         },
         next: function () {
             var self = this,
-				plain;
+                plain;
 
             self.findMin();
             plain = self.src.slice(0, self.min);

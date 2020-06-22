@@ -1654,7 +1654,7 @@
         //this.curGC.isZoomAction = isSelect;
         this.curTab.setIsZoomAction(isSelect);
         setTimeout(function (that) {
-            //that.curGC.isZoomAction = isSelect;
+            that.curGC.isZoomAction = isSelect;
             that.tabActionPerformed(that.firstTabId);
             that.setTabNavigation();
             that = null;
@@ -2718,6 +2718,9 @@
                     this.setDefaultSearch(gc);
                     //}
                     gc.query(this.curTab.getOnlyCurrentDays(), 0, false);	//	updated
+                }
+                else {
+                    this.setDefaultSearch(gc);
                 }
             }
 
