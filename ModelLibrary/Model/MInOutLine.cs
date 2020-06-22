@@ -1321,12 +1321,12 @@ namespace VAdvantage.Model
                                 {
                                     if (Count > GetQtyEntered())
                                     {
-                                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MaterialAtrbteGreater"));
+                                        log.SaveError("DTD001_MaterialAtrbteGreater", "");
                                         return false;
                                     }
                                     else
                                     {
-                                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MaterialAtrbteless"));
+                                        log.SaveError("DTD001_MaterialAtrbteless", "");
                                         return false;
                                     }
                                 }
