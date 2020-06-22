@@ -511,7 +511,6 @@
         this.list = this.list.concat(arrRes);
     };
 
-
     VIS.Query.prototype.addRangeRestriction = function () {
 
         var r = null;
@@ -683,7 +682,7 @@
     };
     VIS.Query.prototype.CVOPERATORS = {
         "=": " = ",		//	0
-        "!": " != ",
+        "!=": " != ",
         ">": " > ",
         "<": " < ",
         //	,new ValueNamePair (IN,				" () "),
