@@ -37,6 +37,8 @@ namespace VAdvantage.Process
         /**	Current Order			*/
         private MOrder _order = null;
         private string message="";
+        // Time Expense Line
+        MTimeExpenseLine tel=null;
 
 
         /// <summary>
@@ -146,7 +148,7 @@ namespace VAdvantage.Process
                 {
                     foreach (DataRow dr in dt.Rows)             //	********* Expense Line Loop
                     {
-                        MTimeExpenseLine tel = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
+                         tel = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
                         if (!tel.IsInvoiced())
                         {
                             continue;
@@ -236,8 +238,25 @@ namespace VAdvantage.Process
                     return;
                 }
                 _order.SetM_Warehouse_ID(te.GetM_Warehouse_ID());
+                //Bhupendra: Add payment term 
+                // to check for if payment term is null
+                if(bp.GetC_PaymentTerm_ID()==0){
+                    // set the default payment method as check
+                    _order.SetC_PaymentTerm_ID(GetPaymentTerm());
+                }
+                else{
+                    _order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                }
+                // Bhupendra: added a cond to check for payment method if null
                 // Added by mohit - to set payment method and sales rep id.
-                _order.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
+                if(bp.GetVA009_PaymentMethod_ID()==0){
+                    // set the default payment method as check
+                    _order.SetVA009_PaymentMethod_ID(GetPaymentMethod());
+                }
+                else
+                {
+                    _order.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
+                }
                 _order.SetSalesRep_ID(te.GetDoc_User_ID());
 
                 ////Added By Arpit asked by Surya Sir..................29-12-2015
@@ -319,6 +338,8 @@ namespace VAdvantage.Process
                         tel.GetC_Currency_ID(), _order.GetC_Currency_ID(),
                         _order.GetAD_Client_ID(), _order.GetAD_Org_ID());
                 ol.SetPrice(price);
+                // added by Bhupendra to set the entered price
+                ol.SetPriceEntered(price);
             }
             else
             {
@@ -367,6 +388,21 @@ namespace VAdvantage.Process
             _order = null;
         }   //	completeOrder
 
+        public int GetPaymentMethod(){
+            //get organisation default 
+            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
+            dynamic pri = DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
+            return Convert.ToInt32(pri);
+        }
+        public int GetPaymentTerm(){
+            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, C_PaymentTerm_IDDESC";
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
+            dynamic pri= DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
+            return Convert.ToInt32(pri);
+        }
     }	//	ExpenseSOrder
 
 }
