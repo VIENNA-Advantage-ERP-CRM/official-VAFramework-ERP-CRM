@@ -11,35 +11,38 @@
         function init() {
             $maingrid = $('<div class="vis-forms-container" ></div>');
 
-            var $containerdiv = $('<div></div>');
+            var $containerdiv = $('<div class="vis-emailsavewrap"></div>');
+            var $divinputwrap = $('<div class="input-group vis-input-wrap"></div>');
 
-            var namediv = $('<div style="overflow:auto;margin-bottom:10px"></div>');
+            var namediv = $('<div class="vis-control-wrap"></div>');
 
-            var $label = $('<p  style="float:left;margin-right:10px"  >' + VIS.Msg.getMsg('Name') + '</p>');
-
-
-            $name = $('<input type="text" style="float:left;margin-right:4px" ></input>');
-            namediv.append($label).append($name);
+            var $label = $('<label>' + VIS.Msg.getMsg('Name') + '</label>');
 
 
+            $name = $('<input type="text" data-placeholder="" placeholder=" ">');
+            namediv.append($name).append($label);
 
 
 
-            $showforall = $('<input type="checkbox" style="float:right"></input>');
-            var labelshow = $('<p  style="float:right;margin-bottom:0px;margin-right:4px"  >' + VIS.Msg.getMsg('ForAllWindows') + '</p>');
-            var checkdiv = $('<div></div>');
+
+
+            $showforall = $('<label class="vis-ec-col-lblchkbox"><input type="checkbox">' + VIS.Msg.getMsg('ForAllWindows') + '</label>');
+            var labelshow = $( VIS.Msg.getMsg('ForAllWindows'));
+            var checkdiv = $('<div style="display: flex"></div>');
 
             if (VIS.Application.isRTL) {
-                $label.css({ "float": "right", "margin-right": "0px", "margin-left": "0px" })
-                $name.css({ "float": "right", "margin-right": "10px", "margin-left": "0px" });
-                $showforall.css("float", "left");
-                labelshow.css({ "float": "left", "margin-right": "5px" });
-                checkdiv.css({ "float": "right", "margin-bottom": "-5px" });
+                //$label.css({ "float": "right", "margin-right": "0px", "margin-left": "0px" })
+                //$name.css({ "float": "right", "margin-right": "10px", "margin-left": "0px" });
+                //$showforall.css("float", "left");
+                //labelshow.css({ "float": "left", "margin-right": "5px" });
+                //checkdiv.css({ "float": "right", "margin-bottom": "-5px" });
             }
 
 
-            checkdiv.append(labelshow).append($showforall);
-            $containerdiv.append(namediv).append(checkdiv);
+            checkdiv.append($showforall);
+            $containerdiv.append($divinputwrap);
+            $divinputwrap.append(namediv);
+            $containerdiv.append(checkdiv);
             $maingrid.append($containerdiv);
         };
 

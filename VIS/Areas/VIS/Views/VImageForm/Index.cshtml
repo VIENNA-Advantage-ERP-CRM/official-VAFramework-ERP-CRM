@@ -4,11 +4,12 @@
         Select Image
     </label>*@
     <div>
-        <label for="@("fileUpload_" + ViewBag.WindowNumber)"  id="@("lblfileUpload_" + ViewBag.WindowNumber)" class="VIS-VImage-file-label">Choose File</label>
+        <label for="@("fileUpload_" + ViewBag.WindowNumber)" id="@("lblfileUpload_" + ViewBag.WindowNumber)" class="VIS-VImage-file-label">Choose File</label>
         <input id="@("fileUpload_" + ViewBag.WindowNumber)" style="display: none;" type="file" accept="image/*" />
-        <span>
-            <label id="@("lblDataBaseSave_" + ViewBag.WindowNumber)" style="font-size: 17px;"  class="VIS_Pref_Label_Font">Save In Database</label></span>
         <input id="@("chkDataBaseSave_" + ViewBag.WindowNumber)" type="checkbox" checked="@Model.Isdatabase" style="margin-left:10px !Important" />
+        <span>
+            <label id="@("lblDataBaseSave_" + ViewBag.WindowNumber)" class="VIS_Pref_Label_Font">Save In Database</label>
+        </span>
     </div>
 </div>
 

@@ -189,7 +189,7 @@ div.VIS_Pref_slide-show.pp {
     padding-right: 10px;
     /* font-weight: 400; */
     /* vertical-align: middle; */
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .VIS_Pref_pass {
@@ -564,6 +564,7 @@ div.VIS_Pref_slide-show.pp {
     display: flex;
     margin-top: 0;
     margin-bottom: 10px;
+    align-items: center;
 }
 .VIS_Pref_show .VIS_Pref_dd:first-child{
     padding-right: 10px;
@@ -600,6 +601,7 @@ div.VIS_Pref_slide-show.pp {
 
 a.VIS_Pref_tooltip {
     outline: none;
+    /*margin-bottom: 15px;*/
 }
 
     a.VIS_Pref_tooltip strong {
@@ -919,15 +921,14 @@ input:required:valid {
     text-align: right;
 }
 
-    .VIS-VImage-testBottom-btn > a {
-        background: #616364;
-        border-radius: 0;
-        color: #fff;
-    }
-
-        .VIS-VImage-testBottom-btn > a:hover {
-            color: #fff;
-        }
+.VIS-VImage-testBottom-btn > a {
+    /* background: #616364; */
+    border-radius: 0;
+    /*color: #fff;*/
+}
+.VIS-VImage-testBottom-btn > a:hover {
+    /* color: #fff; */
+}
 
 .VIS-GmailSetting-Controls {
     /*margin-left:5%;*/
@@ -1115,9 +1116,30 @@ html[dir="rtl"] .input-group-addon {
     width: 70%;
     float: right;
 }
+.VIS_Pref_error-list .VIS_Pref_err-btn {
+    overflow: auto;
+}
+.VIS-locator-DivStyle .vis-input-wrap .VIS_Pref_pass,
+.vis-locatormainwrap .VIS_Pref_show .VIS_Pref_dd {
+    margin-bottom: 0;
+}
+.vis-locatormainwrap{
+    float: left;
+    width: 100%;
+}
+.vis-locatormainwrap .vis-input-wrap input + label {
+    left: 10px;
+}
+.vis-locatormainwrap .vis-input-wrap input:not([type="checkbox"]) {
+    padding: 5px 10px;
+}
+.VIS_Pref_show:last-child .vis-input-wrap {
+    margin-bottom: 5px;
+}
+
 @media (max-width:679px) {
     .VIS_Pref_close {
-        width: 8%;
+        /*width: 8%;*/
     }
 
     .VIS_Pref_settings {
@@ -1162,7 +1184,7 @@ html[dir="rtl"] .input-group-addon {
     }
 
     .VIS_Pref_input-t {
-        border: 1px solid #A9A9A9;
+        /*border: 1px solid #A9A9A9;*/
         width: 42%;
         height: 30px;
     }
@@ -1180,38 +1202,42 @@ html[dir="rtl"] .input-group-addon {
     }
 
     .VIS_Pref_new-password h4 {
-        margin: 0;
-        float: left;
+        /*margin: 0;
+        float: left;*/
     }
 
     .VIS_Pref_new-password {
-        border: 1px solid #DDDDDD;
+        /*border: 1px solid #DDDDDD;
         padding: 15px;
         border-radius: 5px;
         position: relative;
         width: 80%;
-        margin: auto;
+        margin: auto;*/
     }
 }
 
 @media (max-width:420px) {
     .VIS_Pref_log-width {
-        width: 90%;
+        /*width: 90%;*/
     }
 }
 
 @media (max-width:962px) {
-    .VIS_Pref_pass {
+    .VIS_Pref_pass,
+    .VIS_Pref_log-width {
         width: 100%;
-        border: 1px solid #AAAAAA !Important;
+        /*border: 1px solid #AAAAAA !Important;
         padding: 5px 10px !Important;
         border-radius: 5px !Important;
         background: white;
         float: right;
-        margin-bottom: 10px;
+        margin-bottom: 10px;*/
     }
-
+    .VIS_Pref_email-configuration h4, .VIS_Pref_notification h4{
+        text-align: left;
+    }
     .VIS_Pref_log-width h4 span {
         top: 0;
     }
+   
 }

@@ -318,7 +318,7 @@
 
         // var $chkTrace = $('<input type="checkbox" disabled style="margin-right:25px;float:left" />');
 
-        var $chkTrace = $('<input type="checkbox"  style="float:left;margin-right:9px" disabled  />');
+        var $chkTrace = $('<input type="checkbox"  style="float:left;margin-right:5px" disabled  />');
         //        var $lblTrace = $('<span style="float:left;margin-right:2px">' + VIS.Msg.getMsg("TraceItem") + '<span/>');
 
         var $lblTrace = $('<span>' + VIS.Msg.getMsg("TraceItem") + '<span/>');
@@ -7892,15 +7892,16 @@
         };
 
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='BusyDiv'>");
-            $bsyDiv.css("position", "absolute");
-            $bsyDiv.css("bottom", "0");
-            $bsyDiv.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
-            $bsyDiv.css("background-position", "center center");
-            $bsyDiv.css("width", "98%");
-            $bsyDiv.css("height", "98%");
-            $bsyDiv.css('text-align', 'center');
-            $bsyDiv.css('z-index', '1000');
+            //$bsyDiv = $("<div class='BusyDiv'>");
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$bsyDiv.css("position", "absolute");
+            //$bsyDiv.css("bottom", "0");
+            //$bsyDiv.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
+            //$bsyDiv.css("background-position", "center center");
+            //$bsyDiv.css("width", "98%");
+            //$bsyDiv.css("height", "98%");
+            //$bsyDiv.css('text-align', 'center');
+            //$bsyDiv.css('z-index', '1000');
             $bsyDiv[0].style.visibility = "visible";
             $root.append($bsyDiv);
         };
@@ -7926,15 +7927,15 @@
         function createBusyIndicatorFroBottomDiv() {
             var $topdiv = null;
             $topdiv = $('<div style="position: relative; width: 100%; height: 100%; z-index: -1;">');
-            $bsyDivforbottom = $("<div>");
-            $bsyDivforbottom.css("position", "absolute");
-            $bsyDivforbottom.css("bottom", "0");
-            $bsyDivforbottom.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
-            $bsyDivforbottom.css("background-position", "center center");
-            $bsyDivforbottom.css("width", "98%");
-            $bsyDivforbottom.css("height", "98%");
-            $bsyDivforbottom.css('text-align', 'center');
-            $bsyDivforbottom.css('z-index', '1000');
+            $bsyDivforbottom = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$bsyDivforbottom.css("position", "absolute");
+            //$bsyDivforbottom.css("bottom", "0");
+            //$bsyDivforbottom.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
+            //$bsyDivforbottom.css("background-position", "center center");
+            //$bsyDivforbottom.css("width", "98%");
+            //$bsyDivforbottom.css("height", "98%");
+            //$bsyDivforbottom.css('text-align', 'center');
+            //$bsyDivforbottom.css('z-index', '1000');
             //$bsyDivforbottom[0].style.visibility = "visible";
             $topdiv[0].style.visibility = "visible";
             $topdiv.append($bsyDivforbottom);
@@ -7943,15 +7944,15 @@
 
 
         function createBusyIndicatorForMenu() {
-            $bsyDivMenu = $("<div>");
-            $bsyDivMenu.css("position", "absolute");
-            $bsyDivMenu.css("bottom", "0");
-            $bsyDivMenu.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
-            $bsyDivMenu.css("background-position", "center center");
-            $bsyDivMenu.css("width", "98%");
-            $bsyDivMenu.css("height", "98%");
-            $bsyDivMenu.css('text-align', 'center');
-            $bsyDivMenu.css('z-index', '1000');
+            $bsyDivMenu = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$bsyDivMenu.css("position", "absolute");
+            //$bsyDivMenu.css("bottom", "0");
+            //$bsyDivMenu.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
+            //$bsyDivMenu.css("background-position", "center center");
+            //$bsyDivMenu.css("width", "98%");
+            //$bsyDivMenu.css("height", "98%");
+            //$bsyDivMenu.css('text-align', 'center');
+            //$bsyDivMenu.css('z-index', '1000');
             $bsyDivMenu[0].style.visibility = "visible";
             $rightDataDiv.append($bsyDivMenu);
         };
@@ -7959,15 +7960,15 @@
 
         function createBusyIndicatorForTree() {
             // $recodeCount = $('<span style="display:none;position: relative;top: 60%;">' + VIS.Msg.getMsg("ItWillTakeTime") + '<span/>');
-            $bsyDivTree = $("<div>");
-            $bsyDivTree.css("position", "absolute");
-            $bsyDivTree.css("bottom", "0");
-            $bsyDivTree.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
-            $bsyDivTree.css("background-position", "center center");
-            $bsyDivTree.css("width", "98%");
-            $bsyDivTree.css("height", "98%");
-            $bsyDivTree.css('text-align', 'center');
-            $bsyDivTree.css('z-index', '1000');
+            $bsyDivTree = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$bsyDivTree.css("position", "absolute");
+            //$bsyDivTree.css("bottom", "0");
+            //$bsyDivTree.css("background", "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat");
+            //$bsyDivTree.css("background-position", "center center");
+            //$bsyDivTree.css("width", "98%");
+            //$bsyDivTree.css("height", "98%");
+            //$bsyDivTree.css('text-align', 'center');
+            //$bsyDivTree.css('z-index', '1000');
             $bsyDivTree[0].style.visibility = "visible";
             // $bsyDivTree.append($recodeCount);
             $treeBackDiv.append($bsyDivTree);

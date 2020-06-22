@@ -78,7 +78,7 @@
             //    btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
             //}
             //else {
-                searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0'>");
+                searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0 vis-leftsidebarouterwrap'>");
                 searchSec = $("<div class='vis-info-l-s-content'>");
                 searchTab.append(searchSec);
                 datasec = $("<div class='vis-info-datasec'>");
@@ -134,12 +134,15 @@
                 tr = $("<tr>");
                 tableSArea.append(tr);
                 var td = $("<td>");
-                label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblNametxt);
-                td.append(label);
+                var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+                var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+                label = $("<label class='VIS_Pref_Label_Font'>").append(lblNametxt);
                 tr.append(td);
+                td.append(Leftformfieldwrp);
+                Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-                tr = $("<tr>");
-                tableSArea.append(tr);
+                //tr = $("<tr>");
+                //tableSArea.append(tr);
                 var srchCtrl = {
                 };
 
@@ -148,19 +151,23 @@
                 srchCtrl.AD_Reference_ID = 10;
                 srchCtrl.ColumnName = "Name";
                 var tdctrl = $("<td>");
-                tr.append(tdctrl);
-                tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+                //tr.append(tdctrl);
+                Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                Leftformfieldctrlwrp.append(label);
                 srchCtrls.push(srchCtrl);
 
                 tr = $("<tr>");
                 tableSArea.append(tr);
                 var td = $("<td>");
-                label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblReftxt);
-                td.append(label);
+                var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+                var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+                label = $("<label class='VIS_Pref_Label_Font'>").append(lblReftxt);
                 tr.append(td);
+                td.append(Leftformfieldwrp);
+                Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-                tr = $("<tr>");
-                tableSArea.append(tr);
+                //tr = $("<tr>");
+                //tableSArea.append(tr);
                 var srchCtrl = {
                 };
 
@@ -169,19 +176,23 @@
                 srchCtrl.AD_Reference_ID = 10;
                 srchCtrl.ColumnName = "Reference";
                 var tdctrl = $("<td>");
-                tr.append(tdctrl);
-                tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit"));
+                //tr.append(tdctrl);
+                Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                Leftformfieldctrlwrp.append(label);
                 srchCtrls.push(srchCtrl);
 
                 tr = $("<tr>");
                 tableSArea.append(tr);
                 var td = $("<td>");
-                label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblFromDate);
-                td.append(label);
+                var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+                var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+                label = $("<label class='VIS_Pref_Label_Font'>").append(lblFromDate);
                 tr.append(td);
+                td.append(Leftformfieldwrp);
+                Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-                tr = $("<tr>");
-                tableSArea.append(tr);
+                //tr = $("<tr>");
+                //tableSArea.append(tr);
                 var srchCtrl = {
                 };
 
@@ -190,20 +201,24 @@
                 srchCtrl.AD_Reference_ID = 10;
                 srchCtrl.ColumnName = "TrxFromDate";
                 var tdctrl = $("<td>");
-                tr.append(tdctrl);
-                tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit").css("height", "30px"));
+                //tr.append(tdctrl);
+                Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                Leftformfieldctrlwrp.append(label);
                 //tdctrl.append(ctrl.getControl().addClass("vis-allocation-date"));
                 srchCtrls.push(srchCtrl);
 
                 tr = $("<tr>");
                 tableSArea.append(tr);
                 var td = $("<td>");
-                label = $("<label class='VIS_Pref_Label_Font' style='margin-bottom: 0px;margin-top:5px;font-weight:inherit'>").append(lblToDate);
-                td.append(label);
+                var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+                var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+                label = $("<label class='VIS_Pref_Label_Font'>").append(lblToDate);
                 tr.append(td);
+                td.append(Leftformfieldwrp);
+                Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-                tr = $("<tr>");
-                tableSArea.append(tr);
+                //tr = $("<tr>");
+                //tableSArea.append(tr);
                 var srchCtrl = {
                 };
 
@@ -212,8 +227,9 @@
                 srchCtrl.AD_Reference_ID = 10;
                 srchCtrl.ColumnName = "TrxToDate";
                 var tdctrl = $("<td>");
-                tr.append(tdctrl);
-                tdctrl.append(ctrl.getControl().css("width", "97%").css("font-weight", "inherit").css("height", "30px"));
+                //tr.append(tdctrl);
+                Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                Leftformfieldctrlwrp.append(label);
                 srchCtrls.push(srchCtrl);
 
                 searchSec.append(tableSArea);
@@ -253,11 +269,11 @@
             btnsec.append(divPaging);
             btnsec.append(divbtnRight);
             //Busy Indicator
-            bsyDiv = $("<div class='vis-apanel-busy'>");
-            bsyDiv.css("width", "98%");
-            bsyDiv.css("height", "97%");
-            bsyDiv.css('text-align', 'center');
-            bsyDiv.css("position", "absolute");
+            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //bsyDiv.css("width", "98%");
+            //bsyDiv.css("height", "97%");
+            //bsyDiv.css('text-align', 'center');
+            //bsyDiv.css("position", "absolute");
             bsyDiv[0].style.visibility = "visible";
             chkDelCart = btnsec.find("#chkDelCart_" + windowNo);
 

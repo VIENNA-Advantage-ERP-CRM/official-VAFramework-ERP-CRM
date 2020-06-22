@@ -647,7 +647,7 @@
 
 
         this.leftULsize = function () {
-            debugger;
+            //debugger;
 
             if (!callingFromOutsideofWindow) {
                 var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 53;
