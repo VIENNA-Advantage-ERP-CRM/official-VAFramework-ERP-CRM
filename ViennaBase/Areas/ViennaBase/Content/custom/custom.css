@@ -446,3 +446,13 @@ input:not([type=button]), select, textarea{
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     color: rgba(var(--v-c-on-secondary), 1);
 }
+
+.w2ui-grid .w2ui-toolbar-search {
+    position: relative;
+}
+.w2ui-grid .w2ui-toolbar-search .w2ui-search-down {
+    margin: auto;
+    right: 5px;
+    top: 4px;
+    bottom: 0;
+}

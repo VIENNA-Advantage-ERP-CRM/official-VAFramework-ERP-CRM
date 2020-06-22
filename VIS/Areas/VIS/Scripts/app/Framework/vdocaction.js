@@ -17,8 +17,8 @@
         var defaultV = "";
         this.log = VIS.Logging.VLogger.getVLogger("VDocAction");
         var options;
-        var $cmbAction = $('<select style="width:235px;margin-left:10px"></select>');
-        var $message = $('<p style="font-size:12px;margin-top:10px;margin-bottom:-5px"></p>');
+        var $cmbAction = $('<select></select>');
+        var $message = $('<p style="font-size:12px;margin-bottom:-5px"></p>');
         // var $btnbackground = $('<button>');
         //  var $btnok = $('<button>');
         //  var $btncancel = $('<button>');
@@ -29,12 +29,12 @@
         var $table = $('<table style="width:360px;margin-bottom:9px">');
         var ch = null;
         this.onClose = null;
-        var tabmenubusy = $('<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/busy.gif"/>');
+        var tabmenubusy = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         var loadLabel = $('<label>' + VIS.Msg.getMsg("Loading") + '</label>');
 
         if (VIS.Application.isRTL) {
-            $cmbAction.css({ "margin-left": "0px", "margin-right": "10px" });
-            $message.css({ "margin-right": "3px" });
+            //$cmbAction.css({ "margin-left": "0px", "margin-right": "10px" });
+            //$message.css({ "margin-right": "3px" });
         }
 
         function init() {
@@ -250,16 +250,21 @@
 
             var $td11 = $('<td>');
             var $td12 = $('<td>');
-            if (VIS.Application.isRTL) {
-                $td11.append('<span style="margin-right:3px">' + VIS.Msg.getMsg('DocAction') + '</span>');
-            }
-            else {
-                $td11.append('<span >' + VIS.Msg.getMsg('DocAction') + '</span>');
-            }
-            $td12.append($cmbAction);
-            $tr1.append($td11).append($td12);
+            var $DivInputWrap1 = $("<div class='input-group vis-input-wrap'></div>");
+            var $DivInputCtrlWrap1 = $("<div class='vis-control-wrap'></div>");
+            //if (VIS.Application.isRTL) {
+            //    $td11.append('<span style="margin-right:3px">' + VIS.Msg.getMsg('DocAction') + '</span>');
+            //}
+            //else {
+                $td11.append($DivInputWrap1);
+                $DivInputWrap1.append($DivInputCtrlWrap1);
+            //}
+            $DivInputCtrlWrap1.append($cmbAction);
+            $DivInputCtrlWrap1.append('<label >' + VIS.Msg.getMsg('DocAction') + '</label>');
+            //$tr1.append($td11).append($td12);
+            $tr1.append($td11);
 
-            var $td22 = $('<td colspan="2">');
+            var $td22 = $('<td>');
             $td22.append($message);
             $tr2.append($td22);
 

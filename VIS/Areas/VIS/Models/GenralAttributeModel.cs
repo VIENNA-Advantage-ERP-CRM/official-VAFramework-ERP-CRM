@@ -80,12 +80,16 @@ namespace VIS.Models
             //Column 1
             var label1 = Msg.Translate(ctx, "Description");
             obj.tableStucture += "<td>";
-            obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id='description_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label1 + "</label>";
+            obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+            obj.tableStucture += "<div class='vis-control-wrap'>";
+            obj.tableStucture += "<input readonly data-placeholder='' placeholder=' '  id='txtDescription_" + windowNo + "' value='" + (_masi.GetDescription()) + "' class='VIS_Pref_pass' type='text'>";
+            obj.tableStucture += "<label id='description_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label1 + "</label>";
+            obj.tableStucture += "</div>";
+            obj.tableStucture += "</div>";
             obj.tableStucture += "</td>";
             //Column 2
-            obj.tableStucture += "<td>";
-            obj.tableStucture += "<input style='width: 100%;' readonly  id='txtDescription_" + windowNo + "' value='" + (_masi.GetDescription()) + "' class='VIS_Pref_pass' type='text'>";
-            obj.tableStucture += "</td>";
+            //obj.tableStucture += "<td>";
+            //obj.tableStucture += "</td>";
 
             obj.tableStucture += "</tr>";
 

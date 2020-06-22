@@ -288,7 +288,7 @@
             '<div class="vis-group-user-wrap"  data-UID="{{AD_UserID}}">' +
                 '<input type="radio" class="vis-GroupUserRadio">' +
              '<div class="vis-group-user-profile vis-group-pro-width">' +
-                        	'<div style=" height:46px;width:46px" class="vis-group-user-img vis-chatimgwrap">' +
+                        	'<div class="vis-group-user-img vis-chatimgwrap">' +
                             '{{#if UserImage}}' +
                             	'<img src="' + VIS.Application.contextUrl + '{{UserImage}}" alt="user-img">' +
                                 '{{else}}' +
@@ -310,60 +310,25 @@
 
                         '<div class="vis-group-user-right">' +
                         	'<ul class="vis-flex-directionCol">' +
-                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="padding-bottom: 10px;" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
+                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="padding-bottom: 15px;" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '{{#if IsActive }}' +
                                         '{{#if IsUpdate}}' +
-                                            '<li><span class="vis-group-user-ico vis-group-activeUser vis vis-user" title="'+VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                            '<li><span class="vis-group-user-ico vis-group-activeUser fa fa-check-circle" title="'+VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                '<li><span disabled class="vis-group-user-ico vis-group-activeUser vis vis-user" title="' + VIS.Msg.getMsg("Active") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                '<li><span disabled class="vis-group-user-ico vis-group-activeUser fa fa-check-circle" title="' + VIS.Msg.getMsg("Active") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                             '{{/if}}' +
                                  '{{else}}' +
                                         '{{#if IsUpdate}}' +
-                                                '<li><span class="vis-group-user-ico vis-group-inactiveUser vis vis-user" title="' + VIS.Msg.getMsg("InActive") +'"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                                '<li><span class="vis-group-user-ico vis-group-inactiveUser fa fa-check-circle" title="' + VIS.Msg.getMsg("InActive") +'"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                                                '<li><span disabled class="vis-group-user-ico vis-group-inactiveUser vis vis-user" title="' + VIS.Msg.getMsg("InActive") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                                                '<li><span disabled class="vis-group-user-ico vis-group-inactiveUser fa fa-check-circle" title="' + VIS.Msg.getMsg("InActive") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
                                          '{{/if}}' +
                                  '{{/if}}' +
                             '</ul>' +
                         '</div>' +
             '</div>' +
 
-            //'{{else}}' +
-
-            // '<div class="vis-group-user-wrap"  data-UID="{{AD_UserID}}">' +
-            // '<div class="vis-group-user-profile vis-group-pro-width">' +
-            //            	'<div style=" height:46px;width:46px" class="vis-group-user-img">' +
-            //                '{{#if UserImage}}' +
-            //                	'<img src="' + VIS.Application.contextUrl + '{{UserImage}}" alt="user-img">' +
-            //                    '{{else}}' +
-            //                    '<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/home/defaultUser46X46.PNG" alt="user-img">' +
-            //                    '{{/if}}' +
-            //                '</div>' +
-            //                            '<div class="vis-group-user-text">' +
-            //                                '{{#if IsActive }}' +
-            //                	            '<p style="font-weight: bold">{{Username}}</p>' +
-            //                                '{{else}}' +
-            //                                '<p>{{Username}}</p>' +
-            //                                 '{{/if}}' +
-            //                                '<span>{{Email}}</span>' +
-            //                            '</div>' +
-            //            '</div>' +
-
-            //            '<div class="vis-group-user-right">' +
-            //            	'<ul>' +
-            //                '{{#if IsActive }}' +
-            //                    '<li><span disabled class="vis-group-user-ico vis-group-pointer vis-group-activeUser" data-UID="{{AD_UserID}}"></span></li>' +
-            //                     '{{else}}' +
-            //                     '<li><span disabled class="vis-group-user-ico vis-group-pointer vis-group-inactiveUser"  data-UID="{{AD_UserID}}"></span></li>' +
-            //                     '{{/if}}' +
-            //                	'<li><span class="vis-group-user-ico vis-group-pointer vis-group-edit" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
-            //                '</ul>' +
-            //                '<p>{{Country}}</p>' +
-            //            '</div>' +
-            //'</div>' +
-
-            // '{{/if}}' +
-
+            
             '{{/each}}​' +
             '</script>';
             usermodtmp = $(script).html();

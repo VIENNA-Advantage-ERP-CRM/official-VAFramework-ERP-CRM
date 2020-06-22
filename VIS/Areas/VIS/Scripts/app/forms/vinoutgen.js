@@ -30,7 +30,7 @@
         this.vSearchOrder = null;
 
         this.$root = $("<div style='width: 100%; height: 100%; background-color: white;'>");
-        this.$busyDiv = $('<div class="vis-busyindicatorouterwrap" style="visibility: hidden;"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+        this.$busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         this.topDiv = null;
         this.sideDiv = null;

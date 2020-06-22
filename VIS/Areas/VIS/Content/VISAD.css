@@ -1033,16 +1033,16 @@
 
 .vis-gc-vpanel-table-label-checkbox {
     /*vertical-align:bottom;*/
+    font-weight: normal;
 }
 
-    .vis-gc-vpanel-table-label-checkbox input[type=checkbox] {
-        width: auto;
-        min-height: 0;
-        min-width: 0px;
-        margin-left: 4px;
-        margin-right: 4px;
-    }
-
+.vis-gc-vpanel-table-label-checkbox input[type=checkbox] {
+    /* width: auto; */
+    min-height: 0;
+    min-width: 0px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
 .vis-gc-vpanel-table-td0 {
     min-width: 5px;
     width: auto;
@@ -4863,7 +4863,8 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     padding: 5px 10px;
 }
 .vis-leftsidebarouterwrap .vis-input-wrap label,
-.VIS-archive-table-padding .vis-input-wrap label {
+.VIS-archive-table-padding .vis-input-wrap label,
+.vis-emailsavewrap .vis-input-wrap label {
     left: 10px;
 }
 .vis-leftsidebarouterwrap .vis-input-wrap label {
@@ -4900,9 +4901,28 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 .vis-info-l-s-wrap tr:first-child .vis-input-wrap {
     margin-top: 10px;
 }
-
+.vis-markmodulemainwrap {
+    height: 388px;
+    width: 100%;
+    background: rgba(var(--v-c-secondary), .5);
+    overflow: auto;
+    padding: 5px 10px;
+}
 .vis-flex-directionCol{
     flex-direction: column;
+}
+.vis-markmodulemainwrap .vis-gc-vpanel-table-label-checkbox input[type="checkbox"] {
+    margin-right: 7px;
+}
+.vis-valpreferencedatawrp {
+    display: flex;
+}
+.vis-valpreferencedatawrp .vis-input-wrap + label {
+    flex: 1;
+    padding-left: 10px;
+    margin-bottom: 15px !important;
+    display: flex;
+    align-items: center;
 }
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {
