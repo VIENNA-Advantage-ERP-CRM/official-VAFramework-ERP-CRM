@@ -387,7 +387,7 @@ namespace VAdvantage.Process
             AddLog(_order.Get_ID(), _order.GetDateOrdered(), _order.GetGrandTotal(), _order.GetDocumentNo());
             _order = null;
         }   //	completeOrder
-
+        // to get the payment method if no payment method found on the business partner
         public int GetPaymentMethod(){
             //get organisation default 
             string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
@@ -396,8 +396,9 @@ namespace VAdvantage.Process
             dynamic pri = DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
             return Convert.ToInt32(pri);
         }
+        // to get the payment method if no payment term found on the business partner
         public int GetPaymentTerm(){
-            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, C_PaymentTerm_IDDESC";
+            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, C_PaymentTerm_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
             dynamic pri= DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
