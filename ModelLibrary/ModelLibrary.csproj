@@ -419,6 +419,7 @@
     <Compile Include="ModelAD\X_AD_InviteUser_Role.cs" />
     <Compile Include="ModelAD\X_AD_MailQueue.cs" />
     <Compile Include="ModelAD\X_AD_ModuleTable.cs" />
+    <Compile Include="ModelAD\X_AD_Module_DBScript.cs" />
     <Compile Include="ModelAD\X_AD_PInstance_Result.cs" />
     <Compile Include="ModelAD\X_AD_ReportFormat.cs" />
     <Compile Include="ModelAD\X_AD_ReportItem.cs" />

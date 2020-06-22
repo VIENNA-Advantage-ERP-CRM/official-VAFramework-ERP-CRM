@@ -2661,7 +2661,7 @@
 
         this.vTabbedPane.setSelectedTab(action); //set Seleted tab
 
-
+        var keepFilters = back;
         if (isAPanelTab) {
             this.curST = st;
             st.registerAPanel(this);
@@ -2679,6 +2679,7 @@
             if (!gc.isZoomAction && this.curTab.getTabLevel() > 0) {
                 var queryy = new VIS.Query();
                 this.curTab.query = queryy;
+                keepFilters = false;
             }
 
             if (back && this.curTab.getIsCurrent()) {
@@ -2779,7 +2780,7 @@
         //else {
         //    this.setTabPanelIcons();
         this.showTabPanel(this.curTab.getHasPanel());
-        this.showFilterPanel(back);
+        this.showFilterPanel(keepFilters);
 
         //}
 
