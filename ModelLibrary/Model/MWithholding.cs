@@ -66,11 +66,11 @@ namespace VAdvantage.Model
             }
             if (IsApplicableonPay())
             {
-                sql += " AND PayPercentage= " + GetPayPercentage();
+                sql += " AND IsApplicableonPay = 'Y' AND PayPercentage= " + GetPayPercentage();
             }
             if (IsApplicableonInv())
             {
-                sql += " AND invpercentage= " + GetInvPercentage();
+                sql += " AND IsApplicableonInv = 'Y' AND invpercentage= " + GetInvPercentage();
             }
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
