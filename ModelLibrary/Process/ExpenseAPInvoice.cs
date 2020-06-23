@@ -32,7 +32,17 @@ namespace VAdvantage.Process
         private List<int> noPayMethEmp = new List<int>();
         private string bpNameNoPM = "";
         private string message = "";
-
+        private List<int> PayMethEmp = new List<int>();
+        private List<int> PayTermEmp = new List<int>();
+        private List<int> IncompleteInvoice = new List<int>();
+        private string bpNameInvoice = "";
+        private string bpNamePT = "";
+        private string bpNamePM = "";
+        private int paymethod = 0;
+        private int payterm = 0;
+        private string sqlqry, sqlqry1;
+        private int pm;
+        private int pt;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -60,13 +70,15 @@ namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-        }	//	prepare
+        }   //	prepare
 
 
         /// <summary>
         /// Perform Process.
         /// </summary>
         /// <returns>Message (clear text)</returns>
+        /// 
+
         protected override String DoIt()
         {
             int index = 1;
@@ -100,6 +112,8 @@ namespace VAdvantage.Process
             //
             int old_BPartner_ID = -1;
             MInvoice invoice = null;
+            MTimeExpense te = null;
+            //MTimeExpense te = null;
             //
             //PreparedStatement pstmt = null;
             SqlParameter[] param = new SqlParameter[index];
@@ -137,39 +151,103 @@ namespace VAdvantage.Process
                 if (dt.Rows.Count > 0)
                 {
                     foreach (DataRow dr in dt.Rows)
+
                     //	********* Expense Line Loop
                     {
-                        MTimeExpense te = new MTimeExpense(GetCtx(), dr, Get_TrxName());
+                        //Siddheshwar:Checking ConvertedAmt is not null
+                        if (Util.GetValueOfInt(dr["ConvertedAmt"].ToString()) <= 0)
+                        {
+                            return Msg.GetMsg(GetCtx(), "Converted Amount Should be greater than 0");
+                        }
+
+                        te = new MTimeExpense(GetCtx(), dr, Get_TrxName());
 
                         //	New BPartner - New Order
                         if (te.GetC_BPartner_ID() != old_BPartner_ID)
                         {
 
-                            CompleteInvoice(invoice);
+                            CompleteInvoice(invoice, te);
                             MBPartner bp = new MBPartner(GetCtx(), te.GetC_BPartner_ID(), Get_TrxName());
+
+                            log.Info("New Invoice for " + bp);
+                            invoice = new MInvoice(GetCtx(), 0, Get_Trx());
+                            // Siddheshwar: added a code to check for payment method if null
+
                             if (bp.GetVA009_PO_PaymentMethod_ID() <= 0)
                             {
-                                if (!noPayMethEmp.Contains(bp.GetC_BPartner_ID()))
+
+                                paymethod = GetPaymentMethod(te);
+                                if (paymethod <= 0)
                                 {
-                                    noPayMethEmp.Add(bp.GetC_BPartner_ID());
-                                    if (string.IsNullOrEmpty(bpNameNoPM))
+                                    if (!noPayMethEmp.Contains(bp.GetC_BPartner_ID()))
                                     {
-                                        bpNameNoPM = bp.GetName();
+                                        noPayMethEmp.Add(bp.GetC_BPartner_ID());
+                                        if (string.IsNullOrEmpty(bpNameNoPM))
+                                        {
+                                            bpNameNoPM = bp.GetName();
+                                        }
+                                        else
+                                        {
+                                            bpNameNoPM += bp.GetName() + ", ";
+                                        }
                                     }
-                                    else
-                                    {
-                                        bpNameNoPM += bp.GetName() + ", ";
-                                    }
+
                                 }
-                                continue;
+                                else
+                                {
+                                    invoice.SetVA009_PaymentMethod_ID(paymethod);
+
+                                }
+
+
                             }
-                            //
-                            log.Info("New Invoice for " + bp);
-                            invoice = new MInvoice(GetCtx(), 0, null);
+                            else
+                            {
+                                invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
+                            }
                             invoice.SetIsExpenseInvoice(true); //added by arpit asked by Surya Sir on DEC 28,2015
                             invoice.SetClientOrg(te.GetAD_Client_ID(), te.GetAD_Org_ID());
+                            // Siddheshwar: added a code to check for payment term if null
 
-                            invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
+                            if (bp.GetC_PaymentTerm_ID() <= 0)
+                            {
+                                payterm = GetPaymentTerm(te);
+                                if (payterm <= 0)
+                                {
+
+                                    if (!PayTermEmp.Contains(bp.GetC_BPartner_ID()))
+                                    {
+                                        PayTermEmp.Add(bp.GetC_BPartner_ID());
+                                        if (string.IsNullOrEmpty(bpNamePT))
+                                        {
+                                            bpNamePT = bp.GetName();
+                                        }
+                                        else
+                                        {
+                                            bpNamePT += bp.GetName() + ", ";
+
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    invoice.SetC_PaymentTerm_ID(payterm);
+
+                                }
+
+
+                            }
+                            else
+                            {
+                                invoice.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                            }
+
+                            // Added by mohit - to set payment method and sales rep id.
+
+                            //invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
+
+                            //invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
                             // JID_0868
                             // chanegs done by Bharat on 12 September 2018 to set the document type where Expense Invoice checkbox is true.
                             // String qry = "SELECT C_DocType_ID FROM C_DocType "
@@ -216,13 +294,18 @@ namespace VAdvantage.Process
                             invoice.SetDescription(descr);
                             if (!invoice.Save())
                             {
-                                return GetRetrievedError(invoice, "Cannot save Invoice");
+
+
+                                return GetRetrievedError(invoice, te.GetS_TimeExpense_ID() + " " + "Cannot save Invoice");
+
                                 // new Exception("Cannot save Invoice"); 
                             }
                             //added by arpit asked by Surya Sir on 29/12/2015*******
                             else
                             {
                                 old_BPartner_ID = bp.GetC_BPartner_ID();
+                                //Added by siddheshwar
+
                             }
                             //end***************
                         }
@@ -338,17 +421,28 @@ namespace VAdvantage.Process
                     idr.Close();
                 }
             }
-            CompleteInvoice(invoice);
+            CompleteInvoice(invoice, te);
             //if (_noInvoices == 0)
             //{
 
             //    message = " @No Record Found for Invoice  Creation@";
             //}
 
+            //Code for Showing Message when PaymentTerm is null
+            if (!string.IsNullOrEmpty(bpNamePT))
+            {
+                message += Msg.GetMsg(GetCtx(), "NoPayTerm") + bpNamePT + "\n";
+            }
+
+            //code for showing Error Message when Invoice is not completed
+            if (!string.IsNullOrEmpty(bpNameInvoice))
+            {
+                message += Msg.GetMsg(GetCtx(), "NoInvoiceCreated") + bpNameInvoice + "\n";
+            }
 
             if (!string.IsNullOrEmpty(bpNameNoPM))
             {
-                message = Msg.GetMsg(GetCtx(), "NoPayMethEmp") + bpNameNoPM + "\n";
+                message += Msg.GetMsg(GetCtx(), "NoPayMethEmp") + bpNameNoPM + "\n";
             }
             if (_noInvoices > 0)
             {
@@ -357,13 +451,38 @@ namespace VAdvantage.Process
 
             //return "" + _noInvoices + " @Invoices Generated Successfully@";
             return message;
-        }	//	doIt
+        }   //	doIt
+
+
+        /// <summary>
+        /// Method to get default PaymentMethod
+        /// </summary>
+        /// <param name="te">TimeExpense</param>
+        /// <returns></returns>
+        public int GetPaymentMethod(MTimeExpense te)
+        {
+            sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_Org_ID IN(0," + te.GetAD_Org_ID() + ") ORDER BY AD_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
+            pm = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry));
+            return pm;
+        }
+
+        /// <summary>
+        /// Method to get default PaymentTerm
+        /// </summary>
+        /// <param name="te">TimeExpense</param>
+        /// <returns></returns>
+        public int GetPaymentTerm(MTimeExpense te)
+        {
+            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_Org_ID IN(0, " + te.GetAD_Org_ID() + ") ORDER BY AD_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
+            pt = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry1));
+            return pt;
+        }
 
         /// <summary>
         /// Complete Invoice
         /// </summary>
         /// <param name="invoice">invoice</param>
-        private void CompleteInvoice(MInvoice invoice)
+        private void CompleteInvoice(MInvoice invoice, MTimeExpense te)
         {
             if (invoice == null)
             {
@@ -374,17 +493,40 @@ namespace VAdvantage.Process
             invoice.ProcessIt(DocActionVariables.ACTION_COMPLETE);
             if (!invoice.Save())
             {
-                new Exception("Cannot save Invoice");
+                //Added By Siddheshwar
+                if (!IncompleteInvoice.Contains(te.GetS_TimeExpense_ID()))
+                {
+                    IncompleteInvoice.Add(te.GetS_TimeExpense_ID());
+                    if (string.IsNullOrEmpty(bpNameInvoice))
+                    {
+                        bpNameInvoice = te.GetDocumentNo();
+                    }
+                    else
+                    {
+                        bpNameInvoice += te.GetDocumentNo() + ", ";
+
+                    }
+                }
+                new Exception(invoice + "Cannot save Invoice");
+                Rollback();
+            }
+            else
+            {
+                Commit();
+                _noInvoices++;
+                AddLog(invoice.Get_ID(), invoice.GetDateInvoiced(),
+                    invoice.GetGrandTotal(), invoice.GetDocumentNo());
+
             }
 
 
-
             //
-            _noInvoices++;
-            AddLog(invoice.Get_ID(), invoice.GetDateInvoiced(),
-                invoice.GetGrandTotal(), invoice.GetDocumentNo());
+
         }	//	completeInvoice
 
-    }	//	ExpenseAPInvoice
+
+    }
+
+
 
 }
