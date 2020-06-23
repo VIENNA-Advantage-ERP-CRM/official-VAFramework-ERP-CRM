@@ -4261,69 +4261,85 @@ namespace VAdvantage.Model
             DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                sql = @"SELECT IsApplicableonInv, InvCalculation , InvPercentage 
+                // check Withholding applicable on vendor/customer
+                if ((!IsSOTrx() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPInvoice"]).Equals("Y")) ||
+                    (IsSOTrx() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARInvoice"]).Equals("Y")))
+                {
+                    sql = @"SELECT IsApplicableonInv, InvCalculation , InvPercentage 
                                         FROM C_Withholding WHERE IsApplicableonInv = 'Y' AND C_Withholding_ID = " + GetC_Withholding_ID();
-                if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) > 0)
-                {
-                    sql += " AND NVL(C_Region_ID, 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) + ")";
-                }
-                else
-                {
-                    sql += " AND NVL(C_Region_ID, 0) IN (0) ";
-                }
-                if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) > 0)
-                {
-                    sql += " AND NVL(C_Country_ID , 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) + ")";
-                }
-                DataSet dsWithholding = DB.ExecuteDataset(sql, null, Get_Trx());
-                if (dsWithholding != null && dsWithholding.Tables.Count > 0 && dsWithholding.Tables[0].Rows.Count > 0)
-                {
-                    // check on withholding - "Applicable on Invoice" or not
-                    if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["IsApplicableonInv"]).Equals("Y"))
+                    if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) > 0)
                     {
-                        // get amount on which we have to derive withholding tax amount
-                        if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_GrandTotal))
+                        sql += " AND NVL(C_Region_ID, 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) + ")";
+                    }
+                    else
+                    {
+                        sql += " AND NVL(C_Region_ID, 0) IN (0) ";
+                    }
+                    if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) > 0)
+                    {
+                        sql += " AND NVL(C_Country_ID , 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) + ")";
+                    }
+                    DataSet dsWithholding = DB.ExecuteDataset(sql, null, Get_Trx());
+                    if (dsWithholding != null && dsWithholding.Tables.Count > 0 && dsWithholding.Tables[0].Rows.Count > 0)
+                    {
+                        // check on withholding - "Applicable on Invoice" or not
+                        if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["IsApplicableonInv"]).Equals("Y"))
                         {
-                            if (IsTaxIncluded())
-                                sql = @"SELECT (SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine WHERE C_Invoice_ID = inv.C_Invoice_ID) FROM C_invoice inv "
-                                    + " WHERE inv.C_Invoice_ID=" + invoice.GetC_Invoice_ID();
-                            else
-                                sql = @"SELECT (SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine WHERE C_Invoice_ID = inv.C_Invoice_ID) + 
+                            // get amount on which we have to derive withholding tax amount
+                            if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_GrandTotal))
+                            {
+                                if (IsTaxIncluded())
+                                    sql = @"SELECT (SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine WHERE C_Invoice_ID = inv.C_Invoice_ID) FROM C_invoice inv "
+                                        + " WHERE inv.C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+                                else
+                                    sql = @"SELECT (SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine WHERE C_Invoice_ID = inv.C_Invoice_ID) + 
                                     (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=inv.C_Invoice_ID) FROM C_invoice inv "
-                                     + " WHERE inv.C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+                                         + " WHERE inv.C_Invoice_ID=" + invoice.GetC_Invoice_ID();
 
-                            withholdingAmt = DB.ExecuteQuery(sql, null, invoice.Get_Trx());//GetGrandTotal();
-                        }
-                        else if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_SubTotal))
-                        {
-                            withholdingAmt = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine 
+                                withholdingAmt = DB.ExecuteQuery(sql, null, invoice.Get_Trx());//GetGrandTotal();
+                            }
+                            else if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_SubTotal))
+                            {
+                                withholdingAmt = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine 
                                              WHERE C_Invoice_ID  = " + GetC_Invoice_ID(), null, invoice.Get_Trx())); //GetTotalLines();
-                        }
-                        else if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_TaxAmount))
-                        {
-                            // get tax amount from Invoice tax
-                            withholdingAmt = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT SUM(TaxAmt) FROM C_InvoiceTax 
+                            }
+                            else if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["InvCalculation"]).Equals(X_C_Withholding.INVCALCULATION_TaxAmount))
+                            {
+                                // get tax amount from Invoice tax
+                                withholdingAmt = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT SUM(TaxAmt) FROM C_InvoiceTax 
                                              WHERE C_Invoice_ID  = " + GetC_Invoice_ID(), null, invoice.Get_Trx()));
+                            }
+
+                            _log.Info("Invoice withholding detail, Invoice Document No = " + GetDocumentNo() + " , Amount on distribute = " + withholdingAmt +
+                             " , Invoice Withhold Percentage " + Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["InvPercentage"]));
+
+                            // derive formula
+                            withholdingAmt = Decimal.Divide(
+                                             Decimal.Multiply(withholdingAmt, Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["InvPercentage"]))
+                                             , 100);
+
+                            invoice.SetBackupWithholdingAmount(Decimal.Round(withholdingAmt, GetPrecision()));
+                            invoice.SetGrandTotalAfterWithholding(Decimal.Subtract(GetGrandTotal(), Decimal.Add(GetWithholdingAmt(), GetBackupWithholdingAmount())));
                         }
-
-                        _log.Info("Invoice withholding detail, Invoice Document No = " + GetDocumentNo() + " , Amount on distribute = " + withholdingAmt +
-                         " , Invoice Withhold Percentage " + Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["InvPercentage"]));
-
-                        // derive formula
-                        withholdingAmt = Decimal.Divide(
-                                         Decimal.Multiply(withholdingAmt, Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["InvPercentage"]))
-                                         , 100);
-
-                        invoice.SetBackupWithholdingAmount(Decimal.Round(withholdingAmt, GetPrecision()));
-                        invoice.SetGrandTotalAfterWithholding(Decimal.Subtract(GetGrandTotal(), Decimal.Add(GetWithholdingAmt(), GetBackupWithholdingAmount())));
+                    }
+                    else
+                    {
+                        // when backup withholding ref as ZERO, when it is not for Invoice
+                        //invoice.SetC_Withholding_ID(0);
+                        _log.Info("Invoice backup withholding not found, Invoice Document No = " + GetDocumentNo());
+                        return false;
                     }
                 }
                 else
                 {
-                    // when backup withholding ref as ZERO, when it is not for Invoice
-                    //invoice.SetC_Withholding_ID(0);
-                    _log.Info("Invoice backup withholding not found, Invoice Document No = " + GetDocumentNo());
-                    return false;
+                    // when withholding not applicable on Business Partner
+                    SetBackupWithholdingAmount(0);
+                    // when withholdinf define by user manual or already set, but not applicable on invoice
+                    if (GetC_Withholding_ID() > 0)
+                    {
+                        //SetC_Withholding_ID(0);
+                        return false;
+                    }
                 }
             }
             return true;
