@@ -1,5 +1,4 @@
-﻿/*** version 1.0.18.1***/
-
+﻿/** 1.0.19.1*/
 html, body {
     height: 100%;
     width: 100%;
@@ -263,6 +262,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home {
     bottom: 0px;
     min-width: 320px;
     box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.15);
+    border-radius: .3rem;
 }
 
     #vis_mainMenu .vis-menuTitle {
@@ -272,7 +272,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home {
         border-top-right-radius: 5px;
     }
 
-.vis-menuTitle i {
+.vis-mainMenu .vis-menuTitle i {
     color: rgba(var(--v-c-on-primary), 1);
 }
 
@@ -283,7 +283,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home {
 #vis_mainMenu .vis-menuTitle p {
     margin: 0px;
     padding: 0px 0px 0px 10px;
-    color: #ffffff;
+    color: rgba(var(--v-c-on-primary), 1);
     font-size: 14px;
     font-weight: bold;
     display: inline-block;
@@ -293,7 +293,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home {
 #vis_mainMenu .vis-menuSearch {
     display: flex;
     padding: 10px;
-    border-bottom: 1px solid #d8d7d7;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     align-items: center;
 }
 
@@ -317,7 +317,7 @@ html[dir="rtl"] .vis-icons-menuBar.vis-icon-Info-Home {
 }
 
     #vis_mainMenu .vis-menuSearch input[type=text]:focus {
-        border: 1px solid rgba(var(--v-c-primary), .3);
+        border: 1px solid rgba(var(--v-c-primary), .4);
     }
 
     #vis_mainMenu .vis-menuSearch input[type=text]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -386,12 +386,16 @@ html[dir="rtl"] .vis-menufavitm {
         float: right;
     }
 
-.vis-icon-menuclose, .vis-icon-menuclose:hover {
-    /*width: 40px;*/
-    /* height: 42px; */
-    /* float: right; */
-    color: rgba(var(--v-c-on-primary), 1);
+.vis-icon-menuclose {
+    font-size: .875rem;
 }
+
+    .vis-icon-menuclose, .vis-icon-menuclose:hover {
+        /* width: 40px; */
+        /* height: 42px; */
+        /* float: right; */
+        color: rgba(var(--v-c-on-secondary), 1);
+    }
 
 html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose {
     float: left;
@@ -1228,22 +1232,25 @@ html[dir="rtl"] .vis-filter-dialog {
     }
 
 .vis-awindow-header {
-    /*background-color: #58B1E2;*/
-    background-color: rgba(var(--v-c-primary), 1);
-    vertical-align: middle;
-    display: block;
+    /* background-color: #58B1E2; */
+    /* background-color: rgba(var(--v-c-primary), 1); */
+    /* vertical-align: middle; */
+    display: flex;
     height: 42px;
-    color: rgba(var(--v-c-on-primary), 1);
+    color: rgba(var(--v-c-primary), 1);
+    align-items: center;
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
 }
 
     .vis-awindow-header p, .vis-awindow-header h1 {
         margin: 0px;
-        padding: 10px 10px 0px 10px;
+        padding: 0px 10px 0px 10px;
         font-size: 14px;
-        /*font-weight: bold;*/
+        /* font-weight: bold; */
         display: inline-block;
-        color: rgba(var(--v-c-on-primary), 1);
+        /* color: rgba(var(--v-c-on-primary), 1); */
         white-space: nowrap;
+        flex: 1;
     }
 
     .vis-awindow-header p {
@@ -1349,7 +1356,6 @@ html[dir="rtl"] .vis-filter-dialog {
     background: url("../Images/busy.gif") no-repeat;
     background-position: center center;
 }
-
 
 .vis-apanel-busyVInOutGenRoot {
     position: relative;
@@ -2105,16 +2111,15 @@ html[dir="rtl"] .vis-filter-dialog {
 .vis-gc-vpanel-table select,
 .vis-gc-vpanel-table textarea,
 .vis-gc-vpanel-table button {
-    border-style: solid;
+    /*border-style: solid;
     border-width: 1px;
-    border-color: darkgray;
+    border-color: darkgray;*/
     position: relative;
     width: 100%;
     min-width: 100%;
     min-height: 26px;
     line-height: inherit !important;
     margin-bottom: 10px;
-    padding: 1px !important;
 }
 
 .vis-gc-vpanel-table button {
@@ -2156,10 +2161,11 @@ html[dir="rtl"] .vis-filter-dialog {
 
 .vis-gc-vpanel-table-label-checkbox {
     /*vertical-align:bottom;*/
+    font-weight: normal;
 }
 
     .vis-gc-vpanel-table-label-checkbox input[type=checkbox] {
-        width: auto;
+        /* width: auto; */
         min-height: 0;
         min-width: 0px;
         margin-left: 4px;
@@ -2634,21 +2640,23 @@ html[dir="rtl"] .vis-sms-leftWrap {
         color: #535353;
     }
 
-.vis-sms-form-data > input, .vis-sms-form-data-extra > input, .vis-sms-form-data-sub > input {
+/*.vis-sms-form-data > input, .vis-sms-form-data-extra > input, .vis-sms-form-data-sub > input {
     width: 100%;
     float: left;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     padding-bottom: 10px;
     font-size: 20px;
     font-weight: lighter;
     color: rgba(var(--v-c-on-secondary), 1);
-}
+}*/
 
-    .vis-sms-form-data > input:focus, .vis-sms-form-data-extra > input:focus {
-        border: none;
-        border-bottom: 1px solid #ccc;
-    }
+/*.vis-sms-form-data > input:focus,
+.vis-sms-form-data-extra > input:focus,
+.vis-sms-form-data-sub input:focus {
+    border: none;
+    border-bottom: 1px solid #ccc;
+}*/
 
 .vis-sms-leftFooter {
     width: 100%;
@@ -3488,12 +3496,13 @@ findImg {
 .vis-allocation-leftControls {
     width: 100%;
     float: left;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
 }
 
 .vis-allocation-inputLabels {
     width: 100%;
     float: left;
+    margin: 10px 0;
 }
 
 .vis-allocation-currencycmb, .vis-allocation-docTypecmb, .vis-allocation-docNo, .vis-allocation-fromDate, .vis-allocation-toDate {
@@ -3550,7 +3559,7 @@ findImg {
 }
 /*Added new classes*/
 .vis-leftpanel-wrapper {
-    background-color: rgba(var(--v-c-secondary), .8);
+    background-color: rgba(var(--v-c-secondary), 1);
     float: left;
     height: 100%;
     position: relative;
@@ -3987,6 +3996,7 @@ findImg {
     height: 171px;
     overflow: auto;
     float: left;
+    width: 100%;
 }
 
 .vis-cardviewCondition {
@@ -5801,7 +5811,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     float: left;
     height: 100%;
     max-width: 260px;
-    background: rgba(var(--v-c-secondary), .8);
+    background: rgba(var(--v-c-secondary), 1);
 }
 
 .vis-archive-l-s-head {
@@ -5832,7 +5842,8 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     padding-top: 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    background: rgba(var(--v-c-secondary), 0.8);
+    background: rgba(var(--v-c-secondary), 1);
+    width: 100%;
 }
 
 .vis-archive-l-s-content-inner {
@@ -5872,6 +5883,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 
 .VIS-archive-table-padding input {
     height: 30px;
+    padding: 5px 10px;
 }
 
 .vis-mi-ls-wrp, .vis-mi-main-contntwrp {
@@ -5900,6 +5912,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-frm-contenthead {
     flex: 1;
     display: flex;
+    align-items: center;
 }
 
     .vis-frm-contenthead > label {
@@ -5919,8 +5932,9 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     outline: none;
 }
 
-    .vis-app-aform-root input:not([type="button"]):not([type="checkbox"]), .vis-app-aform-root select {
+    .vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), .vis-app-aform-root select {
         min-height: 30px;
+        padding: 5px 10px;
     }
 
         .vis-app-aform-root input:focus,
@@ -5945,7 +5959,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 
 .vis-info-l-s-wrap {
-    background-color: rgba(var(--v-c-secondary), .8);
+    background-color: rgba(var(--v-c-secondary), 1);
     padding: 0 10px;
     float: left;
     width: 25%;
@@ -5981,10 +5995,10 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 
 .vis-info-subroot input:not([type="button"]):not([type="checkbox"]),
 .vis-info-subroot select {
-    width: 100%;
+    /*width: 100%;
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
-    color: rgba(var(--v-c-on-secondary), 1);
-    background-color: rgba(var(--v-c-common), 1);
+    color: rgba(var(--v-c-on-secondary), 1);*/
+    /*background-color: rgba(var(--v-c-common), 1);*/
 }
 
 .vis-info-btnswrap .VIS_Pref_btn-2 {
@@ -6043,7 +6057,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 
 .vis-info-btnswrap,
 .vis-info-btnswrap > div,
-.vis-info-btmcnt-wrap,
+/*.vis-info-btmcnt-wrap,*/
 .vis-frm-ls-top {
     display: flex;
     align-items: center;
@@ -6059,8 +6073,10 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 
 .vis-info-btmcnt-wrap {
-    padding: 4px 10px;
+    padding: 10px;
     width: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .vis-info-searchbtn-wrap {
@@ -6071,7 +6087,16 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-info-btnfileds-wrap {
     flex: 1;
     padding: 0 20px;
+    display: flex;
 }
+
+.vis-info-botdatafield {
+    flex: 1;
+}
+
+    .vis-info-botdatafield .vis-input-wrap {
+        margin-bottom: 0px;
+    }
 
 .vis-p-t-10 {
     padding-top: 10px;
@@ -6119,6 +6144,196 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     display: flex;
     justify-content: center;
 }
+
+.vis-icon-menuclose {
+    order: 7;
+    display: flex;
+    cursor: pointer;
+}
+
+.vis-leftsidebarouterwrap .vis-input-wrap select,
+.vis-leftsidebarouterwrap .vis-input-wrap input {
+    background-color: transparent;
+}
+
+.vis-leftsidebarouterwrap .vis-input-wrap select,
+.vis-leftsidebarouterwrap .vis-input-wrap input,
+.vis-leftsidebarouterwrap .vis-input-wrap .input-group-text {
+    border: 1px solid rgba(var(--v-c-on-secondary), .4);
+}
+
+    .vis-leftsidebarouterwrap .vis-input-wrap select ~ label,
+    .vis-leftsidebarouterwrap .vis-input-wrap select:focus ~ label,
+    .vis-leftsidebarouterwrap .vis-input-wrap input:focus ~ label,
+    .vis-leftsidebarouterwrap .vis-input-wrap input:not(:placeholder-shown) ~ label {
+        background: linear-gradient(rgba(var(--v-c-secondary), 1) 50%, transparent 50%);
+        left: 5px;
+    }
+
+.vis-leftsidebarouterwrap .vis-input-wrap input {
+    padding: 5px 10px;
+}
+
+.vis-leftsidebarouterwrap .vis-input-wrap label,
+.VIS-archive-table-padding .vis-input-wrap label,
+.vis-emailsavewrap .vis-input-wrap label {
+    left: 10px;
+}
+
+.vis-leftsidebarouterwrap .vis-input-wrap label {
+    color: rgba(var(--v-c-on-secondary), .8);
+}
+
+.vis-leftsidebarouterwrap .vis-input-wrap .vis-ev-col-mandatory {
+    /*border: 1px solid rgba(var(--v-c-mandatory), 1);*/
+}
+
+.vis-matchpoTopcheckwrap {
+    padding: 0 10px;
+    display: flex;
+}
+
+.vis-info-btmcnt-wrap .VIS_Pref_btn-2 {
+    height: 35px;
+    padding: 5px 12px;
+}
+
+.vis-paymentselect-field .vis-input-wrap .vis-paymentPrintChk-field label {
+    position: relative;
+    top: auto !important;
+    padding-left: 0;
+}
+
+.vis-leftsidebarouterwrap .panel-body {
+    padding-bottom: 0;
+}
+
+    .vis-leftsidebarouterwrap .panel-body .vis-input-wrap select ~ label,
+    .vis-leftsidebarouterwrap .panel-body .vis-input-wrap select:focus ~ label,
+    .vis-leftsidebarouterwrap .panel-body .vis-input-wrap input:focus ~ label,
+    .vis-leftsidebarouterwrap .panel-body .vis-input-wrap input:not(:placeholder-shown) ~ label {
+        background: linear-gradient(#fff 50%, transparent 50%);
+    }
+
+.vis-leftsidebarouterwrap .vis-input-wrap .input-group-text {
+    height: 35px;
+}
+
+.vis-info-l-s-wrap tr:first-child .vis-input-wrap {
+    margin-top: 10px;
+}
+
+.vis-markmodulemainwrap {
+    height: 388px;
+    width: 100%;
+    background: rgba(var(--v-c-secondary), .5);
+    overflow: auto;
+    padding: 5px 10px;
+}
+
+.vis-flex-directionCol {
+    flex-direction: column;
+}
+
+.vis-markmodulemainwrap .vis-gc-vpanel-table-label-checkbox input[type="checkbox"] {
+    margin-right: 7px;
+}
+
+.vis-valpreferencedatawrp {
+    display: flex;
+}
+
+    .vis-valpreferencedatawrp .vis-input-wrap + label {
+        flex: 1;
+        padding-left: 10px;
+        margin-bottom: 15px !important;
+        display: flex;
+        align-items: center;
+    }
+/*busy indicator css for vis*/
+.vis-busyindicatorouterwrap {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    left: 0;
+}
+
+.vis-busyindicatorinnerwrap {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vis-busyindicatordiv {
+    border: 4px solid rgba(var(--v-c-secondary), 1);
+    border-radius: 50%;
+    border-top: 4px solid rgba(var( --v-c-primary), 1);
+    width: 40px;
+    height: 40px;
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+    display: flex;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/*overwrite kendo classes*/
+.k-treeview .k-in {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(var(--v-c-on-secondary), 1);
+    background-image: none;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+    .k-treeview .k-in p {
+        padding-left: 6px;
+        margin: 0;
+        display: inline;
+    }
+
+.k-state-hover, .k-state-hover:hover, .k-splitbar-horizontal-hover:hover, .k-splitbar-vertical-hover:hover, .k-list > .k-state-hover, .k-scheduler .k-scheduler-toolbar ul li.k-state-hover, .k-pager-wrap .k-link:hover, .k-dropdown .k-state-focused, .k-imagebrowser-dropzone, .k-mobile-list .k-item > .k-link:active, .k-mobile-list .k-item > .k-label:active, .k-mobile-list .k-edit-label.k-check:active, .k-mobile-list .k-recur-view .k-check:active {
+    background: rgba(var(--v-c-on-secondary), .1) !important;
+    color: rgba(var(--v-c-primary), 1) !important;
+    background-image: none;
+}
+
+.k-state-selected, .k-state-selected:link, .k-state-selected:visited, .k-list > .k-state-selected, .k-list > .k-state-highlight, .k-panel > .k-state-selected, .k-ghost-splitbar-vertical, .k-ghost-splitbar-horizontal, .k-draghandle.k-state-selected:hover, .k-scheduler .k-scheduler-toolbar .k-state-selected, .k-scheduler .k-today.k-state-selected, .k-marquee-color {
+    color: rgba(var(--v-c-on-primary), 1) !important;
+    background-color: rgba(var(--v-c-primary), 1) !important;
+    border-color: inherit;
+}
+
+.k-state-focused.k-state-selected, .k-list > .k-state-focused.k-state-selected, .k-listview > .k-state-focused.k-state-selected, td.k-state-focused.k-state-selected {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
 
 
 
@@ -6322,7 +6537,7 @@ div.VIS_Pref_slide-show.pp {
     padding-right: 10px;
     /* font-weight: 400; */
     /* vertical-align: middle; */
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .VIS_Pref_pass {
@@ -6714,6 +6929,7 @@ div.VIS_Pref_slide-show.pp {
         display: flex;
         margin-top: 0;
         margin-bottom: 10px;
+        align-items: center;
     }
 
         .VIS_Pref_show .VIS_Pref_dd:first-child {
@@ -6755,6 +6971,7 @@ div.VIS_Pref_slide-show.pp {
 
 a.VIS_Pref_tooltip {
     outline: none;
+    /*margin-bottom: 15px;*/
 }
 
     a.VIS_Pref_tooltip strong {
@@ -7084,13 +7301,13 @@ input:required:valid {
 }
 
     .VIS-VImage-testBottom-btn > a {
-        background: #616364;
+        /* background: #616364; */
         border-radius: 0;
-        color: #fff;
+        /*color: #fff;*/
     }
 
         .VIS-VImage-testBottom-btn > a:hover {
-            color: #fff;
+            /* color: #fff; */
         }
 
 .VIS-GmailSetting-Controls {
@@ -7293,9 +7510,35 @@ html[dir="rtl"] .input-group-addon {
     float: right;
 }
 
+.VIS_Pref_error-list .VIS_Pref_err-btn {
+    overflow: auto;
+}
+
+.VIS-locator-DivStyle .vis-input-wrap .VIS_Pref_pass,
+.vis-locatormainwrap .VIS_Pref_show .VIS_Pref_dd {
+    margin-bottom: 0;
+}
+
+.vis-locatormainwrap {
+    float: left;
+    width: 100%;
+}
+
+    .vis-locatormainwrap .vis-input-wrap input + label {
+        left: 10px;
+    }
+
+    .vis-locatormainwrap .vis-input-wrap input:not([type="checkbox"]) {
+        padding: 5px 10px;
+    }
+
+.VIS_Pref_show:last-child .vis-input-wrap {
+    margin-bottom: 5px;
+}
+
 @media (max-width:679px) {
     .VIS_Pref_close {
-        width: 8%;
+        /*width: 8%;*/
     }
 
     .VIS_Pref_settings {
@@ -7340,7 +7583,7 @@ html[dir="rtl"] .input-group-addon {
     }
 
     .VIS_Pref_input-t {
-        border: 1px solid #A9A9A9;
+        /*border: 1px solid #A9A9A9;*/
         width: 42%;
         height: 30px;
     }
@@ -7358,35 +7601,40 @@ html[dir="rtl"] .input-group-addon {
     }
 
     .VIS_Pref_new-password h4 {
-        margin: 0;
-        float: left;
+        /*margin: 0;
+        float: left;*/
     }
 
     .VIS_Pref_new-password {
-        border: 1px solid #DDDDDD;
+        /*border: 1px solid #DDDDDD;
         padding: 15px;
         border-radius: 5px;
         position: relative;
         width: 80%;
-        margin: auto;
+        margin: auto;*/
     }
 }
 
 @media (max-width:420px) {
     .VIS_Pref_log-width {
-        width: 90%;
+        /*width: 90%;*/
     }
 }
 
 @media (max-width:962px) {
-    .VIS_Pref_pass {
+    .VIS_Pref_pass,
+    .VIS_Pref_log-width {
         width: 100%;
-        border: 1px solid #AAAAAA !Important;
+        /*border: 1px solid #AAAAAA !Important;
         padding: 5px 10px !Important;
         border-radius: 5px !Important;
         background: white;
         float: right;
-        margin-bottom: 10px;
+        margin-bottom: 10px;*/
+    }
+
+    .VIS_Pref_email-configuration h4, .VIS_Pref_notification h4 {
+        text-align: left;
     }
 
     .VIS_Pref_log-width h4 span {
@@ -11232,7 +11480,8 @@ ul.vis-userLinks-ListMenu li a i {
     align-items: center;
 }
 
-.vis-app-aform-root .VIS-TM-data input[type="checkbox"] {
+.vis-app-aform-root .VIS-TM-data-head input[type="checkbox"],
+.vis-app-aform-root .VIS-TM-data-headMID input[type="checkbox"] {
     margin-top: 0;
 }
 
@@ -11711,13 +11960,13 @@ ul.VIS-TM-root-node li a {
     float: right;
     font-size: 13px;
     margin-right: 5px;
-    color: #fff;
+    color: rgba(var(--v-c-on-primary), 1);
     cursor: pointer;
-    background: #7E8182;
+    background: rgba(var(--v-c-on-secondary), .9);
     padding: 1px 11px;
     letter-spacing: 1px;
     line-height: 22px;
-    font-family: Helvetica;
+    /* font-family: Helvetica; */
 }
 
 .vis-tmlinkdel-icon {
@@ -11738,7 +11987,7 @@ ul.VIS-TM-root-node li a {
 }
 
 .vis-tm-selectedkendoNode {
-    color: #242830;
+    /*color:#242830;*/
     /*color:#ff0000;*/
 }
 
@@ -11809,7 +12058,7 @@ ul.VIS-TM-root-node li a {
 }
 
 .treechild {
-    color: rgba(var(--v-c-on-secondary), 1);
+    /*color: rgba(var(--v-c-on-secondary), 1);*/
 }
 
 .imgdivTree {
@@ -12089,36 +12338,37 @@ input[type="checkbox"].vis-tm-chkbox {
     padding-right: 12px;
 }
 
-    .vis-intial-form-data > label, .vis-intial-form-dataCombo > label {
-        font-size: 14px;
-        /*color:#666;
+.vis-input-wrap.vis-intial-form-data label, .vis-input-wrap.vis-intial-form-dataCombo label {
+    /*font-size:14px;*/
+    /*color:#666;
 	font-weight:normal;*/
-        width: 100%;
-        float: left;
-        /*margin-bottom: 2px;*/
-    }
+    /*width:100%;
+	float:left;*/
+    /*margin-bottom: 2px;*/
+    left: 10px;
+}
 
-    .vis-intial-form-data > input, .vis-intial-form-dataCombo > select {
-        float: left;
-        width: 100%;
-        /*border:1px solid #ccc;*/
-        border-radius: 3px;
-        padding: 5px 10px;
-        height: 30px;
-    }
+.vis-intial-form-data input, .vis-intial-form-dataCombo select {
+    /*float:left;
+	width:100%;*/
+    /*border:1px solid #ccc;*/
+    border-radius: 3px;
+    padding: 5px 10px;
+    height: 30px;
+}
 
-    .vis-intial-form-dataCombo > select {
-        margin-right: 10px;
-    }
+.vis-intial-form-dataCombo > select {
+    margin-right: 10px;
+}
 
-    .vis-intial-form-data > a {
-        float: right;
-        width: 16px;
-        height: 16px;
-        background: url('../Images/info-icon.png');
-        margin-top: 8px;
-        cursor: pointer;
-    }
+.vis-intial-form-data > a {
+    float: right;
+    width: 16px;
+    height: 16px;
+    background: url('../Images/info-icon.png');
+    margin-top: 8px;
+    cursor: pointer;
+}
 
 html[dir="rtl"] .vis-intial-form-data {
     float: right;
@@ -12257,6 +12507,10 @@ html[dir="rtl"] .vis-initial-form-checkbox > label {
 
 .vis-its-ryt-panel .vis-initial-btn {
     float: right;
+}
+
+.initial-client-form .VIS_Pref_change-pass {
+    margin-bottom: 20px;
 }
 /* CSS Document */
 
@@ -12856,19 +13110,18 @@ html[dir="rtl"] .vis-email-leftDiv {
 }
 
 .vis-email-ul {
-    list-style-type: none;
+    /*list-style-type: none;*/
 }
 
-
-
 .vis-list-li-bcc {
-    white-space: nowrap;
+    /* white-space: nowrap; */
 }
 
 label.vis-chcklist-label {
     font-size: 12px;
     font-weight: normal;
     margin-bottom: 0;
+    line-height: 1.5rem;
 }
 
 
@@ -13010,7 +13263,7 @@ html[dir="rtl"] .vis-Email-leftWrap {
 .vis-Email-CcBcc {
     float: right;
     /*width:12%;*/
-    color: #535353;
+    /*color: #535353;*/
     font-size: 12px;
     margin-top: 5px;
 }
@@ -13018,10 +13271,15 @@ html[dir="rtl"] .vis-Email-leftWrap {
     .vis-Email-CcBcc:hover, .vis-EmailAttachment:hover {
         text-decoration: none;
         cursor: pointer;
-        color: #535353;
+        /*color: #535353;*/
     }
 
-.vis-form-data > input, .vis-form-data-extra > input, .vis-form-data-sub > input {
+.vis-form-data > input,
+.vis-form-data-extra > input,
+.vis-form-data-sub > input,
+.vis-sms-form-data > input,
+.vis-sms-form-data-extra > input,
+.vis-sms-form-data-sub > input {
     width: 100%;
     float: left;
     border: none;
@@ -13030,10 +13288,16 @@ html[dir="rtl"] .vis-Email-leftWrap {
     font-size: 20px;
     font-weight: lighter;
     color: rgba(var(--v-c-on-secondary), 1);
+    outline: none;
 }
 
-    .vis-form-data > input:focus, .vis-form-data-extra > input:focus {
-        border: none;
+    .vis-form-data > input:focus,
+    .vis-form-data-extra > input:focus,
+    .vis-form-data-sub input:focus,
+    .vis-sms-form-data > input:focus,
+    .vis-sms-form-data-extra > input:focus,
+    .vis-sms-form-data-sub input:focus {
+        /* border: none; */
         border-bottom: 1px solid rgba(var(--v-c-primary), 1);
     }
 
@@ -13044,32 +13308,33 @@ html[dir="rtl"] .vis-Email-leftWrap {
     display: flex;
     align-items: center;
 }
-
-html[dir="rtl"] .vis-Email-leftFooter {
+    /*html[dir="rtl"] .vis-Email-leftFooter
+{
     float: right;
-}
+}*/
+    .vis-Email-leftFooter > input {
+        /* float: left; */
+    }
 
-.vis-Email-leftFooter > input {
-    float: left;
-}
-
-html[dir="rtl"] .vis-Email-leftFooter > input {
+    /*html[dir="rtl"] .vis-Email-leftFooter > input
+{
     float: right;
-}
+}*/
 
-.vis-Email-leftFooter > label {
-    font-weight: normal;
-    font-size: .75rem;
-    /* float: left; */
-    /* margin-top: 2px; */
-    margin-left: 5px;
-    margin-bottom: 0;
-}
+    .vis-Email-leftFooter > label {
+        font-weight: normal;
+        font-size: .75rem;
+        /* float: left; */
+        /* margin-top: 2px; */
+        margin-left: 5px;
+        margin-bottom: 0;
+    }
 
-html[dir="rtl"] .vis-Email-leftFooter > label {
+/*html[dir="rtl"] .vis-Email-leftFooter > label
+{
     margin-right: 10px;
     margin-left: 0px;
-}
+}*/
 
 /*.Email-divider{
 	width:1px;
@@ -13081,20 +13346,10 @@ html[dir="rtl"] .vis-Email-leftFooter > label {
 .vis-Email-rytWrap {
     float: left;
     width: 325px;
-    border-left: 1px solid #ccc;
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .2);
     padding-left: 20px;
     margin-left: 20px;
     height: 100%;
-}
-
-html[dir="rtl"] .vis-Email-rytWrap {
-    float: right;
-    border-right: 1px solid #ccc;
-    padding-right: 20px;
-    margin-right: 20px;
-    padding-left: 0px;
-    margin-left: 0px;
-    border-left: 0px;
 }
 
 .vis-Email-rytContent {
@@ -13107,28 +13362,33 @@ html[dir="rtl"] .vis-Email-rytWrap {
 .vis-form-rytData {
     float: left;
     width: 100%;
-    margin-bottom: 10px;
+    /*margin-bottom: 5px;*/
+    position: relative;
+    /*margin-top: 10px;*/
+    display: flex;
+    align-items: center;
 }
 
-    .vis-form-rytData > label {
-        width: 100%;
-        float: left;
-        font-size: 12px;
-        /*color: #535353;*/
-        font-weight: normal;
-        margin-bottom: 0;
+    .vis-form-rytData .vis-input-wrap input + label {
+        left: 10px;
     }
 
-    .vis-form-rytData > input {
-        float: left;
-        width: 100%;
-        border: 1px solid rgba(var(--v-c-on-secondary), .2);
-    }
-
-        .vis-form-rytData > input:focus {
-            border: 1px solid #ccc;
-        }
-
+.vis-Email-rytForm .vis-form-rytData:first-child {
+    margin-top: 5px;
+}
+/*.vis-form-rytData input {
+    float: left;
+    width: 100%;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    outline: none
+}
+.vis-form-rytData input:focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
+.vis-form-rytData input:focus ~ label {
+    top: -8px;
+    color: rgba(var(--v-c-primary), 1);
+}*/
 .vis-Email-rytBcc {
     /*margin-top: 10px;*/
     float: left;
@@ -13158,17 +13418,17 @@ html[dir="rtl"] .vis-Email-rytWrap {
     }
 
         .vis-Email-BccList > ul > li {
-            /*color: #535353;*/
+            /* color: #535353; */
             font-size: 12px;
             line-height: 30px;
             display: flex;
-            align-items: center;
+            margin-bottom: 5px;
         }
 
             .vis-Email-BccList > ul > li input {
                 margin-right: 10px;
+                margin-top: 5px;
             }
-
 
 /* Add By Param On date 22-sep-2015*/
 .vis-DMSAttachDoc {
@@ -13258,12 +13518,12 @@ html[dir="rtl"] .vis-Email-rytWrap {
 }
 
 .vis-email-sendbtn {
-    background: rgba(var(--v-c-on-secondary), .5);
+    /* background: rgba(var(--v-c-on-secondary), .5); */
     margin-right: 0;
     width: 42px;
     justify-content: center;
+    order: 6;
 }
-
 
 /*@media(max-width:1024px){
 	.Email-ContentWrap{
@@ -13289,13 +13549,16 @@ html[dir="rtl"] .vis-Email-rytWrap {
                 display: block;
             }
 
+.vis-sms-textarea-div textarea:focus {
+    border: 1px solid rgba(var(--v-c-primary), 1);
+}
 /*----------------------------end by designer--------------------------------*/
 
 .vis-pSelectInfo {
     width: 320px;
     float: left;
     /*padding: 12px;*/
-    background: rgba(var(--v-c-secondary), .8);
+    background: rgba(var(--v-c-secondary), 1);
     position: relative;
     height: 100%;
 }
@@ -13311,7 +13574,7 @@ html[dir="rtl"] .vis-Email-rytWrap {
 
 .vis-paymentselect-field, .vis-paymentPrint-field {
     float: left;
-    margin-bottom: 8px;
+    /*margin-bottom: 5px;*/
     padding: 0 7px;
 }
 
@@ -13357,14 +13620,17 @@ html[dir="rtl"] .vis-Email-rytWrap {
     cursor: not-allowed;
 }
 
-.vis-paymentselect-field select, .vis-paymentselect-field input:not([type="submit"]), .vis-paymentPrint-field select, .vis-paymentPrint-field input:not([type="submit"]) {
-    width: 100%;
-    float: left;
-    /*color: rgba(var(--v-c-on-secondary), 1);*/
-    height: 30px;
-    flex: 1;
-    background-color: var(--white);
-    /*outline: none;*/
+.vis-paymentselect-field select,
+.vis-paymentselect-field input:not([type="submit"]):not([type="checkbox"]),
+.vis-paymentPrint-field select,
+.vis-paymentPrint-field input:not([type="submit"]) {
+    /*width: 100%;
+    float: left;*/
+    /* color: rgba(var(--v-c-on-secondary), 1); */
+    /*height: 30px;*/
+    /*flex: 1;*/
+    /*background-color: var(--white);*/
+    /* outline: none; */
 }
 
 .vis-paymentselect-field input[type="checkbox"] {
@@ -13458,6 +13724,13 @@ html[dir="rtl"] .vis-Email-rytWrap {
         width: auto;
     }
 
+.vis-leftsidebarouterwrap .vis-paymentselect-field:first-child {
+    margin-top: 6px;
+}
+
+.vis-paymentPrint-field .vis-input-wrap input + label {
+    left: 10px;
+}
 
 @media (max-width: 1024px) {
     .vis-paymentPrint-field {
@@ -13499,22 +13772,24 @@ html[dir="rtl"] .vis-Email-rytWrap {
 
 .vis-report-header h3 {
     margin: 0;
-    font-size: 22px;
-    font-family: helvetica;
+    font-size: 1rem;
+    /* font-family: helvetica; */
     font-weight: 400;
-    color: rgba(var(--v-c-on-primary), 1);
+    /*color: rgba(var(--v-c-on-primary), 1);*/
     flex: 1;
 }
 
 .vis-report-header {
     width: 100%;
-    background: rgba(var(--v-c-primary), 1);
-    /*padding: 10px 0px 10px 0px;*/
-    /*float: left;*/
-    /*padding-left: 10px;*/
+    /* background: rgba(var(--v-c-primary), 1); */
+    /* padding: 10px 0px 10px 0px; */
+    /* float: left; */
+    /* padding-left: 10px; */
     padding: 5px 0 5px 0;
     display: flex;
     align-items: center;
+    color: rgba(var(--v-c-primary), 1);
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
 }
 
 .vis-report-tittle {
@@ -13530,7 +13805,7 @@ html[dir="rtl"] .vis-Email-rytWrap {
 .vis-report-header .vis-icon-menuclose.vis-cross {
     padding: 12px 10px;
     display: flex;
-    background: rgba(var(--v-c-on-secondary), .4);
+    /*background: rgba(var(--v-c-on-secondary), .4);*/
 }
 
 .vis-report-a-r-container {
@@ -13573,7 +13848,7 @@ html[dir="rtl"] .vis-Email-rytWrap {
             float: left;
             display: inline-flex;
             padding: 0 7px;
-            color: rgba(var(--v-c-on-secondary), 1);
+            color: rgba(var(--v-c-primary), 1);
             font-size: 1.2rem;
             cursor: pointer;
         }
@@ -13593,7 +13868,7 @@ ul.vis-reporticonsul, ul.vis-reporticonsulprint {
 }
 
     ul.vis-reporticonsul li {
-        color: rgba(var(--v-c-on-primary), 1);
+        /*color: rgba(var(--v-c-on-primary), 1);*/
     }
 
 ul.vis-toppaging {
@@ -13603,13 +13878,13 @@ ul.vis-toppaging {
 }
 
     ul.vis-toppaging li {
-        color: rgba(var(--v-c-on-primary), 1);
+        /*color: rgba(var(--v-c-on-primary), 1);*/
         margin: 0;
         font-size: 1rem;
     }
 
         ul.vis-toppaging li select {
-            border: none;
+            /*border: none;*/
         }
 
         ul.vis-toppaging li:nth-child(3) {
@@ -13635,6 +13910,7 @@ ul.vis-toppaging {
 
 .vis-icon-menuclose .vis-cross {
     color: rgba(var(--v-c-on-secondary), 1);
+    font-size: .875rem;
 }
 
 .vis-savecsv-ico {
@@ -13791,6 +14067,13 @@ ul.vis-toppaging {
             height: 25px;
         }
 
+.vis-report-header input[type="checkbox"],
+.vis-report-header input[type="checkbox"]:checked:before,
+.vis-report-header input[type="checkbox"]:not(:checked),
+.vis-report-header input[type="checkbox"]:checked {
+    border-color: rgba(var(--v-c-on-primary), 1);
+}
+
 /*.vis-rad-mainWrap{ width: 540px; margin: 20% auto;}*/
 .vis-header-wrap h3 {
     /*margin: 0;
@@ -13832,11 +14115,7 @@ ul.vis-toppaging {
     width: 100%;
     float: left;
 }
-
-.vis-rad-recordOp {
-    margin-top: 10px;
-}
-
+/*.vis-rad-recordOp{ margin-top: 10px;}*/
 .vis-rad-recordData {
     width: calc(100% - 31px);
     float: left;
@@ -14027,6 +14306,7 @@ span.vis-rad-paging {
     font-size: 16px;
     display: flex;
     align-items: center;
+    flex: 1;
 }
 
     .vis-group-content-tittle i {
@@ -14079,6 +14359,9 @@ h4.vis-group-rights:before {
 .vis-group-content-headDown {
     margin-top: 10px;
     display: flex;
+    align-items: center;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-right: 10px;
 }
 
 .vis-group-ass-btns {
@@ -14100,8 +14383,10 @@ h4.vis-group-rights:before {
     margin-right: 5px;
 }
 
-.vis-group-search-icon {
+.vis-groupbtn.vis-group-search-icon {
     border-left: none;
+    margin: 0;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
 input.vis-group-search-icon {
@@ -14147,27 +14432,27 @@ input.vis-group-search-icon {
     }
 
 .vis-group-content-headDown span {
-    display: flex;
-    width: 100%;
+    /*display: flex;
+    width: 100%;*/
 }
 
 .vis-group-content-headDown > input[type=text], .vis-group-content-headDown > span > input[type=text] {
-    border: 1px solid rgba(var(--v-c-on-secondary), .25);
+    border: none;
     height: 29px;
-    padding-left: 5px;
-    /*width: 83%;*/
-    /*float: left;*/
-    outline: none;
+    padding: 5px 10px;
+    /* width: 83%; */
+    /* float: left; */
+    /* outline: none; */
     border-radius: 0px;
     flex: 1;
     min-width: 50px;
-    color: rgba(var(--v-c-on-secondary), 1)
+    /* color: rgba(var(--v-c-on-secondary), 1); */
 }
 
 .vis-group-users-container, .vis-group-role-container {
     overflow-y: auto;
     overflow-x: hidden;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .vis-group-users-container {
@@ -14180,46 +14465,56 @@ input.vis-group-search-icon {
 
 .vis-group-bordertop {
     width: 100%;
-    border-top: 1px solid rgba(var(--v-c-on-secondary), .25);
+    border-top: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 
 .vis-group-user-wrap {
-    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .25);
-    padding-top: 10px;
-    padding-bottom: 10px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding: 10px 15px;
+    /* padding-bottom: 10px; */
     float: left;
     width: 100%;
     display: flex;
+    margin-bottom: 10px;
+    cursor: pointer;
+    align-items: center;
+    min-height: 79px;
 }
 
 .vis-group-user-profile, .vis-group-user-img {
-    float: left;
+    /*float: left;*/
 }
 
 .vis-group-pro-width {
-    width: calc(100% - 60px);
+    /* width: calc(100% - 60px); */
+    flex: 1;
+    display: flex;
 }
 
 .vis-group-user-text {
-    float: left;
-    padding: 0px 10px 0px;
-    width: calc(100% - 46px);
+    /* float: left; */
+    padding: 0px 10px 0px 15px;
+    /* width: calc(100% - 46px); */
+    flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
     .vis-group-user-text > p {
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 14px;
+        /* color: rgba(var(--v-c-on-secondary), 1); */
         margin: 0;
     }
 
-    .vis-group-user-text > span {
-        color: rgba(var(--v-c-on-secondary), .6);
-        font-size: 12px;
-        margin: 0;
-    }
+        .vis-group-user-text > p:not(:first-child),
+        .vis-group-user-text > span {
+            color: rgba(var(--v-c-on-secondary), .7);
+            font-size: .75rem;
+            /*margin: 0;*/
+        }
 
 .vis-group-user-right {
     float: right;
@@ -14231,6 +14526,7 @@ input.vis-group-search-icon {
         padding: 0;
         display: flex;
         align-items: center;
+        justify-content: flex-end;
     }
 
         .vis-group-user-right > ul > li {
@@ -14245,7 +14541,7 @@ input.vis-group-search-icon {
     cursor: pointer;
     color: rgba(var(--v-c-on-secondary), .5);
     font-size: 1rem;
-    margin-right: 10px;
+    /*margin-right: 10px;*/
 }
 
 .vis-group-edit {
@@ -14258,13 +14554,17 @@ input.vis-group-search-icon {
     /*background-repeat: no-repeat;*/
 }
 
-.vis-group-info, .vis-group-activeUser, .vis-group-inactiveUser {
+.vis-group-info {
     font-size: 1.2rem;
+}
+
+.vis-group-activeUser, .vis-group-inactiveUser {
+    font-size: 1.3rem;
 }
 
 .vis-group-activeUser {
     /*background: url(../Images/group-active-user.png);*/
-    color: rgba(var(--v-c-primary), 1);
+    color: #41c22d;
 }
 
 .vis-group-inactiveUser {
@@ -14278,12 +14578,11 @@ input.vis-group-search-icon {
     color: rgba(var(--v-c-on-secondary), .6);
     font-size: 12px;
     margin-bottom: 0;
+    padding-right: 5px;
 }
 
 .vis-group-user-wrap:hover, .vis-group-selected-op {
-    border-top: 1px solid rgba(var(--v-c-primary), 1);
-    border-bottom: 1px solid rgba(var(--v-c-primary), 1);
-    margin-top: -1px;
+    border: 1px solid rgba(var(--v-c-primary), 1);
 }
 
     .vis-group-user-wrap:hover .vis-group-user-text > span, .vis-group-user-wrap:hover .vis-group-user-right > p, .vis-group-user-wrap:hover .vis-group-user-text > p, .vis-group-user-wrap:hover .vis-group-user-profile > label {
@@ -14291,7 +14590,7 @@ input.vis-group-search-icon {
     }
 
     .vis-group-user-wrap:hover .vis-group-edit, .vis-group-selected-op .vis-group-edit, .vis-group-user-wrap:hover .vis-group-info {
-        /*background: url(../Images/group-edit-hover.png);*/
+        /* background: url(../Images/group-edit-hover.png); */
         color: rgba(var(--v-c-on-secondary), 1);
     }
 
@@ -14304,11 +14603,14 @@ input.vis-group-search-icon {
     }
 
 .vis-group-selected-opbackground {
-    background-color: rgba(var(--v-c-secondary), .6);
+    /*background-color: rgba(var(--v-c-secondary), .6);*/
 }
 
 .vis-group-role-pad {
-    padding: 22px 0;
+    /* padding: 22px 0; */
+    min-height: 79px;
+    display: flex;
+    align-items: center;
 }
 
 .vis-group-user-profile > input[type=checkbox] {
@@ -14328,7 +14630,7 @@ input.vis-group-search-icon {
 .vis-group-top-right {
     float: right;
     text-align: right;
-    display: inline;
+    display: flex;
 }
 
     .vis-group-top-right > span {
@@ -14399,34 +14701,34 @@ input.vis-group-search-icon {
     border-bottom: 2px solid #1AA0ED;*/
 }
 
-.vis-group-assinRole-data {
+/*.vis-group-assinRole-data {
     width: 100%;
     float: left;
     margin-bottom: 10px;
     position: relative;
+}*/
+.vis-group-assinRole-data .vis-input-wrap input + label {
+    /*width: 100%;*/
+    /*font-weight: normal;*/
+    /*color: rgba(var(--v-c-on-secondary), 1);*/
+    /*font-size: 14px;*/
+    /*margin-bottom: 0px;*/
+    left: 10px;
 }
 
-    .vis-group-assinRole-data > label {
-        width: 100%;
-        font-weight: normal;
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 14px;
-        margin-bottom: 0px;
-    }
-
-    .vis-group-assinRole-data > input[type="text"],
-    .vis-group-assinRole-data > input[type="password"],
-    .vis-group-assinRole-data > select,
-    .vis-group-form-data > input[type="text"],
-    .vis-group-form-data > input[type="password"] {
-        border: 1px solid rgba(var(--v-c-on-secondary), .25);
-        padding: 5px;
-        width: 100%;
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 13px;
-        resize: none;
-        outline: none;
-    }
+.vis-group-assinRole-data > input[type="text"],
+.vis-group-assinRole-data > input[type="password"],
+.vis-group-assinRole-data > select,
+.vis-group-form-data > input[type="text"],
+.vis-group-form-data > input[type="password"] {
+    border: 1px solid rgba(var(--v-c-on-secondary), .25);
+    padding: 5px;
+    width: 100%;
+    color: rgba(var(--v-c-on-secondary), 1);
+    font-size: 13px;
+    resize: none;
+    outline: none;
+}
 
 .vis-group-blueBtn {
     background: rgba(var(--v-c-primary), 1);
@@ -14464,16 +14766,6 @@ input.vis-group-search-icon {
         float: left;
         margin-right: 10px;
     }
-
-    .vis-group-assinRole-data > label {
-        width: 100%;
-        font-weight: normal;
-        color: rgba(var(--v-c-on-secondary), 1);
-        font-size: 14px;
-        margin-bottom: 0px;
-    }
-
-
 
 .vis-group-mandatory {
     background-color: lightpink !important;
@@ -14616,8 +14908,6 @@ input.vis-group-search-icon {
     font-size: 13px;
 }
 
-
-
 .vis-group-SaveMessage {
     display: compact;
     display: none;
@@ -14640,6 +14930,7 @@ input.vis-group-search-icon {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        padding-left: 10px;
     }
 
 .vis-group-groupss .vis-group-user-profile {
@@ -14648,7 +14939,7 @@ input.vis-group-search-icon {
 
 .vis-group-colwrap {
     width: calc(100% / 3);
-    padding: 0 12px;
+    /*padding: 0 12px;*/
     height: 100%;
 }
 
@@ -14662,11 +14953,61 @@ input.vis-group-search-icon {
 
 .vis-group-user-right li:nth-child(2) .vis-group-user-ico,
 .vis-group-roless .vis-group-user-ico {
-    margin-right: 5px;
+    /*margin-right: 5px;*/
 }
 
 .vis-group-user-right li:nth-child(2) .vis-group-user-ico {
-    margin-left: 5px;
+    /*margin-left: 5px;*/
+}
+
+.vis-group-content-head {
+    display: flex;
+    align-items: center;
+}
+
+.vis-group-content-head,
+.vis-group-searchwrp,
+.vis-group-DataContainer {
+    padding: 0 12px;
+}
+
+.vis-groupbtn {
+    border: none;
+    background: no-repeat;
+    padding: 0;
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 1.2rem;
+    display: flex;
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+.vis-group-user-img.vis-chatimgwrap {
+    border-radius: 50%;
+    width: 57px;
+    height: 57px;
+}
+
+.vis-group-user-wrap input[type="checkbox"],
+.vis-group-user-wrap input[type="radio"] {
+    width: 20px;
+    height: 20px;
+}
+
+    .vis-group-user-wrap input[type="checkbox"]:checked:before {
+        width: 7px;
+        height: 12px;
+        bottom: 3px;
+        border-width: 0 3px 3px 0;
+    }
+
+    .vis-group-user-wrap input[type="radio"]:checked:before {
+        width: 8px;
+        height: 8px;
+    }
+
+.vis-group-user-wrap input[type="radio"] {
+    margin-right: 12px;
 }
 /*******************************************/
 
@@ -14693,68 +15034,9 @@ input.vis-group-search-icon {
     }
 
     .vis-group-content-headDown > span > input[type=text] {
-        width: 88%;
+        /*width: 88%;*/
     }
 }
-
-/*@media (max-width: 1024px) {
-    .vis-group-left-wrap {
-        width: 40% !important;
-        text-align: center;
-        padding: 20px;
-    }
-
-       
-    .vis-group-form-wrap {
-        border-left: none;
-    }
-}
-
-@media (max-width: 999px) {
- 
-    .vis-group-form-wrap {
-        width: 90%;
-    }
-    
-    .vis-group-left-wrap {
-        width: 95%;
-        text-align: center;
-    }
-    .vis-group-form-wrap {
-        width: 100%;
-    }
-        .vis-group-left-wrap > img {
-            width: 100%;
-        }
-}*/
-
-
-
-
-/*@media (max-width: 999px){
-	.vis-group-form-wrap{
-		width: 90%;	
-	}
-	.vis-group-left-wrap{ width: 95%; text-align: center;}
-	.vis-group-left-wrap > img{
-		width: 100%;
-	}
-     .vis-group-form-wrap {
-        border-left: none;
-    }
-}*/
-/*@media (min-width:1024px){
-    .vis-group-form-wrap{
-		width: 45%;	
-	}
-	.vis-group-left-wrap{ width: 45%; text-align: center; padding: 20px;}
-	.vis-group-left-wrap > img{
-		width: 100%;
-	}
-}*/
-
-
-
 
 .VIS_main-wrap, .VIS_form-wrap, .VIS_form-row {
     float: left;
@@ -15450,7 +15732,7 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.4rem;
+    font-size: .875rem;
     cursor: pointer;
     color: rgb(var(--v-c-on-secondary), 1);
 }
@@ -17499,11 +17781,6 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 /**********************END Filter Panel*/
 
 /****** Style Inputs Control STRAT*****/
-:root {
-    --button-bg: #eee;
-    --input-border: #ddd;
-}
-
 .vis-ev-col * {
     padding: 0px;
     font-weight: normal;
@@ -17517,7 +17794,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 }
 
 
-.vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+.vis-ev-col input:not([type=button]):not([type="checkbox"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
@@ -17526,7 +17803,8 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.vis-ev-col input:not([type=button]), .vis-ev-col textarea {
+.vis-ev-col input:not([type=button]):not([type="checkbox"]),
+.vis-ev-col textarea {
     padding: 5px 10px 5px 30px;
 }
 
@@ -17586,8 +17864,8 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     position: relative;
     z-index: 1;
     width: 100%;
-    display: flex;
-    align-items: center;
+    /*display: flex;
+    align-items: center;*/
 }
 
 .vis-input-wrap input {
@@ -17677,10 +17955,13 @@ select.vis-ev-col-mandatory {
     border-left: 1px solid rgba(var(--v-c-secondary),1);
 }
 
-
-
-.vis-input-wrap input:focus ~ label, .vis-input-wrap input:not(:placeholder-shown) ~ label, .vis-input-wrap textarea:not(:placeholder-shown) ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap textarea:focus ~ label, .vis-input-wrap select ~ label {
-    top: -8px;
+.vis-input-wrap input:focus ~ label,
+.vis-input-wrap input:not(:placeholder-shown) ~ label,
+.vis-input-wrap textarea:not(:placeholder-shown) ~ label,
+.vis-input-wrap select:focus ~ label,
+.vis-input-wrap textarea:focus ~ label,
+.vis-input-wrap select ~ label {
+    top: -7px;
     font-size: 12px;
     background: linear-gradient(#fff 50%, transparent 50%);
     padding: 0 0.4rem;
@@ -17690,7 +17971,11 @@ select.vis-ev-col-mandatory {
     color: rgba(var(--v-c-on-secondary), 1);
 }
 
-    .vis-input-wrap input:focus ~ label, .vis-input-wrap select:focus ~ label, .vis-input-wrap input:focus ~ label sup, .vis-input-wrap select:focus ~ label sup, .vis-input-wrap textarea:focus ~ label {
+    .vis-input-wrap input:focus ~ label,
+    .vis-input-wrap select:focus ~ label,
+    .vis-input-wrap input:focus ~ label sup,
+    .vis-input-wrap select:focus ~ label sup,
+    .vis-input-wrap textarea:focus ~ label {
         color: rgba(var(--v-c-primary),1);
     }
 
@@ -17765,7 +18050,7 @@ select.vis-ev-col-mandatory {
 }
 
     .vis-ev-col-fieldgroup * {
-        background: rgba(var(--v-c-on-secondary), 0.07);
+        background: rgba(var(--v-c-on-secondary), .07);
     }
 
     .vis-ev-col-fieldgroup :first-child {
@@ -17779,7 +18064,7 @@ select.vis-ev-col-mandatory {
     .vis-ev-col-fieldgroup i {
         font-size: 1.5rem;
         color: rgba(var(--v-c-primary), 1);
-        /*padding: 0 10px;*/
+        /* padding: 0 10px; */
     }
 
 .vis-ev-col-fg-rotate {
@@ -17814,7 +18099,9 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     /*.vis-input-wrap input.vis-ev-col-mandatory:not(:focus), .vis-input-wrap select:not(:focus).vis-ev-col-mandatory {
     border: 1px solid #ec3f3f;
 }*/
-    .vis-input-wrap .vis-ev-col-mandatory ~ label, .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup, .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
+    .vis-input-wrap .vis-ev-col-mandatory ~ label,
+    .vis-input-wrap .vis-ev-col-mandatory:not(:focus) ~ label sup,
+    .vis-input-wrap .vis-ev-col-mandatory::-webkit-input-placeholder {
         color: rgba(var(--v-c-mandatory),1) !important;
     }
 
@@ -17852,23 +18139,24 @@ label.vis-ec-col-lblchkbox {
     display: inline-flex;
     align-items: center;
     font-weight: normal;
-}
-
-.vis-ev-col label.vis-ec-col-lblchkbox {
     color: rgba(var(--v-c-on-secondary), 1);
     align-items: center;
 }
 
+/*.vis-ev-col label.vis-ec-col-lblchkbox {
+    color: rgba(var(--v-c-on-secondary), 1);
+    align-items: center;
+}*/
+
 .vis-ec-col-lblchkbox input[type=checkbox] {
-    width: auto;
-    min-height: 0;
-    min-width: 0px;
     margin: 0 4px;
+    padding: 0;
+    border-radius: .15rem;
 }
 
     .vis-ec-col-lblchkbox input[type=checkbox]:focus {
-        outline: auto;
-        outline-color: rgba(var(--v-c-primary), 1);
+        /* outline: auto; */
+        /* outline-color: rgba(var(--v-c-primary), 1); */
     }
 
 .vis-ev-col input:-webkit-autofill {
@@ -17886,7 +18174,7 @@ label.vis-ec-col-lblchkbox {
 .vis-ev-ctrlinfowrap {
     position: absolute;
     left: 10px;
-    top: auto;
+    top: 11px;
     cursor: pointer;
     outline: none;
     z-index: 5;
@@ -17901,7 +18189,8 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     display: inline-flex;
 }
 
-.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap, .vis-input-wrap button.vis-ev-col-img-ctrl ~ .vis-ev-ctrlinfowrap {
+.vis-input-wrap textarea ~ .vis-ev-ctrlinfowrap,
+.vis-input-wrap button.vis-ev-col-img-ctrl ~ .vis-ev-ctrlinfowrap {
     top: 9px;
     align-items: flex-start;
     bottom: auto;
@@ -17946,6 +18235,62 @@ label.vis-ec-col-lblchkbox + .vis-ev-ctrlinfowrap {
     cursor: pointer;
 }
 
+/*checkbox and radio css*/
+input[type="checkbox"],
+input[type="radio"] {
+    -webkit-appearance: none;
+    width: 12px;
+    padding: 0;
+    height: 12px;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    min-width: 12px;
+    min-height: 12px;
+}
+
+    input[type="checkbox"]:checked,
+    input[type="radio"]:checked {
+        /*border: 1px solid rgba(var(--v-c-primary), 1);*/
+        position: relative;
+    }
+
+    input[type="checkbox"]:focus,
+    input[type="radio"]:focus {
+        border: 1px solid rgba(var(--v-c-primary), 1);
+    }
+
+    input[type="checkbox"]:checked:before,
+    input[type="radio"]:checked:before {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0px;
+        right: 0;
+        margin: auto;
+    }
+
+    input[type="checkbox"]:checked:before {
+        width: 4px;
+        height: 7px;
+        bottom: 1px;
+        border: solid rgba(var(--v-c-primary), 1);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    input[type="radio"]:checked:before {
+        width: 6px;
+        height: 6px;
+        background-color: rgba(var(--v-c-primary), 1);
+        bottom: 0;
+        border-radius: .1rem;
+    }
+
+    input[type="checkbox"]:not(:checked),
+    input[type="radio"]:not(:checked) {
+        border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    }
 
 
 /***************************** Control Prop End ****************************************/
@@ -18850,7 +19195,8 @@ html[dir="rtl"] .vis-rad-actionBtn,
 html[dir="rtl"] .vis-rad-recordData,
 html[dir="rtl"] .vis-paymentselect-field,
 html[dir="rtl"] .vis-paymentPrint-field,
-html[dir="rtl"] .vis-sms-leftDiv {
+html[dir="rtl"] .vis-sms-leftDiv,
+html[dir="rtl"] .vis-Email-leftFooter {
     float: right;
 }
 
@@ -18958,7 +19304,8 @@ html[dir="rtl"] .vis-apanel-rb-ul span,
 html[dir="rtl"] .vis-group-head-right:after,
 html[dir="rtl"] .VIS-Tm-btnicon:last-child,
 html[dir="rtl"] .vis-allocation-rightContainer p + input[type="checkbox"],
-html[dir="rtl"] .vis-CardView button {
+html[dir="rtl"] .vis-CardView button,
+html[dir="rtl"] .vis-Email-leftFooter > label {
     margin-left: 0;
     margin-right: 5px;
 }
@@ -18984,7 +19331,8 @@ html[dir="rtl"] .VIS_Pref_btn-2.vis-frm-button,
 html[dir="rtl"] .vis-ctrfrm-btnwrp input,
 html[dir="rtl"] .btns > input[type=button],
 html[dir="rtl"] .VIS-Tm-unlinkforbottmo,
-html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link {
+html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
+html[dir="rtl"] span.vis-ad-w-p-tb-rc-action {
     margin-left: 0;
     margin-right: 10px;
 }
@@ -19100,7 +19448,9 @@ html[dir="rtl"] .vis-input-wrap label {
     left: auto;
 }
 
-html[dir="rtl"] .vis-ev-col input:not([type=button]), html[dir="rtl"] .vis-ev-col textarea, html[dir="rtl"] .vis-control-wrap > button {
+html[dir="rtl"] .vis-ev-col input:not([type=button]):not([type="checkbox"]),
+html[dir="rtl"] .vis-ev-col textarea,
+html[dir="rtl"] .vis-control-wrap > button {
     padding: 5px 30px 5px 10px;
 }
 
@@ -19370,6 +19720,16 @@ html[dir="rtl"] .vis-tm-b-s-ryt input[type="checkbox"] {
 html[dir="rtl"] .vis-process-left-sidebar {
     border-left: 1px solid rgba(var(--v-c-on-secondary), .1);
     border-right: none;
+}
+
+html[dir="rtl"] .vis-Email-rytWrap {
+    /* float: right; */
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-right: 20px;
+    /* margin-right: 20px; */
+    padding-left: 0px;
+    margin-left: 0px;
+    border-left: 0px;
 }
 /*rtl css End here*/
 

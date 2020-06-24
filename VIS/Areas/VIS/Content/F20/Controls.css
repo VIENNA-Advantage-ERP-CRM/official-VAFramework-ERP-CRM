@@ -12,8 +12,7 @@
 }
 
 
-.vis-ev-col input:not([type=button]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
-
+.vis-ev-col input:not([type=button]):not([type="checkbox"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;

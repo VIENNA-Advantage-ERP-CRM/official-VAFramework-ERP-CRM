@@ -862,33 +862,40 @@ namespace VIS.Helpers
                 foreach (string str in UnqFields)
                 {
 
-                    bool isText = DisplayType.IsText(m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())].DisplayType);
+                    //bool isText = DisplayType.IsText(m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())].DisplayType);
+                    int displayType = m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())].DisplayType;
 
                     if (sb.Length == 0)
                     {
                         sb.Append(" SELECT COUNT(1) FROM ");
                         sb.Append(inn.TableName).Append(" WHERE ");
-                        sb.Append(str).Append(" = ");
-                        if (isText)
-                        {
-                            sb.Append("'").Append(rowData[str.ToLower()]).Append("'");
-                        }
-                        else
-                        {
-                            sb.Append(rowData[str.ToLower()]);
-                        }
                     }
                     else
                     {
                         sb.Append(" AND ");
+                    }
+
+                    object colval = rowData[str.ToLower()];
+
+                    if (colval == null || colval == DBNull.Value)
+                    {
+                        sb.Append(str).Append(" IS NULL ");
+                    }
+                    else
+                    {
                         sb.Append(str).Append(" = ");
-                        if (isText)
+                        if (DisplayType.IsID(displayType))
                         {
-                            sb.Append("'").Append(rowData[str.ToLower()]).Append("'");
+                            sb.Append(colval);
+                        }
+                        else if (DisplayType.IsDate(displayType))
+                        {
+
+                            sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
                         }
                         else
                         {
-                            sb.Append(rowData[str.ToLower()]);
+                            sb.Append("'").Append(colval).Append("'");
                         }
                     }
                 }
