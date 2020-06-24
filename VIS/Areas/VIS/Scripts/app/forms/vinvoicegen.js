@@ -216,6 +216,7 @@
 
             //Add to root
             $self.$root.append($self.$busyDiv);
+            $self.$busyDiv[0].style.visibility = "hidden";
             $self.$root.append($self.topDiv).append($self.sideDiv).append($self.gridSelectDiv).append($self.gridGenerateDiv).append($self.bottumDiv);
         }
 
