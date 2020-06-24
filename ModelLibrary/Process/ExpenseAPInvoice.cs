@@ -149,12 +149,6 @@ namespace VAdvantage.Process
                     foreach (DataRow dr in dt.Rows)
                     //	********* Expense Line Loop
                     {
-                        //Siddheshwar:Checking ConvertedAmt is not null
-                        if (Util.GetValueOfInt(dr["ConvertedAmt"].ToString()) <= 0)
-                        {
-                            return Msg.GetMsg(GetCtx(), "Converted Amount Should be greater than 0");
-                        }
-
                         te = new MTimeExpense(GetCtx(), dr, Get_TrxName());
 
                         //	New BPartner - New Order
