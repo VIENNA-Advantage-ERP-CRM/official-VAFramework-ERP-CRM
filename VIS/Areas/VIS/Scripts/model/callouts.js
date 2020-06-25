@@ -16542,8 +16542,12 @@
 
         //	get values
         var ExpenseAmt = mTab.getValue("ExpenseAmt");
-        var C_Currency_From_ID = mTab.getValue("C_Currency_ID");
-        var C_Currency_To_ID = ctx.getContextAsInt(windowNo, "$C_Currency_ID");
+        // did changes to correct the logic for conversion and to consider expense date in conversion.-Mohit
+        //var C_Currency_From_ID = mTab.getValue("C_Currency_ID");        
+        //var C_Currency_To_ID = ctx.getContextAsInt(windowNo, "$C_Currency_ID");
+        var C_Currency_From_ID = 0;
+        var C_Currency_To_ID = mTab.getValue("C_Currency_ID");
+        C_Currency_From_ID = VIS.dataContext.getJSONRecord("MExpenseReport/GetPriceListCurrency", mTab.getValue("S_TimeExpense_ID"));
         //DateTime DateExpense = new DateTime(ctx.getContextAsTime(windowNo, "DateExpense"));
         var DateExpense = ctx.getContext(windowNo, "DateExpense");
         //
@@ -16554,13 +16558,16 @@
         if (!ConvertedAmt.equals(VIS.Env.ZERO) && C_Currency_To_ID != Util.getValueOfInt(C_Currency_From_ID)) {
             var AD_Client_ID = ctx.getContextAsInt(windowNo, "AD_Client_ID");
             var AD_Org_ID = ctx.getContextAsInt(windowNo, "AD_Org_ID");
-            var paramString = ConvertedAmt.toString() + "," + C_Currency_From_ID.toString() + "," + C_Currency_To_ID.toString() + "," +
-                AD_Client_ID.toString() + "," + AD_Org_ID.toString();
+            var paramString = ConvertedAmt.toString() + "," + C_Currency_From_ID.toString() + "," + C_Currency_To_ID.toString() + "," + DateExpense +
+                "," + 0 + "," + AD_Client_ID.toString() + "," + AD_Org_ID.toString();
 
             //ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(ctx,
             //    ConvertedAmt, Util.getValueOfInt(C_Currency_From_ID), C_Currency_To_ID,
             //    DateExpense, 0, AD_Client_ID, AD_Org_ID);
-            ConvertedAmt = VIS.dataContext.getJSONRecord("MConversionRate/Convert", paramString);
+           // ConvertedAmt = VIS.dataContext.getJSONRecord("MConversionRate/Convert", paramString);
+
+            // called currencyconvert method to calculate the conversion on basis of expense date also.
+            ConvertedAmt = VIS.dataContext.getJSONRecord("MConversionRate/CurrencyConvert", paramString);
         }
         mTab.setValue("ConvertedAmt", ConvertedAmt);
         this.log.fine("= ConvertedAmt=" + ConvertedAmt);
