@@ -74,6 +74,30 @@ namespace VAdvantage.Model
 
 
         /// <summary>
+        /// Before Save
+        /// </summary>
+        /// <param name="newRecord">If new record</param>
+        /// <returns></returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            //applied check on changing the pricelist if time epense lines are present.
+            if (!newRecord)
+            {
+                if (Is_ValueChanged("M_PriceList_ID"))
+                {
+                    MTimeExpenseLine[] lines = GetLines();
+                    if (lines.Length > 0)
+                    {
+                        log.SaveError("LinesExists", "");
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Get Lines Convenience Wrapper
         /// </summary>
         /// <returns>array of lines</returns>
