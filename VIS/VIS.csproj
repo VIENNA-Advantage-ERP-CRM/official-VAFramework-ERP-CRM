@@ -784,7 +784,6 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\MConversionRateController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MCurrencyController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MDocTypeController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MExpenseReportController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MInOutController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MInOutLineController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MInventoryController.cs" />

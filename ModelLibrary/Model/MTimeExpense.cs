@@ -66,12 +66,8 @@ namespace VAdvantage.Model
             {
                 if (Is_ValueChanged("M_PriceList_ID"))
                 {
-                    MTimeExpenseLine[] lines = GetLines();
-                    if (lines.Length > 0)
-                    {
-                        log.SaveError("LinesExists", "");
-                        return false;
-                    }
+                    log.SaveError("LinesExists", "");
+                    return false;
                 }
             }
             
