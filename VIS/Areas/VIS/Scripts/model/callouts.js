@@ -16545,9 +16545,9 @@
         // did changes to correct the logic for conversion and to consider expense date in conversion.-Mohit
         //var C_Currency_From_ID = mTab.getValue("C_Currency_ID");        
         //var C_Currency_To_ID = ctx.getContextAsInt(windowNo, "$C_Currency_ID");
-        var C_Currency_From_ID = 0;
-        var C_Currency_To_ID = mTab.getValue("C_Currency_ID");
-        C_Currency_From_ID = VIS.dataContext.getJSONRecord("MExpenseReport/GetPriceListCurrency", mTab.getValue("S_TimeExpense_ID"));
+        var C_Currency_To_ID = 0;
+        var C_Currency_From_ID = mTab.getValue("C_Currency_ID");
+        C_Currency_To_ID = VIS.dataContext.getJSONRecord("MExpenseReport/GetPriceListCurrency", mTab.getValue("S_TimeExpense_ID"));
         //DateTime DateExpense = new DateTime(ctx.getContextAsTime(windowNo, "DateExpense"));
         var DateExpense = ctx.getContext(windowNo, "DateExpense");
         //
