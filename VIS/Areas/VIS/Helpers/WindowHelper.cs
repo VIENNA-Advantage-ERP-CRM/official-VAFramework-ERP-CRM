@@ -857,13 +857,14 @@ namespace VIS.Helpers
             {
 
                 StringBuilder sb = new StringBuilder("");
-
+                StringBuilder colHeaders = new StringBuilder("");
 
                 foreach (string str in UnqFields)
                 {
 
                     //bool isText = DisplayType.IsText(m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())].DisplayType);
-                    int displayType = m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())].DisplayType;
+                    WindowField wField = m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())];
+                    int displayType = wField.DisplayType;
 
                     if (sb.Length == 0)
                     {
@@ -873,8 +874,10 @@ namespace VIS.Helpers
                     else
                     {
                         sb.Append(" AND ");
+                        colHeaders.Append(", " );
                     }
 
+                    colHeaders.Append(wField.Name);
                     object colval = rowData[str.ToLower()];
 
                     if (colval == null || colval == DBNull.Value)
@@ -907,7 +910,7 @@ namespace VIS.Helpers
                 {
                     outt.IsError = true;
                     outt.FireEEvent = true;
-                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = string.Join(",", UnqFields) , IsError = true };
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = colHeaders.ToString() , IsError = true };
                     outt.Status = GridTable.SAVE_ERROR;
                     return;
 
