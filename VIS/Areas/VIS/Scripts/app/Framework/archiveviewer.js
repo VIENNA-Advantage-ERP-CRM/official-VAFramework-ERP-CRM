@@ -794,7 +794,7 @@
                 arrListColumns.push({ field: "CREATED", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "CREATED"), sortable: true, size: '16%', min: 150, hidden: false, render: 'date' });
                 arrListColumns.push({
                     field: "View", caption: VIS.Msg.translate(VIS.Env.getCtx(), "View"), sortable: true, size: '80px', min: 150, hidden: false,
-                    render: function () { return '<div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/download-ico-hover.png" alt="View record" title="View record" style="opacity: 1;"></div>'; }
+                    render: function () { return '<div><i class="vis vis-download" title="View record" style="opacity: 1; font-size: 1rem"></i></div>'; }
                 });
 
                 arrListColumns.push({ field: "AD_ARCHIVE_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "AD_ARCHIVE_ID"), hidden: true });
