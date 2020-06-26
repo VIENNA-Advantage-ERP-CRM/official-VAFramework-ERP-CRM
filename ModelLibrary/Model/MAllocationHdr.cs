@@ -694,10 +694,12 @@ namespace VAdvantage.Model
                             //checking amount is match or not - if not then balance with the same du amount
                             decimal matchedAmount = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(NVL(DUEAMT, 0)) FROM C_InvoicePaySchedule WHERE ISACTIVE = 'Y' AND C_INVOICE_ID = " + invoice.GetC_Invoice_ID(), null, Get_Trx()));
                             matchedAmount += newPaySch.GetDueAmt();
-                            if (matchedAmount != (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()))
+                            if (matchedAmount != (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
+                                && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()))
                             {
                                 newPaySch.SetDueAmt(Decimal.Add(newPaySch.GetDueAmt(),
-                                    (Decimal.Subtract((invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()), matchedAmount))));
+                                    (Decimal.Subtract((invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
+                                    && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()), matchedAmount))));
                             }
 
                             // convert due amount into Base Currency

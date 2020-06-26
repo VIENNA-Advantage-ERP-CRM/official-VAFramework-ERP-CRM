@@ -142,7 +142,8 @@ namespace VAdvantage.Model
             //	Amounts
             int scale = MCurrency.GetStdPrecision(GetCtx(), invoice.GetC_Currency_ID());
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
-            Decimal due = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
+            Decimal due = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 
+                            && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
             if (due.CompareTo(Env.ZERO) == 0)
             {
                 SetDueAmt(Env.ZERO);
