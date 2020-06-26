@@ -152,12 +152,17 @@ namespace VAdvantage.Process
                         te = new MTimeExpense(GetCtx(), dr, Get_TrxName());
 
                         //	New BPartner - New Order
-                        // // Siddheshwar: added a code to check for payment method if null
+                        // 
                         if (te.GetC_BPartner_ID() != old_BPartner_ID)
                         {
 
                             CompleteInvoice(invoice, te);
                             MBPartner bp = new MBPartner(GetCtx(), te.GetC_BPartner_ID(), Get_TrxName());
+
+                            log.Info("New Invoice for " + bp);
+                            invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
+
+                            // Siddheshwar: added a code to check for payment method if null
                             if (bp.GetVA009_PO_PaymentMethod_ID() <= 0)
                             {
 
@@ -226,8 +231,7 @@ namespace VAdvantage.Process
                                 invoice.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
                             }
 
-                            log.Info("New Invoice for " + bp);
-                            invoice = new MInvoice(GetCtx(), 0, null);
+                            
                             invoice.SetIsExpenseInvoice(true); //added by arpit asked by Surya Sir on DEC 28,2015
                             invoice.SetClientOrg(te.GetAD_Client_ID(), te.GetAD_Org_ID());
 
