@@ -369,7 +369,7 @@ namespace VAdvantage.Model
                 {
                     // did changes to give error message when conversion is not found.-Mohit
                     decimal convertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
-                        GetExpenseAmt(), GetC_Currency_Report_ID(), GetC_Currency_ID(),
+                        GetExpenseAmt(), GetC_Currency_ID(), GetC_Currency_Report_ID(), 
                         GetDateExpense(), 0, GetAD_Client_ID(), GetAD_Org_ID());
                     if (convertedAmt.Equals(0))
                     {
