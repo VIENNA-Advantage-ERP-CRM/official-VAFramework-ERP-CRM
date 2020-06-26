@@ -91,8 +91,8 @@
 
         function initializeComponent() {
 
-            chkReportQ = $("<label id='" + "lblReportQ_" + $self.windowNo + "' class='vis-ec-col-lblchkbox'><input id='" + "chkReportQ_" + $self.windowNo + "' type='checkbox' style='margin-left: 0px;' class='VIS_Pref_automatic'>" +
-           "SelectDoc</label>");
+            chkReportQ = $("<label id='" + "lblReportQ_" + $self.windowNo + "' class='vis-ec-col-lblchkbox'><input id='" + "chkReportQ_" + $self.windowNo + "' type='checkbox' style='margin-left: 0px;' class='VIS_Pref_automatic'>" + VIS.Msg.translate(VIS.Env.getCtx(), "IsReport") +
+           "</label>");
 
             lblBPartnerQ = new VIS.Controls.VLabel();
             lblProcessQ = new VIS.Controls.VLabel();
@@ -118,8 +118,8 @@
             txtCommentQ.getControl().val("%%");
 
             cmbCreatedByQ = new VIS.Controls.VComboBox('', false, false, true);
-            dtpCreatedFromQ = $("<input id='" + "dtpCreatedFromQ_" + $self.windowNo + "' type='date'  style='display: inline-block;line-height: 23px;width:100%'>")
-            dtpCreatedToQ = $("<input id='" + "dtpCreatedToQ_" + $self.windowNo + "' type='date' style='display: inline-block;line-height: 23px;width:100%'>");
+            dtpCreatedFromQ = $("<input id='" + "dtpCreatedFromQ_" + $self.windowNo + "' type='date'>")
+            dtpCreatedToQ = $("<input id='" + "dtpCreatedToQ_" + $self.windowNo + "' type='date'>");
 
             lblCreatedBy = new VIS.Controls.VLabel();
             lblCreatedOn = new VIS.Controls.VLabel();
@@ -131,7 +131,7 @@
             txtName = new VIS.Controls.VTextBox("Name", false, false, true, 50, 50, "Name");
             txtDescription = new VIS.Controls.VTextBox("Description", false, false, true, 50, 50, "Description");
             txtComment = new VIS.Controls.VTextArea("Comment", false, false, true, 200, 200);
-            dtpCreatedOn = $("<input id='" + "dtpCreatedOn_" + $self.windowNo + "' readonly class='vis-gc-vpanel-table-readOnly' type='date' style='display: inline-block;height: 30px;width:100%'>");
+            dtpCreatedOn = $("<input id='" + "dtpCreatedOn_" + $self.windowNo + "' readonly class='vis-gc-vpanel-table-readOnly' type='date'>");
 
             lblRecordsCount = new VIS.Controls.VLabel();
 
@@ -159,7 +159,7 @@
             topLeftDiv.append(topleftparaDiv);
             topLeftDiv.css("width", leftDivWidth);
 
-            var tble = $("<table>");
+            var tble = $("<table style='width: 100%'>");
 
             var tr = $("<tr>");
             var td = $("<td style='padding: 0px 10px 0px;'>");
@@ -449,7 +449,7 @@
 
         function jbInit() {
 
-            chkReportQ.find("label").text(VIS.Msg.translate(VIS.Env.getCtx(), "IsReport"));
+            //chkReportQ.find("label").text(VIS.Msg.translate(VIS.Env.getCtx(), "IsReport"));
             lblProcessQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "AD_Process_ID"));
             lblTableQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "AD_Table_ID"));
             lblBPartnerQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"));
@@ -541,14 +541,14 @@
 
             if (gAD_Table_ID > 0) {
                 //reportField.IsChecked = true;
-                chkReportQ.prop("checked", true);
+                chkReportQ.find('input').prop("checked", true);
                 cmdQuery();
             }
         }
 
         function query(isReport, AD_Table_ID, Record_ID) {
             $self.log.config("Report=" + isReport + ", AD_Table_ID=" + AD_Table_ID + ",Record_ID=" + Record_ID);
-            chkReportQ.prop("checked", isReport);
+            chkReportQ.find('input').prop("checked", isReport);
             gAD_Table_ID = AD_Table_ID;
             gRecord_ID = Record_ID;
             cmdQuery();
@@ -600,7 +600,7 @@
 
         function cmdQuery() {
             var sql = "";
-            var reports = chkReportQ.prop("checked");
+            var reports = chkReportQ.find('input').prop("checked");
             var role = null;
 
             role = VIS.MRole.getDefault();
@@ -953,7 +953,7 @@
                         toggleside = false;
                         topLeftDiv.animate({ width: leftDivWidth }, "slow");
                         topleftparaDiv.animate({ width: leftDivWidth }, "slow");
-                        topleftparaDiv.find("table").css("display", "block");
+                        //topleftparaDiv.find("table").css("display", "block");
                         //topleftparaDiv.css("background-color", "transparent");
                         btnOk.css("display", "block");
                         topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
@@ -986,7 +986,7 @@
                 cmbProcess.getControl().hide();
                 lblProcessQ.getControl().hide();
                 $(".VIS-Search-hide").show();
-                if (chkReportQ.prop("checked")) {
+                if (chkReportQ.find('input').prop("checked")) {
                     cmbProcess.getControl().show();
                     lblProcessQ.getControl().show();
                     $(".VIS-Search-hide").hide();
@@ -1011,7 +1011,7 @@
             else {
                 topLeftDiv.animate({ width: leftDivWidth }, "slow");
                 topleftparaDiv.animate({ width: leftDivWidth }, "slow");
-                topleftparaDiv.find("table").css("display", "block");
+                //topleftparaDiv.find("table").css("display", "block");
                 //topleftparaDiv.css("background-color", "transparent");
                 btnOk.css("display", "block");
                 topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
