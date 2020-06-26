@@ -59,7 +59,8 @@
     padding-right: 12px;
 }
 
-.vis-input-wrap.vis-intial-form-data label, .vis-input-wrap.vis-intial-form-dataCombo label {
+.vis-input-wrap.vis-intial-form-data input:not(:focus):placeholder-shown ~ label,
+.vis-input-wrap.vis-intial-form-dataCombo input:not(:focus):placeholder-shown ~ label {
     /*font-size:14px;*/
     /*color:#666;
 	font-weight:normal;*/
@@ -74,7 +75,7 @@
 	/*border:1px solid #ccc;*/
 	border-radius:3px;
 	padding:5px 10px;
-     height:30px;
+     /*height:30px;*/
    
 }
 .vis-intial-form-dataCombo > select {
