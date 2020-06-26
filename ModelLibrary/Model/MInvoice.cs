@@ -1236,7 +1236,8 @@ namespace VAdvantage.Model
                 //if (due != null)
                 total = Decimal.Add(total, due);
             }
-            bool valid = (Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? GetGrandTotalAfterWithholding() : GetGrandTotal()).CompareTo(total) == 0;
+            bool valid = (Get_ColumnIndex("GrandTotalAfterWithholding") > 0
+                && GetGrandTotalAfterWithholding() != 0 ? GetGrandTotalAfterWithholding() : GetGrandTotal()).CompareTo(total) == 0;
             SetIsPayScheduleValid(valid);
 
             //	Update Schedule Lines
