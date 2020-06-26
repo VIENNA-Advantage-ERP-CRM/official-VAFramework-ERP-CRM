@@ -356,6 +356,7 @@ namespace VAdvantage.Process
                             //
                             //	il.setPrice();	//	not really a list/limit price for reimbursements
                             il.SetPrice(line.GetPriceReimbursed()); //
+                            il.SetC_UOM_ID(line.GetC_UOM_ID());
 
                             // JID_0868
                             // chanegs done by Bharat on 12 September 2018 to set the Amount in List price column.
