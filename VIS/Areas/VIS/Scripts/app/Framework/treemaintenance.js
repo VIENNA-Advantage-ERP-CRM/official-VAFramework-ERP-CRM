@@ -5,7 +5,7 @@
         this.frame;
         this.windowNo;
         var $self = this;
-        var $root = $('<div class="vis-forms-container" style="padding:5px 0 7px;background-color:white;height:100%"/>');
+        var $root = $('<div class="vis-forms-container" style="padding:3px 0 7px;background-color:white;height:100%"/>');
 
         var $leftTreeKeno;
         //var $isSummary = false;
@@ -155,7 +155,7 @@
             return result;
         };
         
-        var $lTopLeftDiv = $('<div class="VIS-TM-data-head">')
+        var $lTopLeftDiv = $('<div class="VIS-TM-data-head" style="padding-top: 8px;">')
         var $lTopRightDiv = $('<div class="VIS-TM-data">');
         var $chkSummaryLevel = $('<input disabled type="checkbox" checked="true" />');
         var $lblSummaryLevel = $('<span>' + VIS.Msg.getMsg("OnlySummaryLevel") + '<span/>');
@@ -309,7 +309,7 @@
         var $pathRightlist = $("<div class='VIS-TM-path'>");
         var $pathInfo = $("<i style='font-weight:600'>");
 
-        var $rightMenuDemand = $('<select disabled style="float: right;"></select>');
+        var $rightMenuDemand = $('<select disabled style="float: right; min-width: 100px"></select>');
 
         var $lblGetMenu = $('<span style="margin: 0 7px;">' + VIS.Msg.getMsg("Show") + '<span/>');
 

@@ -762,31 +762,32 @@ input:required:valid {
 
 /*Prefrence New Style 28-07-2014*/
 
-.location > label {
-    width: 80px;
+.location  label {
+    /*width: 80px;
     float: left;
     text-align: left;
-    margin-top: 7px;
+    margin-top: 7px;*/
 }
 
 
 .form-group.location {
-    display: flex;
-    position: relative;
+    /*display: flex;
+    position: relative;*/
 }
 .location input {
     /*width: 85.87%;
     float: left;*/
-    flex: 1;    
+    /*flex: 1;*/  
+    padding: 5px 10px;
 }
 .location input, .location .input-group-text {
-    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*border: 1px solid rgba(var(--v-c-on-secondary), .2);*/
 }
 
 .right-inner-addon {
-    position: relative;
+    /*position: relative;
     display: flex;
-    flex: 1;
+    flex: 1;*/
 }
 
 .margin-top {
@@ -796,15 +797,15 @@ input:required:valid {
 .right-inner-addon input {
     /*width:79%;*/
     /*width: 85.87%;*/
-    flex: 1;
+    /*flex: 1;*/
 }
 
     .right-inner-addon input:focus, .input-group-addon input:focus, .location input:focus {
-        box-shadow: none;
-        border: 1px solid rgba(var(--v-c-primary), 1);
+        /*box-shadow: none;
+        border: 1px solid rgba(var(--v-c-primary), 1);*/
     }
 .location .input-group input:focus {
-    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*border-right: 1px solid rgba(var(--v-c-on-secondary), .2);*/
 }
 
     .right-inner-addon input[type=search] {
@@ -812,10 +813,10 @@ input:required:valid {
     }
 
 .location .input-group-text a {
-    background-color: rgba(var(--v-c-secondary), 1);
+    /*background-color: rgba(var(--v-c-secondary), 1);*/
 }
 .location input, .location select, .location .input-group-text a {
-    color: rgba(var(--v-c-on-secondary), 1);
+    /*color: rgba(var(--v-c-on-secondary), 1);*/
 }
 
 .right-inner-addon i {
@@ -862,10 +863,15 @@ input:required:valid {
     width: 50%;
     /*margin-top: 15px;*/
 }
-
+.form-input{
+    padding-right: 7px;
+}
+.zip-input {
+    padding-left: 7px;
+}
     .zip-input > label {
-        margin-left: 20px;
-        margin-top: 7px;
+        /*margin-left: 20px;
+        margin-top: 7px;*/
     }
 
     .zip-input > input {
