@@ -1027,6 +1027,27 @@ SetVersion (0.0);
             }
             return false;
         }
+
+        /** Set unique column.
+@param unique This column is the unique in this table */
+
+
+        public void SetIsUnique(Boolean IsUnique)
+        {
+            Set_Value("IsUnique", IsUnique);
+        }
+        /** Get Unique column.
+@return This column is the unique in this table */
+        public Boolean IsUnique()
+        {
+            Object oo = Get_Value("IsUnique");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
     }
 
 }

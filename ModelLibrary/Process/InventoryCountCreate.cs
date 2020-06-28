@@ -115,13 +115,12 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder(
                 @"WITH mt AS (SELECT m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, SUM(CurrentQty) AS CurrentQty FROM
-                (SELECT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, SUM(t.CurrentQty) keep (dense_rank last
-                ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
+                (SELECT DISTINCT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID 
+                ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
                 WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
                 @" AND t.AD_Client_ID = " + _inventory.GetAD_Client_ID() + " AND l.AD_Org_ID = " + _inventory.GetAD_Org_ID() +
-                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @" GROUP BY t.M_Product_ID,l.M_Warehouse_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID) 
-                GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID )
-                SELECT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID, mt.currentqty AS Qty, s.QtyOnHand, p.M_AttributeSet_ID FROM M_Product p 
+                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @") t GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID )
+                SELECT DISTINCT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID, mt.currentqty AS Qty, s.QtyOnHand, p.M_AttributeSet_ID FROM M_Product p 
                 INNER JOIN M_Storage s ON (s.M_Product_ID=p.M_Product_ID) INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) 
                 JOIN mt ON (mt.M_Product_ID = s.M_Product_ID AND mt.M_Locator_ID = s.M_Locator_ID AND mt.M_AttriButeSetInstance_ID = NVL(s.M_AttriButeSetInstance_ID,0))
                 WHERE l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + " AND p.IsActive='Y' AND p.IsStocked='Y' and p.ProductType='I'");
@@ -129,14 +128,13 @@ namespace VAdvantage.Process
             else
             {
                 sql = new StringBuilder(@"WITH mt AS (SELECT m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, SUM(CurrentQty) AS CurrentQty, M_ProductContainer_ID
-                      FROM (SELECT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, NVL(t.M_ProductContainer_ID , 0) AS M_ProductContainer_ID,
-                          SUM(t.containercurrentqty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty
-                        FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
-                         WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
+                FROM (SELECT DISTINCT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, NVL(t.M_ProductContainer_ID , 0) AS M_ProductContainer_ID,
+                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
+                FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
+                WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
                 @" AND t.AD_Client_ID = " + _inventory.GetAD_Client_ID() + " AND l.AD_Org_ID = " + _inventory.GetAD_Org_ID() +
-                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @" GROUP BY t.M_Product_ID,l.M_Warehouse_ID, t.M_Locator_ID,t.M_ProductContainer_ID, t.M_AttributeSetInstance_ID) 
-                GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, M_ProductContainer_ID ) 
-                SELECT UNIQUE s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID, mt.currentqty AS Qty, mt.M_ProductContainer_ID, p.M_AttributeSet_ID FROM M_Product p 
+                @" AND l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + @") t GROUP BY m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, M_ProductContainer_ID ) 
+                SELECT DISTINCT s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID, mt.currentqty AS Qty, mt.M_ProductContainer_ID, p.M_AttributeSet_ID FROM M_Product p 
                 INNER JOIN M_ContainerStorage s ON (s.M_Product_ID=p.M_Product_ID) INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) 
                 JOIN mt ON (mt.M_Product_ID = s.M_Product_ID AND mt.M_Locator_ID = s.M_Locator_ID AND mt.M_AttriButeSetInstance_ID = NVL(s.M_AttriButeSetInstance_ID,0) AND mt.M_ProductContainer_ID = NVL(s.M_ProductContainer_ID , 0))
                 WHERE l.M_Warehouse_ID = " + _inventory.GetM_Warehouse_ID() + " AND p.IsActive='Y' AND p.IsStocked='Y' and p.ProductType='I'");
@@ -187,7 +185,7 @@ namespace VAdvantage.Process
                 sql.Append(" AND mt.currentqty " + _qtyRange + " 0");
             }
 
-            int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_Product_ID) FROM ( " + sql.ToString() + " )", null, null));
+            int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_Product_ID) FROM ( " + sql.ToString() + " ) t", null, null));
             int pageSize = 500;
             int TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
             StringBuilder insertSql = new StringBuilder();
@@ -230,36 +228,39 @@ namespace VAdvantage.Process
                     {
                         for (int pageNo = 1; pageNo <= TotalPage; pageNo++)
                         {
-                            insertSql.Clear();
+                            //insertSql.Clear();
                             ds = DB.GetDatabase().ExecuteDatasetPaging(sql.ToString(), pageNo, pageSize, 0);
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
                             {
                                 sqlQry = "SELECT COALESCE(MAX(Line),0) AS DefaultValue FROM M_InventoryLine WHERE M_Inventory_ID=" + _m_Inventory_ID;
                                 int lineNo = DB.GetSQLValue(Get_Trx(), sqlQry);
-                                insertSql.Append("BEGIN ");
-                                for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
-                                {
-                                    decimal currentQty = 0;
-                                    int container_ID = 0;
-                                    int M_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
-                                    int M_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
-                                    int M_AttributeSetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
-                                    int M_AttributeSet_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
-                                    if (isContainerApplicable)
-                                    {
-                                        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["M_ProductContainer_ID"]);
-                                    }
-                                    currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
-                                    lineNo = lineNo + 10;
-                                    string insertQry = InsertInventoryLine(M_Locator_ID, M_Product_ID, lineNo, M_AttributeSetInstance_ID, currentQty, M_AttributeSet_ID, container_ID);
-                                    if (insertQry != "")
-                                    {
-                                        insertSql.Append(insertQry);
-                                    }
-                                }
+                                //insertSql.Append("BEGIN ");
+                                //for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
+                                //{
+                                //    decimal currentQty = 0;
+                                //    int container_ID = 0;
+                                //    int M_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
+                                //    int M_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
+                                //    int M_AttributeSetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
+                                //    int M_AttributeSet_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
+                                //    if (isContainerApplicable)
+                                //    {
+                                //        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["M_ProductContainer_ID"]);
+                                //    }
+                                //    currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
+                                //    lineNo = lineNo + 10;
+                                //    string insertQry = InsertInventoryLine(M_Locator_ID, M_Product_ID, lineNo, M_AttributeSetInstance_ID, currentQty, M_AttributeSet_ID, container_ID);
+                                //    if (insertQry != "")
+                                //    {
+                                //        insertSql.Append(insertQry);
+                                //    }
+                                //}
+                                //ds.Dispose();
+                                //insertSql.Append(" END;");
+
+                                string insertQry = DBFunctionCollection.InsertInventoryLine(GetCtx(), _inventory, ds, lineNo, isContainerApplicable, Get_Trx());
                                 ds.Dispose();
-                                insertSql.Append(" END;");
-                                int no = DB.ExecuteQuery(insertSql.ToString(), null, Get_Trx());
+                                int no = DB.ExecuteQuery(insertQry, null, Get_Trx());
                             }
                         }
                     }

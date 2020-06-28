@@ -28,7 +28,7 @@
         this.log = VIS.Logging.VLogger.getVLogger("VCharge");
 
         var $root = $("<div style='width: 100%; height: 100%; background-color: white; '>");
-        var $busyDiv = $("<div class='vis-apanel-busy' style='width:100%;height:100%;z-index: 1'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var leftsideDiv = null;
         var rightSideGridDiv = null;
@@ -69,7 +69,7 @@
             chkExpense.setValue(true);
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
             //left side div
-            leftsideDiv = $("<div id='sideDiv_" + $self.windowNo + "' class='vis-archive-left-sidebar'>");//" + sideDivHeight + "
+            leftsideDiv = $("<div id='sideDiv_" + $self.windowNo + "' class='vis-archive-left-sidebar vis-leftsidebarouterwrap'>");//" + sideDivHeight + "
 
             //topLeftSide div
             topLeftDiv = $("<div id='btnSpaceDiv_" + $self.windowNo + "' class='vis-archive-l-s-head'>" +
@@ -98,33 +98,43 @@
             var tr = $("<tr>");
             var td = $("<td style='padding: 0px 10px 0px;'>");
             paradiv.append(tble);
-            tble.append(tr);
-            tr.append(td);
-            td.append(lblSearchKey.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblSearchKey.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(txtSearchKey.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtSearchKey.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(lblSearchKey.getControl().addClass("VIS_Pref_Label_Font"));
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(lblName.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+
+            tr = $("<tr>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            tble.append(tr);
+            tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append(txtName.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(lblName.getControl().addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;'>");
             tble.append(tr);
             tr.append(td);
-            td.append(lblName.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(txtName.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
-
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(chkExpense.getControl().css("height", "30px"));
+            td.append(chkExpense.getControl());
 
             bottumDiv = $("<div class='vis-frm-bot-btn-wrp'>");
             var buttonDiv = $("<div class='vis-frm-bttsec'>");

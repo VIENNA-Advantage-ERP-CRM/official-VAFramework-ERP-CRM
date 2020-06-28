@@ -37,7 +37,7 @@
         this.log = VIS.Logging.VLogger.getVLogger("VCreateFrom");
         this.$busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
 
-        this.topDiv = $("<div style='float: left; width: 100%;'>");
+        this.topDiv = $("<div class='vis-locatormainwrap'>");
         this.middelDiv = $("<div class='vis-crtfrm-datawrp'>");
         this.bottomDiv = $("<div class='vis-ctrfrm-btnwrp'>");
         this.divPaging = $('<div>');
@@ -719,64 +719,7 @@
         //return pairs;
     }
 
-    //VCreateFrom.prototype.getOrders = function (ctx, C_BPartner_ID, isReturnTrx, forInvoice) {
-    //    var pairs = [];
-    //    // Display
-    //    var display = "o.DocumentNo||' - ' ||".concat(VIS.DB.to_char("o.DateOrdered", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("||' - '||").concat(
-    //            VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
-
-    //    var column = "m.M_InOutLine_ID";
-    //    if (forInvoice) {
-    //        column = "m.C_InvoiceLine_ID";
-    //    }
-
-    //    //var sql = ("SELECT o.C_Order_ID,").concat(display).concat(
-    //    //        " FROM C_Order o " + "WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx='N' AND o.DocStatus IN ('CL','CO') "
-    //    //                + "AND o.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND o.C_Order_ID IN "
-    //    //                + "(SELECT ol.C_Order_ID FROM C_OrderLine ol"
-    //    //                + " LEFT OUTER JOIN M_MatchPO m ON (ol.C_OrderLine_ID=m.C_OrderLine_ID) "
-    //    //                + "GROUP BY ol.C_Order_ID,ol.C_OrderLine_ID, ol.QtyOrdered,").concat(column).concat(
-    //    //        " HAVING (ol.QtyOrdered <> SUM(m.Qty) AND ").concat(column).concat(" IS NOT NULL) OR ").concat(column)
-    //    //        .concat(" IS NULL) " + "ORDER BY o.DateOrdered");
-
-    //    var sql = ("SELECT o.C_Order_ID,").concat(display).concat(
-    //        " FROM C_Order o   WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='N' AND o.DocStatus IN ('CL','CO') "
-    //      + "AND o.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND o.C_Order_ID IN "
-    //      //Commented by Arpit Rai on 25 March,2017
-    //      //+ "(SELECT C_Order_ID FROM (SELECT ol.C_Order_ID,ol.C_OrderLine_ID,ol.QtyOrdered,m.Qty FROM C_OrderLine ol "
-    //      //+ "LEFT OUTER JOIN M_MatchPO m ON (ol.C_OrderLine_ID=m.C_OrderLine_ID) WHERE (ol.QtyOrdered <> nvl(m.Qty,0) "
-    //      //+ "AND ").concat(column).concat(" IS NOT NULL) OR ").concat(column).concat(" IS NULL ) GROUP BY C_Order_ID,C_OrderLine_ID,QtyOrdered "
-    //      //+ "HAVING QtyOrdered > SUM(nvl(Qty,0))) ORDER BY o.DateOrdered");
-    //    //Commenting Done 
-    //    //Following query is modified by Arpit Rai on 25 March,2017
-    //    //To not display those orders from Create Lines in Invoice which are already in System (Document staus must not in Void Or Reversed)
-    //    + "(SELECT C_Order_ID FROM (SELECT ol.C_Order_ID,ol.C_OrderLine_ID,ol.QtyOrdered,m.Qty,IL.QtyInvoiced FROM C_OrderLine ol "
-    //      + "LEFT OUTER JOIN M_MatchPO m ON (ol.C_OrderLine_ID=m.C_OrderLine_ID) "
-    //      + " LEFT OUTER JOIN C_INVOICELINE IL"
-    //      + " ON (OL.C_ORDERLINE_ID =IL.C_ORDERLINE_ID)"
-    //      + " Left Outer JOIN C_Invoice I"
-    //      + " ON I.C_INVOICE_ID       =IL.C_INVOICE_ID"
-    //      + " AND I.DOCSTATUS NOT    IN ('VO','RE')"
-    //              + " WHERE (ol.QtyOrdered <> nvl(m.Qty,0)  OR Ol.QtyOrdered       <> NVL(IL.QtyInvoiced,0) "
-    //      + "AND ").concat(column).concat(" IS NOT NULL) OR ").concat(column).concat(" IS NULL ) GROUP BY C_Order_ID,C_OrderLine_ID,QtyOrdered "
-    //      + "HAVING QtyOrdered > SUM(nvl(Qty,0)) AND QtyOrdered > SUM(NVL(QtyInvoiced,0))) ORDER BY o.DateOrdered");
-    //    //Arpit
-
-    //    try {
-    //        var dr = VIS.DB.executeReader(sql.toString(), null);
-    //        var key, value;
-    //        while (dr.read()) {
-    //            key = VIS.Utility.Util.getValueOfInt(dr.getString(0));
-    //            value = dr.getString(1);
-    //            pairs.push({ ID: key, value: value });
-    //        }
-    //        dr.close();
-    //    }
-    //    catch (e) {
-    //    }
-    //    return pairs;
-    //}
-
+    
     VCreateFrom.prototype.jbInit = function () {
         this.init();
 
@@ -799,369 +742,7 @@
         this.lblAuthCode.getControl().text(VIS.Msg.getMsg("AuthCode"));
         this.lblCheckNo.getControl().text(VIS.Msg.getMsg("CheckNo"));
 
-        ////Line1
-        //var line = $("<div class='VIS_Pref_show'>");
-        //var col = $("<div class='VIS_Pref_dd' style='float: left; height: 34px;'>");
-        //var label = $("<div style='float: left; margin-right: 5px; width: 30%; text-align: right'>");
-
-        //if (VIS.Application.isRTL) {
-        //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        //}
-
-        //var lableCtrl = $("<h5 style='width: 100%'>");
-        //var ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
-
-        //this.topDiv.append(line);
-        //line.append(col);
-        //col.append(label);
-        //label.append(lableCtrl);
-        //// changes by bharat on 05/May/2017
-        ////if (this.cmbBankAccount != null) {
-        ////    col.css("float", "none");
-        ////    lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-        ////    col.append(ctrl);
-        ////    ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
-        ////    return;
-        ////}
-        ////if (this.cmbBankAccount != null) {
-        ////    col.css("float", "none");
-        ////    lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-        ////    col.append(ctrl);
-        ////    ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
-
-        ////    col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        ////    label = $("<div style='float: left; margin-right: 5px; width: 30%; text-align: right'>");
-        ////    if (VIS.Application.isRTL) {
-        ////        label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        ////    }
-        ////    lableCtrl = $("<h5 style='width: 100%'>");
-        ////    ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show'>");
-
-
-        ////    line.append(col);
-        ////    col.append(label);
-        ////    label.append(lableCtrl);
-        ////}
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.cmbOrder != null) {
-        //        lableCtrl.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbOrder.getControl().css('width', '100%'));
-        //    }
-        //    if (this.cmbBankAccount != null) {
-        //        lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
-        //    }
-        //}
-        //else {
-        //    if (this.vBPartner != null) {
-        //        lableCtrl.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        if (this.cmbBankAccount != null) {
-        //            ctrl.append(this.vBPartner.getControl().css('width', '78%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //            ctrl.append(this.vBPartner.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //        }
-        //        else {
-        //            ctrl.append(this.vBPartner.getControl().css('width', '88%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //        }
-        //    }
-        //}
-
-        //col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        //label = $("<div style='float: left; margin-right: 5px; width: 30%; text-align: right'>");
-        //if (VIS.Application.isRTL) {
-        //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        //}
-        //lableCtrl = $("<h5 style='width: 100%'>");
-        //ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show'>");
-
-
-        //line.append(col);
-        //col.append(label);
-        //label.append(lableCtrl);
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order            
-        //    if (this.vBPartner != null) {
-        //        lableCtrl.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        if (this.cmbBankAccount != null) {
-        //            ctrl.append(this.vBPartner.getControl().css('width', '78%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //            ctrl.append(this.vBPartner.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //        }
-        //        else {
-        //            ctrl.append(this.vBPartner.getControl().css('width', '88%')).append(this.vBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //        }
-        //    }
-        //}
-        //else {
-        //    if (this.cmbOrder != null) {
-        //        lableCtrl.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbOrder.getControl().css('width', '100%'));
-        //    }
-        //    if (this.cmbBankAccount != null) {
-        //        lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
-        //    }
-        //}
-
-        ////Line2
-        //line = $("<div class='VIS_Pref_show'>");
-        //col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        //label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-        //if (VIS.Application.isRTL) {
-        //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        //}
-        //lableCtrl = $("<h5 style='width: 100%'>");
-        //ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
-
-
-        //this.topDiv.append(line);
-        //line.append(col);
-        //col.append(label);
-        //label.append(lableCtrl);
-        ////Changed by Bharat on 05/May/2017
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.Date != null) {
-        //        lableCtrl.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.Date.getControl().css('width', '100%'));
-        //    }
-        //}
-        //else {
-        //    if (this.DocumentNo != null) {
-        //        lableCtrl.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.DocumentNo.getControl().css('width', '100%'));
-        //    }
-        //}
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.cmbInvoice != null) {
-        //        lableCtrl.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbInvoice.getControl().css('width', '100%'));
-        //    }
-        //    if (this.cmbShipment != null) {
-        //        lableCtrl.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbShipment.getControl().css('width', '100%'));
-        //    }
-        //} else {
-
-        //    if (this.locatorField != null) {
-        //        lableCtrl.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.locatorField.getControl().css('width', '88%')).append(this.locatorField.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //    }
-        //}
-
-        //col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        //label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-        //if (VIS.Application.isRTL) {
-        //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        //}
-        //lableCtrl = $("<h5 style='width: 100%'>");
-        //ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
-
-        //line.append(col);
-        //col.append(label);
-        //label.append(lableCtrl);
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.locatorField != null) {
-        //        lableCtrl.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.locatorField.getControl().css('width', '88%')).append(this.locatorField.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //    }
-        //    // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
-        //    if (this.cmbContainer != null) {
-        //        lableCtrl.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbContainer.getControl().css('width', '100%'));
-        //    }
-
-        //} else {
-
-        //    // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
-        //    if (this.cmbContainer != null) {
-        //        lableCtrl.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbContainer.getControl().css('width', '100%'));
-        //    }
-
-        //    if (this.cmbInvoice != null) {
-        //        lableCtrl.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbInvoice.getControl().css('width', '100%'));
-        //    }
-        //    if (this.cmbShipment != null) {
-        //        lableCtrl.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbShipment.getControl().css('width', '100%'));
-        //    }
-        //}
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.DocumentNo != null) {
-        //        lableCtrl.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.DocumentNo.getControl().css('width', '100%'));
-        //    }
-        //}
-        //else {
-        //    if (this.Date != null) {
-        //        lableCtrl.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.Date.getControl().css('width', '100%'));
-        //    }
-        //}
-
-        ////Line3
-        //line = $("<div class='VIS_Pref_show'>");
-        //col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        //label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-        //if (VIS.Application.isRTL) {
-        //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        //}
-        //lableCtrl = $("<h5 style='width: 100%'>");
-        //ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
-
-
-        //this.topDiv.append(line);
-        //line.append(col);
-        //col.append(label);
-        //label.append(lableCtrl);
-        //// Added by Bharat on 05/May/2017
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.AuthCode != null) {
-        //        lableCtrl.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.AuthCode.getControl().css('width', '100%'));
-        //    }
-        //}
-        //else {
-        //    if (this.DepositSlip != null) {
-        //        lableCtrl.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.DepositSlip.getControl().css('width', '100%'));
-        //    }
-        //}
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.vProduct != null) {
-        //        lableCtrl.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.vProduct.getControl().css('width', '78%')).append(this.vProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //        ctrl.append(this.vProduct.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //    }
-        //}
-        //else {
-        //    if (this.deliveryDate != null) {
-        //        lableCtrl.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.deliveryDate.getControl().css('width', '100%'));
-        //    }
-        //}
-
-        //col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        //label = $("<div style='float: left; margin-right: 5px;width: 30%; text-align: right'>");
-        //if (VIS.Application.isRTL) {
-        //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        //}
-        //lableCtrl = $("<h5 style='width: 100%'>");
-        //ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
-
-        //line.append(col);
-        //col.append(label);
-        //label.append(lableCtrl);
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.deliveryDate != null) {
-        //        lableCtrl.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.deliveryDate.getControl().css('width', '100%'));
-        //    }
-        //}
-        //else {
-        //    if (this.vProduct != null) {
-        //        lableCtrl.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.vProduct.getControl().css('width', '78%')).append(this.vProduct.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //        ctrl.append(this.vProduct.getBtn(1).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
-        //    }
-        //}
-
-        //if (VIS.Application.isRTL) {
-        //    //reverse controls order
-        //    if (this.DepositSlip != null) {
-        //        lableCtrl.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.DepositSlip.getControl().css('width', '100%'));
-        //    }
-        //}
-        //else {
-        //    if (this.AuthCode != null) {
-        //        lableCtrl.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
-        //        ctrl.removeClass("VIS_Pref_slide-show pp");
-        //        col.append(ctrl);
-        //        ctrl.append(this.AuthCode.getControl().css('width', '100%'));
-        //    }
-        //}
-
-        //// specific to Batir
-        ////if (window.BTR001) {
-        ////Line4
-        //if (this.relatedToOrg != null) {
-        //    line = $("<div class='VIS_Pref_show'>");
-        //    col = $("<div class='VIS_Pref_dd' style='float: left ; height: 34px;'>");
-        //    label = $("<div style='float: left; margin-right: 5px;width: 100%; text-align: left'>");
-        //    if (VIS.Application.isRTL) {
-        //        label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
-        //    }
-        //    lableCtrl = $("<h5 style='width: 100%'>");
-        //    ctrl = $("<div style='float: left; width: 68%;' class='VIS_Pref_slide-show pp'>");
-
-
-        //    this.topDiv.append(line);
-        //    line.append(col);
-        //    col.append(label);
-        //    label.append(lableCtrl);
-
-        //    //if (window.DTD001) {
-        //    lableCtrl.append(this.relatedToOrg.getControl().css('width', '100%'));
-        //}
-
-        ////var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), this.windowNo, 3499, VIS.DisplayType.Search);
-        ////this.vBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value);
-
-
+        
         //First Row
         /*******************************/
         var line = $("<div class='VIS_Pref_show'>");
@@ -1169,49 +750,41 @@
         //First Column
         /*******************************/
         var col = $("<div class='VIS_Pref_dd'>");
-        var label = $("<div class='vis-pref-ctrl-lblwrp'>");
+        //var label = $("<div class='vis-pref-ctrl-lblwrp'>");
 
         //if (VIS.Application.isRTL) {
         //    label = $("<div style='float: right; margin-right: 5px; width: 100%; text-align: left'>");
         //}
 
-        var lableCtrl = $("<h5 style='width: 100%'>");
-        var ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+        //var lableCtrl = $("<h5 style='width: 100%'>");
+        //var ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+        var DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+        var DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
+        var DivCtrlBtnWrap = $("<div class='input-group-append'>");
 
         this.topDiv.append(line);
         line.append(col);
-        col.append(label);
-        label.append(lableCtrl);
-        //if (VIS.Application.isRTL) {
-        //    //Bank Account Control
-        //    if (this.cmbBankAccount != null) {
-        //        lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-        //        col.append(ctrl);
-        //        ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
-        //    }
-        //        //Bank Account Control
-        //    else {
-        //        if (this.DocumentNoRef != null) {
-        //            lableCtrl.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
-        //            ctrl.removeClass("VIS_Pref_slide-show pp");
-        //            col.append(ctrl);
-        //            ctrl.append(this.DocumentNoRef.getControl().css('width', '100%'));
-        //        }
-        //    }
-        //}
+        col.append(DivInputWrap);
+        DivInputWrap.append(DivInputCtrlWrap);
+        DivInputWrap.append(DivCtrlBtnWrap);
+        
         //else {
             // To append Business Partner Control.. 
             if (this.vBPartner != null) {
-                lableCtrl.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(DivInputWrap);
+                //DivInputWrap.append(DivInputCtrlWrap);
+                //DivInputWrap.append(DivCtrlBtnWrap);
                 if (this.cmbBankAccount != null) {
-                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
-                    ctrl.append(this.vBPartner.getBtn(1));
+                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
                 }
                 else {
-                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
+                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
                 }
+                DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
             }
             //End Business Partner Control
         //}
@@ -1221,44 +794,54 @@
         //Second Column
         /*******************************/
         col = $("<div class='VIS_Pref_dd'>");
-        label = $("<div class='vis-pref-ctrl-lblwrp'>");
+        //label = $("<div class='vis-pref-ctrl-lblwrp'>");
         //if (VIS.Application.isRTL) {
         //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
         //}
-        lableCtrl = $("<h5 style='width: 100%'>");
-        ctrl = $("<div class='VIS_Pref_slide-show vis-pref-ctrlwrap'>");
+        //lableCtrl = $("<h5 style='width: 100%'>");
+        //ctrl = $("<div class='VIS_Pref_slide-show vis-pref-ctrlwrap'>");
+        DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+        DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
+        DivCtrlBtnWrap = $("<div class='input-group-append'>");
 
         line.append(col);
-        col.append(label);
-        label.append(lableCtrl);
+        col.append(DivInputWrap);
+        DivInputWrap.append(DivInputCtrlWrap);
+        DivInputWrap.append(DivCtrlBtnWrap);
 
         if (VIS.Application.isRTL) {
             //reverse controls order            
             if (this.vBPartner != null) {
-                lableCtrl.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(DivInputWrap);
+                //DivInputWrap.append(DivInputCtrlWrap);
+                //DivInputWrap.append(DivCtrlBtnWrap);
                 if (this.cmbBankAccount != null) {
-                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
-                    ctrl.append(this.vBPartner.getBtn(1));
+                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
                 }
                 else {
-                    ctrl.append(this.vBPartner.getControl()).append(this.vBPartner.getBtn(0));
+                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
                 }
+                DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         else {
             if (this.cmbBankAccount != null) {
-                lableCtrl.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbBankAccount.getControl().css('width', '100%'));
+                //col.append(DivInputWrap);
+                //DivInputWrap.append(DivInputCtrlWrap);
+                DivInputCtrlWrap.append(this.cmbBankAccount.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
             }
             else {
                 if (this.DocumentNoRef != null) {
-                    lableCtrl.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
-                    ctrl.removeClass("VIS_Pref_slide-show pp");
-                    col.append(ctrl);
-                    ctrl.append(this.DocumentNoRef.getControl().css('width', '100%'));
+                    //ctrl.removeClass("VIS_Pref_slide-show pp");
+                    //col.append(DivInputWrap);
+                    //DivInputWrap.append(DivInputCtrlWrap);
+                    DivInputCtrlWrap.append(this.DocumentNoRef.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                    DivInputCtrlWrap.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
                 }
             }
         }
@@ -1272,146 +855,156 @@
         line = $("<div class='VIS_Pref_show'>");
         if (this.Amount != null) {
             col = $("<div class='VIS_Pref_dd'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
             //}
         }
         else {
             col = $("<div class='VIS_Pref_dd'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
             //}
         }
-        lableCtrl = $("<h5 style='width: 100%'>");
+        //lableCtrl = $("<h5 style='width: 100%'>");
 
         this.topDiv.append(line);
         line.append(col);
-        col.append(label);
-        label.append(lableCtrl);
+        col.append(DivInputWrap);
+        DivInputWrap.append(DivInputCtrlWrap);
 
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.Date != null) {
-                lableCtrl.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.Date.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         else {
             if (this.DocumentNo != null) {
-                lableCtrl.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.DocumentNo.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
 
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.cmbInvoice != null) {
-                lableCtrl.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbInvoice.getControl());
+                col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
             }
             if (this.cmbShipment != null) {
-                lableCtrl.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbShipment.getControl());
+                col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
             }
         } else {
 
             if (this.cmbOrder != null) {
-                lableCtrl.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbOrder.getControl());
+                col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.cmbOrder.getControl());
+                DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
 
         // Amount Control
         if (this.Amount != null) {
             col = $("<div class='VIS_Pref_dd'>");
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
-            lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //lableCtrl = $("<h5 style='width: 100%'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
             line.append(col);
-            col.append(label);
-            label.append(lableCtrl);
+            col.append(DivInputWrap);
+            DivInputWrap.append(DivInputCtrlWrap);
 
-            lableCtrl.append(this.lblAmount.getControl().addClass('VIS_Pref_Label_Font'));
-            ctrl.removeClass("VIS_Pref_slide-show pp");
-            col.append(ctrl);
-            ctrl.append(this.Amount.getControl());
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.Amount.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblAmount.getControl().addClass('VIS_Pref_Label_Font'));
         }
 
         // Reset Column size
         if (this.Amount != null) {
             col = $("<div class='VIS_Pref_dd'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
             //}
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
         }
         else {
             col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
             //}
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
         }
-        lableCtrl = $("<h5 style='width: 100%'>");
+        //lableCtrl = $("<h5 style='width: 100%'>");
 
 
         line.append(col);
-        col.append(label);
-        label.append(lableCtrl);
+        col.append(DivInputWrap);
+        DivInputWrap.append(DivInputCtrlWrap);
 
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.cmbOrder != null) {
-                lableCtrl.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbOrder.getControl());
+                //col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.cmbOrder.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
             }
 
         } else {
             if (this.cmbInvoice != null) {
-                lableCtrl.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbInvoice.getControl());
+                //col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
             }
             if (this.cmbShipment != null) {
-                lableCtrl.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.cmbShipment.getControl());
+                //col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
 
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.DocumentNo != null) {
-                lableCtrl.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.DocumentNo.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         else {
             if (this.Date != null) {
-                lableCtrl.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.Date.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(DivInputWrap);
+                DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
 
@@ -1421,82 +1014,96 @@
         //Third Row
         /*******************************/
         if (this.locatorField != null || this.cmbContainer != null) {
-            this.middelDiv.css('height', '52%');
+            this.middelDiv.css('height', '48.5%');
 
             line = $("<div class='VIS_Pref_show'>");
             col = $("<div class='VIS_Pref_dd'>");
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
             //}
-            lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //lableCtrl = $("<h5 style='width: 100%'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
+            DivCtrlBtnWrap = $("<div class='input-group-append'>");
 
 
             this.topDiv.append(line);
             line.append(col);
-            col.append(label);
-            label.append(lableCtrl);
+            col.append(DivInputWrap);
+            DivInputWrap.append(DivInputCtrlWrap);
+            DivInputWrap.append(DivCtrlBtnWrap);
 
             if (VIS.Application.isRTL) {
                 // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
                 if (this.cmbContainer != null) {
                     //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
-                    lableCtrl.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
-                    col.css('visibility', 'hidden').append(ctrl);
+                    col.css('visibility', 'hidden');
+                    //.append(ctrl);
                     if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
                         if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
-                            col.css('visibility', 'visible').append(ctrl);
+                            col.css('visibility', 'visible');
+                            //.append(ctrl);
                             this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
                         }
                     }
-                    ctrl.append(this.cmbContainer.getControl().attr("disabled", true)).append(this.ContainerTree);
+                    DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' '));
+                    DivCtrlBtnWrap.append(this.ContainerTree);
+                    DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
                 }
             }
             else {
 
                 if (this.locatorField != null) {
-                    lableCtrl.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
-                    ctrl.removeClass("VIS_Pref_slide-show pp");
-                    col.append(ctrl);
-                    ctrl.append(this.locatorField.getControl()).append(this.locatorField.getBtn(0));
+                    //ctrl.removeClass("VIS_Pref_slide-show pp");
+                    //col.append(ctrl);
+                    DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                    DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
+                    DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
                 }
             }
 
 
             col = $("<div class='VIS_Pref_dd'>");
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
             //}
-            lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //lableCtrl = $("<h5 style='width: 100%'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
+            DivCtrlBtnWrap = $("<div class='input-group-append'>");
 
             line.append(col);
-            col.append(label);
-            label.append(lableCtrl);
+            col.append(DivInputWrap);
+            DivInputWrap.append(DivInputCtrlWrap);
+            DivInputWrap.append(DivCtrlBtnWrap);
 
             if (VIS.Application.isRTL) {
                 if (this.locatorField != null) {
-                    lableCtrl.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
-                    ctrl.removeClass("VIS_Pref_slide-show pp");
-                    col.append(ctrl);
-                    ctrl.append(this.locatorField.getControl()).append(this.locatorField.getBtn(0));
+                    //ctrl.removeClass("VIS_Pref_slide-show pp");
+                    //col.append(ctrl);
+                    DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                    DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
+                    DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
                 }
             }
             else {
                 // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
                 if (this.cmbContainer != null) {
                     //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
-                    lableCtrl.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
-                    col.css('visibility', 'hidden').append(ctrl);
+                    col.css('visibility', 'hidden');//.append(ctrl);
                     if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
                         if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
-                            col.css('visibility', 'visible').append(ctrl);
+                            col.css('visibility', 'visible');//.append(ctrl);
                             this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
                         }
                     }
-                    ctrl.append(this.cmbContainer.getControl().attr("disabled", true)).append(this.ContainerTree);
+                    DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' '));
+                    DivCtrlBtnWrap.append(this.ContainerTree);
+                    DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
                 }
             }
         }
@@ -1512,139 +1119,157 @@
         if (this.CheckNo != null) {
             col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
             //}
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
+            DivCtrlBtnWrap = $("<div class='input-group-append'>");
         }
         else {
             col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
             //}
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
+            DivCtrlBtnWrap = $("<div class='input-group-append'>");
         }
-        lableCtrl = $("<h5 style='width: 100%'>");
+        //lableCtrl = $("<h5 style='width: 100%'>");
 
 
         this.topDiv.append(line);
         line.append(col);
-        col.append(label);
-        label.append(lableCtrl);
+        col.append(DivInputWrap);
+        DivInputWrap.append(DivInputCtrlWrap);
+        DivInputWrap.append(DivCtrlBtnWrap);
         // Added by Bharat on 05/May/2017
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.AuthCode != null) {
-                lableCtrl.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.AuthCode.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         else {
             if (this.DepositSlip != null) {
-                lableCtrl.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.DepositSlip.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
 
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.vProduct != null) {
-                lableCtrl.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.vProduct.getControl()).append(this.vProduct.getBtn(0));
-                ctrl.append(this.vProduct.getBtn(1));
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
+                DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
+                DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         else {
             if (this.deliveryDate != null) {
-                lableCtrl.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.deliveryDate.getControl());
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
 
         // Check No Control
         if (this.CheckNo != null) {
             col = $("<div class='VIS_Pref_dd'>");
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
-            lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
-            line.append(col);
-            col.append(label);
-            label.append(lableCtrl);
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //lableCtrl = $("<h5 style='width: 100%'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
 
-            lableCtrl.append(this.lblCheckNo.getControl().addClass('VIS_Pref_Label_Font'));
-            ctrl.removeClass("VIS_Pref_slide-show pp");
-            col.append(ctrl);
-            ctrl.append(this.CheckNo.getControl());
+            line.append(col);
+            col.append(DivInputWrap);
+            DivInputWrap.append(DivInputCtrlWrap);
+
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.CheckNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblCheckNo.getControl().addClass('VIS_Pref_Label_Font'));
         }
 
         // Reset Column Size
         if (this.CheckNo != null) {
             col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 40%; text-align: left'>");
             //}
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
         }
         else {
             col = $("<div class='VIS_Pref_dd'>");
 
-            label = $("<div class='vis-pref-ctrl-lblwrp'>");
+            //label = $("<div class='vis-pref-ctrl-lblwrp'>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
             //}
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
+            DivCtrlBtnWrap = $("<div class='input-group-append'>");
         }
-        lableCtrl = $("<h5 style='width: 100%'>");
+        //lableCtrl = $("<h5 style='width: 100%'>");
 
         line.append(col);
-        col.append(label);
-        label.append(lableCtrl);
+        col.append(DivInputWrap);
+        DivInputWrap.append(DivInputCtrlWrap);
+        DivInputWrap.append(DivCtrlBtnWrap);
 
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.deliveryDate != null) {
-                lableCtrl.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
-                col.append(ctrl);
-                ctrl.append(this.deliveryDate.getControl());
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         else {
             if (this.vProduct != null) {
-                lableCtrl.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.vProduct.getControl()).append(this.vProduct.getBtn(0));
-                ctrl.append(this.vProduct.getBtn(1));
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
+                DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
+                DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
 
         if (VIS.Application.isRTL) {
             //reverse controls order
             if (this.DepositSlip != null) {
-                lableCtrl.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.DepositSlip.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         else {
             if (this.AuthCode != null) {
-                lableCtrl.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
-                ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(ctrl);
-                ctrl.append(this.AuthCode.getControl());
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
         //End Forth Row
@@ -1657,21 +1282,23 @@
         if (this.relatedToOrg != null) {
             line = $("<div class='VIS_Pref_show'>");
             col = $("<div class='VIS_Pref_dd'>");
-            label = $("<div class=''>");
+            //label = $("<div class=''>");
             //if (VIS.Application.isRTL) {
             //    label = $("<div style='float: right; margin-right: 5px; width: 30%; text-align: left'>");
             //}
-            lableCtrl = $("<h5 style='width: 100%'>");
-            ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            //lableCtrl = $("<h5 style='width: 100%'>");
+            //ctrl = $("<div class='VIS_Pref_slide-show pp vis-pref-ctrlwrap'>");
+            DivInputWrap = $("<div class='input-group vis-input-wrap'></div>");
+            DivInputCtrlWrap = $("<div class='vis-control-wrap'></div>");
 
 
             this.topDiv.append(line);
             line.append(col);
-            col.append(label);
-            label.append(lableCtrl);
+            col.append(DivInputWrap);
+            DivInputWrap.append(DivInputCtrlWrap);
 
             //if (window.DTD001) {
-            lableCtrl.append(this.relatedToOrg.getControl());
+            DivInputCtrlWrap.append(this.relatedToOrg.getControl());
         }
         //End Fifth Row
         /******************************/

@@ -92,14 +92,14 @@ namespace VAdvantage.DataBase
             return TO_DATE(day, true);
         }
 
-       /// <summary>
-       /// Create SQL for formatted Date, Number
-       /// </summary>
-       /// <param name="columnName">the column name in the SQL</param>
-       /// <param name="displayType">displayType Display Type</param>
-       /// <param name="AD_Language"></param>
-       /// <returns>TRIM(TO_CHAR(columnName,'999G999G999G990D00','NLS_NUMERIC_CHARACTERS='',.'''))
-	 ///     or TRIM(TO_CHAR(columnName,'TM9')) depending on DisplayType and Language</returns>
+        /// <summary>
+        /// Create SQL for formatted Date, Number
+        /// </summary>
+        /// <param name="columnName">the column name in the SQL</param>
+        /// <param name="displayType">displayType Display Type</param>
+        /// <param name="AD_Language"></param>
+        /// <returns>TRIM(TO_CHAR(columnName,'999G999G999G990D00','NLS_NUMERIC_CHARACTERS='',.'''))
+        ///     or TRIM(TO_CHAR(columnName,'TM9')) depending on DisplayType and Language</returns>
         public static String TO_CHAR(String columnName, int displayType, String AD_Language)
         {
             if (columnName == null || columnName.Length == 0)
@@ -107,22 +107,22 @@ namespace VAdvantage.DataBase
             return s_cc.GetDatabase().TO_CHAR(columnName, displayType, AD_Language);
         }   //  TO_CHAR
 
-      /// <summary>
-      ///Create SQL TO Date String from Timestamp
-	 
-	 
-      /// </summary>
-      /// <param name="time">Date to be converted</param>
-      /// <param name="dayOnly">dayOnly true if time set to 00:00:00</param>
-      /// <returns> TO_DATE('2001-01-30 18:10:20',''YYYY-MM-DD HH24:MI:SS')
-	  ///     or  TO_DATE('2001-01-30',''YYYY-MM-DD')</returns>
+        /// <summary>
+        ///Create SQL TO Date String from Timestamp
+
+
+        /// </summary>
+        /// <param name="time">Date to be converted</param>
+        /// <param name="dayOnly">dayOnly true if time set to 00:00:00</param>
+        /// <returns> TO_DATE('2001-01-30 18:10:20',''YYYY-MM-DD HH24:MI:SS')
+        ///     or  TO_DATE('2001-01-30',''YYYY-MM-DD')</returns>
         public static String TO_DATE(DateTime? time, bool dayOnly)
         {
             if (!dayOnly)
             {
                 time = GlobalVariable.SetDateTimeUTC(time);
             }
-            
+
             return s_cc.GetDatabase().TO_DATE(time, dayOnly);
         }
 
@@ -705,7 +705,7 @@ namespace VAdvantage.DataBase
             return null;
         }
 
-        
+
 
 
 
@@ -771,7 +771,7 @@ namespace VAdvantage.DataBase
         {
 
             //s_cc.SetDataSource(null)
-           // s_cc = null;
+            // s_cc = null;
         }
 
         /// <summary>
@@ -1008,6 +1008,24 @@ namespace VAdvantage.DataBase
             }
         }
 
+        /// <summary>
+        /// Execute Procedure
+        /// </summary>
+        /// <param name="sql">Procedure Name</param>
+        /// <param name="arrParam">Sql Parameters</param>
+        /// <param name="trx">Transaction</param>
+        /// <returns>Sql Parameters containing result</returns>
+        public static SqlParameter[] ExecuteProcedure(string sql, SqlParameter[] arrParam, Trx trx)
+        {
+            if (trx != null)
+            {
+                return trx.ExecuteProcedure(sql, arrParam, trx);
+            }
+            else
+            {
+                return SqlExec.ExecuteQuery.ExecuteProcedure(sql, arrParam);
+            }
+        }
 
         //modified by Deepak
         public static Decimal? GetSQLValueBD(Trx trxName, String sql, int int_param1)

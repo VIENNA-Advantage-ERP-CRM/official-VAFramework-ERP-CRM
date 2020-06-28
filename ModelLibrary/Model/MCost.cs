@@ -121,14 +121,14 @@ namespace VAdvantage.Model
                                INNER JOIN C_ACCTSCHEMA ACC   ON CST.C_ACCTSCHEMA_ID=ACC.C_ACCTSCHEMA_ID
                                INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID
                                INNER JOIN M_COSTELEMENT CE  ON CST.M_COSTELEMENT_ID=CE.M_COSTELEMENT_ID
-                              WHERE ((   CASE WHEN PC.COSTINGMETHOD IS NOT NULL  AND PC.COSTINGMETHOD   = 'C'  THEN (SELECT CAST( Cel.M_Ref_Costelement AS NUMBER)
-                                                  FROM M_CostElement ced  INNER JOIN M_Costelementline Cel ON Ced.M_Costelement_Id = Cel.M_Ref_Costelement
+                              WHERE ((   CASE WHEN PC.COSTINGMETHOD IS NOT NULL  AND PC.COSTINGMETHOD   = 'C'  THEN (SELECT CAST( Cel.M_Ref_Costelement AS INTEGER)
+                                                  FROM M_CostElement ced  INNER JOIN M_Costelementline Cel ON Ced.M_Costelement_Id = CAST( Cel.M_Ref_Costelement AS INTEGER)
                                                   WHERE Ced.Ad_Client_Id  =" + client_Id + @" AND Ced.Isactive ='Y' AND ced.CostElementType ='M'
                                                   AND Cel.Isactive ='Y' AND Cel.M_Costelement_Id=PC.M_costelement_id AND ced.CostingMethod  IS NOT NULL )
                                             WHEN PC.COSTINGMETHOD IS NOT NULL  THEN (SELECT M_CostElement_ID FROM M_costelement 
                                                   WHERE COSTINGMETHOD = pc.COSTINGMETHOD AND ad_client_id    = " + client_Id + @" )
-                                            WHEN ACC.COSTINGMETHOD IS NOT NULL AND ACC.COSTINGMETHOD   = 'C' THEN (SELECT CAST( Cel.M_Ref_Costelement AS NUMBER)
-                                                  FROM M_CostElement ced  INNER JOIN M_Costelementline Cel ON Ced.M_Costelement_Id = Cel.M_Ref_Costelement
+                                            WHEN ACC.COSTINGMETHOD IS NOT NULL AND ACC.COSTINGMETHOD   = 'C' THEN (SELECT CAST( Cel.M_Ref_Costelement AS INTEGER)
+                                                  FROM M_CostElement ced  INNER JOIN M_Costelementline Cel ON Ced.M_Costelement_Id = CAST( Cel.M_Ref_Costelement AS INTEGER)
                                                   WHERE Ced.Ad_Client_Id  =" + client_Id + @" AND Ced.Isactive ='Y' AND ced.CostElementType ='M'
                                                   AND Cel.Isactive ='Y' AND Cel.M_Costelement_Id= ACC.M_costelement_id AND ced.CostingMethod  IS NOT NULL ) 
                                             ELSE

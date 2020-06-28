@@ -27,7 +27,7 @@
         var ordershipment_id = null;
 
         this.$root = $("<div style='width: 100%; height: 100%; background-color: white;'>");
-        this.$busyDiv = $("<div class='vis-apanel-busy'>");
+        this.$busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         this.topDiv = null;
         this.sideDiv = null;
@@ -72,8 +72,8 @@
 
             // JID_1110: Clear option required on Business partner and Docuemnt No. parameter.
             //var imgInfo = VIS.Application.contextUrl + "Areas/VIS/Images/clear16.png";
-            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px;"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
-            btnClearOrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text" style="width: 30px; height: 30px; padding: 0px;"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
+            btnClearBP = $('<button id = "btnClearBP_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
+            btnClearOrd = $('<button id = "btnClearOrd_' + $self.windowNo + '" tabindex="-1" class="vis-controls-txtbtn-table-td2 input-group-text"><i class="fa fa-arrow-left" title="' + VIS.Msg.getMsg("Clear", false, false) + '"></i></button>');
 
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
 
@@ -92,7 +92,7 @@
             this.lblGenrate = $self.topDiv.find("#" + lblGenerateid);
             this.lblSelect = $self.topDiv.find("#" + lblSelectid);
 
-            $self.sideDiv = $("<div id='" + sideDivId + "' class='vis-archive-l-s-content'>");
+            $self.sideDiv = $("<div id='" + sideDivId + "' class='vis-archive-l-s-content vis-leftsidebarouterwrap'>");
             $self.sideDiv.css("width", sideDivWidth);
             //$self.sideDiv.css("height", sideDivHeight);
             $self.sideDiv.css("height", "calc(100% - 103px)");
@@ -102,51 +102,73 @@
 
             var tble = $("<table style='width: 100%;'>");
 
-            var tr = $("<tr>");
-            var td = $("<td style='padding: 0px 10px 0px;'>");
+            //var tr = $("<tr>");
+            //var td = $("<td style='padding: 0px 10px 0px;'>");
             $self.div.append(tble);
-            tble.append(tr);
-            tr.append(td);
-            td.append($self.lblOrg.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblOrg.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 10px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append($self.cmbOrg.getControl().css("display", "inline-block").css("width", "236px").css("height", "30px"));
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldctrlwrp.append($self.cmbOrg.getControl());
+            Leftformfieldctrlwrp.append($self.lblOrg.getControl().addClass("VIS_Pref_Label_Font"))
+
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append($self.lblBPartner.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            var Leftformfieldbtnwrap = $('<div class="input-group-append">');
             tble.append(tr);
             tr.append(td);
-
-            td.append($self.lblBPartner.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
-            tble.append(tr);
-            tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
             // var ctrl = $("<div style='float: left; width: 100%;' class='VIS_Pref_slide-show pp'>");
             //ctrl.removeClass("VIS_Pref_slide-show pp");
-            td.append($self.vSearchBPartner.getControl().css('width', '176px')).append($self.vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px'))
-            .append(btnClearBP);
+            Leftformfieldctrlwrp.append($self.vSearchBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            Leftformfieldbtnwrap.append($self.vSearchBPartner.getBtn(0));
+            Leftformfieldbtnwrap.append(btnClearBP);
+            Leftformfieldctrlwrp.append($self.lblBPartner.getControl().addClass("VIS_Pref_Label_Font"));
+            Leftformfieldwrp.append(Leftformfieldbtnwrap);
+
 
 
             //JID_1109: Top tip required on Document No. field ie Sales Order/Customer RMA.
             var OrderShipmentNo = VIS.Msg.translate(VIS.Env.getCtx(), "DocumentNo")
-            tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 0px;' title=' " + VIS.Msg.getMsg("SalesOrderNo", false, false) + "'>");
-            tble.append(tr);
-            tr.append(td);
-            td.append(OrderShipmentNo);
+            //tr = $("<tr>");
+            //td = $("<td style='padding: 0px 10px 0px;' title=' " + VIS.Msg.getMsg("SalesOrderNo", false, false) + "'>");
+            //tble.append(tr);
+            //tr.append(td);
+            //td.append(OrderShipmentNo);
 
             tr = $("<tr>");
-            td = $("<td style='padding: 0px 10px 10px;'>");
+            td = $("<td style='padding: 0px 10px 0px;'>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            var Leftformfieldbtnwrap = $('<div class="input-group-append">');
             tble.append(tr);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
             // var ctrl = $("<div style='float: left; width: 100%;' class='VIS_Pref_slide-show pp'>");
             //ctrl.removeClass("VIS_Pref_slide-show pp");
-            td.append($self.vSearchOrderShipment.getControl(0).css('width', '176px')).append($self.vSearchOrderShipment.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px'))
-                .append(btnClearOrd);
+            Leftformfieldctrlwrp.append($self.vSearchOrderShipment.getControl(0).attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            Leftformfieldbtnwrap.append($self.vSearchOrderShipment.getBtn(0));
+            Leftformfieldbtnwrap.append(btnClearOrd);
+            Leftformfieldctrlwrp.append('<label>' + OrderShipmentNo + '</label>');
+            Leftformfieldwrp.append(Leftformfieldbtnwrap);
 
             tr = $("<tr>");
             td = $("<td style='padding: 0px 10px 0px;font-size:12px;'>");
@@ -194,6 +216,7 @@
 
             //Add to root
             $self.$root.append($self.$busyDiv);
+            $self.$busyDiv[0].style.visibility = "hidden";
             $self.$root.append($self.topDiv).append($self.sideDiv).append($self.gridSelectDiv).append($self.gridGenerateDiv).append($self.bottumDiv);
         }
 
@@ -238,8 +261,24 @@
                 $self.arrListColumns.push({ field: "C_DocType_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_DocType_ID"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "DocumentNo", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DocumentNo"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "C_BPartner_ID", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '16%', min: 150, hidden: false });
-                $self.arrListColumns.push({ field: "DateOrdered", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DateOrdered"), sortable: true, size: '16%', min: 150, hidden: false, render: 'date' });
-                $self.arrListColumns.push({ field: "TotalLines", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "TotalLines"), sortable: true, size: '20%', min: 150, hidden: false });
+                $self.arrListColumns.push({
+                    field: "DateOrdered", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DateOrdered"), sortable: true, size: '16%', min: 150, hidden: false, render: function (record, index, col_index) {
+                        var val;
+                        if (record.changes == undefined || record.changes.DateOrdered == undefined) {
+                            val = record["DateOrdered"];
+                        }
+                        else {
+                            val = record.changes.DateOrdered;
+                        }
+                        return new Date(val).toLocaleDateString();
+                    }
+                });
+                $self.arrListColumns.push({ field: "TotalLines", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "TotalLines"), sortable: true, size: '20%', min: 150, hidden: false, align: 'right',
+                    render: function (record, index, col_index) {
+                        var val = record["TotalLines"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
 
                 $self.arrListColumns.push({ field: "C_Order_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_UOM_ID"), sortable: true, size: '150px', hidden: true });
             }

@@ -37,7 +37,7 @@
 	width: 100%;
 	float: left;	
 }
- .vis-rad-recordOp{ margin-top: 10px;}
+ /*.vis-rad-recordOp{ margin-top: 10px;}*/
 .vis-rad-recordData {
     width: calc(100% - 31px);
     float: left;

@@ -357,6 +357,7 @@ namespace VAdvantage.Process
         private void CreateDetail(String sql, MCommissionAmt comAmt)
         {
             IDataReader idr = null;
+            DataTable dt = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[3];
@@ -365,46 +366,50 @@ namespace VAdvantage.Process
                 param[2] = new SqlParameter("@edate", m_EndDate.Date);
 
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_Trx());
-                while (idr.Read())
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach(DataRow dr in dt.Rows)
+                      //while (idr.Read())
                 {
                     //	CommissionAmount, C_Currency_ID, Amt, Qty,
                     MCommissionDetail cd = new MCommissionDetail(comAmt,
-                        Utility.Util.GetValueOfInt(idr[0]), Utility.Util.GetValueOfDecimal(idr[1]), Utility.Util.GetValueOfDecimal(idr[2]));
+                        Utility.Util.GetValueOfInt(dr[0]), Utility.Util.GetValueOfDecimal(dr[1]), Utility.Util.GetValueOfDecimal(dr[2]));
 
                     //	C_OrderLine_ID, C_InvoiceLine_ID,
-                    cd.SetLineIDs(Utility.Util.GetValueOfInt(idr[3]), Utility.Util.GetValueOfInt(idr[4]));
+                    cd.SetLineIDs(Utility.Util.GetValueOfInt(dr[3]), Utility.Util.GetValueOfInt(dr[4]));
 
-                    if (Utility.Util.GetValueOfInt(idr[3]) > 0) {
-                        MOrderLine _ordline = new MOrderLine(GetCtx(), Utility.Util.GetValueOfInt(idr[3]), Get_TrxName());
+                    if (Utility.Util.GetValueOfInt(dr[3]) > 0) {
+                        MOrderLine _ordline = new MOrderLine(GetCtx(), Utility.Util.GetValueOfInt(dr[3]), Get_TrxName());
                         _ordline.SetIsCommissionCalculated(true);
                         _ordline.Save();
                     }
-                    if (Utility.Util.GetValueOfInt(idr[4]) > 0) {
-                        MInvoiceLine _invline = new MInvoiceLine(GetCtx(), Utility.Util.GetValueOfInt(idr[4]), Get_TrxName());
+                    if (Utility.Util.GetValueOfInt(dr[4]) > 0) {
+                        MInvoiceLine _invline = new MInvoiceLine(GetCtx(), Utility.Util.GetValueOfInt(dr[4]), Get_TrxName());
                         _invline.SetIsCommissionCalculated(true);
                         _invline.Save();
                     }
 
                     //	Reference, Info,
-                    String s = idr[5].ToString();
+                    String s = dr[5].ToString();
                     if (s != null)
                         cd.SetReference(s);
-                    s = idr[6].ToString();
+                    s = dr[6].ToString();
                     if (s != null)
                         cd.SetInfo(s);
 
                     //	Date
-                    DateTime? date = Utility.Util.GetValueOfDateTime(idr[7]);
+                    DateTime? date = Utility.Util.GetValueOfDateTime(dr[7]);
                     cd.SetConvertedAmt(date);
 
                     //
                     if (!cd.Save())		//	creates memory leak
                     {
-                        idr.Close();
+                        //idr.Close();
                         throw new ArgumentException("CommissionCalc - Detail Not saved");
                     }
                 }
-                idr.Close();
+                //idr.Close();
             }
             catch (Exception e)
             {

@@ -18,6 +18,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using Oracle.ManagedDataAccess.Client;
+using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
@@ -431,42 +432,30 @@ namespace VAdvantage.Model
         /// <writer>Manjot, Amit</writer>
         public static string CheckFutureDateRecord(DateTime? MovementDate, string TableName, int Record_ID, Trx trx)
         {
-            int retval = 0;
-            IDbConnection dbConnection = trx.GetConnection();
-            if (dbConnection != null)
+            SqlParameter[] param = new SqlParameter[4];
+            param[0] = new SqlParameter("p_movementdate", MovementDate);
+            param[0].SqlDbType = SqlDbType.Date;
+            param[0].Direction = ParameterDirection.Input;
+
+            param[1] = new SqlParameter("p_TableName", TableName.ToUpper());
+            param[1].SqlDbType = SqlDbType.VarChar;
+            param[1].Direction = ParameterDirection.Input;
+
+            param[2] = new SqlParameter("p_Record_ID", Record_ID);
+            param[2].SqlDbType = SqlDbType.Int;
+            param[2].Direction = ParameterDirection.Input;
+
+            param[3] = new SqlParameter("results", 0);
+            param[3].SqlDbType = SqlDbType.Int;
+            param[3].Direction = ParameterDirection.Output;
+
+            param = DB.ExecuteProcedure("CheckFutureDateRecord", param, trx);
+
+            if (param != null && param.Length > 0 && Util.GetValueOfInt(param[0].Value) > 0) // If Record Found
             {
-                // execute procedure for updating cost of components
-                OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Connection = (OracleConnection)dbConnection;
-                cmd.CommandText = "CheckFutureDateRecord";
-                cmd.Parameters.Add("p_movementdate", OracleDbType.Date, MovementDate, ParameterDirection.Input);
-                cmd.Parameters.Add("p_TableName", OracleDbType.Varchar2, TableName.ToUpper(), ParameterDirection.Input);
-                cmd.Parameters.Add("p_Record_ID", OracleDbType.Int32, Record_ID, ParameterDirection.Input);
-                cmd.Parameters.Add("results", OracleDbType.Int32, 4, ParameterDirection.Output);
-                cmd.BindByName = true;
-                try
-                {
-                    retval = cmd.ExecuteNonQuery();
-                    retval = Util.GetValueOfInt(cmd.Parameters[3].Value.ToString());
-                    if (retval > 0) // If Record Found
-                    {
-                        return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
-                    }
-                    else
-                    {// if no future date record found on MTransaction
-                        return string.Empty;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // If any exception comes then we will not complete the record
-                    log.Severe("Exception: {0} " + ex.Message);
-                    return ex.Message;
-                }
+                return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
             }
-            log.Severe("Connection Closed");
-            return Msg.GetMsg(Env.GetCtx(), "NoDBConnection");
+            return string.Empty;            
         }
 
         public void UpdateStockSummary()

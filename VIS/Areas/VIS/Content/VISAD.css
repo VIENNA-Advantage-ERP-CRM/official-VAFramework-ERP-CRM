@@ -113,24 +113,25 @@
     }
 
 .vis-awindow-header {
-    /*background-color: #58B1E2;*/
-    background-color: rgba(var(--v-c-primary), 1);
-    vertical-align: middle;
-    display: block;
+    /* background-color: #58B1E2; */
+    /* background-color: rgba(var(--v-c-primary), 1); */
+    /* vertical-align: middle; */
+    display: flex;
     height: 42px;
-    color: rgba(var(--v-c-on-primary), 1);
+    color: rgba(var(--v-c-primary), 1);
+    align-items: center;
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
 }
-
-    .vis-awindow-header p, .vis-awindow-header h1 {
-        margin: 0px;
-        padding: 10px 10px 0px 10px;
-        font-size: 14px;
-        /*font-weight: bold;*/
-        display: inline-block;
-        color: rgba(var(--v-c-on-primary), 1);
-        white-space: nowrap;
-    }
-
+.vis-awindow-header p, .vis-awindow-header h1 {
+    margin: 0px;
+    padding: 0px 10px 0px 10px;
+    font-size: 14px;
+    /* font-weight: bold; */
+    display: inline-block;
+    /* color: rgba(var(--v-c-on-primary), 1); */
+    white-space: nowrap;
+    flex: 1;
+}
     .vis-awindow-header p {
         /*margin: 0px;
     padding: 10px 10px 0px 10px;
@@ -234,12 +235,9 @@
     background: url("../Images/busy.gif") no-repeat;
     background-position: center center;
 }
-
-
 .vis-apanel-busyVInOutGenRoot {
     position: relative;
 }
-
 .vis-apanel-busyVInOutGenBusyDiv {
     top: 0px;
     z-index: 9999;
@@ -1035,16 +1033,16 @@
 
 .vis-gc-vpanel-table-label-checkbox {
     /*vertical-align:bottom;*/
+    font-weight: normal;
 }
 
-    .vis-gc-vpanel-table-label-checkbox input[type=checkbox] {
-        width: auto;
-        min-height: 0;
-        min-width: 0px;
-        margin-left: 4px;
-        margin-right: 4px;
-    }
-
+.vis-gc-vpanel-table-label-checkbox input[type=checkbox] {
+    /* width: auto; */
+    min-height: 0;
+    min-width: 0px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
 .vis-gc-vpanel-table-td0 {
     min-width: 5px;
     width: auto;
@@ -1511,21 +1509,23 @@ html[dir="rtl"] .vis-sms-leftWrap {
         color: #535353;
     }
 
-.vis-sms-form-data > input, .vis-sms-form-data-extra > input, .vis-sms-form-data-sub > input {
+/*.vis-sms-form-data > input, .vis-sms-form-data-extra > input, .vis-sms-form-data-sub > input {
     width: 100%;
     float: left;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
     padding-bottom: 10px;
     font-size: 20px;
     font-weight: lighter;
     color: rgba(var(--v-c-on-secondary), 1);
-}
+}*/
 
-    .vis-sms-form-data > input:focus, .vis-sms-form-data-extra > input:focus {
-        border: none;
-        border-bottom: 1px solid #ccc;
-    }
+/*.vis-sms-form-data > input:focus,
+.vis-sms-form-data-extra > input:focus,
+.vis-sms-form-data-sub input:focus {
+    border: none;
+    border-bottom: 1px solid #ccc;
+}*/
 
 .vis-sms-leftFooter {
     width: 100%;
@@ -2323,12 +2323,13 @@ findImg {
 .vis-allocation-leftControls {
     width: 100%;
     float: left;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
 }
 
 .vis-allocation-inputLabels {
     width: 100%;
     float: left;
+    margin: 10px 0;
 }
 
 .vis-allocation-currencycmb, .vis-allocation-docTypecmb, .vis-allocation-docNo, .vis-allocation-fromDate, .vis-allocation-toDate {
@@ -2385,7 +2386,7 @@ findImg {
 }
 /*Added new classes*/
 .vis-leftpanel-wrapper {
-    background-color: rgba(var(--v-c-secondary), .8);
+    background-color: rgba(var(--v-c-secondary), 1);
     float: left;
     height: 100%;
     position: relative;
@@ -2791,10 +2792,11 @@ findImg {
 .vis-cardviewCondition{
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
-.vis-cardviewmainsecondchildinner{
+.vis-cardviewmainsecondchildinner {
     height: 171px;
     overflow: auto;
     float: left;
+    width: 100%;
 }
 .vis-cardviewCondition {
     width: calc(100% - 140px);
@@ -4557,7 +4559,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     float: left;
     height: 100%;
     max-width: 260px;
-    background: rgba(var(--v-c-secondary), .8);
+    background: rgba(var(--v-c-secondary), 1);
 }
 .vis-archive-l-s-head {
     width: 100%;
@@ -4585,7 +4587,8 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     padding-top: 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    background: rgba(var(--v-c-secondary), 0.8);
+    background: rgba(var(--v-c-secondary), 1);
+    width: 100%;
 }
 .vis-archive-l-s-content-inner {
     height: 100%;
@@ -4618,6 +4621,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 .VIS-archive-table-padding input {
     height: 30px;
+    padding: 5px 10px;
 }
 .vis-mi-ls-wrp, .vis-mi-main-contntwrp {
     height: calc(100% - 135px);
@@ -4642,6 +4646,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-frm-contenthead {
     flex: 1;
     display: flex;
+    align-items: center;
 }
 .vis-frm-contenthead > label{
     display: inline-block;
@@ -4660,6 +4665,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 .vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), .vis-app-aform-root select {
     min-height: 30px;
+        padding: 5px 10px;
 }
 .vis-app-aform-root input:focus, 
 .vis-app-aform-root select:focus{
@@ -4680,7 +4686,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     height: 100%;
 }
 .vis-info-l-s-wrap {
-    background-color: rgba(var(--v-c-secondary), .8);
+    background-color: rgba(var(--v-c-secondary), 1);
     padding: 0 10px;
     float: left;
     width: 25%;
@@ -4711,10 +4717,10 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 .vis-info-subroot input:not([type="button"]):not([type="checkbox"]), 
 .vis-info-subroot select {
-    width: 100%;
+    /*width: 100%;
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
-    color: rgba(var(--v-c-on-secondary), 1);
-    background-color: rgba(var(--v-c-common), 1);
+    color: rgba(var(--v-c-on-secondary), 1);*/
+    /*background-color: rgba(var(--v-c-common), 1);*/
 }
 .vis-info-btnswrap .VIS_Pref_btn-2 {
     margin-left: 10px;
@@ -4759,7 +4765,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 }
 .vis-info-btnswrap,
 .vis-info-btnswrap > div,
-.vis-info-btmcnt-wrap,
+/*.vis-info-btmcnt-wrap,*/
 .vis-frm-ls-top {
     display: flex;
     align-items: center;
@@ -4772,8 +4778,10 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     font-size: 1rem;
 }
 .vis-info-btmcnt-wrap {
-    padding: 4px 10px;
+    padding: 10px;
     width: 100%;
+    display: flex;
+    align-items: center;
 }
 .vis-info-searchbtn-wrap {
     width: 250px;
@@ -4782,6 +4790,13 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-info-btnfileds-wrap {
     flex: 1;
     padding: 0 20px;
+    display: flex;
+}
+.vis-info-botdatafield {
+    flex: 1;
+}
+.vis-info-botdatafield .vis-input-wrap {
+    margin-bottom: 0px;
 }
 .vis-p-t-10 {
     padding-top: 10px;
@@ -4823,16 +4838,99 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     display: flex;
     justify-content: center;
 }
-
-
-
+.vis-icon-menuclose {
+    order: 7;
+    display: flex;
+    cursor: pointer;
+}
+.vis-leftsidebarouterwrap .vis-input-wrap select,
+.vis-leftsidebarouterwrap .vis-input-wrap input {
+    background-color: transparent;
+}
+.vis-leftsidebarouterwrap .vis-input-wrap select,
+.vis-leftsidebarouterwrap .vis-input-wrap input,
+.vis-leftsidebarouterwrap .vis-input-wrap .input-group-text {
+    border: 1px solid rgba(var(--v-c-on-secondary), .4);
+}
+.vis-leftsidebarouterwrap .vis-input-wrap select ~ label, 
+.vis-leftsidebarouterwrap .vis-input-wrap select:focus ~ label, 
+.vis-leftsidebarouterwrap .vis-input-wrap input:focus ~ label,
+.vis-leftsidebarouterwrap .vis-input-wrap input:not(:placeholder-shown) ~ label{
+    background: linear-gradient(rgba(var(--v-c-secondary), 1) 50%, transparent 50%);
+    left: 5px;
+}
+.vis-leftsidebarouterwrap .vis-input-wrap input {
+    padding: 5px 10px;
+}
+.vis-leftsidebarouterwrap .vis-input-wrap label,
+.VIS-archive-table-padding .vis-input-wrap label,
+.vis-emailsavewrap .vis-input-wrap label {
+    left: 10px;
+}
+.vis-leftsidebarouterwrap .vis-input-wrap label {
+    color: rgba(var(--v-c-on-secondary), .8);
+}
+.vis-leftsidebarouterwrap .vis-input-wrap .vis-ev-col-mandatory {
+    /*border: 1px solid rgba(var(--v-c-mandatory), 1);*/
+}
+.vis-matchpoTopcheckwrap {
+    padding: 0 10px;
+    display: flex;
+}
+.vis-info-btmcnt-wrap .VIS_Pref_btn-2 {
+    height: 35px;
+    padding: 5px 12px;
+}
+.vis-paymentselect-field .vis-input-wrap .vis-paymentPrintChk-field label {
+    position: relative;
+    top: auto !important;
+    padding-left: 0;
+}
+.vis-leftsidebarouterwrap .panel-body {
+    padding-bottom: 0;
+}
+.vis-leftsidebarouterwrap .panel-body .vis-input-wrap select ~ label, 
+.vis-leftsidebarouterwrap .panel-body .vis-input-wrap select:focus ~ label, 
+.vis-leftsidebarouterwrap .panel-body .vis-input-wrap input:focus ~ label, 
+.vis-leftsidebarouterwrap .panel-body .vis-input-wrap input:not(:placeholder-shown) ~ label {
+    background: linear-gradient(#fff 50%, transparent 50%);
+}
+.vis-leftsidebarouterwrap .vis-input-wrap .input-group-text {
+    height: 35px;
+}
+.vis-info-l-s-wrap tr:first-child .vis-input-wrap {
+    margin-top: 10px;
+}
+.vis-markmodulemainwrap {
+    height: 388px;
+    width: 100%;
+    background: rgba(var(--v-c-secondary), .5);
+    overflow: auto;
+    padding: 5px 10px;
+}
+.vis-flex-directionCol{
+    flex-direction: column;
+}
+.vis-markmodulemainwrap .vis-gc-vpanel-table-label-checkbox input[type="checkbox"] {
+    margin-right: 7px;
+}
+.vis-valpreferencedatawrp {
+    display: flex;
+}
+.vis-valpreferencedatawrp .vis-input-wrap + label {
+    flex: 1;
+    padding-left: 10px;
+    margin-bottom: 15px !important;
+    display: flex;
+    align-items: center;
+}
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {
     position: absolute;
     bottom: 0px;
     width: 100%;
     height: 100%;
-    z-index: 999; 
+    z-index: 999;
     left: 0;
 }
 .vis-busyindicatorinnerwrap {

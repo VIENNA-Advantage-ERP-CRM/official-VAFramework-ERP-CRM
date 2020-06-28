@@ -1394,6 +1394,8 @@ namespace VAdvantage.Model
 
                 if (node.IsSummary && node.Nodes.Count < 1)
                 {
+                    if (tn == node)
+                        continue;
                     tn.Nodes.Remove(node);
 
                     if (barNodes.Contains(node))

@@ -1701,9 +1701,12 @@
                     success = false;
                 }
                 else {
+                    var value = "";
+                    if (this.vo.tabNo > 0)
+                        var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc, true);
+                    else
+                        var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc);
 
-                    var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc, true);
-                    //	Same link value?
                     if (refresh) {
                         refresh = this.linkValue.equals(value);
                         queryDetailAll = !refresh;
@@ -1858,7 +1861,7 @@
                 var value = VIS.context.getTabRecordContext(this.vo.windowNo, this.getParentTabNo(), lc, true);
 
                 lc = this.getTableName() + "." + lc;
-                
+
                 //	Check validity
                 if (value.length == 0) {
                     //log.Warning("No value for link column " + lc);
@@ -1950,7 +1953,7 @@
             this.getField(i).setError(false);
         }
         this.gridTable.setDisableNotification(false);
-        this.gridTable.fireDataStatusIEvent(copy ? "UpdateCopied" : "Inserted", "");
+        this.gridTable.fireDataStatusIEvent(copy ? "UpdateCopied" : "Insertdata", "");
         return retValue;
 
     }; // dataNew
@@ -4074,7 +4077,7 @@
         var AD_Org_ID = co[1];
         var createError = true;
         if (!VIS.MRole.canUpdate(AD_Client_ID, AD_Org_ID, this.AD_Table_ID, 0, createError)) {
-           // this.fireDataStatusEEvent("cant-update","",true);//CLogger.retrieveError());
+            // this.fireDataStatusEEvent("cant-update","",true);//CLogger.retrieveError());
             this.fireDataStatusEEvent("AccessTableNoUpdate", "", true);//CLogger.retrieveError());
             this.dataIgnore();
             return this.SAVE_ACCESS;
@@ -4213,7 +4216,8 @@
             AD_Org_ID: AD_Org_ID,
             SelectSQL: VIS.secureEngine.encrypt(this.SQL_Select),
             AD_WIndow_ID: m_fields[0].getAD_Window_ID(), // vinay bhatt window id
-            MaintainVersions: false
+            MaintainVersions: false,
+            UnqFields: this.gFieldUnique
             //ImmediateSave: true,
             //ValidFrom: new Date().toISOString(),
         };
@@ -4388,6 +4392,7 @@
                 return this.gFieldData;
             else {
                 this.gFieldData = [];
+                this.gFieldUnique = [];
                 for (var i = 0; i < size; i++) {
                     var field = m_fields[i];
                     this.gFieldData.push({
@@ -4398,8 +4403,12 @@
                         ColumnSQL: field.getColumnSQL(true),
                         IsEncryptedColumn: field.getIsEncryptedColumn(),
                         IsParentColumn: field.getIsParentColumn(),
-                        Name: field.getHeader()
+                        Name: field.getHeader(),
+                        IsUnique: field.getIsUnique()
                     });
+                    if (field.getIsUnique() && !field.getIsVirtualColumn()) {
+                        this.gFieldUnique.push(field.getColumnName());
+                    }
                 }
                 return this.gFieldData;
             }
@@ -5179,6 +5188,7 @@
         this.gridFields = null;
         this.gFieldLessData = null;
         this.gFieldData = null;
+        this.gFieldUnique = null;
     };
 
     GridTable.prototype.maintainVersionFieldChanged = function (rowData, oldRowData) {
@@ -6659,6 +6669,10 @@
     //
     GridField.prototype.getShowFilterOption = function () {
         return this.vo.ShowFilterOption;
+    };
+
+    GridField.prototype.getIsUnique = function () {
+        return this.vo.IsUnique;
     };
 
     /**

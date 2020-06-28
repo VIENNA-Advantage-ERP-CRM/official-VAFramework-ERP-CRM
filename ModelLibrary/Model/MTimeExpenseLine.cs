@@ -349,7 +349,7 @@ namespace VAdvantage.Model
             }
             SetConvertedAmt(ConvertedAmt);
             log.Fine("ConvertedAmt=" + ConvertedAmt);
-        }	//	setAmt
+        }   //	setAmt
 
         /// <summary>
         /// Before Save.
@@ -359,7 +359,7 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             //	Calculate Converted Amount
-            if (newRecord || Is_ValueChanged("ExpenseAmt") || Is_ValueChanged("C_Currency_ID"))
+            if (newRecord || Is_ValueChanged("ExpenseAmt") || Is_ValueChanged("C_Currency_ID") || Is_ValueChanged("DateExpense"))
             {
                 if (GetC_Currency_ID() == GetC_Currency_Report_ID())
                 {
@@ -367,9 +367,16 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    SetConvertedAmt(VAdvantage.Model.MConversionRate.Convert(GetCtx(),
-                        GetExpenseAmt(), GetC_Currency_Report_ID(), GetC_Currency_ID(), 
-                        GetDateExpense(), 0, GetAD_Client_ID(), GetAD_Org_ID()));
+                    // did changes to give error message when conversion is not found.-Mohit
+                    decimal convertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
+                        GetExpenseAmt(), GetC_Currency_ID(), GetC_Currency_Report_ID(), 
+                        GetDateExpense(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    if (convertedAmt.Equals(0))
+                    {
+                        log.SaveError("ConversionNotFound", "");
+                        return false;
+                    }
+                    SetConvertedAmt(convertedAmt);
                 }
             }
             if (IsTimeReport())

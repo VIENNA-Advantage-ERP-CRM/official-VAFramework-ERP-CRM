@@ -778,12 +778,12 @@ namespace VAdvantage.Model
                                 if (costingMethodMatchPO == "C")
                                 {
                                     query.Clear();
-                                    query.Append(@" SELECT costingmethod FROM m_costelement WHERE m_costelement_id = (SELECT  cel.m_ref_costelement
+                                    query.Append(@" SELECT costingmethod FROM m_costelement WHERE m_costelement_id = (SELECT CAST(cel.M_Ref_CostElement AS INTEGER)
                                     FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID  = cel.M_CostElement_ID
                                     WHERE ce.AD_Client_ID   =" + product.GetAD_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.M_CostElement_ID = " + pca.GetM_CostElement_ID() + @"
-                                    AND m_ref_costelement  IN   (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  ) )
+                                    AND CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  ) )
                                     ");
                                 }
                             }
@@ -795,12 +795,12 @@ namespace VAdvantage.Model
                                 if (costingMethodMatchPO == "C")
                                 {
                                     query.Clear();
-                                    query.Append(@" SELECT costingmethod FROM m_costelement WHERE m_costelement_id = (SELECT  cel.m_ref_costelement
+                                    query.Append(@" SELECT costingmethod FROM m_costelement WHERE m_costelement_id = (SELECT CAST(cel.M_Ref_CostElement AS INTEGER)
                                     FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID  = cel.M_CostElement_ID
                                     WHERE ce.AD_Client_ID   =" + product.GetAD_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.M_CostElement_ID = " + pca.GetM_CostElement_ID() + @"
-                                    AND m_ref_costelement  IN   (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  ) )
+                                    AND CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  ) )
                                     ");
                                 }
                             }

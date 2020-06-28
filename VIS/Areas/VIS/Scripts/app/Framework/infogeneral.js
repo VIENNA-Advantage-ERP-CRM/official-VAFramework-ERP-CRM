@@ -64,25 +64,13 @@
                 //btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
             //}
             //else {
-                searchTab = $("<div class='vis-info-l-s-wrap'>");
+            searchTab = $("<div class='vis-info-l-s-wrap vis-leftsidebarouterwrap'>");
                 searchSec = $("<div>");
                 searchTab.append(searchSec);
                 datasec = $("<div class='vis-info-datasec'>");
                 btnsec = $("<div class='vis-info-btnsec'>");
            // }
-            //searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;overflow:auto;'>");
-            //searchSec = $("<div style='background-color: rgb(241, 241, 241)'>");
-            //if (true) {//IPAD
-            //    ssHeader.css('display', 'none');
-            //    searchTab.css('height', '100%');
-            //    searchSec.css('height', '100%');
-            //}
-            //searchTab.append(searchSec);
-            //sSContainer.append(searchTab);
-
-            // var searchSec = $("<div style='display: inline-block; float: left;width:23%;height:86.8%;overflow:auto'>");
-            //  datasec = $("<div style='display: inline-block; float: left;width:75%;height:87.8%;margin-left:10px;'>");
-            //  btnsec = $("<div style='display: inline-block; float: left;width:99%;height:auto;margin-top: 2px;'>");
+            
             subroot.append(searchTab);
             subroot.append(datasec);
             subroot.append(btnsec);
@@ -139,11 +127,11 @@
             btnsec.append(divPaging);
             btnsec.append(divbtnRight);
             //Busy Indicator
-            bsyDiv = $("<div class='vis-apanel-busy'>");
-            bsyDiv.css("width", "98%");
-            bsyDiv.css("height", "97%");
-            bsyDiv.css('text-align', 'center');
-            bsyDiv.css("position", "absolute");
+            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //bsyDiv.css("width", "98%");
+            //bsyDiv.css("height", "97%");
+            //bsyDiv.css('text-align', 'center');
+            //bsyDiv.css("position", "absolute");
             bsyDiv[0].style.visibility = "visible";
 
 
@@ -153,54 +141,7 @@
 
         initializeComponent();
 
-        function bindEvent() {
-            //btnExpander.on('click', function () {
-            //    //sSContainer.css("width", '4%');
-            //    //datasec.css("width", '95%');
-            //    //searchSec.hide();
-            //    //$(document.getElementsByName('gridInfodata')).css("width", '95%');
-
-            //    if (isExpanded) {
-            //        btnExpander.animate({ borderSpacing: 180 }, {
-            //            step: function (now, fx) {
-            //                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-            //                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-            //                $(this).css('transform', 'rotate(' + now + 'deg)');
-            //            },
-            //            duration: 'slow'
-            //        }, 'linear');
-
-            //        sSContainer.animate({ width: '4%' }, "slow");
-            //        searchSec.hide();
-            //        //datasec.animate({ width: "94%" }, "slow");
-            //        //datasec.css("width", '94.8%');
-            //        //dGrid.animate({ width: "94%" }, "fast");               
-
-            //        // $(window).trigger('resize');
-            //        // $(document.getElementsByName('gridInfodata')).css('width','100%')
-            //        datasec.animate({ width: "94%" }, "slow", null, function () {
-            //            dGrid.resize();
-            //            dGrid.refresh();
-            //        });
-
-            //    }
-            //    else {
-            //        btnExpander.animate({ borderSpacing: 0 }, {
-            //            step: function (now, fx) {
-            //                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-            //                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-            //                $(this).css('transform', 'rotate(' + now + 'deg)');
-            //            },
-            //            duration: 'slow'
-            //        }, 'linear');
-
-            //        // datasec.css("width", '76%');
-            //        searchSec.show();
-            //        datasec.animate({ width: "75%" }, "slow");
-            //        sSContainer.animate({ width: '23%' }, "slow");
-            //    }
-            //    isExpanded = !isExpanded;
-            //});
+        function bindEvent() {            
 
             if (!VIS.Application.isMobile) {
                 inforoot.on('keyup', function (e) {
@@ -321,16 +262,18 @@
             //var rowctrl = 0;
             for (var item in schema) {
 
-                tr = $("<tr>");
-                tableSArea.append(tr);
+                //tr = $("<tr>");
+                //tableSArea.append(tr);
 
                 var td = $("<td>");
-                label = new VIS.Controls.VLabel(schema[item].Name, schema[item].ColumnName);
-                td.append(label.getControl());
-                tr.append(td);
+                var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+                var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">'); 
 
                 tr = $("<tr>");
                 tableSArea.append(tr);
+                tr.append(td);
+                td.append(Leftformfieldwrp);
+                Leftformfieldwrp.append(Leftformfieldctrlwrp);
                 var srchCtrl = {
                 };
 
@@ -344,8 +287,11 @@
                     ctrl.setValue(value);
                 }
                 var tdctrl = $("<td>");
-                tr.append(tdctrl);
-                tdctrl.append(ctrl.getControl());
+                //tr.append(tdctrl);
+                Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+
+                label = new VIS.Controls.VLabel(schema[item].Name, schema[item].ColumnName);
+                Leftformfieldctrlwrp.append(label.getControl());
 
                 srchCtrls.push(srchCtrl);
             }
@@ -369,38 +315,7 @@
                 resizable: false,
 
                 modal: true
-                //,
-                //buttons: [
-                //     {
-                //         text: refreshtxt,
-                //         click: function () {
-
-                //             bsyDiv[0].style.visibility = 'visible';                           
-                //             displayData(true);
-
-                //         },
-                //         style: "float:left;margin:0px;margin-right:5px;margin-bottom:-5px"
-                //         //class: "VIS_Pref_pass-btn"
-                //     },
-                //     {
-                //         text: Oktxt,
-                //         click: function () {
-                //             btnOKClick();
-                //         },
-                //         style: "margin:0px;margin-right:5px;margin-bottom:-5px"
-                //         //class: "VIS_Pref_pass-btn"
-                //     },
-                //     {
-                //         text: canceltxt,
-                //         click: function () {
-                //             disposeComponent();
-                //             inforoot.dialog("close");
-                //             inforoot = null;
-                //         },
-                //         style: "margin:0px;margin-right:5px;margin-bottom:-5px"
-                //         //class: "VIS_Pref_pass-btn"
-                //     }
-                //]
+                
                 ,
                 close: onClosing,
                 closeText: VIS.Msg.getMsg("close")

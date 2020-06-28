@@ -56,11 +56,11 @@
         //Load BusyDiv
         //*****************
         function busyIndicator() {
-            $divBusy = $("<div>");
-            $divBusy.css({
-                "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
-                "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
-            });
+            $divBusy = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$divBusy.css({
+            //    "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
+            //    "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
+            //});
             $divBusy[0].style.visibility = "hidden";
             $root.append($divBusy);
         };
@@ -81,37 +81,43 @@
         function customDesign() {
             var height = ($(window).height())*(94/100);
             $divContainer = $("<div class='vis-mainContainer'>");
-            var designPSelectInfo = " <div class='vis-pSelectInfo'>"  // div pSelectInfo starts here
+            var designPSelectInfo = " <div class='vis-pSelectInfo vis-leftsidebarouterwrap'>"  // div pSelectInfo starts here
                              +"<div class='vis-pSelectInner'>"
                              + " <div class='vis-paymentselect-field'>"  // div bankAccount starts here
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"
+                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbBankAccount_" + $self.windowNo + "'></select>"
-                             + " </div>" // div bankAccount ends here 
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"
+                             + "</div></div> </div>" // div bankAccount ends here 
                              + " <div class='vis-paymentselect-field'>"  // div currentBalance starts here
+                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                             + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrentBal_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
                              + " <label>" + VIS.Msg.getMsg("CurrentBalance") + " </label>"
-                             + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrentBal_" + $self.windowNo + "' MaxLength='50'></input>"
-                             + " </div>" // div currentBalance ends here 
+                             + "</div></div>  </div>" // div currentBalance ends here 
                              + " <div class='vis-paymentselect-field'>"  // div businessPartner starts here
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID") + " </label>"
+                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbbusinessPartner_" + $self.windowNo + "'></select>"
-                             + " </div>" // div businessPartner ends here                             
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID") + " </label>"
+                             + "</div></div>  </div>" // div businessPartner ends here                             
                              + " <div class='vis-paymentselect-field'>"  // div paymentDate starts here
-                             + " <label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "PayDate") + " </label>"
-                             + " <input  id='VIS_cmbPayDate_" + $self.windowNo + "'type='date'>"
-                             + " </div>" // div paymentDate ends here 
+                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                             + " <input  id='VIS_cmbPayDate_" + $self.windowNo + "'type='date' data-placeholder='' placeholder=' '>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "PayDate") + " </label>"
+                             + "</div></div>  </div>" // div paymentDate ends here 
                              + " <div class='vis-paymentselect-field'>"  // div paymentMethod starts here
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "PaymentRule") + " </label>"
+                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbPaymentMethod_" + $self.windowNo + "'></select>"
-                             + " </div>" // div paymentMethod ends here 
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "PaymentRule") + " </label>"
+                             + "</div></div>  </div>" // div paymentMethod ends here 
                              + " <div class='vis-paymentselect-field'>"  // div paymentAmount starts here
-                             + " <label>" + VIS.Msg.getMsg("PaymentAmount") + " </label>"
-                             + " <input type='number' id='VIS_txtPaymentAmount_" + $self.windowNo + "' disabled MaxLength='50'></input>"
-                             + " </div>" // div paymentAmount ends here 
+                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <input type='number' id='VIS_txtPaymentAmount_" + $self.windowNo + "' disabled MaxLength='50' data-placeholder='' placeholder=' '>"
+                + " <label>" + VIS.Msg.getMsg("PaymentAmount") + " </label>"
+                             + "</div></div>  </div>" // div paymentAmount ends here 
                              + " <div class='vis-paymentselect-field'>"  // div onlyDueInvoice starts here
-                             + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "'></input>"
+                + " <input type='checkbox' id='VIS_chkOnlyDue_" + $self.windowNo + "' data-placeholder='' placeholder=' '>"
                              + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("OnlyDue") + " </label>"
-                             + " </div>"  // div onlyDueInvoice starts here
-                             + " <div class='vis-paymentselect-field'>"  // div lblSHowDetail starts here                            
+                             + "  </div>"  // div onlyDueInvoice starts here
+                             + " <div class='vis-paymentselect-field'>"  // div lblSHowDetail starts here                          
                              + " <label for='VIS_lblShowDetail_" + $self.windowNo + "'></label>"
                              + " </div>" // div lblSHowDetail ends here 
                              + " </div>" // div vis-pSelectInner ends here 
@@ -240,18 +246,61 @@
             catch(err)
             {
             }
-            if (arrListColumns.length == 0) {                
+            if (arrListColumns.length == 0) {
+                //debugger;
                 arrListColumns.push({ field: "SELECT", caption: VIS.Msg.getMsg("SELECT"), sortable: true, size: '100px',hidden:true });
                 arrListColumns.push({ field: "C_INVOICE_ID", caption: VIS.Msg.getMsg("Invoice"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "DUEDATE", caption: VIS.Msg.getMsg("DueDate"), sortable: true, size: '100px' });
+                arrListColumns.push({ field: "DUEDATE", caption: VIS.Msg.getMsg("DueDate"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val;
+                        if (record.changes == undefined || record.changes.DUEDATE == undefined) {
+                            val = record["DUEDATE"];
+                        }
+                        else {
+                            val = record.changes.DUEDATE;
+                        }
+                        return new Date(val).toLocaleDateString();
+                    }
+                });
                 arrListColumns.push({ field: "BUSINESSPARTNER", caption: VIS.Msg.getMsg("BusinessPartner"), sortable: true, size: '100px' });
                 arrListColumns.push({ field: "DOCUMENTNO", caption: VIS.Msg.getMsg("Document_No"), sortable: true, size: '100px' });
                 arrListColumns.push({ field: "CURRENCY", caption: VIS.Msg.getMsg("Currency"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "GRANDTOTAL", caption: VIS.Msg.getMsg("GrandTotal"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "DISCOUNTAMOUNT", caption: VIS.Msg.getMsg("DiscountAmt"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "DISCOUNTDATE", caption: VIS.Msg.getMsg("DiscountDate"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "AMOUNTDUE", caption: VIS.Msg.getMsg("AmountDue"), sortable: true, size: '100px' });
-                arrListColumns.push({ field: "PAYMENTAMOUNT", caption: VIS.Msg.getMsg("PaymentAmount"), sortable: true, size: '100px' });
+                arrListColumns.push({ field: "GRANDTOTAL", caption: VIS.Msg.getMsg("GrandTotal"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["GRANDTOTAL"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
+                arrListColumns.push({ field: "DISCOUNTAMOUNT", caption: VIS.Msg.getMsg("DiscountAmt"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["DISCOUNTAMOUNT"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
+                arrListColumns.push({ field: "DISCOUNTDATE", caption: VIS.Msg.getMsg("DiscountDate"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val;
+                        if (record.changes == undefined || record.changes.DISCOUNTDATE == undefined) {
+                            val = record["DISCOUNTDATE"];
+                        }
+                        else {
+                            val = record.changes.DISCOUNTDATE;
+                        }
+                        return new Date(val).toLocaleDateString();
+                    }
+                });
+                arrListColumns.push({ field: "AMOUNTDUE", caption: VIS.Msg.getMsg("AmountDue"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["AMOUNTDUE"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
+                arrListColumns.push({ field: "PAYMENTAMOUNT", caption: VIS.Msg.getMsg("PaymentAmount"), sortable: true, size: '100px',
+                    render: function (record, index, col_index) {
+                        var val = record["PAYMENTAMOUNT"];
+                        return parseFloat(val).toLocaleString();
+                    }
+                });
             }
           
             dGrid=$divGridPSelect.w2grid({

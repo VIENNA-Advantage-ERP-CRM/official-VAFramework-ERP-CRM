@@ -46,7 +46,7 @@
 
                 @{if ((Session["ctx"] as VAdvantage.Utility.Ctx).GetIsRightToLeft())
                   {
-                    <div class="k-rtl vis-Email-textarea-div" style="width: 100%; float: left; border: 1px solid rgb(204, 204, 204);">
+                    <div class="k-rtl vis-Email-textarea-div" style="width: 100%; float: left;">
                         <textarea  ondrop="return false;" id="@(ViewBag.windowNo + "_vis-Email-textarea")" style="width: 100%; height:100%;">
                 
                 </textarea>
@@ -54,7 +54,7 @@
                   }
                   else
                   {
-                    <div class="vis-Email-textarea-div" style="width: 100%; float: left; border: 1px solid rgb(204, 204, 204);">
+                    <div class="vis-Email-textarea-div" style="width: 100%; float: left;">
                         <textarea  ondrop="return false;" id="@(ViewBag.windowNo + "_vis-Email-textarea")" style="width: 100%; height:100%;">
                 
                 </textarea>
@@ -78,44 +78,56 @@
                 <div class="vis-Email-rytContent">
                     <div class="vis-Email-rytForm">
                         <div class="vis-form-rytData">
-                            <label for="to">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "To")</label>
-                            <input id="@(ViewBag.windowNo + "_emailTo")"  type="text" name="to">
+                            <div class="input-group vis-input-wrap">
+                                <div class="vis-control-wrap">
+                                    <input id="@(ViewBag.windowNo + "_emailTo")" type="text" name="to" data-placeholder="" placeholder=" ">
+                                    <label for="to">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "To")</label>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="vis-form-rytData">
-                            <label for="cc">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Cc")</label>
-                            <input id="@(ViewBag.windowNo + "_eamilCc")"  type="text" name="cc">
-                        </div>
+                            <div class="input-group vis-input-wrap">
+                                <div class="vis-control-wrap">
+                                    <input id="@(ViewBag.windowNo + "_eamilCc")" type="text" name="cc" data-placeholder="" placeholder=" ">
+                                    <label for="cc">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Cc")</label>
+                                    </div>
+                                </div>
+                                </div>
 
                         <div class="vis-form-rytData">
-                            <label for="bcc">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Bcc")</label>
-                            <input id="@(ViewBag.windowNo + "_emailBcc")"  type="text" name="bcc">
-                        </div>
+                            <div class="input-group vis-input-wrap">
+                                <div class="vis-control-wrap">
+                                    <input id="@(ViewBag.windowNo + "_emailBcc")" type="text" name="bcc" data-placeholder="" placeholder=" ">
+                                    <label for="bcc">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Bcc")</label>
+                                    </div>
+                                </div>
+                                </div>
                     </div>
-                    <!-- end of Email-rytForm -->
+                            <!-- end of Email-rytForm -->
 
-                    <div class="vis-Email-rytBcc">
-                        <div class="vis-email-rytBcc-header">
-                            <h4 style="float: left">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Bcc")</h4>
-                            @*<img  id="@(ViewBag.windowNo + "_emailRefresh")"  style="cursor: pointer;float:right;margin-top:8px" title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Refresh")" src="~/Areas/vis/Images/Refresh24.png">*@
-                            <!-- Refresh message from message window showing & symbol. Now we used CleanMnemonics to remove &.-->
+                            <div class="vis-Email-rytBcc">
+                                <div class="vis-email-rytBcc-header">
+                                    <h4 style="float: left">@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Bcc")</h4>
+                                    @*<img  id="@(ViewBag.windowNo + "_emailRefresh")"  style="cursor: pointer;float:right;margin-top:8px" title="@VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Refresh")" src="~/Areas/vis/Images/Refresh24.png">*@
+                                    <!-- Refresh message from message window showing & symbol. Now we used CleanMnemonics to remove &.-->
 
-                            <i  id="@(ViewBag.windowNo + "_emailRefresh")"  title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Refresh"))" class="vis vis-refresh"></i>
+                                    <i id="@(ViewBag.windowNo + "_emailRefresh")" title="@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.language, "Refresh"))" class="vis vis-refresh"></i>
+                                </div>
+                                <div class="vis-Email-BccList">
+                                </div>
+                            </div>
+
+                            <div class="vis-DMSAttachDoc">
+                                <div>
+                                    <h4 class="vis-dmsdocumentheader" style="float: left"></h4>
+                                </div>
+                                <div class="vis-DMSAttachDocList">
+
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="vis-Email-BccList">
-                        </div>
-                    </div>
-
-                    <div class="vis-DMSAttachDoc">
-                        <div>
-                           <h4 class="vis-dmsdocumentheader" style="float: left"></h4>
-                        </div>
-                        <div class="vis-DMSAttachDocList">
-
-                        </div>
-                    </div>
-
-                </div>
                 <!-- end of Email-rytContent -->
             </div>
             <!-- end of Email-rytWrap -->

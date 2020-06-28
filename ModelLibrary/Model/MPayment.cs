@@ -1160,45 +1160,26 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public string GetChecknumber(int payMethod_ID, int BankAccount_ID, Trx trx)
         {
-            string retval = string.Empty;
-            IDbConnection dbConnection = null;
-            if (trx == null)
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("P_BANKACCOUNTID", BankAccount_ID);
+            param[0].SqlDbType = SqlDbType.Int;
+            param[0].Direction = ParameterDirection.Input;
+
+            param[1] = new SqlParameter("p_PAYMETHODID", payMethod_ID);
+            param[1].SqlDbType = SqlDbType.Int;
+            param[1].Direction = ParameterDirection.Input;
+
+            param[2] = new SqlParameter("p_result", 0);
+            param[2].SqlDbType = SqlDbType.Int;
+            param[2].Direction = ParameterDirection.Output;
+
+            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);            
+
+            if (param != null && param.Length > 0) // If Record Found
             {
-                return string.Empty; ;
+                return param[0].Value.ToString();
             }
-            try
-            {
-                dbConnection = trx.GetConnection();
-                if (dbConnection != null)
-                {
-                    // execute procedure for updating cost of components
-                    OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = (OracleConnection)dbConnection;
-                    cmd.CommandText = "GETCHECKNO";
-                    cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
-                    cmd.BindByName = true;
-                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());
-                    retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
-                    if (retval == "0") // If Record Found
-                    {
-                        retval = string.Empty;
-                    }
-
-                }
-
-                return retval.ToString();
-
-            }
-            catch (Exception e)
-            {
-                log.SaveError("Error:GetCheckNumber", e.Message);
-                return retval;
-            }
-
-
+            return string.Empty;
         }
 
         /**
@@ -2622,8 +2603,6 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Prepare);
             return true;
         }
-
-
         /**
          *	Prepare Document
          * 	@return new status (In Progress or Invalid) 
@@ -2634,7 +2613,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-
+   
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
@@ -2650,7 +2629,6 @@ namespace VAdvantage.Model
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
             }
-
 
             //	Unsuccessful Online Payment
             if (IsOnline() && !IsApproved())
@@ -2677,9 +2655,12 @@ namespace VAdvantage.Model
                         // if order not completed - then payment also not completed (Prepay Order)
                         throw new Exception("Failed when processing document - " + order.GetProcessMsg());
                     }
-                    _processMsg = order.GetProcessMsg();
-                    order.Save(Get_Trx());
 
+                    //JID_0880 Show message on completion of Payment
+                    _processMsg =  order.GetProcessMsg();
+                    GetCtx().SetContext("prepayOrder", _processMsg);
+
+                    order.Save(Get_Trx());
 
                     /******************Commented By Lakhwinder
                      * //// Payment was Not Completed Against Prepay Order//////////*
@@ -2696,9 +2677,10 @@ namespace VAdvantage.Model
                     }
                     */
                     ////////////////////////
-                }	//	WaitingPayment
+                }
+                //	WaitingPayment
             }
-
+          
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
             {
@@ -2793,7 +2775,7 @@ namespace VAdvantage.Model
          * 	Complete Document
          * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
          */
-        public String CompleteIt()
+        public String  CompleteIt()
         {
             //	Re-Check
             if (!_justPrepared)
@@ -2802,7 +2784,6 @@ namespace VAdvantage.Model
                 if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                     return status;
             }
-
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
 
@@ -3333,10 +3314,16 @@ namespace VAdvantage.Model
                 }
             }
 
-
             if (!UpdateUnMatchedBalanceForAccount())
             {
                 return DocActionVariables.STATUS_INVALID;
+            }
+           
+            //JID_0880 Show message on completion of Payment
+            if (GetCtx().GetContext("prepayOrder") != null)
+            {
+                _processMsg += ","+ GetCtx().GetContext("prepayOrder");
+                GetCtx().SetContext("prepayOrder", "");
             }
 
             return DocActionVariables.STATUS_COMPLETED;
@@ -5096,7 +5083,7 @@ namespace VAdvantage.Model
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
-                string sql = "SELECT UNIQUE C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
+                string sql = "SELECT DISTINCT C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
                 DataSet ds = new DataSet();
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)

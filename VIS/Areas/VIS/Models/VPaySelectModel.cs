@@ -152,8 +152,8 @@ namespace VIS.Models
         public List<GridRecords> GetGridData(Ctx ctx, int bankAccountId, int C_BPartner_ID, DateTime? payDate, string paymentRule, bool chkDue, int C_Currency_ID)
         {
             List<GridRecords> lstGridRecords = new List<GridRecords>();
-            string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, i.DateInvoiced+p.NetDays AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.C_BPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.C_CURRENCY_ID, i.GRANDTOTAL, "
-            + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, SysDate-paymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate) as DISCOUNTDATE, "
+            string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, adddays(i.DateInvoiced, p.NetDays) AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.C_BPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.C_CURRENCY_ID, i.GRANDTOTAL, "
+            + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, adddays(SYSDATE, -1 * PaymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate)) as DISCOUNTDATE, "
             + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.C_Currency_ID, @param2, @param3,i.C_ConversionType_ID, i.AD_Client_ID,i.AD_Org_ID) as AMOUNTDUE, "
             + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
             + " i.C_Currency_ID, @param5, @param6,i.C_ConversionType_ID, i.AD_Client_ID,i.AD_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN C_BPartner bp ON "

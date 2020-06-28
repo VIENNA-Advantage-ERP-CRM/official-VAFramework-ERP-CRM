@@ -1150,7 +1150,7 @@
             this.gTab.setTreeNodeID(nodeID);
 
             this.gTab.gridTable.setCurrentPage(1);
-            this.gTab.setQuery(null);
+           // this.gTab.setQuery(null);
             this.navigate(0);
 
             this.query(0, 0, false, nodeID, this.treeID, this.gTab.getAD_Table_ID());   //  autoSize
@@ -1239,6 +1239,8 @@
         this.getMTab().setQuery(qry);
         this.query(0, 0, null);
     };
+
+  
 
     VIS.GridController.prototype.queryCompleted = function (result) {
         this.vTable.clear();
@@ -1611,6 +1613,12 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
                     var val = lookup.getValidation();
                     if (val.indexOf(columnName) != -1)	//	dep is dependent
                     {
+                       // var mField = this.gTab.getField(columnName);
+
+                        this.gTab.getTableModel().setDisableNotification(true);
+                        this.gTab.setValue(dep, null);
+                        //dep.setValue(null, true);
+                        this.gTab.getTableModel().setDisableNotification(false);
                         //Object oldValue = lookup.getSelectedItem();
                         //boolean mandatory = dep.isMandatory(false);
                         // lookup.fillComboBox (mandatory, true, true, false);

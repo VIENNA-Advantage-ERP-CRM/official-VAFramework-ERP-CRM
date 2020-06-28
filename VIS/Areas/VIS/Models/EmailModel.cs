@@ -857,7 +857,7 @@ namespace VIS.Models
                 {
                     item = new RecordData();
 
-                    item.name = ds.Tables[0].Columns[i].ColumnName;
+                    item.name = ds.Tables[0].Columns[i].ColumnName.ToUpper();
                     values = new List<object>();
                     for (int j = 0; j < ds.Tables[0].Rows.Count; j++)  //rows
                     {
