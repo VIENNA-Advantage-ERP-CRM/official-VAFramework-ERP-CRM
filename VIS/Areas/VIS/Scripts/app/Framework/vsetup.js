@@ -136,6 +136,7 @@
             cmbReg = $('<select placeholder="Region">');
             dRegInner.append(cmbReg);
             dRegInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Region_ID")));
+            dReg.append(dRegInner);
             dTForm.append(dReg);
 
             //var ulCase = $('<ul  class="initial-client-form-list">');

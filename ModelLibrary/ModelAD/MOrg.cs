@@ -74,11 +74,12 @@ namespace VAdvantage.Model
         /// Get Organizations Of Client
         /// </summary>
         /// <param name="po">persistent object</param>
-        /// <returns>array of orgs</returns>
+        /// <returns>array of orgs whose Organization unit is false</returns>
         public static MOrg[] GetOfClient(PO po)
         {
             List<MOrg> list = new List<MOrg>();
-            String sql = "SELECT * FROM AD_Org WHERE issummary = 'N' AND IsActive = 'Y' AND AD_Client_ID=" + po.GetAD_Client_ID() + " ORDER BY Value";
+            //JID_1833 - pick only those org, whose Org unit = False
+            String sql = "SELECT * FROM AD_Org WHERE issummary = 'N' AND IsOrgUnit = 'N' AND IsActive = 'Y' AND AD_Client_ID=" + po.GetAD_Client_ID() + " ORDER BY Value";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);

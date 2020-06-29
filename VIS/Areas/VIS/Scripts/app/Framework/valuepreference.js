@@ -379,14 +379,16 @@
 
         var returnValue = false;
 
-        var AD_Preference_ID = this.getADPreferenceID();
-
         this.orgchk = this.chkOrg.prop("checked");
         this.userchk = this.chkUser.prop("checked");
         this.windowchk = this.chkWindow.prop("checked");
         this.tenantchk = this.chkTenant.prop("checked");
 
         var localObj = this;
+
+        var AD_Preference_ID = this.getADPreferenceID();
+
+       
         $.ajax({
             url: VIS.Application.contextUrl + "ValuePreference/Save",
             dataType: "json",

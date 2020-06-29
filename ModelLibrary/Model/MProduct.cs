@@ -811,10 +811,10 @@ namespace VAdvantage.Model
 
             //22-12-2015
             //by Amit for creating records ffor product foe all Costing Element whose costing elemnt type is 'Material'
-            if (newRecord || Is_ValueChanged("M_Product_Category_ID"))
-            {
-                MCost.CreateRecords(this);
-            }
+            //if (newRecord || Is_ValueChanged("M_Product_Category_ID"))
+            //{
+            //    MCost.CreateRecords(this);
+            //}
             //20-12-2016
             //By Vivek Chauhan saving Nutrition value against product...........
             object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VA019_' and isactive='Y'");

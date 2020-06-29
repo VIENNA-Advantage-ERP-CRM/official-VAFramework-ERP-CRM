@@ -3779,7 +3779,7 @@ namespace VAdvantage.Model
                 {
                     if (!CalculateWithholding(inv.GetC_BPartner_ID(), inv.GetC_BPartner_Location_ID(), inv.IsSOTrx()))
                     {
-                        log.SaveError("", Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                         return false;
                     }
                 }
@@ -3971,6 +3971,7 @@ namespace VAdvantage.Model
          */
         private bool UpdateHeaderTax()
         {
+            MInvoice invoice = null;
             try
             {
                 //	Recalculate Tax for this Tax
@@ -3988,7 +3989,7 @@ namespace VAdvantage.Model
                 MTax taxRate = tax.GetTax();
                 if (taxRate.IsSummary())
                 {
-                    MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                    invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
                     if (!CalculateChildTax(invoice, tax, taxRate, Get_TrxName()))
                     {
                         return false;
@@ -4039,6 +4040,25 @@ namespace VAdvantage.Model
             if (no != 1)
             {
                 log.Warning("(2) #" + no);
+            }
+            else
+            {
+                // calculate withholdng on header 
+                if (invoice == null)
+                {
+                    invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                }
+                if (invoice.GetC_Withholding_ID() > 0)
+                {
+                    if (!invoice.SetWithholdingAmount(invoice))
+                    {
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx() , "WrongBackupWithholding"));
+                    }
+                    else
+                    {
+                        invoice.Save();
+                    }
+                }
             }
             _parent = null;
 
