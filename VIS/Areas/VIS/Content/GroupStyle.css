@@ -740,6 +740,7 @@ input.vis-group-search-icon {
     border-radius: 50%;
     width: 57px;
     height: 57px;
+    overflow: hidden;
 }
 .vis-group-user-wrap input[type="checkbox"], 
 .vis-group-user-wrap input[type="radio"] {
