@@ -14082,7 +14082,7 @@ ul.vis-toppaging {
 .vis-report-header input[type="checkbox"]:checked:before,
 .vis-report-header input[type="checkbox"]:not(:checked),
 .vis-report-header input[type="checkbox"]:checked {
-    border-color: rgba(var(--v-c-on-primary), 1);
+    /*border-color: rgba(var(--v-c-on-primary), 1);*/
 }
 
 /*.vis-rad-mainWrap{ width: 540px; margin: 20% auto;}*/
