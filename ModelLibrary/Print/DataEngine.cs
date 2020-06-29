@@ -352,9 +352,17 @@ namespace VAdvantage.Print
                         {
                             sqlSelfTableRef = _synonym + "." + tr.KeyColumn;
                         }
-                        sqlFROM.Append(tr.TableName).Append(" ").Append(_synonym).Append(" ON (")
-                        .Append(tableName).Append(".").Append(ColumnName).Append("=")
-                        .Append(_synonym).Append(".").Append(tr.KeyColumn).Append(")");
+                        sqlFROM.Append(tr.TableName).Append(" ").Append(_synonym).Append(" ON (");
+                        if (!ColumnName.EndsWith("_ID") && DatabaseType.IsPostgre)
+                        {
+                            sqlFROM.Append("TO_NUMBER(").Append(tableName).Append(".").Append(ColumnName).Append(",'99G999D9S')").Append("=");
+                            //TO_NUMBER()
+                        }
+                        else
+                        {
+                            sqlFROM.Append(tableName).Append(".").Append(ColumnName).Append("=");
+                        }
+                        sqlFROM.Append(_synonym).Append(".").Append(tr.KeyColumn).Append(")");
                         //
                         pdc = new PrintDataColumn(AD_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
                         SynonymNext();
