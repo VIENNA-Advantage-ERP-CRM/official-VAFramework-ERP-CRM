@@ -195,7 +195,7 @@
             $btnSaveRoles = $middlePanel.find('.vis-group-save-btn');
             $btnCreateRole = $middlePanel.find('.vis-group-add-btn');
             $searchRole = $middlePanel.find('.vis-group-SearchText');
-            $searchRoleBtn = $middlePanel.find('.vis-group-ass-btns');
+            $searchRoleBtn = $middlePanel.find('.vis-group-search-icon');
             /**end of content-head**/
 
             $divRoleGroup = $('<div class="vis-group-role-container">');
@@ -231,7 +231,7 @@
                 '</div></div>'
                 );
             $searchGroup = $rightPanel.find('.vis-group-SearchText');
-            $searchGroupBtn = $rightPanel.find('.vis-group-ass-btns');
+            $searchGroupBtn = $rightPanel.find('.vis-group-search-icon');
             $btnCreateGroup = $rightPanel.find('.vis-group-add-btn');
             $btnSaveGroup = $rightPanel.find('.vis-group-save-btn');
 

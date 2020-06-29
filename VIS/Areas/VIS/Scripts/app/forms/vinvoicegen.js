@@ -318,7 +318,7 @@
             // set busy indegator
             $($self.$root[0]).addClass("vis-apanel-busyVInOutGenRoot");
             $($self.$busyDiv[0]).addClass("vis-apanel-busyVInOutGenBusyDiv");
-
+            $self.$busyDiv[0].style.visibility = "visible";
             $.ajax({
                 url: VIS.Application.contextUrl + "VCreateFrom/ExecuteQueryVInvoiceGen",
                 type: 'POST',
@@ -360,12 +360,14 @@
                     // set busy indegator
                     $($self.$root[0]).removeClass("vis-apanel-busyVInOutGenRoot");
                     $($self.$busyDiv[0]).removeClass("vis-apanel-busyVInOutGenBusyDiv");
+                    $self.$busyDiv[0].style.visibility = "hidden";
                 },
                 error: function (e) {
                     //$self.log.info(e);
                     // set busy indegator
                     $($self.$root[0]).removeClass("vis-apanel-busyVInOutGenRoot");
                     $($self.$busyDiv[0]).removeClass("vis-apanel-busyVInOutGenBusyDiv");
+                    $self.$busyDiv[0].style.visibility = "hidden";
                 },
             });
 
@@ -484,7 +486,7 @@
 
         function generateInvoices(whereClause) {
             var obj = $self;
-
+            $self.$busyDiv[0].style.visibility = "visible";
             $.ajax({
                 url: VIS.Application.contextUrl + "Common/GenerateInvoices",
                 dataType: "json",
