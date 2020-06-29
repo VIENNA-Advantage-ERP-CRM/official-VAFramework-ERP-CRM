@@ -896,6 +896,13 @@ namespace VIS.Helpers
 
                             sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
                         }
+                        else if(DisplayType.YesNo == displayType)
+                        {
+                            string boolval = "N";
+                            if (VAdvantage.Utility.Util.GetValueOfBool(colval))
+                                boolval = "Y";
+                            sb.Append("'").Append(boolval).Append("'");
+                        }
                         else
                         {
                             sb.Append("'").Append(colval).Append("'");
