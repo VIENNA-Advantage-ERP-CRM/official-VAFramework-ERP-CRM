@@ -355,7 +355,7 @@ namespace VAdvantage.Print
                         sqlFROM.Append(tr.TableName).Append(" ").Append(_synonym).Append(" ON (");
                         if (!ColumnName.EndsWith("_ID") && DatabaseType.IsPostgre)
                         {
-                            sqlFROM.Append("TO_NUMBER(").Append(tableName).Append(".").Append(ColumnName).Append(",'99G999D9S')").Append("=");
+                            sqlFROM.Append("TO_NUMBER(").Append(tableName).Append(".").Append(ColumnName).Append(",'99G999')").Append("=");
                             //TO_NUMBER()
                         }
                         else
