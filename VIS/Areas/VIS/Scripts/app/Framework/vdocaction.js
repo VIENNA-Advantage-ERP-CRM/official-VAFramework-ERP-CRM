@@ -17,7 +17,7 @@
         var defaultV = "";
         this.log = VIS.Logging.VLogger.getVLogger("VDocAction");
         var options;
-        var $cmbAction = $('<select></select>');
+        var $cmbAction = $('<select class="vis-select-docAction"></select>');
         var $message = $('<p style="font-size:12px;margin-bottom:-5px"></p>');
         // var $btnbackground = $('<button>');
         //  var $btnok = $('<button>');
