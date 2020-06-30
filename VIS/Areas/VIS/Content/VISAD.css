@@ -2329,7 +2329,7 @@ findImg {
 .vis-allocation-inputLabels {
     width: 100%;
     float: left;
-    margin: 10px 0;
+    margin: 10px 0 5px 0;
 }
 
 .vis-allocation-currencycmb, .vis-allocation-docTypecmb, .vis-allocation-docNo, .vis-allocation-fromDate, .vis-allocation-toDate {

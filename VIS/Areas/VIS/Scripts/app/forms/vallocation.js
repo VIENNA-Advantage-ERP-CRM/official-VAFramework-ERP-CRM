@@ -1112,7 +1112,7 @@
             $resultDiv.append('<div class="vis-allocation-leftControls">' +
                 '<span class="vis-allocation-inputLabels">' + VIS.Msg.getMsg("Difference")
                 + '</span>');
-            $resultDiv.append('<div class="vis-allocation-leftControls">'
+            $resultDiv.append('<div class="vis-allocation-leftControls" style=" margin-bottom: 10px; ">'
                 + '<span class="vis-allocation-lblCurrnecy"></span>'
                 + '<span class="vis-allocation-lbldifferenceAmt" style="float:right;">'
                 + '</span>');
