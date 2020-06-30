@@ -953,7 +953,7 @@
                         toggleside = false;
                         topLeftDiv.animate({ width: leftDivWidth }, "slow");
                         topleftparaDiv.animate({ width: leftDivWidth }, "slow");
-                        //topleftparaDiv.find("table").css("display", "block");
+                        topleftparaDiv.find("table").css("display", "block");
                         //topleftparaDiv.css("background-color", "transparent");
                         btnOk.css("display", "block");
                         topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
@@ -1011,7 +1011,7 @@
             else {
                 topLeftDiv.animate({ width: leftDivWidth }, "slow");
                 topleftparaDiv.animate({ width: leftDivWidth }, "slow");
-                //topleftparaDiv.find("table").css("display", "block");
+                topleftparaDiv.find("table").css("display", "block");
                 //topleftparaDiv.css("background-color", "transparent");
                 btnOk.css("display", "block");
                 topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
