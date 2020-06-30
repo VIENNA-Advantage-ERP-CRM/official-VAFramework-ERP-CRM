@@ -3,7 +3,7 @@
     function VImageForm(ad_image_id, textLength) {
         var $self = this;
         var $root = $("<div>");
-        var $busyDiv = $("<div class='vis-apanel-busy'>")
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>')
         var windowNo = VIS.Env.getWindowNo();
         var Okbtn = null;
         var cancelbtn = null;

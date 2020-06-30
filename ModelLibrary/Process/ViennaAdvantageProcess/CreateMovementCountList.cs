@@ -196,22 +196,27 @@ ORDER BY s.M_Locator_ID, s.M_Product_ID, s.Qty DESC, s.M_AttributeSetInstance_ID
             //
             int count = 0;
             IDataReader idr = null;
+            DataTable dt = null;
             MProduct product = null;
             try
             {
                 idr = DB.ExecuteReader(sql.ToString(), null, Get_Trx());
-                while (idr.Read())
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                   // while (idr.Read())
                 {
-                    int M_Product_ID = Util.GetValueOfInt(idr[0]);
+                    int M_Product_ID = Util.GetValueOfInt(dr[0]);
                     product = MProduct.Get(GetCtx(), M_Product_ID);
-                    int M_Locator_ID = Util.GetValueOfInt(idr[1]);
-                    int M_AttributeSetInstance_ID = Util.GetValueOfInt(idr[2]);
-                    Decimal qtyOnHand = Util.GetValueOfDecimal(idr[3]);
+                    int M_Locator_ID = Util.GetValueOfInt(dr[1]);
+                    int M_AttributeSetInstance_ID = Util.GetValueOfInt(dr[2]);
+                    Decimal qtyOnHand = Util.GetValueOfDecimal(dr[3]);
                     //if (qtyOnHand == null) commented by manjot Because Decimal is Never equals to Null 
                     //  qtyOnHand = Env.ZERO;
-                    int M_AttributeSet_ID = Util.GetValueOfInt(idr[4]);
+                    int M_AttributeSet_ID = Util.GetValueOfInt(dr[4]);
                     //container
-                    int container_Id = Util.GetValueOfInt(idr[5]);
+                    int container_Id = Util.GetValueOfInt(dr[5]);
                     //
                     int compare = qtyOnHand.CompareTo(Env.ZERO);
                     if (_qtyRange == null
@@ -254,7 +259,7 @@ ORDER BY s.M_Locator_ID, s.M_Product_ID, s.Qty DESC, s.M_AttributeSetInstance_ID
                         }
                     }
                 }
-                idr.Close();
+                //idr.Close();
             }
             catch (Exception e)
             {

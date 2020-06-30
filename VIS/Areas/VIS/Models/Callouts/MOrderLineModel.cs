@@ -1835,7 +1835,7 @@ namespace VIS.Models
         public decimal FlatDiscount(int ProductId, int ClientId, decimal amount, int DiscountSchemaId, decimal FlatDiscount, decimal QtyEntered)
         {
             decimal amountAfterBreak = amount;
-            var sql = "SELECT UNIQUE M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId;
+            var sql = "SELECT M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId;
             var productCategoryId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             var isCalulate = false;
             DataSet dsDiscountBreak = null;

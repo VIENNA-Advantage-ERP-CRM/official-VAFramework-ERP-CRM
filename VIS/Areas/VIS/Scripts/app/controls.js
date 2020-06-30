@@ -750,6 +750,18 @@
      */
     IControl.prototype.fireValueChanged = function (evt, force) {
 
+        if (this.isReadOnly) {
+            //if (this.valSetting) {
+            //    this.valSetting = false;
+            //    return;
+            //}
+            var oldVal = this.oldValue;
+            this.oldValue = "";
+           // this.valSetting = true;
+            this.setValue(oldVal);
+            return;
+        }
+
         if (this.editingGrid && (this.gridPos.dialog || force)) {
             window.setTimeout(function (self) {
 
@@ -2228,11 +2240,14 @@
             //    }
 
             //else 
-            if ((event.keyCode == 13 || event.keyCode == 9) && !event.shiftKey) {//will work on press of Tab key OR Enter Key
+            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey) {//will work on press of Tab key OR Enter Key
                 if (self.actionText()) {
                     event.stopPropagation();
                     event.preventDefault();
                 }
+            }
+            else if ((event.keyCode == 46 || event.keyCode == 8) && $ctrl.val().trim() != '') {
+                self.setValue(null, true, true);
             }
 
         });
@@ -3358,7 +3373,7 @@
 
         var displayType = controlDisplayType;
         var length = fieldLength;
-        
+
         //Init Control
         var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
         //Call base class
@@ -3383,7 +3398,7 @@
 
         // For testing purpose
         //this.dotFormatter = true;
-        
+
         //On key down event
         $ctrl.on("keydown", function (event) {
 
@@ -3395,7 +3410,7 @@
 
 
                 var val = self.format.GetConvertedNumber(this.value, self.dotFormatter);
-                
+
                 this.value = Number(val) * -1;
                 setTimeout(function () {
                     $ctrl.trigger("change");
@@ -3440,7 +3455,7 @@
 
             //if (!VIS.Env.isDecimalPoint()) {
             if (!self.dotFormatter) {
-               
+
                 if (event.keyCode == 190 || event.keyCode == 110) {
                     return false;
                 }
@@ -3479,13 +3494,13 @@
                     $ctrl.select();
                     return true;
                 }
-            // Copy (CTRL +C)
+                // Copy (CTRL +C)
             } else if (event.ctrlKey && event.keyCode == 67) {
                 if (this.value.length > 0) {
                     event.stopPropagation();
                     return true;
                 }
-            // Paster (CTRL+V)
+                // Paster (CTRL+V)
             } else if (event.ctrlKey && event.keyCode == 86) {
                 setTimeout(function () {
                     event.stopPropagation();
@@ -3493,7 +3508,7 @@
                     event.target.value = _value ? self.format.GetConvertedString(_value, self.dotFormatter) : '';
                 }, 10);
                 return true;
-            // CUT (CTRL+X)
+                // CUT (CTRL+X)
             } else if (event.ctrlKey && event.keyCode == 88) {
                 event.stopPropagation();
                 return true;
@@ -3506,7 +3521,7 @@
             //else {
             return false;
             //}
-        }); 
+        });
 
 
         //If user click in amount control, select all amount present in control
@@ -3516,9 +3531,9 @@
             var _value = e.target.value;
             $ctrl.attr("type", "text");
 
-            
+
             e.target.value = _value ? self.format.GetConvertedString(_value, self.dotFormatter) : '';
-            
+
             if (VIS.DisplayType.Amount == displayType) {
                 $ctrl.select();
             }
@@ -3573,7 +3588,7 @@
 
             // this.ctrl.val(newValue);
             // this.setBackground("white");
-            
+
             this.ctrl.attr("type", "text");
             var _value = this.format.GetFormatAmount(newValue, "init", this.dotFormatter);
 
@@ -5421,6 +5436,9 @@
         var self = this;
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory); //call base function
 
+        this.format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+        this.dotFormatter = VIS.Env.isDecimalPoint();
+
         if (isReadOnly || !isUpdateable) {
             this.setReadOnly(true);
         }
@@ -5622,7 +5640,8 @@
             }
             //this.ctrl.val(this.lastDisplay);
             if (this.lastDisplay) {
-                this.ctrl.val(VIS.Utility.decodeText(this.lastDisplay));
+                var _value = this.format.GetFormatedValue(this.lastDisplay);
+                this.ctrl.val(this.format.GetFormatAmount(_value, "init", this.dotFormatter));
             }
             this.settingValue = true;
 

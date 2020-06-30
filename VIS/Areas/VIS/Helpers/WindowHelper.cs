@@ -839,6 +839,7 @@ namespace VIS.Helpers
             string SQL_Select = inn.SelectSQL;
             bool inserting = inn.Inserting;
             bool compareDB = inn.CompareDB;
+            List<String> UnqFields = inn.UnqFields;
 
             // Table ID of the table where record need to be Inserted/Updated
             int InsAD_Table_ID = AD_Table_ID;
@@ -852,10 +853,78 @@ namespace VIS.Helpers
 
             //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
 
+            if (UnqFields != null && UnqFields.Count > 0)
+            {
 
-            //if (rowData.ContainsKey("value") && Util.GetValueOfString(rowData["value"]) != "")
-            //{
-            //    int  valIndex = rowData.Keys.ToList().IndexOf("value");
+                StringBuilder sb = new StringBuilder("");
+                StringBuilder colHeaders = new StringBuilder("");
+
+                foreach (string str in UnqFields)
+                {
+
+                    //bool isText = DisplayType.IsText(m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())].DisplayType);
+                    WindowField wField = m_fields[rowData.Keys.ToList().IndexOf(str.ToLower())];
+                    int displayType = wField.DisplayType;
+
+                    if (sb.Length == 0)
+                    {
+                        sb.Append(" SELECT COUNT(1) FROM ");
+                        sb.Append(inn.TableName).Append(" WHERE ");
+                    }
+                    else
+                    {
+                        sb.Append(" AND ");
+                        colHeaders.Append(", " );
+                    }
+
+                    colHeaders.Append(wField.Name);
+                    object colval = rowData[str.ToLower()];
+
+                    if (colval == null || colval == DBNull.Value)
+                    {
+                        sb.Append(str).Append(" IS NULL ");
+                    }
+                    else
+                    {
+                        sb.Append(str).Append(" = ");
+                        if (DisplayType.IsID(displayType))
+                        {
+                            sb.Append(colval);
+                        }
+                        else if (DisplayType.IsDate(displayType))
+                        {
+
+                            sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
+                        }
+                        else if(DisplayType.YesNo == displayType)
+                        {
+                            string boolval = "N";
+                            if (VAdvantage.Utility.Util.GetValueOfBool(colval))
+                                boolval = "Y";
+                            sb.Append("'").Append(boolval).Append("'");
+                        }
+                        else
+                        {
+                            sb.Append("'").Append(colval).Append("'");
+                        }
+                    }
+                }
+
+                //Check value in DB 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString()));
+                sb = null;
+                if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+                {
+                    outt.IsError = true;
+                    outt.FireEEvent = true;
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = colHeaders.ToString() , IsError = true };
+                    outt.Status = GridTable.SAVE_ERROR;
+                    return;
+
+                }
+            }
+        
+
 
             //        //Check value in DB 
             //        int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 

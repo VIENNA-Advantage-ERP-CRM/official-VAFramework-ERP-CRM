@@ -469,10 +469,11 @@
                     //var dlbl = $("<div class='attach-heading pull-left'>").append($("<h4>").append(VIS.Msg.getMsg('New')));
                     // dlaHeader.append(dlbl);
                     var dfRight = $("<div class='vis-attach-file-location'>");
+                    var dflInputWrap = $("<div class='input-group vis-input-wrap' style='margin-bottom: 0;'>");
+                    var dflInputCtrlWrap = $("<div class='vis-control-wrap'>");
                     dlaHeader.append(dfRight);
-
-                    var lblF = $("<label>").append(VIS.Msg.getMsg('FileLocation'));
-                    dfRight.append(lblF);
+                    dfRight.append(dflInputWrap);
+                    dflInputWrap.append(dflInputCtrlWrap);
 
                     cmbFileLocation = $('<select class="vis-custom-select">');
                     cmbFileLocation.attr("disabled", true);
@@ -487,11 +488,10 @@
 
                     }
 
-                    dfRight.append(cmbFileLocation);
+                    dflInputCtrlWrap.append(cmbFileLocation);
 
-
-
-
+                    var lblF = $("<label>").append(VIS.Msg.getMsg('FileLocation'));
+                    dflInputCtrlWrap.append(lblF);
 
 
                     var dHeaderRight = $("<div class='vis-attach-top-btns'>");
@@ -596,7 +596,7 @@
                         lstLatestFiles = [];
                         dLAContent.hide();
                         ddLABtnsFull.hide();
-                        dOAContent.css('height', '356px');
+                        dOAContent.css('height', '353px');
                     });
 
 
@@ -613,7 +613,7 @@
                     //var hOld = $("<h4>").append(VIS.Msg.getMsg('Old'));
                     //dOldhdrRight.append(hOld);
 
-                    dOAContent = $("<div class='vis-attach-content-wrap' style='height: 356px;'>");
+                    dOAContent = $("<div class='vis-attach-content-wrap' style='height: 353px;'>");
                     dOldAtt.append(dOAContent);
 
                     //AppendFiles in Old Files Region
@@ -833,7 +833,7 @@
                         dLAContent.hide();
                         ddLABtnsFull.hide();
                         dLAContent.css('height', '0px');
-                        dOAContent.css('height', '356px');
+                        dOAContent.css('height', '353px');
                     }
                     //dLAContent.remove(divFInfo);
                 });
@@ -1183,7 +1183,7 @@
                                     dLAContent.hide();
                                     ddLABtnsFull.hide();
                                     dLAContent.css('height', '0px');
-                                    dOAContent.css('height', '356px');
+                                    dOAContent.css('height', '353px');
                                     divGreen.css('width', 'O%');
                                 }, 500);
 

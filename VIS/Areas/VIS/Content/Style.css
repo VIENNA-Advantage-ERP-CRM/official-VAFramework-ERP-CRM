@@ -467,7 +467,8 @@
      display: flex;
      align-items: center;
 }
-.vis-app-aform-root .VIS-TM-data input[type="checkbox"] {
+.vis-app-aform-root .VIS-TM-data-head input[type="checkbox"], 
+.vis-app-aform-root .VIS-TM-data-headMID input[type="checkbox"] {
     margin-top: 0;
 }
 .VIS-TM-data input {
@@ -901,21 +902,18 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
 {
    margin: auto; position: relative; top: 50%; display: block;
 }
-
-.vis-tm-childnodeinidailog
-{  
+.vis-tm-childnodeinidailog {
     float: right;
     font-size: 13px;
     margin-right: 5px;
-    color: #fff;
-    cursor:pointer;
-    background: #7E8182;
-        padding: 1px 11px;
+    color: rgba(var(--v-c-on-primary), 1);
+    cursor: pointer;
+    background: rgba(var(--v-c-on-secondary), .9);
+    padding: 1px 11px;
     letter-spacing: 1px;
     line-height: 22px;
-    font-family: Helvetica;
+    /* font-family: Helvetica; */
 }
-
 .vis-tmlinkdel-icon 
 {
         width: 16px;
@@ -934,7 +932,7 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
 }
 
 .vis-tm-selectedkendoNode {
-    color:#242830;
+    /*color:#242830;*/
     /*color:#ff0000;*/
 }
 
@@ -999,7 +997,7 @@ ul.VIS-TM-root-node li a:hover{ text-decoration: none;}
     outline: none;
 }
 .treechild {
-    color: rgba(var(--v-c-on-secondary), 1);
+    /*color: rgba(var(--v-c-on-secondary), 1);*/
 }
 .imgdivTree {
     float: left;

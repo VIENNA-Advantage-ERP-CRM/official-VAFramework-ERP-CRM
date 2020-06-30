@@ -202,7 +202,7 @@ namespace VIS.Models
                 sqlWhere = MRole.GetDefault(ctx).AddAccessSQL(sqlWhere, tableName,
                                 MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 //DataSet data = DBase.DB.ExecuteDataset(sql, null, null);
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sqlWhere + " )", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sqlWhere + " ) t", null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
@@ -218,8 +218,8 @@ namespace VIS.Models
                         LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)
                         , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, w.M_Warehouse_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
                 sqlPaging = MRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-                sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, rownum AS row_num FROM 
-                        (" + sqlPaging + @") prd) WHERE row_num BETWEEN " + startPage + " AND " + endPage +
+                sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, row_number() over (order by prd.M_Product_ID) AS row_num FROM 
+                        (" + sqlPaging + @") prd) t WHERE row_num BETWEEN " + startPage + " AND " + endPage +
                         @") pp ON pp.M_Product_ID = p.M_Product_ID AND pp.M_AttriButeSetInstance_ID = NVL(pr.M_AttriButeSetInstance_ID,0) AND pp.C_UOM_ID = NVL(pr.C_UOM_ID,0) 
                         AND pp.M_Warehouse_ID = w.M_Warehouse_ID AND pp.M_PriceList_Version_ID = NVL(pr.M_PriceList_Version_ID,0)";
                 sql += sqlPaging + where;
@@ -274,7 +274,7 @@ namespace VIS.Models
                         if (WarehouseToID > 0)
                             sqlWhere.Append(" AND M_Warehouse_ID = " + WarehouseToID);
                     }
-                    sql += " AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE AD_Client_ID IN " + ctx.GetAD_Client_ID() + " AND IsActive = 'Y' AND DocStatus IN ('CO') "
+                    sql += " AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND IsActive = 'Y' AND DocStatus IN ('CO') "
                         + sqlWhere.ToString() + ")";
                 }
                 else if (!isCart && windowID == 168)  // JID_1030: on physical inventory system does not check that the locator is of selected warehouse on Physiacl inventory header or not.
@@ -289,7 +289,7 @@ namespace VIS.Models
                                 MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
                 //DataSet data = DB.ExecuteDataset(sql, null, null);
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sql + " )", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sql + " ) t", null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
@@ -998,6 +998,9 @@ namespace VIS.Models
                                 po.Set_Value("M_ProductContainer_ID", ContainerID);
                             po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
 
+                            // JID_1700: when saving Product from Cart, UOM Conversion was not working 
+                            po.Set_Value("AdjustmentType", MInventoryLine.ADJUSTMENTTYPE_AsOnDateCount);
+
                             if (WindowID == Util.GetValueOfInt(Windows.PhysicalInventory))
                             {
                                 Decimal? qtyBook = 0;
@@ -1700,7 +1703,7 @@ namespace VIS.Models
         {
             StringBuilder query = new StringBuilder();
             decimal amountAfterBreak = amount;
-            query.Append(@"SELECT UNIQUE M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
+            query.Append(@"SELECT DISTINCT M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
             int productCategoryId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
             bool isCalulate = false;
 
@@ -2086,8 +2089,13 @@ namespace VIS.Models
             string sql = "SELECT cl.M_Product_ID,prd.Name,prd.Value,cl.VAICNT_Quantity,cl.M_AttributeSetInstance_ID,cl.C_UOM_ID,uom.Name as UOM,ic.VAICNT_ReferenceNo,cl.VAICNT_InventoryCountLine_ID,"
                         + " ats.Description FROM VAICNT_InventoryCount ic INNER JOIN VAICNT_InventoryCountLine cl ON ic.VAICNT_InventoryCount_ID = cl.VAICNT_InventoryCount_ID"
                         + " INNER JOIN M_Product prd ON cl.M_Product_ID = prd.M_Product_ID INNER JOIN C_UOM uom ON cl.C_UOM_ID = uom.C_UOM_ID LEFT JOIN M_AttributeSetInstance ats"
-                        + " ON cl.M_AttributeSetInstance_ID = ats.M_AttributeSetInstance_ID WHERE cl.IsActive = 'Y' AND ic.VAICNT_InventoryCount_ID IN (" + countID
-                        + ") ORDER BY ic.VAICNT_ReferenceNo, cl.Line";
+                         + " ON cl.M_AttributeSetInstance_ID = ats.M_AttributeSetInstance_ID WHERE cl.IsActive = 'Y' AND ic.VAICNT_InventoryCount_ID IN (" + countID + ")";
+            // JID_1700: When physical inventory showing only available stock
+            if (Util.GetValueOfInt(Windows.PhysicalInventory) == WindowID || Util.GetValueOfInt(Windows.InternalUse) == WindowID)
+            {
+                sql += "AND prd.IsStocked='Y'";
+            }
+            sql += " ORDER BY ic.VAICNT_ReferenceNo, cl.Line";
             DataSet ds = DB.ExecuteDataset(sql, null, null);
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)

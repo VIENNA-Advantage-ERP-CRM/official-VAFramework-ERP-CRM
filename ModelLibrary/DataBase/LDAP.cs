@@ -34,6 +34,7 @@ namespace VAdvantage.DataBase
             {
 
                 if (string.IsNullOrEmpty(adminUser))
+
                 {
                     entry = new DirectoryEntry(ldapURL, userName, password, AuthenticationTypes.Secure | AuthenticationTypes.Signing | AuthenticationTypes.Sealing);
                     DirectorySearcher ds = new DirectorySearcher(entry);
@@ -104,6 +105,7 @@ namespace VAdvantage.DataBase
 
                     }
                 }
+
 
 
             }

@@ -83,6 +83,7 @@ namespace VAdvantage.Process
                         + "FROM M_InventoryLine "
                         + "WHERE M_Inventory_ID=" + _m_Inventory_ID
                         + " GROUP BY M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID "
+                        + (isContainerApplicable ? " , M_ProductContainer_ID" : "")
                         + "HAVING COUNT(*) > 1)";
             }
             else
@@ -94,6 +95,7 @@ namespace VAdvantage.Process
                         + "FROM M_InventoryLine "
                         + "WHERE M_Inventory_ID=" + _m_Inventory_ID
                         + " GROUP BY M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID "
+                        + (isContainerApplicable ? " , M_ProductContainer_ID" : "")
                         + "HAVING COUNT(*) > 1)";
             }
             int multiple = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -193,26 +195,24 @@ namespace VAdvantage.Process
                 if (isContainerApplicable)
                 {
                     sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
-                nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID,
-                SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM M_Transaction t
+                nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID,
+                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @" GROUP BY t.M_Locator_ID, t.M_Product_ID,
-                t.M_AttributeSetInstance_ID , M_ProductContainer_ID) mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
+                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
                 AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) 
                 WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
                 }
                 else
                 {
                     sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
-                nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, 
-                SUM(t.CurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM M_Transaction t
+                nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, 
+                FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @" GROUP BY t.M_Locator_ID, t.M_Product_ID,
-                t.M_AttributeSetInstance_ID) mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
+                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
                 AND m.M_Locator_ID = mt.M_Locator_ID WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
                 }
 
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InventoryLine_ID) FROM ( " + sql + " )", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InventoryLine_ID) FROM ( " + sql + " ) t", null, null));
                 int pageSize = 500;
                 int TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
                 int count = 0;
@@ -265,30 +265,34 @@ namespace VAdvantage.Process
                         {
                             for (int pageNo = 1; pageNo <= TotalPage; pageNo++)
                             {
-                                updateSql.Clear();
+                                //updateSql.Clear();
                                 ds = DB.GetDatabase().ExecuteDatasetPaging(sql, pageNo, pageSize, 0);
                                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                                 {
-                                    updateSql.Append("BEGIN ");
-                                    for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
-                                    {
-                                        int line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
-                                        int locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
-                                        int product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
-                                        string AdjustType = Util.GetValueOfString(ds.Tables[0].Rows[j][4]);
-                                        decimal AsonDateCount = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][5]);
-                                        decimal DiffQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][6]);
-                                        decimal currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][7]);
-                                        string updateQry = UpdateInventoryLine(line_ID, product_ID, locator_ID, currentQty, AdjustType, AsonDateCount, DiffQty);
-                                        if (updateQry != "")
-                                        {
-                                            updateSql.Append(updateQry);
-                                        }
-                                    }
-                                    ds.Dispose();
-                                    updateSql.Append(" END;");
-                                    int cnt = DB.ExecuteQuery(updateSql.ToString(), null, Get_Trx());
+                                    //updateSql.Append("BEGIN ");
+                                    //for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
+                                    //{
+                                    //    int line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
+                                    //    int locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
+                                    //    int product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
+                                    //    string AdjustType = Util.GetValueOfString(ds.Tables[0].Rows[j][4]);
+                                    //    decimal AsonDateCount = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][5]);
+                                    //    decimal DiffQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][6]);
+                                    //    decimal currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][7]);
+                                    //    string updateQry = UpdateInventoryLine(line_ID, product_ID, locator_ID, currentQty, AdjustType, AsonDateCount, DiffQty);
+                                    //    if (updateQry != "")
+                                    //    {
+                                    //        updateSql.Append(updateQry);
+                                    //    }
+                                    //}
+                                    //ds.Dispose();
+                                    //updateSql.Append(" END;");
+                                    //int cnt = DB.ExecuteQuery(updateSql.ToString(), null, Get_Trx());
                                     //log.Info(" =====>  records updated at " + DateTime.Now.ToString() + " are = " + count + " <===== ");
+
+                                    string updateQry = DBFunctionCollection.UpdateInventoryLine(GetCtx(), ds, Get_Trx());                                    
+                                    ds.Dispose();
+                                    int cnt = DB.ExecuteQuery(updateQry, null, Get_Trx());
                                 }
                             }
                         }

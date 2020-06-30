@@ -77,7 +77,7 @@ namespace VIS.Models
                 sql.Append("INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID AND p.ProductType = 'I'");
             }
 
-            sql.Append(") GROUP BY C_Order_ID,C_OrderLine_ID,QtyOrdered "
+            sql.Append(") t GROUP BY C_Order_ID,C_OrderLine_ID,QtyOrdered "
             + "HAVING QtyOrdered > SUM(nvl(Qty,0)) AND QtyOrdered > SUM(NVL(QtyInvoiced,0))) ORDER BY o.DateOrdered, o.DocumentNo");
 
             DataSet ds = DB.ExecuteDataset(sql.ToString());
@@ -115,7 +115,7 @@ namespace VIS.Models
 
                + "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID, sl.M_InOutLine_ID, sl.MovementQty, mi.QtyInvoiced FROM M_InOutLine sl "
                + "LEFT OUTER JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID "
-               + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON sl.M_InOutLine_ID=mi.M_InOutLine_ID) "
+               + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON sl.M_InOutLine_ID=mi.M_InOutLine_ID) t "
                + "GROUP BY M_InOut_ID, M_InOutLine_ID, MovementQty HAVING MovementQty > SUM(NVL(QtyInvoiced,0))) ORDER BY s.MovementDate, s.DocumentNo";
 
             //+ "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID,sl.M_InOutLine_ID,sl.MovementQty,mi.Qty,IL.QtyInvoiced FROM M_InOutLine sl "
@@ -224,7 +224,7 @@ namespace VIS.Models
 
             sql.Append(" (il.QtyInvoiced <> nvl(mi.Qty,0) AND mi.C_InvoiceLine_ID IS NOT NULL And Mp.Iscostadjustmentonlost = 'N') "
                      + " OR (NVL(Mi.Qty,0) = 0 AND Mi.C_Invoiceline_Id IS NOT NULL AND Mp.Iscostadjustmentonlost = 'Y') "
-                     + " OR mi.C_InvoiceLine_ID IS NULL ) GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
+                     + " OR mi.C_InvoiceLine_ID IS NULL ) t GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
                      + " HAVING QtyInvoiced > SUM(nvl(Qty,0))) ORDER BY i.DateInvoiced, i.DocumentNo");
 
             DataSet ds = DB.ExecuteDataset(sql.ToString());

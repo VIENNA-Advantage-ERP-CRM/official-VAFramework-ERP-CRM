@@ -39,6 +39,7 @@ namespace VAdvantage.Model
         #region Variables
         /**	Process Message 			*/
         private String _processMsg = null;
+        
         /**	Order Lines					*/
         private MOrderLine[] _lines = null;
         /**	Tax Lines					*/
@@ -2784,7 +2785,11 @@ namespace VAdvantage.Model
                     _processMsg = Msg.GetMsg(GetCtx(), "Order/ShipmentNotCompleted");
                     return DocActionVariables.STATUS_INVALID;
                 }
+
             }
+
+
+
 
             //	Lines
             if (ExplodeBOM())
@@ -3677,6 +3682,7 @@ namespace VAdvantage.Model
                         if (shipment == null)
                             return DocActionVariables.STATUS_INVALID;
                         Info.Append("Successfully created:@M_InOut_ID@ & doc no.: ").Append(shipment.GetDocumentNo());
+                        _processMsg= Info.ToString();
                         if (shipment.GetDocStatus() == "DR")
                         {
                             if (String.IsNullOrEmpty(_processMsg))
@@ -3686,6 +3692,7 @@ namespace VAdvantage.Model
                             shipment.SetProcessMsg(_processMsg);
                             // Info.Append(" " + _processMsg);
                         }
+
 
                         String msg = shipment.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
@@ -3711,6 +3718,8 @@ namespace VAdvantage.Model
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
+                        _processMsg += Info.ToString();
+                       
                         String msg = invoice.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
                             Info.Append(" (").Append(msg).Append(")");
@@ -3793,7 +3802,7 @@ namespace VAdvantage.Model
                 _processMsg = Info.ToString();
                 //
                 SetDocAction(DOCACTION_Close);
-                //Changes by abhishek suggested by lokesh on 7/1/2016
+               //Changes by abhishek suggested by lokesh on 7/1/2016
                 //try
                 //{
                 //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from AD_ModuleInfo Where Prefix='VAPOS_'"));
@@ -3862,6 +3871,8 @@ namespace VAdvantage.Model
                 _processMsg = GetProcessMsg();
                 return DocActionVariables.STATUS_INVALID;
             }
+
+           
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -4544,7 +4555,7 @@ namespace VAdvantage.Model
             List<RecordContainer> shipLine = new List<RecordContainer>();
 
             // JID_1746: Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-            if (oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item && Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
+            if (oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item)
             {
                 MProductCategory productCategory = MProductCategory.GetOfProduct(GetCtx(), oLine.GetM_Product_ID());
 
@@ -5037,6 +5048,9 @@ namespace VAdvantage.Model
                     line.SetQtyLostSales(old);
                     line.SetQty(Env.ZERO);
                     line.SetLineNetAmt(Env.ZERO);
+
+                    // Remove Reference of Requisition from PO line after Void.
+                    line.Set_Value("M_RequisitionLine_ID", 0);
                     line.Save(Get_TrxName());
                 }
             }
@@ -5578,7 +5592,7 @@ namespace VAdvantage.Model
                          UNION ALL
                           SELECT COUNT(il.c_orderline_id) AS Result FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_id = il.C_Invoice_id
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
-                          WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO'))";
+                          WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')) t";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             if (_countOrder > 0)
             {
@@ -5604,8 +5618,6 @@ namespace VAdvantage.Model
         {
             return null;
         }
-
-
 
         public void SetProcessMsg(string processMsg)
         {

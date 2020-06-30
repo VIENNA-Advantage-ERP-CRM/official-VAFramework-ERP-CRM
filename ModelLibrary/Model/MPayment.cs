@@ -55,6 +55,8 @@ namespace VAdvantage.Model
 
         private bool autoCheck = false;
 
+        public bool _isWithholdingFromPaymentAllocate = false;
+
         // used for locking query - checking schedule is paid or not on completion
         // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
         static readonly object objLock = new object();
@@ -1039,7 +1041,23 @@ namespace VAdvantage.Model
                 }
             }
 
-
+            // set Payment Amount as PayAmt
+            if (GetReversalDoc_ID() <= 0 && Get_ColumnIndex("PaymentAmount") > 0)
+            {
+                if (Is_ValueChanged("PayAmt"))
+                {
+                    SetPaymentAmount(GetPayAmt());
+                }
+                if (!IsProcessing() && !_isWithholdingFromPaymentAllocate && !VerifyAndCalculateWithholding(false))
+                {
+                    log.SaveError("Error", GetProcessMsg());
+                    return false;
+                }
+                if (Is_ValueChanged("BackupWithholdingAmount") || Is_ValueChanged("WithholdingAmt"))
+                {
+                    SetPayAmt(Decimal.Subtract(GetPaymentAmount(), Decimal.Add(GetBackupWithholdingAmount(), GetWithholdingAmt())));
+                }
+            }
 
             return true;
         }	//	beforeSave
@@ -1142,45 +1160,26 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public string GetChecknumber(int payMethod_ID, int BankAccount_ID, Trx trx)
         {
-            string retval = string.Empty;
-            IDbConnection dbConnection = null;
-            if (trx == null)
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("P_BANKACCOUNTID", BankAccount_ID);
+            param[0].SqlDbType = SqlDbType.Int;
+            param[0].Direction = ParameterDirection.Input;
+
+            param[1] = new SqlParameter("p_PAYMETHODID", payMethod_ID);
+            param[1].SqlDbType = SqlDbType.Int;
+            param[1].Direction = ParameterDirection.Input;
+
+            param[2] = new SqlParameter("p_result", 0);
+            param[2].SqlDbType = SqlDbType.Int;
+            param[2].Direction = ParameterDirection.Output;
+
+            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);            
+
+            if (param != null && param.Length > 0) // If Record Found
             {
-                return string.Empty; ;
+                return param[0].Value.ToString();
             }
-            try
-            {
-                dbConnection = trx.GetConnection();
-                if (dbConnection != null)
-                {
-                    // execute procedure for updating cost of components
-                    OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Connection = (OracleConnection)dbConnection;
-                    cmd.CommandText = "GETCHECKNO";
-                    cmd.Parameters.Add("P_BANKACCOUNTID", OracleDbType.Int32, BankAccount_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_PAYMETHODID", OracleDbType.Int32, payMethod_ID, ParameterDirection.Input);
-                    cmd.Parameters.Add("p_result", OracleDbType.Int32, 0, ParameterDirection.Output);
-                    cmd.BindByName = true;
-                    retval = Util.GetValueOfString(cmd.ExecuteNonQuery());
-                    retval = Util.GetValueOfString(cmd.Parameters[2].Value.ToString());
-                    if (retval == "0") // If Record Found
-                    {
-                        retval = string.Empty;
-                    }
-
-                }
-
-                return retval.ToString();
-
-            }
-            catch (Exception e)
-            {
-                log.SaveError("Error:GetCheckNumber", e.Message);
-                return retval;
-            }
-
-
+            return string.Empty;
         }
 
         /**
@@ -2604,8 +2603,6 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Prepare);
             return true;
         }
-
-
         /**
          *	Prepare Document
          * 	@return new status (In Progress or Invalid) 
@@ -2616,7 +2613,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-
+   
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
@@ -2632,7 +2629,6 @@ namespace VAdvantage.Model
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
             }
-
 
             //	Unsuccessful Online Payment
             if (IsOnline() && !IsApproved())
@@ -2659,9 +2655,12 @@ namespace VAdvantage.Model
                         // if order not completed - then payment also not completed (Prepay Order)
                         throw new Exception("Failed when processing document - " + order.GetProcessMsg());
                     }
-                    _processMsg = order.GetProcessMsg();
-                    order.Save(Get_Trx());
 
+                    //JID_0880 Show message on completion of Payment
+                    _processMsg =  order.GetProcessMsg();
+                    GetCtx().SetContext("prepayOrder", _processMsg);
+
+                    order.Save(Get_Trx());
 
                     /******************Commented By Lakhwinder
                      * //// Payment was Not Completed Against Prepay Order//////////*
@@ -2678,9 +2677,10 @@ namespace VAdvantage.Model
                     }
                     */
                     ////////////////////////
-                }	//	WaitingPayment
+                }
+                //	WaitingPayment
             }
-
+          
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
             {
@@ -2735,21 +2735,11 @@ namespace VAdvantage.Model
              * While calculating the withholding amount, the system has to check whether the withholding amount 
              * is zero or not equal to zero. If it's not equal to zero then the system will not calculate the withholding amount.
              * After confirmation with Surya  / Ashish By Amit */
-            if (IsPrepayment() && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0 && GetWithholdingAmt() == 0)
+            if (GetReversalDoc_ID() == 0 && GetC_BPartner_ID() > 0 && Get_ColumnIndex("C_Withholding_ID") > 0)
             {
-                // check withholding applicable on Business Partner 
-                int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_ID) FROM C_BPartner WHERE NVL(C_Withholding_ID , 0) > 0 
-                        AND C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx()));
-
-                // Applicable, but withholding not selected on record
-                if (count > 0 && GetC_Withholding_ID() == 0)
+                if (!VerifyAndCalculateWithholding(false))
                 {
-                    SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
                     return DocActionVariables.STATUS_INVALID;
-                }
-                else if (count > 0 || GetC_Withholding_ID() > 0)
-                {
-                    SetWithholdingAmount();
                 }
             }
 
@@ -2785,7 +2775,7 @@ namespace VAdvantage.Model
          * 	Complete Document
          * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
          */
-        public String CompleteIt()
+        public String  CompleteIt()
         {
             //	Re-Check
             if (!_justPrepared)
@@ -2794,7 +2784,6 @@ namespace VAdvantage.Model
                 if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                     return status;
             }
-
             // JID_1290: Set the document number from completed document sequence after completed (if needed)
             SetCompletedDocumentNo();
 
@@ -3132,73 +3121,51 @@ namespace VAdvantage.Model
             //Credit Limit
             if (GetC_InvoicePaySchedule_ID() != 0)
             {
-                MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_Trx());
-                paySch.SetC_Payment_ID(GetC_Payment_ID());
-                //---------------Anuj----------------------
+                // commeted - bcz of rework -- already handled in View Allocation Completion
+                //MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_Trx());
+                //paySch.SetC_Payment_ID(GetC_Payment_ID());
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
-                    MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
-                    paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
-                    if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
-                    {
-                        if (((-1 * GetPayAmt()) + (-1 * GetDiscountAmt()) + (-1 * GetWriteOffAmt())) < paySch.GetDueAmt())
-                        {
-                            paySch.SetVA009_IsPaid(false);
-                        }
-                        else
-                        {
-                            paySch.SetVA009_IsPaid(true);
-                        }
-                    }
-                    else
-                    {
-                        if ((GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt()) < paySch.GetDueAmt())
-                        {
-                            paySch.SetVA009_IsPaid(false);
-                        }
-                        else
-                        {
-                            paySch.SetVA009_IsPaid(true);
-                        }
-                    }
-                    paySch.Save(Get_Trx());
-
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(GetC_Invoice_ID()), null, Get_Trx())) == 0)
-                    {
-                        MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                        inv.SetIsPaid(true);
-                        inv.Save(Get_Trx());
-                    }
-                    else
-                    {
-                        MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                        inv.SetIsPaid(false);
-                        inv.Save(Get_Trx());
-                    }
-
-                    //DataSet ds = DB.ExecuteDataset("SELEct va009_ispaid from c_invoicepayschedule where c_invoice_id=" + GetC_Invoice_ID() + " Group by va009_ispaid ", null, null);
-                    //if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0].Rows.Count < 2)
+                    //MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
+                    //MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                    //paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
+                    //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
                     //{
-                    //    if (Util.GetValueOfString(ds.Tables[0].Rows[0]["va009_ispaid"]) == "Y")
+                    //    if (((-1 * (Get_ColumnIndex("PaymentAmount") > 0 ? GetPaymentAmount() : GetPayAmt())) + (-1 * GetDiscountAmt()) + (-1 * GetWriteOffAmt())) < paySch.GetDueAmt())
                     //    {
-                    //        MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                    //        inv.SetIsPaid(true);
-                    //        inv.Save(Get_Trx());
+                    //        paySch.SetVA009_IsPaid(false);
                     //    }
                     //    else
                     //    {
-                    //        MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                    //        inv.SetIsPaid(false);
-                    //        inv.Save(Get_Trx());
+                    //        paySch.SetVA009_IsPaid(true);
                     //    }
                     //}
+                    //else
+                    //{
+                    //    if (((Get_ColumnIndex("PaymentAmount") > 0 ? GetPaymentAmount() : GetPayAmt()) + GetDiscountAmt() + GetWriteOffAmt()) < paySch.GetDueAmt())
+                    //    {
+                    //        paySch.SetVA009_IsPaid(false);
+                    //    }
+                    //    else
+                    //    {
+                    //        paySch.SetVA009_IsPaid(true);
+                    //    }
+                    //}
+                    //paySch.Save(Get_Trx());
+
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(GetC_Invoice_ID()), null, Get_Trx())) == 0)
+                    {
+                        DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                    }
+                    else
+                    {
+                        DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'N' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                    }
                 }
-                //---------------Anuj----------------------
-                paySch.Save();
+                //paySch.Save(Get_Trx());
 
             }
-            else if (Env.IsModuleInstalled("VA009_"))
+            else if (Env.IsModuleInstalled("VA009_") && GetVA009_OrderPaySchedule_ID() != 0)
             {
                 if (GetVA009_OrderPaySchedule_ID() != 0 && GetDescription() != null && GetDescription().Contains("{->"))
                 {
@@ -3248,53 +3215,53 @@ namespace VAdvantage.Model
             }
             else if (countPaymentAllocateRecords > 0)
             {
-                DataSet ds = DB.ExecuteDataset("SELECT C_InvoicePaySchedule_ID , C_Invoice_ID , overunderamt , writeoffamt , discountamt , amount FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  C_Payment_ID = " + GetC_Payment_ID(), null, null);
+                DataSet ds = DB.ExecuteDataset(@"SELECT C_PaymentAllocate.C_InvoicePaySchedule_ID , C_PaymentAllocate.C_Invoice_ID ,
+                            C_PaymentAllocate.overunderamt , C_PaymentAllocate.writeoffamt , C_PaymentAllocate.discountamt ,
+                            C_PaymentAllocate.amount  
+                            FROM C_PaymentAllocate INNER JOIN C_Payment ON C_Payment.C_Payment_ID =C_PaymentAllocate.C_Payment_ID 
+                            WHERE C_PaymentAllocate.IsActive = 'Y' AND  C_PaymentAllocate.C_Payment_ID =" + GetC_Payment_ID(), null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
-                    int i = 0;
-                    for (i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]), Get_Trx());
-                        paySch.SetC_Payment_ID(GetC_Payment_ID());
-                        MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
-                        MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
-                        if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
-                        {
-                            if (((-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"])) + (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"])) +
-                                (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"]))) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
-                            {
-                                paySch.SetVA009_IsPaid(false);
-                            }
-                            else
-                            {
-                                paySch.SetVA009_IsPaid(true);
-                            }
-                        }
-                        else
-                        {
-                            if ((Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"]) + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"]) +
-                                Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"])) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
-                            {
-                                paySch.SetVA009_IsPaid(false);
-                            }
-                            else
-                            {
-                                paySch.SetVA009_IsPaid(true);
-                            }
-                        }
-                        paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
-                        paySch.Save(Get_Trx());
+                        // commeted - bcz of rework -- already handled in View Allocation Completion
+                        //MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]), Get_Trx());
+                        //paySch.SetC_Payment_ID(GetC_Payment_ID());
+                        //MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
+                        //MDocType doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                        //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
+                        //{
+                        //    if (((-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"])) + (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"])) +
+                        //        (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"]))) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
+                        //    {
+                        //        paySch.SetVA009_IsPaid(false);
+                        //    }
+                        //    else
+                        //    {
+                        //        paySch.SetVA009_IsPaid(true);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    if ((Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"]) + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"]) +
+                        //        Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"])) < Util.GetValueOfDecimal(paySch.GetDueAmt()))
+                        //    {
+                        //        paySch.SetVA009_IsPaid(false);
+                        //    }
+                        //    else
+                        //    {
+                        //        paySch.SetVA009_IsPaid(true);
+                        //    }
+                        //}
+                        //paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
+                        //paySch.Save(Get_Trx());
                         if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Invoice_ID"]), null, Get_Trx())) == 0)
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                            inv.SetIsPaid(true);
-                            inv.Save(Get_Trx());
+                            DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                         }
                         else
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                            inv.SetIsPaid(false);
-                            inv.Save(Get_Trx());
+                            DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'N' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                         }
                     }
                 }
@@ -3347,10 +3314,16 @@ namespace VAdvantage.Model
                 }
             }
 
-
             if (!UpdateUnMatchedBalanceForAccount())
             {
                 return DocActionVariables.STATUS_INVALID;
+            }
+           
+            //JID_0880 Show message on completion of Payment
+            if (GetCtx().GetContext("prepayOrder") != null)
+            {
+                _processMsg += ","+ GetCtx().GetContext("prepayOrder");
+                GetCtx().SetContext("prepayOrder", "");
             }
 
             return DocActionVariables.STATUS_COMPLETED;
@@ -3404,14 +3377,104 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Set Withholding Tax Amount
+        /// This function is used to verify and calculate withholdng
+        /// <param name="IsPaymentAllocate">withholding calculate from payment allocate or not</param>
         /// </summary>
-        private void SetWithholdingAmount()
+        /// <returns>false,when not calculated</returns>
+        public bool VerifyAndCalculateWithholding(bool IsPaymentAllocate)
+        {
+            string sql = @"SELECT C_BPartner.IsApplicableonARReceipt, C_BPartner.IsApplicableonAPPayment, C_BPartner.C_Withholding_ID,
+                            C_BPartner.AP_WithholdingTax_ID,  C_Location.C_Country_ID , C_Location.C_Region_ID   "
+                             + @" FROM C_Bpartner INNER JOIN C_Bpartner_Location ON 
+                                 C_Bpartner.C_Bpartner_ID = C_Bpartner_Location.C_Bpartner_ID
+                                 INNER JOIN C_Location ON C_Bpartner_Location.C_Location_ID = C_Location.C_Location_ID  WHERE
+                                 C_BPartner.C_Bpartner_ID = " + GetC_BPartner_ID() + @" AND C_Bpartner_Location.C_BPartner_Location_ID = " + GetC_BPartner_Location_ID();
+            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                // Applicable, but withholding not selected on Business partner record
+                if (((IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARReceipt"]).Equals("Y") &&
+                                   Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"]) == 0) ||
+                    (!IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPPayment"]).Equals("Y") &&
+                                   Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]) == 0)) && GetC_Withholding_ID() == 0)
+                {
+                    SetProcessMsg(Msg.GetMsg(GetCtx(), "WithHoldingNotDefine"));
+                    return false;
+                }
+                else if ((IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARReceipt"]).Equals("Y")) ||
+                    (!IsReceipt() && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonAPPayment"]).Equals("Y")))
+                {
+                    // calculate withholding amount
+                    //if (GetWithholdingAmt() == 0)
+                    //{
+                    if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
+                        : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false,
+                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
+                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                    {
+                        SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
+                        return false;
+                    }
+                    //}
+
+                    // calculate backup withholding amount
+                    if (GetBackupWithholding_ID() > 0)//&& GetBackupWithholdingAmount() == 0
+                    {
+                        if (!CalculateWithholdingAmount(GetBackupWithholding_ID(), true,
+                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
+                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                        {
+                            SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        SetBackupWithholdingAmount(0);
+                    }
+                }
+                else
+                {
+                    // when not applicable then set reference and amount as ZERO
+                    SetBackupWithholding_ID(0);
+                    SetC_Withholding_ID(0);
+                    SetWithholdingAmt(0);
+                    SetBackupWithholdingAmount(0);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Set Withholding Tax Amount / Backup withholding Tax Amount
+        /// </summary>
+        /// <param name="withholding_ID">withholding reference</param>
+        /// <param name="isBackupWithholding">is calculation going on for backup withholding</param>
+        /// <param name="Region_ID">busines partnet region</param>
+        /// <param name="Country_ID">business partner country</param>
+        /// <param name="IsPaymentAllocate">withholding calculate from Payment Allocate or not</param>
+        /// <returns></returns>
+        private bool CalculateWithholdingAmount(int withholding_ID, bool isBackupWithholding, int Region_ID, int Country_ID, bool IsPaymentAllocate)
         {
             Decimal withholdingAmt = 0;
-
-            DataSet dsWithholding = DB.ExecuteDataset(@"SELECT IsApplicableonPay, PayCalculation , PayPercentage 
-                                        FROM C_Withholding WHERE C_Withholding_ID = " + GetC_Withholding_ID(), null, Get_Trx());
+            String sql = @"SELECT IsApplicableonPay, PayCalculation , PayPercentage 
+                                        FROM C_Withholding WHERE IsActive = 'Y' AND IsApplicableonPay = 'Y' AND C_Withholding_ID = "
+                                         + (!isBackupWithholding && GetC_Withholding_ID() > 0 ? GetC_Withholding_ID() : withholding_ID)
+                                         + " AND TransactionType = '" + (IsReceipt() ? X_C_Withholding.TRANSACTIONTYPE_Sale
+                                         : X_C_Withholding.TRANSACTIONTYPE_Purchase) + "'";
+            if (Region_ID > 0)
+            {
+                sql += " AND NVL(C_Region_ID, 0) IN (0 ,  " + Region_ID + ")";
+            }
+            else
+            {
+                sql += " AND NVL(C_Region_ID, 0) IN (0) ";
+            }
+            if (Country_ID > 0)
+            {
+                sql += " AND NVL(C_Country_ID , 0) IN (0 ,  " + Country_ID + ")";
+            }
+            DataSet dsWithholding = DB.ExecuteDataset(sql, null, Get_Trx());
             if (dsWithholding != null && dsWithholding.Tables.Count > 0 && dsWithholding.Tables[0].Rows.Count > 0)
             {
                 // check on withholding - "Applicable on Payment" or not
@@ -3420,7 +3483,16 @@ namespace VAdvantage.Model
                     // get amount on which we have to derive withholding tax amount
                     if (Util.GetValueOfString(dsWithholding.Tables[0].Rows[0]["PayCalculation"]).Equals(X_C_Withholding.INVCALCULATION_PaymentAmount))
                     {
-                        withholdingAmt = GetPayAmt();
+                        if (IsPaymentAllocate)
+                        {
+                            withholdingAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT COALESCE(SUM(PaymentAmount),0) - COALESCE(SUM(TaxAmount),0) 
+                                                FROM C_Payment WHERE C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx()));
+                            SetPaymentAmount(withholdingAmt);
+                        }
+                        else
+                        {
+                            withholdingAmt = GetPaymentAmount() - GetTaxAmount();
+                        }
                     }
 
                     _log.Info("Payment withholding detail, Payment Document No = " + GetDocumentNo() + " , Amount on distribute = " + withholdingAmt +
@@ -3430,9 +3502,34 @@ namespace VAdvantage.Model
                     withholdingAmt = Decimal.Divide(
                                      Decimal.Multiply(withholdingAmt, Util.GetValueOfDecimal(dsWithholding.Tables[0].Rows[0]["PayPercentage"]))
                                      , 100);
-                    SetWithholdingAmt(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID())));
+                    if (isBackupWithholding)
+                    {
+                        SetBackupWithholdingAmount(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID())));
+                    }
+                    else
+                    {
+                        SetWithholdingAmt(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID())));
+                        if (GetC_Withholding_ID() <= 0)
+                        {
+                            SetC_Withholding_ID(withholding_ID);
+                        }
+                    }
                 }
             }
+            else
+            {
+                // when the selected withholding not applicable for payment then select refernce as ZERO
+                if (isBackupWithholding)
+                {
+                    SetBackupWithholding_ID(0);
+                }
+                else
+                {
+                    SetC_Withholding_ID(0);
+                }
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -4437,35 +4534,55 @@ namespace VAdvantage.Model
                 log.Severe("P.Allocations not created");
                 return false;
             }
+            DataSet ds = null;
+            DataRow[] dr = null;
+            if (Get_ColumnIndex("BackupWithholding_ID") > 0 && (GetC_Withholding_ID() > 0 || GetBackupWithholding_ID() > 0))
+            {
+                int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                ds = DB.ExecuteDataset(@"SELECT C_PaymentAllocate.C_PaymentAllocate_ID,  
+                            (SELECT ROUND((C_PaymentAllocate.amount * paypercentage)/100 , " + precision + @") as withholdingAmt 
+                            FROM c_withholding where c_withholding_id = C_Payment.C_Withholding_ID) as withholdingAmt,
+                            (SELECT ROUND((C_PaymentAllocate.amount * paypercentage)/100 , " + precision + @") as withholdingAmt 
+                            FROM c_withholding where c_withholding_id = C_Payment.BackupWithholding_ID) as BackupwithholdingAmt
+                            FROM C_PaymentAllocate INNER JOIN C_Payment ON C_Payment.C_Payment_ID =C_PaymentAllocate.C_Payment_ID 
+                            WHERE C_PaymentAllocate.IsActive = 'Y' AND  C_PaymentAllocate.C_Payment_ID =" + GetC_Payment_ID(), null, Get_Trx());
+            }
+
             //	Lines
             for (int i = 0; i < pAllocs.Length; i++)
             {
                 MPaymentAllocate pa = pAllocs[i];
 
-                // commented Reason -- because when we save same record of schedule system not allow it.
-                // when we complete record - we check all schedule on the same record is paid or not
-                // if paid then give messsage there
-
-                //if (Env.IsModuleInstalled("VA009_"))
-                //{
-                //    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), pa.GetC_InvoicePaySchedule_ID(), Get_Trx());
-                //    // Added by Bharat on 27 June 2017 to restrict multiple payment against same Invoice Pay Schedule.
-                //    MInvoice invoice = new MInvoice(GetCtx(), pa.GetC_Invoice_ID(), Get_Trx());
-                //    if (paySch.IsVA009_IsPaid())
-                //    {
-                //        _AllocMsg = "Payment is already done for Invoice No " + invoice.GetDocumentNo() + " for invoice Schedule " + paySch.GetDueDate().Value.ToShortDateString() + "_" + paySch.GetDueAmt();
-                //        Get_Trx().Rollback();
-                //        return false;
-                //    }
-                //}
+                if (Get_ColumnIndex("BackupWithholding_ID") > 0 && (GetC_Withholding_ID() > 0 || GetBackupWithholding_ID() > 0) && ds != null)
+                {
+                    dr = ds.Tables[0].Select("C_PAYMENTALLOCATE_ID = " + Util.GetValueOfString(pa.GetC_PaymentAllocate_ID()));
+                }
 
                 MAllocationLine aLine = null;
                 if (IsReceipt())
-                    aLine = new MAllocationLine(alloc, pa.GetAmount(),
+                {
+                    aLine = new MAllocationLine(alloc, (pa.GetAmount() -
+                        (Get_ColumnIndex("WithholdingAmt") > 0 && dr != null ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
+                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
                         pa.GetDiscountAmt(), pa.GetWriteOffAmt(), pa.GetOverUnderAmt());
+                    if (dr != null)
+                    {
+                        aLine.SetWithholdingAmt(Util.GetValueOfDecimal(dr[0]["withholdingAmt"]));
+                        aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"]));
+                    }
+                }
                 else
-                    aLine = new MAllocationLine(alloc, Decimal.Negate(pa.GetAmount()),
+                {
+                    aLine = new MAllocationLine(alloc, Decimal.Negate((pa.GetAmount()) -
+                        (Get_ColumnIndex("WithholdingAmt") > 0 && dr != null ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
+                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
                         Decimal.Negate(pa.GetDiscountAmt()), Decimal.Negate(pa.GetWriteOffAmt()), Decimal.Negate(pa.GetOverUnderAmt()));
+                    if (dr != null)
+                    {
+                        aLine.SetWithholdingAmt(Decimal.Negate(Util.GetValueOfDecimal(dr[0]["withholdingAmt"])));
+                        aLine.SetBackupWithholdingAmount(Decimal.Negate(Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])));
+                    }
+                }
                 aLine.SetDocInfo(pa.GetC_BPartner_ID(), 0, pa.GetC_Invoice_ID());
                 aLine.SetPaymentInfo(GetC_Payment_ID(), 0);
                 if (Env.IsModuleInstalled("VA009_"))
@@ -4518,11 +4635,25 @@ namespace VAdvantage.Model
                 }
                 MAllocationLine aLine = null;
                 if (IsReceipt())
+                {
                     aLine = new MAllocationLine(alloc, allocationAmt,
                         GetDiscountAmt(), GetWriteOffAmt(), GetOverUnderAmt());
+                    if (aLine.Get_ColumnIndex("WithholdingAmt") > 0)
+                    {
+                        aLine.SetBackupWithholdingAmount(GetBackupWithholdingAmount());
+                        aLine.SetWithholdingAmt(GetWithholdingAmt());
+                    }
+                }
                 else
+                {
                     aLine = new MAllocationLine(alloc, Decimal.Negate(allocationAmt),
                         Decimal.Negate(GetDiscountAmt()), Decimal.Negate(GetWriteOffAmt()), Decimal.Negate(GetOverUnderAmt()));
+                    if (aLine.Get_ColumnIndex("WithholdingAmt") > 0)
+                    {
+                        aLine.SetBackupWithholdingAmount(Decimal.Negate(GetBackupWithholdingAmount()));
+                        aLine.SetWithholdingAmt(Decimal.Negate(GetWithholdingAmt()));
+                    }
+                }
                 aLine.SetDocInfo(GetC_BPartner_ID(), 0, GetC_Invoice_ID());
                 aLine.SetC_Payment_ID(GetC_Payment_ID());
                 if (Env.IsModuleInstalled("VA009_"))
@@ -4747,6 +4878,7 @@ namespace VAdvantage.Model
         bool ChekVoidIt = false;
         public Boolean VoidIt()
         {
+
             // if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
             //  {
             ChekVoidIt = true;
@@ -4850,8 +4982,17 @@ namespace VAdvantage.Model
         /// @return true if success
         /// </summary>
         /// <returns></returns>
+
         public Boolean ReverseCorrectIt()
         {
+            //added by shubham (JID_1472) To check payment is reconciled or not
+            if (IsReconciled())
+            {
+
+                _processMsg = Msg.GetMsg(GetCtx(), "PaymentAlreadyReconciled");
+                return false;
+
+            }
             //if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
             //{
             log.Info(ToString());
@@ -4885,7 +5026,11 @@ namespace VAdvantage.Model
             //negate witholding amount - 
             if (Get_ColumnIndex("WithholdingAmt") > 0)
             {
+                reversal.SetC_Withholding_ID(GetC_Withholding_ID());
                 reversal.SetWithholdingAmt(Decimal.Negate(GetWithholdingAmt()));
+                reversal.SetBackupWithholding_ID(GetBackupWithholding_ID());
+                reversal.SetBackupWithholdingAmount(Decimal.Negate(GetBackupWithholdingAmount()));
+                reversal.SetPaymentAmount(Decimal.Negate(GetPaymentAmount()));
             }
             //
             // make unique record based on Bank and cheque no - thats why on reversing a record - place reverse indicator on it.
@@ -4938,7 +5083,7 @@ namespace VAdvantage.Model
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
-                string sql = "SELECT UNIQUE C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
+                string sql = "SELECT DISTINCT C_PaymentAllocate_ID FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID =  " + GetC_Payment_ID();
                 DataSet ds = new DataSet();
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -5028,7 +5173,8 @@ namespace VAdvantage.Model
             // Changes done by Vivek Kumar on 26/06/2017 assigned by Mandeep sir
             //	Create automatic Allocation
 
-            StringBuilder Info = new StringBuilder(reversal.GetDocumentNo());
+            //JID_0889: show on void full message Reversal Document created
+            StringBuilder Info = new StringBuilder(Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo());
             int Alline_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT al.c_allocationline_id FROM c_allocationline al "
                                                                 + " INNER JOIN c_allocationhdr alhdr ON alhdr.c_allocationhdr_ID=al.c_allocationhdr_ID WHERE al.c_payment_ID         =" + GetC_Payment_ID()
                                                                 + " and alhdr.docstatus in ('CO','CL')"));

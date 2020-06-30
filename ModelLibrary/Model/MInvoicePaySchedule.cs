@@ -141,7 +141,9 @@ namespace VAdvantage.Model
 
             //	Amounts
             int scale = MCurrency.GetStdPrecision(GetCtx(), invoice.GetC_Currency_ID());
-            Decimal due = invoice.GetGrandTotal();
+            // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
+            Decimal due = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 
+                            && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
             if (due.CompareTo(Env.ZERO) == 0)
             {
                 SetDueAmt(Env.ZERO);
@@ -309,6 +311,12 @@ namespace VAdvantage.Model
                     SetIsHoldPayment(IsHoldPayment.Equals("Y"));
                 }
             }
+            // if payment refrence not found on schedule the set withholdimh amount as ZERO
+            if(GetC_Payment_ID() <=0)
+            {
+                SetBackupWithholdingAmount(0);
+                SetWithholdingAmt(0);
+            }
             return true;
         }
 
@@ -333,7 +341,8 @@ namespace VAdvantage.Model
                 {
                     log.SaveWarning("Message", Msg.GetMsg(GetCtx(), "VA009_ChangeOtherSchedule"));
                 }
-                if (GetDueAmt() <= Decimal.Add(GetVA009_PaidAmntInvce(), GetVA009_Variance()))
+                if (GetDueAmt() <= Decimal.Add(Decimal.Add(GetVA009_PaidAmntInvce(), GetVA009_Variance()),
+                    (Get_ColumnIndex("BackupWithholdingAmount") > 0 ? Decimal.Add(GetBackupWithholdingAmount(), GetWithholdingAmt()) : 0)))
                 {
                     DB.ExecuteQuery("UPDATE C_InvoicePaySchedule SET VA009_IsPaid = 'Y' WHERE C_InvoicePaySchedule_ID = " + GetC_InvoicePaySchedule_ID(), null, Get_Trx());
                     // if payment is done against invioce for advanced schedules then update payment reference at order schedule tab

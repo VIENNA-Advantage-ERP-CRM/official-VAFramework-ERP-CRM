@@ -422,7 +422,7 @@ namespace VIS.Helpers
 
             System.Threading.Thread.CurrentThread.CurrentCulture = original;
             System.Threading.Thread.CurrentThread.CurrentUICulture = original;
-            //VAdvantage.Classes.CleanUp.Get().Start();
+           VAdvantage.Classes.CleanUp.Get().Start();
             return rep;
         }
         // vinay bhatt window id

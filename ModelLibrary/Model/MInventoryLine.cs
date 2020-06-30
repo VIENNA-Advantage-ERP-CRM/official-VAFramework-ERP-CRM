@@ -325,6 +325,12 @@ namespace VAdvantage.Model
             if (newRecord || Is_ValueChanged("QtyInternalUse"))
                 SetQtyInternalUse(GetQtyInternalUse());
 
+            //JID_0680 set quantity according to precision
+            if (Is_ValueChanged("C_UOM_ID"))
+            {
+                Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("C_UOM_ID")))));
+            }
+
             // change to set Converted Quantity in Internal Use Qty and AsonDateQty and difference qty if there is differnce in UOM of Base Product and UOM Selected on line
             if (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID"))
             {
@@ -397,7 +403,7 @@ namespace VAdvantage.Model
                     // pick container current qty from transaction based on locator / product / ASI / Container / Movement Date 
                     if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0)
                     {
-                        qry = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
+                        qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
                                     " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + GetM_Locator_ID() +
                                     " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +

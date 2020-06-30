@@ -202,7 +202,9 @@ namespace VAdvantage.Model
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), invoice.Get_Trx());
             MPaySchedule sched = new MPaySchedule(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
 
-            Decimal remainder = invoice.GetGrandTotal();
+            // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
+            Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 &&
+                invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
 
             if (Env.IsModuleInstalled("VA009_"))
             {
@@ -210,7 +212,8 @@ namespace VAdvantage.Model
                 if (payterm.IsVA009_Advance())
                 {
                     // is used to get record from invoice line which is created against orderline
-                    String sql = @"SELECT o.C_Order_ID , NVL(SUM(il.LineTotalAmt) , 0) AS LineTotalAmt 
+                    String sql = @"SELECT o.C_Order_ID , NVL(SUM(NVL(il.LineTotalAmt , 0) " +
+                                    (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? " - NVL(il.withholdingamt , 0)" : "") + @") , 0) AS LineTotalAmt 
                                     FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_ID = il.C_Invoice_ID
                                     INNER JOIN C_Orderline ol ON ol.C_Orderline_ID = il.C_Orderline_ID
                                     INNER JOIN C_Order o ON o.C_Order_ID = ol.C_Order_ID
@@ -389,7 +392,8 @@ namespace VAdvantage.Model
                             #region IsAdvance true on Payment Schedule
 
                             // is used to get record from invoice line which is created against orderline
-                            String sql = @"SELECT o.C_Order_ID , NVL(SUM(il.LineTotalAmt) , 0) AS LineTotalAmt 
+                            String sql = @"SELECT o.C_Order_ID , NVL(SUM(NVL(il.LineTotalAmt , 0) "
+                                    + (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? " - NVL(il.withholdingamt , 0)" : "") + @") , 0) AS LineTotalAmt 
                                     FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_ID = il.C_Invoice_ID
                                     INNER JOIN C_Orderline ol ON ol.C_Orderline_ID = il.C_Orderline_ID
                                     INNER JOIN C_Order o ON o.C_Order_ID = ol.C_Order_ID
@@ -908,7 +912,9 @@ namespace VAdvantage.Model
         {
             //	Create Schedule
             DeleteInvoicePaySchedule(invoice.GetC_Invoice_ID(), invoice.Get_Trx());
-            Decimal remainder = invoice.GetGrandTotal();
+            // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
+            Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
+                && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), invoice.Get_Trx());
             MInvoicePaySchedule schedule = null;
             StringBuilder _sql = new StringBuilder();
@@ -1113,7 +1119,7 @@ namespace VAdvantage.Model
                               SELECT COUNT(*) AS COUNT FROM C_Project  WHERE IsActive = 'Y' AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
                               SELECT COUNT(*) AS COUNT FROM C_Contract  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
-                               " ) ";
+                               " ) t";
                 int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (no > 0)
                 {
@@ -1169,7 +1175,8 @@ namespace VAdvantage.Model
                 schedule.SetDueDate(payDueDate);
 
                 //schedule.SetDueDate(GetDueDate(invoice));
-                schedule.SetDueAmt(invoice.GetGrandTotal());
+                schedule.SetDueAmt((invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
+                    && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()));
 
                 // check next business days in case of Discount Date                
                 if (payterm.IsNextBusinessDay())

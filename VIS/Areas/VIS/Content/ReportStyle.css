@@ -4,24 +4,25 @@
     display: flex;
     flex-direction: column;
 }
-
 .vis-report-header h3 {
     margin: 0;
-    font-size: 22px;
-    font-family: helvetica;
+    font-size: 1rem;
+    /* font-family: helvetica; */
     font-weight: 400;
-    color: rgba(var(--v-c-on-primary), 1);
+    /*color: rgba(var(--v-c-on-primary), 1);*/
     flex: 1;
 }
 .vis-report-header {
     width: 100%;
-    background: rgba(var(--v-c-primary), 1);
-    /*padding: 10px 0px 10px 0px;*/
-    /*float: left;*/
-    /*padding-left: 10px;*/
+    /* background: rgba(var(--v-c-primary), 1); */
+    /* padding: 10px 0px 10px 0px; */
+    /* float: left; */
+    /* padding-left: 10px; */
     padding: 5px 0 5px 0;
     display: flex;
     align-items: center;
+    color: rgba(var(--v-c-primary), 1);
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
 }
 .vis-report-tittle {
     width: 40%;
@@ -34,7 +35,7 @@
 .vis-report-header .vis-icon-menuclose.vis-cross {
     padding: 12px 10px;
     display: flex;
-    background: rgba(var(--v-c-on-secondary), .4);
+    /*background: rgba(var(--v-c-on-secondary), .4);*/
 }
 
 .vis-report-a-r-container {
@@ -72,7 +73,7 @@
 	    float: left;
     display: inline-flex;
     padding: 0 7px;
-    color: rgba(var(--v-c-on-secondary), 1);
+    color: rgba(var(--v-c-primary), 1);
     font-size: 1.2rem;
     cursor: pointer;
 }
@@ -91,7 +92,7 @@ ul.vis-reporticonsul, ul.vis-reporticonsulprint {
 }
 
 ul.vis-reporticonsul li {
-    color: rgba(var(--v-c-on-primary), 1);
+    /*color: rgba(var(--v-c-on-primary), 1);*/
 }
 
 ul.vis-toppaging {
@@ -101,12 +102,12 @@ ul.vis-toppaging {
 }
 
 ul.vis-toppaging li {
-    color: rgba(var(--v-c-on-primary), 1);
+    /*color: rgba(var(--v-c-on-primary), 1);*/
     margin: 0;
     font-size: 1rem;
 }
 ul.vis-toppaging li select {
-    border: none;    
+    /*border: none;*/    
 }
 
 ul.vis-toppaging li:nth-child(3) {
@@ -128,6 +129,7 @@ ul.vis-toppaging li:nth-child(3) {
 }
 .vis-icon-menuclose .vis-cross {
     color: rgba(var(--v-c-on-secondary), 1);
+    font-size: .875rem;
 }
 
 .vis-savecsv-ico{
@@ -258,3 +260,9 @@ ul.vis-toppaging li:nth-child(3) {
         margin-top: 0 !important;
     }
 .VAPOS-ReportHeadRap ul li a {width: 22px;height: 25px;}
+.vis-report-header input[type="checkbox"],
+.vis-report-header input[type="checkbox"]:checked:before,
+.vis-report-header input[type="checkbox"]:not(:checked),
+.vis-report-header input[type="checkbox"]:checked {
+    /*border-color: rgba(var(--v-c-on-primary), 1);*/
+}

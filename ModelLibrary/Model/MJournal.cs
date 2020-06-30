@@ -774,7 +774,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             // end 18/7/2016
 
             String sql = "UPDATE GL_JournalBatch jb"
-                + " SET (TotalDr, TotalCr) = (SELECT COALESCE(SUM(TotalDr),0), COALESCE(SUM(TotalCr),0)" //jz hard coded ", "
+                + " SET (TotalDr, TotalCr) = (SELECT SUM(TotalDr), SUM(TotalCr)" //jz hard coded ", "
                     + " FROM GL_Journal j WHERE j.IsActive='Y' AND jb.GL_JournalBatch_ID=j.GL_JournalBatch_ID) "
                 + "WHERE GL_JournalBatch_ID=" + GetGL_JournalBatch_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -1169,7 +1169,9 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                 reverse.SetDocAction(DOCACTION_None);
                 reverse.Save(Get_TrxName());
             }
-            //
+
+            //JID_0889: show on void full message Reversal Document created
+            _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reverse.GetDocumentNo();
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
             return reverse;

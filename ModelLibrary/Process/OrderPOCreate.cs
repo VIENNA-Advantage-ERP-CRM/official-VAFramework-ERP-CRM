@@ -269,20 +269,25 @@ namespace VAdvantage.Process
             GetErrorOrSetting(sqlErrorMessage.ToString(), Get_TrxName());
 
             IDataReader idr = null;
+            DataTable dt = null;
             MOrder po = null;
             ConsolidatePO consolidatePO = null;
             //ConsolidatePOLine consolidatePOLine = null;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
-                while (idr.Read())
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
                 {
+                    //while (idr.Read())                {
                     //	New Order                    
-                    int C_BPartner_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
+                    int C_BPartner_ID = Utility.Util.GetValueOfInt(dr[0]);//.getInt(1);
                     // Code Commented by Vivek Kumar on 20/09/2017 Assigned By Pradeep for drop shipment
                     //if (po == null || po.GetBill_BPartner_ID() != C_BPartner_ID)
                     //{
-                    //    po = CreatePOForVendor(Utility.Util.GetValueOfInt(idr[0]), so);
+                    //    po = CreatePOForVendor(Utility.Util.GetValueOfInt(dr[0]), so);
                     //    AddLog(0, null, null, po.GetDocumentNo());
                     //    counter++;
                     //
@@ -291,9 +296,9 @@ namespace VAdvantage.Process
                     if (_IsConsolidatedPO && listConsolidatePO.Count > 0)
                     {
                         ConsolidatePO poRecord;
-                        if (listConsolidatePO.Exists(x => (x.C_BPartner_ID == C_BPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(idr[2]))))
+                        if (listConsolidatePO.Exists(x => (x.C_BPartner_ID == C_BPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2]))))
                         {
-                            poRecord = listConsolidatePO.Find(x => (x.C_BPartner_ID == C_BPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(idr[2])));
+                            poRecord = listConsolidatePO.Find(x => (x.C_BPartner_ID == C_BPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2])));
                             if (poRecord != null)
                             {
                                 po = new MOrder(GetCtx(), poRecord.C_Order_ID, Get_Trx());
@@ -303,9 +308,9 @@ namespace VAdvantage.Process
                     }
 
                     // Drop Shipment fucntionality added by Vivek on 20/09/2017 Assigned By Pradeep 
-                    if (po == null || po.GetBill_BPartner_ID() != C_BPartner_ID || _Dropship != Utility.Util.GetValueOfString(idr[2]))
+                    if (po == null || po.GetBill_BPartner_ID() != C_BPartner_ID || _Dropship != Utility.Util.GetValueOfString(dr[2]))
                     {
-                        po = CreatePOForVendor(Utility.Util.GetValueOfInt(idr[0]), so, Utility.Util.GetValueOfString(idr[2]));
+                        po = CreatePOForVendor(Utility.Util.GetValueOfInt(dr[0]), so, Utility.Util.GetValueOfString(dr[2]));
                         if (po == null)
                             return counter;
                         // AddLog(0, null, null, po.GetDocumentNo());
@@ -317,14 +322,14 @@ namespace VAdvantage.Process
                             consolidatePO = new ConsolidatePO();
                             consolidatePO.C_Order_ID = po.GetC_Order_ID();
                             consolidatePO.C_BPartner_ID = C_BPartner_ID;
-                            consolidatePO.IsDropShip = Utility.Util.GetValueOfString(idr[2]);
+                            consolidatePO.IsDropShip = Utility.Util.GetValueOfString(dr[2]);
                             listConsolidatePO.Add(consolidatePO);
                         }
                     }
 
-                    _Dropship = Utility.Util.GetValueOfString(idr[2]);
+                    _Dropship = Utility.Util.GetValueOfString(dr[2]);
                     //	Line
-                    int M_Product_ID = Utility.Util.GetValueOfInt(idr[1]);//.getInt(2);
+                    int M_Product_ID = Utility.Util.GetValueOfInt(dr[1]);//.getInt(2);
                     for (int i = 0; i < soLines.Length; i++)
                     {
                         // When Drop ship parameter is yes but SO line does not contains any drop shipment product
@@ -385,7 +390,7 @@ namespace VAdvantage.Process
                     }
 
                 }
-                idr.Close();
+                //idr.Close();
             }
             catch (Exception e)
             {

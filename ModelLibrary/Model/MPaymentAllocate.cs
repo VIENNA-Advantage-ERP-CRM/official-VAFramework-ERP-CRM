@@ -425,12 +425,24 @@ namespace VAdvantage.Model
                     + "     DiscountAmt= (SELECT COALESCE(SUM(DiscountAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) ,  "
                     + "     WriteOffAmt= (SELECT COALESCE(SUM(WriteOffAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) , "
                     + "     OverUnderAmt= (SELECT COALESCE(SUM(OverUnderAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID)  "
+                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? ", PaymentAmount =  (SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE il.IsActive = 'Y' AND i.C_Payment_ID=il.C_Payment_ID)" : "")
                     + "WHERE C_Payment_ID=" + GetC_Payment_ID();
                 int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 if (no != 1)
                 {
                     log.Warning("(1) #" + no);
                 }
+            }
+
+            // calculate Withholding
+            if (!pay.VerifyAndCalculateWithholding(true))
+            {
+                log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
+            }
+            else
+            {
+                pay._isWithholdingFromPaymentAllocate = true;
+                pay.Save();
             }
             return true;
         }
@@ -453,21 +465,33 @@ namespace VAdvantage.Model
                 }
             }
 
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // consider record which are active
                 String sql = "UPDATE C_Payment i"
-                    + " SET PayAmt= (SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE il.IsActive = 'Y' AND i.C_Payment_ID=il.C_Payment_ID) ,  "
+                    + " SET PayAmt= ((SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE il.IsActive = 'Y' AND i.C_Payment_ID=il.C_Payment_ID) "
+                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? " - (BackupWithholdingAmount + WithholdingAmt)),  " : "), ")
                     + "     DiscountAmt= (SELECT COALESCE(SUM(DiscountAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) ,  "
                     + "     WriteOffAmt= (SELECT COALESCE(SUM(WriteOffAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) , "
                     + "     OverUnderAmt= (SELECT COALESCE(SUM(OverUnderAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID)  "
+                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? ", PaymentAmount =  (SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE il.IsActive = 'Y' AND i.C_Payment_ID=il.C_Payment_ID)" : "")
                     + "WHERE C_Payment_ID=" + GetC_Payment_ID();
                 int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 if (no != 1)
                 {
                     log.Warning("(1) #" + no);
                 }
+            }
+
+            // calculate Withholding
+            if (!pay.VerifyAndCalculateWithholding(true))
+            {
+                log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
+            }
+            else
+            {
+                pay._isWithholdingFromPaymentAllocate = true;
+                pay.Save();// if not saved, then try to calculate on prepare
             }
             return true;
         }

@@ -1654,7 +1654,7 @@
         //this.curGC.isZoomAction = isSelect;
         this.curTab.setIsZoomAction(isSelect);
         setTimeout(function (that) {
-            //that.curGC.isZoomAction = isSelect;
+            that.curGC.isZoomAction = isSelect;
             that.tabActionPerformed(that.firstTabId);
             that.setTabNavigation();
             that = null;
@@ -2661,7 +2661,7 @@
 
         this.vTabbedPane.setSelectedTab(action); //set Seleted tab
 
-
+        var keepFilters = back;
         if (isAPanelTab) {
             this.curST = st;
             st.registerAPanel(this);
@@ -2679,6 +2679,7 @@
             if (!gc.isZoomAction && this.curTab.getTabLevel() > 0) {
                 var queryy = new VIS.Query();
                 this.curTab.query = queryy;
+                keepFilters = false;
             }
 
             if (back && this.curTab.getIsCurrent()) {
@@ -2717,6 +2718,9 @@
                     this.setDefaultSearch(gc);
                     //}
                     gc.query(this.curTab.getOnlyCurrentDays(), 0, false);	//	updated
+                }
+                else {
+                    this.setDefaultSearch(gc);
                 }
             }
 
@@ -2779,7 +2783,7 @@
         //else {
         //    this.setTabPanelIcons();
         this.showTabPanel(this.curTab.getHasPanel());
-        this.showFilterPanel(back);
+        this.showFilterPanel(keepFilters);
 
         //}
 

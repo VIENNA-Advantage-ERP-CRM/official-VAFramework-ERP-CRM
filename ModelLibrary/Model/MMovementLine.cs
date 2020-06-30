@@ -360,7 +360,7 @@ namespace VAdvantage.Model
                         //                               " AND NVL(t.M_ProductContainer_ID, 0) = " + (move.IsReversal() && !IsMoveFullContainer() && GetMovementQty() < 0 ? GetM_ProductContainer_ID() : GetRef_M_ProductContainerTo_ID());
                         //                    containerQtyTo = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, null));  // dont use Transaction here - otherwise impact goes wrong on completion
 
-                        qry = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
+                        qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                                                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
                                     " AND t.AD_Client_ID = " + GetAD_Client_ID() +
                                     @" AND t.M_Locator_ID = " + GetM_Locator_ID() +
@@ -368,7 +368,7 @@ namespace VAdvantage.Model
                                     " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID();
                         containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, null));  // dont use Transaction here - otherwise impact goes wrong on completion
 
-                        qry = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
+                        qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS CurrentQty FROM m_transaction t 
                                                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() +
                                    @" AND t.M_Locator_ID = " + GetM_LocatorTo_ID() +
@@ -486,6 +486,23 @@ namespace VAdvantage.Model
                                     return false;
                                 }
                             }
+
+                            //JID_1422: Check No Of Attributes Are Equal To Quantity Or Less Than
+
+                            int Count = CountAttributes(GetDTD001_AttributeNumber());
+                            if (Count != GetQtyEntered())
+                            {
+                                if (Count > GetQtyEntered())
+                                {
+                                    log.SaveError("DTD001_MovementAttrbtGreater", "");
+                                    return false;
+                                }
+                                else
+                                {
+                                    log.SaveError("DTD001_MovementAttrbtLess", "");
+                                    return false;
+                                }
+                            }
                         }
                         else
                         {
@@ -503,20 +520,20 @@ namespace VAdvantage.Model
 
                                 //Check No Of Attributes Are Equal To Quantity Or Less Than
 
-                                int Count = CountAttributes(GetDTD001_AttributeNumber());
-                                if (Count != GetMovementQty())
-                                {
-                                    if (Count > GetMovementQty())
-                                    {
-                                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtGreater"));
-                                        return false;
-                                    }
-                                    else
-                                    {
-                                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtLess"));
-                                        return false;
-                                    }
-                                }
+                                //int Count = CountAttributes(GetDTD001_AttributeNumber());
+                                //if (Count != GetMovementQty())
+                                //{
+                                //    if (Count > GetMovementQty())
+                                //    {
+                                //        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtGreater"));
+                                //        return false;
+                                //    }
+                                //    else
+                                //    {
+                                //        log.SaveError("Error", Msg.GetMsg(GetCtx(), "DTD001_MovementAttrbtLess"));
+                                //        return false;
+                                //    }
+                                //}
                             }
 
                         }

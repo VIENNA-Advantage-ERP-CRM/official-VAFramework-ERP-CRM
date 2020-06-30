@@ -1294,7 +1294,7 @@ namespace VAdvantage.Model
                     if (Env.IsModuleInstalled("VA009_"))
                     {
                         string qry = "SELECT MAX(VA009_PaymentMethod_ID) FROM VA009_PaymentMethod WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + " AND VA009_PaymentBaseType = " +
-                            (line.GetTransferType() == MCashLine.TRANSFERTYPE_Check ? "'S'" : "'T'") + " AND AD_Org_ID IN (0, " + GetAD_Org_ID() + ") ORDER BY AD_Org_ID DESC";
+                            (line.GetTransferType() == MCashLine.TRANSFERTYPE_Check ? "'S'" : "'T'") + " AND AD_Org_ID IN (0, " + GetAD_Org_ID() + ")";
                         int paymethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_TrxName()));
                         pay.SetVA009_PaymentMethod_ID(paymethod_ID);
                     }

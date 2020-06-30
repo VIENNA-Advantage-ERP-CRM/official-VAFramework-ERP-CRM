@@ -1107,7 +1107,7 @@ namespace VIS.Models
 
                 if (attributes.Length > 0 && attrCount > 0)
                 {
-                    qry.Append(",au.M_Attribute_ID) GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount);
+                    qry.Append(",au.M_Attribute_ID) t GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount);
                 }
 
                 ds = DB.ExecuteDataset(qry.ToString(), null, trx);
