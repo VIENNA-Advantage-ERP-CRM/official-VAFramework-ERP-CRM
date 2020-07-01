@@ -121,15 +121,15 @@
             //subroot.css("height", "97%");
             //subroot.css("position", "absolute");
             tableSArea.css("width", "100%");
-            
+
             //else {
-                searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0 vis-leftsidebarouterwrap'>");
-                searchSec = $("<div class='vis-info-l-s-content'>");
-                searchTab.append(searchSec);
-                datasec = $("<div class='vis-info-datasec'>");
-                btnsec = $("<div class='vis-info-btnsec'>");
+            searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0 vis-leftsidebarouterwrap'>");
+            searchSec = $("<div class='vis-info-l-s-content'>");
+            searchTab.append(searchSec);
+            datasec = $("<div class='vis-info-datasec'>");
+            btnsec = $("<div class='vis-info-btnsec'>");
             //}
-            
+
             subroot.append(searchTab);
             subroot.append(datasec);
             subroot.append(btnsec);
@@ -521,7 +521,7 @@
             var td = $("<td>");
             var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
             var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
-            var Leftformfieldbtnwrap = $('<div class="input-group-append">');   
+            var Leftformfieldbtnwrap = $('<div class="input-group-append">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttrSetInstance);
             //tr.append(tdctrl);
             td.append(Leftformfieldwrp);
@@ -1241,7 +1241,13 @@
                 columns: [
                     { field: "Value", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "Value") + '</span></div>', sortable: false, size: '120px', min: 100, hidden: false },
                     { field: "Product", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "Product") + '</span></div>', sortable: false, size: '20%', min: 150, hidden: false },
-                    { field: "QtyEntered", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "QtyEntered") + '</span></div>', sortable: false, size: '70px', min: 60, hidden: false, editable: { type: 'float' }, render: 'number:1' },
+                    {
+                        field: "QtyEntered", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "QtyEntered") + '</span></div>', sortable: false, size: '70px', min: 60, hidden: false, editable: { type: 'float' },
+                        render: function (record, index, colIndex) {
+                            var val = VIS.Utility.Util.getValueOfDecimal(record["QtyEntered"]);
+                            return (val).toLocaleString();
+                        }
+                    },
                     { field: "UOM", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "UOM") + '</span></div>', sortable: false, size: '70px', min: 60, hidden: false },
                     //{
                     //    field: "UOM", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.getElement(VIS.Env.getCtx(), "C_UOM_ID") + '</span></div>', sortable: false, size: '80px', min: 80, hidden: false, editable: { type: 'select', items: uomArray, showAll: true },
@@ -2152,7 +2158,7 @@
 
                         var d = record[grdCols[colIndex].field];
                         if (d) {
-                            d = Globalize.format(new Date(d), 'd');
+                            d = new Date(d).toLocaleDateString();
                         }
                         else d = "";
                         return d;
