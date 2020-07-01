@@ -32,7 +32,10 @@ namespace VIS.Models
                 MPriceList prcLst = new MPriceList(ctx, M_PriceList_ID, null);
                 Dictionary<String, String> retDic = new Dictionary<string, string>();
                 // Reset Orig Shipment
-                retDic["StdPrecision"] = prcLst.GetPricePrecision().ToString();
+                MCurrency crncy = new MCurrency(ctx, prcLst.GetC_Currency_ID(), null);
+                //retDic["StdPrecision"] = prcLst.GetPricePrecision().ToString();
+                //JID_1744  Precision should be as per currency percision 
+                retDic["StdPrecision"] = crncy.GetStdPrecision().ToString();
                 return retDic;
             }
             else

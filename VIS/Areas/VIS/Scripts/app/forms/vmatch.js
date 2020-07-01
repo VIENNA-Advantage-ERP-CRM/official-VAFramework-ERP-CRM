@@ -1070,7 +1070,12 @@
                             var line = {};
                             line['_ID'] = res[i]._ID;
                             line['DocumentNo'] = res[i].DocNo;
+                            // JID_1822 Date Showing As per  browser culture
+                            var da = (res[i].Date);
+                            var d = new Date(da);
+                            res[i].Date = d.toLocaleDateString();
                             line['Date'] = res[i].Date;
+                            //line['Date'] = res[i].Date;
                             line['C_BPartner_ID'] = res[i].CBPartnerIDK;
                             line['C_BPartner_ID_K'] = res[i].CBPartnerID;
                             line['Line'] = res[i].Line;
@@ -1196,14 +1201,18 @@
             if ($self.arrListColumns.length == 0) {
                 $self.arrListColumns.push({ field: "_ID", caption: "_ID", sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "DocumentNo", caption: VIS.Msg.translate(VIS.Env.getCtx(), "DocumentNo"), sortable: true, size: '11%', hidden: false });
-                $self.arrListColumns.push({ field: "Date", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Date"), sortable: true, size: '11%', hidden: false, render: 'date' });
+                $self.arrListColumns.push({ field: "Date", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Date"), sortable: true, size: '11%', hidden: false });
                 $self.arrListColumns.push({ field: "C_BPartner_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '11%', hidden: false });
                 $self.arrListColumns.push({ field: "C_BPartner_ID_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "Line", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Line"), sortable: true, size: '11%', hidden: false });
                 $self.arrListColumns.push({ field: "Line_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Line"), sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "M_Product_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"), sortable: true, size: '11%', hidden: false });
                 $self.arrListColumns.push({ field: "M_Product_ID_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"), sortable: true, size: '11%', hidden: true });
-                $self.arrListColumns.push({ field: "Qty", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Qty"), sortable: true, size: '11%', hidden: false });
+                $self.arrListColumns.push({ field: "Qty", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Qty"), sortable: true, size: '11%', hidden: false,
+                    render: function (record, index, col_index) {
+                        var val = VIS.Utility.Util.getValueOfDecimal(record["Qty"]);
+                        return (val).toLocaleString();
+                    } });
                 $self.arrListColumns.push({ field: "Matched", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Matched"), sortable: true, size: '11%', hidden: false });
             }
 

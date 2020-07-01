@@ -738,6 +738,41 @@ namespace VAdvantage.Model
             decimal currentQty = 0;
             MMovementLine mLine = confirm.GetLine();
 
+            //Added By amit 11-jun-2015 
+            //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
+            //As On Date Count = Opening Stock - Diff Qty
+            //Qty Count = Qty Book - Diff Qty
+            query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate = " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                           AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+            result = Util.GetValueOfInt(DB.ExecuteScalar(query));
+            if (result > 0)
+            {
+                query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
+                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
+                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+                currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
+            }
+            else
+            {
+                query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+                result = Util.GetValueOfInt(DB.ExecuteScalar(query));
+                if (result > 0)
+                {
+                    query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
+                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
+                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+                    currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
+                }
+            }
+            //End
+
             //	Difference - Create Inventory Difference for Source Location
             if (Env.ZERO.CompareTo(confirm.GetDifferenceQty()) != 0)
             {
@@ -771,41 +806,6 @@ namespace VAdvantage.Model
 
                 MInventoryLine line = new MInventoryLine(_inventoryFrom, mLine.GetM_Locator_ID(), mLine.GetM_Product_ID(),
                         mLine.GetM_AttributeSetInstance_ID(), confirm.GetDifferenceQty(), Env.ZERO);
-
-                //Added By amit 11-jun-2015 
-                //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
-                //As On Date Count = Opening Stock - Diff Qty
-                //Qty Count = Qty Book - Diff Qty
-                query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate = " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                           AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-                result = Util.GetValueOfInt(DB.ExecuteScalar(query));
-                if (result > 0)
-                {
-                    query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-                    currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
-                }
-                else
-                {
-                    query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-                    result = Util.GetValueOfInt(DB.ExecuteScalar(query));
-                    if (result > 0)
-                    {
-                        query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-                        currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
-                    }
-                }
-                //End
 
                 line.SetAdjustmentType("D");
                 line.SetDifferenceQty(Util.GetValueOfDecimal(confirm.GetDifferenceQty()));
@@ -865,6 +865,15 @@ namespace VAdvantage.Model
                 //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
                 line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
                 line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
+
+                // JID_0804 Ship receipt confirm with scrap Qty
+                line.SetAdjustmentType("D");
+                line.SetDifferenceQty(Util.GetValueOfDecimal(confirm.GetScrappedQty()));
+                line.SetQtyBook(currentQty);
+                line.SetOpeningStock(currentQty);
+                line.SetAsOnDateCount(Decimal.Subtract(Util.GetValueOfDecimal(line.GetOpeningStock()), Util.GetValueOfDecimal(confirm.GetScrappedQty())));
+                line.SetQtyCount(Decimal.Subtract(Util.GetValueOfDecimal(line.GetQtyBook()), Util.GetValueOfDecimal(confirm.GetScrappedQty())));
+
                 if (!line.Save(Get_TrxName()))
                 {
                     _processMsg += "Inventory Line not created";

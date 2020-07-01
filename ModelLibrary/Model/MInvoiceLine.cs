@@ -3715,6 +3715,10 @@ namespace VAdvantage.Model
                 if (newRecord || Is_ValueChanged("QtyInvoiced"))
                     SetQtyInvoiced(GetQtyInvoiced());
 
+                //JID_1744 PriceList Precision should as per Currency Precision
+                if (newRecord || Is_ValueChanged("PriceList"))
+                    SetPriceList(Decimal.Round(GetPriceList(), GetPrecision(), MidpointRounding.AwayFromZero));
+
                 //	Calculations & Rounding
                 SetLineNetAmt();
                 if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
