@@ -30,6 +30,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	RfQ 			
         private int _C_RfQ_ID = 0;
         private int _C_DocType_ID = 0;
+        //Variable Declaration
+        private int VA009_PaymentMethod_ID = 0;
+        private string PaymentBaseType = "";
 
         //100
         private static Decimal ONEHUNDRED = 100;
@@ -96,9 +99,23 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 order.SetC_DocTypeTarget_ID();
             }
+            order.SetAD_Org_ID(rfq.GetAD_Org_ID());
             order.SetBPartner(bp);
             order.SetC_BPartner_Location_ID(rfq.GetC_BPartner_Location_ID());
             order.SetSalesRep_ID(rfq.GetSalesRep_ID());
+            //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
+            if (bp.GetVA009_PaymentMethod_ID() == 0)
+            {
+                order.SetVA009_PaymentMethod_ID(GetPaymentMethod(rfq.GetAD_Org_ID()));
+                order.SetPaymentMethod(GetPaymentBaseType(VA009_PaymentMethod_ID));
+                order.SetPaymentRule(PaymentBaseType);
+            }
+            else
+            {
+                order.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
+                order.SetPaymentMethod(GetPaymentBaseType(bp.GetVA009_PaymentMethod_ID()));
+                order.SetPaymentRule(PaymentBaseType);
+            }
             if (rfq.GetDateWorkComplete() != null)
             {
                 order.SetDatePromised(rfq.GetDateWorkComplete());
@@ -154,5 +171,33 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             rfq.Save();
             return order.GetDocumentNo();
         }
+        //Added by Neha Thakur
+        /// <summary>
+        /// to get the payment method if no payment method found on the business partner
+        /// </summary>
+        /// <returns>returns payment meyhod ID</returns>
+        public int GetPaymentMethod(int Org_ID)
+        {
+            VA009_PaymentMethod_ID = 0;
+            //get organisation default 
+            string _sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("@param1", Org_ID);
+            VA009_PaymentMethod_ID =Util.GetValueOfInt(DB.ExecuteScalar(_sql, param, Get_TrxName()));
+            return VA009_PaymentMethod_ID;
+        }
+        /// <summary>
+        /// Get PaymentBase Type on Payment Method
+        /// </summary>
+        /// <param name="VA009_PaymentMethod_ID"></param>
+        /// <returns>Payment Base Type</returns>
+        public string GetPaymentBaseType(int VA009_PaymentMethod_ID)
+        {
+            PaymentBaseType = "";
+            string _sql = "SELECT VA009_PAYMENTBASETYPE FROM VA009_PAYMENTMETHOD WHERE VA009_PaymentMethod_ID=" + VA009_PaymentMethod_ID;
+            PaymentBaseType= Util.GetValueOfString(DB.ExecuteScalar(_sql, null, Get_TrxName()));
+            return PaymentBaseType;
+        }
+        //-------End------
     }
 }
