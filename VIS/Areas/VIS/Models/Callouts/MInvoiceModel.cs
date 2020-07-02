@@ -1331,5 +1331,19 @@ namespace VIS.Models
             retDic["PriceLimit"] = PriceLimit;
             return retDic;
         }
+
+        /// <summary>
+        /// Getting the percision values
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="fields"></param>
+        /// <returns>get Percision value</returns>
+        public int GetPrecision(Ctx ctx, string fields)
+        {
+            string sql = "SELECT CC.StdPrecision FROM C_Invoice CI INNER JOIN C_Currency CC on CC.C_Currency_Id = CI.C_Currency_Id where CI.C_Invoice_ID= " + Util.GetValueOfInt(fields);
+            int stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            return stdPrecision;
+
+        }
     }
 }

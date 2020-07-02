@@ -301,5 +301,19 @@ namespace VIS.Models
             }
             return retDir;
         }
+
+        /// <summary>
+        /// Getting the percision values
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="fields"></param>
+        /// <returns>get Percision value</returns>
+
+        public int GetPrecision(Ctx ctx,string fields)
+        {
+            string sql = "SELECT CC.StdPrecision FROM C_Order CO INNER JOIN C_Currency CC on CC.C_Currency_Id = Co.C_Currency_Id where CO.C_Order_Id= " + Util.GetValueOfInt(fields);
+            var stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null,null));
+            return stdPrecision;
+        }
     }
 }
