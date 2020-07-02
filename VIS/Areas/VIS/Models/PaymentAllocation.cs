@@ -1970,7 +1970,7 @@ namespace VIS.Models
 
             if (!chk)
             {
-                sqlInvoice.Append( " AND i.C_Currency_ID=" + _C_Currency_ID);                                   //  #6
+                sqlInvoice.Append(" AND i.C_Currency_ID=" + _C_Currency_ID);                                   //  #6
             }
 
             //sqlInvoice += " AND (currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + ",i.DATEACCT,i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID) *i.MultiplierAP ) <> 0 ";

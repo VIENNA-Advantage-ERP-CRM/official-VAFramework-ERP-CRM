@@ -58,19 +58,19 @@ namespace VAdvantage.Model
             }
 
             // validate unique record on the basis of this filteration of parameters
-            string sql = @"SELECT COUNT(C_Withholding_ID) FROM C_Withholding WHERE TransactionType='" + GetTransactionType() + "'AND C_WithholdingCategory_ID= " +
-                GetC_WithholdingCategory_ID() + " AND c_country_ID =" + GetC_Country_ID() + " AND C_region_ID=" + GetC_Region_ID();
+            string sql = @"SELECT COUNT(C_Withholding_ID) FROM C_Withholding WHERE TransactionType='" + GetTransactionType() + "'AND NVL(C_WithholdingCategory_ID , 0) = " +
+                GetC_WithholdingCategory_ID() + " AND NVL(c_country_ID  ,0) = " + GetC_Country_ID() + " AND NVL(C_region_ID , 0) = " + GetC_Region_ID();
             if (!newRecord)
             {
                 sql += " AND C_withholding_ID != " + GetC_Withholding_ID();
             }
             if (IsApplicableonPay())
             {
-                sql += " AND PayPercentage= " + GetPayPercentage();
+                sql += " AND IsApplicableonPay = 'Y' AND PayPercentage= " + GetPayPercentage();
             }
             if (IsApplicableonInv())
             {
-                sql += " AND invpercentage= " + GetInvPercentage();
+                sql += " AND IsApplicableonInv = 'Y' AND invpercentage= " + GetInvPercentage();
             }
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {

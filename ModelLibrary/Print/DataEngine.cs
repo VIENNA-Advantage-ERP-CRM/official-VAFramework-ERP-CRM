@@ -195,6 +195,7 @@ namespace VAdvantage.Print
             StringBuilder sqlFROM = new StringBuilder(" FROM ");
             sqlFROM.Append(tableName);
             StringBuilder sqlGROUP = new StringBuilder(" GROUP BY ");
+            string sqlSelfTableRef = "";
             //    //
             bool IsGroupedBy = false;
             //    //
@@ -339,12 +340,29 @@ namespace VAdvantage.Print
 
                         //	=> x JOIN table A ON (x.KeyColumn=A.Key)
                         if (IsMandatory)
+                        {
                             sqlFROM.Append(" INNER JOIN ");
+                        }
                         else
+                        {
                             sqlFROM.Append(" LEFT OUTER JOIN ");
-                        sqlFROM.Append(tr.TableName).Append(" ").Append(_synonym).Append(" ON (")
-                            .Append(tableName).Append(".").Append(ColumnName).Append("=")
-                            .Append(_synonym).Append(".").Append(tr.KeyColumn).Append(")");
+                        }
+
+                        if (tr.TableName.Equals(tableName))
+                        {
+                            sqlSelfTableRef = _synonym + "." + tr.KeyColumn;
+                        }
+                        sqlFROM.Append(tr.TableName).Append(" ").Append(_synonym).Append(" ON (");
+                        if (!ColumnName.EndsWith("_ID") && DatabaseType.IsPostgre)
+                        {
+                            sqlFROM.Append("TO_NUMBER(").Append(tableName).Append(".").Append(ColumnName).Append(",'99G99')").Append("=");
+                            //TO_NUMBER()
+                        }
+                        else
+                        {
+                            sqlFROM.Append(tableName).Append(".").Append(ColumnName).Append("=");
+                        }
+                        sqlFROM.Append(_synonym).Append(".").Append(tr.KeyColumn).Append(")");
                         //
                         pdc = new PrintDataColumn(AD_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
                         SynonymNext();
@@ -611,6 +629,11 @@ namespace VAdvantage.Print
                 else
                     finalSQL = new StringBuilder(role.AddAccessSQL(finalSQL.ToString(),
                         tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO));
+            }
+
+            if (sqlSelfTableRef.Length > 0)
+            {
+                finalSQL = finalSQL.Replace(sqlSelfTableRef + " NOT IN", "nvl(" + sqlSelfTableRef + ",0) NOT IN");
             }
 
             if (AD_Tab_ID > 0)
@@ -1010,7 +1033,7 @@ namespace VAdvantage.Print
                                     pde = new PrintDataElement(pdc.GetColumnName(), value, pdc.GetDisplayType());
                                 }
 
-                                    /* Modified by Deepak */
+                                /* Modified by Deepak */
                                 /* to resolve DateTime Issue*/
 
                                 else if (DisplayType.IsDate(pdc.GetDisplayType()))

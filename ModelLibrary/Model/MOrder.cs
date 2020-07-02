@@ -4555,7 +4555,7 @@ namespace VAdvantage.Model
             List<RecordContainer> shipLine = new List<RecordContainer>();
 
             // JID_1746: Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-            if (oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item && Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
+            if (oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item)
             {
                 MProductCategory productCategory = MProductCategory.GetOfProduct(GetCtx(), oLine.GetM_Product_ID());
 
@@ -5048,6 +5048,9 @@ namespace VAdvantage.Model
                     line.SetQtyLostSales(old);
                     line.SetQty(Env.ZERO);
                     line.SetLineNetAmt(Env.ZERO);
+
+                    // Remove Reference of Requisition from PO line after Void.
+                    line.Set_Value("M_RequisitionLine_ID", 0);
                     line.Save(Get_TrxName());
                 }
             }
@@ -5589,7 +5592,7 @@ namespace VAdvantage.Model
                          UNION ALL
                           SELECT COUNT(il.c_orderline_id) AS Result FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_id = il.C_Invoice_id
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
-                          WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO'))";
+                          WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')) t";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             if (_countOrder > 0)
             {

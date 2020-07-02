@@ -103,16 +103,16 @@
         function initializeComponent() {
             SubGridCol = [];
             SubGridCol.push({ field: 'WareHouse', caption: VIS.Msg.getMsg('Warehouse'), size: '150px' },
-                                { field: 'Variant', caption: VIS.Msg.getMsg('Variant'), size: '150px' },
-                                { field: 'Quantity', caption: VIS.Msg.getMsg('Quantity'), size: '100px', editable: { type: 'float' }, render: 'number:1' },
-                                { field: 'Available', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyAvailable'), size: '100px' },
-                                { field: 'OnHand', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOnHand'), size: '100px' },
-                                { field: 'Reserved', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyReserved'), size: '100px' },
-                                { field: 'Ordered', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOrdered'), size: '100px' },
-                                { field: 'M_Warehouse_ID', caption: 'WareHouse ID', size: '150px', hidden: true },
-                                { field: 'M_AttributeSetInstance_ID', caption: 'M_AttributeSetInstance_ID', size: '150px', hidden: true },
-                                { field: 'M_Product_ID', caption: 'M_Product_ID', size: '150px', hidden: true },
-                                { field: 'ParentRec_ID', caption: 'Parent recid', size: '150px', hidden: true });
+                { field: 'Variant', caption: VIS.Msg.getMsg('Variant'), size: '150px' },
+                { field: 'Quantity', caption: VIS.Msg.getMsg('Quantity'), size: '100px', editable: { type: 'float' }, render: 'number:1' },
+                { field: 'Available', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyAvailable'), size: '100px' },
+                { field: 'OnHand', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOnHand'), size: '100px' },
+                { field: 'Reserved', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyReserved'), size: '100px' },
+                { field: 'Ordered', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOrdered'), size: '100px' },
+                { field: 'M_Warehouse_ID', caption: 'WareHouse ID', size: '150px', hidden: true },
+                { field: 'M_AttributeSetInstance_ID', caption: 'M_AttributeSetInstance_ID', size: '150px', hidden: true },
+                { field: 'M_Product_ID', caption: 'M_Product_ID', size: '150px', hidden: true },
+                { field: 'ParentRec_ID', caption: 'Parent recid', size: '150px', hidden: true });
 
             inforoot.css("width", "100%");
             inforoot.css("height", "100%");
@@ -121,42 +121,15 @@
             //subroot.css("height", "97%");
             //subroot.css("position", "absolute");
             tableSArea.css("width", "100%");
-            //subroot.css("margin-left", "-10px");
 
-            //sSContainer = $("<div style='display: inline-block; float: left;width:23%;height:87.8%;overflow:auto;'>");
-            //ssHeader = $('<div style="padding: 7px; background-color: #F1F1F1;margin-bottom: 2px;height:10.5%;">');
-            //btnExpander = $('<button style="border: 0px;background-color: transparent; padding: 0px;">').append($('<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/arrow-left.png">'));
-
-            //ssHeader.append(btnExpander);
-            //sSContainer.append(ssHeader);
-
-            //if (VIS.Application.isRTL) {
-            //    searchTab = $("<div style='background-color: rgb(241, 241, 241);display: inline-block; float:right;width:23%;height:87.8%;overflow:auto;padding-right: 7px;margin-left: 10px;'>");
-            //    searchSec = $("<div style='background-color: rgb(241, 241, 241);'>");
-            //    searchTab.append(searchSec);
-            //    datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
-            //    btnsec = $("<div style='display: inline-block;float: right;width:99%;height:auto;margin-top: 2px;'>");
-            //}
             //else {
-                searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0'>");
-                searchSec = $("<div class='vis-info-l-s-content'>");
-                searchTab.append(searchSec);
-                datasec = $("<div class='vis-info-datasec'>");
-                btnsec = $("<div class='vis-info-btnsec'>");
+            searchTab = $("<div class='vis-info-l-s-wrap vis-pad-0 vis-leftsidebarouterwrap'>");
+            searchSec = $("<div class='vis-info-l-s-content'>");
+            searchTab.append(searchSec);
+            datasec = $("<div class='vis-info-datasec'>");
+            btnsec = $("<div class='vis-info-btnsec'>");
             //}
-            //searchTab = $("<div style='background-color: rgb(241, 241, 241);padding-left: 7px;height:88.9%;overflow:auto;'>");
-            //searchSec = $("<div style='background-color: rgb(241, 241, 241)'>");
-            //if (true) {//IPAD
-            //    ssHeader.css('display', 'none');
-            //    searchTab.css('height', '100%');
-            //    searchSec.css('height', '100%');
-            //}
-            //searchTab.append(searchSec);
-            //sSContainer.append(searchTab);
 
-            // var searchSec = $("<div style='display: inline-block; float: left;width:23%;height:86.8%;overflow:auto'>");
-            //  datasec = $("<div style='display: inline-block; float: left;width:75%;height:87.8%;margin-left:10px;'>");
-            //  btnsec = $("<div style='display: inline-block; float: left;width:99%;height:auto;margin-top: 2px;'>");
             subroot.append(searchTab);
             subroot.append(datasec);
             subroot.append(btnsec);
@@ -232,12 +205,15 @@
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblValuetxt);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -246,19 +222,23 @@
             srchCtrl.AD_Reference_ID = 10;
             srchCtrl.ColumnName = "Value";
             var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl());
+            //tr.append(tdctrl);
+            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblNametxt);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -268,19 +248,23 @@
             srchCtrl.ColumnName = "Name";
             ctrl.setValue(value);
             var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl());
+            //tr.append(tdctrl);
+            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblUPCtxt);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -288,20 +272,24 @@
             srchCtrl.Ctrl = ctrl;
             srchCtrl.AD_Reference_ID = 10;
             srchCtrl.ColumnName = "UPC";
-            var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl());
+            //var tdctrl = $("<td>");
+            //tr.append(tdctrl);
+            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblSKUtxt);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -310,19 +298,23 @@
             srchCtrl.AD_Reference_ID = 10;
             srchCtrl.ColumnName = "SKU";
             var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl());
+            //tr.append(tdctrl);
+            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblWarehousetxt);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -332,18 +324,22 @@
             srchCtrl.ColumnName = "M_Warehouse_ID";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
-            tdctrl.append(cmbWarehoue.getControl());
+            Leftformfieldctrlwrp.append(cmbWarehoue.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblPriceListtxt);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -352,8 +348,9 @@
             srchCtrl.AD_Reference_ID = VIS.DisplayType.tableDir;
             srchCtrl.ColumnName = "M_PriceList_Version_ID";
             var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append(cmbPriceList.getControl());
+            //tr.append(tdctrl);
+            Leftformfieldctrlwrp.append(cmbPriceList.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
 
@@ -361,12 +358,15 @@
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttrCodeText);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -375,20 +375,24 @@
             srchCtrl.AD_Reference_ID = 10;
             srchCtrl.ColumnName = "AttributeCode";
             var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append(ctrl.getControl());
+            //tr.append(tdctrl);
+            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttributeSet);
-            td.append(label);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
             cmbAttributeSet = new VIS.Controls.VComboBox("M_AttributeSet_ID", false, false, true, null, 50);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
@@ -396,19 +400,23 @@
             srchCtrl.AD_Reference_ID = VIS.DisplayType.tableDir;
             srchCtrl.ColumnName = "M_AttributeSet_ID";
             var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append(cmbAttributeSet.getControl());
+            //tr.append(tdctrl);
+            Leftformfieldctrlwrp.append(cmbAttributeSet.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            Leftformfieldctrlwrp.append(label);
             srchCtrls.push(srchCtrl);
 
             tr = $("<tr>");
             tableSArea.append(tr);
             var td = $("<td>");
-            label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttrSetInstance);
-            td.append(label);
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            //label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttrSetInstance);
             tr.append(td);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
 
-            tr = $("<tr>");
-            tableSArea.append(tr);
+            //tr = $("<tr>");
+            //tableSArea.append(tr);
             var srchCtrl = {
             };
 
@@ -428,14 +436,14 @@
             //    btnShowCart = $("<button class='VIS_Pref_btn-2'style='margin-top: 5px;margin-bottom: -10px;margin-left:5px'>").append($("<img src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/opencart.png'>"));
             //}
             //else {
-                divbtnsec = $("<div class='vis-info-ls-btnswrap'>");
-                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
-                btnAddCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-cart-plus'></i>"));
-                btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled>").append($("<i class='fa fa-list-ul'></i>"));
-                btnScanFile = $("<button class='VIS_Pref_btn-2'>").append($("<i class='vis vis-scanner'>"));
-                btnShowCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-shopping-cart'></i>"));
-                //btnShowSaved.prop('disabled', true);
+            divbtnsec = $("<div class='vis-info-ls-btnswrap'>");
+            btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+            btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+            btnAddCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-cart-plus'></i>"));
+            btnShowSaved = $("<button class='VIS_Pref_btn-2' disabled>").append($("<i class='fa fa-list-ul'></i>"));
+            btnScanFile = $("<button class='VIS_Pref_btn-2'>").append($("<i class='vis vis-scanner'>"));
+            btnShowCart = $("<button class='VIS_Pref_btn-2'>").append($("<i class='fa fa-shopping-cart'></i>"));
+            //btnShowSaved.prop('disabled', true);
             //}
 
             //divbtnRight.append(btnCancel);
@@ -466,14 +474,14 @@
             //    divbtnRight.append(btnRequery);
             //}
             //else {
-                divbtnRight.append(btnCancel);
-                divbtnRight.append(btnOK);
-                divbtnRight.append(btnShowSaved);
-                divbtnRight.append(btnAddCart);
-                divbtnsec.append(btnScanFile);
-                divbtnsec.append(btnShowCart);
-                searchTab.append(divbtnsec);
-                divbtnLeft.append(btnRequery);
+            divbtnRight.append(btnCancel);
+            divbtnRight.append(btnOK);
+            divbtnRight.append(btnShowSaved);
+            divbtnRight.append(btnAddCart);
+            divbtnsec.append(btnScanFile);
+            divbtnsec.append(btnShowCart);
+            searchTab.append(divbtnsec);
+            divbtnLeft.append(btnRequery);
             //}
 
             // divbtnLeft.append(btnRequery);
@@ -481,11 +489,11 @@
             btnsec.append(divPaging);
             btnsec.append(divbtnRight);
             //Busy Indicator
-            bsyDiv = $("<div class='vis-apanel-busy'>");
-            bsyDiv.css("width", "98%");
-            bsyDiv.css("height", "97%");
-            bsyDiv.css('text-align', 'center');
-            bsyDiv.css("position", "absolute");
+            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //bsyDiv.css("width", "98%");
+            //bsyDiv.css("height", "97%");
+            //bsyDiv.css('text-align', 'center');
+            //bsyDiv.css("position", "absolute");
             bsyDiv[0].style.visibility = "visible";
 
 
@@ -501,7 +509,7 @@
             var _WhereAttr = " M_AttributeSetInstance_ID IN (SELECT  asi.M_AttributeSetInstance_ID as M_AttributeSetInstance_ID   FROM M_AttributeSetInstance asi   WHERE asi.IsActive='Y' AND asi.M_ATTRIBUTESET_ID=" + cmbAttributeSet.ctrl.val() + ")";
             _AttrSetInstLookUp = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, 8472, VIS.DisplayType.Search, "M_AttributeSetInstance_ID", 0, false, _WhereAttr);
             $AttrSetInstControl = new VIS.Controls.VTextBoxButton("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.Search, _AttrSetInstLookUp);
-            $AttrSetInstControl.getControl().css("width", "calc(100% - 60px)");
+            $AttrSetInstControl.getControl();
             //$AttrSetInstControl.getBtn(0).css("height", "26px");
             //$AttrSetInstControl.getBtn(0).css("margin-top", "-1px");
             //$AttrSetInstControl.getBtn(0).css('float','left');
@@ -510,14 +518,29 @@
             srchCtrl.Ctrl = $AttrSetInstControl;
             srchCtrl.AD_Reference_ID = VIS.DisplayType.Search;
             srchCtrl.ColumnName = "M_AttributeSetInstance_ID";
-            var tdctrl = $("<td>");
-            tr.append(tdctrl);
-            tdctrl.append($AttrSetInstControl.getControl()).append($AttrSetInstControl.getBtn(0)).append($AttrSetInstControl.getBtn(1));
+            var td = $("<td>");
+            var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            var Leftformfieldbtnwrap = $('<div class="input-group-append">');
+            label = $("<label class='VIS_Pref_Label_Font'>").append(lblAttrSetInstance);
+            //tr.append(tdctrl);
+            td.append(Leftformfieldwrp);
+            Leftformfieldwrp.append(Leftformfieldctrlwrp);
+            Leftformfieldwrp.append(Leftformfieldbtnwrap);
+
+            //tr.append(td);
+            Leftformfieldctrlwrp.append($AttrSetInstControl.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            Leftformfieldbtnwrap.append($AttrSetInstControl.getBtn(0));
+            Leftformfieldbtnwrap.append($AttrSetInstControl.getBtn(1));
+            Leftformfieldctrlwrp.append(label);
+
             srchCtrls.push(srchCtrl);
         };
         //---End Mohit Change---
 
         initializeComponent();
+
+        InitInfo(M_Warehouse_ID, M_PriceList_ID);
 
         //var winQry = "SELECT AD_Window_ID FROM AD_Tab WHERE AD_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "AD_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry));
@@ -637,7 +660,7 @@
 
         bindEvent();
         //M_Warehouse_ID = VIS.context.getContextAsInt("#M_Warehouse_ID");
-        InitInfo(M_Warehouse_ID, M_PriceList_ID);
+        //InitInfo(M_Warehouse_ID, M_PriceList_ID);
 
         function InitInfo(M_Warehouse_ID, M_PriceList_ID) {
             pattrLookup = new VIS.MPAttributeLookup(VIS.context, WindowNo);
@@ -673,7 +696,8 @@
             //VIS.DB.executeReader(sql.toString(), null, GetWarehouseCallBack);
             // Added by Bharat on 31 May 2017 to remove client side queries
             try {
-                VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetWarehouse", "", GetWarehouseCallBack);
+                var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetWarehouse", null, null);
+                GetWarehouseCallBack(dr);
             }
             catch (e) {
                 console.log(e);
@@ -754,7 +778,8 @@
 
             // Added by Bharat on 31 May 2017 to remove client side queries
             try {
-                VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceList", { "PriceList": PriceList }, PriceListCallBack);
+                var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceList", { "PriceList": PriceList }, null);
+                PriceListCallBack(dr);
             }
             catch (e) {
                 console.log(e);
@@ -1146,18 +1171,18 @@
             if (prodID.length > 0) {
                 for (var i = 0; i < prodID.length; i++) {
                     savedProduct.push(
-                       {
-                           SrNo: i,
-                           Product: prodName[i],
-                           Value: value[i],
-                           QtyEntered: qty[i],
-                           UOM_ID: uomID[i],
-                           UOM: uom[i],
-                           M_Product_ID1: prodID[i],
-                           Attribute: Attribute[i],
-                           AttributeName: AttributeName[i],
-                           RefNo: ReferenceNo[i]
-                       }
+                        {
+                            SrNo: i,
+                            Product: prodName[i],
+                            Value: value[i],
+                            QtyEntered: qty[i],
+                            UOM_ID: uomID[i],
+                            UOM: uom[i],
+                            M_Product_ID1: prodID[i],
+                            Attribute: Attribute[i],
+                            AttributeName: AttributeName[i],
+                            RefNo: ReferenceNo[i]
+                        }
                     );
                 }
                 BindGridSavedProducts();
@@ -1216,7 +1241,13 @@
                 columns: [
                     { field: "Value", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "Value") + '</span></div>', sortable: false, size: '120px', min: 100, hidden: false },
                     { field: "Product", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "Product") + '</span></div>', sortable: false, size: '20%', min: 150, hidden: false },
-                    { field: "QtyEntered", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "QtyEntered") + '</span></div>', sortable: false, size: '70px', min: 60, hidden: false, editable: { type: 'float' }, render: 'number:1' },
+                    {
+                        field: "QtyEntered", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "QtyEntered") + '</span></div>', sortable: false, size: '70px', min: 60, hidden: false, editable: { type: 'float' },
+                        render: function (record, index, colIndex) {
+                            var val = VIS.Utility.Util.getValueOfDecimal(record["QtyEntered"]);
+                            return (val).toLocaleString();
+                        }
+                    },
                     { field: "UOM", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "UOM") + '</span></div>', sortable: false, size: '70px', min: 60, hidden: false },
                     //{
                     //    field: "UOM", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.getElement(VIS.Env.getCtx(), "C_UOM_ID") + '</span></div>', sortable: false, size: '80px', min: 80, hidden: false, editable: { type: 'select', items: uomArray, showAll: true },
@@ -1276,19 +1307,19 @@
                     else if (event.column == 6 && dGrid.records.length > 0) {
                         bsyDiv[0].style.visibility = "visible";
                         savedProduct.push(
-                        {
-                            SrNo: savedProduct.length,
-                            Product: savedProduct[event.recid - 1].Product,
-                            Value: savedProduct[event.recid - 1].Value,
-                            QtyEntered: savedProduct[event.recid - 1].QtyEntered,
-                            UOM_ID: savedProduct[event.recid - 1].UOM_ID,
-                            UOM: savedProduct[event.recid - 1].UOM,
-                            M_Product_ID1: savedProduct[event.recid - 1].M_Product_ID1,
-                            Attribute: "",
-                            AttributeName: "",
-                            RefNo: savedProduct[event.recid - 1].RefNo
-                        }
-                       );
+                            {
+                                SrNo: savedProduct.length,
+                                Product: savedProduct[event.recid - 1].Product,
+                                Value: savedProduct[event.recid - 1].Value,
+                                QtyEntered: savedProduct[event.recid - 1].QtyEntered,
+                                UOM_ID: savedProduct[event.recid - 1].UOM_ID,
+                                UOM: savedProduct[event.recid - 1].UOM,
+                                M_Product_ID1: savedProduct[event.recid - 1].M_Product_ID1,
+                                Attribute: "",
+                                AttributeName: "",
+                                RefNo: savedProduct[event.recid - 1].RefNo
+                            }
+                        );
                         infoLines[infoLines.length] = {
                             _prodQty: savedProduct[savedProduct.length - 1].QtyEntered,
                             _prdID: savedProduct[savedProduct.length - 1].M_Product_ID1,
@@ -1400,44 +1431,44 @@
                             }
                             else {
                                 selectedItems.push(
-                                        {
-                                            _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
-                                            _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
-                                            _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _value: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
-                                            _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
-                                            _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
-                                            _windowNo: WindowNo,
-                                            _RefNo: "",
-                                            _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
-                                            _AttributeName: "",
-                                            _Locator_ID: 0,
-                                            _IsLotSerial: "N",
-                                            _countID: 0
-                                        }
-                                    )
+                                    {
+                                        _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
+                                        _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                        _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
+                                        _value: w2ui[grdname].records[selection[i] - 1].NAME,
+                                        _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                        _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
+                                        _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                        _windowNo: WindowNo,
+                                        _RefNo: "",
+                                        _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                        _AttributeName: "",
+                                        _Locator_ID: 0,
+                                        _IsLotSerial: "N",
+                                        _countID: 0
+                                    }
+                                )
                             }
                         }
                         else {
                             selectedItems.push(
-                                        {
-                                            _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
-                                            _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
-                                            _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _value: w2ui[grdname].records[selection[i] - 1].NAME,
-                                            _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
-                                            _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
-                                            _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
-                                            _windowNo: WindowNo,
-                                            _RefNo: "",
-                                            _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
-                                            _AttributeName: "",
-                                            _Locator_ID: 0,
-                                            _IsLotSerial: "N",
-                                            _countID: 0
-                                        }
-                                    )
+                                {
+                                    _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
+                                    _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                    _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
+                                    _value: w2ui[grdname].records[selection[i] - 1].NAME,
+                                    _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                    _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
+                                    _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                    _windowNo: WindowNo,
+                                    _RefNo: "",
+                                    _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                    _AttributeName: "",
+                                    _Locator_ID: 0,
+                                    _IsLotSerial: "N",
+                                    _countID: 0
+                                }
+                            )
                         }
                     }
                 }
@@ -1458,9 +1489,9 @@
             }
             disposeComponent();
 
-           // var msg = VIS.Msg.getMsg("RecordsSavedPlzRequery");
+            // var msg = VIS.Msg.getMsg("RecordsSavedPlzRequery");
             var msg = VIS.Msg.getMsg("RecSaved");
-            
+
             if (!success) {
                 if (count > 0) {
                     msg = count + " " + VIS.Msg.getMsg("RecordsNotSaved");
@@ -2093,12 +2124,15 @@
                     if (displayType == VIS.DisplayType.Integer) {
                         oColumn.render = 'int';
                     }
-                    else if (displayType == VIS.DisplayType.Amount) {
-                        oColumn.render = 'number:2';
+                    else {          //if (displayType == VIS.DisplayType.Amount) {
+                        oColumn.render = function (record, index, colIndex) {
+                            var val = VIS.Utility.Util.getValueOfDecimal(record[grdCols[colIndex].field]);
+                            return (val).toLocaleString();
+                        };
                     }
-                    else {
-                        oColumn.render = 'number:1';
-                    }
+                    //else {
+                    //    oColumn.render = 'number:1';
+                    //}
                     if (displayCols[item].ColumnName.toUpperCase() == 'QTYENTERED') {
                         if (multiSelection && !updating) {
                             oColumn.editable = {
@@ -2107,24 +2141,24 @@
                         }
                     }
                 }
-                    //	YesNo
-                    //else if (displayType == VIS.DisplayType.YesNo) {
+                //	YesNo
+                //else if (displayType == VIS.DisplayType.YesNo) {
 
-                    //    oColumn.render = function (record, index, colIndex) {
+                //    oColumn.render = function (record, index, colIndex) {
 
-                    //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
+                //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
 
-                    //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
-                    //    }
-                    //}
+                //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
+                //    }
+                //}
 
-                    //Date /////////
+                //Date /////////
                 else if (VIS.DisplayType.IsDate(displayType)) {
                     oColumn.render = function (record, index, colIndex) {
 
                         var d = record[grdCols[colIndex].field];
                         if (d) {
-                            d = Globalize.format(new Date(d), 'd');
+                            d = new Date(d).toLocaleDateString();
                         }
                         else d = "";
                         return d;
@@ -2174,7 +2208,7 @@
                 var row = {};
                 for (var item in dynData) {
                     //grdCol[item] = { field: dynData[item].ColumnName, sortable: true, attr: 'align=center' };
-                    row[dynData[item].ColumnName] = dynData[item].Values[j];
+                    row[dynData[item].ColumnName.toUpperCase()] = dynData[item].Values[j];
                 }
                 row['M_AttributeSetInstance_ID'] = 0;
                 row['recid'] = j + 1;
@@ -2418,23 +2452,23 @@
                             }
                             else {
                                 infoLines.push(
-                                {
-                                    _prodQty: qty,
-                                    _prdID: multiValues[item].M_PRODUCT_ID,
-                                    _prdName: multiValues[item].NAME,
-                                    _value: multiValues[item].VALUE,
-                                    _uom: multiValues[item].C_UOM_ID,
-                                    _uomName: multiValues[item].UOM,
-                                    _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
-                                    _windowNo: WindowNo,
-                                    _RefNo: "",
-                                    _Attribute: multiValues[item].M_AttributeSetInstance_ID,
-                                    _AttributeName: "",
-                                    _Locator_ID: 0,
-                                    _IsLotSerial: "N",
-                                    _countID: 0
-                                }
-                            )
+                                    {
+                                        _prodQty: qty,
+                                        _prdID: multiValues[item].M_PRODUCT_ID,
+                                        _prdName: multiValues[item].NAME,
+                                        _value: multiValues[item].VALUE,
+                                        _uom: multiValues[item].C_UOM_ID,
+                                        _uomName: multiValues[item].UOM,
+                                        _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                        _windowNo: WindowNo,
+                                        _RefNo: "",
+                                        _Attribute: multiValues[item].M_AttributeSetInstance_ID,
+                                        _AttributeName: "",
+                                        _Locator_ID: 0,
+                                        _IsLotSerial: "N",
+                                        _countID: 0
+                                    }
+                                )
                             }
                         }
                         else {

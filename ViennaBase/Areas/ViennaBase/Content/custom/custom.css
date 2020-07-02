@@ -230,7 +230,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     font-family: var(--v-c-font-family) !important;
     font-size: 1em;
 }
-.ui-widget-content {
+.ui-widget.ui-widget-content {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     color: inherit;
 }
@@ -291,7 +291,9 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 .ui-button .ui-icon, .ui-state-hover .ui-icon, .ui-state-focus .ui-icon, .ui-button:hover .ui-icon, .ui-button:focus .ui-icon, .ui-state-default .ui-icon {
     background-image: url(../migration/themes/base/images/ui-icons_ffffff_256x240.png);
 }
-
+.ui-menu .ui-state-focus, .ui-menu .ui-state-active {
+    margin: auto;
+}
 .ui-dialog .ui-dialog-buttonpane {
     border-bottom-left-radius: .40rem;
     border-bottom-right-radius: .40rem;
@@ -417,6 +419,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 input:not([type=button]), select, textarea{
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     color: rgba(var(--v-c-on-secondary), 1);
+    outline: none;
 }
 /**************************************/
 
@@ -442,4 +445,14 @@ input:not([type=button]), select, textarea{
     background-color: rgba(var(--v-c-secondary), 1);
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     color: rgba(var(--v-c-on-secondary), 1);
+}
+
+.w2ui-grid .w2ui-toolbar-search {
+    position: relative;
+}
+.w2ui-grid .w2ui-toolbar-search .w2ui-search-down {
+    margin: auto;
+    right: 5px;
+    top: 4px;
+    bottom: 0;
 }

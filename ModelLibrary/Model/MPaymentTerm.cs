@@ -203,7 +203,8 @@ namespace VAdvantage.Model
             MPaySchedule sched = new MPaySchedule(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
 
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
-            Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
+            Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 &&
+                invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
 
             if (Env.IsModuleInstalled("VA009_"))
             {
@@ -912,7 +913,8 @@ namespace VAdvantage.Model
             //	Create Schedule
             DeleteInvoicePaySchedule(invoice.GetC_Invoice_ID(), invoice.Get_Trx());
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
-            Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
+            Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
+                && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), invoice.Get_Trx());
             MInvoicePaySchedule schedule = null;
             StringBuilder _sql = new StringBuilder();
@@ -1117,7 +1119,7 @@ namespace VAdvantage.Model
                               SELECT COUNT(*) AS COUNT FROM C_Project  WHERE IsActive = 'Y' AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
                               SELECT COUNT(*) AS COUNT FROM C_Contract  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
-                               " ) ";
+                               " ) t";
                 int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (no > 0)
                 {
@@ -1173,7 +1175,8 @@ namespace VAdvantage.Model
                 schedule.SetDueDate(payDueDate);
 
                 //schedule.SetDueDate(GetDueDate(invoice));
-                schedule.SetDueAmt((invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()));
+                schedule.SetDueAmt((invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
+                    && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()));
 
                 // check next business days in case of Discount Date                
                 if (payterm.IsNextBusinessDay())

@@ -849,7 +849,8 @@
         //Fill Dynamic Column List 
         for (var c = 0; c < this.curTabfields.length; c++) {
             // get field
-            var field = this.curTabfields[c];
+            var field = jQuery.extend(true, {}, this.curTabfields[c]); 
+            field.lookup = jQuery.extend(true, {}, this.curTabfields[c].lookup);
             if (field.getIsEncrypted())
                 continue;
             // get field's column name

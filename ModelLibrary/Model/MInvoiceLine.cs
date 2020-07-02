@@ -913,7 +913,7 @@ namespace VAdvantage.Model
             {
                 sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
                     " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID = " + Country_ID + " AND NVL(tcr.C_Region_ID,0) = " + Region_ID +
-                    " AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= " + Postal + " AND tcr.postal_to >= " + Postal + " THEN 1 ELSE 2" +
+                    " AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '" + Postal + "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2" +
                     " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -932,8 +932,8 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID = " + Country_ID + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= " + Postal +
-                        " AND tcr.postal_to >= " + Postal + " THEN 1 ELSE 2" + " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID = " + Country_ID + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '" + Postal +
+                        "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2" + " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -946,8 +946,8 @@ namespace VAdvantage.Model
                     if (!String.IsNullOrEmpty(Postal))
                     {
                         sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                            " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID IS NULL " + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= "
-                            + Postal + " AND tcr.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                            " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID IS NULL " + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '"
+                            + Postal + "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                             + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                         C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     }
@@ -974,7 +974,7 @@ namespace VAdvantage.Model
             {
                 sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
                 + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND NVL(trl.C_Region_ID,0) = " + Region_ID +
-                " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= " + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '"
+                " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '" + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '"
                 + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -993,8 +993,8 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= "
-                    + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                    + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                     + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -1007,8 +1007,8 @@ namespace VAdvantage.Model
                     if (!String.IsNullOrEmpty(Postal))
                     {
                         sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                        + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= "
-                        + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                        + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                        + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                         C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
 
@@ -1036,8 +1036,8 @@ namespace VAdvantage.Model
             {
                 sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
                 + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID +
-                " AND NVL(trl.C_Region_ID,0) = " + Region_ID + " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= " + Postal + " AND trl.postal_to >= " + Postal +
-                " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                " AND NVL(trl.C_Region_ID,0) = " + Region_ID + " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '" + Postal + "' AND trl.postal_to >= '" + Postal +
+                "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (C_Tax_ID > 0)
@@ -1055,8 +1055,8 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                    + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= "
-                    + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                    + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                    + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (C_Tax_ID > 0)
@@ -1068,8 +1068,8 @@ namespace VAdvantage.Model
                     if (!String.IsNullOrEmpty(Postal))
                     {
                         sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                        + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= "
-                        + Postal + " AND trl.postal_to >= " + Postal + " THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                        + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                        + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                         C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         if (C_Tax_ID > 0)
                         {
@@ -2380,7 +2380,7 @@ namespace VAdvantage.Model
         {
             StringBuilder query = new StringBuilder();
             decimal amountAfterBreak = amount;
-            query.Append(@"SELECT UNIQUE M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
+            query.Append(@"SELECT DISTINCT M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
             int productCategoryId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
             bool isCalulate = false;
 
@@ -2526,7 +2526,7 @@ namespace VAdvantage.Model
         {
             StringBuilder query = new StringBuilder();
             decimal amountAfterBreak = amount;
-            query.Append(@"SELECT UNIQUE M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
+            query.Append(@"SELECT DISTINCT M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID = " + ProductId);
             int productCategoryId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
             bool isCalulate = false;
 
@@ -3715,6 +3715,10 @@ namespace VAdvantage.Model
                 if (newRecord || Is_ValueChanged("QtyInvoiced"))
                     SetQtyInvoiced(GetQtyInvoiced());
 
+                //JID_1744 PriceList Precision should as per Currency Precision
+                if (newRecord || Is_ValueChanged("PriceList"))
+                    SetPriceList(Decimal.Round(GetPriceList(), GetPrecision(), MidpointRounding.AwayFromZero));
+
                 //	Calculations & Rounding
                 SetLineNetAmt();
                 if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
@@ -3777,7 +3781,11 @@ namespace VAdvantage.Model
                 // Calculate Withholding Tax
                 if (newRecord || !inv.IsProcessing())
                 {
-                    CalculateWithholding(inv.GetC_BPartner_ID(), inv.GetC_BPartner_Location_ID(), inv.IsSOTrx());
+                    if (!CalculateWithholding(inv.GetC_BPartner_ID(), inv.GetC_BPartner_Location_ID(), inv.IsSOTrx()))
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
+                        return false;
+                    }
                 }
 
                 // Reset Amount Dimension if Line Amount is different
@@ -3967,6 +3975,7 @@ namespace VAdvantage.Model
          */
         private bool UpdateHeaderTax()
         {
+            MInvoice invoice = null;
             try
             {
                 //	Recalculate Tax for this Tax
@@ -3984,7 +3993,7 @@ namespace VAdvantage.Model
                 MTax taxRate = tax.GetTax();
                 if (taxRate.IsSummary())
                 {
-                    MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                    invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
                     if (!CalculateChildTax(invoice, tax, taxRate, Get_TrxName()))
                     {
                         return false;
@@ -4036,6 +4045,25 @@ namespace VAdvantage.Model
             {
                 log.Warning("(2) #" + no);
             }
+            else
+            {
+                // calculate withholdng on header 
+                if (invoice == null)
+                {
+                    invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                }
+                if (invoice.GetC_Withholding_ID() > 0)
+                {
+                    if (!invoice.SetWithholdingAmount(invoice))
+                    {
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx() , "WrongBackupWithholding"));
+                    }
+                    else
+                    {
+                        invoice.Save();
+                    }
+                }
+            }
             _parent = null;
 
             return no == 1;
@@ -4063,7 +4091,13 @@ namespace VAdvantage.Model
             return true;
         }
 
-
+        /// <summary>
+        /// This function is used to calculate withholding cost
+        /// </summary>
+        /// <param name="C_Bpartner_ID">Buisness partner refrence</param>
+        /// <param name="C_BPartner_Location_ID">business partner location</param>
+        /// <param name="issotrx">transaction type</param>
+        /// <returns>success</returns>
         private bool CalculateWithholding(int C_Bpartner_ID, int C_BPartner_Location_ID, bool issotrx)
         {
             Decimal withholdingAmt = 0.0M;
@@ -4090,13 +4124,17 @@ namespace VAdvantage.Model
                     (issotrx && Util.GetValueOfString(ds.Tables[0].Rows[0]["IsApplicableonARInvoice"]).Equals("Y")))
                 {
                     sql = "SELECT  C_Withholding_ID , InvCalculation, InvPercentage FROM C_Withholding " +
-                          " WHERE C_WithholdingCategory_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_WithholdingCategory_ID"]) +
+                          " WHERE IsActive = 'Y' AND C_WithholdingCategory_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_WithholdingCategory_ID"]) +
                           " AND TransactionType = '" + (issotrx ? X_C_Withholding.TRANSACTIONTYPE_Sale : X_C_Withholding.TRANSACTIONTYPE_Purchase) + "' " +
                           " AND IsApplicableonInv='Y' AND AD_Client_ID = " + GetAD_Client_ID() +
                           " AND AD_Org_ID IN (0 , " + GetAD_Org_ID() + ")";
                     if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) > 0)
                     {
                         sql += " AND NVL(C_Region_ID, 0) IN (0 ,  " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]) + ")";
+                    }
+                    else
+                    {
+                        sql += " AND NVL(C_Region_ID, 0) IN (0) ";
                     }
                     if (Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) > 0)
                     {
@@ -4132,6 +4170,28 @@ namespace VAdvantage.Model
 
                         SetWithholdingAmt(Decimal.Round(withholdingAmt, GetPrecision()));
                         SetC_Withholding_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"]));
+                    }
+                    else
+                    {
+                        // when exact data not found 
+                        SetWithholdingAmt(0);
+                        // when withholdinf define by user manual or already set
+                        if (GetC_Withholding_ID() > 0)
+                        {
+                            //SetC_Withholding_ID(0);
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    // when withholding not applicable on Business Partner
+                    SetWithholdingAmt(0);
+                    // when withholdinf define by user manual or already set, but not applicable on invoice
+                    if (GetC_Withholding_ID() > 0)
+                    {
+                        //SetC_Withholding_ID(0);
+                        return false;
                     }
                 }
             }
@@ -5362,7 +5422,7 @@ namespace VAdvantage.Model
         private int GetExpectedLandedCostId(MLandedCost lc, int C_OrderLine_ID)
         {
             int C_ExpectedCost_ID = 0;
-            String sql = @"Select Unique C_Expectedcost.C_ExpectedCost_ID From C_Expectedcost 
+            String sql = @"Select Distinct C_Expectedcost.C_ExpectedCost_ID From C_Expectedcost 
                             INNER JOIN C_Expectedcostdistribution ON C_Expectedcost.C_Expectedcost_Id = C_Expectedcostdistribution.C_Expectedcost_Id
                             WHERE C_Expectedcost.M_Costelement_Id = " + lc.GetM_CostElement_ID() + @"
                             AND C_Expectedcostdistribution.C_OrderLine_ID = " + C_OrderLine_ID;

@@ -342,7 +342,7 @@ namespace VIS.Models
                                MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
                 
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( "+sql+" )",null,null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( "+sql+" ) t",null,null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;

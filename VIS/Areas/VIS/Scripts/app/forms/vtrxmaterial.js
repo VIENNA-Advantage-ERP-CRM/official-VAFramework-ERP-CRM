@@ -58,11 +58,11 @@
         //Load BusyDiv
         //*****************
         function busyIndicator() {
-            $divBusy = $("<div>");
-            $divBusy.css({
-                "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
-                "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
-            });
+            $divBusy = $('<div class="vis-busyindicatorouterwrap" style="visibility: hidden;"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$divBusy.css({
+            //    "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
+            //    "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
+            //});
             $divBusy[0].style.visibility = "hidden";
             $root.append($divBusy);
         };
@@ -92,81 +92,108 @@
             $cmbMoventType = new VIS.Controls.VComboBox("MovementType", false, false, true, lookupMoventType, 29);
 
             //*************Lookup for Locator************            
-            var containerdivLocator = $('<div class="d-flex"></div>');
+            //var containerdivLocator = $('<div class="d-flex"></div>');
+            var $divLocatorInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divLocatorCtrlwrap = $("<div class='vis-control-wrap'>");
+            var $divLocatorBtnwrap = $("<div class='input-group-append'>");
             var lookupLocator = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Locator_ID", 0, false, "");
             $locator = new VIS.Controls.VTextBoxButton("M_Locator_ID", false, false, true, VIS.DisplayType.Search, lookupLocator);
-            containerdivLocator.append($locator.getControl());
-            containerdivLocator.append($locator.getBtn(0));
-            containerdivLocator.append($locator.getBtn(1));
+            $divLocatorInputwrap.append($divLocatorCtrlwrap);
+            $divLocatorCtrlwrap.append($locator.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            $divLocatorInputwrap.append($divLocatorBtnwrap);
+            $divLocatorBtnwrap.append($locator.getBtn(0));
+            $divLocatorBtnwrap.append($locator.getBtn(1));
             // $locator.getControl().css("width", "73%");
-            $locator.getControl().addClass("vis-lookupTextboxes");
+            //$locator.getControl().addClass("vis-lookupTextboxes");
             $locator.getBtn(0).addClass("vis-lookupButtons");
             $locator.getBtn(1).addClass("vis-lookupButtons");
             // $locator.getBtn(0).css("float", "left");
             //  $locator.getBtn(1).css("float", "right");
-            $locator.getBtn(0).css("height", "30");
-            $locator.getBtn(0).css("width", "30");
-            $locator.getBtn(1).css("width", "30");
-            $locator.getBtn(1).css("height", "30");
-            $locator.getBtn(0).css("padding", "0px");
-            $locator.getBtn(1).css("padding", "0px");
+            //$locator.getBtn(0).css("height", "30");
+            //$locator.getBtn(0).css("width", "30");
+            //$locator.getBtn(1).css("width", "30");
+            //$locator.getBtn(1).css("height", "30");
+            //$locator.getBtn(0).css("padding", "0px");
+            //$locator.getBtn(1).css("padding", "0px");
             //*******LookUp Locator Ends**************
             //*************Lookup for Product************            
-            var containerdivProduct = $('<div class="d-flex"></div>');
+            //var containerdivProduct = $('<div class="d-flex"></div>');
+            var $divProductInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divProductCtrlwrap = $("<div class='vis-control-wrap'>");
+            var $divProductBtnwrap = $("<div class='input-group-append'>");
             var lookupProduct = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Product_ID", 0, false, "");
             $product = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, lookupProduct);
-            containerdivProduct.append($product.getControl());
-            containerdivProduct.append($product.getBtn(0));
-            containerdivProduct.append($product.getBtn(1));
+            $divProductInputwrap.append($divProductCtrlwrap);
+            $divProductCtrlwrap.append($product.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            $divProductInputwrap.append($divProductBtnwrap);
+            $divProductBtnwrap.append($product.getBtn(0));
+            $divProductBtnwrap.append($product.getBtn(1));
             // $product.getControl().css("width", "73%");
-            $product.getControl().addClass("vis-lookupTextboxes");
+            //$product.getControl().addClass("vis-lookupTextboxes");
             $product.getBtn(0).addClass("vis-lookupButtons");
             $product.getBtn(1).addClass("vis-lookupButtons");
             //$product.getBtn(0).css("float", "left");
             //$product.getBtn(1).css("float", "right");
-            $product.getBtn(0).css("height", "30");
-            $product.getBtn(0).css("width", "30");
-            $product.getBtn(0).css("padding", "0px");
-            $product.getBtn(1).css("height", "30");
-            $product.getBtn(1).css("width", "30");
-            $product.getBtn(0).css("padding", "0px");
-            $product.getBtn(1).css("padding", "0px");
+            //$product.getBtn(0).css("height", "30");
+            //$product.getBtn(0).css("width", "30");
+            //$product.getBtn(0).css("padding", "0px");
+            //$product.getBtn(1).css("height", "30");
+            //$product.getBtn(1).css("width", "30");
+            //$product.getBtn(0).css("padding", "0px");
+            //$product.getBtn(1).css("padding", "0px");
             //*******LookUp Product Ends**************
             $divContainer = $("<div class='vis-mainContainer'>");
 
-            var $divInfo = $("<div class='vis-pSelectInfo'>");
+            var $divInfo = $("<div class='vis-pSelectInfo vis-leftsidebarouterwrap'>");
             var $divInfoinn = $("<div class='vis-pSelectInner'>");
 
             $divInfo.append($divInfoinn);
 
             var $divOrganization = $("<div class='vis-paymentselect-field'>");
-            $divOrganization.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "AD_Org_ID") + " </label>"));
-            $divOrganization.append($cmbOrganization.getControl());
+            var $divOrganizationInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divOrganizationCtrlwrap = $("<div class='vis-control-wrap'>");
+            $divOrganization.append($divOrganizationInputwrap);
+            $divOrganizationInputwrap.append($divOrganizationCtrlwrap);
+            $divOrganizationCtrlwrap.append($cmbOrganization.getControl());
+            $divOrganizationCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "AD_Org_ID") + " </label>"));
             $divInfoinn.append($divOrganization);
 
             var $divMovementType = $("<div class='vis-paymentselect-field'>");
-            $divMovementType.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "MovementType") + " </label>"));
-            $divMovementType.append($cmbMoventType.getControl());
+            var $divMovementTypeInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divMovementTypeCtrlwrap = $("<div class='vis-control-wrap'>");
+            $divMovementType.append($divMovementTypeInputwrap);
+            $divMovementTypeInputwrap.append($divMovementTypeCtrlwrap);
+            $divMovementTypeCtrlwrap.append($cmbMoventType.getControl());
+            $divMovementTypeCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "MovementType") + " </label>"));
             $divInfoinn.append($divMovementType);
 
             var $divLocator = $("<div class='vis-paymentselect-field'>");
-            $divLocator.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + " </label>"));
-            $divLocator.append(containerdivLocator);
+            $divLocator.append($divLocatorInputwrap);            
+            $divLocatorCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + " </label>"));
             $divInfoinn.append($divLocator);
 
             var $divProduct = $("<div class='vis-paymentselect-field'>");
-            $divProduct.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Product") + " </label>"));
-            $divProduct.append(containerdivProduct);
+            $divProduct.append($divProductInputwrap);  
+            $divProductCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Product") + " </label>"));
+            //$divProduct.append(containerdivProduct);
             $divInfoinn.append($divProduct);
 
             var $divFromDate = $("<div class='vis-paymentselect-field'>");
-            $divFromDate.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateFrom") + " </label>"));
-            $divFromDate.append($("<input  id='VIS_dtpFromDate" + $self.windowNo + "'type='date'>"));
+            var $divFromDateInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divFromDateCtrlwrap = $("<div class='vis-control-wrap'>");
+            $divFromDateCtrlwrap.append($("<input  id='VIS_dtpFromDate" + $self.windowNo + "'type='date'>"));
+            $divFromDateCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateFrom") + " </label>"));
+            $divFromDate.append($divFromDateInputwrap);
+            $divFromDateInputwrap.append($divFromDateCtrlwrap);
             $divInfoinn.append($divFromDate);
 
             var $divToDate = $("<div class='vis-paymentselect-field'>");
-            $divToDate.append($("<label style='width:100%;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateTo") + " </label>"));
-            $divToDate.append($("<input  id='VIS_dtpToDate" + $self.windowNo + "'type='date'>"));
+            var $divToDateInputwrap = $("<div class='input-group vis-input-wrap'>");
+            var $divToDateCtrlwrap = $("<div class='vis-control-wrap'>");
+            $divToDateCtrlwrap.append($("<input  id='VIS_dtpToDate" + $self.windowNo + "'type='date'>"));
+            $divToDateCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "DateTo") + " </label>"));
+            $divToDate.append($divToDateInputwrap);
+            $divToDateInputwrap.append($divToDateCtrlwrap);
             $divInfoinn.append($divToDate);
 
             var $divRefresh = $("<div class='vis-paymentselect-field'>");

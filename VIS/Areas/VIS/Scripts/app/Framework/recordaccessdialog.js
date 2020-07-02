@@ -9,6 +9,8 @@
         var divRecord = null;
         var divNav = null;
         var divRole = null;
+        var divRoleInputWrp = null;
+        var divRoleInputCtrlWrp = null;
         var lblRole = null;
         var cmbRole = null;
         var divAccOp = null;
@@ -95,10 +97,15 @@
             drow1 = $("<div class='vis-rad-contantTop'>");
             //divRecord = $("<div class='vis-rad-recordData' style='float:" + VIS.Application.isRTL?'right':'left' + "'>");
             divRole = $("<div class='vis-rad-roleCombo'>");
-            lblRole = $("<lable>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'AD_Role_ID'));
+            divRoleInputWrp = $("<div class='input-group vis-input-wrap'>");
+            divRoleInputCtrlWrp = $("<div class='vis-control-wrap'>");
+
+            lblRole = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'AD_Role_ID'));
             cmbRole = $("<select class='vis-custom-select'>");
-            divRole.append(lblRole);
-            divRole.append(cmbRole);
+            divRole.append(divRoleInputWrp);
+            divRoleInputWrp.append(divRoleInputCtrlWrp);
+            divRoleInputCtrlWrp.append(cmbRole);
+            divRoleInputCtrlWrp.append(lblRole);
             divAccOp = $("<div class='vis-rad-recordOp'>");
 
             divActive = $("<div class='vis-rad-check'>");

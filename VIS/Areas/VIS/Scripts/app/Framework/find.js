@@ -1702,7 +1702,7 @@
 
                             }
                             if (parsedValue == null && value != null && (value.toString().trim().startsWith("adddays") || value.toString().trim().startsWith("@"))) {
-                                var Where = columnName + optr + value;
+                                var Where = tableName + "." + columnName + optr + value;
                                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
 
                                     Where = columnName + VIS.Query.prototype.IN + '(' + parsedValue + ')';
@@ -1737,7 +1737,7 @@
                 sb += " UPPER( ";
             }
 
-            sb += column;
+            sb += tableName+"."+ column;
 
 
             if (typeof code == "string") {

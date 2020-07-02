@@ -676,12 +676,17 @@ function VCard(fields, record) {
 
         else if (VIS.DisplayType.IsDate(dt)) {
             if (value) {
+                // JID_1826 Date is showing as per browser culture
+                var d = new Date(value);
                 if (dt == VIS.DisplayType.Date)
-                    value = Globalize.format(new Date(value), 'd');
+                    value = d.toLocaleDateString();
+                //value = Globalize.format(new Date(value), 'd');
                 else if (dt == VIS.DisplayType.DateTime)
-                    value = Globalize.format(new Date(value), 'f');
+                    value = d.toDateString();
+                //value = Globalize.format(new Date(value), 'f');
                 else
-                    value = Globalize.format(new Date(value), 't');
+                    value = d.toLocaleTimeString();
+                //value = Globalize.format(new Date(value), 't');
             }
             else value = null;
         }

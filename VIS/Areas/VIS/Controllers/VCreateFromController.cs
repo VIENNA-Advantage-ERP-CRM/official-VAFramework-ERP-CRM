@@ -105,7 +105,7 @@ namespace VIS.Controllers
                 + "l.M_Product_ID,COALESCE(p.Name,c.Name),COALESCE(p.Value,c.Value),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description, l.IsDropShip, o.C_PaymentTerm_ID , t.Name "
                 + "ORDER BY l.Line";
 
-            string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
+            string sqlNew = "SELECT * FROM (" + sql + ") t WHERE QUANTITY > 0";
 
             return sqlNew;
         }
@@ -256,7 +256,7 @@ namespace VIS.Controllers
                       + "l.M_Product_ID,c.Name,c.Value,l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, " + precision + ", l.IsDropShip , o.C_PaymentTerm_ID , t.Name");
             }
             // JID_1287: Line number sequence to be maintained when we create lines from the reference of other documents.
-            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") WHERE QUANTITY > 0 ORDER BY LINE";
+            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") t WHERE QUANTITY > 0 ORDER BY LINE";
 
             return sqlNew;
         }
@@ -396,7 +396,7 @@ namespace VIS.Controllers
                                                                                                                                                                                //+ "l.M_Product_ID,COALESCE(p.Name,c.Name), l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description "
                 + "ORDER BY l.Line";
 
-            string sqlNew = "SELECT * FROM (" + sql + ") WHERE QUANTITY > 0";
+            string sqlNew = "SELECT * FROM (" + sql + ") t WHERE QUANTITY > 0";
 
             return sqlNew;
         }
@@ -451,6 +451,8 @@ namespace VIS.Controllers
         /// <returns></returns>
         private string GetDataSqlQueries(string mInOutId, string isBaseLanguages, string mProductIDD)
         {
+            var ctx = Session["ctx"] as Ctx;
+            bool isAllownonItem = Util.GetValueOfString(ctx.GetContext("$AllowNonItem")).Equals("Y");
             string precision = "3";
             if (isBaseLanguages.ToUpper().Contains("C_UOM_TRL"))
             {
@@ -498,16 +500,65 @@ namespace VIS.Controllers
 
             if (isBaseLanguages.ToUpper().Contains("C_UOM_TRL"))
             {
-                sql += " ,uom1.stdprecision ORDER BY l.Line";
+                sql += " ,uom1.stdprecision ";
             }
             else
             {
-                sql += " ,uom.stdprecision ORDER BY l.Line";
+                sql += " ,uom.stdprecision ";
             }
 
+            //JID_1728 Show Shipmentline with Charge also, based on the setting for Non Item type on Tenant.
+            if (isAllownonItem)
+            {
+                sql += "UNION SELECT "
+              //+ "round((l.MovementQty-SUM(COALESCE(mi.Qty,0))) * "					//	1               
+              // Changes done by Bharat on 07 July 2017 restrict to create invoice if Invoice already created against that for same quantity
+              + "ROUND((l.MovementQty-SUM(COALESCE(mi.QtyInvoiced,0))) * "                    //	1  
+              + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END )," + precision + ") as QUANTITY,"    //	2
+                                                                                                                             //+ "round((l.MovementQty-SUM(COALESCE(mi.Qty,0))) * "					//	1               
+              + "ROUND((l.MovementQty-SUM(COALESCE(mi.QtyInvoiced,0))) * "                    //	1  
+              + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END )," + precision + ") as QTYENTER," //	2
+              + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM," // 3..4
+              + " 0 as M_Product_ID,c.Name as Product,c.Value as PRODUCTSEARCHKEY, l.M_InOutLine_ID,l.Line," // 5..8
+              + " l.C_OrderLine_ID, " // 9
+              + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
+              + " ins.description , o.C_PaymentTerm_ID , pt.Name AS PaymentTermName "
+              + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' ) 
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID  AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance ";
+                if (isBaseLanguages != "")
+                {
+                    sql += isBaseLanguages + " ";
+                }
 
+                sql += "INNER JOIN C_charge c ON (l.C_charge_ID=c.C_charge_ID) "
+                    + " LEFT JOIN C_OrderLine ol ON ol.C_OrderLine_ID = l.c_orderline_id "
+                    + " LEFT JOIN c_order o ON o.c_order_id = ol.c_order_id LEFT JOIN c_paymentterm pt ON pt.C_Paymentterm_id = o.c_paymentterm_id "
+                    //+ "LEFT OUTER JOIN M_MatchInv mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) "
+                    + "LEFT JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID "
+                    + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) "
+                    + "LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
+                    + "WHERE l.M_InOut_ID=" + mInOutId; // #1
+                if (mProductIDD != "")
+                {
+                    sql += mProductIDD + " ";
+                }
+                sql += " GROUP BY l.MovementQty, l.QtyEntered," + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
+                    + "l.M_Product_ID,c.Name,c.Value, l.M_InOutLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description , o.C_PaymentTerm_ID , pt.Name ";
 
-            return sql;
+                if (isBaseLanguages.ToUpper().Contains("C_UOM_TRL"))
+                {
+                    sql += " ,uom1.stdprecision ";
+                }
+                else
+                {
+                    sql += " ,uom.stdprecision ";
+                }
+            }
+
+            string sqlNew = "SELECT * FROM (" + sql.ToString() + ") t ORDER BY Line";
+
+            return sqlNew;
         }
 
         /// <summary>
@@ -730,7 +781,7 @@ namespace VIS.Controllers
                 }
             }
 
-            sql.Append(") "
+            sql.Append(") t"
                    + " WHERE (   "
                    + "   CASE    "
                    + "     WHEN Iscostadjustmentonlost = 'N' "

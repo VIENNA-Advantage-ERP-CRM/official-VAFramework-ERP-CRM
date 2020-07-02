@@ -48,6 +48,8 @@ namespace VIS.DataContracts
         public DateTime? ValidFrom { get; set; }
 
         public int VerRecID { get; set; }
+
+        public List<string> UnqFields { get; set; }
     }
 
     public class WindowField

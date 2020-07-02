@@ -270,17 +270,17 @@ namespace VAdvantage.Model
             // get Cost element id of selected costing method
             if (costingMethod != "C")
             {
-                costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT UNIQUE M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
+                costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
                             AND CostingMethod = '" + costingMethod + "' AND AD_Client_ID = " + product.GetAD_Client_ID()));
             }
             else if (costingMethod == "C") // costing method on cost combination - Element line
             {
-                string sql = @"SELECT  cel.m_ref_costelement
+                string sql = @"SELECT  cel.M_Ref_CostElement
                                     FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID  = cel.M_CostElement_ID
                                     WHERE ce.AD_Client_ID   =" + product.GetAD_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.M_CostElement_ID = " + costElementId + @"
-                                    AND m_ref_costelement  IN   (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  )
+                                    AND  CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  )
                                     ORDER BY ce.M_CostElement_ID";
                 costElementId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             }
@@ -3837,7 +3837,7 @@ namespace VAdvantage.Model
 
             // Get Cost element of Cost Combination type
             sql = @"SELECT ce.M_CostElement_ID ,  ce.Name ,  cel.lineno ,  cel.m_ref_costelement , 
-                      (SELECT CASE  WHEN costingmethod IS NOT NULL THEN 1  ELSE 0 END  FROM m_costelement WHERE m_costelement_id = cel.m_ref_costelement ) AS iscostMethod 
+                      (SELECT CASE  WHEN costingmethod IS NOT NULL THEN 1  ELSE 0 END  FROM m_costelement WHERE m_costelement_id = CAST(cel.M_Ref_CostElement AS INTEGER) ) AS iscostMethod 
                             FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID = cel.M_CostElement_ID "
                           + "WHERE ce.AD_Client_ID=" + GetAD_Client_ID()
                           + " AND ce.IsActive='Y' AND ce.CostElementType='C' AND cel.IsActive='Y' ";
@@ -4013,9 +4013,15 @@ namespace VAdvantage.Model
         {
             // is used to get current qty of defined costing method on Product category or Accounting schema
             Decimal Qty = MCost.GetproductCostAndQtyMaterial(cd.GetAD_Client_ID(), AD_Org_ID, product.GetM_Product_ID(), M_ASI_ID, cd.Get_Trx(), M_Warehouse_ID, true);
-            if (Qty == 0)
+            if (Qty == 0 && cd.GetM_CostElement_ID() > 0)
             {
-                return true;
+                // check, is this kind of Custome or Freight (bypass)
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(M_CostElement_ID) FROM M_CostElement WHERE M_CostElement_ID = " + cd.GetM_CostElement_ID() +
+                           @" AND CostElementType = '" + X_M_CostElement.COSTELEMENTTYPE_Material + "' AND CostingMethod IS NULL"));
+                if (count > 0)
+                {
+                    return true;
+                }
             }
 
             bool isReversed = false;
@@ -4053,14 +4059,22 @@ namespace VAdvantage.Model
                              (windowName.Equals("Inventory Move") && ((cd.GetQty() > 0 && !isReversed) || (cd.GetQty() < 0 && isReversed)))
                              ))
                     {
-                        // not to distribute cost in thiscase 
+                        // not to distribute cost in this case, but when qty become ZERO, than set current cost as ZERO
+                        if (windowName.Equals("Physical Inventory") && cost.GetCurrentQty().Equals(0))
+                        {
+                            cost.SetCurrentCostPrice(0);
+                        }
                     }
                     else
                     {
-                        currentCost = Decimal.Round(Decimal.Divide(
-                                                     Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), Qty),
-                                                     acctSchema.GetCostingPrecision());
-                        cost.SetCurrentCostPrice(currentCost);
+                        if (!Qty.Equals(0))
+                        {
+                            currentCost = Decimal.Round(Decimal.Divide(
+                                                         Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), Qty),
+                                                         acctSchema.GetCostingPrecision());
+
+                            cost.SetCurrentCostPrice(currentCost);
+                        }
                     }
                     cost.SetCurrentQty(Qty);
                     if (!cost.Save(cd.Get_Trx()))

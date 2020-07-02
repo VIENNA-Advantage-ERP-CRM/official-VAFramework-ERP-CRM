@@ -48,14 +48,14 @@ namespace VAdvantage.DBPort
                 int end = joinClause.IndexOf('.', indexEqual);
                 if (end == -1)  //  no alias
                     end = joinClause.IndexOf('(', indexEqual);
-                m_joinAlias = joinClause.Substring(indexEqual + 1, end).Trim();  //  c
+                m_joinAlias = joinClause.Substring(indexEqual + 1, end - (indexEqual + 1)).Trim();  //  c
             }
             else            //  f.AD_Column_ID(+) = c.AD_Column_ID  => c / f
             {
                 int end = joinClause.IndexOf('.', indexEqual);
                 if (end == -1)  //  no alias
                     end = joinClause.Length;
-                m_mainAlias = joinClause.Substring(indexEqual + 1, end).Trim();  //  c
+                m_mainAlias = joinClause.Substring(indexEqual + 1, end - (indexEqual + 1)).Trim();  //  c
                 m_joinAlias = joinClause.Substring
                     (0, Util.FindIndexOf(joinClause, '.', '(')).Trim();          //  f
             }
@@ -176,7 +176,7 @@ namespace VAdvantage.DBPort
          *  @return info
          */
         public override String ToString()
-        { 
+        {
             StringBuilder sb = new StringBuilder("Join[");
             sb.Append(m_joinClause)
                 .Append(" - Main=").Append(m_mainTable).Append("/").Append(m_mainAlias)

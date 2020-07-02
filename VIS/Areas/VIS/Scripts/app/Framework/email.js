@@ -180,7 +180,7 @@
             var $btncloseChart = null;
             var pheader;
             if (isEmail == true) {
-                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-mainMenuIcons vis-icon-menuclose"></a>');
+                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="vis vis-cross"></i></a>');
                 if (callingFromOutsideofWindow) {
                     pheader = $('<p>' + VIS.Msg.getMsg("EMail") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
                 }
@@ -191,7 +191,7 @@
 
             }
             else {
-                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-mainMenuIcons vis-icon-menuclose"></a>');
+                $btncloseChart = $('<a href="javascript:void(0)"  class="vis-icon-menuclose"><i class="vis vis-cross"></i></a>');
                 if (callingFromOutsideofWindow) {
                     pheader = $('<p>' + VIS.Msg.getMsg("Letter") + ' (' + VIS.Msg.getMsg("Contacts") + ')' + ' </p>');
                 }
@@ -647,7 +647,7 @@
 
 
         this.leftULsize = function () {
-            debugger;
+            //debugger;
 
             if (!callingFromOutsideofWindow) {
                 var ulHeight = ($scrollIcon.height() + $lineImgDiv.height()) + 53;
@@ -982,9 +982,9 @@
 
             $AttacmentOption.css('width', 'auto');
             $AttacmentOption.css('height', '100%');
-            var li = "<li style='margin-top:15px;margin-left:10px;margin-right:13px;font-size: 15px' class='vis-filesystem' value='0'>" + VIS.Msg.getMsg("FileSystem") + "</li> ";
+            var li = "<li class='vis-filesystem' value='0'>" + VIS.Msg.getMsg("FileSystem") + "</li> ";
             if (window.VADMS) {
-                li += "<li style='margin-top:15px;margin-left:10px;margin-right:13px;font-size: 15px' class='vis-dms' value='1'>" + VIS.Msg.getMsg("DMS") + "</li>"
+                li += "<li class='vis-dms' value='1'>" + VIS.Msg.getMsg("DMS") + "</li>"
             }
             $AttacmentOption.append(li);
             $root.append($AttacmentOption);
@@ -2578,8 +2578,21 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+                        var displayType= _curtab.getField(columnName).getDisplayType()
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+                       
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
+
+                        //toLocaleDateString
+                        //toLocaleTimeString
                     }
                     else {
                         fieldValue = rowsSource[i][columnName.toLower()];
@@ -2607,8 +2620,19 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+                        var displayType = _curtab.getField(columnName).getDisplayType();
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
+
                     }
                     else {
                         if (_curGC.singleRow == true && rowsSource.length == 0) {
@@ -2642,8 +2666,20 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+
+                        var displayType = _curtab.getField(columnName).getDisplayType();
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
+
                     }
                     else {
                         fieldValue = rowsSource[i][columnName.toLower()];
@@ -2680,8 +2716,19 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
+
+                        var displayType = _curtab.getField(columnName).getDisplayType()
                         fieldValue = _curtab.getField(columnName).value;
-                        fieldValue = new Date(fieldValue).toLocaleString();
+
+                        if (VIS.DisplayType.Date == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleDateString();
+                        }
+                        else if (VIS.DisplayType.Time == displayType) {
+                            fieldValue = new Date(fieldValue).toLocaleTimeString();
+                        }
+                        else {
+                            fieldValue = new Date(fieldValue).toLocaleString();
+                        }
                     }
                     else {
                         if (_curGC.singleRow == true && rowsSource.length == 0) {

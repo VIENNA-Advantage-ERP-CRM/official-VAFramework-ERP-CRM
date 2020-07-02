@@ -327,24 +327,31 @@ namespace VAdvantage.Process
 
             IDataReader idr = null;
             IDataReader idr1 = null;
+            DataTable dt = null;
+            DataTable dt1 = null;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), param, Get_TrxName());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                
                 sql.Clear();
                 //
-                while (idr.Read())
+                foreach (DataRow dr in dt.Rows)
+                // while (idr.Read())
                 {
                     C_Invoice_ID = 0; C_Currency_ID = 0; GrandTotal = 0; Open = 0; DaysDue = 0;
                     IsInDispute = false; C_BPartner_ID = 0; PaySchedule_ID = 0;
 
-                    C_Invoice_ID = Utility.Util.GetValueOfInt(idr[0]);
-                    C_Currency_ID = Utility.Util.GetValueOfInt(idr[1]);
-                    GrandTotal = Utility.Util.GetValueOfDecimal(idr[2]);
-                    Open = Utility.Util.GetValueOfDecimal(idr[7]);
-                    DaysDue = Utility.Util.GetValueOfInt(idr[4]);
-                    IsInDispute = "Y".Equals(Utility.Util.GetValueOfString(idr[5]));
-                    C_BPartner_ID = Utility.Util.GetValueOfInt(idr[6]);
-                    PaySchedule_ID = Utility.Util.GetValueOfInt(idr[8]);
+                    C_Invoice_ID = Utility.Util.GetValueOfInt(dr[0]);
+                    C_Currency_ID = Utility.Util.GetValueOfInt(dr[1]);
+                    GrandTotal = Utility.Util.GetValueOfDecimal(dr[2]);
+                    Open = Utility.Util.GetValueOfDecimal(dr[7]);
+                    DaysDue = Utility.Util.GetValueOfInt(dr[4]);
+                    IsInDispute = "Y".Equals(Utility.Util.GetValueOfString(dr[5]));
+                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr[6]);
+                    PaySchedule_ID = Utility.Util.GetValueOfInt(dr[8]);
 
                     //
                     // Check for Dispute
@@ -368,13 +375,17 @@ namespace VAdvantage.Process
                     param1[1] = new SqlParameter("@C_Invoice_ID", C_Invoice_ID);
                     param1[2] = new SqlParameter("@C_InvoicePaySchedule_ID", PaySchedule_ID);
                     idr1 = DataBase.DB.ExecuteReader(sql2, param1, Get_TrxName());
-                    //	SubQuery
-                    if (idr1.Read())
-                    {
-                        timesDunned = Utility.Util.GetValueOfInt(idr1[0]);
-                        daysAfterLast = Utility.Util.GetValueOfInt(idr1[1]);
-                    }
+                    dt1 = new DataTable();
+                    dt1.Load(idr);
                     idr1.Close();
+                    //	SubQuery
+                    foreach (DataRow dr1 in dt1.Rows)
+                    // if (idr1.Read())
+                    {
+                        timesDunned = Utility.Util.GetValueOfInt(dr1[0]);
+                        daysAfterLast = Utility.Util.GetValueOfInt(dr1[1]);
+                    }
+                    //idr1.Close();
                     //	SubQuery
 
                     // Ensure that Daysbetween Dunning is enforced
@@ -403,7 +414,7 @@ namespace VAdvantage.Process
                         count++;
                     }
                 }
-                idr.Close();
+               // idr.Close();
             }
             catch (Exception e)
             {
@@ -530,20 +541,26 @@ namespace VAdvantage.Process
 
             int count = 0;
             IDataReader idr = null;
+            DataTable dt = null;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
-                sql.Clear();
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+              
+                    sql.Clear();
+                foreach (DataRow dr in dt.Rows)
 
-                while (idr.Read())
+                    //while (idr.Read())
                 {
                     C_Payment_ID = 0; C_Currency_ID = 0; PayAmt = 0; openAmt = 0; C_BPartner_ID = 0;
 
-                    C_Payment_ID = Utility.Util.GetValueOfInt(idr[0]);
-                    C_Currency_ID = Utility.Util.GetValueOfInt(idr[1]);
-                    PayAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(idr[2]));//.getBigDecimal(3).negate();
-                    openAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(idr[3]));// rs.getBigDecimal(4).negate();
-                    C_BPartner_ID = Utility.Util.GetValueOfInt(idr[4]);//.getInt(5);
+                    C_Payment_ID = Utility.Util.GetValueOfInt(dr[0]);
+                    C_Currency_ID = Utility.Util.GetValueOfInt(dr[1]);
+                    PayAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr[2]));//.getBigDecimal(3).negate();
+                    openAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr[3]));// rs.getBigDecimal(4).negate();
+                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr[4]);//.getInt(5);
 
                     // checkup the amount
                     if (Env.ZERO.CompareTo(openAmt) == 0)
@@ -557,7 +574,7 @@ namespace VAdvantage.Process
                         count++;
                     }
                 }
-                idr.Close();
+               // idr.Close();
             }
             catch (Exception e)
             {

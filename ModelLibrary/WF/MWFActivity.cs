@@ -3002,7 +3002,6 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 // mail or notice
                 if (rl.Length <= 0)
                     return;
-
                 //Notice
                 if (action != null && action.Equals(MWFNode.ACTION_EMailPlusFaxEMail) &&
                   (MUser.NOTIFICATIONTYPE_Notice.Equals(user.GetNotificationType()) ||

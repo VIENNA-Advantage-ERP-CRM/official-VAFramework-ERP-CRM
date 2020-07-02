@@ -784,8 +784,8 @@ namespace VAdvantage.WF
                 int wfcattSetIns = Util.GetValueOfInt(GetC_GenAttributeSetInstance_ID());
                 int rcattSetIns = Util.GetValueOfInt(po.Get_Value("C_GenAttributeSetInstance_ID"));
 
-                DataSet wfcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id=" + wfcattSetIns, null);
-                DataSet rcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id=" + rcattSetIns, null);
+                DataSet wfcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id='" + wfcattSetIns + "'", null);
+                DataSet rcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id='" + rcattSetIns + "'", null);
                 bool retVal = true;
                 for (int i = 0; i < wfcDs.Tables[0].Rows.Count; i++)
                 {
