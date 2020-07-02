@@ -3167,6 +3167,7 @@ namespace VAdvantage.Model
             }
             else if (Env.IsModuleInstalled("VA009_") && GetVA009_OrderPaySchedule_ID() != 0)
             {
+            
                 if (GetVA009_OrderPaySchedule_ID() != 0 && GetDescription() != null && GetDescription().Contains("{->"))
                 {
                     // also need to set Execution Status As Awaited
@@ -3183,6 +3184,7 @@ namespace VAdvantage.Model
                         MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                         MClientInfo client = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
                         MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetC_AcctSchema1_ID());
+                 
                         if (order.GetC_Currency_ID() != GetC_Currency_ID())
                         {
                             orderPaidAmt = MConversionRate.Convert(GetCtx(), orderPaidAmt, GetC_Currency_ID(), order.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
@@ -3200,6 +3202,7 @@ namespace VAdvantage.Model
                                         @" , VA009_PaidAmnt = " + basePaidAmt +
                                         @" , VA009_Variance = -( " + (GetOverUnderAmt() != 0 ? orderPaidAmt.ToString() : " DueAmt ") + " - " + orderPaidAmt + " ) " +
                                         @" , VA009_ExecutionStatus = 'I' " +
+                                        @" , VA009_PaymentMethod_ID =" + GetVA009_PaymentMethod_ID() + //by shubham (JID_0519_2) to update payment method in order schedule
                                         @" WHERE VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
 
                         // when underr amount contain value then we need to split order schedule
@@ -3326,6 +3329,7 @@ namespace VAdvantage.Model
                 GetCtx().SetContext("prepayOrder", "");
             }
 
+            
             return DocActionVariables.STATUS_COMPLETED;
         }
 
