@@ -289,7 +289,8 @@ namespace VIS.Models
                 {
                     dtpicGuaranteeDate = _masi.GetGuaranteeDate();
                 }
-                var label = Msg.Translate(ctx, "GuaranteeDate");
+                // JID_1811: Need to rename lable from ""Gurantee Date" to "Expiration date"
+                var label = Msg.Translate(ctx, "ExpirationDate");
                 //Column 1
                 obj.tableStucture += "<td>";
                 obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id='guaranteeDate_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label>";
