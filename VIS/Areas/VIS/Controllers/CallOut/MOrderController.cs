@@ -119,7 +119,6 @@ namespace VIS.Controllers
         public JsonResult GetPrecision(string fields)
         {
             string retJSON = "";
-            //var OrderID = Util.GetValueOfInt(C_Order_ID);
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;

@@ -1794,18 +1794,9 @@
             try {
                 //Get product price information
                 var dr = null;
-                var dt = null;
+
                 // JID_1744 The Precision Shpould as per Currency precision
-                var C_Order_ID = mTab.getValue("C_Order_ID").toString();
-                //var Strsql = "select C_CURRENCY_ID from C_Order where C_Order_ID =" + C_Order_ID;
-                //var C_Currency_ID = VIS.DB.executeScalar(Strsql, null, null);
-                //var Strsql1 = "Select STDPRECISION from C_Currency where C_Currency_ID =" + C_Currency_ID;
-                //var stdPrecision = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "MOrder/GetPrecision", C_Order_ID, null)
-                dt = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", C_Order_ID);
-                var stdPrecision = 0;
-                if (dt != null) {
-                     stdPrecision = dt;
-                }                
+                var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());               
 
                 dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
                 if (dr != null) {
@@ -1985,18 +1976,10 @@
             ctx.setContext(windowNo, "DiscountSchema", "N");
             var sql = "SELECT ChargeAmt FROM C_Charge WHERE C_Charge_ID=" + C_Charge_ID;
             var dr = null;
-            var dt=null;
+
 
             // JID_1744 The Precision Shpould as per Currency precision
-            var C_Order_ID = mTab.getValue("C_Order_ID");
-            //var Strsql = "select C_CURRENCY_ID from C_Order where C_Order_ID =" + C_Order_ID;
-            //var C_Currency_ID = VIS.DB.executeScalar(Strsql, null, null);
-            //var Strsql1 = "Select STDPRECISION from C_Currency where C_Currency_ID =" + C_Currency_ID;
-            dt = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", C_Order_ID);
-            var stdPrecision = 0;
-            if (dt != null) {
-                stdPrecision = dt;
-            }
+            var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());
 
             dr = VIS.DB.executeReader(sql);
             var PriceEntered;
@@ -2017,7 +2000,7 @@
             mTab.setValue("PriceActual", Util.getValueOfDecimal(PriceEntered.toFixed(stdPrecision)));
             mTab.setValue("PriceLimit", VIS.Env.ZERO);
             mTab.setValue("PriceList", VIS.Env.ZERO);
-            mTab.setValue("Discount", VIS.Env.ZERO); CalloutInvoice.prototype.Charge
+            mTab.setValue("Discount", VIS.Env.ZERO);
             dr.close();
         }
         catch (err) {
@@ -12489,15 +12472,7 @@
 
             var rowDataDB = null;
 
-            //var Strsql1 = "Select STDPRECISION from C_Currency where C_Currency_ID =" + Util.getValueOfInt(dr.C_Currency_ID);
-            //var stdPrecision = VIS.DB.executeScalar(Strsql1, null, null);
-            //var stdPrecision = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "MCurrency/GetCurrency?fields" + dr.C_Currency_ID, "", null);
-            var std = null;
-            std = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.C_Currency_ID);
-            var stdPrecision = 0;
-            if (dt != null) {
-                stdPrecision = std;
-            } 
+            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.C_Currency_ID); 
             // MProductPricing pp = new MProductPricing(ctx.getAD_Client_ID(), ctx.getAD_Org_ID(),
             //     M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
             
@@ -12858,17 +12833,8 @@
 
 
             //JID_1744 The precision should be as per Currenct Precision
-            var C_Invoice_ID = mTab.getValue("C_Invoice_ID");
-            //var Strsql = "select C_CURRENCY_ID from C_Invoice where C_INVOICE_ID =" + C_Invoice_ID;
-            //var C_Currency_ID = VIS.DB.executeScalar(Strsql, null, null);
-            //var Strsql1 = "Select STDPRECISION from C_Currency where C_Currency_ID =" + C_Currency_ID;
-            //var stdPrecision = VIS.DB.executeScalar(Strsql1, null, null);
-            var std = null;
-            std = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.C_Currency_ID);
-            var stdPrecision = 0;
-            if (dt != null) {
-                stdPrecision = std;
-            } 
+            //JID_1744 The precision should be as per Currenct Precision
+            var stdPrecision = VIS.dataContext.getJSONRecord("MInvoice/GetPercision", mTab.getValue("C_Invoice_ID").toString());
 
             dr = VIS.DB.executeReader(sql, null, null);
             if (dr.read()) {

@@ -311,16 +311,9 @@ namespace VIS.Models
 
         public int GetPrecision(Ctx ctx,string fields)
         {
-            int stdPrecision = 0;
-            int order = Util.GetValueOfInt(fields);
-            string sql = "select STDPRECISION from C_Order Co Inner join C_CURRENCY cc on cc.C_CURRENCY_ID = Co.C_CURRENCY_ID where co.C_Order_ID= " + order;
-            var std = DB.ExecuteScalar(sql, null,null);
-            if(std != null)
-            {
-                stdPrecision = Util.GetValueOfInt(std);
-            }
+            string sql = "SELECT CC.StdPrecision FROM C_Order CO INNER JOIN C_Currency CC on CC.C_Currency_Id = Co.C_Currency_Id where CO.C_Order_Id= " + Util.GetValueOfInt(fields);
+            var stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null,null));
             return stdPrecision;
-
         }
     }
 }
