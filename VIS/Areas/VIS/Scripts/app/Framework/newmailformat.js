@@ -24,12 +24,14 @@
 
 
 
+            //
 
+            labelshow = $('<label class="vis-ec-col-lblchkbox"><input type="checkbox">' + VIS.Msg.getMsg('ForAllWindows') + '</label>');
 
-            $showforall = $('<label class="vis-ec-col-lblchkbox"><input type="checkbox">' + VIS.Msg.getMsg('ForAllWindows') + '</label>');
-            var labelshow = $( VIS.Msg.getMsg('ForAllWindows'));
+            $showforall = $(labelshow.find('input')[0]);
+            
             var checkdiv = $('<div style="display: flex"></div>');
-
+            $showforall
             if (VIS.Application.isRTL) {
                 //$label.css({ "float": "right", "margin-right": "0px", "margin-left": "0px" })
                 //$name.css({ "float": "right", "margin-right": "10px", "margin-left": "0px" });
@@ -39,7 +41,7 @@
             }
 
 
-            checkdiv.append($showforall);
+            checkdiv.append(labelshow);
             $containerdiv.append($divinputwrap);
             $divinputwrap.append(namediv);
             $containerdiv.append(checkdiv);
