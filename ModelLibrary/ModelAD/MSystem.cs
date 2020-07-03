@@ -142,9 +142,10 @@ namespace VAdvantage.Model
         /// <param name="userName">user name</param>
         /// <param name="password">password</param>
         /// <returns>true if ldap authenticated</returns>
-        public bool IsLDAP(String userName, String password)
+        public bool IsLDAP(String userName, String password,out string output)
         {
-            return LDAP.Validate(GetLDAPHost(), GetLDAPDomain(), userName, password, GetLDAPAdminUser(), GetLDAPAdminPwd());
+            output = "";
+            return LDAP.Validate(GetLDAPHost(), GetLDAPDomain(), userName, password, GetLDAPAdminUser(), GetLDAPAdminPwd(),out output);
             //return false;
         }
 

@@ -48,14 +48,12 @@ namespace VIS.Helpers
             bool authenticated = false;
             bool isLDAP = false;
             MSystem system = MSystem.Get(new Ctx());
-
+            string output = "";
             if (system != null && system.IsLDAP())
             {
-                authenticated = system.IsLDAP(model.Login1Model.UserValue, model.Login1Model.Password);
-                //if (authenticated)
-                //{
-                //    model.Login1Model.Password = null;
-                //}
+               
+                authenticated = system.IsLDAP(model.Login1Model.UserValue, model.Login1Model.Password, out output);
+                
                 isLDAP = true;
             }
             //Save Failed Login Count and Password validty in cache
@@ -82,7 +80,7 @@ namespace VIS.Helpers
                 if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue) && dsUserInfo.Tables[0].Rows[0]["IsOnlyLDAP"].ToString().Equals("Y")
                     && isLDAP && !authenticated)
                 {
-                    throw new Exception("UserPwdError");
+                    throw new Exception(output);
                 }
             }
             else
