@@ -18,6 +18,15 @@ namespace VAdvantage.Model
         	/**	Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MSession).FullName);
 
+        //	get
+        /**	Sessions					*/
+        private static CCache<int, MSession> cache = Ini.IsClient()
+            ? new CCache<int, MSession>("AD_Session_ID", 1, 0)		//	one client session 
+            : new CCache<int, MSession>("AD_Session_ID", 30, 0);    //	no time-out	
+
+        /* Do-not use CCache class :: cacahe list get clear at time cache reset process*/
+        //private static Dictionary<int, MSession> cache = new Dictionary<int, MSession>(10);
+
         /// <summary>
         /// Get existing or create local session
         /// </summary>
@@ -26,20 +35,21 @@ namespace VAdvantage.Model
         /// <returns>session</returns>
         public static MSession Get(Ctx ctx, Boolean createNew)
         {
-            int AD_Session_ID = ctx.GetContextAsInt("#AD_Session_ID");
-            MSession session = null;
-            if (AD_Session_ID > 0)
-                session = cache[AD_Session_ID];
+            //int AD_Session_ID = ctx.GetContextAsInt("#AD_Session_ID");
+            //MSession session = null;
+            //if (AD_Session_ID > 0)
+            //    session = cache[AD_Session_ID];
 
-            if (session == null && createNew)
-            {
-                session = new MSession(ctx, null);	//	local session
-                session.Save();
-                AD_Session_ID = session.GetAD_Session_ID();
-                ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
-                cache.Add(AD_Session_ID, session);
-            }
-            return session;
+            //if (session == null && createNew)
+            //{
+            //    session = new MSession(ctx, null);	//	local session
+            //    session.Save();
+            //    AD_Session_ID = session.GetAD_Session_ID();
+            //    ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
+            //    cache.Add(AD_Session_ID, session);
+            //}
+            //return session;
+            return Get(ctx, createNew, "");
         }	//	get
 
         /// <summary>
@@ -56,18 +66,46 @@ namespace VAdvantage.Model
             if (AD_Session_ID > 0)
                 session = cache[AD_Session_ID];
 
-            
+            if (session == null && AD_Session_ID >0)
+            {
+                // check from DB
+                session = new MSession(ctx, AD_Session_ID, null);
+                if (session.Get_ID() != AD_Session_ID)
+                    session = null;
+                else
+                    cache.Add(AD_Session_ID, session);
+            }
+
+            if (session != null && session.IsProcessed())
+            {
+                s_log.Log(Level.WARNING, "Session Processed=" + session);
+               
+                cache.Remove(AD_Session_ID);
+                session = null;
+            }
+
 
             if (session == null && createNew)
             {
                 session = new MSession(ctx, null);	//	local session
-                session.SetRequest_Addr(requestAddr);
+                if (!string.IsNullOrEmpty(requestAddr))
+                {
+                    session.SetRequest_Addr(requestAddr);
+                }
                 session.Save();
                 AD_Session_ID = session.GetAD_Session_ID();
                 ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
                 cache.Add(AD_Session_ID, session);
             }
+           
+            if (session == null)
+            {
+                s_log.Fine("No Session");
+            }
+           
             return session;
+
+
         }
 
 
@@ -133,12 +171,7 @@ namespace VAdvantage.Model
             return session;
         }	//	get
 
-        //	get
-        /**	Sessions					*/
-        private static CCache<int, MSession> cache = Ini.IsClient()
-            ? new CCache<int, MSession>("AD_Session_ID", 1, 0)		//	one client session 
-            : new CCache<int, MSession>("AD_Session_ID", 30, 0);	//	no time-out	
-
+        
 
         /// <summary>
         /// 	 * 	Standard Constructor
@@ -197,7 +230,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="trxName">transaction</param>
         public MSession(Ctx ctx, Trx trxName)
-            : base(ctx, 0, trxName)
+            : this(ctx, 0, trxName)
         {
 
             try
@@ -478,29 +511,10 @@ namespace VAdvantage.Model
         /// <date>08-March-2011</date>
         public static MSession Get(Ctx ctx)
         {
-            int AD_Session_ID = ctx.GetContextAsInt("#AD_Session_ID");
-            MSession session = null;
-            if (AD_Session_ID > 0)
-            {
-                session = s_sessions.Get(ctx, Util.GetValueOfInt(AD_Session_ID));
-                if (session == null)
-                {
-                    session = new MSession(ctx, AD_Session_ID, null);
-                    if (session.GetAD_Session_ID() != AD_Session_ID)
-                        session = null;
-                }
-            }
-            if (session == null)
-            {
-                s_log.Fine("No Session");
-            }
-            else if (session.IsProcessed())
-            {
-                s_log.Log(Level.WARNING, "Session Processed=" + session);
-                s_sessions.Remove(AD_Session_ID);
-                return null;
-            }
-            return session;
+
+            return Get(ctx, false, "");
+
+           
         }
 
         /// <summary>

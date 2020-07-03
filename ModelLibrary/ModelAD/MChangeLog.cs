@@ -242,7 +242,7 @@ namespace VAdvantage.Model
         int AD_Table_ID, int AD_Column_ID, Object keyInfo,
         int AD_Client_ID, int AD_Org_ID,
         Object oldValue, Object newValue)
-            : base(ctx, 0, null)
+            : this(ctx, 0, null)
         {
             //this (ctx, 0, null);	//	 out of trx
             if (AD_ChangeLog_ID == 0)
@@ -271,6 +271,7 @@ namespace VAdvantage.Model
             //
             SetClientOrg(AD_Client_ID, AD_Org_ID);
             //
+           // SetAD_Role_ID(ctx.GetAD_Role_ID());
             SetOldValue(oldValue);
             SetNewValue(newValue);
 
