@@ -690,7 +690,16 @@ function VCard(fields, record) {
             }
             else value = null;
         }
-
+        // JID_1826 Amount is showing as per browser culture
+        else if (VIS.DisplayType.Amount == dt) {
+            var val = VIS.Utility.Util.getValueOfDecimal(value);
+            value = (val).toLocaleString();
+        }
+        // JID_1826 Quantity is showing as per browser culture
+        else if (VIS.DisplayType.Quantity == dt) {
+            var val = VIS.Utility.Util.getValueOfDecimal(value);
+            value = (val).toLocaleString();
+        }
         if (!value && value != 0)
             value = ' -- ';
         value = w2utils.encodeTags(value);
