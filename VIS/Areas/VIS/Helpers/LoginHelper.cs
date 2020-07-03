@@ -67,6 +67,29 @@ namespace VIS.Helpers
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@username", model.Login1Model.UserValue);
 
+
+
+            DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount, IsOnlyLDAP FROM AD_User WHERE Value=@username", param);
+            if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
+            {
+                // skipped Login user check for SuperUser (100)
+                if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue)
+                    && !dsUserInfo.Tables[0].Rows[0]["IsLoginUser"].ToString().Equals("Y"))
+                {
+                    throw new Exception("NotLoginUser");
+                }
+
+                if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue) && dsUserInfo.Tables[0].Rows[0]["IsOnlyLDAP"].ToString().Equals("Y")
+                    && isLDAP && !authenticated)
+                {
+                    throw new Exception("UserPwdError");
+                }
+            }
+            else
+            {
+                throw new Exception("UserNotFound");
+            }
+
             //if authenticated by LDAP or password is null(Means request from home page)
             if (!authenticated && model.Login1Model.Password != null)
             {
@@ -77,17 +100,11 @@ namespace VIS.Helpers
                     model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
                 }
 
-                DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
+                //  DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
                 if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
                 {
-                    // skipped Login user check for SuperUser (100)
-                    if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
-                    {
-                        if (!dsUserInfo.Tables[0].Rows[0]["IsLoginUser"].ToString().Equals("Y"))
-                        {
-                            throw new Exception("NotLoginUser");
-                        }
-                    }
+
+
                     //if username or password is not matching
                     if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserValue) ||
                         !dsUserInfo.Tables[0].Rows[0]["Password"].Equals(model.Login1Model.Password))
@@ -113,10 +130,6 @@ namespace VIS.Helpers
                             throw new Exception("MaxFailedLoginAttempts");
                         }
                     }
-                }
-                else// if no data found
-                {
-                    throw new Exception("UserNotFound");
                 }
             }
 
@@ -214,10 +227,16 @@ namespace VIS.Helpers
             //{
             //    throw new Exception("MaxFailedLoginAttempts");
             //}
-            DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
-            if (pwdExpireDate == null || (passwordValidUpto > 0 && (DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)))
+
+            if (!authenticated)
             {
-                model.Login1Model.ResetPwd = true;
+                DateTime? pwdExpireDate = Util.GetValueOfDateTime(dr["PasswordExpireOn"]);
+                if (pwdExpireDate == null || (passwordValidUpto > 0 && (DateTime.Compare(DateTime.Now, Convert.ToDateTime(pwdExpireDate)) > 0)))
+                {
+                    model.Login1Model.ResetPwd = true;
+                    //if (SecureEngine.IsEncrypted(model.Login1Model.Password))
+                    //    model.Login1Model.Password = SecureEngine.Decrypt(model.Login1Model.Password);
+                }
             }
 
             roles = new List<KeyNamePair>(); //roles
