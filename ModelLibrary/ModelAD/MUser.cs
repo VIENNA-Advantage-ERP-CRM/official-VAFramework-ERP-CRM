@@ -604,6 +604,12 @@ namespace VAdvantage.Model
             {
                 string pwd = GetPassword();
                 string oldPwd = Util.GetValueOfString(Get_ValueOld("Password"));
+                if ((pwd == null && GetCtx().GetAD_User_ID() == GetAD_User_ID()) || (pwd == null && !HasRole() && GetCtx().GetAD_User_ID() != GetAD_User_ID()))
+                {
+                    log.SaveInfo("Info", Msg.GetMsg(GetCtx(), "PasswordSetNull", true) + " " + GetName());
+                    return true;
+                }
+
                 if (pwd != null || !newRecord)
                 {
                     string validated = Common.Common.ValidatePassword(oldPwd, pwd, pwd);
@@ -615,7 +621,7 @@ namespace VAdvantage.Model
                 }
                 if (!newRecord && GetCtx().GetAD_User_ID() == GetAD_User_ID())
                 {
-                    int validity = GetCtx().GetContextAsInt("#"+Common.Common.Password_Valid_Upto_Key);
+                    int validity = GetCtx().GetContextAsInt("#" + Common.Common.Password_Valid_Upto_Key);
                     base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
                 }
             }
