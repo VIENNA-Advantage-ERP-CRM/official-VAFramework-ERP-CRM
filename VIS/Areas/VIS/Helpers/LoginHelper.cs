@@ -51,9 +51,9 @@ namespace VIS.Helpers
             string output = "";
             if (system != null && system.IsLDAP())
             {
-               
+
                 authenticated = system.IsLDAP(model.Login1Model.UserValue, model.Login1Model.Password, out output);
-                
+
                 isLDAP = true;
             }
             //Save Failed Login Count and Password validty in cache
@@ -77,8 +77,11 @@ namespace VIS.Helpers
                     throw new Exception("NotLoginUser");
                 }
 
+                // output length will be greater than 0 if there is any error while ldap auth. 
+                //output check is applied to becuase after first login, when user redriect to home page, this functioexecutes again and password is null on that time.
+                // so ldap reject auth , but user is actually authenticated. so to avoid error, this check is used.
                 if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue) && dsUserInfo.Tables[0].Rows[0]["IsOnlyLDAP"].ToString().Equals("Y")
-                    && isLDAP && !authenticated)
+                    && isLDAP && !authenticated && output.Length > 0)
                 {
                     throw new Exception(output);
                 }

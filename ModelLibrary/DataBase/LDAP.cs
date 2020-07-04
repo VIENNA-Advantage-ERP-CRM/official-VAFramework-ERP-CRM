@@ -93,6 +93,7 @@ namespace VAdvantage.DataBase
                         if (null == result)
                         {
                             log.Warning("Error in LDAP: User Not Found" + userName);
+                            output = "UserNotFound";
                             return false;
                         }
                         string guid = BitConverter.ToString((byte[])result.Properties["objectguid"][0]);

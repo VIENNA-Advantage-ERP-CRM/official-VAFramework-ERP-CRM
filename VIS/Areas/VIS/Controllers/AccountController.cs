@@ -29,11 +29,11 @@ namespace VIS.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Login1Model.Password == null && model.Login1Model.ResetPwd == false && model.Login1Model.Is2FAEnabled == false)
-                {
-                    ModelState.AddModelError("", "UserPwdError");
-                    return Json(new { errors = GetErrorsFromModelState() });
-                }
+                //if (model.Login1Model.Password == null && model.Login1Model.ResetPwd == false && model.Login1Model.Is2FAEnabled == false)
+                //{
+                //    ModelState.AddModelError("", "UserPwdError");
+                //    return Json(new { errors = GetErrorsFromModelState() });
+                //}
 
                 VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
 
