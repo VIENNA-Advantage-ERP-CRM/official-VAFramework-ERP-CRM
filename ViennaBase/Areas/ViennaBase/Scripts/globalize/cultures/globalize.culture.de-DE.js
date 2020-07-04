@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Globalize Culture de-DE
  *
  * http://github.com/jquery/globalize
@@ -133,8 +133,8 @@
             "UserNotFound": "Benutzername ist falsch.",
             "RoleNotDefined": "Für diesen Benutzer ist keine Rolle definiert",
             "oldNewSamePwd": "Altes und neues Passwort müssen unterschiedlich sein.",
-            "NewPassword": "Neues Kennwort",
-            "NewCPassword": "Bestätige neues Passwort",
+            "NewPassword": "Neues VA-Passwort",
+            "NewCPassword": "Bestätigen Sie das neue VA-Passwort",
             "EnterOTP": "Geben Sie OTP ein",
             "WrongOTP": "Falsches OTP eingegeben",
             "ScanQRCode": "Scannen Sie den Code mit Google Authenticator",

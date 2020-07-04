@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Globalize Culture sq-AL
  *
  * http://github.com/jquery/globalize
@@ -129,8 +129,8 @@ Globalize.addCultureInfo( "sq-AL", "default", {
         "UserNotFound": "Emri i përdoruesit është i pasaktë.",
         "RoleNotDefined": "Asnjë rol i përcaktuar për këtë përdorues",
         "oldNewSamePwd": "fjalëkalimi i vjetër dhe fjalëkalimi i ri duhet të jenë të ndryshëm.",
-        "NewPassword": "Fjalëkalim i ri",
-        "NewCPassword": "Konfirmoni fjalëkalimin e ri",
+        "NewPassword": "Fjalëkalime të reja VA",
+        "NewCPassword": "Konfirmoni fjalëkalimin e ri të VA-së",
         "EnterOTP": "Hyni në OTP",
         "WrongOTP": "Hyrë e gabuar OTP",
         "ScanQRCode": "Skanoni kodin me Google Authenticator",

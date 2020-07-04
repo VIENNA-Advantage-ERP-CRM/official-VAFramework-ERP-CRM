@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Globalize Culture sv-SE
  *
  * http://github.com/jquery/globalize
@@ -127,8 +127,8 @@ Globalize.addCultureInfo( "sv-SE", "default", {
         "UserNotFound": "Användarnamn är felaktigt.",
         "RoleNotDefined": "Ingen roll definierad för den här användaren",
         "oldNewSamePwd": "gamla lösenord och nytt lösenord måste vara annorlunda.",
-        "NewPassword": "nytt lösenord",
-        "NewCPassword": "Bekräfta nytt lösenord",
+        "NewPassword": "Nytt VA-lösenord",
+        "NewCPassword": "Bekräfta nytt VA-lösenord",
         "EnterOTP": "Ange OTP",
         "WrongOTP": "Fel OTP anges",
         "ScanQRCode": "Skanna koden med Google Authenticator",
