@@ -81,7 +81,7 @@ namespace VIS.Helpers
                 //output check is applied to becuase after first login, when user redriect to home page, this functioexecutes again and password is null on that time.
                 // so ldap reject auth , but user is actually authenticated. so to avoid error, this check is used.
                 if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue) && dsUserInfo.Tables[0].Rows[0]["IsOnlyLDAP"].ToString().Equals("Y")
-                    && isLDAP && !authenticated && output.Length > 0)
+                    && isLDAP && !authenticated)
                 {
                     throw new Exception(output);
                 }
@@ -134,53 +134,11 @@ namespace VIS.Helpers
                 }
             }
 
-            StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
-               // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
-               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value, u.Name as username, u.Created ")	//	4,5
-               .Append("FROM AD_User u")
-               .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
-               .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
-            if (isLDAP && authenticated)
-            {
-                sql.Append(" WHERE (COALESCE(u.LDAPUser,u.Value)=@username)");
-            }
-            //else if (isLDAP && !authenticated && model.Login1Model.Password == null)// If user not authenicated using LDAP, then if LDAP user is available
-            //{
-            //    sql.Append(" WHERE (u.LDAPUser=@username OR u.Value=@username)");
-            //}
-            else
-            {
-                sql.Append(" WHERE (u.Value=@username)");
-            }
-
-            sql.Append(" AND u.IsActive='Y' ");
-            // allowed SuperUser to login if it's not login user // no need to check Login user for SuperUser
-            if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
-                sql.Append(" AND u.IsLoginUser='Y' ");
-            sql.Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
-            .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
-
-            //if (model.Login1Model.Password != null)
-            //{
-            //    sql.Append(" AND (u.Password='" + model.Login1Model.Password + "')");	//  #2/3
-            //}
-            sql.Append(" ORDER BY r.Name");
-            IDataReader dr = null;
-            //try
-            //{
-            //SqlParameter[] param = new SqlParameter[1];
-            //param[0] = new SqlParameter("@username", model.Login1Model.UserName);
-            //	execute a query
-            dr = DB.ExecuteReader(sql.ToString(), param);
+            IDataReader dr = GetRoles(model.Login1Model.UserValue, authenticated, isLDAP);
 
             if (!dr.Read())		//	no record found, then return msaage that role not found.
             {
                 dr.Close();
-                //if (!cache["SuperUserVal"].Equals(model.Login1Model.UserName))
-                //{
-                //    param[0] = new SqlParameter("@username", model.Login1Model.UserName);
-                //    DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value='@username' ", param);
-                //}
                 throw new Exception("RoleNotDefined");
             }
 
@@ -224,10 +182,6 @@ namespace VIS.Helpers
                 model.Login1Model.Is2FAEnabled = enable2FA;
             }
 
-            //if (fCount >0 && fCount <= Util.GetValueOfInt(dr["FailedLoginCount"]))
-            //{
-            //    throw new Exception("MaxFailedLoginAttempts");
-            //}
 
             if (!authenticated)
             {
@@ -318,6 +272,38 @@ namespace VIS.Helpers
                 }
             }
             return true;
+        }
+        public static IDataReader GetRoles(string uname, bool authenticated, bool isLDAP)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("@username", uname);
+            StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
+               // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
+               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value, u.Name as username, u.Created ")	//	4,5
+               .Append("FROM AD_User u")
+               .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
+               .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
+            if (isLDAP && authenticated)
+            {
+                sql.Append(" WHERE (COALESCE(u.LDAPUser,u.Value)=@username)");
+            }
+            else
+            {
+                sql.Append(" WHERE (u.Value=@username)");
+            }
+
+            sql.Append(" AND u.IsActive='Y' ");
+            // allowed SuperUser to login if it's not login user // no need to check Login user for SuperUser
+            if (!cache["SuperUserVal"].Equals(uname))
+                sql.Append(" AND u.IsLoginUser='Y' ");
+            sql.Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
+            .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
+
+            sql.Append(" ORDER BY r.Name");
+            IDataReader dr = null;
+            //	execute a query
+            dr = DB.ExecuteReader(sql.ToString(), param);
+            return dr;
         }
 
         private static void GetSysConfigForlogin()
