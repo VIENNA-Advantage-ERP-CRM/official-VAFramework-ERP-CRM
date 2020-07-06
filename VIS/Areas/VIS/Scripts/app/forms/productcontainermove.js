@@ -12,7 +12,7 @@
         this.windowNo;
         var $self = this;
         var $root = $("<div style='height:100%;background-color:white;' class='vis-forms-container' >");
-        var $bsyDiv = $("<div class='vis-apanel-busy' style='height:100%;position:relative;z-index: 2'>");
+        var $bsyDiv = $("<div class='vis-busyindicatorouterwrap'><div class='vis-busyindicatorinnerwrap'><i class='vis-busyindicatordiv'></i></div></div>");
 
         /**Create Main View Variable **/
         var $mainpageContent = null;
@@ -105,15 +105,19 @@
             $formWrap = $('<div class="VIS_form-wrap">');
             $formDataRow = $('<div class="VIS_form-row">');
 
-            $formData = $('<div class="VIS_form-col">');
+            $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
             $lblFromWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_Warehouse_ID") + '</label>');
-            $cmbFromWarehouse = $('<select disabled style="background: #f5f5f5;">');
-            $formData.append($lblFromWarehouse).append($cmbFromWarehouse);
+            $cmbFromWarehouse = $('<select disabled class="vis-ev-col-readonly">');
+            $formData.append($formDataCtrlWrp);
+            $formDataCtrlWrp.append($cmbFromWarehouse).append($lblFromWarehouse);
 
-            $formDataR = $('<div class="VIS_form-col">');
+            $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
             $lblToWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_WarehouseTo_ID") + '</label>');
             $cmbToWarehouse = $('<select>');
-            $formDataR.append($lblToWarehouse).append($cmbToWarehouse);
+            $formDataR.append($formDataRCtrlWrp);
+            $formDataRCtrlWrp.append($cmbToWarehouse).append($lblToWarehouse);
 
             $formDataRow.append($formData).append($formDataR);
             $formWrap.append($formDataRow);
@@ -121,15 +125,19 @@
             // Row 2
             $formDataRow = $('<div class="VIS_form-row">');
 
-            $formData = $('<div class="VIS_form-col">');
+            $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
             $lblFromLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + '</label>');
             $cmbFromLocator = $('<select>');
-            $formData.append($lblFromLocator).append($cmbFromLocator);
+            $formData.append($formDataCtrlWrp);
+            $formDataCtrlWrp.append($cmbFromLocator).append($lblFromLocator);
 
-            $formDataR = $('<div class="VIS_form-col">');
+            $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
             $lblToLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_LocatorTo_ID") + '</label>');
             $cmbToLocator = $('<select>');
-            $formDataR.append($lblToLocator).append($cmbToLocator);
+            $formDataR.append($formDataRCtrlWrp);
+            $formDataRCtrlWrp.append($cmbToLocator).append($lblToLocator);
 
             $formDataRow.append($formData).append($formDataR);
             $formWrap.append($formDataRow);
@@ -137,17 +145,27 @@
             // Row 3
             $formDataRow = $('<div class="VIS_form-row">');
 
-            $formData = $('<div class="VIS_form-col">');
+            $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
+            var $formDataBtnWrp = $('<div class="input-group-append">');
             $lblFromContainer = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_FromContainer") + '</label>');
-            $cmbFromContainer = $('<select disabled class="VIS-container-move-combo-width" style="background: #f5f5f5;">');
-            $btnFromContainerTree = $('<span class="pull-left VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled"></span>');
-            $formData.append($lblFromContainer).append($cmbFromContainer).append($btnFromContainerTree);
+            $cmbFromContainer = $('<select disabled class="VIS-container-move-combo-width" class="vis-ev-col-readonly" data-hasbtn=" ">');
+            $btnFromContainerTree = $('<span class="fa fa-cubes input-group-text VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled"></span>');
+            $formData.append($formDataCtrlWrp);
+            $formDataCtrlWrp.append($cmbFromContainer).append($lblFromContainer);
+            $formData.append($formDataBtnWrp);
+            $formDataBtnWrp.append($btnFromContainerTree);
 
-            $formDataR = $('<div class="VIS_form-col">');
+            $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
+            var $formDataRBtnWrp = $('<div class="input-group-append">');
             $lblToContainer = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "Ref_M_ProductContainerTo_ID") + '</label>');
-            $cmbToContainer = $('<select disabled class="VIS-container-move-combo-width" style="background: #f5f5f5;">');
-            $btnToContainerTree = $('<span class="pull-left VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled"></span>');
-            $formDataR.append($lblToContainer).append($cmbToContainer).append($btnToContainerTree);
+            $cmbToContainer = $('<select disabled class="VIS-container-move-combo-width" class="vis-ev-col-readonly" data-hasbtn=" ">');
+            $btnToContainerTree = $('<span class="fa fa-cubes input-group-text VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled"></span>');
+            $formDataR.append($formDataRCtrlWrp);
+            $formDataRCtrlWrp.append($cmbToContainer).append($lblToContainer);
+            $formDataR.append($formDataRBtnWrp);
+            $formDataRBtnWrp.append($btnToContainerTree);
 
             $formDataRow.append($formData).append($formDataR);
             $formWrap.append($formDataRow);
@@ -155,21 +173,23 @@
             // Row 4
             $formDataRow = $('<div class="VIS_form-row">');
 
-            $formData = $('<div class="VIS_form-col-checkbox">');
-            $moveFullContainer = $('<input type="checkbox" name="">');
-            $lblMoveFullContainer = $('<label title=' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainerToolTip") + '>' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainer") + '</label>');
-            $formData.append($moveFullContainer).append($lblMoveFullContainer);
+            $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
+            $moveFullContainer = $('<label class="vis-ec-col-lblchkbox" title=' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainerToolTip") + '><input type="checkbox" name="">' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainer") + '</label>');
+            $formData.append($formDataCtrlWrp);
+            $formDataCtrlWrp.append($moveFullContainer)/*.append($lblMoveFullContainer)*/;
 
             //$formDataR = $('<div class="VIS_form-col-checkbox">');
             //$withContainer = $('<input type="radio" name="WithContainer" disabled>');
             //$lblWithContainer = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(),"VIS_WithContainer") + '</label>');
             //$formDataR.append($withContainer).append($lblWithContainer);
 
-            $formData3 = $('<div class="VIS_form-col-checkbox">');
+            $formData3 = $('<div class="VIS_form-col input-group vis-input-wrap">');
+            var $formData3CtrlWrp = $('<div class="vis-control-wrap">');
             //$withoutContainer = $('<input type="radio" name="WithoutContainer" disabled>');
-            $withoutContainer = $('<input type="checkbox" name="WithoutContainer">');
-            $lblWithoutContainer = $('<label title=' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainerToolTip") + '>' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainer") + '</label>');
-            $formData3.append($withoutContainer).append($lblWithoutContainer);
+            $withoutContainer = $('<label title=' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainerToolTip") + '><input type="checkbox" name="WithoutContainer">' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainer") + '</label>');
+            $formData3.append($formData3CtrlWrp);
+            $formData3CtrlWrp.append($withoutContainer)/*.append($lblWithoutContainer)*/;
 
             $formDataRow.append($formData).append($formData3);
             $formWrap.append($formDataRow);
@@ -197,17 +217,17 @@
         function createPageSettings(buttonsdiv) {
             ulPaging = $('<ul style="float:left;margin-top:4px" class="vis-statusbar-ul">');
 
-            liFirstPage = $('<li style="display: none; "><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageFirst16.png" alt="First Page" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "FirstPage") + '"  style="opacity: 0.6;"></div></li>');
+            liFirstPage = $('<li style="display: none; "><div><i class="vis vis-shiftleft" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "FirstPage") + '"  style="opacity: 0.6;"></i></div></li>');
 
-            liPrevPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageUp16.png" alt="Page Up" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "PageUp") + '"  style="opacity: 0.6;"></div></li>');
+            liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "PageUp") + '"  style="opacity: 0.6;"></i></div></li>');
 
             cmbPage = $("<select>");
 
             liCurrPage = $('<li>').append(cmbPage);
 
-            liNextPage = $('<li style="opacity: 1;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageDown16.png" alt="Page Down" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "PageDown") + '" style="opacity: 0.6;"></div></li>');
+            liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "PageDown") + '" style="opacity: 0.6;"></i></div></li>');
 
-            liLastPage = $('<li style="display: none;"><div><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/PageLast16.png" alt="Last Page" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "LastPage") + '" style="opacity: 0.6;"></div></li>');
+            liLastPage = $('<li style="display: none;"><div><i class="vis vis-shiftright" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "LastPage") + '" style="opacity: 0.6;"></div></li>');
 
 
             ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);
