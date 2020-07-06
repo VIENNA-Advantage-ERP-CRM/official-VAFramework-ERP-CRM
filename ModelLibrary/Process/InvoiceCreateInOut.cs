@@ -145,19 +145,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //JID_1679 Generate Receipt from Invoice(Vendor) for remaining quantity 
                 if (invoiceLine.GetC_OrderLine_ID() != 0)
                 {
-                  
+                    decimal? res = 0;
                     decimal movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from C_OrderLine ol Inner join M_InOutLine il on il.C_orderline_ID= ol.C_Orderline_Id "
                              + " WHERE il.C_OrderLine_ID =" + invoiceLine.GetC_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
                     // in case of partial receipt
                     if ( invoiceLine.GetQtyInvoiced() > movementqty && movementqty!=0)
                     {
-                        decimal? res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetC_UOM_ID(), movementqty);
+                        if (product.GetC_UOM_ID() != invoiceLine.GetC_UOM_ID())
+                        {
+                            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetC_UOM_ID(), movementqty);
+                        }
                         sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator
                             invoice.IsSOTrx() ? (movementqty) : Env.ZERO);
-                        sLine.SetQtyEntered(res);
+                        sLine.SetQtyEntered(res==0?(movementqty):res);
                         sLine.SetMovementQty(movementqty);
                     }
-                    // if QtyInvoiced is less or No Material receipt is found against this order
+                    // if QtyInvoiced is less or No Material receipt is found against the order
                     else
                     {
                         sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator 
@@ -180,9 +183,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 if (!sLine.Save())
                 {
-                    sLine.Get_Trx().Rollback();
+                    ship.Get_Trx().Rollback();
                     return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
-                    
                     //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");
                 }
                 //
