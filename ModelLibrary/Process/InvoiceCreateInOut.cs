@@ -172,7 +172,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 else
                 {
                     sLine.SetInvoiceLine(invoiceLine, 0,	//	Locator 
-                    invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);
+                     invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);
                     sLine.SetQtyEntered(invoiceLine.GetQtyEntered());
                     sLine.SetMovementQty(invoiceLine.GetQtyInvoiced());
                 }
@@ -185,7 +185,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ship.Get_Trx().Rollback();
                     return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
-                    //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");
+                    //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");  
                 }
                 //
                 invoiceLine.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
