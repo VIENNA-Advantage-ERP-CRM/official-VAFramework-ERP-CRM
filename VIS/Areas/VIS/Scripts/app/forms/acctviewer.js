@@ -657,7 +657,7 @@
     function AcctViewer(AD_Client_ID, AD_Table_ID, Record_ID, windowNum, AD_Window_ID) {
 
         var $root = $("<div style='position:relative;'>");
-        var $busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var $self = this;
         var _AD_Client_ID = AD_Client_ID;
@@ -691,27 +691,26 @@
         var srcRefresh = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
         var srcPrint = VIS.Application.contextUrl + "Areas/VIS/Images/base/Print24.PNG";
 
-        var btnRefresh = $("<button id='" + "btnRefresh_" + windowNo + "'style='margin-bottom: 1px; margin-top: 6px; float: right; margin-left: 15px; height: 38px;' class='VIS_Pref_btn-2'><img src='" + srcRefresh + "'/></button>");
-        var btnPrint = $("<button id='" + "btnPrint_" + windowNo + "' style='border: 0px;background-color: transparent; padding: 0px;float: right;margin-right: 10px;margin-top: 5px;'><img src='"
-            + srcPrint + "'/></button>");
-        var btnRePost = $("<button id='" + "btnRePost_" + windowNo + "' style='float: left; display: inline-block;height: 30px;margin-top: 10px;margin-left: 5px;' ><img src='" + src + "'/></button>");
+        var btnRefresh = $("<button id='" + "btnRefresh_" + windowNo + "'style='margin-top: 0;' class='VIS_Pref_btn-2'><i class='vis vis-refresh'></i></button>");
+        var btnPrint = $("<button class='VIS_Pref_btn-2' id='" + "btnPrint_" + windowNo + "' style='margin-top: 0px; margin-left: 10px;'><i class='vis vis-print'></button>");
+        var btnRePost = $("<button class='VIS_Pref_btn-2' id='" + "btnRePost_" + windowNo + "' style='margin-top: 0px;'><img src='" + src + "'/></button>");
 
 
-        var btnSelctDoc = $("<button Name='btnSelctDoc' id='" + "btnSelctDoc_" + windowNo + "' style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-        var btnAccount = $("<button  Name='btnAccount' id='" + "btnAccount_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-        var btnProduct = $("<button  Name='btnProduct' id='" + "btnProduct_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-        var btnBPartner = $("<button Name='btnBPartner' id='" + "btnBPartner_" + windowNo + "' style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-        var btnProject = $("<button  Name='btnProject' id='" + "btnProject_" + windowNo + "'   style='height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-        var btnCampaning = $("<button Name='btnCampaning' id='" + "btnCampaning_" + windowNo + "' style=' height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
-        var btnOrgUnit = $("<button Name='btnOrgUnit' id='" + "btnOrgUnit_" + windowNo + "' style=' height:30px; padding: 0px;'><img src='" + src + "'/><span style='padding-left: 8px;padding-right: 8px;'></span></button>");
+        var btnSelctDoc = $("<button class='input-group-text' Name='btnSelctDoc' id='" + "btnSelctDoc_" + windowNo + "'><i class='vis vis-find'></i></button>");
+        var btnAccount = $("<button class='input-group-text' Name='btnAccount' id='" + "btnAccount_" + windowNo + "'><i class='vis vis-find'></i></button>");
+        var btnProduct = $("<button class='input-group-text' Name='btnProduct' id='" + "btnProduct_" + windowNo + "'><i class='vis vis-find'></i></button>");
+        var btnBPartner = $("<button class='input-group-text' Name='btnBPartner' id='" + "btnBPartner_" + windowNo + "'><i class='vis vis-find'></i></button>");
+        var btnProject = $("<button class='input-group-text'Name='btnProject' id='" + "btnProject_" + windowNo + "'><i class='vis vis-find'></i></button>");
+        var btnCampaning = $("<button class='input-group-text' Name='btnCampaning' id='" + "btnCampaning_" + windowNo + "'><i class='vis vis-find'></i></button>");
+        var btnOrgUnit = $("<button class='input-group-text' Name='btnOrgUnit' id='" + "btnOrgUnit_" + windowNo + "'><i class='vis vis-find'></i></button>");
 
-        var btnSelctDocClear = $("<button Name='btnSelctDocClear' id='" + "btnSelctDocClear_" + windowNo + "' class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnAccountClear = $("<button  Name='btnAccountClear' id='" + "btnAccountClear_" + windowNo + "'   class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnProductClear = $("<button  Name='btnProductClear' id='" + "btnProductClear_" + windowNo + "'   class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnBPartnerClear = $("<button Name='btnBPartnerClear' id='" + "btnBPartnerClear_" + windowNo + "' class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnProjectClear = $("<button  Name='btnProjectClear' id='" + "btnProjectClear_" + windowNo + "'   class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnCampaningClear = $("<button Name='btnCampaningClear' id='" + "btnCampaningClear_" + windowNo + "' class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
-        var btnOrgUnitClear = $("<button Name='btnOrgUnitClear' id='" + "btnOrgUnitClear_" + windowNo + "' class='VIS-pref-button'><img src='" + srcz + "'/><span style='padding-left: 3px;'></span></button>");
+        var btnSelctDocClear = $("<button Name='btnSelctDocClear' id='" + "btnSelctDocClear_" + windowNo + "' class='input-group-text'><i class='vis vis-mark'></i></button>");
+        var btnAccountClear = $("<button  Name='btnAccountClear' id='" + "btnAccountClear_" + windowNo + "'   class='input-group-text'><i class='vis vis-mark'></i></button>");
+        var btnProductClear = $("<button  Name='btnProductClear' id='" + "btnProductClear_" + windowNo + "'   class='input-group-text'><i class='vis vis-mark'></i></button>");
+        var btnBPartnerClear = $("<button Name='btnBPartnerClear' id='" + "btnBPartnerClear_" + windowNo + "' class='input-group-text'><i class='vis vis-mark'></i></button>");
+        var btnProjectClear = $("<button  Name='btnProjectClear' id='" + "btnProjectClear_" + windowNo + "'   class='input-group-text'><i class='vis vis-mark'></i></button>");
+        var btnCampaningClear = $("<button Name='btnCampaningClear' id='" + "btnCampaningClear_" + windowNo + "' class='input-group-text'><i class='vis vis-mark'></i></button>");
+        var btnOrgUnitClear = $("<button Name='btnOrgUnitClear' id='" + "btnOrgUnitClear_" + windowNo + "' class='input-group-text'><i class='vis vis-mark'></i></button>");
 
 
 
@@ -762,13 +761,13 @@
         var tabT1 = null;
         var tabT2 = null;
 
-        var chkSelectDoc = $("<input id='" + "chkSelectDoc_" + windowNo + "' type='checkbox' checked class='VIS_Pref_automatic'>" +
-            "<span><label id='" + "lblSelectDoc_" + windowNo + "' class='VIS_Pref_Label_Font'>SelectDoc</label></span>");
+        var chkSelectDoc = $("<label id='" + "lblSelectDoc_" + windowNo + "' class='VIS_Pref_Label_Font vis-ec-col-lblchkbox'><input id='" + "chkSelectDoc_" + windowNo + "' type='checkbox' checked class='VIS_Pref_automatic'>" +
+            "SelectDoc</label>");
 
         var chkQty = $("<input id='" + "chkQty_" + windowNo + "' type='checkbox' class='VIS_Pref_automatic'>" +
             "<span><label id='" + "lblQty_" + windowNo + "' class='VIS_Pref_Label_Font'>chkQty</label></span>");
 
-        var chkforcePost = $("<input id='" + "chkforcePost_" + windowNo + "' type='checkbox' class='VIS_Pref_automatic' style='display: inline-block;margin-left: 20px;'>" +
+        var chkforcePost = $("<input id='" + "chkforcePost_" + windowNo + "' type='checkbox' class='VIS_Pref_automatic' style='display: inline-block;margin-left: 20px; margin-top: 0;'>" +
             "<span><label id='" + "lblforcePost_" + windowNo + "' class='VIS_Pref_Label_Font'>chkforcePost</label></span>");
 
 
@@ -790,8 +789,8 @@
         var chkSumriz4 = $("<input id='" + "chkSumriz4_" + windowNo + "' type='checkbox' class='VIS_Pref_automatic'>");
         //"<span><label id='" + "lblSumriz4_" + windowNo + "' class='VIS_Pref_Label_Font'>chkSumriz4</label></span>");
 
-        var vdtpkAccDateFrom = $("<input id='" + "vdtpkAccDateFrom_" + windowNo + "' type='date' name='DateOrdered' style='display: inline-block;line-height: 23px;width:100%'>");
-        var vdtpkAccDateTo = $("<input id='" + "vdtpkAccDateTo_" + windowNo + "' type='date' name='DateOrdered' style='display: inline-block;line-height: 23px;width:100%'>");
+        var vdtpkAccDateFrom = $("<input id='" + "vdtpkAccDateFrom_" + windowNo + "' type='date' name='DateOrdered'>");
+        var vdtpkAccDateTo = $("<input id='" + "vdtpkAccDateTo_" + windowNo + "' type='date' name='DateOrdered'>");
 
         var topDiv = null;
         var leftSideDiv = null;
@@ -835,7 +834,7 @@
             lblSumrise.getControl().text(VIS.Msg.getMsg("GroupBy"));
             // 
             // South
-            lblstatusLine.getControl().css("color", "#19A0ED");//css("font-size", "28px").
+            lblstatusLine.getControl().css("color", "rgba(var(--v-c-primary), 1)");//css("font-size", "28px").
             btnRePost.text(VIS.Msg.getMsg("RePost"));
             btnRePost.show();
             chkforcePost.find("label").text(VIS.Msg.getMsg("Force"));
@@ -843,8 +842,8 @@
         }
 
         function tab1Select() {
-            tabT2.css("font-size", "14px").css("color", "#333333");
-            tabT1.css("font-size", "28px").css("color", "#19A0ED");
+            tabT2.css("color", "rgba(var(--v-c-on-secondary), 1)");
+            tabT1.css("font-size", "1rem").css("color", "rgba(var(--v-c-primary), 1)");
             rightSideDiv.show();
             leftSideDiv.show();
             resultDiv.css("display", "none");
@@ -859,8 +858,8 @@
         }
 
         function tab2Select() {
-            tabT1.css("font-size", "14px").css("color", "#333333");
-            tabT2.css("font-size", "28px").css("color", "#19A0ED");
+            tabT1.css("color", "rgba(var(--v-c-on-secondary), 1)");
+            tabT2.css("font-size", "1rem").css("color", "rgba(var(--v-c-primary), 1)");
             rightSideDiv.hide();
             leftSideDiv.hide();
             resultDiv.css("display", "block");
@@ -1155,29 +1154,29 @@
 
         function initializeComponent() {
 
-            topDiv = $("<div id='" + "topDiv_" + windowNo + "' style='float: left; width: 100%; height: 45px; margin-bottom: 2px;margin-left: 0px;'>" +
-                "<div id='" + "queryDiv_" + windowNo + "'style='display: inline-block;  padding-left: 15px;margin-right: 15px;' >" +
-                "<label id='" + "lblquery_" + windowNo + "' class='VIS_Pref_Label_Font' style='vertical-align: middle; cursor: pointer;font-size: 28px;color: #19A0ED;'>"
+            topDiv = $("<div id='" + "topDiv_" + windowNo + "' style='float: left; width: 100%;'>" +
+                "<div id='" + "queryDiv_" + windowNo + "'style='display: inline-block; margin-right: 15px; margin-top: 5px' >" +
+                "<label id='" + "lblquery_" + windowNo + "' class='VIS_Pref_Label_Font' style='cursor: pointer;font-size: 1rem;color: rgba(var(--v-c-primary), 1);'>"
                 + VIS.Msg.getMsg("ViewerQuery") + "</label></div>" +
                 "<div id='" + "resulttopDiv_" + windowNo + "' style='display: inline-block; width: 160px;'>" +
                 "<label id='" + "lblresult_" + windowNo + "' class='VIS_Pref_Label_Font' style='vertical-align: middle; cursor: pointer;'>"
                 + VIS.Msg.getMsg("ViewerResult") + "</label></div>" +
                 "</div>");
             var localdiv = $("<div id='" + "resultTopFilterDiv_" + windowNo + "' style='float: right;width: 50%;'>");
-            localdiv.append(lblAccSchemaFilter.getControl().css("display", "inline-block").css("width", "49%")
-                .css("text-align", "right")
-                .css("margin-top", "5px")
-                .addClass("VIS_Pref_Label_Font"))
-                .append(cmbAccSchemaFilter.getControl().css("display", "inline-block").css("width", "50%").css("float", "right").css("height", "32px"));
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            localdiv.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
+            $DivControlWrap.append(cmbAccSchemaFilter.getControl()).append(lblAccSchemaFilter.getControl());
             topDiv.append(localdiv);
 
             //Left side Div designing
-            leftSideDiv = $("<div id='" + "leftSideDiv_" + windowNo + "' style='float: left; margin-bottom: 3px; margin-left: 0px;background-color: #F1F1F1; '>");
+            leftSideDiv = $("<div class='vis-leftsidebarouterwrap' id='" + "leftSideDiv_" + windowNo + "' style='float: left;background-color: rgba(var(--v-c-secondary), 1);overflow: auto;padding: 10px;'>");
 
             if (VIS.Application.isRTL) {
                 leftSideDiv.css("float", "right");
-                btnRefresh.css("float", "left");
-                btnRePost.css("float", "right");
+                //btnRefresh.css("float", "left");
+                //btnRePost.css("float", "right");
             }
 
             leftSideDiv.css("width", "50%");// leftSideDivWidth);
@@ -1189,193 +1188,234 @@
 
             //line1
             var tr = $("<tr>");
-            var td = $("<td style='padding: 4px 2px 2px;'>");
+            var td = $("<td>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
             div.append(tble);
             tble.append(tr);
-            tr.append(td);
-            td.append(lblAccSchema.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblAccSchema.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             ////line2
             //tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px; '>");//width: 236px;
+            //td = $("<td>");//width: 236px;
             //tble.append(tr);
             tr.append(td);
-            td.append(cmbAccSchema.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmControlWrap.append(cmbAccSchema.getControl()).append(lblAccSchema.getControl());
 
             //line3
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblPostType.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblPostType.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line4
             //tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             // tble.append(tr);
             tr.append(td);
-            td.append(cmbPostType.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmControlWrap.append(cmbPostType.getControl()).append(lblPostType.getControl());
 
             //line5
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            td = $("<td>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
             tble.append(tr);
             tr.append(td);
-            td.append(chkSelectDoc);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmControlWrap.append(chkSelectDoc);
 
-            // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
-            // tble.append(tr);
+             tr = $("<tr>");
+            td = $("<td>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
+            var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
+             tble.append(tr);
             tr.append(td);
-            td.append(cmbSelectDoc.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmInputWrap.append($FrmCtrlBtnWrap);
+            $FrmControlWrap.append(cmbSelectDoc.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' '));
 
             //// tr = $("<tr>");
             //td = $("<td>");//style='padding: 0px 15px 0px;'
             //// tble.append(tr);
             //tr.append(td);
-            td.append(btnSelctDoc).append(btnSelctDocClear);
+            $FrmCtrlBtnWrap.append(btnSelctDoc).append(btnSelctDocClear);
 
             //line6
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblAccDate.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblAccDate.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line7
             // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             // tble.append(tr);
             tr.append(td);
-            td.append(vdtpkAccDateFrom);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmControlWrap.append(vdtpkAccDateFrom).append(lblAccDate.getControl());
 
             //line8
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblAccDateTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblAccDateTo.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line9
             // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             //  tble.append(tr);
             tr.append(td);
-            td.append(vdtpkAccDateTo);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmControlWrap.append(vdtpkAccDateTo).append(lblAccDateTo.getControl());
 
             //line10
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblOrg.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblOrg.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line11
             // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             // tble.append(tr);
             tr.append(td);
-            td.append(cmbOrg.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmControlWrap.append(cmbOrg.getControl()).append(lblOrg.getControl());
 
             //line12
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
+            var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
+            var $FrmInputRO = $('<input type="text" readonly data-hasbtn=" ">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblAcc.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblAcc.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line13
             //  tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             // tble.append(tr);
             tr.append(td);
-            td.append(btnAccount).append(btnAccountClear);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmInputWrap.append($FrmCtrlBtnWrap);
+            $FrmControlWrap.append($FrmInputRO).append(lblAcc.getControl());
+            $FrmCtrlBtnWrap.append(btnAccount).append(btnAccountClear);
 
             //line20
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
+            var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
+            var $FrmInputRO = $('<input type="text" readonly data-hasbtn=" ">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblOrgUnit.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblOrgUnit.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line21
             // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             //  tble.append(tr);
             tr.append(td);
-            td.append(btnOrgUnit).append(btnOrgUnitClear);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmInputWrap.append($FrmCtrlBtnWrap);
+            $FrmControlWrap.append($FrmInputRO).append(lblOrgUnit.getControl());
+            $FrmCtrlBtnWrap.append(btnOrgUnit).append(btnOrgUnitClear);
 
             //line14
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
+            var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
+            var $FrmInputRO = $('<input type="text" readonly data-hasbtn=" ">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblProduct.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblProduct.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
 
             //line15
             // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             // tble.append(tr);
             tr.append(td);
-            td.append(btnProduct).append(btnProductClear);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmInputWrap.append($FrmCtrlBtnWrap);
+            $FrmControlWrap.append($FrmInputRO).append(lblProduct.getControl());
+            $FrmCtrlBtnWrap.append(btnProduct).append(btnProductClear);
 
             //line16
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
+            var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
+            var $FrmInputRO = $('<input type="text" readonly data-hasbtn=" ">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblBP.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblBP.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line17
             // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             // tble.append(tr);
             tr.append(td);
-            td.append(btnBPartner).append(btnBPartnerClear);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmInputWrap.append($FrmCtrlBtnWrap);
+            $FrmControlWrap.append($FrmInputRO).append(lblBP.getControl());
+            $FrmCtrlBtnWrap.append(btnBPartner).append(btnBPartnerClear);
 
             //line18
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 2px 2px;'>");
+            //td = $("<td style='padding: 4px 2px 2px;'>");
+            var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $FrmControlWrap = $('<div class="vis-control-wrap">');
+            var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
+            var $FrmInputRO = $('<input type="text" readonly data-hasbtn=" ">');
             tble.append(tr);
-            tr.append(td);
-            td.append(lblProject.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
+            //tr.append(td);
+            //td.append(lblProject.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
             //line19
             // tr = $("<tr>");
-            td = $("<td style='padding: 0px 15px 0px;'>");
+            td = $("<td>");
             // tble.append(tr);
             tr.append(td);
-            td.append(btnProject).append(btnProjectClear);
-
-            //line20
-            //tr = $("<tr>");
-            //td = $("<td style='padding: 4px 2px 2px;'>");
-            //tble.append(tr);
-            //tr.append(td);
-            //td.append(lblCompaning.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            ////line21
-            //// tr = $("<tr>");
-            //td = $("<td style='padding: 0px 15px 0px;'>");
-            ////  tble.append(tr);
-            //tr.append(td);
-            //td.append(btnCampaning).append(btnCampaningClear);
-
-
-            //line20
-            //tr = $("<tr>");
-            //td = $("<td style='padding: 4px 2px 2px;'>");
-            //tble.append(tr);
-            //tr.append(td);
-            //td.append(lblOrgUnit.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-
-            ////line21
-            //// tr = $("<tr>");
-            //td = $("<td style='padding: 0px 15px 0px;'>");
-            ////  tble.append(tr);
-            //tr.append(td);
-            //td.append(btnOrgUnit).append(btnOrgUnitClear);
+            td.append($FrmInputWrap);
+            $FrmInputWrap.append($FrmControlWrap);
+            $FrmInputWrap.append($FrmCtrlBtnWrap);
+            $FrmControlWrap.append($FrmInputRO).append(lblProject.getControl());
+            $FrmCtrlBtnWrap.append(btnProject).append(btnProjectClear);
 
             //Right side Div designing
             rightSideDiv = $("<div id='" + "rightSideDiv_" + windowNo + "' style='float: right;margin-bottom: 3px; margin-right: 0px; '>");
@@ -1388,7 +1428,7 @@
 
             //line1
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             div.append(tble);
             tble.append(tr);
             tr.append(td);
@@ -1403,18 +1443,18 @@
 
             //line3
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(chkQty);
 
             //line4
             tr = $("<tr>");
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tble.append(tr);
             tr.append(td);
             td.append(lblSort.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tr.append(td);
             td.append(lblSumrise.getControl().css("display", "inline-block").addClass("VIS_Pref_Label_Font"));
 
@@ -1424,7 +1464,7 @@
             tble.append(tr);
             tr.append(td);
             td.append(cmbSort1.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tr.append(td);
             td.append(chkSumriz1);
 
@@ -1434,7 +1474,7 @@
             tble.append(tr);
             tr.append(td);
             td.append(cmbSort2.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tr.append(td);
             td.append(chkSumriz2);
 
@@ -1444,7 +1484,7 @@
             tble.append(tr);
             tr.append(td);
             td.append(cmbSort3.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tr.append(td);
             td.append(chkSumriz3);
 
@@ -1454,25 +1494,25 @@
             tble.append(tr);
             tr.append(td);
             td.append(cmbSort4.getControl().css("display", "inline-block").css("width", "100%").css("height", "32px"));
-            td = $("<td style='padding: 4px 15px 2px;'>");
+            td = $("<td style='padding: 0px 15px 0px;'>");
             tr.append(td);
             td.append(chkSumriz4);
 
             //Bottum Div
 
-            bottumDiv = $("<div style='float: left;background-color: #F1F1F1; width:100%'>");
-            bottumDiv.css("height", 50);
+            bottumDiv = $("<div class='vis-acctviewerbottdiv'>");
+            //bottumDiv.css("height", 50);
             /** dont show repost butoon if form is opened from menu. **/
             if (!$self.getIsMenu()) {
                 bottumDiv.append(btnRePost);
                 bottumDiv.append(chkforcePost);
             }
 
-            bottumDiv.append(lblstatusLine.getControl().css("margin-left", "10px").css("margin-right", "10px").css("margin-top", "15px").addClass("VIS_Pref_Label_Font"));
+            bottumDiv.append(lblstatusLine.getControl().addClass("VIS_Pref_Label_Font"));
             bottumDiv.append(btnRefresh);
             bottumDiv.append(btnPrint);
 
-            resultDiv = $("<div id='" + "resultDiv_" + windowNo + "' style='float: left; width: 100%; display: none; margin-bottom: 2px;margin-left: 0px;background-color: #F1F1F1;'>");
+            resultDiv = $("<div id='" + "resultDiv_" + windowNo + "' style='float: left; width: 100%; display: none;'>");
             //resultDiv.css("width", $(window).width() - 30);
             resultDiv.css("height", selectDivHeight);
 
@@ -1530,13 +1570,13 @@
                 var haveDoc = AD_Table_ID != 0 && Record_ID != 0;
 
                 if (haveDoc) {
-                    chkSelectDoc.prop("checked", true);
+                    chkSelectDoc.find('input').prop("checked", true);
                 }
 
                 actionDocument();
                 actionTable();
                 lblstatusLine.getControl().text(VIS.Msg.getMsg("VIS_EnterSelctionAndDisplayToQueryFind"));
-                lblstatusLine.getControl().css("color", "#19A0ED");//css("font-size", "28px").
+                lblstatusLine.getControl().css("color", "rgba(var(--v-c-primary), 1)");//css("font-size", "28px").
                 ////  Initial Query
                 if (haveDoc) {
                     _data.AD_Table_ID = AD_Table_ID;
@@ -1654,9 +1694,9 @@
             para = para.concat(", PostingType=").concat(_data.PostingType);
 
             //  Document
-            _data.documentQuery = chkSelectDoc.prop("checked");
+            _data.documentQuery = chkSelectDoc.find('input').prop("checked");
             para = para.concat(", DocumentQuery=").concat(_data.documentQuery);
-            if (chkSelectDoc.prop("checked")) {
+            if (chkSelectDoc.find('input').prop("checked")) {
                 if (_data.AD_Table_ID == 0 || _data.Record_ID == 0) {
                     return;
                 }
@@ -1772,7 +1812,7 @@
         };
 
         function actionDocument() {
-            var doc = chkSelectDoc.prop("checked");
+            var doc = chkSelectDoc.find('input').prop("checked");
             if (doc) {
                 cmbSelectDoc.getControl().removeAttr("disabled");
                 btnSelctDoc.removeAttr("disabled");
@@ -1881,7 +1921,7 @@
                     whereClause += " AND C_Element_ID=" + ase.c_element_id;
                 }
             }
-            else if (chkSelectDoc.prop("checked")) {
+            else if (chkSelectDoc.find('input').prop("checked")) {
                 whereClause = "";
             }
 

@@ -470,7 +470,7 @@ div.VIS_Pref_slide-show.pp {
     font-size: 14px;
     border: 0px;
     float: right;
-    border-radius: 2px;
+    border-radius: .25rem;
     font-weight: 200;
     /*font-family: helvetica;*/
     cursor: pointer;
@@ -898,6 +898,7 @@ input:required:valid {
     color: #fff;
     padding: 8px 15px;
     cursor: pointer;
+    font-weight: normal;
 }
 
 /*#file-input {

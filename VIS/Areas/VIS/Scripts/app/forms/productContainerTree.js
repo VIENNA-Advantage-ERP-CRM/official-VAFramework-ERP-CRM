@@ -47,26 +47,26 @@
             $_CreateNewProductContainer = $("<div id='AddNewContainer' style='float: left; width: 100%; display:none;'>"
 
                                             + "<div class='VIS_form-data-row'>"
-                                            + "<div class='VIS_form-data-col'>" // style='float: left; width: 50%; margin-bottom:10px;
-                                            + "<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Value") + "</label>"
-                                            + "<input id='VIS_SearchValue' type='text'/></div>" // style='width: 96%;'
+                                            + "<div class='VIS_form-data-col input-group vis-input-wrap'><div class='vis-control-wrap'>" // style='float: left; width: 50%; margin-bottom:10px;
+                                            + "<input id='VIS_SearchValue' type='text' placeholder=' ' data-placeholder=''><label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Value") + "</label>"
+                                            + "</div></div>" // style='width: 96%;'
 
-                                            + "<div class='VIS_form-data-col'>" // style='float: left; width: 50%; margin-bottom:10px;'
-                                            + "<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Name") + "</label>"
-                                            + "<input id='VIS_Name' type='text' style='background-color:#FFB6C1'/></div>" //style='width: 96%;'
+                                            + "<div class='VIS_form-data-col input-group vis-input-wrap'><div class='vis-control-wrap'>" // style='float: left; width: 50%; margin-bottom:10px;'
+                                            + "<input id='VIS_Name' type='text' class='vis-ev-col-mandatory' placeholder=' ' data-placeholder=''><label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Name") + "</label>"
+                                            + "</div></div>" //style='width: 96%;'
                                             + "</div>"
 
                                             + "<div class='VIS_form-data-row'>"
-                                            + "<div class='VIS_form-data-col'>" // style='float: left; width: 50%; margin-bottom:10px;'
-                                            + "<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Height") + "</label>"
-                                            + "<input id='VIS_Height' type='Number'/></div>" //style='width: 96%;'
+                                            + "<div class='VIS_form-data-col input-group vis-input-wrap'><div class='vis-control-wrap'>" // style='float: left; width: 50%; margin-bottom:10px;'
+                                            + "<input id='VIS_Height' type='Number' placeholder=' ' data-placeholder=''><label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Height") + "</label>"
+                                            + "</div></div>" //style='width: 96%;'
 
-                                            + "<div class='VIS_form-data-col'>" //style='float: left; width: 50%; margin-bottom:10px;'
-                                            + "<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Width") + "</label>"
-                                            + "<input id='VIS_Width' type='Number'/></div>" // style='width: 96%;'
+                                            + "<div class='VIS_form-data-col input-group vis-input-wrap'><div class='vis-control-wrap'>" //style='float: left; width: 50%; margin-bottom:10px;'
+                                            + "<input id='VIS_Width' type='Number' placeholder=' ' data-placeholder=''><label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Width") + "</label>"
+                                            + "</div></div>" // style='width: 96%;'
                                             + "</div>"
 
-                                            + "<div class='VIS_form-data-row'>"
+                                            + "<div class='VIS_form-data-row' style='display: none;'>"
                                             + "<div class='VIS_form-data-col'>" //style='float: left; width: 50%; margin-bottom:10px;'
                                             + "<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Ref_M_Container_ID") + "</label>"
                                             + "</div>"
@@ -75,12 +75,12 @@
                                             + "</div>");
 
             $_ContainerPopUp = $("<div class='VIS_form-data-row'>"
-                               + "<div class='VIS_form-search-wrap'>"
-                               + "<input class='VIS_form-search-wrap input' id='VIS_Search' type='text' placeholder='Search Here...'>"
-                               + "<button class='VIS_form-search-wrap button' id=VIS_BtnSearch title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_Search") + "><i class='glyphicon glyphicon-search'></i></button>"
-                               + "<button class='VIS_form-search-wrap button' id=VIS_BtnAdd title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_NewContainer") + "><i class='glyphicon glyphicon-plus'></i></button>"
-                               + "<button class='VIS_form-search-wrap button' style='display:none;' id=VIS_BtnSave title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_SaveContainer") + "><i class='glyphicon glyphicon-floppy-disk'></i></button>"
-                               + "<button class='VIS_form-search-wrap button' style='display:none;' id=VIS_BtnCancel title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_Cancel") + "><i class='glyphicon glyphicon-remove'></i></button>"
+                               + "<div class='VIS_form-search-wrap input-group vis-input-wrap'><div class='vis-control-wrap'>"
+                               + "<input class='VIS_form-search-wrap input' id='VIS_Search' type='text' placeholder='Search Here...' data-hasbtn=' '></div>"
+                               + "<div class='input-group-append'><button class='VIS_form-search-wrap button input-group-text' id=VIS_BtnSearch title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_Search") + "><i class='vis vis-search'></i></button>"
+                               + "<button class='VIS_form-search-wrap button input-group-text' id=VIS_BtnAdd title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_NewContainer") + "><i class='vis vis-plus'></i></button>"
+                               + "<button class='VIS_form-search-wrap button input-group-text' style='display:none;' id=VIS_BtnSave title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_SaveContainer") + "><i class='vis vis-save'></i></button>"
+                               + "<button class='VIS_form-search-wrap button input-group-text' style='display:none;' id=VIS_BtnCancel title=" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_Cancel") + "><i class='vis vis-mark'></i></button>"
                                + "</div></div>");
 
             $ContainerParentChild = $("<div id='VIS_ContainerParentChild' class='VIS_Tree-Container' ></div>"); //style='height:400px; float: left; width: 100%;'
@@ -89,7 +89,7 @@
             //                            + " <span class='btn' style='display:none;' id=VIS_BtnCancel1>" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_Cancel") + "</span>"
             //                            + " </div>");
 
-            $_DialogOKCancelProductContainer = $("<div id='VIS_DialogOKCancelProductContainer' class='VIS_buttons-wrap VIS_pop-btn-wrap' style='display:block; margin-right: -7px'>"
+            $_DialogOKCancelProductContainer = $("<div id='VIS_DialogOKCancelProductContainer' class='VIS_buttons-wrap VIS_pop-btn-wrap' style='display:block;'>"
                                         + " <span class='btn' id=VIS_DialogOK>" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_DialogOK") + "</span>"
                                         + " <span class='btn' id=VIS_DialogCancel>" + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_DialogCancel") + "</span>"
                                         + " </div>");
@@ -282,7 +282,7 @@
         function callbackController(data) {
             $ContainerParent = '<div id=containerParent style="width:100%;height:400px">'
                                     + '<div>'
-                                    + '<div class="well VIS_tree-container" style="width:100%; padding: 8px 0;float: left;">'
+                                    + '<div class="well VIS_tree-container" style="width:100%;float: left;">'
                                     + '<div id=containerParent1 style="overflow-y: auto;height: 383px;">'
                                     + '<ul class="nav nav-list">';
             var result = JSON.parse(data);
@@ -453,7 +453,7 @@
                     if (JSON.parse(data) == "") {
                         VIS.ADialog.info("VIS_ContainerInserted", true, "", "");
                         $($ContainerParentChild).empty();
-                        $ContainerParentChild = $("<div id='VIS_ContainerParentChild' style='height:400px; float: left; width: 100%;'></div>");
+                        $ContainerParentChild = $("<div id='VIS_ContainerParentChild' style='height:382px; float: left; width: 100%;'></div>");
                         // Load data
                         loadgrdContainer(callbackController);
 
@@ -486,7 +486,7 @@
             divContainer = $ContainerPopUp.find("#AddNewContainer");
             divContainer[0].style.display = "none";
 
-            $btnAdd[0].style.display = "block";
+            $btnAdd[0].style.display = "flex";
             $btnSave[0].style.display = "none";
 
             $btnCancel[0].style.display = "none";
@@ -495,7 +495,7 @@
 
             $ContainerPopUp.find("#containerParent").css('height', '400px');
             $ContainerPopUp.find("#containerParent1").css('height', '383px');
-            $ContainerPopUp.find("#VIS_ContainerParentChild").css('height', '397px');
+            $ContainerPopUp.find("#VIS_ContainerParentChild").css('height', '382px');
 
             $labelInfo[0].style.display = "none";
         };
@@ -506,15 +506,15 @@
             divContainer[0].style.display = "block";
 
             $btnAdd[0].style.display = "none";
-            $btnSave[0].style.display = "block";
+            $btnSave[0].style.display = "flex";
 
-            $btnCancel[0].style.display = "block";
+            $btnCancel[0].style.display = "flex";
 
             $ContainerPopUp.find("#VIS_DialogOKCancelProductContainer")[0].style.display = "none";
 
             $ContainerPopUp.find("#containerParent").css('height', '295px');
             $ContainerPopUp.find("#containerParent1").css('height', '275px');
-            $ContainerPopUp.find("#VIS_ContainerParentChild").css('height', '295px');
+            $ContainerPopUp.find("#VIS_ContainerParentChild").css('height', '265px');
 
             $labelInfo[0].style.display = "block";
         }

@@ -66,7 +66,7 @@
         var $imgToggle = $('<i class="fa fa-bars vis-apanel-lb-img" title="Actions"></i>');
         if (this.splitUI) {
             this.partitionContainer = $('<div class="vis-process-outer-wrap">');
-            this.parameterContainer = $('<div class="vis-process-left-sidebar">');
+            this.parameterContainer = $('<div class="vis-process-left-sidebar vis-leftsidebarouterwrap">');
             this.reportAreaContainer = $('<div class="vis-process-main-wrap">');
             this.reportToolbar = $('<div class="vis-process-toolbar vis-processtoolpadd">');
             this.parameterFixedArea = $('<div class="vis-process-parm-top">');
@@ -86,7 +86,7 @@
         function initilizedComponent() {
 
             $root = $("<div style='position:relative;width:100%'>");
-            $busyDiv = $("<div class='vis-apanel-busy'>");
+            $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             $table = $("<table  class='vis-process-table'>");
             $btnOK = $("<button class='vis-button-ok' tabindex=0>").text(VIS.Msg.getMsg("OK"));
             $btnClose = $("<button class='vis-button-close'>").text(VIS.Msg.getMsg("Close"));
@@ -101,14 +101,18 @@
 
             $divOuterMain.append($busyDiv);
             $cmbType = $('<select style="display:none;width:100%">');
-            $chkIsBG = $('<input type="checkbox" class="vis-process-background">');
-            $lblIsBG = $('<label  class="vis-process-background-label">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+            $chkIsBG = $('<label  class="vis-ec-col-lblchkbox" style="display: none;"><input type="checkbox">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+            //$lblIsBG = $('<label  class="vis-process-background-label">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
             $text = $("<span class='vis-process-description-Span' style='height: 40px;'>").val("asassasasasasaasa");
             //ProcessDialog
             $contentGrid.append($text);
-            $lblRptTypeHeader = $('<label style="float: left;margin: 0px 10px 0px 0px;display:none;">' + VIS.Msg.getMsg("ChooseReportType") + '</label>');
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivInputCtrlWrap = $('<div class="vis-control-wrap">');
+            $lblRptTypeHeader = $('<label style="display:none;">' + VIS.Msg.getMsg("ChooseReportType") + '</label>');
             var divrptType = $('<div style="display:inherit"></div>');
-            self.parameterFixedArea.append($lblRptTypeHeader).append($cmbType).append($chkIsBG).append($lblIsBG);
+            self.parameterFixedArea.append($DivInputWrap);
+            $DivInputWrap.append($DivInputCtrlWrap);
+            $DivInputCtrlWrap.append($chkIsBG).append($cmbType).append($lblRptTypeHeader)/*.append($lblIsBG)*/;
 
             $contentGrid.append(divrptType);
             $contentGrid.append($btnOK).append($btnClose);
@@ -372,13 +376,13 @@
         this.showBackgroundProcess = function (value) {
             if (value) {
                 self.parameterFixedArea.addClass('vis-process-pram-checkbox-text');
-                $chkIsBG.css('display', 'block');
-                $lblIsBG.css('display', 'block');
+                $chkIsBG.css('display', 'flex');
+                //$lblIsBG.css('display', 'block');
             }
             else {
                 self.parameterFixedArea.removeClass('vis-process-pram-checkbox-text');
                 $chkIsBG.css('display', 'none');
-                $lblIsBG.css('display', 'none');
+                //$lblIsBG.css('display', 'none');
             }
 
         };
