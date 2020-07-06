@@ -926,12 +926,10 @@ namespace VIS.Helpers
         
 
 
-            //    if (!m_fields[valIndex].IsVirtualColumn)
-            //    {
-
             //        //Check value in DB 
             //        int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
             //            + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
+
 
             //        if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
             //        {

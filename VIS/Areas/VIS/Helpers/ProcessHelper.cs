@@ -454,25 +454,25 @@ namespace VIS.Helpers
                 return ret;
             }
 
-            if (!instance.Save())
-            {
-                ret.IsError = true;
-                ret.Message = Msg.GetMsg(ctx, "ProcessNoInstance");
-                return ret;
-            }
-            ret.AD_PInstance_ID = instance.GetAD_PInstance_ID();
 
             //	Get Parameters (Dialog)
             //Check If Contaon Parameter
 
             List<GridField> fields = ProcessParameter.GetParametersList(ctx, Util.GetValueOfInt(processInfo["Process_ID"]), Util.GetValueOfInt(processInfo["WindowNo"]));
 
-            if (fields.Count < 1) //no Parameter
+            if (fields.Count < 1) //no Parameter then save instance and start execution
             {
+                if (!instance.Save())
+                {
+                    ret.IsError = true;
+                    ret.Message = Msg.GetMsg(ctx, "ProcessNoInstance");
+                    return ret;
+                }
+                ret.AD_PInstance_ID = instance.GetAD_PInstance_ID();
                 processInfo["AD_PInstance_ID"] = ret.AD_PInstance_ID.ToString();
                 ret = ExecuteProcessCommon(ctx, processInfo, null);
             }
-            else
+            else// If  parameter exist, then instance is created after user clciks OK
             {
                 ret.ShowParameter = true;
                 ret.ProcessFields = fields;

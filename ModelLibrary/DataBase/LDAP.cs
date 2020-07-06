@@ -14,8 +14,9 @@ namespace VAdvantage.DataBase
         /**	Logger	*/
         private static VLogger log = VLogger.GetVLogger(typeof(LDAP).FullName);
 
-        public static bool Validate(String ldapURL, String domain, String userName, String password, string adminUser, string adminPwd)
+        public static bool Validate(String ldapURL, String domain, String userName, String password, string adminUser, string adminPwd, out string output)
         {
+            output = "";
             if (String.IsNullOrEmpty(password))
                 return false;
             //LdapConnection
@@ -43,6 +44,7 @@ namespace VAdvantage.DataBase
                     if (null == result)
                     {
                         log.Warning("Error in LDAP: User Not Found" + userName);
+                        output = "UserNotFound";
                         return false;
                     }
                 }
@@ -67,6 +69,7 @@ namespace VAdvantage.DataBase
                     catch (Exception e)
                     {
                         log.Severe("Error in LDAP for Admin user. User not found " + userName + " : " + e.Message);
+                        output = e.Message;
                         return false;
                     }
 
@@ -74,6 +77,7 @@ namespace VAdvantage.DataBase
                     if (null == result)
                     {
                         log.Warning("Error in LDAP for Admin User: User Not Found: " + userName);
+                        output = "UserNotFound";
                         return false;
                     }
                     else if (result != null)
@@ -89,6 +93,7 @@ namespace VAdvantage.DataBase
                         if (null == result)
                         {
                             log.Warning("Error in LDAP: User Not Found" + userName);
+                            output = "UserNotFound";
                             return false;
                         }
                         string guid = BitConverter.ToString((byte[])result.Properties["objectguid"][0]);
@@ -100,6 +105,7 @@ namespace VAdvantage.DataBase
                         else
                         {
                             log.Warning("Error in LDAP: User Not Found" + userName);
+                            output = "UserNotFound";
                             return false;
                         }
 
@@ -112,11 +118,13 @@ namespace VAdvantage.DataBase
             catch (AuthenticationException e)
             {
                 log.Severe("Authentication Error in LDAP for user " + userName + " : " + e.Message);
+                output = e.Message;
                 return false;
             }
             catch (Exception e)
             {
                 log.Severe("Error in LDAP for user " + userName + " : " + e.Message);
+                output = e.Message;
                 return false;
             }
             if (log.IsLoggable(Level.INFO)) log.Info("OK: " + userName);
