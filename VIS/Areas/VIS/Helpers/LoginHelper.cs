@@ -275,6 +275,10 @@ namespace VIS.Helpers
         }
         public static IDataReader GetRoles(string uname, bool authenticated, bool isLDAP)
         {
+            //Save Failed Login Count and Password validty in cache
+             GetSysConfigForlogin();
+
+
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@username", uname);
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
