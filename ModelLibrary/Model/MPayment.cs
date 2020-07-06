@@ -789,6 +789,13 @@ namespace VAdvantage.Model
                         SetTenderType("A");
                     }
 
+                    // JID_1676 -- set Payment Execution as "In-Progress if not defined
+                    if (String.IsNullOrEmpty(GetVA009_ExecutionStatus()))
+                    {
+                        SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_In_Progress);
+                    }
+
+
                     //change by amit // for letter of credit
                     if (Env.IsModuleInstalled("VA026_"))
                     {
@@ -1173,7 +1180,7 @@ namespace VAdvantage.Model
             param[2].SqlDbType = SqlDbType.Int;
             param[2].Direction = ParameterDirection.Output;
 
-            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);            
+            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);
 
             if (param != null && param.Length > 0) // If Record Found
             {
@@ -2613,7 +2620,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-   
+
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
@@ -2657,7 +2664,7 @@ namespace VAdvantage.Model
                     }
 
                     //JID_0880 Show message on completion of Payment
-                    _processMsg =  order.GetProcessMsg();
+                    _processMsg = order.GetProcessMsg();
                     GetCtx().SetContext("prepayOrder", _processMsg);
 
                     order.Save(Get_Trx());
@@ -2680,7 +2687,7 @@ namespace VAdvantage.Model
                 }
                 //	WaitingPayment
             }
-          
+
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
             {
@@ -2775,7 +2782,7 @@ namespace VAdvantage.Model
          * 	Complete Document
          * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
          */
-        public String  CompleteIt()
+        public String CompleteIt()
         {
             //	Re-Check
             if (!_justPrepared)
@@ -3167,7 +3174,7 @@ namespace VAdvantage.Model
             }
             else if (Env.IsModuleInstalled("VA009_") && GetVA009_OrderPaySchedule_ID() != 0)
             {
-            
+
                 if (GetVA009_OrderPaySchedule_ID() != 0 && GetDescription() != null && GetDescription().Contains("{->"))
                 {
                     // also need to set Execution Status As Awaited
@@ -3184,7 +3191,7 @@ namespace VAdvantage.Model
                         MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                         MClientInfo client = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
                         MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetC_AcctSchema1_ID());
-                 
+
                         if (order.GetC_Currency_ID() != GetC_Currency_ID())
                         {
                             orderPaidAmt = MConversionRate.Convert(GetCtx(), orderPaidAmt, GetC_Currency_ID(), order.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
@@ -3321,15 +3328,15 @@ namespace VAdvantage.Model
             {
                 return DocActionVariables.STATUS_INVALID;
             }
-           
+
             //JID_0880 Show message on completion of Payment
             if (GetCtx().GetContext("prepayOrder") != null)
             {
-                _processMsg += ","+ GetCtx().GetContext("prepayOrder");
+                _processMsg += "," + GetCtx().GetContext("prepayOrder");
                 GetCtx().SetContext("prepayOrder", "");
             }
 
-            
+
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -3414,7 +3421,7 @@ namespace VAdvantage.Model
                     if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
                         : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false,
                         Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]), IsPaymentAllocate))
                     {
                         SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                         return false;
@@ -3426,7 +3433,7 @@ namespace VAdvantage.Model
                     {
                         if (!CalculateWithholdingAmount(GetBackupWithholding_ID(), true,
                             Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]), IsPaymentAllocate))
                         {
                             SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                             return false;
@@ -4989,17 +4996,25 @@ namespace VAdvantage.Model
 
         public Boolean ReverseCorrectIt()
         {
-            //added by shubham (JID_1472) To check payment is reconciled or not
+            log.Info(ToString());
+
+            // (JID_1472) To check payment is reconciled or not
             if (IsReconciled())
             {
-
                 _processMsg = Msg.GetMsg(GetCtx(), "PaymentAlreadyReconciled");
                 return false;
-
             }
-            //if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
-            //{
-            log.Info(ToString());
+
+            // JID_1276
+            if (GetC_Order_ID() > 0 && GetVA009_OrderPaySchedule_ID() > 0)
+            {
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_OrderLine_ID) FROM C_OrderLine 
+                                    WHERE (QtyInvoiced != 0 OR QtyDelivered != 0) AND C_Order_ID = " + GetC_Order_ID(), null, Get_Trx())) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "InvoiceOrGrnAlreadyCreated");
+                    return false;
+                }
+            }
 
             //	Std Period open?
             DateTime? dateAcct = GetDateAcct();
