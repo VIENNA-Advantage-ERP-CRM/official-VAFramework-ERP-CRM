@@ -131,7 +131,7 @@
             txtName = new VIS.Controls.VTextBox("Name", false, false, true, 50, 50, "Name");
             txtDescription = new VIS.Controls.VTextBox("Description", false, false, true, 50, 50, "Description");
             txtComment = new VIS.Controls.VTextArea("Comment", false, false, true, 200, 200);
-            dtpCreatedOn = $("<input id='" + "dtpCreatedOn_" + $self.windowNo + "' readonly class='vis-gc-vpanel-table-readOnly' type='date'>");
+            dtpCreatedOn = $("<input id='" + "dtpCreatedOn_" + $self.windowNo + "' readonly class='vis-gc-vpanel-table-readOnly'>");
 
             lblRecordsCount = new VIS.Controls.VLabel();
 
@@ -791,7 +791,7 @@
                 arrListColumns.push({ field: "DESCRIPTION", caption: VIS.Msg.translate(VIS.Env.getCtx(), "DESCRIPTION"), sortable: true, size: '16%', min: 150, hidden: false });
                 arrListColumns.push({ field: "HELP", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "HELP"), sortable: true, size: '16%', min: 150, hidden: false });
                 arrListColumns.push({ field: "CREATEDBY", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "CREATEDBY"), sortable: true, size: '16%', min: 150, hidden: false });
-                arrListColumns.push({ field: "CREATED", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "CREATED"), sortable: true, size: '16%', min: 150, hidden: false, render: 'date' });
+                arrListColumns.push({ field: "CREATED", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "CREATED"), sortable: true, size: '16%', min: 150, hidden: false });
                 arrListColumns.push({
                     field: "View", caption: VIS.Msg.translate(VIS.Env.getCtx(), "View"), sortable: true, size: '80px', min: 150, hidden: false,
                     render: function () { return '<div><i class="vis vis-download" title="View record" style="opacity: 1; font-size: 1rem"></i></div>'; }
@@ -849,7 +849,8 @@
             txtCreatedBy.getControl().val(dGrid.get(recid).CREATEDBY);
 
             if (dGrid.get(recid).CREATED != null) {
-                dtpCreatedOn.val((dGrid.get(recid).CREATED).split('T')[0])
+                //dtpCreatedOn.val((dGrid.get(recid).CREATED).split('T')[0])
+                dtpCreatedOn.val(dGrid.get(recid).CREATED)
             }
 
             archiveId = dGrid.get(recid).AD_ARCHIVE_ID;
@@ -884,7 +885,12 @@
                     line['DESCRIPTION'] = dr.getString('DESCRIPTION');
                     line['HELP'] = dr.getString('HELP');
                     line['CREATEDBY'] = getCreatedByName(dr.getString('CREATEDBY'));
-                    line['CREATED'] = dr.getString('CREATED');
+                    //JID_1825 Date Showing as per browser culture
+                    var da = (dr.getString('CREATED'));
+                    var d = new Date(da);
+                    CreatedOn = d.toLocaleDateString();
+
+                    line['CREATED'] = CreatedOn;
                     line['AD_ARCHIVE_ID'] = dr.getInt('AD_ARCHIVE_ID');
                     //line['AD_PROCESS_ID'] = dr.getInt('AD_PROCESS_ID');
                     //line['AD_TABLE_ID'] = dr.getInt('AD_TABLE_ID');

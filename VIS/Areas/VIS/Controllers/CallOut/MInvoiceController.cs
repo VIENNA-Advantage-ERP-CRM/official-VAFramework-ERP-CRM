@@ -98,5 +98,23 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Getting the percision values
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="fields"></param>
+        /// <returns>get Percision value</returns>
+        public JsonResult GetPercision(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInvoiceModel objInvoice = new MInvoiceModel();
+                retJSON = JsonConvert.SerializeObject(objInvoice.GetPrecision(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }   
 }

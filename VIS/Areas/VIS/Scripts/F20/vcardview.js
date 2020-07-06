@@ -676,16 +676,30 @@ function VCard(fields, record) {
 
         else if (VIS.DisplayType.IsDate(dt)) {
             if (value) {
+                // JID_1826 Date is showing as per browser culture
+                var d = new Date(value);
                 if (dt == VIS.DisplayType.Date)
-                    value = Globalize.format(new Date(value), 'd');
+                    value = d.toLocaleDateString();
+                //value = Globalize.format(new Date(value), 'd');
                 else if (dt == VIS.DisplayType.DateTime)
-                    value = Globalize.format(new Date(value), 'f');
+                    value = d.toDateString();
+                //value = Globalize.format(new Date(value), 'f');
                 else
-                    value = Globalize.format(new Date(value), 't');
+                    value = d.toLocaleTimeString();
+                //value = Globalize.format(new Date(value), 't');
             }
             else value = null;
         }
-
+        // JID_1826 Amount is showing as per browser culture
+        else if (VIS.DisplayType.Amount == dt) {
+            var val = VIS.Utility.Util.getValueOfDecimal(value);
+            value = (val).toLocaleString();
+        }
+        // JID_1826 Quantity is showing as per browser culture
+        else if (VIS.DisplayType.Quantity == dt) {
+            var val = VIS.Utility.Util.getValueOfDecimal(value);
+            value = (val).toLocaleString();
+        }
         if (!value && value != 0)
             value = ' -- ';
         value = w2utils.encodeTags(value);

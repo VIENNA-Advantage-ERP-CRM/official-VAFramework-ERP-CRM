@@ -1794,14 +1794,18 @@
             try {
                 //Get product price information
                 var dr = null;
+
+                // JID_1744 The Precision Shpould as per Currency precision
+                var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());               
+
                 dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
                 if (dr != null) {
                     mTab.setValue("PriceList", dr["PriceList"]);
                     mTab.setValue("PriceLimit", dr.PriceLimit);
-                    mTab.setValue("PriceActual", dr.PriceActual);
-                    mTab.setValue("PriceEntered", dr.PriceEntered);
+                    mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.PriceActual.toFixed(stdPrecision)));
+                    mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.PriceEntered.toFixed(stdPrecision)));
                     mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
-                    mTab.setValue("Discount", dr.Discount);
+                    mTab.setValue("Discount", Util.getValueOfDecimal(dr.Discount.toFixed(stdPrecision)));
                     if (countEd011 <= 0) {
                         mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
                     }
@@ -1818,9 +1822,9 @@
                         mTab.setValue("PriceList", PriceList);
                         PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
                         mTab.setValue("PriceEntered", PriceEntered);
-                        PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
+                        PriceActual = Util.getValueOfDecimal(prices["PriceEntered"].toFixed(stdPrecision));
                         mTab.setValue("PriceActual", PriceActual);
-                        mTab.setValue("QtyOrdered", Util.getValueOfDecimal(prices["QtyOrdered"]));
+                        mTab.setValue("QtyOrdered", Util.getValueOfDecimal(prices["QtyOrdered"].toFixed(stdPrecision)));
                     }
                     //End UOM
 
@@ -1973,6 +1977,10 @@
             var sql = "SELECT ChargeAmt FROM C_Charge WHERE C_Charge_ID=" + C_Charge_ID;
             var dr = null;
 
+
+            // JID_1744 The Precision Shpould as per Currency precision
+            var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());
+
             dr = VIS.DB.executeReader(sql);
             var PriceEntered;
             if (dr != null) {
@@ -1986,10 +1994,10 @@
                     //mTab.setValue("Discount", VIS.Env.ZERO);
                 }
             }
-            mTab.setValue("PriceEntered", PriceEntered);
+            mTab.setValue("PriceEntered", Util.getValueOfDecimal(PriceEntered.toFixed(stdPrecision)));
             //mTab.SetValue("PriceEntered", Utility.Util.GetValueOfDecimal(dr[0]));
             //mTab.SetValue("PriceActual", Utility.Util.GetValueOfDecimal(dr[0]));
-            mTab.setValue("PriceActual", PriceEntered);
+            mTab.setValue("PriceActual", Util.getValueOfDecimal(PriceEntered.toFixed(stdPrecision)));
             mTab.setValue("PriceLimit", VIS.Env.ZERO);
             mTab.setValue("PriceList", VIS.Env.ZERO);
             mTab.setValue("Discount", VIS.Env.ZERO);
@@ -2044,7 +2052,7 @@
             var paramString = "";
 
             //change by amit 7-june-2016
-            var params = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", (mTab.getValue("C_Order_ID")).toString() +
+            var params = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")));
             var recDic = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
             //end 
@@ -2278,7 +2286,7 @@
             //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'"));
 
             var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-            var params = M_Product_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
+            var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + C_BPartner_ID1.toString() +
                 "," + (mTab.getValue("QtyEntered")).toString());
@@ -2381,7 +2389,7 @@
                     //
                     this.log.fine("QtyChanged -> PriceActual=" + stdPrice
                         + ", PriceEntered=" + PriceEntered + ", Discount=" + pp.Discount);
-                    PriceActual = pp.PriceStd;
+                    PriceActual = Util.getValueOfDecimal(pp.PriceStd.toFixed(StdPrecision));
                     //mTab.setValue("PriceActual", PriceActual);
                     // SI_0605: not to update price when blanket order line exist
                     // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
@@ -2408,8 +2416,7 @@
                 }
             }
             else if (mField.getColumnName() == "PriceActual") {
-                PriceActual = Util.getValueOfDecimal(value);
-
+                PriceActual = Util.getValueOfDecimal(value.toFixed(StdPrecision));
                 // commneted by Amit on behalf of Ravikant 15-10-2015
                 //make parameter string
                 //paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
@@ -2430,9 +2437,10 @@
                 this.log.fine("PriceActual=" + PriceActual
                     + " -> PriceEntered=" + PriceEntered);
                 mTab.setValue("PriceEntered", PriceEntered);
+                mTab.setValue("PriceActual", PriceActual);
             }
             else if (mField.getColumnName() == "PriceEntered") {
-                PriceEntered = Util.getValueOfDecimal(value);
+                PriceEntered = Util.getValueOfDecimal(value.toFixed(StdPrecision));
 
                 //make parameter string
                 paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
@@ -2455,6 +2463,7 @@
                 this.log.fine("PriceEntered=" + PriceEntered
                     + " -> PriceActual=" + PriceActual);
                 mTab.setValue("PriceActual", PriceActual);
+                mTab.setValue("PriceEntered", PriceEntered);
             }
 
             //  Discount entered - Calculate Actual/Entered
@@ -2497,7 +2506,8 @@
                 }
                 //if (Discount.Scale() > 2)
                 //   Discount = Decimal.Round(Discount.Value, 2);//, MidpointRounding.AwayFromZero);
-                Discount = Discount.toFixed(2);
+                Discount = Util.getValueOfDecimal(Discount.toFixed(StdPrecision));
+                mTab.setValue("PriceList", Util.getValueOfDecimal(PriceList.toFixed(StdPrecision)));
 
                 // SI_0605: not to update price when blanket order line exist
                 // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
@@ -2640,10 +2650,10 @@
             }
 
             if (IsTaxIncluded) {
-                mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(LineNetAmt)));
+                mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(LineNetAmt.toFixed(StdPrecision))));
             }
             else {
-                mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(LineNetAmt) + taxAmt));
+                mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(LineNetAmt.toFixed(StdPrecision)) + Util.getValueOfDecimal(taxAmt.toFixed(StdPrecision))));
             }
         }
         catch (err) {
@@ -12462,16 +12472,15 @@
 
             var rowDataDB = null;
 
-
+            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.C_Currency_ID); 
             // MProductPricing pp = new MProductPricing(ctx.getAD_Client_ID(), ctx.getAD_Org_ID(),
             //     M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
-
-
+            
             //		
             mTab.setValue("PriceList", dr["PriceList"]);
             mTab.setValue("PriceLimit", dr.PriceLimit);
-            mTab.setValue("PriceActual", dr.PriceActual);
-            mTab.setValue("PriceEntered", dr.PriceEntered);
+            mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.PriceActual.toFixed(stdPrecision)));
+            mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.PriceEntered.toFixed(stdPrecision)));
             mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
             // mTab.setValue("Discount", dr.Discount);
             if (countEd011 <= 0) {
@@ -12822,10 +12831,15 @@
             ctx.setContext(windowNo, "DiscountSchema", "N");
             var sql = "SELECT ChargeAmt FROM C_Charge WHERE C_Charge_ID=" + C_Charge_ID;
 
+
+            //JID_1744 The precision should be as per Currenct Precision
+            //JID_1744 The precision should be as per Currenct Precision
+            var stdPrecision = VIS.dataContext.getJSONRecord("MInvoice/GetPercision", mTab.getValue("C_Invoice_ID").toString());
+
             dr = VIS.DB.executeReader(sql, null, null);
             if (dr.read()) {
-                mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.get("chargeamt")));//.getBigDecimal(1));
-                mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.get("chargeamt")));//dr.getBigDecimal(1));
+                mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.get("chargeamt").toFixed(stdPrecision)));//.getBigDecimal(1));
+                mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.get("chargeamt").toFixed(stdPrecision)));//dr.getBigDecimal(1));else if (mField.getColumnName() == "PriceActual") {
                 mTab.setValue("PriceLimit", 0);
                 mTab.setValue("PriceList", 0);
                 mTab.setValue("Discount", 0);
@@ -13477,7 +13491,7 @@
                 ctx.setContext(windowNo, "DiscountSchema", dr.IsDiscountSchema ? "Y" : "N");
             }
             else if (mField.getColumnName() == "PriceActual") {
-                PriceActual = value;
+                PriceActual = Util.getValueOfDecimal(value.toFixed(StdPrecision));
 
                 //commneted by Amit On behlf of ravikant 15-10-2015
                 //make parameter string
@@ -13501,9 +13515,10 @@
                 this.log.fine("amt - PriceActual=" + PriceActual
                     + " -> PriceEntered=" + PriceEntered);
                 mTab.setValue("PriceEntered", PriceEntered);
+                mTab.SetValue("PriceActual", PriceActual);
             }
             else if (mField.getColumnName() == "PriceEntered") {
-                PriceEntered = value;
+                PriceEntered = Util.getValueOfDecimal(value.toFixed(StdPrecision));
 
 
                 //make parameter string
@@ -13523,6 +13538,7 @@
                 this.log.fine("amt - PriceEntered=" + PriceEntered
                     + " -> PriceActual=" + PriceActual);
                 mTab.setValue("PriceActual", PriceActual);
+                mTab.setValue("PriceEntered", PriceEntered);
             }
 
             //	Check PriceLimit
@@ -15657,6 +15673,8 @@
             if (Util.scale(LineNetAmt) > StdPrecision)
                 LineNetAmt = LineNetAmt.toFixed(StdPrecision);//, MidpointRounding.AwayFromZero);
             mTab.setValue("LineNetAmt", LineNetAmt);
+            // JID_1744 the precision should be as per currency percision
+            mTab.setValue("PriceActual", Util.getValueOfDecimal(PriceActual.toFixed(StdPrecision)));
             this.log.info("amt - LineNetAmt=" + LineNetAmt);
         }
         catch (err) {
