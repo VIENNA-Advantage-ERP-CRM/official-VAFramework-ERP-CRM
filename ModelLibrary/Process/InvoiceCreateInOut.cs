@@ -33,7 +33,6 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int _C_DocType_ID = 0;
         // Invoice			
         private int _C_Invoice_ID = 0;
-
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -136,17 +135,44 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	Nothing to Deliver
 
                 // Get the lines of Invoice based on the setting taken on Tenant to allow non item Product         
-                if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N") 
+                if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")
                     && ((product != null && product.GetProductType() != MProduct.PRODUCTTYPE_Item) || invoiceLine.GetC_Charge_ID() != 0))
                 {
                     continue;
-                }                
+                }
 
                 MInOutLine sLine = new MInOutLine(ship);
-                sLine.SetInvoiceLine(invoiceLine, 0,	//	Locator 
+                //JID_1679 Generate Receipt from Invoice(Vendor) for remaining quantity 
+                if (invoiceLine.GetC_OrderLine_ID() != 0)
+                {
+                  
+                    decimal movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from C_OrderLine ol Inner join M_InOutLine il on il.C_orderline_ID= ol.C_Orderline_Id "
+                             + " WHERE il.C_OrderLine_ID =" + invoiceLine.GetC_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
+                    // in case of partial receipt
+                    if ( invoiceLine.GetQtyInvoiced() > movementqty && movementqty!=0)
+                    {
+                        decimal? res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetC_UOM_ID(), movementqty);
+                        sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator
+                            invoice.IsSOTrx() ? (movementqty) : Env.ZERO);
+                        sLine.SetQtyEntered(res);
+                        sLine.SetMovementQty(movementqty);
+                    }
+                    // if QtyInvoiced is less or No Material receipt is found against this order
+                    else
+                    {
+                        sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator 
+                          invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);
+                        sLine.SetQtyEntered(invoiceLine.GetQtyEntered());
+                        sLine.SetMovementQty(invoiceLine.GetQtyInvoiced());
+                    }
+                }
+                else
+                {
+                    sLine.SetInvoiceLine(invoiceLine, 0,	//	Locator 
                     invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);
-                sLine.SetQtyEntered(invoiceLine.GetQtyEntered());
-                sLine.SetMovementQty(invoiceLine.GetQtyInvoiced());
+                    sLine.SetQtyEntered(invoiceLine.GetQtyEntered());
+                    sLine.SetMovementQty(invoiceLine.GetQtyInvoiced());
+                }
                 if (invoice.IsCreditMemo())
                 {
                     sLine.SetQtyEntered(Decimal.Negate(sLine.GetQtyEntered()));//.negate());
@@ -154,7 +180,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 if (!sLine.Save())
                 {
+                    sLine.Get_Trx().Rollback();
                     return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
+                    
                     //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");
                 }
                 //
