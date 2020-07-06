@@ -106,9 +106,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
             if (bp.GetVA009_PaymentMethod_ID() == 0)
             {
-                order.SetVA009_PaymentMethod_ID(GetPaymentMethod(rfq.GetAD_Org_ID()));
-                order.SetPaymentMethod(GetPaymentBaseType(VA009_PaymentMethod_ID));
-                order.SetPaymentRule(PaymentBaseType);
+                DataSet result = GetPaymentMethod(rfq.GetAD_Org_ID());
+                order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+                order.SetPaymentMethod(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                order.SetPaymentRule(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
             }
             else
             {
@@ -175,16 +176,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <summary>
         /// to get the payment method if no payment method found on the business partner
         /// </summary>
-        /// <returns>returns payment meyhod ID</returns>
-        public int GetPaymentMethod(int Org_ID)
+        /// <returns>returns payment meyhod ID, Payment Type</returns>
+        public DataSet GetPaymentMethod(int Org_ID)
         {
             VA009_PaymentMethod_ID = 0;
             //get organisation default 
-            string _sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string _sql = "SELECT VA009_PaymentMethod_ID,VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", Org_ID);
-            VA009_PaymentMethod_ID =Util.GetValueOfInt(DB.ExecuteScalar(_sql, param, Get_TrxName()));
-            return VA009_PaymentMethod_ID;
+            DataSet _ds = DB.ExecuteDataset(_sql, param, Get_TrxName());
+            return _ds;
         }
         /// <summary>
         /// Get PaymentBase Type on Payment Method
