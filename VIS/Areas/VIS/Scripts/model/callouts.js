@@ -2617,7 +2617,7 @@
             }
 
             if (Util.scale(LineNetAmt) > StdPrecision) {//LineNetAmt = Decimal.Round(LineNetAmt, StdPrecision);//, MidpointRounding.AwayFromZero);
-                LineNetAmt = LineNetAmt.toFixed(StdPrecision);
+                LineNetAmt = Util.getValueOfDecimal(LineNetAmt.toFixed(StdPrecision));
             }
 
             this.log.info("LineNetAmt=" + LineNetAmt);
