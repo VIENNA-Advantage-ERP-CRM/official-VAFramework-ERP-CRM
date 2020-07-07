@@ -37,6 +37,7 @@ namespace VAdvantage.Process
         //Variable Declaration
         private int VA009_PaymentMethod_ID = 0;
         private string PaymentBaseType = "";
+        DataSet result = new DataSet();
         /// <summary>
         ///  	Prepare
         /// </summary>
@@ -115,10 +116,13 @@ namespace VAdvantage.Process
                 //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
                 if (bp.GetVA009_PO_PaymentMethod_ID() == 0)
                 {
-                    DataSet result = GetPaymentMethod(rfq.GetAD_Org_ID());
-                    order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
-                    order.SetPaymentMethod(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
-                    order.SetPaymentRule(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                    result = GetPaymentMethod(rfq.GetAD_Org_ID());
+                    if (result != null && result.Tables[0].Rows.Count > 0)
+                    {
+                        order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+                        order.SetPaymentMethod(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                        order.SetPaymentRule(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                    }
                 }
                 else
                 {
@@ -218,10 +222,14 @@ namespace VAdvantage.Process
                         //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
                         if (bp.GetVA009_PO_PaymentMethod_ID() == 0)
                         {
-                            DataSet result=GetPaymentMethod(rfq.GetAD_Org_ID());
-                            order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
-                            order.SetPaymentMethod(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
-                            order.SetPaymentRule(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                            result = null;
+                            result=GetPaymentMethod(rfq.GetAD_Org_ID());
+                            if (result != null && result.Tables[0].Rows.Count > 0)
+                            {
+                                order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+                                order.SetPaymentMethod(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                                order.SetPaymentRule(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                            }
                         }
                         else
                         {
@@ -269,7 +277,7 @@ namespace VAdvantage.Process
         }
         //Added by Neha Thakur
         /// <summary>
-        /// to get the payment method if no payment method found on the business partner
+        /// to get the payment method,Payment Type if no payment method found on the business partner
         /// </summary>
         /// <returns>returns payment meyhod ID,Payment Type</returns>
         public DataSet GetPaymentMethod(int Org_ID)

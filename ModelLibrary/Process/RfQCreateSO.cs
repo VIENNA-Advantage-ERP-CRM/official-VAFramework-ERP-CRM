@@ -107,9 +107,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (bp.GetVA009_PaymentMethod_ID() == 0)
             {
                 DataSet result = GetPaymentMethod(rfq.GetAD_Org_ID());
-                order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
-                order.SetPaymentMethod(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
-                order.SetPaymentRule(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                if (result != null && result.Tables[0].Rows.Count > 0)
+                {
+                    order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+                    order.SetPaymentMethod(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                    order.SetPaymentRule(Util.GetValueOfString(result.Tables[0].Rows[0]["VA009_PaymentBaseType"]));
+                }
             }
             else
             {
