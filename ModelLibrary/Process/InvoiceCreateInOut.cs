@@ -33,7 +33,6 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int _C_DocType_ID = 0;
         // Invoice			
         private int _C_Invoice_ID = 0;
-        private decimal movementqty = 0;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -144,6 +143,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 
                 MInOutLine sLine = new MInOutLine(ship);
                 //JID_1679 Generate Receipt from Invoice(Vendor) for remaining quantity 
+                 decimal movementqty = 0;
                 if (invoiceLine.GetC_OrderLine_ID() != 0)
                 {
                     decimal? res = 0;
