@@ -33,6 +33,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int _C_DocType_ID = 0;
         // Invoice			
         private int _C_Invoice_ID = 0;
+        private decimal movementqty = 0;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -81,7 +82,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new ArgumentException("@NotFound@ @M_Warehouse_ID@");
             }
             //
-            MInvoice invoice = new MInvoice(GetCtx(), _C_Invoice_ID, null);
+            MInvoice invoice = new MInvoice(GetCtx(), _C_Invoice_ID, Get_Trx());
             if (invoice.Get_ID() == 0)
             {
                 throw new ArgumentException("@NotFound@ @C_Invoice_ID@");
@@ -140,13 +141,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     continue;
                 }
-
+                
                 MInOutLine sLine = new MInOutLine(ship);
                 //JID_1679 Generate Receipt from Invoice(Vendor) for remaining quantity 
                 if (invoiceLine.GetC_OrderLine_ID() != 0)
                 {
                     decimal? res = 0;
-                    decimal movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from C_OrderLine ol Inner join M_InOutLine il on il.C_orderline_ID= ol.C_Orderline_Id "
+                     movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from C_OrderLine ol Inner join M_InOutLine il on il.C_orderline_ID= ol.C_Orderline_Id "
                              + " WHERE il.C_OrderLine_ID =" + invoiceLine.GetC_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
                     // in case of partial receipt
                     if ( invoiceLine.GetQtyInvoiced() > movementqty && movementqty!=0)
@@ -184,7 +185,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (!sLine.Save())
                 {
                     ship.Get_Trx().Rollback();
-                    return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
+                    if (movementqty == 0)
+                    {
+                        return  Msg.GetMsg(GetCtx(), "MRIsAlreadyCreated");
+                    }
+                    else
+                    {
+                        return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
+                    }
                     //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");  
                 }
                 //
