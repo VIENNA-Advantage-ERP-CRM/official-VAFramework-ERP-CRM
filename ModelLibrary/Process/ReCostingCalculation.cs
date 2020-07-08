@@ -1122,7 +1122,6 @@ namespace VAdvantage.Process
                             {
                                 if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]).Equals("VAFAM_AssetDisposal"))
                                 {
-
                                     po_AssetDisposal = tbl_AssetDisposal.GetPO(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                     CalculateCostForAssetDisposal(Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Util.GetValueOfInt(Util.GetValueOfInt(po_AssetDisposal.Get_Value("M_Product_ID"))));
 
