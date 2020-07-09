@@ -3436,6 +3436,7 @@ namespace VAdvantage.Model
                                                      PostCurrentCostPrice = CASE WHEN 1 = " + (isUpdatePostCurrentcostPriceFromMR ? 1 : 0) +
                                                      @" THEN " + currentCostPrice + @" ELSE PostCurrentCostPrice END 
                                                  WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                 sLine.SetIsCostImmediate(true);
                                             }
                                         }
                                     }

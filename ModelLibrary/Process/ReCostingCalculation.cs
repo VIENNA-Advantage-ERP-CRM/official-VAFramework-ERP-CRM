@@ -112,7 +112,7 @@ namespace VAdvantage.Process
         string conversionNotFound = "";
 
         List<ReCalculateRecord> ListReCalculatedRecords = new List<ReCalculateRecord>();
-        public enum windowName { Shipment = 0, CustomerReturn, ReturnVendor, MaterialReceipt, MatchInvoice, Inventory, Movement, CreditMemo }
+        public enum windowName { Shipment = 0, CustomerReturn, ReturnVendor, MaterialReceipt, MatchInvoice, Inventory, Movement, CreditMemo, AssetDisposal }
 
         protected override void Prepare()
         {
@@ -170,7 +170,7 @@ namespace VAdvantage.Process
 
                 if (onlyDeleteCosting.Equals("Y"))
                     return Msg.GetMsg(GetCtx(), "VIS_DeleteCostingImpacts");
-
+                             
                 // check IsCostAdjustmentOnLost exist on product 
                 sql.Clear();
                 sql.Append(@"SELECT COUNT(*) FROM AD_Column WHERE IsActive = 'Y' AND 
@@ -1122,6 +1122,7 @@ namespace VAdvantage.Process
                             {
                                 if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]).Equals("VAFAM_AssetDisposal"))
                                 {
+                                    po_AssetDisposal = tbl_AssetDisposal.GetPO(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                     CalculateCostForAssetDisposal(Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Util.GetValueOfInt(Util.GetValueOfInt(po_AssetDisposal.Get_Value("M_Product_ID"))));
 
                                     continue;
@@ -2370,6 +2371,11 @@ namespace VAdvantage.Process
                                         SELECT m_inventory_ID FROM m_inventoryline WHERE  M_Product_ID IN 
                                         (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
 
+                // for VAFAM_AssetDisposal
+                DB.ExecuteQuery(@"UPDATE VAFAM_AssetDisposal SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N'
+                                                 WHERE M_Product_ID IN 
+                                                 (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
+
                 // for M_Movement / M_MovementLine
                 countRecord = 0;
                 countRecord = DB.ExecuteQuery(@"UPDATE m_movementline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0
@@ -2487,6 +2493,9 @@ namespace VAdvantage.Process
                     DB.ExecuteQuery(@"UPDATE m_movement  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
                                        WHERE m_movement_ID IN ( 
                                         SELECT m_movement_ID FROM m_movementline WHERE  M_Product_ID IN (" + productID + " ) )", null, Get_Trx());
+                // for VAFAM_AssetDisposal
+                DB.ExecuteQuery(@"UPDATE vafam_assetdisposal SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' 
+                                                 WHERE M_Product_ID IN  (" + productID + " ) ", null, Get_Trx());
 
                 // for M_Production / M_ProductionLine
                 countRecord = 0;
@@ -2553,6 +2562,9 @@ namespace VAdvantage.Process
                 // for M_Inventory / M_InventoryLine
                 DB.ExecuteQuery(@"UPDATE m_inventoryline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0 , PostCurrentCostPrice = 0  WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"UPDATE m_inventory  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+
+                // for VAFAM_AssetDisposal
+                DB.ExecuteQuery(@"UPDATE vafam_assetdisposal SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N'  WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // for M_Movement / M_MovementLine
                 DB.ExecuteQuery(@"UPDATE m_movementline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0 
@@ -4132,7 +4144,6 @@ namespace VAdvantage.Process
             try
             {
 
-                po_AssetDisposal = tbl_AssetDisposal.GetPO(GetCtx(), VAFAM_AssetDisposal_ID, Get_Trx());
                 product = new MProduct(GetCtx(), M_Product_ID, Get_Trx());
                 if (product.GetProductType() == "I") // for Item Type product
                 {
@@ -4142,6 +4153,7 @@ namespace VAdvantage.Process
                         product, Util.GetValueOfInt(po_AssetDisposal.Get_Value("GetM_AttributeSetInstance_ID")), "AssetDisposal", null, null, null, null, po_AssetDisposal, 0, quantity, Get_Trx(), out conversionNotFoundInventory))
                     {
                         _log.Info("Cost not Calculated for Asset Dispose ID = " + VAFAM_AssetDisposal_ID);
+                        ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.AssetDisposal, HeaderId = VAFAM_AssetDisposal_ID, LineId = VAFAM_AssetDisposal_ID, IsReversal = false });
                     }
                     else
                     {
@@ -4909,6 +4921,11 @@ namespace VAdvantage.Process
                     {
                         CalculationCostCreditMemo(objReCalculateRecord.HeaderId);
                     }
+                }
+                else if (objReCalculateRecord.WindowName == (int)windowName.AssetDisposal)
+                {
+                    po_AssetDisposal = tbl_AssetDisposal.GetPO(GetCtx(), objReCalculateRecord.HeaderId, Get_Trx());
+                    CalculateCostForAssetDisposal(objReCalculateRecord.HeaderId, Util.GetValueOfInt(Util.GetValueOfInt(po_AssetDisposal.Get_Value("M_Product_ID"))));
                 }
             }
         }
