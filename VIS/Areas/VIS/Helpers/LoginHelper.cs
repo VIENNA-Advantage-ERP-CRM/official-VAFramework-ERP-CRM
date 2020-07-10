@@ -175,7 +175,9 @@ namespace VIS.Helpers
                         Token2FAKey = userSKey + ADUserID.ToString() + decKey;
                     }
 
-                    setupInfo = tfa.GenerateSetupCode("VA Google Auth", userSKey, Token2FAKey, 150, 150);
+                    string url = Util.GetValueOfString(HttpContext.Current.Request.Url.AbsoluteUri).Replace("VIS/Account/JsonLogin", "").Replace("https://", "").Replace("http://", "");
+
+                    setupInfo = tfa.GenerateSetupCode("VA ", url + " " + userSKey, Token2FAKey, 150, 150);
                     model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
 
