@@ -174,7 +174,9 @@ namespace VIS.Helpers
                         string decKey = SecureEngine.Decrypt(Token2FAKey);
                         Token2FAKey = userSKey + ADUserID.ToString() + decKey;
                     }
+
                     string url = Util.GetValueOfString(HttpContext.Current.Request.Url.AbsoluteUri).Replace("VIS/Account/JsonLogin", "").Replace("https://", "").Replace("http://", "");
+
                     setupInfo = tfa.GenerateSetupCode("VA ", url + " " + userSKey, Token2FAKey, 150, 150);
                     model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
