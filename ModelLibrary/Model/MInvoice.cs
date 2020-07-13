@@ -1324,12 +1324,12 @@ namespace VAdvantage.Model
                     }
                 }
 
-                sb.Append(Get_TableName() + "_ID != " + Get_ID());
+                sb.Append(" AND " + Get_TableName() + "_ID != " + Get_ID());
 
                 //Check unique record in DB 
                 int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString()));
                 sb = null;
-                if ((count > 0 && newRecord) /*new*/  || (count > 1 && !newRecord)/*update*/)
+                if (count > 0)
                 {
                     log.SaveError("SaveErrorNotUnique", colHeaders.ToString());
                     return false;
