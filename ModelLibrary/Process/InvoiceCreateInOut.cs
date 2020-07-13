@@ -33,6 +33,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int _C_DocType_ID = 0;
         // Invoice			
         private int _C_Invoice_ID = 0;
+
+        private String _processMsg = String.Empty;
+
+        //private String _processMsg = String.Empty;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -143,40 +147,40 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 
                 MInOutLine sLine = new MInOutLine(ship);
                 //JID_1679 Generate Receipt from Invoice(Vendor) for remaining quantity 
-                 decimal movementqty = 0;
-                if (invoiceLine.GetC_OrderLine_ID() != 0)
-                {
-                    decimal? res = 0;
-                     movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from C_OrderLine ol Inner join M_InOutLine il on il.C_orderline_ID= ol.C_Orderline_Id "
-                             + " WHERE il.C_OrderLine_ID =" + invoiceLine.GetC_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
-                    // in case of partial receipt
-                    if ( invoiceLine.GetQtyInvoiced() > movementqty && movementqty!=0)
-                    {
-                        if (product.GetC_UOM_ID() != invoiceLine.GetC_UOM_ID())
-                        {
-                            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetC_UOM_ID(), movementqty);
-                        }
-                        sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator
-                            invoice.IsSOTrx() ? (movementqty) : Env.ZERO);
-                        sLine.SetQtyEntered(res==0?(movementqty):res);
-                        sLine.SetMovementQty(movementqty);
-                    }
-                    // if QtyInvoiced is less or No Material receipt is found against the order
-                    else
-                    {
-                        sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator 
-                          invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);
-                        sLine.SetQtyEntered(invoiceLine.GetQtyEntered());
-                        sLine.SetMovementQty(invoiceLine.GetQtyInvoiced());
-                    }
-                }
-                else
-                {
+                //decimal movementqty = 0;
+                //if (invoiceLine.GetC_OrderLine_ID() != 0)
+                //{
+                //    decimal? res = 0;
+                //    movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from C_OrderLine ol Inner join M_InOutLine il on il.C_orderline_ID= ol.C_Orderline_Id "
+                //            + " WHERE il.C_OrderLine_ID =" + invoiceLine.GetC_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
+                //    // in case of partial receipt
+                //    if (invoiceLine.GetQtyInvoiced() > movementqty && movementqty != 0)
+                //    {
+                //        if (product.GetC_UOM_ID() != invoiceLine.GetC_UOM_ID())
+                //        {
+                //            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetC_UOM_ID(), movementqty);
+                //        }
+                //        sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator
+                //            invoice.IsSOTrx() ? (movementqty) : Env.ZERO);
+                //        sLine.SetQtyEntered(res == 0 ? (movementqty) : res);
+                //        sLine.SetMovementQty(movementqty);
+                //    }
+                //    // if QtyInvoiced is less or No Material receipt is found against the order
+                //    else
+                //    {
+                //        sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator 
+                //          invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);
+                //        sLine.SetQtyEntered(invoiceLine.GetQtyEntered());
+                //        sLine.SetMovementQty(invoiceLine.GetQtyInvoiced());
+                //    }
+                //}
+                //else
+                //{
                     sLine.SetInvoiceLine(invoiceLine, 0,	//	Locator 
                      invoice.IsSOTrx() ? invoiceLine.GetQtyInvoiced() : Env.ZERO);
                     sLine.SetQtyEntered(invoiceLine.GetQtyEntered());
                     sLine.SetMovementQty(invoiceLine.GetQtyInvoiced());
-                }
+                //}
                 if (invoice.IsCreditMemo())
                 {
                     sLine.SetQtyEntered(Decimal.Negate(sLine.GetQtyEntered()));//.negate());
@@ -185,18 +189,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (!sLine.Save())
                 {
                     ship.Get_Trx().Rollback();
-                    if (movementqty == 0)
-                    {
-                        return  Msg.GetMsg(GetCtx(), "MRIsAlreadyCreated");
-                    }
-                    else
-                    {
+                    //if (movementqty == 0)
+                    //{
+                    //    _processMsg += ", LineNo: " + invoiceLine.GetLine() + Msg.GetMsg(GetCtx(), "MRIsAlreadyCreated");
+                    //    return _processMsg;
+                    //}
+                    //else
+                    //{
                         return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
-                    }
-                    //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");  
+                    //}
+                   // throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");
                 }
-                //
                 invoiceLine.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
+              //  _processMsg+= ", LineNo: "+invoiceLine.GetLine()+Msg.GetMsg(GetCtx(), "MRCreatedWithDocNo" + ship.GetDocumentNo());
                 if (!invoiceLine.Save())
                 {
                     return GetRetrievedError(invoiceLine, "@SaveError@ @C_InvoiceLine_ID@");
