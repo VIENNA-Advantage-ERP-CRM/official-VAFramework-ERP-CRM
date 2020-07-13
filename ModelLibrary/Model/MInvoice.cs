@@ -1327,7 +1327,7 @@ namespace VAdvantage.Model
                 sb.Append(" AND " + Get_TableName() + "_ID != " + Get_ID());
 
                 //Check unique record in DB 
-                int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString()));
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
                 sb = null;
                 if (count > 0)
                 {
