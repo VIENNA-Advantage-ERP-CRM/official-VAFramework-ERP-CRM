@@ -874,7 +874,7 @@ namespace VIS.Helpers
                     else
                     {
                         sb.Append(" AND ");
-                        colHeaders.Append(", " );
+                        colHeaders.Append(", ");
                     }
 
                     colHeaders.Append(wField.Name);
@@ -896,7 +896,7 @@ namespace VIS.Helpers
 
                             sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
                         }
-                        else if(DisplayType.YesNo == displayType)
+                        else if (DisplayType.YesNo == displayType)
                         {
                             string boolval = "N";
                             if (VAdvantage.Utility.Util.GetValueOfBool(colval))
@@ -910,20 +910,22 @@ namespace VIS.Helpers
                     }
                 }
 
+                sb.Append(" AND " + inn.TableName + "_ID != " + Record_ID);
+
                 //Check value in DB 
                 int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString()));
                 sb = null;
-                if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+                if (count > 0)
                 {
                     outt.IsError = true;
                     outt.FireEEvent = true;
-                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = colHeaders.ToString() , IsError = true };
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = colHeaders.ToString(), IsError = true };
                     outt.Status = GridTable.SAVE_ERROR;
                     return;
 
                 }
             }
-        
+
 
 
             //        //Check value in DB 
@@ -1069,7 +1071,7 @@ namespace VIS.Helpers
             }
             else
                 if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey))
-                    return;
+                return;
 
             if (!po.Save())
             {
