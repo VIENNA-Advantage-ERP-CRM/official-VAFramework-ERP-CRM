@@ -159,7 +159,7 @@
             topLeftDiv.append(topleftparaDiv);
             topLeftDiv.css("width", leftDivWidth);
 
-            var tble = $("<table style='width: 100%'>");
+            var tble = $("<table style='width: 100%' class='vis-formouterwrpdiv'>");
 
             var tr = $("<tr>");
             var td = $("<td style='padding: 0px 10px 0px;'>");
@@ -337,7 +337,7 @@
             rightBottomDiv.css("height", rightparaHeight);
 
 
-            tble = $("<table style='width: 100%; '>");
+            tble = $("<table style='width: 100%; ' class='vis-formouterwrpdiv'>");
 
             tr = $("<tr>");
             td = $("<td colspan='4' style='text-align: right; height: 10px;'>");//55px

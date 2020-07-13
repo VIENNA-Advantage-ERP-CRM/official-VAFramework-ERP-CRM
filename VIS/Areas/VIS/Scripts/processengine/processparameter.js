@@ -33,7 +33,7 @@
         function initlizedComponent() {
 
             $root = $("<div class='vis-pro-para-root'>");
-            $table = $("<table class='vis-processpara-table'>");
+            $table = $("<table class='vis-processpara-table vis-formouterwrpdiv'>");
             // $root.append($table);
             $divButtons = $('<div class="vis-processbtnwrap">');
             // $divTable = $('<div style="overflow-y:auto;overflow-x:hidden">');
@@ -76,11 +76,13 @@
             //$td2 = $("<td class=''>");
             $td3 = $("<td class='vis-processpara-table-td3'>");
             //$table.append($tr.append($td1).append($td2).append($td3));
-            $table.append($tr.append($td1).append($td3));
+            //$table.append($tr.append($td1).append($td3));
+            $table.append($tr.append($td3));
+
             if (splitUI) {
                 $table.width('100%');
                 $tr.addClass('vis-processpara-table-SplitUI');
-                $td1.addClass('vis-processpara-table-SplitUI');
+                //$td1.addClass('vis-processpara-table-SplitUI');
                 //$td2.addClass('vis-processpara-table-SplitUI');
                 $td3.addClass('vis-processpara-table-SplitUI');
             }
@@ -88,25 +90,33 @@
 
         this.addFields = function (c1, c2) {
             if (c1) {
-                var control = c1.getControl();
+                //var control = c1.getControl();
                 // if (splitUI)
                 //control.css('color', 'white');
-                $td1.append(control);
+                //$td1.append(control);
             }
             if (c2) {
-
-                var $inputGroup = $('<div class="input-group">');
+                var $control = null;
+                if (c1) {
+                    $control = c1.getControl();
+                }
+                var $inputGroup = $('<div class="input-group vis-input-wrap">');
+                var $CtrlGroup = $('<div class="vis-control-wrap">');
                 $td3.append($inputGroup);
-                var controll = c2.getControl();
-                $inputGroup.append(controll);
-                if (controll.is('select'))
-                    controll.addClass('vis-custom-select');
+                $inputGroup.append($CtrlGroup);
+                var controll = c2.getControl().attr('placeholder', ' ').attr('data-placeholder', '');
+                $CtrlGroup.append(controll);
+                if ($control) {
+                    $CtrlGroup.append($control);
+                }
+                //if (controll.is('select'))
+                    //controll.addClass('vis-custom-select');
                 //$td3.append(c2.getControl());
                 if (c2.getBtnCount() > 0) {
-
+                    c2.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ');
                     //if (splitUI) {
                     if (controll.attr('type') == "date") {
-                        controll.css({ 'width': '100%' });
+                        //controll.css({ 'width': '100%' });
                     }
                     //else {
                     //    //c2.getControl().css({ 'width': 'calc(100% - 36px)' });
@@ -125,9 +135,9 @@
                     //if (c2.getDisplayType() == VIS.DisplayType.MultiKey) {
                     var btn2 = c2.getBtn(1);
                     if (btn2) {
-                        var $divInputGroupAppend1 = $('<div class="input-group-append">');
-                        $divInputGroupAppend1.append(btn2);
-                        $inputGroup.append($divInputGroupAppend1);
+                        //var $divInputGroupAppend1 = $('<div class="input-group-append">');
+                        $divInputGroupAppend.append(btn2);
+                        //$inputGroup.append($divInputGroupAppend1);
                     }
                     //    if (splitUI) {
                     //        // c2.getControl().css({ 'width': 'calc(100% - 64px)' });
@@ -139,7 +149,7 @@
                 else {
                     // if (splitUI) {
                     if (controll.attr('type') == "date") {
-                        controll.css({ 'width': '100%' });
+                        //controll.css({ 'width': '100%' });
                     }
                     //c2.getControl().height("26px");
                     //  }

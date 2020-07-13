@@ -325,12 +325,17 @@ namespace VIS.Models
             //	Attrribute Set Instance Description
             //Column 1
             var label1 = Msg.Translate(ctx, "Description");
-            obj.tableStucture += "<td>";
-            obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id='description_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label1 + "</label>";
-            obj.tableStucture += "</td>";
+            //obj.tableStucture += "<td>";
+            //obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id='description_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label1 + "</label>";
+            //obj.tableStucture += "</td>";
             //Column 2
             obj.tableStucture += "<td>";
-            obj.tableStucture += "<input style='width: 100%;' readonly  id='txtDescription_" + windowNo + "' value='" + _masi.GetDescription() + "' class='VIS_Pref_pass vis-gc-vpanel-table-readOnly' type='text'>";
+            obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+            obj.tableStucture += "<div class='vis-control-wrap'>";
+            obj.tableStucture += "<input readonly  id='txtDescription_" + windowNo + "' value='" + _masi.GetDescription() + "' class='vis-ev-col-readonly' type='text'>";
+            obj.tableStucture += "<label id='description_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label1 + "</label>";
+            obj.tableStucture += "</div>";
+            obj.tableStucture += "</div>";
             obj.tableStucture += "</td>";
 
             obj.tableStucture += "</tr>";

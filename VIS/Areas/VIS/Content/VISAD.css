@@ -1158,7 +1158,7 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
 
 
 .vis-processpara-table {
-    width: auto;
+    width: 100%;
 }
 
     .vis-processpara-table label sup {
@@ -1166,7 +1166,7 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
     }
 
 .vis-processpara-table-td3 {
-    padding: 5px 0 5px 5px;
+    /*padding: 5px 0 5px 5px;*/
 }
 
     .vis-processpara-table-td3 label.vis-ec-col-lblchkbox {
@@ -1181,19 +1181,16 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
     margin-bottom: 0;
     font-weight: normal;
 }
-
-
-
 .vis-process-result-table {
     max-height: calc(100vh - 280px);
     float: left;
     width: 100%;
     overflow: auto;
     margin-bottom: 10px;
-    border: 1px solid #333;
-    margin-top: 10px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .3);
+    /* margin-top: 10px; */
+    padding: 5px 10px;
 }
-
 
 
 
@@ -3894,7 +3891,7 @@ html[dir="rtl"] .VIS-AMTD-ModalformBtns a {
 }
 
 tr.vis-processpara-table-SplitUI {
-    padding: 10px 10px 0px 10px;
+    padding: 0px 10px;
 }
 tr.vis-processpara-table-SplitUI label {
     margin-bottom: 0px;
@@ -3903,14 +3900,14 @@ tr.vis-processpara-table-SplitUI label {
 }
 .vis-process-background {
     Display: none;
-    float: left;
+    /*float: left;*/
 }
 
 .vis-process-background-label {
     Display: none;
     /*color: white;*/
-    line-height: 12px;
-    margin-left: 5px;
+    /*line-height: 12px;
+    margin-left: 5px;*/
 }
 
 .vis-confirm-popup-check {
@@ -4107,7 +4104,7 @@ li.vis-selected-list {
     flex-basis: 280px;
     /* height: 100%; */
     flex-direction: column;
-    background: rgba(var(--v-c-secondary), .8);
+    background: rgba(var(--v-c-secondary), 1);
     color: rgba(var(--v-c-on-secondary), 1);
     border-right: 1px solid rgba(var(--v-c-on-secondary), .1);
 }
@@ -4154,7 +4151,7 @@ li.vis-selected-list {
 .vis-process-parm-top {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 15px 10px 0;
     /*border-bottom: 1px solid #fff;*/
 }
 
@@ -4178,19 +4175,19 @@ li.vis-selected-list {
     display: block;
     margin-bottom: 0;
 }
-.vis-processbtnwrap {
+.vis-leftsidebarouterwrap .vis-processbtnwrap {
     padding: 0 10px;
 }
 .vis-pro-para-root .vis-processbtnwrap {
-    padding: 0;
+    /*padding: 0;*/
 }
 .vis-process-left-sidebar .VIS_Pref_btn-2.vis-process-ok-btn {
     background-color: rgba(var(--v-c-on-secondary), 1);
-    margin-bottom: 0px;
-    margin-top: 7px;
+    /*margin-bottom: 0px;*/
+    margin-top: 0;
     width: 100%;
-    border-radius: 0;
-    text-align: center;
+    /*border-radius: 0;*/
+    /*text-align: center;*/
 }
 /*.vis-process-description-Span p {
     text-overflow: ellipsis;
@@ -4220,39 +4217,40 @@ li.vis-selected-list {
     overflow-y: auto;
     /*height:-webkit-fill-available;*/
     max-height: calc(100% - 58px);
+    padding-top: 1px;
 }
 
 .vis-processpara-table-SplitUI select, .vis-processpara-table-SplitUI button, .vis-processpara-table-SplitUI input:not([type="checkbox"]) {
-    height: 30px;
+    /*height: 30px;
     border-radius: 0;
-    outline: none;
+    outline: none;*/
 }
 .vis-processpara-table-SplitUI select:focus, .vis-processpara-table-SplitUI input:not([type="checkbox"]):focus {
-    border: 1px solid rgba(var(--v-c-primary), 1);
+    /*border: 1px solid rgba(var(--v-c-primary), 1);*/
 }
 .vis-processpara-table-SplitUI button {
-    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*border: 1px solid rgba(var(--v-c-on-secondary), .2);
     float: right;
     width: 30px;
     padding: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;*/
 }
 
 
 td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
-    display: flex;
-    padding: 0;
+    /*display: flex;
+    padding: 0;*/
 }
 
 .vis-processpara-table-SplitUI select, .vis-processpara-table-SplitUI input:not([type="checkbox"]) {
-    flex: 1;
+    /*flex: 1;*/
 }
 
 .vis-processpara-table-SplitUI select {
-    width: 200px;
-    background-color: #fff;
+    /*width: 200px;
+    background-color: #fff;*/
 }
 
 .vis-pt-0 {
@@ -4663,7 +4661,8 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     color: rgba(var(--v-c-on-secondary), 1);
     outline: none;
 }
-.vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), .vis-app-aform-root select {
+.vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), 
+.vis-app-aform-root select {
     min-height: 30px;
         padding: 5px 10px;
 }
@@ -4862,9 +4861,11 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 .vis-leftsidebarouterwrap .vis-input-wrap input {
     padding: 5px 10px;
 }
-.vis-leftsidebarouterwrap .vis-input-wrap label,
-.VIS-archive-table-padding .vis-input-wrap label,
-.vis-emailsavewrap .vis-input-wrap label {
+.vis-leftsidebarouterwrap .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+.vis-emailsavewrap .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+.vis-valpreferencedatawrp .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+.vis-formouterwrpdiv .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+.vis-formouterwrpdiv .vis-input-wrap textarea:not(:focus):placeholder-shown ~ label{
     left: 10px;
 }
 .vis-leftsidebarouterwrap .vis-input-wrap label {
@@ -4923,6 +4924,25 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     margin-bottom: 15px !important;
     display: flex;
     align-items: center;
+}
+.vis-process-toolbar .vis-icon-menuclose .vis-cross {
+    padding: 0 10px;
+}
+.vis-acctviewerbottdiv {
+    display: flex;
+    float: left;
+    align-items: center;
+    width: 100%;
+}
+.vis-acctviewerbottdiv > label{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #19a0ed;
+    flex: 1;
+    text-align: right;
+}
+.vis-formouterwrpdiv input {
+    padding: 5px 10px;
 }
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {

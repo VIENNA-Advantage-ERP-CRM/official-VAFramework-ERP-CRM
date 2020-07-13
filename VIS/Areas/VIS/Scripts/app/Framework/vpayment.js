@@ -126,8 +126,8 @@
         var kLayout;
         var tPanelLayout;
         var sPanelLayout;
-        var tabmenubusy = $('<img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/busy.gif"/>');
-        var loadLabel = $('<label>' + VIS.Msg.getMsg("Loading") + '</label>');
+        var tabmenubusy = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i><label>' + VIS.Msg.getMsg("Loading") + '</label></div></div>');
+        //var loadLabel = $('<label>' + VIS.Msg.getMsg("Loading") + '</label>');
 
 
 
@@ -141,20 +141,22 @@
         //init();
         function initDesign() {
 
-            var mainUpperDiv = $('<div></div>');
+            var mainUpperDiv = $('<div class="input-group vis-input-wrap"></div>');
+            var mainInnerCtrlDiv = $('<div class="vis-control-wrap"></div>');
 
             var $mainSpan = null;
 
-            if (VIS.Application.isRTL) {
-                $mainSpan = $('<p class="vis-payment-spanPayment-RTL"> ' + VIS.Msg.translate(ctx, 'PaymentMethod') + ' </p>');
-            }
-            else {
-             $mainSpan=   $('<p class="vis-payment-spanPayment"> ' + VIS.Msg.translate(ctx, 'PaymentMethod') + ' </p>');
-            }
-            $mainSpan.appendTo(mainUpperDiv);
+            //if (VIS.Application.isRTL) {
+            //    $mainSpan = $('<p class="vis-payment-spanPayment-RTL"> ' + VIS.Msg.translate(ctx, 'PaymentMethod') + ' </p>');
+            //}
+            //else {
+             $mainSpan=   $('<label class="vis-payment-spanPayment"> ' + VIS.Msg.translate(ctx, 'PaymentMethod') + ' </label>');
+            //}
+            mainUpperDiv.append(mainInnerCtrlDiv);
 
             cmbPayment = $('<select class="vis-payment-cmbPayment"></select>');
-            cmbPayment.appendTo(mainUpperDiv);
+            cmbPayment.appendTo(mainInnerCtrlDiv);
+            $mainSpan.appendTo(mainInnerCtrlDiv);
 
             mainUpperDiv.appendTo($maindiv);
 
@@ -165,12 +167,12 @@
             /**************CreditCard************************/
             // CreditCard               
 
-            lblKTypeLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'CreditCardType') + '</p>');
-            lblKNumnerLabel = $('<p class="vis-payment-span">' + VIS.Msg.translate(ctx, 'CreditCardNumber') + '</p>');
-            lblKExpLabel = $('<p class="vis-payment-span">' + VIS.Msg.translate(ctx, 'Expires') + '</p>');
-            lblKApprovalLabel = $('<p class="vis-payment-span">' + VIS.Msg.translate(ctx, 'VoiceAuthCode') + '</p>');
-            btnKOnline = $('<p class="vis-payment-span">' + VIS.Msg.translate(ctx, 'Online') + '</p>');
-            lblKStatus = $('<p class="vis-payment-span"></p>');
+            lblKTypeLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'CreditCardType') + '</label>');
+            lblKNumnerLabel = $('<label class="vis-payment-span">' + VIS.Msg.translate(ctx, 'CreditCardNumber') + '</label>');
+            lblKExpLabel = $('<label class="vis-payment-span">' + VIS.Msg.translate(ctx, 'Expires') + '</label>');
+            lblKApprovalLabel = $('<label class="vis-payment-span">' + VIS.Msg.translate(ctx, 'VoiceAuthCode') + '</label>');
+            btnKOnline = $('<label class="vis-payment-span">' + VIS.Msg.translate(ctx, 'Online') + '</label>');
+            lblKStatus = $('<label class="vis-payment-span"></label>');
             kPanel = $('<table class="vis-payment-table"></table>');
             var trkpanel = $('<tr></tr>');
             kPanel.append(trkpanel);
@@ -183,47 +185,67 @@
 
             cmbKType = $('<select  class="vis-payment-cmb"></select>');
             var kltr1 = $('<tr></tr>');
-            var kltr1td1 = $('<td ></td>');
+            //var kltr1td1 = $('<td ></td>');
             var kltr1td2 = $('<td class="vis-payment-td2"></td>');
-            kltr1td1.append(lblKTypeLabel);
-            kltr1td2.append(cmbKType);
-            kltr1.append(kltr1td1).append(kltr1td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(cmbKType);
+            $DivControlWrap.append(lblKTypeLabel);
+            kltr1.append(kltr1td2);
+            kltr1td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
+            //kltr1.append(kltr1td1).append(kltr1td2);
             kLayout.append(kltr1);
 
 
-            txtKNumber = $('<input class="vis-payment-inputs" type="text"></input>');
+            txtKNumber = $('<input class="vis-payment-inputs" type="text" placeholder=" " data-placeholder="" >');
             var kltr2 = $('<tr></tr>');
-            var kltr2td1 = $('<td class="vis-payment-td1"></td>');
+            //var kltr2td1 = $('<td class="vis-payment-td1"></td>');
             var kltr2td2 = $('<td class="vis-payment-td2"></td>');
-            kltr2td1.append(lblKNumnerLabel);
-            kltr2td2.append(txtKNumber);
-            kltr2.append(kltr2td1).append(kltr2td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(txtKNumber);
+            $DivControlWrap.append(lblKNumnerLabel);
+            //kltr2.append(kltr2td1).append(kltr2td2);
+            kltr2.append(kltr2td2);
+            kltr2td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             kLayout.append(kltr2);
 
 
-            txtKExp = $('<input class="vis-payment-inputs"  type="text"></input>');
+            txtKExp = $('<input class="vis-payment-inputs"  type="text" placeholder=" " data-placeholder="" >');
             var kltr3 = $('<tr></tr>');
-            var kltr3td1 = $('<td class="vis-payment-td1"></td>');
+            //var kltr3td1 = $('<td class="vis-payment-td1"></td>');
             var kltr3td2 = $('<td class="vis-payment-td2"></td>');
-            kltr3td1.append(lblKExpLabel);
-            kltr3td2.append(txtKExp);
-            kltr3.append(kltr3td1).append(kltr3td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(txtKExp);
+            $DivControlWrap.append(lblKExpLabel);
+            //kltr3.append(kltr3td1).append(kltr3td2);
+            kltr3.append(kltr3td2);
+            kltr3td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             kLayout.append(kltr3);
 
 
-            txtKApproval = $('<input class="vis-payment-inputs"  type="text"></input>');
+            txtKApproval = $('<input class="vis-payment-inputs"  type="text" placeholder=" " data-placeholder="" >');
             var kltr4 = $('<tr></tr>');
-            var kltr4td1 = $('<td class="vis-payment-td1"></td>');
+            //var kltr4td1 = $('<td class="vis-payment-td1"></td>');
             var kltr4td2 = $('<td class="vis-payment-td2"></td>');
-            kltr4td1.append(lblKApprovalLabel);
-            kltr4td2.append(txtKApproval);
-            kltr4.append(kltr4td1).append(kltr4td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(txtKApproval);
+            $DivControlWrap.append(lblKApprovalLabel);
+            //kltr4.append(kltr4td1).append(kltr4td2);
+            kltr4.append(kltr4td2);
+            kltr4td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             kLayout.append(kltr4);
 
 
             btnKOnline = $('<button class="vis-payment-inputs-buttons"  type="button">' + VIS.Msg.translate(ctx, 'Online') + '</button>');
             var kltr5 = $('<tr></tr>');
-            var kltr5td1 = $('<td colspan="2"></td>');
+            var kltr5td1 = $('<td></td>');
             kltr5td1.append(btnKOnline);
             kltr5.append(kltr5td1);
             kLayout.append(kltr5);
@@ -231,7 +253,7 @@
 
             //**************DircetDebit/Credit************************/
             // DirectDebit/Credit           
-            lblTAccountLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_BP_BankAccount_ID') + '</p>');
+            lblTAccountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_BP_BankAccount_ID') + '</label>');
             lblTStatus = $('<p class="vis-payment-span"> </p>');
 
             tPanel = $('<table class="vis-payment-table"></table>');
@@ -243,23 +265,28 @@
 
             cmbTAccount = $('<select class="vis-payment-cmb"></select>');
             var tptr1 = $('<tr></tr>');
-            var tptr1td1 = $('<td class="vis-payment-td1"></td>');
+            //var tptr1td1 = $('<td class="vis-payment-td1"></td>');
             var tptr1td2 = $('<td class="vis-payment-td2"></td>');
-            tptr1td1.append(lblTAccountLabel);
-            tptr1td2.append(cmbTAccount);
-            tptr1.append(tptr1td1).append(tptr1td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(cmbTAccount);
+            $DivControlWrap.append(lblTAccountLabel);
+            //tptr1.append(tptr1td1).append(tptr1td2);
+            tptr1.append(tptr1td2);
+            tptr1td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             tPanelLayout.append(tptr1);
 
 
             //**************Check************************/
             /// Check     
-            lblSBankAccountLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_BankAccount_ID') + '</p>');
-            lblSAmountLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'Amount') + '</p>');
-            lblSAmountField = $('<p class="vis-payment-span vis-payment-AmountField"> </p>');
-            lblSRoutingLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'RoutingNo') + '</p>');
-            lblSNumberLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'AccountNo') + '</p>');
-            lblSCheckLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'CheckNo') + '</p>');
-            lblSCurrencyLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_Currency_ID') + '</p>');
+            lblSBankAccountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_BankAccount_ID') + '</label>');
+            lblSAmountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'Amount') + '</label>');
+            lblSAmountField = $('<label class="vis-payment-span vis-payment-AmountField"> </label>');
+            lblSRoutingLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'RoutingNo') + '</label>');
+            lblSNumberLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'AccountNo') + '</label>');
+            lblSCheckLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'CheckNo') + '</label>');
+            lblSCurrencyLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_Currency_ID') + '</label>');
             //txtSNumber.Width = 180;
             lblSStatus = $('<p class="vis-payment-span"> </p>');
             btnSOnline = $('<button class="vis-payment-inputs-buttons"  type="button">' + VIS.Msg.translate(ctx, 'Online') + '</button>');
@@ -273,62 +300,92 @@
 
             cmbSBankAccount = $('<select class="vis-payment-cmb"></select>');
             var spstr1 = $('<tr></tr>');
-            var spstr1td1 = $('<td class="vis-payment-td1"></td>');
+            //var spstr1td1 = $('<td class="vis-payment-td1"></td>');
             var spstr1td2 = $('<td class="vis-payment-td2"></td>');
-            spstr1td1.append(lblSBankAccountLabel);
-            spstr1td2.append(cmbSBankAccount);
-            spstr1.append(spstr1td1).append(spstr1td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(cmbSBankAccount);
+            $DivControlWrap.append(lblSBankAccountLabel);
+            //spstr1.append(spstr1td1).append(spstr1td2);
+            spstr1.append(spstr1td2);
+            spstr1td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             sPanelLayout.append(spstr1);
 
 
-            lblSAmountField = $('<p class="vis-payment-span vis-payment-AmountField"> </p>');
+            lblSAmountField = $('<input type="text" readonly class="vis-payment-span vis-payment-AmountField">');
             var spstr2 = $('<tr></tr>');
-            var spstr2td1 = $('<td class="vis-payment-td1"></td>');
+            //var spstr2td1 = $('<td class="vis-payment-td1"></td>');
             var spstr2td2 = $('<td class="vis-payment-td2"></td>');
-            spstr2td1.append(lblSAmountLabel);
-            spstr2td2.append(lblSAmountField);
-            spstr2.append(spstr2td1).append(spstr2td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(lblSAmountField);
+            $DivControlWrap.append(lblSAmountLabel);
+            //spstr2.append(spstr2td1).append(spstr2td2);
+            spstr2.append(spstr2td2);
+            spstr2td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             sPanelLayout.append(spstr2);
 
 
-            txtSRouting = $('<input  class="vis-payment-inputs"  type="text"> </input>');
+            txtSRouting = $('<input class="vis-payment-inputs" type="text" placeholder=" " data-placeholder="" >');
             var spstr3 = $('<tr></tr>');
-            var spstr3td1 = $('<td class="vis-payment-td1"></td>');
+            //var spstr3td1 = $('<td class="vis-payment-td1"></td>');
             var spstr3td2 = $('<td class="vis-payment-td2"></td>');
-            spstr3td1.append(lblSRoutingLabel);
-            spstr3td2.append(txtSRouting);
-            spstr3.append(spstr3td1).append(spstr3td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(txtSRouting);
+            $DivControlWrap.append(lblSRoutingLabel);
+            //spstr3.append(spstr3td1).append(spstr3td2);
+            spstr3.append(spstr3td2);
+            spstr3td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             sPanelLayout.append(spstr3);
 
 
-            txtSNumber = $('<input class="vis-payment-inputs"  type="text"> </input>');
+            txtSNumber = $('<input class="vis-payment-inputs" type="text" placeholder=" " data-placeholder="" >');
             var spstr4 = $('<tr></tr>');
-            var spstr4td1 = $('<td class="vis-payment-td1"></td>');
+            //var spstr4td1 = $('<td class="vis-payment-td1"></td>');
             var spstr4td2 = $('<td class="vis-payment-td2"></td>');
-            spstr4td1.append(lblSNumberLabel);
-            spstr4td2.append(txtSNumber);
-            spstr4.append(spstr4td1).append(spstr4td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(txtSNumber);
+            $DivControlWrap.append(lblSNumberLabel);
+            //spstr4.append(spstr4td1).append(spstr4td2);
+            spstr4.append(spstr4td2);
+            spstr4td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             sPanelLayout.append(spstr4);
 
 
-            txtSCheck = $('<input class="vis-payment-inputs"  type="text"> </input>');
+            txtSCheck = $('<input class="vis-payment-inputs"  type="text" placeholder=" " data-placeholder="" >');
             var spstr5 = $('<tr></tr>');
-            var spstr5td1 = $('<td class="vis-payment-td1"></td>');
+            //var spstr5td1 = $('<td class="vis-payment-td1"></td>');
             var spstr5td2 = $('<td class="vis-payment-td2"></td>');
-            spstr5td1.append(lblSCheckLabel);
-            spstr5td2.append(txtSCheck);
-            spstr5.append(spstr5td1).append(spstr5td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(txtSCheck);
+            $DivControlWrap.append(lblSCheckLabel);
+            //spstr5.append(spstr5td1).append(spstr5td2);
+            spstr5.append(spstr5td2);
+            spstr5td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             sPanelLayout.append(spstr5);
 
 
             //not know where it will appear in the form
             cmbSCurrency = $('<select class="vis-payment-cmb"></select>');
             var spstr6 = $('<tr></tr>');
-            var spstr6td1 = $('<td class="vis-payment-td1"></td>');
+            //var spstr6td1 = $('<td class="vis-payment-td1"></td>');
             var spstr6td2 = $('<td class="vis-payment-td2"></td>');
-            spstr6td1.append(lblSCurrencyLabel);
-            spstr6td2.append(cmbSCurrency);
-            spstr6.append(spstr6td1).append(spstr6td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(cmbSCurrency);
+            $DivControlWrap.append(lblSCurrencyLabel);
+            //spstr6.append(spstr6td1).append(spstr6td2);
+            spstr6.append(spstr6td2);
+            spstr6td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             sPanelLayout.append(spstr6);
 
 
@@ -343,7 +400,7 @@
 
             //**************On Credit************************/
             // On Credit     
-            lblPTermLabel = $('<Span class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_PaymentTerm_ID') + '</span>');
+            lblPTermLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_PaymentTerm_ID') + '</label>');
 
             pPanel = $('<table  class="vis-payment-table"></table>');
             var pPanelTr = $('<tr></tr>');
@@ -354,28 +411,33 @@
 
             cmbPTerm = $('<select class="vis-payment-cmb"></select>');
             var ppltr1 = $('<tr></tr>');
-            var ppltr1td1 = $('<td class="vis-payment-td1"></td>');
+            //var ppltr1td1 = $('<td class="vis-payment-td1"></td>');
             var ppltr1td2 = $('<td class="vis-payment-td2"></td>');
-            ppltr1td1.append(lblPTermLabel);
-            ppltr1td2.append(cmbPTerm);
-            ppltr1.append(ppltr1td1).append(ppltr1td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(cmbPTerm);
+            $DivControlWrap.append(lblPTermLabel);
+            //ppltr1.append(ppltr1td1).append(ppltr1td2);
+            ppltr1.append(ppltr1td2);
+            ppltr1td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             pPanelLayout.append(ppltr1);
 
             //**************Cash************************/
             // Cash            
-            lblBCashBookLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_CashBook_ID') + '</p>');
+            lblBCashBookLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_CashBook_ID') + '</label>');
 
 
-            lblBCurrencyLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_Currency_ID') + '</p>');
+            lblBCurrencyLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_Currency_ID') + '</label>');
 
 
-            lblBAmountLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'Amount') + '</p>');
+            lblBAmountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'Amount') + '</label>');
 
 
-            lblBAmountField = $('<p class="vis-payment-span vis-payment-AmountField"> </p>');
+            lblBAmountField = $('<label class="vis-payment-span vis-payment-AmountField"> </label>');
 
 
-            lblBDateLabel = $('<p class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'DateAcct') + '</p>');
+            lblBDateLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'DateAcct') + '</label>');
 
 
             bPanel = $('<table class="vis-payment-table"></table>');
@@ -388,41 +450,62 @@
 
             cmbBCurrency = $('<select class="vis-payment-cmb"></select>');
             var bPltr1 = $('<tr></tr>');
-            var bPltr1td1 = $('<td class="vis-payment-td1"></td>');
+            //var bPltr1td1 = $('<td class="vis-payment-td1"></td>');
             var bPltr1td2 = $('<td class="vis-payment-td2"></td>');
-            bPltr1td1.append(lblBCurrencyLabel);
-            bPltr1td2.append(cmbBCurrency);
-            bPltr1.append(bPltr1td1).append(bPltr1td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(cmbBCurrency);
+            $DivControlWrap.append(lblBCurrencyLabel);
+            //bPltr1.append(bPltr1td1).append(bPltr1td2);
+            bPltr1.append(bPltr1td2);
+            bPltr1td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             bPanelLayout.append(bPltr1);
 
 
             cmbBCashBook = $('<select class="vis-payment-cmb"></select>');
             var bPltr2 = $('<tr></tr>');
-            var bPltr2td1 = $('<td class="vis-payment-td1"></td>');
+            //var bPltr2td1 = $('<td class="vis-payment-td1"></td>');
             var bPltr2td2 = $('<td class="vis-payment-td2"></td>');
-            bPltr2td1.append(lblBCashBookLabel);
-            bPltr2td2.append(cmbBCashBook);
-            bPltr2.append(bPltr2td1).append(bPltr2td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(cmbBCashBook);
+            $DivControlWrap.append(lblBCashBookLabel);
+            //bPltr2.append(bPltr2td1).append(bPltr2td2);
+            bPltr2.append(bPltr2td2);
+            bPltr2td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             bPanelLayout.append(bPltr2);
 
 
-            bDateField = $('<input class="vis-payment-inputs vis-payment-date"  type="date"></input>');
+            bDateField = $('<input class="vis-payment-inputs vis-payment-date" type="date" placeholder=" " data-placeholder="" >');
             var bPltr3 = $('<tr></tr>');
-            var bPltr3td1 = $('<td class="vis-payment-td1"></td>');
+            //var bPltr3td1 = $('<td class="vis-payment-td1"></td>');
             var bPltr3td2 = $('<td class="vis-payment-td2"></td>');
-            bPltr3td1.append(lblBDateLabel);
-            bPltr3td2.append(bDateField);
-            bPltr3.append(bPltr3td1).append(bPltr3td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(bDateField);
+            $DivControlWrap.append(lblBDateLabel);
+            //bPltr3.append(bPltr3td1).append(bPltr3td2);
+            bPltr3.append(bPltr3td2);
+            bPltr3td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             bPanelLayout.append(bPltr3);
 
 
-            lblBAmountField = $('<p class="vis-payment-span vis-payment-AmountField"> </p> ');
+            //lblBAmountField = $('<p class="vis-payment-span vis-payment-AmountField"> </p> ');
+            lblBAmountField = $('<input type="text" readonly class="vis-payment-span vis-payment-AmountField"> ');
             var bPltr4 = $('<tr></tr>');
-            var bPltr4td1 = $('<td class="vis-payment-td1"></td>');
+            //var bPltr4td1 = $('<td class="vis-payment-td1"></td>');
             var bPltr4td2 = $('<td class="vis-payment-td2"></td>');
-            bPltr4td1.append(lblBAmountLabel);
-            bPltr4td2.append(lblBAmountField);
-            bPltr4.append(bPltr4td1).append(bPltr4td2);
+            var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
+            var $DivControlWrap = $('<div class="vis-control-wrap">');
+            $DivControlWrap.append(lblBAmountField);
+            $DivControlWrap.append(lblBAmountLabel);
+            //bPltr4.append(bPltr4td1).append(bPltr4td2);
+            bPltr4.append(bPltr4td2);
+            bPltr4td2.append($DivInputWrap);
+            $DivInputWrap.append($DivControlWrap);
             bPanelLayout.append(bPltr4);
 
             $maindiv.append(centerPanel);
@@ -526,8 +609,8 @@
                         centerPanel.show();
                     }
 
-                    lblBAmountField.text(_Amount);
-                    lblSAmountField.text(_Amount);
+                    lblBAmountField.val(_Amount);
+                    lblSAmountField.val(_Amount);
 
 
                     txtKNumber.val(result.strKNumber);
@@ -1161,12 +1244,12 @@
 
         function setVisibility(tvisible) {
             if (tvisible) {
-                tabmenubusy.show(); loadLabel.show();
+                tabmenubusy.show(); /*loadLabel.show();*/
                 $maindiv.find("button").prop("disabled", true);
             }
             else {
                 tabmenubusy.hide();
-                loadLabel.hide();
+                //loadLabel.hide();
                 $maindiv.find("button").prop("disabled", false);
             }
         }
@@ -1182,8 +1265,8 @@
 
         this.show = function () {
             ch = new VIS.ChildDialog();
-            $maindiv = $('<div></div>');
-            $maindiv.append(tabmenubusy).append(loadLabel);
+            $maindiv = $('<div class="vis-formouterwrpdiv"></div>');
+            $maindiv.append(tabmenubusy)/*.append(loadLabel)*/;
             setVisibility(true);
             ch.setContent($maindiv);
             ch.setWidth(360);
