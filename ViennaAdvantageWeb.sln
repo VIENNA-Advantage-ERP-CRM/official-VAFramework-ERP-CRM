@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLibrary", "ModelLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViennaBase", "ViennaBase\ViennaBase.csproj", "{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VA.Secure", "VA.Secure\VA.Secure.csproj", "{7CA83C47-B8A6-4073-B438-20F2F46C8CB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VA.Utility", "VA.Utility\VA.Utility.csproj", "{535B7932-9275-46A1-9AC7-8C1418860000}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CA83C47-B8A6-4073-B438-20F2F46C8CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CA83C47-B8A6-4073-B438-20F2F46C8CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CA83C47-B8A6-4073-B438-20F2F46C8CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CA83C47-B8A6-4073-B438-20F2F46C8CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{535B7932-9275-46A1-9AC7-8C1418860000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{535B7932-9275-46A1-9AC7-8C1418860000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{535B7932-9275-46A1-9AC7-8C1418860000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{535B7932-9275-46A1-9AC7-8C1418860000}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
