@@ -1266,6 +1266,77 @@ namespace VAdvantage.Model
             if (GetC_BPartner_Location_ID() == 0)
                 SetBPartner(new MBPartner(GetCtx(), GetC_BPartner_ID(), null));
 
+            // Check Unique column marked on Database table
+            StringBuilder colHeaders = new StringBuilder("");
+            int displayType;
+            string colName;
+            StringBuilder sb = new StringBuilder("SELECT ColumnName, Name FROM AD_Column WHERE IsActive = 'Y' AND IsUnique = 'Y' AND  AD_Table_ID = " + Get_Table_ID());
+            DataSet UnqFields = DB.ExecuteDataset(sb.ToString(), null, Get_Trx());
+
+            if (UnqFields != null && UnqFields.Tables[0].Rows.Count > 0)
+            {
+                sb.Clear();
+                for (int l = 0; l < UnqFields.Tables[0].Rows.Count; l++)
+                {
+                    if (sb.Length == 0)
+                    {
+                        sb.Append(" SELECT COUNT(1) FROM ");
+                        sb.Append(Get_TableName()).Append(" WHERE ");
+                    }
+                    else
+                    {
+                        sb.Append(" AND ");
+                        colHeaders.Append(", ");
+                    }
+
+                    colName = Util.GetValueOfString(UnqFields.Tables[0].Rows[l]["ColumnName"]);
+                    colHeaders.Append(UnqFields.Tables[0].Rows[l]["Name"]);
+                    object colval = Get_Value(colName);
+                    displayType = Get_ColumnDisplayType(Get_ColumnIndex(colName));
+
+                    if (colval == null || colval == DBNull.Value)
+                    {
+                        sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" IS NULL ");
+                    }
+                    else
+                    {
+                        sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" = ");
+                        if (DisplayType.IsID(displayType))
+                        {
+                            sb.Append(colval);
+                        }
+                        else if (DisplayType.IsDate(displayType))
+                        {
+
+                            sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
+                        }
+                        else if (DisplayType.YesNo == displayType)
+                        {
+                            string boolval = "N";
+                            if (VAdvantage.Utility.Util.GetValueOfBool(colval))
+                                boolval = "Y";
+                            sb.Append("'").Append(boolval).Append("'");
+                        }
+                        else
+                        {
+                            sb.Append("'").Append(colval).Append("'");
+                        }
+                    }
+                }
+
+                sb.Append(" AND " + Get_TableName() + "_ID != " + Get_ID());
+
+                //Check unique record in DB 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString()));
+                sb = null;
+                if (count > 0)
+                {
+                    log.SaveError("SaveErrorNotUnique", colHeaders.ToString());
+                    return false;
+
+                }
+            }
+
             //	Price List
             if (GetM_PriceList_ID() == 0)
             {
@@ -1531,7 +1602,7 @@ namespace VAdvantage.Model
                 Decimal invAmt = GetGrandTotal(true);
                 // If Amount is ZERO then no need to check currency conversion
                 if (!invAmt.Equals(Env.ZERO))
-                { 
+                {
                     // JID_1828 -- need to pick selected record conversion type
                     invAmt = MConversionRate.ConvertBase(GetCtx(), invAmt,  //	CM adjusted 
                         GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
@@ -3436,7 +3507,7 @@ namespace VAdvantage.Model
                                                      PostCurrentCostPrice = CASE WHEN 1 = " + (isUpdatePostCurrentcostPriceFromMR ? 1 : 0) +
                                                      @" THEN " + currentCostPrice + @" ELSE PostCurrentCostPrice END 
                                                  WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
-                                                 sLine.SetIsCostImmediate(true);
+                                                sLine.SetIsCostImmediate(true);
                                             }
                                         }
                                     }
