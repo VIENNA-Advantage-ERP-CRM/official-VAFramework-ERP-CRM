@@ -284,7 +284,7 @@ namespace VAdvantage.Process
         {
             VA009_PaymentMethod_ID = 0;
             //get organisation default 
-            string _sql = "SELECT VA009_PaymentMethod_ID,VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string _sql = "SELECT VA009_PaymentMethod_ID, VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PaymentBaseType='S' AND IsActive='Y' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", Org_ID);
             DataSet _ds = DB.ExecuteDataset(_sql, param, Get_TrxName());
