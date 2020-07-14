@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         #region Variables
         /**	Process Message 			*/
         private String _processMsg = null;
-        
+
         /**	Order Lines					*/
         private MOrderLine[] _lines = null;
         /**	Tax Lines					*/
@@ -3556,53 +3556,53 @@ namespace VAdvantage.Model
                         #endregion
 
                     }
-                    //
-
-                    if (dt.GetDocBaseType() == "BOO") ///dt.GetValue() == "BSO" || dt.GetValue() == "BPO")
+                    
+                    // Enabled Order History Tab
+                    //if (dt.GetDocBaseType() == "BOO") ///dt.GetValue() == "BSO" || dt.GetValue() == "BPO")
+                    //{
+                    if (PO.Get_Table_ID("C_OrderlineHistory") > 0)
                     {
-                        if (PO.Get_Table_ID("C_OrderlineHistory") > 0)
+                        #region C_OrderlineHistory
+                        MOrderlineHistory lHist = null;
+                        GetLines(true, null);
+                        if (_lines.Length > 0)
                         {
-                            #region C_OrderlineHistory
-                            MOrderlineHistory lHist = null;
-                            GetLines(true, null);
-                            if (_lines.Length > 0)
+                            for (int i = 0; i < _lines.Length; i++)
                             {
-                                for (int i = 0; i < _lines.Length; i++)
+                                lHist = new MOrderlineHistory(GetCtx(), 0, Get_TrxName());
+                                lHist.SetClientOrg(_lines[i]);
+                                lHist.SetC_OrderLine_ID(_lines[i].Get_ID());
+                                lHist.SetC_Charge_ID(_lines[i].GetC_Charge_ID());
+                                lHist.SetC_Frequency_ID(_lines[i].GetC_Frequency_ID());
+                                lHist.SetC_Tax_ID(_lines[i].GetC_Tax_ID());
+                                lHist.SetDateOrdered(_lines[i].GetDateOrdered());
+                                lHist.SetDatePromised(_lines[i].GetDatePromised());
+                                lHist.SetDescription(_lines[i].GetDescription());
+                                lHist.SetDiscount(_lines[i].GetDiscount());
+                                lHist.SetEndDate(_lines[i].GetEndDate());
+                                lHist.SetLineNetAmt(_lines[i].GetLineNetAmt());
+                                lHist.SetM_Product_ID(_lines[i].GetM_Product_ID());
+                                lHist.SetC_UOM_ID(_lines[i].GetC_UOM_ID());
+                                lHist.SetM_Shipper_ID(_lines[i].GetM_Shipper_ID());
+                                lHist.SetNoofCycle(_lines[i].GetNoofCycle());
+                                lHist.SetPriceActual(_lines[i].GetPriceActual());
+                                lHist.SetPriceCost(_lines[i].GetPriceCost());
+                                lHist.SetPriceEntered(_lines[i].GetPriceEntered());
+                                lHist.SetPriceList(_lines[i].GetPriceList());
+                                lHist.SetProcessed(true);
+                                lHist.SetQtyEntered(_lines[i].GetQtyEntered());
+                                lHist.SetQtyOrdered(_lines[i].GetQtyOrdered());
+                                lHist.SetQtyPerCycle(_lines[i].GetQtyPerCycle());
+                                lHist.SetStartDate(_lines[i].GetStartDate());
+                                if (!lHist.Save(Get_TrxName()))
                                 {
-                                    lHist = new MOrderlineHistory(GetCtx(), 0, Get_TrxName());
-                                    lHist.SetClientOrg(_lines[i]);
-                                    lHist.SetC_OrderLine_ID(_lines[i].Get_ID());
-                                    lHist.SetC_Charge_ID(_lines[i].GetC_Charge_ID());
-                                    lHist.SetC_Frequency_ID(_lines[i].GetC_Frequency_ID());
-                                    lHist.SetC_Tax_ID(_lines[i].GetC_Tax_ID());
-                                    lHist.SetDateOrdered(_lines[i].GetDateOrdered());
-                                    lHist.SetDatePromised(_lines[i].GetDatePromised());
-                                    lHist.SetDescription(_lines[i].GetDescription());
-                                    lHist.SetDiscount(_lines[i].GetDiscount());
-                                    lHist.SetEndDate(_lines[i].GetEndDate());
-                                    lHist.SetLineNetAmt(_lines[i].GetLineNetAmt());
-                                    lHist.SetM_Product_ID(_lines[i].GetM_Product_ID());
-                                    lHist.SetC_UOM_ID(_lines[i].GetC_UOM_ID());
-                                    lHist.SetM_Shipper_ID(_lines[i].GetM_Shipper_ID());
-                                    lHist.SetNoofCycle(_lines[i].GetNoofCycle());
-                                    lHist.SetPriceActual(_lines[i].GetPriceActual());
-                                    lHist.SetPriceCost(_lines[i].GetPriceCost());
-                                    lHist.SetPriceEntered(_lines[i].GetPriceEntered());
-                                    lHist.SetPriceList(_lines[i].GetPriceList());
-                                    lHist.SetProcessed(true);
-                                    lHist.SetQtyEntered(_lines[i].GetQtyEntered());
-                                    lHist.SetQtyOrdered(_lines[i].GetQtyOrdered());
-                                    lHist.SetQtyPerCycle(_lines[i].GetQtyPerCycle());
-                                    lHist.SetStartDate(_lines[i].GetStartDate());
-                                    if (!lHist.Save(Get_TrxName()))
-                                    {
-                                        _processMsg = "Could not Create Order Line History";
-                                        return DocActionVariables.STATUS_INVALID;
-                                    }
+                                    _processMsg = "Could not Create Order Line History";
+                                    return DocActionVariables.STATUS_INVALID;
                                 }
                             }
-                            #endregion
                         }
+                        #endregion
+                        //}
                     }
 
                     //	Re-Check
@@ -3682,7 +3682,7 @@ namespace VAdvantage.Model
                         if (shipment == null)
                             return DocActionVariables.STATUS_INVALID;
                         Info.Append("Successfully created:@M_InOut_ID@ & doc no.: ").Append(shipment.GetDocumentNo());
-                        _processMsg= Info.ToString();
+                        _processMsg = Info.ToString();
                         if (shipment.GetDocStatus() == "DR")
                         {
                             if (String.IsNullOrEmpty(_processMsg))
@@ -3719,7 +3719,7 @@ namespace VAdvantage.Model
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
                         _processMsg += Info.ToString();
-                       
+
                         String msg = invoice.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
                             Info.Append(" (").Append(msg).Append(")");
@@ -3802,7 +3802,7 @@ namespace VAdvantage.Model
                 _processMsg = Info.ToString();
                 //
                 SetDocAction(DOCACTION_Close);
-               //Changes by abhishek suggested by lokesh on 7/1/2016
+                //Changes by abhishek suggested by lokesh on 7/1/2016
                 //try
                 //{
                 //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from AD_ModuleInfo Where Prefix='VAPOS_'"));
@@ -3872,7 +3872,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-           
+
             return DocActionVariables.STATUS_COMPLETED;
         }
 
