@@ -140,13 +140,16 @@
                 else if (minFractionDigit === maxFractionDigit) {
                     o = parseFloat(o).toFixed(minFractionDigit);
                 }
+                else if (o.split(".")[1].length < minFractionDigit) {
+                    o = parseFloat(o).toFixed(minFractionDigit);
+                }
             }
             //Also remove extra zero before return
             return o;
         };
 
         this.GetConvertedNumber = function (val, dotFormatter) {
-            if (dotFormatter) {
+    if (dotFormatter) {
                 return Number(String(val).replace(/[^0-9.-]+/g, ""));
             } else {
                 return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
@@ -228,13 +231,13 @@
                         return inputPrime.toLocaleString(language);
                     } else {
                         // de-DE
-                        return  inputPrime.toLocaleString(language);
+                        return inputPrime.toLocaleString(language);
                     }
                 } else {
                     if (dotFormatter) {
-                        return  inputPrime;
+                        return inputPrime;
                     } else {
-                        return  inputPrime;
+                        return inputPrime;
                     }
                 }
             }
@@ -506,9 +509,9 @@
 
                 if (token.contains(".")) {
                     token = token.substring(0, token.indexOf("."));
-                   //txInfo = ctx.getWindowContext(WindowNo, tabNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
+                    //txInfo = ctx.getWindowContext(WindowNo, tabNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
                 }
-                
+
                 ctxInfo = ctx.getWindowContext(windowNo, tabNo, token, onlyWindow);	// get context
 
                 if (ctxInfo.length == 0 && (token.startsWith("#") || token.startsWith("$")))
@@ -1736,7 +1739,7 @@
 
     DataSet.prototype.toJson = function (jsonString) {
         var tables = jsonString;
-        if(typeof(jsonString) == "string")
+        if (typeof (jsonString) == "string")
             tables = JSON.parse(jsonString);
 
         tables = $.isArray(tables) ? tables : [tables];
@@ -1778,7 +1781,7 @@
         this.rows = []; // rows of column
         this.totalRecord = 0; // total record 
         this.columnsName = [];
-        
+
     };
 
     DataTable.prototype.toJson = function (js) {
