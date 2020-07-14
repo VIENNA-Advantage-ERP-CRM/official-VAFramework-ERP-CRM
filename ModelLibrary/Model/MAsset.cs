@@ -473,7 +473,8 @@ namespace VAdvantage.Model
         public new Decimal GetQty()
         {
             Decimal qty = base.GetQty();
-            if (qty == null || qty.Equals(Env.ZERO))
+            // In Case of Disposal, no need to set Asset Qty to One.
+            if (qty.Equals(Env.ZERO) && !IsDisposed())
                 SetQty(Env.ONE);
             return base.GetQty();
         }
