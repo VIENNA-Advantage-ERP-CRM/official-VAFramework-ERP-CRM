@@ -39,11 +39,11 @@ namespace VIS.Helpers
             SecureEngine.Encrypt("t"); //Initialize 
 
             //	Cannot use encrypted password
-            if (model.Login1Model.Password != null && SecureEngine.IsEncrypted(model.Login1Model.Password))
-            {
-                //log.warning("Cannot use Encrypted Password");
-                return false;
-            }
+            //if ())
+            //{
+            //    //log.warning("Cannot use Encrypted Password");
+            //    return false;
+            //}
             //	Authentification
             bool authenticated = false;
             bool isLDAP = false;
@@ -96,6 +96,7 @@ namespace VIS.Helpers
             {
                 string sqlEnc = "SELECT isencrypted FROM ad_column WHERE ad_table_id=(SELECT ad_table_id FROM ad_table WHERE tablename='AD_User') AND columnname='Password'";
                 char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
+                string originalpwd = model.Login1Model.Password;
                 if (isEncrypted == 'Y' && model.Login1Model.Password != null)
                 {
                     model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
@@ -104,11 +105,10 @@ namespace VIS.Helpers
                 //  DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
                 if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
                 {
-
-
                     //if username or password is not matching
-                    if (!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserValue) ||
+                    if ((!dsUserInfo.Tables[0].Rows[0]["Value"].Equals(model.Login1Model.UserValue) ||
                         !dsUserInfo.Tables[0].Rows[0]["Password"].Equals(model.Login1Model.Password))
+                        || (originalpwd != null && SecureEngine.IsEncrypted(originalpwd)))
                     {
                         //if current user is Not superuser, then increase failed login count
                         if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
