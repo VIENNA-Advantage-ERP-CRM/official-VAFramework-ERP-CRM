@@ -42,12 +42,12 @@ namespace VIS.Models
         // Added by Bharat on 09 June 2017
         public List<Dictionary<string, object>> GetWarehouse(int warehouse_id, Ctx ctx)
         {
-            List<Dictionary<string, object>> retDic = null;
+            List<Dictionary<string, object>> retDic = null;            
             string sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse";
             if (warehouse_id != 0)
             {
                 sql += " WHERE M_Warehouse_ID=" + warehouse_id;
-            }
+            }            
             string finalSql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Warehouse", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " ORDER BY 2";
             DataSet ds = DB.ExecuteDataset(finalSql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -85,6 +85,34 @@ namespace VIS.Models
                     obj["Separator"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Separator"]);                    
             }
             return obj;
+        }
+
+        /// <summary>
+        /// Getting locator
+        /// </summary>
+        /// <param name="Locator_ID"></param>
+        /// <returns>Locator Count </returns>
+        public int GetLocator(string locator_id, Ctx ctx)
+        {
+            int count = 0;
+            string sql = "SELECT * FROM M_Locator ";
+            string[] arr = locator_id.Split(',');
+            int windowNo = Util.GetValueOfInt(arr[1]);
+            int orgId = ctx.GetContextAsInt(windowNo, "AD_Org_ID");
+            if (Util.GetValueOfInt(arr[0]) != 0)
+            {
+                sql += " WHERE M_Locator_ID=" + Util.GetValueOfInt(arr[0]);
+            }
+            if (orgId != 0)
+            {
+                sql += " AND Ad_Org_Id=" + orgId;
+            }
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                count++;
+            }
+            return count;
         }
     }
 }

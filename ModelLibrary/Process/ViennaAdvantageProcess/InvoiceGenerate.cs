@@ -332,9 +332,13 @@ namespace ViennaAdvantage.Process
                         {
                             continue;
                         }
-                        //
-                        CreateLine(order, shipment, shipLine);
-                    }	//	shipment lines                        
+                        //JID_1139 Avoided the duplicate charge records
+                        if(shipLine.GetM_Product_ID() >0)
+                        {
+                            CreateLine(order, shipment, shipLine);
+                        }                                 
+                    }//	shipment lines
+                    
                     for (int i = 0; i < oLines.Length; i++)
                     {
                         MOrderLine oLine = oLines[i];

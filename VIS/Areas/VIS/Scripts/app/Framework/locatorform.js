@@ -209,13 +209,19 @@
                     }
                     //send matched items into reponse
                     if (mLocator.data.length > 0) {
-                        response($.map(mLocator.data, function (item) {
+                        response($.map(mLocator.data, function (item) {                           
                             if (item.Name.toUpperCase().contains(request.term.trim().toUpperCase())) {
-                                return {
-                                    label: item.Name,
-                                    value: item.Name,
-                                    locatorID: item.Key
+                                // JID_0932 In validation of locator need consider organization also
+                                var param = item.Key.toString().concat(",", windowNo.toString());
+                                var dsLocator = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Locator/GetLocator", { "Locator_ID": param }, null);
+                                if (dsLocator != 0) {
+                                    return {
+                                        label: item.Name,
+                                        value: item.Name,
+                                        locatorID: item.Key
+                                    }
                                 }
+                                
                             }
                         }));
                     }
