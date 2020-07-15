@@ -5323,6 +5323,13 @@ namespace VAdvantage.Model
                     return false;
                 }
 
+                // JID_1035 before reactivating the order user need to void the payment first if orderschedule  exist against current order
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT( VA009_OrderPaySchedule_ID ) FROM VA009_OrderPaySchedule WHERE c_order_id =" + GetC_Order_ID() + " AND (c_payment_id !=0 OR c_cashline_id!=0)")) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "PaymentmustvoidedFirst");
+                    return false;
+                }
+
                 MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
                 MOrderLine[] lines = null;
