@@ -685,17 +685,12 @@
 
                 //	Created
                 var tt = dtpCreatedFromQ.val();
-                var todate = dtpCreatedToQ.val();
                 //JID_1725 getting the Data between fromdate and todate
-                if (tt != "" && todate != "") {
-                    sql = sql.concat(" AND ").concat("TRUNC(").concat("Created,'DD') BETWEEN ").concat(VIS.DB.to_date(tt)).concat(" AND ").concat(VIS.DB.to_date(todate));
-                }
-                else if (tt != "")
+                if (tt != "")
                     sql = sql.concat(" AND ").concat("TRUNC(").concat("Created,'DD') >= ").concat(VIS.DB.to_date(tt));
-                        //concat(" AND Created >=").concat(VIS.DB.to_date(tt));                
-                else if (todate != "")
-                    sql = sql.concat(" AND ").concat("TRUNC(").concat("Created,'DD') <= ").concat(VIS.DB.to_date(todate));
-                        //concat(" AND Created<").concat(VIS.DB.to_date(todate));                
+                var tt = dtpCreatedToQ.val();
+                if (tt != "")
+                    sql = sql.concat(" AND ").concat("TRUNC(").concat("Created,'DD') <= ").concat(VIS.DB.to_date(tt));               
 
                 $self.log.fine(sql.toString());
 

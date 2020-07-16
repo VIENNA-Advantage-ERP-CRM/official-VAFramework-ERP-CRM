@@ -52,16 +52,5 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(model.GetWarehouseData(Locator_ID, ct)), JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Getting locator
-        /// </summary>
-        /// <param name="Locator_ID"></param>
-        /// <returns>Locator Count </returns>
-        public JsonResult GetLocator(string Locator_ID)
-        {
-            Ctx ct = Session["ctx"] as Ctx;
-            LocatorModel model = new LocatorModel();
-            return Json(JsonConvert.SerializeObject(model.GetLocator(Locator_ID, ct)), JsonRequestBehavior.AllowGet);
-        }
     }
 }

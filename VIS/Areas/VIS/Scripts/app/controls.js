@@ -4047,11 +4047,12 @@
             if (self.isReadOnly) {
                 return;
             }
-            //	Warehouse/Product
+            //	Organization/Warehouse/Product
+            var OrgId = self.getOnlyOrgID();
             var warehouseId = self.getOnlyWarehouseID();
             var productId = self.getOnlyProductID();
-
-            self.showLocatorForm(warehouseId, productId);
+            // JID_0932 In validation of locator need consider organization also
+            self.showLocatorForm(OrgId,warehouseId, productId);
 
         });
 
@@ -4131,6 +4132,21 @@
 
     VIS.Utility.inheritPrototype(VLocator, IControl);
 
+    VLocator.prototype.getOnlyOrgID = function () {
+        var ctx = VIS.Env.getCtx();
+        var Only_Org = ctx.getContext(this.windowNum, "AD_Org_ID", true);
+        var Only_Org_ID = 0;
+        try {
+            if (Only_Org != null && Only_Org.length > 0) {
+                Only_Org_ID = Number(Only_Org);
+            }
+        }
+        catch (ex) {
+            // log.Log(Logging.Level.SEVERE, ex.Message);
+        }
+        return Only_Org_ID;
+    };
+
     VLocator.prototype.getOnlyWarehouseID = function () {
         var ctx = VIS.Env.getCtx();
         // gwu: do not restrict locators by warehouse when in Import Inventory Transactions window 
@@ -4176,12 +4192,13 @@
     };
 
     //Function which show form
-    VLocator.prototype.showLocatorForm = function (warehouseId, productId) {
+    VLocator.prototype.showLocatorForm = function (OrgId, warehouseId, productId) {
         var M_Locator_ID = 0;
         if (this.value != null) {
             M_Locator_ID = Number(this.value);
         }
 
+        this.lookup.setOnlyOrgID(OrgId);
         this.lookup.setOnlyWarehouseID(warehouseId);
         this.lookup.setOnlyProductID(productId);
 

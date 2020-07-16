@@ -86,33 +86,6 @@ namespace VIS.Models
             }
             return obj;
         }
-
-        /// <summary>
-        /// Getting locator
-        /// </summary>
-        /// <param name="Locator_ID"></param>
-        /// <returns>Locator Count </returns>
-        public int GetLocator(string locator_id, Ctx ctx)
-        {
-            int count = 0;
-            string sql = "SELECT * FROM M_Locator ";
-            string[] arr = locator_id.Split(',');
-            int windowNo = Util.GetValueOfInt(arr[1]);
-            int orgId = ctx.GetContextAsInt(windowNo, "AD_Org_ID");
-            if (Util.GetValueOfInt(arr[0]) != 0)
-            {
-                sql += " WHERE M_Locator_ID=" + Util.GetValueOfInt(arr[0]);
-            }
-            if (orgId != 0)
-            {
-                sql += " AND Ad_Org_Id=" + orgId;
-            }
-            DataSet ds = DB.ExecuteDataset(sql);
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                count++;
-            }
-            return count;
-        }
+  
     }
 }

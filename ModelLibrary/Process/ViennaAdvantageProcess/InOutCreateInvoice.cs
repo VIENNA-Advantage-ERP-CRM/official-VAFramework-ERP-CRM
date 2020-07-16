@@ -82,6 +82,7 @@ namespace ViennaAdvantage.Process
             StringBuilder invDocumentNo = new StringBuilder();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT  Count(*)  FROM M_Inout WHERE  ISSOTRX='Y' AND  M_Inout_ID=" + GetRecord_ID()));
             MInOut ship = null;
+            bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
             if (count > 0)
             {
                 if (_M_InOut_ID == 0)
@@ -309,6 +310,10 @@ namespace ViennaAdvantage.Process
                     else
                     {
                         MInvoiceLine line = new MInvoiceLine(invoice);
+                        if (line.GetC_Charge_ID() > 0 && !isAllownonItem || _GenerateCharges)
+                        {
+                            continue;
+                        }
                         line.SetShipLine(sLine);
                         line.SetQtyEntered(qtyEntered);
                         line.SetQtyInvoiced(qtyInvoiced);
@@ -404,28 +409,15 @@ namespace ViennaAdvantage.Process
                 else
                 {
                     MInvoiceLine line = new MInvoiceLine(invoice);
-                    // JID_1850 Avoid the duplicate charge line
-                    if (sLine.GetM_Product_ID() > 0 || sLine.GetC_Charge_ID() > 0)
-                    {                        
-                        if (sLine.GetC_Charge_ID() > 0)
-                        {                           
-                            var ctx = GetCtx();
-                            bool isAllownonItem = Util.GetValueOfString(ctx.GetContext("$AllowNonItem")).Equals("Y");
-                            if (!_GenerateCharges && isAllownonItem)
-                            {
-                                line.SetShipLine(sLine);
-                            }
-                            else
-                               continue;
-                        }
-                        else
-                        {
-                            line.SetShipLine(sLine);
-                        }
-                        line.SetQtyEntered(sLine.GetQtyEntered());
-                        line.SetQtyInvoiced(sLine.GetMovementQty());
-                        line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017
-                    }                
+                    // JID_1850 Avoid the duplicate charge line 
+                    if (sLine.GetC_Charge_ID() > 0 && isAllownonItem || !_GenerateCharges)
+                    {
+                        continue;
+                    }
+                    line.SetShipLine(sLine);
+                    line.SetQtyEntered(sLine.GetQtyEntered());
+                    line.SetQtyInvoiced(sLine.GetMovementQty());
+                    line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017              
                    
                     // Change By Mohit Amortization process -------------
                     if (_CountVA038 > 0)

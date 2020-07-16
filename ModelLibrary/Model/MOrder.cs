@@ -3085,23 +3085,27 @@ namespace VAdvantage.Model
                             Weight = Decimal.Add(Weight, (Decimal.Multiply(product.GetWeight(), line.GetQtyOrdered())));
                         }
 
-                        // Work done by Vivek on 13/11/2017 assigned by Mukesh sir
-                        // Work done to update qtyordered at storage and qtyreserved at order line
-                        // when document is processed in closing state
-                        if (DOCACTION_Close.Equals(GetDocAction()))
+                        //JID_1686,JID_1687 only Items are updated in storage tab
+                        if(product.IsStocked())
                         {
-                            Decimal ordered = isSOTrx ? Env.ZERO : line.GetQtyReserved();
-                            Decimal reserved = isSOTrx ? line.GetQtyReserved() : Env.ZERO;
-                            M_Locator_ID = wh.GetDefaultM_Locator_ID();
-                            if (!MStorage.Add(GetCtx(), line.GetM_Warehouse_ID(), M_Locator_ID,
-                                        line.GetM_Product_ID(),
-                                        line.GetM_AttributeSetInstance_ID(), reserved,
-                                        ordered, Get_TrxName()))
-                                return false;
-                            line.SetQtyReserved(Env.ZERO);
-                            if (!line.Save(Get_TrxName()))
-                                return false;
-                        }
+                            // Work done by Vivek on 13/11/2017 assigned by Mukesh sir
+                            // Work done to update qtyordered at storage and qtyreserved at order line
+                            // when document is processed in closing state
+                            if (DOCACTION_Close.Equals(GetDocAction()))
+                            {
+                                Decimal ordered = isSOTrx ? Env.ZERO : line.GetQtyReserved();
+                                Decimal reserved = isSOTrx ? line.GetQtyReserved() : Env.ZERO;
+                                M_Locator_ID = wh.GetDefaultM_Locator_ID();
+                                if (!MStorage.Add(GetCtx(), line.GetM_Warehouse_ID(), M_Locator_ID,
+                                            line.GetM_Product_ID(),
+                                            line.GetM_AttributeSetInstance_ID(), reserved,
+                                            ordered, Get_TrxName()))
+                                    return false;
+                                line.SetQtyReserved(Env.ZERO);
+                                if (!line.Save(Get_TrxName()))
+                                    return false;
+                            }
+                        }                        
                         continue;
                     }
 

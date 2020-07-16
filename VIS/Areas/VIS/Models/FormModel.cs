@@ -564,9 +564,14 @@ namespace VIS.Models
             return sql;
         }
 
-        public List<JTable> GetWareProWiseLocator(Ctx ctx, string colName, int warehouseId, int productId, bool onlyIsSOTrx)
+        public List<JTable> GetWareProWiseLocator(Ctx ctx, string colName, int orgId, int warehouseId, int productId, bool onlyIsSOTrx)
         {
             string sql = "SELECT M_Locator_ID," + colName + " FROM M_Locator WHERE IsActive='Y'";
+            //JID_0932 In validation of locator need to consider organization  
+            if (orgId != 0)
+            {
+                sql += " AND AD_Org_ID=@org";
+            }
             if (warehouseId != 0)
             {
                 sql += " AND M_Warehouse_ID=@w";
@@ -586,6 +591,10 @@ namespace VIS.Models
 
             var finalSql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Locator", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             List<SqlParams> param = new List<SqlParams>();
+            if (orgId != 0)
+            {
+                param.Add(new SqlParams() { name = "@org", value = orgId });
+            }
             if (warehouseId != 0)
             {
                 param.Add(new SqlParams() { name = "@w", value = warehouseId });
