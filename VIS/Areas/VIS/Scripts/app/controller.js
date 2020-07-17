@@ -874,6 +874,8 @@
                 if (Record_ID < 1 && rec_id > 0)
                     Record_ID = rec_id;
 
+                var $self = this;
+
                 // var dr = null;
                 $.ajax({
                     type: 'Get',
@@ -886,27 +888,22 @@
                             var filled = false;
                             var dr = new VIS.DB.DataReader().toJson(data);
                             var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
-                            var dotsepartor = VIS.Env.isDecimalPoint();
                             //dr = executeReader(sql.toString());
                             if (dr.read()) {
                                 //	{0} - Number of lines
                                 var lines = dr.getInt(0);
                                 arguments[0] = lines;
                                 //	{1} - Line toral
-                                var lineTotal = format.GetFormatedValue(dr.getDecimal(2)).toLocaleString();//.toFixed(2);
-                                lineTotal = format.GetFormatAmount(lineTotal, "init", dotsepartor);
-                                arguments[1] = lineTotal;
+                                arguments[1] = format.getLocaleAmount(dr.getDecimal(2));
                                 //	{2} - Grand total (including tax, etc.)
-                                var grandTotal = format.GetFormatedValue(dr.getDecimal(3)).toLocaleString();//.toFixed(2);
-                                grandTotal = format.GetFormatAmount(grandTotal, "init", dotsepartor);
-                                arguments[2] = grandTotal;
+                               
+                                arguments[2] = format.getLocaleAmount(dr.getDecimal(3));
                                 //	{3} - Currency
                                 var currency = dr.getString(1);
                                 arguments[3] = currency;
                                 //	(4) - Grand total converted to Base
-                                var grandBase = format.GetFormatedValue(dr.getDecimal(4)).toLocaleString();//.toFixed(2);
-                                grandBase = format.GetFormatAmount(grandBase, "init", dotsepartor);
-                                arguments[4] = grandBase;
+                               
+                                arguments[4] = format.getLocaleAmount(dr.getDecimal(4));
                                 arguments[5] = ctx.getContext("$CurrencyISO");
                                 filled = true;
                             }
@@ -932,6 +929,11 @@
         });
     };
 
+    GridTab.prototype.getFormattedAmount = function (amount) {
+        var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+        var formattedAmount = format.GetFormatedValue(amount).toLocaleString();//.toFixed(2);
+        formattedAmount = format.GetFormatAmount(formattedAmount, "init", VIS.Env.isDecimalPoint());
+    };
 
     GridTab.prototype.getTrxInfo = function (tableName, ctx, windowNo, tabNo) {
         if (tableName.startsWith("C_Order") || tableName.startsWith("C_Invoice")) {
