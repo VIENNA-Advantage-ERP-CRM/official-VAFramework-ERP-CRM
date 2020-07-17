@@ -928,11 +928,6 @@
         });
     };
 
-    GridTab.prototype.getFormattedAmount = function (amount) {
-        var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
-        var formattedAmount = format.GetFormatedValue(amount).toLocaleString();//.toFixed(2);
-        formattedAmount = format.GetFormatAmount(formattedAmount, "init", VIS.Env.isDecimalPoint());
-    };
 
     GridTab.prototype.getTrxInfo = function (tableName, ctx, windowNo, tabNo) {
         if (tableName.startsWith("C_Order") || tableName.startsWith("C_Invoice")) {
