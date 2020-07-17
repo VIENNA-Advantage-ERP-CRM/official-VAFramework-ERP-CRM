@@ -874,7 +874,6 @@
                 if (Record_ID < 1 && rec_id > 0)
                     Record_ID = rec_id;
 
-                var $self = this;
 
                 // var dr = null;
                 $.ajax({
