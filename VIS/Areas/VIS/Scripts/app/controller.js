@@ -874,6 +874,7 @@
                 if (Record_ID < 1 && rec_id > 0)
                     Record_ID = rec_id;
 
+
                 // var dr = null;
                 $.ajax({
                     type: 'Get',
@@ -885,23 +886,23 @@
                             var arguments = [];//new Object[6];
                             var filled = false;
                             var dr = new VIS.DB.DataReader().toJson(data);
+                            var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
                             //dr = executeReader(sql.toString());
                             if (dr.read()) {
                                 //	{0} - Number of lines
                                 var lines = dr.getInt(0);
                                 arguments[0] = lines;
                                 //	{1} - Line toral
-                                var lineTotal = dr.getDecimal(2).toLocaleString();//.toFixed(2);
-                                arguments[1] = lineTotal;
+                                arguments[1] = format.getLocaleAmount(dr.getDecimal(2));
                                 //	{2} - Grand total (including tax, etc.)
-                                var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
-                                arguments[2] = grandTotal;
+                               
+                                arguments[2] = format.getLocaleAmount(dr.getDecimal(3));
                                 //	{3} - Currency
                                 var currency = dr.getString(1);
                                 arguments[3] = currency;
                                 //	(4) - Grand total converted to Base
-                                var grandBase = dr.getDecimal(4).toLocaleString();//.toFixed(2);
-                                arguments[4] = grandBase;
+                               
+                                arguments[4] = format.getLocaleAmount(dr.getDecimal(4));
                                 arguments[5] = ctx.getContext("$CurrencyISO");
                                 filled = true;
                             }

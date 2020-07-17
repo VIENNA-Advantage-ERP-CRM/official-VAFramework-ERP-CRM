@@ -251,6 +251,11 @@
             return maxFractionDigit;
         }
 
+        this.getLocaleAmount = function (amount) {
+            var formattedAmount = this.GetFormatedValue(amount).toLocaleString();//.toFixed(2);
+            return this.GetFormatAmount(formattedAmount, "init", VIS.Env.isDecimalPoint());
+        };
+
         /* privilized function */
         this.dispose = function () {
             this.GetFormatedValue = null;
