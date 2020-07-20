@@ -83,7 +83,7 @@ namespace VAdvantage.Model
 
             if (DisplayType.IsLookup(_vo.displayType))
             {
-                MLookup ml = new MLookup(_vo.GetCtx(), _vo.windowNo,_vo.tabNo, _vo.displayType);
+                MLookup ml = new MLookup(_vo.GetCtx(), _vo.windowNo, _vo.tabNo, _vo.displayType);
                 ml.SetColumnName(_vo.ColumnName.ToLower());
                 if (_vo.lookupInfo == null)
                 {
@@ -105,7 +105,7 @@ namespace VAdvantage.Model
                 //
                 if (_vo.lookupInfo == null)
                 {
-                    throw new Exception(Msg.GetMsg(_vo.GetCtx(), "Error")+ " " + _vo.Header);
+                    throw new Exception(Msg.GetMsg(_vo.GetCtx(), "Error") + " " + _vo.Header);
                 }
                 _vo.lookupInfo.isKey = _vo.IsKey;
                 _lookup = ml.Initialize(_vo.lookupInfo);
@@ -793,6 +793,8 @@ namespace VAdvantage.Model
 
         public string GetObscureType()
         {
+            if (!String.IsNullOrEmpty(_vo.ObscureFieldType))
+                return _vo.ObscureFieldType;
             return _vo.ObscureType;
         }
 

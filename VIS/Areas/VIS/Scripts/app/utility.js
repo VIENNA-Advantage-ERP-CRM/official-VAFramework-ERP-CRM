@@ -469,7 +469,7 @@
         var WINDOW_PAGE_SIZE = 50;
         var window_height = 400;
         var NULLString = "NULLValue";
-
+        var obscureTypes = { DigitButLast4: 904, DigitButFirstLast4: 944, AlphanumButLast4: A04, AlphaNumButFirstLast4: A44 };
 
         function getWindowNo() {
             return windowNo++;
@@ -538,6 +538,21 @@
             }
             outStr += value;						// add the rest of the string
             return outStr;
+        };
+
+        function getObscureColumn(type, column) {
+            if (type == obscureTypes.DigitButLast4) {
+                //column=
+            }
+            else if (type == obscureTypes.DigitButFirstLast4) {
+
+            }
+            else if (type == obscureTypes.AlphanumButLast4) {
+
+            }
+            else if (type == obscureTypes.AlphaNumButFirstLast4) {
+
+            }
         };
 
         function getWINDOW_PAGE_SIZE() {

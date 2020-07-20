@@ -895,13 +895,13 @@
                                 //	{1} - Line toral
                                 arguments[1] = format.getLocaleAmount(dr.getDecimal(2));
                                 //	{2} - Grand total (including tax, etc.)
-                               
+
                                 arguments[2] = format.getLocaleAmount(dr.getDecimal(3));
                                 //	{3} - Currency
                                 var currency = dr.getString(1);
                                 arguments[3] = currency;
                                 //	(4) - Grand total converted to Base
-                               
+
                                 arguments[4] = format.getLocaleAmount(dr.getDecimal(4));
                                 arguments[5] = ctx.getContext("$CurrencyISO");
                                 filled = true;
@@ -5754,6 +5754,9 @@
             }
             if (this.vo.displayType == VIS.DisplayType.YesNo) {
                 //return " (case " + _vo.ColumnName + " when 'Y' then 'True' else 'False' end) AS " + _vo.ColumnName;
+            }
+            if (this.getObscureType().length > 0) {
+
             }
             return this.vo.ColumnName;
         }
