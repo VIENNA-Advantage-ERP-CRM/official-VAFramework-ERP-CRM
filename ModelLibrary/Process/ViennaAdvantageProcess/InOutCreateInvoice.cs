@@ -310,10 +310,6 @@ namespace ViennaAdvantage.Process
                     else
                     {
                         MInvoiceLine line = new MInvoiceLine(invoice);
-                        if (line.GetC_Charge_ID() > 0 && !isAllownonItem || _GenerateCharges)
-                        {
-                            continue;
-                        }
                         line.SetShipLine(sLine);
                         line.SetQtyEntered(qtyEntered);
                         line.SetQtyInvoiced(qtyInvoiced);
@@ -410,7 +406,7 @@ namespace ViennaAdvantage.Process
                 {
                     MInvoiceLine line = new MInvoiceLine(invoice);
                     // JID_1850 Avoid the duplicate charge line 
-                    if (sLine.GetC_Charge_ID() > 0 && isAllownonItem || !_GenerateCharges)
+                    if (sLine.GetC_Charge_ID() > 0 && (!isAllownonItem || _GenerateCharges))
                     {
                         continue;
                     }
