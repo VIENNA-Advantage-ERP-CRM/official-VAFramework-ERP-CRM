@@ -42,12 +42,12 @@ namespace VIS.Models
         // Added by Bharat on 09 June 2017
         public List<Dictionary<string, object>> GetWarehouse(int warehouse_id, Ctx ctx)
         {
-            List<Dictionary<string, object>> retDic = null;
+            List<Dictionary<string, object>> retDic = null;            
             string sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse";
             if (warehouse_id != 0)
             {
                 sql += " WHERE M_Warehouse_ID=" + warehouse_id;
-            }
+            }            
             string finalSql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Warehouse", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " ORDER BY 2";
             DataSet ds = DB.ExecuteDataset(finalSql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -86,5 +86,6 @@ namespace VIS.Models
             }
             return obj;
         }
+  
     }
 }

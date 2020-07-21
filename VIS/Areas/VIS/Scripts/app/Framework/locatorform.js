@@ -210,13 +210,11 @@
                     //send matched items into reponse
                     if (mLocator.data.length > 0) {
                         response($.map(mLocator.data, function (item) {
-                            if (item.Name.toUpperCase().contains(request.term.trim().toUpperCase())) {
-                                return {
-                                    label: item.Name,
-                                    value: item.Name,
-                                    locatorID: item.Key
-                                }
-                            }
+                                    return {
+                                        label: item.Name,
+                                        value: item.Name,
+                                        locatorID: item.Key
+                                    }
                         }));
                     }
                 },

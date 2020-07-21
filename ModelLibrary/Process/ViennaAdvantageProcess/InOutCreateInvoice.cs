@@ -82,6 +82,7 @@ namespace ViennaAdvantage.Process
             StringBuilder invDocumentNo = new StringBuilder();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT  Count(*)  FROM M_Inout WHERE  ISSOTRX='Y' AND  M_Inout_ID=" + GetRecord_ID()));
             MInOut ship = null;
+            bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
             if (count > 0)
             {
                 if (_M_InOut_ID == 0)
@@ -266,14 +267,15 @@ namespace ViennaAdvantage.Process
             DateTime? AmortEndDate = null;
             count = 0;
             DataSet ds = null;
+            DataSet dsDoc = null;
 
             for (int i = 0; i < shipLines.Length; i++)
             {
-                MInOutLine sLine = shipLines[i];
+                MInOutLine sLine = shipLines[i];               
                 // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
-                string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty-SUM(COALESCE(li.QtyInvoiced,0)) as QtyInvoiced, ci.DocumentNo 
-                FROM M_InOutLine ml INNER JOIN C_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID 
-                WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.M_InOutLine_ID =" + sLine.GetM_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered, ci.DocumentNo";
+                string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty- SUM(COALESCE(li.QtyInvoiced, 0)) as QtyInvoiced" +
+                    " FROM M_InOutLine ml INNER JOIN C_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID "+
+                    " WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.M_InOutLine_ID =" + sLine.GetM_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -281,18 +283,29 @@ namespace ViennaAdvantage.Process
                     decimal qtyInvoiced = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyInvoiced"]);
                     if (qtyEntered <= 0)
                     {
-                        // JID_1358: Need to show document number in message if Invoice already generated for Material Receipt
-                        if (invDocumentNo.Length > 0)
+                        // Getting document number Count if Invoice already generated for Material Receipt
+                        string StrSql = "SELECT ci.DocumentNo,li.M_InOutLine_ID FROM C_InvoiceLine li INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID " +
+                            "  WHERE ci.DocStatus NOT IN ('VO', 'RE') AND li.M_InOutLine_ID = " + sLine.GetM_InOutLine_ID();
+                        dsDoc = DB.ExecuteDataset(StrSql, null, Get_Trx());
+                        if (dsDoc != null && dsDoc.Tables[0].Rows.Count > 0)
                         {
-                            invDocumentNo.Append(", " + Util.GetValueOfString(ds.Tables[0].Rows[0]["DocumentNo"]));
+                            for (int j = 0; j < dsDoc.Tables[0].Rows.Count; j++)
+                            {
+                                // JID_1358: Need to show document number in message if Invoice already generated for Material Receipt
+                                if (invDocumentNo.Length > 0)
+                                {
+                                    invDocumentNo.Append(", " + Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
+                                }
+                                else
+                                {
+                                    invDocumentNo.Append(Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
+                                }
+                                ds.Dispose();
+                                log.Info("Invoice Line already exist for Receipt Line ID - " + sLine.GetM_InOutLine_ID());
+                                continue;
+                            }
+                            dsDoc.Dispose();
                         }
-                        else
-                        {
-                            invDocumentNo.Append(Util.GetValueOfString(ds.Tables[0].Rows[0]["DocumentNo"]));
-                        }
-                        ds.Dispose();
-                        log.Info("Invoice Line already exist for Receipt Line ID - " + sLine.GetM_InOutLine_ID());
-                        continue;
                     }
                     else
                     {
@@ -392,10 +405,16 @@ namespace ViennaAdvantage.Process
                 else
                 {
                     MInvoiceLine line = new MInvoiceLine(invoice);
+                    // JID_1850 Avoid the duplicate charge line 
+                    if (sLine.GetC_Charge_ID() > 0 && (!isAllownonItem || _GenerateCharges))
+                    {
+                        continue;
+                    }
                     line.SetShipLine(sLine);
                     line.SetQtyEntered(sLine.GetQtyEntered());
                     line.SetQtyInvoiced(sLine.GetMovementQty());
-                    line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017
+                    line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017              
+                   
                     // Change By Mohit Amortization process -------------
                     if (_CountVA038 > 0)
                     {
@@ -470,7 +489,7 @@ namespace ViennaAdvantage.Process
                                     amrtDS.Dispose();
                                 }
                             }
-                        }
+                        }                                               
                     }
                     // End Change Amortization process--------------
                     if (!line.Save())
@@ -485,7 +504,7 @@ namespace ViennaAdvantage.Process
                 }
             }
 
-
+           
             #region[Enhancement for Charges Distribution/Generation by Sukhwinder on 13 December 2017]
 
             if (_GenerateCharges && count > 0)
