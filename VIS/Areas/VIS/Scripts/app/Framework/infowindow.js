@@ -914,12 +914,19 @@
                     if (displayType == VIS.DisplayType.Integer) {
                         oColumn.render = 'int';
                     }
-                    else if (displayType == VIS.DisplayType.Amount) {
-                        oColumn.render = 'number:2';
+                    //else if (displayType == VIS.DisplayType.Amount) {
+                    //    oColumn.render = 'number:2';
+                    //}
+                    // JID_1809  Amount showing as per the browser culture
+                    else {          //if (displayType == VIS.DisplayType.Amount) {
+                        oColumn.render = function (record, index, colIndex) {
+                            var val = VIS.Utility.Util.getValueOfDecimal(record[grdCols[colIndex].field]);
+                            return (val).toLocaleString();
+                        };
                     }
-                    else {
-                        oColumn.render = 'number:1';
-                    }
+                    //else {
+                    //    oColumn.render = 'number:1';
+                    //}
                 }
                     //	YesNo
                     //else if (displayType == VIS.DisplayType.YesNo) {
@@ -932,18 +939,42 @@
                     //    }
                     //}
 
-                    //Date /////////
+                //Date /////////
+             // JID_1809 Date is showing as per browser culture
                 else if (VIS.DisplayType.IsDate(displayType)) {
-                    oColumn.render = function (record, index, colIndex) {
-
-                        var d = record[grdCols[colIndex].field];
-                        if (d) {
-                            d = Globalize.format(new Date(d), 'd');
+                    if (displayType == VIS.DisplayType.Date) {
+                        oColumn.render = function (record, index, colIndex) {
+                            var d = record[grdCols[colIndex].field];
+                            if (d) {
+                                var d = new Date(d);
+                                d = d.toLocaleDateString();
+                            }
+                            else d = "";
+                            return d;
                         }
-                        else d = "";
-                        return d;
-
                     }
+                    else if (displayType == VIS.DisplayType.DateTime) {
+                        oColumn.render = function (record, index, colIndex) {
+                            var d = record[grdCols[colIndex].field];
+                            if (d) {
+                                var d = new Date(d);
+                                d = d.toDateString();
+                            }
+                            else d = "";
+                            return d;
+                        }
+                    }
+                    else {
+                        oColumn.render = function (record, index, colIndex) {
+                            var d = record[grdCols[colIndex].field];
+                            if (d) {
+                                var d = new Date(d);
+                                d = d.toLocaleTimeString();
+                            }
+                            else d = "";
+                            return d;
+                        }
+                    }                    
                 }
 
                 else if (displayType == VIS.DisplayType.Location || displayType == VIS.DisplayType.Locator) {
