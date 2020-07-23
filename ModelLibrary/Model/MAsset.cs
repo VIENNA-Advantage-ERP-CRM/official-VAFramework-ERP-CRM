@@ -726,7 +726,7 @@ namespace VAdvantage.Model
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());
 
                 // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
-                if (ctl.Get_ColumnIndex("IsOrgLevelSequence") > 0)
+                if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
                 {
                     name = ctl.CreateDefiniteSerNo(this);
                 }
