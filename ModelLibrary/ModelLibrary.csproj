@@ -1424,6 +1424,7 @@
     <Compile Include="Model\X_M_Routing.cs" />
     <Compile Include="Model\X_M_SerNoCtl.cs" />
     <Compile Include="Model\X_M_SerNoCtlExclude.cs" />
+    <Compile Include="Model\X_M_SerNoCtl_No.cs" />
     <Compile Include="Model\X_M_Shipper.cs" />
     <Compile Include="Model\X_M_StandardOperation.cs" />
     <Compile Include="Model\X_M_Storage.cs" />
