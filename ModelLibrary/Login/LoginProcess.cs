@@ -40,7 +40,8 @@ namespace VAdvantage.Login
         /** The Current Org		*/
         private KeyNamePair m_org = null;
         /** Web Store Login		*/
-        private X_W_Store m_store = null;
+        //private X_W_Store m_store = null;
+        private object m_store = null;
 
 
 
@@ -553,8 +554,8 @@ namespace VAdvantage.Login
                 throw new Exception("Role missing");
             m_role = role;
             //	Web Store Login
-            if (m_store != null)
-                return new KeyNamePair[] { new KeyNamePair(m_store.GetAD_Client_ID(), m_store.GetName() + " Tenant") };
+           // if (m_store != null)
+            //    return new KeyNamePair[] { new KeyNamePair(m_store.GetAD_Client_ID(), m_store.GetName() + " Tenant") };
 
             //	Set User for Role
             int AD_Role_ID = role.GetKey();

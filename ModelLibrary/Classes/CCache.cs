@@ -16,7 +16,6 @@ using System.Text;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using VAdvantage.Logging;
-using VAdvantage.Model;
 using VAdvantage.Utility;
 
 namespace VAdvantage.Classes

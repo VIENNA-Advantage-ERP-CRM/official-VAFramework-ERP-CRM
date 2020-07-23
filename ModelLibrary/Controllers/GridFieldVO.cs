@@ -17,15 +17,7 @@ using VAdvantage.Classes;
 
 namespace VAdvantage.Controller
 {
-    public interface Evaluatee
-    {
-        /// <summary>
-        /// Get Variable Value
-        /// </summary>
-        /// <param name="variableName"></param>
-        /// <returns></returns>
-        string GetValueAsString(string variableName);
-    }
+    
     public class GridFieldVO : FieldVObj, Evaluatee
     {
         /*callout text*/

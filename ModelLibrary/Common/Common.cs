@@ -518,6 +518,351 @@ namespace VAdvantage.Common
             return "";
         }
 
+
+        /// <summary>
+        /// Sync column or table passed in the parameter
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="column"></param>
+        /// <param name="noColumns">OUT parameter, returns 0 if table is being synched for the first time</param>
+        /// <returns>string message</returns>
+        public static string SyncColumn(MTable table, MColumn column, out int noColumns)
+        {
+            DatabaseMetaData md = new DatabaseMetaData();
+            String catalog = "";
+            String schema = DataBase.DB.GetSchema();
+
+            //get table name
+            string tableName = table.GetTableName();
+
+            noColumns = 0;
+            string sql = null;
+            //get columns of a table
+            DataSet dt = md.GetColumns(catalog, schema, tableName);
+            md.Dispose();
+            //for each column
+            for (noColumns = 0; noColumns < dt.Tables[0].Rows.Count; noColumns++)
+            {
+                string columnName = dt.Tables[0].Rows[noColumns]["COLUMN_NAME"].ToString().ToLower();
+                if (!columnName.Equals(column.GetColumnName().ToLower()))
+                    continue;
+
+                //check if column is null or not
+                string dtColumnName = "is_nullable";
+                string value = "YES";
+                //if database is oracle
+                if (DatabaseType.IsOracle)
+                {
+                    dtColumnName = "NULLABLE";
+                    value = "Y";
+                }
+                bool notNull = false;
+                //check if column is null
+                if (dt.Tables[0].Rows[noColumns][dtColumnName].ToString() == value)
+                    notNull = false;
+                else
+                    notNull = true;
+                //............................
+
+                //if column is virtual column then alter table and drop this column
+                if (column.IsVirtualColumn())
+                {
+                    sql = "ALTER TABLE " + table.GetTableName()
+                   + " DROP COLUMN " + columnName;
+                }
+                else
+                {
+                    sql = column.GetSQLModify(table, column.IsMandatory() != notNull);
+                    noColumns++;
+                    break;
+                }
+            }
+            dt = null;
+            //while (rs.next())
+            //{
+            //    noColumns++;
+            //    String columnName = rs.getString ("COLUMN_NAME");
+            //    if (!columnName.equalsIgnoreCase(column.getColumnName()))
+            //        continue;
+
+            //    //	update existing column
+            //    boolean notNull = DatabaseMetaData.columnNoNulls == rs.getInt("NULLABLE");
+            //    if (column.isVirtualColumn())
+            //        sql = "ALTER TABLE " + table.getTableName() 
+            //            + " DROP COLUMN " + columnName;
+            //    else
+            //        sql = column.getSQLModify(table, column.isMandatory() != notNull);
+            //    break;
+            //}
+            //rs.close();
+            //rs = null;
+
+            //	No Table
+            if (noColumns == 0)
+            {
+                sql = table.GetSQLCreate();
+            }
+            //	No existing column
+            else if (sql == null)
+            {
+                if (column.IsVirtualColumn())
+                {
+                    return "@IsVirtualColumn@";
+                }
+                sql = column.GetSQLAdd(table);
+            }
+            return sql;
+        }
+
+        /// <summary>
+        /// Parse text
+        /// </summary>
+        /// <param name="text">text</param>
+        /// <param name="po">po object</param>
+        /// <returns>parsed text</returns>
+        public static string Parse(String text, PO po)
+        {
+            if (po == null || text.IndexOf("@") == -1)
+                return text;
+
+            String inStr = text;
+            String token;
+            StringBuilder outStr = new StringBuilder();
+
+            int i = inStr.IndexOf("@");
+            while (i != -1)
+            {
+                outStr.Append(inStr.Substring(0, i));			// up to @
+                inStr = inStr.Substring(i + 1); ///from first @
+
+                int j = inStr.IndexOf("@");						// next @
+                if (j < 0)										// no second tag
+                {
+                    inStr = "@" + inStr;
+                    break;
+                }
+
+                token = inStr.Substring(0, j);
+                if (token == "Tenant")
+                {
+                    int id = po.GetAD_Client_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_Client WHERE AD_Client_ID=" + id));
+                }
+                else if (token == "Org")
+                {
+                    int id = po.GetAD_Org_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_ORG WHERE AD_ORG_ID=" + id));
+                }
+                else if (token == "BPName")
+                {
+                    if (po.Get_TableName() == "C_BPartner")
+                    {
+                        outStr.Append(ParseVariable("Name", po));
+                    }
+                    else
+                    {
+                        outStr.Append("@" + token + "@");
+                    }
+                }
+                else
+                {
+                    outStr.Append(ParseVariable(token, po));		// replace context
+                }
+                inStr = inStr.Substring(j + 1);
+                // from second @
+                i = inStr.IndexOf("@");
+            }
+
+            outStr.Append(inStr);           					//	add remainder
+            return outStr.ToString();
+        }
+
+        /// <summary>
+        /// Parse Variable
+        /// </summary>
+        /// <param name="variable">variable</param>
+        /// <param name="po">po object</param>
+        /// <returns>translated variable or if not found the original tag</returns>
+        private static string ParseVariable(String variable, PO po)
+        {
+            int index = po.Get_ColumnIndex(variable);
+            if (index == -1)
+                return "@" + variable + "@";	//	keep for next
+            //
+            Object value = po.Get_Value(index);
+            if (value == null)
+                return "";
+
+            POInfo _poInfo = POInfo.GetPOInfo(po.GetCtx(), po.Get_Table_ID());
+
+            MColumn column = (new MTable(po.GetCtx(), po.Get_Table_ID(), null)).GetColumn(variable);
+            if (column.GetAD_Reference_ID() == DisplayType.Location)
+            {
+                StringBuilder sb = new StringBuilder();
+                DataSet ds = DB.ExecuteDataset(@"SELECT l.address1,
+                                                          l.address2,
+                                                          l.address3,
+                                                          l.address4,
+                                                          l.city,
+                                                          CASE
+                                                            WHEN l.C_City_ID IS NOT NULL
+                                                            THEN
+                                                              ( SELECT NAME FROM C_City ct WHERE ct.C_City_ID=l.C_City_ID
+                                                              )
+                                                            ELSE NULL
+                                                          END CityName,
+                                                          (SELECT NAME FROM C_Country c WHERE c.C_Country_ID=l.C_Country_ID
+                                                          ) AS CountryName
+                                                        FROM C_Location l WHERE l.C_Location_ID=" + value);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    if (ds.Tables[0].Rows[0]["address1"] != null && ds.Tables[0].Rows[0]["address1"] != DBNull.Value)
+                    {
+                        sb.Append(ds.Tables[0].Rows[0]["address1"]).Append(",");
+                    }
+                    if (ds.Tables[0].Rows[0]["address2"] != null && ds.Tables[0].Rows[0]["address2"] != DBNull.Value)
+                    {
+                        sb.Append(ds.Tables[0].Rows[0]["address2"]).Append(",");
+                    }
+                    if (ds.Tables[0].Rows[0]["address3"] != null && ds.Tables[0].Rows[0]["address3"] != DBNull.Value)
+                    {
+                        sb.Append(ds.Tables[0].Rows[0]["address3"]).Append(",");
+                    }
+                    if (ds.Tables[0].Rows[0]["address4"] != null && ds.Tables[0].Rows[0]["address4"] != DBNull.Value)
+                    {
+                        sb.Append(ds.Tables[0].Rows[0]["address4"]).Append(",");
+                    }
+                    if (ds.Tables[0].Rows[0]["city"] != null && ds.Tables[0].Rows[0]["city"] != DBNull.Value)
+                    {
+                        sb.Append(ds.Tables[0].Rows[0]["city"]).Append(",");
+                    }
+                    if (ds.Tables[0].Rows[0]["CityName"] != null && ds.Tables[0].Rows[0]["CityName"] != DBNull.Value)
+                    {
+                        sb.Append(ds.Tables[0].Rows[0]["CityName"]).Append(",");
+                    }
+                    if (ds.Tables[0].Rows[0]["CountryName"] != null && ds.Tables[0].Rows[0]["CountryName"] != DBNull.Value)
+                    {
+                        sb.Append(ds.Tables[0].Rows[0]["CountryName"]).Append(",");
+                    }
+                    return sb.ToString().TrimEnd(',');
+
+                }
+                else
+                {
+                    return "";
+                }
+
+            }
+
+            //Get lookup display column name for ID 
+            if (_poInfo != null && _poInfo.getAD_Table_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
+            {
+                VLookUpInfo lookup = _poInfo.GetColumnLookupInfo(index); //create lookup info for column
+                DataSet ds = DB.ExecuteDataset(lookup.queryDirect.Replace("@key", DB.TO_STRING(value.ToString())), null); //Get Name from data
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    value = ds.Tables[0].Rows[0][2]; //Name Value
+                }
+            }
+
+
+
+            if (column.GetAD_Reference_ID() == DisplayType.Date)
+            {
+                return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
+            }
+
+            // Show Amount according to browser culture
+            if (column.GetAD_Reference_ID() == DisplayType.Amount || column.GetAD_Reference_ID() == DisplayType.CostPrice)
+            {
+                return DisplayType.GetNumberFormat(column.GetAD_Reference_ID()).GetFormatAmount(value, po.GetCtx().GetContext("#ClientLanguage"));
+            }
+            return value.ToString();
+        }
+
+        public static DateTime AddDate(int duration, object time)
+        {
+            if (duration == GlobalVariable.DayOfYear)
+            {
+                return DateTime.Now.AddDays(Convert.ToDouble(time));
+            }
+            else if (duration == GlobalVariable.Month)
+            {
+                return DateTime.Now.AddMonths(Utility.Util.GetValueOfInt(time.ToString()));
+            }
+            else if (duration == GlobalVariable.Hour)
+            {
+                return DateTime.Now.AddHours(Convert.ToDouble(time));
+            }
+            else if (duration == GlobalVariable.Minute)
+            {
+                return DateTime.Now.AddMinutes(Convert.ToDouble(time));
+            }
+            else if (duration == GlobalVariable.Second)
+            {
+                return DateTime.Now.AddSeconds(Convert.ToDouble(time));
+            }
+            else if (duration == GlobalVariable.Year)
+            {
+                return DateTime.Now.AddYears(Utility.Util.GetValueOfInt(time.ToString()));
+            }
+            return DateTime.Now;
+        }
+
+
+        public static int GetRootNode(string TreeType)
+        {
+            int AD_Tree_ID = 0;
+            if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and treetype='" + TreeType + "' and isAllNodes='Y'")) > 0)
+            {
+                if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and " +
+                "isdefault='Y' and treetype='" + TreeType + "'").ToString()) > 0)
+                {
+                    AD_Tree_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select ad_TREE_ID" +
+                   " from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and isdefault='Y' AND " +
+                   "created <=(select MIN(created) FROM ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " " +
+                   "and isdefault='Y' and TREETYPE='" + TreeType + "') and TREETYPE='" + TreeType + "'"));
+                }
+                else
+                {
+                    AD_Tree_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select ad_TREE_ID" +
+                  " from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and isAllNodes='Y' AND " +
+                  "created <=(select MIN(created) FROM ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " " +
+                  "and isAllNodes='Y' and TREETYPE='" + TreeType + "') and TREETYPE='" + TreeType + "'"));
+                }
+
+            }
+            return AD_Tree_ID;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="AD_TREE_ID">Tree ID</param>
+        /// <param name="strTable">Table Name</param>
+        /// <param name="ChkecSeqno"></param>
+        /// <returns></returns>
+        /// <author>Kiran Sangwan</author>
+        public static int GetTotalMenues(int AD_TREE_ID, string strTable, bool ChkecSeqno)
+        {
+            string strQuery = "select count(1) from " + strTable + " where AD_Tree_Id=" + AD_TREE_ID;
+            if (ChkecSeqno == true)
+            {
+                strQuery += " and seqno=9999";
+            }
+            return int.Parse(ExecuteQuery.ExecuteScalar(strQuery));
+        }
+
+        /// <author>Kiran Sangwan</author>
+        public static int CheckUniqueName(string tableName, string columnName, string columnValue)
+        {
+            string sqlQuery = "select count(1) from " + tableName + " where " + columnName + "='" + columnValue + "' and AD_CLIENT_ID=" + Utility.Env.GetContext().GetAD_Client_ID();
+            return Utility.Util.GetValueOfInt(ExecuteQuery.ExecuteScalar(sqlQuery).ToString());
+        }
+
+
     }
 
 }

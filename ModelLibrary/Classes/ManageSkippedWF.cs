@@ -10,6 +10,41 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Classes
 {
+
+    internal class TrxActionObserver : ITrxAction
+    {
+        private static TrxActionObserver _single = null;
+        public static TrxActionObserver Get()
+        {
+            if (_single == null)
+            {
+                _single = new TrxActionObserver();
+                TrxActionNotifier.Get().Register(_single);
+            }
+
+            return _single;
+        }
+        public bool OnClose(string trxName)
+        {
+            
+            return true;
+        }
+
+        public bool OnCommit(string trxName)
+        {
+            ManageSkippedWF.Remove(trxName);
+            return true;
+        }
+
+        public bool OnRollBack(string trxName)
+        {
+            ManageSkippedWF.Remove(trxName);
+            return true;
+        }
+
+    }
+    
+
     public class ManageSkippedWF
     {
         public static Dictionary<string, List<PO>> trxList = new Dictionary<string, List<PO>>();
@@ -18,6 +53,8 @@ namespace VAdvantage.Classes
         {
             try
             {
+                TrxActionObserver.Get(); //Initlializre Observer
+
                 if (trxList.ContainsKey(trxName))
                 {
                     trxList[trxName].Add(po);

@@ -12,6 +12,17 @@ using System.Collections;
 
 namespace VAdvantage.Classes
 {
+
+    public interface Evaluatee
+    {
+        /// <summary>
+        /// Get Variable Value
+        /// </summary>
+        /// <param name="variableName"></param>
+        /// <returns></returns>
+        string GetValueAsString(string variableName);
+    }
+
     #region "Old Context Class"
     /*  
 
