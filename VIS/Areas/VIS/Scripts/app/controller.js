@@ -3829,6 +3829,7 @@
         var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
         var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0 };
 
+        var obscureFields = this.createObsecureFields(this.gridFields);
 
 
         dataIn.sqlDirect = VIS.secureEngine.encrypt(this.SQL_Direct);
@@ -3877,7 +3878,7 @@
         }
         // else {
 
-        VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, function (buffer, lookupDirect) {
+        VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, obscureFields, function (buffer, lookupDirect) {
 
             try {
 
@@ -3980,6 +3981,9 @@
                     colValue = colValue.toString();//string
                 //	Encrypted
                 if (field.getIsEncryptedColumn() && displayType != VIS.DisplayType.YesNo)
+                    colValue = this.decrypt(colValue);
+
+                if (field.getObscureType() && displayType != VIS.DisplayType.YesNo)
                     colValue = this.decrypt(colValue);
             }
             catch (e) {
@@ -4421,6 +4425,23 @@
                 }
                 return this.gFieldData;
             }
+        }
+    };
+
+    GridTable.prototype.createObsecureFields = function (mfields) {
+        var size = mfields.length;
+        if (this.gFieldObscureList)
+            return this.gFieldObscureList;
+        else {
+            this.gFieldObscureList = [];
+            for (var i = 0; i < size; i++) {
+                var field = mfields[i];
+                if (field.getObscureType()) {
+                    this.gFieldObscureList.push(field.getColumnName().toLowerCase());
+                }
+
+            }
+            return this.gFieldObscureList;
         }
     };
 
@@ -5755,9 +5776,9 @@
             if (this.vo.displayType == VIS.DisplayType.YesNo) {
                 //return " (case " + _vo.ColumnName + " when 'Y' then 'True' else 'False' end) AS " + _vo.ColumnName;
             }
-            if (this.getObscureType().length > 0) {
+            //if (this.getObscureType().length > 0) {
 
-            }
+            //}
             return this.vo.ColumnName;
         }
     };

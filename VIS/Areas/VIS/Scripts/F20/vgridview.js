@@ -432,6 +432,14 @@
                         return "";
                     }
                 }
+                else if (mField.getObscureType()) {
+                    oColumn.render = function (record, index, colIndex) {
+                        var val = record[oColumns[colIndex].field];
+                        if (val || (val === 0))
+                            return VIS.Env.getObscureColumn(oColumns[colIndex].gridField.getObscureType(), val);
+                        return "";
+                    }
+                }
                 else {
                     oColumn.render = function (record, index, colIndex) {
                         var f = oColumns[colIndex].field;

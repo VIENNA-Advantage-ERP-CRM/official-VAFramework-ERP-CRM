@@ -219,9 +219,9 @@ namespace VAdvantage.Controller
                         vo.ReadOnlyLogic = dr[i].ToString();
                     else if (columnName.Equals("MANDATORYLOGIC"))
                         vo.mandatoryLogic = dr[i].ToString();
-                    else if (columnName.Equals("Obscuretype"))
+                    else if (columnName.Equals("OBSCURETYPE"))
                         vo.ObscureType = dr[i].ToString();
-                    else if (columnName.Equals("ObscureFieldtype"))
+                    else if (columnName.Equals("OBSCUREFIELDTYPE"))
                         vo.ObscureFieldType = dr[i].ToString();
                     else if (columnName.Equals("ISDEFAULTFOCUS"))
                         vo.IsDefaultFocus = "Y".Equals(dr[i].ToString());

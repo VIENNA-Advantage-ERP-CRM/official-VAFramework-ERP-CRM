@@ -757,7 +757,7 @@
             //}
             var oldVal = this.oldValue;
             this.oldValue = "";
-           // this.valSetting = true;
+            // this.valSetting = true;
             this.setValue(oldVal);
             return;
         }
@@ -862,6 +862,7 @@
     function VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, vFormat, obscureType, isPwdField) {
 
         var displayType = VIS.DisplayType.String;
+        this.obscureType = obscureType;
 
         //Init Control
         var $ctrl = $('<input>', { type: (isPwdField) ? 'password' : 'text', name: columnName, maxlength: fieldLength });
@@ -910,7 +911,12 @@
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             //console.log(newValue);
-            this.ctrl.val(newValue);
+
+            if (this.obscureType) {
+                this.ctrl.val(VIS.Env.getObscureColumn(this.obscureType, newValue));
+            }
+            else
+                this.ctrl.val(newValue);
             //this.setBackground("white");
         }
     };

@@ -469,7 +469,7 @@
         var WINDOW_PAGE_SIZE = 50;
         var window_height = 400;
         var NULLString = "NULLValue";
-        var obscureTypes = { DigitButLast4: 904, DigitButFirstLast4: 944, AlphanumButLast4: A04, AlphaNumButFirstLast4: A44 };
+        var obscureTypes = { DigitButLast4: "904", DigitButFirstLast4: "944", AlphanumButLast4: "A04", AlphaNumButFirstLast4: "A44" };
 
         function getWindowNo() {
             return windowNo++;
@@ -540,18 +540,20 @@
             return outStr;
         };
 
-        function getObscureColumn(type, column) {
-            if (type == obscureTypes.DigitButLast4) {
-                //column=
-            }
-            else if (type == obscureTypes.DigitButFirstLast4) {
-
-            }
-            else if (type == obscureTypes.AlphanumButLast4) {
-
-            }
-            else if (type == obscureTypes.AlphaNumButFirstLast4) {
-
+        function getObscureColumn(type, value) {
+            if (value) {
+                if (type == obscureTypes.DigitButLast4) {
+                    return value.replace(/\d(?=\w{4})/g, "X");
+                }
+                else if (type == obscureTypes.DigitButFirstLast4) {
+                    return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "X");
+                }
+                else if (type == obscureTypes.AlphanumButLast4) {
+                    return value.replace(/[_\W]/g, "X").replace(/[\w](?=\w{4})/g, "X");
+                }
+                else if (type == obscureTypes.AlphaNumButFirstLast4) {
+                    return value.replace(/[_\W]/g, "X").replace(/(?<=\w{4})[\w](?=\w{4})/g, "X");
+                }
             }
         };
 
@@ -811,7 +813,8 @@
             SHOW_ORG_ONLY: 2,
             HIDE_CLIENT_ORG: 3,
             NULLString: NULLString,
-            approveCol: "IsApproved"
+            approveCol: "IsApproved",
+            getObscureColumn: getObscureColumn
         }
     }();
     // ******************** END ENV *********************//
