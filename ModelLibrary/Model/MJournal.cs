@@ -1069,6 +1069,10 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
                 || DOCSTATUS_Invalid.Equals(GetDocStatus()))
             {
+                //Bug 124 in Devops :  set Amount as ZERO on GL journal , 
+                DB.ExecuteQuery(@"Update GL_Journal SET TotalDr = 0, TotalCr = 0
+                                    WHERE GL_Journal_ID =  " + GetGL_Journal_ID(), null, Get_Trx());
+
                 //Bug 124 in Devops :  set Amount as ZERO on GL journal Line, 
                 DB.ExecuteQuery(@"Update GL_JournalLine SET AmtSourceDr = 0, AmtSourceCr = 0, AmtAcctDr = 0, AmtAcctCr = 0 
                                     WHERE GL_Journal_ID =  " + GetGL_Journal_ID(), null, Get_Trx());
