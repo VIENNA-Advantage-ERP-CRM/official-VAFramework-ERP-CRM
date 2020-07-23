@@ -910,7 +910,8 @@ namespace VAdvantage.Classes
 
             if (column.GetAD_Reference_ID() == DisplayType.Date)
             {
-                return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
+                //return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
+                return DisplayType.GetDateFormat(column.GetAD_Reference_ID()).Format(value, po.GetCtx().GetContext("#ClientLanguage"), SimpleDateFormat.DATESHORT);
             }
 
             // Show Amount according to browser culture
