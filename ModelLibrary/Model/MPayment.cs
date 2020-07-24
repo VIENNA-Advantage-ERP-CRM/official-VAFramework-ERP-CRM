@@ -542,7 +542,7 @@ namespace VAdvantage.Model
                             return false;
                         }
                         // set currency type from invoice
-                       // SetC_ConversionType_ID(invoice.GetC_ConversionType_ID());
+                        // SetC_ConversionType_ID(invoice.GetC_ConversionType_ID());
                         // Change By Mohit Asked By Amardeep Sir 02/03/2016
                         SetPOReference(invoice.GetPOReference());
                         // Changes Done by Bharat on 20 June 2017 to not allow more than Schedule Amount.
@@ -578,6 +578,14 @@ namespace VAdvantage.Model
                         // set conversion type from order
                         //SetC_ConversionType_ID(order.GetC_ConversionType_ID());
                     }
+                }
+
+                if (GetC_Charge_ID() == 0)
+                {
+                    // when charge is not defined then set Value as Zero
+                    SetC_Tax_ID(0);
+                    SetTaxAmount(0);
+                    Set_Value("SurchargeAmt", 0);
                 }
 
                 //	We have a charge
@@ -697,27 +705,28 @@ namespace VAdvantage.Model
                 //                || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
                 //}
 
-                if (GetC_Charge_ID() != 0)
-                {
-                    string sqlAdvCharge = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
-                    string isAdvCharge = "";
-                    try
-                    {
-                        isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sqlAdvCharge, null, null));
-                    }
-                    catch
-                    {
+                // Already written above
+                //if (GetC_Charge_ID() != 0)
+                //{
+                //    string sqlAdvCharge = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
+                //    string isAdvCharge = "";
+                //    try
+                //    {
+                //        isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sqlAdvCharge, null, null));
+                //    }
+                //    catch
+                //    {
 
-                    }
-                    if (isAdvCharge.Equals("Y"))
-                    {
-                        SetIsPrepayment(true);
-                    }
-                    else
-                    {
-                        SetIsPrepayment(false);
-                    }
-                }
+                //    }
+                //    if (isAdvCharge.Equals("Y"))
+                //    {
+                //        SetIsPrepayment(true);
+                //    }
+                //    else
+                //    {
+                //        SetIsPrepayment(false);
+                //    }
+                //}
 
                 if (IsPrepayment())
                 {
@@ -3497,12 +3506,12 @@ namespace VAdvantage.Model
                         if (IsPaymentAllocate)
                         {
                             withholdingAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT COALESCE(SUM(PaymentAmount),0) - COALESCE(SUM(TaxAmount),0) 
-                                                FROM C_Payment WHERE C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx()));
+                                               - COALESCE(SUM(SurchargeAmt),0) FROM C_Payment WHERE C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx()));
                             SetPaymentAmount(withholdingAmt);
                         }
                         else
                         {
-                            withholdingAmt = GetPaymentAmount() - GetTaxAmount();
+                            withholdingAmt = GetPaymentAmount() - GetTaxAmount() - Util.GetValueOfDecimal(Get_Value("SurchargeAmt"));
                         }
                     }
 
