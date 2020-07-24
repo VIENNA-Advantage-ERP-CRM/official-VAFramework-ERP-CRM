@@ -540,7 +540,7 @@
             return outStr;
         };
 
-        function getObscureColumn(type, value) {
+        function getObscureValue(type, value) {
             if (value) {
                 if (type == obscureTypes.DigitButLast4) {
                     return value.replace(/\d(?=\w{4})/g, "X");
@@ -814,7 +814,7 @@
             HIDE_CLIENT_ORG: 3,
             NULLString: NULLString,
             approveCol: "IsApproved",
-            getObscureColumn: getObscureColumn
+            getObscureValue: getObscureValue
         }
     }();
     // ******************** END ENV *********************//

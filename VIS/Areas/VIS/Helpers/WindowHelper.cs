@@ -1286,7 +1286,7 @@ namespace VIS.Helpers
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                 Object oldValue = isEmpty ? null : _rowData[columnName.ToLower()];// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
 
-                if (field.IsEncryptedColumn)
+                if (field.IsEncryptedColumn || field.IsObscure)
                 {
                     value = SecureEngineBridge.DecryptByClientKey((string)rowData[columnName.ToLower()], key);// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                     oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);

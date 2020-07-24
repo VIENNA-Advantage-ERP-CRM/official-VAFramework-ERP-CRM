@@ -863,11 +863,12 @@
 
         var displayType = VIS.DisplayType.String;
         this.obscureType = obscureType;
-
+        var src = "vis vis-locator";
         //Init Control
         var $ctrl = $('<input>', { type: (isPwdField) ? 'password' : 'text', name: columnName, maxlength: fieldLength });
-
-
+        var $btnSearch = $('<button class="input-group-text" style="display:none"><i class="' + src + '" /></button>');
+        //if (obscureType && !isReadOnly)
+        //    $ctrl.append($btnSearch);
 
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
@@ -880,6 +881,27 @@
             this.setReadOnly(false);
         }
 
+        this.getBtn = function (index) {
+            if (index == 0 && obscureType) {
+                $ctrl.attr("readonly", true);
+                return $btnSearch;
+            }
+        };
+
+
+        this.showObscureButton = function (show) {
+            if (show && obscureType) {
+                $btnSearch.css("display", "");
+            }
+            else {
+                $btnSearch.css("display", "none");
+            }
+        };
+
+        this.getBtnCount = function () {
+            return 1;
+        };
+
         var self = this; //self pointer
 
         /* Event */
@@ -891,6 +913,13 @@
                 var evt = { newValue: newVal, propertyName: self.getName() };
                 self.fireValueChanged(evt);
                 evt = null;
+            }
+        });
+
+        $btnSearch.on("click", function () {
+            if (self.mField.getIsEditable(true)) {
+                $ctrl.attr("readonly", false);
+                $ctrl.val(self.mField.getValue());
             }
         });
 
@@ -913,7 +942,8 @@
             //console.log(newValue);
 
             if (this.obscureType) {
-                this.ctrl.val(VIS.Env.getObscureColumn(this.obscureType, newValue));
+                this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
+                this.ctrl.attr("readonly", true);
             }
             else
                 this.ctrl.val(newValue);

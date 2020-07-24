@@ -4180,6 +4180,8 @@
 
         var encryptedCol = this.createGridFieldArr(m_fields, true);
 
+        var obscureFields = this.createObsecureFields(m_fields);
+
         var RowData = {}, OldRowData = {};
 
         $.extend(true, RowData, rowDataNew);
@@ -4194,6 +4196,19 @@
 
                 if (OldRowData[encryptedCol[i]]) {
                     OldRowData[encryptedCol[i]] = this.encrypt(OldRowData[encryptedCol[i]]);
+                }
+            }
+        }
+
+        if (obscureFields && obscureFields.length > 0) {
+            var len = obscureFields.length;
+            for (var i = 0; i < len; i++) {
+                if (RowData[obscureFields[i]]) {
+                    RowData[obscureFields[i]] = this.encrypt(RowData[obscureFields[i]]);
+                }
+
+                if (OldRowData[obscureFields[i]]) {
+                    OldRowData[obscureFields[i]] = this.encrypt(OldRowData[obscureFields[i]]);
                 }
             }
         }
@@ -4417,7 +4432,8 @@
                         IsEncryptedColumn: field.getIsEncryptedColumn(),
                         IsParentColumn: field.getIsParentColumn(),
                         Name: field.getHeader(),
-                        IsUnique: field.getIsUnique()
+                        IsUnique: field.getIsUnique(),
+                        IsObscure: field.getObscureType() ? true : false
                     });
                     if (field.getIsUnique() && !field.getIsVirtualColumn()) {
                         this.gFieldUnique.push(field.getColumnName());

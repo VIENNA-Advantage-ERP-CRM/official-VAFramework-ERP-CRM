@@ -436,7 +436,7 @@
                     oColumn.render = function (record, index, colIndex) {
                         var val = record[oColumns[colIndex].field];
                         if (val || (val === 0))
-                            return VIS.Env.getObscureColumn(oColumns[colIndex].gridField.getObscureType(), val);
+                            return VIS.Env.getObscureValue(oColumns[colIndex].gridField.getObscureType(), val);
                         return "";
                     }
                 }
