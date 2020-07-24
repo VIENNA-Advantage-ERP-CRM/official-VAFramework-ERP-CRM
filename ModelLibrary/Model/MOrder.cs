@@ -3899,7 +3899,7 @@ namespace VAdvantage.Model
 
             return DocActionVariables.STATUS_COMPLETED;
         }
-        
+
         /// <summary>
         /// This function is used to check, document is budget control or not.
         /// </summary>
@@ -3919,22 +3919,22 @@ namespace VAdvantage.Model
                   GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName 
                 FROM GL_Budget INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
                 INNER JOIN Ad_ClientInfo ON Ad_ClientInfo.AD_Client_ID = GL_Budget.AD_Client_ID
-                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND 
-                   GL_BudgetControl.CommitmentType IN ('B' , 'C') AND 
-                  (( GL_Budget.BudgetControlBasis = 'P' AND GL_Budget.C_Period_ID =
-                  (SELECT C_Period.C_Period_ID FROM C_Period INNER JOIN c_year ON c_year.c_year_ID      = C_Period.c_year_ID
-                  WHERE C_Period.IsActive  = 'Y'  AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID
-                  AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate )) 
-                OR ( GL_Budget.BudgetControlBasis = 'A' AND GL_Budget.C_Year_ID =
+                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.AD_Org_ID IN (0 , " + GetAD_Org_ID() + @")
+                   AND GL_BudgetControl.CommitmentType IN('B', 'C') AND
+                  ((GL_Budget.BudgetControlBasis = 'P' AND GL_Budget.C_Period_ID =
+                  (SELECT C_Period.C_Period_ID FROM C_Period INNER JOIN c_year ON c_year.c_year_ID = C_Period.c_year_ID
+                  WHERE C_Period.IsActive = 'Y'  AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID
+                  AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate))
+                OR(GL_Budget.BudgetControlBasis = 'A' AND GL_Budget.C_Year_ID =
                   (SELECT C_Period.C_Year_ID FROM C_Period INNER JOIN c_year ON c_year.c_year_ID = C_Period.c_year_ID
-                  WHERE C_Period.IsActive  = 'Y'   AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID  
-                AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate   ) ) ) 
-                AND (SELECT COUNT(fact_acct_id) FROM fact_acct
+                  WHERE C_Period.IsActive = 'Y'   AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID
+                AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate) ) ) 
+                AND(SELECT COUNT(fact_acct_id) FROM fact_acct
                 WHERE gl_budget_id = GL_Budget.GL_Budget_ID
-                AND (c_period_id  IN ( NVL(GL_Budget.C_Period_ID ,0 ))
-                OR c_period_id    IN (SELECT C_Period_ID FROM C_Period   WHERE C_Year_ID = NVL(GL_Budget.C_Year_ID , 0) ) ) ) > 0");
+                AND(c_period_id  IN(NVL(GL_Budget.C_Period_ID, 0))
+                OR c_period_id    IN(SELECT C_Period_ID FROM C_Period   WHERE C_Year_ID = NVL(GL_Budget.C_Year_ID, 0)))) > 0");
             DataSet dsBudgetControl = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
-            if (dsBudgetControl != null && dsBudgetControl.Tables.Count > 0)
+            if (dsBudgetControl != null && dsBudgetControl.Tables.Count > 0 && dsBudgetControl.Tables[0].Rows.Count > 0)
             {
                 // get budget control ids
                 object[] budgetControlIds = dsBudgetControl.Tables[0].AsEnumerable().Select(r => r.Field<object>("GL_BUDGETCONTROL_ID")).ToArray();
