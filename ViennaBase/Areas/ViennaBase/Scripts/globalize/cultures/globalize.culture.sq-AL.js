@@ -134,7 +134,16 @@ Globalize.addCultureInfo( "sq-AL", "default", {
         "EnterOTP": "Hyni në OTP",
         "WrongOTP": "Hyrë e gabuar OTP",
         "ScanQRCode": "Skanoni kodin me Google Authenticator",
-        "EnterVerCode": "Vendosni OTP të gjeneruar nga aplikacioni juaj celular"
+        "EnterVerCode": "Vendosni OTP të gjeneruar nga aplikacioni juaj celular",
+        "PwdExpired": "Fjalëkalimi i përdoruesit skadoi",
+        "ActDisabled": "Llogaria është çaktivizuar",
+        "ActExpired": "Llogaria ka skaduar",
+        "AdminUserNotFound": "Emri i administratorit nuk është i saktë.",
+        "AdminUserPwdError": "Përdoruesi i administratorit nuk përputhet me fjalëkalimin",
+        "AdminPwdExpired": "Fjalëkalimi i përdoruesit të administratorit skaduar",
+        "AdminActDisabled": "Llogaria e administratorit është çaktivizuar",
+        "AdminActExpired": "Llogaria e administratorit ka skaduar",
+        "AdminMaxFailedLoginAttempts": "Admin e llogarisë së përdoruesit është e kyçur. Përpjekjet maksimale të dështuara të hyrjes tejkalojnë kufirin e përcaktuar. Ju lutemi kontaktoni administratorin.",
 
     }
 });

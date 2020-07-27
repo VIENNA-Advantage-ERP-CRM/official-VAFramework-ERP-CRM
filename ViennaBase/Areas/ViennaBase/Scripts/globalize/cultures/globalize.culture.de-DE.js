@@ -139,7 +139,17 @@
             "WrongOTP": "Falsches OTP eingegeben",
             "ScanQRCode": "Scannen Sie den Code mit Google Authenticator",
             "EnterVerCode": "Geben Sie das von Ihrer mobilen Anwendung generierte OTP ein",
+            "PwdExpired": "Benutzerkennwort abgelaufen",
+            "ActDisabled": "Account wurde deaktiviert",
+            "ActExpired": "Konto ist abgelaufen",
+            "AdminUserNotFound": "Der Administrator-Benutzername ist falsch.",
+            "AdminUserPwdError": "Der Administrator stimmt nicht mit dem Kennwort überein",
+            "AdminPwdExpired": "Kennwort des Administrators abgelaufen",
+            "AdminActDisabled": "Das Administratorkonto wurde deaktiviert",
+            "AdminActExpired": "Das Administratorkonto ist abgelaufen",
+            "AdminMaxFailedLoginAttempts": "Admin-Benutzerkonto ist gesperrt. Die maximale Anzahl fehlgeschlagener Anmeldeversuche überschreitet das definierte Limit. Bitte wenden Sie sich an den Administrator.",
         }
+
 
     });
 
