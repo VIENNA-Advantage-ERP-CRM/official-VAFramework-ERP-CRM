@@ -127,13 +127,17 @@ namespace VAdvantage.DataBase
                 log.Severe("Error in LDAP for user " + userName + " : " + e.Message);
                 output = e.Message;
 
-                using (PrincipalContext ctx = new PrincipalContext(ContextType.Domain, ldapURL))
+                DirectoryEntry user = new DirectoryEntry(ldapURL, userName, password);
+                string attribName = "msDS-User-Account-Control-Computed";
+                user.RefreshCache(new string[] { attribName });
+                const int UF_LOCKOUT = 0x0010;
+                int userFlags = (int)user.Properties[attribName].Value;
+                if ((userFlags & UF_LOCKOUT) == UF_LOCKOUT)
                 {
-                    using (UserPrincipal usr = UserPrincipal.FindByIdentity(ctx, IdentityType.SamAccountName, userName))
-                    {
-                        usr.IsAccountLockedOut(); //Gets if account is locked out
-                    }
+                    // if this is the case, the account is locked out
+                    return true;
                 }
+                return false;
 
 
                 return false;
