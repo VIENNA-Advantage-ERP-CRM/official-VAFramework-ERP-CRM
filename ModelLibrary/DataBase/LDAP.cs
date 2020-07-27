@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Security.Authentication;
 using System.Text;
@@ -125,6 +126,16 @@ namespace VAdvantage.DataBase
             {
                 log.Severe("Error in LDAP for user " + userName + " : " + e.Message);
                 output = e.Message;
+
+                using (PrincipalContext ctx = new PrincipalContext(ContextType.Domain, ldapURL))
+                {
+                    using (UserPrincipal usr = UserPrincipal.FindByIdentity(ctx, IdentityType.SamAccountName, userName))
+                    {
+                        usr.IsAccountLockedOut(); //Gets if account is locked out
+                    }
+                }
+
+
                 return false;
             }
             if (log.IsLoggable(Level.INFO)) log.Info("OK: " + userName);
