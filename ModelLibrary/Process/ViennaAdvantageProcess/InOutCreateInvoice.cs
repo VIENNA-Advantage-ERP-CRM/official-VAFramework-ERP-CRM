@@ -292,12 +292,14 @@ namespace ViennaAdvantage.Process
                             for (int j = 0; j < dsDoc.Tables[0].Rows.Count; j++)
                             {
                                 // JID_1358: Need to show document number in message if Invoice already generated for Material Receipt
-                                if (invDocumentNo.Length > 0)
+                                string no = invDocumentNo.ToString();
+                                if (invDocumentNo.Length > 0 && no != Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]))
                                 {
-                                    invDocumentNo.Append(", " + Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
+                                   invDocumentNo.Append(", " + Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
                                 }
                                 else
                                 {
+                                    invDocumentNo.Clear();
                                     invDocumentNo.Append(Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
                                 }
                                 ds.Dispose();
