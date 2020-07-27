@@ -67,6 +67,12 @@ namespace VAdvantage.DataBase
                         result = search.FindOne();
                         log.Info("LDAP Admin user Credentials and user verified");
                     }
+                    catch (DirectoryServicesCOMException exception)
+                    {
+                        log.Severe("Error in LDAP for  Admin user " + userName + " : " + exception.Message);
+                        output = LDAPExceptions.TreatErrorMessage(exception,true);
+                        return false;
+                    }
                     catch (Exception e)
                     {
                         log.Severe("Error in LDAP for Admin user. User not found " + userName + " : " + e.Message);
@@ -121,7 +127,7 @@ namespace VAdvantage.DataBase
             catch (DirectoryServicesCOMException exception)
             {
                 log.Severe("Error in LDAP for user " + userName + " : " + exception.Message);
-                output = LDAPExceptions.TreatErrorMessage(exception);
+                output = LDAPExceptions.TreatErrorMessage(exception,false);
                 return false;
             }
             catch (Exception e)
@@ -141,7 +147,7 @@ namespace VAdvantage.DataBase
 
     public class LDAPExceptions
     {
-        public static string TreatErrorMessage(DirectoryServicesCOMException e)
+        public static string TreatErrorMessage(DirectoryServicesCOMException e, bool isAdmin)
         {
             /** http://www-01.ibm.com/support/docview.wss?uid=swg21290631
              * 525 - user not found
@@ -158,45 +164,29 @@ namespace VAdvantage.DataBase
             string msg = e.ExtendedErrorMessage ?? "";
             if (msg.Contains("525"))
             {
-                return "UserNotfound";
+                return isAdmin? "AdminUserNotFound": "UserNotFound";
             }
             if (msg.Contains("52e"))
             {
-                return "invalid credentials";
-            }
-            if (msg.Contains("530"))
-            {
-                return "not permitted to logon at this time";
-            }
-            if (msg.Contains("531"))
-            {
-                return "not permitted to logon at this workstation";
+                return isAdmin ? "AdminUserPwdError":"UserPwdError";
             }
             if (msg.Contains("532"))
             {
-                return "password expired";
+                return isAdmin ? "AdminPwdExpired":"PwdExpired";
             }
             if (msg.Contains("533"))
             {
-                return "account disabled";
-            }
-            if (msg.Contains("534"))
-            {
-                return "The user has not been granted the requested logon type at this machine";
+                return isAdmin ? "AdminActDisabled": "ActDisabled";
             }
             if (msg.Contains("701"))
             {
-                return "account expired";
-            }
-            if (msg.Contains("773"))
-            {
-                return "user must reset password";
+                return isAdmin ? "AdminActExpired":"ActExpired";
             }
             if (msg.Contains("775"))
             {
-                return "user account locked";
+                return isAdmin ? "AdminMaxFailedLoginAttempts":"MaxFailedLoginAttempts";
             }
-            return "";
+            return e.Message;
         }
     }
 }
