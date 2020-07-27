@@ -71,6 +71,7 @@ namespace VAdvantage.DataBase
                     {
                         log.Severe("Error in LDAP for Admin user. User not found " + userName + " : " + e.Message);
                         output = e.Message;
+                       
                         return false;
                     }
 
@@ -79,6 +80,7 @@ namespace VAdvantage.DataBase
                     {
                         log.Warning("Error in LDAP for Admin User: User Not Found: " + userName);
                         output = "UserNotFound";
+                       
                         return false;
                     }
                     else if (result != null)
@@ -116,30 +118,16 @@ namespace VAdvantage.DataBase
 
 
             }
-            catch (AuthenticationException e)
+            catch (DirectoryServicesCOMException exception)
             {
-                log.Severe("Authentication Error in LDAP for user " + userName + " : " + e.Message);
-                output = e.Message;
+                log.Severe("Error in LDAP for user " + userName + " : " + exception.Message);
+                output = LDAPExceptions.TreatErrorMessage(exception);
                 return false;
             }
             catch (Exception e)
             {
                 log.Severe("Error in LDAP for user " + userName + " : " + e.Message);
                 output = e.Message;
-
-                DirectoryEntry user = new DirectoryEntry(ldapURL, userName, password);
-                string attribName = "msDS-User-Account-Control-Computed";
-                user.RefreshCache(new string[] { attribName });
-                const int UF_LOCKOUT = 0x0010;
-                int userFlags = (int)user.Properties[attribName].Value;
-                if ((userFlags & UF_LOCKOUT) == UF_LOCKOUT)
-                {
-                    // if this is the case, the account is locked out
-                    return true;
-                }
-                return false;
-
-
                 return false;
             }
             if (log.IsLoggable(Level.INFO)) log.Info("OK: " + userName);
@@ -148,5 +136,67 @@ namespace VAdvantage.DataBase
         }	//	validate
 
 
+    }
+
+
+    public class LDAPExceptions
+    {
+        public static string TreatErrorMessage(DirectoryServicesCOMException e)
+        {
+            /** http://www-01.ibm.com/support/docview.wss?uid=swg21290631
+             * 525 - user not found
+             * 52e - invalid credentials
+             * 530 - not permitted to logon at this time
+             * 531 - not permitted to logon at this workstation
+             * 532 - password expired
+             * 533 - account disabled
+             * 534 - The user has not been granted the requested logon type at this machine
+             * 701 - account expired
+             * 773 - user must reset password
+             * 775 - user account locked */
+
+            string msg = e.ExtendedErrorMessage ?? "";
+            if (msg.Contains("525"))
+            {
+                return "UserNotfound";
+            }
+            if (msg.Contains("52e"))
+            {
+                return "invalid credentials";
+            }
+            if (msg.Contains("530"))
+            {
+                return "not permitted to logon at this time";
+            }
+            if (msg.Contains("531"))
+            {
+                return "not permitted to logon at this workstation";
+            }
+            if (msg.Contains("532"))
+            {
+                return "password expired";
+            }
+            if (msg.Contains("533"))
+            {
+                return "account disabled";
+            }
+            if (msg.Contains("534"))
+            {
+                return "The user has not been granted the requested logon type at this machine";
+            }
+            if (msg.Contains("701"))
+            {
+                return "account expired";
+            }
+            if (msg.Contains("773"))
+            {
+                return "user must reset password";
+            }
+            if (msg.Contains("775"))
+            {
+                return "user account locked";
+            }
+            return "";
+        }
     }
 }
