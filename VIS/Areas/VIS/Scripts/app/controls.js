@@ -883,7 +883,7 @@
 
         this.getBtn = function (index) {
             if (index == 0 && obscureType) {
-                $ctrl.attr("readonly", true);
+                this.setReadOnly(true);
                 return $btnSearch;
             }
         };
@@ -918,7 +918,7 @@
 
         $btnSearch.on("click", function () {
             if (self.mField.getIsEditable(true)) {
-                $ctrl.attr("readonly", false);
+                self.setReadOnly(false);
                 $ctrl.val(self.mField.getValue());
             }
         });
@@ -932,6 +932,18 @@
 
     VIS.Utility.inheritPrototype(VTextBox, IControl);//Inherit from IControl
 
+
+    //VTextBox.prototype.setReadOnly = function (readOnly) {
+    //    this.isReadOnly = readOnly;
+    //    this.ctrl.prop('disabled', readOnly ? true : false);
+    //    this.setBackground(false);
+    //    if (this.obscureType) {
+    //        obscureType
+    //    }
+
+    //};
+
+
     /** 
      *  set value 
      *  @param new value to set
@@ -943,7 +955,7 @@
 
             if (this.obscureType) {
                 this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
-                this.ctrl.attr("readonly", true);
+                this.setReadOnly(true);
             }
             else
                 this.ctrl.val(newValue);
