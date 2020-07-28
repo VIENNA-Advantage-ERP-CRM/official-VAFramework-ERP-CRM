@@ -3387,26 +3387,6 @@ namespace VAdvantage.Model
         /****************************************************************************************************/
         public String CompleteIt()
         {
-            if (Env.IsModuleInstalled("FRPT_") && !IsSOTrx() && !IsReturnTrx())
-            {
-                // budget control functionality work when Financial Managemt Module Available
-                try
-                {
-                    EvaluateBudgetControlData();
-                    if (_budgetMessage.Length > 0)
-                    {
-                        _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
-                        SetProcessed(false);
-                        return DocActionVariables.STATUS_INPROGRESS;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log.Severe("Budget Control Issue " + ex.Message);
-                    SetProcessed(false);
-                    return DocActionVariables.STATUS_INPROGRESS;
-                }
-            }
             // chck pallet Functionality applicable or not
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
@@ -3635,6 +3615,30 @@ namespace VAdvantage.Model
                         String status = PrepareIt();
                         if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                             return status;
+                    }
+                }
+
+                // Handle Budget Control
+                if (Env.IsModuleInstalled("FRPT_") && !IsSOTrx() && !IsReturnTrx())
+                {
+                    // budget control functionality work when Financial Managemt Module Available
+                    try
+                    {
+                        log.Info("Budget Control Start for PO Document No  " + GetDocumentNo());
+                        EvaluateBudgetControlData();
+                        if (_budgetMessage.Length > 0)
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                            SetProcessed(false);
+                            return DocActionVariables.STATUS_INPROGRESS;
+                        }
+                        log.Info("Budget Control Completed for PO Document No  " + GetDocumentNo());
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Severe("Budget Control Issue " + ex.Message);
+                        SetProcessed(false);
+                        return DocActionVariables.STATUS_INPROGRESS;
                     }
                 }
 
@@ -3979,6 +3983,7 @@ namespace VAdvantage.Model
             else
             {
                 //  no recod found for budget control 
+                log.Info("Budget control not found" + sql.ToString());
                 return true;
             }
             return true;
@@ -4154,10 +4159,18 @@ namespace VAdvantage.Model
                     budgetControl.WhereClause = Where + whereDimension;
                     _listBudgetControl.Add(budgetControl);
                 }
+
+                //for (int i = 0; i < dsBudgetControlAmount.Tables[0].Rows.Count; i++)
+                //{
+                //    CheckOrCreateDefault(Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"]),
+                //    Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"]), Util.GetValueOfInt(drBUdgetControl["C_AcctSchema_ID"]),
+                //    Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["Account_id"]));
+                //}
+
             }
 
-            // Reduce Amount (Budget - Actual - Commitment - Reservation) from respective budget (TODO)
-            String query = "SELECT SUM(AmtAcctDr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('A' , 'E', 'R') AND " + Where + whereDimension;
+            // Reduce Amount (Budget - Actual - Commitment - Reservation) from respective budget, AlreadyControlledAmount = Actual + Commitment + Reservation
+            String query = "SELECT SUM(AmtAcctDr - AmtAcctCr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('A' , 'E', 'R') AND " + Where + whereDimension;
             Decimal AlreadyControlledAmount = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, Get_Trx()));
             if (AlreadyControlledAmount > 0)
             {
@@ -4249,6 +4262,25 @@ namespace VAdvantage.Model
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]));
                 }
             }
+            else if (AlreadyAllocatedAmount == 0)
+            {
+                if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                             (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                             (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) 
+                                            ))
+                {
+                    if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
+                    {
+                        _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                            + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
+                    }
+                    log.Info("Budget control not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                        + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - Table ID : " +
+                                        Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]) + 
+                                        " - Account ID : " + Util.GetValueOfInt(drDataRecord["Account_ID"]));
+                }
+            }
+
             return _budgetMessage;
         }
 
@@ -4370,6 +4402,66 @@ namespace VAdvantage.Model
                 }
             }
             return where;
+        }
+
+        public void CheckOrCreateDefault(int budget_id, int budgetControl_Id, int acctSchema_ID, int account_id)
+        {
+            BudgetControl budgetControl = null;
+            if (!_listBudgetControl.Exists(x => (x.GL_Budget_ID == budget_id) &&
+                                             (x.GL_BudgetControl_ID == budgetControl_Id) &&
+                                             (x.Account_ID == account_id) &&
+                                             (x.AD_Org_ID == 0) &&
+                                             (x.C_BPartner_ID == 0) &&
+                                             (x.M_Product_ID == 0) &&
+                                             (x.C_Activity_ID == 0) &&
+                                             (x.C_LocationFrom_ID == 0) &&
+                                             (x.C_LocationTo_ID == 0) &&
+                                             (x.C_Campaign_ID == 0) &&
+                                             (x.AD_OrgTrx_ID == 0) &&
+                                             (x.C_Project_ID == 0) &&
+                                             (x.C_SalesRegion_ID == 0) &&
+                                             (x.UserList1_ID == 0) &&
+                                             (x.UserList2_ID == 0) &&
+                                             (x.UserElement1_ID == 0) &&
+                                             (x.UserElement2_ID == 0) &&
+                                             (x.UserElement3_ID == 0) &&
+                                             (x.UserElement4_ID == 0) &&
+                                             (x.UserElement5_ID == 0) &&
+                                             (x.UserElement6_ID == 0) &&
+                                             (x.UserElement7_ID == 0) &&
+                                             (x.UserElement8_ID == 0) &&
+                                             (x.UserElement9_ID == 0)
+                                            ))
+            {
+                budgetControl = new BudgetControl();
+                budgetControl.GL_Budget_ID = budget_id;
+                budgetControl.GL_BudgetControl_ID = budgetControl_Id;
+                budgetControl.C_AcctSchema_ID = acctSchema_ID;
+                budgetControl.Account_ID = account_id;
+                budgetControl.AD_Org_ID = 0;
+                budgetControl.M_Product_ID = 0;
+                budgetControl.C_BPartner_ID = 0;
+                budgetControl.C_Activity_ID = 0;
+                budgetControl.C_LocationFrom_ID = 0;
+                budgetControl.C_LocationTo_ID = 0;
+                budgetControl.C_Campaign_ID = 0;
+                budgetControl.AD_OrgTrx_ID = 0;
+                budgetControl.C_Project_ID = 0;
+                budgetControl.C_SalesRegion_ID = 0;
+                budgetControl.UserList1_ID = 0;
+                budgetControl.UserList2_ID = 0;
+                budgetControl.UserElement1_ID = 0;
+                budgetControl.UserElement2_ID = 0;
+                budgetControl.UserElement3_ID = 0;
+                budgetControl.UserElement4_ID = 0;
+                budgetControl.UserElement5_ID = 0;
+                budgetControl.UserElement6_ID = 0;
+                budgetControl.UserElement7_ID = 0;
+                budgetControl.UserElement8_ID = 0;
+                budgetControl.UserElement9_ID = 0;
+                budgetControl.ControlledAmount = 0;
+                _listBudgetControl.Add(budgetControl);
+            }
         }
 
         /// <summary>

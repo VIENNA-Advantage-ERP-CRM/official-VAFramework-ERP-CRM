@@ -395,6 +395,7 @@ namespace VAdvantage.Model
                     // budget control functionality work when Financial Managemt Module Available
                     try
                     {
+                        log.Info("Budget Control Start for Rquisition Document No  " + GetDocumentNo());
                         EvaluateBudgetControlData();
                         if (_budgetMessage.Length > 0)
                         {
@@ -402,6 +403,7 @@ namespace VAdvantage.Model
                             SetProcessed(false);
                             return DocActionVariables.STATUS_INPROGRESS;
                         }
+                        log.Info("Budget Control Completed for Rquisition Document No  " + GetDocumentNo());
                     }
                     catch (Exception ex)
                     {
@@ -842,7 +844,7 @@ namespace VAdvantage.Model
             }
 
             // Reduce Amount (Budget - Actual - Commitment - Reservation) from respective budget (TODO)
-            String query = "SELECT SUM(AmtAcctDr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('A' , 'E', 'R') AND " + Where + whereDimension;
+            String query = "SELECT SUM(AmtAcctDr - AmtAcctCr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('A' , 'E', 'R') AND " + Where + whereDimension;
             Decimal AlreadyControlledAmount = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, Get_Trx()));
             if (AlreadyControlledAmount > 0)
             {
@@ -932,6 +934,24 @@ namespace VAdvantage.Model
                     log.Info("Budget control Exceed For Purchase Requisition - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                         + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - (" + _budgetControl.ControlledAmount + ") - Table ID : " +
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]));
+                }
+            }
+            else if (AlreadyAllocatedAmount == 0)
+            {
+                if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                             (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                             (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
+                                            ))
+                {
+                    if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
+                    {
+                        _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                            + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
+                    }
+                    log.Info("Budget control not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                        + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - Table ID : " +
+                                        Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]) +
+                                        " - Account ID : " + Util.GetValueOfInt(drDataRecord["Account_ID"]));
                 }
             }
             return _budgetMessage;
