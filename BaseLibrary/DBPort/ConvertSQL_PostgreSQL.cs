@@ -639,7 +639,7 @@ namespace VAdvantage.DBPort
         protected String ConvertComplexStatement(String sqlStatement)
         {
             String retValue = sqlStatement;
-            StringBuilder sb = null;
+            //StringBuilder sb = null;
 
             // Convert all decode parts
             int found = retValue.ToUpper().IndexOf("DECODE");

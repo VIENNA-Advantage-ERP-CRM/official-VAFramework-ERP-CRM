@@ -55,7 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CCache.cs" />
+    <Compile Include="Classes\Context.cs" />
     <Compile Include="Classes\DisplayType.cs" />
+    <Compile Include="Classes\Evalutee.cs" />
     <Compile Include="Classes\Format.cs" />
     <Compile Include="Classes\MultiMap.cs" />
     <Compile Include="Classes\StringTokenizer.cs" />
@@ -100,6 +103,8 @@
     <Compile Include="Model\NamePair.cs" />
     <Compile Include="Model\ValueNamePair.cs" />
     <Compile Include="Print\HashMap.cs" />
+    <Compile Include="Utility\Ctx.cs" />
+    <Compile Include="Utility\EnvConstants.cs" />
     <Compile Include="Utility\Properties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlExec\ExecuteQuery.cs" />

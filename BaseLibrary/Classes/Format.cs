@@ -136,7 +136,7 @@ namespace VAdvantage.Classes
                 _number = VAdvantage.Utility.Util.GetValueOfDouble(amount).ToString("N", culture);
                 return _number;
             }
-            catch (Exception e)
+            catch 
             {
                 return amount.ToString();
             }

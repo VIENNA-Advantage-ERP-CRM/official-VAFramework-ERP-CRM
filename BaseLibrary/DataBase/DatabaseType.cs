@@ -206,13 +206,14 @@ namespace VAdvantage.DataBase
                 else
                 {
 
-                    // manish 8 May, 2017
-                    if (true) //MDialog.GetMConnection().IsOracle())
-                    {
-                        return true;
-                    }
-                    //End
-                    return false;
+                    //// manish 8 May, 2017
+                    //if (true) //MDialog.GetMConnection().IsOracle())
+                    //{
+                    //    return true;
+                    //}
+                    ////End
+                    //return false;
+                    return true;
                 }
             }
         }

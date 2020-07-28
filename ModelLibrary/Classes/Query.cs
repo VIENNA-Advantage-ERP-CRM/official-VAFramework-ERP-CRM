@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using VAdvantage.Model;
 using System.Data;
@@ -17,7 +16,6 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Logging;
 using VAdvantage.Login;
-using VAdvantage.Report;
 
 namespace VAdvantage.Classes
 {

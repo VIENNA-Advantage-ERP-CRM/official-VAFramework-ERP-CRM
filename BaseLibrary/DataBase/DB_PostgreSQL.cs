@@ -35,9 +35,9 @@ namespace VAdvantage.DataBase
         private ConvertSQL m_convert = new ConvertSQL_PostgreSQL();
 
         /** Cached Database Name	*/
-        private String m_dbName = null;
+        //private String m_dbName = null;
 
-        private String m_userName = null;
+        //private String m_userName = null;
 
         /**	Logger			*/
         private static VLogger log = VLogger.GetVLogger(typeof(DB_PostgreSQL).FullName);
@@ -431,7 +431,7 @@ namespace VAdvantage.DataBase
             }
 
             NpgsqlCommand cmd = new NpgsqlCommand();
-            int result;
+            //int result;
             int countOut = 0;
             NpgsqlDataReader pgreader = null;
             SqlParameter[] ret = null;

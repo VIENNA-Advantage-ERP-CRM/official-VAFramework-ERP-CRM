@@ -74,7 +74,7 @@ namespace VAdvantage.Logging
         }
 
 
-        private static DateTime? _lastDate = null;
+        //private static DateTime? _lastDate = null;
 
 
 

@@ -241,7 +241,7 @@ namespace VAdvantage.Logging
         //}	//	getColumnNames
 
         /**	Constains column name for Datagrindview binding				*/
-        object[] colName;
+       // object[] colName;
         /**	Constains Data for Datagrindview binding				*/
         object[,] errorData;
 
