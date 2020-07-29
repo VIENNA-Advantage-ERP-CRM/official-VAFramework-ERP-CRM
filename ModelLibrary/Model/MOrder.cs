@@ -26,6 +26,7 @@ using System.Data.SqlClient;
 using VAdvantage.Logging;
 using VAdvantage.Print;
 using System.Reflection;
+using ModelLibrary.Classes;
 
 namespace VAdvantage.Model
 {
@@ -3917,6 +3918,7 @@ namespace VAdvantage.Model
             DataRow[] drBudgetControlDimension = null;
             List<BudgetControl> _budgetControl = new List<BudgetControl>();
             StringBuilder sql = new StringBuilder();
+            BudgetCheck budget = new BudgetCheck();
 
             sql.Clear();
             sql.Append(@"SELECT GL_Budget.GL_Budget_ID , GL_Budget.BudgetControlBasis, GL_Budget.C_Year_ID , GL_Budget.C_Period_ID,GL_Budget.Name As BudgetName, 
@@ -3943,7 +3945,7 @@ namespace VAdvantage.Model
                 // get budget control ids (TODO for postgre)
                 object[] budgetControlIds = dsBudgetControl.Tables[0].AsEnumerable().Select(r => r.Field<object>("GL_BUDGETCONTROL_ID")).ToArray();
                 string result = string.Join(",", budgetControlIds);
-                dsBudgetControlDimension = MBudgetControl.GetBudgetDimension(result);
+                dsBudgetControlDimension = budget.GetBudgetDimension(result);
 
                 // get record posting data 
                 dsRecordData = BudgetControlling();
@@ -3969,7 +3971,7 @@ namespace VAdvantage.Model
                                                                 + Util.GetValueOfInt(drBudgetControl[j]["GL_BudgetControl_ID"]));
 
                                     // get BUdgeted Controlled Value based on dimension
-                                    _budgetControl = MBudgetControl.GetBudgetControlValue(drRecordData[i], drBudgetControl[j], drBudgetControlDimension, GetDateAcct(),
+                                    _budgetControl = budget.GetBudgetControlValue(drRecordData[i], drBudgetControl[j], drBudgetControlDimension, GetDateAcct(),
                                         _budgetControl, Get_Trx(), 'O', GetC_Order_ID());
 
                                     // Reduce amount from Budget controlled value
