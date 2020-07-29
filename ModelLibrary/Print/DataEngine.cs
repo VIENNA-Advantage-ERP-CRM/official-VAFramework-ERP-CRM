@@ -513,7 +513,7 @@ namespace VAdvantage.Print
                             string obscureType = col.GetObscureType();
                             if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetAD_Table_ID(),AD_Column_ID,false))
                             {
-                                sb.Append(Env.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
+                                sb.Append(DBFunctionCollection.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
                             }
                             else
                             {

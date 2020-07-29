@@ -1360,28 +1360,7 @@ namespace VAdvantage.Utility
             return ctx.GetApplicationUrl();
         }
 
-        public static string GetObscureColumn(string obscureType,string tableName, string columnName)
-        {
-
-            if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButLast4))
-            {
-                return " REGEXP_REPLACE(SUBSTR(" + tableName+"."+columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]','X') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
-            }
-            else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButFirstLast4))
-            {
-                return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]],'X') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
-            }
-            else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButLast4))
-            {
-                return " REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]|[[:alpha:]]','X') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
-            }
-            else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButFirstLast4))
-            {
-                return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]|[[:alpha:]]','X') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
-            }
-
-            return tableName + "." + columnName;
-        }
+        
     }
 
 
