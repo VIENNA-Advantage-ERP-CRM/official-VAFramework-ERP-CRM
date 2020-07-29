@@ -3828,17 +3828,22 @@ namespace VAdvantage.Model
             MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), Get_Trx());
             MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID());
 
-            //SI_0643: If we reactive the Sales order, System will not allow to save Ordered Qty less than delivered qty.
-            // when we void a record, then not to check this record, because first we set qtyOrdered/qtyenetered as 0 after that we update qtydelivered on line
-            // JID_1362: when qty delivered / invoicedcant be less than qtyordered
-            // JID_1403 : System do not allow to create order with -ve qty, On Completion system give error "Can't Server Qty" (for comparison - make absolute)
-            if (!newRecord && (Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyDelivered()) || Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyInvoiced())) &&
-                (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided")))
-                && docType.GetDocBaseType() != "BOO")       // Skip for Blanket Order
+            // JID_1850 if product is there when qty delivered / invoicedcant be less than qtyordered
+            if ((GetM_Product_ID()) > 0)
             {
-                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_QtydeliveredNotLess"));
-                return false;
+                //SI_0643: If we reactive the Sales order, System will not allow to save Ordered Qty less than delivered qty.
+                // when we void a record, then not to check this record, because first we set qtyOrdered/qtyenetered as 0 after that we update qtydelivered on line
+                // JID_1362: when qty delivered / invoicedcant be less than qtyordered
+                // JID_1403 : System do not allow to create order with -ve qty, On Completion system give error "Can't Server Qty" (for comparison - make absolute)
+                if (!newRecord && (Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyDelivered()) || Math.Abs(GetQtyOrdered()) < Math.Abs(GetQtyInvoiced())) &&
+                    (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided")))
+                    && docType.GetDocBaseType() != "BOO")       // Skip for Blanket Order
+                {
+                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_QtydeliveredNotLess"));
+                    return false;
+                }
             }
+
 
             // Added by Vivek on 22/09/2017 assigned by Mukesh sir
             // if PO is drop ship type then new line should not allow 

@@ -511,6 +511,15 @@ Globalize.addCultureInfo( "ar-IQ", "default", {
         "WrongOTP": "تم إدخال خطأ OTP",
         "ScanQRCode": "امسح الرمز ضوئيًا باستخدام Google Authenticator",
         "EnterVerCode": "أدخل كلمة المرور لمرة واحدة التي تم إنشاؤها بواسطة تطبيق الهاتف المحمول الخاص بك",
+        "PwdExpired": "انتهت صلاحية كلمة مرور المستخدم",
+        "ActDisabled": "تم تعطيل الحساب",
+        "ActExpired": "الحساب منتهي الصلاحية",
+        "AdminUserNotFound": "اسم المستخدم المسؤول غير صحيح.",
+        "AdminUserPwdError": "لا يتطابق المستخدم المسؤول مع كلمة المرور",
+        "AdminPwdExpired": "انتهت صلاحية كلمة مرور مستخدم المسؤول",
+        "AdminActDisabled": "تم تعطيل حساب المسؤول",
+        "AdminActExpired": "انتهت صلاحية حساب المسؤول",
+        "AdminMaxFailedLoginAttempts": "حساب المستخدم المسؤول مغلق. تجاوزت محاولات تسجيل الدخول الفاشلة الحد المحدد. يرجى الاتصال بالمسؤول.",
     }
 });
 

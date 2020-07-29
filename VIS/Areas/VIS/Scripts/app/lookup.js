@@ -1115,6 +1115,8 @@
         Lookup.call(this, null, null, ctx, windowNo, VIS.DisplayType.TableDir);
 
         this.C_Locator_ID = 0;
+        //Only  Organization
+        this.OnlyOrgID = 0;
         //	Only Warehouse	
         this.onlyWarehouseID = 0;
         //	Only Product				
@@ -1142,6 +1144,9 @@
     MLocatorLookup.prototype.getDefault = function () {
         return this.defaultID;
     };
+    MLocatorLookup.prototype.getOnlyOrgID = function () {
+        return this.OnlyOrgID;
+    };
     MLocatorLookup.prototype.getOnlyWarehouseID = function () {
         return this.onlyWarehouseID;
     };
@@ -1150,6 +1155,9 @@
     };
     MLocatorLookup.prototype.getIsOnlyOutgoing = function () {
         return this.onlyOutgoing;
+    };
+    MLocatorLookup.prototype.setOnlyOrgID = function (OnlyOrgID) {
+        this.OnlyOrgID = OnlyOrgID;
     };
     MLocatorLookup.prototype.setOnlyWarehouseID = function (onlyWarehouseID) {
         this.onlyWarehouseID = onlyWarehouseID;
@@ -1213,6 +1221,7 @@
         var sqlParaCount = 0;
         var rows = 0;
 
+        var orgId = this.getOnlyOrgID();
         var warehouseId = this.getOnlyWarehouseID();
         var productId = this.getOnlyProductId();
         var onlyIsSOTrx = this.getIsOnlyOutgoing();
@@ -1305,6 +1314,7 @@
                     url: VIS.Application.contextUrl + "Form/GetWareProWiseLocator",
                     data: {
                         colName: colName,
+                        orgId: orgId,
                         warehouseId: warehouseId,
                         productId: productId,
                         onlyIsSOTrx: onlyIsSOTrx
@@ -1342,6 +1352,7 @@
                     url: VIS.Application.contextUrl + "Form/GetWareProWiseLocator",
                     data: {
                         colName: colName,
+                        orgId: orgId,
                         warehouseId: warehouseId,
                         productId: productId,
                         onlyIsSOTrx: onlyIsSOTrx

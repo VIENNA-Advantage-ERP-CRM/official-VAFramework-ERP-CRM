@@ -1796,7 +1796,7 @@
                 var dr = null;
 
                 // JID_1744 The Precision Shpould as per Currency precision
-                var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());               
+                var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());
 
                 dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
                 if (dr != null) {
@@ -3965,7 +3965,7 @@
     VIS.Utility.inheritPrototype(CalloutInventoryMove, VIS.CalloutEngine); //inherit calloutengine
 
     CalloutInventoryMove.prototype.UOM = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        if (value == null || value.toString() == "") {
+        if (value == 0 || value == null || value.toString() == "") {
             return "";
 
         }
@@ -3979,10 +3979,13 @@
                 QtyOrdered = QtyEntered;
                 mTab.setValue("QtyOrdered", QtyOrdered);
                 mTab.setValue("QtyEntered", QtyEntered);
+
+                this.setCalloutActive(false);
+                ctx = windowNo = mTab = mField = value = oldValue = null;
+                return "";
             }
 
             if (mField.getColumnName() == "C_UOM_ID") {
-
                 var C_UOM_To_ID = Util.getValueOfInt(value);
                 QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                 M_Product_ID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
@@ -11703,7 +11706,7 @@
                     //handle issue while conversion on Physical Inventory
                     //var conversion = false
 
-                    if (QtyOrdered == null) {                        
+                    if (QtyOrdered == null) {
                         QtyOrdered = QtyEntered;
                     }
 
@@ -12472,10 +12475,10 @@
 
             var rowDataDB = null;
 
-            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.C_Currency_ID); 
+            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.C_Currency_ID);
             // MProductPricing pp = new MProductPricing(ctx.getAD_Client_ID(), ctx.getAD_Org_ID(),
             //     M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
-            
+
             //		
             mTab.setValue("PriceList", dr["PriceList"]);
             mTab.setValue("PriceLimit", dr.PriceLimit);
@@ -14647,6 +14650,11 @@
             }
             return "";
         }
+
+        if (this.isCalloutActive()) {
+            return "";
+        }
+
         this.setCalloutActive(true);
         try {
             var M_Product_ID = value;

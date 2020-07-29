@@ -2136,6 +2136,9 @@
 
                         this.log.fine(columnName + " changed - "
                             + dependentField.getColumnName() + " set to null");
+                        if (dependentField.getValue() == null) {
+                            return;
+                        }
                         //  invalidate current selection
                         this.setValue(dependentField, null);
                     }
