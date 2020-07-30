@@ -732,7 +732,7 @@ namespace VAdvantage.Controller
             }
             if (DisplayType.IsLookup(displayType))
             {
-                if (IsDisplayedf || IsDisplayedMR)
+                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby")|| ColumnName.ToLower().Equals("updatedby")) 
                 {
                     try
                     {

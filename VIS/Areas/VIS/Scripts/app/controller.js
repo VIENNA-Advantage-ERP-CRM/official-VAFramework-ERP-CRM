@@ -5287,7 +5287,7 @@
 
         var m_lookup = null;
         /* Load Lookup */
-        if (this.vo.IsDisplayedf) {
+        if (this.vo.IsDisplayedf || this.vo.ColumnName.toLower().equals("createdby") || gField._vo.ColumnName.toLower().equals("updatedby")){
             if (gField._vo.lookupInfo != null && VIS.DisplayType.IsLookup(gField._vo.displayType)) {
                 if (VIS.DisplayType.IsLookup(gField._vo.displayType)) {
 

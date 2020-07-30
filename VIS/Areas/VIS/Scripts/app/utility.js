@@ -543,16 +543,16 @@
         function getObscureValue(type, value) {
             if (value) {
                 if (type == obscureTypes.DigitButLast4) {
-                    return value.replace(/\d(?=\w{4})/g, "X");
+                    return value.replace(/\d(?=\w{4})/g, "*");
                 }
                 else if (type == obscureTypes.DigitButFirstLast4) {
-                    return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "X");
+                    return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "*");
                 }
                 else if (type == obscureTypes.AlphanumButLast4) {
-                    return value.replace(/[_\W]/g, "X").replace(/[\w](?=\w{4})/g, "X");
+                    return value.replace(/[_\W]/g, "*").replace(/[\w](?=\w{4})/g, "*");
                 }
                 else if (type == obscureTypes.AlphaNumButFirstLast4) {
-                    return value.replace(/[_\W]/g, "X").replace(/(?<=\w{4})[\w](?=\w{4})/g, "X");
+                    return value.replace(/[_\W]/g, "*").replace(/(?<=\w{4})[\w](?=\w{4})/g, "*");
                 }
             }
         };

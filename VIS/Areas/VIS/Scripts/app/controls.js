@@ -863,7 +863,7 @@
 
         var displayType = VIS.DisplayType.String;
         this.obscureType = obscureType;
-        var src = "vis vis-locator";
+        var src = "fa fa-credit-card";
         //Init Control
         var $ctrl = $('<input>', { type: (isPwdField) ? 'password' : 'text', name: columnName, maxlength: fieldLength });
         var $btnSearch = $('<button class="input-group-text" style="display:none"><i class="' + src + '" /></button>');
@@ -873,9 +873,8 @@
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
-        if (isReadOnly || !isUpdateable) {
+        if (isReadOnly || !isUpdateable || obscureType) {
             this.setReadOnly(true);
-            //this.Enabled = false;
         }
         else {
             this.setReadOnly(false);

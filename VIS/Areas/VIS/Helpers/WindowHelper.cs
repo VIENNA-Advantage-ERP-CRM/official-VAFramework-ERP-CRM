@@ -1618,6 +1618,14 @@ namespace VIS.Helpers
 
                             rowData[colLower] = Decrypt(rowData[colLower]);
                         }
+                        if (field.IsObscure && displayType != DisplayType.YesNo)
+                        {
+                            if (!SecureEngine.IsEncrypted(Convert.ToString(rowData[colLower])))
+                            {
+                                rowData[colLower] = SecureEngine.Encrypt(rowData[colLower]);
+                            }
+                            rowData[colLower] = Decrypt(rowData[colLower]);
+                        }
                     }
                 }
             }
@@ -1955,9 +1963,9 @@ namespace VIS.Helpers
                         //var c = new Dictionary<string,object>();
                         //c[dt.Columns[column].ColumnName.ToLower()] = dt.Rows[row][column];
 
-                        if (checkEncrypted 
-                            && ((encryptedColNames!=null &&encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
-                            || (obscureFields != null &&  obscureFields.Contains(dt.Columns[column].ColumnName.ToLower()))))
+                        if (checkEncrypted
+                            && ((encryptedColNames != null && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                            || (obscureFields != null && obscureFields.Contains(dt.Columns[column].ColumnName.ToLower()))))
                         {
                             r.cells[dt.Columns[column].ColumnName.ToLower()] = SecureEngineBridge.EncryptFromSeverToClient(dt.Rows[row][column].ToString(), key);
                             continue;
