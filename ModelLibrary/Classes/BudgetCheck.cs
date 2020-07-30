@@ -1322,8 +1322,8 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
 
             if (order.Equals('O') && Util.GetValueOfString(drBUdgetControl["CommitmentType"]).Equals(X_GL_BudgetControl.COMMITMENTTYPE_CommitmentReservation))
             {
-                query = @"SELECT DISTINCT M_Requisition_ID AS Col1 FROM M_RequisitionLine WHERE M_RequisitionLine_ID IN ( 
-                            SELECT DISTINCT M_RequisitionLine_ID FROM C_OrderLine WHERE C_Order_ID = " + OrderId + ")";
+                query = @"SELECT DISTINCT M_Requisition_ID AS Col1 FROM M_RequisitionLine WHERE C_OrderLine_ID IN ( 
+                            SELECT DISTINCT C_OrderLine_ID FROM C_OrderLine WHERE M_RequisitionLine_ID > 0 AND  C_Order_ID = " + OrderId + ")";
                 DataSet ds = DB.ExecuteDataset(query, null, trxName);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
