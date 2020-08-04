@@ -59,21 +59,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audit\MWindowLog.cs" />
+    <Compile Include="Audit\X_AD_WindowLog.cs" />
     <Compile Include="Classes\AccessSqlParser.cs" />
     <Compile Include="Classes\CCache.cs" />
     <Compile Include="Classes\GlobalVariable.cs" />
     <Compile Include="Classes\Info_Column.cs" />
     <Compile Include="Classes\KeyEdition.cs" />
-    <Compile Include="ModelAD\IPOValidator.cs" />
-    <Compile Include="ModelAD\MChangeLog.cs" />
-    <Compile Include="ModelAD\MPreference.cs" />
-    <Compile Include="ModelAD\MSession.cs" />
+    <Compile Include="Engine\POActionEngine.cs" />
+    <Compile Include="Audit\MChangeLog.cs" />
+    <Compile Include="Audit\MQueryLog.cs" />
+    <Compile Include="Audit\MSession.cs" />
     <Compile Include="ModelAD\POInfo.cs" />
-    <Compile Include="ModelAD\PORecord.cs" />
     <Compile Include="ModelAD\PO_LOB.cs" />
-    <Compile Include="ModelAD\X_AD_ChangeLog.cs" />
-    <Compile Include="ModelAD\X_AD_Preference.cs" />
-    <Compile Include="ModelAD\X_AD_Session.cs" />
+    <Compile Include="Audit\X_AD_ChangeLog.cs" />
+    <Compile Include="Audit\X_AD_QueryLog.cs" />
+    <Compile Include="Audit\X_AD_Session.cs" />
+    <Compile Include="Process\Class1.cs" />
     <Compile Include="WF\DocWorkflowMgr.cs" />
     <Compile Include="ModelAD\PO.cs" />
     <Compile Include="Utility\ModuleTypeContainer.cs" />
@@ -118,7 +120,7 @@
     <Compile Include="Login\LanguageCall.cs" />
     <Compile Include="Login\LanguageProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\ModelValidationEngine.cs" />
+    <Compile Include="Engine\ModelValidationEngine.cs" />
     <Compile Include="Utility\Env.cs" />
     <Compile Include="Utility\Msg.cs" />
     <Compile Include="Utility\QueryUtil.cs" />

@@ -150,7 +150,6 @@
     <Compile Include="ModelAD\MViewComponent.cs" />
     <Compile Include="ModelAD\MWindow.cs" />
     <Compile Include="ModelAD\MWindowAccess.cs" />
-    <Compile Include="ModelAD\MWindowLog.cs" />
     <Compile Include="ModelAD\M_Element.cs" />
     <Compile Include="ModelAD\M_Registration.cs" />
     <Compile Include="ModelAD\PO.cs" />
@@ -358,7 +357,6 @@
     <Compile Include="ModelAD\X_AD_WF_Responsible.cs" />
     <Compile Include="ModelAD\X_AD_Window.cs" />
     <Compile Include="ModelAD\X_AD_WindowAction.cs" />
-    <Compile Include="ModelAD\X_AD_WindowLog.cs" />
     <Compile Include="ModelAD\X_AD_Window_Access.cs" />
     <Compile Include="ModelAD\X_AD_Workbench.cs" />
     <Compile Include="ModelAD\X_AD_WorkbenchWindow.cs" />

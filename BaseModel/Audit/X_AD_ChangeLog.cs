@@ -1,20 +1,17 @@
 namespace VAdvantage.Model
 {
 
-/** Generated Model - DO NOT CHANGE */
-using System;
-using System.Text;
-using VAdvantage.DataBase;
-using VAdvantage.Common;
-using VAdvantage.Classes;
-using VAdvantage.Process;
-using VAdvantage.Model;
-using VAdvantage.Utility;
-using System.Data;
-/** Generated Model for AD_ChangeLog
- *  @author Jagmohan Bhatt (generated) 
- *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ChangeLog : PO
+    /** Generated Model - DO NOT CHANGE */
+    using System;
+    using System.Text;
+    using VAdvantage.DataBase;
+    using VAdvantage.Classes;
+    using VAdvantage.Utility;
+    using System.Data;
+    /** Generated Model for AD_ChangeLog
+     *  @author Jagmohan Bhatt (generated) 
+     *  @version Vienna Framework 1.1.1 - $Id$ */
+    public class X_AD_ChangeLog : PO
 {
 public X_AD_ChangeLog (Context ctx, int AD_ChangeLog_ID, Trx trxName) : base (ctx, AD_ChangeLog_ID, trxName)
 {

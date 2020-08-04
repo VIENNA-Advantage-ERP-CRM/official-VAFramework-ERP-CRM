@@ -15,4 +15,6 @@ namespace VAdvantage.Classes
         /// <returns></returns>
         string GetValueAsString(string variableName);
     }
+
+   
 }

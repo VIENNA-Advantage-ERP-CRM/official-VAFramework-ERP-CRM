@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using VAdvantage.Model;
 using VAdvantage.Logging;
-namespace VAdvantage.Classes
+using VAdvantage.DataBase;
+using VAdvantage.Utility;
+using VAdvantage.Classes;
+
+namespace BaseModel.Engine
 {
     /// <summary>
     /// Model Validator
@@ -12,7 +16,7 @@ namespace VAdvantage.Classes
     {
         /// <summary>
         /// Initialize Validation
-        /// </summary>
+        /// </summary>mmmmp+xzfg
         /// <param name="engine">validation engine</param>
         void Initialize(ModelValidationEngine engine);
 
@@ -73,10 +77,24 @@ namespace VAdvantage.Classes
     {
         /** Model Change Type New		*/
         public const int CHANGETYPE_NEW = 1;
+
+        /** Model Change Type New		*/
+        public const int TYPE_NEW = 1;
+
         /** Model Change Type Change	*/
         public const int CHANGETYPE_CHANGE = 2;
+       
         /** Model Change Type Delete	*/
         public const int CHANGETYPE_DELETE = 3;
+        
+        /* Model change Type after new */
+        public const int TYPE_AFTER_NEW = 4;
+
+        /* Model after change */
+        public const int TYPE_AFTER_CHANGE = 5;
+
+        /* Model change Type delete */
+        public const int TYPE_AFTER_DELETE = 6;
 
         /** Called before document is prepared		*/
         public const int DOCTIMING_BEFORE_PREPARE = 1;
@@ -84,10 +102,17 @@ namespace VAdvantage.Classes
         public const int DOCTIMING_AFTER_COMPLETE = 9;
     }
 
-    /// <summary>
-    /// Model Validation Engine
-    /// </summary>
-    public class ModelValidationEngine
+
+
+
+
+
+
+        /// <summary>
+        /// Model Validation Engine
+        /// 
+        /// </summary>
+        public class ModelValidationEngine
     {
 
         /** Engine Singleton				*/
