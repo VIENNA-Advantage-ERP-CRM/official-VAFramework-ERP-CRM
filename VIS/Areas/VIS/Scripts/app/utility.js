@@ -170,7 +170,7 @@
                 }
             } else {
                 //return String(String(num).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ","));
-
+               
                 _tStr = num.match(/[,]+/g);
                 if (_tStr != null && _tStr.length > 1) {
                     return "";

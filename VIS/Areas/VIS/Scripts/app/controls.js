@@ -3605,8 +3605,13 @@
         $ctrl.on("blur", function (e) {
             e.stopPropagation();
             $ctrl.attr("type", "text");
+            var val = $ctrl.val()
+            if (!self.dotFormatter) {
+                val = val.replace(".", ",");
+            }
+            
 
-            var _value = self.format.GetConvertedString($ctrl.val(), self.dotFormatter);
+            var _value = self.format.GetConvertedString(val, self.dotFormatter);
 
             var _val = self.format.GetFormatAmount(_value, "formatOnly", self.dotFormatter);
             $ctrl.val(_val);
