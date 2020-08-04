@@ -4581,9 +4581,7 @@ namespace VAdvantage.Model
                 MAllocationLine aLine = null;
                 if (IsReceipt())
                 {
-                    aLine = new MAllocationLine(alloc, (pa.GetAmount() -
-                        (Get_ColumnIndex("WithholdingAmt") > 0 && dr != null ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
-                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
+                    aLine = new MAllocationLine(alloc, pa.GetAmount(),
                         pa.GetDiscountAmt(), pa.GetWriteOffAmt(), pa.GetOverUnderAmt());
                     if (dr != null)
                     {
@@ -4593,9 +4591,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    aLine = new MAllocationLine(alloc, Decimal.Negate((pa.GetAmount()) -
-                        (Get_ColumnIndex("WithholdingAmt") > 0 && dr != null ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
-                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
+                    aLine = new MAllocationLine(alloc, Decimal.Negate(pa.GetAmount()),
                         Decimal.Negate(pa.GetDiscountAmt()), Decimal.Negate(pa.GetWriteOffAmt()), Decimal.Negate(pa.GetOverUnderAmt()));
                     if (dr != null)
                     {
@@ -4634,8 +4630,8 @@ namespace VAdvantage.Model
             try
             {
                 //	calculate actual allocation
-                Decimal allocationAmt = GetPayAmt();			//	underpayment
-                if (Env.Signum(GetOverUnderAmt()) < 0 && Env.Signum(GetPayAmt()) > 0)
+                Decimal allocationAmt = GetPaymentAmount();			//	underpayment
+                if (Env.Signum(GetOverUnderAmt()) < 0 && Env.Signum(GetPaymentAmount()) > 0)
                     allocationAmt = Decimal.Add(allocationAmt, GetOverUnderAmt());	//	overpayment (negative)
 
                 MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,

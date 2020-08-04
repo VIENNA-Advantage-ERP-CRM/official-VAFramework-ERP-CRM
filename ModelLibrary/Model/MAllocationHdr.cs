@@ -575,11 +575,9 @@ namespace VAdvantage.Model
 
                         // when paid amount against invoice = due amount on schedule then make invoice schedule as Paid 
                         //or wjem last record and due amount = variance amount + paid invoice amount
-                        if (((paySch.GetVA009_PaidAmntInvce() +
-                            (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (paySch.GetWithholdingAmt() + paySch.GetBackupWithholdingAmount()) : 0)) >= paySch.GetDueAmt()) ||
+                        if (((paySch.GetVA009_PaidAmntInvce()) >= paySch.GetDueAmt()) ||
                             (countUnPaidSchedule == 0 && line.GetOverUnderAmt() == 0 &&
-                            Decimal.Add(paySch.GetVA009_PaidAmntInvce(), paySch.GetVA009_Variance()) +
-                            (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (paySch.GetWithholdingAmt() + paySch.GetBackupWithholdingAmount()) : 0) == paySch.GetDueAmt()))
+                            Decimal.Add(paySch.GetVA009_PaidAmntInvce(), paySch.GetVA009_Variance()) == paySch.GetDueAmt()))
                         {
                             paySch.SetVA009_IsPaid(true);
                         }
@@ -1335,12 +1333,7 @@ namespace VAdvantage.Model
                 }
                 // variance = Paid Invoice amount - Due Amount 
                 //paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetVA009_PaidAmntInvce(), paySch.GetDueAmt()));
-                paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetDueAmt(), Decimal.Add(paySch.GetVA009_PaidAmntInvce(),
-                    Decimal.Round(Decimal.Multiply((line.Get_ColumnIndex("WithholdingAmt") > 0 ?
-                    ((doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) ||
-                    doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE)) ?
-                    Decimal.Negate(line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) :
-                    (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount())) : 0), currencymultiplyRate), currency.GetStdPrecision()))));
+                paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetDueAmt(), paySch.GetVA009_PaidAmntInvce()));
             }
             if (C_InvoicePaySch_ID != paySch.GetC_InvoicePaySchedule_ID())
             {
