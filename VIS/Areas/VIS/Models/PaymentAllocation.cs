@@ -1039,6 +1039,22 @@ namespace VIS.Models
                                 MAllocationLine aLine = new MAllocationLine(alloc, amount,
                                     DiscountAmt, WriteOffAmt, OverUnderAmt);
                                 aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
+
+                                // set withholding amount based on porpotionate
+                                if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                                {
+                                    DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + C_Payment_ID, null, null);
+                                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                    {
+                                        aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
+                                        aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["BackupwithholdingAmt"]));
+                                    }
+                                }
+
                                 //if (isInterBPartner)
                                 //{
                                 //    MInvoicePaySchedule invPay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_ID, trx);
@@ -1295,6 +1311,18 @@ namespace VIS.Models
                         aLine.SetPaymentInfo(C_Payment_ID, 0);
                         //to set transaction on allocation line
                         aLine.SetDateTrx(DateTrx);
+                        // set withholding amount based on porpotionate
+                        DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + PaymentAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  (SELECT ROUND((" + PaymentAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + C_Payment_ID, null, null);
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                        {
+                            aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
+                            aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["BackupwithholdingAmt"]));
+                        }
+
                         if (!aLine.Save())
                         {
                             _log.SaveError("Error: ", "Allocation line not saved");
