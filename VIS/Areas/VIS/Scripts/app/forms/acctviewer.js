@@ -888,10 +888,21 @@
                 var line = {};
                 for (var j = 0; j < dataObj.Columns.length; j++) {
                     if ($self.arrListColumns.length != dataObj.Columns.length) {
-                        $self.arrListColumns.push({
-                            field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
-                                dataObj.Columns[j]), sortable: true, size: '16%', hidden: false
-                        });
+                        // alignment of Credit and Debit field
+                        if (row[j] != null && typeof (row[j]) == "number" &&
+                            (VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctCr") == dataObj.Columns[j] ||
+                                VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctDr") == dataObj.Columns[j])) {
+                            $self.arrListColumns.push({
+                                field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
+                                    dataObj.Columns[j]), sortable: true, size: '16%', hidden: false, style: 'text-align: right'
+                            });
+                        }
+                        else {
+                            $self.arrListColumns.push({
+                                field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
+                                    dataObj.Columns[j]), sortable: true, size: '16%', hidden: false
+                            });
+                        }
                     }
                     if (row[j] != null && typeof (row[j]) == "object") {
                         line[dataObj.Columns[j]] = row[j].Name;
