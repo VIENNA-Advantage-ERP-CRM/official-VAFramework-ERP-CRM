@@ -125,7 +125,7 @@
 .vis-awindow-header p, .vis-awindow-header h1 {
     margin: 0px;
     padding: 0px 10px 0px 10px;
-    font-size: 14px;
+    font-size: 1rem;
     /* font-weight: bold; */
     display: inline-block;
     /* color: rgba(var(--v-c-on-primary), 1); */
