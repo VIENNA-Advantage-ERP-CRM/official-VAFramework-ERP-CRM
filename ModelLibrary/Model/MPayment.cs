@@ -1257,7 +1257,7 @@ namespace VAdvantage.Model
             Decimal? alloc = GetAllocatedAmt();
             if (alloc == null)
                 alloc = Env.ZERO;
-            Decimal total = GetPayAmt();
+            Decimal total = GetPayAmt() + (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetBackupWithholdingAmount() + GetWithholdingAmt()) : 0);
 
             if (!IsReceipt())
                 total = Decimal.Negate(total);
@@ -3195,8 +3195,8 @@ namespace VAdvantage.Model
                 {
                     if (GetVA009_OrderPaySchedule_ID() != 0)
                     {
-                        Decimal basePaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() + 
-                            (Get_ColumnIndex("WithholdingAmt") >=0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
+                        Decimal basePaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
+                            (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
                             (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
