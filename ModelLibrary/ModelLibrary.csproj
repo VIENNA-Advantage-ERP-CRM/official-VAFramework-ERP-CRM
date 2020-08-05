@@ -1304,7 +1304,6 @@
     <Compile Include="Utility\EmailMessageSerializable.cs" />
     <Compile Include="Utility\EmailMSMQ.cs" />
     <Compile Include="Utility\EmailSingleton.cs" />
-    <Compile Include="Utility\ExternalWebMethod.cs" />
     <Compile Include="Utility\NativeDigitConverter.cs" />
     <Compile Include="Utility\ReplenishInterface.cs" />
     <Compile Include="Utility\Sms.cs" />
