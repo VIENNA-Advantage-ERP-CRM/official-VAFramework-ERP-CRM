@@ -13,14 +13,22 @@ using System.Text;
 using System.Data;
 using VAdvantage.Classes;
 using VAdvantage.DataBase;
+using System.Data.SqlClient;
+using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
+
+    
     /// <summary>
     /// Access Log Model
     /// </summary>
     public class MAccessLog : X_AD_AccessLog
     {
+
+        private static VLogger _log = VLogger.GetVLogger(typeof(MAccessLog).FullName);
+
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -89,11 +97,43 @@ namespace VAdvantage.Model
         {
             if (email == null || email.Length == 0)
                 return;
-            int AD_User_ID = MUser.GetAD_User_ID(email, GetAD_Client_ID());
+            int AD_User_ID = GetAD_User_ID(email, GetAD_Client_ID());
             Set_ValueNoCheck("CreatedBy", AD_User_ID);
             SetUpdatedBy(AD_User_ID);
             GetCtx().SetContext("##AD_User_ID", AD_User_ID.ToString());
             SetAD_User_ID(AD_User_ID);
+        }
+
+
+        private int GetAD_User_ID(String email, int AD_Client_ID)
+        {
+            int AD_User_ID = 0;
+            IDataReader idr = null;
+            String sql = "SELECT AD_User_ID FROM AD_User "
+                + "WHERE UPPER(EMail)=@param1"
+                + " AND AD_Client_ID=@param2";
+            try
+            {
+                SqlParameter[] param = new SqlParameter[2];
+                param[0] = new SqlParameter("@param1", email.ToUpper());
+                param[1] = new SqlParameter("@param2", AD_Client_ID);
+                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param, null);
+                while (idr.Read())
+                {
+                    AD_User_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
+                }
+                idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, email, e);
+            }
+
+            return AD_User_ID;
         }
 
         /// <summary>
