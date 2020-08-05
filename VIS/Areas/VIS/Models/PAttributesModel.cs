@@ -88,7 +88,7 @@ namespace VIS.Models
             }
 
             //Row 0
-            obj.tableStucture = "<table style='width: 100%;'><tr>";
+            obj.tableStucture = "<table class='vis-formouterwrpdiv' style='width: 100%;'><tr>";
             if (_productWindow)
             {
                 for (int i = 0; i < attributes.Length; i++)
@@ -105,9 +105,9 @@ namespace VIS.Models
                 //    newEditContent = VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "EditRecord"));
                 //}
                 //column 1
-                obj.tableStucture += "<td>";
+                //obj.tableStucture += "<td>";
                 //obj.tableStucture += "<input type='checkbox' id='chkNewEdit_" + windowNo + "' ><label  class='VIS_Pref_Label_Font'>" + newEditContent + "</label>";
-                obj.tableStucture += "</td>";
+                //obj.tableStucture += "</td>";
 
                 ////column 1
                 //obj.tableStucture += "<td>";
@@ -115,23 +115,29 @@ namespace VIS.Models
                 //obj.tableStucture += "</td>";
 
                 obj.tableStucture += "<td>";
-                obj.tableStucture += "<div style='float: left; margin-bottom: 10px; margin-right: 20px;'><input type='checkbox' style='float:left;' id=chkNewEdit_" + windowNo
-                    + "><label  class='VIS_Pref_Label_Font'>" + newEditContent + "</label></div>";
-                obj.tableStucture += "<div style='float: left; margin-bottom: 10px; margin-right: 20px;'><input type='checkbox' style='float:left;' id=chkEdit_" + windowNo
-                    + "><label id=lblEdit_" + windowNo + " class='VIS_Pref_Label_Font'>" + Msg.GetMsg(ctx, "EditRecord") + "</label></div>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap' style='width: 50%; float: left;'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+                obj.tableStucture += "<label class='vis-ec-col-lblchkbox'><input type='checkbox' style='float:left;' id=chkNewEdit_" + windowNo
+                    + ">" + newEditContent + "</label></div></div>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap' style='width: 50%; float: left;'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+                obj.tableStucture += "<label id=lblEdit_" + windowNo + " class='vis-ec-col-lblchkbox'><input type='checkbox' id=chkEdit_" + windowNo
+                    + ">" + Msg.GetMsg(ctx, "EditRecord") + "</label></div></div>";
                 //obj.tableStucture += "<input type='checkbox' style='height: 31px;' id=chkEdit_" + windowNo + " >";
                 obj.tableStucture += "</td>";
                 obj.tableStucture += "</tr>";
 
                 //column 2
                 obj.tableStucture += "<tr'>";
-                obj.tableStucture += "<td></td>";
+                //obj.tableStucture += "<td></td>";
 
                 //column 2
                 obj.tableStucture += "<td>";
-                obj.tableStucture += "<button type='button' style='margin-bottom: 10px;' id='btnSelect_" + windowNo + "' role='button' aria-disabled='false'>"
-                    + "<img style='float:left;margin-top: 5px;' src='~/Areas/VIS/Images/base/Delete24.PNG' /><span style='float: left;margin-left:10px; margin-right:5px;' >"
-                    + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "SelectExisting")) + "</span></button>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+                obj.tableStucture += "<button type='button' id='btnSelect_" + windowNo + "' role='button' aria-disabled='false'>"
+                    + "<i class='vis vis-locator' style='padding: 0 6px'></i><span>"
+                    + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "SelectExisting")) + "</span></button></div></div>";
                 obj.tableStucture += "</td>";
                 obj.tableStucture += "</tr>";
 
@@ -139,11 +145,13 @@ namespace VIS.Models
                 var label = Msg.Translate(ctx, "AttrCode");
                 obj.tableStucture += "<tr>";
                 obj.tableStucture += "<td>";
-                obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id=lot_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label>";
-                obj.tableStucture += "</td>";
-                //column 2
-                obj.tableStucture += "<td>";
-                obj.tableStucture += "<input  style='width: 100%;' id='txtAttrCode_" + windowNo + "' value='' class='VIS_Pref_pass' type='text'>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+                obj.tableStucture += "<input id='txtAttrCode_" + windowNo + "' value='' type='text'  placeholder=' ' data-placeholder=''>";
+                obj.tableStucture += "<label id=lot_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label></div></div>";
+                //obj.tableStucture += "</td>";
+                ////column 2
+                //obj.tableStucture += "<td>";
                 obj.tableStucture += "</td>";
 
                 obj.tableStucture += "</tr>";
@@ -163,11 +171,13 @@ namespace VIS.Models
                 //column 1
                 var label = Msg.Translate(ctx, "Lot");
                 obj.tableStucture += "<td>";
-                obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id=lot_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label>";
-                obj.tableStucture += "</td>";
-                //column 2
-                obj.tableStucture += "<td>";
-                obj.tableStucture += "<input  style='width: 100%;' id='txtLotString_" + windowNo + "' value='" + _masi.GetLot() + "' class='VIS_Pref_pass' type='text'>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+                //obj.tableStucture += "</td>";
+                ////column 2
+                //obj.tableStucture += "<td>";
+                obj.tableStucture += "<input id='txtLotString_" + windowNo + "' value='" + _masi.GetLot() + "' type='text' placeholder=' ' data-placeholder=''>";
+                obj.tableStucture += "<label id=lot_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label></div></div>";
                 obj.tableStucture += "</td>";
 
                 obj.tableStucture += "</tr>";
@@ -179,8 +189,9 @@ namespace VIS.Models
                     //column 1
                     label = Msg.Translate(ctx, "M_Lot_ID");
                     obj.tableStucture += "<td>";
-                    obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id=M_Lot_ID_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label>";
-                    obj.tableStucture += "</td>";
+                    obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                    obj.tableStucture += "<div class='vis-control-wrap'>";
+                    //obj.tableStucture += "</td>";
 
 
                     String sql = "SELECT M_Lot_ID, Name "
@@ -191,8 +202,8 @@ namespace VIS.Models
 
                     KeyNamePair[] data = DB.GetKeyNamePairs(sql, true);
                     //column 2
-                    obj.tableStucture += "<td>";
-                    obj.tableStucture += "<select style='width: 100%;margin-bottom: 10px;height: 34px;' id='cmbLot_" + windowNo + "'>";
+                    //obj.tableStucture += "<td>";
+                    obj.tableStucture += "<select id='cmbLot_" + windowNo + "'>";
                     obj.tableStucture += " <option selected value='" + 0 + "' > </option>";
                     for (int i = 1; i < data.Length; i++)
                     {
@@ -207,6 +218,7 @@ namespace VIS.Models
                     }
 
                     obj.tableStucture += "</select>";
+                    obj.tableStucture += "<label id=M_Lot_ID_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label></div></div>";
                     obj.tableStucture += "</td>";
                     obj.tableStucture += "</tr>";
 
@@ -222,11 +234,13 @@ namespace VIS.Models
                             if (!_masi.IsExcludeLot(AD_Column_ID, IsSOTrx))//_windowNoParent
                             {
                                 //column 1
-                                obj.tableStucture += "<td></td>";
+                                //obj.tableStucture += "<td></td>";
                                 //column 2
                                 obj.tableStucture += "<td>";
-                                obj.tableStucture += "<button type='button' style='margin-bottom: 10px;' id='btnLot_" + windowNo + "' role='button' aria-disabled='false'><span >" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "New")) + "</span></button>";
-                                obj.tableStucture += "</td>";
+                                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                                obj.tableStucture += "<div class='vis-control-wrap'>";
+                                obj.tableStucture += "<button type='button' id='btnLot_" + windowNo + "' role='button' aria-disabled='false'><span >" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "New")) + "</span></button>";
+                                obj.tableStucture += "</div></div></td>";
 
                                 obj.tableStucture += "</tr>";
                                 //Row 3
@@ -246,13 +260,15 @@ namespace VIS.Models
                 //column 1
                 var label = Msg.Translate(ctx, "SerNo");
                 obj.tableStucture += "<td>";
-                obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id=SerNo_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label>";
-                obj.tableStucture += "</td>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+                //obj.tableStucture += "</td>";
 
                 //column 2
                 // txtSerNo.Text = _masi.GetSerNo();
-                obj.tableStucture += "<td>";
-                obj.tableStucture += "<input style='width: 100%;'  id='txtSerNo_" + windowNo + "' value='" + _masi.GetSerNo() + "' class='VIS_Pref_pass' type='text'>";
+                //obj.tableStucture += "<td>";
+                obj.tableStucture += "<input id='txtSerNo_" + windowNo + "' value='" + _masi.GetSerNo() + "' type='text' placeholder=' ' data-placeholder=''>";
+                obj.tableStucture += "<label id=SerNo_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label></div></div>";
                 obj.tableStucture += "</td>";
 
                 obj.tableStucture += "</tr>";
@@ -268,10 +284,12 @@ namespace VIS.Models
                         if (!_masi.IsExcludeSerNo(AD_Column_ID, IsSOTrx))//_windowNoParent
                         {
                             //column 1
-                            obj.tableStucture += "<td></td>";
+                            //obj.tableStucture += "<td></td>";
                             obj.tableStucture += "<td>";
-                            obj.tableStucture += "<button type='button' style='margin-bottom: 10px;' id='btnSerNo_" + windowNo + "' role='button' aria-disabled='false'><span >" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "New")) + "</span></button>";
-                            obj.tableStucture += "</td>";
+                            obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                            obj.tableStucture += "<div class='vis-control-wrap'>";
+                            obj.tableStucture += "<button type='button' id='btnSerNo_" + windowNo + "' role='button' aria-disabled='false'><span >" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "New")) + "</span></button>";
+                            obj.tableStucture += "</div></div></td>";
                         }
 
                         obj.tableStucture += "</tr>";
@@ -293,13 +311,15 @@ namespace VIS.Models
                 var label = Msg.Translate(ctx, "ExpirationDate");
                 //Column 1
                 obj.tableStucture += "<td>";
-                obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' id='guaranteeDate_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label>";
-                obj.tableStucture += "</td>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+                //obj.tableStucture += "</td>";
                 //Column 2
-                obj.tableStucture += "<td>";
+                //obj.tableStucture += "<td>";
                 //obj.tableStucture += "<input style='width: 100%;' value='" + String.Format("{0:yyyy-MM-dd}", dtpicGuaranteeDate) + "' type='date'  id='dtpicGuaranteeDate_" + windowNo + "' class='VIS_Pref_pass'/>";
-                obj.tableStucture += "<input style='width: 100%;' value='" + String.Format("{0:yyyy-MM-dd}", dtpicGuaranteeDate) + "' type='date'  id='dtpicGuaranteeDate_" + windowNo + "' class='VIS_Pref_pass'/>";
-                obj.tableStucture += "</td>";
+                obj.tableStucture += "<input value='" + String.Format("{0:yyyy-MM-dd}", dtpicGuaranteeDate) + "' type='date'  id='dtpicGuaranteeDate_" + windowNo + "' >";
+                obj.tableStucture += "<label id='guaranteeDate_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label>";
+                obj.tableStucture += "</div></div></td>";
 
                 obj.tableStucture += "</tr>";
                 //Row 2
@@ -345,7 +365,7 @@ namespace VIS.Models
             //Last row
             obj.tableStucture += "<tr>";
 
-            obj.tableStucture += "<td style='text-align:right'  colspan='2'>";
+            obj.tableStucture += "<td style='text-align:right'>";
             obj.tableStucture += "<button style='margin-bottom:0px;margin-top:0px; float:right' type='button' class='VIS_Pref_btn-2' style='float: right;'  id='btnCancel_" + windowNo + "' role='button' aria-disabled='false'>" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "Cancel")) + "</button>";
             obj.tableStucture += "<button style='margin-bottom:0px;margin-top:0px; float:right; margin-right: 10px;' type='button' class='VIS_Pref_btn-2' style='float: right; margin-right: 10px;' id='btnOk_" + windowNo + "' role='button' aria-disabled='false'>" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "OK")) + "</button>";
             obj.tableStucture += "</td>";
@@ -649,15 +669,20 @@ namespace VIS.Models
             log.Fine(attribute + ", Product=" + product + ", R/O=" + readOnly);
             //Column 1
             obj.tableStucture += "<td>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
+
+            string lbl = "";
+
             if (product)
             {
-                obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' class='VIS_Pref_Label_Font' id=" + attribute.GetName().Replace(" ", "") + "_" + windowNo + ">" + attribute.GetName() + "</label>";
+                lbl += "<label id=" + attribute.GetName().Replace(" ", "") + "_" + windowNo + ">" + attribute.GetName() + "</label>";
             }
             else
             {
-                obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;' class='VIS_Pref_Label_Font' id=" + attribute.GetName().Replace(" ", "") + "_" + windowNo + "  >" + attribute.GetName() + "</label>";
+                lbl += "<label id=" + attribute.GetName().Replace(" ", "") + "_" + windowNo + "  >" + attribute.GetName() + "</label>";
             }
-            obj.tableStucture += "</td>";
+            //obj.tableStucture += "</td>";
 
             MAttributeInstance instance = attribute.GetMAttributeInstance(M_AttributeSetInstance_ID);
 
@@ -665,14 +690,14 @@ namespace VIS.Models
             {
                 MAttributeValue[] values = attribute.GetMAttributeValues();
                 //Column 2
-                obj.tableStucture += "<td>";
+                //obj.tableStucture += "<td>";
                 if (readOnly)
                 {
-                    obj.tableStucture += "<select style='height:31px; width: 100%;margin-bottom: 10px;' readonly id='cmb_" + count + "_" + windowNo + "' attribute_id = " + attribute.Get_ID() + ">";
+                    obj.tableStucture += "<select readonly id='cmb_" + count + "_" + windowNo + "' attribute_id = " + attribute.Get_ID() + ">";
                 }
                 else
                 {
-                    obj.tableStucture += "<select style='height:31px;  width: 100%;margin-bottom: 10px;' id='cmb_" + count + "_" + windowNo + "' attribute_id = " + attribute.Get_ID() + ">";
+                    obj.tableStucture += "<select id='cmb_" + count + "_" + windowNo + "' attribute_id = " + attribute.Get_ID() + ">";
                 }
                 obj.ControlList += "cmb_" + count + "_" + windowNo + ",";
                 bool found = false;
@@ -705,7 +730,8 @@ namespace VIS.Models
                 }
 
                 obj.tableStucture += "</select>";
-                obj.tableStucture += "</td>";
+                obj.tableStucture += lbl;
+                obj.tableStucture += "</div></div></td>";
 
                 if (found)
                 {
@@ -733,24 +759,27 @@ namespace VIS.Models
                 }
                 //Column 2
                 obj.tableStucture += "<td>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
                 if (readOnly)
                 {
-                    obj.tableStucture += "<input style='height:31px;  width: 100%;' class='VIS_Pref_pass' readonly id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
-                        + "' value='" + value + "' class='' type='number' attribute_id = " + attribute.Get_ID() + ">";
+                    obj.tableStucture += "<input placeholder=' ' data-placeholder='' class='' readonly id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
+                        + "' value='" + value + "' type='number' attribute_id = " + attribute.Get_ID() + ">";
                 }
                 else
                 {
-                    string addclass = "VIS_Pref_pass";
+                    string addclass = "";
                     if (attribute.IsMandatory())
                     {
-                        addclass += " vis-gc-vpanel-table-mandatory ";
+                        addclass += " vis-ev-col-mandatory ";
                     }
 
-                    obj.tableStucture += "<input style='height:31px; width: 100% ;' maxlength='40' class='" + addclass + "' id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
+                    obj.tableStucture += "<input placeholder=' ' data-placeholder='' maxlength='40' class='" + addclass + "' id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
                         + "' value='" + value + "' class='' type='number' attribute_id = " + attribute.Get_ID() + ">";
                 }
                 obj.ControlList += "txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo + ",";
-                obj.tableStucture += "</td>";
+                obj.tableStucture += lbl;
+                obj.tableStucture += "</div></div></td>";
             }
             else	//	Text Field
             {
@@ -762,24 +791,27 @@ namespace VIS.Models
 
                 //Column 2
                 obj.tableStucture += "<td>";
+                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                obj.tableStucture += "<div class='vis-control-wrap'>";
                 if (readOnly)
                 {
-                    obj.tableStucture += "<input style='height:31px; width: 100%;' class='VIS_Pref_pass' readonly id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
-                        + "' value='" + value + "' class='' type='text' attribute_id = " + attribute.Get_ID() + ">";
+                    obj.tableStucture += "<input placeholder=' ' data-placeholder='' class='' readonly id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
+                        + "' value='" + value + "' type='text' attribute_id = " + attribute.Get_ID() + ">";
                 }
                 else
                 {
-                    string addclass = "VIS_Pref_pass";
+                    string addclass = "";
                     if (attribute.IsMandatory())
                     {
-                        addclass += " vis-gc-vpanel-table-mandatory ";
+                        addclass += " vis-ev-col-mandatory ";
                     }
 
-                    obj.tableStucture += "<input style='height:31px; width: 100%;' maxlength='40' class='" + addclass + "' id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
+                    obj.tableStucture += "<input placeholder=' ' data-placeholder='' maxlength='40' class='" + addclass + "' id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
                         + "' value='" + value + "' class='' type='text' attribute_id = " + attribute.Get_ID() + ">";
                 }
                 obj.ControlList += "txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo + ",";
-                obj.tableStucture += "</td>";
+                obj.tableStucture += lbl;
+                obj.tableStucture += "</div></div></td>";
             }
 
             obj.tableStucture += "</tr>";

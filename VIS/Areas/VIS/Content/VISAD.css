@@ -455,7 +455,7 @@
 .vis-apanel-lb {
     min-width: 40px;
     height: 100%;
-    background: #575757;
+    background: rgba(var(--v-c-secondary), 1);
     overflow: hidden;
 }
 
@@ -3638,15 +3638,20 @@ html[dir="rtl"] .vis-cvd-editbtn {
     /*position: absolute;*/
     overflow: auto;
     /*margin-right: -10px;*/
+    position: relative;
 }
 
 .VIS-AMTD-formWrap {
     width: 100%;
     float: left;
-    /*margin-bottom: 10px;*/
+    /* margin-bottom: 10px; */
+    padding-top: 5px;
 }
-
-.VIS-AMTD-ReadOnly .VIS-AMTD-formWrap, .VIS-AMTD-ReadOnly .VIS-AMTD-Grid tr, .VIS-AMTD-ReadOnly .VIS-AMTD-StatusContainer, .VIS-AMTD-ReadOnly .VIS-AMTD-formData, .VIS-AMTD-ReadOnly.VIS-AMTD-MainContent input {
+.VIS-AMTD-ReadOnly .VIS-AMTD-formWrap, 
+.VIS-AMTD-ReadOnly .VIS-AMTD-Grid tr, 
+.VIS-AMTD-ReadOnly .VIS-AMTD-StatusContainer, 
+.VIS-AMTD-ReadOnly .VIS-AMTD-formData, 
+.VIS-AMTD-ReadOnly.VIS-AMTD-MainContent input {
     pointer-events: none;
 }
 
@@ -3658,17 +3663,17 @@ html[dir="rtl"] .vis-cvd-editbtn {
 }
 
 .VIS-AMTD-formData label {
-    float: left;
-    width: 100%;
-    font-weight: normal;
-    margin: 0;
+    /* float: left; */
+    /* width: 100%; */
+    /* font-weight: normal; */
+    /* margin: 0; */
 }
 
 .VIS-AMTD-formData select, .VIS-AMTD-formData input {
-    float: left;
+    /*float: left;
     width: 100%;
     height: 31px;
-    padding-left: 10px;
+    padding-left: 10px;*/
 }
 
 
@@ -3678,27 +3683,29 @@ html[dir="rtl"] .vis-cvd-editbtn {
 
 .VIS-AMTD-formBtns a {
     float: left;
-    margin-top: 19px;
+    margin-top: 0px;
     margin-left: 10px;
     background: rgba(var(--v-c-primary), 1);
     border: none;
     color: rgba(var(--v-c-on-primary), 1);
-    padding: 6px 7px;
+    padding: 7px 7px;
+    border-radius: .25rem;
+    cursor: pointer;
 }
 .VIS-AMTD-formData.VIS-AMTD-InputBtns {
-    padding-right: 0px;
+    /*padding-right: 0px;*/
 }
 
 .VIS-AMTD-formData.VIS-AMTD-InputBtns button {
-    height: 31px;
-    width: 31px;
+    /*height: 31px;
+    width: 31px;*/
 }
 html[dir="rtl"] .VIS-AMTD-formData.VIS-AMTD-InputBtns {
-    padding-left: 0px;
+    /*padding-left: 0px;*/
 }
 
 .VIS-AMTD-InputBtns input {
-    width: calc(100% - 31px);
+    /*width: calc(100% - 31px);*/
 }
 
 .VIS-AMTD-formBtns a:hover {
@@ -3727,7 +3734,7 @@ html[dir="rtl"] .VIS-AMTD-formBtns {
 
 .VIS-AMTD-amountTxt {
     /*width: 32.3%;*/
-    /*padding: 0;*/
+    padding: 0;
 }
 
 .VIS-AMTD-Modal {
@@ -4664,6 +4671,8 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), 
 .vis-app-aform-root select {
     min-height: 30px;
+}
+.vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]) {
         padding: 5px 10px;
 }
 .vis-app-aform-root input:focus, 
@@ -4735,8 +4744,9 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
 .VIS-AMTD-formData:nth-child(4) {
     padding-right: 0;
 }
-.VIS-AMTD-Grid + .VIS-AMTD-formData{
+.VIS-AMTD-Grid + .VIS-AMTD-formData {
     margin-bottom: 0;
+    margin-top: 15px;
 }
 .vis-info-l-s-content {
     /*height: calc(100% - 60px);*/
@@ -4941,9 +4951,21 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     flex: 1;
     text-align: right;
 }
-.vis-formouterwrpdiv input {
+.vis-formouterwrpdiv input:not([type="checkbox"]):not([type="radio"]):not([type="button"]) {
     padding: 5px 10px;
 }
+.vis-excelimportbtn {font-size: 1.2rem;}
+.VIS-AMTD-formBtns {
+    display: flex;
+}
+.vis-excelimportbtn a {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    background: rgba(var(--v-c-on-secondary), 1);
+}
+
+
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {
     position: absolute;
