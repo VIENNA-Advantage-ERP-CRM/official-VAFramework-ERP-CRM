@@ -16,6 +16,8 @@ using VAdvantage.Classes;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
+using BaseModel.Engine;
+
 namespace VAdvantage.Model
 {
     public class MChangeLog : X_AD_ChangeLog
@@ -247,7 +249,7 @@ namespace VAdvantage.Model
             //this (ctx, 0, null);	//	 out of trx
             if (AD_ChangeLog_ID == 0)
             {
-                AD_ChangeLog_ID = BaseLibrary.DataBase.DB.GetNextID(AD_Client_ID, Table_Name, null);
+                AD_ChangeLog_ID = POActionEngine.Get().GetNextID(AD_Client_ID, Table_Name, null);
                 if (AD_ChangeLog_ID <= 0)
                 {
                     log.Severe("No NextID (" + AD_ChangeLog_ID + ")");

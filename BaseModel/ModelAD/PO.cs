@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         private int _idOld = 0;
 
         /**	Attachment with entriess	*/
-        private MAttachment _attachment = null;
+        private object _attachment = null;
         /** Document Value Workflow Manager		*/
         private static DocWorkflowMgr s_docWFMgr = null;
 
@@ -2842,6 +2842,15 @@ namespace VAdvantage.Model
 
             }
 
+            String errorMsg = ModelValidationEngine.Get().FireModelChange
+             (this, newRecord ? ModalValidatorVariables.CHANGETYPE_NEW : ModalValidatorVariables.CHANGETYPE_CHANGE);
+            if (errorMsg != null)
+            {
+                s_log.Warning("Validation failed - " + errorMsg);
+                s_log.SaveError("Error", errorMsg);
+                return false;
+            }
+
             if (newRecord)
                 return saveNew();
             else
@@ -3824,7 +3833,8 @@ namespace VAdvantage.Model
      */
         protected Lookup Get_ColumnLookup(int index)
         {
-            return p_info.GetColumnLookup(index);
+            POInfoColumn col = p_info.GetColumnInfo(index);
+            return POActionEngine.Get().GetLookup(col);
         }
 
         /**
@@ -4921,63 +4931,63 @@ namespace VAdvantage.Model
         /// <returns>attachment</returns>
         /// <date>07-march-2011</date>
         /// <writer>raghu</writer>
-        public MAttachment CreateAttachment()
-        {
-            GetAttachment(false);
-            if (_attachment == null)
-                _attachment = new MAttachment(GetCtx(), p_info.GetAD_Table_ID(), Get_ID(), null);
-            return _attachment;
-        }
+        //public MAttachment CreateAttachment()
+        //{
+        //    GetAttachment(false);
+        //    if (_attachment == null)
+        //        _attachment = new MAttachment(GetCtx(), p_info.GetAD_Table_ID(), Get_ID(), null);
+        //    return _attachment;
+        //}
 
-        /// <summary>
-        ///Get Attachments.	An attachment may have multiple entries
-        /// </summary>
-        /// <returns> Attachment or null</returns>
-        public MAttachment GetAttachment()
-        {
-            return GetAttachment(false);
-        }
-        /// <summary>
-        /// Get Attachments
-        /// </summary>
-        /// <param name="requery">requery</param>
-        /// <returns>Attachment or null</returns>
-        public MAttachment GetAttachment(bool requery)
-        {
-            if (_attachment == null || requery)
-                _attachment = MAttachment.Get(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
-            return _attachment;
-        }
+        ///// <summary>
+        /////Get Attachments.	An attachment may have multiple entries
+        ///// </summary>
+        ///// <returns> Attachment or null</returns>
+        //public MAttachment GetAttachment()
+        //{
+        //    return GetAttachment(false);
+        //}
+        ///// <summary>
+        ///// Get Attachments
+        ///// </summary>
+        ///// <param name="requery">requery</param>
+        ///// <returns>Attachment or null</returns>
+        //public MAttachment GetAttachment(bool requery)
+        //{
+        //    if (_attachment == null || requery)
+        //        _attachment = MAttachment.Get(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
+        //    return _attachment;
+        //}
 
         /// <summary>
         /// Do we have a PDF Attachment
         /// </summary>
         /// <returns>true if there is a PDF attachment</returns>
-        public bool IsPdfAttachment()
-        {
-            return IsAttachment(".pdf");
-        }
+        //public bool IsPdfAttachment()
+        //{
+        //    return IsAttachment(".pdf");
+        //}
 
         /// <summary>
         /// Do we have a Attachment of type
         /// </summary>
         /// <param name="extension">extension e.g. .pdf</param>
         /// <returns>true if there is a attachment of type</returns>
-        public bool IsAttachment(String extension)
-        {
-            GetAttachment(false);
-            if (_attachment == null)
-                return false;
-            for (int i = 0; i < _attachment.GetEntryCount(); i++)
-            {
-                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
-                {
-                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
-                    return true;
-                }
-            }
-            return false;
-        }
+        //public bool IsAttachment(String extension)
+        //{
+        //    GetAttachment(false);
+        //    if (_attachment == null)
+        //        return false;
+        //    for (int i = 0; i < _attachment.GetEntryCount(); i++)
+        //    {
+        //        if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
+        //        {
+        //            log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
 
 
@@ -4985,31 +4995,31 @@ namespace VAdvantage.Model
         /// 
         /// </summary>
         /// <returns></returns>
-        public byte[] GetPdfAttachment()
-        {
-            return GetAttachmentData(".pdf");
-        }
+        //public byte[] GetPdfAttachment()
+        //{
+        //    return GetAttachmentData(".pdf");
+        //}
 
-        /// <summary>
-        /// Get Attachment Data of type
-        /// </summary>
-        /// <param name="extension">extension e.g. .pdf</param>
-        /// <returns>data or null</returns>
-        public byte[] GetAttachmentData(String extension)
-        {
-            GetAttachment(false);
-            if (_attachment == null)
-                return null;
-            for (int i = 0; i < _attachment.GetEntryCount(); i++)
-            {
-                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
-                {
-                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
-                    return _attachment.GetEntryData(i);
-                }
-            }
-            return null;
-        }
+        ///// <summary>
+        ///// Get Attachment Data of type
+        ///// </summary>
+        ///// <param name="extension">extension e.g. .pdf</param>
+        ///// <returns>data or null</returns>
+        //public byte[] GetAttachmentData(String extension)
+        //{
+        //    GetAttachment(false);
+        //    if (_attachment == null)
+        //        return null;
+        //    for (int i = 0; i < _attachment.GetEntryCount(); i++)
+        //    {
+        //        if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
+        //        {
+        //            log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
+        //            return _attachment.GetEntryData(i);
+        //        }
+        //    }
+        //    return null;
+        //}
 
         public void ExecuteWF()
         {

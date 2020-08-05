@@ -230,7 +230,6 @@
     <Compile Include="ModelAD\X_AD_InfoWindow.cs" />
     <Compile Include="ModelAD\X_AD_InviteUser.cs" />
     <Compile Include="ModelAD\X_AD_InviteUser_Role.cs" />
-    <Compile Include="ModelAD\X_AD_Issue.cs" />
     <Compile Include="ModelAD\X_AD_LabelPrinter.cs" />
     <Compile Include="ModelAD\X_AD_LabelPrinterFunction.cs" />
     <Compile Include="ModelAD\X_AD_Language.cs" />

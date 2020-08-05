@@ -21,6 +21,8 @@ namespace BaseModel.Engine
         string GetDocumentNo(int id, PO pO);
         int GetNextID(int AD_Client_ID, string TableName, Trx trx);
        string  GetDocumentNo(PO po);
+        Lookup GetLookup(POInfoColumn colInfo);
+
     }
 
 
@@ -40,6 +42,8 @@ namespace BaseModel.Engine
         {
             try
             {
+                //Libraray name
+                //Loaq lib 
                 _action = (POAction)Activator.GetObject(typeof(POAction), CLASS);
             }
             catch
@@ -62,32 +66,45 @@ namespace BaseModel.Engine
 
         public bool BeforeSave(PO po)
         {
-            throw new NotImplementedException();
+            if (_action != null)
+                return _action.BeforeSave(po);
+            return false;
         }
 
         public bool AfterSave(bool newRecord, bool success, PO po)
         {
-            throw new NotImplementedException();
+            if (_action != null)
+                return _action.AfterSave(newRecord,success, po);
+            return false;
         }
 
         public bool BeforeDelete(PO po)
         {
-            throw new NotImplementedException();
+            if (_action != null)
+                return _action.BeforeDelete(po);
+            return false; ;
         }
 
         public bool AfterDelete(PO po, bool success)
         {
-            throw new NotImplementedException();
+            if (_action != null)
+                return _action.AfterDelete(po,success);
+            return false; ;
         }
 
         public bool IsAutoUpdateTrl(Ctx ctx,String tableName)
         {
-            throw new NotImplementedException();
+            if (_action != null)
+                return _action.IsAutoUpdateTrl(ctx,tableName);
+            return false;
         }
 
-        public string GetDocumentNo(int id,  PO pO)
+        public string GetDocumentNo(int id,  PO po)
         {
-            throw new NotImplementedException();
+            if (_action != null)
+                return _action.GetDocumentNo(id,po);
+            return null;
+
         }
 
         public int GetNextID(int AD_Client_ID, string TableName, Trx trx)
@@ -101,6 +118,13 @@ namespace BaseModel.Engine
         {
             if (_action != null)
               return   _action.GetDocumentNo(po);
+            return null;
+        }
+
+        public Lookup GetLookup(POInfoColumn colInfo)
+        {
+            if (_action != null)
+                return _action.GetLookup(colInfo);
             return null;
         }
     }

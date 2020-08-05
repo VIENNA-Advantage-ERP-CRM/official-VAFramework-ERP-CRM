@@ -608,11 +608,11 @@ namespace VAdvantage.Utility
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns>rue if multi lingual documents</returns>
-        public static bool IsMultiLingualDocument(Ctx ctx)
-        {
-            return VAdvantage.Model.MClient.Get((Ctx)ctx).IsMultiLingualDocument();//
-            //MClient.get(ctx).isMultiLingualDocument();
-        }	//	isMultiLingualDocument
+        //public static bool IsMultiLingualDocument(Ctx ctx)
+        //{
+        //    return VAdvantage.Model.MClient.Get((Ctx)ctx).IsMultiLingualDocument();//
+        //    //MClient.get(ctx).isMultiLingualDocument();
+        //}	//	isMultiLingualDocument
 
         /// <summary>
         ///Get Header info (connection, org, user)
@@ -677,11 +677,11 @@ namespace VAdvantage.Utility
             {
                 //DataBase.DB.SetDBTarget(CConnection.get());
                 //DataBase.DB.SetDBTarget(DataBase.DB.GetConnection());
-                MRole defaultRole = MRole.GetDefault(_sCtx, false);
-                if (defaultRole != null)
-                {
-                    defaultRole.LoadAccess(true);	//	Reload
-                }
+             //   MRole defaultRole = MRole.GetDefault(_sCtx, false);
+             //   if (defaultRole != null)
+            //   {
+                //    defaultRole.LoadAccess(true);	//	Reload
+            //    }
             }
         }
 

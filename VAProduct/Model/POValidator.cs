@@ -395,5 +395,10 @@ namespace VAProduct.Model
             return tblName;
 
         }
+
+        public Lookup GetLookup(POInfoColumn colInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
