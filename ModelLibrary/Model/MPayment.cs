@@ -3195,8 +3195,10 @@ namespace VAdvantage.Model
                 {
                     if (GetVA009_OrderPaySchedule_ID() != 0)
                     {
-                        Decimal basePaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt();
-                        Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt();
+                        Decimal basePaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() + 
+                            (Get_ColumnIndex("WithholdingAmt") >=0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
+                        Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
+                            (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                         MClientInfo client = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
                         MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetC_AcctSchema1_ID());
