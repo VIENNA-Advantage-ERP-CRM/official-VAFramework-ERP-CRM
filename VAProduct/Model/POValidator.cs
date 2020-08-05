@@ -236,12 +236,15 @@ namespace VAProduct.Model
 
         public bool AfterDelete(PO po, bool success)
         {
-            throw new NotImplementedException();
+            if (success)
+                DeleteTreeNode();
+            return success;
         }
 
-        public bool IsAutoUpdateTrl(Ctx ctx)
+        public bool IsAutoUpdateTrl(Ctx ctx,string tableName)
         {
-            throw new NotImplementedException();
+            MClient client = MClient.Get(ctx);
+            return client.IsAutoUpdateTrl(tableName);
         }
 
         public string GetDocumentNo(int dt, PO po)
@@ -273,8 +276,11 @@ namespace VAProduct.Model
             if (masDet != null && masDet.TableName != null && masDet.TableName != "")
                 value = MSequence.GetDocumentNo(masDet.TableName, po.Get_Trx(), po.GetCtx(), po);
             else
+            {
                 // Handled to get Search Key based on Organization same as Document No.
-                value = MSequence.GetDocumentNo(po.Get_TableName(), po.Get_Trx(), po.GetCtx(), po);
+                value = MSequence.GetDocumentNo(GetTable(po.Get_TableName()), po.Get_Trx(), po.GetCtx(), po);
+
+            }
             return value;
         }
 

@@ -19,6 +19,7 @@ using System.Drawing;
 
 using java.io;
 using java.util.zip;
+using BaseModel.Engine;
 
 namespace VAdvantage.DataBase
 {
@@ -81,7 +82,7 @@ namespace VAdvantage.DataBase
             //TODO
             //if (isDB2())
             //    trxName = null;	//	tries 3 times
-            int id = MSequence.GetNextID(AD_Client_ID, TableName, trxName);	//	tries 3 times
+            int id = POActionEngine.Get().GetNextID(AD_Client_ID, TableName, trxName);	//	tries 3 times
             //	if (id <= 0)
             //		throw new DBException("No NextID (" + id + ")");
             return id;
@@ -679,39 +680,39 @@ namespace VAdvantage.DataBase
         /// <param name="AD_Client_ID">client</param>
         /// <param name="TableName">table name</param>
         /// <param name="trx">optional Transaction Name</param>
-        /// <returns>document no or null</returns>
-        public static String GetDocumentNo(int AD_Client_ID, String TableName, Trx trx, Ctx ctx)
-        {
+        ///// <returns>document no or null</returns>
+        //public static String GetDocumentNo(int AD_Client_ID, String TableName, Trx trx, Ctx ctx)
+        //{
 
 
-            String dn = MSequence.GetDocumentNo(AD_Client_ID, TableName, trx, ctx);
-            if (dn == null)		//	try again
-                dn = MSequence.GetDocumentNo(AD_Client_ID, TableName, trx, ctx);
-            if (dn == null)
-                throw new Exception("No DocumentNo");
-            return dn;
-        }	//	getDocumentNo
+        //    String dn = MSequence.GetDocumentNo(AD_Client_ID, TableName, trx, ctx);
+        //    if (dn == null)		//	try again
+        //        dn = MSequence.GetDocumentNo(AD_Client_ID, TableName, trx, ctx);
+        //    if (dn == null)
+        //        throw new Exception("No DocumentNo");
+        //    return dn;
+        //}	//	getDocumentNo
 
-        /// <summary>
-        /// Get Document No based on Document Type get doc numbr from application server
-        /// </summary>
-        /// <param name="C_DocType_ID">document type</param>
-        /// <param name="trx">optional Transaction Name</param>
-        /// <returns>document no or null</returns>
-        /// <date>08-March-2011</date>
-
-
-        public static String GetDocumentNo(int C_DocType_ID, Trx trx, Ctx ctx)
-        {
+        ///// <summary>
+        ///// Get Document No based on Document Type get doc numbr from application server
+        ///// </summary>
+        ///// <param name="C_DocType_ID">document type</param>
+        ///// <param name="trx">optional Transaction Name</param>
+        ///// <returns>document no or null</returns>
+        ///// <date>08-March-2011</date>
 
 
-            String dn = MSequence.GetDocumentNo(C_DocType_ID, trx, ctx);
-            if (dn == null)		//	try again
-            {
-                dn = MSequence.GetDocumentNo(C_DocType_ID, trx, ctx);
-            }
-            return dn;
-        }
+        //public static String GetDocumentNo(int C_DocType_ID, Trx trx, Ctx ctx)
+        //{
+
+
+        //    String dn = MSequence.GetDocumentNo(C_DocType_ID, trx, ctx);
+        //    if (dn == null)		//	try again
+        //    {
+        //        dn = MSequence.GetDocumentNo(C_DocType_ID, trx, ctx);
+        //    }
+        //    return dn;
+        //}
 
 
 
@@ -1002,9 +1003,9 @@ namespace VAdvantage.DataBase
         public static String TO_CHAR(String columnName, int displayType, String AD_Language)
         {
             return BaseLibrary.DataBase.DB.TO_CHAR(columnName, displayType, AD_Language);
-            if (columnName == null || columnName.Length == 0)
-                throw new ArgumentException("Required parameter missing");
-            return s_cc.GetDatabase().TO_CHAR(columnName, displayType, AD_Language);
+            //if (columnName == null || columnName.Length == 0)
+            //    throw new ArgumentException("Required parameter missing");
+            //return s_cc.GetDatabase().TO_CHAR(columnName, displayType, AD_Language);
         }   //  TO
     }
 #pragma warning restore 612, 618

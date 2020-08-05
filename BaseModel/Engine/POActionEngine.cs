@@ -17,7 +17,7 @@ namespace BaseModel.Engine
         bool AfterSave(bool newRecord, bool succes, PO po);
         bool BeforeDelete(PO po);
         bool AfterDelete(PO po, bool success);
-        bool IsAutoUpdateTrl(Ctx ctx);
+        bool IsAutoUpdateTrl(Ctx ctx,string tableName);
         string GetDocumentNo(int id, PO pO);
         int GetNextID(int AD_Client_ID, string TableName, Trx trx);
        string  GetDocumentNo(PO po);
@@ -65,7 +65,7 @@ namespace BaseModel.Engine
             throw new NotImplementedException();
         }
 
-        public bool AfterSave(PO po, bool success, bool newRecord)
+        public bool AfterSave(bool newRecord, bool success, PO po)
         {
             throw new NotImplementedException();
         }
@@ -80,7 +80,7 @@ namespace BaseModel.Engine
             throw new NotImplementedException();
         }
 
-        public bool IsAutoUpdateTrl(Ctx ctx)
+        public bool IsAutoUpdateTrl(Ctx ctx,String tableName)
         {
             throw new NotImplementedException();
         }
@@ -92,12 +92,16 @@ namespace BaseModel.Engine
 
         public int GetNextID(int AD_Client_ID, string TableName, Trx trx)
         {
-            throw new NotImplementedException();
+            if (_action != null)
+                return _action.GetNextID(AD_Client_ID,TableName,trx);
+            return 0;
         }
 
         public string GetDocumentNo(PO po)
         {
-            
+            if (_action != null)
+              return   _action.GetDocumentNo(po);
+            return null;
         }
     }
 }

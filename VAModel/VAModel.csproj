@@ -70,6 +70,7 @@
     <Compile Include="ModelAD\MChartAccess.cs" />
     <Compile Include="ModelAD\MChat.cs" />
     <Compile Include="ModelAD\MChatEntry.cs" />
+    <Compile Include="ModelAD\MClient.cs" />
     <Compile Include="ModelAD\MClientInfo.cs" />
     <Compile Include="ModelAD\MClientShare.cs" />
     <Compile Include="ModelAD\MColor.cs" />

@@ -2507,18 +2507,19 @@ namespace VAdvantage.Model
                     {
                         value = null;
                         int AD_Client_ID = GetAD_Client_ID();
+                        int docId = -1;
                         int index = p_info.GetColumnIndex("C_DocTypeTarget_ID");
                         if (index == -1)
                             index = p_info.GetColumnIndex("C_DocType_ID");
                         if (index != -1)		//	get based on Doc Type (might return null)
+                            docId = Get_ValueAsInt(index);
                             //value = MSequence.GetDocumentNo(get_ValueAsInt(index), _trx, GetCtx());
-                            value = POActionEngine.Get().GetDocumentNo(get_ValueAsInt(dt),  this);
-                        if (value == null)	//	not overwritten by DocType and not manually entered
-                            value = POActionEngine.Get().GetDocumentNo(AD_Client_ID, this);
+                        //    value = POActionEngine.Get().GetDocumentNo(get_ValueAsInt(dt),  this);
+                       // if (value == null)	//	not overwritten by DocType and not manually entered
+                            value = POActionEngine.Get().GetDocumentNo(docId, this);
                     }
                     else
                         log.Warning("DocumentNo updated: " + _mOldValues[i] + " -> " + value);
-
                 }
 
                 if (blnChanges)
@@ -2982,14 +2983,14 @@ namespace VAdvantage.Model
             if (!trlColumnChanged)
                 return true;
             //
-            MClient client = MClient.Get(GetCtx());
+            //MClient client = MClient.Get(GetCtx());
             //
             String tableName = p_info.GetTableName();
             String keyColumn = _mKeyColumns[0];
             StringBuilder sql = new StringBuilder("UPDATE ")
                 .Append(tableName).Append("_Trl SET ");
             //
-            if (client.IsAutoUpdateTrl(tableName))
+            if (POActionEngine.Get().IsAutoUpdateTrl(GetCtx(), tableName)) // client.IsAutoUpdateTrl(tableName))
             {
                 for (int i = 0; i < p_info.GetColumnCount(); i++)
                 {
@@ -3329,8 +3330,7 @@ namespace VAdvantage.Model
             try
             {
                 success = AfterDelete(success);
-                if (success)
-                    DeleteTreeNode();
+                POActionEngine.Get().AfterDelete(this , success);
             }
             catch (Exception e)
             {
@@ -3340,7 +3340,7 @@ namespace VAdvantage.Model
                 success = false;
                 //	throw new DBException(e);
             }
-
+                
             //	Reset
             if (success)
             {
@@ -3557,85 +3557,7 @@ namespace VAdvantage.Model
             return Get_Value(index);
         }
 
-        /// <summary>
-        /// Do we have a PDF Attachment
-        /// </summary>
-        /// <returns>true if there is a PDF attachment</returns>
-        public bool IsPdfAttachment()
-        {
-            return IsAttachment(".pdf");
-        }
-
-        /// <summary>
-        /// Do we have a Attachment of type
-        /// </summary>
-        /// <param name="extension">extension e.g. .pdf</param>
-        /// <returns>true if there is a attachment of type</returns>
-        public bool IsAttachment(String extension)
-        {
-            GetAttachment(false);
-            if (_attachment == null)
-                return false;
-            for (int i = 0; i < _attachment.GetEntryCount(); i++)
-            {
-                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
-                {
-                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        ///Get Attachments.	An attachment may have multiple entries
-        /// </summary>
-        /// <returns> Attachment or null</returns>
-        public MAttachment GetAttachment()
-        {
-            return GetAttachment(false);
-        }
-        /// <summary>
-        /// Get Attachments
-        /// </summary>
-        /// <param name="requery">requery</param>
-        /// <returns>Attachment or null</returns>
-        public MAttachment GetAttachment(bool requery)
-        {
-            if (_attachment == null || requery)
-                _attachment = MAttachment.Get(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
-            return _attachment;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public byte[] GetPdfAttachment()
-        {
-            return GetAttachmentData(".pdf");
-        }
-
-        /// <summary>
-        /// Get Attachment Data of type
-        /// </summary>
-        /// <param name="extension">extension e.g. .pdf</param>
-        /// <returns>data or null</returns>
-        public byte[] GetAttachmentData(String extension)
-        {
-            GetAttachment(false);
-            if (_attachment == null)
-                return null;
-            for (int i = 0; i < _attachment.GetEntryCount(); i++)
-            {
-                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
-                {
-                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
-                    return _attachment.GetEntryData(i);
-                }
-            }
-            return null;
-        }
+       
 
         /// <summary>
         /// Get the Column Processing index
@@ -4384,10 +4306,11 @@ namespace VAdvantage.Model
                     int dtIndex = p_info.GetColumnIndex("C_DocTypeTarget_ID");
                     if (dtIndex == -1)
                         dtIndex = p_info.GetColumnIndex("C_DocType_ID");
-                    if (dtIndex != -1)		//	get based on Doc Type (might return null)
-                        value = DB.GetDocumentNo(Get_ValueAsInt(dtIndex), Get_Trx(), GetCtx());
-                    if (value == null)	//	not overwritten by DocType and not manually entered
-                        value = DB.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx(), GetCtx());
+                    // if (dtIndex != -1)		//	get based on Doc Type (might return null)
+                    //   value = DB.GetDocumentNo(Get_ValueAsInt(dtIndex), Get_Trx(), GetCtx());
+                    //  if (value == null)	//	not overwritten by DocType and not manually entered
+                    //    value = DB.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx(), GetCtx());
+                    value = POActionEngine.Get().GetDocumentNo(dtIndex, this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -4401,10 +4324,10 @@ namespace VAdvantage.Model
                 {
                     // If import table, get the underlying data table to get the "Value"
                     String tableName = p_info.GetTableName();
-                    if (p_info.GetTableName().StartsWith("I_"))
-                        tableName = GetTable();
+                    //if (p_info.GetTableName().StartsWith("I_"))
+                    //    tableName = GetTable();
 
-                    value = DB.GetDocumentNo(GetAD_Client_ID(), tableName, Get_Trx(), GetCtx());
+                    value = POActionEngine.Get().GetDocumentNo(-1, this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -4707,14 +4630,18 @@ namespace VAdvantage.Model
                     {
                         value = null;
                         int AD_Client_ID = GetAD_Client_ID();
+                        int docId = -1;
                         int index = p_info.GetColumnIndex("C_DocTypeTarget_ID");
                         if (index == -1)
                             index = p_info.GetColumnIndex("C_DocType_ID");
                         if (index != -1)		//	get based on Doc Type (might return null)
-                            value = DB.GetDocumentNo(Get_ValueAsInt(index), _trx, GetCtx());
-                        if (value == null)	//	not overwritten by DocType and not manually entered
-                            value = DB.GetDocumentNo(AD_Client_ID, p_info.GetTableName(), _trx, GetCtx());
+                            docId = Get_ValueAsInt(index);
+                        //    value = DB.GetDocumentNo(Get_ValueAsInt(index), _trx, GetCtx());
+                        //if (value == null)	//	not overwritten by DocType and not manually entered
+                        //    value = DB.GetDocumentNo(AD_Client_ID, p_info.GetTableName(), _trx, GetCtx());
+                        value = POActionEngine.Get().GetDocumentNo(docId, this);
                     }
+
                     else if (!Util.IsEqual(_mOldValues[i], value))
                         log.Info("DocumentNo updated: " + _mOldValues[i] + " -> " + value);
                 }
@@ -5000,6 +4927,88 @@ namespace VAdvantage.Model
             if (_attachment == null)
                 _attachment = new MAttachment(GetCtx(), p_info.GetAD_Table_ID(), Get_ID(), null);
             return _attachment;
+        }
+
+        /// <summary>
+        ///Get Attachments.	An attachment may have multiple entries
+        /// </summary>
+        /// <returns> Attachment or null</returns>
+        public MAttachment GetAttachment()
+        {
+            return GetAttachment(false);
+        }
+        /// <summary>
+        /// Get Attachments
+        /// </summary>
+        /// <param name="requery">requery</param>
+        /// <returns>Attachment or null</returns>
+        public MAttachment GetAttachment(bool requery)
+        {
+            if (_attachment == null || requery)
+                _attachment = MAttachment.Get(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
+            return _attachment;
+        }
+
+        /// <summary>
+        /// Do we have a PDF Attachment
+        /// </summary>
+        /// <returns>true if there is a PDF attachment</returns>
+        public bool IsPdfAttachment()
+        {
+            return IsAttachment(".pdf");
+        }
+
+        /// <summary>
+        /// Do we have a Attachment of type
+        /// </summary>
+        /// <param name="extension">extension e.g. .pdf</param>
+        /// <returns>true if there is a attachment of type</returns>
+        public bool IsAttachment(String extension)
+        {
+            GetAttachment(false);
+            if (_attachment == null)
+                return false;
+            for (int i = 0; i < _attachment.GetEntryCount(); i++)
+            {
+                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
+                {
+                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetPdfAttachment()
+        {
+            return GetAttachmentData(".pdf");
+        }
+
+        /// <summary>
+        /// Get Attachment Data of type
+        /// </summary>
+        /// <param name="extension">extension e.g. .pdf</param>
+        /// <returns>data or null</returns>
+        public byte[] GetAttachmentData(String extension)
+        {
+            GetAttachment(false);
+            if (_attachment == null)
+                return null;
+            for (int i = 0; i < _attachment.GetEntryCount(); i++)
+            {
+                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
+                {
+                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
+                    return _attachment.GetEntryData(i);
+                }
+            }
+            return null;
         }
 
         public void ExecuteWF()

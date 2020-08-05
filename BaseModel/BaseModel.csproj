@@ -71,6 +71,7 @@
     <Compile Include="Audit\MQueryLog.cs" />
     <Compile Include="Audit\MSession.cs" />
     <Compile Include="ModelAD\POInfo.cs" />
+    <Compile Include="ModelAD\PORecord.cs" />
     <Compile Include="ModelAD\PO_LOB.cs" />
     <Compile Include="Audit\X_AD_ChangeLog.cs" />
     <Compile Include="Audit\X_AD_QueryLog.cs" />
