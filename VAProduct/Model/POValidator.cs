@@ -19,18 +19,18 @@ namespace VAProduct.Model
         ///Insert id data into Tree
         /// </summary>
         /// <returns></returns>
-        private bool InsertTreeNode()
+        private bool InsertTreeNode(PO po)
         {
-            int AD_Table_ID = Get_Table_ID();
-            if (!MTree.HasTree(AD_Table_ID, GetCtx()))
+            int AD_Table_ID = po.Get_Table_ID();
+            if (!MTree.HasTree(AD_Table_ID, po.GetCtx()))
                 return false;
-            int id = Get_ID();
-            int AD_Client_ID = GetAD_Client_ID();
-            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, GetCtx());
+            int id = po.Get_ID();
+            int AD_Client_ID = po.GetAD_Client_ID();
+            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, po.GetCtx());
             int C_Element_ID = 0;
             if (AD_Table_ID == X_C_ElementValue.Table_ID)
             {
-                int? ii = (int?)Get_Value("C_Element_ID");
+                int? ii = (int?)po.Get_Value("C_Element_ID");
                 if (ii != null)
                     C_Element_ID = ii.Value;
             }
@@ -57,24 +57,24 @@ namespace VAProduct.Model
             // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
             if (AD_Table_ID == X_AD_Org.Table_ID)
             {
-                MOrg Org = new MOrg(GetCtx(), id, null);
+                MOrg Org = new MOrg(po.GetCtx(), id, null);
                 if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
                 {
                     if (Org.IsOrgUnit())
                     {
-                        int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(GetAD_Client_ID(), AD_Table_ID);
+                        int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(po.GetAD_Client_ID(), AD_Table_ID);
                         sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
                     }
                 }
             }
-            int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
+            int no = DB.ExecuteQuery(sb.ToString(), null, po.Get_Trx());
             if (no > 0)
             {
-                log.Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+               po.GetLog().Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
             }
             else
             {
-                log.Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+                po.GetLog().Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
             }
             return no > 0;
         }
@@ -83,15 +83,15 @@ namespace VAProduct.Model
         /// Delete ID Tree Nodes
         /// </summary>
         /// <returns>true if actually deleted (could be non existing)</returns>
-        private bool DeleteTreeNode()
+        private bool DeleteTreeNode(PO po)
         {
-            int id = Get_ID();
+            int id = po.Get_ID();
             if (id == 0)
-                id = Get_IDOld();
-            int AD_Table_ID = Get_Table_ID();
-            if (!MTree.HasTree(AD_Table_ID, GetCtx()))
+                id = po.Get_IDOld();
+            int AD_Table_ID = po.Get_Table_ID();
+            if (!MTree.HasTree(AD_Table_ID, po.GetCtx()))
                 return false;
-            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, GetCtx());
+            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, po.GetCtx());
             if (treeTableName == null)
                 return false;
             //
@@ -102,11 +102,11 @@ namespace VAProduct.Model
                 .Append("WHERE t.AD_Tree_ID=n.AD_Tree_ID AND t.AD_Table_ID=")
                 .Append(AD_Table_ID).Append(")");
             //
-            int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
+            int no = DB.ExecuteQuery(sb.ToString(), null, po.Get_Trx());
             if (no > 0)
-                log.Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+               po.GetLog().Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
             else
-                log.Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+                po.GetLog().Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
             return no > 0;
         }
 
@@ -140,14 +140,14 @@ namespace VAProduct.Model
             }
 
             //	Before Save
-            MAssignSet.Execute(this, po.Is_New());	//	Automatic Assignment
+            MAssignSet.Execute(po, po.Is_New());	//	Automatic Assignment
             return true;
         }
 
         public bool AfterSave( bool newRecord, bool success, PO po)
         {
             if (success && newRecord)
-                InsertTreeNode();
+                InsertTreeNode(po);
 
             // Case for Master Data Versioning, check if the record being saved is in Version table
 
@@ -227,6 +227,7 @@ namespace VAProduct.Model
                     }
                 }
             }
+            return success;
         }
 
         public bool BeforeDelete(PO po)
@@ -237,7 +238,7 @@ namespace VAProduct.Model
         public bool AfterDelete(PO po, bool success)
         {
             if (success)
-                DeleteTreeNode();
+                DeleteTreeNode(po);
             return success;
         }
 

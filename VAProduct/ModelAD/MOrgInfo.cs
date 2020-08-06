@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /// Organization constructor
         /// </summary>
         /// <param name="org">org</param>
-        public MOrgInfo(MOrg org)
+        public MOrgInfo(X_AD_Org org)
             : base(org.GetCtx(), 0, org.Get_TrxName())
         {
             SetClientOrg(org);

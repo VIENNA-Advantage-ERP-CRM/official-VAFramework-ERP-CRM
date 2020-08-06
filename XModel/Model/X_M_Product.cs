@@ -292,8 +292,9 @@ namespace VAdvantage.Model
             Object ii = Get_Value("C_TaxCategory_ID");
             if (ii == null)
             {
-                MProductCategory pCat = new MProductCategory(GetCtx(), GetM_Product_Category_ID(), null);
-                return pCat.GetC_TaxCategory_ID() == null ? 0 : pCat.GetC_TaxCategory_ID();
+                X_M_Product_Category pCat = new X_M_Product_Category(GetCtx(), GetM_Product_Category_ID(), null);
+                return  pCat.GetC_TaxCategory_ID();
+                
             }
             return Convert.ToInt32(ii);
         }

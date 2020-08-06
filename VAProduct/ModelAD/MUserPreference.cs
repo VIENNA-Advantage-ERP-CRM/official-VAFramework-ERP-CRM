@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         /// <param name="user">user </param>
         /// <param name="createNew">create new if not found</param>
         /// <returns>user preference</returns>
-        public static MUserPreference GetOfUser(MUser user, bool createNew)
+        public static MUserPreference GetOfUser(X_AD_User user, bool createNew)
         {
             MUserPreference retValue = null;
             String sql = "SELECT * FROM AD_UserPreference WHERE AD_User_ID='" + user.GetAD_User_ID() + "'";

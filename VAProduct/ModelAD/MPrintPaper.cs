@@ -11,7 +11,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Logging;
 using System.Drawing;
-using System.Drawing.Printing;
+
 using VAdvantage.Print;
 
 namespace VAdvantage.Model

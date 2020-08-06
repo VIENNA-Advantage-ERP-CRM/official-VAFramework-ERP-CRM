@@ -952,6 +952,18 @@ namespace VAdvantage.Utility
             return newMap;
         }
 
+        public bool GetIsUseBetaFunctions()
+        {
+            string s = GetContext("#IsUseBetaFunctions");
+            if (s != null && s.Equals("Y"))
+                return true;
+            return false;
+        }
+        public void SetIsUseBetaFunctions(bool IsUseBetaFunctions)
+        {
+            m_map["#IsUseBetaFunctions"] = IsUseBetaFunctions ? "Y" : "N";
+        }
+
         /// <summary>
         ///Remove context for Window (i.e. delete it)
         /// </summary>

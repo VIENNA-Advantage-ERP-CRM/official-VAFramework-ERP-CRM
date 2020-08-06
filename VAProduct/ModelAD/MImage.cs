@@ -127,7 +127,7 @@ namespace VAdvantage.Model
             try
             {
                 //    Toolkit tk = Toolkit.getDefaultToolkit();
-                _image = Utility.Env.GetImageIcon(url);
+                _image = null;// Utility.Env.GetImageIcon(url);
 
 
                 //    m_image = tk.getImage(url);

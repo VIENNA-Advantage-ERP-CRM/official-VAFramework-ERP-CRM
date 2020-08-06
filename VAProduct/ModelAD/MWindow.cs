@@ -58,33 +58,33 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="whereClause">whereClause where clause w/o the actual WHERE</param>
         /// <returns>nodes</returns>
-        public static X_AD_WF_Node[] GetWFNodes(Ctx ctx, string whereClause)
-        {
-            String sql = "SELECT * FROM AD_WF_Node";
-            if (whereClause != null && whereClause.Length > 0)
-                sql += " WHERE " + whereClause;
-            List<X_AD_WF_Node> list = new List<X_AD_WF_Node>();
-            DataSet ds = null;
-            try
-            {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    DataRow rs = ds.Tables[0].Rows[i];
-                    list.Add(new X_AD_WF_Node(ctx, rs, null));
-                }
-                ds = null;
-            }
-            catch (Exception e)
-            {
-                _log.Log(Level.SEVERE, sql, e);
-            }
+        //public static X_AD_WF_Node[] GetWFNodes(Ctx ctx, string whereClause)
+        //{
+        //    String sql = "SELECT * FROM AD_WF_Node";
+        //    if (whereClause != null && whereClause.Length > 0)
+        //        sql += " WHERE " + whereClause;
+        //    List<X_AD_WF_Node> list = new List<X_AD_WF_Node>();
+        //    DataSet ds = null;
+        //    try
+        //    {
+        //        ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+        //        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+        //        {
+        //            DataRow rs = ds.Tables[0].Rows[i];
+        //            list.Add(new X_AD_WF_Node(ctx, rs, null));
+        //        }
+        //        ds = null;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _log.Log(Level.SEVERE, sql, e);
+        //    }
 
-            X_AD_WF_Node[] retValue = new X_AD_WF_Node[list.Count];
-            //list.toArray(retValue);
-            retValue = list.ToArray();
-            return retValue;
-        }
+        //    X_AD_WF_Node[] retValue = new X_AD_WF_Node[list.Count];
+        //    //list.toArray(retValue);
+        //    retValue = list.ToArray();
+        //    return retValue;
+        //}
 
         /// <summary>
         ///Standard Constructor
@@ -121,19 +121,19 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="size">size</param>
         //public void SetWindowSize(Dimension size)
-        public void SetWindowSize(Size size)
-        {
-            if (size != null)
-            {
-                SetWinWidth(size.Width);
-                SetWinHeight(size.Height);
-            }
-            else
-            {
-                SetWinWidth(0);
-                SetWinHeight(0);
-            }
-        }
+        //public void SetWindowSize(Size size)
+        //{
+        //    if (size != null)
+        //    {
+        //        SetWinWidth(size.Width);
+        //        SetWinHeight(size.Height);
+        //    }
+        //    else
+        //    {
+        //        SetWinWidth(0);
+        //        SetWinHeight(0);
+        //    }
+        //}
 
         /// <summary>
         ///Get Fields
@@ -233,8 +233,41 @@ namespace VAdvantage.Model
                 }
             }
             return success;
-        }	
+        }
+        /// <summary>
+        ///Get workflow nodes with where clause.
+        ///Is here as MWFNode is in base
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="whereClause">whereClause where clause w/o the actual WHERE</param>
+        /// <returns>nodes</returns>
+        public static X_AD_WF_Node[] GetWFNodes(Ctx ctx, string whereClause)
+        {
+            String sql = "SELECT * FROM AD_WF_Node";
+            if (whereClause != null && whereClause.Length > 0)
+                sql += " WHERE " + whereClause;
+            List<X_AD_WF_Node> list = new List<X_AD_WF_Node>();
+            DataSet ds = null;
+            try
+            {
+                ds = DataBase.DB.ExecuteDataset(sql, null, null);
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    DataRow rs = ds.Tables[0].Rows[i];
+                    list.Add(new X_AD_WF_Node(ctx, rs, null));
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+                _log.Log(Level.SEVERE, sql, e);
+            }
 
+            X_AD_WF_Node[] retValue = new X_AD_WF_Node[list.Count];
+            //list.toArray(retValue);
+            retValue = list.ToArray();
+            return retValue;
+        }
         /// <summary>
         ///String Representation
         /// </summary>

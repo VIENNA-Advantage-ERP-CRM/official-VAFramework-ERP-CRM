@@ -7,9 +7,8 @@ using System.Data.SqlClient;
 using VAdvantage.DataBase;
 using VAdvantage.Classes;
 //using System.Data.OracleClient;
-using Oracle.ManagedDataAccess.Client;
-using Npgsql;
-using MySql.Data.MySqlClient;
+
+
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Threading;
@@ -32,6 +31,22 @@ namespace VAdvantage.Model
         static VConnection vConn = new VConnection();
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MSequence).FullName);
+
+        private static CCache<int, X_C_DocType> s_doctypecache = new CCache<int, X_C_DocType>("AD_seq_doctype", 10);
+
+
+        private static X_C_DocType GetDocType(Ctx ctx,int C_DocType_ID)
+        {
+            int key = (int)C_DocType_ID;
+            X_C_DocType retValue = (X_C_DocType)s_doctypecache[key];
+            if (retValue == null)
+            {
+                retValue = new X_C_DocType(ctx, C_DocType_ID, null);
+                s_doctypecache.Add(key, retValue);
+            }
+            return retValue;
+        }
+
 
         public MSequence(Ctx ctx, int AD_Sequence_ID, Trx trxName)
             : base(ctx, AD_Sequence_ID, trxName)
@@ -226,6 +241,10 @@ namespace VAdvantage.Model
                 + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' "
                 + " FOR UPDATE";
 
+            String updateSQL = "UPDATE AD_Sequence SET  Export_ID = @CurrentNext@, CurrentNextSys = @CurrentNextSys@ "
+                   + "WHERE Upper(Name)=Upper('" + TableName + "')"
+                   + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' ";
+
             trxName = null;
             //SqlParameter[] param = new SqlParameter[1];
             Trx trx = trxName;
@@ -235,19 +254,21 @@ namespace VAdvantage.Model
             {
                 try
                 {
-                    if (trx != null)
-                        conn = trx.GetConnection();
-                    else
-                        conn = DB.GetConnection();
-                    //	Error
-                    if (conn == null)
-                        return -1;
+                    //if (trx != null)
+                    //    conn = trx.GetConnection();
+                    //else
+                    //    conn = DB.GetConnection();
+                    ////	Error
+                    //if (conn == null)
+                    //    return -1;
 #pragma warning disable 612, 618
                     DataSet ds = new DataSet();
                     //OracleDataAdapter da = new OracleDataAdapter(selectSQL, new OracleConnection(Ini.CreateConnectionString()));
-                    OracleDataAdapter da = new OracleDataAdapter(selectSQL, (OracleConnection)conn);
-                    OracleCommandBuilder bld = new OracleCommandBuilder(da);
-                    da.Fill(ds);
+                    //OracleDataAdapter da = new OracleDataAdapter(selectSQL, (OracleConnection)conn);
+                    //  OracleCommandBuilder bld = new OracleCommandBuilder(da);
+                    //da.Fill(ds);
+                    ds = DB.ExecuteDataset(selectSQL, null, trx);
+
                     for (int irow = 0; irow <= ds.Tables[0].Rows.Count - 1; irow++)
                     {
                         //	int AD_Sequence_ID = dr.getInt(4);
@@ -264,28 +285,50 @@ namespace VAdvantage.Model
                             tempRetValue = int.Parse(ds.Tables[0].Rows[0]["Export_ID"].ToString());
                             ds.Tables[0].Rows[0]["Export_ID"] = tempRetValue + incrementNo;
                         }
-                       
-                        da.Update(ds);
-                        retValue = tempRetValue;
-                        s_log.Info("Export ID for Table " + TableName + ": " + retValue);
+
+                        updateSQL = updateSQL.Replace("@CurrentNext@", ds.Tables[0].Rows[0]["Export_ID"].ToString()).Replace("@CurrentNextSys@", ds.Tables[0].Rows[0]["CurrentNextSys"].ToString());
+
+                        if (DataBase.DB.ExecuteQuery(updateSQL, null, trx) < 0)
+                        // if (trx.ExecuteNonQuery(updateSQL, null, trx) < 0)
+                        // if (trx.ExeNonQuery(updateSQL) < 0)
+                        {
+                            retValue = -1;
+                        }
+                    }
+                    if (retValue == -1)
+                        trx.Rollback();
+                    else
+                    {
+                        if (trx != null)
+                            trx.Commit();
                     }
 
-                    conn = null;
-#pragma warning disable 612, 618
-                    break;		//	EXIT
+                    break;      //	EXIT
                 }
                 catch (Exception e)
                 {
-                    s_log.Severe("Error Generating Export ID for Table " + TableName + ": " + e.ToString());
-                    return -1;
+                    if (trx != null)
+                    {
+                        trx.Rollback();
+                    }
+                    s_log.Severe(e.ToString());
                 }
-                conn = null;
+                finally
+                {
+                    if (trx != null)
+                        trx.Close();
+                }
             }	//	loop
 
             return retValue;
         }
 
         public static int GetNextIDPostgre(int AD_Client_ID, String TableName, Trx trxName)
+        {
+            return GetNextID(AD_Client_ID, TableName);
+        }
+
+        private static int GetNextID(int AD_Client_ID, string TableName)
         {
             if (TableName == null || TableName.Length == 0)
                 throw new ArgumentException("TableName missing");
@@ -375,116 +418,15 @@ namespace VAdvantage.Model
             return retValue;
         }
 
-
         public static int GetNextIDMySql(int AD_Client_ID, String TableName)
         {
-            if (TableName == null || TableName.Length == 0)
-                throw new ArgumentException("TableName missing");
-            int retValue = -1;
-
-            //	Check viennaSys
-            bool viennaSys = false;
-            if (viennaSys && AD_Client_ID > 11)
-                viennaSys = false;
-
-            String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, AD_Sequence_ID "
-                + "FROM AD_Sequence "
-                + "WHERE Name='" + TableName + "'"
-                + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' "
-                + " FOR UPDATE";
-
-            //SqlParameter[] param = new SqlParameter[1];
-
-            for (int i = 0; i < 3; i++)
-            {
-                try
-                {
-                    DataSet ds = new DataSet();
-                    MySqlDataAdapter da = new MySqlDataAdapter(selectSQL, new MySqlConnection(DB.GetConnectionString()));
-                    MySqlCommandBuilder bld = new MySqlCommandBuilder(da);
-                    da.Fill(ds);
-                    for (int irow = 0; irow <= ds.Tables[0].Rows.Count - 1; irow++)
-                    {
-                        //	int AD_Sequence_ID = dr.getInt(4);
-                        //
-                        int incrementNo = int.Parse(ds.Tables[0].Rows[0]["IncrementNo"].ToString());
-                        if (viennaSys)
-                        {
-                            retValue = int.Parse(ds.Tables[0].Rows[0]["CurrentNextSys"].ToString());
-                            ds.Tables[0].Rows[0]["CurrentNextSys"] = retValue + incrementNo;
-                        }
-                        else
-                        {
-                            retValue = int.Parse(ds.Tables[0].Rows[0]["CurrentNext"].ToString());
-                            ds.Tables[0].Rows[0]["CurrentNext"] = retValue + incrementNo;
-                        }
-                        da.Update(ds);
-                    }
-                    break;		//	EXIT
-                }
-                catch (Exception e)
-                {
-                    s_log.Severe(e.ToString());
-                }
-            }	//	loop
-
-            return retValue;
+            return GetNextID(AD_Client_ID,TableName);
         }
 
         public static int GetNextIDMSSql(int AD_Client_ID, String TableName)
         {
-            if (TableName == null || TableName.Length == 0)
-                throw new ArgumentException("TableName missing");
-            int retValue = -1;
-
-            //	Check viennaSys
-            bool viennaSys = false;
-            if (viennaSys && AD_Client_ID > 11)
-                viennaSys = false;
-
-            String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, AD_Sequence_ID "
-                + "FROM AD_Sequence "
-                + "WHERE Name='" + TableName + "'"
-                + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' "
-                + " FOR UPDATE";
-
-            //SqlParameter[] param = new SqlParameter[1];
-
-            for (int i = 0; i < 3; i++)
-            {
-                try
-                {
-                    DataSet ds = new DataSet();
-                    SqlDataAdapter da = new SqlDataAdapter(selectSQL, new SqlConnection(DB.GetConnectionString()));
-                    SqlCommandBuilder bld = new SqlCommandBuilder(da);
-
-                    da.Fill(ds);
-                    for (int irow = 0; irow <= ds.Tables[0].Rows.Count - 1; irow++)
-                    {
-                        //	int AD_Sequence_ID = dr.getInt(4);
-                        //
-                        int incrementNo = int.Parse(ds.Tables[0].Rows[0]["IncrementNo"].ToString());
-                        if (viennaSys)
-                        {
-                            retValue = int.Parse(ds.Tables[0].Rows[0]["CurrentNextSys"].ToString());
-                            ds.Tables[0].Rows[0]["CurrentNextSys"] = retValue + incrementNo;
-                        }
-                        else
-                        {
-                            retValue = int.Parse(ds.Tables[0].Rows[0]["CurrentNext"].ToString());
-                            ds.Tables[0].Rows[0]["CurrentNext"] = retValue + incrementNo;
-                        }
-                        da.Update(ds);
-                    }
-                    break;		//	EXIT
-                }
-                catch (Exception e)
-                {
-                    s_log.Severe(e.ToString());
-                }
-            }	//	loop
-
-            return retValue;
+            return GetNextID(AD_Client_ID, TableName);
+           
         }
 
         public int GetNextID()
@@ -535,7 +477,8 @@ namespace VAdvantage.Model
                 return null;
             }
 
-            MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
+            // MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
+            X_C_DocType dt = GetDocType(ctx, C_DocType_ID);
             if (dt != null && !dt.IsDocNoControlled())
             {
                 s_log.Finer("DocType_ID=" + C_DocType_ID + " Not DocNo controlled");
@@ -1298,7 +1241,8 @@ namespace VAdvantage.Model
                 s_log.Severe("C_DocType_ID=0");
                 return null;
             }
-            MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
+            //MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
+            X_C_DocType dt = GetDocType(ctx, C_DocType_ID);
             if (dt != null && !dt.IsDocNoControlled())
             {
                 s_log.Finer("DocType_ID=" + C_DocType_ID + " Not DocNo controlled");

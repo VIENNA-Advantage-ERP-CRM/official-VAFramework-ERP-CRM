@@ -10,7 +10,6 @@ using VAdvantage.Model;
 using VAdvantage.Utility;
 
 
-using VAdvantage.ProcessEngine;
 namespace VAdvantage.Model
 {
    public class MProcessPara : X_AD_Process_Para

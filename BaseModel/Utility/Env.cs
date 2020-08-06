@@ -1174,7 +1174,7 @@ namespace VAdvantage.Utility
             _keyEdition = key;
         }
 
-        internal static string GetApplicationURL(Ctx ctx)
+        public static string GetApplicationURL(Ctx ctx)
         {
             return ctx.GetApplicationUrl();
         }

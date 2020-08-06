@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAPrintUtility", "VAPrintUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAProduct", "VAProduct\VAProduct.csproj", "{0ED818BE-CB22-47DF-8C2B-3CAAFFA36D92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XModel", "XModel\XModel.csproj", "{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{0ED818BE-CB22-47DF-8C2B-3CAAFFA36D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ED818BE-CB22-47DF-8C2B-3CAAFFA36D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ED818BE-CB22-47DF-8C2B-3CAAFFA36D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
