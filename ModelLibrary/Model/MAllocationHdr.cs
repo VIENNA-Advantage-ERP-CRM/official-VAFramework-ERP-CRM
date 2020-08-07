@@ -1170,15 +1170,13 @@ namespace VAdvantage.Model
                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "API")
                 {
                     varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
                 }
                 else
                 {
                     varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
                 }
                 if (_isDuplicate)
@@ -1192,8 +1190,7 @@ namespace VAdvantage.Model
                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "API")
                 {
                     if ((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate)) < paySch.GetDueAmt())
                     {
                         paySch.SetVA009_Variance(Decimal.Negate(varianceAmount));
@@ -1206,8 +1203,7 @@ namespace VAdvantage.Model
                 else
                 {
                     if (Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate) < paySch.GetDueAmt())
                     {
                         paySch.SetVA009_Variance(Decimal.Negate(varianceAmount));
