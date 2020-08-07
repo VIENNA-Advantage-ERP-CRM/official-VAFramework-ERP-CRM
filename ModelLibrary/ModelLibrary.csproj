@@ -150,7 +150,6 @@
     <Compile Include="Classes\SessionEventHandler.cs" />
     <Compile Include="Classes\TableSQL.cs" />
     <Compile Include="Classes\WindowCtx.cs" />
-    <Compile Include="Classes\ZoomTarget.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Controllers\Lookup\LookUp.cs" />
     <Compile Include="Controllers\Lookup\MLookup.cs" />
