@@ -19,7 +19,7 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 using VAdvantage.Classes;
 
-namespace BaseLibrary.Classes
+namespace CoreLibrary.Classes
 {
     /// <summary>
     ///  Define basic function

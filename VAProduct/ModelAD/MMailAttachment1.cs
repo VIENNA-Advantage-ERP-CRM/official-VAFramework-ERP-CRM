@@ -83,7 +83,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM mailattachment1 WHERE AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Record_ID + "";
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 if (ds.Tables.Count > 0)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)

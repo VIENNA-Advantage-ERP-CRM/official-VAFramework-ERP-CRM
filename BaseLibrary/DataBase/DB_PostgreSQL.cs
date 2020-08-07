@@ -426,7 +426,7 @@ namespace VAdvantage.DataBase
             }
             else
             {
-                string dbConn = BaseLibrary.DataBase.DB.GetConnectionString();
+                string dbConn = CoreLibrary.DataBase.DB.GetConnectionString();
                 conn = new NpgsqlConnection(dbConn);
             }
 

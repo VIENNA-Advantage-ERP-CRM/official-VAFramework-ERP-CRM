@@ -74,7 +74,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@infowindid", GetAD_InfoWindow_ID());
 
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();

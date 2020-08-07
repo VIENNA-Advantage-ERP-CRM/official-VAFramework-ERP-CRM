@@ -320,7 +320,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 if (dr.Read())
                 {
                     if (dr["AD_Tree_ID"] != null && dr["AD_Tree_ID"].ToString() != "")
@@ -508,7 +508,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, trxName);
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, trxName);
                 while (dr.Read())
                 {
                     String TreeType = dr["TreeType"].ToString();//rs.getString(1);
@@ -927,7 +927,7 @@ namespace VAdvantage.Model
             try
             {
 
-                drTree = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                drTree = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(drTree);
                 drTree.Close();

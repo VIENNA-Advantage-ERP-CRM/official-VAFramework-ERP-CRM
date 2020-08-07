@@ -94,7 +94,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 if (ds.Tables.Count > 0)
                 {
                     DataRow dr = null;
@@ -131,7 +131,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 if (ds.Tables.Count > 0)
                 {
                     DataRow dr = null;
@@ -511,7 +511,7 @@ namespace VAdvantage.Model
                 IDataReader dr = null;
                 try
                 {
-                    dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
+                    dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
                     while (dr.Read())
                     {
                         _dcWindow_access.Add(dr.GetInt32(0), dr[1].ToString() == "Y");
@@ -563,7 +563,7 @@ namespace VAdvantage.Model
                 IDataReader dr = null;
                 try
                 {
-                    dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
+                    dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
                     while (dr.Read())
                     {
                         _dcForm_access.Add(dr.GetInt32(0), dr[1].ToString() == "Y");
@@ -767,14 +767,14 @@ namespace VAdvantage.Model
             //
             String whereDel = " WHERE AD_Role_ID=" + GetAD_Role_ID();
             //
-            int winDel = BaseLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Window_Access" + whereDel, null, Get_TrxName());
-            int win = BaseLibrary.DataBase.DB.ExecuteQuery(sqlWindow + roleAccessLevelWin, null, Get_TrxName());
-            int procDel = BaseLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Process_Access" + whereDel, null, Get_TrxName());
-            int proc = BaseLibrary.DataBase.DB.ExecuteQuery(sqlProcess + roleAccessLevel, null, Get_TrxName());
-            int formDel = BaseLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Form_Access" + whereDel, null, Get_TrxName());
-            int form = BaseLibrary.DataBase.DB.ExecuteQuery(sqlForm + roleAccessLevel, null, Get_TrxName());
-            int wfDel = BaseLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Workflow_Access" + whereDel, null, Get_TrxName());
-            int wf = BaseLibrary.DataBase.DB.ExecuteQuery(sqlWorkflow + roleAccessLevel, null, Get_TrxName());
+            int winDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Window_Access" + whereDel, null, Get_TrxName());
+            int win = CoreLibrary.DataBase.DB.ExecuteQuery(sqlWindow + roleAccessLevelWin, null, Get_TrxName());
+            int procDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Process_Access" + whereDel, null, Get_TrxName());
+            int proc = CoreLibrary.DataBase.DB.ExecuteQuery(sqlProcess + roleAccessLevel, null, Get_TrxName());
+            int formDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Form_Access" + whereDel, null, Get_TrxName());
+            int form = CoreLibrary.DataBase.DB.ExecuteQuery(sqlForm + roleAccessLevel, null, Get_TrxName());
+            int wfDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Workflow_Access" + whereDel, null, Get_TrxName());
+            int wf = CoreLibrary.DataBase.DB.ExecuteQuery(sqlWorkflow + roleAccessLevel, null, Get_TrxName());
 
             // called function to add Document action access
             string daAccess = AddDocActionAccess();
@@ -832,8 +832,8 @@ namespace VAdvantage.Model
                 int daAcc = 0;
                 if (IsCheckDocActionAccess())
                 {
-                    daAccDel = BaseLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Document_Action_Access WHERE AD_Role_ID=" + GetAD_Role_ID(), null, Get_TrxName());
-                    daAcc = BaseLibrary.DataBase.DB.ExecuteQuery(sqlDocAction, null, Get_TrxName());
+                    daAccDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Document_Action_Access WHERE AD_Role_ID=" + GetAD_Role_ID(), null, Get_TrxName());
+                    daAcc = CoreLibrary.DataBase.DB.ExecuteQuery(sqlDocAction, null, Get_TrxName());
                 }
 
                 return " @DocumentAccess@ " + daAcc;
@@ -857,7 +857,7 @@ namespace VAdvantage.Model
                 IDataReader dr = null;
                 try
                 {
-                    dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
+                    dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
                     while (dr.Read())
                     {
                         _dcProcess_access.Add(dr.GetInt32(0), dr[1].ToString() == "Y");
@@ -899,7 +899,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
                 while (dr.Read())
                 {
                     _dcProcess_access.Add(dr.GetInt32(0), dr[1].ToString() == "Y");
@@ -948,7 +948,7 @@ namespace VAdvantage.Model
                 IDataReader dr = null;
                 try
                 {
-                    dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
+                    dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
                     while (dr.Read())
                     {
                         _dcWorkflow_access.Add(dr[0].ToString(), dr[1].ToString());
@@ -990,7 +990,7 @@ namespace VAdvantage.Model
                 IDataReader dr = null;
                 try
                 {
-                    dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
+                    dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
                     while (dr.Read())
                     {
                         _dcTask_access.Add(dr[0].ToString(), dr[1].ToString());
@@ -1451,7 +1451,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(dr);
                 dr.Close();
@@ -1504,7 +1504,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 while (dr.Read())
                 {
                     int ii = Utility.Util.GetValueOfInt(dr[0]);
@@ -1552,7 +1552,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(dr);
                 dr.Close();
@@ -1608,7 +1608,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(dr);
                 dr.Close();
@@ -1703,7 +1703,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(dr);
                 dr.Close();
@@ -1742,7 +1742,7 @@ namespace VAdvantage.Model
                 + "WHERE AD_Role_ID=" + GetAD_Role_ID() + " AND IsActive='Y'";
             try
             {
-                IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                IDataReader dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 DataTable dt = new DataTable();
                 dt.Load(dr);
                 foreach (DataRow rs in dt.Rows)
@@ -1792,7 +1792,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -2211,7 +2211,7 @@ namespace VAdvantage.Model
                             + "' AND c.ColumnName='C_BPartner_ID' ";
             try
             {
-                string ret = BaseLibrary.DataBase.DB.ExecuteScalar(sql).ToString();
+                string ret = CoreLibrary.DataBase.DB.ExecuteScalar(sql).ToString();
                 if (ret != "")
                 {
                     hasBPColumn = int.Parse(ret) != 0;
@@ -2243,7 +2243,7 @@ namespace VAdvantage.Model
             try
             {
 
-                string ret = BaseLibrary.DataBase.DB.ExecuteScalar(sql).ToString();
+                string ret = CoreLibrary.DataBase.DB.ExecuteScalar(sql).ToString();
                 if (ret != "")
                 {
                     hasUserColumn = int.Parse(ret) != 0;

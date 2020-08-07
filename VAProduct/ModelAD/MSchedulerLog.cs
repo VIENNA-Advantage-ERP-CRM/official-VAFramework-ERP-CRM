@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="parent">parent</param>
         /// <param name="summary">summary</param>
-        public MSchedulerLog(MScheduler parent, String summary)
+        public MSchedulerLog(X_AD_Scheduler parent, String summary)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);

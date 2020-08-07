@@ -1,4 +1,4 @@
-﻿using BaseLibrary.DataBase;
+﻿using CoreLibrary.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;

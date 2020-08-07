@@ -7,7 +7,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Classes;
 
-namespace BaseModel.Engine
+namespace BaseLibrary.Engine
 {
     /// <summary>
     /// Model Validator

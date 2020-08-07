@@ -48,7 +48,7 @@ namespace VAdvantage.Model
             //pstmt = DataBase.prepareStatement (sql, trxName);
             //pstmt.setInt (1, AD_Tree_ID);
             Param[0] = new SqlParameter("@Param1", AD_Tree_ID);
-            idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, Param, trxName);
+            idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, Param, trxName);
             dt = new DataTable();
             dt.Load(idr);
             idr.Close();
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
             Param[1] = new SqlParameter("@Param1", Node_ID);
             //pstmt.setInt (2, Node_ID);
             //ResultSet rs = pstmt.executeQuery ();
-            idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, Param, tree.Get_TrxName());
+            idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, Param, tree.Get_TrxName());
             dt = new DataTable();
             dt.Load(idr);
             //if (rs.next ())

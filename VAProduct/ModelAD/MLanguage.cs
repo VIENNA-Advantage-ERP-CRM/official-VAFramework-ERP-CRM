@@ -17,7 +17,7 @@ using System.Data;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
 
-using BaseLibrary.DataBase;
+
 
 namespace VAdvantage.Model
 {
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
             int retNo = 0;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
                 DataRow rs;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
                 DataRow rs;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
@@ -203,7 +203,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 while (dr.Read())
                 {
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
                 //		+ keyColumn + ",AD_Language FROM " + tableName + ")";
             }
 
-            int no = BaseLibrary.DataBase.DB.ExecuteQuery(insert.ToString(), null, Get_TrxName());
+            int no = CoreLibrary.DataBase.DB.ExecuteQuery(insert.ToString(), null, Get_TrxName());
             return no;
         }
 
@@ -288,7 +288,7 @@ namespace VAdvantage.Model
             String sql = "DELETE FROM " + tableName
                 + " WHERE AD_Language='" + GetAD_Language() + "'";
             //int no = DataBase.executeUpdate(sql, Get_TrxName());
-            int no = BaseLibrary.DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             return no;
         }
 

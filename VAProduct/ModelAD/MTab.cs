@@ -133,7 +133,7 @@ namespace VAdvantage.Model
             DataSet pstmt = null;
             try
             {
-                pstmt = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                pstmt = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
                 for (int i = 0; i < pstmt.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = pstmt.Tables[0].Rows[i];
@@ -209,7 +209,7 @@ namespace VAdvantage.Model
             DataSet pstmt = null;
             try
             {
-                pstmt = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                pstmt = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 for (int i = 0; i < pstmt.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = pstmt.Tables[0].Rows[i];

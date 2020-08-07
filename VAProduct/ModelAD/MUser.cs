@@ -149,7 +149,7 @@ namespace VAdvantage.Model
                 + "WHERE EMail='" + email + "' AND AD_Client_ID=" + AD_Client_ID;
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
                 if (ds.Tables.Count > 0)
                 {
                     if (ds.Tables[0].Rows.Count != 0 && ds.Tables[0].Rows.Count > 1)
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
                 + "WHERE Name='" + name + "' AND Password='" + password + "' AND IsActive='Y' AND AD_Client_ID=" + AD_Client_ID;
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
                 if (ds.Tables.Count > 0)
                 {
                     if (ds.Tables[0].Rows.Count != 0 && ds.Tables[0].Rows.Count > 1)
@@ -226,7 +226,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 if (dr.Read())
                 {
                     name = dr[0].ToString();
@@ -257,7 +257,7 @@ namespace VAdvantage.Model
 
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 if (ds.Tables.Count > 0)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
@@ -289,7 +289,7 @@ namespace VAdvantage.Model
             List<X_AD_UserBPAccess> list = new List<X_AD_UserBPAccess>();
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 if (ds.Tables.Count > 0)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
@@ -360,7 +360,7 @@ namespace VAdvantage.Model
 
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     list.Add(new MRole(GetCtx(), dr, Get_TrxName()));
@@ -392,7 +392,7 @@ namespace VAdvantage.Model
                     + "WHERE ur.AD_User_ID=u.AD_User_ID AND ur.AD_Role_ID=" + role.GetAD_Role_ID() + " AND ur.IsActive='Y')";
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 if (ds.Tables.Count > 0)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
@@ -471,7 +471,7 @@ namespace VAdvantage.Model
             String sql = "SELECT MAX(AD_User_ID) FROM AD_User u"
                 + " INNER JOIN C_BPartner bp ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
                 + "WHERE bp.IsSalesRep='Y' AND AD_User_ID=" + AD_User_ID;
-            int no = BaseLibrary.DataBase.DB.GetSQLValue(null, sql);
+            int no = CoreLibrary.DataBase.DB.GetSQLValue(null, sql);
             return no == AD_User_ID;
         }
 
@@ -612,7 +612,7 @@ namespace VAdvantage.Model
 
                 if (pwd != null || !newRecord)
                 {
-                    string validated = Common.Common.ValidatePassword(oldPwd, pwd, pwd);
+                    string validated = BaseLibrary.Common.Common.ValidatePassword(oldPwd, pwd, pwd);
                     if (validated.Length > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), validated, true));
@@ -621,7 +621,7 @@ namespace VAdvantage.Model
                 }
                 if (!newRecord && GetCtx().GetAD_User_ID() == GetAD_User_ID())
                 {
-                    int validity = GetCtx().GetContextAsInt("#" + Common.Common.Password_Valid_Upto_Key);
+                    int validity = GetCtx().GetContextAsInt("#" + BaseLibrary.Common.Common.Password_Valid_Upto_Key);
                     base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
                 }
             }
@@ -740,59 +740,59 @@ namespace VAdvantage.Model
 
         private void WorkThreadFunction(object data)
         {
-            ThreadParameter tp = (ThreadParameter)data;
+            //ThreadParameter tp = (ThreadParameter)data;
 
-            var client = ServerEndPoint.GetCloudClient();
-            if (client != null)
-            {
-                int count = Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql + tp.AD_Client_ID));
+            //var client = ServerEndPoint.GetCloudClient();
+            //if (client != null)
+            //{
+            //    int count = Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql + tp.AD_Client_ID));
 
-                client.CreateCustomerUserCompleted += (se, ev) =>
-                {
-                    client.Close();
-                    //VLogger.Get().Info("URL => " + applicationURL);
-                    if (ev.Result != null)
-                    {
-                        log.SaveInfo("UserCloudResult=> ", "Result=> " + ev.Result.ToString());
-                    }
-                    else
-                    {
-                        log.SaveInfo("UserCloudResult=> ", "Result => " + "Null");
-                    }
-                };
-                //log.SaveInfo("Url=> ", "Url=> " + Envs.GetApplicationURL());
-                //log.SaveInfo("UserID=> ", "UserID=> " + GetAD_User_ID());
-                //log.SaveInfo("Name=> ", "Name=> " + GetName());
-                //log.SaveInfo("teanant=> ", "teanant=> " + GetAD_Client_ID());
-                //log.SaveInfo("Count=> ", "Count=> " + count);
-                //log.SaveInfo("isLogin=> ", "isLogin=> " + IsLoginUser());
-                try
-                {
-                    ServicePointManager.Expect100Continue = false;
-                    client.CreateCustomerUserAsync(tp.appUrl, tp.AD_User_ID, tp.Name, tp.AD_Client_ID, count, tp.isLoginUser, false,
-                        ServerEndPoint.GetAccesskey());
-                }
-                catch
-                {
-                }
+            //    client.CreateCustomerUserCompleted += (se, ev) =>
+            //    {
+            //        client.Close();
+            //        //VLogger.Get().Info("URL => " + applicationURL);
+            //        if (ev.Result != null)
+            //        {
+            //            log.SaveInfo("UserCloudResult=> ", "Result=> " + ev.Result.ToString());
+            //        }
+            //        else
+            //        {
+            //            log.SaveInfo("UserCloudResult=> ", "Result => " + "Null");
+            //        }
+            //    };
+            //    //log.SaveInfo("Url=> ", "Url=> " + Envs.GetApplicationURL());
+            //    //log.SaveInfo("UserID=> ", "UserID=> " + GetAD_User_ID());
+            //    //log.SaveInfo("Name=> ", "Name=> " + GetName());
+            //    //log.SaveInfo("teanant=> ", "teanant=> " + GetAD_Client_ID());
+            //    //log.SaveInfo("Count=> ", "Count=> " + count);
+            //    //log.SaveInfo("isLogin=> ", "isLogin=> " + IsLoginUser());
+            //    try
+            //    {
+            //        ServicePointManager.Expect100Continue = false;
+            //        client.CreateCustomerUserAsync(tp.appUrl, tp.AD_User_ID, tp.Name, tp.AD_Client_ID, count, tp.isLoginUser, false,
+            //            ServerEndPoint.GetAccesskey());
+            //    }
+            //    catch
+            //    {
+            //    }
 
-                //try
-                //{
-                //    string res = client.CreateCustomerUser(appUrl, AD_User_ID, Name, AD_Client_ID, count, isLoginUser, false, ServerEndPoint.GetAccesskey());
-                //    if (res != null)
-                //    {
-                //        log.SaveInfo("UserCloudResult=> ", "Result=> " + res);
-                //    }
-                //    else
-                //    {
-                //        log.SaveInfo("UserCloudResult=> ", "Result => " + "Null");
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    log.SaveError("UserCloudResult=> ", "Result => " + ex.Message);
-                //}
-            }
+            //    //try
+            //    //{
+            //    //    string res = client.CreateCustomerUser(appUrl, AD_User_ID, Name, AD_Client_ID, count, isLoginUser, false, ServerEndPoint.GetAccesskey());
+            //    //    if (res != null)
+            //    //    {
+            //    //        log.SaveInfo("UserCloudResult=> ", "Result=> " + res);
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        log.SaveInfo("UserCloudResult=> ", "Result => " + "Null");
+            //    //    }
+            //    //}
+            //    //catch (Exception ex)
+            //    //{
+            //    //    log.SaveError("UserCloudResult=> ", "Result => " + ex.Message);
+            //    //}
+            //}
         }
 
         protected override bool AfterDelete(bool success)
@@ -840,9 +840,6 @@ namespace VAdvantage.Model
                 return false;
             }
         }
-
-
-
 
         /// <summary>
         /// Add to Description
@@ -1012,7 +1009,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[2];
                 param[0] = new SqlParameter("@param1", email.ToUpper());
                 param[1] = new SqlParameter("@param2", AD_Client_ID);
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param, null);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
                 while (idr.Read())
                 {
                     AD_User_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);

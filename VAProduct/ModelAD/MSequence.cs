@@ -1610,7 +1610,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, trxName);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, trxName);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -1747,7 +1747,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -1827,7 +1827,7 @@ namespace VAdvantage.Model
                 return false;
             }
             String tableName = GetName();
-            int AD_Column_ID = BaseLibrary.DataBase.DB.GetSQLValue(null, "SELECT MAX(c.AD_Column_ID) "
+            int AD_Column_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, "SELECT MAX(c.AD_Column_ID) "
                 + "FROM AD_Table t"
                 + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
                 + "WHERE t.TableName='" + tableName + "'"
@@ -1852,7 +1852,7 @@ namespace VAdvantage.Model
             {
                 sql += " WHERE " + tableName + "_ID < " + IDRangeEnd;
             }
-            int maxTableID = BaseLibrary.DataBase.DB.GetSQLValue(null, sql);
+            int maxTableID = CoreLibrary.DataBase.DB.GetSQLValue(null, sql);
             if (maxTableID < INIT_NO)
             {
                 maxTableID = INIT_NO - 1;
@@ -1868,7 +1868,7 @@ namespace VAdvantage.Model
             //	Get Max System_ID used in Table
             sql = "SELECT MAX(" + tableName + "_ID) FROM " + tableName
                 + " WHERE " + tableName + "_ID < " + INIT_NO;
-            int maxTableSysID = BaseLibrary.DataBase.DB.GetSQLValue(null, sql);
+            int maxTableSysID = CoreLibrary.DataBase.DB.GetSQLValue(null, sql);
             if (maxTableSysID <= 0)
             {
                 maxTableSysID = INIT_SYS_NO - 1;

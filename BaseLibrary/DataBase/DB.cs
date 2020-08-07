@@ -20,7 +20,7 @@ using VAdvantage.Logging;
 using Npgsql;
 using VAdvantage.Classes;
 
-namespace BaseLibrary.DataBase
+namespace CoreLibrary.DataBase
 {
 #pragma warning disable 612, 618
     public class DB

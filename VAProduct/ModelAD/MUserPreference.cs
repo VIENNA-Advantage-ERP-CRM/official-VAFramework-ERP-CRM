@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_UserPreference WHERE AD_User_ID='" + user.GetAD_User_ID() + "'";
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql);
                 foreach (DataRow rs in ds.Tables[0].Rows)
                 {
                     retValue = new MUserPreference(user.GetCtx(), rs, null);
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_UserPreference WHERE AD_User_ID='" + AD_User_ID + "'";
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql);
                 foreach (DataRow rs in ds.Tables[0].Rows)
                 {
                     retValue = new MUserPreference(user.GetCtx(), rs, null);

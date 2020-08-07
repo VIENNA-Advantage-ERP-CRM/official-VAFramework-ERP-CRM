@@ -17,8 +17,8 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Logging;
 using VAdvantage.Print;
-using BaseLibrary.Classes;
-using BaseModel.Engine;
+using CoreLibrary.Classes;
+using BaseLibrary.Engine;
 
 namespace VAdvantage.Model
 {

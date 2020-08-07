@@ -19,8 +19,8 @@ using Npgsql;
 using MySql.Data.MySqlClient;
 using VAdvantage.Logging;
 using Oracle.ManagedDataAccess.Client;
-using BaseLibrary.Classes;
-using BaseLibrary.DataBase;
+using CoreLibrary.Classes;
+using CoreLibrary.DataBase;
 //using VAdvantage.Install;
 
 namespace VAdvantage.DataBase

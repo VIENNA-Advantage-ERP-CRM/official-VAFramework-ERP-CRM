@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using VAdvantage.ProcessEngine;
 using System.Data.SqlClient;
 using System.Data;
@@ -10,17 +9,15 @@ using System.Reflection;
 using VAdvantage.DataBase;
 using VAdvantage.Utility;
 //using System.Data.OracleClient;
-using Oracle.ManagedDataAccess.Client;
+
 using VAdvantage.Print;
 using System.Threading;
-using System.Windows.Forms;
+
 using VAdvantage.CrystalReport;
 using VAdvantage.Logging;
 using VAdvantage.Classes;
-using System.ComponentModel;
+
 using System.IO;
-using VAdvantage.Model;
-using Npgsql;
 
 namespace VAdvantage.ProcessEngine
 {
@@ -82,92 +79,92 @@ namespace VAdvantage.ProcessEngine
 #pragma warning disable 612, 618
         public bool StartDBProcess(String procedureName)
         {
-            if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
-            {
-                NpgsqlConnection conn1 = null;
-                try
-                {
-                    NpgsqlCommand comm = new NpgsqlCommand();
-                conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
-                conn1.Open();
-                comm.Connection = conn1;
-                comm.CommandText = procedureName;
-                comm.CommandType = CommandType.StoredProcedure;
-                NpgsqlCommandBuilder.DeriveParameters(comm);
-                NpgsqlParameter[] param = new NpgsqlParameter[1];
+            //if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
+            //{
+            //    NpgsqlConnection conn1 = null;
+            //    try
+            //    {
+            //        NpgsqlCommand comm = new NpgsqlCommand();
+            //    conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
+            //    conn1.Open();
+            //    comm.Connection = conn1;
+            //    comm.CommandText = procedureName;
+            //    comm.CommandType = CommandType.StoredProcedure;
+            //    NpgsqlCommandBuilder.DeriveParameters(comm);
+            //    NpgsqlParameter[] param = new NpgsqlParameter[1];
 
-                foreach (NpgsqlParameter orp in comm.Parameters)
-                {
-                    param[0] = new NpgsqlParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
-                }
+            //    foreach (NpgsqlParameter orp in comm.Parameters)
+            //    {
+            //        param[0] = new NpgsqlParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
+            //    }
 
-                //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
-                int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
-                conn1.Close();
-                if (res < 0)
-                {
-                    ProcessInfoUtil.SetParameterFromDB(_pi, _ctx);
-                    return StartDBProcess(procedureName, _pi.GetParameter());
-                }
-                }
-                catch (Exception e)
-                {
-                    if (conn1 != null)
-                        conn1.Close();
-                    //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
-                    _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
-                    _pi.SetError(true);
-                    return false;
+            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //    int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
+            //    conn1.Close();
+            //    if (res < 0)
+            //    {
+            //        ProcessInfoUtil.SetParameterFromDB(_pi, _ctx);
+            //        return StartDBProcess(procedureName, _pi.GetParameter());
+            //    }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        if (conn1 != null)
+            //            conn1.Close();
+            //        //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+            //        _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
+            //        _pi.SetError(true);
+            //        return false;
 
-                }
-                //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
-                return true;
-                //DB.ExecuteProcedure(procedureName, null, null);
-                //return false;
-            }
+            //    }
+            //    //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+            //    return true;
+            //    //DB.ExecuteProcedure(procedureName, null, null);
+            //    //return false;
+            //}
 
-            //  execute on this thread/connection
-            //String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
-            OracleConnection conn = null;
-            try
-            {
-                //only oracle procedure are supported
-                OracleCommand comm = new OracleCommand();
-                conn = (OracleConnection)DataBase.DB.GetConnection();
-                conn.Open();
-                comm.Connection = conn;
-                comm.CommandText = procedureName;
-                comm.CommandType = CommandType.StoredProcedure;
-                OracleCommandBuilder.DeriveParameters(comm);
-                OracleParameter[] param = new OracleParameter[1];
+            ////  execute on this thread/connection
+            ////String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
+            //OracleConnection conn = null;
+            //try
+            //{
+            //    //only oracle procedure are supported
+            //    OracleCommand comm = new OracleCommand();
+            //    conn = (OracleConnection)DataBase.DB.GetConnection();
+            //    conn.Open();
+            //    comm.Connection = conn;
+            //    comm.CommandText = procedureName;
+            //    comm.CommandType = CommandType.StoredProcedure;
+            //    OracleCommandBuilder.DeriveParameters(comm);
+            //    OracleParameter[] param = new OracleParameter[1];
 
-                foreach (OracleParameter orp in comm.Parameters)
-                {
-                    param[0] = new OracleParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
-                }
+            //    foreach (OracleParameter orp in comm.Parameters)
+            //    {
+            //        param[0] = new OracleParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
+            //    }
 
-                //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
-                int res = SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
-                conn.Close();
-                if (res < 0)
-                {
-                    ProcessInfoUtil.SetParameterFromDB(_pi, _ctx);
-                    return StartDBProcess(procedureName, _pi.GetParameter());
-                }
+            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //    int res = SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
+            //    conn.Close();
+            //    if (res < 0)
+            //    {
+            //        ProcessInfoUtil.SetParameterFromDB(_pi, _ctx);
+            //        return StartDBProcess(procedureName, _pi.GetParameter());
+            //    }
 
-                //DataBase.DB.ExecuteQuery(sql, null);
-            }
-            catch (Exception e)
-            {
-                if (conn != null)
-                    conn.Close();
-                //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
-                _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
-                _pi.SetError(true);
-                return false;
+            //    //DataBase.DB.ExecuteQuery(sql, null);
+            //}
+            //catch (Exception e)
+            //{
+            //    if (conn != null)
+            //        conn.Close();
+            //    //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+            //    _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
+            //    _pi.SetError(true);
+            //    return false;
 
-            }
-            //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+            //}
+            ////	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
             return true;
         }
 
@@ -175,210 +172,210 @@ namespace VAdvantage.ProcessEngine
         private bool StartDBProcess(String procedureName, ProcessInfoParameter[] list)
         {
 
-            if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
-            {
-                NpgsqlConnection conn1 = null;
-                try
-                {
-                    NpgsqlCommand comm = new NpgsqlCommand();
-                    conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
-                    conn1.Open();
-                    comm.Connection = conn1;
-                    comm.CommandText = procedureName;
-                    comm.CommandType = CommandType.StoredProcedure;
-                    NpgsqlCommandBuilder.DeriveParameters(comm);
-                    NpgsqlParameter[] param = new NpgsqlParameter[comm.Parameters.Count];
-                    int i = 0;
-                    StringBuilder orclParams = new StringBuilder();
-                    bool isDateTo = false;
-                    foreach (NpgsqlParameter orp in comm.Parameters)
-                    {
-                        if (isDateTo)
-                        {
-                            isDateTo = false;
-                            continue;
-                        }
-                        Object paramvalue = list[i].GetParameter();
-                        if (paramvalue != null)
-                        {
-                            if (orp.DbType == System.Data.DbType.DateTime)
-                            {
-                                if (paramvalue.ToString().Length > 0)
-                                {
-                                    paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
-                                }
-                                param[i] = new NpgsqlParameter(orp.ParameterName, paramvalue);
-                                if (list[i].GetParameter_To() != null && list[i].GetParameter_To().ToString().Length > 0)
-                                {
-                                    paramvalue = list[i].GetParameter_To();
-                                    paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
-                                    param[i + 1] = new NpgsqlParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
-                                    i++;
-                                    isDateTo = true;
-                                    continue;
-                                }
-                                else
-                                {
-                                    if (comm.Parameters.Count > (i + 1))
-                                    {
-                                        if (comm.Parameters[i + 1].ParameterName.Equals(comm.Parameters[i].ParameterName + "_TO", StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            param[i + 1] = new NpgsqlParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
-                                            isDateTo = true;
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-                            else if (orp.DbType == System.Data.DbType.VarNumeric)
-                            {
-                                if (paramvalue.ToString().Length > 0)
-                                {
-                                    //continue;
-                                }
-                                else
-                                    paramvalue = 0;
-                            }
-                            else
-                            {
-                                if (paramvalue.ToString().Length > 0)
-                                {
-                                    paramvalue = GlobalVariable.TO_STRING(paramvalue.ToString());
-                                }
-                            }
+            //if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
+            //{
+            //    NpgsqlConnection conn1 = null;
+            //    try
+            //    {
+            //        NpgsqlCommand comm = new NpgsqlCommand();
+            //        conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
+            //        conn1.Open();
+            //        comm.Connection = conn1;
+            //        comm.CommandText = procedureName;
+            //        comm.CommandType = CommandType.StoredProcedure;
+            //        NpgsqlCommandBuilder.DeriveParameters(comm);
+            //        NpgsqlParameter[] param = new NpgsqlParameter[comm.Parameters.Count];
+            //        int i = 0;
+            //        StringBuilder orclParams = new StringBuilder();
+            //        bool isDateTo = false;
+            //        foreach (NpgsqlParameter orp in comm.Parameters)
+            //        {
+            //            if (isDateTo)
+            //            {
+            //                isDateTo = false;
+            //                continue;
+            //            }
+            //            Object paramvalue = list[i].GetParameter();
+            //            if (paramvalue != null)
+            //            {
+            //                if (orp.DbType == System.Data.DbType.DateTime)
+            //                {
+            //                    if (paramvalue.ToString().Length > 0)
+            //                    {
+            //                        paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+            //                    }
+            //                    param[i] = new NpgsqlParameter(orp.ParameterName, paramvalue);
+            //                    if (list[i].GetParameter_To() != null && list[i].GetParameter_To().ToString().Length > 0)
+            //                    {
+            //                        paramvalue = list[i].GetParameter_To();
+            //                        paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+            //                        param[i + 1] = new NpgsqlParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+            //                        i++;
+            //                        isDateTo = true;
+            //                        continue;
+            //                    }
+            //                    else
+            //                    {
+            //                        if (comm.Parameters.Count > (i + 1))
+            //                        {
+            //                            if (comm.Parameters[i + 1].ParameterName.Equals(comm.Parameters[i].ParameterName + "_TO", StringComparison.OrdinalIgnoreCase))
+            //                            {
+            //                                param[i + 1] = new NpgsqlParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+            //                                isDateTo = true;
+            //                                continue;
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //                else if (orp.DbType == System.Data.DbType.VarNumeric)
+            //                {
+            //                    if (paramvalue.ToString().Length > 0)
+            //                    {
+            //                        //continue;
+            //                    }
+            //                    else
+            //                        paramvalue = 0;
+            //                }
+            //                else
+            //                {
+            //                    if (paramvalue.ToString().Length > 0)
+            //                    {
+            //                        paramvalue = GlobalVariable.TO_STRING(paramvalue.ToString());
+            //                    }
+            //                }
 
-                        }
-                        param[i] = new NpgsqlParameter(orp.ParameterName, paramvalue);
-                        //orclParams.Append(orp.ParameterName).Append(": ").Append(_curTab.GetValue(list[i]));
-                        //if (i < comm.Parameters.Count - 1)
-                        //    orclParams.Append(", ");
-                        i++;
-                    }
+            //            }
+            //            param[i] = new NpgsqlParameter(orp.ParameterName, paramvalue);
+            //            //orclParams.Append(orp.ParameterName).Append(": ").Append(_curTab.GetValue(list[i]));
+            //            //if (i < comm.Parameters.Count - 1)
+            //            //    orclParams.Append(", ");
+            //            i++;
+            //        }
 
-                    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
-                    int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
-                    conn1.Close();                    
-                    if (res < 0)
-                    {
-                        return false;
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (conn1 != null)
-                        conn1.Close();
-                    //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
-                    _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
-                    _pi.SetError(true);
-                    return false;
+            //        //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //        int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
+            //        conn1.Close();                    
+            //        if (res < 0)
+            //        {
+            //            return false;
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        if (conn1 != null)
+            //            conn1.Close();
+            //        //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+            //        _pi.SetSummary(Msg.GetMsg(_ctx, "ProcessRunError") + " " + e.Message);
+            //        _pi.SetError(true);
+            //        return false;
 
-                }
-                //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
-                return true;
-                //return false;
-            }
+            //    }
+            //    //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+            //    return true;
+            //    //return false;
+            //}
 
-            //  execute on this thread/connection
-            //String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
-            OracleConnection conn = null;
-            try
-            {
-                //only oracle procedure are supported
-                OracleCommand comm = new OracleCommand();
-                conn = (OracleConnection)VAdvantage.DataBase.DB.GetConnection();
-                conn.Open();
-                comm.Connection = conn;
-                comm.CommandText = procedureName;
-                comm.CommandType = CommandType.StoredProcedure;
-                OracleCommandBuilder.DeriveParameters(comm);
-                OracleParameter[] param = new OracleParameter[comm.Parameters.Count];
-                int i = 0;
-                StringBuilder orclParams = new StringBuilder();
-                bool isDateTo = false;
-                foreach (OracleParameter orp in comm.Parameters)
-                {
-                    if (isDateTo)
-                    {
-                        isDateTo = false;
-                        continue;
-                    }
-                    Object paramvalue = list[i].GetParameter();
-                    if (paramvalue != null)
-                    {
-                        if (orp.DbType == System.Data.DbType.DateTime)
-                        {
-                            if (paramvalue.ToString().Length > 0)
-                            {
-                                paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
-                            }
-                            param[i] = new OracleParameter(orp.ParameterName, paramvalue);
-                            if (list[i].GetParameter_To() != null && list[i].GetParameter_To().ToString().Length > 0)
-                            {
-                                paramvalue = list[i].GetParameter_To();
-                                paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
-                                param[i + 1] = new OracleParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
-                                i++;
-                                isDateTo = true;
-                                continue;
-                            }
-                            else
-                            {
-                                if (comm.Parameters.Count > (i + 1))
-                                {
-                                    if (comm.Parameters[i + 1].ParameterName.Equals(comm.Parameters[i].ParameterName + "_TO", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        param[i + 1] = new OracleParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
-                                        isDateTo = true;
-                                        continue;
-                                    }
-                                }
-                            }
-                        }
-                        else if (orp.DbType == System.Data.DbType.VarNumeric)
-                        {
-                            if (paramvalue.ToString().Length > 0)
-                            {
-                                //continue;
-                            }
-                            else
-                                paramvalue = 0;
-                        }
-                        else
-                        {
-                            if (paramvalue.ToString().Length > 0)
-                            {
-                                paramvalue = GlobalVariable.TO_STRING(paramvalue.ToString());
-                            }
-                        }
+            ////  execute on this thread/connection
+            ////String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
+            //OracleConnection conn = null;
+            //try
+            //{
+            //    //only oracle procedure are supported
+            //    OracleCommand comm = new OracleCommand();
+            //    conn = (OracleConnection)VAdvantage.DataBase.DB.GetConnection();
+            //    conn.Open();
+            //    comm.Connection = conn;
+            //    comm.CommandText = procedureName;
+            //    comm.CommandType = CommandType.StoredProcedure;
+            //    OracleCommandBuilder.DeriveParameters(comm);
+            //    OracleParameter[] param = new OracleParameter[comm.Parameters.Count];
+            //    int i = 0;
+            //    StringBuilder orclParams = new StringBuilder();
+            //    bool isDateTo = false;
+            //    foreach (OracleParameter orp in comm.Parameters)
+            //    {
+            //        if (isDateTo)
+            //        {
+            //            isDateTo = false;
+            //            continue;
+            //        }
+            //        Object paramvalue = list[i].GetParameter();
+            //        if (paramvalue != null)
+            //        {
+            //            if (orp.DbType == System.Data.DbType.DateTime)
+            //            {
+            //                if (paramvalue.ToString().Length > 0)
+            //                {
+            //                    paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+            //                }
+            //                param[i] = new OracleParameter(orp.ParameterName, paramvalue);
+            //                if (list[i].GetParameter_To() != null && list[i].GetParameter_To().ToString().Length > 0)
+            //                {
+            //                    paramvalue = list[i].GetParameter_To();
+            //                    paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+            //                    param[i + 1] = new OracleParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+            //                    i++;
+            //                    isDateTo = true;
+            //                    continue;
+            //                }
+            //                else
+            //                {
+            //                    if (comm.Parameters.Count > (i + 1))
+            //                    {
+            //                        if (comm.Parameters[i + 1].ParameterName.Equals(comm.Parameters[i].ParameterName + "_TO", StringComparison.OrdinalIgnoreCase))
+            //                        {
+            //                            param[i + 1] = new OracleParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+            //                            isDateTo = true;
+            //                            continue;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //            else if (orp.DbType == System.Data.DbType.VarNumeric)
+            //            {
+            //                if (paramvalue.ToString().Length > 0)
+            //                {
+            //                    //continue;
+            //                }
+            //                else
+            //                    paramvalue = 0;
+            //            }
+            //            else
+            //            {
+            //                if (paramvalue.ToString().Length > 0)
+            //                {
+            //                    paramvalue = GlobalVariable.TO_STRING(paramvalue.ToString());
+            //                }
+            //            }
 
-                    }
-                    param[i] = new OracleParameter(orp.ParameterName, paramvalue);
-                    //orclParams.Append(orp.ParameterName).Append(": ").Append(_curTab.GetValue(list[i]));
-                    //if (i < comm.Parameters.Count - 1)
-                    //    orclParams.Append(", ");
-                    i++;
-                }
+            //        }
+            //        param[i] = new OracleParameter(orp.ParameterName, paramvalue);
+            //        //orclParams.Append(orp.ParameterName).Append(": ").Append(_curTab.GetValue(list[i]));
+            //        //if (i < comm.Parameters.Count - 1)
+            //        //    orclParams.Append(", ");
+            //        i++;
+            //    }
 
-                //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
-                int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
-                conn.Close();
-                if (res < 0)
-                {
-                    return false;
-                }
+            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //    int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
+            //    conn.Close();
+            //    if (res < 0)
+            //    {
+            //        return false;
+            //    }
 
-                //DataBase.DB.ExecuteQuery(sql, null);
-            }
-            catch (Exception e)
-            {
-                if (conn != null)
-                    conn.Close();
-                VAdvantage.Logging.VLogger.Get().SaveError(e.Message, e);
-                //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
-                return false;
+            //    //DataBase.DB.ExecuteQuery(sql, null);
+            //}
+            //catch (Exception e)
+            //{
+            //    if (conn != null)
+            //        conn.Close();
+            //    VAdvantage.Logging.VLogger.Get().SaveError(e.Message, e);
+            //    //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+            //    return false;
 
-            }
-            //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+            //}
+            ////	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
             return true;
         }
 

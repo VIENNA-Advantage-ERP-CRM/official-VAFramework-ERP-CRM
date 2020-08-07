@@ -73,19 +73,19 @@ namespace VAdvantage.Model
                                     SET IsActive      ='N',IsReadWrite='N'
                                     WHERE ad_process_id=" + GetAD_Process_ID() + @"
                                     AND AD_Role_ID   IN
-                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE ad_groupinfo_id=" + GetAD_GroupInfo_ID() + ")");
+                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE AD_GroupInfo_ID=" + GetAD_GroupInfo_ID() + ")");
             }
             return true;
         }
 
         private void InsertNewRecordInRole()
         {
-            DataSet ds = DB.ExecuteDataset("SELECT AD_Role_ID FROM AD_Role_Group WHERE ad_groupinfo_id=" + GetAD_GroupInfo_ID() );
+            DataSet ds = DB.ExecuteDataset("SELECT AD_Role_ID FROM AD_Role_Group WHERE AD_GroupInfo_ID=" + GetAD_GroupInfo_ID() );
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    MProcessAccess access = new MProcessAccess(GetCtx(), 0, null);
+                    X_AD_Process_Access access = new X_AD_Process_Access(GetCtx(), 0, null);
                     access.SetAD_Process_ID(GetAD_Process_ID());
                     access.SetAD_Role_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]));
                     access.SetIsReadWrite(true);

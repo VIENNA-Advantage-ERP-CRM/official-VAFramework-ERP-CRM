@@ -12,7 +12,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Classes;
 
 using VAdvantage.Model;
-using VAdvantage.Common;
+
 using System.Drawing;
 using System.Data;
 using System.Data.SqlClient;

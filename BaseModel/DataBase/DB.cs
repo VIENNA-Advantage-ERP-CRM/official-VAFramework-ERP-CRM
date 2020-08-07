@@ -19,7 +19,7 @@ using System.Drawing;
 
 using java.io;
 using java.util.zip;
-using BaseModel.Engine;
+using BaseLibrary.Engine;
 
 namespace VAdvantage.DataBase
 {
@@ -379,7 +379,7 @@ namespace VAdvantage.DataBase
 
         public static DataSet ExecuteDataset(string sql, SqlParameter[] param, Trx trx, int pageSize, int pageNumber)
         {
-            return BaseLibrary.DataBase.DB.ExecuteDataset(sql, param, trx, pageSize, pageNumber);
+            return CoreLibrary.DataBase.DB.ExecuteDataset(sql, param, trx, pageSize, pageNumber);
         }
 
         /// <summary>
@@ -391,7 +391,7 @@ namespace VAdvantage.DataBase
         public static int GetSQLValue(Trx trxName, String sql)
         {
 
-            return BaseLibrary.DataBase.DB.GetSQLValue(trxName, sql);
+            return CoreLibrary.DataBase.DB.GetSQLValue(trxName, sql);
 
         }
 
@@ -405,7 +405,7 @@ namespace VAdvantage.DataBase
         /// <returns>value or -1</returns>
         public static int GetSQLValue(Trx trxName, String sql, int int_param1)
         {
-            return BaseLibrary.DataBase.DB.GetSQLValue(trxName, sql, int_param1);
+            return CoreLibrary.DataBase.DB.GetSQLValue(trxName, sql, int_param1);
         }
 
 
@@ -418,7 +418,7 @@ namespace VAdvantage.DataBase
         /// <returns>value or -1</returns>
         public static int GetSQLValue(Trx trxName, String sql, string str_param1)
         {
-            return BaseLibrary.DataBase.DB.GetSQLValue(trxName, sql, str_param1);
+            return CoreLibrary.DataBase.DB.GetSQLValue(trxName, sql, str_param1);
         }
         /// <summary>
         ///Get Value from sql
@@ -430,7 +430,7 @@ namespace VAdvantage.DataBase
         /// <returns>value or -1</returns>
         public static int GetSQLValue(Trx trxName, String sql, int param1, String param2)
         {
-            return BaseLibrary.DataBase.DB.GetSQLValue(trxName, sql, param1, param2);
+            return CoreLibrary.DataBase.DB.GetSQLValue(trxName, sql, param1, param2);
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace VAdvantage.DataBase
         public static IDbConnection GetConnection()
         {
 
-            return BaseLibrary.DataBase.DB.GetConnection();
+            return CoreLibrary.DataBase.DB.GetConnection();
 
         }
 
@@ -486,14 +486,14 @@ namespace VAdvantage.DataBase
         /// <returns></returns>
         public static ViennaDatabase GetDatabase()
         {
-            return BaseLibrary.DataBase.DB.GetDatabase();
+            return CoreLibrary.DataBase.DB.GetDatabase();
 
         }   //  ge
 
 
         public static int ExecuteUpdateMultiple(String sql, bool ignoreError, Trx trx)
         {
-            return BaseLibrary.DataBase.DB.ExecuteUpdateMultiple(sql, ignoreError, trx);
+            return CoreLibrary.DataBase.DB.ExecuteUpdateMultiple(sql, ignoreError, trx);
 
         }	//	executeUpdareMultiple
 
@@ -504,7 +504,7 @@ namespace VAdvantage.DataBase
         /// <returns></returns> 
         public static string GetSchema()
         {
-            return BaseLibrary.DataBase.DB.GetSchema();
+            return CoreLibrary.DataBase.DB.GetSchema();
 
         }
 
@@ -525,7 +525,7 @@ namespace VAdvantage.DataBase
         public static void SetDBTarget(VConnection cc)//setDBTarget (CConnection cc)
         {
 
-            BaseLibrary.DataBase.DB.SetDBTarget(cc);
+            CoreLibrary.DataBase.DB.SetDBTarget(cc);
 
         }
 
@@ -537,7 +537,7 @@ namespace VAdvantage.DataBase
         /// <returns>array of key name pairs</returns>
         public static KeyNamePair[] GetKeyNamePairs(String sql, bool optional)
         {
-            return BaseLibrary.DataBase.DB.GetKeyNamePairs(sql, optional);
+            return CoreLibrary.DataBase.DB.GetKeyNamePairs(sql, optional);
         }
 
         /// <summary>
@@ -546,7 +546,7 @@ namespace VAdvantage.DataBase
         /// <returns>true if connected to Oracle</returns>
         public static Boolean IsOracle()
         {
-            return BaseLibrary.DataBase.DB.IsOracle();
+            return CoreLibrary.DataBase.DB.IsOracle();
         }
 
         /// <summary>
@@ -555,7 +555,7 @@ namespace VAdvantage.DataBase
         /// <returns>true if connected to PostgreSQL</returns>
         public static Boolean IsPostgreSQL()
         {
-            return BaseLibrary.DataBase.DB.IsPostgreSQL();
+            return CoreLibrary.DataBase.DB.IsPostgreSQL();
 
         }
 
@@ -569,7 +569,7 @@ namespace VAdvantage.DataBase
         /// <returns>true if not needed or success</returns>
         public static bool Commit(bool throwException, Trx trxName)
         {
-            return BaseLibrary.DataBase.DB.Commit(throwException, trxName);
+            return CoreLibrary.DataBase.DB.Commit(throwException, trxName);
 
         }	//	commit
 
@@ -583,14 +583,14 @@ namespace VAdvantage.DataBase
         /// <returns> true if not needed or success</returns>
         public static bool Rollback(bool throwException, Trx trx)
         {
-            return BaseLibrary.DataBase.DB.Rollback(throwException, trx);
+            return CoreLibrary.DataBase.DB.Rollback(throwException, trx);
 
         }	//	commit
 
 
         public static int ExecuteQuery(String sql, SqlParameter[] param, Trx trx, bool ignoreError, bool throwError = false)
         {
-            return BaseLibrary.DataBase.DB.ExecuteQuery(sql, param, trx, ignoreError, throwError);
+            return CoreLibrary.DataBase.DB.ExecuteQuery(sql, param, trx, ignoreError, throwError);
 
         }
 
@@ -603,13 +603,13 @@ namespace VAdvantage.DataBase
         /// <returns>Sql Parameters containing result</returns>
         public static SqlParameter[] ExecuteProcedure(string sql, SqlParameter[] arrParam, Trx trx)
         {
-            return BaseLibrary.DataBase.DB.ExecuteProcedure(sql, arrParam, trx);
+            return CoreLibrary.DataBase.DB.ExecuteProcedure(sql, arrParam, trx);
         }
 
         //modified by Deepak
         public static Decimal? GetSQLValueBD(Trx trxName, String sql, int int_param1)
         {
-            return BaseLibrary.DataBase.DB.GetSQLValueBD(trxName, sql, int_param1);
+            return CoreLibrary.DataBase.DB.GetSQLValueBD(trxName, sql, int_param1);
         }
 
 
@@ -618,11 +618,11 @@ namespace VAdvantage.DataBase
         {
             get
             {
-                return BaseLibrary.DataBase.DB.UseMigratedConnection;
+                return CoreLibrary.DataBase.DB.UseMigratedConnection;
             }
             set
             {
-                BaseLibrary.DataBase.DB.UseMigratedConnection = value;
+                CoreLibrary.DataBase.DB.UseMigratedConnection = value;
             }
         }
 
@@ -632,28 +632,28 @@ namespace VAdvantage.DataBase
         {
             get
             {
-                return BaseLibrary.DataBase.DB.MigrationConnection;
+                return CoreLibrary.DataBase.DB.MigrationConnection;
             }
             set
             {
-                BaseLibrary.DataBase.DB.MigrationConnection = value;
+                CoreLibrary.DataBase.DB.MigrationConnection = value;
             }
         }
 
         public static String TO_DATE(DateTime? day)
         {
-            return BaseLibrary.DataBase.DB.TO_DATE(day, true);
+            return CoreLibrary.DataBase.DB.TO_DATE(day, true);
         }
 
         public static String TO_DATE(DateTime? time, bool dayOnly)
         {
-            return BaseLibrary.DataBase.DB.TO_DATE(time, dayOnly);
+            return CoreLibrary.DataBase.DB.TO_DATE(time, dayOnly);
         }
 
         //Manfacturing
         public static int ExecuteBulkUpdate(Trx trx, String key, List<List<Object>> bulkParams)
         {
-            return BaseLibrary.DataBase.DB.ExecuteBulkUpdate(trx, key, bulkParams);
+            return CoreLibrary.DataBase.DB.ExecuteBulkUpdate(trx, key, bulkParams);
 
         }
 
@@ -670,7 +670,7 @@ namespace VAdvantage.DataBase
         /// <returns>number of rows updated or -1 if error</returns>
         public static int ExecuteBulkUpdate(Trx trx1, String sql, List<Object[]> bulkParams, Boolean ignoreError, Boolean bulkSQL)
         {
-            return BaseLibrary.DataBase.DB.ExecuteBulkUpdate(trx1, sql, bulkParams, ignoreError, bulkSQL);
+            return CoreLibrary.DataBase.DB.ExecuteBulkUpdate(trx1, sql, bulkParams, ignoreError, bulkSQL);
 
         }
 
@@ -725,7 +725,7 @@ namespace VAdvantage.DataBase
         /// <Writer>Raghu</Writer>
         public static void StartLoggingUpdates()
         {
-            BaseLibrary.DataBase.DB.StartLoggingUpdates();
+            CoreLibrary.DataBase.DB.StartLoggingUpdates();
         }
 
         private static class UpdateStats
@@ -746,7 +746,7 @@ namespace VAdvantage.DataBase
         /// <returns>formatted log output</returns>
         public static String StopLoggingUpdates(int numRecordsThreshold)
         {
-            return BaseLibrary.DataBase.DB.StopLoggingUpdates(numRecordsThreshold);
+            return CoreLibrary.DataBase.DB.StopLoggingUpdates(numRecordsThreshold);
 
         }
 
@@ -968,7 +968,7 @@ namespace VAdvantage.DataBase
         /// <returns></returns>
         public static string ConvertSqlQuery(string sql)
         {
-            return BaseLibrary.DataBase.DB.ConvertSqlQuery(sql);
+            return CoreLibrary.DataBase.DB.ConvertSqlQuery(sql);
         }
 
 
@@ -989,7 +989,7 @@ namespace VAdvantage.DataBase
          */
         public static String TO_STRING(String txt, int maxLength)
         {
-            return BaseLibrary.DataBase.DB.TO_STRING(txt, maxLength);
+            return CoreLibrary.DataBase.DB.TO_STRING(txt, maxLength);
         }
 
         /// <summary>
@@ -1002,7 +1002,7 @@ namespace VAdvantage.DataBase
         ///     or TRIM(TO_CHAR(columnName,'TM9')) depending on DisplayType and Language</returns>
         public static String TO_CHAR(String columnName, int displayType, String AD_Language)
         {
-            return BaseLibrary.DataBase.DB.TO_CHAR(columnName, displayType, AD_Language);
+            return CoreLibrary.DataBase.DB.TO_CHAR(columnName, displayType, AD_Language);
             //if (columnName == null || columnName.Length == 0)
             //    throw new ArgumentException("Required parameter missing");
             //return s_cc.GetDatabase().TO_CHAR(columnName, displayType, AD_Language);

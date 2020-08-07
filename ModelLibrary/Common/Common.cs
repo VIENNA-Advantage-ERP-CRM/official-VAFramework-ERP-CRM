@@ -20,17 +20,7 @@ namespace VAdvantage.Common
         static public bool ISTENATRUNNINGFORERP = false;
         public static string NONBUSINESSDAY = "@DateIsInNonBusinessDay@";
 
-        public static string Password_Valid_Upto_Key = "PASSWORD_VALID_UPTO";
-        public static string Failed_Login_Count_Key = "FAILED_LOGIN_COUNT";
-
-        public static int GetPassword_Valid_Upto
-        {
-            get { return 3; }
-        }
-        public static int GetFailed_Login_Count
-        {
-            get { return 5; }
-        }
+       
         public static void GetAllTable()
         {
 

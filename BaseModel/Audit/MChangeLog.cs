@@ -16,7 +16,7 @@ using VAdvantage.Classes;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
-using BaseModel.Engine;
+using BaseLibrary.Engine;
 
 namespace VAdvantage.Model
 {
@@ -151,7 +151,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();

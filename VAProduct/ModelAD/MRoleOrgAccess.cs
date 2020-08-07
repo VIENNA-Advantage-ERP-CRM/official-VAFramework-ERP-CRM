@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@param1", id);
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param, null);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -217,7 +217,7 @@ namespace VAdvantage.Model
                 IDataReader idr = null;
                 try
                 {
-                    idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                    idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                     dt = new DataTable();
                     dt.Load(idr);
                     idr.Close();

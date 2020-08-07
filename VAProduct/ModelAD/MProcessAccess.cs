@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="parent">parent</param>
         /// <param name="AD_Role_ID">role id</param>
-        public MProcessAccess(MProcess parent, int AD_Role_ID)
+        public MProcessAccess(X_AD_Process parent, int AD_Role_ID)
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);

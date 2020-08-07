@@ -212,7 +212,7 @@ namespace VAdvantage.Model
 				.Append(" SET AD_Org_ID=0 WHERE AD_Org_ID<>0 AND AD_Client_ID=@param1");
             SqlParameter[] param = new SqlParameter[1];
             param[0]=new SqlParameter("@param1", GetAD_Client_ID());
-			int no = BaseLibrary.DataBase.DB.ExecuteQuery(sql.ToString(),param, Get_TrxName());
+			int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql.ToString(),param, Get_TrxName());
 			info = GetTableName() + " set to Shared #" + no;
 			log.Info(info);
 		}
@@ -223,7 +223,7 @@ namespace VAdvantage.Model
                 .Append(" WHERE AD_Org_ID=0 WHERE AD_Client_ID=").Append(GetAD_Client_ID());
             
             
-			int no = BaseLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql.ToString());
+			int no = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql.ToString());
            
 			info = GetTableName() + " Shared records #" + no;
 			log.Info(info);
@@ -253,7 +253,7 @@ namespace VAdvantage.Model
 			//pstmt = DataBase.prepareStatement (sql, null);
 			//pstmt.setInt (1, getAD_Table_ID());
             param[0] = new SqlParameter("@param", GetAD_Table_ID());
-            idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param, null);
+            idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
 			while (idr.Read())
 			{
                 int AD_Table_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);

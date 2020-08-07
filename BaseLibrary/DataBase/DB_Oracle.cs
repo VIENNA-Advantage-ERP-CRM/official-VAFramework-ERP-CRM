@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data.Common;
-using BaseLibrary.DataBase;
+using CoreLibrary.DataBase;
 
 namespace VAdvantage.DataBase
 {

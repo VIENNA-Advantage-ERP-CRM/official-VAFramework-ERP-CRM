@@ -232,7 +232,7 @@ namespace VAdvantage.Model
             IDataReader dr=null;
             try
             {
-                 dr = BaseLibrary.DataBase.DB.ExecuteReader(sql);
+                 dr = CoreLibrary.DataBase.DB.ExecuteReader(sql);
                 if (dr.Read())
                 {
                     retValue = dr[0].ToString();
@@ -283,7 +283,7 @@ namespace VAdvantage.Model
             StringBuilder sql = new StringBuilder("SELECT ").Append(columnName)
                 .Append(" FROM ").Append(tableName)
                 .Append(" WHERE ").Append(columnName).Append("=@param1 AND IsSummary='Y'");
-            int id = BaseLibrary.DataBase.DB.GetSQLValue(null, sql.ToString(), Utility.Util.GetValueOfInt(cmp));
+            int id = CoreLibrary.DataBase.DB.GetSQLValue(null, sql.ToString(), Utility.Util.GetValueOfInt(cmp));
             if (id <= 0)
                 return null;
 

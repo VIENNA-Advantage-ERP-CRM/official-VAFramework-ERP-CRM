@@ -20,7 +20,7 @@ using VAdvantage.Logging;
 
 using System.Drawing;
 using VAdvantage.DataBase;
-using BaseLibrary.Classes;
+using CoreLibrary.Classes;
 
 namespace VAdvantage.Utility
 {

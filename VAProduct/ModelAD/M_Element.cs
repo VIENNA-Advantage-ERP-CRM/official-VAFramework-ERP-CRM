@@ -39,7 +39,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
@@ -99,11 +99,11 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
             }
             catch
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);            //in case the transaction error comes, try again without trx
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);            //in case the transaction error comes, try again without trx
             }
             try
             {
@@ -140,7 +140,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];

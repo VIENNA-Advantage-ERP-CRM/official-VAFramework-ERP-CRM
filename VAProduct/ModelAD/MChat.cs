@@ -53,7 +53,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
             try
             {
                 //execute the Query get number of chat for a perticular CHAT_ID
-                _ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                _ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
 
                 DataRow rs;
                 for (int i = 0; i < _ds.Tables[0].Rows.Count; i++)

@@ -30,7 +30,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@roleid", AD_Role_ID);
 
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     list.Add(new MUserRoles(ctx, dr, null));
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@userid", AD_User_ID);
 
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     list.Add(new MUserRoles(ctx, dr, null));

@@ -117,7 +117,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[2];
                 param[0] = new SqlParameter("@param1", email.ToUpper());
                 param[1] = new SqlParameter("@param2", AD_Client_ID);
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param, null);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
                 while (idr.Read())
                 {
                     AD_User_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);

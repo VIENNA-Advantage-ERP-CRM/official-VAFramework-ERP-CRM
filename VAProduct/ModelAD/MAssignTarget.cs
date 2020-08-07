@@ -58,7 +58,7 @@ namespace VAdvantage.Model
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@AD_AssignTarget_ID", GetAD_AssignTarget_ID());
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     list.Add(new MAssignCriteria(GetCtx(), dr, Get_TrxName()));

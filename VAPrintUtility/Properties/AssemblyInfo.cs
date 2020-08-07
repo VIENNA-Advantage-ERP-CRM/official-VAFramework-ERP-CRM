@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VAPrintUtility")]
+[assembly: AssemblyTitle("VAPrintLib")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Oracle.com")]
-[assembly: AssemblyProduct("VAPrintUtility")]
+[assembly: AssemblyCompany("VA")]
+[assembly: AssemblyProduct("VAPrintLib")]
 [assembly: AssemblyCopyright("Copyright © Oracle.com 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -20,7 +20,7 @@ namespace VAdvantage.Classes
     /// </summary>
     /// <typeparam name="K"></typeparam>
     /// <typeparam name="V"></typeparam>
-    public class CCache<K, V> : BaseLibrary.Classes.Cache<K,V>
+    public class CCache<K, V> : CoreLibrary.Classes.Cache<K,V>
     {
        
         /// <summary>

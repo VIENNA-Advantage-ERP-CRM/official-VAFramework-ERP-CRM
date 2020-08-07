@@ -56,7 +56,7 @@ namespace VAdvantage.Model
                     + "WHERE D_SERIES_ID = @SeriesID";
                     SqlParameter[] param = new SqlParameter[1];
                     param[0] = new SqlParameter("@SeriesID", Get_ID());
-                    int no = BaseLibrary.DataBase.DB.ExecuteQuery(sql, param);
+                    int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, param);
                     log.Fine("MSeries Alert update  #" + no);
 
                 }
@@ -975,7 +975,7 @@ namespace VAdvantage.Model
                 DateTime alternateDate = DateTime.Now;
                 if (GetDateFrom() == null && (GetDateTimeTypes() == IS_YEARLY || GetDateTimeTypes() == IS_MONTHLY || GetDateTimeTypes() == IS_DAILY))
                 {
-                    IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader("SELECT MIN(" + m_colX + ") FROM " + m_tableName);
+                    IDataReader dr = CoreLibrary.DataBase.DB.ExecuteReader("SELECT MIN(" + m_colX + ") FROM " + m_tableName);
                     while (dr.Read())
                     {
                         try
@@ -1442,7 +1442,7 @@ namespace VAdvantage.Model
                         else
                             sql = series.GetSqlQuery();
 
-                        IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(sql);
+                        IDataReader dr = CoreLibrary.DataBase.DB.ExecuteReader(sql);
                         StringBuilder sb = new StringBuilder("");
                         int total_match = 0;
 

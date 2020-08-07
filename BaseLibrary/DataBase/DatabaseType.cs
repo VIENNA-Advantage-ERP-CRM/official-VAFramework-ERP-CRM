@@ -5,7 +5,7 @@ using System.Text;
 using VAdvantage.Logging;
 //using VAdvantage.Install;
 //using VAdvantage.WindowMigration;
-using BaseLibrary;
+using CoreLibrary;
 namespace VAdvantage.DataBase
 {
     /// <summary>
@@ -98,7 +98,7 @@ namespace VAdvantage.DataBase
         {
             get
             {
-                if (!BaseLibrary.DataBase.DB.UseMigratedConnection)
+                if (!CoreLibrary.DataBase.DB.UseMigratedConnection)
                 {
                     if (VConnection.Get().IsMysql())
                         return true;
@@ -123,7 +123,7 @@ namespace VAdvantage.DataBase
         {
             get
             {
-                if (!BaseLibrary.DataBase.DB.UseMigratedConnection)
+                if (!CoreLibrary.DataBase.DB.UseMigratedConnection)
                 {
                     if (VConnection.Get().IsMSSQLServer())
                         return true;
@@ -147,7 +147,7 @@ namespace VAdvantage.DataBase
         {
             get
             {
-                if (!BaseLibrary.DataBase.DB.UseMigratedConnection)
+                if (!CoreLibrary.DataBase.DB.UseMigratedConnection)
                 {
                     if (VConnection.Get().IsPostgreSQL())
                         return true;
@@ -171,7 +171,7 @@ namespace VAdvantage.DataBase
         {
             get
             {
-                if (!BaseLibrary.DataBase.DB.UseMigratedConnection)
+                if (!CoreLibrary.DataBase.DB.UseMigratedConnection)
                 {
                     if (VConnection.Get().IsPostgreSQLPlus())
                         return true;
@@ -196,7 +196,7 @@ namespace VAdvantage.DataBase
         {
             get
             {
-                if (!BaseLibrary.DataBase.DB.UseMigratedConnection)
+                if (!CoreLibrary.DataBase.DB.UseMigratedConnection)
                 {
                     if (VConnection.Get().IsOracle())
                         return true;

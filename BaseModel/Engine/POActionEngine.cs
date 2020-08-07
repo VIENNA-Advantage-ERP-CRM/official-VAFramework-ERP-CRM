@@ -8,7 +8,7 @@ using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 
-namespace BaseModel.Engine
+namespace BaseLibrary.Engine
 {
 
     public interface POAction

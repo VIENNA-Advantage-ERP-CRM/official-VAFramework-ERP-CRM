@@ -13,15 +13,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViennaBase", "ViennaBase\Vi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAModel", "VAModel\VAModel.csproj", "{70B3C9A6-631E-40D0-BF47-D573B4478980}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseLibrary", "BaseLibrary\BaseLibrary.csproj", "{2609163F-87CE-4796-86E9-D3E5DE2044CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLibrary", "BaseLibrary\CoreLibrary.csproj", "{2609163F-87CE-4796-86E9-D3E5DE2044CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseModel", "BaseModel\BaseModel.csproj", "{E2AF5F6B-8107-4D3A-A6F0-EC2B83447B9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseLibrary", "BaseModel\BaseLibrary.csproj", "{E2AF5F6B-8107-4D3A-A6F0-EC2B83447B9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAPrintUtility", "VAPrintUtility\VAPrintUtility.csproj", "{64B1D750-7031-41A4-80D1-21BD0A88C184}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAPrintLib", "VAPrintUtility\VAPrintLib.csproj", "{64B1D750-7031-41A4-80D1-21BD0A88C184}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAProduct", "VAProduct\VAProduct.csproj", "{0ED818BE-CB22-47DF-8C2B-3CAAFFA36D92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAModelAD", "VAProduct\VAModelAD.csproj", "{0ED818BE-CB22-47DF-8C2B-3CAAFFA36D92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XModel", "XModel\XModel.csproj", "{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAProcessEngine", "VAProcessEngine\VAProcessEngine.csproj", "{EE1D2256-DCBB-4B36-98CE-6A292F7D4A48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE1D2256-DCBB-4B36-98CE-6A292F7D4A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE1D2256-DCBB-4B36-98CE-6A292F7D4A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE1D2256-DCBB-4B36-98CE-6A292F7D4A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE1D2256-DCBB-4B36-98CE-6A292F7D4A48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

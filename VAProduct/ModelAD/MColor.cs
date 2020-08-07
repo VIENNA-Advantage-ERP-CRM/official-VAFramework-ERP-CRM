@@ -122,7 +122,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 if (idr.Read())
                 {
                     retValue = Utility.Util.GetValueOfString(idr[0]);//.getString(1);

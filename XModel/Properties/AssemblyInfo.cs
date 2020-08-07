@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("XModel")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Oracle.com")]
+[assembly: AssemblyCompany("VA")]
 [assembly: AssemblyProduct("XModel")]
-[assembly: AssemblyCopyright("Copyright © Oracle.com 2020")]
+[assembly: AssemblyCopyright("Copyright © VA 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

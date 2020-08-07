@@ -563,7 +563,7 @@ namespace VAdvantage.Model
                     .Append(" WHERE AD_Column_ID=").Append(Get_ID())
                     .Append(" AND IsCentrallyMaintained='Y'");
 
-                int no = BaseLibrary.DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
+                int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
 
                 //int no = DataBase.executeUpdate(sql.ToString(), Get_TrxName());
                 log.Fine("afterSave - Fields updated #" + no);
@@ -874,7 +874,7 @@ namespace VAdvantage.Model
                     DatabaseMetaData md = new DatabaseMetaData();
 
                     //get columns of a table
-                    DataSet dt = md.GetColumns("", BaseLibrary.DataBase.DB.GetSchema(), tableName + "_Ver");
+                    DataSet dt = md.GetColumns("", CoreLibrary.DataBase.DB.GetSchema(), tableName + "_Ver");
                     md.Dispose();
 
                     // check whether version table exists in database

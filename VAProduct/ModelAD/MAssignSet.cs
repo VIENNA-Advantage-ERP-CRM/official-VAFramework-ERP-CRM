@@ -38,7 +38,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_AssignSet";
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql);
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     list.Add(new MAssignSet(ctx, dr, null));
@@ -139,7 +139,7 @@ namespace VAdvantage.Model
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@AD_AssignSet_ID", GetAD_AssignSet_ID());
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
+                DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     list.Add(new MAssignTarget(GetCtx(), dr, Get_TrxName()));

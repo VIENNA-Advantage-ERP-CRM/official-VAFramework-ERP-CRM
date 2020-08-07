@@ -57,7 +57,7 @@ namespace VAdvantage.Model
             try
             {
                 Param[0] = new SqlParameter("@Param1", id);
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, Param, null);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, Param, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -177,7 +177,7 @@ namespace VAdvantage.Model
                 try
                 {
                     Param[0] = new SqlParameter("@Param1", GetAD_Org_ID());
-                    idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, Param, null);
+                    idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, Param, null);
                     if (idr.Read())
                     {
                         _clientName = Utility.Util.GetValueOfString(idr[0]); //rs.getString(1);

@@ -21,7 +21,7 @@ using System.Collections;
 using VAdvantage.DataBase;
 using Oracle.ManagedDataAccess.Client;
 using System.Data.Common;
-using BaseLibrary.DataBase;
+using CoreLibrary.DataBase;
 
 namespace VAdvantage.SqlExec
 {

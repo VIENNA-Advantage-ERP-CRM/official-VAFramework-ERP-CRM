@@ -69,7 +69,7 @@ namespace VAdvantage.Model
             if (newRecord && GetSeqNo() == 0)
             {
                 String sql = "SELECT COALESCE(MAX(SeqNo),0)+10 FROM AD_InfoColumn WHERE AD_InfoWindow_ID=" + GetAD_InfoWindow_ID();
-                int no = BaseLibrary.DataBase.DB.GetSQLValue(null, sql);
+                int no = CoreLibrary.DataBase.DB.GetSQLValue(null, sql);
                 SetSeqNo(no);
             }
 

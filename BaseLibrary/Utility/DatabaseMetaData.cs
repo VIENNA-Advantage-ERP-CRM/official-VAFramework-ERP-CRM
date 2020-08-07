@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Data.Common;
 using Npgsql;
-using BaseLibrary.DataBase;
+using CoreLibrary.DataBase;
 
 namespace VAdvantage.Utility
 {

@@ -6,7 +6,6 @@ using VAdvantage.DataBase;
 using VAdvantage.Classes;
 using VAdvantage.Process;
 using VAdvantage.Model;
-using VAdvantage.Common;
 using System.Data.SqlClient;
 using System.Data;
 using System.Collections;
@@ -348,7 +347,7 @@ namespace VAdvantage.Model
             DataSet ds = null;
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
@@ -439,7 +438,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = BaseLibrary.DataBase.DB.ExecuteReader(sql.ToString(), null, trxName);
+                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql.ToString(), null, trxName);
                 dt = new DataTable();
                 dt.Load(dr);
                 dr.Close();
@@ -1021,8 +1020,8 @@ namespace VAdvantage.Model
                     if (ColID > 0)
                     {
                         MColumn column = new MColumn(GetCtx(), ColID, Get_Trx());
-                        MasterVersions mv = new MasterVersions();
-                        string versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
+                       // MasterVersions mv = new MasterVersions();
+                      //  string versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
                     }
                 }
             }
@@ -1088,7 +1087,7 @@ namespace VAdvantage.Model
             List<MTable> list = new List<MTable>();
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql);
                 while (idr.Read())
                 {
                     MTable table = new MTable(ctx, idr, null);
@@ -1181,7 +1180,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_Trx());
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_Trx());
                 while (idr.Read())
                 {
                     list.Add(new MViewComponent(GetCtx(), idr, Get_Trx()));

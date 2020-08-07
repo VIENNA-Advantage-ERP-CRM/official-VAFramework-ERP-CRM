@@ -5,7 +5,7 @@ namespace VAdvantage.Model
     using System;
     using System.Text;
     using VAdvantage.DataBase;
-    using VAdvantage.Common;
+    
     using VAdvantage.Classes;
     using VAdvantage.Process;
     using VAdvantage.Model;
