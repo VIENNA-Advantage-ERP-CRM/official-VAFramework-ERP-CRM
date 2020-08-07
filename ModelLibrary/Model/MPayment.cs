@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                 // When Discounting PDC is true, No need to check Check Date with Account Date.
                 if (Env.IsModuleInstalled("VA027_") && IsVA027_DiscountingPDC())
                 {
-
+                    
                 }
                 else
                 {
@@ -4913,7 +4913,7 @@ namespace VAdvantage.Model
             //	If on Bank Statement, don't void it - reverse it
             if (GetC_BankStatementLine_ID() > 0)
                 return ReverseCorrectIt();
-
+            
             //	Not Processed
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
                 || DOCSTATUS_Invalid.Equals(GetDocStatus())
@@ -5031,7 +5031,17 @@ namespace VAdvantage.Model
 
             //	Auto Reconcile if not on Bank Statement
             Boolean reconciled = false; //	GetC_BankStatementLine_ID() == 0;
+          
+            // if Payment aginst PDC is voided remove reference of payment from chequedetials and set Payment Generated to false on Header
+                if ( Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0 )
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment='N' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
+                    if (count > 0)
+                    {
+                        DB.ExecuteScalar("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID=  " + GetVA027_PostDatedCheck_ID(), null, Get_Trx());
+                    }
 
+                }
             //	Create Reversal
             MPayment reversal = new MPayment(GetCtx(), 0, Get_Trx());
             CopyValues(this, reversal);
@@ -5048,6 +5058,11 @@ namespace VAdvantage.Model
             reversal.SetDiscountAmt(Decimal.Negate(GetDiscountAmt()));
             reversal.SetWriteOffAmt(Decimal.Negate(GetWriteOffAmt()));
             reversal.SetOverUnderAmt(Decimal.Negate(GetOverUnderAmt()));
+            //Remove PDC reference
+            if (Env.IsModuleInstalled("VA027_"))
+            {
+                reversal.SetVA027_PostDatedCheck_ID(0);
+            }
 
             //negate witholding amount - 
             if (Get_ColumnIndex("WithholdingAmt") > 0)
@@ -5105,7 +5120,7 @@ namespace VAdvantage.Model
             }
 
             reversal.Save(Get_Trx());
-
+           
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
@@ -5193,6 +5208,11 @@ namespace VAdvantage.Model
             SetDocStatus(DOCSTATUS_Reversed);
             SetDocAction(DOCACTION_None);
             SetProcessed(true);
+            //Remove PostdatedCheck Reference
+            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID()>0)
+            {
+               SetVA027_PostDatedCheck_ID(0);
+            }
 
             // new change when allocation exist for already made payments then it will create allocation 
             // otherwise it will not create allocation against that payment
