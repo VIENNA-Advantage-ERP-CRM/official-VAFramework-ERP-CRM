@@ -921,7 +921,7 @@
                             }
                         }
                         else if (row[j] != null && typeof (row[j]) == "number" &&
-                            (VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j] ||
+                            (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
                             VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
                             line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
                         }
