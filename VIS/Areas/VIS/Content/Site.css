@@ -661,19 +661,17 @@ html[dir="rtl"] .vis-hasSubMenu:after
     height: 100%;
     overflow-y: auto;
 }
+.vis-css-treeview ul {
+    list-style: none;
+    margin: 0px 10px 10px 10px;
+    padding: 0px;
+}
 
-    .vis-css-treeview ul
-    {
-        list-style: none;
-        margin: 0px 10px 10px 10px;
-        padding: 0px;
-    }
-
-        .vis-css-treeview ul li {
-            margin-bottom: 2px;
-            background-color: rgba(var(--v-c-secondary), 0.5);
-            position: relative;
-        }
+.vis-css-treeview ul li {
+    margin-bottom: 2px;
+    background-color: rgba(var(--v-c-secondary), 0.5);
+    position: relative;
+}
 
             .vis-css-treeview ul li a {
                 padding: 10px;
@@ -683,22 +681,19 @@ html[dir="rtl"] .vis-hasSubMenu:after
                 /*margin-right: 20px;*/
             }
 
-            .vis-css-treeview ul li ul {
-                background-color: rgba(var(--v-c-primary), 0.07);
-                padding: 4px 4px 4px 4px;
-                margin: 0px;
-            }
+.vis-css-treeview ul li ul {
+    background-color: rgba(var(--v-c-primary), 0.07);
+    padding: 4px 4px 4px 4px;
+    margin: 0px;
+}
 
-                .vis-css-treeview ul li ul li
-                {
-                    margin-bottom: 1px;
-                }
-
-                    .vis-css-treeview ul li ul li ul
-                    {
-                        padding: 4px 0px 4px 4px;
-                        margin: 0px;
-                    }
+.vis-css-treeview ul li ul li {
+    margin-bottom: 2px;
+}
+.vis-css-treeview ul li ul li ul {
+    padding: 4px 0px 4px 4px;
+    margin: 0px;
+}
 
 
     /*.vis-css-treeview li
@@ -1183,4 +1178,7 @@ html[dir="rtl"] .vis-filter-dialog
 {
     left:auto;
     right: 15px;
+}
+.vis-css-treeview ul li input[type="checkbox"] {
+    position: absolute;
 }
