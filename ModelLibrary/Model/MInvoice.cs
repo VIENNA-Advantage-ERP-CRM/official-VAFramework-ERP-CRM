@@ -4828,9 +4828,9 @@ namespace VAdvantage.Model
                 }
             }
             //if PDC available against Invoice donot void/reverse the Invoice
-            if (Env.IsModuleInstalled("VA027_"))
+            if (Env.IsModuleInstalled("VA027_")) 
             {
-                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VA027_postdatedcheck_id) FROM va027_Postdatedcheck where c_invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx()));
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VA027_postdatedcheck_id) FROM va027_Postdatedcheck WHERE DocStatus NOT IN('RE', 'VO') AND c_invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx()));
                 if (count > 0)
                 {
                     _processMsg= Msg.GetMsg(GetCtx(), "LinkedDocStatus");
