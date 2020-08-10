@@ -5243,7 +5243,8 @@ namespace VAdvantage.Model
                 else
                 {
                     //	Original Allocation
-                    MAllocationLine aLine = new MAllocationLine(alloc, GetPayAmt(true),
+                    MAllocationLine aLine = new MAllocationLine(alloc, GetPayAmt(true) -
+                        (Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0),
                         Env.ZERO, Env.ZERO, Env.ZERO);
                     aLine.SetDocInfo(GetC_BPartner_ID(), 0, 0);
                     aLine.SetPaymentInfo(GetC_Payment_ID(), 0);
@@ -5252,7 +5253,8 @@ namespace VAdvantage.Model
                         log.Warning("Automatic allocation - line not saved");
                     }
                     //	Reversal Allocation
-                    aLine = new MAllocationLine(alloc, reversal.GetPayAmt(true),
+                    aLine = new MAllocationLine(alloc, reversal.GetPayAmt(true) +
+                        (Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0),
                         Env.ZERO, Env.ZERO, Env.ZERO);
                     aLine.SetDocInfo(reversal.GetC_BPartner_ID(), 0, 0);
                     aLine.SetPaymentInfo(reversal.GetC_Payment_ID(), 0);
